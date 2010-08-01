@@ -1,16 +1,16 @@
         <div id="content-main">
-        <%= form_for(@object, :action => rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
+        <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
           <div>
-<%= partial('properties', :properties => @properties) -%>
-<%= partial('belongs_to', :with => @abstract_model.belongs_to_associations, :as => :association) -%>
-<%= partial('has_one', :with => @abstract_model.has_one_associations, :as => :association) -%>
-<%= partial('has_many', :with => @abstract_model.has_many_associations, :as => :association) -%>
+<%= render(:partial => 'properties', :properties => @properties) -%>
+<%= render(:partial => 'belongs_to_association', :collection => @abstract_model.belongs_to_associations) -%>
+<%= render(:partial => 'has_one_association', :collection => @abstract_model.has_one_associations) -%>
+<%= render(:partial => 'has_many_association', :collection => @abstract_model.has_many_associations) -%>
             <div class="submit-row" >
-              <%= submit "Save", :class => "default", :name => "_save" %>
-              <%= submit "Save and add another", :name => "_add_another" %>
-              <%= submit "Save and continue editing", :name => "_continue" %>
+              <%= submit_tag "Save", :class => "default", :name => "_save" %>
+              <%= submit_tag "Save and add another", :name => "_add_another" %>
+              <%= submit_tag "Save and continue editing", :name => "_continue" %>
             </div>
           </div>
-        <% end =%>
+        <% end %>
 
         </div>
