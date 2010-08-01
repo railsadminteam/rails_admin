@@ -1,0 +1,43 @@
+<%
+  slice_name = "RailsAdmin"
+  page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="NONE,NOARCHIVE" />
+    <title><%= page_name %> | <%= slice_name %></title>
+    <!-- FIXME: These should use something like "public_path_for" from merb-slices -->
+    <%= stylesheet_link_tag('base.css') %>
+    <%= stylesheet_link_tag('changelists.css') %>
+    <!--[if lte IE 7]><%= stylesheet_link_tag('ie.css') %><![endif]-->
+    <%= javascript_include_tag('core.js') %>
+    <%= javascript_include_tag('RelatedObjectLookups.js') %>
+    <%= javascript_include_tag('getElementsBySelector.js') %>
+    <%= javascript_include_tag('actions.js') %>
+  </head>
+  <body class="admin-slice change-list">
+    <div id="container">
+      <div id="header">
+        <div id="branding">
+          <h1 id="site-name">
+            <%= slice_name %>
+          </h1>
+        </div>
+      </div>
+      <div class="breadcrumbs">
+        <%= link_to("Home", rails_admin_dashboard_path) %> &rsaquo;
+        <%= @abstract_model.pretty_name %>
+      </div>
+<%= partial('layout/flash', :flash => flash) unless flash.blank? %>
+      <div id="content" class="flex">
+        <h1>
+          <%= page_name %>
+        </h1>
+<%= yield %>
+      </div>
+      <div id="footer"></div>
+    </div>
+  </body>
+</html>
