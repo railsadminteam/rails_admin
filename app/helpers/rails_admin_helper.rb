@@ -17,6 +17,7 @@ module RailsAdminHelper
   def object_property(object, property)
     property_type = property[:type]
     property_name = property[:name]
+    return "" if object.send(property_name).nil?
     case property_type
     when :boolean
       if object.send(property_name) == true
@@ -25,25 +26,21 @@ module RailsAdminHelper
         Builder::XmlMarkup.new.img(:src => image_path("icon-no.gif"), :alt => "False")
       end
     when :datetime
-      value = object.send(property_name)
-      value.respond_to?(:strftime) ? value.strftime("%b. %d, %Y, %I:%M%p") : nil
+      object.send(property_name).strftime("%b. %d, %Y, %I:%M%p")
     when :date
-      value = object.send(property_name)
-      value.respond_to?(:strftime) ? value.strftime("%b. %d, %Y") : nil
+      object.send(property_name).strftime("%b. %d, %Y")
     when :time
-      value = object.send(property_name)
-      value.respond_to?(:strftime) ? value.strftime("%I:%M%p") : nil
+      object.send(property_name).strftime("%I:%M%p")
     when :string
       if property_name.to_s =~ /(image|logo|photo|photograph|picture|thumb|thumbnail)_ur(i|l)/i
         Builder::XmlMarkup.new.img(:src => object.send(property_name), :width => 10, :height => 10)
       else
-        object.send(property_name).to_s
+        object.send(property_name)
       end
     when :text
-      object.send(property_name).to_s
+      object.send(property_name)
     when :integer
-      association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
-      if association
+      if association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
         object_label(object.send(association[:name]))
       else
         object.send(property_name)
