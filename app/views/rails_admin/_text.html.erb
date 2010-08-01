@@ -1,0 +1,11 @@
+<%
+  name = property[:name]
+  label = property[:pretty_name]
+  required = !property[:nullable?]
+%>
+                <div>
+                  <%= text_area(name, :cols => 80, :label => label) %>
+                  <p class="help">
+                    <%= required ? "Required." : "Optional." %>
+                  </p>
+                </div>

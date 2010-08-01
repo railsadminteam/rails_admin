@@ -1,0 +1,22 @@
+        <div id="content-main">
+          <div class="module">
+            <table summary="Models available in the application.">
+              <caption>
+                <%= link_to("Models", rails_admin_dashboard_path, :class => "section") %>
+              </caption>
+              <% @abstract_models.each do |abstract_model| %>
+              <tr>
+                <th scope="row">
+                  <%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %>
+                </th>
+                <td>
+                  <%= link_to("Add", rails_admin_new_path(:model_name => abstract_model.to_param), :class => "addlink") %>
+                </td>
+                <td>
+                  <%= link_to("Edit", rails_admin_list_path(:model_name => abstract_model.to_param), :class => "changelink") %>
+                </td>
+              </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>

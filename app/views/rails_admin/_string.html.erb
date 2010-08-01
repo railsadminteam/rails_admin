@@ -1,0 +1,15 @@
+<%
+  property_name = property[:name]
+  length = property[:length]
+  label = property[:pretty_name]
+  required = !property[:nullable?]
+%>
+                <div>
+                  <%= text_field(property_name, :size => [50, length].min, :maxlength => length, :label => label) %>
+                  <% if property_name.to_s =~ /(image|logo|photo|photograph|picture|thumb|thumbnail)_ur(i|l)/i %>
+                    <img src="<%= @object.send(property_name) %>" width="10" height"10" />
+                  <% end %>
+                  <p class="help">
+                    <%= required ? "Required." : "Optional." %> <%= length %> <%= length == 1 ? "character." : "characters or fewer." %>
+                  </p>
+                </div>

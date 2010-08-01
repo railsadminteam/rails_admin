@@ -1,0 +1,28 @@
+        <p>Are you sure you want to delete the <%= @abstract_model.pretty_name.downcase %> &ldquo;<%= object_label(@object) %>&rdquo;? All of the following related items will be deleted:</p>
+        <ul>
+          <li>
+            <%= @abstract_model.pretty_name %>: <%= link_to(object_label(@object), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => @object.id)) %>
+            <ul>
+              <% @abstract_model.has_many_associations.each do |association| %>
+              <% @object.send(association[:name]).reject{|child| child.nil?}.each do |child| %>
+              <li>
+                One or more <%= @abstract_model.pretty_name.pluralize.downcase %> in <%= association[:pretty_name].downcase %>: <%= link_to(object_label(child), rails_admin_edit_path(:model_name => association[:name].to_s.singularize.to_sym, :id => child.id)) %>
+              </li>
+              <% end %>
+              <% end %>
+              <% @abstract_model.has_one_associations.each do |association| %>
+              <% child = @object.send(association[:name]) %>
+              <% next if child.nil? %>
+              <li>
+                A <%= @abstract_model.pretty_name.downcase %> in <%= association[:pretty_name].downcase %>: <%= link_to(object_label(child), rails_admin_edit_path(:model_name => association[:name], :id => child.id)) %>
+              </li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+        <%= form_for(@object, :action => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :method => :delete) do %>
+          <div>
+            <%= submit "Yes, I'm sure" %>
+          </div>
+        <% end =%>
+

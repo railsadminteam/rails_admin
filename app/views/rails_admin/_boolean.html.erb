@@ -1,0 +1,7 @@
+<%
+  property_name = property[:name]
+  label = property[:pretty_name]
+%>
+                <div>
+                  <%= check_box(property_name, :label => label) %>
+                </div>

@@ -1,0 +1,16 @@
+        <div id="content-main">
+        <%= form_for(@object, :action => rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
+          <div>
+<%= partial('properties', :properties => @properties) -%>
+<%= partial('belongs_to', :with => @abstract_model.belongs_to_associations, :as => :association) -%>
+<%= partial('has_one', :with => @abstract_model.has_one_associations, :as => :association) -%>
+<%= partial('has_many', :with => @abstract_model.has_many_associations, :as => :association) -%>
+            <div class="submit-row" >
+              <%= submit "Save", :class => "default", :name => "_save" %>
+              <%= submit "Save and add another", :name => "_add_another" %>
+              <%= submit "Save and continue editing", :name => "_continue" %>
+            </div>
+          </div>
+        <% end =%>
+
+        </div>

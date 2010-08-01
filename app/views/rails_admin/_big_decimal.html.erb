@@ -1,0 +1,12 @@
+<%
+  property_name = property[:name]
+  length = property[:length]
+  label = property[:pretty_name]
+  required = !property[:nullable?] || property[:serial?]
+%>
+                <div>
+                  <%= text_field(property_name, :maxlength => length, :label => label) %>
+                  <p class="help">
+                    <%= required ? "Required." : "Optional." %>
+                  </p>
+                </div>

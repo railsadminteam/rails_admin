@@ -1,0 +1,12 @@
+<%
+  property_name = property[:name]
+  value = @object.send(property_name)
+  label = property[:pretty_name]
+  required = !property[:nullable?]
+%>
+                <div>
+                  <%= text_field(property_name, :class => "vTimeField", :value => value.respond_to?(:strftime) ? value.strftime("%H:%M:%S") : nil, :label => label) %>
+                  <p class="help">
+                    <%= required ? "Required." : "Optional." %>
+                  </p>
+                </div>

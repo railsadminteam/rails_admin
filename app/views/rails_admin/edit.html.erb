@@ -1,0 +1,19 @@
+        <div id="content-main">
+        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id)) do %>
+          <div>
+<%= render(:partial => 'properties', :object => @properties) -%>
+<%= render(:partial => 'belongs_to_association', :collection => @abstract_model.belongs_to_associations) -%>
+<%= render(:partial => 'has_one_association', :collection => @abstract_model.has_one_associations) -%>
+<%= render(:partial => 'has_many_association', :collection => @abstract_model.has_many_associations) -%>
+            <div class="submit-row" >
+              <%= submit_tag "Save", :class => "default", :name => "_save" %>
+              <p class="deletelink-box">
+                <%= link_to("Delete", rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => @object.id), :class => "deletelink") %>
+              </p>
+              <%= submit_tag "Save and add another", :name => "_add_another" %>
+              <%= submit_tag "Save and continue editing", :name => "_continue" %>
+            </div>
+          </div>
+        <% end =%>
+
+        </div>
