@@ -4,34 +4,60 @@
   slice_name = "RailsAdmin"
   page_name = "Site administration"
 %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="robots" content="NONE,NOARCHIVE" />
-    <title><%= page_name %> | <%= slice_name %></title>
-    <!-- FIXME: These should use something like "public_path_for" from merb-slices -->
-    <%= stylesheet_link_tag('base') %>
-    <%= stylesheet_link_tag('dashboard') %>
-    <!--[if lte IE 7]><%= stylesheet_link_tag('ie') %><![endif]-->
-  </head>
-  <body class="admin-slice dashboard">
-    <div id="container">
-      <div id="header">
-        <div id="branding">
-          <h1 id="site-name">
-            <%= slice_name %>
-          </h1>
-        </div>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="NONE,NOARCHIVE" />
+  <title><%= page_name %> | <%= slice_name %></title>
+  <%= stylesheet_link_tag('style') %>
+</head>
+
+<body>
+  <div id="wraper">
+    <div id="header">
+      <div id="headerLeft">
+        <ul class="breadcrumb">
+          <li>
+            <a href="#">Overview</a>
+          </li>
+          <li>
+            <a href="#">></a>
+          </li>
+          <li>
+            <a href="#">Modules</a>
+          </li>
+        </ul>
+        <h1>Rails Admin</h1>
       </div>
-<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
-      <div id="content" class="colMS">
-        <h1>
-          <%= page_name %>
-        </h1>
-<%= content_for(:layout) -%>
+      
+      <ul id="nav">
+        <li id="active"><a href="#">Overview</a></li>
+        <li><a href="#">Polls</a></li>
+      </ul>
+            
+      <div id="headerRight">
+        <ul class="breadcrumb">
+          <li>
+            <a href="#">John Doe</a>
+          </li>
+          <li>|</li>
+          <li>
+            <a href="#">My profile</a>
+          </li>
+          <li>|</li>
+          <li>
+            <a href="#">Log out</a>
+          </li>
+        </ul>
       </div>
-      <div id="footer"></div>
     </div>
-  </body>
+    
+    <div id="content">
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
+<%= content_for(:layout) %>
+    </div>
+  </div>
+</body>
 </html>
