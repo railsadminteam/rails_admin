@@ -1,11 +1,12 @@
 <%
-  name = property[:name]
+  property_name = property[:name]
   label = property[:pretty_name]
   required = !property[:nullable?]
+  model_name = @abstract_model.to_param
 %>
                 <div>
                   <%= label_tag label %>
-                  <%= text_area name, :cols => 80 %>
+                  <%= text_area model_name, property_name, :cols => 80 %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>

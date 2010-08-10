@@ -3,10 +3,11 @@
   length = property[:length]
   label = property[:pretty_name]
   required = !property[:nullable?] || property[:serial?]
+  model_name = @abstract_model.to_param
 %>
                 <div>
                   <%= label_tag label %>
-                  <%= text_field property_name, :maxlength => length %>
+                  <%= text_field model_name, property_name, :maxlength => length %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>

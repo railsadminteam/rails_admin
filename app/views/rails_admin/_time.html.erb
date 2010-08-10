@@ -3,10 +3,11 @@
   value = @object.send(property_name)
   label = property[:pretty_name]
   required = !property[:nullable?]
+  model_name = @abstract_model.to_param
 %>
                 <div>
                   <%= label_tag label %>
-                  <%= text_field property_name, :class => "vTimeField", :value => value.respond_to?(:strftime) ? value.strftime("%H:%M:%S") : nil %>
+                  <%= text_field model_name, property_name, :class => "vTimeField", :value => value.respond_to?(:strftime) ? value.strftime("%H:%M:%S") : nil %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>
