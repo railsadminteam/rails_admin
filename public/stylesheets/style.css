@@ -7,7 +7,7 @@
 
 body{
 	text-align:center;
-	background:#f6f6f6 url(images/background.png) repeat-x;
+	background:#f6f6f6 url(/images/background.png) repeat-x;
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
 }
