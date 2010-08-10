@@ -1,8 +1,8 @@
 <%
   # FIXME
   # slice_name = "RailsAdmin" + (RailsAdmin[:app_name].blank? ? "" : " for #{RailsAdmin[:app_name]}")
-  slice_name = "RailsAdmin"
-  page_name = "Site administration"
+  @slice_name = "RailsAdmin"
+  @page_name = "Site administration"
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -10,7 +10,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="robots" content="NONE,NOARCHIVE" />
-  <title><%= page_name %> | <%= slice_name %></title>
+  <title><%= @page_name %> | <%= @slice_name %></title>
   <%= stylesheet_link_tag('style') %>
 </head>
 
@@ -33,9 +33,7 @@
       </div>
       
       <ul id="nav">
-        <li id="active"><a href="#">Overview</a></li>
-        <li><a href="#">Polls</a></li>
-      </ul>
+<%= render(:partial => 'rails_admin/navigation', :locals => {:abstract_models => @abstract_models}) %>      </ul>
             
       <div id="headerRight">
         <ul class="breadcrumb">
