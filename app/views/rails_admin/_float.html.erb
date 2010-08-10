@@ -5,7 +5,8 @@
   required = !property[:nullable?] || property[:serial?]
 %>
                 <div>
-                  <%= text_field(property_name, :maxlength => length, :label => label) %>
+                  <%= label_tag label %>
+                  <%= text_field property_name, :maxlength => length %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>

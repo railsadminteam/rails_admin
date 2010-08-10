@@ -8,7 +8,8 @@
               <h2><%= label %></h2>
               <div class="form-row">
                 <div>
-                  <%= select("associations", association_name, collection, :id => association_name, :selected => selected.map{|o| o.id.to_s}, :label => label, :multiple => true) %>
+                  <%= label_tag label %>
+                  <%= select "associations", association_name, collection, :id => association_name, :selected => selected.map{|o| o.id.to_s}, :multiple => true %>
                   <script type="text/javascript">addEvent(window, "load", function(e) {SelectFilter.init("<%= association_name %>", "<%= association_name %>", 0, "<%= image_path("") %>"); });</script>
                   <p class="help">Hold down "Control", or "Command" on a Mac, to select more than one.</p>
                 </div>

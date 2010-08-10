@@ -21,7 +21,8 @@
                 </ul>
                 <% end %>
                 <div>
-                  <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected ? selected.id.to_s : nil, :label => label}) %>
+                  <%= label_tag label %>
+                  <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected ? selected.id.to_s : nil}) %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>

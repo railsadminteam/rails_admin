@@ -4,7 +4,8 @@
   required = !property[:nullable?]
 %>
                 <div>
-                  <%= text_area(name, :cols => 80, :label => label) %>
+                  <%= label_tag label %>
+                  <%= text_area name, :cols => 80 %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>

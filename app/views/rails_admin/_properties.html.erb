@@ -1,5 +1,7 @@
             <fieldset class="module aligned">
               <% belongs_to_keys = @abstract_model.belongs_to_associations.map{|b| b[:child_key].first} %>
+              <% # reject some attributes and loop through the properties
+              %>
               <% @properties.reject{|property| [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(property[:name]) || belongs_to_keys.include?(property[:name])}.each do |property| %>
               <% property_name = property[:name] %>
               <% property_type = property[:type] %>
@@ -12,7 +14,7 @@
                   <% end %>
                 </ul>
                 <% end %>
-<%= render(:partial => property_type.to_s, :locals => {:property => property}) -%>
+<%= render :partial => property_type.to_s, :locals => {:property => property} %>
               </div>
               <% end %>
             </fieldset>

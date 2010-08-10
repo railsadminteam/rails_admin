@@ -3,5 +3,6 @@
   label = property[:pretty_name]
 %>
                 <div>
-                  <%= check_box(property_name, :label => label) %>
+                  <%= label_tag label %>
+                  <%= check_box property_name %>
                 </div>

@@ -5,7 +5,8 @@
   required = !property[:nullable?]
 %>
                 <div>
-                  <%= text_field(property_name, :class => "vTimeField", :value => value.respond_to?(:strftime) ? value.strftime("%H:%M:%S") : nil, :label => label) %>
+                  <%= label_tag label %>
+                  <%= text_field property_name, :class => "vTimeField", :value => value.respond_to?(:strftime) ? value.strftime("%H:%M:%S") : nil %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>

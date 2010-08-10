@@ -20,7 +20,8 @@
                 </ul>
                 <% end %>
                 <div>
-                  <%= select("object", child_key, collection, {:include_blank => true, :selected => selected.to_s, :label => label}) %>
+                  <%= label_tag label %>
+                  <%= select("object", child_key, collection, {:include_blank => true, :selected => selected.to_s}) %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>
