@@ -1,4 +1,6 @@
-        <li id="active"><a href="#">Overview</a></li>
+      <ul id="nav">  
+        <li id="active"><%= link_to("Dashboard", rails_admin_dashboard_path) %></li>
 <% @abstract_models.each do |abstract_model| %>
         <li><%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %></li>
 <% end %>
+      </ul>
