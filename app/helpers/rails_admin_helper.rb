@@ -18,6 +18,7 @@ module RailsAdminHelper
     property_type = property[:type]
     property_name = property[:name]
     return "" if object.send(property_name).nil?
+
     case property_type
     when :boolean
       if object.send(property_name) == true
@@ -85,15 +86,19 @@ module RailsAdminHelper
   #    Provides the base url to use in the page navigation links.
   #    Defaults to ''
   def paginate(current_page, page_count, options = {})
+
     options[:left_cut_label] ||= '&hellip;'
     options[:right_cut_label] ||= '&hellip;'
     options[:outer_window] ||= 2
     options[:inner_window] ||= 7
     options[:page_param] ||= 'page'
-    options[:url] ||= ''
+    options[:url] ||= ""
 
     url = options.delete(:url)
-    url << (url.include?('?') ? '&' : '?') << options[:page_param]
+    url = url.to_a.collect{|x| x.join("=")}.join("&")
+
+    url += (url.include?('=') ? '&' : '') + options[:page_param]
+    url = "?"+url
 
     pages = {
       :all => (1..page_count).to_a,
@@ -133,6 +138,7 @@ module RailsAdminHelper
 
     [pages[:left], pages[:center], pages[:right]].each do |p|
       p.each do |page_number|
+        
         case page_number
         when String
           b << page_number
