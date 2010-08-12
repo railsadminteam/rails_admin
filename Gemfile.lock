@@ -69,5 +69,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  builder
   rails (= 3.0.0.rc)
   sqlite3-ruby
