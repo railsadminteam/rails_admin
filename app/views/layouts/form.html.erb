@@ -1,13 +1,9 @@
-<%
-  slice_name = "RailsAdmin"
-  page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="robots" content="NONE,NOARCHIVE" />
-    <title><%= page_name %> | <%= slice_name %></title>
+    <title><%= @page_name %> | <%= @plugin_name %></title>
     <!-- FIXME: These should use something like "public_path_for" from merb-slices -->
     <%= stylesheet_link_tag('base.css') %>
     <%= stylesheet_link_tag('forms.css') %>
@@ -27,19 +23,20 @@
       <div id="header">
         <div id="branding">
           <h1 id="site-name">
-            <%= slice_name %>
+            <%= @plugin_name %>
           </h1>
         </div>
       </div>
       <div class="breadcrumbs">
         <%= link_to("Home", rails_admin_dashboard_path) %> &rsaquo;
         <%= link_to(@abstract_model.pretty_name, rails_admin_list_path(:model_name => @abstract_model.to_param)) %> &rsaquo;
-        <%= page_name %>
+        <%= @page_name %>
       </div>
-<%= partial('layout/flash', :flash => flash) unless flash.blank? %>
+
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="content" class="colM">
         <h1>
-          <%= page_name %>
+          <%= @page_name %>
         </h1>
 <%= yield %>
       </div>

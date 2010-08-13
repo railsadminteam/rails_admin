@@ -46,7 +46,7 @@ class RailsAdminController < ApplicationController
 
   def new
     @object = @abstract_model.new
-
+    @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     render :layout => 'form'
   end
 
