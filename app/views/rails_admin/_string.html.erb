@@ -4,10 +4,11 @@
   length = property[:length]
   label = property[:pretty_name]
   required = !property[:nullable?]
+  
 %>
                 <%= label_tag "#{property_name}", label %>
-                
-                <%= text_field model_name, property_name, :size => [50, length].min, :maxlength => length, :class => "stringField #{errors_exist ? "errorField" : nil}" %>
+                <% object_property(@object,property) %>
+                <%= text_field model_name, property_name, :size => [50, length].min, :maxlength => length, :class => "stringField #{errors_exist ? "errorField" : nil}", :value => object_property(@object,property) %>
                 <!--><p class="help">
                   <%= required ? "Required." : "Optional." %> <%= length %> <%= length == 1 ? "character." : "characters or fewer." %>
                 </p>-->

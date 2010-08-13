@@ -40,6 +40,7 @@ module MerbAdmin
       model = self.class.lookup(model.to_s.camelize) unless model.is_a?(Class)
       @model = model
       self.extend(GenericSupport)
+      ### TODO more ORMs support
       require 'rails_admin/active_record_support'
       self.extend(ActiverecordSupport)
     end

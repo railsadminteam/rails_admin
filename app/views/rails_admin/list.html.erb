@@ -52,7 +52,7 @@
           <% end %>
           <li class="otherRow"><a href="#">...</a></li>
           <li class="actionRow editAction"><%= link_to("Edit", rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
-          <li class="actionRow deleteAction"><a href="#">Delete</a></li>
+          <li class="actionRow deleteAction"><%= link_to("Delete",rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
         </ul>
         <% end %>                
       </div>

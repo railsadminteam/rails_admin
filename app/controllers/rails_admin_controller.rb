@@ -69,10 +69,19 @@ class RailsAdminController < ApplicationController
   end
 
   def edit
+    
+    @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+    @abstract_models = MerbAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
+    
     render(:layout => 'form')
   end
 
   def update
+    @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+    @abstract_models = MerbAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
+    
     if @object.update_attributes(@attributes) && update_all_associations
       redirect_to_on_success
     else

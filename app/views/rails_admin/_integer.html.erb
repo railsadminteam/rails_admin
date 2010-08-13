@@ -7,7 +7,7 @@
 %>
               <%= label_tag "#{property_name}", label %>
               
-              <%= text_field model_name, property_name,  :maxlength => length, :class => "intField #{errors_exist ? "errorField" : nil}" %>
+              <%= text_field model_name, property_name,  :maxlength => length, :class => "intField #{errors_exist ? "errorField" : nil}", :value => object_property(@object,property) %>
               <!--><p class="help">
               <%= required ? "Required." : "Optional." %> <%= length %> <%= length == 1 ? "character." : "characters or fewer." %>
               </p>-->
