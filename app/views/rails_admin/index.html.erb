@@ -1,7 +1,7 @@
         <div id="contentHeader">
           <h2><%= @page_name %></h2>
         </div>
-
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
         <div id="contentMain">
           <div class="section">
             <ul class="menu">

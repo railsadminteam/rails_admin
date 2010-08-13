@@ -14,30 +14,28 @@
   <%= stylesheet_link_tag('datepicker.css') %>
 
 
-<script type="text/javascript" language="javascript">
-document.observe("dom:loaded", function() {
-	$$(".dateField").each(function(elem){
-		new Control.DatePicker(elem, {icon: '/images/calendar.png'});
-	});
-	// .dateField, .timestampField, .timeField, .datetimeField
-	$$(".timestampField").each(function(elem){
-		new Control.DatePicker(elem, {icon: '/images/clock.png',timePicker: true, timePickerAdjacent: true});
-	});
-	$$(".timeField").each(function(elem){
-		new Control.DatePicker(elem, {icon: '/images/clock.png',timePicker: true,datePicker :false});
-	});
-	$$(".datetimeField").each(function(elem){
-		new Control.DatePicker(elem, {icon: '/images/calendar.png',timePicker: true, timePickerAdjacent: true});
-	});
-});
+  <script type="text/javascript" language="javascript">
+  document.observe("dom:loaded", function() {
+  	$$(".dateField").each(function(elem){
+  		new Control.DatePicker(elem, {icon: '/images/calendar.png'});
+  	});
+  	// .dateField, .timestampField, .timeField, .datetimeField
+  	$$(".timestampField").each(function(elem){
+  		new Control.DatePicker(elem, {icon: '/images/clock.png',timePicker: true, timePickerAdjacent: true});
+  	});
+  	$$(".timeField").each(function(elem){
+  		new Control.DatePicker(elem, {icon: '/images/clock.png',timePicker: true,datePicker :false});
+  	});
+  	$$(".datetimeField").each(function(elem){
+  		new Control.DatePicker(elem, {icon: '/images/calendar.png',timePicker: true, timePickerAdjacent: true});
+  	});
+  });
 
-</script>
+  </script>
 
-
-
-<title>Rails Admin Modules</title>
-<link href="base.css" rel="stylesheet" type="text/css" />
-<link href="create.css" rel="stylesheet" type="text/css" />
+  <title><%= @page_name %></title>
+  <link href="base.css" rel="stylesheet" type="text/css" />
+  <link href="create.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -75,7 +73,6 @@ document.observe("dom:loaded", function() {
     </div>
     
     <div id="content">
-<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>      
 <%= yield %>      
     </div>
   </div>
