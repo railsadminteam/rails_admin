@@ -90,12 +90,17 @@ class RailsAdminController < ApplicationController
   end
 
   def delete
-    render(:layout => 'form')
+    @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+    @abstract_models = MerbAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
+    
+    render(:layout => 'delete')
   end
 
   def destroy
     @object.destroy
-    redirect_to(url_for(:rails_admin_list, :model_name => @abstract_model.to_param), :message => {:notice => "#{@abstract_model.pretty_name} was successfully destroyed"})
+    flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
+    redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
   end
 
   private

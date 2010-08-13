@@ -1,0 +1,38 @@
+#contentMainDelete{
+	padding:5px;
+}
+
+#contentMainDelete ul{
+	margin-left:14px;
+	margin-top:4px;
+}
+
+#contentMainDelete ul li{
+	margin-bottom:3px;
+}
+
+#contentMainDelete ul li a{
+	color:#000;
+}
+
+#contentMainDelete ul li a:hover{
+	text-decoration:none;
+}
+
+#deleteConfirmation{
+	margin-left:-5px;
+	margin-bottom:-4px;
+	background:url(/images/delete_confirmation.png) no-repeat;
+	width:106px;
+	height:37px;
+}
+
+#deleteConfirmation input{
+	background:none;
+	margin-top:5px;
+	margin-left:6px;
+	width:94px;
+	height:26px;
+	border:none;
+	text-indent:-9999px;
+}
