@@ -46,13 +46,20 @@ class RailsAdminController < ApplicationController
 
   def new
     @object = @abstract_model.new
+    
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+    @abstract_models = MerbAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
+    
     render :layout => 'form'
   end
 
   def create
     @object = @abstract_model.new(@attributes)
-    @object.save!
+    
+    @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+    @abstract_models = MerbAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
     
     if @object.save && update_all_associations
       redirect_to_on_success
@@ -185,9 +192,7 @@ class RailsAdminController < ApplicationController
     param = @abstract_model.to_param
     pretty_name = @abstract_model.pretty_name
     action = params[:action]
-    
-      
-    
+       
     if params[:_continue]
       redirect_to(url_for(:rails_admin_edit, :model_name => param, :id => @object.id), :message => {:notice => "#{pretty_name} was successfully #{action}d"})
     elsif params[:_add_another]
