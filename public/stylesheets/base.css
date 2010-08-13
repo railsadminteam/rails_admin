@@ -190,7 +190,7 @@ ul#quick li:hover ul a{
 }
 
 ul#quick li a {
-	background:url(images/fast_btn.png) repeat-x;
+	background:url(/images/fast_btn.png) repeat-x;
 	border:1px solid #DDD;
 	padding:5px;
 	text-decoration:none;

@@ -22,54 +22,112 @@
 .idHeader{
 	width:46px;
 	text-align:center;
+	background:#FC9;
 }
 
 .idRow{
 	width:46px;
 	text-align:center;
-
+	background:#FC9;
 }
 
-.varcharMinHeader{
-	width:150px;
+.dateHeader{
+	background:#FCC;
 	text-align:center;
+	width:90px;
 }
-
-.varcharMinRow{
-	width:150px;
+.dateRow{
+	background:#FCC;
 	text-align:center;
+	width:90px;
 }
-
-.varcharMaxHeader{
-	width:234px;
+.timeHeader{
+	background:#F99;
 	text-align:center;
+	width:60px
 }
-
-.varcharMaxRow{
-	width:234px;
+.timeRow{
+	background:#F99;
 	text-align:center;
-
+	width:60px
 }
-
-.smallIntHeader{
-	width:80px;
+.dateTimeHeader{
+	background:#FC6;
 	text-align:center;
+	width:170px
+}
+.dateTimeRow{
+	background:#FC6;
+	text-align:center;
+	width:170px
+}
+.smallStringHeader{
+	background:#F66;
+	text-align:center;
+	width:180px
+}
+.smallStringRow{
+	background:#F66;
+	text-align:center;
+	width:180px;
 }
 
-.smallIntRow{
-	width:80px;
+.bigStringHeader{
+	background:#0CC;
 	text-align:center;
+	width:240px
+
+}
+.bigStringRow{
+	background:#0CC;
+	text-align:center;
+	width:240px
 }
 
-.bigIntHeader{
-	width:150px;
+.textHeader{
+	background:#0CC;
 	text-align:center;
+	width:240px
+}
+.textRow{
+	background:#0CC;
+	text-align:center;
+	width:240px
+}
+.intHeader{
+	background:#9CC;
+	text-align:center;
+	width:80px
+}
+.intRow{
+	background:#9CC;
+	text-align:center;
+	width:80px
+
+}
+.bigDecimalHeader{
+	background:#CC6;
+	text-align:center;
+	width:110px
+
+}
+.bigDecimalRow{
+	background:#CC6;
+	text-align:center;
+	width:110px
+
+}
+.floatHeader{
+	background:#39C;
+	text-align:center;
+	width:110px
+}
+.floatRow{
+	background:#39C;
+	text-align:center;
+	width:110px
 }
 
-.bigIntRow{
-	width:150px;
-	text-align:center;
-}
 
 .otherHeader{
 	width:40px;

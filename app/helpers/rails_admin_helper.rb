@@ -1,6 +1,39 @@
 require 'builder'
 
 module RailsAdminHelper
+  
+  def getColumnType(property,type)
+    property_type = property[:type]
+    property_name = property[:name]
+    
+    case property_type
+    when :boolean
+      "bool#{type}"
+    when :datetime
+      "dateTime#{type}"
+    when :date
+      "date#{type}"
+    when :time
+      "time#{type}"
+    when :string
+      if property[:length] < 100
+        "smallString#{type}"
+      else
+        "bigString#{type}"
+      end
+    when :text
+      "text#{type}"
+    when :integer
+      if property_name == :id
+        "id#{type}"
+      else
+        "int#{type}"
+      end
+    when :float
+      "float#{type}"
+    else
+    end
+  end
 
   def object_label(object)
     if object.nil?
@@ -14,6 +47,7 @@ module RailsAdminHelper
     end
   end
 
+  # FIXME same as getColumnType - next iteration when adding associations
   def object_property(object, property)
     property_type = property[:type]
     property_name = property[:name]
