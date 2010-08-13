@@ -5,10 +5,9 @@
   required = !property[:nullable?] || property[:serial?]
   model_name = @abstract_model.to_param
 %>
-                <div>
-                  <%= label_tag label %>
-                  <%= text_field model_name, property_name, :maxlength => length %>
-                  <p class="help">
-                    <%= required ? "Required." : "Optional." %>
-                  </p>
-                </div>
+               <%= label_tag "#{property_name}", label %>
+
+               <%= text_field model_name, property_name,  :maxlength => length, :class => "floatField #{errors_exist ? "errorField" : nil}" %>
+               <!--><p class="help">
+               <%= required ? "Required." : "Optional." %> <%= length %> <%= length == 1 ? "character." : "characters or fewer." %>
+               </p>-->

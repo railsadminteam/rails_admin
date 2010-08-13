@@ -5,10 +5,9 @@
   required = !property[:nullable?]
   model_name = @abstract_model.to_param
 %>
-                <div>
-                  <%= label_tag label %>
-                  <%= text_field model_name, property_name, :class => "vDateField", :value => value.respond_to?(:strftime) ? value.strftime("%Y-%m-%d %H:%M:%S") : nil %>
-                  <p class="help">
-                    <%= required ? "Required." : "Optional." %>
-                  </p>
-                </div>
+                <%= label_tag "#{property_name}", label %>
+
+                <%= text_field model_name, property_name,  :maxlength => length, :class => "datetimeField #{errors_exist ? "errorField" : nil}" %>
+                <!--><p class="help">
+                <%= required ? "Required." : "Optional." %> <%= length %> <%= length == 1 ? "character." : "characters or fewer." %>
+                </p>-->

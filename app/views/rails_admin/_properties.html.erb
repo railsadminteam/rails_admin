@@ -1,20 +1,16 @@
-            <fieldset class="module aligned">
               <% belongs_to_keys = @abstract_model.belongs_to_associations.map{|b| b[:child_key].first} %>
               <% # reject some attributes and loop through the properties
               %>
               <% @properties.reject{|property| [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(property[:name]) || belongs_to_keys.include?(property[:name])}.each do |property| %>
+              
               <% property_name = property[:name] %>
               <% property_type = property[:type] %>
               <% errors_exist = !(@object.errors[property_name].nil? || @object.errors[property_name].empty?) %>
-              <div class="<%= errors_exist ? "form-row errors" : "form-row" %>">
-                <% if errors_exist %>
-                <ul class="errorlist">
-                  <% @object.errors[property_name].each do |error| %>
-                  <li><%= error %></li>
-                  <% end %>
-                </ul>
+              
+              <p>
+<%= render :partial => property_type.to_s, :locals => {:property => property, :errors_exist => errors_exist} %>
+              	<% if errors_exist %>
+                <span class="errorMessage"><%= "#{property_name.capitalize} #{@object.errors[property_name].first}" %></span>
                 <% end %>
-<%= render :partial => property_type.to_s, :locals => {:property => property} %>
-              </div>
+            	</p>
               <% end %>
-            </fieldset>
