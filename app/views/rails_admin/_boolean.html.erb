@@ -3,7 +3,9 @@
   label = property[:pretty_name]
   model_name = @abstract_model.to_param
 %>
-                <div>
+
+                <p>
                   <%= label_tag label %>
-                  <%= check_box model_name, property_name %>
-                </div>
+                  <%= check_box model_name, property_name, :checked => object_property(@object,property).nil? ? true : false%>
+                </p>
+              	
