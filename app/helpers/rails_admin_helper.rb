@@ -2,6 +2,82 @@ require 'builder'
 
 module RailsAdminHelper
   
+  def calculateWidth(properties)
+    # local variables
+    total = 0
+    set = []
+    
+    # variables used in loop
+    partialTotal = 0
+    temp = []
+    
+    debugString = ""
+    
+    properties.each do |property|
+      width = getWidthForColumn(property)
+      
+      debugString += " #{width}"
+      
+      if partialTotal + width > 697
+        set << { :p => temp, :size =>partialTotal}
+        partialTotal = 0
+        temp = []
+      end
+      
+      temp << property
+      partialTotal += width
+      total += width
+    end
+    
+    set << { :p => temp, :size =>partialTotal}
+    
+    return set
+  end
+  
+  # calculate sets
+  # expand set
+  
+  def getColumnSet(properties)
+    sets = calculateWidth(properties)
+    
+    current_set ||= params[:set].to_i
+    selected_set = sets[current_set][:p]
+    return selected_set
+  end
+  
+  def getWidthForColumn(property)
+    property_type = property[:type]
+    property_name = property[:name]
+    
+    case property_type
+    when :boolean
+      return 40
+    when :datetime
+      return 170
+    when :date
+      return 90
+    when :time
+      return 60
+    when :string
+      if property[:length] < 100
+        return 180
+      else
+        return 250
+      end
+    when :text
+      return 250
+    when :integer
+      if property_name == :id
+        return 46
+      else
+        return 80
+      end
+    when :float
+      return 110
+    else
+    end
+  end
+  
   def getColumnType(property,type)
     property_type = property[:type]
     property_name = property[:name]
