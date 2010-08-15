@@ -61,10 +61,19 @@ class RailsAdminController < ApplicationController
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
-    if @object.save && update_all_associations
-      redirect_to_on_success
+    if params["_continue"] == "cancel"
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)  
     else
-      render_error
+      if @object.save && update_all_associations
+        if params["_add_another"] == "Save and add another"
+          flash[:notice] = "#{@abstract_model.pretty_name} was successfully created"
+          redirect_to rails_admin_new_path(:model_name => @abstract_model.to_param)  
+        else
+          redirect_to_on_success
+        end
+      else
+        render_error
+      end
     end
   end
 
@@ -83,10 +92,15 @@ class RailsAdminController < ApplicationController
     @page_type = @abstract_model.pretty_name.downcase
     
     if params["_continue"] == "cancel"
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)  
     else
       if @object.update_attributes(@attributes) && update_all_associations
-        redirect_to_on_success
+        if params["_add_another"] == "Save and add another"
+          flash[:notice] = "#{@abstract_model.pretty_name} was successfully updated"
+          redirect_to rails_admin_new_path(:model_name => @abstract_model.to_param)  
+        else
+          redirect_to_on_success
+        end
       else
         render_error
       end
