@@ -177,14 +177,14 @@ module RailsAdminHelper
   def object_property(object, property)
     property_type = property[:type]
     property_name = property[:name]
-    return "" if object.send(property_name).nil?
+    return "&nbsp;".html_safe if object.send(property_name).nil?
 
     case property_type
     when :boolean
       if object.send(property_name) == true
-        Builder::XmlMarkup.new.img(:src => image_path("icon-yes.gif"), :alt => "True")
+        Builder::XmlMarkup.new.img(:src => image_path("bullet_black.png"), :alt => "True").html_safe
       else
-        Builder::XmlMarkup.new.img(:src => image_path("icon-no.gif"), :alt => "False")
+        Builder::XmlMarkup.new.img(:src => image_path("bullet_white.png"), :alt => "False").html_safe
       end
     when :datetime
       object.send(property_name).strftime("%b. %d, %Y, %I:%M%p")
@@ -194,7 +194,7 @@ module RailsAdminHelper
       object.send(property_name).strftime("%I:%M%p")
     when :string
       if property_name.to_s =~ /(image|logo|photo|photograph|picture|thumb|thumbnail)_ur(i|l)/i
-        Builder::XmlMarkup.new.img(:src => object.send(property_name), :width => 10, :height => 10)
+        Builder::XmlMarkup.new.img(:src => object.send(property_name), :width => 10, :height => 10).html_safe
       else
         object.send(property_name)
       end

@@ -176,6 +176,7 @@ class RailsAdminController < ApplicationController
   end
 
   def update_all_associations
+
     @abstract_model.associations.each do |association|
       ids = (params[:associations] || {}).delete(association[:name])
       case association[:type]
