@@ -4,10 +4,7 @@
   required = !property[:nullable?]
   model_name = @abstract_model.to_param
 %>
-                <div>
-                  <%= label_tag label %>
-                  <%= text_area model_name, property_name, :cols => 80 %>
-                  <p class="help">
-                    <%= required ? "Required." : "Optional." %>
-                  </p>
-                </div>
+              <p>
+              	<%= label_tag label %>
+              	<%= text_area model_name, property_name, :cols => 50, :rows => 10, :class => "textField" %>
+              </p>

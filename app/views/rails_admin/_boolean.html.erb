@@ -6,6 +6,6 @@
 
                 <p>
                   <%= label_tag label %>
-                  <%= check_box model_name, property_name, :checked => object_property(@object,property).nil? ? true : false%>
+                  <%= check_box model_name, property_name, :checked => @object.send(property_name) ? true : false %>
                 </p>
               	
