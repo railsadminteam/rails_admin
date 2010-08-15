@@ -14,7 +14,7 @@
               <div class="formSection">
                 <p>
                   <%= label_tag label %>
-                  <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected ? selected.id.to_s : nil}) %>
+                  <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected ? selected.id.to_s : nil},:class => "#{errors_exist ? "errorField" : nil}") %>
                 </p>
 
               </div>

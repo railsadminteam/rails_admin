@@ -15,7 +15,7 @@
               <div class="formSection">
                 <p>
                   <%= label_tag label %>
-                  <%= select(model_name, child_key, collection, {:include_blank => true, :selected => selected.to_s}) %>
+                  <%= select model_name, child_key, collection, {:include_blank => true, :selected => selected.to_s}, :class => "#{errors_exist ? "errorField" : nil}" %>
                 </p>
 
               </div>
