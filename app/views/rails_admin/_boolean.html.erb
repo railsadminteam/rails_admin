@@ -4,8 +4,5 @@
   model_name = @abstract_model.to_param
 %>
 
-                <p>
-                  <%= label_tag label %>
-                  <%= check_box model_name, property_name, :checked => @object.send(property_name) ? true : false %>
-                </p>
-              	
+                <%= label_tag label %>
+                <%= check_box model_name, property_name, :checked => @object.send(property_name) ? true : false %>

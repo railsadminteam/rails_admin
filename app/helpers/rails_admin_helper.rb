@@ -177,7 +177,7 @@ module RailsAdminHelper
   def object_property(object, property)
     property_type = property[:type]
     property_name = property[:name]
-    return "&nbsp;".html_safe if object.send(property_name).nil?
+    return "".html_safe if object.send(property_name).nil?
 
     case property_type
     when :boolean

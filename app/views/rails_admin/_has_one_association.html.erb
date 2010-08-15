@@ -10,22 +10,11 @@
     required = true unless property[:nullable?]
   end
 %>
-            <fieldset class="module aligned">
               <h2><%= label %></h2>
-              <div class="<%= errors_exist ? "form-row errors" : "form-row" %>">
-                <% if errors_exist %>
-                <ul class="errorlist">
-                  <% @object.errors[child_key].each do |error| %>
-                  <li><%= error %></li>
-                  <% end %>
-                </ul>
-                <% end %>
-                <div>
+              <div class="formSection">
+                <p>
                   <%= label_tag label %>
                   <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected ? selected.id.to_s : nil}) %>
-                  <p class="help">
-                    <%= required ? "Required." : "Optional." %>
-                  </p>
-                </div>
+                </p>
+
               </div>
-            </fieldset>

@@ -82,10 +82,14 @@ class RailsAdminController < ApplicationController
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
-    if @object.update_attributes(@attributes) && update_all_associations
-      redirect_to_on_success
+    if params["_continue"] == "cancel"
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     else
-      render_error
+      if @object.update_attributes(@attributes) && update_all_associations
+        redirect_to_on_success
+      else
+        render_error
+      end
     end
   end
 
@@ -169,6 +173,7 @@ class RailsAdminController < ApplicationController
 
   def get_attributes
     @attributes = params[@abstract_model.to_param] || {}
+    
     # Delete fields that are blank
     @attributes.each do |key, value|
       @attributes[key] = nil if value.blank?
@@ -183,7 +188,7 @@ class RailsAdminController < ApplicationController
       when :has_one
         update_association(association, ids)
       when :has_many
-        update_associations(association, ids.to_a)
+        update_associations(association, [ids])
       end
     end
   end

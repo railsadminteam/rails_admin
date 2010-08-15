@@ -10,22 +10,12 @@
   end
   model_name = @abstract_model.to_param
 %>
-            <fieldset class="module aligned">
+            
               <h2><%= label %></h2>
-              <div class="<%= errors_exist ? "form-row errors" : "form-row"%>">
-                <% if errors_exist %>
-                <ul class="errorlist">
-                  <% @object.errors[child_key].each do |error| %>
-                  <li><%= error %></li>
-                  <% end %>
-                </ul>
-                <% end %>
-                <div>
+              <div class="formSection">
+                <p>
                   <%= label_tag label %>
                   <%= select(model_name, child_key, collection, {:include_blank => true, :selected => selected.to_s}) %>
-                  <p class="help">
-                    <%= required ? "Required." : "Optional." %>
-                  </p>
-                </div>
+                </p>
+
               </div>
-            </fieldset>

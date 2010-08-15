@@ -4,14 +4,13 @@
   selected = @object.send(association_name)
   label = has_many_association[:pretty_name]
 %>
-            <fieldset class="module aligned">
-              <h2><%= label %></h2>
-              <div class="form-row">
-                <div>
+            <h2><%= label %></h2>
+            <div class="formSection">
+              <p>
+                
                   <%= label_tag label %>
                   <%= select "associations", association_name, collection, :id => association_name, :selected => selected.map{|o| o.id.to_s}, :multiple => true %>
-                  <script type="text/javascript">addEvent(window, "load", function(e) {SelectFilter.init("<%= association_name %>", "<%= association_name %>", 0, "<%= image_path("") %>"); });</script>
-                  <p class="help">Hold down "Control", or "Command" on a Mac, to select more than one.</p>
-                </div>
-              </div>
-            </fieldset>
+
+              </p>
+
+            </div>
