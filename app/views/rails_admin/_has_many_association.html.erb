@@ -1,8 +1,12 @@
 <%
   association_name = has_many_association[:name]
+  child_key = has_many_association[:child_key].first
+  
   collection = MerbAdmin::AbstractModel.new(has_many_association[:child_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
   selected = @object.send(association_name)
   label = has_many_association[:pretty_name]
+  
+  errors_exist = !(@object.errors[child_key].nil? || @object.errors[child_key].empty?)
 %>
             <h2><%= label %></h2>
             <div class="formSection">
