@@ -5,7 +5,26 @@
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
   filters_exist = !@properties.select{|property| property[:type] == :boolean}.empty?
+  # columns paginate
+  @style, @other, @properties = getColumnSet(@properties)
 %>
+
+<style type="text/css">
+<% @style.each do |key,value| %>
+  <%= ".#{key}Header" %>{
+    width: <%= value[:width] %>px;
+  }
+  
+  <%= ".#{key}Row" %>{
+    width: <%= value[:width] %>px;
+  }
+<% end %>
+<% @other.each do |t| %>
+  <%= ".#{t}"%>{
+    display:none;
+  }
+<% end %>
+</style>
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
           
@@ -22,6 +41,7 @@
       <div id="contentMainModules">
         
         <ul id="moduleHeader">
+          <li class="otherHeader otherHeaderLeft">...</li>
           <% @properties.each do |property| %>
           <% property_name = property[:name] %>
           <% property_pretty_name = property[:pretty_name] %>
@@ -33,7 +53,7 @@
             <% end %>
           </li>
           <% end %>
-          <li class="otherHeader"><a href="#">[...]</a></li>
+          <li class="otherHeader otherHeaderRight">...</li>
           <li class="actionHeader">EDIT</li>
           <li class="actionHeader">DELETE</li>
         </ul>
@@ -47,13 +67,23 @@
         </div>
         <% @objects.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
+          <li class="otherRow otherLeft"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i - 1)) %></li>
           <% @properties.each do |property| %>
           <li class="<%= getColumnType(property,"Row") %>"><%= object_property(object, property) %></li>
           <% end %>
-          <li class="otherRow"><a href="#">...</a></li>
+          <li class="otherRow otherRight"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i + 1)) %></li>
           <li class="actionRow editAction"><%= link_to("Edit", rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
           <li class="actionRow deleteAction"><%= link_to("Delete",rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
         </ul>
         <% end %>                
       </div>
+      <p class="paginator">
+      <% if @page_count.to_i > 1 %>
+        <%= paginate(@current_page, @page_count, :url => params).html_safe %>
+      <% end %>
+      <%= @record_count %> <%= @record_count == 1 ? @abstract_model.pretty_name.downcase : @abstract_model.pretty_name.downcase.pluralize %>
+      <% if @page_count.to_i == 2 %>
+        <%= link_to("Show all", params.merge(:all => true), :class => "showall") %>	 	
+      <% end %>
+      </p>
       

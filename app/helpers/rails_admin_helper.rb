@@ -11,24 +11,26 @@ module RailsAdminHelper
     partialTotal = 0
     temp = []
     
-    debugString = ""
-    
+    # loop through properties
     properties.each do |property|
+      # get width for the current property
       width = getWidthForColumn(property)
       
-      debugString += " #{width}"
-      
-      if partialTotal + width > 697
+      # if properties that were gathered so far have the width
+      # over 697 make a set for them
+      if partialTotal + width >= 697
         set << { :p => temp, :size =>partialTotal}
         partialTotal = 0
         temp = []
       end
       
+      # continue to add properties to set
       temp << property
       partialTotal += width
       total += width
     end
     
+    # add final set to returned value
     set << { :p => temp, :size =>partialTotal}
     
     return set
@@ -37,12 +39,60 @@ module RailsAdminHelper
   # calculate sets
   # expand set
   
+  def justifyProperties(sets, current_set)
+    total = 697
+    style = {}
+    
+    properties = sets[current_set][:p]
+    
+    # calculate the maximum distance
+    total = sets.size == 1 ? 784 : 744
+    max_sets = sets.size-2 > 1 ? sets.size-2 : 1
+    total = current_set.between?(1,max_sets) ?  704 : total
+    
+    columnOffset = total-sets[current_set][:size]
+    
+    per_property = columnOffset/properties.size
+    
+    offset = columnOffset - per_property*properties.size
+    
+    properties.each do |property|
+      property_type = getColumnType(property,"")
+      property_width = getWidthForColumn(property)
+      
+      style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
+      
+      style[property_type][:size] += per_property
+      style[property_type][:occ] += 1
+      style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
+      
+    end
+        
+    other = []
+    if total == 784
+      other = ["otherHeaderLeft","otherHeaderRight","otherLeft","otherRight"]
+    elsif total == 744
+      if current_set == 0
+        other = ["otherHeaderLeft","otherLeft"]
+      else
+        other = ["otherHeaderRight","otherRight"]        
+      end
+    end
+    
+    return style, other
+  end
+  
   def getColumnSet(properties)
     sets = calculateWidth(properties)
     
     current_set ||= params[:set].to_i
+    
+    raise NotFound if sets.size <= current_set
     selected_set = sets[current_set][:p]
-    return selected_set
+    
+    style, other = justifyProperties(sets, current_set)
+    
+    return style, other, selected_set
   end
   
   def getWidthForColumn(property)
@@ -51,7 +101,7 @@ module RailsAdminHelper
     
     case property_type
     when :boolean
-      return 40
+      return 60
     when :datetime
       return 170
     when :date
