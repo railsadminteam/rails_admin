@@ -62,6 +62,7 @@
           <form action="#" method="post">
             <fieldset>
               <input type="text" id="searchBar" />
+              <input type="submit" id="searchbar_btn" value="SEARCH" />
             </fieldset>
           </form>
         </div>
@@ -77,6 +78,8 @@
         </ul>
         <% end %>                
       </div>
+    </div>
+    <div id="pagination">
       <p class="paginator">
       <% if @page_count.to_i > 1 %>
         <%= paginate(@current_page, @page_count, :url => params).html_safe %>
@@ -86,4 +89,5 @@
         <%= link_to("Show all", params.merge(:all => true), :class => "showall") %>	 	
       <% end %>
       </p>
+    </div>
       

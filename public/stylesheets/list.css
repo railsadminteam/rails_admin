@@ -31,6 +31,16 @@
 	background:#FC9;
 }
 
+.boolRow{
+	width:50px;
+	text-align:center;
+}
+
+.boolHeader{
+	width:50px;
+	text-align:center;
+}
+
 .dateHeader{
 	background:#FCC;
 	text-align:center;
@@ -274,6 +284,7 @@ ul.infoRow li{
 #pagination{
 	text-align:center;
 	margin-top:9px;
+	margin-bottom:15px;
 }
 
 #pagination a{
@@ -289,4 +300,19 @@ ul.infoRow li{
 #pagination a:hover{
 	background:#EEE;
 	border:1px solid #494949;
+}
+
+#searchbar_btn{
+	background:#DDD;
+	border:1px solid #CBCBCB;
+	font-family:Verdana,Geneva,sans-serif;
+	font-size:10px;
+	padding:5px;
+	padding-left:6px;
+	padding-right:6px;
+	margin-left:3px;
+}
+
+.this-page{
+	padding:3px;
 }
