@@ -15,6 +15,11 @@
 
 
   <script type="text/javascript" language="javascript">
+  Control.DatePicker.Locale['en_US'] = {
+  	dateTimeFormat: 'dd/MM/yyyy HH:mm',
+  	dateFormat: 'dd/MM/yyyy'}
+  
+  
   document.observe("dom:loaded", function() {
   	$$(".dateField").each(function(elem){
   		new Control.DatePicker(elem, {icon: '/images/calendar.png'});

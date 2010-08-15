@@ -12,6 +12,7 @@
 }
 
 #contentMainNew h2{
+	clear:both;
 	margin-top:2px;
 	margin-bottom:3px;
 	border-bottom:1px solid #b9b9b9;
@@ -25,7 +26,6 @@
 
 
 .formSection p{
-
 	padding-top:5px;
 	padding-bottom:5px;
 	margin-bottom:1px;
@@ -144,7 +144,6 @@
 }
 
 #submitArea{
-	clear:both;
 	display:block;
 	list-style-type:none;
 }
@@ -215,4 +214,12 @@
 }
 
 .textField{
+	height:200px;
+}
+
+.breakSpan{
+	float:left;
+	width:100%;
+	display:block;
+	height:1px;
 }
