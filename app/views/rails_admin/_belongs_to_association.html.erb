@@ -8,6 +8,7 @@
   @properties.select{|property| property[:name] == child_key}.each do |property|
     required = true unless property[:nullable?]
   end
+  model_name = @abstract_model.to_param
 %>
             <fieldset class="module aligned">
               <h2><%= label %></h2>
@@ -21,7 +22,7 @@
                 <% end %>
                 <div>
                   <%= label_tag label %>
-                  <%= select("object", child_key, collection, {:include_blank => true, :selected => selected.to_s}) %>
+                  <%= select(model_name, child_key, collection, {:include_blank => true, :selected => selected.to_s}) %>
                   <p class="help">
                     <%= required ? "Required." : "Optional." %>
                   </p>
