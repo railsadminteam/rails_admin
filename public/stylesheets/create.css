@@ -223,3 +223,13 @@
 	display:block;
 	height:1px;
 }
+
+p.help{
+	padding-top:0px;
+	padding-bottom:0px;
+	margin-bottom:0px;
+	height:15px;
+	font-size:10px;
+	margin-left:103px;
+	display:block;
+}
