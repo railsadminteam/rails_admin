@@ -1,7 +1,7 @@
 
 #moduleHeader{
 	border-top:1px solid #b9b9b9;
-	border-bottom:1px solid #b9b9b9;
+	border-bottom:2px solid #b9b9b9;
 	list-style-type:none;
 	height:22px;
 }
@@ -205,7 +205,7 @@ ul.infoRow li{
 	padding:5px;
 	height:23px;
 	background:#e0ecfc;
-	border-bottom:1px solid #B9B9B9;
+	border-top:1px solid #B9B9B9;
 }
 
 .quickInsert{

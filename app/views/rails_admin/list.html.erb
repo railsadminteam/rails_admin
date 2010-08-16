@@ -39,7 +39,14 @@
       </div>
 <%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>      
       <div id="contentMainModules">
-        
+        <div class="searchBox">
+          <form action="#" action="" method="get">
+            <fieldset>
+              <input type="text" id="searchBar" name="query" value="<%= query %>"/>
+              <input type="submit" id="searchbar_btn" value="SEARCH" />
+            </fieldset>
+          </form>
+        </div>
         <ul id="moduleHeader">
           <li class="otherHeader otherHeaderLeft">...</li>
           <% @properties.each do |property| %>
@@ -58,14 +65,7 @@
           <li class="actionHeader">DELETE</li>
         </ul>
                 
-        <div class="searchBox">
-          <form action="#" action="" method="get">
-            <fieldset>
-              <input type="text" id="searchBar" name="query" value="<%= query %>"/>
-              <input type="submit" id="searchbar_btn" value="SEARCH" />
-            </fieldset>
-          </form>
-        </div>
+        
         <% @objects.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
           <li class="otherRow otherLeft"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i - 1)) %></li>
