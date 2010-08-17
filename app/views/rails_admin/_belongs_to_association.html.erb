@@ -20,7 +20,11 @@
               <div class="formSection">
                 <p>
                   <%= label_tag label %>
-                  <%= select model_name, child_key, collection, {:include_blank => true, :selected => selected}, :class => "#{errors_exist ? "errorField" : nil}" %>
+                  <%= select model_name, child_key, collection, {:include_blank => true, :selected => selected}, :class => "selectField #{errors_exist ? "errorField" : nil}" %>
+                  <% if errors_exist %>
+                  <span class="errorMessage"><%= "#{child_key.to_param.capitalize} #{@object.errors[child_key].first}" %></span>
+                  <% end %>
                 </p>
+                
 
               </div>

@@ -21,6 +21,10 @@
                 <p>
                   <%= label_tag label %>
                   <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected},:class => "#{errors_exist ? "errorField" : nil}") %>
+                  <% if errors_exist %>
+                  <span class="errorMessage"><%= "#{association_name.to_param.capitalize} #{@object.errors[association_name].first}" %></span>
+                  <% end %>
                 </p>
+                
 
               </div>

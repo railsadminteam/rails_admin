@@ -18,12 +18,16 @@
             <h2><%= label %></h2>
             <div class="formSection">
               <p>
-                
-                  <%= label_tag label %>
+                <%= label_tag label %>
                <!-- >   select "associations", association_name, collection, :id => association_name, :selected => selected, :class => "#{errors_exist ? "errorField" : nil}", :multiple => true -->
-                  <select id="associations_<%= association_name %>" name="associations[<%= association_name %>][]" multiple="multiple">
-                  <%= options_for_select(collection,select) %>
-                  </select>
+                <select id="associations_<%= association_name %>" name="associations[<%= association_name %>][]" multiple="multiple">
+                <%= options_for_select(collection,select) %>
+                </select>
+                <% if errors_exist %>
+                <span class="errorMessage"><%= "#{association_name.to_param.capitalize} #{@object.errors[association_name].first}" %></span>
+                <% end %>
+                <span class="breakSpan"></span>
               </p>
-
+              
             </div>
+            

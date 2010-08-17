@@ -233,3 +233,8 @@ p.help{
 	margin-left:103px;
 	display:block;
 }
+
+.selectField{
+	float:left;
+	margin-top:4px;
+}
