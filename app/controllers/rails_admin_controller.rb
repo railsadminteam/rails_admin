@@ -5,6 +5,7 @@ class RailsAdminController < ApplicationController
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
   before_filter :set_plugin_name
+  before_filter :check_for_cancel
 
   def index
     @page_name = "Site administration"
@@ -62,23 +63,12 @@ class RailsAdminController < ApplicationController
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
-    # FIXME move cancel into before_filter
-    # move save and add another into redirect_to_on_success
-    if params["_continue"] == "cancel"
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)  
+    if @object.save && update_all_associations
+      redirect_to_on_success
     else
-      if @object.save && update_all_associations
-        if params["_add_another"] == "Save and add another"
-          flash[:notice] = "#{@abstract_model.pretty_name} was successfully created"
-          redirect_to rails_admin_new_path(:model_name => @abstract_model.to_param)  
-        else
-          redirect_to_on_success
-        end
-      else
-        
-        render_error
-      end
+      render_error
     end
+    
   end
 
   def edit
@@ -95,20 +85,11 @@ class RailsAdminController < ApplicationController
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
-    if params["_continue"] == "cancel"
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)  
+    
+    if @object.update_attributes(@attributes) && update_all_associations
+      redirect_to_on_success
     else
-      if @object.update_attributes(@attributes) && update_all_associations
-        if params["_add_another"] == "Save and add another"
-          flash[:notice] = "#{@abstract_model.pretty_name} was successfully updated"
-          redirect_to rails_admin_new_path(:model_name => @abstract_model.to_param)  
-        else
-          redirect_to_on_success
-        end
-      else
-
-        render_error
-      end
+      render_error
     end
   end
 
@@ -232,10 +213,9 @@ class RailsAdminController < ApplicationController
     pretty_name = @abstract_model.pretty_name
     action = params[:action]
        
-    if params[:_continue]
-      redirect_to(url_for(:rails_admin_edit, :model_name => param, :id => @object.id), :message => {:notice => "#{pretty_name} was successfully #{action}d"})
-    elsif params[:_add_another]
-      redirect_to(url_for(:rails_admin_new, :model_name => param), :notice => "#{pretty_name} was successfully #{action}d")
+    if params[:_add_another]
+      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      redirect_to rails_admin_new_path( :model_name => param)
     else
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_list_path(:model_name => param)
@@ -256,6 +236,13 @@ class RailsAdminController < ApplicationController
   
   def set_plugin_name
     @plugin_name = "RailsAdmin"
+  end
+  
+  def check_for_cancel
+    if params[:_continue]
+      flash[:notice] = "No actions where taken!"
+      redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
+    end
   end
 
 end
