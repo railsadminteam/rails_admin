@@ -55,12 +55,15 @@ class RailsAdminController < ApplicationController
   end
 
   def create
+    
     @object = @abstract_model.new(@attributes)
     
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
+    # FIXME move cancel into before_filter
+    # move save and add another into redirect_to_on_success
     if params["_continue"] == "cancel"
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)  
     else
@@ -72,6 +75,7 @@ class RailsAdminController < ApplicationController
           redirect_to_on_success
         end
       else
+        
         render_error
       end
     end
@@ -102,6 +106,7 @@ class RailsAdminController < ApplicationController
           redirect_to_on_success
         end
       else
+
         render_error
       end
     end
@@ -134,7 +139,7 @@ class RailsAdminController < ApplicationController
   def get_object
     @object = @abstract_model.get(params[:id])
     # FIXME
-    raise NotFound unless @object
+    NotFound unless @object
   end
 
   def get_sort_hash
