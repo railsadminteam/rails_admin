@@ -16,18 +16,39 @@
 
 %>
             <h2><%= label %></h2>
+            
             <div class="formSection">
-              <p>
-                <%= label_tag label %>
-               <!-- >   select "associations", association_name, collection, :id => association_name, :selected => selected, :class => "#{errors_exist ? "errorField" : nil}", :multiple => true -->
-                <select id="associations_<%= association_name %>" name="associations[<%= association_name %>][]" multiple="multiple">
-                <%= options_for_select(collection,select) %>
+              <%= label_tag label %>
+              <div class="many_header">
+                <input type="text" class="searchMany" value="Search <%= association_name %>" ref="<%= association_name %>" class="many_text" used="0" />
+                <p>
+                  <strong>Chosen <%= association_name %></strong>
+                  Select your choise(s) and click <img src="/images/selector-add.gif" alt="Add" />
+                </p>
+              </div>
+              <div class="manySelector">
+                <select multiple="multiple" size="8" class="firstSelect">
+                  <%= options_for_select(collection,select) %>
                 </select>
+                
+                <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-add.gif" alt="Add element" class="add_elem"/></a>
+                <a href="javascript:void(0)" class="removeAssoc"><img src="/images/selector-remove.gif" alt="Remove element" class="remove_elem"/></a>
+                
+                <select id="associations_<%= association_name %>" name="associations[<%= association_name %>][]" multiple="multiple" class="secondSelect" size="8">
+                  
+                </select>
+                </div>
+                <div class="many_controls">
+                  <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-addall.gif" alt="Add all" class="add_all" /> Choose all</a>
+                  <a href="javascript:void(0)" class="clearAssoc"><img src="/images/selector-removeall.gif" alt="Clear all" class="clear_all"/>Clear all</a>
+                </div>
+                <span class="breakSpan"></span>
+              </div>
+                
+               <!-- >   select "associations", association_name, collection, :id => association_name, :selected => selected, :class => "#{errors_exist ? "errorField" : nil}", :multiple => true -->
+                
+                
                 <% if errors_exist %>
                 <span class="errorMessage"><%= "#{association_name.to_param.capitalize} #{@object.errors[association_name].first}" %></span>
                 <% end %>
-                <span class="breakSpan"></span>
-              </p>
-              
-            </div>
             
