@@ -63,6 +63,7 @@ class RailsAdminController < ApplicationController
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
+    
     if @object.save && update_all_associations
       redirect_to_on_success
     else
@@ -85,6 +86,7 @@ class RailsAdminController < ApplicationController
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
     
+    update_all_associations
     
     if @object.update_attributes(@attributes) && update_all_associations
       redirect_to_on_success
@@ -183,12 +185,15 @@ class RailsAdminController < ApplicationController
   def update_all_associations
 
     @abstract_model.associations.each do |association|
+
       ids = (params[:associations] || {}).delete(association[:name])
+      
+      
       case association[:type]
       when :has_one
         update_association(association, ids)
       when :has_many
-        update_associations(association, [ids])
+        update_associations(association, ids.to_a)
       end
     end
   end

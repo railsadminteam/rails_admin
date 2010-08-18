@@ -1,15 +1,26 @@
 <%
   association_name = has_many_association[:name]
-  
   child_key = has_many_association[:child_key].first
-  
   collection = MerbAdmin::AbstractModel.new(has_many_association[:child_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
 
-  selected = @object.send(association_name).map{|o| o.id.to_s}
-  
-  if selected.empty? && params["associations"]
+  # for edit action
+  selected = @object.send(association_name).map{|object|
+    [object_label(object), object.id]
+  }.sort_by{|object| object.first}
+
+  # if error accurs - show the selected associations
+  if params["associations"]
     select = params["associations"][association_name.to_param.pluralize].to_a.map{|o| o.to_i}
+    selected = collection.map{|t|
+      t if select.include?(t[1])
+    }.compact
+    
   end
+  
+  # exclude selected from the original collection
+  collection = collection.map{|t|
+    t if not selected.include?(t)
+  }.compact
   
   label = has_many_association[:pretty_name]
   errors_exist = !(@object.errors[child_key].nil? || @object.errors[child_key].empty?)
@@ -28,20 +39,31 @@
               </div>
               <div class="manySelector">
                 <select multiple="multiple" size="8" class="firstSelect">
-                  <%= options_for_select(collection,select) %>
+                  <%= options_for_select(collection) %>
                 </select>
                 
                 <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-add.gif" alt="Add element" class="add_elem"/></a>
                 <a href="javascript:void(0)" class="removeAssoc"><img src="/images/selector-remove.gif" alt="Remove element" class="remove_elem"/></a>
                 
-                <select id="associations_<%= association_name %>" name="associations[<%= association_name %>][]" multiple="multiple" class="secondSelect" size="8">
-                  
+                <select id="associations_<%= association_name %>" multiple="multiple" class="secondSelect" size="8">
+                  <%= options_for_select(selected) %>
                 </select>
                 </div>
                 <div class="many_controls">
                   <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-addall.gif" alt="Add all" class="add_all" /> Choose all</a>
                   <a href="javascript:void(0)" class="clearAssoc"><img src="/images/selector-removeall.gif" alt="Clear all" class="clear_all"/>Clear all</a>
                 </div>
+                <div class="manyHidden">
+                  <% if selected.empty? %>
+                  <input type="hidden" name="associations[<%= association_name %>][]" />
+                  <% else %>
+                  <% selected.each do |t|%>
+                  <input type="hidden" name="associations[<%= association_name %>][]" value="<%= t[1] %>" />
+                  <% end %>
+                  <% end %>
+                  
+                </div>
+                
                 <span class="breakSpan"></span>
               </div>
                 
