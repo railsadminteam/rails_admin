@@ -1,22 +1,76 @@
-        <div id="content-main">
-          <div class="module">
-            <table summary="Models available in the application.">
-              <caption>
-                <%= link_to("Models", rails_admin_dashboard_path, :class => "section") %>
-              </caption>
-              <% @abstract_models.each do |abstract_model| %>
-              <tr>
-                <th scope="row">
-                  <%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %>
-                </th>
-                <td>
-                  <%= link_to("Add", rails_admin_new_path(:model_name => abstract_model.to_param), :class => "addlink") %>
-                </td>
-                <td>
-                  <%= link_to("Edit", rails_admin_list_path(:model_name => abstract_model.to_param), :class => "changelink") %>
-                </td>
-              </tr>
-              <% end %>
-            </table>
+        <div id="contentHeader">
+          <h2><%= @page_name %></h2>
+        </div>
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
+        <div id="contentMain">
+          <div class="section">
+            <ul class="menu">
+              <li id="modelNameHeader">Model name</li>
+              <li id="lastUsedHeader">Last used</li>
+              <li id="recordsHeader">Records</li>
+              <li id="modifyHeader">Modify</li>
+            </ul>
+            <% @abstract_models.each do |abstract_model| %>
+            <ul class="row">
+              <li class="modelNameRow"><%= abstract_model.pretty_name %></li>
+              <li class="lastUsedRow">Yesterday</li>
+              <li class="recordsRow">
+                <div class="scale">
+                  <div class="bar" style="width:20%;"></div>
+                </div>
+              </li>
+              <li class="modifyRow">
+                <%= link_to("Add new", rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to("Show", rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+              </li>
+            </ul>
+            <% end %> 
+          </div>
+
+          <div class="section">
+            <h2>History</h2>
+            <div id="timeline">
+              <a href="#" id="arrowLeft"><img src="images/arrow_left.png" alt="Left" /></a>
+              <div id="timelineSlider">
+                <ul>
+                  <li>Ian '10
+                    <span class="bars">
+                      <span class="indicator" style="height:15%"></span>
+                    </span>
+                  </li>
+                  <li>Feb '10
+                    <span class="bars">
+                      <span class="indicator medium" style="height:50%"></span>
+                    </span>
+                  </li>
+                  <li>Mar '10
+                    <span class="bars">
+                      <span class="indicator" style="height:20%"></span>
+                    </span>
+                  </li>
+                  <li>Apr '10
+                    <span class="bars">
+                      <span class="indicator high" style="height:80%"></span>
+                    </span>
+                  </li>
+                  <li>May '10
+                    <span class="bars">
+                      <span class="indicator" style="height:30%"></span>
+                    </span>
+                  </li>
+                </ul>
+
+                <div id="handler">
+                  <img src="images/handler.png"/>
+                </div>
+              </div>
+
+              <a href="#" id="arrowRight"><img src="images/arrow_right.png" alt="Right" /></a>
+            </div>
+            <p id="listing">Listing <strong>IAN'10</strong> History:</p>
+            <ul id="history">
+              <li>John added <em>Poll #1</em></li>
+              <li>John added a <em>Poll type - Question</em></li>
+              <li>John deleted <em>Poll #1</em></li>
+            </ul>
           </div>
         </div>

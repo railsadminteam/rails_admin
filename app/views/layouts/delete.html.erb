@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title><%= @page_name %> | <%= @plugin_name %></title>
+  <%= stylesheet_link_tag('base.css') %>
+  <%= stylesheet_link_tag('delete.css') %>
+  <title><%= @page_name %></title>
+  <link href="base.css" rel="stylesheet" type="text/css" />
+  <link href="delete.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div id="wraper">
+    <div id="header">
+      <div id="headerLeft">
+        <ul class="breadcrumb">
+          <li>
+            <%= link_to("Dashboard", rails_admin_dashboard_path) %>
+            &rsaquo;
+          </li>
+          <li>
+            <%= link_to(@abstract_model.pretty_name, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
+            &rsaquo;
+          </li>
+          <li>
+            <%= link_to(@page_name, rails_admin_new_path(:model_name => @abstract_model.to_param)) %>
+          </li>
+        </ul>
+				
+				<h1>Rails Admin</h1>
+			</div>
+            
+<%= render(:partial => 'rails_admin/navigation', :locals => {:abstract_models => @abstract_models}) %>
+			
+			<div id="headerRight">
+			  <ul class="breadcrumb">
+			    <li><a href="#">John Doe</a></li>
+			    <li>|</li>
+			    <li><a href="#">My profile</a></li>
+			    <li>|</li>
+			    <li><a href="#">Log out</a></li>
+			  </ul>
+      </div>
+    </div>
+    
+    <div id="content">
+<%= yield %>      
+    </div>
+  </div>
+</body>
+</html>

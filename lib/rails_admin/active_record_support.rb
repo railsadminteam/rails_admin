@@ -98,7 +98,7 @@ module MerbAdmin
 
       def merge_order(options)
         @sort ||= options.delete(:sort) || "id"
-        @sort_order ||= options.delete(:sort_reverse) ? "desc" : "asc"
+        @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
         options.merge(:order => ["#{@sort} #{@sort_order}"])
       end
 

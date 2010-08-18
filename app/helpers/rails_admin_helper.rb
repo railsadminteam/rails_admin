@@ -1,6 +1,165 @@
 require 'builder'
 
 module RailsAdminHelper
+  
+  def calculateWidth(properties)
+    # local variables
+    total = 0
+    set = []
+    
+    # variables used in loop
+    partialTotal = 0
+    temp = []
+    
+    # loop through properties
+    properties.each do |property|
+      # get width for the current property
+      width = getWidthForColumn(property)
+      
+      # if properties that were gathered so far have the width
+      # over 697 make a set for them
+      if partialTotal + width >= 697
+        set << { :p => temp, :size =>partialTotal}
+        partialTotal = 0
+        temp = []
+      end
+      
+      # continue to add properties to set
+      temp << property
+      partialTotal += width
+      total += width
+    end
+    
+    # add final set to returned value
+    set << { :p => temp, :size =>partialTotal}
+    
+    return set
+  end
+  
+  # calculate sets
+  # expand set
+  
+  def justifyProperties(sets, current_set)
+    total = 697
+    style = {}
+    
+    properties = sets[current_set][:p]
+    
+    # calculate the maximum distance
+    total = sets.size == 1 ? 784 : 744
+    max_sets = sets.size-2 > 1 ? sets.size-2 : 1
+    total = current_set.between?(1,max_sets) ?  704 : total
+    
+    columnOffset = total-sets[current_set][:size]
+    
+    per_property = columnOffset/properties.size
+    
+    offset = columnOffset - per_property*properties.size
+    
+    properties.each do |property|
+      property_type = getColumnType(property,"")
+      property_width = getWidthForColumn(property)
+      
+      style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
+      
+      style[property_type][:size] += per_property
+      style[property_type][:occ] += 1
+      style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
+      
+    end
+        
+    other = []
+    if total == 784
+      other = ["otherHeaderLeft","otherHeaderRight","otherLeft","otherRight"]
+    elsif total == 744
+      if current_set == 0
+        other = ["otherHeaderLeft","otherLeft"]
+      else
+        other = ["otherHeaderRight","otherRight"]        
+      end
+    end
+    
+    return style, other
+  end
+  
+  def getColumnSet(properties)
+    sets = calculateWidth(properties)
+    
+    current_set ||= params[:set].to_i
+    
+    raise NotFound if sets.size <= current_set
+    selected_set = sets[current_set][:p]
+    
+    style, other = justifyProperties(sets, current_set)
+    
+    return style, other, selected_set
+  end
+  
+  def getWidthForColumn(property)
+    property_type = property[:type]
+    property_name = property[:name]
+    
+    case property_type
+    when :boolean
+      return 60
+    when :datetime
+      return 170
+    when :date
+      return 90
+    when :time
+      return 60
+    when :string
+      if property[:length] < 100
+        return 180
+      else
+        return 250
+      end
+    when :text
+      return 250
+    when :integer
+      if property_name == :id
+        return 46
+      else
+        return 80
+      end
+    when :float
+      return 110
+    else
+    end
+  end
+  
+  def getColumnType(property,type)
+    property_type = property[:type]
+    property_name = property[:name]
+    
+    case property_type
+    when :boolean
+      "bool#{type}"
+    when :datetime
+      "dateTime#{type}"
+    when :date
+      "date#{type}"
+    when :time
+      "time#{type}"
+    when :string
+      if property[:length] < 100
+        "smallString#{type}"
+      else
+        "bigString#{type}"
+      end
+    when :text
+      "text#{type}"
+    when :integer
+      if property_name == :id
+        "id#{type}"
+      else
+        "int#{type}"
+      end
+    when :float
+      "float#{type}"
+    else
+    end
+  end
 
   def object_label(object)
     if object.nil?
@@ -14,16 +173,18 @@ module RailsAdminHelper
     end
   end
 
+  # FIXME same as getColumnType - next iteration when adding associations
   def object_property(object, property)
     property_type = property[:type]
     property_name = property[:name]
-    return "" if object.send(property_name).nil?
+    return "".html_safe if object.send(property_name).nil?
+
     case property_type
     when :boolean
       if object.send(property_name) == true
-        Builder::XmlMarkup.new.img(:src => image_path("icon-yes.gif"), :alt => "True")
+        Builder::XmlMarkup.new.img(:src => image_path("bullet_black.png"), :alt => "True").html_safe
       else
-        Builder::XmlMarkup.new.img(:src => image_path("icon-no.gif"), :alt => "False")
+        Builder::XmlMarkup.new.img(:src => image_path("bullet_white.png"), :alt => "False").html_safe
       end
     when :datetime
       object.send(property_name).strftime("%b. %d, %Y, %I:%M%p")
@@ -33,7 +194,7 @@ module RailsAdminHelper
       object.send(property_name).strftime("%I:%M%p")
     when :string
       if property_name.to_s =~ /(image|logo|photo|photograph|picture|thumb|thumbnail)_ur(i|l)/i
-        Builder::XmlMarkup.new.img(:src => object.send(property_name), :width => 10, :height => 10)
+        Builder::XmlMarkup.new.img(:src => object.send(property_name), :width => 10, :height => 10).html_safe
       else
         object.send(property_name)
       end
@@ -85,15 +246,19 @@ module RailsAdminHelper
   #    Provides the base url to use in the page navigation links.
   #    Defaults to ''
   def paginate(current_page, page_count, options = {})
+
     options[:left_cut_label] ||= '&hellip;'
     options[:right_cut_label] ||= '&hellip;'
     options[:outer_window] ||= 2
     options[:inner_window] ||= 7
     options[:page_param] ||= 'page'
-    options[:url] ||= ''
+    options[:url] ||= ""
 
     url = options.delete(:url)
-    url << (url.include?('?') ? '&' : '?') << options[:page_param]
+    url = url.to_a.collect{|x| x.join("=")}.join("&")
+
+    url += (url.include?('=') ? '&' : '') + options[:page_param]
+    url = "?"+url
 
     pages = {
       :all => (1..page_count).to_a,
@@ -133,6 +298,7 @@ module RailsAdminHelper
 
     [pages[:left], pages[:center], pages[:right]].each do |p|
       p.each do |page_number|
+        
         case page_number
         when String
           b << page_number

@@ -5,89 +5,89 @@
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
   filters_exist = !@properties.select{|property| property[:type] == :boolean}.empty?
+  # columns paginate
+  @style, @other, @properties = getColumnSet(@properties)
 %>
-        <div id="content-main">
-          <ul class="object-tools">
-            <li>
-              <%= link_to("Add #{@abstract_model.pretty_name.downcase}", rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
-            </li>
-          </ul>
-          <div class="<%= filters_exist ? "module filtered" : "module" %>" id="changelist">
-            <div id="toolbar">
-              <form id="changelist-search" action="" method="get">
-              <div>
-                <label for="searchbar"><img src="<%= image_path("icon_searchbox.png") %>" alt="Search" /></label>
-                <input type="text" size="40" name="query" value="<%= query %>" id="searchbar" />
-                <input type="submit" value="Search" />
-                <% if query || filter %>
-                  <span class="small quiet"><%= @record_count %> <%= @record_count == 1 ? "result" : "results" %> (<%= link_to("#{@abstract_model.count} total", "?") %>)</span>
-                <% end %>
-                <% if filter %>
-                <% filter.each do |name, value| %>
-                <input type="hidden" name="filter[<%= name %>]" value="<%= value %>"/>
-                <% end %>
-                <% end %>
-              </div>
-              </form>
-            </div>
-            <script type="text/javascript">document.getElementById("searchbar").focus();</script>
-            <% if filters_exist %>
-            <div id="changelist-filter">
-              <h2>Filter</h2>
-              <% @properties.each do |property| %>
-              <% property_type = property[:type] %>
-              <% property_name = property[:name] %>
-              <% property_pretty_name = property[:pretty_name] %>
-              <% if property_type == :boolean %>
-              <h3>By <%= property_pretty_name %></h3>
-              <ul>
-                <li class="<%= filter.nil? || filter[property_name].blank? ? "selected" : nil %>">
-                  <%= link_to("All", params.merge(:filter => (filter || {}).reject{|key, value| key.to_sym == property_name})) %>
-                </li>
-                <li class="<%= filter && filter[property_name] == "true" ? "selected" : nil %>">
-                  <%= link_to("Yes", params.merge(:filter => (filter || {}).merge({property_name => "true"}))) %>
-                </li>
-                <li class="<%= filter && filter[property_name] == "false" ? "selected" : nil %>">
-                  <%= link_to("No", params.merge(:filter => (filter || {}).merge({property_name => "false"}))) %>
-                </li>
-              </ul>
-              <% end %>
-              <% end %>
-            </div>
-            <% end %>
-            <table cellspacing="0">
-              <thead>
-                <tr>
-                  <% @properties.each do |property| %>
-                  <% property_name = property[:name] %>
-                  <% property_pretty_name = property[:pretty_name] %>
-                  <th class="<%= sort == property_name.to_s ? sort_reverse ? "sorted descending" : "sorted ascending" : nil %>">
-                    <%= link_to(property_pretty_name, params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {})) %>
-                  </th>
-                  <% end %>
-                </tr>
-              </thead>
-              <tbody>
-                <% @objects.each_with_index do |object, index| %>
-                <tr class="row<%= index % 2 == 0 ? "1" : "2" %>">
-                  <% @properties.each do |property| %>
-                  <td>
-                    <%= link_to(object_property(object, property), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %>
-                  </td>
-                  <% end %>
-                </tr>
-                <% end %>
-              </tbody>
-            </table>
-            <p class="paginator">
-              <% if @page_count.to_i > 1 %>
-              <%= paginate(@current_page, @page_count, :url => params) %>
-              <% end %>
-              <%= @record_count %> <%= @record_count == 1 ? @abstract_model.pretty_name.downcase : @abstract_model.pretty_name.downcase.pluralize %>
-              <% if @page_count.to_i == 2 %>
-              <%= link_to("Show all", params.merge(:all => true), :class => "showall") %>
-              <% end %>
-            </p>
-          </div>
+
+<style type="text/css">
+<% @style.each do |key,value| %>
+  <%= ".#{key}Header" %>{
+    width: <%= value[:width] %>px;
+  }
+  
+  <%= ".#{key}Row" %>{
+    width: <%= value[:width] %>px;
+  }
+<% end %>
+<% @other.each do |t| %>
+  <%= ".#{t}"%>{
+    display:none;
+  }
+<% end %>
+</style>
+      <div id="contentHeader">
+        <h2><%= @page_name %></h2>
+          
+      	<div id="quickAccess">
+      	  <ul id="quick">
+      	    <li><a href="#">Quick add</a></li>
+      	    <li>
+      	     <%= link_to("Add new", rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
+      	    </li>
+      	  </ul>
+      	</div>
+      </div>
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>      
+      <div id="contentMainModules">
+        <div class="searchBox">
+          <form action="#" action="" method="get">
+            <fieldset>
+              <input type="text" id="searchBar" name="query" value="<%= query %>"/>
+              <input type="submit" id="searchbar_btn" value="SEARCH" />
+            </fieldset>
+          </form>
         </div>
-        <br class="clear" />
+        <ul id="moduleHeader">
+          <li class="otherHeader otherHeaderLeft">...</li>
+          <% @properties.each do |property| %>
+          <% property_name = property[:name] %>
+          <% property_pretty_name = property[:pretty_name] %>
+          <li class="<%= getColumnType(property,"Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
+            <%= link_to(property_pretty_name.upcase, params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {})) %>
+            <% if sort == property_name.to_s %>
+            <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>              
+            <%= link_to image_tag(image_name), params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <% end %>
+          </li>
+          <% end %>
+          <li class="otherHeader otherHeaderRight">...</li>
+          <li class="actionHeader">EDIT</li>
+          <li class="actionHeader">DELETE</li>
+        </ul>
+                
+        
+        <% @objects.each_with_index do |object, index| %>
+        <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
+          <li class="otherRow otherLeft"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i - 1)) %></li>
+          <% @properties.each do |property| %>
+          <li class="<%= getColumnType(property,"Row") %>"><%= object_property(object, property) %></li>
+          <% end %>
+          <li class="otherRow otherRight"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i + 1)) %></li>
+          <li class="actionRow editAction"><%= link_to("Edit", rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
+          <li class="actionRow deleteAction"><%= link_to("Delete",rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
+        </ul>
+        <% end %>                
+      </div>
+    </div>
+    <div id="pagination">
+      <p class="paginator">
+      <% if @page_count.to_i > 1 %>
+        <%= paginate(@current_page, @page_count, :url => params).html_safe %>
+      <% end %>
+      <%= @record_count %> <%= @record_count == 1 ? @abstract_model.pretty_name.downcase : @abstract_model.pretty_name.downcase.pluralize %>
+      <% if @page_count.to_i == 2 %>
+        <%= link_to("Show all", params.merge(:all => true), :class => "showall") %>	 	
+      <% end %>
+      </p>
+    </div>
+      

@@ -1,10 +1,10 @@
       <% if flash && flash[:error] %>
-      <p class="errornote">
-        <%= flash[:error] %>
-      </p>
+      <div id="error">
+      	<%= flash[:error] %>
+      </div>
       <% end %>
       <% if flash && flash[:notice] %>
-      <ul class="flashlist">
-        <li><%= flash[:notice] %></li>
-      </ul>
+      <div id="highlight">
+      	<%= flash[:notice] %>
+      </div>
       <% end %>

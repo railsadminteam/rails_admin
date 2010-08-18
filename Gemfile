@@ -11,6 +11,8 @@ group :test, :development do
   gem "rspec-rails", ">= 2.0.0.beta.19"
 end
 
+gem 'builder'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
