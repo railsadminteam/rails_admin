@@ -1,11 +1,18 @@
 require 'spec_helper'
 
 describe "RailsAdmin" do
+  # dashboard
   describe "GET /admin" do
-    it "works!" do
+    before(:each) do
       get rails_admin_dashboard_path
     end
+    
+    it "should respond sucessfully" do
+      puts response.inspect
+    end
+    
   end
+  
 end
 
 # require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
