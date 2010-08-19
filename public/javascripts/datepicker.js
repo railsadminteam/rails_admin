@@ -1,6 +1,6 @@
 /*
  * Control.DatePicker
- * 
+ *
  * Transforms an ordinary input textbox into an interactive date picker.
  * When the textbox is clicked (or the down arrow is pressed), a calendar
  * appears that the user can browse through and select a date.
@@ -265,14 +265,14 @@ Control.DatePicker.Language = {
 			'Open calendar': 'Abre calendario'
 		}
 	},
-	'de': { 
-		months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'], 
-		days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'], 
-		strings: { 
-			'Now': 'Jetzt', 
-			'Today': 'Heute', 
-			'Time': 'Zeit', 
-			'Exact minutes': 'Exakte minuten', 
+	'de': {
+		months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+		days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+		strings: {
+			'Now': 'Jetzt',
+			'Today': 'Heute',
+			'Time': 'Zeit',
+			'Exact minutes': 'Exakte minuten',
 			'Select Date and Time': 'Zeit und Datum Auswählen',
 			'Select Time': 'Zeit Auswählen',
 			'Open calendar': 'Kalender öffnen'

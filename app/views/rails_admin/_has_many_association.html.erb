@@ -14,20 +14,18 @@
     selected = collection.map{|t|
       t if select.include?(t[1])
     }.compact
-    
+
   end
-  
+
   # exclude selected from the original collection
   collection = collection.map{|t|
     t if not selected.include?(t)
   }.compact
-  
+
   label = has_many_association[:pretty_name]
   errors_exist = !(@object.errors[child_key].nil? || @object.errors[child_key].empty?)
-
 %>
             <h2><%= label %></h2>
-            
             <div class="formSection">
               <%= label_tag label %>
               <div class="many_header">
@@ -41,10 +39,8 @@
                 <select multiple="multiple" size="8" class="firstSelect">
                   <%= options_for_select(collection) %>
                 </select>
-                
                 <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-add.gif" alt="Add element" class="add_elem"/></a>
                 <a href="javascript:void(0)" class="removeAssoc"><img src="/images/selector-remove.gif" alt="Remove element" class="remove_elem"/></a>
-                
                 <select id="associations_<%= association_name %>" multiple="multiple" class="secondSelect" size="8">
                   <%= options_for_select(selected) %>
                 </select>
@@ -61,16 +57,9 @@
                   <input type="hidden" name="associations[<%= association_name %>][]" value="<%= t[1] %>" />
                   <% end %>
                   <% end %>
-                  
                 </div>
-                
                 <span class="breakSpan"></span>
               </div>
-                
-               <!-- >   select "associations", association_name, collection, :id => association_name, :selected => selected, :class => "#{errors_exist ? "errorField" : nil}", :multiple => true -->
-                
-                
                 <% if errors_exist %>
                 <span class="errorMessage"><%= "#{association_name.to_param.capitalize} #{@object.errors[association_name].first}" %></span>
                 <% end %>
-            

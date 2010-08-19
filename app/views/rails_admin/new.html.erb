@@ -1,7 +1,7 @@
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
       </div>
-<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>      
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
         <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
           <fieldset>
@@ -28,4 +28,4 @@
   		    </fieldset>
           </div>
         <% end %>
-      </div>        
+      </div>

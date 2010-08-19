@@ -1,7 +1,7 @@
         <div id="contentHeader">
           <h2>Delete confirmation</h2>
         </div>
-<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>      
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
         <div id="contentMainDelete">
           <p>Are you sure you want to delete the <%= @abstract_model.pretty_name.downcase %> &ldquo;<strong><%= object_label(@object) %></strong>&rdquo;? All of the following related items will be deleted:</p>
           <ul>

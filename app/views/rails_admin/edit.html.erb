@@ -1,7 +1,7 @@
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
       </div>
-<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>      
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
         <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id)) do %>
           <fieldset>
