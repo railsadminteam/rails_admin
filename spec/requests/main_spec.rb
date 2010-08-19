@@ -8,7 +8,7 @@ describe "RailsAdmin" do
     end
     
     it "should respond sucessfully" do
-      puts response.inspect
+      response.code.should == "200"
     end
     
   end
