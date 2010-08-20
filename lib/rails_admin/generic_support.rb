@@ -1,4 +1,4 @@
-module MerbAdmin
+module RailsAdmin
   class AbstractModel
     module GenericSupport
       def to_param

@@ -11,13 +11,13 @@ class RailsAdminController < ApplicationController
     @page_name = "Site administration"
     @page_type = "dashboard"
 
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
     render(:layout => 'dashboard')
   end
 
   def list
 
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
 
     options = {}
     options.merge!(get_sort_hash)
@@ -26,7 +26,7 @@ class RailsAdminController < ApplicationController
     options.merge!(get_filter_hash(options))
     per_page = 20 # HAX FIXME
 
-    # per_page = MerbAdmin[:per_page]
+    # per_page = RailsAdmin[:per_page]
     if params[:all]
       options.merge!(:limit => per_page * 2)
       @objects = @abstract_model.all(options).reverse
@@ -50,7 +50,7 @@ class RailsAdminController < ApplicationController
     @object = @abstract_model.new
 
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
     render :layout => 'form'
@@ -61,7 +61,7 @@ class RailsAdminController < ApplicationController
     @object = @abstract_model.new(@attributes)
 
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
 
@@ -76,7 +76,7 @@ class RailsAdminController < ApplicationController
   def edit
 
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
     render(:layout => 'form')
@@ -84,7 +84,7 @@ class RailsAdminController < ApplicationController
 
   def update
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
     update_all_associations
@@ -98,7 +98,7 @@ class RailsAdminController < ApplicationController
 
   def delete
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-    @abstract_models = MerbAdmin::AbstractModel.all
+    @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
     render(:layout => 'delete')
@@ -115,7 +115,7 @@ class RailsAdminController < ApplicationController
   def get_model
     model_name = to_model_name(params[:model_name])
     # FIXME: What method AbstractModel calls? => initialize.
-    @abstract_model = MerbAdmin::AbstractModel.new(model_name)
+    @abstract_model = RailsAdmin::AbstractModel.new(model_name)
     @properties = @abstract_model.properties
 
   end
@@ -200,7 +200,7 @@ class RailsAdminController < ApplicationController
   end
 
   def update_association(association, id = nil)
-    associated_model = MerbAdmin::AbstractModel.new(association[:child_model])
+    associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
     if object = associated_model.get(id)
       object.update_attributes(association[:child_key].first => @object.id)
     end

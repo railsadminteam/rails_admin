@@ -4,11 +4,11 @@ describe "RailsAdmin" do
   # dashboard
   
   before(:each) do
-    MerbAdmin::AbstractModel.new("Division").destroy_all!
-    MerbAdmin::AbstractModel.new("Draft").destroy_all!
-    MerbAdmin::AbstractModel.new("League").destroy_all!
-    MerbAdmin::AbstractModel.new("Player").destroy_all!
-    MerbAdmin::AbstractModel.new("Team").destroy_all!
+    RailsAdmin::AbstractModel.new("Division").destroy_all!
+    RailsAdmin::AbstractModel.new("Draft").destroy_all!
+    RailsAdmin::AbstractModel.new("League").destroy_all!
+    RailsAdmin::AbstractModel.new("Player").destroy_all!
+    RailsAdmin::AbstractModel.new("Team").destroy_all!
   end  
   
   describe "GET /admin" do
@@ -46,8 +46,8 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with sort" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
       get rails_admin_list_path(:model_name => "player", :sort => "name", :set => 1)
     end
 
@@ -63,8 +63,8 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with reverse sort" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
       get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true",:set => 1)
     end
  
@@ -80,8 +80,8 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with query" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
       get rails_admin_list_path(:model_name => "player", :query => "Jackie Robinson",:set => 1)
     end
 
@@ -100,10 +100,10 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with query and boolean filter" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
       get rails_admin_list_path(:model_name => "player", :query => "Sandy Koufax", :filter => {:injured => "true"}, :set => 1)
     end
 
@@ -124,8 +124,8 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with boolean filter" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :injured => true)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :injured => false)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :injured => true)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :injured => false)
       get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"},:set => 1)
     end
 
@@ -144,10 +144,10 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with boolean filters" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
-      MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
       get rails_admin_list_path( :model_name => "player", :filter => {:retired => "true", :injured => "true"},:set => 1)
     end
 
@@ -169,7 +169,7 @@ describe "RailsAdmin" do
     before(:each) do
       
       (1..2).each do |number|
-        MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
       
       get rails_admin_list_path(:model_name => "player")
@@ -188,7 +188,7 @@ describe "RailsAdmin" do
     before(:each) do
       
       (1..20).each do |number|
-        MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
       
       get rails_admin_list_path(:model_name => "player")
@@ -206,7 +206,7 @@ describe "RailsAdmin" do
   describe "GET /admin/player with 100 objects" do
     before(:each) do
       (1..100).each do |number|
-        MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
       
       get rails_admin_list_path(:model_name => "player")
@@ -224,7 +224,7 @@ describe "RailsAdmin" do
   describe "GET /admin/player show all" do
     before(:each) do
       (1..2).each do |number|
-        MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
       
       get rails_admin_list_path(:model_name => "player", :all => true)
@@ -264,7 +264,7 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player/new with has-one association" do
     before(:each) do
-      MerbAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
       get rails_admin_new_path(:model_name => "player")
       
     end
@@ -281,7 +281,7 @@ describe "RailsAdmin" do
   describe "GET /admin/player/new with has-many association" do
     before(:each) do
       (1..3).each do |number|
-        MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
       
       get rails_admin_new_path(:model_name => "player")
@@ -299,7 +299,7 @@ describe "RailsAdmin" do
   describe "GET /admin/player/new with missing label" do
     before(:each) do
       (1..3).each do |number|
-        MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
       get rails_admin_new_path(:model_name => "player")
     end
@@ -319,7 +319,7 @@ describe "RailsAdmin" do
       
       @req = click_button "Save"
       
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
@@ -341,7 +341,7 @@ describe "RailsAdmin" do
   #       fill_in "player[position]", :with => "Second baseman"
   #       @req = click_button "Save and continue editing"
   #       
-  #       @player = MerbAdmin::AbstractModel.new("Player").first
+  #       @player = RailsAdmin::AbstractModel.new("Player").first
   #     end
   # 
   #     it "should be successful" do
@@ -362,7 +362,7 @@ describe "RailsAdmin" do
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       @req = click_button "Save and add another"
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
@@ -378,14 +378,14 @@ describe "RailsAdmin" do
 
   describe "create with has-one association" do
     before(:each) do
-      @draft = MerbAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
       get rails_admin_new_path(:model_name => "player")
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => 42
       fill_in "player[position]", :with => "Second baseman"
       select "Draft ##{@draft.id}"
       @req = click_button "Save"
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
   
     it "should create an object with correct associations" do
@@ -398,7 +398,7 @@ describe "RailsAdmin" do
     before(:each) do
       @teams = []
       (1..3).each do |number|
-        @teams << MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
     
       get rails_admin_new_path(:model_name => "league")
@@ -408,7 +408,7 @@ describe "RailsAdmin" do
       set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
       @req = click_button "Save"
     
-      @league = MerbAdmin::AbstractModel.new("League").first
+      @league = RailsAdmin::AbstractModel.new("League").first
     end
 
     it "should create an object with correct associations" do
@@ -424,8 +424,8 @@ describe "RailsAdmin" do
 
   describe "create with uniqueness constraint violated", :given => "a player exists" do
     before(:each) do
-      @team =  MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => @team.id, :number => 1, :name => "Player 1")
+      @team =  RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => @team.id, :number => 1, :name => "Player 1")
       
       get rails_admin_new_path(:model_name => "player")
       
@@ -454,7 +454,7 @@ describe "RailsAdmin" do
   
   describe "edit" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -480,8 +480,8 @@ describe "RailsAdmin" do
    
   describe "edit with has-one association" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      @draft = MerbAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
       
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
@@ -499,9 +499,9 @@ describe "RailsAdmin" do
     before(:each) do
       @teams = []
       (1..3).each do |number|
-        @teams << MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -526,11 +526,11 @@ describe "RailsAdmin" do
 
   describe "edit with missing label", :given => ["a player exists", "three teams with no name exist"] do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       
       @teams = []
       (1..3).each do |number|
-        @teams << MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
       
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
@@ -543,14 +543,14 @@ describe "RailsAdmin" do
 
   describe "update" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       
       @req = click_button "Save"
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
@@ -566,7 +566,7 @@ describe "RailsAdmin" do
 
   describe "update and edit" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
       
       fill_in "player[name]", :with => "Jackie Robinson"
@@ -574,7 +574,7 @@ describe "RailsAdmin" do
       fill_in "player[position]", :with => "Second baseman"
       
       @req = click_button "Save and add another" #FIXME Save and add continue
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
@@ -590,8 +590,8 @@ describe "RailsAdmin" do
 
   describe "update with has-one association" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      @draft = MerbAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
       
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
       
@@ -602,7 +602,7 @@ describe "RailsAdmin" do
       select "Draft ##{@draft.id}"
       
       @req = click_button "Save"
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
       # @response = rails_admin_update, :model_name => "player", :id => @player.id), :put, :params => {:player => {:name => "Jackie Robinson", :number => 42, :team_id => 1, :position => "Second baseman"}, :associations => {:draft => @draft.id}})
     end
 
@@ -620,11 +620,11 @@ describe "RailsAdmin" do
 
   describe "update with has-many association", :given => ["a league exists", "three teams exist"] do
     before(:each) do
-      @league = MerbAdmin::AbstractModel.new("League").create(:name => "League 1")
+      @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
       
       @teams = []
       (1..3).each do |number|
-        @teams << MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
       
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
@@ -634,7 +634,7 @@ describe "RailsAdmin" do
       set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
       
       response = click_button "Save"
-      @league = MerbAdmin::AbstractModel.new("League").first
+      @league = RailsAdmin::AbstractModel.new("League").first
     end
 
     it "should update an object with correct attributes" do
@@ -664,14 +664,14 @@ describe "RailsAdmin" do
 
   describe "update with invalid object" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
       
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "a"
       fill_in "player[position]", :with => "Second baseman"
       @req = click_button "Save"
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should show an error message" do
@@ -681,7 +681,7 @@ describe "RailsAdmin" do
 
   describe "delete" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
     end
 
@@ -708,8 +708,8 @@ describe "RailsAdmin" do
 ###?
   describe "delete with missing label" do
     before(:each) do
-      @league = MerbAdmin::AbstractModel.new("League").create(:name => "League 1")
-      @team = MerbAdmin::AbstractModel.new("Team").create(:league_id => @league.id, :division_id => rand(99999), :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
+      @team = RailsAdmin::AbstractModel.new("Team").create(:league_id => @league.id, :division_id => rand(99999), :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       
       get rails_admin_delete_path(:model_name => "league", :id => @league.id)
     end
@@ -721,12 +721,12 @@ describe "RailsAdmin" do
 
   describe "destroy" do
     before(:each) do
-      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
       
       @req = click_button "Yes, I'm sure"
-      @player = MerbAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do

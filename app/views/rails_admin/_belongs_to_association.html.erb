@@ -1,6 +1,6 @@
 <%
   child_key = belongs_to_association[:child_key].first
-  collection = MerbAdmin::AbstractModel.new(belongs_to_association[:parent_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
+  collection = RailsAdmin::AbstractModel.new(belongs_to_association[:parent_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
   selected = @object.send(child_key)
 
   if selected.nil? && params["associations"]

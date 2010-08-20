@@ -1,7 +1,7 @@
 <%
   association_name = has_many_association[:name]
   child_key = has_many_association[:child_key].first
-  collection = MerbAdmin::AbstractModel.new(has_many_association[:child_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
+  collection = RailsAdmin::AbstractModel.new(has_many_association[:child_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
 
   # for edit action
   selected = @object.send(association_name).map{|object|

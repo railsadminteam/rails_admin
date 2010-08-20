@@ -1,6 +1,6 @@
 require 'active_record'
 
-module MerbAdmin
+module RailsAdmin
   class AbstractModel
     module ActiverecordSupport
       def get(id)
@@ -23,7 +23,7 @@ module MerbAdmin
 
       def paginated(options = {})
         page = options.delete(:page) || 1
-        per_page = options.delete(:per_page) || MerbAdmin[:per_page]
+        per_page = options.delete(:per_page) || RailsAdmin[:per_page]
 
         page_count = (count(options).to_f / per_page).ceil
 

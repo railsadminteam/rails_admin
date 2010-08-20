@@ -1,6 +1,6 @@
 require 'rails_admin/generic_support'
 
-module MerbAdmin
+module RailsAdmin
   class AbstractModel
     # Returns all models for a given Merb app
     def self.all
@@ -24,7 +24,7 @@ module MerbAdmin
         # TODO: Should probably require the right part of ActiveSupport for this
         model = model_name.constantize
       rescue NameError
-        raise "MerbAdmin could not find model #{model_name}"
+        raise "RailsAdmin could not find model #{model_name}"
       end
 
       if superclasses(model).include?(ActiveRecord::Base)
