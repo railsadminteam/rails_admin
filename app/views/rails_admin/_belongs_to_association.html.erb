@@ -6,7 +6,7 @@
   if selected.nil? && params["associations"]
     selected = params["associations"][child_key.to_param.pluralize].to_i
   end
-  
+
   label = belongs_to_association[:pretty_name]
   required = false
   errors_exist = !(@object.errors[child_key].nil? || @object.errors[child_key].empty?)
@@ -15,7 +15,6 @@
   end
   model_name = @abstract_model.to_param
 %>
-            
               <h2><%= label %></h2>
               <div class="formSection">
                 <p>
@@ -25,6 +24,4 @@
                   <span class="errorMessage"><%= "#{child_key.to_param.capitalize} #{@object.errors[child_key].first}" %></span>
                   <% end %>
                 </p>
-                
-
               </div>

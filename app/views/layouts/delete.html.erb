@@ -9,7 +9,6 @@
   <link href="base.css" rel="stylesheet" type="text/css" />
   <link href="delete.css" rel="stylesheet" type="text/css" />
 </head>
-
 <body>
   <div id="wraper">
     <div id="header">
@@ -27,10 +26,9 @@
             <%= link_to(@page_name, rails_admin_new_path(:model_name => @abstract_model.to_param)) %>
           </li>
         </ul>
-				
 				<h1>Rails Admin</h1>
 			</div>
-            
+
 <%= render(:partial => 'rails_admin/navigation', :locals => {:abstract_models => @abstract_models}) %>
 			
 			<div id="headerRight">
@@ -43,9 +41,8 @@
 			  </ul>
       </div>
     </div>
-    
     <div id="content">
-<%= yield %>      
+<%= yield %>
     </div>
   </div>
 </body>

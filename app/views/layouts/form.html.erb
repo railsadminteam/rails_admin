@@ -19,8 +19,7 @@
   Control.DatePicker.Locale['en_US'] = {
   	dateTimeFormat: 'dd/MM/yyyy HH:mm',
   	dateFormat: 'dd/MM/yyyy'}
-  
-  
+
   document.observe("dom:loaded", function() {
   	$$(".dateField").each(function(elem){
   		new Control.DatePicker(elem, {icon: '/images/calendar.png'});
@@ -64,7 +63,7 @@
 				
 				<h1>Rails Admin</h1>
 			</div>
-            
+
 <%= render(:partial => 'rails_admin/navigation', :locals => {:abstract_models => @abstract_models}) %>
 			
 			<div id="headerRight">
@@ -77,9 +76,8 @@
 			  </ul>
       </div>
     </div>
-    
     <div id="content">
-<%= yield %>      
+<%= yield %>
     </div>
   </div>
 </body>

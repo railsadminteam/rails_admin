@@ -10,7 +10,7 @@ class RailsAdminController < ApplicationController
   def index
     @page_name = "Site administration"
     @page_type = "dashboard"
-    
+
     @abstract_models = MerbAdmin::AbstractModel.all
     render(:layout => 'dashboard')
   end
@@ -18,14 +18,14 @@ class RailsAdminController < ApplicationController
   def list
 
     @abstract_models = MerbAdmin::AbstractModel.all
-    
+
     options = {}
     options.merge!(get_sort_hash)
     options.merge!(get_sort_reverse_hash)
     options.merge!(get_query_hash(options))
     options.merge!(get_filter_hash(options))
     per_page = 20 # HAX FIXME
-    
+
     # per_page = MerbAdmin[:per_page]
     if params[:all]
       options.merge!(:limit => per_page * 2)
@@ -40,7 +40,7 @@ class RailsAdminController < ApplicationController
       options.delete(:limit)
     end
     @record_count = @abstract_model.count(options)
-    
+
     @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
     @page_type = @abstract_model.pretty_name.downcase
     render :layout => 'list'
@@ -48,37 +48,37 @@ class RailsAdminController < ApplicationController
 
   def new
     @object = @abstract_model.new
-    
+
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    
+
     render :layout => 'form'
   end
 
   def create
-    
+
     @object = @abstract_model.new(@attributes)
-    
+
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    
-    
+
+
     if @object.save && update_all_associations
       redirect_to_on_success
     else
       render_error
     end
-    
+
   end
 
   def edit
-    
+
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    
+
     render(:layout => 'form')
   end
 
@@ -86,9 +86,9 @@ class RailsAdminController < ApplicationController
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    
+
     update_all_associations
-    
+
     if @object.update_attributes(@attributes) && update_all_associations
       redirect_to_on_success
     else
@@ -100,7 +100,7 @@ class RailsAdminController < ApplicationController
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = MerbAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    
+
     render(:layout => 'delete')
   end
 
@@ -114,7 +114,7 @@ class RailsAdminController < ApplicationController
 
   def get_model
     model_name = to_model_name(params[:model_name])
-    # FIXME: What method AbstractModel calls? => initialize. 
+    # FIXME: What method AbstractModel calls? => initialize.
     @abstract_model = MerbAdmin::AbstractModel.new(model_name)
     @properties = @abstract_model.properties
 
@@ -176,7 +176,7 @@ class RailsAdminController < ApplicationController
 
   def get_attributes
     @attributes = params[@abstract_model.to_param] || {}
-    
+
     # Delete fields that are blank
     @attributes.each do |key, value|
       @attributes[key] = nil if value.blank?
@@ -188,8 +188,8 @@ class RailsAdminController < ApplicationController
     @abstract_model.associations.each do |association|
 
       ids = (params[:associations] || {}).delete(association[:name])
-      
-      
+
+
       case association[:type]
       when :has_one
         update_association(association, ids)
@@ -218,7 +218,7 @@ class RailsAdminController < ApplicationController
     param = @abstract_model.to_param
     pretty_name = @abstract_model.pretty_name
     action = params[:action]
-       
+
     if params[:_add_another]
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_new_path( :model_name => param)
@@ -239,11 +239,11 @@ class RailsAdminController < ApplicationController
   def to_model_name(param)
     param.split("::").map{|x| x.camelize}.join("::")
   end
-  
+
   def set_plugin_name
     @plugin_name = "RailsAdmin"
   end
-  
+
   def check_for_cancel
     if params[:_continue]
       flash[:notice] = "No actions where taken!"

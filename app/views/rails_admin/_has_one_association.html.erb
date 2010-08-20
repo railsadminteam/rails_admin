@@ -3,12 +3,11 @@
   association_name = has_one_association[:name]
   collection = MerbAdmin::AbstractModel.new(has_one_association[:child_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
   selected = @object.send(association_name)
-  
+
   if selected.nil? && params["associations"]
     selected = params["associations"][child_key.to_param.pluralize].to_i
   end
-  
-  
+
   label = has_one_association[:pretty_name]
   required = false
   errors_exist = !(@object.errors[child_key].nil? || @object.errors[child_key].empty?)
@@ -25,6 +24,4 @@
                   <span class="errorMessage"><%= "#{association_name.to_param.capitalize} #{@object.errors[association_name].first}" %></span>
                   <% end %>
                 </p>
-                
-
               </div>
