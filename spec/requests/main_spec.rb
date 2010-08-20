@@ -309,8 +309,243 @@ describe "RailsAdmin" do
     end
   end
 
-  
+  describe "create" do
+    before(:each) do
+      get rails_admin_new_path(:model_name => "player")
+      
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      
+      @req = click_button "Save"
+      
+      @player = MerbAdmin::AbstractModel.new("Player").first
+    end
 
+    it "should be successful" do
+      @req.should be_successful
+    end
+
+    it "should create an object with correct attributes" do
+      @player.name.should eql("Jackie Robinson")
+      @player.number.should eql(42)
+      @player.position.should eql("Second baseman")
+    end
+  end
+  
+  # describe "create and edit" do
+  #     before(:each) do
+  #       get rails_admin_new_path(:model_name => "player")
+  #       fill_in "player[name]", :with => "Jackie Robinson"
+  #       fill_in "player[number]", :with => "42"
+  #       fill_in "player[position]", :with => "Second baseman"
+  #       @req = click_button "Save and continue editing"
+  #       
+  #       @player = MerbAdmin::AbstractModel.new("Player").first
+  #     end
+  # 
+  #     it "should be successful" do
+  #       @response.should be_successful
+  #     end
+  # 
+  #     it "should create an object with correct attributes" do
+  #       @player.name.should eql("Jackie Robinson")
+  #       @player.number.should eql(42)
+  #       @player.position.should eql("Second baseman")
+  #     end
+  #   end
+
+  describe "create and add another" do
+    before(:each) do
+      get rails_admin_new_path(:model_name => "player")
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      @req = click_button "Save and add another"
+      @player = MerbAdmin::AbstractModel.new("Player").first
+    end
+
+    it "should be successful" do
+      @req.should be_successful
+    end
+
+    it "should create an object with correct attributes" do
+      @player.name.should eql("Jackie Robinson")
+      @player.number.should eql(42)
+      @player.position.should eql("Second baseman")
+    end
+  end
+
+  describe "create with has-one association" do
+    before(:each) do
+      @draft = MerbAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      get rails_admin_new_path(:model_name => "player")
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => 42
+      fill_in "player[position]", :with => "Second baseman"
+      select "Draft ##{@draft.id}"
+      @req = click_button "Save"
+      @player = MerbAdmin::AbstractModel.new("Player").first
+    end
+  
+    it "should create an object with correct associations" do
+      @draft.reload
+      @player.draft.should eql(@draft)
+    end
+  end
+
+  describe "create with has-many association" do
+    before(:each) do
+      @teams = []
+      (1..3).each do |number|
+        @teams << MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      end
+    
+      get rails_admin_new_path(:model_name => "league")
+    
+      fill_in "league[name]", :with => "National League"
+
+      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
+      @req = click_button "Save"
+    
+      @league = MerbAdmin::AbstractModel.new("League").first
+    end
+
+    it "should create an object with correct associations" do
+      @teams[0].reload
+      @league.teams.should include(@teams[0])
+    end
+
+    it "should not create an object with incorrect associations" do
+      @league.teams.should_not include(@teams[1])
+      @league.teams.should_not include(@teams[2])
+    end
+  end  
+
+  describe "create with uniqueness constraint violated", :given => "a player exists" do
+    before(:each) do
+      @team =  MerbAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => @team.id, :number => 1, :name => "Player 1")
+      
+      get rails_admin_new_path(:model_name => "player")
+      
+      fill_in "player[name]", :with => @player.name
+      fill_in "player[number]", :with => @player.number.to_s
+      fill_in "player[position]", :with => @player.position
+      select "#{@team.name}", :from => "player[team_id]"
+      
+      @req = click_button "Save"
+    end
+
+    it "should show an error message" do
+      @req.body.should contain("There is already a player with that number on this team")
+    end
+  end
+
+  describe "create with invalid object" do
+    before(:each) do
+        @response = visit(rails_admin_create_path(:model_name => "player"), :post, :params => {:player => {}})
+    end
+
+    it "should show an error message" do
+      @response.body.should contain("Player failed to be created")
+    end
+  end
+  
+  describe "edit" do
+    before(:each) do
+      @player = MerbAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+    end
+
+    it "should respond sucessfully" do
+      response.should be_successful
+    end
+
+    it "should show \"Edit model\"" do
+      response.body.should contain("Edit player")
+    end
+
+    it "should show required fields as \"Required\"" do
+      response.body.should contain(/Name\n\s*Required/)
+      response.body.should contain(/Number\n\s*Required/)
+    end
+
+    it "should show non-required fields as \"Optional\"" do
+      response.body.should contain(/Position\n\s*Optional/)
+      response.body.should contain(/Born on\n\s*Optional/)
+      response.body.should contain(/Notes\n\s*Optional/)
+    end
+  end
+  # 
+  #   describe "edit with has-one association", :given => ["a player exists", "a draft exists"] do
+  #     before(:each) do
+  #       @response = visit(url(:merb_admin_edit, :model_name => "player", :id => @player.id))
+  #     end
+  # 
+  #     it "should respond sucessfully" do
+  #       @response.should be_successful
+  #     end
+  # 
+  #     it "should show associated objects" do
+  #       @response.body.should contain(/DraftDraft #\d+/)
+  #     end
+  #   end
+  # 
+  #   describe "edit with has-many association", :given => ["a player exists", "three teams exist"] do
+  #     before(:each) do
+  #       @response = visit(url(:merb_admin_edit, :model_name => "player", :id => @player.id))
+  #     end
+  # 
+  #     it "should respond sucessfully" do
+  #       @response.should be_successful
+  #     end
+  # 
+  #     it "should show associated objects" do
+  #       @response.body.should contain(/TeamTeam 1Team 2Team 3/)
+  #     end
+  #   end
+  # 
+  #   describe "edit with missing object" do
+  #     before(:each) do
+  #       @response = visit(url(:merb_admin_edit, :model_name => "player", :id => 1))
+  #     end
+  # 
+  #     it "should raise NotFound" do
+  #       @response.status.should equal(404)
+  #     end
+  #   end
+  # 
+  #   describe "edit with missing label", :given => ["a player exists", "three teams with no name exist"] do
+  #     before(:each) do
+  #       @response = visit(url(:merb_admin_edit, :model_name => "player", :id => @player.id))
+  #     end
+  # 
+  #     it "should respond sucessfully" do
+  #       @response.should be_successful
+  #     end
+  #   end
+  # 
+  #   describe "update", :given => "a player exists" do
+  #     before(:each) do
+  #       visit(url(:merb_admin_edit, :model_name => "player", :id => @player.id))
+  #       fill_in "Name", :with => "Jackie Robinson"
+  #       fill_in "Number", :with => "42"
+  #       fill_in "Position", :with => "Second baseman"
+  #       @response = click_button "Save"
+  #       @player = MerbAdmin::AbstractModel.new("Player").first
+  #     end
+  # 
+  #     it "should be successful" do
+  #       @response.should be_successful
+  #     end
+  # 
+  #     it "should update an object with correct attributes" do
+  #       @player.name.should eql("Jackie Robinson")
+  #       @player.number.should eql(42)
+  #       @player.position.should eql("Second baseman")
+  #     end
+  #   end
 end
 
 # require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
