@@ -19,7 +19,7 @@
               <h2><%= label %></h2>
               <div class="formSection">
                 <p>
-                  <%= label_tag label %>
+                  <label for="associations[<%= association_name%>]"><%= label %></label>
                   <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected},:class => "#{errors_exist ? "errorField" : nil}") %>
                   <% if errors_exist %>
                   <span class="errorMessage"><%= "#{association_name.to_param.capitalize} #{@object.errors[association_name].first}" %></span>
