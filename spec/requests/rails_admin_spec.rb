@@ -652,15 +652,15 @@ describe "RailsAdmin" do
     end
   end
 
-  # describe "update with missing object" do
-  #   before(:each) do
-  #     @response = visit(rails_admin_update_path(:model_name => "player", :id => 1), :put, {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
-  #   end
-  #
-  #   it "should raise NotFound" do
-  #     @response.status.should equal(404)
-  #   end
-  # end
+  describe "update with missing object" do
+    before(:each) do
+      @response = visit(rails_admin_update_path(:model_name => "player", :id => 1), :put, {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
+    end
+  
+    it "should raise NotFound" do
+      @response.status.should equal(404)
+    end
+  end
 
   describe "update with invalid object" do
     before(:each) do
@@ -694,15 +694,15 @@ describe "RailsAdmin" do
     end
   end
 
-  # describe "delete with missing object" do
-  #   before(:each) do
-  #     @response = rails_admin_delete, :model_name => "player", :id => 1))
-  #   end
-  #
-  #   it "should raise NotFound" do
-  #     @response.status.should equal(404)
-  #   end
-  # end
+  describe "delete with missing object" do
+    before(:each) do
+      get rails_admin_delete_path(:model_name => "player", :id => 1)
+    end
+  
+    it "should raise NotFound" do
+      @response.status.should equal(404)
+    end
+  end
 
 
 ###?
@@ -738,14 +738,14 @@ describe "RailsAdmin" do
     end
   end
 
-  # describe "destroy with missing object" do
-  #   before(:each) do
-  #     @req = visit(rails_admin_destroy_path(:model_name => "player", :id => 1), :delete)
-  #   end
-  #
-  #   it "should raise NotFound" do
-  #     @req.status.should equal(404)
-  #   end
-  # end
+  describe "destroy with missing object" do
+    before(:each) do
+      @req = visit(rails_admin_destroy_path(:model_name => "player", :id => 1), :delete)
+    end
+  
+    it "should raise NotFound" do
+      @req.status.should equal(404)
+    end
+  end
 
 end

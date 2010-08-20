@@ -11,7 +11,7 @@
               <p>
 <%= render :partial => property_type.to_s, :locals => {:property => property, :errors_exist => errors_exist} %>
               	<% if errors_exist %>
-                <span class="errorMessage"><%= "#{property_name.capitalize} #{@object.errors[property_name].first}" %></span>
+                <span class="errorMessage"><%= "#{property_name.to_param.capitalize! } #{@object.errors[property_name].first}" %></span>
                 <% end %>
             	</p>
             	<p class="help"><%= required ? "Required." : "Optional." %>

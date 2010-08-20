@@ -123,7 +123,7 @@ class RailsAdminController < ApplicationController
   def get_object
     @object = @abstract_model.get(params[:id])
     # FIXME
-    NotFound unless @object
+    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
   end
 
   def get_sort_hash
