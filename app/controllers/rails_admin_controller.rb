@@ -16,6 +16,7 @@ class RailsAdminController < ApplicationController
   end
 
   def list
+
     @abstract_models = MerbAdmin::AbstractModel.all
     
     options = {}
@@ -229,7 +230,7 @@ class RailsAdminController < ApplicationController
 
   def render_error
     action = params[:action]
-    flash.now[:alert] = "#{@abstract_model.pretty_name} failed to be #{action}d"
+    flash.now[:error] = "#{@abstract_model.pretty_name} failed to be #{action}d"
     render :new, :layout => 'form'
   end
 
