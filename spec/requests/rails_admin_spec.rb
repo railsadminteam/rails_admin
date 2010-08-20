@@ -2,26 +2,26 @@ require 'spec_helper'
 
 describe "RailsAdmin" do
   # dashboard
-  
+
   before(:each) do
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
     RailsAdmin::AbstractModel.new("League").destroy_all!
     RailsAdmin::AbstractModel.new("Player").destroy_all!
     RailsAdmin::AbstractModel.new("Team").destroy_all!
-  end  
-  
+  end
+
   describe "GET /admin" do
     before(:each) do
       get rails_admin_dashboard_path
     end
-    
+
     it "should respond sucessfully" do
       response.code.should == "200"
     end
-    
+
   end
-  
+
   describe "GET /admin/player as list" do
     before(:each) do
       get rails_admin_list_path(:model_name => "player")
@@ -67,11 +67,11 @@ describe "RailsAdmin" do
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
       get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true",:set => 1)
     end
- 
+
     it "should respond sucessfully" do
       response.should be_successful
     end
- 
+
     it "should be sorted correctly" do
       response.body.should contain(/Sandy Koufax/)
       response.body.should contain(/Jackie Robinson/)
@@ -167,11 +167,11 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with 2 objects" do
     before(:each) do
-      
+
       (1..2).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
-      
+
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -186,11 +186,11 @@ describe "RailsAdmin" do
 
   describe "GET /admin/player with 20 objects" do
     before(:each) do
-      
+
       (1..20).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
-      
+
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -208,7 +208,7 @@ describe "RailsAdmin" do
       (1..100).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
-      
+
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -226,7 +226,7 @@ describe "RailsAdmin" do
       (1..2).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
-      
+
       get rails_admin_list_path(:model_name => "player", :all => true)
     end
 
@@ -266,7 +266,7 @@ describe "RailsAdmin" do
     before(:each) do
       RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
       get rails_admin_new_path(:model_name => "player")
-      
+
     end
 
     it "should respond sucessfully" do
@@ -283,7 +283,7 @@ describe "RailsAdmin" do
       (1..3).each do |number|
         RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
-      
+
       get rails_admin_new_path(:model_name => "player")
     end
 
@@ -312,13 +312,13 @@ describe "RailsAdmin" do
   describe "create" do
     before(:each) do
       get rails_admin_new_path(:model_name => "player")
-      
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      
+
       @req = click_button "Save"
-      
+
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
@@ -332,7 +332,7 @@ describe "RailsAdmin" do
       @player.position.should eql("Second baseman")
     end
   end
-  
+
   # describe "create and edit" do
   #     before(:each) do
   #       get rails_admin_new_path(:model_name => "player")
@@ -340,14 +340,14 @@ describe "RailsAdmin" do
   #       fill_in "player[number]", :with => "42"
   #       fill_in "player[position]", :with => "Second baseman"
   #       @req = click_button "Save and continue editing"
-  #       
+  #
   #       @player = RailsAdmin::AbstractModel.new("Player").first
   #     end
-  # 
+  #
   #     it "should be successful" do
   #       @response.should be_successful
   #     end
-  # 
+  #
   #     it "should create an object with correct attributes" do
   #       @player.name.should eql("Jackie Robinson")
   #       @player.number.should eql(42)
@@ -387,7 +387,7 @@ describe "RailsAdmin" do
       @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
-  
+
     it "should create an object with correct associations" do
       @draft.reload
       @player.draft.should eql(@draft)
@@ -400,14 +400,14 @@ describe "RailsAdmin" do
       (1..3).each do |number|
         @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
-    
+
       get rails_admin_new_path(:model_name => "league")
-    
+
       fill_in "league[name]", :with => "National League"
 
       set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
       @req = click_button "Save"
-    
+
       @league = RailsAdmin::AbstractModel.new("League").first
     end
 
@@ -420,20 +420,20 @@ describe "RailsAdmin" do
       @league.teams.should_not include(@teams[1])
       @league.teams.should_not include(@teams[2])
     end
-  end  
+  end
 
   describe "create with uniqueness constraint violated", :given => "a player exists" do
     before(:each) do
       @team =  RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => @team.id, :number => 1, :name => "Player 1")
-      
+
       get rails_admin_new_path(:model_name => "player")
-      
+
       fill_in "player[name]", :with => @player.name
       fill_in "player[number]", :with => @player.number.to_s
       fill_in "player[position]", :with => @player.position
       select "#{@team.name}", :from => "player[team_id]"
-      
+
       @req = click_button "Save"
     end
 
@@ -451,7 +451,7 @@ describe "RailsAdmin" do
       @response.body.should contain("Player failed to be created")
     end
   end
-  
+
   describe "edit" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
@@ -477,12 +477,12 @@ describe "RailsAdmin" do
       response.body.should contain(/Notes\n\s*Optional/)
     end
   end
-   
+
   describe "edit with has-one association" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
-      
+
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -518,7 +518,7 @@ describe "RailsAdmin" do
   #   before(:each) do
   #     rails_admin_edit_path :model_name => "player", :id => 1))
   #   end
-  # 
+  #
   #   it "should raise NotFound" do
   #     response.status.should equal(404)
   #   end
@@ -527,12 +527,12 @@ describe "RailsAdmin" do
   describe "edit with missing label", :given => ["a player exists", "three teams with no name exist"] do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      
+
       @teams = []
       (1..3).each do |number|
         @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
-      
+
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -548,7 +548,7 @@ describe "RailsAdmin" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      
+
       @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -568,11 +568,11 @@ describe "RailsAdmin" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
-      
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      
+
       @req = click_button "Save and add another" #FIXME Save and add continue
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -592,15 +592,15 @@ describe "RailsAdmin" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
-      
+
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
-      
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      
+
       select "Draft ##{@draft.id}"
-      
+
       @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
       # @response = rails_admin_update, :model_name => "player", :id => @player.id), :put, :params => {:player => {:name => "Jackie Robinson", :number => 42, :team_id => 1, :position => "Second baseman"}, :associations => {:draft => @draft.id}})
@@ -621,18 +621,18 @@ describe "RailsAdmin" do
   describe "update with has-many association", :given => ["a league exists", "three teams exist"] do
     before(:each) do
       @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
-      
+
       @teams = []
       (1..3).each do |number|
         @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
-      
+
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
-      
+
       fill_in "league[name]", :with => "National League"
-      
+
       set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
-      
+
       response = click_button "Save"
       @league = RailsAdmin::AbstractModel.new("League").first
     end
@@ -656,7 +656,7 @@ describe "RailsAdmin" do
   #   before(:each) do
   #     @response = visit(rails_admin_update_path(:model_name => "player", :id => 1), :put, {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
   #   end
-  # 
+  #
   #   it "should raise NotFound" do
   #     @response.status.should equal(404)
   #   end
@@ -666,7 +666,7 @@ describe "RailsAdmin" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
-      
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "a"
       fill_in "player[position]", :with => "Second baseman"
@@ -698,7 +698,7 @@ describe "RailsAdmin" do
   #   before(:each) do
   #     @response = rails_admin_delete, :model_name => "player", :id => 1))
   #   end
-  # 
+  #
   #   it "should raise NotFound" do
   #     @response.status.should equal(404)
   #   end
@@ -710,7 +710,7 @@ describe "RailsAdmin" do
     before(:each) do
       @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
       @team = RailsAdmin::AbstractModel.new("Team").create(:league_id => @league.id, :division_id => rand(99999), :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      
+
       get rails_admin_delete_path(:model_name => "league", :id => @league.id)
     end
 
@@ -722,9 +722,9 @@ describe "RailsAdmin" do
   describe "destroy" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      
+
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
-      
+
       @req = click_button "Yes, I'm sure"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -742,7 +742,7 @@ describe "RailsAdmin" do
   #   before(:each) do
   #     @req = visit(rails_admin_destroy_path(:model_name => "player", :id => 1), :delete)
   #   end
-  # 
+  #
   #   it "should raise NotFound" do
   #     @req.status.should equal(404)
   #   end
