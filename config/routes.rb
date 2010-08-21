@@ -1,4 +1,4 @@
-RailsAdmin::Application.routes.draw do
+Rails.application.routes.draw do |map|
   match "/admin", :to => "rails_admin#index", :as => :rails_admin_dashboard
   match "/admin/:model_name", :to => "rails_admin#list", :as => :rails_admin_list
   match "/admin/:model_name/new", :to => "rails_admin#new", :as => :rails_admin_new
