@@ -333,27 +333,27 @@ describe "RailsAdmin" do
     end
   end
 
-  # describe "create and edit" do
-  #     before(:each) do
-  #       get rails_admin_new_path(:model_name => "player")
-  #       fill_in "player[name]", :with => "Jackie Robinson"
-  #       fill_in "player[number]", :with => "42"
-  #       fill_in "player[position]", :with => "Second baseman"
-  #       @req = click_button "Save and continue editing"
-  #
-  #       @player = RailsAdmin::AbstractModel.new("Player").first
-  #     end
-  #
-  #     it "should be successful" do
-  #       @response.should be_successful
-  #     end
-  #
-  #     it "should create an object with correct attributes" do
-  #       @player.name.should eql("Jackie Robinson")
-  #       @player.number.should eql(42)
-  #       @player.position.should eql("Second baseman")
-  #     end
-  #   end
+  describe "create and edit" do
+    before(:each) do
+      get rails_admin_new_path(:model_name => "player")
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      @req = click_button "Save and edit"
+
+      @player = RailsAdmin::AbstractModel.new("Player").first
+    end
+
+    it "should be successful" do
+      @response.should be_successful
+    end
+
+    it "should create an object with correct attributes" do
+      @player.name.should eql("Jackie Robinson")
+      @player.number.should eql(42)
+      @player.position.should eql("Second baseman")
+    end
+  end
 
   describe "create and add another" do
     before(:each) do
@@ -573,7 +573,7 @@ describe "RailsAdmin" do
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
 
-      @req = click_button "Save and add another" #FIXME Save and add continue
+      @req = click_button "Save and edit" #FIXME Save and add continue
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
