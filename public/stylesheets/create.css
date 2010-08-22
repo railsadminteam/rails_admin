@@ -342,3 +342,24 @@ p.help{
 .searchMany{
 	float:left;
 }
+
+#saveEdit_btn{
+	cursor:pointer;
+	background:none;
+	border:none;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	width:98px;
+	height:24px;
+	text-indent:-9999px;
+	margin-left:7px;
+	margin-top:7px;
+}
+
+#saveEditContainer{
+	background:url(/images/saveandedit.png) no-repeat;
+	width:119px;
+	height:39px;
+	margin-top:2px;
+	margin-left:-12px;	
+}

@@ -514,15 +514,15 @@ describe "RailsAdmin" do
     end
   end
 
-  # describe "edit with missing object" do
-  #   before(:each) do
-  #     rails_admin_edit_path :model_name => "player", :id => 1))
-  #   end
-  #
-  #   it "should raise NotFound" do
-  #     response.status.should equal(404)
-  #   end
-  # end
+  describe "edit with missing object" do
+    before(:each) do
+      get rails_admin_edit_path(:model_name => "player", :id => 1)
+    end
+  
+    it "should raise NotFound" do
+      response.status.should equal(404)
+    end
+  end
 
   describe "edit with missing label", :given => ["a player exists", "three teams with no name exist"] do
     before(:each) do
@@ -541,7 +541,7 @@ describe "RailsAdmin" do
     end
   end
 
-  describe "update" do
+  describe "update and add another" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
@@ -704,8 +704,6 @@ describe "RailsAdmin" do
     end
   end
 
-
-###?
   describe "delete with missing label" do
     before(:each) do
       @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")

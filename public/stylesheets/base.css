@@ -64,6 +64,17 @@ ul.breadcrumb li a:hover{
 
 }
 
+#nav li#more{
+	margin-top:-9px;
+}
+
+#nav li#more a{
+	background:url(/images/navigation_more.png) no-repeat;
+	display:block;
+	text-indent:-9999px;
+}
+
+
 ul#nav{
 	float:left;
 	list-style-type:none;
@@ -142,6 +153,8 @@ ul#nav{
 }
 
 #content{
+	width:960px;
+	float:left;
 	background:#FFF;
 	border:1px solid #e6e6e6;
 }
@@ -234,4 +247,49 @@ ul#quick li a {
 	position:relative;
 	top:4px;
 	right:3px;
+}
+
+ul#nav li#more a{
+	width:25px;
+	height:32px;
+	padding:0;
+	margin:0;
+}
+
+ul#nav li#more:hover ul{
+	display:block;
+}
+
+ul#nav li#more ul{
+	display:none;
+	margin:0;
+	background:#9e988e;
+	width:120px;
+	position:absolute;
+	margin-left:-2px;
+}
+
+ul#nav li#more ul li{
+	float:none;
+	margin:0;
+	padding:5px;
+	padding-bottom:0px;
+	padding-top:0px;
+}
+
+ul#nav li#more ul li:first-child  a{
+	border-top:none;
+}
+
+ul#nav li#more ul li a{
+	background:none;
+	text-indent:0px;
+	padding:0;
+	height:15px;
+	font-size:10px;
+	color:#FFF;
+	padding-top:7px;
+	padding-bottom:4px;
+	border-top:1px solid #c7c7c7;
+	width:110px;
 }
