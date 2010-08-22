@@ -1,6 +1,16 @@
       <ul id="nav">
         <li <%if @page_type == "dashboard" %>id="active"<% end %>><%= link_to("Dashboard", rails_admin_dashboard_path) %></li>
-<% @abstract_models.each do |abstract_model| %>
+<% @abstract_models[0..5].each do |abstract_model| %>
         <li <%if @page_type == abstract_model.pretty_name.downcase %>id="active"<% end %>><%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %></li>
+<% end %>
+<% if @abstract_models.size > 5 %>
+        <li id="more">
+        	<a href="#">&raquo;</a>
+          <ul>
+          <% @abstract_models[6..@abstract_models.size].each do |abstract_model| %>
+          <li <%if @page_type == abstract_model.pretty_name.downcase %>id="active"<% end %>><%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %></li>
+          <% end %>
+          </ul>
+        </li>
 <% end %>
       </ul>

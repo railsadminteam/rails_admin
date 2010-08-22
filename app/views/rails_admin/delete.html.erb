@@ -26,8 +26,16 @@
             </li>
           </ul>
           <%= form_for(@object, :url => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :method => :delete) do %>
+
             <div id="deleteConfirmation">
-              <%= submit_tag "Yes, I'm sure" %>
+              <ul id="submitArea">
+          	    <li>
+          	      <%= submit_tag "Yes, I'm sure" %>
+          	    </li>
+                <li id="cancelContainer">
+                  <%= submit_tag "cancel", :name => "_continue", :id => "cancel_btn" %>
+                </li>
+              </ul>
             </div>
           <% end =%>
         </div>

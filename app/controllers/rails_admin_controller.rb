@@ -66,6 +66,7 @@ class RailsAdminController < ApplicationController
 
 
     if @object.save && update_all_associations
+      @lastId = @object.id
       redirect_to_on_success
     else
       render_error
@@ -86,10 +87,9 @@ class RailsAdminController < ApplicationController
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-
-    update_all_associations
-
+    
     if @object.update_attributes(@attributes) && update_all_associations
+      @lastId = @object.id
       redirect_to_on_success
     else
       render_error
@@ -218,13 +218,16 @@ class RailsAdminController < ApplicationController
     param = @abstract_model.to_param
     pretty_name = @abstract_model.pretty_name
     action = params[:action]
-
-    if params[:_add_another]
+    
+    if params[:_add_another] == "Save and add another"
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_new_path( :model_name => param)
-    else
+    elsif params[:_add_edit] == "Save and edit"
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
-      redirect_to rails_admin_list_path(:model_name => param)
+      redirect_to rails_admin_edit_path( :model_name => param,:id =>@lastId)
+    elsif
+      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      redirect_to rails_admin_list_path(:model_name => param)      
     end
   end
 
