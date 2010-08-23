@@ -203,21 +203,44 @@ describe "RailsAdmin" do
     end
   end
 
-  describe "GET /admin/player with 100 objects" do
+
+  describe "list with 20 objects, page 8" do
     before(:each) do
-      (1..100).each do |number|
+      per_page = 20
+      max_pages = 20
+      (1..per_page*max_pages).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 
-      get rails_admin_list_path(:model_name => "player")
+      get rails_admin_list_path(:model_name => "player",:page => 8)
     end
 
     it "should respond sucessfully" do
-      @response.should be_successful
+      response.should be_successful
     end
 
     it "should paginate correctly" do
-      @response.body.should contain(/1 2 3 4 5/)
+      response.body.should contain(/1 2 [^0-9]*5 6 7 8 9 10 11[^0-9]*19 20/)
+    end
+  end
+
+  describe "list with 20 objects, page 17" do
+    before(:each) do
+      per_page = 20
+      max_pages = 20
+      (1..per_page*max_pages).each do |number|
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
+      end
+
+      get rails_admin_list_path(:model_name => "player",:page => 18)
+    end
+
+    it "should respond sucessfully" do
+      response.should be_successful
+    end
+
+    it "should paginate correctly" do
+      @response.body.should contain(/1 2[^0-9]*12 13 14 15 16 17 18 19 20/)
     end
   end
 
