@@ -203,13 +203,15 @@ describe "RailsAdmin" do
     end
   end
 
-  describe "GET /admin/player with 100 objects" do
+  describe "GET /admin/player with 20 objects, page 8" do
     before(:each) do
-      (1..100).each do |number|
+      per_page = 20
+      page_numers = 20
+      (1..per_page*page_numers).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 
-      get rails_admin_list_path(:model_name => "player")
+      get rails_admin_list_path(:model_name => "player",:page => 8)
     end
 
     it "should respond sucessfully" do
