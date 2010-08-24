@@ -97,6 +97,6 @@ DEPENDENCIES
   builder
   launchy (>= 0.3.0)
   rails (= 3.0.0.rc2)
-  rspec-rails (>= 2.0.0.beta.19)
+  rspec-rails (>= 2.0.0.beta.20)
   sqlite3-ruby
   webrat!
