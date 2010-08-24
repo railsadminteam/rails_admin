@@ -39,8 +39,12 @@ GEM
     activesupport (3.0.0.rc2)
     arel (1.0.0.rc1)
       activesupport (>= 3.0.0.beta)
+    bcrypt-ruby (2.1.2)
     builder (2.1.2)
     configuration (1.1.0)
+    devise (1.1.1)
+      bcrypt-ruby (~> 2.1.2)
+      warden (~> 0.10.7)
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -89,12 +93,15 @@ GEM
     treetop (1.4.8)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
+    warden (0.10.7)
+      rack (>= 1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   builder
+  devise
   launchy (>= 0.3.0)
   rails (= 3.0.0.rc2)
   rspec-rails (>= 2.0.0.beta.20)
