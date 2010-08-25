@@ -1,0 +1,365 @@
+
+
+#contentMainNew{
+	padding:5px;
+	margin-bottom:5px;
+}
+
+
+
+#contentMainNew fieldset{
+	border:none;
+}
+
+#contentMainNew h2{
+	clear:both;
+	margin-top:2px;
+	margin-bottom:3px;
+	border-bottom:1px solid #b9b9b9;
+	padding-bottom:4px;
+	font-weight:normal;
+	color:#9e988e;
+	text-transform:uppercase;
+	font-weight:bold;
+	font-size:10px;
+}
+
+
+.formSection p{
+	padding-top:5px;
+	padding-bottom:5px;
+	margin-bottom:1px;
+	height:26px;
+}
+
+.formSection{
+	margin-bottom:5px;
+}
+
+.formSection label{
+	width:100px;
+
+	display:block;
+	float:left;
+	margin-top:6px;
+	font-size:11px;
+	font-weight:bold;
+	margin-left:2px;
+}
+
+.stringField, .intField, .bigDecimalField, .floatField, .dateField, .timestampField, .timeField, .datetimeField, .textField{
+	float:left;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	padding:5px;
+	width:250px;
+	border-left:1px solid #e2e3ea;
+	border-top:1px solid #abadb3;
+	border-bottom:1px solid #e3e9ef;
+	border-right:1px solid #dbdfe6;
+}
+
+.intField{
+	width:90px;
+}
+
+.bigDecimalField{
+	width:170px;
+}
+
+.floatField{
+	width:120px;
+}
+
+.boolField{
+	float:left;
+	margin-top:6px;
+}
+
+.boolLabel{
+}
+
+.formSection p.boolPlace{
+	padding-top:2px;
+}
+
+.modifyInt{
+	float:left;
+	margin-left:5px;
+}
+
+.modifyInt a{
+	display:block;
+	width:9px;
+	height:7px;
+}
+
+.modifyInt a img{
+	border:none;
+}
+
+.modifyDown{
+	margin-top:2px;
+}
+
+.modifyUp{
+
+}
+
+#error{
+	background:#903333;
+	padding:6px;
+	padding-bottom:3px;
+	color:#FFF;
+	margin-top:2px;
+	margin-bottom:5px;
+}
+
+#error h3{
+	margin-bottom:5px;
+}
+
+#error ul{
+	list-style-type:none;
+}
+
+#error ul li{
+	margin-bottom:5px;
+}
+
+.errorField{
+	border:1px solid #bd2b14;
+}
+
+.errorMessage{
+	display:block;
+	float:left;
+	margin-top:5px;
+	margin-left:5px;
+	color:#bd2b14;
+}
+
+.dateField, .timestampField, .timeField, .datetimeField{
+	width:150px;
+}
+
+#submitArea{
+	display:block;
+	list-style-type:none;
+}
+
+#submitArea li{
+	float:left;
+}
+
+#saveContainer{
+	background:url(/images/save.png) no-repeat;
+	width:90px;
+	height:42px;
+	margin-left:-8px;
+}
+
+#save_btn{
+	cursor:pointer;
+	background:none;
+	border:none;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	width:68px;
+	height:24px;
+	text-indent:-9999px;
+	margin-left:10px;
+	margin-top:9px;
+}
+
+
+#saveAddContainer{
+	background:url(/images/saveandadd.png);
+	width:180px;
+	height:42px;
+	margin-left:-12px;
+}
+
+#saveAdd_btn{
+	cursor:pointer;
+	background:none;
+	border:none;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	width:158px;
+	height:24px;
+	text-indent:-9999px;
+	margin-left:10px;
+	margin-top:9px;
+}
+
+#cancelContainer{
+	background:url(/images/cancel.png);
+	width:82px;
+	height:42px;
+	margin-left:-12px;	
+}
+
+#cancel_btn{
+	cursor:pointer;
+	background:none;
+	border:none;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	width:66px;
+	height:24px;
+	text-indent:-9999px;
+	margin-left:7px;
+	margin-top:9px;
+}
+
+.textField{
+	height:200px;
+}
+
+.breakSpan{
+	float:left;
+	width:100%;
+	display:block;
+	height:1px;
+}
+
+p.help{
+	padding-top:0px;
+	padding-bottom:0px;
+	margin-bottom:0px;
+	height:15px;
+	font-size:10px;
+	margin-left:103px;
+	display:block;
+}
+
+.selectField{
+	float:left;
+	margin-top:4px;
+}
+.many{
+}
+
+.manySelector{
+	clear:both;
+	margin-left:102px;
+}
+
+.manySelector select{
+	padding:5px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	width:191px;
+	border-left:1px solid #e2e3ea;
+	border-top:1px solid #abadb3;
+	border-bottom:1px solid #e3e9ef;
+	border-right:1px solid #dbdfe6;
+	float:left;
+}
+
+.searchMany{
+	background:url(/images/magnifier.png) no-repeat;
+	padding-left:19px;
+	padding-top:5px;
+	font-size:11px;
+	font-family:Verdana, Geneva, sans-serif;
+	padding-bottom:5px;
+	background-position:2px 4px;
+	border-left:1px solid #e2e3ea;
+	border-top:1px solid #abadb3;
+	border-bottom:1px solid #e3e9ef;
+	border-right:1px solid #dbdfe6;
+	margin-bottom:5px;
+	width:170px;
+	color:#AAA;
+}
+
+.add_elem{
+	float:left;
+	border:none;
+	margin-top:50px;
+	margin-right:3px;
+	margin-left:3px;
+}
+
+.remove_elem{
+	float:left;
+	border:none;
+	margin-top:74px;
+	margin-left:-19px;
+}
+
+.many_controls{
+	margin-left:103px;
+	clear:both;
+}
+
+.many_controls a img{
+	border:none;
+	position:relative;
+	top:4px;
+}
+
+.add_all{
+	left:2px;
+}
+
+.many_controls a{
+	text-decoration:none;
+	color:#000;
+	font-size:11px;
+	font-weight:bold;
+}
+
+.clear_all{
+	margin-left:125px;
+	margin-right:3px;
+}
+
+.many_header{
+	margin-left:103px;
+	margin-top:8px;
+}
+
+.many_header p{
+	float:left;
+	margin-top:-5px;
+	margin-left:22px;
+	font-size:10px;
+	line-height:7px;
+}
+
+.many_header p img{
+	position:relative;
+	top:4px;
+}
+
+.many_header p strong{
+	display:block;
+}
+
+.searchMany{
+	float:left;
+}
+
+#saveEdit_btn{
+	cursor:pointer;
+	background:none;
+	border:none;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	width:98px;
+	height:24px;
+	text-indent:-9999px;
+	margin-left:7px;
+	margin-top:7px;
+}
+
+#saveEditContainer{
+	background:url(/images/saveandedit.png) no-repeat;
+	width:119px;
+	height:39px;
+	margin-top:2px;
+	margin-left:-12px;	
+}
