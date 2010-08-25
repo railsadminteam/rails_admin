@@ -22,19 +22,7 @@
 <%= render(:partial => 'rails_admin/navigation', :locals => {:abstract_models => @abstract_models}) %>
 
       <div id="headerRight">
-        <ul class="breadcrumb">
-          <li>
-            <a href="#">John Doe</a>
-          </li>
-          <li>|</li>
-          <li>
-            <a href="#">My profile</a>
-          </li>
-          <li>|</li>
-          <li>
-            <a href="#">Log out</a>
-          </li>
-        </ul>
+<%= render(:partial => 'rails_admin/userinfo', :locals => {:current_user => current_user}) %>
       </div>
     </div>
 
