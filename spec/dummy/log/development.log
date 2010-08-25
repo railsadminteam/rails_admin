@@ -54,3 +54,27 @@ Rendered layouts/_flash.html.erb (0.5ms)
 Rendered rails_admin/_navigation.html.erb (2.1ms)
 Rendered rails_admin/index.html.erb within layouts/dashboard (10.5ms)
 Completed 200 OK in 100ms (Views: 14.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/admin/league" for 127.0.0.1 at 2010-08-26 00:10:21 +0300
+  Processing by RailsAdminController#list as HTML
+  Parameters: {"model_name"=>"league"}
+  [1m[36mSQL (0.3ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.1ms)[0m  SELECT COUNT(*) AS count_id FROM "leagues"
+  [1m[36mLeague Load (0.1ms)[0m  [1mSELECT "leagues".* FROM "leagues" ORDER BY id desc LIMIT 20 OFFSET 0[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) AS count_id FROM "leagues"
+Rendered layouts/_flash.html.erb (0.5ms)
+Rendered rails_admin/_navigation.html.erb (2.2ms)
+Rendered rails_admin/list.html.erb within layouts/list (30.1ms)
+Completed 200 OK in 261ms (Views: 34.5ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/admin" for 127.0.0.1 at 2010-08-26 00:10:30 +0300
+  Processing by RailsAdminController#index as HTML
+Rendered layouts/_flash.html.erb (0.5ms)
+Rendered rails_admin/_navigation.html.erb (2.1ms)
+Rendered rails_admin/index.html.erb within layouts/dashboard (10.4ms)
+Completed 200 OK in 97ms (Views: 14.6ms | ActiveRecord: 0.0ms)
