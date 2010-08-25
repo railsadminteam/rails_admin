@@ -9,11 +9,9 @@ module RailsAdmin
       devideModel =  Devise.mappings.keys[0].to_param.capitalize
       Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
         File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
-
           if model_name != devideModel
             add_model(model_name)
-          end
-          
+          end        
         end
       end
 

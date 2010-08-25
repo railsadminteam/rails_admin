@@ -7,6 +7,11 @@ GIT
       rack (>= 1.0)
       rack-test (>= 0.5.3)
 
+PATH
+  remote: /Users/Bogdan/Desktop/rails_admin
+  specs:
+    rails_admin (0.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -104,6 +109,7 @@ DEPENDENCIES
   devise
   launchy (>= 0.3.0)
   rails (= 3.0.0.rc2)
+  rails_admin!
   rspec-rails (>= 2.0.0.beta.20)
   sqlite3-ruby
   webrat!
