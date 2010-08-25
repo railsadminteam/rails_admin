@@ -1,0 +1,56 @@
+
+
+Started GET "/admin/league" for 127.0.0.1 at 2010-08-25 23:35:42 +0300
+  Processing by RailsAdminController#list as HTML
+  Parameters: {"model_name"=>"league"}
+  [1m[36mSQL (0.2ms)[0m  [1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [1m[35mSQL (0.3ms)[0m  SELECT COUNT(*) AS count_id FROM "leagues"
+  [1m[36mLeague Load (0.1ms)[0m  [1mSELECT "leagues".* FROM "leagues" ORDER BY id desc LIMIT 20 OFFSET 0[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) AS count_id FROM "leagues"
+Rendered layouts/_flash.html.erb (0.6ms)
+Rendered rails_admin/_navigation.html.erb (3.0ms)
+Rendered rails_admin/list.html.erb within layouts/list (89.1ms)
+Completed 200 OK in 334ms (Views: 93.8ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/admin/league" for 127.0.0.1 at 2010-08-25 23:35:44 +0300
+  Processing by RailsAdminController#list as HTML
+  Parameters: {"model_name"=>"league"}
+  [1m[36mSQL (0.2ms)[0m  [1mSELECT COUNT(*) AS count_id FROM "leagues"[0m
+  [1m[35mLeague Load (0.1ms)[0m  SELECT "leagues".* FROM "leagues" ORDER BY id desc LIMIT 20 OFFSET 0
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT COUNT(*) AS count_id FROM "leagues"[0m
+Rendered layouts/_flash.html.erb (0.6ms)
+Rendered rails_admin/_navigation.html.erb (2.7ms)
+Rendered rails_admin/list.html.erb within layouts/list (59.5ms)
+Completed 200 OK in 166ms (Views: 63.3ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/admin" for 127.0.0.1 at 2010-08-25 23:35:46 +0300
+  Processing by RailsAdminController#index as HTML
+Rendered layouts/_flash.html.erb (0.5ms)
+Rendered rails_admin/_navigation.html.erb (2.2ms)
+Rendered rails_admin/index.html.erb within layouts/dashboard (10.8ms)
+Completed 200 OK in 113ms (Views: 28.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/admin/team" for 127.0.0.1 at 2010-08-25 23:35:48 +0300
+  Processing by RailsAdminController#list as HTML
+  Parameters: {"model_name"=>"team"}
+  [1m[35mSQL (21.5ms)[0m  SELECT COUNT(*) AS count_id FROM "teams"
+  [1m[36mTeam Load (0.3ms)[0m  [1mSELECT "teams".* FROM "teams" ORDER BY id desc LIMIT 20 OFFSET 0[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT COUNT(*) AS count_id FROM "teams"
+Rendered layouts/_flash.html.erb (0.6ms)
+Rendered rails_admin/_navigation.html.erb (2.3ms)
+Rendered rails_admin/list.html.erb within layouts/list (13.0ms)
+Completed 200 OK in 142ms (Views: 17.4ms | ActiveRecord: 21.7ms)
+
+
+Started GET "/admin" for 127.0.0.1 at 2010-08-25 23:35:49 +0300
+  Processing by RailsAdminController#index as HTML
+Rendered layouts/_flash.html.erb (0.5ms)
+Rendered rails_admin/_navigation.html.erb (2.1ms)
+Rendered rails_admin/index.html.erb within layouts/dashboard (10.5ms)
+Completed 200 OK in 100ms (Views: 14.4ms | ActiveRecord: 0.0ms)

@@ -203,12 +203,11 @@ describe "RailsAdmin" do
     end
   end
 
-
-  describe "list with 20 objects, page 8" do
+  describe "GET /admin/player with 20 objects, page 8" do
     before(:each) do
       per_page = 20
-      max_pages = 20
-      (1..per_page*max_pages).each do |number|
+      page_numers = 20
+      (1..per_page*page_numers).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 

@@ -5,11 +5,18 @@ module RailsAdmin
     # Returns all models for a given Merb app
     def self.all
       @models = []
+      str = ""
+      devideModel =  Devise.mappings.keys[0].to_param.capitalize
       Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
         File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
-          add_model(model_name)
+
+          if model_name != devideModel
+            add_model(model_name)
+          end
+          
         end
       end
+
       @models.sort!{|x, y| x.model.to_s <=> y.model.to_s}
     end
 

@@ -1,0 +1,67 @@
+#contentMainDelete{
+	padding:5px;
+}
+
+#contentMainDelete ul{
+	margin-left:14px;
+	margin-top:4px;
+}
+
+#contentMainDelete ul li{
+	margin-bottom:3px;
+}
+
+#contentMainDelete ul li a{
+	color:#000;
+}
+
+#contentMainDelete ul li a:hover{
+	text-decoration:none;
+}
+
+#deleteConfirmation{
+	margin-left:-5px;
+	margin-bottom:-4px;
+	background:url(/images/delete_confirmation.png) no-repeat;
+	width:296px;
+	height:37px;
+}
+
+#deleteConfirmation input{
+	background:none;
+	margin-top:9px;
+	margin-left:6px;
+	width:94px;
+	height:26px;
+	border:none;
+	text-indent:-9999px;
+}
+
+ul#submitArea{
+  list-style-type: none;
+}
+
+ul#submitArea li{
+  float:left;
+}
+
+#cancelContainer{
+	background:url(/images/cancel.png);
+	width:82px;
+	height:42px;
+	margin-top:-3px;
+	margin-left:-12px;	
+}
+
+#cancel_btn{
+	cursor:pointer;
+	background:none;
+	border:none;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	width:66px;
+	height:24px;
+	text-indent:-9999px;
+	margin-left:7px;
+	margin-top:-5px;
+}
