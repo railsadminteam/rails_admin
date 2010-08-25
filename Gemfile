@@ -7,7 +7,6 @@ gem 'builder'
 # To use debugger
 # gem 'ruby-debug'
 
-
 gem 'devise'
 
 # Bundle gems for the local environment. Make sure to
