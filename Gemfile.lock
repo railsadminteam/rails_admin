@@ -5,7 +5,16 @@ GEM
     devise (1.1.1)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 0.10.7)
+    gemcutter (0.6.1)
+    git (1.2.5)
+    jeweler (1.4.0)
+      gemcutter (>= 0.1.0)
+      git (>= 1.2.5)
+      rubyforge (>= 2.0.0)
+    json_pure (1.4.6)
     rack (1.2.1)
+    rubyforge (2.0.4)
+      json_pure (>= 1.1.7)
     warden (0.10.7)
       rack (>= 1.0.0)
 
@@ -14,3 +23,4 @@ PLATFORMS
 
 DEPENDENCIES
   devise
+  jeweler

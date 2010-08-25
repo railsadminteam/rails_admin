@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version = "0.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.date = %q{2010-08-21}
+  s.date = %q{2010-08-25}
   s.extra_rdoc_files = [
     "README"
   ]
@@ -49,11 +49,13 @@ Gem::Specification.new do |s|
      "app/views/rails_admin/list.html.erb",
      "app/views/rails_admin/new.html.erb",
      "config/routes.rb",
+     "lib/generators/rails_admin/rails_admin_generator.rb",
      "lib/rails_admin.rb",
      "lib/rails_admin/abstract_model.rb",
      "lib/rails_admin/active_record_support.rb",
      "lib/rails_admin/engine.rb",
-     "lib/rails_admin/generic_support.rb"
+     "lib/rails_admin/generic_support.rb",
+     "lib/rails_admin/railties/tasks.rake"
   ]
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
