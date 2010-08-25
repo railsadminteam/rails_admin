@@ -1,0 +1,27 @@
+<%
+  child_key = belongs_to_association[:child_key].first
+  collection = RailsAdmin::AbstractModel.new(belongs_to_association[:parent_model]).all.map{|object| [object_label(object), object.id]}.sort_by{|object| object.first}
+  selected = @object.send(child_key)
+
+  if selected.nil? && params["associations"]
+    selected = params["associations"][child_key.to_param.pluralize].to_i
+  end
+
+  label = belongs_to_association[:pretty_name]
+  required = false
+  errors_exist = !(@object.errors[child_key].nil? || @object.errors[child_key].empty?)
+  @properties.select{|property| property[:name] == child_key}.each do |property|
+    required = true unless property[:nullable?]
+  end
+  model_name = @abstract_model.to_param
+%>
+              <h2><%= label %></h2>
+              <div class="formSection">
+                <p>
+                  <%= label_tag label %>
+                  <%= select model_name, child_key, collection, {:include_blank => true, :selected => selected}, :class => "selectField #{errors_exist ? "errorField" : nil}" %>
+                  <% if errors_exist %>
+                  <span class="errorMessage"><%= "#{child_key.to_param.capitalize} #{@object.errors[child_key].first}" %></span>
+                  <% end %>
+                </p>
+              </div>

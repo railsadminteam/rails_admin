@@ -1,0 +1,10 @@
+<%
+  property_name = property[:name]
+  value = @object.send(property_name)
+  label = property[:pretty_name]
+  required = !property[:nullable?]
+  model_name = @abstract_model.to_param
+%>
+                <%= label_tag "#{property_name}", label %>
+
+                <%= text_field model_name, property_name,  :maxlength => length, :class => "timestampField #{errors_exist ? "errorField" : nil}", :value => object_property(@object,property) %>
