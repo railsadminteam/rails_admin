@@ -7,9 +7,10 @@ module RailsAdmin
       @models = []
       str = ""
       devideModel =  Devise.mappings.keys[0].to_param.capitalize
+      historyModel = "History"
       Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
         File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
-          if model_name != devideModel
+          if model_name != devideModel and model_name != historyModel
             add_model(model_name)
           end        
         end
