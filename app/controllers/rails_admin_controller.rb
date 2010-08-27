@@ -249,6 +249,8 @@ class RailsAdminController < ApplicationController
     pretty_name = @abstract_model.pretty_name
     action = params[:action]
     
+    check_history
+    
     if params[:_add_another] == "Save and add another"
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_new_path( :model_name => param)
@@ -258,6 +260,27 @@ class RailsAdminController < ApplicationController
     elsif
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_list_path(:model_name => param)      
+    end
+  end
+  
+  def check_history
+
+    action = params[:action]
+    action_type = -1
+
+    case action
+    when "create"
+      action_type = 1
+    when "update"
+
+      action_type=2
+    when "distroy"
+      action_type=3
+    end
+    
+    if action_type != -1
+      date = Time.now
+      History.create(:action => action_type,:month =>date.month, :year => date.year, :user_id => current_user.id)
     end
   end
 
@@ -278,7 +301,8 @@ class RailsAdminController < ApplicationController
   end
 
   def check_for_cancel
-
+    
+    
     if params[:_continue]
       flash[:notice] = "No actions where taken!"
       redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
