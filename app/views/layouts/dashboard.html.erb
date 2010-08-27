@@ -6,6 +6,25 @@
   <title><%= @page_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('base') %>
   <%= stylesheet_link_tag('dashboard') %>
+  
+  <%= javascript_include_tag('prototype.js') %>
+  <%= javascript_include_tag('scriptaculous.js') %>
+  <script type="text/javascript" language="javascript">
+  
+  document.observe("dom:loaded", function() {
+    
+    new Draggable('handler', {
+       snap: function(x, y) {
+                return[ (x < 870) ? (x > -5 ? x : -5 ) : 870,
+                        -12 ];
+        },
+      change: function(e){
+        console.log($("handler").getStyle('left'));
+      }
+    });
+  });
+  
+  </script>
 </head>
 <body>
   <div id="wraper">

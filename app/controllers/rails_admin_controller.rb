@@ -3,7 +3,7 @@ require 'rails_admin/abstract_model'
 class RailsAdminController < ApplicationController
   before_filter :authenticate_user!
   
-  before_filter :get_model, :except => [:index]
+  before_filter :get_model, :except => [:index,:history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
   before_filter :set_plugin_name
@@ -112,6 +112,10 @@ class RailsAdminController < ApplicationController
     flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
     redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
   end
+  
+  def history
+    start_month, start_year, stop_month, stop_year = get_dates
+  end
 
   private
 
@@ -128,6 +132,11 @@ class RailsAdminController < ApplicationController
     # FIXME
     render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
   end
+  
+  def show404
+    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
+  end
+
 
   def get_sort_hash
     sort = params[:sort]
@@ -208,6 +217,24 @@ class RailsAdminController < ApplicationController
       object.update_attributes(association[:child_key].first => @object.id)
     end
   end
+  
+  def get_dates
+    start_month = params[:mstart]
+    start_year = params[:ystart]
+    stop_month = params[:mstop]
+    stop_year = params[:ystop]
+    
+    dates = [start_month,start_year,stop_month,stop_year]
+    
+    dates.each do |t|
+      if t.nil?
+        show404
+        break
+      end
+    end
+    
+    return dates
+  end
 
   def update_associations(association, ids = [])
     @object.send(association[:name]).clear
@@ -251,6 +278,7 @@ class RailsAdminController < ApplicationController
   end
 
   def check_for_cancel
+
     if params[:_continue]
       flash[:notice] = "No actions where taken!"
       redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
