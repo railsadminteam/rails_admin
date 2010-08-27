@@ -6,11 +6,6 @@ module RailsAdmin
     desc "RailsAdmin"
     
     def check_for_devise
-#      railsPath = Rails.public_path
-       # search Gemfile for
-#      puts __FILE__
-      # check if devise is installed
-#        invoke 'devise'
       loaded_gems = Bundler.setup.gems
       is_loaded = loaded_gems.reject{|t| t.name == "devise" ? false : true }.size == 1 ? true : false
       
