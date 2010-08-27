@@ -18,6 +18,8 @@ body{
 	text-align:left;
 }
 
+
+
 #header{
 	font-size:10px;
 	color:#FFF;
@@ -30,8 +32,12 @@ body{
 	color:#FFF;
 }
 
-ul.breadcrumb{
+#headerLeft ul:first-child{
   position:absolute;
+}
+
+ul.breadcrumb{
+  float:left;
 	list-style-type:none;
 	height:14px;
 }
