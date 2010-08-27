@@ -1,6 +1,8 @@
 require 'rails_admin/abstract_model'
 
 class RailsAdminController < ApplicationController
+  before_filter :authenticate_user!
+  
   before_filter :get_model, :except => [:index]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
