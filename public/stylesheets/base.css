@@ -31,6 +31,7 @@ body{
 }
 
 ul.breadcrumb{
+  position:absolute;
 	list-style-type:none;
 	height:14px;
 }
@@ -58,7 +59,7 @@ ul.breadcrumb li a:hover{
 }
 
 #headerLeft h1{
-	margin-top:8px;
+	margin-top:25px;
 	font-weight:normal;
 	font-size:22px;
 
