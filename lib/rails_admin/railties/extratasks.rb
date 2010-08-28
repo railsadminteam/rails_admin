@@ -8,7 +8,7 @@ module RailsAdmin
       self.require_model
       
       max_history_times = 20
-      history_months = 12
+      history_months = 24
       
       current_month = Time.now.month
       current_year = Time.now.year
