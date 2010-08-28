@@ -1,7 +1,9 @@
+require 'rails_admin/railties/extratasks'
+
+
 namespace :admin do
-  desc "Admin set env"
-  task :set_env do
-    railsPath = Rails.public_path
-    puts "Hello!"
+  desc "Populate history tabel with a year of data"
+  task :populate_history do
+    RailsAdmin::ExtraTasks.populateDatabase
   end
 end
