@@ -4,6 +4,8 @@ class CreateHistoriesTable < ActiveRecord::Migration
        t.integer :action, :limit => 4
        t.integer :month, :limit => 2
        t.integer :year, :limit => 5
+       t.string :table
+       t.string :other # => title, name or just object_id
        t.integer :user_id
        #Any additional fields here
 

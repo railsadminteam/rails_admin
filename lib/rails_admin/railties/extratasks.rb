@@ -24,7 +24,7 @@ module RailsAdmin
           History.create(:action => action_type,
                          :month =>computed_date.month,
                          :year => computed_date.year,
-                         :user_id => 1)
+                         :user_id => 1, :table => "Posts", :other => "something interesting!")
         end
       end
       

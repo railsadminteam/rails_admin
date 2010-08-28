@@ -2,7 +2,7 @@ require 'rails/generators'
 require 'rails/generators/migration'
 
 module RailsAdmin 
-  class InstallMigrations < Rails::Generators::Base
+  class InstallMigrationsGenerator < Rails::Generators::Base
     include Rails::Generators::Migration
     
     source_root File.expand_path("../templates", __FILE__)
@@ -20,3 +20,5 @@ module RailsAdmin
     end
   end
 end
+
+
