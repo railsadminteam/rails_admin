@@ -1,0 +1,6 @@
+<p id="listing">Listing <strong><%= Time.parse("01/#{@current_month.month}/#{@current_month.year}").strftime("%B %Y")%></strong> History:</p>
+<ul id="history">
+<% @history.each do |t|%>
+<li>John added <em>Poll #1</em></li>
+<% end %>
+</ul>

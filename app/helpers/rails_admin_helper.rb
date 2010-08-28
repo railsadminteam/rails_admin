@@ -3,6 +3,7 @@ require 'builder'
 module RailsAdminHelper
   
   def getIndicator(procent)
+    procent = 0 if procent.nil?
     return "" if procent.between?(0,33)
     return "medium" if procent.between?(34,67)
     return "high" if procent.between?(68,100)

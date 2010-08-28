@@ -3,7 +3,7 @@ require 'rails_admin/abstract_model'
 class RailsAdminController < ApplicationController
   before_filter :authenticate_user!
   
-  before_filter :get_model, :except => [:index,:history]
+  before_filter :get_model, :except => [:index,:history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
   before_filter :set_plugin_name
@@ -15,6 +15,8 @@ class RailsAdminController < ApplicationController
     @page_type = "dashboard"
     
     @history = History.latest
+    # history listing with ref = 0 and section = 4
+    @historyListing, @current_month = History.get_history_for_month(0,4)
 
     @abstract_models = RailsAdmin::AbstractModel.all
     render(:layout => 'dashboard')
@@ -116,9 +118,28 @@ class RailsAdminController < ApplicationController
   end
   
   def history
-    start_month, start_year, stop_month, stop_year = get_dates
+    ref = params[:ref].to_i
     
-    render :json => History.get_history_for_dates(start_month,stop_month,start_year,stop_year)
+    if ref.nil? or ref > 0
+      show404
+    else
+      current_diff = -5 * ref
+      start_month = (5+current_diff).month.ago.month
+      start_year = (5+current_diff).month.ago.year
+      stop_month = (current_diff).month.ago.month
+      stop_year = (current_diff).month.ago.year
+      
+      render :json => History.get_history_for_dates(start_month,stop_month,start_year,stop_year)
+    end
+  end
+  
+  def get_history
+    if params[:ref].nil? or params[:section].nil?
+      show404
+    else
+      @history, @current_month = History.get_history_for_month(params[:ref],params[:section])
+      render :template => "rails_admin/history"
+    end
   end
 
   private
@@ -221,24 +242,6 @@ class RailsAdminController < ApplicationController
       object.update_attributes(association[:child_key].first => @object.id)
     end
   end
-  
-  def get_dates
-    start_month = params[:mstart]
-    start_year = params[:ystart]
-    stop_month = params[:mstop]
-    stop_year = params[:ystop]
-    
-    dates = [start_month,start_year,stop_month,stop_year]
-    
-    dates.each do |t|
-      if t.nil?
-        show404
-        break
-      end
-    end
-    
-    return dates
-  end
 
   def update_associations(association, ids = [])
     @object.send(association[:name]).clear
@@ -305,8 +308,6 @@ class RailsAdminController < ApplicationController
   end
 
   def check_for_cancel
-    
-    
     if params[:_continue]
       flash[:notice] = "No actions where taken!"
       redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
