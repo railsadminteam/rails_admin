@@ -265,9 +265,10 @@ ul.infoRow li{
 }
 
 #pagination{
+  clear:both;
 	text-align:center;
-	margin-top:9px;
 	margin-bottom:15px;
+	padding-top:10px;
 }
 
 #pagination a{
