@@ -1,6 +1,21 @@
 require 'builder'
 
 module RailsAdminHelper
+  
+  def formatOutput(property,output)
+    property_type = property[:type]
+    
+    
+    case property_type
+    when :text
+      return output[0..40]
+    when :string
+      return output[0..40]
+    else
+      return output
+    end
+    
+  end
 
   def calculateWidth(properties)
     # local variables
@@ -165,9 +180,9 @@ module RailsAdminHelper
     if object.nil?
       nil
     elsif object.respond_to?(:name) && object.name
-      object.name
+      object.name[0..10]
     elsif object.respond_to?(:title) && object.title
-      object.title
+      object.title[0..10]
     else
       "#{object.class.to_s} ##{object.id}"
     end
