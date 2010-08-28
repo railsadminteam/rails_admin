@@ -13,6 +13,8 @@ class RailsAdminController < ApplicationController
   def index
     @page_name = "Site administration"
     @page_type = "dashboard"
+    
+    @history = History.latest
 
     @abstract_models = RailsAdmin::AbstractModel.all
     render(:layout => 'dashboard')
@@ -115,6 +117,8 @@ class RailsAdminController < ApplicationController
   
   def history
     start_month, start_year, stop_month, stop_year = get_dates
+    
+    render :json => History.get_history_for_dates(start_month,stop_month,start_year,stop_year)
   end
 
   private

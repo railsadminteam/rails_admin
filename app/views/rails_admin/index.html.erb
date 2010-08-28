@@ -31,32 +31,19 @@
             <div id="timeline">
               <a href="#" id="arrowLeft"><img src="/images/arrow_left.png" alt="Left" /></a>
               <div id="timelineSlider">
+                <% max = @history[0].number %>
+                <% @history.each{|t| max = t.number if t.number > max} %>
                 <ul>
-                  <li>Ian '10
+                  <% @history.each do |t| %>
+                  <% procent = (t.number * 100) / max %>
+                  <% indicator_type = getIndicator(procent)%>
+                  <li><%= Time.parse("01/#{t.month}/#{t.year}").strftime("%B %Y") %>
                     <span class="bars">
-                      <span class="indicator" style="height:15%"></span>
+                      <span class="indicator <%= indicator_type %>" style="height:<%= procent %>%"></span>
                     </span>
                   </li>
-                  <li>Feb '10
-                    <span class="bars">
-                      <span class="indicator medium" style="height:50%"></span>
-                    </span>
-                  </li>
-                  <li>Mar '10
-                    <span class="bars">
-                      <span class="indicator" style="height:20%"></span>
-                    </span>
-                  </li>
-                  <li>Apr '10
-                    <span class="bars">
-                      <span class="indicator high" style="height:80%"></span>
-                    </span>
-                  </li>
-                  <li>May '10
-                    <span class="bars">
-                      <span class="indicator" style="height:30%"></span>
-                    </span>
-                  </li>
+                  <% end %>
+                  
                 </ul>
 
                 <div id="handler">

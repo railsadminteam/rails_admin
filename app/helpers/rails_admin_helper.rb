@@ -2,6 +2,12 @@ require 'builder'
 
 module RailsAdminHelper
   
+  def getIndicator(procent)
+    return "" if procent.between?(0,33)
+    return "medium" if procent.between?(34,67)
+    return "high" if procent.between?(68,100)
+  end
+  
   def formatOutput(property,output)
     property_type = property[:type]
     
