@@ -1,6 +1,6 @@
 <ul class="breadcrumb">
   <li>
-    <a href="#"><%= %></a>
+    <a href="#"><%= current_user.email.split("@")[0] %></a>
   </li>
   <li>|</li>
   <li>
@@ -8,6 +8,6 @@
   </li>
   <li>|</li>
   <li>
-    <a href="<%=  %>">Log out</a>
+    <a href="<%= destroy_user_session_path() %>">Log out</a>
   </li>
 </ul>

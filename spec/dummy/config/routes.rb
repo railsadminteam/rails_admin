@@ -11,5 +11,7 @@ Rails.application.routes.draw do |map|
   match "/admin/:model_name/delete", :to => "rails_admin#delete", :as => :rails_admin_delete
   match "/admin/:model_name/destroy", :to => "rails_admin#destroy", :as => :rails_admin_destroy
 
-  devise_for :users  
+  devise_for :users
+  
+  root :to => "welcome#index"
 end

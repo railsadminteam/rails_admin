@@ -9,6 +9,8 @@ describe "RailsAdmin" do
     RailsAdmin::AbstractModel.new("League").destroy_all!
     RailsAdmin::AbstractModel.new("Player").destroy_all!
     RailsAdmin::AbstractModel.new("Team").destroy_all!
+    
+    get rails_admin_dashboard_path
   end
 
   describe "GET /admin" do
