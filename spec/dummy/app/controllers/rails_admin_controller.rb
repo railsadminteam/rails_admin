@@ -1,7 +1,7 @@
 require 'rails_admin/abstract_model'
 
 class RailsAdminController < ApplicationController
-  before_filter :authenticate_user!
+  #before_filter :authenticate_user!
   
   before_filter :get_model, :except => [:index,:history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
@@ -269,7 +269,7 @@ class RailsAdminController < ApplicationController
     
     if action_type != -1
       date = Time.now
-      History.create(:action => action_type,:month =>date.month, :year => date.year, :user_id => current_user.id)
+      History.create(:action => action_type,:month =>date.month, :year => date.year, :user_id => 1)
     end
   end
 
