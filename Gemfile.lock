@@ -46,6 +46,10 @@ GEM
       bcrypt-ruby (~> 2.1.2)
       warden (~> 0.10.7)
     diff-lcs (1.1.2)
+    dummy (0.9)
+    dummy_data (0.9)
+      dummy (>= 0.9)
+      rails (>= 3.0.0.beta)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     gemcutter (0.6.1)
@@ -111,6 +115,7 @@ PLATFORMS
 DEPENDENCIES
   builder
   devise
+  dummy_data
   jeweler
   launchy (>= 0.3.0)
   rails (= 3.0.0.rc2)
