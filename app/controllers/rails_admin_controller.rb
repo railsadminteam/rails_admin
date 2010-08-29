@@ -10,6 +10,7 @@ class RailsAdminController < ApplicationController
   before_filter :check_for_cancel
 
   def index
+    
     @page_name = "Site administration"
     @page_type = "dashboard"
 
@@ -26,6 +27,12 @@ class RailsAdminController < ApplicationController
       @max = current_count > @max ? current_count : @max
 
       @count[t.pretty_name] = current_count
+    end
+    
+    users = User.find(:all)
+    @users = {}
+    users.each do |t|
+      @users[t.id] = t.email
     end
 
     render(:layout => 'dashboard')
@@ -53,6 +60,7 @@ class RailsAdminController < ApplicationController
 
     if @object.save && update_all_associations
       @lastId = @object.id
+      @object_label = object_label(@object)
       redirect_to_on_success
     else
       render_error
@@ -74,6 +82,7 @@ class RailsAdminController < ApplicationController
 
     if @object.update_attributes(@attributes) && update_all_associations
       @lastId = @object.id
+      @object_label = object_label(@object)
       redirect_to_on_success
     else
       render_error
@@ -89,8 +98,15 @@ class RailsAdminController < ApplicationController
   end
 
   def destroy
+    @object_label = object_label(@object)
+    
+    
+    
     @object.destroy
     flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
+    
+    check_history
+    
     redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
   end
 
@@ -252,19 +268,28 @@ class RailsAdminController < ApplicationController
   def check_history
     action = params[:action]
     action_type = -1
+    action_other = ""
 
     case action
     when "create"
       action_type = 1
+      action_other = "created"
     when "update"
+      action_other = "updated"
       action_type=2
     when "distroy"
+      action_other = "deleted"
       action_type=3
     end
 
     if action_type != -1
       date = Time.now
-      History.create(:action => action_type,:month =>date.month, :year => date.year, :user_id => current_user.id)
+      History.create(:action => action_type,
+      :month =>date.month,
+      :year => date.year,
+      :user_id => current_user.id,
+      :table => @abstract_model.pretty_name,
+      :other => @object_label)
     end
   end
 
@@ -320,4 +345,15 @@ class RailsAdminController < ApplicationController
     @page_type = @abstract_model.pretty_name.downcase
   end
 
+  def object_label(object)
+    if object.nil?
+      nil
+    elsif object.respond_to?(:name) && object.name
+      object.name[0..10]
+    elsif object.respond_to?(:title) && object.title
+      object.title[0..10]
+    else
+      "#{object.class.to_s} ##{object.id}"
+    end
+  end
 end

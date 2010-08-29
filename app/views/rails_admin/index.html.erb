@@ -16,7 +16,8 @@
               <li class="lastUsedRow">Yesterday</li>
               <li class="recordsRow">
                 <div class="scale">
-                  <% procent = @count[abstract_model.pretty_name] * 100 / @max %>
+                  <% procent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
+                  <% procent = 1 if procent.nil? %>
                   <div class="bar <%= getIndicator(procent)%>" style="width:<%= procent %>%;"></div>
                 </div>
               </li>
@@ -56,7 +57,7 @@
               <p id="listing">Listing <strong><%= Time.now.strftime("%B %Y")%></strong> History:</p>
               <ul id="history">
                 <% @historyListing.each do |t|%>
-                <li>John added <em>Poll #1</em></li>
+                <li><%= @users[t.id].split("@")[0] %> <%= getActionHere(t.action )%> <em><%= t.other %></em> <%= t.table.downcase %></li>
                 <% end %>
               </ul>
             </div>

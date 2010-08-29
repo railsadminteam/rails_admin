@@ -333,5 +333,16 @@ module RailsAdminHelper
   def infinity
     1.0 / 0
   end
+  
+  def getActionHere(index)
+    case index
+    when 1
+      return "created"
+    when 2
+      return "edited"
+    when 3
+      return "deleted"
+    end
+  end
 
 end
