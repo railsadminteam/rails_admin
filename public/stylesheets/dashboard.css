@@ -1,71 +1,71 @@
 
 ul.menu{
-	list-style-type:none;
-	display:block;
-	height:18px;
-	border-bottom:1px solid #DDDDDD;
-	margin-bottom:2px;
+  list-style-type:none;
+  display:block;
+  height:18px;
+  border-bottom:1px solid #DDDDDD;
+  margin-bottom:2px;
 }
 
 ul.menu li{
-	float:left;
-	font-size:11px;
+  float:left;
+  font-size:11px;
 }
 
 #modelNameHeader{
-	margin-left:5px;
-	width:247px;
+  margin-left:5px;
+  width:247px;
 }
 
 #lastUsedHeader{
-	width:84px;
-	text-align:center;
+  width:84px;
+  text-align:center;
 }
 
 #recordsHeader{
-	width:475px;
-	text-align:center;
+  width:475px;
+  text-align:center;
 }
 
 #modifyHeader{
-	width:135px;
-	text-align:center;
+  width:135px;
+  text-align:center;
 }
 
 .row{
-	list-style-type:none;
-	display:block;
-	padding-top:4px;
-	padding-bottom:4px;
-	height:16px;
+  list-style-type:none;
+  display:block;
+  padding-top:4px;
+  padding-bottom:4px;
+  height:16px;
 }
 
 .row li{
-	float:left;
+  float:left;
 }
 
 .modelNameRow{
-	font-weight:bold;
-	margin-left:2px;
-	width:250px;	
+  font-weight:bold;
+  margin-left:2px;
+  width:250px;
 }
 .lastUsedRow{
-	width:84px;
-	text-align:center;
+  width:84px;
+  text-align:center;
 }
 
 .scale{
-	margin: 0 auto;
-	display:block;
-	width:200px;
-	height:13px;
+  margin:0 auto;
+  display:block;
+  width:200px;
+  height:13px;
 }
 
 .bar{
-	margin:0 auto;
-	background:#bcceb6;
-	display:block;
-	height:13px;
+  margin:0 auto;
+  background:#bcceb6;
+  display:block;
+  height:13px;
 }
 
 
@@ -73,148 +73,148 @@ ul.menu li{
 }
 
 .recordsRow{
-	width:475px;
-	text-align:center;
+  width:475px;
+  text-align:center;
 }
 .modifyRow{
-	width:135px;
-	text-align:center;
+  width:135px;
+  text-align:center;
 }
 
 .add{
-	color:#9a012f;
-	font-weight:bold;
-	text-decoration:none;
-	padding-right:3px;
+  color:#9a012f;
+  font-weight:bold;
+  text-decoration:none;
+  padding-right:3px;
 }
 
 a.add:hover{
-	text-decoration:underline;
+  text-decoration:underline;
 }
 
 .show{
-	padding-left:3px;
-	color:#215086;
-	font-weight:bold;
-	text-decoration:none;
+  padding-left:3px;
+  color:#215086;
+  font-weight:bold;
+  text-decoration:none;
 }
 
 a.show:hover{
-	text-decoration:underline;
+  text-decoration:underline;
 }
 
 .section{
 }
 
 .section h2{
-	margin-top:2px;
-	font-size:11px;
-	border-bottom:1px solid #DDD;
-	padding-bottom:4px;
-	font-weight:normal;
-	padding-left:5px;
-	margin-top:5px;
+  margin-top:2px;
+  font-size:11px;
+  border-bottom:1px solid #DDD;
+  padding-bottom:4px;
+  font-weight:normal;
+  padding-left:5px;
+  margin-top:5px;
 }
 
 
 #timeline {
-	margin-top:8px;
-	background-color:#f6f6f6;
-	border:1px solid #dbdbdb;
-	height:53px;
+  margin-top:8px;
+  background-color:#f6f6f6;
+  border:1px solid #dbdbdb;
+  height:53px;
 }
 #timeline a img{
-	border:none;
+  border:none;
 }
 
 #arrowLeft{
-	float:left;
-	margin-top:16px;
+  float:left;
+  margin-top:16px;
 }
 #arrowRight{
-	float:right;
-	margin-top:16px;
+  float:right;
+  margin-top:16px;
 }
 
 #timelineSlider{
-	float:left;
-	position:relative;
+  float:left;
+  position:relative;
 }
 
 #timelineSlider ul{
-	list-style-type:none;
+  list-style-type:none;
 }
 
 
 #timelineSlider ul li{
-	float:left;
-	font-size:10px;
-	width:183px;
-	text-align:center;
-	border-left:1px solid #DDD;
-	height:53px;
+  float:left;
+  font-size:10px;
+  width:183px;
+  text-align:center;
+  border-left:1px solid #DDD;
+  height:53px;
 }
 #timelineSlider ul li:first-child{
-	border:none;
-} 
+  border:none;
+}
 
 .bars{
-	display:block;
-	height:39px;
-	margin-top:2px;
-	position:relative;
+  display:block;
+  height:39px;
+  margin-top:2px;
+  position:relative;
 }
 
 .indicator{
-	display:block;
-	background:#bcceb6;
-	position:absolute;
-	bottom:0;
-	width:183px;
+  display:block;
+  background:#bcceb6;
+  position:absolute;
+  bottom:0;
+  width:183px;
 }
 
 .high{
-	background:#bf2531;
+  background:#bf2531;
 }
 
 .medium{
-	background:#d2a71c;
+  background:#d2a71c;
 }
 
 
 #handler{
-	position:absolute;
-	top:-12px;
-	left:-5px;
+  position:absolute;
+  top:-12px;
+  left:-5px;
 }
 
 #listing{
-	margin-top:40px;
-	font-size:11px;
-	margin-bottom:5px;
+  margin-top:40px;
+  font-size:11px;
+  margin-bottom:5px;
 }
 
 #history{
-	list-style-type:none;
+  list-style-type:none;
 }
 
 #history li{
-	padding-bottom:8px;
+  padding-bottom:8px;
 }
 
 #history li a img{
-	border:none;
-	position:relative;
-	top:4px;
-	left:2px;
+  border:none;
+  position:relative;
+  top:4px;
+  left:2px;
 }
 
 #history li em{
-	font-style:normal;
-	text-decoration:underline;
+  font-style:normal;
+  text-decoration:underline;
 }
 
 #history li{
-	font-size:11px;
-	font-weight:bold;
+  font-size:11px;
+  font-weight:bold;
 }
