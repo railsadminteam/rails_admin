@@ -16,7 +16,8 @@
               <li class="lastUsedRow">Yesterday</li>
               <li class="recordsRow">
                 <div class="scale">
-                  <div class="bar" style="width:20%;"></div>
+                  <% procent = @count[abstract_model.pretty_name] * 100 / @max %>
+                  <div class="bar <%= getIndicator(procent)%>" style="width:<%= procent %>%;"></div>
                 </div>
               </li>
               <li class="modifyRow">

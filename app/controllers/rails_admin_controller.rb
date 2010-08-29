@@ -18,6 +18,16 @@ class RailsAdminController < ApplicationController
     @historyListing, @current_month = History.get_history_for_month(0,4)
 
     @abstract_models = RailsAdmin::AbstractModel.all
+    
+    @count = {}
+    @max = 0
+    @abstract_models.each do |t|
+      current_count =t.count
+      @max = current_count > @max ? current_count : @max
+
+      @count[t.pretty_name] = current_count
+    end
+
     render(:layout => 'dashboard')
   end
 
