@@ -23,35 +23,11 @@ class RailsAdminController < ApplicationController
   end
 
   def list
-
-    @abstract_models = RailsAdmin::AbstractModel.all
-
-    options = {}
-    options.merge!(get_sort_hash)
-    options.merge!(get_sort_reverse_hash)
-    options.merge!(get_query_hash(options))
-    options.merge!(get_filter_hash(options))
-    per_page = 20 # HAX FIXME
-
-    # per_page = RailsAdmin[:per_page]
-    if params[:all]
-      options.merge!(:limit => per_page * 2)
-      @objects = @abstract_model.all(options).reverse
-    else
-      @current_page = (params[:page] || 1).to_i
-      options.merge!(:page => @current_page, :per_page => per_page)
-      @page_count, @objects = @abstract_model.paginated(options)
-      options.delete(:page)
-      options.delete(:per_page)
-      options.delete(:offset)
-      options.delete(:limit)
-    end
-    @record_count = @abstract_model.count(options)
-
-    @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
-    @page_type = @abstract_model.pretty_name.downcase
+    list_entries
     render :layout => 'list'
   end
+  
+  
 
   def new
     @object = @abstract_model.new
@@ -115,6 +91,12 @@ class RailsAdminController < ApplicationController
     @object.destroy
     flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
     redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+  end
+  
+  def get_pages
+    list_entries
+    @xhr = true;
+    render :template => "rails_admin/list.html"
   end
   
   def history
@@ -314,4 +296,34 @@ class RailsAdminController < ApplicationController
     end
   end
 
+  def list_entries
+
+    @abstract_models = RailsAdmin::AbstractModel.all
+
+    options = {}
+    options.merge!(get_sort_hash)
+    options.merge!(get_sort_reverse_hash)
+    options.merge!(get_query_hash(options))
+    options.merge!(get_filter_hash(options))
+    per_page = 20 # HAX FIXME
+
+    # per_page = RailsAdmin[:per_page]
+    if params[:all]
+      options.merge!(:limit => per_page * 2)
+      @objects = @abstract_model.all(options).reverse
+    else
+      @current_page = (params[:page] || 1).to_i
+      options.merge!(:page => @current_page, :per_page => per_page)
+      @page_count, @objects = @abstract_model.paginated(options)
+      options.delete(:page)
+      options.delete(:per_page)
+      options.delete(:offset)
+      options.delete(:limit)
+    end
+    @record_count = @abstract_model.count(options)
+
+    @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
+    @page_type = @abstract_model.pretty_name.downcase
+  end
+  
 end

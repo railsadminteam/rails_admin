@@ -69,7 +69,11 @@ module RailsAdminHelper
 
     # calculate the maximum distance
     total = sets.size == 1 ? 784 : 744
-    max_sets = sets.size-2 > 1 ? sets.size-2 : 1
+    
+    max_sets = sets.size-2 
+    
+
+    
     total = current_set.between?(1,max_sets) ?  704 : total
 
     columnOffset = total-sets[current_set][:size]
@@ -91,16 +95,18 @@ module RailsAdminHelper
     end
 
     other = []
+    
     if total == 784
       other = ["otherHeaderLeft","otherHeaderRight","otherLeft","otherRight"]
     elsif total == 744
       if current_set == 0
         other = ["otherHeaderLeft","otherLeft"]
       else
+
         other = ["otherHeaderRight","otherRight"]
       end
     end
-
+  
     return style, other
   end
 
