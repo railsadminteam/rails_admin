@@ -7,6 +7,8 @@ gem 'builder'
 gem 'jeweler'
 gem 'devise'
 
+gem 'dummy_data'
+
 gem "launchy", ">= 0.3.0"
 gem "rspec-rails", ">= 2.0.0.beta.20"
 gem "webrat", :git => "git://github.com/kalv/webrat.git"
