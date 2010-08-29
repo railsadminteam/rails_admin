@@ -1,18 +1,17 @@
 require 'builder'
 
 module RailsAdminHelper
-  
+
   def getIndicator(procent)
     procent = 0 if procent.nil?
     return "" if procent.between?(0,33)
     return "medium" if procent.between?(34,67)
     return "high" if procent.between?(68,100)
   end
-  
+
   def formatOutput(property,output)
     property_type = property[:type]
-    
-    
+
     case property_type
     when :text
       return output[0..40]
@@ -21,7 +20,7 @@ module RailsAdminHelper
     else
       return output
     end
-    
+
   end
 
   def calculateWidth(properties)
@@ -69,11 +68,9 @@ module RailsAdminHelper
 
     # calculate the maximum distance
     total = sets.size == 1 ? 784 : 744
-    
-    max_sets = sets.size-2 
-    
 
-    
+    max_sets = sets.size-2
+
     total = current_set.between?(1,max_sets) ?  704 : total
 
     columnOffset = total-sets[current_set][:size]
@@ -95,7 +92,7 @@ module RailsAdminHelper
     end
 
     other = []
-    
+
     if total == 784
       other = ["otherHeaderLeft","otherHeaderRight","otherLeft","otherRight"]
     elsif total == 744
@@ -106,7 +103,7 @@ module RailsAdminHelper
         other = ["otherHeaderRight","otherRight"]
       end
     end
-  
+
     return style, other
   end
 

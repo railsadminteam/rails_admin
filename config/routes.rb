@@ -10,5 +10,4 @@ Rails.application.routes.draw do |map|
   match "/admin/:model_name/update", :to => "rails_admin#update", :as => :rails_admin_update
   match "/admin/:model_name/delete", :to => "rails_admin#delete", :as => :rails_admin_delete
   match "/admin/:model_name/destroy", :to => "rails_admin#destroy", :as => :rails_admin_destroy
-  
 end

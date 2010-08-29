@@ -121,7 +121,6 @@
   width:110px
 }
 
-
 .otherHeader{
   width:40px;
   text-align:center;
@@ -168,9 +167,7 @@
   color:#ad0208;
 }
 
-
 .actionHeader{
-
   width:80px;
   text-align:center;
   font-size:10px;
@@ -228,8 +225,6 @@ ul.infoRow li{
   width:300px;
 }
 
-
-
 .searchBox span{
   float:left;
 
@@ -257,7 +252,6 @@ ul.infoRow li{
   padding-right:6px;
   margin-left:5px;
 }
-
 
 #moduleHeader li a img{
   margin-bottom:-4px;

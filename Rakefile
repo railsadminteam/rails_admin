@@ -1,12 +1,10 @@
 require 'rake'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
-
 require 'rspec/core'
 require 'rspec/core/rake_task'
+require 'jeweler'
 
-
-require "jeweler"
 Jeweler::Tasks.new do |gem|
   gem.name = "rails_admin"
   gem.summary = "RailsAdmin for Rails 3"

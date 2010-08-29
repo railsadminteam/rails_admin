@@ -1,18 +1,17 @@
 require 'builder'
 
 module RailsAdminHelper
-  
+
   def getIndicator(procent)
     procent = 0 if procent.nil?
     return "" if procent.between?(0,33)
     return "medium" if procent.between?(34,67)
     return "high" if procent.between?(68,100)
   end
-  
+
   def formatOutput(property,output)
     property_type = property[:type]
-    
-    
+
     case property_type
     when :text
       return output[0..40]
@@ -21,7 +20,6 @@ module RailsAdminHelper
     else
       return output
     end
-    
   end
 
   def calculateWidth(properties)
@@ -66,58 +64,45 @@ module RailsAdminHelper
     style = {}
 
     properties = sets[current_set][:p]
-
     # calculate the maximum distance
     total = sets.size == 1 ? 784 : 744
-    
-    max_sets = sets.size-2 
-    
-
-    
+    max_sets = sets.size-2
     total = current_set.between?(1,max_sets) ?  704 : total
-
     columnOffset = total-sets[current_set][:size]
-
     per_property = columnOffset/properties.size
-
     offset = columnOffset - per_property*properties.size
 
     properties.each do |property|
       property_type = getColumnType(property,"")
       property_width = getWidthForColumn(property)
-
       style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
-
       style[property_type][:size] += per_property
       style[property_type][:occ] += 1
       style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
-
     end
 
     other = []
-    
+
     if total == 784
       other = ["otherHeaderLeft","otherHeaderRight","otherLeft","otherRight"]
     elsif total == 744
       if current_set == 0
         other = ["otherHeaderLeft","otherLeft"]
       else
-
         other = ["otherHeaderRight","otherRight"]
       end
     end
-  
+
     return style, other
   end
 
   def getColumnSet(properties)
     sets = calculateWidth(properties)
-
     current_set ||= params[:set].to_i
 
     raise NotFound if sets.size <= current_set
-    selected_set = sets[current_set][:p]
 
+    selected_set = sets[current_set][:p]
     style, other = justifyProperties(sets, current_set)
 
     return style, other, selected_set

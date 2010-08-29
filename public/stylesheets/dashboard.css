@@ -68,7 +68,6 @@ ul.menu li{
   height:13px;
 }
 
-
 .low{
 }
 
@@ -116,7 +115,6 @@ a.show:hover{
   margin-top:5px;
 }
 
-
 #timeline {
   margin-top:8px;
   background-color:#f6f6f6;
@@ -144,7 +142,6 @@ a.show:hover{
 #timelineSlider ul{
   list-style-type:none;
 }
-
 
 #timelineSlider ul li{
   float:left;
@@ -180,7 +177,6 @@ a.show:hover{
 .medium{
   background:#d2a71c;
 }
-
 
 #handler{
   position:absolute;

@@ -12,7 +12,7 @@ module RailsAdmin
         File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
           if model_name != devideModel and model_name != historyModel
             add_model(model_name)
-          end        
+          end
         end
       end
 

@@ -1,11 +1,7 @@
-
-
 #contentMainNew{
   padding:5px;
   margin-bottom:5px;
 }
-
-
 
 #contentMainNew fieldset{
   border:none;
@@ -23,7 +19,6 @@
   font-weight:bold;
   font-size:10px;
 }
-
 
 .formSection p{
   padding-top:5px;
@@ -171,7 +166,6 @@
   margin-left:10px;
   margin-top:9px;
 }
-
 
 #saveAddContainer{
   background:url(/images/saveandadd.png);

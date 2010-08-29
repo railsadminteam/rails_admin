@@ -6,14 +6,14 @@
   <title><%= @page_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('base') %>
   <%= stylesheet_link_tag('dashboard') %>
-  
+
   <%= javascript_include_tag('prototype.js') %>
   <%= javascript_include_tag('scriptaculous.js') %>
   <script type="text/javascript" language="javascript">
   var nameForMonths = ['January','February','March','April','May','June','July', 'August','September','October','November','December'];
-  
+
   var totalRef = 0;
-  
+
   // hardcoing colors rulz
   function getIndicator(procent){
     if(procent < 33){
@@ -24,15 +24,15 @@
       return "#BF2531";
     }
   }
-  
+
   function loadHistory(param){
     var ref = param;
-    
-    new Ajax.Request("/admin/history/list", { method: 'post', parameters: { "ref": ref }, 
+
+    new Ajax.Request("/admin/history/list", { method: 'post', parameters: { "ref": ref },
     onSuccess: function(transport) {
-      
+
       var response = JSON.parse(transport.responseText)
-      
+
       var max = response[4].history.number;
 
       response.each(function(e){
@@ -43,14 +43,14 @@
         }
 
       })
-      
+
       var index = 0;
       var indexEx = 0;
-      
+
       var effectsArray = []
-      
+
       $$("#timelineSlider ul li").each(function(e){
-        
+
         if(response[index].fake != 1){
           var procent = parseInt(response[index].history.number * 100 / max);
           var indicator = e.childElements()[1].childElements()[0];
@@ -63,7 +63,7 @@
           var setStyle = "height: 0%; background:"+getIndicator(procent);
           var text = "No data";
         }
-        
+
         var morphEffect = new Effect.Morph(indicator, {
           style: setStyle, sync: true, afterSetup: function(here){
             var updatedElement = e.childElements()[0];
@@ -71,31 +71,27 @@
             indexEx++;
           }
         });
-      
+
         effectsArray.push(morphEffect)
-          
-          
-        
+
         index++;
       })
-      
-    
+
       new Effect.Parallel(effectsArray);
-      
+
       totalRef = ref;
-      
+
       var current_ref = parseInt(ref);
       var ref_right = current_ref+1;
       var ref_left = current_ref-1;
-      
+
       $("arrowLeft").writeAttribute("ref",ref_left);
       $("arrowRight").writeAttribute("ref",ref_right);
-      
-      
+
     }})
 
   }
-  
+
   function getDragSection(location){
     if(location<=161){
       return 0;
@@ -109,11 +105,11 @@
       return 4;
     }
   }
-  
+
   var lastSection = 0;
-  
+
   document.observe("dom:loaded", function() {
-    
+
     new Draggable('handler', {
        snap: function(x, y) {
                 return[ (x < 870) ? (x > -5 ? x : -5 ) : 870,
@@ -123,19 +119,19 @@
 
         var dragLocation = parseInt($("handler").getStyle('left'))+5;
         var section = getDragSection(dragLocation);
-        
+
         if(section != lastSection){
           lastSection = section;
-          
+
           new Ajax.Updater('listingHistory', '/admin/history/get', {
             parameters: { "ref": totalRef, "section" :  lastSection}
           });
         }
       }
     });
-    
+
     $$("#arrowLeft").each(function(elem){
-      
+
       Event.observe(elem,'click',function(e){
         var ref = elem.readAttribute('ref')
         if(ref<=0) loadHistory(ref)
@@ -143,16 +139,16 @@
     })
 
     $$("#arrowRight").each(function(elem){
-      
+
       Event.observe(elem,'click',function(e){
 
         var ref = elem.readAttribute('ref')
         if(ref<=0) loadHistory(ref)
       })
     })
-    
+
   });
-  
+
   </script>
 </head>
 <body>
@@ -175,7 +171,7 @@
     </div>
 
     <div id="content">
-        
+
 <%= content_for(:layout) %>
     </div>
   </div>
