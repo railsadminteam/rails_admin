@@ -6,6 +6,48 @@
   <title><%= @page_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('base') %>
   <%= stylesheet_link_tag('list') %>
+  <%= javascript_include_tag('prototype.js') %>
+  
+  <script type="text/javascript" language="javascript">
+    function updatePage(paramList){
+
+      new Ajax.Updater('content', '/admin/<%= @abstract_model.pretty_name.downcase %>/set',{
+        parameters: paramList,
+        onComplete: function(){
+          initPages();
+        }
+      });
+    }
+    
+    function initPages(){
+      $$(".otherLeft").each(function(elem){
+        elem.childElements()[0].writeAttribute("href","#");
+        
+        Event.observe(elem,'click',function(e){
+          elem.childElements()[0].writeAttribute("href","#");
+          var ref = elem.childElements()[0].readAttribute("ref");
+          updatePage(JSON.parse(ref));
+//          updatePage
+        })
+        
+      })
+      
+      $$(".otherRight").each(function(elem){
+        elem.childElements()[0].writeAttribute("href","#");
+        
+        Event.observe(elem,'click',function(e){
+          elem.childElements()[0].writeAttribute("href","#");
+          var ref = elem.childElements()[0].readAttribute("ref");
+          updatePage(JSON.parse(ref));
+        })
+        
+      })
+    }
+    
+    document.observe("dom:loaded", function() {
+      initPages();
+    })
+  </script>
 </head>
 <body>
   <div id="wraper">

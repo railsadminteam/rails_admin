@@ -3,50 +3,31 @@ require 'rails_admin/abstract_model'
 class RailsAdminController < ApplicationController
   before_filter :authenticate_user!
   
-  before_filter :get_model, :except => [:index]
+  before_filter :get_model, :except => [:index,:history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
   before_filter :set_plugin_name
   before_filter :check_for_cancel
+  
 
   def index
     @page_name = "Site administration"
     @page_type = "dashboard"
+    
+    @history = History.latest
+    # history listing with ref = 0 and section = 4
+    @historyListing, @current_month = History.get_history_for_month(0,4)
 
     @abstract_models = RailsAdmin::AbstractModel.all
     render(:layout => 'dashboard')
   end
 
   def list
-
-    @abstract_models = RailsAdmin::AbstractModel.all
-
-    options = {}
-    options.merge!(get_sort_hash)
-    options.merge!(get_sort_reverse_hash)
-    options.merge!(get_query_hash(options))
-    options.merge!(get_filter_hash(options))
-    per_page = 20 # HAX FIXME
-
-    # per_page = RailsAdmin[:per_page]
-    if params[:all]
-      options.merge!(:limit => per_page * 2)
-      @objects = @abstract_model.all(options).reverse
-    else
-      @current_page = (params[:page] || 1).to_i
-      options.merge!(:page => @current_page, :per_page => per_page)
-      @page_count, @objects = @abstract_model.paginated(options)
-      options.delete(:page)
-      options.delete(:per_page)
-      options.delete(:offset)
-      options.delete(:limit)
-    end
-    @record_count = @abstract_model.count(options)
-
-    @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
-    @page_type = @abstract_model.pretty_name.downcase
+    list_entries
     render :layout => 'list'
   end
+  
+  
 
   def new
     @object = @abstract_model.new
@@ -111,6 +92,37 @@ class RailsAdminController < ApplicationController
     flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
     redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
   end
+  
+  def get_pages
+    list_entries
+    @xhr = true;
+    render :template => "rails_admin/list.html"
+  end
+  
+  def history
+    ref = params[:ref].to_i
+    
+    if ref.nil? or ref > 0
+      show404
+    else
+      current_diff = -5 * ref
+      start_month = (5+current_diff).month.ago.month
+      start_year = (5+current_diff).month.ago.year
+      stop_month = (current_diff).month.ago.month
+      stop_year = (current_diff).month.ago.year
+      
+      render :json => History.get_history_for_dates(start_month,stop_month,start_year,stop_year)
+    end
+  end
+  
+  def get_history
+    if params[:ref].nil? or params[:section].nil?
+      show404
+    else
+      @history, @current_month = History.get_history_for_month(params[:ref],params[:section])
+      render :template => "rails_admin/history"
+    end
+  end
 
   private
 
@@ -127,6 +139,11 @@ class RailsAdminController < ApplicationController
     # FIXME
     render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
   end
+  
+  def show404
+    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
+  end
+
 
   def get_sort_hash
     sort = params[:sort]
@@ -221,6 +238,8 @@ class RailsAdminController < ApplicationController
     pretty_name = @abstract_model.pretty_name
     action = params[:action]
     
+    check_history
+    
     if params[:_add_another] == "Save and add another"
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_new_path( :model_name => param)
@@ -230,6 +249,27 @@ class RailsAdminController < ApplicationController
     elsif
       flash[:notice] = "#{pretty_name} was successfully #{action}d"
       redirect_to rails_admin_list_path(:model_name => param)      
+    end
+  end
+  
+  def check_history
+
+    action = params[:action]
+    action_type = -1
+
+    case action
+    when "create"
+      action_type = 1
+    when "update"
+
+      action_type=2
+    when "distroy"
+      action_type=3
+    end
+    
+    if action_type != -1
+      date = Time.now
+      History.create(:action => action_type,:month =>date.month, :year => date.year, :user_id => current_user.id)
     end
   end
 
@@ -256,4 +296,34 @@ class RailsAdminController < ApplicationController
     end
   end
 
+  def list_entries
+
+    @abstract_models = RailsAdmin::AbstractModel.all
+
+    options = {}
+    options.merge!(get_sort_hash)
+    options.merge!(get_sort_reverse_hash)
+    options.merge!(get_query_hash(options))
+    options.merge!(get_filter_hash(options))
+    per_page = 20 # HAX FIXME
+
+    # per_page = RailsAdmin[:per_page]
+    if params[:all]
+      options.merge!(:limit => per_page * 2)
+      @objects = @abstract_model.all(options).reverse
+    else
+      @current_page = (params[:page] || 1).to_i
+      options.merge!(:page => @current_page, :per_page => per_page)
+      @page_count, @objects = @abstract_model.paginated(options)
+      options.delete(:page)
+      options.delete(:per_page)
+      options.delete(:offset)
+      options.delete(:limit)
+    end
+    @record_count = @abstract_model.count(options)
+
+    @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
+    @page_type = @abstract_model.pretty_name.downcase
+  end
+  
 end

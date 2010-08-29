@@ -66,17 +66,21 @@
 
         <% @objects.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
-          <li class="otherRow otherLeft"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i - 1)) %></li>
+          <% otherLeft = params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+          <li class="otherRow otherLeft"><%= link_to("...",otherLeft, :ref => otherLeft.to_json) %></li>
           <% @properties.each do |property| %>
-          <li class="<%= getColumnType(property,"Row") %>"><%= object_property(object, property) %></li>
+          <% output_type = formatOutput(property,object_property(object, property)) %>
+          <li class="<%= getColumnType(property,"Row") %>"><%= output_type %></li>
           <% end %>
-          <li class="otherRow otherRight"><%= link_to("...",params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i + 1)) %></li>
+          <% otherRight = params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+          <li class="otherRow otherRight"><%= link_to("...", otherRight, :ref => otherRight.to_json)%></li>
           <li class="actionRow editAction"><%= link_to("Edit", rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
           <li class="actionRow deleteAction"><%= link_to("Delete",rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
         </ul>
         <% end %>
       </div>
     </div>
+    <% unless @xhr %>
     <div id="pagination">
       <p class="paginator">
       <% if @page_count.to_i > 1 %>
@@ -88,3 +92,4 @@
       <% end %>
       </p>
     </div>
+    <% end %>

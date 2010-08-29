@@ -18,6 +18,8 @@ body{
 	text-align:left;
 }
 
+
+
 #header{
 	font-size:10px;
 	color:#FFF;
@@ -30,7 +32,12 @@ body{
 	color:#FFF;
 }
 
+#headerLeft ul:first-child{
+  position:absolute;
+}
+
 ul.breadcrumb{
+  float:left;
 	list-style-type:none;
 	height:14px;
 }
@@ -58,7 +65,7 @@ ul.breadcrumb li a:hover{
 }
 
 #headerLeft h1{
-	margin-top:8px;
+	margin-top:25px;
 	font-weight:normal;
 	font-size:22px;
 

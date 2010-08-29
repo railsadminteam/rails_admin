@@ -1,13 +1,4 @@
-.DS_Store
 .bundle
-.rspec
-*.log
 db/*.sqlite3
-db/*.sqlite3-journal
 log/*.log
 tmp/**/*
-webrat.log
-pkg/*
-spec/dummy/db/*.sqlite3
-spec/dummy/db/*.sqlite3-journal
-spec/dummy/log/*.log
