@@ -1,5 +1,6 @@
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
+        <a href="#" id="deleteItem"><img src="/images/cross.png" alt="Delete">Delete</a>
       </div>
 <%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
@@ -25,6 +26,7 @@
                 <%= submit_tag "cancel", :name => "_continue", :id => "cancel_btn" %>
               </li>
             </ul>
+            
   		    </fieldset>
           </div>
         <% end %>

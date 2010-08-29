@@ -358,3 +358,17 @@ p.help{
   margin-top:2px;
   margin-left:-12px;
 }
+
+#deleteItem{
+  float:right;
+  text-decoration:none;
+  margin-top:-2px;
+  color:#AD0208;
+  font-weight:bold;
+}
+
+#deleteItem img{
+  position:relative;
+  top:4px;
+  right:2px;
+}
