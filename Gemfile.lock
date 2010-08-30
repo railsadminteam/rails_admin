@@ -41,7 +41,6 @@ GEM
       activesupport (~> 3.0.0)
     bcrypt-ruby (2.1.2)
     builder (2.1.2)
-    configuration (1.1.0)
     devise (1.1.2)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 0.10.7)
@@ -60,9 +59,6 @@ GEM
       git (>= 1.2.5)
       rubyforge (>= 2.0.0)
     json_pure (1.4.6)
-    launchy (0.3.7)
-      configuration (>= 0.0.5)
-      rake (>= 0.8.1)
     mail (2.2.5)
       activesupport (>= 2.3.6)
       mime-types
@@ -117,7 +113,6 @@ DEPENDENCIES
   devise
   dummy_data
   jeweler
-  launchy (>= 0.3.0)
   rails (= 3.0.0)
   rspec-rails (>= 2.0.0.beta.20)
   sqlite3-ruby
