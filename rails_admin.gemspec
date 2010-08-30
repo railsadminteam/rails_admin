@@ -8,7 +8,10 @@ Gem::Specification.new do |s|
   s.version = "0.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.date = %q{2010-08-25}
+  s.authors = ["Erik Michaels-Ober", "Bogdan Gaza"]
+  s.date = %q{2010-08-30}
+  s.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
+  s.email = %q{sferik@gmail.com}
   s.extra_rdoc_files = [
     "README"
   ]
@@ -19,6 +22,7 @@ Gem::Specification.new do |s|
      "app/helpers/rails_admin_helper.rb",
      "app/models/division.rb",
      "app/models/draft.rb",
+     "app/models/history.rb",
      "app/models/league.rb",
      "app/models/player.rb",
      "app/models/team.rb",
@@ -43,29 +47,88 @@ Gem::Specification.new do |s|
      "app/views/rails_admin/_text.html.erb",
      "app/views/rails_admin/_time.html.erb",
      "app/views/rails_admin/_timestamp.html.erb",
+     "app/views/rails_admin/_userinfo.html.erb",
      "app/views/rails_admin/delete.html.erb",
      "app/views/rails_admin/edit.html.erb",
+     "app/views/rails_admin/history.html.erb",
      "app/views/rails_admin/index.html.erb",
      "app/views/rails_admin/list.html.erb",
      "app/views/rails_admin/new.html.erb",
+     "config/application.rb",
+     "config/boot.rb",
+     "config/database.yml",
+     "config/environment.rb",
+     "config/environments/development.rb",
+     "config/environments/production.rb",
+     "config/environments/test.rb",
+     "config/initializers/backtrace_silencers.rb",
+     "config/initializers/inflections.rb",
+     "config/initializers/mime_types.rb",
+     "config/initializers/secret_token.rb",
+     "config/initializers/session_store.rb",
+     "config/locales/en.yml",
      "config/routes.rb",
+     "lib/generators/rails_admin/install_admin_generator.rb",
+     "lib/generators/rails_admin/install_migrations_generator.rb",
      "lib/generators/rails_admin/rails_admin_generator.rb",
+     "lib/generators/rails_admin/templates/migration.rb",
      "lib/rails_admin.rb",
      "lib/rails_admin/abstract_model.rb",
      "lib/rails_admin/active_record_support.rb",
      "lib/rails_admin/engine.rb",
      "lib/rails_admin/generic_support.rb",
+     "lib/rails_admin/railties/extratasks.rb",
      "lib/rails_admin/railties/tasks.rake"
   ]
+  s.homepage = %q{http://github.com/sferik/rails_admin}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{RailsAdmin for Rails 3}
   s.test_files = [
     "spec/controllers/rails_admin_controller_spec.rb",
+     "spec/dummy/app/controllers/application_controller.rb",
+     "spec/dummy/app/controllers/rails_admin_controller.rb",
+     "spec/dummy/app/helpers/application_helper.rb",
+     "spec/dummy/app/helpers/rails_admin_helper.rb",
+     "spec/dummy/app/models/division.rb",
+     "spec/dummy/app/models/draft.rb",
+     "spec/dummy/app/models/history.rb",
+     "spec/dummy/app/models/league.rb",
+     "spec/dummy/app/models/player.rb",
+     "spec/dummy/app/models/team.rb",
+     "spec/dummy/app/models/user.rb",
+     "spec/dummy/autotest/discover.rb",
+     "spec/dummy/config/application.rb",
+     "spec/dummy/config/boot.rb",
+     "spec/dummy/config/environment.rb",
+     "spec/dummy/config/environments/development.rb",
+     "spec/dummy/config/environments/production.rb",
+     "spec/dummy/config/environments/test.rb",
+     "spec/dummy/config/initializers/backtrace_silencers.rb",
+     "spec/dummy/config/initializers/devise.rb",
+     "spec/dummy/config/initializers/inflections.rb",
+     "spec/dummy/config/initializers/mime_types.rb",
+     "spec/dummy/config/initializers/secret_token.rb",
+     "spec/dummy/config/initializers/session_store.rb",
+     "spec/dummy/config/routes.rb",
+     "spec/dummy/db/migrate/001_create_divisions_migration.rb",
+     "spec/dummy/db/migrate/002_create_drafts_migration.rb",
+     "spec/dummy/db/migrate/003_create_leagues_migration.rb",
+     "spec/dummy/db/migrate/004_create_players_migration.rb",
+     "spec/dummy/db/migrate/005_create_teams_migration.rb",
+     "spec/dummy/db/migrate/20100829102851_create_histories_table.rb",
+     "spec/dummy/db/migrate/20100829122005_devise_create_users.rb",
+     "spec/dummy/db/schema.rb",
+     "spec/dummy/db/seeds.rb",
+     "spec/dummy/lib/rails_admin/abstract_model.rb",
+     "spec/dummy/lib/rails_admin/active_record_support.rb",
+     "spec/dummy/lib/rails_admin/generic_support.rb",
      "spec/helpers/rails_admin_helper_spec.rb",
      "spec/requests/rails_admin_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "test/performance/browsing_test.rb",
+     "test/test_helper.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -73,9 +136,30 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<rails>, ["~> 3.0.0"])
+      s.add_runtime_dependency(%q<builder>, ["~> 2.1.0"])
+      s.add_runtime_dependency(%q<devise>, ["~> 1.1.0"])
+      s.add_development_dependency(%q<dummy_data>, [">= 0.9"])
+      s.add_development_dependency(%q<jeweler>, [">= 1.4.0"])
+      s.add_development_dependency(%q<rspec-rails>, [">= 2.0.0.beta.20"])
+      s.add_development_dependency(%q<sqlite3-ruby>, [">= 1.3.1"])
     else
+      s.add_dependency(%q<rails>, ["~> 3.0.0"])
+      s.add_dependency(%q<builder>, ["~> 2.1.0"])
+      s.add_dependency(%q<devise>, ["~> 1.1.0"])
+      s.add_dependency(%q<dummy_data>, [">= 0.9"])
+      s.add_dependency(%q<jeweler>, [">= 1.4.0"])
+      s.add_dependency(%q<rspec-rails>, [">= 2.0.0.beta.20"])
+      s.add_dependency(%q<sqlite3-ruby>, [">= 1.3.1"])
     end
   else
+    s.add_dependency(%q<rails>, ["~> 3.0.0"])
+    s.add_dependency(%q<builder>, ["~> 2.1.0"])
+    s.add_dependency(%q<devise>, ["~> 1.1.0"])
+    s.add_dependency(%q<dummy_data>, [">= 0.9"])
+    s.add_dependency(%q<jeweler>, [">= 1.4.0"])
+    s.add_dependency(%q<rspec-rails>, [">= 2.0.0.beta.20"])
+    s.add_dependency(%q<sqlite3-ruby>, [">= 1.3.1"])
   end
 end
 
