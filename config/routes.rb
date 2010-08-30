@@ -1,4 +1,4 @@
-Rails.application.routes.draw do |map|
+RailsAdmin::Application.routes.draw do
   match "/admin", :to => "rails_admin#index", :as => :rails_admin_dashboard
   match "/admin/history/list", :to => "rails_admin#history", :as => :rails_admin_history
   match "/admin/history/get", :to => "rails_admin#get_history", :as => :rails_admin_history_get
