@@ -52,10 +52,11 @@
           <% property_name = property[:name] %>
           <% property_pretty_name = property[:pretty_name] %>
           <li class="<%= getColumnType(property,"Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
-            <%= link_to(property_pretty_name.upcase, params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {})) %>
+            <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <%= link_to(property_pretty_name.upcase, sort_location, :ref => sort_location.to_json, :class => "headerSort") %>
             <% if sort == property_name.to_s %>
             <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
-            <%= link_to image_tag(image_name), params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
           </li>
           <% end %>
