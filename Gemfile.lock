@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/kalv/webrat.git
-  revision: 66130e4b9e903e07cfa86286655bde439c7b376e
+  revision: 66130e4
   specs:
     webrat (0.7.2.pre)
       nokogiri (>= 1.2.0)
