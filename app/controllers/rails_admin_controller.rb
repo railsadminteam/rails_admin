@@ -9,6 +9,8 @@ class RailsAdminController < ApplicationController
   before_filter :set_plugin_name
   before_filter :check_for_cancel
 
+  before_filter :set_locale
+  
   def index
     
     @page_name = "Site administration"
@@ -356,4 +358,10 @@ class RailsAdminController < ApplicationController
       "#{object.class.to_s} ##{object.id}"
     end
   end
+
+  def set_locale
+    # if params[:locale] is nil then I18n.default_locale will be used
+    I18n.locale = params[:locale].nil? ? "en" : params[:locale]
+  end
+  
 end
