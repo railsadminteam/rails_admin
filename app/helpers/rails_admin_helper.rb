@@ -186,7 +186,6 @@ module RailsAdminHelper
     end
   end
 
-  # FIXME same as getColumnType - next iteration when adding associations
   def object_property(object, property)
     property_type = property[:type]
     property_name = property[:name]

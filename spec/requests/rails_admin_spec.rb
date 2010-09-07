@@ -597,7 +597,7 @@ describe "RailsAdmin" do
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
 
-      @req = click_button "Save and edit" #FIXME Save and add continue
+      @req = click_button "Save and edit"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 

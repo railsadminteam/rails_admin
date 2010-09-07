@@ -146,7 +146,6 @@ class RailsAdminController < ApplicationController
 
   def get_model
     model_name = to_model_name(params[:model_name])
-    # FIXME: What method AbstractModel calls? => initialize.
     @abstract_model = RailsAdmin::AbstractModel.new(model_name)
     @properties = @abstract_model.properties
 
@@ -154,7 +153,6 @@ class RailsAdminController < ApplicationController
 
   def get_object
     @object = @abstract_model.get(params[:id])
-    # FIXME
     render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
   end
 
