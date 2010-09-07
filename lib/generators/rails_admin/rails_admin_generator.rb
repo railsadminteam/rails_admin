@@ -2,8 +2,10 @@ module RailsAdmin
   class RailsAdminGenerator < Rails::Generators::Base
     
     source_root File.expand_path("../templates", __FILE__)
-
+    
     desc "RailsAdmin"
+    
+    namespace "rails_admin"
 
     def print_instructions
       puts "RailsAdmin!

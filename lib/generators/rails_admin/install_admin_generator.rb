@@ -53,10 +53,49 @@ Setting up devise for you!
       else
         puts "Please put gem 'devise' into your Gemfile"
       end
-      
+
+      copy_locales_files
+            
       puts "Also you need a new migration. We'll generate it for you or you can generate it manually using rails g rails_admin:install_migrations"
       invoke 'rails_admin:install_migrations'
+
     end
     
+    private
+    
+    def copy_locales_files
+      print "Now copying locales files! "
+      gem_path = __FILE__
+      gem_path = gem_path.split("/")
+      
+      gem_path = gem_path[0..-5]
+      gem_path = gem_path.join("/")
+      ###
+      locales_path = gem_path + "/config/locales/*.yml"
+      
+      app_path = Rails.public_path.split("/")
+      app_path.delete_at(-1)
+      app_path = app_path.join("/")
+      
+      app_path = app_path + "/config/locales"
+      
+      unless File.directory?(app_path)
+        FileUtils.mkdir app_path
+      end
+      
+      Dir.glob(locales_path).each do |file|
+        file_path = file.split("/")
+        file_path = file_path[-1]
+        FileUtils.copy_file(file,app_path + "/" + file_path)
+        print "."
+      end
+      print "\n"
+      
+    end
+    
+
+  
   end
+  
+  
 end
