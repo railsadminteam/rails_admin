@@ -141,70 +141,36 @@
 #submitArea{
   display:block;
   list-style-type:none;
+  margin-bottom:-7px;
 }
 
 #submitArea li{
   float:left;
+  margin-right:4px;
 }
 
 #saveContainer{
-  background:url(/images/save.png) no-repeat;
-  width:90px;
-  height:42px;
-  margin-left:-8px;
+  
 }
 
 #save_btn{
-  cursor:pointer;
-  background:none;
-  border:none;
-  font-family:Verdana, Geneva, sans-serif;
-  font-size:10px;
-  width:68px;
-  height:24px;
-  text-indent:-9999px;
-  margin-left:10px;
-  margin-top:9px;
+  
 }
 
 #saveAddContainer{
-  background:url(/images/saveandadd.png);
-  width:180px;
-  height:42px;
-  margin-left:-12px;
+
 }
 
 #saveAdd_btn{
-  cursor:pointer;
-  background:none;
-  border:none;
-  font-family:Verdana, Geneva, sans-serif;
-  font-size:10px;
-  width:158px;
-  height:24px;
-  text-indent:-9999px;
-  margin-left:10px;
-  margin-top:9px;
+ 
 }
 
 #cancelContainer{
-  background:url(/images/cancel.png);
-  width:82px;
-  height:42px;
-  margin-left:-12px;
+  
 }
 
 #cancel_btn{
-  cursor:pointer;
-  background:none;
-  border:none;
-  font-family:Verdana, Geneva, sans-serif;
-  font-size:10px;
-  width:66px;
-  height:24px;
-  text-indent:-9999px;
-  margin-left:7px;
-  margin-top:9px;
+  
 }
 
 .textField{
@@ -339,24 +305,58 @@ p.help{
 }
 
 #saveEdit_btn{
-  cursor:pointer;
-  background:none;
-  border:none;
-  font-family:Verdana, Geneva, sans-serif;
-  font-size:10px;
-  width:98px;
-  height:24px;
-  text-indent:-9999px;
-  margin-left:7px;
-  margin-top:7px;
+
 }
 
 #saveEditContainer{
-  background:url(/images/saveandedit.png) no-repeat;
-  width:119px;
-  height:39px;
-  margin-top:2px;
-  margin-left:-12px;
+ 
+}
+
+input.default{
+  color:#d9eef7;
+  border: solid 1px #0076c3;
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+}
+
+input.default:active{
+	background: #00adee;
+  background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+  background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}
+
+.button:active{
+	background: #CCCCCC;
+  background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
+  background: -moz-linear-gradient(top,  #CCCCCC,  #DDDDDD);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#DDDDDD');
+}
+
+.button{
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-size: 10px;
+  padding:5px;
+  padding-left:10px;
+  padding-right:10px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.2);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,.2);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  color: #000;
+	border: solid 1px #CDCDCD;
+	background: #DDDDDD;
+	background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
+	background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');  
 }
 
 #deleteItem{

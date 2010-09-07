@@ -30,10 +30,10 @@
             <div id="deleteConfirmation">
               <ul id="submitArea">
           	    <li>
-          	      <%= submit_tag "Yes, I'm sure" %>
+          	      <%= submit_tag t("admin.delete.confirmation"), :class => "button default" %>
           	    </li>
                 <li id="cancelContainer">
-                  <%= submit_tag "cancel", :name => "_continue", :id => "cancel_btn" %>
+                  <%= submit_tag t("admin.new.cancel"), :class => "button", :name => "_continue", :id => "cancel_btn" %>
                 </li>
               </ul>
             </div>

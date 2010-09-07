@@ -14,10 +14,10 @@
                 <span class="errorMessage"><%= "#{property_name.to_param.capitalize! } #{@object.errors[property_name].first}" %></span>
                 <% end %>
             	</p>
-            	<p class="help"><%= required ? "Required." : "Optional." %>
+            	<p class="help"><%= required ? t("admin.new.required") : t("admin.new.optional") %>
             	  <% if property_type == :string %>
             	    <% length = property[:length] %>
-            	    <%= length %> <%= length == 1 ? "character." : "characters or fewer." %>
+            	    <%= length %> <%= length == 1 ? t("admin.new.one_char") : t("admin.new.many_chars") %>
             	  <% end %>
             	</p>
             	

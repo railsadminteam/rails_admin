@@ -5,7 +5,7 @@
       <div id="contentMainNew">
         <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
           <fieldset>
-		        <h2>BASIC INFO</h2>
+		        <h2><%= t("admin.new.basic_info")%></h2>
       			<div class="formSection">
 <%= render(:partial => 'properties', :properties => @properties) -%>
             </div>
@@ -16,19 +16,21 @@
 
             <ul id="submitArea">
         	    <li id="saveContainer">
-        	      <%= submit_tag "Save", :class => "default", :name => "_save", :id => "save_btn" %>
+        	      <%= submit_tag t("admin.new.save"), :class => "button default", :name => "_save", :id => "save_btn" %>
         	    </li>
               <li id="saveAddContainer">
-                <%= submit_tag "Save and add another", :name => "_add_another", :id => "saveAdd_btn" %>
+                <%= submit_tag t("admin.new.save_and_add_another"), :class => "button", :name => "_add_another", :id => "saveAdd_btn" %>
               </li>
               <li id="saveEditContainer">
-                <%= submit_tag "Save and edit", :name => "_add_edit", :id => "saveEdit_btn" %>
+                <%= submit_tag t("admin.new.save_and_edit"), :class => "button", :name => "_add_edit", :id => "saveEdit_btn" %>
               </li>
               <li id="cancelContainer">
-                <%= submit_tag "cancel", :name => "_continue", :id => "cancel_btn" %>
+                <%= submit_tag t("admin.new.cancel"), :class => "button", :name => "_continue", :id => "cancel_btn" %>
               </li>
             </ul>
   		    </fieldset>
           </div>
+
         <% end %>
       </div>
+

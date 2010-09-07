@@ -31,8 +31,8 @@
               <div class="many_header">
                 <input type="text" class="searchMany" value="Search <%= association_name %>" ref="<%= association_name %>" class="many_text" used="0" />
                 <p>
-                  <strong>Chosen <%= association_name %></strong>
-                  Select your choise(s) and click <img src="/images/selector-add.gif" alt="Add" />
+                  <strong><%= t("admin.new.chosen",:name => association_name) %></strong>
+                  <%= t("admin.new.select_choise")%> <img src="/images/selector-add.gif" alt="Add" />
                 </p>
               </div>
               <div class="manySelector">
@@ -46,8 +46,8 @@
                 </select>
                 </div>
                 <div class="many_controls">
-                  <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-addall.gif" alt="Add all" class="add_all" /> Choose all</a>
-                  <a href="javascript:void(0)" class="clearAssoc"><img src="/images/selector-removeall.gif" alt="Clear all" class="clear_all"/>Clear all</a>
+                  <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-addall.gif" alt="Add all" class="add_all" /> <%= t("admin.new.chose_all")%></a>
+                  <a href="javascript:void(0)" class="clearAssoc"><img src="/images/selector-removeall.gif" alt="Clear all" class="clear_all"/><%= t("admin.new.clear_all")%></a>
                 </div>
                 <div class="manyHidden">
                   <% if selected.empty? %>

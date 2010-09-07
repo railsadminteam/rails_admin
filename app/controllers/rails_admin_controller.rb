@@ -12,8 +12,7 @@ class RailsAdminController < ApplicationController
   before_filter :set_locale
   
   def index
-    
-    @page_name = "Site administration"
+    @page_name = t("admin.dashboard.pagename")
     @page_type = "dashboard"
 
     @history = History.latest
@@ -105,7 +104,7 @@ class RailsAdminController < ApplicationController
     
     
     @object.destroy
-    flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
+    flash[:notice] = t("admin.delete.flash_confirmation",:name => @abstract_model.pretty_name)
     
     check_history
     
@@ -256,13 +255,14 @@ class RailsAdminController < ApplicationController
     check_history
 
     if params[:_add_another] == "Save and add another"
-      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      
+      flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_new_path( :model_name => param)
     elsif params[:_add_edit] == "Save and edit"
-      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_edit_path( :model_name => param,:id =>@lastId)
     elsif
-      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_list_path(:model_name => param)
     end
   end
@@ -297,7 +297,7 @@ class RailsAdminController < ApplicationController
 
   def render_error
     action = params[:action]
-    flash.now[:error] = "#{@abstract_model.pretty_name} failed to be #{action}d"
+    flash.now[:error] = t("admin.flash.error",:action => @abstract_model.pretty_name,:action => "#{action}d")
     render :new, :layout => 'form'
   end
 
@@ -313,7 +313,7 @@ class RailsAdminController < ApplicationController
 
   def check_for_cancel
     if params[:_continue]
-      flash[:notice] = "No actions where taken!"
+      flash[:notice] = t("admin.flash.noaction")
       redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
     end
   end
@@ -343,7 +343,7 @@ class RailsAdminController < ApplicationController
     end
     @record_count = @abstract_model.count(options)
 
-    @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
+    @page_name = t("admin.list.select",:name => @abstract_model.pretty_name.downcase)
     @page_type = @abstract_model.pretty_name.downcase
   end
 

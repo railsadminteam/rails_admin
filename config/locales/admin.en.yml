@@ -3,5 +3,44 @@
 
 en:
   admin:
-    hello: "Hello world"
-    
+    dashboard:
+      pagename: "Site administration"
+      name: "Dashboard"
+      model_name: "Model name"
+      last_used: "Last used"
+      records: "Records"
+      modify: "Modify"
+      add_new: "Add new"
+      show: "Show"
+    history:
+      name: "History"
+    credentials:
+      log_out: "Log out"
+    list:
+      edit_action: "Edit"
+      delete_action: "Delete"
+      add_new: "Add new"
+      search_btn: "SEARCH"
+      select: "Select %{name} to edit"
+      show_all: "Show all"
+    new:
+      basic_info: "BASIC INFO"
+      required: "Required"
+      optional: "Optional"
+      one_char: "character."
+      many_chars: "characters or fewer."
+      chosen: "Chosen %{name}"
+      select_choise: "Select your choise(s) and click"
+      chose_all: "Choose all"
+      clear_all: "Clear all"
+      save: "Save"
+      save_and_add_another: "Save and add another"
+      save_and_edit: "Save and edit"
+      cancel: "Cancel"
+    delete:
+      flash_confirmation: "%{name} was successfully destroyed"
+      confirmation: "Yes, I'm sure"
+    flash:
+      successful: "%{name} was successfully %{action}"
+      error: "%{name} failed to be %{action}"
+      noaction: "No actions where taken!"

@@ -2,7 +2,7 @@
   max_visible_tabs = 5
 %>
       <ul id="nav">
-        <li <%if @page_type == "dashboard" %>id="active"<% end %>><%= link_to("Dashboard", rails_admin_dashboard_path) %></li>
+        <li <%if @page_type == "dashboard" %>id="active"<% end %>><%= link_to(t("admin.dashboard.name"), rails_admin_dashboard_path) %></li>
 <% @abstract_models[0..max_visible_tabs-1].each do |abstract_model| %>
         <li <%if @page_type == abstract_model.pretty_name.downcase %>id="active"<% end %>><%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %></li>
 <% end %>
