@@ -147,6 +147,7 @@ class RailsAdminController < ApplicationController
     @general = true
     
     options = {}
+    options[:order] = "created_at DESC"
     
     options[:conditions] = []
     
@@ -168,6 +169,7 @@ class RailsAdminController < ApplicationController
     end
     
     if params["sort"]
+      options.delete(:order)
       if params["sort_reverse"] == "true"
         options[:order] = "#{params["sort"]} desc"
       else
