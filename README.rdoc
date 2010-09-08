@@ -17,4 +17,12 @@ in your Gemfile and run
   $ bundle update
 After that run following command
   $ rails g rails_admin:install_admin
-This will set up your rails_admin installation
+This will set up your rails_admin installation. Also in the progress it check for Devise, and if you don't have it installed it 
+will install that too.
+
+== Usage
+Start the server:
+  $ rails server
+You should now be able to administer your site at http://localhost:3000/admin (after you have created a simple account)
+== Contributing
+In the spirit of {free software}[http://www.fsf.org/licensing/essays/free-sw.html], people of all abilities are encouraged to help improve RailsAdmin.
