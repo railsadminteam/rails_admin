@@ -2,6 +2,14 @@ require 'builder'
 
 module RailsAdminHelper
 
+  def historyOutput(t)
+    if not t.message.downcase.rindex("changed").nil?
+      return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"
+    else
+      return t.message.downcase
+    end
+  end
+
   def getIndicator(procent)
     procent = 0 if procent.nil?
     return "" if procent.between?(0,33)
@@ -343,5 +351,6 @@ module RailsAdminHelper
       return "deleted"
     end
   end
+
 
 end
