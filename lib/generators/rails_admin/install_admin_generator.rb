@@ -37,6 +37,7 @@ Rails_admin works with devise. Checking for a current installation of devise!
 Setting up devise for you!
 ======================================================"
             invoke 'devise', ['user']
+            invoke 'devise', ['admin']
           end
           
         else
@@ -48,6 +49,7 @@ Setting up devise for you!
           puts "Setting up devise for you!
 ======================================================"
           invoke 'devise', ['user']
+          invoke 'devise', ['admin']
         end
         
       else
