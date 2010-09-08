@@ -75,6 +75,8 @@ class RailsAdminController < ApplicationController
   end
 
   def update
+    @modified_assoc = []
+    
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
@@ -181,8 +183,6 @@ class RailsAdminController < ApplicationController
       @page_count, @history = History.paginated(options)
     end
     
-    
-    
     render :layout => 'list'
   end
 
@@ -271,12 +271,17 @@ class RailsAdminController < ApplicationController
       when :has_many
         update_associations(association, ids.to_a)
       end
+      
+      
     end
   end
 
   def update_association(association, id = nil)
     associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
     if object = associated_model.get(id)
+      if object.send(association[:child_key].first) != @object.id
+        @modified_assoc << association[:pretty_name]
+      end
       object.update_attributes(association[:child_key].first => @object.id)
     end
   end
@@ -324,16 +329,26 @@ class RailsAdminController < ApplicationController
       @properties.each do |property|
         property_name = property[:name].to_param
         
-        logger.info @old_object.send(property_name)
-        logger.info @object.send(property_name)
-        
         if @old_object.send(property_name) != @object.send(property_name)
           changed_property_list << property_name
         end
         
       end
+            
+      @abstract_model.associations.each do |t|
+        assoc = changed_property_list.index(t[:child_key].to_param)
+        if assoc
+          changed_property_list[assoc] = "associated #{t[:pretty_name]}"
+        end
+      end
       
-      message = "Changed #{changed_property_list.join(", ")}"
+      @modified_assoc.uniq.each do |t|
+        changed_property_list << "associated #{t}"
+      end
+      
+      if not changed_property_list.empty?
+        message = "Changed #{changed_property_list.join(", ")}"
+      end
     when "destroy"
       message = "Destroyed #{object_label(@object)}"
     end
