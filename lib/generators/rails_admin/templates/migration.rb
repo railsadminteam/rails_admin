@@ -16,6 +16,6 @@ class CreateHistoriesTable < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :accounts
+    drop_table :histories
   end
 end
