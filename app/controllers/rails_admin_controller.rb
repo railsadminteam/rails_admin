@@ -172,8 +172,16 @@ class RailsAdminController < ApplicationController
         options[:order] = params["sort"]
       end      
     end
-
+    
     @history = History.find(:all,options)
+    
+    if @general and not params[:all]
+      @current_page = (params[:page] || 1).to_i
+      options.merge!(:page => @current_page, :per_page => 20)
+      @page_count, @history = History.paginated(options)
+    end
+    
+    
     
     render :layout => 'list'
   end
