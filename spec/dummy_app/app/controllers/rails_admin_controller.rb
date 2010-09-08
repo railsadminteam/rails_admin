@@ -53,6 +53,7 @@ class RailsAdminController < ApplicationController
   end
 
   def create
+    @modified_assoc = []
     @object = @abstract_model.new(@attributes)
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
@@ -74,6 +75,8 @@ class RailsAdminController < ApplicationController
   end
 
   def update
+    @modified_assoc = []
+    
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
@@ -139,12 +142,12 @@ class RailsAdminController < ApplicationController
     ####
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    @page_name = t("admin.history.page_name", :name => object_label(@object))
+    @page_name = t("admin.history.page_name", :name => @abstract_model.pretty_name)
     
-
-    
+    @general = true
     
     options = {}
+    options[:order] = "created_at DESC"
     
     options[:conditions] = []
     
@@ -153,8 +156,10 @@ class RailsAdminController < ApplicationController
     
     if params[:id]
       get_object
-      options[:conditions][0] += " and `item` = ?"      
+      @page_name = t("admin.history.page_name", :name => object_label(@object))
+      options[:conditions][0] += " and `item` = ?"
       options[:conditions] << params[:id]
+      @general = false
     end
     
     if params[:query]
@@ -164,14 +169,21 @@ class RailsAdminController < ApplicationController
     end
     
     if params["sort"]
+      options.delete(:order)
       if params["sort_reverse"] == "true"
         options[:order] = "#{params["sort"]} desc"
       else
         options[:order] = params["sort"]
       end      
     end
-
+    
     @history = History.find(:all,options)
+    
+    if @general and not params[:all]
+      @current_page = (params[:page] || 1).to_i
+      options.merge!(:page => @current_page, :per_page => 20)
+      @page_count, @history = History.paginated(options)
+    end
     
     render :layout => 'list'
   end
@@ -261,12 +273,17 @@ class RailsAdminController < ApplicationController
       when :has_many
         update_associations(association, ids.to_a)
       end
+      
+      
     end
   end
 
   def update_association(association, id = nil)
     associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
     if object = associated_model.get(id)
+      if object.send(association[:child_key].first) != @object.id
+        @modified_assoc << association[:pretty_name]
+      end
       object.update_attributes(association[:child_key].first => @object.id)
     end
   end
@@ -292,7 +309,7 @@ class RailsAdminController < ApplicationController
       redirect_to rails_admin_new_path( :model_name => param)
     elsif params[:_add_edit] == "Save and edit"
       flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
-      redirect_to rails_admin_edit_path( :model_name => param,:id =>@lastId)
+      redirect_to rails_admin_edit_path( :model_name => param,:id =>@object.id)
     elsif
       flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_list_path(:model_name => param)
@@ -314,16 +331,26 @@ class RailsAdminController < ApplicationController
       @properties.each do |property|
         property_name = property[:name].to_param
         
-        logger.info @old_object.send(property_name)
-        logger.info @object.send(property_name)
-        
         if @old_object.send(property_name) != @object.send(property_name)
           changed_property_list << property_name
         end
         
       end
+            
+      @abstract_model.associations.each do |t|
+        assoc = changed_property_list.index(t[:child_key].to_param)
+        if assoc
+          changed_property_list[assoc] = "associated #{t[:pretty_name]}"
+        end
+      end
       
-      message = "Changed #{changed_property_list.join(", ")}"
+      @modified_assoc.uniq.each do |t|
+        changed_property_list << "associated #{t}"
+      end
+      
+      if not changed_property_list.empty?
+        message = "Changed #{changed_property_list.join(", ")}"
+      end
     when "destroy"
       message = "Destroyed #{object_label(@object)}"
     end
@@ -343,7 +370,7 @@ class RailsAdminController < ApplicationController
 
   def render_error
     action = params[:action]
-    flash.now[:error] = t("admin.flash.error",:action => @abstract_model.pretty_name)
+    flash.now[:error] = t("admin.flash.error",:name => @abstract_model.pretty_name,:action => "#{action}d")
     render :new, :layout => 'form'
   end
 

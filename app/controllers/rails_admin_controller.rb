@@ -54,6 +54,7 @@ class RailsAdminController < ApplicationController
   end
 
   def create
+    @modified_assoc = []
     @object = @abstract_model.new(@attributes)
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
@@ -309,7 +310,7 @@ class RailsAdminController < ApplicationController
       redirect_to rails_admin_new_path( :model_name => param)
     elsif params[:_add_edit] == "Save and edit"
       flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
-      redirect_to rails_admin_edit_path( :model_name => param,:id =>@lastId)
+      redirect_to rails_admin_edit_path( :model_name => param,:id =>@object.id)
     elsif
       flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_list_path(:model_name => param)
@@ -370,7 +371,7 @@ class RailsAdminController < ApplicationController
 
   def render_error
     action = params[:action]
-    flash.now[:error] = t("admin.flash.error",:action => @abstract_model.pretty_name,:action => "#{action}d")
+    flash.now[:error] = t("admin.flash.error",:name => @abstract_model.pretty_name,:action => "#{action}d")
     render :new, :layout => 'form'
   end
 
