@@ -6,7 +6,9 @@ require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'rspec/core'
 require 'rspec/core/rake_task'
+require 'bundler'
 
+Bundler::GemHelper.install_tasks
 Rspec::Core::RakeTask.new(:spec)
 
 task :default => :spec
