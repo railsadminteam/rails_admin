@@ -1,6 +1,6 @@
 = RailsAdmin
-==== RailsAdmin is a Rails Engine that provides an easy-to-use interface for managing your data.
-RailsAdmin was conceived as a port of MerbAdmin[http://github.com/sferik/merb-admin] to Rails 3 and implemented as a {Ruby Summer of Code project}[http://www.rubysoc.org/projects] by Bogdan Gaza with mentors {Erik Michaels-Ober}[http://github.com/sferik], {Yehuda Katz}[http://github.com/wycats], {Rodrigo Rosenfeld Rosas}[http://github.com/rosenfeld], {Luke van der Hoeven}[http://github.com/plukevdh], and {Rein Henrichs}[http://github.com/reinh].
+==== RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
+RailsAdmin was conceived as a port of MerbAdmin[http://github.com/sferik/merb-admin] to Rails 3 and implemented as a {Ruby Summer of Code project}[http://www.rubysoc.org/projects] by {Bogdan Gaza}[http://github.com/hurrycane] with mentors {Erik Michaels-Ober}[http://github.com/sferik], {Yehuda Katz}[http://github.com/wycats], {Rodrigo Rosenfeld Rosas}[http://github.com/rosenfeld], {Luke van der Hoeven}[http://github.com/plukevdh], and {Rein Henrichs}[http://github.com/reinh].
 
 It currently offers the following functionality:
 * Show database tables
@@ -19,7 +19,7 @@ Run:
   $ bundle update
 And then run:
   $ rails generate rails_admin:install_admin
-This task will install RailsAdmin. During this process, it checks for Devise[http://github.com/plataformatec/devise] and installs it if you don't already have it installed. Devise[http://github.com/plataformatec/devise] is required for authentication to protect your data from anonymous users.
+This task will install RailsAdmin. During this process, it install Devise[http://github.com/plataformatec/devise] if you don't already have it installed. Devise[http://github.com/plataformatec/devise] is required for authentication to protect your data from anonymous users.
 
 == Usage
 Start the server:
@@ -46,5 +46,5 @@ If you have questions about contributing to RailsAdmin, please contact {Erik Mic
 == Credits
 Many thanks to:
 * Everyone in the {Ruby Summer of Code}[http://www.rubysoc.org] class of 2010
-* Piotr Sarnacki[http://github.com/drogus] for {making RailsAdmin mountable}[http://github.com/drogus/rails_admin/commit/3349b36db2d4eda296aad96f03b7e7a6a544bcd8]
+* {Piotr Sarnacki}[http://github.com/drogus] for {making RailsAdmin mountable}[http://github.com/drogus/rails_admin/commit/3349b36db2d4eda296aad96f03b7e7a6a544bcd8]
 * and everyone who contributed to MerbAdmin[http://github.com/sferik/merb-admin] in the first place.
