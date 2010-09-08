@@ -4,7 +4,7 @@
 en:
   admin:
     dashboard:
-      pagename: "Site administration"
+      pagename: "Site administrationz"
       name: "Dashboard"
       model_name: "Model name"
       last_used: "Last used"

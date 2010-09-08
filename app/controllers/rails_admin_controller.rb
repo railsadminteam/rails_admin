@@ -140,10 +140,9 @@ class RailsAdminController < ApplicationController
     ####
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
-    @page_name = t("admin.history.page_name", :name => object_label(@object))
+    @page_name = t("admin.history.page_name", :name => @abstract_model.pretty_name)
     
-
-    
+    @general = true
     
     options = {}
     
@@ -154,8 +153,10 @@ class RailsAdminController < ApplicationController
     
     if params[:id]
       get_object
-      options[:conditions][0] += " and `item` = ?"      
+      @page_name = t("admin.history.page_name", :name => object_label(@object))
+      options[:conditions][0] += " and `item` = ?"
       options[:conditions] << params[:id]
+      @general = false
     end
     
     if params[:query]

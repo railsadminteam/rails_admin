@@ -48,6 +48,18 @@
             <% end %>
           </li>
           
+          <% if @general %>
+          <% property_name = "item"%>
+          <li class="intHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+            <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <%= link_to("ITEM", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
+            <% if sort == property_name.to_s %>
+            <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
+            <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+            <% end %>
+          </li>
+          <% end %>
+          
           <% property_name = "message"%>
           <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
@@ -58,15 +70,23 @@
             <% end %>
           </li>
           
+          
+          
         </ul>
         <% @history.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
           <li class="dateTimeRow">
-            
             <%= object.created_at %>
           </li>
           <li class="smallStringRow">
             <%= object.username %>
+          </li>
+          <li class="intRow">
+            <% unless object.message.match("Destroy") %>
+            <%= link_to object.item, rails_admin_show_history_path(:model_name => @abstract_model, :id => object.item), :class => "historyLink"%>
+            <% else %>
+            <%= object.item %>
+            <% end %>
           </li>
           <li class="smallStringRow">
             <%= object.message %>

@@ -294,3 +294,12 @@ ul.infoRow li{
 .this-page{
   padding:3px;
 }
+
+.historyLink{
+  color:#000;
+  text-decoration:none;
+}
+
+.historyLink:hover{
+  text-decoration:underline;
+}
