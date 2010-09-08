@@ -1,6 +1,16 @@
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
-        <a href="<%= %>" id="deleteItem"><img src="/images/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
+        
+        <div id="quickAccess">
+      	  <ul id="quick">
+      	    <!--<li><a href="#">Quick add</a></li>-->
+      	    <li>
+      	     <%= link_to(t("admin.history.name"), rails_admin_show_history_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
+      	    </li>
+      	  </ul>
+
+      	</div>
+      	  <a href="<%= rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>      	
       </div>
 <%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">

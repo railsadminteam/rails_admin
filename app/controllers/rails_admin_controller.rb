@@ -24,7 +24,7 @@ class RailsAdminController < ApplicationController
     @count = {}
     @max = 0
     @abstract_models.each do |t|
-      current_count =t.count
+      current_count = t.count
       @max = current_count > @max ? current_count : @max
 
       @count[t.pretty_name] = current_count
@@ -60,8 +60,6 @@ class RailsAdminController < ApplicationController
     @page_type = @abstract_model.pretty_name.downcase
 
     if @object.save && update_all_associations
-      @lastId = @object.id
-      @object_label = object_label(@object)
       redirect_to_on_success
     else
       render_error
@@ -81,9 +79,9 @@ class RailsAdminController < ApplicationController
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
+    @old_object = @object.clone
+    
     if @object.update_attributes(@attributes) && update_all_associations
-      @lastId = @object.id
-      @object_label = object_label(@object)
       redirect_to_on_success
     else
       render_error
@@ -99,11 +97,7 @@ class RailsAdminController < ApplicationController
   end
 
   def destroy
-    @object_label = object_label(@object)
-    
-    
-    
-    @object.destroy
+    @object = @object.destroy
     flash[:notice] = t("admin.delete.flash_confirmation",:name => @abstract_model.pretty_name)
     
     check_history
@@ -140,6 +134,47 @@ class RailsAdminController < ApplicationController
       @history, @current_month = History.get_history_for_month(params[:ref],params[:section])
       render :template => "rails_admin/history"
     end
+  end
+  
+  def show_history
+    ####
+    @abstract_models = RailsAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
+    @page_name = t("admin.history.page_name", :name => object_label(@object))
+    
+
+    
+    
+    options = {}
+    
+    options[:conditions] = []
+    
+    options[:conditions] << conditions = "`table` = ?"
+    options[:conditions] << @abstract_model.pretty_name
+    
+    if params[:id]
+      get_object
+      options[:conditions][0] += " and `item` = ?"      
+      options[:conditions] << params[:id]
+    end
+    
+    if params[:query]
+      options[:conditions][0] += " and (`message` LIKE ? or `username` LIKE ? )"
+      options[:conditions] << "%#{params["query"]}%"
+      options[:conditions] << "%#{params["query"]}%"
+    end
+    
+    if params["sort"]
+      if params["sort_reverse"] == "true"
+        options[:order] = "#{params["sort"]} desc"
+      else
+        options[:order] = params["sort"]
+      end      
+    end
+
+    @history = History.find(:all,options)
+    
+    render :layout => 'list'
   end
 
   private
@@ -267,29 +302,43 @@ class RailsAdminController < ApplicationController
 
   def check_history
     action = params[:action]
-    action_type = -1
-    action_other = ""
+    message = ""
 
     case action
     when "create"
-      action_type = 1
-      action_other = "created"
+      message = "#{action.capitalize}d #{object_label(@object)}"
     when "update"
-      action_other = "updated"
-      action_type=2
-    when "distroy"
-      action_other = "deleted"
-      action_type=3
+      # determine which fields changed ???
+      changed_property_list = []
+      @properties = @abstract_model.properties.reject{|property| [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(property[:name])}
+
+      @properties.each do |property|
+        property_name = property[:name].to_param
+        
+        logger.info @old_object.send(property_name)
+        logger.info @object.send(property_name)
+        
+        if @old_object.send(property_name) != @object.send(property_name)
+          changed_property_list << property_name
+        end
+        
+      end
+      
+      message = "Changed #{changed_property_list.join(", ")}"
+    when "destroy"
+      message = "Destroyed #{object_label(@object)}"
     end
 
-    if action_type != -1
+    if not message.empty?
       date = Time.now
-      History.create(:action => action_type,
-      :month =>date.month,
-      :year => date.year,
-      :user_id => current_user.id,
+      History.create(
+      :message => message,
+      :item => @object.id,
       :table => @abstract_model.pretty_name,
-      :other => @object_label)
+      :username => current_user.email,
+      :month => Time.now.month,
+      :year => Time.now.year
+      )
     end
   end
 
@@ -316,7 +365,7 @@ class RailsAdminController < ApplicationController
     end
   end
 
-  def list_entries
+  def list_entries(other = {})
     @abstract_models = RailsAdmin::AbstractModel.all
 
     options = {}
@@ -326,7 +375,9 @@ class RailsAdminController < ApplicationController
     options.merge!(get_filter_hash(options))
     per_page = 20 # HAX FIXME
 
-    # per_page = RailsAdmin[:per_page]
+    # external filter 
+    options.merge!(other)
+    
     if params[:all]
       options.merge!(:limit => per_page * 2)
       @objects = @abstract_model.all(options).reverse

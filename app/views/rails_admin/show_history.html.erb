@@ -1,0 +1,80 @@
+<%
+  params = request.params.except(:action, :controller, :model_name)
+  query = params[:query]
+  filter = params[:filter]
+  sort = params[:sort]
+  sort_reverse = params[:sort_reverse]
+  
+%>
+
+
+      <div id="contentHeader">
+        <h2><%= @page_name %></h2>
+      	<div id="quickAccess">
+      	  <ul id="quick">
+      	    <!--<li><a href="#">Quick add</a></li>-->
+      	  </ul>
+      	</div>
+      </div>
+<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
+      <div id="contentMainModules">
+        <div class="searchBox">
+          <form action="#" method="get">
+            <fieldset>
+              <input type="text" id="searchBar" name="query" value="<%= query %>"/>
+              <input type="submit" id="searchbar_btn" value="<%= t("admin.list.search_btn")%>" />
+              <input type="hidden" value="<%= params["id"] %>" name="id">
+            </fieldset>
+          </form>
+        </div>
+        <ul id="moduleHeader">
+          <% property_name = "created_at"%>
+          <li class="dateTimeHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+            <% sort_location = params.merge(:sort => :created_at).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <%= link_to("DATE/TIME", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
+            <% if sort == property_name.to_s %>
+            <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
+            <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+            <% end %>
+          </li>
+          
+          <% property_name = "username"%>
+          <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+            <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <%= link_to("USER", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
+            <% if sort == property_name.to_s %>
+            <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
+            <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+            <% end %>
+          </li>
+          
+          <% property_name = "message"%>
+          <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+            <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+            <%= link_to("ACTION", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
+            <% if sort == property_name.to_s %>
+            <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
+            <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+            <% end %>
+          </li>
+          
+        </ul>
+        <% @history.each_with_index do |object, index| %>
+        <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
+          <li class="dateTimeRow">
+            
+            <%= object.created_at %>
+          </li>
+          <li class="smallStringRow">
+            <%= object.username %>
+          </li>
+          <li class="smallStringRow">
+            <%= object.message %>
+          </li>
+        </ul>
+        <% end %>
+
+        
+      </div>
+    </div>
+

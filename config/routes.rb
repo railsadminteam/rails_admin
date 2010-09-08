@@ -8,6 +8,7 @@ Rails.application.routes.draw do |map|
   match "/admin/:model_name/create", :to => "rails_admin#create", :as => :rails_admin_create
   match "/admin/:model_name/edit", :to => "rails_admin#edit", :as => :rails_admin_edit
   match "/admin/:model_name/update", :to => "rails_admin#update", :as => :rails_admin_update
+  match "/admin/:model_name/history", :to => "rails_admin#show_history", :as => :rails_admin_show_history
   match "/admin/:model_name/delete", :to => "rails_admin#delete", :as => :rails_admin_delete
   match "/admin/:model_name/destroy", :to => "rails_admin#destroy", :as => :rails_admin_destroy
 end

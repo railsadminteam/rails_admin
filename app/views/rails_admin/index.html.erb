@@ -58,7 +58,7 @@
               <p id="listing">Listing <strong><%= Time.now.strftime("%B %Y")%></strong> History:</p>
               <ul id="history">
                 <% @historyListing.each do |t|%>
-                <li><%= @users[t.id]%> <%= getActionHere(t.action )%> <em><%= t.other %></em> <%= t.table.downcase %></li>
+                <li><%= t.message %></li>
                 <% end %>
               </ul>
             </div>

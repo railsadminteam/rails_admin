@@ -363,6 +363,7 @@ input.default:active{
   float:right;
   text-decoration:none;
   margin-top:-2px;
+  margin-right:10px;
   color:#AD0208;
   font-weight:bold;
 }

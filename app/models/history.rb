@@ -10,6 +10,10 @@ end
 
 class History < ActiveRecord::Base
 
+  def pretty_name
+    "ceva"
+  end
+
   def self.latest
     mstart = 5.month.ago.month
     mstop = Time.now.month
@@ -19,6 +23,7 @@ class History < ActiveRecord::Base
 
     self.get_history_for_dates(mstart,mstop,ystart,ystop)
   end
+
 
   def self.get_history_for_dates(mstart,mstop,ystart,ystop)
     sql_in = ""
