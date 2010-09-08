@@ -1,9 +1,6 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path("../lib/rails_admin/version", __FILE__)
 
-EXECUTABLES_REGEX = /^bin\/(.*)/
-TEST_FILES_REGEX  = /^(spec|test|features)\/(.*)/
-
 Gem::Specification.new do |s|
   s.add_development_dependency("dummy_data", [">= 0.9"])
   s.add_development_dependency("rspec-rails", [">= 2.0.0.beta.20"])
@@ -14,9 +11,9 @@ Gem::Specification.new do |s|
   s.authors = ["Erik Michaels-Ober", "Bogdan Gaza"]
   s.description = "RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data"
   s.email = ["sferik@gmail.com"]
-  s.executables = `git ls-files`.split("\n").select{|f| f =~ EXECUTABLES_REGEX ? $1 : nil}.compact
+  s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.extra_rdoc_files = ["README.rdoc"]
-  s.files = `git ls-files`.split("\n").reject{|f| f =~ TEST_FILES_REGEX ? $1 : nil}.compact
+  s.files = `git ls-files`.split("\n")
   s.homepage = "http://rubygems.org/gems/rails_admin"
   s.name = "rails_admin"
   s.platform = Gem::Platform::RUBY
@@ -25,6 +22,6 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project = "rails_admin"
   s.summary = "Admin for Rails"
-  s.test_files = `git ls-files`.split("\n").select{|f| f =~ TEST_FILES_REGEX ? $1 : nil}.compact
+  s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.version = RailsAdmin::VERSION
 end
