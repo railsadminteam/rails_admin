@@ -10,6 +10,10 @@ end
 
 class History < ActiveRecord::Base
 
+  def pretty_name
+    "ceva"
+  end
+
   def self.latest
     mstart = 5.month.ago.month
     mstop = Time.now.month
@@ -19,6 +23,7 @@ class History < ActiveRecord::Base
 
     self.get_history_for_dates(mstart,mstop,ystart,ystop)
   end
+
 
   def self.get_history_for_dates(mstart,mstop,ystart,ystop)
     sql_in = ""
@@ -31,7 +36,6 @@ class History < ActiveRecord::Base
 
       results.concat(results_two)
     else
-
       sql_in =  (mstart+1..mstop).to_a.join(", ")
 
       results = History.find_by_sql("select count(*) as number, year, month from histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")

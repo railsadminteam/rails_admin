@@ -1,7 +1,6 @@
 require 'rails_admin/abstract_model'
 
 class RailsAdminController < ApplicationController
-  #before_filter :authenticate_user!
 
   before_filter :get_model, :except => [:index,:history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
@@ -9,8 +8,10 @@ class RailsAdminController < ApplicationController
   before_filter :set_plugin_name
   before_filter :check_for_cancel
 
+  before_filter :set_locale
+  
   def index
-    @page_name = "Site administration"
+    @page_name = t("admin.dashboard.pagename")
     @page_type = "dashboard"
 
     @history = History.latest
@@ -18,6 +19,22 @@ class RailsAdminController < ApplicationController
     @historyListing, @current_month = History.get_history_for_month(0,4)
 
     @abstract_models = RailsAdmin::AbstractModel.all
+    
+    @count = {}
+    @max = 0
+    @abstract_models.each do |t|
+      current_count = t.count
+      @max = current_count > @max ? current_count : @max
+
+      @count[t.pretty_name] = current_count
+    end
+    
+    users = User.find(:all)
+    @users = {}
+    users.each do |t|
+      @users[t.id] = t.email
+    end
+
     render(:layout => 'dashboard')
   end
 
@@ -28,7 +45,6 @@ class RailsAdminController < ApplicationController
 
   def new
     @object = @abstract_model.new
-
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
@@ -38,13 +54,11 @@ class RailsAdminController < ApplicationController
 
   def create
     @object = @abstract_model.new(@attributes)
-
     @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
     if @object.save && update_all_associations
-      @lastId = @object.id
       redirect_to_on_success
     else
       render_error
@@ -64,8 +78,9 @@ class RailsAdminController < ApplicationController
     @abstract_models = RailsAdmin::AbstractModel.all
     @page_type = @abstract_model.pretty_name.downcase
 
+    @old_object = @object.clone
+    
     if @object.update_attributes(@attributes) && update_all_associations
-      @lastId = @object.id
       redirect_to_on_success
     else
       render_error
@@ -81,8 +96,11 @@ class RailsAdminController < ApplicationController
   end
 
   def destroy
-    @object.destroy
-    flash[:notice] = "#{@abstract_model.pretty_name} was successfully destroyed"
+    @object = @object.destroy
+    flash[:notice] = t("admin.delete.flash_confirmation",:name => @abstract_model.pretty_name)
+    
+    check_history
+    
     redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
   end
 
@@ -116,12 +134,52 @@ class RailsAdminController < ApplicationController
       render :template => "rails_admin/history"
     end
   end
+  
+  def show_history
+    ####
+    @abstract_models = RailsAdmin::AbstractModel.all
+    @page_type = @abstract_model.pretty_name.downcase
+    @page_name = t("admin.history.page_name", :name => object_label(@object))
+    
+
+    
+    
+    options = {}
+    
+    options[:conditions] = []
+    
+    options[:conditions] << conditions = "`table` = ?"
+    options[:conditions] << @abstract_model.pretty_name
+    
+    if params[:id]
+      get_object
+      options[:conditions][0] += " and `item` = ?"      
+      options[:conditions] << params[:id]
+    end
+    
+    if params[:query]
+      options[:conditions][0] += " and (`message` LIKE ? or `username` LIKE ? )"
+      options[:conditions] << "%#{params["query"]}%"
+      options[:conditions] << "%#{params["query"]}%"
+    end
+    
+    if params["sort"]
+      if params["sort_reverse"] == "true"
+        options[:order] = "#{params["sort"]} desc"
+      else
+        options[:order] = params["sort"]
+      end      
+    end
+
+    @history = History.find(:all,options)
+    
+    render :layout => 'list'
+  end
 
   private
 
   def get_model
     model_name = to_model_name(params[:model_name])
-    # FIXME: What method AbstractModel calls? => initialize.
     @abstract_model = RailsAdmin::AbstractModel.new(model_name)
     @properties = @abstract_model.properties
 
@@ -129,7 +187,6 @@ class RailsAdminController < ApplicationController
 
   def get_object
     @object = @abstract_model.get(params[:id])
-    # FIXME
     render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
   end
 
@@ -230,39 +287,63 @@ class RailsAdminController < ApplicationController
     check_history
 
     if params[:_add_another] == "Save and add another"
-      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      
+      flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_new_path( :model_name => param)
     elsif params[:_add_edit] == "Save and edit"
-      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_edit_path( :model_name => param,:id =>@lastId)
     elsif
-      flash[:notice] = "#{pretty_name} was successfully #{action}d"
+      flash[:notice] = t("admin.flash.successful",:name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_list_path(:model_name => param)
     end
   end
 
   def check_history
     action = params[:action]
-    action_type = -1
+    message = ""
 
     case action
     when "create"
-      action_type = 1
+      message = "#{action.capitalize}d #{object_label(@object)}"
     when "update"
-      action_type = 2
-    when "distroy"
-      action_type = 3
+      # determine which fields changed ???
+      changed_property_list = []
+      @properties = @abstract_model.properties.reject{|property| [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(property[:name])}
+
+      @properties.each do |property|
+        property_name = property[:name].to_param
+        
+        logger.info @old_object.send(property_name)
+        logger.info @object.send(property_name)
+        
+        if @old_object.send(property_name) != @object.send(property_name)
+          changed_property_list << property_name
+        end
+        
+      end
+      
+      message = "Changed #{changed_property_list.join(", ")}"
+    when "destroy"
+      message = "Destroyed #{object_label(@object)}"
     end
 
-    if action_type != -1
+    if not message.empty?
       date = Time.now
-      History.create(:action => action_type,:month =>date.month, :year => date.year, :user_id => 1)
+      History.create(
+      :message => message,
+      :item => @object.id,
+      :table => @abstract_model.pretty_name,
+      :username => current_user.email,
+      :month => Time.now.month,
+      :year => Time.now.year
+      )
     end
   end
 
   def render_error
     action = params[:action]
-    flash.now[:error] = "#{@abstract_model.pretty_name} failed to be #{action}d"
+    flash.now[:error] = t("admin.flash.error",:action => @abstract_model.pretty_name,:action => "#{action}d")
     render :new, :layout => 'form'
   end
 
@@ -278,12 +359,12 @@ class RailsAdminController < ApplicationController
 
   def check_for_cancel
     if params[:_continue]
-      flash[:notice] = "No actions where taken!"
+      flash[:notice] = t("admin.flash.noaction")
       redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
     end
   end
 
-  def list_entries
+  def list_entries(other = {})
     @abstract_models = RailsAdmin::AbstractModel.all
 
     options = {}
@@ -293,7 +374,9 @@ class RailsAdminController < ApplicationController
     options.merge!(get_filter_hash(options))
     per_page = 20 # HAX FIXME
 
-    # per_page = RailsAdmin[:per_page]
+    # external filter 
+    options.merge!(other)
+    
     if params[:all]
       options.merge!(:limit => per_page * 2)
       @objects = @abstract_model.all(options).reverse
@@ -308,8 +391,25 @@ class RailsAdminController < ApplicationController
     end
     @record_count = @abstract_model.count(options)
 
-    @page_name = "Select " + @abstract_model.pretty_name.downcase + " to edit"
+    @page_name = t("admin.list.select",:name => @abstract_model.pretty_name.downcase)
     @page_type = @abstract_model.pretty_name.downcase
   end
 
+  def object_label(object)
+    if object.nil?
+      nil
+    elsif object.respond_to?(:name) && object.name
+      object.name[0..10]
+    elsif object.respond_to?(:title) && object.title
+      object.title[0..10]
+    else
+      "#{object.class.to_s} ##{object.id}"
+    end
+  end
+
+  def set_locale
+    # if params[:locale] is nil then I18n.default_locale will be used
+    I18n.locale = params[:locale].nil? ? "en" : params[:locale]
+  end
+  
 end

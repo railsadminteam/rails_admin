@@ -1,7 +1,1 @@
-<%
-  property_name = property[:name]
-  label = property[:pretty_name]
-  model_name = @abstract_model.to_param
-%>
-                <%= label_tag label %>
-                <%= check_box model_name, property_name, :checked => @object.send(property_name) ? true : false %>
+../../../../../app/views/rails_admin_boolean.html.erb
