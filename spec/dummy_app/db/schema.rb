@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100829122005) do
+ActiveRecord::Schema.define(:version => 20100908023201) do
 
   create_table "divisions", :force => true do |t|
     t.datetime "created_at"
@@ -33,17 +33,17 @@ ActiveRecord::Schema.define(:version => 20100829122005) do
   end
 
   create_table "histories", :force => true do |t|
-    t.integer  "action",     :limit => 4
+    t.string   "message"
+    t.string   "username"
+    t.integer  "item"
+    t.string   "table"
     t.integer  "month",      :limit => 2
     t.integer  "year",       :limit => 5
-    t.string   "table"
-    t.string   "other"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "histories", ["month", "year"], :name => "index_histories_on_month_and_year"
+  add_index "histories", ["item", "table", "month", "year"], :name => "index_histories_on_item_and_table_and_month_and_year"
 
   create_table "leagues", :force => true do |t|
     t.datetime "created_at"

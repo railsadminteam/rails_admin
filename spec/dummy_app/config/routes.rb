@@ -10,6 +10,8 @@ Dummy::Application.routes.draw do
   match "/admin/:model_name/update", :to => "rails_admin#update", :as => :rails_admin_update
   match "/admin/:model_name/delete", :to => "rails_admin#delete", :as => :rails_admin_delete
   match "/admin/:model_name/destroy", :to => "rails_admin#destroy", :as => :rails_admin_destroy
+  match "/admin/:model_name/history", :to => "rails_admin#show_history", :as => :rails_admin_show_history
+
 
   devise_for :users
   root :to => "welcome#index"

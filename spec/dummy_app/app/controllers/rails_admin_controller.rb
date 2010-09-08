@@ -334,7 +334,7 @@ class RailsAdminController < ApplicationController
       :message => message,
       :item => @object.id,
       :table => @abstract_model.pretty_name,
-      :username => current_user.email,
+      :username => "bogdan.gaza@yahoo.com",
       :month => Time.now.month,
       :year => Time.now.year
       )
@@ -343,7 +343,7 @@ class RailsAdminController < ApplicationController
 
   def render_error
     action = params[:action]
-    flash.now[:error] = t("admin.flash.error",:action => @abstract_model.pretty_name,:action => "#{action}d")
+    flash.now[:error] = t("admin.flash.error",:action => @abstract_model.pretty_name)
     render :new, :layout => 'form'
   end
 
