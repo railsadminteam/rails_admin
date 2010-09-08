@@ -40,7 +40,7 @@ Also there is a list of feature that are going to implemented even if the RubySO
 
 All contributors will be added to the credits below and will receive the respect and gratitude of the author.
 == Contact
-If you are interested in contributing to RailsAdmin, please contact Erik Michaels-Ober via email[mailto:sferik@gmail.com] or Bogdan Gaza via email[hurrycane@gmail.com], on GitHub at [http://github.com/sferik/] and [http://github.com/hurrycane/], or on Twitter at [http://twitter.com/sferik] and [http://twitter.com/hurrycane]
+If you are interested in contributing to RailsAdmin, please contact Erik Michaels-Ober via email[mailto:sferik@gmail.com] or Bogdan Gaza via email[mailto:hurrycane@gmail.com], on GitHub at [http://github.com/sferik/] and [http://github.com/hurrycane/], or on Twitter at [http://twitter.com/sferik] and [http://twitter.com/hurrycane]
 
 == Credits
 Many thanks to:
