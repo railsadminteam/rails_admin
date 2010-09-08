@@ -26,3 +26,22 @@ Start the server:
 You should now be able to administer your site at http://localhost:3000/admin (after you have created a simple account)
 == Contributing
 In the spirit of {free software}[http://www.fsf.org/licensing/essays/free-sw.html], people of all abilities are encouraged to help improve RailsAdmin.
+
+There are many ways to contribute:
+* by reporting bugs
+* by suggesting new features
+* by writing documentation
+* by writing specifications
+* by writing code (no patch is too small: fix typos in comments or inconsistent whitespace)
+* by refactoring code
+* by reviewing patches
+* financially[http://pledgie.com/campaigns/5428]
+
+All contributors will be added to the credits below and will receive the respect and gratitude of the author.
+== Contact
+If you are interested in contributing to RailsAdmin, please contact Erik Michaels-Ober via email[mailto:sferik@gmail.com] or Bogdan Gaza at [hurrycane@gmail.com], on GitHub at [http://github.com/sferik/] and [http://github.com/hurrycane/], or on Twitter at [http://twitter.com/sferik] and [http://twitter.com/hurrycane]
+
+== Credits
+Many thanks to:
+* Everyone in the RubySOC Project
+* Everyone to contributed for the MerbAdmin[http://github.com/sferik/merb-admin] in the first place.
