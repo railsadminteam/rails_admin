@@ -2,7 +2,7 @@ require 'rails_admin/generic_support'
 
 module RailsAdmin
   class AbstractModel
-    # Returns all models for a given Merb app
+    # Returns all models for a given Rails app
     def self.all
       @models = []
       str = ""
