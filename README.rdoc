@@ -1,24 +1,25 @@
 = RailsAdmin
 ==== RailsAdmin is a Rails Engine that provides an easy-to-use interface for managing your data.
-Rails Admin started as a port of Erik Michaels-Ober's MerbAdmin to Rails 3 and a RubySOC 2010 project.
+RailsAdmin was conceived as a port of MerbAdmin[http://github.com/sferik/merb-admin] to Rails 3 and implemented as a {Ruby Summer of Code project}[http://www.rubysoc.org/projects] by Bogdan Gaza with mentors {Erik Michaels-Ober}[http://github.com/sferik], {Yehuda Katz}[http://github.com/wycats], {Rodrigo Rosenfeld Rosas}[http://github.com/rosenfeld], {Luke van der Hoeven}[http://github.com/plukevdh], and {Rein Henrichs}[http://github.com/reinh].
+
 It currently offers the following functionality:
-* CRUD functionality on database tables
-* Validate form dat
-* Map ActiveRecord relations to CRUD functionality
+* Show database tables
+* Easily update data
+* Create new data
+* Safely delete data
+* Automatic form validation
 * Search
-* Full Rails 3.0 and RSpec 2.0 beta 20
-* Authentication (integration with devise)
+* Authentication (via Devise[http://github.com/plataformatec/devise])
 * User action history
 
 == Installation
-Into your Rails app put
-  $ gem 'rails_admin'
-in your Gemfile and run
+In your <tt>Gemfile</tt>, add the following dependency:
+  gem 'rails_admin', :git => "git://github.com/sferik/merb-admin.git"
+Run:
   $ bundle update
-After that run following command
-  $ rails g rails_admin:install_admin
-This will set up your rails_admin installation. Also in the progress it check for Devise, and if you don't have it installed it 
-will install that too.
+And then run:
+  $ rails generate rails_admin:install_admin
+This task will install RailsAdmin. During this process, it checks for Devise[http://github.com/plataformatec/devise] and installs it if you don't already have it installed. Devise[http://github.com/plataformatec/devise] is required for authentication to protect your data from anonymous users.
 
 == Usage
 Start the server:
@@ -28,21 +29,22 @@ You should now be able to administer your site at http://localhost:3000/admin (a
 In the spirit of {free software}[http://www.fsf.org/licensing/essays/free-sw.html], people of all abilities are encouraged to help improve RailsAdmin.
 
 There are many ways to contribute:
-* by reporting bugs
-* by suggesting new features
+* by reporting bugs[http://github.com/sferik/rails_admin/issues/labels/bug]
+* by suggesting new features[http://github.com/sferik/rails_admin/issues/labels/feature]
 * by writing documentation
 * by writing specifications
 * by writing code (no patch is too small: fix typos in comments or inconsistent whitespace)
 * by refactoring code
 * by reviewing patches
 
-Also there is a list of feature that are going to implemented even if the RubySOC will be finally over: a tighter integration with devise, some other visualization for History, integration with mountable apps and Rails 3.1
+Please submit bugs and feature requests to the {issue tracker}[http://github.com/sferik/rails_admin/issues].
 
 All contributors will be added to the credits below and will receive the respect and gratitude of the author.
 == Contact
-If you are interested in contributing to RailsAdmin, please contact Erik Michaels-Ober via email[mailto:sferik@gmail.com] or Bogdan Gaza via email[mailto:hurrycane@gmail.com], on GitHub at [http://github.com/sferik/] and [http://github.com/hurrycane/], or on Twitter at [http://twitter.com/sferik] and [http://twitter.com/hurrycane]
+If you have questions about contributing to RailsAdmin, please contact {Erik Michaels-Ober}[http://github.com/sferik] and {Bogdan Gaza}[http://github.com/hurrycane].
 
 == Credits
 Many thanks to:
-* Everyone in the RubySOC Project
-* Everyone to contributed for the MerbAdmin[http://github.com/sferik/merb-admin] in the first place.
+* Everyone in the {Ruby Summer of Code}[http://www.rubysoc.org] class of 2010
+* Piotr Sarnacki[http://github.com/drogus] for {making RailsAdmin mountable}[http://github.com/drogus/rails_admin/commit/3349b36db2d4eda296aad96f03b7e7a6a544bcd8]
+* and everyone who contributed to MerbAdmin[http://github.com/sferik/merb-admin] in the first place.
