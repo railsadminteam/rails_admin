@@ -1,0 +1,20 @@
+= RailsAdmin
+==== RailsAdmin is a Rails Engine that provides an easy-to-use interface for managing your data.
+Rails Admin started as a port of Erik Michaels-Ober's MerbAdmin to Rails 3 and a RubySOC 2010 project.
+It currently offers the following functionality:
+* CRUD functionality on database tables
+* Validate form dat
+* Map ActiveRecord relations to CRUD functionality
+* Search
+* Full Rails 3.0 and RSpec 2.0 beta 20
+* Authentication (integration with devise)
+* User action history
+
+== Installation
+Into your Rails app put
+  $ gem 'rails_admin'
+in your Gemfile and run
+  $ bundle update
+After that run following command
+  $ rails g rails_admin:install_admin
+This will set up your rails_admin installation
