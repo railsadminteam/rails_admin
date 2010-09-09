@@ -14,7 +14,8 @@ It currently offers the following functionality:
 
 == Installation
 In your <tt>Gemfile</tt>, add the following dependency:
-  gem 'rails_admin', :git => "git://github.com/sferik/rails_admin.git"
+  gem 'devise' # Devise must be required before RailsAdmin
+  gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 Run:
   $ bundle update
 And then run:
