@@ -17,9 +17,9 @@
               <li class="lastUsedRow">Yesterday</li>
               <li class="recordsRow">
                 <div class="scale">
-                  <% procent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
-                  <% procent = 1 if procent.nil? %>
-                  <div class="bar <%= get_indicator(procent)%>" style="width:<%= procent %>%;"></div>
+                  <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
+                  <% percent = 1 if percent.nil? %>
+                  <div class="bar <%= get_indicator(percent)%>" style="width:<%= percent %>%;"></div>
                 </div>
               </li>
               <li class="modifyRow">
@@ -38,11 +38,11 @@
                 <% @history.each{|t| max = t.number if t.number > max} %>
                 <ul>
                   <% @history.each do |t| %>
-                  <% procent = (t.number * 100) / max unless max == 0 %>
-                  <% indicator_type = get_indicator(procent)%>
+                  <% percent = (t.number * 100) / max unless max == 0 %>
+                  <% indicator_type = get_indicator(percent)%>
                   <li><span><%= t.number != 0 ? Time.parse("01/#{t.month}/#{t.year}").strftime("%B %Y") : "No activity" %></span>
                     <span class="bars">
-                      <span class="indicator <%= indicator_type %>" style="height:<%= procent %>%"></span>
+                      <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
                     </span>
                   </li>
                   <% end %>

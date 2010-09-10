@@ -10,11 +10,11 @@ module RailsAdminHelper
     end
   end
 
-  def get_indicator(procent)
-    procent = 0 if procent.nil?
-    return "" if procent.between?(0, 33)
-    return "medium" if procent.between?(34, 67)
-    return "high" if procent.between?(68, 100)
+  def get_indicator(percent)
+    percent = 0 if percent.nil?
+    return "" if percent.between?(0, 33)
+    return "medium" if percent.between?(34, 67)
+    return "high" if percent.between?(68, 100)
   end
 
   def format_output(property, output)
