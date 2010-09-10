@@ -9,8 +9,7 @@ gem 'devise'
 # and rake tasks are available in development mode:
 group :development, :test do
   gem 'dummy_data'
-  gem 'jeweler'
-  gem "rspec-rails", ">= 2.0.0.beta.20"
+  gem 'rspec-rails', '>= 2.0.0.beta.20'
   gem 'sqlite3-ruby', :require => 'sqlite3'
-  gem "webrat", :git => "git://github.com/kalv/webrat.git"
+  gem 'webrat', :git => 'git://github.com/kalv/webrat.git'
 end
