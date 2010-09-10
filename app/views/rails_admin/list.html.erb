@@ -69,14 +69,14 @@
 
         <% @objects.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
-          <% otherLeft = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-          <li class="otherRow otherLeft"><%= link_to("...", otherLeft, :ref => otherLeft.to_json) %></li>
+          <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+          <li class="otherRow otherLeft"><%= link_to("...", other_left, :ref => other_left.to_json) %></li>
           <% @properties.each do |property| %>
           <% output_type = format_output(property, object_property(object, property)) %>
           <li class="<%= get_column_type(property, "Row") %>"><%= output_type %></li>
           <% end %>
-          <% otherRight = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
-          <li class="otherRow otherRight"><%= link_to("...", otherRight, :ref => otherRight.to_json)%></li>
+          <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+          <li class="otherRow otherRight"><%= link_to("...", other_right, :ref => other_right.to_json)%></li>
           <li class="actionRow editAction"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
           <li class="actionRow deleteAction"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
         </ul>

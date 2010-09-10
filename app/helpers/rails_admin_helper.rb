@@ -239,7 +239,7 @@ module RailsAdminHelper
     set = []
 
     # variables used in loop
-    partialTotal = 0
+    partial_total = 0
     temp = []
 
     # loop through properties
@@ -249,20 +249,20 @@ module RailsAdminHelper
 
       # if properties that were gathered so far have the width
       # over 697 make a set for them
-      if partialTotal + width >= 697
-        set << { :p => temp, :size =>partialTotal}
-        partialTotal = 0
+      if partial_total + width >= 697
+        set << { :p => temp, :size =>partial_total}
+        partial_total = 0
         temp = []
       end
 
       # continue to add properties to set
       temp << property
-      partialTotal += width
+      partial_total += width
       total += width
     end
 
     # add final set to returned value
-    set << { :p => temp, :size =>partialTotal}
+    set << { :p => temp, :size =>partial_total}
 
     return set
   end
@@ -276,9 +276,9 @@ module RailsAdminHelper
     total = sets.size == 1 ? 784 : 744
     max_sets = sets.size-2
     total = current_set.between?(1, max_sets) ?  704 : total
-    columnOffset = total-sets[current_set][:size]
-    per_property = columnOffset/properties.size
-    offset = columnOffset - per_property*properties.size
+    column_offset = total-sets[current_set][:size]
+    per_property = column_offset/properties.size
+    offset = column_offset - per_property*properties.size
 
     properties.each do |property|
       property_type = get_column_type(property, "")
