@@ -1,1 +1,0 @@
-../../../../lib/rails_admin/abstract_model.rb

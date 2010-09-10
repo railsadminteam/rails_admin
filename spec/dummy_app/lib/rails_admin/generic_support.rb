@@ -1,1 +1,0 @@
-../../../../lib/rails_admin/generic_support.rb

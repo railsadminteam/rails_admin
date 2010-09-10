@@ -1,1 +1,0 @@
-../../../../app/helpers/rails_admin_helper.rb

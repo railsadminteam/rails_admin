@@ -1,3 +1,1 @@
-class ApplicationController < ActionController::Base
-  protect_from_forgery
-end
+../../../../app/controllers/application_controller.rb
