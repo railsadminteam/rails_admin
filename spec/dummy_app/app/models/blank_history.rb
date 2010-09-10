@@ -1,0 +1,1 @@
+../../../../app/models/blank_history.rb
