@@ -19,7 +19,7 @@
                 <div class="scale">
                   <% procent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
                   <% procent = 1 if procent.nil? %>
-                  <div class="bar <%= getIndicator(procent)%>" style="width:<%= procent %>%;"></div>
+                  <div class="bar <%= get_indicator(procent)%>" style="width:<%= procent %>%;"></div>
                 </div>
               </li>
               <li class="modifyRow">
@@ -39,7 +39,7 @@
                 <ul>
                   <% @history.each do |t| %>
                   <% procent = (t.number * 100) / max unless max == 0 %>
-                  <% indicator_type = getIndicator(procent)%>
+                  <% indicator_type = get_indicator(procent)%>
                   <li><span><%= t.number != 0 ? Time.parse("01/#{t.month}/#{t.year}").strftime("%B %Y") : "No activity" %></span>
                     <span class="bars">
                       <span class="indicator <%= indicator_type %>" style="height:<%= procent %>%"></span>
@@ -58,7 +58,7 @@
               <p id="listing">Listing <strong><%= Time.now.strftime("%B %Y")%></strong> History:</p>
               <ul id="history">
                 <% @historyListing.each do |t|%>
-                <li><%= t.username%> <%= historyOutput(t)%></li>
+                <li><%= t.username%> <%= history_output(t)%></li>
                 <% end %>
               </ul>
             </div>

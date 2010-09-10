@@ -2,7 +2,7 @@ require 'builder'
 
 module RailsAdminHelper
 
-  def historyOutput(t)
+  def history_output(t)
     if not t.message.downcase.rindex("changed").nil?
       return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"
     else
@@ -10,14 +10,14 @@ module RailsAdminHelper
     end
   end
 
-  def getIndicator(procent)
+  def get_indicator(procent)
     procent = 0 if procent.nil?
     return "" if procent.between?(0, 33)
     return "medium" if procent.between?(34, 67)
     return "high" if procent.between?(68, 100)
   end
 
-  def formatOutput(property, output)
+  def format_output(property, output)
     property_type = property[:type]
 
     case property_type
@@ -30,126 +30,19 @@ module RailsAdminHelper
     end
   end
 
-  def calculateWidth(properties)
-    # local variables
-    total = 0
-    set = []
-
-    # variables used in loop
-    partialTotal = 0
-    temp = []
-
-    # loop through properties
-    properties.each do |property|
-      # get width for the current property
-      width = getWidthForColumn(property)
-
-      # if properties that were gathered so far have the width
-      # over 697 make a set for them
-      if partialTotal + width >= 697
-        set << { :p => temp, :size =>partialTotal}
-        partialTotal = 0
-        temp = []
-      end
-
-      # continue to add properties to set
-      temp << property
-      partialTotal += width
-      total += width
-    end
-
-    # add final set to returned value
-    set << { :p => temp, :size =>partialTotal}
-
-    return set
-  end
-
-  # calculate sets
-  # expand set
-
-  def justifyProperties(sets, current_set)
-    total = 697
-    style = {}
-
-    properties = sets[current_set][:p]
-    # calculate the maximum distance
-    total = sets.size == 1 ? 784 : 744
-    max_sets = sets.size-2
-    total = current_set.between?(1, max_sets) ?  704 : total
-    columnOffset = total-sets[current_set][:size]
-    per_property = columnOffset/properties.size
-    offset = columnOffset - per_property*properties.size
-
-    properties.each do |property|
-      property_type = getColumnType(property, "")
-      property_width = getWidthForColumn(property)
-      style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
-      style[property_type][:size] += per_property
-      style[property_type][:occ] += 1
-      style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
-    end
-
-    other = []
-
-    if total == 784
-      other = ["otherHeaderLeft", "otherHeaderRight", "otherLeft", "otherRight"]
-    elsif total == 744
-      if current_set == 0
-        other = ["otherHeaderLeft", "otherLeft"]
-      else
-        other = ["otherHeaderRight", "otherRight"]
-      end
-    end
-
-    return style, other
-  end
-
-  def getColumnSet(properties)
-    sets = calculateWidth(properties)
+  def get_column_set(properties)
+    sets = calculate_width(properties)
     current_set ||= params[:set].to_i
 
     raise NotFound if sets.size <= current_set
 
     selected_set = sets[current_set][:p]
-    style, other = justifyProperties(sets, current_set)
+    style, other = justify_properties(sets, current_set)
 
     return style, other, selected_set
   end
 
-  def getWidthForColumn(property)
-    property_type = property[:type]
-    property_name = property[:name]
-
-    case property_type
-    when :boolean
-      return 60
-    when :datetime
-      return 170
-    when :date
-      return 90
-    when :time
-      return 60
-    when :string
-      if property[:length] < 100
-        return 180
-      else
-        return 250
-      end
-    when :text
-      return 250
-    when :integer
-      if property_name == :id
-        return 46
-      else
-        return 80
-      end
-    when :float
-      return 110
-    else
-    end
-  end
-
-  def getColumnType(property, type)
+  def get_column_type(property, type)
     property_type = property[:type]
     property_name = property[:name]
 
@@ -266,7 +159,6 @@ module RailsAdminHelper
   #    Provides the base url to use in the page navigation links.
   #    Defaults to ''
   def paginate(current_page, page_count, options = {})
-
     options[:left_cut_label] ||= '&hellip;'
     options[:right_cut_label] ||= '&hellip;'
     options[:outer_window] ||= 2
@@ -341,16 +233,108 @@ module RailsAdminHelper
     1.0 / 0
   end
 
-  def getActionHere(index)
-    case index
-    when 1
-      return "created"
-    when 2
-      return "edited"
-    when 3
-      return "deleted"
+  def calculate_width(properties)
+    # local variables
+    total = 0
+    set = []
+
+    # variables used in loop
+    partialTotal = 0
+    temp = []
+
+    # loop through properties
+    properties.each do |property|
+      # get width for the current property
+      width = get_width_for_column(property)
+
+      # if properties that were gathered so far have the width
+      # over 697 make a set for them
+      if partialTotal + width >= 697
+        set << { :p => temp, :size =>partialTotal}
+        partialTotal = 0
+        temp = []
+      end
+
+      # continue to add properties to set
+      temp << property
+      partialTotal += width
+      total += width
     end
+
+    # add final set to returned value
+    set << { :p => temp, :size =>partialTotal}
+
+    return set
   end
 
+  def justify_properties(sets, current_set)
+    total = 697
+    style = {}
+
+    properties = sets[current_set][:p]
+    # calculate the maximum distance
+    total = sets.size == 1 ? 784 : 744
+    max_sets = sets.size-2
+    total = current_set.between?(1, max_sets) ?  704 : total
+    columnOffset = total-sets[current_set][:size]
+    per_property = columnOffset/properties.size
+    offset = columnOffset - per_property*properties.size
+
+    properties.each do |property|
+      property_type = get_column_type(property, "")
+      property_width = get_width_for_column(property)
+      style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
+      style[property_type][:size] += per_property
+      style[property_type][:occ] += 1
+      style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
+    end
+
+    other = []
+
+    if total == 784
+      other = ["otherHeaderLeft", "otherHeaderRight", "otherLeft", "otherRight"]
+    elsif total == 744
+      if current_set == 0
+        other = ["otherHeaderLeft", "otherLeft"]
+      else
+        other = ["otherHeaderRight", "otherRight"]
+      end
+    end
+
+    return style, other
+  end
+
+  def get_width_for_column(property)
+    property_type = property[:type]
+    property_name = property[:name]
+
+    case property_type
+    when :boolean
+      return 60
+    when :datetime
+      return 170
+    when :date
+      return 90
+    when :time
+      return 60
+    when :string
+      if property[:length] < 100
+        return 180
+      else
+        return 250
+      end
+    when :text
+      return 250
+    when :integer
+      if property_name == :id
+        return 46
+      else
+        return 80
+      end
+    when :float
+      return 110
+    else
+    end
+  end
 
 end

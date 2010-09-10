@@ -3,7 +3,7 @@ var nameForMonths = ['January','February','March','April','May','June','July', '
 var totalRef = 0;
 
 // hardcoing colors rulz
-function getIndicator(procent){
+function get_indicator(procent){
   if(procent < 33){
     return "#BCCEB6";
   }else if(procent < 67){
@@ -42,13 +42,13 @@ function loadHistory(param){
       if(response[index].fake != 1){
         var procent = parseInt(response[index].history.number * 100 / max);
         var indicator = e.childElements()[1].childElements()[0];
-        var setStyle = "height: "+procent+"%; background:"+getIndicator(procent);
+        var setStyle = "height: "+procent+"%; background:"+get_indicator(procent);
         var monthName = response[index].history.month;
         var yearName = response[index].history.year;
         var text = nameForMonths[monthName-1] + " " + yearName
       }else{
         var indicator = e.childElements()[1].childElements()[0];
-        var setStyle = "height: 0%; background:"+getIndicator(procent);
+        var setStyle = "height: 0%; background:"+get_indicator(procent);
         var text = "No data";
       }
 

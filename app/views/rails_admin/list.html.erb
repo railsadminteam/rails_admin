@@ -6,7 +6,7 @@
   sort_reverse = params[:sort_reverse]
   filters_exist = !@properties.select{|property| property[:type] == :boolean}.empty?
   # columns paginate
-  @style, @other, @properties = getColumnSet(@properties)
+  @style, @other, @properties = get_column_set(@properties)
 %>
 
 <style type="text/css">
@@ -53,7 +53,7 @@
           <% @properties.each do |property| %>
           <% property_name = property[:name] %>
           <% property_pretty_name = property[:pretty_name] %>
-          <li class="<%= getColumnType(property, "Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
+          <li class="<%= get_column_type(property, "Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to(property_pretty_name.upcase, sort_location, :ref => sort_location.to_json, :class => "headerSort") %>
             <% if sort == property_name.to_s %>
@@ -72,8 +72,8 @@
           <% otherLeft = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
           <li class="otherRow otherLeft"><%= link_to("...", otherLeft, :ref => otherLeft.to_json) %></li>
           <% @properties.each do |property| %>
-          <% output_type = formatOutput(property, object_property(object, property)) %>
-          <li class="<%= getColumnType(property, "Row") %>"><%= output_type %></li>
+          <% output_type = format_output(property, object_property(object, property)) %>
+          <li class="<%= get_column_type(property, "Row") %>"><%= output_type %></li>
           <% end %>
           <% otherRight = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
           <li class="otherRow otherRight"><%= link_to("...", otherRight, :ref => otherRight.to_json)%></li>
