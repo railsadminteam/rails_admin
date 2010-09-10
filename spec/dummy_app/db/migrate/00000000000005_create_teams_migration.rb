@@ -1,6 +1,6 @@
 class CreateTeamsMigration < ActiveRecord::Migration
   def self.up
-    create_table :teams  do |t|
+    create_table :teams do |t|
       t.timestamps
       t.integer :league_id
       t.integer :division_id

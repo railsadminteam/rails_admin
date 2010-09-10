@@ -21,20 +21,20 @@
 
     function initPages(){
       $$(".headerSort").each(function(elem){
-        elem.writeAttribute("href","javascript:void(0)");
-        
-        Event.observe(elem,'click',function(e){
-          elem.writeAttribute("href","javascript:void(0)");
+        elem.writeAttribute("href", "javascript:void(0)");
+
+        Event.observe(elem, 'click', function(e){
+          elem.writeAttribute("href", "javascript:void(0)");
           var ref = elem.readAttribute("ref");
           updatePage(JSON.parse(ref));
         })
       })
-      
-      $$(".otherLeft").each(function(elem){
-        elem.childElements()[0].writeAttribute("href","javascript:void(0)");
 
-        Event.observe(elem,'click',function(e){
-          elem.childElements()[0].writeAttribute("href","javascript:void(0)");
+      $$(".otherLeft").each(function(elem){
+        elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
+
+        Event.observe(elem, 'click', function(e){
+          elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
           var ref = elem.childElements()[0].readAttribute("ref");
           updatePage(JSON.parse(ref));
 //          updatePage
@@ -43,10 +43,10 @@
       })
 
       $$(".otherRight").each(function(elem){
-        elem.childElements()[0].writeAttribute("href","javascript:void(0)");
+        elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
 
-        Event.observe(elem,'click',function(e){
-          elem.childElements()[0].writeAttribute("href","javascript:void(0)");
+        Event.observe(elem, 'click', function(e){
+          elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
           var ref = elem.childElements()[0].readAttribute("ref");
           updatePage(JSON.parse(ref));
         })

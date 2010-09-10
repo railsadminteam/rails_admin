@@ -10,7 +10,7 @@
 %>
 
 <style type="text/css">
-<% @style.each do |key,value| %>
+<% @style.each do |key, value| %>
   <%= ".#{key}Header" %>{
     width: <%= value[:width] %>px;
   }
@@ -29,14 +29,12 @@
         <h2><%= @page_name %></h2>
       	<div id="quickAccess">
       	  <ul id="quick">
-      	    <!--<li><a href="#">Quick add</a></li>-->
       	    <li>
       	     <%= link_to(t("admin.history.name"), rails_admin_show_history_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
       	    </li>
       	    <li>
       	     <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
       	    </li>
-      	    
       	  </ul>
       	</div>
       </div>
@@ -55,7 +53,7 @@
           <% @properties.each do |property| %>
           <% property_name = property[:name] %>
           <% property_pretty_name = property[:pretty_name] %>
-          <li class="<%= getColumnType(property,"Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
+          <li class="<%= getColumnType(property, "Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to(property_pretty_name.upcase, sort_location, :ref => sort_location.to_json, :class => "headerSort") %>
             <% if sort == property_name.to_s %>
@@ -71,16 +69,16 @@
 
         <% @objects.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
-          <% otherLeft = params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-          <li class="otherRow otherLeft"><%= link_to("...",otherLeft, :ref => otherLeft.to_json) %></li>
+          <% otherLeft = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+          <li class="otherRow otherLeft"><%= link_to("...", otherLeft, :ref => otherLeft.to_json) %></li>
           <% @properties.each do |property| %>
-          <% output_type = formatOutput(property,object_property(object, property)) %>
-          <li class="<%= getColumnType(property,"Row") %>"><%= output_type %></li>
+          <% output_type = formatOutput(property, object_property(object, property)) %>
+          <li class="<%= getColumnType(property, "Row") %>"><%= output_type %></li>
           <% end %>
-          <% otherRight = params.reject{|key,value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+          <% otherRight = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
           <li class="otherRow otherRight"><%= link_to("...", otherRight, :ref => otherRight.to_json)%></li>
           <li class="actionRow editAction"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
-          <li class="actionRow deleteAction"><%= link_to(t("admin.list.delete_action"),rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
+          <li class="actionRow deleteAction"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
         </ul>
         <% end %>
       </div>

@@ -9,7 +9,7 @@ describe "RailsAdmin" do
     RailsAdmin::AbstractModel.new("League").destroy_all!
     RailsAdmin::AbstractModel.new("Player").destroy_all!
     RailsAdmin::AbstractModel.new("Team").destroy_all!
-    
+
     get rails_admin_dashboard_path
   end
 
@@ -67,7 +67,7 @@ describe "RailsAdmin" do
     before(:each) do
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
-      get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true",:set => 1)
+      get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
     end
 
     it "should respond sucessfully" do
@@ -84,7 +84,7 @@ describe "RailsAdmin" do
     before(:each) do
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
-      get rails_admin_list_path(:model_name => "player", :query => "Jackie Robinson",:set => 1)
+      get rails_admin_list_path(:model_name => "player", :query => "Jackie Robinson", :set => 1)
     end
 
     it "should respond sucessfully" do
@@ -128,7 +128,7 @@ describe "RailsAdmin" do
     before(:each) do
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :injured => true)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :injured => false)
-      get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"},:set => 1)
+      get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"}, :set => 1)
     end
 
     it "should respond sucessfully" do
@@ -150,7 +150,7 @@ describe "RailsAdmin" do
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
-      get rails_admin_list_path( :model_name => "player", :filter => {:retired => "true", :injured => "true"},:set => 1)
+      get rails_admin_list_path( :model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
     end
 
     it "should respond sucessfully" do
@@ -213,7 +213,7 @@ describe "RailsAdmin" do
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 
-      get rails_admin_list_path(:model_name => "player",:page => 8)
+      get rails_admin_list_path(:model_name => "player", :page => 8)
     end
 
     it "should respond sucessfully" do
@@ -233,7 +233,7 @@ describe "RailsAdmin" do
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 
-      get rails_admin_list_path(:model_name => "player",:page => 18)
+      get rails_admin_list_path(:model_name => "player", :page => 18)
     end
 
     it "should respond sucessfully" do

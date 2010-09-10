@@ -5,7 +5,6 @@
 #contentMainDelete ul{
   margin-left:14px;
   margin-top:4px;
-  
 }
 
 #contentMainDelete ul li{
@@ -26,10 +25,6 @@
   margin-left:-20px;
 }
 
-#deleteConfirmation input{
-  
-}
-
 #submitArea{
   display:block;
   list-style-type:none;
@@ -40,12 +35,6 @@
   float:left;
   margin-right:2px;
   padding-bottom:5px;
-}
-#cancelContainer{
-}
-
-#cancel_btn{
-  
 }
 
 .button:active{
@@ -76,7 +65,7 @@
 	background: #DDDDDD;
 	background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
 	background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');  
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');
 }
 
 
@@ -93,5 +82,5 @@ input.default:active{
 	background: #00adee;
   background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
   background: -moz-linear-gradient(top,  #0078a5,  #00adee);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
 }

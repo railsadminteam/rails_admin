@@ -1,9 +1,27 @@
-
+class BlankHistory
+  attr_accessor :number, :month, :year, :fake
+  def initialize
+    @number = 0
+    @month = "No data"
+    @year = "for this month"
+    @fake = 1
+  end
+end
 
 class History < ActiveRecord::Base
 
-  def pretty_name
-    "ceva"
+  def self.paginated(options = {})
+    page = options.delete(:page) || 1
+    per_page = options.delete(:per_page) || RailsAdmin[:per_page]
+
+    page_count = (count(options).to_f / per_page).ceil
+
+    options.merge!({
+      :limit => per_page,
+      :offset => (page - 1) * per_page
+    })
+
+    [page_count, all(options)]
   end
 
   def self.latest
@@ -13,11 +31,11 @@ class History < ActiveRecord::Base
     ystop = Time.now.year
     ystart = 5.month.ago.year
 
-    self.get_history_for_dates(mstart,mstop,ystart,ystop)
+    self.get_history_for_dates(mstart, mstop, ystart, ystop)
   end
 
 
-  def self.get_history_for_dates(mstart,mstop,ystart,ystop)
+  def self.get_history_for_dates(mstart, mstop, ystart, ystop)
     sql_in = ""
     if mstart > mstop
       sql_in = (mstart+1..12).to_a.join(", ")
@@ -52,23 +70,12 @@ class History < ActiveRecord::Base
     end
   end
 
-  def self.get_history_for_month(ref,section)
-    # blah
+  def self.get_history_for_month(ref, section)
     current_ref = -5 * ref.to_i
     current_diff = current_ref + 5 - (section.to_i+1)
 
     current_month = current_diff.month.ago
 
     return History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
-  end
-end
-
-class BlankHistory
-  attr_accessor :number, :month, :year, :fake
-  def initialize
-    @number = 0
-    @month = "No data"
-    @year = "for this month"
-    @fake = 1
   end
 end

@@ -5,7 +5,7 @@ namespace :admin do
   task :populate_history do
     RailsAdmin::ExtraTasks.populateDatabase
   end
-  
+
   desc "Populate history tabel with a year of data"
   task :populate_database do
     system("rails generate dummy:data --base-amount 60 --growth-ratio 1.5")

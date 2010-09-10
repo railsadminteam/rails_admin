@@ -5,5 +5,5 @@
   label = property[:pretty_name]
 %>
                 <%= label_tag "#{property_name}", label %>
-                <% object_property(@object,property) %>
+                <% object_property(@object, property) # FIXME: Why is this here? %>
                 <%= text_field model_name, property_name, :size => [50, length].min, :maxlength => length, :class => "stringField #{errors_exist ? "errorField" : nil}", :value => @object.send(property_name) %>

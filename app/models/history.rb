@@ -31,11 +31,11 @@ class History < ActiveRecord::Base
     ystop = Time.now.year
     ystart = 5.month.ago.year
 
-    self.get_history_for_dates(mstart,mstop,ystart,ystop)
+    self.get_history_for_dates(mstart, mstop, ystart, ystop)
   end
 
 
-  def self.get_history_for_dates(mstart,mstop,ystart,ystop)
+  def self.get_history_for_dates(mstart, mstop, ystart, ystop)
     sql_in = ""
     if mstart > mstop
       sql_in = (mstart+1..12).to_a.join(", ")
@@ -70,8 +70,7 @@ class History < ActiveRecord::Base
     end
   end
 
-  def self.get_history_for_month(ref,section)
-    # blah
+  def self.get_history_for_month(ref, section)
     current_ref = -5 * ref.to_i
     current_diff = current_ref + 5 - (section.to_i+1)
 

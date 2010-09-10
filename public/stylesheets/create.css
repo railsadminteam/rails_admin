@@ -33,7 +33,6 @@
 
 .formSection label{
   width:100px;
-
   display:block;
   float:left;
   margin-top:6px;
@@ -71,9 +70,6 @@
   margin-top:6px;
 }
 
-.boolLabel{
-}
-
 .formSection p.boolPlace{
   padding-top:2px;
 }
@@ -95,10 +91,6 @@
 
 .modifyDown{
   margin-top:2px;
-}
-
-.modifyUp{
-
 }
 
 #error{
@@ -149,30 +141,6 @@
   margin-right:4px;
 }
 
-#saveContainer{
-  
-}
-
-#save_btn{
-  
-}
-
-#saveAddContainer{
-
-}
-
-#saveAdd_btn{
- 
-}
-
-#cancelContainer{
-  
-}
-
-#cancel_btn{
-  
-}
-
 .textField{
   height:200px;
 }
@@ -198,8 +166,6 @@ p.help{
 .selectField{
   float:left;
   margin-top:4px;
-}
-.many{
 }
 
 .manySelector{
@@ -304,14 +270,6 @@ p.help{
   float:left;
 }
 
-#saveEdit_btn{
-
-}
-
-#saveEditContainer{
- 
-}
-
 input.default{
   color:#d9eef7;
   border: solid 1px #0076c3;
@@ -356,7 +314,7 @@ input.default:active{
 	background: #DDDDDD;
 	background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
 	background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');  
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');
 }
 
 #deleteItem{

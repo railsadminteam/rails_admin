@@ -4,17 +4,10 @@
   filter = params[:filter]
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
-  
+
 %>
-
-
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
-      	<div id="quickAccess">
-      	  <ul id="quick">
-      	    <!--<li><a href="#">Quick add</a></li>-->
-      	  </ul>
-      	</div>
       </div>
 <%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainModules">
@@ -37,7 +30,6 @@
             <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
           </li>
-          
           <% property_name = "username"%>
           <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
@@ -47,7 +39,6 @@
             <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
           </li>
-          
           <% if @general %>
           <% property_name = "item"%>
           <li class="intHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
@@ -59,7 +50,6 @@
             <% end %>
           </li>
           <% end %>
-          
           <% property_name = "message"%>
           <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
@@ -69,9 +59,6 @@
             <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
           </li>
-          
-          
-          
         </ul>
         <% @history.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
@@ -93,8 +80,6 @@
           </li>
         </ul>
         <% end %>
-
-        
       </div>
     </div>
     <% if @general %>
@@ -108,5 +93,4 @@
       <% end %>
       </p>
     </div>
-
     <% end %>

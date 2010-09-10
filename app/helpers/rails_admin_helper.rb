@@ -12,12 +12,12 @@ module RailsAdminHelper
 
   def getIndicator(procent)
     procent = 0 if procent.nil?
-    return "" if procent.between?(0,33)
-    return "medium" if procent.between?(34,67)
-    return "high" if procent.between?(68,100)
+    return "" if procent.between?(0, 33)
+    return "medium" if procent.between?(34, 67)
+    return "high" if procent.between?(68, 100)
   end
 
-  def formatOutput(property,output)
+  def formatOutput(property, output)
     property_type = property[:type]
 
     case property_type
@@ -75,13 +75,13 @@ module RailsAdminHelper
     # calculate the maximum distance
     total = sets.size == 1 ? 784 : 744
     max_sets = sets.size-2
-    total = current_set.between?(1,max_sets) ?  704 : total
+    total = current_set.between?(1, max_sets) ?  704 : total
     columnOffset = total-sets[current_set][:size]
     per_property = columnOffset/properties.size
     offset = columnOffset - per_property*properties.size
 
     properties.each do |property|
-      property_type = getColumnType(property,"")
+      property_type = getColumnType(property, "")
       property_width = getWidthForColumn(property)
       style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
       style[property_type][:size] += per_property
@@ -92,12 +92,12 @@ module RailsAdminHelper
     other = []
 
     if total == 784
-      other = ["otherHeaderLeft","otherHeaderRight","otherLeft","otherRight"]
+      other = ["otherHeaderLeft", "otherHeaderRight", "otherLeft", "otherRight"]
     elsif total == 744
       if current_set == 0
-        other = ["otherHeaderLeft","otherLeft"]
+        other = ["otherHeaderLeft", "otherLeft"]
       else
-        other = ["otherHeaderRight","otherRight"]
+        other = ["otherHeaderRight", "otherRight"]
       end
     end
 
@@ -149,7 +149,7 @@ module RailsAdminHelper
     end
   end
 
-  def getColumnType(property,type)
+  def getColumnType(property, type)
     property_type = property[:type]
     property_name = property[:name]
 
@@ -237,7 +237,7 @@ module RailsAdminHelper
   # * We use an inner and outer window into a list of links. For a set of
   # 20 pages with the current page being 10:
   # outer_window:
-  #   1 2  ..... 19 20
+  #   1 2 ..... 19 20
   # inner_window
   #   5 6 7 8 9 10 11 12 13 14
   #
@@ -340,7 +340,7 @@ module RailsAdminHelper
   def infinity
     1.0 / 0
   end
-  
+
   def getActionHere(index)
     case index
     when 1

@@ -1,6 +1,6 @@
 class CreatePlayersMigration < ActiveRecord::Migration
   def self.up
-    create_table :players  do |t|
+    create_table :players do |t|
       t.timestamps
       t.datetime :deleted_at
       t.integer :team_id
