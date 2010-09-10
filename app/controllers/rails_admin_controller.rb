@@ -116,8 +116,8 @@ class RailsAdminController < ApplicationController
       show404
     else
       current_diff = -5 * ref
-      start_month = (5+current_diff).month.ago.month
-      start_year = (5+current_diff).month.ago.year
+      start_month = (5 + current_diff).month.ago.month
+      start_year = (5 + current_diff).month.ago.year
       stop_month = (current_diff).month.ago.month
       stop_year = (current_diff).month.ago.year
 
@@ -155,7 +155,7 @@ class RailsAdminController < ApplicationController
     end
 
     if params[:query]
-      options[:conditions][0] += " and (`message` LIKE ? or `username` LIKE ? )"
+      options[:conditions][0] += " and (`message` LIKE ? or `username` LIKE ?)"
       options[:conditions] << "%#{params["query"]}%"
       options[:conditions] << "%#{params["query"]}%"
     end
@@ -293,10 +293,10 @@ class RailsAdminController < ApplicationController
     if params[:_add_another] == "Save and add another"
 
       flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
-      redirect_to rails_admin_new_path( :model_name => param)
+      redirect_to rails_admin_new_path(:model_name => param)
     elsif params[:_add_edit] == "Save and edit"
       flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
-      redirect_to rails_admin_edit_path( :model_name => param, :id =>@object.id)
+      redirect_to rails_admin_edit_path(:model_name => param, :id => @object.id)
     elsif
       flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
       redirect_to rails_admin_list_path(:model_name => param)
@@ -372,7 +372,7 @@ class RailsAdminController < ApplicationController
   def check_for_cancel
     if params[:_continue]
       flash[:notice] = t("admin.flash.noaction")
-      redirect_to rails_admin_list_path( :model_name => @abstract_model.to_param)
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
   end
 

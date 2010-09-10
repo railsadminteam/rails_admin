@@ -150,7 +150,7 @@ describe "RailsAdmin" do
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
-      get rails_admin_list_path( :model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
+      get rails_admin_list_path(:model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
     end
 
     it "should respond sucessfully" do
@@ -209,7 +209,7 @@ describe "RailsAdmin" do
     before(:each) do
       per_page = 20
       page_numers = 20
-      (1..per_page*page_numers).each do |number|
+      (1..per_page * page_numers).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 
@@ -229,7 +229,7 @@ describe "RailsAdmin" do
     before(:each) do
       per_page = 20
       max_pages = 20
-      (1..per_page*max_pages).each do |number|
+      (1..per_page * max_pages).each do |number|
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
       end
 

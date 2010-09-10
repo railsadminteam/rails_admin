@@ -9,7 +9,7 @@ module RailsAdmin
 Rails_admin works with devise. Checking for a current installation of devise!
 "
       loaded_gems = Bundler.setup.gems
-      is_loaded = loaded_gems.reject{|t| t.name == "devise" ? false : true }.size == 1 ? true : false
+      is_loaded = loaded_gems.reject{|t| t.name == "devise" ? false : true}.size == 1 ? true : false
 
       if is_loaded
         check_for_devise_models

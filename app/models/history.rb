@@ -38,7 +38,7 @@ class History < ActiveRecord::Base
   def self.get_history_for_dates(mstart, mstop, ystart, ystop)
     sql_in = ""
     if mstart > mstop
-      sql_in = (mstart+1..12).to_a.join(", ")
+      sql_in = (mstart + 1..12).to_a.join(", ")
       sql_in_two = (1..mstop).to_a.join(", ")
 
       results = History.find_by_sql("select count(*) as number, year, month from histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
@@ -46,7 +46,7 @@ class History < ActiveRecord::Base
 
       results.concat(results_two)
     else
-      sql_in =  (mstart+1..mstop).to_a.join(", ")
+      sql_in =  (mstart + 1..mstop).to_a.join(", ")
 
       results = History.find_by_sql("select count(*) as number, year, month from histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
     end
@@ -72,7 +72,7 @@ class History < ActiveRecord::Base
 
   def self.get_history_for_month(ref, section)
     current_ref = -5 * ref.to_i
-    current_diff = current_ref + 5 - (section.to_i+1)
+    current_diff = current_ref + 5 - (section.to_i + 1)
 
     current_month = current_diff.month.ago
 

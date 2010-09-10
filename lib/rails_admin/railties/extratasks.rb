@@ -22,7 +22,7 @@ module RailsAdmin
 
         history_entries.times do |t|
           History.create(:action => action_type,
-                         :month =>computed_date.month,
+                         :month => computed_date.month,
                          :year => computed_date.year,
                          :user_id => 1, :table => "Posts", :other => "something interesting!")
         end
