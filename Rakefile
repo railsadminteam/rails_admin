@@ -11,4 +11,5 @@ require 'bundler'
 Bundler::GemHelper.install_tasks
 Rspec::Core::RakeTask.new(:spec)
 
+desc 'Run RSpec code examples'
 task :default => :spec
