@@ -7,6 +7,14 @@ GIT
       rack (>= 1.0)
       rack-test (>= 0.5.3)
 
+PATH
+  remote: .
+  specs:
+    rails_admin (0.0.1)
+      builder (~> 2.1.0)
+      devise (~> 1.1.0)
+      rails (~> 3.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -102,10 +110,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  builder
-  devise
-  dummy_data
-  rails (= 3.0.0)
-  rspec-rails (>= 2.0.0.beta.20)
-  sqlite3-ruby
+  builder (~> 2.1.0)
+  devise (~> 1.1.0)
+  dummy_data (~> 0.9)
+  rails (~> 3.0.0)
+  rails_admin!
+  rspec-rails (~> 2.0.0.beta.22)
+  sqlite3-ruby (~> 1.3)
   webrat!
