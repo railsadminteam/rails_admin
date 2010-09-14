@@ -1,7 +1,8 @@
 require 'rails_admin/abstract_model'
 
 class RailsAdminController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :_authenticate!
+  before_filter :_authorize!
 
   before_filter :get_model, :except => [:index, :history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
@@ -419,4 +420,11 @@ class RailsAdminController < ApplicationController
     end
   end
 
+  def _authenticate!
+    instance_eval &RailsAdmin.authenticate_with
+  end
+
+  def _authorize!
+    instance_eval &RailsAdmin.authorize_with
+  end
 end
