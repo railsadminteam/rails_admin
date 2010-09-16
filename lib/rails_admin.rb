@@ -14,14 +14,14 @@ module RailsAdmin
   #
   # @see RailsAdmin.authenticate_with
   # @see RailsAdmin.authorize_with
-  DEFAULT_AUTHENTICATION = lambda do
+  DEFAULT_AUTHENTICATION = Proc.new do |controller|
     warden = request.env['warden']
     if warden
       warden.authenticate!
     end
   end
 
-  DEFAULT_AUTHORIZE = lambda {}
+  DEFAULT_AUTHORIZE = Proc.new {|controller|}
 
   # Setup authentication to be run as a before filter
   # This is run inside the controller instance so you can setup any authentication you need to
