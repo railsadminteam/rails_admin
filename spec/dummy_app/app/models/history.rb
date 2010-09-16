@@ -1,1 +1,0 @@
-../../../../app/models/history.rb
