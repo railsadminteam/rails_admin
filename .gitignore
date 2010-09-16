@@ -7,6 +7,7 @@ db/*.sqlite3
 db/*.sqlite3-journal
 log/*.log
 pkg/*
+spec/dummy_app/db/schema.rb
 spec/dummy_app/db/*.sqlite3
 spec/dummy_app/db/*.sqlite3-journal
 spec/dummy_app/log/*.log
