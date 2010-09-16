@@ -9,6 +9,21 @@ describe "RailsAdmin" do
     RailsAdmin::AbstractModel.new("League").destroy_all!
     RailsAdmin::AbstractModel.new("Player").destroy_all!
     RailsAdmin::AbstractModel.new("Team").destroy_all!
+    RailsAdmin::AbstractModel.new("User").destroy_all!
+
+    user_password = Devise.friendly_token
+
+    RailsAdmin::AbstractModel.new("User").create(
+      :email => "email@domain.com",
+      :password => user_password
+    )
+
+    get new_user_session_url
+
+    fill_in "user[email]", :with => "email@domain.com"
+    fill_in "user[password]", :with => user_password
+
+    click_button "Sign in"
 
     get rails_admin_dashboard_path
   end
