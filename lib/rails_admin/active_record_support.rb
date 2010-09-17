@@ -106,10 +106,10 @@ module RailsAdmin
         case association.macro
         when :belongs_to
           association.klass
-        when :has_one, :has_many
+        when :has_one, :has_many, :has_and_belongs_to_many
           association.active_record
         else
-          raise "Unknown association type"
+          raise "Unknown association type: #{association.macro.inspect}"
         end
       end
 
@@ -121,10 +121,10 @@ module RailsAdmin
         case association.macro
         when :belongs_to
           association.active_record
-        when :has_one, :has_many
+        when :has_one, :has_many, :has_and_belongs_to_many
           association.klass
         else
-          raise "Unknown association type"
+          raise "Unknown association type: #{association.macro.inspect}"
         end
       end
 
@@ -132,10 +132,10 @@ module RailsAdmin
         case association.macro
         when :belongs_to
           ["#{association.class_name.underscore}_id".to_sym]
-        when :has_one, :has_many
+        when :has_one, :has_many, :has_and_belongs_to_many
           [association.primary_key_name.to_sym]
         else
-          raise "Unknown association type"
+          raise "Unknown association type: #{association.macro.inspect}"
         end
       end
 
