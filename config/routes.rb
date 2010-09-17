@@ -1,14 +1,24 @@
 Rails.application.routes.draw do |map|
-  match "/admin", :to => "rails_admin#index", :as => :rails_admin_dashboard
-  match "/admin/history/list", :to => "rails_admin#history", :as => :rails_admin_history
-  match "/admin/history/get", :to => "rails_admin#get_history", :as => :rails_admin_history_get
-  match "/admin/:model_name", :to => "rails_admin#list", :as => :rails_admin_list
-  match "/admin/:model_name/set", :to => "rails_admin#get_pages", :as => :rails_admin_set
-  match "/admin/:model_name/new", :to => "rails_admin#new", :as => :rails_admin_new
-  match "/admin/:model_name/create", :to => "rails_admin#create", :as => :rails_admin_create
-  match "/admin/:model_name/edit", :to => "rails_admin#edit", :as => :rails_admin_edit
-  match "/admin/:model_name/update", :to => "rails_admin#update", :as => :rails_admin_update
-  match "/admin/:model_name/history", :to => "rails_admin#show_history", :as => :rails_admin_show_history
-  match "/admin/:model_name/delete", :to => "rails_admin#delete", :as => :rails_admin_delete
-  match "/admin/:model_name/destroy", :to => "rails_admin#destroy", :as => :rails_admin_destroy
+
+  # Routes for rails_admin controller
+  controller "rails_admin" do            
+    
+    # Prefix route urls with "admin" and route names with "rails_admin_"
+    scope "admin", :as => "rails_admin" do            
+      
+      match "/", :to => :index, :as => "dashboard"
+      
+      match "/history/list", :to => :history, :as => "history"
+      match "/history/get", :to => :get_history, :as => "history_get"
+      
+      match "/:model_name", :to => :list, :as => "list"
+      match "/:model_name/set", :to => :get_pages, :as => "set"
+      match "/:model_name/history", :to => :show_history, :as => "show_history"
+      
+      ["new", "create", "edit", "update", "delete", "destroy"].each do |action|
+        match "/:model_name/#{action}", :to => action.to_sym, :as => action
+      end
+    end
+  end  
+
 end
