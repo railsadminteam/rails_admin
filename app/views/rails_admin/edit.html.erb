@@ -23,6 +23,7 @@
 <%= render(:partial => 'belongs_to_association', :collection => @abstract_model.belongs_to_associations) -%>
 <%= render(:partial => 'has_one_association', :collection => @abstract_model.has_one_associations) -%>
 <%= render(:partial => 'has_many_association', :collection => @abstract_model.has_many_associations) -%>
+<%= render(:partial => 'has_and_belongs_to_many_association', :collection => @abstract_model.has_and_belongs_to_many_associations) -%>
 
             <ul id="submitArea">
         	    <li id="saveContainer">
