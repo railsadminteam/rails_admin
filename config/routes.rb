@@ -1,4 +1,4 @@
-Rails.application.routes.draw do |map|
+Rails.application.routes.draw do
 
   # Routes for rails_admin controller
   controller "rails_admin" do            
