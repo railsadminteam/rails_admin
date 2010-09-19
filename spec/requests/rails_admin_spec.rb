@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe "RailsAdmin" do
-  # dashboard
-
+  include Warden::Test::Helpers
+  
   before(:each) do
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
@@ -11,21 +11,18 @@ describe "RailsAdmin" do
     RailsAdmin::AbstractModel.new("Team").destroy_all!
     RailsAdmin::AbstractModel.new("User").destroy_all!
 
-    user_password = Devise.friendly_token
-
-    RailsAdmin::AbstractModel.new("User").create(
-      :email => "email@domain.com",
-      :password => user_password
+    user = RailsAdmin::AbstractModel.new("User").create(
+      :email => "test@test.com",
+      :password => "test1234"
     )
 
-    get new_user_session_url
-
-    fill_in "user[email]", :with => "email@domain.com"
-    fill_in "user[password]", :with => user_password
-
-    click_button "Sign in"
+    login_as user
 
     get rails_admin_dashboard_path
+  end
+  
+  after(:each) do
+    Warden.test_reset!
   end
 
   describe "GET /admin" do
