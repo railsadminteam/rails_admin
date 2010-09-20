@@ -3,12 +3,11 @@ require 'rails_admin/abstract_model'
 class RailsAdminController < ApplicationController
   before_filter :_authenticate!
   before_filter :_authorize!
-
+  before_filter :set_plugin_name
   before_filter :get_model, :except => [:index, :history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
-  before_filter :set_plugin_name
-  before_filter :check_for_cancel
+  before_filter :check_for_cancel, :only => [:create, :update, :destroy]
 
   def index
     @page_name = t("admin.dashboard.pagename")
@@ -114,7 +113,7 @@ class RailsAdminController < ApplicationController
     ref = params[:ref].to_i
 
     if ref.nil? or ref > 0
-      show404
+      not_found
     else
       current_diff = -5 * ref
       start_month = (5 + current_diff).month.ago.month
@@ -128,7 +127,7 @@ class RailsAdminController < ApplicationController
 
   def get_history
     if params[:ref].nil? or params[:section].nil?
-      show404
+      not_found
     else
       @history, @current_month = History.get_history_for_month(params[:ref], params[:section])
       render :template => 'rails_admin/history'
@@ -183,6 +182,18 @@ class RailsAdminController < ApplicationController
 
   private
 
+  def _authenticate!
+    instance_eval &RailsAdmin.authenticate_with
+  end
+
+  def _authorize!
+    instance_eval &RailsAdmin.authorize_with
+  end
+
+  def set_plugin_name
+    @plugin_name = "RailsAdmin"
+  end
+
   def get_model
     model_name = to_model_name(params[:model_name])
     @abstract_model = RailsAdmin::AbstractModel.new(model_name)
@@ -191,11 +202,11 @@ class RailsAdminController < ApplicationController
 
   def get_object
     @object = @abstract_model.get(params[:id])
-    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
+    not_found unless @object
   end
 
-  def show404
-    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404 unless @object
+  def not_found
+    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404
   end
 
   def get_sort_hash
@@ -360,14 +371,8 @@ class RailsAdminController < ApplicationController
     render :new, :layout => 'form'
   end
 
-  private
-
   def to_model_name(param)
     param.split("::").map{|x| x.camelize}.join("::")
-  end
-
-  def set_plugin_name
-    @plugin_name = "RailsAdmin"
   end
 
   def check_for_cancel
@@ -420,11 +425,4 @@ class RailsAdminController < ApplicationController
     end
   end
 
-  def _authenticate!
-    instance_eval &RailsAdmin.authenticate_with
-  end
-
-  def _authorize!
-    instance_eval &RailsAdmin.authorize_with
-  end
 end

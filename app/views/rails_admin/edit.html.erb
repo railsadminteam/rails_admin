@@ -4,7 +4,7 @@
       	  <ul id="quick">
       	    <!--<li><a href="#">Quick add</a></li>-->
       	    <li>
-      	     <%= link_to(t("admin.history.name"), rails_admin_show_history_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
+      	     <%= link_to(t("admin.history.name"), rails_admin_history_show_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
       	    </li>
       	  </ul>
 
