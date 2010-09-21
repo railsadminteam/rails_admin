@@ -64,3 +64,5 @@ module RailsAdmin
   end
 
 end
+
+require 'rails_admin/abstract_model'

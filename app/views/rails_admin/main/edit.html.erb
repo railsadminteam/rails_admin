@@ -1,9 +1,19 @@
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
+        <div id="quickAccess">
+          <ul id="quick">
+            <!--<li><a href="#">Quick add</a></li>-->
+            <li>
+             <%= link_to(t("admin.history.name"), rails_admin_history_show_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
+            </li>
+          </ul>
+
+        </div>
+          <a href="<%= rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
       </div>
-<%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
+<%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
-        <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
+        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id)) do %>
           <fieldset>
             <h2><%= t("admin.new.basic_info")%></h2>
             <div class="formSection">
@@ -19,9 +29,6 @@
               <li id="saveContainer">
                 <%= submit_tag t("admin.new.save"), :class => "button default", :name => "_save", :id => "save_btn" %>
               </li>
-              <li id="saveAddContainer">
-                <%= submit_tag t("admin.new.save_and_add_another"), :class => "button", :name => "_add_another", :id => "saveAdd_btn" %>
-              </li>
               <li id="saveEditContainer">
                 <%= submit_tag t("admin.new.save_and_edit"), :class => "button", :name => "_add_edit", :id => "saveEdit_btn" %>
               </li>
@@ -31,7 +38,5 @@
             </ul>
           </fieldset>
           </div>
-
         <% end %>
       </div>
-
