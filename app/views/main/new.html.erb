@@ -5,8 +5,8 @@
       <div id="contentMainNew">
         <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param)) do %>
           <fieldset>
-		        <h2><%= t("admin.new.basic_info")%></h2>
-      			<div class="formSection">
+            <h2><%= t("admin.new.basic_info")%></h2>
+            <div class="formSection">
 <%= render(:partial => 'properties', :properties => @properties) -%>
             </div>
 
@@ -16,9 +16,9 @@
 <%= render(:partial => 'has_and_belongs_to_many_association', :collection => @abstract_model.has_and_belongs_to_many_associations) -%>
 
             <ul id="submitArea">
-        	    <li id="saveContainer">
-        	      <%= submit_tag t("admin.new.save"), :class => "button default", :name => "_save", :id => "save_btn" %>
-        	    </li>
+              <li id="saveContainer">
+                <%= submit_tag t("admin.new.save"), :class => "button default", :name => "_save", :id => "save_btn" %>
+              </li>
               <li id="saveAddContainer">
                 <%= submit_tag t("admin.new.save_and_add_another"), :class => "button", :name => "_add_another", :id => "saveAdd_btn" %>
               </li>
@@ -29,7 +29,7 @@
                 <%= submit_tag t("admin.new.cancel"), :class => "button", :name => "_continue", :id => "cancel_btn" %>
               </li>
             </ul>
-  		    </fieldset>
+          </fieldset>
           </div>
 
         <% end %>

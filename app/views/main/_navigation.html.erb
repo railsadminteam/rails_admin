@@ -8,7 +8,7 @@
 <% end %>
 <% if @abstract_models.size > max_visible_tabs %>
         <li class="more">
-        	<a href="#">&raquo;</a>
+          <a href="#">&raquo;</a>
           <ul>
           <% @abstract_models[max_visible_tabs..@abstract_models.size].each do |abstract_model| %>
           <li <%if @page_type == abstract_model.pretty_name.downcase %>class="active"<% end %>><%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param)) %></li>

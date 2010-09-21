@@ -56,4 +56,4 @@ if(Prototype.Browser.Gecko && navigator.userAgent.indexOf("Win") > 0){
     Sound.template = new Template('<embed type="audio/x-pn-realaudio-plugin" style="height:0" id="sound_#{track}_#{id}" src="#{url}" loop="false" autostart="true" hidden="true"/>');
   else
     Sound.play = function(){};
-} 
+}

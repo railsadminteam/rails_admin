@@ -16,23 +16,23 @@
 
   <script type="text/javascript" language="javascript">
   Control.DatePicker.Locale['en_US'] = {
-  	dateTimeFormat: 'dd/MM/yyyy HH:mm',
-  	dateFormat: 'dd/MM/yyyy'}
+    dateTimeFormat: 'dd/MM/yyyy HH:mm',
+    dateFormat: 'dd/MM/yyyy'}
 
   document.observe("dom:loaded", function() {
-  	$$(".dateField").each(function(elem){
-  		new Control.DatePicker(elem, {icon: '/images/calendar.png'});
-  	});
-  	// .dateField, .timestampField, .timeField, .datetimeField
-  	$$(".timestampField").each(function(elem){
-  		new Control.DatePicker(elem, {icon: '/images/clock.png', timePicker: true, timePickerAdjacent: true});
-  	});
-  	$$(".timeField").each(function(elem){
-  		new Control.DatePicker(elem, {icon: '/images/clock.png', timePicker: true, datePicker :false});
-  	});
-  	$$(".datetimeField").each(function(elem){
-  		new Control.DatePicker(elem, {icon: '/images/calendar.png', timePicker: true, timePickerAdjacent: true});
-  	});
+    $$(".dateField").each(function(elem){
+      new Control.DatePicker(elem, {icon: '/images/calendar.png'});
+    });
+    // .dateField, .timestampField, .timeField, .datetimeField
+    $$(".timestampField").each(function(elem){
+      new Control.DatePicker(elem, {icon: '/images/clock.png', timePicker: true, timePickerAdjacent: true});
+    });
+    $$(".timeField").each(function(elem){
+      new Control.DatePicker(elem, {icon: '/images/clock.png', timePicker: true, datePicker :false});
+    });
+    $$(".datetimeField").each(function(elem){
+      new Control.DatePicker(elem, {icon: '/images/calendar.png', timePicker: true, timePickerAdjacent: true});
+    });
   });
 
   </script>
@@ -57,13 +57,12 @@
             <%= link_to(@page_name, rails_admin_new_path(:model_name => @abstract_model.to_param)) %>
           </li>
         </ul>
-				
-				<h1>Rails Admin</h1>
-			</div>
+        <h1>Rails Admin</h1>
+      </div>
 
 <%= render(:partial => 'main/navigation', :locals => {:abstract_models => @abstract_models}) %>
-			
-			<div id="headerRight">
+
+      <div id="headerRight">
 <%= render(:partial => 'main/user_info', :locals => {:current_user => current_user}) %>
       </div>
     </div>

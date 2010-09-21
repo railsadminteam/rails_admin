@@ -27,16 +27,16 @@
 </style>
       <div id="contentHeader">
         <h2><%= @page_name %></h2>
-      	<div id="quickAccess">
-      	  <ul id="quick">
-      	    <li>
-      	     <%= link_to(t("admin.history.name"), rails_admin_history_show_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
-      	    </li>
-      	    <li>
-      	     <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
-      	    </li>
-      	  </ul>
-      	</div>
+        <div id="quickAccess">
+          <ul id="quick">
+            <li>
+             <%= link_to(t("admin.history.name"), rails_admin_history_show_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
+            </li>
+            <li>
+             <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
+            </li>
+          </ul>
+        </div>
       </div>
 <%= render(:partial => 'layouts/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainModules">
@@ -91,7 +91,7 @@
       <% end %>
       <%= @record_count %> <%= @record_count == 1 ? @abstract_model.pretty_name.downcase : @abstract_model.pretty_name.downcase.pluralize %>
       <% if @page_count.to_i == 2 %>
-        <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :class => "showall") %>	 	
+        <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :class => "showall") %>
       <% end %>
       </p>
     </div>
