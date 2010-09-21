@@ -1,9 +1,4 @@
-require 'rails_admin/abstract_model'
-
-class RailsAdminController < ApplicationController
-  before_filter :_authenticate!
-  before_filter :_authorize!
-  before_filter :set_plugin_name
+class MainController < Admin::BaseController
   before_filter :get_model, :except => [:index, :history, :get_history]
   before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
   before_filter :get_attributes, :only => [:create, :update]
@@ -182,18 +177,6 @@ class RailsAdminController < ApplicationController
 
   private
 
-  def _authenticate!
-    instance_eval &RailsAdmin.authenticate_with
-  end
-
-  def _authorize!
-    instance_eval &RailsAdmin.authorize_with
-  end
-
-  def set_plugin_name
-    @plugin_name = "RailsAdmin"
-  end
-
   def get_model
     model_name = to_model_name(params[:model_name])
     @abstract_model = RailsAdmin::AbstractModel.new(model_name)
@@ -203,10 +186,6 @@ class RailsAdminController < ApplicationController
   def get_object
     @object = @abstract_model.get(params[:id])
     not_found unless @object
-  end
-
-  def not_found
-    render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404
   end
 
   def get_sort_hash
@@ -424,5 +403,4 @@ class RailsAdminController < ApplicationController
       "#{object.class.to_s} ##{object.id}"
     end
   end
-
 end

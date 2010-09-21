@@ -1,6 +1,6 @@
 require 'builder'
 
-module RailsAdminHelper
+module MainHelper
 
   def history_output(t)
     if not t.message.downcase.rindex("changed").nil?

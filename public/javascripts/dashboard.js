@@ -111,7 +111,7 @@ document.observe("dom:loaded", function() {
       if(section != lastSection){
         lastSection = section;
 
-        new Ajax.Updater('listingHistory', '/admin/history/get', {
+        new Ajax.Updater('listingHistory', '/admin/history/show', {
           parameters: { "ref": totalRef, "section" :  lastSection}
         });
       }

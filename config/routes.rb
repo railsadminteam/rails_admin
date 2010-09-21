@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # Prefix route urls with "admin" and route names with "rails_admin_"
   scope "admin", :as => "rails_admin" do
     # Routes for rails_admin controller
-    controller "rails_admin" do
+    controller "main" do
       match "/", :to => :index, :as => "dashboard"
       match "/:model_name", :to => :list, :as => "list"
       match "/:model_name/get_pages", :to => :get_pages, :as => "get_pages"
