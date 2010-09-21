@@ -1,10 +1,7 @@
-require 'rubygems'
-require 'bundler'
-
-Bundler.setup
+require 'rails_admin/engine' if defined?(Rails)
+require 'rails_admin/abstract_model'
 
 module RailsAdmin
-  require 'rails_admin/engine' if defined?(Rails)
 
   # RailsAdmin is setup to try and authenticate with warden
   # If warden is found, then it will try to authenticate
@@ -65,4 +62,3 @@ module RailsAdmin
 
 end
 
-require 'rails_admin/abstract_model'
