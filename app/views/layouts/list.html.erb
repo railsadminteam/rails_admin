@@ -72,7 +72,7 @@
             <%= link_to(@abstract_model.pretty_name, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
           </li>
         </ul>
-        <h1>Rails Admin</h1>
+        <h1><%= @plugin_name %></h1>
       </div>
 <%= render(:partial => 'main/navigation', :locals => {:abstract_models => @abstract_models}) %>
 

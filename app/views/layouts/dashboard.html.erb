@@ -21,7 +21,7 @@
             <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
           </li>
         </ul>
-        <h1>Rails Admin</h1>
+        <h1><%= @plugin_name %></h1>
       </div>
 
 <%= render(:partial => 'main/navigation', :locals => {:abstract_models => @abstract_models}) %>
