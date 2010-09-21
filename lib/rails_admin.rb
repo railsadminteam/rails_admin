@@ -1,4 +1,4 @@
-require 'rails_admin/engine' if defined?(Rails)
+require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
 
 module RailsAdmin
