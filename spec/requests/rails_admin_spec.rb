@@ -17,8 +17,6 @@ describe "RailsAdmin" do
     )
 
     login_as user
-
-    get rails_admin_dashboard_path
   end
   
   after(:each) do
