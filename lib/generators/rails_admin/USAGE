@@ -1,0 +1,17 @@
+Description:
+    Installs RailsAdmin.
+
+Examples:
+    `rails generate rails_admin:install_admin`
+
+        Creates locale and migration files:
+
+            Locales:    config/locales/rails_admin.XX.yml
+            Migration:  db/migrate/XXX_create_histories_table.rb
+
+    `rails generate rails_admin:install_migrations`
+
+        Only creates the migration file 
+            
+            Migration:  db/migrate/XXX_create_histories_table.rb
+
