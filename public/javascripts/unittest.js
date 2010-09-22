@@ -524,8 +524,8 @@ Test.setupBDDExtensionMethods = function(){
     shouldNotBe:     'assertReturnsFalse',
     shouldRespondTo: 'assertRespondsTo'
   };
-  var makeAssertion = function(assertion, args, object) { 
-   	this[assertion].apply(this,(args || []).concat([object]));
+  var makeAssertion = function(assertion, args, object) {
+    this[assertion].apply(this,(args || []).concat([object]));
   };
   
   Test.BDDMethods = {};   
