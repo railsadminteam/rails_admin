@@ -176,6 +176,18 @@ module RailsAdmin
       render :layout => 'rails_admin/list'
     end
 
+    def handle_error(e)
+      if RailsAdmin::AuthenticationNotConfigured === e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
+
+        @error = e
+        render 'authentication_not_setup', :status => 401
+      else
+        super
+      end
+    end
+
     private
 
     def get_model

@@ -2,6 +2,7 @@ require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
 
 module RailsAdmin
+  class AuthenticationNotConfigured < StandardError; end
 
   # RailsAdmin is setup to try and authenticate with warden
   # If warden is found, then it will try to authenticate
@@ -9,16 +10,26 @@ module RailsAdmin
   # This is valid for custom warden setups, and also devise
   # If you're using the admin setup for devise, you should set RailsAdmin to use the admin
   #
+  # By default, this will raise in any of the following environments
+  #   * production
+  #   * beta
+  #   * uat
+  #   * staging
+  #
   # @see RailsAdmin.authenticate_with
   # @see RailsAdmin.authorize_with
-  DEFAULT_AUTHENTICATION = Proc.new do |controller|
+  DEFAULT_AUTHENTICATION = Proc.new do
     warden = request.env['warden']
     if warden
       warden.authenticate!
+    else
+      if %w(production beta uat staging).include(Rails.env)
+        raise AuthenticationNotConfigured, "See RailsAdmin.authenticate_with or setup Devise / Warden"
+      end
     end
   end
 
-  DEFAULT_AUTHORIZE = Proc.new {|controller|}
+  DEFAULT_AUTHORIZE = Proc.new {}
 
   # Setup authentication to be run as a before filter
   # This is run inside the controller instance so you can setup any authentication you need to
