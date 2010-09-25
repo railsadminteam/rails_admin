@@ -23,7 +23,7 @@ module RailsAdmin
     if warden
       warden.authenticate!
     else
-      if %w(production beta uat staging).include(Rails.env)
+      if %w(production beta uat staging).include?(Rails.env)
         raise AuthenticationNotConfigured, "See RailsAdmin.authenticate_with or setup Devise / Warden"
       end
     end
