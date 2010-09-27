@@ -102,7 +102,7 @@ module RailsAdmin
     def get_pages
       list_entries
       @xhr = true;
-      render :template => 'rails_admin/list'
+      render :template => 'rails_admin/main/list'
     end
 
     def history
@@ -126,7 +126,7 @@ module RailsAdmin
         not_found
       else
         @history, @current_month = History.get_history_for_month(params[:ref], params[:section])
-        render :template => 'rails_admin/history'
+        render :template => 'rails_admin/main/history'
       end
     end
 
