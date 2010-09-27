@@ -67,6 +67,8 @@ module RailsAdmin
       when :integer
         if property_name == :id
           "id#{type}"
+        elsif association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
+          "smallString#{type}"
         else
           "int#{type}"
         end
@@ -81,9 +83,9 @@ module RailsAdmin
       if object.nil?
         nil
       elsif object.respond_to?(:name) && object.name
-        object.name[0..10]
+        object.name[0..40]
       elsif object.respond_to?(:title) && object.title
-        object.title[0..10]
+        object.title[0..40]
       else
         "#{object.class.to_s} ##{object.id}"
       end
@@ -330,6 +332,8 @@ module RailsAdmin
       when :integer
         if property_name == :id
           return 46
+        elsif association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
+          return 180
         else
           return 80
         end
