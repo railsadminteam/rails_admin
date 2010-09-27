@@ -5,6 +5,7 @@
 .rspec
 db/*.sqlite3
 db/*.sqlite3-journal
+doc/*
 log/*.log
 pkg/*
 spec/dummy_app/db/schema.rb

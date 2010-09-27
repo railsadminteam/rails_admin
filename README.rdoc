@@ -11,7 +11,9 @@ It currently offers the following functionality:
 * Search
 * Authentication (via Devise[http://github.com/plataformatec/devise])
 * User action history
-
+== Screenshots
+http://github.com/sferik/rails_admin/raw/master/screenshots/list.png
+http://github.com/sferik/rails_admin/raw/master/screenshots/edit.png
 == Installation
 In your <tt>Gemfile</tt>, add the following dependency:
   gem 'devise' # Devise must be required before RailsAdmin
