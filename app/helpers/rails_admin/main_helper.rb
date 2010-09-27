@@ -50,7 +50,7 @@ module RailsAdmin
       case property_type
       when :boolean
         "bool#{type}"
-      when :datetime
+      when :datetime, :timestamp
         "dateTime#{type}"
       when :date
         "date#{type}"
@@ -101,7 +101,7 @@ module RailsAdmin
         else
           Builder::XmlMarkup.new.img(:src => image_path("bullet_white.png"), :alt => "False").html_safe
         end
-      when :datetime
+      when :datetime, :timestamp
         object.send(property_name).strftime("%b. %d, %Y, %I:%M%p")
       when :date
         object.send(property_name).strftime("%b. %d, %Y")
@@ -313,7 +313,7 @@ module RailsAdmin
       case property_type
       when :boolean
         return 60
-      when :datetime
+      when :datetime, :timestamp
         return 170
       when :date
         return 90
