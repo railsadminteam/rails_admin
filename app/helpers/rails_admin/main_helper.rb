@@ -73,6 +73,7 @@ module RailsAdmin
       when :float
         "float#{type}"
       else
+        raise "Unsupported type: #{type}"
       end
     end
 
@@ -335,6 +336,7 @@ module RailsAdmin
       when :float
         return 110
       else
+        raise "Unsupported type: #{type}"
       end
     end
 
