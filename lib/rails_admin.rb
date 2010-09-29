@@ -1,5 +1,6 @@
 require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
+require 'rails_admin/config'
 
 module RailsAdmin
   class AuthenticationNotConfigured < StandardError; end
@@ -71,5 +72,28 @@ module RailsAdmin
     @authorize || DEFAULT_AUTHORIZE
   end
 
-end
+  # Setup RailsAdmin
+  #
+  # If a model class is provided as the first argument model specific
+  # configuration is loaded and returned.
+  #
+  # Otherwise yields self for general configuration to be used in 
+  # an initializer.
+  #
+  # @see RailsAdmin::Config.load
+  def self.config(entity = nil, &block)
+    if not entity
+      yield self
+    else
+      RailsAdmin::Config.load(entity, block)
+    end
+  end
 
+  # Proxy for navigation specific configuration
+  #
+  # @see RailsAdmin::Config::Navigation
+  def self.navigation 
+    return Config::Navigation
+  end
+
+end

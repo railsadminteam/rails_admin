@@ -1,10 +1,5 @@
 module RailsAdmin
 
-  # @see RailsAdmin::Config.load
-  def self.config(entity, &block)
-    RailsAdmin::Config.load(entity, block)
-  end
-  
   module Config
     
     # Stores model specific configuration objects in a hash identified by model's class
@@ -13,14 +8,12 @@ module RailsAdmin
     # @see RailsAdmin::Config.load
     @@registry = {}
     
-    # Loads a model configuration from the registry or registers a new one if one
-    # is yet to be added.
+    # Loads given model's configuration instance from the registry or registers 
+    # a new one if one is yet to be added.
     #
-    # If block is given it is appended to an array of model specific configuration
-    # blocks in the registry.
+    # If a block is given it is evaluated in the context of configuration instance .
     #
-    # If no block is given the requested model's configuration will be initialized
-    # with the stored configuration blocks.
+    # Returns given model's configuration.
     #
     # @see RailsAdmin::Config.registry
     def self.load(entity, block)
@@ -48,7 +41,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Navigation.included
       def self.shortcuts_for(klass, name)
-        klass.send(:define_method, "label_for_#{name}".to_sym) do |label = false, &block|
+        klass.send(:define_method, "label_for_#{name}".to_sym) do |label = nil, &block|
           send(name).label(label, &block)
         end
       end
@@ -67,7 +60,7 @@ module RailsAdmin
       #   3. Result of calling parent object's "label" method if parent object
       #      is set.
       #   4. "abstract_model.pretty_name"
-      def label(label = false, &block)
+      def label(label = nil, &block)
         if label || block
           @label = label || block
         else
@@ -174,7 +167,6 @@ module RailsAdmin
       def initialize(config)
         @config = config
       end
-
     end
 
     # Provides DSL for configuring RailsAdmin navigation
@@ -303,7 +295,7 @@ module RailsAdmin
         HasVisibility.shortcuts_for(klass, :edit)
         HasLabel.shortcuts_for(klass, :edit)
         
-        klass.send(:define_method, :edit) do |record = false, &block|          
+        klass.send(:define_method, :edit) do |record = nil, &block|          
           extension = @registry[:edit] ||= Dsl.new(self)
           extension.instance_eval &block if block
           extension.record = record
