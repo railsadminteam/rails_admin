@@ -41,7 +41,9 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Navigation.included
       def self.shortcuts_for(klass, name)
-        klass.send(:define_method, "label_for_#{name}".to_sym) do |label = nil, &block|
+        klass.send(:define_method, "label_for_#{name}".to_sym) do |*args, &block|
+          # Support for default arguments in ruby 1.8 via splat
+          label = args[0] || nil
           send(name).label(label, &block)
         end
       end
@@ -65,7 +67,7 @@ module RailsAdmin
           @label = label || block
         else
           if @label.nil?
-            label = config.nil? ? config.abstract_model.pretty_name : config.label
+            label = parent.nil? ? parent.abstract_model.pretty_name : parent.label
           else
             label = @label
           end
@@ -150,7 +152,7 @@ module RailsAdmin
       #   4. "true" as last resort
       def visible?()          
         if @visible.nil?
-          visible = config.nil? ? true : config.visible?
+          visible = parent.nil? ? true : parent.visible?
         else
           visible = @visible
         end        
@@ -162,10 +164,10 @@ module RailsAdmin
     # Base class for all model config DSL classes
     class Dsl
       # @see RailsAdmin::Config::Model
-      attr_reader :config
+      attr_reader :parent
       
-      def initialize(config)
-        @config = config
+      def initialize(parent)
+        @parent = parent
       end
     end
 
@@ -295,7 +297,9 @@ module RailsAdmin
         HasVisibility.shortcuts_for(klass, :edit)
         HasLabel.shortcuts_for(klass, :edit)
         
-        klass.send(:define_method, :edit) do |record = nil, &block|          
+        klass.send(:define_method, :edit) do |*args, &block|
+          # Support for default arguments in ruby 1.8 via splat
+          record = args[0] || nil          
           extension = @registry[:edit] ||= Dsl.new(self)
           extension.instance_eval &block if block
           extension.record = record
