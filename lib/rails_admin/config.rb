@@ -13,9 +13,6 @@ module RailsAdmin
     #
     # If a block is given it is evaluated in the context of configuration instance.
     #
-    # Configuration can be forced to reset by passing an optional third argument
-    # with a value that evaluates to true
-    #
     # Returns given model's configuration.
     #
     # @see RailsAdmin::Config.registry
@@ -32,7 +29,7 @@ module RailsAdmin
       config
     end
 
-    # Alias for resetting a model's configuration.
+    # Reset a model's configuration.
     #
     # @see RailsAdmin::Config.load
     def self.reset(entity)

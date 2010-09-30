@@ -46,7 +46,7 @@ describe "RailsAdmin" do
         RailsAdmin::Config.reset(Fan)
       end
     
-      it "should be visible and have a nice label by default" do
+      it "should be visible and sane by default" do
         get rails_admin_dashboard_path
         response.should have_tag("#nav li a", :content => "Fan")
       end
