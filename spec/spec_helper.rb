@@ -23,6 +23,8 @@ Rspec.configure do |config|
   require 'rspec/expectations'
 
   config.include Rspec::Matchers
+  config.include Webrat::Matchers
+  config.include Webrat::HaveTagMatcher
 
   # == Mock Framework
   config.mock_with :rspec
