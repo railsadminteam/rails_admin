@@ -11,12 +11,15 @@ module RailsAdmin
     # Loads given model's configuration instance from the registry or registers 
     # a new one if one is yet to be added.
     #
-    # If a block is given it is evaluated in the context of configuration instance .
+    # If a block is given it is evaluated in the context of configuration instance.
+    #
+    # Configuration can be forced to reset by passing an optional third argument
+    # with a value that evaluates to true
     #
     # Returns given model's configuration.
     #
     # @see RailsAdmin::Config.registry
-    def self.load(entity, block)
+    def self.load(entity, block = nil)
       if entity.is_a?(RailsAdmin::AbstractModel)
         entity = entity.model
       else         
@@ -27,6 +30,19 @@ module RailsAdmin
       config.instance_eval &block if block
       
       config
+    end
+
+    # Alias for resetting a model's configuration.
+    #
+    # @see RailsAdmin::Config.load
+    def self.reset(entity)
+      # Todo: Refactor duplicate code with self.load 
+      if entity.is_a?(RailsAdmin::AbstractModel)
+        entity = entity.model
+      else         
+        entity = entity.to_s.camelize.constantize if not entity.is_a?(Class)
+      end
+      @@registry[entity.name] = nil
     end
 
     # Provides a DSL for configuring item's label.
@@ -120,17 +136,9 @@ module RailsAdmin
 
       # Make item hidden.
       #
-      # If block is passed it will be stored to "@visible" for lazy 
-      # evaluation in a lambda that will return inverse of the block. 
-      # Otherwise set "@visible" to "false".
-      #
       # @see RailsAdmin::Config::HasVisibility.show
-      def hide(&block)
-        if block
-          @visible = lambda { not instance_eval &block }
-        else
-          @visible = false
-        end
+      def hide()
+        @visible = false
       end
 
       # Make item visible.
@@ -155,7 +163,7 @@ module RailsAdmin
           visible = parent.nil? ? true : parent.visible?
         else
           visible = @visible
-        end        
+        end
         visible = instance_eval &visible if visible.kind_of?(Proc)
         visible
       end

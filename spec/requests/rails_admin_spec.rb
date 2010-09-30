@@ -23,6 +23,114 @@ describe "RailsAdmin" do
     Warden.test_reset!
   end
 
+  describe "navigation" do
+
+    describe "number of visible tabs" do
+    
+      after(:each) do
+        RailsAdmin::Config::Navigation.max_visible_tabs = 5
+      end
+    
+      it "should be editable" do
+        RailsAdmin::Config::Navigation.max_visible_tabs = 2
+        get rails_admin_dashboard_path
+        response.should have_tag("#nav > li") do |elements|
+          elements.should have_at_most(4).items
+        end
+      end
+    end
+
+    describe "label for a model" do
+    
+      before(:each) do
+        RailsAdmin::Config.reset(Fan)
+      end
+    
+      it "should be visible and have a nice label by default" do
+        get rails_admin_dashboard_path
+        response.should have_tag("#nav li a", :content => "Fan")
+      end
+
+      it "should be editable" do
+        RailsAdmin.config Fan do
+          label "Fan test 1"
+        end
+        get rails_admin_dashboard_path
+        response.should have_tag("#nav li a", :content => "Fan test 1")
+      end
+
+      it "should be editable via shortcut" do
+        RailsAdmin.config Fan do
+          label_for_navigation "Fan test 2"
+        end
+        get rails_admin_dashboard_path
+        response.should have_tag("#nav li a", :content => "Fan test 2")
+      end
+
+      it "should be editable via navigation configuration" do
+        RailsAdmin.config Fan do
+          navigation do
+            label "Fan test 3"
+          end
+        end
+        get rails_admin_dashboard_path
+        response.should have_tag("#nav li a", :content => "Fan test 3")
+      end
+
+      it "should be editable with a block via navigation configuration" do
+        RailsAdmin.config Fan do
+          label "Fan test"
+          navigation do
+            label do
+              "#{parent.label} 4"
+            end
+          end
+        end
+        get rails_admin_dashboard_path
+        response.should have_tag("#nav li a", :content => "Fan test 4")
+      end
+
+      it "should be hideable" do
+        RailsAdmin.config Fan do
+          hide
+        end
+        get rails_admin_dashboard_path
+        response.should_not have_tag("#nav li a", :content => "Fan")
+      end
+      
+      it "should be hideable via shortcut" do
+        RailsAdmin.config Fan do
+          hide_in_navigation
+        end
+        get rails_admin_dashboard_path
+        response.should_not have_tag("#nav li a", :content => "Fan")
+      end
+      
+      it "should be hideable via navigation configuration" do
+        RailsAdmin.config Fan do
+          navigation do
+            hide
+          end
+        end
+        get rails_admin_dashboard_path
+        response.should_not have_tag("#nav li a", :content => "Fan")
+      end
+
+      it "should be hideable with a block via navigation configuration" do
+        RailsAdmin.config Fan do
+          navigation do
+            show do
+              false
+            end
+          end
+        end
+        get rails_admin_dashboard_path
+        response.should_not have_tag("#nav li a", :content => "Fan")
+      end
+
+    end
+  end    
+  
   describe "GET /admin" do
     before(:each) do
       get rails_admin_dashboard_path
@@ -330,7 +438,7 @@ describe "RailsAdmin" do
     end
   end
 
-  pending"GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
+  pending "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
     before(:each) do
       (1..3).each do |number|
         RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
@@ -897,5 +1005,5 @@ describe "RailsAdmin" do
       @req.status.should equal(404)
     end
   end
-
+  
 end
