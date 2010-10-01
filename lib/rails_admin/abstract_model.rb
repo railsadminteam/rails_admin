@@ -6,14 +6,14 @@ module RailsAdmin
     def self.all
       @models = []
       str = ""
-      devise_model =  Devise.mappings.keys[0].to_param.capitalize
-      history_model = "History"
+
+      excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
+      excluded_models << Devise.mappings.keys[0].to_param.capitalize
+      excluded_models << ['History']
 
       Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
         File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
-          if model_name != devise_model and model_name != history_model
-            add_model(model_name)
-          end
+          add_model(model_name) unless excluded_models.include?(model_name)
         end
       end
 

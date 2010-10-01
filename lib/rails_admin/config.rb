@@ -7,6 +7,10 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.load
     @@registry = {}
+
+    # Configuration option to specify which models you want to exclude. 
+    @@excluded_models = []
+    mattr_accessor :excluded_models
     
     # Loads given model's configuration instance from the registry or registers 
     # a new one if one is yet to be added.
