@@ -50,6 +50,7 @@ If you have questions about contributing to RailsAdmin, please contact {Erik Mic
 Many thanks to:
 * Everyone in the {Ruby Summer of Code}[http://www.rubysoc.org] class of 2010
 * {Piotr Sarnacki}[http://github.com/drogus] for {making RailsAdmin mountable}[http://github.com/drogus/rails_admin/commit/3349b36db2d4eda296aad96f03b7e7a6a544bcd8]
+* {Daniel Neighman}[http://github.com/hassox] for {generalizing authentication}[http://github.com/sferik/rails_admin/commits/master?author=hassox]
 * {Jack Dempsey}[http://github.com/jackdempsey] for {adding support for HABTM associations}[http://github.com/sferik/rails_admin/commits/master?author=jackdempsey]
 * {Petteri Kääpä}[http://github.com/kaapa] for {writing the configuration DSL}[http://github.com/sferik/rails_admin/commit/b72a94c492c650ac615eda108dcdc6e9c58be992]
 * and everyone who contributed to MerbAdmin[http://github.com/sferik/merb-admin].
