@@ -22,112 +22,151 @@ describe "RailsAdmin" do
   after(:each) do
     Warden.test_reset!
   end
-
-  describe "navigation" do
-
-    describe "number of visible tabs" do
+  
+  describe "config" do
     
+    describe "excluded models" do
+      excluded_models = [Division, Draft, Fan]
+
+      before(:each) do
+        RailsAdmin::Config.excluded_models = excluded_models
+      end
+
       after(:each) do
-        RailsAdmin::Config::Navigation.max_visible_tabs = 5
+        RailsAdmin::Config.excluded_models = []
       end
     
-      it "should be editable" do
-        RailsAdmin::Config::Navigation.max_visible_tabs = 2
+      it "should be hidden from navigation" do
         get rails_admin_dashboard_path
-        response.should have_tag("#nav > li") do |elements|
-          elements.should have_at_most(4).items
+        excluded_models.each do |model|
+          response.should have_tag("#nav") do |navigation|
+            navigation.should_not have_tag("li a", :content => model.to_s)
+          end
         end
-      end
+      end      
     end
 
-    describe "label for a model" do
-    
-      before(:each) do
-        RailsAdmin::Config.reset(Fan)
-      end
-    
-      it "should be visible and sane by default" do
-        get rails_admin_dashboard_path
-        response.should have_tag("#nav li a", :content => "Fan")
-      end
+    describe "navigation" do
 
-      it "should be editable" do
-        RailsAdmin.config Fan do
-          label "Fan test 1"
+      describe "number of visible tabs" do    
+        after(:each) do
+          RailsAdmin::Config::Navigation.max_visible_tabs = 5
         end
-        get rails_admin_dashboard_path
-        response.should have_tag("#nav li a", :content => "Fan test 1")
-      end
-
-      it "should be editable via shortcut" do
-        RailsAdmin.config Fan do
-          label_for_navigation "Fan test 2"
-        end
-        get rails_admin_dashboard_path
-        response.should have_tag("#nav li a", :content => "Fan test 2")
-      end
-
-      it "should be editable via navigation configuration" do
-        RailsAdmin.config Fan do
-          navigation do
-            label "Fan test 3"
+    
+        it "should be editable" do
+          RailsAdmin::Config::Navigation.max_visible_tabs = 2
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav > li") do |elements|
+            elements.should have_at_most(4).items
           end
         end
-        get rails_admin_dashboard_path
-        response.should have_tag("#nav li a", :content => "Fan test 3")
       end
 
-      it "should be editable with a block via navigation configuration" do
-        RailsAdmin.config Fan do
-          label "Fan test"
-          navigation do
-            label do
-              "#{parent.label} 4"
+      describe "label for a model" do
+        after(:each) do
+          RailsAdmin::Config.reset(Fan)
+        end
+    
+        it "should be visible and sane by default" do
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should have_tag("li a", :content => "Fan")
+          end
+        end
+
+        it "should be editable" do
+          RailsAdmin.config Fan do
+            label "Fan test 1"
+          end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should have_tag("li a", :content => "Fan test 1")
+          end
+        end
+
+        it "should be editable via shortcut" do
+          RailsAdmin.config Fan do
+            label_for_navigation "Fan test 2"
+          end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should have_tag("li a", :content => "Fan test 2")
+          end
+        end
+
+        it "should be editable via navigation configuration" do
+          RailsAdmin.config Fan do
+            navigation do
+              label "Fan test 3"
             end
           end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should have_tag("li a", :content => "Fan test 3")
+          end
         end
-        get rails_admin_dashboard_path
-        response.should have_tag("#nav li a", :content => "Fan test 4")
-      end
 
-      it "should be hideable" do
-        RailsAdmin.config Fan do
-          hide
+        it "should be editable with a block via navigation configuration" do
+          RailsAdmin.config Fan do
+            label "Fan test"
+            navigation do
+              label do
+                "#{parent.label} 4"
+              end
+            end
+          end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should have_tag("li a", :content => "Fan test 4")
+          end
         end
-        get rails_admin_dashboard_path
-        response.should_not have_tag("#nav li a", :content => "Fan")
-      end
-      
-      it "should be hideable via shortcut" do
-        RailsAdmin.config Fan do
-          hide_in_navigation
-        end
-        get rails_admin_dashboard_path
-        response.should_not have_tag("#nav li a", :content => "Fan")
-      end
-      
-      it "should be hideable via navigation configuration" do
-        RailsAdmin.config Fan do
-          navigation do
+
+        it "should be hideable" do
+          RailsAdmin.config Fan do
             hide
           end
-        end
-        get rails_admin_dashboard_path
-        response.should_not have_tag("#nav li a", :content => "Fan")
-      end
-
-      it "should be hideable with a block via navigation configuration" do
-        RailsAdmin.config Fan do
-          navigation do
-            show do
-              false
-            end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should_not have_tag("li a", :content => "Fan")
           end
         end
-        get rails_admin_dashboard_path
-        response.should_not have_tag("#nav li a", :content => "Fan")
-      end
+      
+        it "should be hideable via shortcut" do
+          RailsAdmin.config Fan do
+            hide_in_navigation
+          end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should_not have_tag("li a", :content => "Fan")
+          end
+        end
+      
+        it "should be hideable via navigation configuration" do
+          RailsAdmin.config Fan do
+            navigation do
+              hide
+            end
+          end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should_not have_tag("li a", :content => "Fan")
+          end
+        end
 
+        it "should be hideable with a block via navigation configuration" do
+          RailsAdmin.config Fan do
+            navigation do
+              show do
+                false
+              end
+            end
+          end
+          get rails_admin_dashboard_path
+          response.should have_tag("#nav") do |navigation|
+            navigation.should_not have_tag("li a", :content => "Fan")
+          end
+        end
+      end
     end
   end    
   
