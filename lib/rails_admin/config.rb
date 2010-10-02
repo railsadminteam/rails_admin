@@ -187,16 +187,15 @@ module RailsAdmin
       mattr_accessor :max_visible_tabs
       
       # Register the navigation config DSL on mixin
-      def self.included(klass)
-        
+      def self.included(klass)        
         HasLabel.shortcuts_for(klass, :navigation)          
-        HasVisibility.shortcuts_for(klass, :navigation)
-        
-        klass.send(:define_method, :navigation) do |&block|          
-          extension = @registry[:navigation] ||= Dsl.new(self)
-          extension.instance_eval &block if block
-          extension
-        end
+        HasVisibility.shortcuts_for(klass, :navigation)        
+      end
+
+      def navigation(&block)
+        extension = @registry[:navigation] ||= Dsl.new(self)
+        extension.instance_eval &block if block
+        extension
       end
       
       # Get all models that are configured as visible 
@@ -229,16 +228,15 @@ module RailsAdmin
     module History
       
       # Register the history config DSL on mixin
-      def self.included(klass)
-        
+      def self.included(klass)        
         HasVisibility.shortcuts_for(klass, :history)
-        HasLabel.shortcuts_for(klass, :history)          
-        
-        klass.send(:define_method, :history) do |&block|          
-          extension = @registry[:history] ||= Dsl.new(self)
-          extension.instance_eval &block if block
-          extension
-        end
+        HasLabel.shortcuts_for(klass, :history)
+      end
+
+      def history(&block)
+        extension = @registry[:history] ||= Dsl.new(self)
+        extension.instance_eval &block if block
+        extension
       end
 
       # Get all models that are configured as visible 
@@ -271,16 +269,15 @@ module RailsAdmin
     module List
       
       # Register the list view config DSL on mixin
-      def self.included(klass)
-        
+      def self.included(klass)        
         HasVisibility.shortcuts_for(klass, :list)
-        HasLabel.shortcuts_for(klass, :list)          
-        
-        klass.send(:define_method, :list) do |&block|          
-          extension = @registry[:list] ||= Dsl.new(self)
-          extension.instance_eval &block if block
-          extension
-        end
+        HasLabel.shortcuts_for(klass, :list)
+      end
+
+      def list(&block)
+        extension = @registry[:list] ||= Dsl.new(self)
+        extension.instance_eval &block if block
+        extension
       end
 
       # Provides DSL for configuring model specific RailsAdmin list view
@@ -301,19 +298,16 @@ module RailsAdmin
     module Edit
       
       # Register the edit view config DSL on mixin
-      def self.included(klass)
-        
+      def self.included(klass)        
         HasVisibility.shortcuts_for(klass, :edit)
-        HasLabel.shortcuts_for(klass, :edit)
-        
-        klass.send(:define_method, :edit) do |*args, &block|
-          # Support for default arguments in ruby 1.8 via splat
-          record = args[0] || nil          
-          extension = @registry[:edit] ||= Dsl.new(self)
-          extension.instance_eval &block if block
-          extension.record = record
-          extension
-        end
+        HasLabel.shortcuts_for(klass, :edit)        
+      end
+
+      def edit(record = nil, &block)
+        extension = @registry[:edit] ||= Dsl.new(self)
+        extension.instance_eval &block if block
+        extension.record = record
+        extension
       end
 
       # Provides DSL for configuring model specific RailsAdmin edit view
