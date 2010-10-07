@@ -52,9 +52,14 @@ module RailsAdmin
     # Reset a model's configuration.
     #
     # @see RailsAdmin::Config.load
-    def self.reset(entity)
-      config = self.load(entity)
-      @@registry[config.abstract_model.model.name] = nil
+    def self.reset(entity = nil)
+      if entity.nil?
+        @@global = nil
+        @@registry = {}
+      else
+        config = self.load(entity)
+        @@registry[config.abstract_model.model.name] = nil
+      end
     end
 
     def self.navigation
