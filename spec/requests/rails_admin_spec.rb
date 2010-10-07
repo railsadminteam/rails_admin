@@ -168,8 +168,74 @@ describe "RailsAdmin" do
         end
       end
     end
-  end    
-  
+    
+    describe "list" do
+
+      describe "number of items per page" do
+        
+        before(:each) do
+          RailsAdmin::AbstractModel.new("League").create(:name => 'American')
+          RailsAdmin::AbstractModel.new("League").create(:name => 'National')
+          RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
+          RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
+        end
+        
+        it "should be configurable" do
+          RailsAdmin::Config.model do
+            list do
+              per_page 1
+            end
+          end
+          get rails_admin_list_path(:model_name => "league")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+          get rails_admin_list_path(:model_name => "player")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+        end
+
+        it "should be configurable per model" do
+          RailsAdmin.config League do
+            list do
+              per_page 1
+            end
+          end
+          get rails_admin_list_path(:model_name => "league")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+          get rails_admin_list_path(:model_name => "player")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(2).items
+          end
+        end
+
+        it "should be globally configurable and overrideable per model" do
+          RailsAdmin.config League do
+            list do
+              per_page 1
+            end
+          end
+          RailsAdmin::Config.model do
+            list do
+              per_page 20
+            end
+          end
+          get rails_admin_list_path(:model_name => "league")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+          get rails_admin_list_path(:model_name => "player")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(2).items
+          end
+        end
+      end
+    end
+  end
+
   describe "GET /admin" do
     before(:each) do
       get rails_admin_dashboard_path
