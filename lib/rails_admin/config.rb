@@ -11,6 +11,19 @@ module RailsAdmin
     # Configuration option to specify which models you want to exclude. 
     @@excluded_models = []
     mattr_accessor :excluded_models
+
+    def self.global(abstract_model = nil, &block)
+      config = load(nil, block)
+      config.abstract_model = abstract_model
+      config
+    end
+
+    # Alias for model specific configuration for nicer syntax in an initializer.
+    #
+    # @see RailsAdmin::Config.load
+    def self.model(entity = nil, &block)
+      load(entity, block)
+    end
     
     # Loads given model's configuration instance from the registry or registers 
     # a new one if one is yet to be added.
@@ -20,334 +33,288 @@ module RailsAdmin
     # Returns given model's configuration.
     #
     # @see RailsAdmin::Config.registry
-    def self.load(entity, block = nil)
-      if entity.is_a?(RailsAdmin::AbstractModel)
-        entity = entity.model
-      else         
-        entity = entity.to_s.camelize.constantize if not entity.is_a?(Class)
-      end
-
-      config = @@registry[entity.name] ||= RailsAdmin::Config::Model.new(entity)
-      config.instance_eval &block if block
-      
+    def self.load(entity = nil, block = nil)      
+      if entity.nil?
+        config = @@global ||= RailsAdmin::Config::Global.new(self)
+      else
+        if entity.is_a?(RailsAdmin::AbstractModel)
+          key = entity.model.name
+        else
+          entity = entity.to_s.camelize.constantize unless entity.is_a?(Class)
+          entity = RailsAdmin::AbstractModel.new(entity)
+        end
+        config = @@registry[entity.model.name] ||= RailsAdmin::Config::Model.new(entity, self)
+      end      
+      config.instance_eval &block if block      
       config
     end
-
+    
     # Reset a model's configuration.
     #
     # @see RailsAdmin::Config.load
     def self.reset(entity)
-      # Todo: Refactor duplicate code with self.load 
-      if entity.is_a?(RailsAdmin::AbstractModel)
-        entity = entity.model
-      else         
-        entity = entity.to_s.camelize.constantize if not entity.is_a?(Class)
-      end
-      @@registry[entity.name] = nil
+      config = self.load(entity)
+      @@registry[config.abstract_model.model.name] = nil
     end
 
-    # Provides a DSL for configuring item's label.
-    module HasLabel
-      
-      # Define a shortcut method for a given class.
-      #
-      # Eg. "HasLabel.shortcuts_for(SomeClass, :navigation)" will provide 
-      # "SomeClass" with method:
-      #
-      #   "label_for_navigation" as proxy for "navigation.label".
-      #
-      # @see RailsAdmin::Config::Navigation.included
-      def self.shortcuts_for(klass, name)
-        klass.send(:define_method, "label_for_#{name}".to_sym) do |*args, &block|
-          # Support for default arguments in ruby 1.8 via splat
-          label = args[0] || nil
-          send(name).label(label, &block)
+    def self.navigation
+      RailsAdmin::Config::Navigation
+    end
+
+    module Navigation
+      @@max_visible_tabs = 5
+      mattr_accessor :max_visible_tabs
+
+      # Get all models that are configured as visible 
+      def self.visible_models
+        RailsAdmin::AbstractModel.all.select do |m|
+          RailsAdmin.config(m.model).navigation.visible
         end
+      end        
+    end
+    
+    class Base                
+      attr_reader :parent, :section_name
+
+      def initialize(parent)
+        @parent = parent
+        @section_name = self.class.name.split("::")[-1].downcase
       end
-      
-      # Get or set a label.
-      #
-      # If first argument is provided "@label" is set to that value. 
-      # Optionally first argument can be omitted and a block passed. 
-      # In this case the block will be stored to the same variable for lazy 
-      # evaluation.
-      #
-      # If no arguments are passed it will return first of following:
-      #
-      #   1. "@label" evaluated in object context if it's a Proc.
-      #   2. "@label" if it is set.
-      #   3. Result of calling parent object's "label" method if parent object
-      #      is set.
-      #   4. "abstract_model.pretty_name"
-      def label(label = nil, &block)
-        if label || block
-          @label = label || block
-        else
-          if @label.nil?
-            label = parent.nil? ? parent.abstract_model.pretty_name : parent.label
+
+      def abstract_model
+        parent.abstract_model
+      end
+
+      def model
+        abstract_model.model
+      end
+
+      def read_option(option_name, recursive = true)
+        value = instance_variable_get("@#{option_name}".to_sym)
+        if recursive
+          value = parent.read_option(option_name, false) if value.nil?
+          value = RailsAdmin::Config.global(abstract_model).send(section_name).read_option(option_name, false) if value.nil?
+          value = RailsAdmin::Config.global(abstract_model).read_option(option_name, false) if value.nil?
+        end
+        value
+      end
+
+      def section?
+        false
+      end
+
+      def self.register_option(option_name, &default)
+        define_method("#{option_name}=".to_sym) do |value|
+          instance_variable_set("@#{option_name}", value)
+        end        
+        define_method(option_name) do |*args, &block|
+          if !args[0].nil? || block
+            instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
           else
-            label = @label
+            value = read_option(option_name)
+            value = default if value.nil?
+            value = instance_eval &value if value.kind_of?(Proc)
+            value
           end
-          label = instance_eval &label if label.kind_of?(Proc)
-          label
         end
       end
     end
 
-    # Provides a DSL for configuring item's visibility
-    module HasVisibility
-      
-      # Define shortcut methods for a given class.
-      #
-      # Eg. "HasVisibility.shortcuts_for(SomeClass, :navigation)" will provide 
-      # "SomeClass" with methods:
-      #
-      #   "hidden_in_navigation?" as proxy for "navigation.hidden?"
-      #   "hide_in_navigation" as proxy for "navigation.hide"
-      #   "show_in_navigation" as proxy for "navigation.show"
-      #   "visible_in_navigation?" as proxy for "navigation.visible?"
-      #
-      # @see RailsAdmin::Config::Navigation.included
-      def self.shortcuts_for(klass, name)
-        klass.send(:define_method, "hidden_in_#{name}?".to_sym) do
-          send(name).hidden?
+    module Labelable
+      def self.included(klass)
+        klass.register_option(:label) do
+          abstract_model.pretty_name
         end
-        
-        klass.send(:define_method, "hide_in_#{name}".to_sym) do |&block|
-          send(name).hide(&block)
-        end
-        
-        klass.send(:define_method, "show_in_#{name}".to_sym) do |&block|
-          send(name).show(&block)
-        end
-        
-        klass.send(:define_method, "visible_in_#{name}?".to_sym) do
-          send(name).visible?
+      end
+    end
+    
+    module Hideable
+      def self.included(klass)
+        klass.register_option(:visible) do
+          true
         end
       end
       
-      # Is item hidden?
-      #
-      # Inverse of visible?
-      #
-      # @see RailsAdmin::Config::HasVisibility.visible?
-      def hidden?()
-        not visible?()
+      def hidden?
+        not visible
       end
 
-      # Make item hidden.
-      #
-      # @see RailsAdmin::Config::HasVisibility.show
-      def hide()
-        @visible = false
+      def hide(&block)
+        visible block ? proc { false == (instance_eval &block) } : false
       end
 
-      # Make item visible.
-      #
-      # If block is passed it will be stored to "@visible" for lazy 
-      # evaluation. Otherwise set "@visible" to "true".
       def show(&block)
-        @visible = block || true
+        visible block || true
       end
-
-      # Is item visible?
-      #
-      # Will return first of following:
-      #
-      #   1. "@visible" evaluated in object context if it's a Proc.
-      #   2. "@visible" if it is set.
-      #   3. Result of calling parent object's "visible" method if parent object
-      #      is set.
-      #   4. "true" as last resort
-      def visible?()          
-        if @visible.nil?
-          visible = parent.nil? ? true : parent.visible?
-        else
-          visible = @visible
-        end
-        visible = instance_eval &visible if visible.kind_of?(Proc)
+      
+      def visible?
         visible
       end
     end
     
-    # Base class for all model config DSL classes
-    class Dsl
-      # @see RailsAdmin::Config::Model
-      attr_reader :parent
-      
-      def initialize(parent)
-        @parent = parent
+    module Fields
+      def field(name, &block)
+        @named_fields ||= []
+        field = @named_fields.find { |f| name == f.name } || (@named_fields << RailsAdmin::Config::Fields::Named.new(name, self))[-1]
+        field.instance_eval &block if block
+        field
+      end
+
+      def field_of_type(type, &block)
+        @typed_fields ||= []
+        field = @typed_fields.find { |f| type == f.type } || (@typed_fields << RailsAdmin::Config::Fields::Typed.new(type, self))[-1]
+        field.instance_eval &block if block
+        field
+      end
+
+      class Base < RailsAdmin::Config::Base
+        include RailsAdmin::Config::Hideable
+
+        register_option(:label) do
+          abstract_model.properties.find { |column| name == column[:name] }[:pretty_name]
+        end
+
+        register_option(:searchable) do
+          type == :string
+        end
+
+        register_option(:sortable) do
+          true
+        end
+
+        def serial
+          abstract_model.properties.find { |column| name == column[:name] }[:serial]
+        end
+      end
+
+      class Named < RailsAdmin::Config::Fields::Base
+        attr_reader :name
+
+        def initialize(name, parent)
+          super(parent)
+          @name = name
+        end
+
+        def read_option(option_name, recursive = true)
+          value = instance_variable_get("@#{option_name}".to_sym)
+          if recursive
+            value = parent.parent.field(name).read_option(option_name, false) if value.nil?
+            value = parent.field_of_type(type).read_option(option_name, false) if value.nil?
+            value = parent.parent.field_of_type(type).read_option(option_name, false) if value.nil?
+            if parent.section?
+              value = RailsAdmin::Config.global(abstract_model).send(parent.section_name).field_of_type(name).read_option(option_name, false) if value.nil?
+              value = RailsAdmin::Config.global(abstract_model).field_of_type(name).read_option(option_name, false) if value.nil?
+            end
+          end
+          value          
+        end
+      end
+
+      class Typed < RailsAdmin::Config::Fields::Base
+        attr_reader :type
+
+        def initialize(type, parent)
+          super(parent)
+          @type = type
+        end
+
+        def read_option(option_name, recursive = true)
+          value = instance_variable_get("@#{option_name}".to_sym)
+          if recursive
+            value = parent.parent.field_of_type(type).read_option(option_name, false) if value.nil?
+            if parent.section?
+              value = RailsAdmin::Config.global(abstract_model).send(parent.section_name).field_of_type(type).read_option(option_name, false) if value.nil?
+              value = RailsAdmin::Config.global(abstract_model).field_of_type(type).read_option(option_name, false) if value.nil?
+            end
+          end
+          value          
+        end
       end
     end
 
-    # Provides DSL for configuring RailsAdmin navigation
-    module Navigation
-      
-      @@max_visible_tabs = 5
-      mattr_accessor :max_visible_tabs
-      
-      # Register the navigation config DSL on mixin
-      def self.included(klass)        
-        HasLabel.shortcuts_for(klass, :navigation)          
-        HasVisibility.shortcuts_for(klass, :navigation)        
-      end
-
-      def navigation(&block)
-        extension = @registry[:navigation] ||= Dsl.new(self)
-        extension.instance_eval &block if block
-        extension
-      end
-      
-      # Get all models that are configured as visible 
-      def self.visible_models
-        RailsAdmin::AbstractModel.all.select do |m|
-          RailsAdmin.config(m.model).navigation.visible?
+    module Sections
+      def self.included(klass)
+        constants.each do |name|
+          section = "RailsAdmin::Config::Sections::#{name}".constantize
+          name = name.to_s.downcase
+          klass.send(:define_method, name) do |&block|
+            @sections ||= {}
+            @sections[name] ||= section.new(self)
+            @sections[name].instance_eval &block if block
+            @sections[name]
+          end
+          klass.send(:define_method, "label_for_#{name}") do |*args, &block|
+            send(name).label(args[0] || block)
+          end
+          klass.send(:define_method, "hide_in_#{name}") do |&block|
+            send(name).visible(block ? proc { false == (instance_eval &block) } : false)
+          end
+          klass.send(:define_method, "show_in_#{name}") do |&block|
+            send(name).visible(block || true)
+          end
         end
       end
 
-      # Provides DSL for configuring model specific RailsAdmin navigation
-      # settings.
-      #
-      # Defaults:
-      # 
-      #   visible in navigation
-      #   label is @abstract_model.pretty_name
-      #
-      # @see RailsAdmin::Config::HasLabel
-      # @see RailsAdmin::Config::HasVisibility
-      class Dsl < RailsAdmin::Config::Dsl
-        include HasLabel
-        include HasVisibility
-      end
-    end
-
-    # DEVELOPMENT NOTICE: Quite useless as is, just a stub for
-    # further exploration...
-    #
-    # Provides DSL for configuring RailsAdmin history    
-    module History
-      
-      # Register the history config DSL on mixin
-      def self.included(klass)        
-        HasVisibility.shortcuts_for(klass, :history)
-        HasLabel.shortcuts_for(klass, :history)
+      class Base < RailsAdmin::Config::Base
+        def section?
+          false
+        end
       end
 
-      def history(&block)
-        extension = @registry[:history] ||= Dsl.new(self)
-        extension.instance_eval &block if block
-        extension
+      class Edit < RailsAdmin::Config::Sections::Base        
+        include RailsAdmin::Config::Fields
+        include RailsAdmin::Config::Hideable
+        include RailsAdmin::Config::Labelable
       end
 
-      # Get all models that are configured as visible 
-      def self.visible_models
-        RailsAdmin::AbstractModel.all.select do |m|
-          RailsAdmin.config(m.model).history.visible?
+      class List < RailsAdmin::Config::Sections::Base
+        include RailsAdmin::Config::Fields
+        include RailsAdmin::Config::Hideable
+        include RailsAdmin::Config::Labelable
+
+        register_option(:items_per_page) do
+          20
         end
       end
       
-      # Provides DSL for configuring model specific RailsAdmin history
-      # settings.
-      #
-      # Defaults:
-      # 
-      #   visible in history
-      #   label is @abstract_model.pretty_name
-      #
-      # @see RailsAdmin::Config::HasLabel
-      # @see RailsAdmin::Config::HasVisibility      
-      class Dsl < RailsAdmin::Config::Dsl
-        include HasLabel
-        include HasVisibility
-      end        
-    end            
-    
-    # DEVELOPMENT NOTICE: Quite useless as is, just a stub for
-    # further exploration...
-    #
-    # Provides DSL for configuring RailsAdmin list view    
-    module List
-      
-      # Register the list view config DSL on mixin
-      def self.included(klass)        
-        HasVisibility.shortcuts_for(klass, :list)
-        HasLabel.shortcuts_for(klass, :list)
-      end
-
-      def list(&block)
-        extension = @registry[:list] ||= Dsl.new(self)
-        extension.instance_eval &block if block
-        extension
-      end
-
-      # Provides DSL for configuring model specific RailsAdmin list view
-      # settings.
-      #
-      # @see RailsAdmin::Config::HasLabel
-      # @see RailsAdmin::Config::HasVisibility      
-      class Dsl < RailsAdmin::Config::Dsl
-        include HasLabel
-        include HasVisibility        
-      end
-    end    
-
-    # DEVELOPMENT NOTICE: Quite useless as is, just a stub for
-    # further exploration...
-    #
-    # Provides DSL for configuring RailsAdmin edit view    
-    module Edit
-      
-      # Register the edit view config DSL on mixin
-      def self.included(klass)        
-        HasVisibility.shortcuts_for(klass, :edit)
-        HasLabel.shortcuts_for(klass, :edit)        
-      end
-
-      def edit(record = nil, &block)
-        extension = @registry[:edit] ||= Dsl.new(self)
-        extension.instance_eval &block if block
-        extension.record = record
-        extension
-      end
-
-      # Provides DSL for configuring model specific RailsAdmin edit view
-      # settings.
-      #
-      # @see RailsAdmin::Config::HasLabel
-      # @see RailsAdmin::Config::HasVisibility      
-      class Dsl < RailsAdmin::Config::Dsl
-        include HasLabel
-        include HasVisibility        
-  
-        attr_reader :fields
-        attr_accessor :record
-              
-        def initialize(config)
-          super(config)
-          @fields = ActiveSupport::OrderedHash.new          
-        end
-      end
+      class Navigation < RailsAdmin::Config::Sections::Base
+        include RailsAdmin::Config::Hideable
+        include RailsAdmin::Config::Labelable
+      end            
     end
     
-    # The base class for model config DSL extensions
-    class Model
-
-      include HasLabel
-      include HasVisibility
-      include Navigation
-      include History
-      include Edit
-      include List
+    class Model < RailsAdmin::Config::Base            
+      include RailsAdmin::Config::Fields
+      include RailsAdmin::Config::Hideable
+      include RailsAdmin::Config::Labelable
+      include RailsAdmin::Config::Sections
+      
+      attr_reader :abstract_model
+      
+      def initialize(abstract_model, parent)
+        @abstract_model = abstract_model
+        super(parent)
+      end
+      
+      def read_option(option_name, recursive = true)
+        value = instance_variable_get("@#{option_name}".to_sym)
+        value = RailsAdmin::Config.global(abstract_model).read_option(option_name, false) if value.nil? && recursive
+        value
+      end      
+    end
+    
+    class Global < RailsAdmin::Config::Base      
+      include RailsAdmin::Config::Fields
+      include RailsAdmin::Config::Hideable
+      include RailsAdmin::Config::Labelable
+      include RailsAdmin::Config::Sections
 
       attr_accessor :abstract_model
       
-      def initialize(model)
-        @abstract_model = RailsAdmin::AbstractModel.new(model)        
-        @label = @abstract_model.pretty_name
-        @registry = {}
-        @visible = true
-      end
-
+      def read_option(option_name, recursive = true)
+        instance_variable_get("@#{option_name}".to_sym)
+        value = RailsAdmin::Config.global(abstract_model).read_option(option_name, false) if value.nil? && recursive && !top_level_configuration?
+      end      
     end
   end
 end

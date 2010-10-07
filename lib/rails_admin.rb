@@ -83,24 +83,9 @@ module RailsAdmin
   # @see RailsAdmin::Config.load
   def self.config(entity = nil, &block)
     if not entity
-      yield self
+      yield RailsAdmin::Config
     else
       RailsAdmin::Config.load(entity, block)
     end
   end
-
-  # Alias for model specific configuration for nicer syntax in an initializer.
-  #
-  # @see RailsAdmin::Config.load
-  def self.model(entity, &block) 
-    RailsAdmin::Config.load(entity, block)
-  end
-
-  # Proxy for navigation specific configuration
-  #
-  # @see RailsAdmin::Config::Navigation
-  def self.navigation
-    Config::Navigation
-  end
-
 end
