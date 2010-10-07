@@ -95,7 +95,7 @@ module RailsAdmin
       end
 
       def read_option(option_name, recursive = true)
-        value = instance_variable_get("@#{option_name}".to_sym)
+        value = instance_variable_get("@#{option_name}")
         if recursive
           value = parent.read_option(option_name, false) if value.nil?
           value = RailsAdmin::Config.global(abstract_model).send(section_name).read_option(option_name, false) if value.nil?
@@ -109,7 +109,7 @@ module RailsAdmin
       end
 
       def self.register_option(option_name, &default)
-        define_method("#{option_name}=".to_sym) do |value|
+        define_method("#{option_name}=") do |value|
           instance_variable_set("@#{option_name}", value)
         end        
         define_method(option_name) do |*args, &block|
@@ -118,7 +118,15 @@ module RailsAdmin
           else
             value = read_option(option_name)
             value = default if value.nil?
-            value = instance_eval &value if value.kind_of?(Proc)
+            if value.kind_of?(Proc)
+              # Override current method with the block containing this option's default value.
+              # This prevents accidental infinite loops and allows configurations such as
+              # label { "#{label}".upcase }
+              option_method = self.class.instance_method(option_name)
+              self.class.send(:define_method, option_name, default)
+              value = instance_eval &value
+              self.class.send(:define_method, option_name, option_method) # Return the original method
+            end
             value
           end
         end
@@ -165,10 +173,11 @@ module RailsAdmin
         field
       end
 
-      def field_of_type(type, &block)
+      def field_of_type(type, name = nil, &block)
         @typed_fields ||= []
         field = @typed_fields.find { |f| type == f.type } || (@typed_fields << RailsAdmin::Config::Fields::Typed.new(type, self))[-1]
         field.instance_eval &block if block
+        field.name = name
         field
       end
 
@@ -225,14 +234,14 @@ module RailsAdmin
         end
 
         def read_option(option_name, recursive = true)
-          value = instance_variable_get("@#{option_name}".to_sym)
+          value = instance_variable_get("@#{option_name}")
           if recursive
             value = parent.parent.field(name).read_option(option_name, false) if value.nil?
-            value = parent.field_of_type(type).read_option(option_name, false) if value.nil?
-            value = parent.parent.field_of_type(type).read_option(option_name, false) if value.nil?
+            value = parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
+            value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
             if parent.section?
-              value = RailsAdmin::Config.global(abstract_model).send(parent.section_name).field_of_type(name).read_option(option_name, false) if value.nil?
-              value = RailsAdmin::Config.global(abstract_model).field_of_type(name).read_option(option_name, false) if value.nil?
+              value = RailsAdmin::Config.global(abstract_model).send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil?
+              value = RailsAdmin::Config.global(abstract_model).field_of_type(type, name).read_option(option_name, false) if value.nil?
             end
           end
           value          
@@ -253,20 +262,22 @@ module RailsAdmin
       end
 
       class Typed < RailsAdmin::Config::Fields::Base
+        attr_accessor :name
         attr_reader :type
 
         def initialize(type, parent)
           super(parent)
+          @name = nil
           @type = type
         end
 
         def read_option(option_name, recursive = true)
-          value = instance_variable_get("@#{option_name}".to_sym)
+          value = instance_variable_get("@#{option_name}")
           if recursive
-            value = parent.parent.field_of_type(type).read_option(option_name, false) if value.nil?
+            value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
             if parent.section?
-              value = RailsAdmin::Config.global(abstract_model).send(parent.section_name).field_of_type(type).read_option(option_name, false) if value.nil?
-              value = RailsAdmin::Config.global(abstract_model).field_of_type(type).read_option(option_name, false) if value.nil?
+              value = RailsAdmin::Config.global(abstract_model).send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil?
+              value = RailsAdmin::Config.global(abstract_model).field_of_type(type, name).read_option(option_name, false) if value.nil?
             end
           end
           value          
@@ -339,7 +350,7 @@ module RailsAdmin
       end
       
       def read_option(option_name, recursive = true)
-        value = instance_variable_get("@#{option_name}".to_sym)
+        value = instance_variable_get("@#{option_name}")
         value = RailsAdmin::Config.global(abstract_model).read_option(option_name, false) if value.nil? && recursive
         value
       end      
@@ -354,7 +365,7 @@ module RailsAdmin
       attr_accessor :abstract_model
       
       def read_option(option_name, recursive = true)
-        instance_variable_get("@#{option_name}".to_sym)
+        instance_variable_get("@#{option_name}")
         value = RailsAdmin::Config.global(abstract_model).read_option(option_name, false) if value.nil? && recursive && !top_level_configuration?
       end      
     end
