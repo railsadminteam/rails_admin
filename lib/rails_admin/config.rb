@@ -167,11 +167,21 @@ module RailsAdmin
         field
       end
 
+      def fields
+        @named_fields ||= abstract_model.properties.map do |p| 
+          RailsAdmin::Config::Fields::Named.new(p[:name], self)
+        end
+      end
+
       class Base < RailsAdmin::Config::Base
         include RailsAdmin::Config::Hideable
 
         register_option(:label) do
           abstract_model.properties.find { |column| name == column[:name] }[:pretty_name]
+        end
+
+        register_option(:length) do
+          abstract_model.properties.find { |column| name == column[:name] }[:length]
         end
 
         register_option(:searchable) do
@@ -182,9 +192,13 @@ module RailsAdmin
           true
         end
 
+        def required
+          abstract_model.properties.find { |column| name == column[:name] }[:nullable?]
+        end        
+
         def serial
-          abstract_model.properties.find { |column| name == column[:name] }[:serial]
-        end
+          abstract_model.properties.find { |column| name == column[:name] }[:serial?]
+        end        
       end
 
       class Named < RailsAdmin::Config::Fields::Base
@@ -193,6 +207,16 @@ module RailsAdmin
         def initialize(name, parent)
           super(parent)
           @name = name
+        end
+        
+        def type(type = nil, &block)
+          if type || block
+            @type = type
+          else
+            type = @type || abstract_model.properties.find { |column| name == column[:name] }[:type]
+            instance_eval &type if type.kind_of?(Proc)
+            type
+          end
         end
 
         def read_option(option_name, recursive = true)
@@ -207,6 +231,19 @@ module RailsAdmin
             end
           end
           value          
+        end
+        
+        def to_hash
+          {
+            :name => name,
+            :pretty_name => label,
+            :type => type,
+            :length => length,
+            :nullable? => required,
+            :searchable? => searchable,            
+            :serial? => serial,            
+            :sortable? => sortable,            
+          }
         end
       end
 
@@ -272,7 +309,7 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Labelable
 
-        register_option(:items_per_page) do
+        register_option(:per_page) do
           20
         end
       end
