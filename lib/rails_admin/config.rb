@@ -84,11 +84,10 @@ module RailsAdmin
 
     # A base for all configurables.
     class Base                
-      attr_reader :parent, :section_name
+      attr_reader :parent
 
       def initialize(parent)
         @parent = parent
-        @section_name = self.class.name.split("::")[-1].downcase
       end
       
       # The abstract model associated with the current configuration
@@ -103,14 +102,15 @@ module RailsAdmin
         abstract_model.model
       end
 
-      # Default behaviour for configuration value inheritance / overrideability. 
+      # Read a configuration value stored in an instance variable named by the argument.
+      # Subclasses may override this method to implement different
+      # lookup strategies - eg. such that will traverse the parent configurations
+      # for fallback values.
+      #
+      # @see RailsAdmin::Config::Model.read_option
       def read_option(option_name, recursive = true)
         instance_variable_get("@#{option_name}")
       end      
-
-      def section?
-        false
-      end
 
       def self.register_option(option_name, &default)
         define_method("#{option_name}=") do |value|
@@ -134,6 +134,14 @@ module RailsAdmin
             value
           end
         end
+      end
+
+      # Is this an instance or a child of the shared model configuration. This information
+      # is used when finding the fallback paths while querying for option values.
+      #
+      # @see RailsAdmin::Config::Base.read_option
+      def shared?
+        false
       end
     end
 
@@ -211,6 +219,10 @@ module RailsAdmin
           abstract_model.properties.find { |column| name == column[:name] }[:length]
         end
 
+        def parent_is_section?
+          parent.kind_of?(RailsAdmin::Config::Sections::Base)
+        end
+
         register_option(:searchable) do
           type == :string
         end
@@ -263,14 +275,32 @@ module RailsAdmin
           end
         end
 
+        # Configuration value lookup strategy for named fields. 
+        #
+        # @see RailsAdmin::Config::Base.read_option
         def read_option(option_name, recursive = true)
-          value = instance_variable_get("@#{option_name}")
+          value = super(option_name)          
           if recursive
-            value = parent.parent.field(name).read_option(option_name, false) if value.nil?
-            value = parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
-            value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
-            value = RailsAdmin::Config.shared_model(abstract_model).send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil? && parent.section?
-            value = RailsAdmin::Config.shared_model(abstract_model).field_of_type(type, name).read_option(option_name, false) if value.nil?
+            shared = RailsAdmin::Config.shared_model(abstract_model)            
+            unless parent.shared?
+              if parent_is_section?
+                # Query current model's main configuration by the name of current field
+                value = parent.parent.field(name).read_option(option_name, false) if value.nil?
+              end
+              # Query parent (either section or model's main configuration) by the type of current field
+              value = parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
+              if parent_is_section?
+                # Query current model's main configuration by the type of current field
+                value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
+                # Query shared model's section by the type of current field. 
+                value = shared.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil? 
+              end
+            end
+            # For non shared configurations and all section configurations
+            if !parent.shared? || parent_is_section?
+              # Query shared model's main configuration by the type of current field. 
+              value = shared.field_of_type(type, name).read_option(option_name, false) if value.nil?
+            end
           end
           value          
         end
@@ -300,14 +330,27 @@ module RailsAdmin
           @type = type
         end
 
+        # Configuration value lookup strategy for typed fields. 
+        #
+        # @see RailsAdmin::Config::Base.read_option
         def read_option(option_name, recursive = true)
-          value = instance_variable_get("@#{option_name}")
+          value = super(option_name)          
           if recursive
-            value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
-            value = RailsAdmin::Config.shared_model(abstract_model).send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil? && parent.section?
-            value = RailsAdmin::Config.shared_model(abstract_model).field_of_type(type, name).read_option(option_name, false) if value.nil?
+            shared = RailsAdmin::Config.shared_model(abstract_model)            
+            # For non shared section configurations
+            if !parent.shared? && parent_is_section?
+              # Query current model's main configuration by the type of current field
+              value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
+              # Query shared model's section by the type of current field. 
+              value = shared.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil? 
+            end
+            # For non shared configurations and all section configurations
+            if !parent.shared? || parent_is_section?
+              # Query shared model's main configuration by the type of current field. 
+              value = shared.field_of_type(type, name).read_option(option_name, false) if value.nil?
+            end
           end
-          value          
+          value
         end
       end
     end
@@ -348,25 +391,35 @@ module RailsAdmin
 
       # Base class for the section configurations
       class Base < RailsAdmin::Config::Base
-        # Section specific configuration value inheritance / overrideability. 
+
+        # Configuration value lookup strategy for sections.
         #
-        # When an option is queried it's value is first looked from current object's instance variable
-        # named by the option name. If that returns nil the model's main configuration instance is 
-        # queried in a non recursive fashion. If that also returns nil the next fallback is to query
-        # the shared model configuration's section (by the name of current section) also non recursively. 
-        # The final lookup is from the shared model configuration.
+        # @see RailsAdmin::Config::Base.read_option
         def read_option(option_name, recursive = true)
-          value = instance_variable_get("@#{option_name}")
+          value = super(option_name)
           if recursive
+            # Query current model's main configuration. Current model can either be 
+            # a concrete application model or the shared model
             value = parent.read_option(option_name, false) if value.nil?
-            value = RailsAdmin::Config.shared_model(abstract_model).send(section_name).read_option(option_name, false) if value.nil?
-            value = RailsAdmin::Config.shared_model(abstract_model).read_option(option_name, false) if value.nil?
+            # For all non shared configurations
+            unless parent.shared?
+              shared_model = RailsAdmin::Config.shared_model(abstract_model)
+              # Query shared model's section configuration
+              value = shared_model.send(section_name).read_option(option_name, false) if value.nil?
+              # Query shared model's main configuration 
+              value = shared_model.read_option(option_name, false) if value.nil?
+            end
           end
           value
         end
 
-        def section?
-          false
+        def section_name
+          @section_name ||= self.class.name.split("::")[-1].downcase
+        end
+
+        # Sections are shared if parent is kind of RailsAdmin::Config::SharedModel
+        def shared?
+          @shared ||= parent.kind_of?(RailsAdmin::Config::SharedModel)
         end
       end
 
@@ -436,12 +489,12 @@ module RailsAdmin
         super(parent)
       end
       
-      # Model configuration specific configuration value inheritance / overrideability. 
+      # Configuration value lookup strategy for model configurations.
       #
-      # When an option is queried it's value is first looked from current object's instance variable
-      # named by the option name. If that returns nil the shared model configuration is queried.
+      # @see RailsAdmin::Config::Base.read_option
       def read_option(option_name, recursive = true)
-        value = instance_variable_get("@#{option_name}")
+        value = super(option_name)
+        # Query shared model's main configuration 
         value = RailsAdmin::Config.shared_model(abstract_model).read_option(option_name, false) if value.nil? && recursive
         value
       end      
@@ -455,6 +508,11 @@ module RailsAdmin
       include RailsAdmin::Config::Sections
 
       attr_accessor :abstract_model
+      
+      # @see RailsAdmin::Config::Base.shared?
+      def shared?
+        true
+      end
     end
   end
 end
