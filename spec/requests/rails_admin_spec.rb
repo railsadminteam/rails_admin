@@ -52,11 +52,11 @@ describe "RailsAdmin" do
 
       describe "number of visible tabs" do    
         after(:each) do
-          RailsAdmin::Config::Navigation.max_visible_tabs = 5
+          RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 5
         end
     
         it "should be editable" do
-          RailsAdmin::Config::Navigation.max_visible_tabs = 2
+          RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 2
           get rails_admin_dashboard_path
           response.should have_tag("#nav > li") do |elements|
             elements.should have_at_most(4).items
@@ -182,7 +182,7 @@ describe "RailsAdmin" do
         it "should be configurable" do
           RailsAdmin::Config.model do
             list do
-              per_page 1
+              items_per_page 1
             end
           end
           get rails_admin_list_path(:model_name => "league")
@@ -198,7 +198,7 @@ describe "RailsAdmin" do
         it "should be configurable per model" do
           RailsAdmin.config League do
             list do
-              per_page 1
+              items_per_page 1
             end
           end
           get rails_admin_list_path(:model_name => "league")
@@ -214,12 +214,12 @@ describe "RailsAdmin" do
         it "should be globally configurable and overrideable per model" do
           RailsAdmin.config League do
             list do
-              per_page 1
+              items_per_page 1
             end
           end
           RailsAdmin::Config.model do
             list do
-              per_page 20
+              items_per_page 20
             end
           end
           get rails_admin_list_path(:model_name => "league")

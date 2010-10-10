@@ -382,7 +382,7 @@ module RailsAdmin
       options.merge!(get_sort_reverse_hash)
       options.merge!(get_query_hash(options))
       options.merge!(get_filter_hash(options))
-      per_page = RailsAdmin.config(@abstract_model).list.per_page
+      per_page = RailsAdmin.config(@abstract_model).list.items_per_page
 
       # external filter
       options.merge!(other)
