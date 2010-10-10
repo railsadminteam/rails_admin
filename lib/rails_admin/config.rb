@@ -5,7 +5,7 @@ module RailsAdmin
     # Stores a shared model configuration object which acts as a global fallback.
     #
     # @see RailsAdmin::Config.global
-    @@global = nil
+    @@shared_model = nil
     
     # Stores model specific configuration objects in a hash identified by model's class
     # name. 
@@ -47,7 +47,7 @@ module RailsAdmin
     # @see RailsAdmin::Config.registry
     def self.load(entity = nil, block = nil)      
       if entity.nil?
-        config = @@global ||= RailsAdmin::Config::SharedModel.new(self)
+        config = @@shared_model ||= RailsAdmin::Config::SharedModel.new(self)
       else
         if entity.is_a?(RailsAdmin::AbstractModel)
           key = entity.model.name
@@ -67,7 +67,7 @@ module RailsAdmin
     # @see RailsAdmin::Config.load
     def self.reset(entity = nil)
       if entity.nil?
-        @@global = nil
+        @@shared_model = nil
         @@registry = {}
       else
         config = self.load(entity)
