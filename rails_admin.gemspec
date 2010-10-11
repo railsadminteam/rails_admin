@@ -3,7 +3,7 @@ require File.expand_path("../lib/rails_admin/version", __FILE__)
 
 Gem::Specification.new do |s|
   s.add_development_dependency("dummy_data", ["~> 0.9"])
-  s.add_development_dependency("rspec-rails", ["~> 2.0.0.beta.22"])
+  s.add_development_dependency("rspec-rails", ["~> 2.0"])
   s.add_development_dependency("sqlite3-ruby", ["~> 1.3"])
   s.add_development_dependency("devise", ["~> 1.1.0"])
   s.add_runtime_dependency("builder", ["~> 2.1.0"])
