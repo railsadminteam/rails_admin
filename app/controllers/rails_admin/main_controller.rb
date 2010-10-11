@@ -40,7 +40,6 @@ module RailsAdmin
     def new
       @object = @abstract_model.new
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -49,7 +48,6 @@ module RailsAdmin
       @modified_assoc = []
       @object = @abstract_model.new(@attributes)
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save && update_all_associations
@@ -61,7 +59,6 @@ module RailsAdmin
 
     def edit
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -70,7 +67,6 @@ module RailsAdmin
       @modified_assoc = []
 
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
 
       @old_object = @object.clone
@@ -84,7 +80,6 @@ module RailsAdmin
 
     def delete
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
@@ -131,7 +126,6 @@ module RailsAdmin
     end
 
     def show_history
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.history.page_name", :name => @abstract_model.pretty_name)
       @general = true
@@ -375,14 +369,14 @@ module RailsAdmin
     end
 
     def list_entries(other = {})
-      @abstract_models = RailsAdmin::AbstractModel.all
+      @list_config = RailsAdmin.config(@abstract_model).list
 
       options = {}
       options.merge!(get_sort_hash)
       options.merge!(get_sort_reverse_hash)
       options.merge!(get_query_hash(options))
       options.merge!(get_filter_hash(options))
-      per_page = RailsAdmin.config(@abstract_model).list.items_per_page
+      per_page = @list_config.items_per_page
 
       # external filter
       options.merge!(other)
@@ -399,10 +393,11 @@ module RailsAdmin
         options.delete(:offset)
         options.delete(:limit)
       end
+
       @record_count = @abstract_model.count(options)
 
-      @page_name = t("admin.list.select", :name => @abstract_model.pretty_name.downcase)
       @page_type = @abstract_model.pretty_name.downcase
+      @page_name = t("admin.list.select", :name => @list_config.label.downcase)
     end
 
     def object_label(object)
