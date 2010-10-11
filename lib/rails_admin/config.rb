@@ -138,7 +138,8 @@ module RailsAdmin
             instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
           else
             value = read_option(option_name)
-            value = default if value.nil?
+            value = default if value.nil?            
+            # instance_variable_set("@#{option_name}", value) # Experimental option value caching
             if value.kind_of?(Proc)
               # Override current method with the block containing this option's default value.
               # This prevents accidental infinite loops and allows configurations such as
@@ -153,8 +154,8 @@ module RailsAdmin
         end
       end
 
-      # Get the shared model configuration preset with current configurations related
-      # abstract model and model instance
+      # Get the shared model configuration preset with current configuration's
+      # abstract model and model instances.
       #
       # @see RailsAdmin::Config.shared_model
       def shared_model
@@ -301,6 +302,87 @@ module RailsAdmin
         # @see RailsAdmin::AbstractModel.properties
         def serial?
           abstract_model.properties.find { |column| name == column[:name] }[:serial?]
+        end
+
+        def column_output()
+          case type
+          when :text
+            return output[0..40]
+          when :string
+            return output[0..40]
+          else
+            return output
+          end
+        end
+
+        register_option(:column_css_class) do
+          case type
+          when :boolean
+            "bool"
+          when :datetime, :timestamp
+            "dateTime"
+          when :date
+            "date"
+          when :time
+            "time"
+          when :string
+            if length < 100
+              "smallString"
+            else
+              "bigString"
+            end
+          when :text
+            "text"
+          when :integer
+            if name == :id
+              "id"
+            elsif association = abstract_model.belongs_to_associations.select{|a| a[:child_key].first == name}.first
+              "smallString"
+            else
+              "int"
+            end
+          when :float
+            "float"
+          else
+            raise "Unsupported type: "
+          end
+        end
+
+        register_option(:column_width) do
+          case type
+          when :boolean
+            60
+          when :datetime, :timestamp
+            170
+          when :date
+            90
+          when :time
+            60
+          when :string
+            if length < 100
+              180
+            else
+              250
+            end
+          when :text
+            250
+          when :integer
+            if name == :id
+              46
+            elsif association = abstract_model.belongs_to_associations.select{ |a| a[:child_key].first == name}.first
+              180
+            else
+              80
+            end
+          when :float
+            110
+          else
+            raise "Unsupported type: "
+          end
+        end
+        
+        def value()
+          object.send(name)
         end
       end
 
@@ -494,6 +576,13 @@ module RailsAdmin
         # Number of items listed per page
         register_option(:items_per_page) do
           20
+        end
+
+        # Get all fields that are configured as visible
+        #
+        # @see RailsAdmin::Config::Hideable
+        def visible_fields
+          fields.select { |f| f.visible? }
         end
       end
 

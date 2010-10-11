@@ -187,11 +187,13 @@ module RailsAdmin
     def get_model
       model_name = to_model_name(params[:model_name])
       @abstract_model = RailsAdmin::AbstractModel.new(model_name)
+      @model_config = RailsAdmin.config(@abstract_model)
       @properties = @abstract_model.properties
     end
 
     def get_object
       @object = @abstract_model.get(params[:id])
+      @model_config.object = @object
       not_found unless @object
     end
 
@@ -369,14 +371,12 @@ module RailsAdmin
     end
 
     def list_entries(other = {})
-      @list_config = RailsAdmin.config(@abstract_model).list
-
       options = {}
       options.merge!(get_sort_hash)
       options.merge!(get_sort_reverse_hash)
       options.merge!(get_query_hash(options))
       options.merge!(get_filter_hash(options))
-      per_page = @list_config.items_per_page
+      per_page = @model_config.list.items_per_page
 
       # external filter
       options.merge!(other)
@@ -397,7 +397,7 @@ module RailsAdmin
       @record_count = @abstract_model.count(options)
 
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.list.select", :name => @list_config.label.downcase)
+      @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)
     end
 
     def object_label(object)

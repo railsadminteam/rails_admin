@@ -4,8 +4,8 @@
   filter = params[:filter]
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
-  properties = RailsAdmin.config(@abstract_model).list.fields.select { |f| f.visible? }.map do |f| f.to_hash end
-  filters_exist = !properties.select{|property| property[:type] == :boolean}.empty?
+  properties = @model_config.list.visible_fields
+  filters_exist = !properties.select{|property| property.type == :boolean}.empty?
   # columns paginate
   @style, @other, properties = get_column_set(properties)
 %>
@@ -52,10 +52,10 @@
         <ul id="moduleHeader">
           <li class="otherHeader otherHeaderLeft">...</li>
           <% properties.each do |property| %>
-          <% property_name = property[:name] %>
-          <% property_pretty_name = property[:pretty_name] %>
-          <li class="<%= get_column_type(property, "Header") %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
-            <% if property[:sortable?] %>
+          <% property_name = property.name %>
+          <% property_pretty_name = property.label %>
+          <li class="<%= "#{property.column_css_class}Header" %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
+            <% if property.sortable? %>
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to(property_pretty_name.upcase, sort_location, :ref => sort_location.to_json, :class => "headerSort") %>
             <% if sort == property_name.to_s %>
@@ -73,12 +73,12 @@
         </ul>
 
         <% @objects.each_with_index do |object, index| %>
+        <% @model_config.object = object %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
           <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
           <li class="otherRow otherLeft"><%= link_to("...", other_left, :ref => other_left.to_json) %></li>
           <% properties.each do |property| %>
-          <% output_type = format_output(property, object_property(object, property)) %>
-          <li class="<%= get_column_type(property, "Row") %>"><%= output_type %></li>
+          <li class="<%= "#{property.column_css_class}Row" %>"><%= [:text, :string].include?(property.type) ? format_property(property)[0..40] : format_property(property) %></li>
           <% end %>
           <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
           <li class="otherRow otherRight"><%= link_to("...", other_right, :ref => other_right.to_json)%></li>
@@ -94,7 +94,7 @@
       <% if @page_count.to_i > 1 %>
         <%= paginate(@current_page, @page_count, :url => params).html_safe %>
       <% end %>
-      <%= @record_count %> <%= @record_count == 1 ? @abstract_model.pretty_name.downcase : @abstract_model.pretty_name.downcase.pluralize %>
+      <%= @record_count %> <%= @record_count == 1 ? @model_config.list.label.downcase : @model_config.list.label.downcase.pluralize %>
       <% if @page_count.to_i == 2 %>
         <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :class => "showall") %>
       <% end %>
