@@ -6,23 +6,28 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.global
     @@shared_model = nil
-    
+
     # Stores model specific configuration objects in a hash identified by model's class
-    # name. 
+    # name.
     #
     # @see RailsAdmin::Config.model
     @@registry = {}
 
-    # Configuration option to specify which models you want to exclude. 
+    # Configuration option to specify which models you want to exclude.
     @@excluded_models = []
     mattr_accessor :excluded_models
 
     # Alias for the shared fallback model configuration.
     #
     # @see RailsAdmin::Config.load
-    def self.shared_model(abstract_model = nil, &block)
+    def self.shared_model(object = nil, abstract_model = nil, &block)
       config = load(nil, block)
-      config.abstract_model = abstract_model
+      config.object = object
+      if abstract_model
+        config.abstract_model = abstract_model
+      elsif not object.nil?
+        config.abstract_model = RailsAdmin::AbstractModel.new(object.class)
+      end
       config
     end
 
@@ -32,35 +37,42 @@ module RailsAdmin
     def self.model(entity = nil, &block)
       load(entity, block)
     end
-    
-    # Loads given model's configuration instance from the registry or registers 
-    # a new one if one is yet to be added. 
+
+    # Loads a model configuration instance from the registry or registers
+    # a new one if one is yet to be added.
     #
-    # 1st argument can be requested model's class object, class name as a string or symbol 
-    # or a RailsAdmin::AbstractModel instance of the requested model. A shared fallback model 
-    # configuration can be accessed by omitting the first argument.
+    # First argument can be an instance of requested model, it's class object,
+    # it's class name as a string or symbol or a RailsAdmin::AbstractModel
+    # instance.
+    #
+    # A shared fallback model configuration can be accessed by omitting the
+    # first argument.
     #
     # If a block is given it is evaluated in the context of configuration instance.
     #
     # Returns given model's configuration or the shared fallback model configuration.
     #
     # @see RailsAdmin::Config.registry
-    def self.load(entity = nil, block = nil)      
+    def self.load(entity = nil, block = nil)
       if entity.nil?
         config = @@shared_model ||= RailsAdmin::Config::SharedModel.new(self)
       else
-        if entity.is_a?(RailsAdmin::AbstractModel)
-          key = entity.model.name
+        if entity.kind_of?(RailsAdmin::AbstractModel)
+          key = entity.model.name.to_sym
+          config = @@registry[key] ||= RailsAdmin::Config::Model.new(entity, self)
+        elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+          key = entity.kind_of?(Class) ? entity.name.to_sym : entity.to_sym
+          config = @@registry[key] ||= RailsAdmin::Config::Model.new(RailsAdmin::AbstractModel.new(entity), self)
         else
-          entity = entity.to_s.camelize.constantize unless entity.is_a?(Class)
-          entity = RailsAdmin::AbstractModel.new(entity)
+          key = entity.class.name.to_sym
+          config = @@registry[key] ||= RailsAdmin::Config::Model.new(RailsAdmin::AbstractModel.new(entity.class), self)
+          config.object = entity
         end
-        config = @@registry[entity.model.name] ||= RailsAdmin::Config::Model.new(entity, self)
-      end      
-      config.instance_eval &block if block      
+      end
+      config.instance_eval &block if block
       config
     end
-    
+
     # Reset a model's configuration. By omitting the first argument all model configurations
     # are reset.
     #
@@ -71,7 +83,7 @@ module RailsAdmin
         @@registry = {}
       else
         config = self.load(entity)
-        @@registry[config.abstract_model.model.name] = nil
+        @@registry[config.abstract_model.model.name.to_sym] = nil
       end
     end
 
@@ -83,13 +95,13 @@ module RailsAdmin
     end
 
     # A base for all configurables.
-    class Base                
+    class Base
       attr_reader :parent
 
       def initialize(parent)
         @parent = parent
       end
-      
+
       # The abstract model associated with the current configuration
       #
       # @see RailsAdmin::AbstractModel
@@ -102,6 +114,11 @@ module RailsAdmin
         abstract_model.model
       end
 
+      # Currently loaded model instance
+      def object
+        parent.object
+      end
+
       # Read a configuration value stored in an instance variable named by the argument.
       # Subclasses may override this method to implement different
       # lookup strategies - eg. such that will traverse the parent configurations
@@ -110,12 +127,12 @@ module RailsAdmin
       # @see RailsAdmin::Config::Model.read_option
       def read_option(option_name, recursive = true)
         instance_variable_get("@#{option_name}")
-      end      
+      end
 
       def self.register_option(option_name, &default)
         define_method("#{option_name}=") do |value|
           instance_variable_set("@#{option_name}", value)
-        end        
+        end
         define_method(option_name) do |*args, &block|
           if !args[0].nil? || block
             instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
@@ -136,6 +153,14 @@ module RailsAdmin
         end
       end
 
+      # Get the shared model configuration preset with current configurations related
+      # abstract model and model instance
+      #
+      # @see RailsAdmin::Config.shared_model
+      def shared_model
+        RailsAdmin::Config.shared_model(object, abstract_model)
+      end
+
       # Is this an instance or a child of the shared model configuration. This information
       # is used when finding the fallback paths while querying for option values.
       #
@@ -151,34 +176,48 @@ module RailsAdmin
         klass.register_option(:label) do
           abstract_model.pretty_name
         end
+        klass.register_option(:object_label) do
+          if object.respond_to?(:name) && object.name
+            object.name
+          elsif object.respond_to?(:title) && object.title
+            object.title
+          else
+            "#{object.class.to_s} ##{object.id}"
+          end
+        end
       end
     end
-    
+
     # Defines a visibility configuration
     module Hideable
+      # Visibility defaults to true.
       def self.included(klass)
         klass.register_option(:visible) do
           true
         end
       end
-      
+
+      # Reader whether field is hidden.
       def hidden?
         not visible
       end
 
+      # Writer to hide field.
       def hide(&block)
         visible block ? proc { false == (instance_eval &block) } : false
       end
 
+      # Writer to show field.
       def show(&block)
         visible block || true
       end
-      
+
+      # Reader whether field is visible.
       def visible?
         visible
       end
     end
-    
+
     # Fields describe the configuration for model's properties that RailsAdmin will
     # use when rendering the list and edit views.
     module Fields
@@ -202,7 +241,7 @@ module RailsAdmin
       # Returns all named field configurations for the model configuration instance. If no fields
       # have been defined returns all fields.
       def fields
-        @named_fields ||= abstract_model.properties.map do |p| 
+        @named_fields ||= abstract_model.properties.map do |p|
           RailsAdmin::Config::Fields::Named.new(p[:name], self)
         end
       end
@@ -211,10 +250,16 @@ module RailsAdmin
       class Base < RailsAdmin::Config::Base
         include RailsAdmin::Config::Hideable
 
+        # Accessor for field's label.
+        #
+        # @see RailsAdmin::AbstractModel.properties
         register_option(:label) do
           abstract_model.properties.find { |column| name == column[:name] }[:pretty_name]
         end
 
+        # Accessor for field's maximum length.
+        #
+        # @see RailsAdmin::AbstractModel.properties
         register_option(:length) do
           abstract_model.properties.find { |column| name == column[:name] }[:length]
         end
@@ -223,36 +268,39 @@ module RailsAdmin
           parent.kind_of?(RailsAdmin::Config::Sections::Base)
         end
 
+        # Accessor for whether this is field is searchable. By default string
+        # fields are searchable.
         register_option(:searchable) do
           type == :string
         end
-        
+
+        # Boolean style alias for syntactic coherence
         def searchable?
           searchable
         end
 
+        # Accessor for whether this is field is sortable. True by default.
         register_option(:sortable) do
           true
         end
-        
+
+        # Boolean style alias for syntactic coherence
         def sortable?
           sortable
         end
 
-        def required
+        # Reader for whether this is field is mandatory.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        def required?
           abstract_model.properties.find { |column| name == column[:name] }[:nullable?]
         end
-        
-        def required?
-          required
-        end
 
-        def serial
-          abstract_model.properties.find { |column| name == column[:name] }[:serial?]
-        end        
-
+        # Reader for whether this is a serial field (aka. primary key, identifier).
+        #
+        # @see RailsAdmin::AbstractModel.properties
         def serial?
-          serial
+          abstract_model.properties.find { |column| name == column[:name] }[:serial?]
         end
       end
 
@@ -264,7 +312,11 @@ module RailsAdmin
           super(parent)
           @name = name
         end
-        
+
+        # Accessor for field type. Supported types are: boolean, datetime,
+        # timestamp, date, time, string, text, integer, float.
+        #
+        # @see RailsAdmin::AbstractModel.properties
         def type(type = nil, &block)
           if type || block
             @type = type
@@ -275,13 +327,12 @@ module RailsAdmin
           end
         end
 
-        # Configuration value lookup strategy for named fields. 
+        # Configuration value lookup strategy for named fields.
         #
         # @see RailsAdmin::Config::Base.read_option
         def read_option(option_name, recursive = true)
-          value = super(option_name)          
+          value = super(option_name)
           if recursive
-            shared = RailsAdmin::Config.shared_model(abstract_model)            
             unless parent.shared?
               if parent_is_section?
                 # Query current model's main configuration by the name of current field
@@ -292,33 +343,33 @@ module RailsAdmin
               if parent_is_section?
                 # Query current model's main configuration by the type of current field
                 value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
-                # Query shared model's section by the type of current field. 
-                value = shared.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil? 
+                # Query shared model's section by the type of current field.
+                value = shared_model.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil?
               end
             end
             # For non shared configurations and all section configurations
             if !parent.shared? || parent_is_section?
-              # Query shared model's main configuration by the type of current field. 
-              value = shared.field_of_type(type, name).read_option(option_name, false) if value.nil?
+              # Query shared model's main configuration by the type of current field.
+              value = shared_model.field_of_type(type, name).read_option(option_name, false) if value.nil?
             end
           end
-          value          
+          value
         end
-        
+
         def to_hash
           {
             :name => name,
             :pretty_name => label,
             :type => type,
             :length => length,
-            :nullable? => required,
-            :searchable? => searchable,            
-            :serial? => serial,            
-            :sortable? => sortable,            
+            :nullable? => required?,
+            :searchable? => searchable?,
+            :serial? => serial?,
+            :sortable? => sortable?,
           }
         end
       end
-      
+
       # A field configuration identified by the type of the column.
       class Typed < RailsAdmin::Config::Fields::Base
         attr_accessor :name
@@ -326,28 +377,26 @@ module RailsAdmin
 
         def initialize(type, parent)
           super(parent)
-          @name = nil
           @type = type
         end
 
-        # Configuration value lookup strategy for typed fields. 
+        # Configuration value lookup strategy for typed fields.
         #
         # @see RailsAdmin::Config::Base.read_option
         def read_option(option_name, recursive = true)
-          value = super(option_name)          
+          value = super(option_name)
           if recursive
-            shared = RailsAdmin::Config.shared_model(abstract_model)            
             # For non shared section configurations
             if !parent.shared? && parent_is_section?
               # Query current model's main configuration by the type of current field
               value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
-              # Query shared model's section by the type of current field. 
-              value = shared.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil? 
+              # Query shared model's section by the type of current field.
+              value = shared_model.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil?
             end
             # For non shared configurations and all section configurations
             if !parent.shared? || parent_is_section?
-              # Query shared model's main configuration by the type of current field. 
-              value = shared.field_of_type(type, name).read_option(option_name, false) if value.nil?
+              # Query shared model's main configuration by the type of current field.
+              value = shared_model.field_of_type(type, name).read_option(option_name, false) if value.nil?
             end
           end
           value
@@ -358,7 +407,7 @@ module RailsAdmin
     # Sections describe different views in the RailsAdmin engine. Configurable sections are
     # edit, list and navigation.
     #
-    # Each section's class object can store generic configuration about that section (such as the 
+    # Each section's class object can store generic configuration about that section (such as the
     # number of visible tabs in the main navigation), while the instances (accessed via model
     # configuration objects) store model specific configuration (such as the label of the
     # model to be used as the title in the main navigation tabs).
@@ -398,21 +447,21 @@ module RailsAdmin
         def read_option(option_name, recursive = true)
           value = super(option_name)
           if recursive
-            # Query current model's main configuration. Current model can either be 
+            # Query current model's main configuration. Current model can either be
             # a concrete application model or the shared model
             value = parent.read_option(option_name, false) if value.nil?
             # For all non shared configurations
             unless parent.shared?
-              shared_model = RailsAdmin::Config.shared_model(abstract_model)
               # Query shared model's section configuration
               value = shared_model.send(section_name).read_option(option_name, false) if value.nil?
-              # Query shared model's main configuration 
+              # Query shared model's main configuration
               value = shared_model.read_option(option_name, false) if value.nil?
             end
           end
           value
         end
 
+        # Section's class name without namespace is used as it's accessor
         def section_name
           @section_name ||= self.class.name.split("::")[-1].downcase
         end
@@ -424,8 +473,14 @@ module RailsAdmin
       end
 
       # Configuration of the edit view
-      class Edit < RailsAdmin::Config::Sections::Base        
+      class Edit < RailsAdmin::Config::Sections::Base
         include RailsAdmin::Config::Fields
+        include RailsAdmin::Config::Hideable
+        include RailsAdmin::Config::Labelable
+      end
+
+      # Configuration of the history view
+      class History < RailsAdmin::Config::Sections::Base
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Labelable
       end
@@ -441,7 +496,7 @@ module RailsAdmin
           20
         end
       end
-      
+
       # Configuration of the navigation view
       class Navigation < RailsAdmin::Config::Sections::Base
         include RailsAdmin::Config::Hideable
@@ -449,7 +504,7 @@ module RailsAdmin
 
         @@max_visible_tabs = 5
 
-        # The number of tabs visible in the main navigation
+        # Accessor for the number of tabs visible in the main navigation
         def self.max_visible_tabs(value = nil, &block)
           if value || block
             @@max_visible_tabs = value || block
@@ -459,56 +514,58 @@ module RailsAdmin
             value
           end
         end
-        
+
+        # Writer for the number of tabs visible in the main navigation
         def self.max_visible_tabs=(value)
           @@max_visible_tabs = value
         end
 
-        # Get all models that are configured as visible 
+        # Get all models that are configured as visible
         #
         # @see RailsAdmin::Config::Hideable
         def self.visible_models
           RailsAdmin::AbstractModel.all.select do |m|
             RailsAdmin.config(m.model).navigation.visible?
           end
-        end        
-      end            
-    end
-    
-    # Model specific configuration object
-    class Model < RailsAdmin::Config::Base            
-      include RailsAdmin::Config::Fields
-      include RailsAdmin::Config::Hideable
-      include RailsAdmin::Config::Labelable
-      include RailsAdmin::Config::Sections
-      
-      attr_reader :abstract_model
-      
-      def initialize(abstract_model, parent)
-        @abstract_model = abstract_model
-        super(parent)
+        end
       end
-      
-      # Configuration value lookup strategy for model configurations.
-      #
-      # @see RailsAdmin::Config::Base.read_option
-      def read_option(option_name, recursive = true)
-        value = super(option_name)
-        # Query shared model's main configuration 
-        value = RailsAdmin::Config.shared_model(abstract_model).read_option(option_name, false) if value.nil? && recursive
-        value
-      end      
     end
-    
-    # Fallback configuration object shared by all models configurations
-    class SharedModel < RailsAdmin::Config::Base      
+
+    # Model specific configuration object
+    class Model < RailsAdmin::Config::Base
       include RailsAdmin::Config::Fields
       include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Labelable
       include RailsAdmin::Config::Sections
 
-      attr_accessor :abstract_model
-      
+      attr_accessor :object
+      attr_reader :abstract_model
+
+      def initialize(abstract_model, parent)
+        @abstract_model = abstract_model
+        super(parent)
+      end
+
+      # Configuration value lookup strategy for model configurations.
+      #
+      # @see RailsAdmin::Config::Base.read_option
+      def read_option(option_name, recursive = true)
+        value = super(option_name)
+        # Query shared model's main configuration
+        value = shared_model.read_option(option_name, false) if value.nil? && recursive
+        value
+      end
+    end
+
+    # Fallback configuration object shared by all models configurations
+    class SharedModel < RailsAdmin::Config::Base
+      include RailsAdmin::Config::Fields
+      include RailsAdmin::Config::Hideable
+      include RailsAdmin::Config::Labelable
+      include RailsAdmin::Config::Sections
+
+      attr_accessor :abstract_model, :object
+
       # @see RailsAdmin::Config::Base.shared?
       def shared?
         true
