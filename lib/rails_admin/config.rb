@@ -225,7 +225,7 @@ module RailsAdmin
       # Defines a configuration for a named field.
       def field(name, &block)
         @named_fields ||= []
-        field = @named_fields.find { |f| name == f.name } || (@named_fields << RailsAdmin::Config::Fields::Named.new(name, self))[-1]
+        field = @named_fields.find { |f| name == f.name } || (@named_fields << RailsAdmin::Config::Fields::Named.factory(name, self))[-1]
         field.instance_eval &block if block
         field
       end
@@ -233,7 +233,7 @@ module RailsAdmin
       # Defines a configuration for a typed field.
       def field_of_type(type, name = nil, &block)
         @typed_fields ||= []
-        field = @typed_fields.find { |f| type == f.type } || (@typed_fields << RailsAdmin::Config::Fields::Typed.new(type, self))[-1]
+        field = @typed_fields.find { |f| type == f.type } || (@typed_fields << RailsAdmin::Config::Fields::Typed.factory(type, self))[-1]
         field.instance_eval &block if block
         field.name = name
         field
@@ -269,10 +269,9 @@ module RailsAdmin
           parent.kind_of?(RailsAdmin::Config::Sections::Base)
         end
 
-        # Accessor for whether this is field is searchable. By default string
-        # fields are searchable.
+        # Accessor for whether this is field is searchable.
         register_option(:searchable) do
-          type == :string
+          RailsAdmin::Config::Fields::Typed.load(type).searchable?
         end
 
         # Boolean style alias for syntactic coherence
@@ -280,9 +279,9 @@ module RailsAdmin
           searchable
         end
 
-        # Accessor for whether this is field is sortable. True by default.
+        # Accessor for whether this is field is sortable.
         register_option(:sortable) do
-          true
+          RailsAdmin::Config::Fields::Typed.load(type).sortable?
         end
 
         # Boolean style alias for syntactic coherence
@@ -304,81 +303,12 @@ module RailsAdmin
           abstract_model.properties.find { |column| name == column[:name] }[:serial?]
         end
 
-        def column_output()
-          case type
-          when :text
-            return output[0..40]
-          when :string
-            return output[0..40]
-          else
-            return output
-          end
-        end
-
         register_option(:column_css_class) do
-          case type
-          when :boolean
-            "bool"
-          when :datetime, :timestamp
-            "dateTime"
-          when :date
-            "date"
-          when :time
-            "time"
-          when :string
-            if length < 100
-              "smallString"
-            else
-              "bigString"
-            end
-          when :text
-            "text"
-          when :integer
-            if name == :id
-              "id"
-            elsif association = abstract_model.belongs_to_associations.select{|a| a[:child_key].first == name}.first
-              "smallString"
-            else
-              "int"
-            end
-          when :float
-            "float"
-          else
-            raise "Unsupported type: "
-          end
+          RailsAdmin::Config::Fields::Typed.load(type).column_css_class(self)
         end
 
         register_option(:column_width) do
-          case type
-          when :boolean
-            60
-          when :datetime, :timestamp
-            170
-          when :date
-            90
-          when :time
-            60
-          when :string
-            if length < 100
-              180
-            else
-              250
-            end
-          when :text
-            250
-          when :integer
-            if name == :id
-              46
-            elsif association = abstract_model.belongs_to_associations.select{ |a| a[:child_key].first == name}.first
-              180
-            else
-              80
-            end
-          when :float
-            110
-          else
-            raise "Unsupported type: "
-          end
+          RailsAdmin::Config::Fields::Typed.load(type).column_width(self)
         end
         
         def value()
@@ -387,12 +317,20 @@ module RailsAdmin
       end
 
       # A field configuration identified by the name of the column.
-      class Named < RailsAdmin::Config::Fields::Base
+      class Named < Base
         attr_reader :name
 
         def initialize(name, parent)
           super(parent)
           @name = name
+        end
+        
+        def self.factory(name, parent)
+          if parent.abstract_model.properties.find { |column| name == column[:name] }.nil?
+            RailsAdmin::Config::Fields::Virtual.new(name, parent)
+          else
+            self.new(name, parent)
+          end
         end
 
         # Accessor for field type. Supported types are: boolean, datetime,
@@ -452,36 +390,198 @@ module RailsAdmin
         end
       end
 
-      # A field configuration identified by the type of the column.
-      class Typed < RailsAdmin::Config::Fields::Base
-        attr_accessor :name
-        attr_reader :type
-
-        def initialize(type, parent)
-          super(parent)
-          @type = type
+      module Typed
+        
+        def self.factory(type, parent)
+          load(type).new(parent)
         end
 
-        # Configuration value lookup strategy for typed fields.
-        #
-        # @see RailsAdmin::Config::Base.read_option
-        def read_option(option_name, recursive = true)
-          value = super(option_name)
-          if recursive
-            # For non shared section configurations
-            if !parent.shared? && parent_is_section?
-              # Query current model's main configuration by the type of current field
-              value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
-              # Query shared model's section by the type of current field.
-              value = shared_model.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil?
+        def self.register(type, klass)
+          @@registry[type.to_sym] = klass
+        end
+        
+        def self.load(type)
+          @@registry[type.to_sym] or raise "Unsupported field type: #{type}"
+        end
+        
+        # A base class for configuring fields identified by the type of the column.
+        class Base < RailsAdmin::Config::Fields::Base
+
+          attr_accessor :name
+
+          # Configuration value lookup strategy for typed fields.
+          #
+          # @see RailsAdmin::Config::Base.read_option
+          def read_option(option_name, recursive = true)
+            value = super(option_name)
+            if recursive
+              # For non shared section configurations
+              if !parent.shared? && parent_is_section?
+                # Query current model's main configuration by the type of current field
+                value = parent.parent.field_of_type(type, name).read_option(option_name, false) if value.nil?
+                # Query shared model's section by the type of current field.
+                value = shared_model.send(parent.section_name).field_of_type(type, name).read_option(option_name, false) if value.nil?
+              end
+              # For non shared configurations and all section configurations
+              if !parent.shared? || parent_is_section?
+                # Query shared model's main configuration by the type of current field.
+                value = shared_model.field_of_type(type, name).read_option(option_name, false) if value.nil?
+              end
             end
-            # For non shared configurations and all section configurations
-            if !parent.shared? || parent_is_section?
-              # Query shared model's main configuration by the type of current field.
-              value = shared_model.field_of_type(type, name).read_option(option_name, false) if value.nil?
+            value
+          end
+
+          def self.column_css_class(field)
+            @column_css_class
+          end
+
+          def self.column_width(field)
+            @column_width
+          end
+
+          def self.searchable?
+            @searchable
+          end
+
+          def self.sortable?
+            @sortable
+          end
+
+          def type
+            self.class.instance_variable_get("@type")
+          end
+        end
+
+        class Boolean < Base
+          @column_css_class = "bool"
+          @column_width = 60
+          @searchable = false
+          @sortable = true
+          @type = :boolean
+        end
+
+        class Date < Base
+          @column_css_class = "date"
+          @column_width = 90
+          @searchable = false
+          @sortable = true
+          @type = :date
+        end
+
+        class Datetime < Base
+          @column_css_class = "dateTime"
+          @column_width = 170
+          @searchable = false
+          @sortable = true
+          @type = :datetime
+        end
+
+        class Float < Base
+          @column_css_class = "float"
+          @column_width = 110
+          @searchable = false
+          @sortable = true
+          @type = :float
+        end
+
+        class Integer < Base
+          @searchable = false
+          @sortable = true
+          @type = :integer
+
+          def self.column_css_class(field)
+            if field.name == :id
+              "id"
+            elsif association = field.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == field.name}.first
+              "smallString"
+            else
+              "int"
             end
           end
-          value
+
+          def self.column_width(field)
+            if field.name == :id
+              46
+            elsif association = field.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == field.name}.first
+              180
+            else
+              80
+            end
+          end
+        end
+
+        class String < Base
+          @searchable = true
+          @sortable = true
+          @type = :string
+          
+          def self.column_css_class(field)
+            if field.length < 100
+              "smallString"
+            else
+              "bigString"
+            end
+          end
+
+          def self.column_width(field)
+            if field.length < 100
+              180
+            else
+              250
+            end
+          end
+        end
+
+        class Text < Base
+          @column_css_class = "text"
+          @column_width = 250
+          @searchable = true
+          @sortable = true
+          @type = :text
+        end
+        
+        class Time < Base
+          @column_css_class = "time"
+          @column_width = 60
+          @searchable = false
+          @sortable = true
+          @type = :time
+        end
+        
+        class Timestamp < Base
+          @column_css_class = "dateTime"
+          @column_width = 170
+          @searchable = false
+          @sortable = true
+          @type = :timestamp
+        end
+
+        class Virtual < Base
+          @column_css_class = "virtual"
+          @column_width = 170
+          @searchable = false
+          @sortable = false
+          @type = :virtual
+        end
+        
+        @@registry = {
+          :boolean => RailsAdmin::Config::Fields::Typed::Boolean,
+          :date => RailsAdmin::Config::Fields::Typed::Date,
+          :datetime => RailsAdmin::Config::Fields::Typed::Datetime,
+          :float => RailsAdmin::Config::Fields::Typed::Float,
+          :integer => RailsAdmin::Config::Fields::Typed::Integer,
+          :string => RailsAdmin::Config::Fields::Typed::String,
+          :text => RailsAdmin::Config::Fields::Typed::Text,
+          :time => RailsAdmin::Config::Fields::Typed::Time,
+          :timestamp => RailsAdmin::Config::Fields::Typed::Timestamp,
+          :virtual => RailsAdmin::Config::Fields::Typed::Virtual,
+        }
+      end
+      
+      class Virtual < Named
+        # Virtual fields are of pseudo-type virtual
+        def type
+          :virtual
         end
       end
     end
