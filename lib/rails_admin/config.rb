@@ -216,16 +216,22 @@ module RailsAdmin
     module Fields
       # Populate the extended object's @fields instance variable with model's properties
       def self.extended(obj)
-        fields = obj.abstract_model.properties.map {|p| Field.new(obj, p[:name], p[:type]) }
+        fields = obj.abstract_model.properties.map do |p| 
+          if association = obj.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == p[:name]}.first
+            BelongsToAssociation.new(obj, p[:name], association)
+          else
+            Field.new(obj, p[:name], p[:serial?] ? :serial : p[:type])
+          end
+        end
         obj.instance_variable_set("@fields", fields)
       end
 
       # Defines a configuration for a field.
-      def field(name, &block)
+      def field(name, type = nil, &block)
         field = @fields.find {|f| name == f.name }
         # Allow the addition of virtual fields such as object methods
         if field.nil?
-          field = (@fields << Virtual.new(self, name)).last
+          field = (@fields << Virtual.new(self, name, type)).last
         end
         # If field has not been yet defined add some default properties
         unless field.defined
@@ -267,18 +273,18 @@ module RailsAdmin
       end
 
       # A base class for configuring the fields of models.
-      class Field < RailsAdmin::Config::Configurable
+      class Base < RailsAdmin::Config::Configurable
         attr_reader :name, :type
         attr_accessor :defined, :order
 
         include RailsAdmin::Config::Hideable
-
+        
         def initialize(parent, name, type = nil)
           super(parent)
           @defined = false
           @name = name
           @order = 0
-          @type = type || abstract_model.properties.find {|column| name == column[:name] }[:type]
+          @type = type
         end
 
         # Accessor for field's column width (in pixels) in the list view
@@ -289,6 +295,24 @@ module RailsAdmin
         # Accessor for field's css class name in the list view
         register_instance_option(:column_css_class) do
           RailsAdmin::Fields.load(type).column_css_class
+        end
+
+        # Accessor for whether this field is searchable.
+        register_instance_option(:searchable?) do
+          RailsAdmin::Fields.load(type).searchable?
+        end
+
+        # Accessor for whether this field is sortable.
+        register_instance_option(:sortable?) do
+          RailsAdmin::Fields.load(type).sortable?
+        end
+      end
+      
+      class Field < Base
+        def initialize(parent, name, type = nil)
+          super(parent, name, type)
+          @type = type || (serial? ? :serial : abstract_model.properties.find {|c| name == c[:name] }[:type])
+          @type = :small_string if :string == @type && length < 100
         end
 
         # Accessor for field's label.
@@ -303,16 +327,6 @@ module RailsAdmin
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:length) do
           abstract_model.properties.find {|column| name == column[:name] }[:length]
-        end
-
-        # Accessor for whether this field is searchable.
-        register_instance_option(:searchable?) do
-          RailsAdmin::Fields.load(type).searchable?
-        end
-
-        # Accessor for whether this field is sortable.
-        register_instance_option(:sortable?) do
-          RailsAdmin::Fields.load(type).sortable?
         end
 
         # Accessor for field's value
@@ -347,22 +361,63 @@ module RailsAdmin
           abstract_model.properties.find {|column| name == column[:name] }[:serial?]
         end
       end
+      
+      class BelongsToAssociation < Base
+        
+        attr_reader :association
+        
+        def initialize(parent, name, association)
+          super(parent, name, :string)
+          @association = association
+        end
+
+        # Accessor for field's label.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        register_instance_option(:label) do
+          association[:pretty_name]
+        end
+
+        # Accessor for whether this field is searchable.
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        # Accessor for whether this field is sortable.
+        register_instance_option(:sortable?) do
+          false
+        end
+
+        # Reader for whether this is field is mandatory.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        def required?
+          abstract_model.properties.find {|column| name == column[:name] }[:nullable?]
+        end
+
+        # Reader for whether this is a serial field (aka. primary key, identifier).
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        def serial?
+          abstract_model.properties.find {|column| name == column[:name] }[:serial?]
+        end
+
+        # Accessor for field's value
+        register_instance_option(:value) do
+          object = bindings[:object].send(association[:name])
+          unless object.nil?
+            RailsAdmin::Config.model(object).list.object_label
+          else
+            nil
+          end
+        end
+      end
 
       # A base class for configuring the fields of models.
-      class Virtual < Field
+      class Virtual < Base
 
-        def initialize(parent, name)
-          super(parent, name, :virtual)
-        end
-
-        # Accessor for field's column width (in pixels) in the list view
-        register_instance_option(:column_width) do
-          RailsAdmin::Fields.load(type).column_width
-        end
-
-        # Accessor for field's css class name in the list view
-        register_instance_option(:column_css_class) do
-          RailsAdmin::Fields.load(type).column_css_class
+        def initialize(parent, name, type = :string)
+          super(parent, name, type)
         end
 
         # Accessor for field's label.

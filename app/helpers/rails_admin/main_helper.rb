@@ -68,16 +68,7 @@ module RailsAdmin
       when :text
         value
       when :integer
-        if association = property.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property.name}.first
-          object = property.bindings[:object].send(association[:name])
-          unless object.nil?
-            RailsAdmin::Config.model(object).list.object_label
-          else
-            value
-          end
-        else
-          value
-        end
+        value
       else
         value
       end
