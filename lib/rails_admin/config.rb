@@ -483,9 +483,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Hideable
         def self.visible_models
-          RailsAdmin::Config.models
-            .select {|m| m.navigation.visible? }
-            .sort {|a, b| a.navigation.label <=> b.navigation.label }
+          RailsAdmin::Config.models.select {|m| m.navigation.visible? }.sort {|a, b| a.navigation.label <=> b.navigation.label }
         end
       end
     end

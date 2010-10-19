@@ -25,11 +25,11 @@ module RailsAdmin
       end
 
       def self.searchable?
-        self.class_variable_get("@@searchable")
+        send(:class_variable_get, "@@searchable")
       end
 
       def self.sortable?
-        self.class_variable_get("@@sortable")
+        send(:class_variable_get, "@@sortable")
       end
     end
 
