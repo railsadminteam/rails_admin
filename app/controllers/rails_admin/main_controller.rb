@@ -193,7 +193,7 @@ module RailsAdmin
 
     def get_object
       @object = @abstract_model.get(params[:id])
-      @model_config.object = @object
+      @model_config.bind(:object, @object)
       not_found unless @object
     end
 

@@ -4,8 +4,6 @@ describe "RailsAdmin" do
   include Warden::Test::Helpers
   
   before(:each) do
-    RailsAdmin::Config.reset
-    
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
     RailsAdmin::AbstractModel.new("League").destroy_all!
@@ -27,6 +25,10 @@ describe "RailsAdmin" do
   
   describe "config" do
     
+    after(:each) do
+      RailsAdmin::Config.reset
+    end
+
     describe "excluded models" do
       excluded_models = [Division, Draft, Fan]
 
@@ -107,10 +109,9 @@ describe "RailsAdmin" do
 
         it "should be editable with a block via navigation configuration" do
           RailsAdmin.config Fan do
-            label "Fan test"
             navigation do
               label do
-                "#{parent.label} 4"
+                "#{label} test 4"
               end
             end
           end
@@ -212,14 +213,14 @@ describe "RailsAdmin" do
         end
 
         it "should be globally configurable and overrideable per model" do
-          RailsAdmin.config League do
-            list do
-              items_per_page 1
-            end
-          end
           RailsAdmin::Config.model do
             list do
               items_per_page 20
+            end
+          end
+          RailsAdmin.config League do
+            list do
+              items_per_page 1
             end
           end
           get rails_admin_list_path(:model_name => "league")
@@ -298,7 +299,7 @@ describe "RailsAdmin" do
         it "should be renameable by type" do
           RailsAdmin.config Fan do
             list do
-              field_of_type :datetime do
+              fields_of_type :datetime do
                 label { "#{label} (DATETIME)" }
               end
             end
@@ -341,7 +342,7 @@ describe "RailsAdmin" do
         it "should have option to disable sortability by type" do
           RailsAdmin.config Fan do
             list do
-              field_of_type :datetime do
+              fields_of_type :datetime do
                 sortable false
               end
               field :id
@@ -362,7 +363,7 @@ describe "RailsAdmin" do
         it "should have option to hide fields by type" do
           RailsAdmin.config Fan do
             list do
-              field_of_type :datetime do
+              fields_of_type :datetime do
                 hide
               end
             end

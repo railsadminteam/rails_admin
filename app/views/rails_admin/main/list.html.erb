@@ -73,7 +73,7 @@
         </ul>
 
         <% @objects.each_with_index do |object, index| %>
-        <% @model_config.object = object %>
+        <% @model_config.bind(:object, object) %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
           <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
           <li class="otherRow otherLeft"><%= link_to("...", other_left, :ref => other_left.to_json) %></li>

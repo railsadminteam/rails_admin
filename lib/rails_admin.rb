@@ -85,7 +85,7 @@ module RailsAdmin
     if not entity
       yield RailsAdmin::Config
     else
-      RailsAdmin::Config.load(entity, block)
+      RailsAdmin::Config.model(entity, &block)
     end
   end
 end
