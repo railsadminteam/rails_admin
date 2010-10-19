@@ -286,6 +286,10 @@ module RailsAdmin
           @order = 0
           @type = type
         end
+        
+        def association?
+          kind_of?(RailsAdmin::Config::Fields::Association)
+        end
 
         # Accessor for field's column width (in pixels) in the list view
         register_instance_option(:column_width) do
@@ -362,8 +366,7 @@ module RailsAdmin
         end
       end
       
-      class BelongsToAssociation < Base
-        
+      class Association < Base
         attr_reader :association
         
         def initialize(parent, name, association)
@@ -387,7 +390,9 @@ module RailsAdmin
         register_instance_option(:sortable?) do
           false
         end
-
+      end
+      
+      class BelongsToAssociation < Association
         # Reader for whether this is field is mandatory.
         #
         # @see RailsAdmin::AbstractModel.properties

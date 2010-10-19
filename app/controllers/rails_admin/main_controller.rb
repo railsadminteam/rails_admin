@@ -213,9 +213,10 @@ module RailsAdmin
       statements = []
       values = []
       conditions = options[:conditions] || [""]
+      table_name = @abstract_model.model.table_name
 
       @properties.select{|property| property[:type] == :string}.each do |property|
-        statements << "(#{property[:name]} LIKE ?)"
+        statements << "(#{table_name}.#{property[:name]} LIKE ?)"
         values << "%#{query}%"
       end
 
@@ -231,10 +232,11 @@ module RailsAdmin
       statements = []
       values = []
       conditions = options[:conditions] || [""]
+      table_name = @abstract_model.model.table_name
 
       filter.each_pair do |key, value|
         @properties.select{|property| property[:type] == :boolean && property[:name] == key.to_sym}.each do |property|
-          statements << "(#{key} = ?)"
+          statements << "(#{table_name}.#{key} = ?)"
           values << (value == "true")
         end
       end
@@ -380,6 +382,9 @@ module RailsAdmin
 
       # external filter
       options.merge!(other)
+
+      associations = @model_config.list.visible_fields.select {|f| f.association? }.map {|f| f.association[:name] }
+      options.merge!(:include => associations) unless associations.empty?
 
       if params[:all]
         options.merge!(:limit => per_page * 2)
