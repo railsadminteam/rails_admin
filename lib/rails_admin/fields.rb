@@ -11,7 +11,7 @@ module RailsAdmin
     end
   
     def self.load(type)
-      @@registry[type.to_sym] or raise "Unsupported field type: #{@type}"
+      @@registry[type.to_sym] or raise "Unsupported field type: #{type}"
     end
   
     # A base class for fields.
@@ -52,6 +52,14 @@ module RailsAdmin
       @searchable = false
       @sortable = true
       @type = :datetime
+    end
+
+    class Decimal < Base
+      @column_css_class = "decimal"
+      @column_width = 110
+      @searchable = false
+      @sortable = true
+      @type = :decimal
     end
 
     class Float < Base
