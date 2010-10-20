@@ -25,6 +25,10 @@ describe "RailsAdmin" do
   
   describe "config" do
     
+    after(:each) do
+      RailsAdmin::Config.reset
+    end
+
     describe "excluded models" do
       excluded_models = [Division, Draft, Fan]
 
@@ -50,11 +54,11 @@ describe "RailsAdmin" do
 
       describe "number of visible tabs" do    
         after(:each) do
-          RailsAdmin::Config::Navigation.max_visible_tabs = 5
+          RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 5
         end
     
         it "should be editable" do
-          RailsAdmin::Config::Navigation.max_visible_tabs = 2
+          RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 2
           get rails_admin_dashboard_path
           response.should have_tag("#nav > li") do |elements|
             elements.should have_at_most(4).items
@@ -63,9 +67,6 @@ describe "RailsAdmin" do
       end
 
       describe "label for a model" do
-        after(:each) do
-          RailsAdmin::Config.reset(Fan)
-        end
     
         it "should be visible and sane by default" do
           get rails_admin_dashboard_path
@@ -108,10 +109,9 @@ describe "RailsAdmin" do
 
         it "should be editable with a block via navigation configuration" do
           RailsAdmin.config Fan do
-            label "Fan test"
             navigation do
               label do
-                "#{parent.label} 4"
+                "#{label} test 4"
               end
             end
           end
@@ -168,8 +168,218 @@ describe "RailsAdmin" do
         end
       end
     end
-  end    
-  
+    
+    describe "list" do
+
+      describe "number of items per page" do
+        
+        before(:each) do
+          RailsAdmin::AbstractModel.new("League").create(:name => 'American')
+          RailsAdmin::AbstractModel.new("League").create(:name => 'National')
+          RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
+          RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
+        end
+
+        it "should be configurable" do
+          RailsAdmin::Config.model do
+            list do
+              items_per_page 1
+            end
+          end
+          get rails_admin_list_path(:model_name => "league")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+          get rails_admin_list_path(:model_name => "player")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+        end
+
+        it "should be configurable per model" do
+          RailsAdmin.config League do
+            list do
+              items_per_page 1
+            end
+          end
+          get rails_admin_list_path(:model_name => "league")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+          get rails_admin_list_path(:model_name => "player")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(2).items
+          end
+        end
+
+        it "should be globally configurable and overrideable per model" do
+          RailsAdmin::Config.model do
+            list do
+              items_per_page 20
+            end
+          end
+          RailsAdmin.config League do
+            list do
+              items_per_page 1
+            end
+          end
+          get rails_admin_list_path(:model_name => "league")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(1).items
+          end
+          get rails_admin_list_path(:model_name => "player")
+          response.should have_tag("#contentMainModules > .infoRow") do |elements|
+            elements.should have_at_most(2).items
+          end
+        end
+      end
+      
+      describe "items' fields" do
+        
+        it "should show all by default" do
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should contain("ID")
+            elements[2].should contain("CREATED AT")
+            elements[3].should contain("UPDATED AT")
+            elements[4].should contain("NAME")
+          end
+        end
+
+        it "should appear in order defined" do
+          RailsAdmin.config Fan do
+            list do
+              field :updated_at
+              field :name
+              field :id
+              field :created_at
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should contain("UPDATED AT")
+            elements[2].should contain("NAME")
+            elements[3].should contain("ID")
+            elements[4].should contain("CREATED AT")
+          end
+        end
+
+        it "should only list the defined fields if some fields are defined" do
+          RailsAdmin.config Fan do
+            list do
+              field :id
+              field :name
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements.should contain("ID")
+            elements.should contain("NAME")
+            elements.should_not contain("CREATED AT")
+            elements.should_not contain("UPDATED AT")
+          end
+        end
+
+        it "should be renameable" do
+          RailsAdmin.config Fan do
+            list do
+              field :id do
+                label "IDENTIFIER"
+              end
+              field :name
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should contain("IDENTIFIER")
+            elements[2].should contain("NAME")
+          end
+        end
+
+        it "should be renameable by type" do
+          RailsAdmin.config Fan do
+            list do
+              fields_of_type :datetime do
+                label { "#{label} (DATETIME)" }
+              end
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should contain("ID")
+            elements[2].should contain("CREATED AT (DATETIME)")
+            elements[3].should contain("UPDATED AT (DATETIME)")
+            elements[4].should contain("NAME")
+          end
+        end
+
+        it "should be sortable by default" do
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should have_tag("a")
+            elements[2].should have_tag("a")
+            elements[3].should have_tag("a")
+            elements[4].should have_tag("a")
+          end
+        end
+        
+        it "should have option to disable sortability" do
+          RailsAdmin.config Fan do
+            list do
+              field :id do
+                sortable false
+              end
+              field :name
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should_not have_tag("a")
+            elements[2].should have_tag("a")
+          end
+        end
+        
+        it "should have option to disable sortability by type" do
+          RailsAdmin.config Fan do
+            list do
+              fields_of_type :datetime do
+                sortable false
+              end
+              field :id
+              field :name
+              field :created_at
+              field :updated_at
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should have_tag("a")
+            elements[2].should have_tag("a")
+            elements[3].should_not have_tag("a")
+            elements[4].should_not have_tag("a")
+          end
+        end
+        
+        it "should have option to hide fields by type" do
+          RailsAdmin.config Fan do
+            list do
+              fields_of_type :datetime do
+                hide
+              end
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements.should contain("ID")
+            elements.should contain("NAME")
+            elements.should_not contain("CREATED AT")
+            elements.should_not contain("UPDATED AT")
+          end
+        end
+      end
+    end
+  end
+
   describe "GET /admin" do
     before(:each) do
       get rails_admin_dashboard_path
