@@ -88,26 +88,32 @@ module RailsAdmin
         @parent = parent
       end
 
+      # Register an instance option for this object only
+      def register_instance_option(option_name, &default)
+        scope = class << self; self; end;
+        self.class.register_instance_option(option_name, scope, &default)
+      end
+
       # Register an instance option. Instance option is a configuration
       # option that stores it's value within an instance variable and is
       # accessed by an instance method. Both go by the name of the option.
-      def self.register_instance_option(option_name, &default)
+      def self.register_instance_option(option_name, scope = self, &default)
         option_name = option_name.to_s
 
         # If it's a boolean create an alias for it and remove question mark
         if "?" == option_name[-1, 1]
-          send(:define_method, "#{option_name.chop!}?") do
+          scope.send(:define_method, "#{option_name.chop!}?") do
             send(option_name)
           end
         end
 
         # Define setter by the option name
-        send(:define_method, "#{option_name}=") do |value|
+        scope.send(:define_method, "#{option_name}=") do |value|
           instance_variable_set("@#{option_name}", value)
         end
 
         # Define getter/setter by the option name
-        send(:define_method, option_name) do |*args, &block|
+        scope.send(:define_method, option_name) do |*args, &block|
           if !args[0].nil? || block
             instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
           else
@@ -117,10 +123,10 @@ module RailsAdmin
               # Override current method with the block containing this option's default value.
               # This prevents accidental infinite loops and allows configurations such as
               # label { "#{label}".upcase }
-              option_method = self.class.instance_method(option_name)
-              self.class.send(:define_method, option_name, default)
+              option_method = scope.instance_method(option_name)
+              scope.send(:define_method, option_name, default)
               value = instance_eval &value
-              self.class.send(:define_method, option_name, option_method) # Return the original method
+              scope.send(:define_method, option_name, option_method) # Return the original method
             end
             value
           end
@@ -128,38 +134,11 @@ module RailsAdmin
       end
 
       # Register a class option. Class option is a configuration
-      # option that stores it's value within a class variable and is
-      # accessed by a class method. Both go by the name of the option.
+      # option that stores it's value within a class object's instance variable 
+      # and is accessed by a class method. Both go by the name of the option.
       def self.register_class_option(option_name, &default)
-        option_name = option_name.to_s
-
-        class_variable_set("@@#{option_name}", nil)
-
-        # If it's a boolean create an alias for it and remove question mark
-        if "?" == option_name[-1, 1]
-          self.class.send(:define_method, "#{option_name.chop!}?") do
-            send(option_name)
-          end
-        end
-
-        # Define setter by the option name
-        self.class.send(:define_method, "#{option_name}=") do |value|
-          class_variable_set("@@#{option_name}", value)
-        end
-
-        # Define getter/setter by the option name
-        self.class.send(:define_method, option_name) do |*args, &block|
-          if !args[0].nil? || block
-            class_variable_set("@@#{option_name}", args[0].nil? ? block : args[0])
-          else
-            value = class_variable_get("@@#{option_name}")
-            value = default if value.nil?
-            if value.kind_of?(Proc)
-              value = class_eval &value
-            end
-            value
-          end
-        end
+        scope = class << self; self; end;
+        self.register_instance_option(option_name, scope, &default)
       end
     end
 
@@ -217,11 +196,7 @@ module RailsAdmin
       # Populate the extended object's @fields instance variable with model's properties
       def self.extended(obj)
         fields = obj.abstract_model.properties.map do |p| 
-          if association = obj.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == p[:name]}.first
-            BelongsToAssociation.new(obj, p[:name], association)
-          else
-            Field.new(obj, p[:name], p[:serial?] ? :serial : p[:type])
-          end
+          Field.new(obj, p[:name], p[:type])
         end
         obj.instance_variable_set("@fields", fields)
       end
@@ -231,7 +206,7 @@ module RailsAdmin
         field = @fields.find {|f| name == f.name }
         # Allow the addition of virtual fields such as object methods
         if field.nil?
-          field = (@fields << Virtual.new(self, name, type)).last
+          field = (@fields << Field.new(self, name, type)).last
         end
         # If field has not been yet defined add some default properties
         unless field.defined
@@ -273,7 +248,7 @@ module RailsAdmin
       end
 
       # A base class for configuring the fields of models.
-      class Base < RailsAdmin::Config::Configurable
+      class Field < RailsAdmin::Config::Configurable
         attr_reader :name, :type
         attr_accessor :defined, :order
 
@@ -285,57 +260,11 @@ module RailsAdmin
           @name = name
           @order = 0
           @type = type
+          extend RailsAdmin::Fields
         end
         
         def association?
-          kind_of?(RailsAdmin::Config::Fields::Association)
-        end
-
-        # Accessor for field's column width (in pixels) in the list view
-        register_instance_option(:column_width) do
-          RailsAdmin::Fields.load(type).column_width
-        end
-
-        # Accessor for field's css class name in the list view
-        register_instance_option(:column_css_class) do
-          RailsAdmin::Fields.load(type).column_css_class
-        end
-
-        # Accessor for whether this field is searchable.
-        register_instance_option(:searchable?) do
-          RailsAdmin::Fields.load(type).searchable?
-        end
-
-        # Accessor for whether this field is sortable.
-        register_instance_option(:sortable?) do
-          RailsAdmin::Fields.load(type).sortable?
-        end
-      end
-      
-      class Field < Base
-        def initialize(parent, name, type = nil)
-          super(parent, name, type)
-          @type = type || (serial? ? :serial : abstract_model.properties.find {|c| name == c[:name] }[:type])
-          @type = :small_string if :string == @type && length < 100
-        end
-
-        # Accessor for field's label.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:label) do
-          abstract_model.properties.find {|column| name == column[:name] }[:pretty_name]
-        end
-
-        # Accessor for field's maximum length.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:length) do
-          abstract_model.properties.find {|column| name == column[:name] }[:length]
-        end
-
-        # Accessor for field's value
-        register_instance_option(:value) do
-          bindings[:object].send(name)
+          kind_of?(RailsAdmin::Fields::Associations)
         end
 
         def to_hash
@@ -349,118 +278,6 @@ module RailsAdmin
             :serial? => serial?,
             :sortable? => sortable?,
           }
-        end
-
-        # Reader for whether this is field is mandatory.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        def required?
-          abstract_model.properties.find {|column| name == column[:name] }[:nullable?]
-        end
-
-        # Reader for whether this is a serial field (aka. primary key, identifier).
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        def serial?
-          abstract_model.properties.find {|column| name == column[:name] }[:serial?]
-        end
-      end
-      
-      class Association < Base
-        attr_reader :association
-        
-        def initialize(parent, name, association)
-          super(parent, name, :string)
-          @association = association
-        end
-
-        # Accessor for field's label.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:label) do
-          association[:pretty_name]
-        end
-
-        # Accessor for whether this field is searchable.
-        register_instance_option(:searchable?) do
-          false
-        end
-
-        # Accessor for whether this field is sortable.
-        register_instance_option(:sortable?) do
-          false
-        end
-      end
-      
-      class BelongsToAssociation < Association
-        # Reader for whether this is field is mandatory.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        def required?
-          abstract_model.properties.find {|column| name == column[:name] }[:nullable?]
-        end
-
-        # Reader for whether this is a serial field (aka. primary key, identifier).
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        def serial?
-          abstract_model.properties.find {|column| name == column[:name] }[:serial?]
-        end
-
-        # Accessor for field's value
-        register_instance_option(:value) do
-          object = bindings[:object].send(association[:name])
-          unless object.nil?
-            RailsAdmin::Config.model(object).list.object_label
-          else
-            nil
-          end
-        end
-      end
-
-      # A base class for configuring the fields of models.
-      class Virtual < Base
-
-        def initialize(parent, name, type = :string)
-          super(parent, name, type)
-        end
-
-        # Accessor for field's label.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:label) do
-          name
-        end
-
-        # Accessor for field's maximum length.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:length) do
-          100
-        end
-
-        # Accessor for whether this field is searchable.
-        register_instance_option(:searchable?) do
-          false
-        end
-
-        # Accessor for whether this field is sortable.
-        register_instance_option(:sortable?) do
-          false
-        end
-
-        # Reader for whether this is field is mandatory.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        def required?
-          false
-        end
-
-        # Reader for whether this is a serial field (aka. primary key, identifier).
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        def serial?
-          false
         end
       end
     end

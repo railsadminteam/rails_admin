@@ -42,38 +42,6 @@ module RailsAdmin
       end
     end
 
-    def format_property(property)
-      value = property.value
-      return "".html_safe if value.nil?
-
-      case property.type
-      when :boolean
-        if value == true
-          Builder::XmlMarkup.new.img(:src => image_path("bullet_black.png"), :alt => "True").html_safe
-        else
-          Builder::XmlMarkup.new.img(:src => image_path("bullet_white.png"), :alt => "False").html_safe
-        end
-      when :datetime, :timestamp
-        value.strftime("%b. %d, %Y, %I:%M%p")
-      when :date
-        value.strftime("%b. %d, %Y")
-      when :time
-        value.strftime("%I:%M%p")
-      when :string
-        if property.name.to_s =~ /(image|logo|photo|photograph|picture|thumb|thumbnail)_ur(i|l)/i
-          Builder::XmlMarkup.new.img(:src => value, :width => 10, :height => 10).html_safe
-        else
-          value
-        end
-      when :text
-        value
-      when :integer
-        value
-      else
-        value
-      end
-    end
-    
     def object_property(object, property)
       property_type = property[:type]
       property_name = property[:name]

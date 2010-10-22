@@ -1,4 +1,5 @@
 <%
+ @model_config.bind(:view, self)
   params = request.params.except(:action, :controller, :model_name)
   query = params[:query]
   filter = params[:filter]
@@ -78,7 +79,7 @@
           <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
           <li class="otherRow otherLeft"><%= link_to("...", other_left, :ref => other_left.to_json) %></li>
           <% properties.each do |property| %>
-          <li class="<%= "#{property.column_css_class}Row" %>"><%= [:text, :string].include?(property.type) ? format_property(property)[0..40] : format_property(property) %></li>
+          <li class="<%= "#{property.column_css_class}Row" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></li>
           <% end %>
           <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
           <li class="otherRow otherRight"><%= link_to("...", other_right, :ref => other_right.to_json)%></li>
