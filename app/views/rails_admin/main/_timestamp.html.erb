@@ -1,2 +1,2 @@
                 <%= label_tag "#{field.name}", field.label %>
-                <%= text_field field.abstract_model.to_param, field.name, :maxlength => field.length, :class => "timestampField #{field.has_errors ? "errorField" : nil}", :value => field.value %>
+                <%= text_field field.abstract_model.to_param, field.name, :maxlength => field.length, :class => "timestampField #{field.has_errors? ? "errorField" : nil}", :value => field.formatted_value %>

@@ -1,5 +1,3 @@
-require "rails_admin/fields"
-
 module RailsAdmin
   module Config
     # Stores model configuration objects in a hash identified by model's class
@@ -214,7 +212,7 @@ module RailsAdmin
           name.to_s.underscore.gsub('_', ' ').capitalize
         end
       end
-      
+
       def self.extended(obj)
         obj.instance_variable_set("@group", obj.parent.group(:default))
         class << obj
@@ -243,6 +241,8 @@ module RailsAdmin
       end
     end
 
+    require "rails_admin/fields"
+
     # Fields describe the configuration for model's properties that RailsAdmin will
     # use when rendering the list and edit views.
     module Fields
@@ -251,7 +251,7 @@ module RailsAdmin
         field = @fields.find {|f| name == f.name }
         # Allow the addition of virtual fields such as object methods
         if field.nil?
-          field = (@fields << Field.new(self, name, type)).last
+          field = (@fields << RailsAdmin::Fields.factory(self, name, :virtual)).last
         end
         # If field has not been yet defined add some default properties
         unless field.defined
@@ -290,48 +290,6 @@ module RailsAdmin
       # Get all fields defined as visible.
       def visible_fields
         fields.select {|f| f.visible? }
-      end
-
-      # A base class for configuring the fields of models.
-      class Field < RailsAdmin::Config::Configurable
-        attr_reader :name, :type
-        attr_accessor :defined, :order
-
-        include RailsAdmin::Config::Hideable
-        
-        def initialize(parent, name, type = nil)
-          super(parent)
-          @defined = false
-          @name = name
-          @order = 0
-          @type = type
-          extend RailsAdmin::Fields
-        end
-        
-        def association?
-          kind_of?(RailsAdmin::Fields::Associations)
-        end
-
-        def errors
-          bindings[:object].errors[name]
-        end
-        
-        def has_errors
-          false #!(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
-        end
-
-        def to_hash
-          {
-            :name => name,
-            :pretty_name => label,
-            :type => type,
-            :length => length,
-            :nullable? => required?,
-            :searchable? => searchable?,
-            :serial? => serial?,
-            :sortable? => sortable?,
-          }
-        end
       end
     end
 
@@ -389,20 +347,18 @@ module RailsAdmin
           # Populate @fields instance variable with model's properties
           @groups = [ RailsAdmin::Config::Groupable::Group.new(self, :default) ]
           @groups.first.label = I18n.translate("admin.new.basic_info")
-          @fields = abstract_model.properties.map do |p| 
-            field = Field.new(self, p[:name], p[:type])
+          @fields = abstract_model.properties.map do |p|
+            field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
             field.extend RailsAdmin::Config::Groupable
-            field.group = :default
-            
+            field.group = :default            
             if field.serial? || [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(p[:name])
               field.hide
-            end
-            
+            end            
             field
           end
           # Append @fields instance variable with model's associations
           @fields += abstract_model.associations.select{|a| a[:type] != :belongs_to}.map do |a|
-            field = Field.new(self, a[:parent_model], a[:type])
+            field = RailsAdmin::Fields.factory(self, a[:parent_model], "#{a[:type]}_association".to_sym, a)
             field.extend RailsAdmin::Config::Groupable
             field.group = a[:parent_model]
             field
@@ -424,7 +380,7 @@ module RailsAdmin
           extend RailsAdmin::Config::Fields
           # Populate @fields instance variable with model's properties
           @fields = abstract_model.properties.map do |p| 
-            Field.new(self, p[:name], p[:type])
+            field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
           end
         end
 

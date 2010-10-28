@@ -1,12 +1,7 @@
-              <p>
+              <div class="field">
 <%= render :partial => field.partial.to_s, :locals => {:field => field} %>
-                <% if field.has_errors %>
+                <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
-              </p>
-              <p class="help"><%= field.required? ? t("admin.new.required") : t("admin.new.optional") %>
-                <% if field.type == :string %>
-                  <% length = field.length %>
-                  <%= length %> <%= length == 1 ? t("admin.new.one_char") : t("admin.new.many_chars") %>
-                <% end %>
-              </p>
+                <p class="help"><%= field.help %></p>
+              </div>

@@ -1,2 +1,2 @@
-                <%= label_tag "#{field.name}", field.label %>
-                <%= text_field field.abstract_model.to_param, field.name, :class => "datetimeField #{field.has_errors ? "errorField" : nil}", :value => field.value %>
+                <%= label_tag "#{field.abstract_model.to_param}_#{field.name}", field.label %>
+                <%= text_field field.abstract_model.to_param, field.name, :class => "datetimeField #{field.has_errors? ? "errorField" : nil}", :value => field.formatted_value %>

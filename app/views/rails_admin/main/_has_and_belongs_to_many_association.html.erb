@@ -1,6 +1,5 @@
 <%
   association_name = field.association[:name]
-  child_key = field.association[:child_key].first
   collection = field.associated_collection.sort_by{|object| object.first}
 
   # for edit action
@@ -23,8 +22,9 @@
   }.compact
 
 %>
+              <%= label_tag field.label %>
               <div class="many_header">
-                <input type="text" class="searchMany" value="Search <%= association_name %>" ref="<%= association_name %>" class="many_text" used="0" />
+                <input type="text" class="searchMany" value="Search <%= association_name %>" ref="<%= association_name %>" used="0" />
                 <p>
                   <strong><%= t("admin.new.chosen", :name => association_name) %></strong>
                   <%= t("admin.new.select_choise")%> <img src="/images/selector-add.gif" alt="Add" />
@@ -39,19 +39,18 @@
                 <select id="associations_<%= association_name %>" multiple="multiple" class="secondSelect" size="8">
                   <%= options_for_select(selected) %>
                 </select>
-                </div>
-                <div class="many_controls">
-                  <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-addall.gif" alt="Add all" class="add_all" /> <%= t("admin.new.chose_all")%></a>
-                  <a href="javascript:void(0)" class="clearAssoc"><img src="/images/selector-removeall.gif" alt="Clear all" class="clear_all"/><%= t("admin.new.clear_all")%></a>
-                </div>
-                <div class="manyHidden">
-                  <% if selected.empty? %>
-                  <input type="hidden" name="associations[<%= association_name %>][]" />
-                  <% else %>
-                  <% selected.each do |t|%>
-                  <input type="hidden" name="associations[<%= association_name %>][]" value="<%= t[1] %>" />
-                  <% end %>
-                  <% end %>
-                </div>
-                <span class="breakSpan"></span>
               </div>
+              <div class="many_controls">
+                <a href="javascript:void(0)" class="addAssoc"><img src="/images/selector-addall.gif" alt="Add all" class="add_all" /> <%= t("admin.new.chose_all")%></a>
+                <a href="javascript:void(0)" class="clearAssoc"><img src="/images/selector-removeall.gif" alt="Clear all" class="clear_all"/><%= t("admin.new.clear_all")%></a>
+              </div>
+              <div class="manyHidden">
+                <% if selected.empty? %>
+                <input type="hidden" name="associations[<%= association_name %>][]" />
+                <% else %>
+                <% selected.each do |t|%>
+                <input type="hidden" name="associations[<%= association_name %>][]" value="<%= t[1] %>" />
+                <% end %>
+                <% end %>
+              </div>
+              <span class="breakSpan"></span>

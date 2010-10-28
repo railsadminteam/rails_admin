@@ -1,252 +1,167 @@
 require 'builder'
 
-module RailsAdmin
+module RailsAdmin  
   module Fields
-    def self.extended(obj)
-      # If field is object's native property
-      if obj.abstract_model.properties.find {|f| obj.name == f[:name] }
-        # Extend field with behaviour of it's data type
-        obj.extend DataTypes.load(obj.type)
-        
-        # If field is a foreign key for a belongs to association
-        if association = obj.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == obj.name}.first
-          # Store association data within field
-          obj.instance_variable_set("@association", association)
-          # Extend field with association behaviour
-          obj.extend Associations
-        
-        # Otherwise it's a normal field
-        else
-          obj.extend Concrete
-        end
 
-      # If field is an association
-      elsif association = obj.abstract_model.associations.select{|a| a[:parent_model] == obj.name}.first
-        # Store association data within field
-        obj.instance_variable_set("@association", association)
-        # Extend field with association behaviour
-        obj.extend Associations
-      
-      # Otherwise field is readable only (eg. is method of record object)
+    def self.factory(parent, name, type, properties = [])
+      if association = parent.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == name}.first
+        field = Types.load("belongs_to_association").new(parent, name, properties, association)
       else
-        # Extend field with virtual field capabilities
-        obj.extend Virtual
+        field = Types.load(type).new(parent, name, properties)
       end
+      field
     end
 
-    # Concrete field mixin provides standard behaviour for a database column. Concrete field
-    # can be found within abstract_model.properties and can deduct it's default capabilities
-    # via that interface.
-    module Concrete
-      def self.extended(obj)
-        # Accessor for field's label.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        obj.register_instance_option(:label) do
-          abstract_model.properties.find {|column| name == column[:name] }[:pretty_name]
-        end
+    class Field < RailsAdmin::Config::Configurable
 
-        # Accessor for field's maximum length.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        obj.register_instance_option(:length) do
-          abstract_model.properties.find {|column| name == column[:name] }[:length]
-        end
+      attr_reader :name, :properties
+      attr_accessor :defined, :order
 
-        # Accessor for whether this is field is mandatory.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        obj.register_instance_option(:required?) do
-          abstract_model.properties.find {|column| name == column[:name]}[:nullable?]
-        end
-
-        # Accessor for whether this is a serial field (aka. primary key, identifier).
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        obj.register_instance_option(:serial?) do
-          abstract_model.properties.find {|column| name == column[:name]}[:serial?]
-        end
-
-        # Accessor for field's value
-        obj.register_instance_option(:value) do
-          bindings[:object].send(name)
-        end
-
-        class << obj
-          def partial
-            type.to_s
-          end
-        end
+      include RailsAdmin::Config::Hideable
+      
+      def initialize(parent, name, properties)
+        super(parent)
+        @defined = false
+        @name = name
+        @order = 0
+        @properties = properties
       end
-    end
 
-    # Association field mixin provides behaviour for database associations. It can
-    # can be found within abstract_model.associations and can deduct it's default capabilities
-    # via that interface.
-    module Associations
-      def self.extended(obj)        
-        # Define reader for association data
-        def obj.association
-          instance_variable_get("@association")
-        end
-
-        # Accessor for field's label.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        obj.register_instance_option(:label) do
-          association[:pretty_name]
-        end
-
-        # Accessor for whether this is field is required.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        obj.register_instance_option(:required?) do
-          false
-        end
-
-        # Accessor for whether this is field is searchable.
-        obj.register_instance_option(:searchable?) do
-          false
-        end
-
-        # Accessor for whether this is field is sortable.
-        obj.register_instance_option(:sortable?) do
-          false
-        end        
-
-        class << obj
-          def associated_collection
-            associated_model_config.abstract_model.all.map do |object|
-              [associated_model_config.bind(:object, object).list.object_label, object.id]
-            end
-          end
-
-          def associated_model_config
-            @associated_model_config ||= RailsAdmin.config(association[:child_model])
-          end
-          
-          def partial
-            "#{association[:type]}_association"
-          end
-          
-          def value
-            bindings[:object].send(association[:name])
-          end
-        end
-        
-        # Extend field with correct association behaviour
-        obj.extend "RailsAdmin::Fields::Associations::#{obj.association[:type].to_s.camelize}".constantize
+      # Accessor for field's help text displayed below input field.
+      register_instance_option(:help) do
+        required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
       end
       
-      module BelongsTo
-        def self.extended(obj)
-          # Accessor for field's maximum length.
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          obj.register_instance_option(:length) do
-            abstract_model.properties.find {|column| name == column[:name] }[:length]
-          end
+      # Accessor for field's label.
+      #
+      # @see RailsAdmin::AbstractModel.properties
+      register_instance_option(:label) do
+        properties[:pretty_name]
+      end
 
-          # Accessor for whether this is field is mandatory.
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          obj.register_instance_option(:required?) do
-            abstract_model.properties.find {|column| name == column[:name]}[:nullable?]
-          end
+      # Accessor for field's maximum length.
+      #
+      # @see RailsAdmin::AbstractModel.properties
+      register_instance_option(:length) do
+        properties[:length]
+      end
 
-          # Accessor for whether this is a serial field (aka. primary key, identifier).
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          obj.register_instance_option(:serial?) do
-            abstract_model.properties.find {|column| name == column[:name]}[:serial?]
-          end
+      register_instance_option(:partial) do
+        type
+      end
 
-          # Accessor for field's formatted value 
-          obj.register_instance_option(:formatted_value) do
-            object = bindings[:object].send(association[:name])
-            unless object.nil?
-              RailsAdmin::Config.model(object).list.object_label
-            else
-              nil
-            end
-          end
+      # Accessor for whether this is field is mandatory.
+      #
+      # @see RailsAdmin::AbstractModel.properties
+      register_instance_option(:required?) do
+        !properties[:nullable?]
+      end
 
-          # Accessor for field's value
-          obj.register_instance_option(:value) do
-            bindings[:object].send(name)
-          end
-          
-          class << obj
-            def associated_collection
-              associated_model_config.abstract_model.all.map do |object| 
-                [associated_model_config.bind(:object, object).list.object_label, object.id]
-              end
-            end
+      # Accessor for whether this is a serial field (aka. primary key, identifier).
+      #
+      # @see RailsAdmin::AbstractModel.properties
+      register_instance_option(:serial?) do
+        properties[:serial?]
+      end
 
-            def associated_model_config
-              @associated_model_config ||= RailsAdmin.config(association[:parent_model])
-            end
-          end
-        end
+      def association?
+        kind_of?(RailsAdmin::Fields::Association)
+      end
+
+      def errors
+        bindings[:object].errors[name]
       end
       
-      module HasAndBelongsToMany
+      def has_errors?
+        !(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
       end
 
-      module HasAndBelongsToMany
+      def to_hash
+        {
+          :name => name,
+          :pretty_name => label,
+          :type => type,
+          :length => length,
+          :nullable? => required?,
+          :searchable? => searchable?,
+          :serial? => serial?,
+          :sortable? => sortable?,
+        }
       end
 
-      module HasMany
+      def type
+        @type ||= self.class.name.split("::").last.underscore.to_sym
       end
 
-      module HasOne
+      # Reader for field's value
+      def value
+        bindings[:object].send(name)
       end
     end
     
-    # Virtual field mixin provides behaviour for columns that are calculated at runtime
-    # for example record object methods.
-    module Virtual
-      def self.extended(obj)
-        # Accessor for field's label.
-        obj.register_instance_option(:label) do
-          name.to_s.underscore.gsub('_', ' ').capitalize
-        end
+    class Association < Field
 
-        # Accessor for field's maximum length.
-        obj.register_instance_option(:length) do
-          100
-        end
+      def association
+        @properties
+      end
+      
+      # Accessor for field's label.
+      #
+      # @see RailsAdmin::AbstractModel.properties
+      register_instance_option(:label) do
+        association[:pretty_name]
+      end
 
-        # Reader for whether this is field is mandatory.
-        obj.register_instance_option(:required?) do
-          false
-        end
+      # Accessor for whether this is field is required.
+      #
+      # @see RailsAdmin::AbstractModel.properties
+      register_instance_option(:required?) do
+        false
+      end
 
-        # Accessor for whether this is field is searchable.
-        obj.register_instance_option(:searchable?) do
-          false
-        end
+      # Accessor for whether this is field is searchable.
+      register_instance_option(:searchable?) do
+        false
+      end
 
-        # Reader for whether this is a serial field (aka. primary key, identifier).
-        obj.register_instance_option(:serial?) do
-          false
-        end
+      # Accessor for whether this is field is sortable.
+      register_instance_option(:sortable?) do
+        false
+      end        
 
-        # Accessor for whether this is field is sortable.
-        obj.register_instance_option(:sortable?) do
-          false
-        end              
-
-        # Accessor for field's value
-        obj.register_instance_option(:value) do
-          bindings[:object].send(name)
+      def associated_collection
+        associated_model_config.abstract_model.all.map do |object|
+          [associated_model_config.bind(:object, object).list.object_label, object.id]
         end
       end
-    end
 
-    # Provides default behaviour for various kinds of database columns based on
-    # the datatype.
-    module DataTypes
+      def associated_model_config
+        @associated_model_config ||= RailsAdmin.config(association[:child_model])
+      end
+      
+      def child_key
+        association[:child_key].first
+      end
+
+      def child_keys
+        association[:child_key]
+      end
+
+      def errors
+        bindings[:object].errors[association[:child_key]]
+      end
+
+      def has_errors?
+        !(bindings[:object].errors[child_key].nil? || bindings[:object].errors[child_key].empty?)
+      end
+
+      def value
+        bindings[:object].send(association[:name])
+      end
+    end
+    
+    module Types
+
       @@registry = {}
 
       def self.register(type, klass)
@@ -256,261 +171,376 @@ module RailsAdmin
       def self.load(type)
         @@registry[type.to_sym] or raise "Unsupported field datatype: #{type}"
       end
+      
+      class BelongsToAssociation < RailsAdmin::Fields::Association
 
-      module Boolean
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "bool"
+        attr_reader :association
+
+        def initialize(parent, name, properties, association)
+          super(parent, name, properties)
+          @association = association
+        end
+
+        register_instance_option(:column_css_class) do
+          "bigString"
+        end
+
+        register_instance_option(:column_width) do
+          250
+        end
+
+        # Accessor for field's maximum length.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        register_instance_option(:length) do
+          properties[:length]
+        end
+
+        # Accessor for whether this is field is mandatory.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        register_instance_option(:required?) do
+          properties[:nullable?]
+        end
+
+        # Accessor for whether this is a serial field (aka. primary key, identifier).
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        register_instance_option(:serial?) do
+          properties[:serial?]
+        end
+
+        # Accessor for field's formatted value 
+        register_instance_option(:formatted_value) do
+          object = bindings[:object].send(association[:name])
+          unless object.nil?
+            RailsAdmin::Config.model(object).list.object_label
+          else
+            nil
           end
-          obj.register_instance_option(:column_width) do
-            60
+        end
+        
+        def associated_collection
+          associated_model_config.abstract_model.all.map do |object| 
+            [associated_model_config.bind(:object, object).list.object_label, object.id]
           end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
-          end
+        end
+
+        def associated_model_config
+          @associated_model_config ||= RailsAdmin.config(association[:parent_model])
+        end
+
+        # Reader for field's value
+        def value
+          bindings[:object].send(name)
+        end
+      end
+      
+      class HasAndBelongsToManyAssociation < RailsAdmin::Fields::Association
+        # Accessor for field's help text displayed below input field.
+        register_instance_option(:help) do
+          ""
         end
       end
 
-      module Date
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "date"
-          end
-          obj.register_instance_option(:column_width) do
-            90
-          end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            if value == true
-              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_black.png"), :alt => "True").html_safe
-            else
-              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_white.png"), :alt => "False").html_safe
-            end
-          end
-          obj.register_instance_option(:strftime_format) do
-            "%b. %d, %Y"
-          end
+      class HasManyAssociation < RailsAdmin::Fields::Association
+        # Accessor for field's help text displayed below input field.
+        register_instance_option(:help) do
+          ""
         end
       end
 
-      module Datetime
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "dateTime"
-          end
-          obj.register_instance_option(:column_width) do
-            170
-          end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (time = value).nil?
-              time.strftime(strftime_format)
-            else
-              "".html_safe
-            end
-          end
-          obj.register_instance_option(:strftime_format) do
-            "%b. %d, %Y, %I:%M%p"
-          end
-        end
+      class HasOneAssociation < RailsAdmin::Fields::Association
       end
-
-      module Decimal
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "decimal"
-          end
-          obj.register_instance_option(:column_width) do
-            110
-          end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
-          end
+      
+      class Boolean < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "bool"
         end
-      end
+        register_instance_option(:column_width) do
+          60
+        end
 
-      module Float
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "float"
-          end
-          obj.register_instance_option(:column_width) do
-            110
-          end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
+        # Accessor for field's help text displayed below input field.
+        register_instance_option(:help) do
+          ""
+        end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          if value == true
+            Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_black.png"), :alt => "True").html_safe
+          else
+            Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_white.png"), :alt => "False").html_safe
           end
         end
       end
 
-      module Integer
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            serial? ? "id" : "int"
+      class Date < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "date"
+        end
+        register_instance_option(:column_width) do
+          90
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (time = value).nil?
+            time.strftime(strftime_format)
+          else
+            "".html_safe
           end
-          obj.register_instance_option(:column_width) do
-            serial? ? 46 : 80
+        end
+        register_instance_option(:strftime_format) do
+          "%b. %d, %Y"
+        end
+      end
+
+      class Datetime < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "dateTime"
+        end
+        register_instance_option(:column_width) do
+          170
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (time = value).nil?
+            time.strftime(strftime_format)
+          else
+            "".html_safe
           end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
+        end
+        register_instance_option(:strftime_format) do
+          "%b. %d, %Y, %I:%M%p"
+        end
+      end
+
+      class Decimal < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "decimal"
+        end
+        register_instance_option(:column_width) do
+          110
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
           end
         end
       end
 
-      module String
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            length > 100 ? "bigString" : "smallString"
-          end
-          obj.register_instance_option(:column_width) do
-            length > 100 ? 250 : 180
-          end
-          obj.register_instance_option(:searchable?) do
-            true
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
+      class Float < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "float"
+        end
+        register_instance_option(:column_width) do
+          110
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
           end
         end
       end
-    
-      module Text
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "text"
-          end
-          obj.register_instance_option(:column_width) do
-            250
-          end
-          obj.register_instance_option(:searchable?) do
-            true
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
+
+      class Integer < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          serial? ? "id" : "int"
+        end
+        register_instance_option(:column_width) do
+          serial? ? 46 : 80
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
           end
         end
       end
-  
-      module Time
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "time"
-          end
-          obj.register_instance_option(:column_width) do
-            60
-          end
-          obj.register_instance_option(:searchable?) do
-            false
-          end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (time = value).nil?
-              time.strftime(strftime_format)
-            else
-              "".html_safe
-            end
-          end
-          obj.register_instance_option(:strftime_format) do
-            "%I:%M%p"
+
+      class String < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          length > 100 ? "bigString" : "smallString"
+        end
+        register_instance_option(:column_width) do
+          length > 100 ? 250 : 180
+        end
+        
+        # Accessor for field's help text displayed below input field.
+        register_instance_option(:help) do
+          text = required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
+          text += " #{length} "
+          text += length == 1 ? I18n.translate("admin.new.one_char") : I18n.translate("admin.new.many_chars")
+          text
+        end
+
+        register_instance_option(:searchable?) do
+          true
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
           end
         end
       end
-  
-      module Timestamp
-        def self.extended(obj)
-          obj.register_instance_option(:column_css_class) do
-            "dateTime"
+
+      class Text < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "text"
+        end
+        register_instance_option(:column_width) do
+          250
+        end
+        register_instance_option(:searchable?) do
+          true
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
           end
-          obj.register_instance_option(:column_width) do
-            170
+        end
+      end
+
+      class Time < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "time"
+        end
+        register_instance_option(:column_width) do
+          60
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (time = value).nil?
+            time.strftime(strftime_format)
+          else
+            "".html_safe
           end
-          obj.register_instance_option(:searchable?) do
-            false
+        end
+        register_instance_option(:strftime_format) do
+          "%I:%M%p"
+        end
+      end
+
+      class Timestamp < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "dateTime"
+        end
+        register_instance_option(:column_width) do
+          170
+        end
+        register_instance_option(:searchable?) do
+          false
+        end
+        register_instance_option(:sortable?) do
+          true
+        end
+        register_instance_option(:formatted_value) do
+          unless (time = value).nil?
+            time.strftime(strftime_format)
+          else
+            "".html_safe
           end
-          obj.register_instance_option(:sortable?) do
-            true
-          end
-          obj.register_instance_option(:formatted_value) do
-            unless (time = value).nil?
-              time.strftime(strftime_format)
-            else
-              "".html_safe
-            end
-          end
-          obj.register_instance_option(:strftime_format) do
-            "%b. %d, %Y, %I:%M%p"
-          end
+        end
+        register_instance_option(:strftime_format) do
+          "%b. %d, %Y, %I:%M%p"
+        end
+      end
+
+      # Virtual field mixin provides behaviour for columns that are calculated at runtime
+      # for example record object methods.
+      class Virtual < RailsAdmin::Fields::Field
+        # Accessor for field's label.
+        register_instance_option(:label) do
+          name.to_s.underscore.gsub('_', ' ').capitalize
+        end
+
+        # Accessor for field's maximum length.
+        register_instance_option(:length) do
+          100
+        end
+
+        # Reader for whether this is field is mandatory.
+        register_instance_option(:required?) do
+          false
+        end
+
+        # Accessor for whether this is field is searchable.
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        # Reader for whether this is a serial field (aka. primary key, identifier).
+        register_instance_option(:serial?) do
+          false
+        end
+
+        # Accessor for whether this is field is sortable.
+        register_instance_option(:sortable?) do
+          false
+        end              
+
+        # Reader for field's value
+        def value
+          bindings[:object].send(name)
         end
       end
 
       constants.each do |it|
-        @@registry[it.to_s.underscore.to_sym] = "RailsAdmin::Fields::DataTypes::#{it}".constantize
+        @@registry[it.to_s.underscore.to_sym] = "RailsAdmin::Fields::Types::#{it}".constantize
       end
     end
   end
