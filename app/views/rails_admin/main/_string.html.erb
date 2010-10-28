@@ -1,9 +1,2 @@
-<%
-  property_name = property[:name]
-  model_name = @abstract_model.to_param
-  length = property[:length]
-  label = property[:pretty_name]
-%>
-                <%= label_tag "#{property_name}", label %>
-                <% object_property(@object, property) # FIXME: Why is this here? %>
-                <%= text_field model_name, property_name, :size => [50, length].min, :maxlength => length, :class => "stringField #{errors_exist ? "errorField" : nil}", :value => @object.send(property_name) %>
+                <%= label_tag "#{field.name}", field.label %>
+                <%= text_field field.abstract_model.to_param, field.name, :size => [50, field.length].min, :maxlength => field.length, :class => "stringField #{field.has_errors ? "errorField" : nil}", :value => field.value %>

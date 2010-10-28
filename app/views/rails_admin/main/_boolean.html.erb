@@ -1,7 +1,2 @@
-<%
-  property_name = property[:name]
-  label = property[:pretty_name]
-  model_name = @abstract_model.to_param
-%>
-                <%= label_tag label %>
-                <%= check_box model_name, property_name, :checked => @object.send(property_name) ? true : false %>
+                <%= label_tag field.label %>
+                <%= check_box field.abstract_model.to_param, field.name, :checked => field.value ? true : false %>

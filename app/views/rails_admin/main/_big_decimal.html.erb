@@ -1,14 +1,2 @@
-<%
-  property_name = property[:name]
-  length = property[:length]
-  label = property[:pretty_name]
-  required = !property[:nullable?] || property[:serial?]
-  model_name = @abstract_model.to_param
-%>
-                <div>
-                  <%= label_tag label %>
-                  <%= text_field model_name, property_name, :maxlength => length, :label => label %>
-                  <p class="help">
-                    <%= required ? "Required." : "Optional." %>
-                  </p>
-                </div>
+                  <%= label_tag field.label %>
+                  <%= text_field field.abstract_model.to_param, field.name, :maxlength => field.length, :label => field.label %>

@@ -1,9 +1,2 @@
-<%
-  property_name = property[:name]
-  label = property[:pretty_name]
-  required = !property[:nullable?]
-  model_name = @abstract_model.to_param
-%>
-              <%= label_tag label %>
-
-              <%= text_area model_name, property_name, :cols => 80, :class => "textField", :value => @object.send(property_name) %>
+              <%= label_tag field.label %>
+              <%= text_area field.abstract_model.to_param, field.name, :cols => 80, :class => "textField", :value => field.value %>

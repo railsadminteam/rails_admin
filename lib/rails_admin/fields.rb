@@ -3,26 +3,34 @@ require 'builder'
 module RailsAdmin
   module Fields
     def self.extended(obj)
-      # Extend field with behaviour of it's data type
-      obj.extend DataTypes.load(obj.type)
+      # If field is object's native property
+      if obj.abstract_model.properties.find {|f| obj.name == f[:name] }
+        # Extend field with behaviour of it's data type
+        obj.extend DataTypes.load(obj.type)
+        
+        # If field is a foreign key for a belongs to association
+        if association = obj.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == obj.name}.first
+          # Store association data within field
+          obj.instance_variable_set("@association", association)
+          # Extend field with association behaviour
+          obj.extend Associations
+        
+        # Otherwise it's a normal field
+        else
+          obj.extend Concrete
+        end
 
       # If field is an association
-      if association = obj.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == obj.name}.first
+      elsif association = obj.abstract_model.associations.select{|a| a[:parent_model] == obj.name}.first
         # Store association data within field
         obj.instance_variable_set("@association", association)
-        # Define reader for association data
-        def obj.association
-          instance_variable_get("@association")
-        end
         # Extend field with association behaviour
         obj.extend Associations
-      # If field does not exist within abstract model properties (eg. is method of record object)
-      elsif obj.abstract_model.properties.find {|f| obj.name == f[:name] }.nil?
+      
+      # Otherwise field is readable only (eg. is method of record object)
+      else
         # Extend field with virtual field capabilities
         obj.extend Virtual
-      else
-        # Otherwise extend with concrete field behaviour
-        obj.extend Concrete
       end
     end
 
@@ -63,6 +71,12 @@ module RailsAdmin
         obj.register_instance_option(:value) do
           bindings[:object].send(name)
         end
+
+        class << obj
+          def partial
+            type.to_s
+          end
+        end
       end
     end
 
@@ -71,13 +85,25 @@ module RailsAdmin
     # via that interface.
     module Associations
       def self.extended(obj)        
+        # Define reader for association data
+        def obj.association
+          instance_variable_get("@association")
+        end
+
         # Accessor for field's label.
         #
         # @see RailsAdmin::AbstractModel.properties
         obj.register_instance_option(:label) do
           association[:pretty_name]
         end
-        
+
+        # Accessor for whether this is field is required.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        obj.register_instance_option(:required?) do
+          false
+        end
+
         # Accessor for whether this is field is searchable.
         obj.register_instance_option(:searchable?) do
           false
@@ -87,11 +113,29 @@ module RailsAdmin
         obj.register_instance_option(:sortable?) do
           false
         end        
-        
-        # Extend field with belongs to behaviour
-        if obj.association[:type] == :belongs_to
-          obj.extend BelongsTo
+
+        class << obj
+          def associated_collection
+            associated_model_config.abstract_model.all.map do |object|
+              [associated_model_config.bind(:object, object).list.object_label, object.id]
+            end
+          end
+
+          def associated_model_config
+            @associated_model_config ||= RailsAdmin.config(association[:child_model])
+          end
+          
+          def partial
+            "#{association[:type]}_association"
+          end
+          
+          def value
+            bindings[:object].send(association[:name])
+          end
         end
+        
+        # Extend field with correct association behaviour
+        obj.extend "RailsAdmin::Fields::Associations::#{obj.association[:type].to_s.camelize}".constantize
       end
       
       module BelongsTo
@@ -131,7 +175,31 @@ module RailsAdmin
           obj.register_instance_option(:value) do
             bindings[:object].send(name)
           end
+          
+          class << obj
+            def associated_collection
+              associated_model_config.abstract_model.all.map do |object| 
+                [associated_model_config.bind(:object, object).list.object_label, object.id]
+              end
+            end
+
+            def associated_model_config
+              @associated_model_config ||= RailsAdmin.config(association[:parent_model])
+            end
+          end
         end
+      end
+      
+      module HasAndBelongsToMany
+      end
+
+      module HasAndBelongsToMany
+      end
+
+      module HasMany
+      end
+
+      module HasOne
       end
     end
     
