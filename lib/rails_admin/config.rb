@@ -132,7 +132,7 @@ module RailsAdmin
       end
 
       # Register a class option. Class option is a configuration
-      # option that stores it's value within a class object's instance variable 
+      # option that stores it's value within a class object's instance variable
       # and is accessed by a class method. Both go by the name of the option.
       def self.register_class_option(option_name, &default)
         scope = class << self; self; end;
@@ -191,19 +191,19 @@ module RailsAdmin
     module Groupable
       class Group < RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-        
+
         attr_reader :name, :registry
-        
+
         def initialize(parent, name)
           super(parent)
           @name = name
           @registry = []
         end
-        
+
         def register(object)
           @registry << object
         end
-        
+
         def delete(object)
           @registry.delete(object)
         end
@@ -350,10 +350,10 @@ module RailsAdmin
           @fields = abstract_model.properties.map do |p|
             field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
             field.extend RailsAdmin::Config::Groupable
-            field.group = :default            
+            field.group = :default
             if field.serial? || [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(p[:name])
               field.hide
-            end            
+            end
             field
           end
           # Append @fields instance variable with model's associations
@@ -365,7 +365,7 @@ module RailsAdmin
           end
         end
       end
-      
+
       class Create < Edit
       end
 
@@ -379,7 +379,7 @@ module RailsAdmin
           super(parent)
           extend RailsAdmin::Config::Fields
           # Populate @fields instance variable with model's properties
-          @fields = abstract_model.properties.map do |p| 
+          @fields = abstract_model.properties.map do |p|
             field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
           end
         end

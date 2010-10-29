@@ -1,6 +1,6 @@
 require 'builder'
 
-module RailsAdmin  
+module RailsAdmin
   module Fields
 
     def self.factory(parent, name, type, properties = [])
@@ -18,7 +18,7 @@ module RailsAdmin
       attr_accessor :defined, :order
 
       include RailsAdmin::Config::Hideable
-      
+
       def initialize(parent, name, properties)
         super(parent)
         @defined = false
@@ -31,7 +31,7 @@ module RailsAdmin
       register_instance_option(:help) do
         required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
       end
-      
+
       # Accessor for field's label.
       #
       # @see RailsAdmin::AbstractModel.properties
@@ -71,7 +71,7 @@ module RailsAdmin
       def errors
         bindings[:object].errors[name]
       end
-      
+
       def has_errors?
         !(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
       end
@@ -98,13 +98,13 @@ module RailsAdmin
         bindings[:object].send(name)
       end
     end
-    
+
     class Association < Field
 
       def association
         @properties
       end
-      
+
       # Accessor for field's label.
       #
       # @see RailsAdmin::AbstractModel.properties
@@ -127,7 +127,7 @@ module RailsAdmin
       # Accessor for whether this is field is sortable.
       register_instance_option(:sortable?) do
         false
-      end        
+      end
 
       def associated_collection
         associated_model_config.abstract_model.all.map do |object|
@@ -138,7 +138,7 @@ module RailsAdmin
       def associated_model_config
         @associated_model_config ||= RailsAdmin.config(association[:child_model])
       end
-      
+
       def child_key
         association[:child_key].first
       end
@@ -159,7 +159,7 @@ module RailsAdmin
         bindings[:object].send(association[:name])
       end
     end
-    
+
     module Types
 
       @@registry = {}
@@ -171,7 +171,7 @@ module RailsAdmin
       def self.load(type)
         @@registry[type.to_sym] or raise "Unsupported field datatype: #{type}"
       end
-      
+
       class BelongsToAssociation < RailsAdmin::Fields::Association
 
         attr_reader :association
@@ -210,7 +210,7 @@ module RailsAdmin
           properties[:serial?]
         end
 
-        # Accessor for field's formatted value 
+        # Accessor for field's formatted value
         register_instance_option(:formatted_value) do
           object = bindings[:object].send(association[:name])
           unless object.nil?
@@ -219,9 +219,9 @@ module RailsAdmin
             nil
           end
         end
-        
+
         def associated_collection
-          associated_model_config.abstract_model.all.map do |object| 
+          associated_model_config.abstract_model.all.map do |object|
             [associated_model_config.bind(:object, object).list.object_label, object.id]
           end
         end
@@ -235,7 +235,7 @@ module RailsAdmin
           bindings[:object].send(name)
         end
       end
-      
+
       class HasAndBelongsToManyAssociation < RailsAdmin::Fields::Association
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do
@@ -252,13 +252,22 @@ module RailsAdmin
 
       class HasOneAssociation < RailsAdmin::Fields::Association
       end
-      
+
       class Boolean < RailsAdmin::Fields::Field
         register_instance_option(:column_css_class) do
           "bool"
         end
+
         register_instance_option(:column_width) do
           60
+        end
+
+        register_instance_option(:formatted_value) do
+          if value == true
+            Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_black.png"), :alt => "True").html_safe
+          else
+            Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_white.png"), :alt => "False").html_safe
+          end
         end
 
         # Accessor for field's help text displayed below input field.
@@ -269,15 +278,9 @@ module RailsAdmin
         register_instance_option(:searchable?) do
           false
         end
+
         register_instance_option(:sortable?) do
           true
-        end
-        register_instance_option(:formatted_value) do
-          if value == true
-            Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_black.png"), :alt => "True").html_safe
-          else
-            Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_white.png"), :alt => "False").html_safe
-          end
         end
       end
 
@@ -285,15 +288,11 @@ module RailsAdmin
         register_instance_option(:column_css_class) do
           "date"
         end
+
         register_instance_option(:column_width) do
           90
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
             time.strftime(strftime_format)
@@ -301,6 +300,15 @@ module RailsAdmin
             "".html_safe
           end
         end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
+        end
+
         register_instance_option(:strftime_format) do
           "%b. %d, %Y"
         end
@@ -310,15 +318,11 @@ module RailsAdmin
         register_instance_option(:column_css_class) do
           "dateTime"
         end
+
         register_instance_option(:column_width) do
           170
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
             time.strftime(strftime_format)
@@ -326,6 +330,15 @@ module RailsAdmin
             "".html_safe
           end
         end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
+        end
+
         register_instance_option(:strftime_format) do
           "%b. %d, %Y, %I:%M%p"
         end
@@ -333,23 +346,31 @@ module RailsAdmin
 
       class Decimal < RailsAdmin::Fields::Field
         register_instance_option(:column_css_class) do
-          "decimal"
+          "float"
         end
+
         register_instance_option(:column_width) do
           110
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
             output
           else
             "".html_safe
           end
+        end
+
+        register_instance_option(:partial) do
+          "float"
+        end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
         end
       end
 
@@ -357,21 +378,25 @@ module RailsAdmin
         register_instance_option(:column_css_class) do
           "float"
         end
+
         register_instance_option(:column_width) do
           110
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
             output
           else
             "".html_safe
           end
+        end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
         end
       end
 
@@ -379,15 +404,11 @@ module RailsAdmin
         register_instance_option(:column_css_class) do
           serial? ? "id" : "int"
         end
+
         register_instance_option(:column_width) do
           serial? ? 46 : 80
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
             output
@@ -395,16 +416,33 @@ module RailsAdmin
             "".html_safe
           end
         end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
+        end
       end
 
       class String < RailsAdmin::Fields::Field
         register_instance_option(:column_css_class) do
           length > 100 ? "bigString" : "smallString"
         end
+
         register_instance_option(:column_width) do
           length > 100 ? 250 : 180
         end
-        
+
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
+          end
+        end
+
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do
           text = required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
@@ -416,15 +454,9 @@ module RailsAdmin
         register_instance_option(:searchable?) do
           true
         end
+
         register_instance_option(:sortable?) do
           true
-        end
-        register_instance_option(:formatted_value) do
-          unless (output = value).nil?
-            output
-          else
-            "".html_safe
-          end
         end
       end
 
@@ -432,15 +464,11 @@ module RailsAdmin
         register_instance_option(:column_css_class) do
           "text"
         end
+
         register_instance_option(:column_width) do
           250
         end
-        register_instance_option(:searchable?) do
-          true
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
             output
@@ -448,21 +476,25 @@ module RailsAdmin
             "".html_safe
           end
         end
+
+        register_instance_option(:searchable?) do
+          true
+        end
+
+        register_instance_option(:sortable?) do
+          true
+        end
       end
 
       class Time < RailsAdmin::Fields::Field
         register_instance_option(:column_css_class) do
           "time"
         end
+
         register_instance_option(:column_width) do
           60
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
             time.strftime(strftime_format)
@@ -470,6 +502,15 @@ module RailsAdmin
             "".html_safe
           end
         end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
+        end
+
         register_instance_option(:strftime_format) do
           "%I:%M%p"
         end
@@ -479,15 +520,11 @@ module RailsAdmin
         register_instance_option(:column_css_class) do
           "dateTime"
         end
+
         register_instance_option(:column_width) do
           170
         end
-        register_instance_option(:searchable?) do
-          false
-        end
-        register_instance_option(:sortable?) do
-          true
-        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
             time.strftime(strftime_format)
@@ -495,6 +532,15 @@ module RailsAdmin
             "".html_safe
           end
         end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          true
+        end
+
         register_instance_option(:strftime_format) do
           "%b. %d, %Y, %I:%M%p"
         end
@@ -503,6 +549,14 @@ module RailsAdmin
       # Virtual field mixin provides behaviour for columns that are calculated at runtime
       # for example record object methods.
       class Virtual < RailsAdmin::Fields::Field
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
+          end
+        end
+
         # Accessor for field's label.
         register_instance_option(:label) do
           name.to_s.underscore.gsub('_', ' ').capitalize
@@ -531,7 +585,7 @@ module RailsAdmin
         # Accessor for whether this is field is sortable.
         register_instance_option(:sortable?) do
           false
-        end              
+        end
 
         # Reader for field's value
         def value
