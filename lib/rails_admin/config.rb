@@ -360,7 +360,7 @@ module RailsAdmin
           @fields += abstract_model.associations.select{|a| a[:type] != :belongs_to}.map do |a|
             field = RailsAdmin::Fields.factory(self, a[:parent_model], "#{a[:type]}_association".to_sym, a)
             field.extend RailsAdmin::Config::Groupable
-            field.group = a[:parent_model]
+            field.group = field.label
             field
           end
         end
