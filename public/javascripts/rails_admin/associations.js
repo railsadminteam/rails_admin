@@ -41,13 +41,14 @@ document.observe("dom:loaded", function() {
   })
 
   $$(".addAssoc").each(function(elem){
-    Event.observe(elem,'click',function(e){
-      var parentDiv = e.target.parentNode.parentNode;
-      var hiddenFields = parentDiv.parentNode.childElements()[4];
-      var assocName = parentDiv.parentNode.childElements()[4].childElements()[0].readAttribute('name');
+    
+    var assocName = elem.parentNode.parentNode.childElements()[4].childElements()[0].readAttribute('name');
 
-      var select = parentDiv.childElements()[0];
-      var select_two = parentDiv.childElements()[3]
+    Event.observe(elem,'click',function(e){
+      var parentDiv = e.findElement('a').parentNode.parentNode;
+      var hiddenFields = parentDiv.childElements()[4];
+      var select = parentDiv.childElements()[2].childElements()[0];
+      var select_two = parentDiv.childElements()[2].childElements()[3]
       var counter = select.readAttribute("ref");
 
       select.childElements().each(function(ev){
@@ -67,21 +68,22 @@ document.observe("dom:loaded", function() {
         buffer[counter].push([e.innerHTML,e.readAttribute('value')])
       })
 
-      var hiddenElem = parentDiv.parentNode.childElements()[4].childElements()[0];
+      var hiddenElem = parentDiv.childElements()[4].childElements()[0];
       if(!hiddenElem.value) hiddenElem.remove()
       // remakeBuffer
     })
   })
 
   $$(".removeAssoc").each(function(elem){
-    Event.observe(elem,'click',function(e){
-      var parentDiv = e.target.parentNode.parentNode;
-      var select = parentDiv.childElements()[0];
-      var select_two = parentDiv.childElements()[3]
-      var counter = select.readAttribute("ref");
 
-      var hiddenFields = parentDiv.parentNode.childElements()[4];
-      var assocName = parentDiv.parentNode.childElements()[4].childElements()[0].readAttribute('name');
+    var assocName = elem.parentNode.parentNode.childElements()[4].childElements()[0].readAttribute('name');
+
+    Event.observe(elem,'click',function(e){
+      var parentDiv = e.findElement('a').parentNode.parentNode;
+      var hiddenFields = parentDiv.childElements()[4];
+      var select = parentDiv.childElements()[2].childElements()[0];
+      var select_two = parentDiv.childElements()[2].childElements()[3]
+      var counter = select.readAttribute("ref");
 
       select_two.childElements().each(function(ev){
         if(ev.selected == true){
@@ -93,12 +95,6 @@ document.observe("dom:loaded", function() {
           hiddenFields.childElements().each(function(o){
             var hiddenValue = o.value;
             if(hiddenValue==ev.readAttribute('value')){
-
-              if(hiddenFields.childElements().size()==1){
-                var hidden = new Element('input',{"name":assocName,"type":"hidden"})
-                hiddenFields.insert({bottom:hidden});
-              }
-
               o.remove()
             }
           })
@@ -114,38 +110,51 @@ document.observe("dom:loaded", function() {
     })
   })
 
-  $$(".addAssoc").each(function(elem){
+  $$(".addAllAssoc").each(function(elem){
+      
+    var assocName = elem.parentNode.parentNode.childElements()[4].childElements()[0].readAttribute('name');
+    
     Event.observe(elem,'click',function(e){
 
-      var parentDiv = e.target.parentNode.parentNode.childElements()[2].childElements();
-
-      var select = parentDiv[0];
-      var select_two = parentDiv[3];
+      var parentDiv = e.findElement('a').parentNode.parentNode;
+      var hiddenFields = parentDiv.childElements()[4];
+      var select = parentDiv.childElements()[2].childElements()[0];
+      var select_two = parentDiv.childElements()[2].childElements()[3]
 
       select.childElements().each(function(ev){
         var option = new Element('option',{"value":ev.readAttribute('value')}).update(ev.innerHTML)
         select_two.insert({bottom:option});
         ev.remove()
+
+        var hidden = new Element('input',{"name":assocName,"type":"hidden","value":ev.readAttribute('value')})
+        hiddenFields.insert({bottom:hidden});
       })
 
       var counter = select.readAttribute("ref");
       buffer[counter] = []
+
+      var hiddenElem = parentDiv.childElements()[4].childElements()[0];
+      if(!hiddenElem.value) hiddenElem.remove()
     })
   })
 
   $$(".clearAssoc").each(function(elem){
     Event.observe(elem,'click',function(e){
 
-      var parentDiv = e.target.parentNode.parentNode.childElements()[2].childElements();
-
-      var select = parentDiv[0];
-      var select_two = parentDiv[3];
+      var parentDiv = e.findElement('a').parentNode.parentNode;
+      var hiddenFields = parentDiv.childElements()[4];
+      var select = parentDiv.childElements()[2].childElements()[0];
+      var select_two = parentDiv.childElements()[2].childElements()[3]
 
       select_two.childElements().each(function(ev){
         var option = new Element('option',{"value":ev.readAttribute('value')}).update(ev.innerHTML)
         select.insert({bottom:option});
         ev.remove()
       })
+
+      hiddenFields.childElements().each(function(ev){
+        ev.remove();
+      });
 
       var counter = select.readAttribute("ref");
       buffer[counter] = []
