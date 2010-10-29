@@ -12,6 +12,10 @@ body{
   font-size:12px;
 }
 
+a img {
+  border:0;
+}
+
 #wraper{
   width:960px;
   margin:0px auto;
