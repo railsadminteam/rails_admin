@@ -8,7 +8,7 @@ module RailsAdmin
       str = ""
 
       excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
-      excluded_models << Devise.mappings.keys[0].to_param.capitalize
+      excluded_models << ::Devise.mappings.keys[0].to_param.capitalize if defined?(::Devise)
       excluded_models << ['History']
 
       Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
