@@ -313,6 +313,23 @@ describe "RailsAdmin" do
           end
         end
 
+        it "should be globally renameable by type" do
+          RailsAdmin::Config.model do
+            list do
+              fields_of_type :datetime do
+                label { "#{label} (DATETIME)" }
+              end
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should contain("ID")
+            elements[2].should contain("CREATED AT (DATETIME)")
+            elements[3].should contain("UPDATED AT (DATETIME)")
+            elements[4].should contain("NAME")
+          end
+        end
+
         it "should be sortable by default" do
           get rails_admin_list_path(:model_name => "fan")
           response.should have_tag("#moduleHeader > li") do |elements|
@@ -338,9 +355,30 @@ describe "RailsAdmin" do
             elements[2].should have_tag("a")
           end
         end
-        
+
         it "should have option to disable sortability by type" do
           RailsAdmin.config Fan do
+            list do
+              fields_of_type :datetime do
+                sortable false
+              end
+              field :id
+              field :name
+              field :created_at
+              field :updated_at
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements[1].should have_tag("a")
+            elements[2].should have_tag("a")
+            elements[3].should_not have_tag("a")
+            elements[4].should_not have_tag("a")
+          end
+        end
+
+        it "should have option to disable sortability by type globally" do
+          RailsAdmin::Config.model do
             list do
               fields_of_type :datetime do
                 sortable false
@@ -376,6 +414,155 @@ describe "RailsAdmin" do
             elements.should_not contain("UPDATED AT")
           end
         end
+
+        it "should have option to hide fields by type globally" do
+          RailsAdmin::Config.model do
+            list do
+              fields_of_type :datetime do
+                hide
+              end
+            end
+          end
+          get rails_admin_list_path(:model_name => "fan")
+          response.should have_tag("#moduleHeader > li") do |elements|
+            elements.should contain("ID")
+            elements.should contain("NAME")
+            elements.should_not contain("CREATED AT")
+            elements.should_not contain("UPDATED AT")
+          end
+        end
+
+        it "should have option to customize css class name" do
+          RailsAdmin.config Fan do
+            list do
+              field :id do
+                column_css_class "customClass"
+              end
+              field :name
+            end
+          end
+          
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+          
+          get rails_admin_list_path(:model_name => "fan")
+          
+          response.should have_tag("#moduleHeader > li:nth-child(2).customClassHeader")
+          response.should have_tag("#moduleHeader > li:nth-child(3).smallStringHeader")
+          response.should have_tag(".infoRow") do |elements|
+            elements[0].should have_tag("li:nth-child(2).customClassRow")
+            elements[0].should have_tag("li:nth-child(3).smallStringRow")
+          end
+        end
+
+        it "should have option to customize css class name by type" do
+          RailsAdmin.config Fan do
+            list do
+              fields_of_type :datetime do
+                column_css_class "customClass"
+              end
+            end
+          end
+          
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+          
+          get rails_admin_list_path(:model_name => "fan")
+          
+          response.should have_tag("#moduleHeader > li:nth-child(3).customClassHeader")
+          response.should have_tag("#moduleHeader > li:nth-child(4).customClassHeader")
+          response.should have_tag("#moduleHeader > li:nth-child(5).smallStringHeader")
+          response.should have_tag(".infoRow") do |elements|
+            elements[0].should have_tag("li:nth-child(3).customClassRow")
+            elements[0].should have_tag("li:nth-child(4).customClassRow")
+            elements[0].should have_tag("li:nth-child(5).smallStringRow")
+          end
+        end
+
+        it "should have option to customize css class name by type globally" do
+          RailsAdmin::Config.model do
+            list do
+              fields_of_type :datetime do
+                column_css_class "customClass"
+              end
+            end
+          end
+          
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+          
+          get rails_admin_list_path(:model_name => "fan")
+          
+          response.should have_tag("#moduleHeader > li:nth-child(3).customClassHeader")
+          response.should have_tag("#moduleHeader > li:nth-child(4).customClassHeader")
+          response.should have_tag("#moduleHeader > li:nth-child(5).smallStringHeader")
+          response.should have_tag(".infoRow") do |elements|
+            elements[0].should have_tag("li:nth-child(3).customClassRow")
+            elements[0].should have_tag("li:nth-child(4).customClassRow")
+            elements[0].should have_tag("li:nth-child(5).smallStringRow")
+          end
+        end
+        
+        it "should have option to customize column width" do
+          RailsAdmin.config Fan do
+            list do
+              field :id do
+                column_width 200
+              end
+              field :name
+              field :created_at
+              field :updated_at
+            end
+          end
+          
+          get rails_admin_list_path(:model_name => "fan")
+
+          response.should have_tag("style") {|css| css.should contain(/\.idHeader[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
+          response.should have_tag("style") {|css| css.should contain(/\.idRow[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
+        end
+
+        it "should have option to customize output formatting" do
+          RailsAdmin.config Fan do
+            list do
+              field :id
+              field :name do
+                formatted_value do
+                  value.to_s.upcase
+                end
+              end
+              field :created_at
+              field :updated_at
+            end
+          end
+          
+          get rails_admin_list_path(:model_name => "fan")
+
+          response.should have_tag(".infoRow") do |elements|
+            elements[0].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN II") }
+            elements[1].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN I") }
+          end
+        end        
+
+        it "should have option to customize output formatting of date fields" do
+          RailsAdmin.config Fan do
+            list do
+              field :id
+              field :name
+              field :created_at do
+                strftime_format "%Y-%m-%d"
+              end
+              field :updated_at
+            end
+          end
+          
+          get rails_admin_list_path(:model_name => "fan")
+
+          response.should have_tag(".infoRow") do |elements|
+            elements[0].should have_tag("li:nth-child(4)") do |li| 
+              li.should contain(/\d{4}-\d{2}-\d{2}/)
+            end
+          end
+        end        
       end
     end
   end
