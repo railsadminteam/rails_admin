@@ -31,7 +31,7 @@ You should now be able to administer your site at http://localhost:3000/admin (a
 
 == Configuration
 
-RailsAdmin provides it's out of the box administrative interface by inspecting application's model files and by following some Rails conventions. For a more tailored experience it also provides a configuration DSL which allows you to customize many aspects of the CRUD interface.
+RailsAdmin provides its out of the box administrative interface by inspecting application's model files and by following some Rails conventions. For a more tailored experience it also provides a configuration DSL which allows you to customize many aspects of the CRUD interface.
 
 The configuration code should be placed in an initializer file, for example:
   config/initializers/rails_admin.rb
@@ -48,7 +48,7 @@ You can exclude models from RailsAdmin by appending those models to <tt>excluded
 * setting the model's label
 * configuring the number of visible tabs
 
-You can hide a model from the top navigation by marking it's <tt>visible</tt> option as false within model's navigation configuration section:
+You can hide a model from the top navigation by marking its <tt>visible</tt> option as false within model's navigation configuration section:
 
 By using an accessor:
 
