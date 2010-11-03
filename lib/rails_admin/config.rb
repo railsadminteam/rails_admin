@@ -78,12 +78,13 @@ module RailsAdmin
     # @see RailsAdmin::Config::Model#bindings
     # @see RailsAdmin::Config::Model#abstract_model
     class Configurable
-      attr_reader :abstract_model, :bindings, :parent
+      attr_reader :abstract_model, :bindings, :parent, :root
 
       def initialize(parent)
         @abstract_model = parent.abstract_model
         @bindings = parent.bindings
         @parent = parent
+        @root = parent.root
       end
 
       # Register an instance option for this object only
@@ -162,8 +163,8 @@ module RailsAdmin
     module Hideable
       # Visibility defaults to true.
       def self.included(klass)
-        klass.register_instance_option(:visible) do
-          true
+        klass.register_instance_option(:visible?) do
+          !root.excluded?
         end
       end
 
@@ -180,11 +181,6 @@ module RailsAdmin
       # Writer to show field.
       def show(&block)
         visible block || true
-      end
-
-      # Reader whether field is visible.
-      def visible?
-        visible
       end
     end
 
@@ -423,7 +419,12 @@ module RailsAdmin
         @abstract_model = abstract_model
         @bindings = {}
         @parent = nil
+        @root = self
         extend RailsAdmin::Config::Sections
+      end
+
+      def excluded?
+        RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }
       end
 
       # Bind variables to be used by the configuration options

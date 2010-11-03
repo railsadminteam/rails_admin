@@ -129,6 +129,10 @@ module RailsAdmin
         false
       end
 
+      register_instance_option(:visible?) do
+        !associated_model_config.excluded?
+      end
+
       def associated_collection
         associated_model_config.abstract_model.all.map do |object|
           [associated_model_config.bind(:object, object).list.object_label, object.id]
