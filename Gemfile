@@ -6,5 +6,5 @@ gemspec
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'webrat', :git => 'git://github.com/kalv/webrat.git'
+  gem 'webrat', :git => 'http://github.com/kalv/webrat.git'
 end

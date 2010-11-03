@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/kalv/webrat.git
+  remote: http://github.com/kalv/webrat.git
   revision: 66130e4b9e903e07cfa86286655bde439c7b376e
   specs:
     webrat (0.7.2.pre)
@@ -8,7 +8,7 @@ GIT
       rack-test (>= 0.5.3)
 
 PATH
-  remote: /Users/petteri/Workspace/rails_admin
+  remote: ../../
   specs:
     rails_admin (0.0.1)
       builder (~> 2.1.0)
