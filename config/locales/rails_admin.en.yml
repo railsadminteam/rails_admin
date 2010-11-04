@@ -15,6 +15,7 @@ en:
     history:
       name: "History"
       page_name: "History for %{name}"
+      no_activity: "No Activity"
     credentials:
       log_out: "Log out"
     list:

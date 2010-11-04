@@ -22,7 +22,26 @@ describe "RailsAdmin" do
   after(:each) do
     Warden.test_reset!
   end
-  
+
+  describe "history blank results" do
+    before(:each) do
+      @months = RailsAdmin::History.add_blank_results([RailsAdmin::BlankHistory.new(3, 2011)], 10, 2010)
+    end
+
+    it "should pad the correct number of months" do
+      @months.length.should == 5
+    end
+
+    it "should pad at the beginning" do
+      @months.first.fake.should == 1
+      @months.map(&:month).should == [11, 12, 1, 2, 3]
+    end
+
+    it "should handle year-to-year rollover" do
+      @months.map(&:year).should == [2010, 2010, 2011, 2011, 2011]
+    end
+  end
+
   describe "config" do
     
     after(:each) do
@@ -1459,5 +1478,5 @@ describe "RailsAdmin" do
       @req.status.should equal(404)
     end
   end
-  
+
 end

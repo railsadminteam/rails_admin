@@ -1,4 +1,5 @@
 <p id="listing"><strong><%= Time.parse("#{year}-#{month}-01").strftime("%B %Y")%></strong> History:</p>
+<%= t("admin.history.no_activity") if history.empty? %>
 <ul id="history">
 <% history.each do |t|%>
 <li><%= t.username%> <%= history_output(t)%></li>
