@@ -1,6 +1,1 @@
-<p id="listing"><strong><%= Time.parse("#{@current_month.year}-#{@current_month.month}-01").strftime("%B %Y")%></strong> History:</p>
-<ul id="history">
-<% @history.each do |t|%>
-<li><%= t.username%> <%= history_output(t)%></li>
-<% end %>
-</ul>
+<%= render(:partial => 'rails_admin/main/history', :locals => {:month => @current_month.month, :year => @current_month.year, :history => @history}) -%>
