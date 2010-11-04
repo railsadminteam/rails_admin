@@ -36,6 +36,12 @@ RailsAdmin provides its out of the box administrative interface by inspecting ap
 The configuration code should be placed in an initializer file, for example:
   config/initializers/rails_admin.rb
 
+==== General
+
+You can customize authentication by providing a custom block for <tt>RailsAdmin.authenticate_with</tt>. To disable authentication pass an empty block:
+
+  RailsAdmin.authenticate_with {}
+
 You can exclude models from RailsAdmin by appending those models to <tt>excluded_models</tt>:
 
   RailsAdmin.config do |config|
