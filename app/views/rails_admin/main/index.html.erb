@@ -55,12 +55,7 @@
               <a href="javascript:void(0)" id="arrowRight" ref="1"><img src="/images/arrow_right.png" alt="Right" /></a>
             </div>
             <div id="listingHistory">
-              <p id="listing"><strong><%= Time.now.strftime("%B %Y")%></strong> History:</p>
-              <ul id="history">
-                <% @historyListing.each do |t|%>
-                <li><%= t.username%> <%= history_output(t)%></li>
-                <% end %>
-              </ul>
+<%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @historyListing}) -%>
             </div>
           </div>
         </div>
