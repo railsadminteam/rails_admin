@@ -40,7 +40,7 @@
                   <% @history.each do |t| %>
                   <% percent = (t.number * 100) / max unless max == 0 %>
                   <% indicator_type = get_indicator(percent)%>
-                  <li><span><%= t.number != 0 ? Time.parse("01/#{t.month}/#{t.year}").strftime("%B %Y") : "No activity" %></span>
+                  <li><span><%= t.number != 0 ? Time.parse("#{t.year}-#{t.month}-01").strftime("%B %Y") : "No activity" %></span>
                     <span class="bars">
                       <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
                     </span>
@@ -55,7 +55,7 @@
               <a href="javascript:void(0)" id="arrowRight" ref="1"><img src="/images/arrow_right.png" alt="Right" /></a>
             </div>
             <div id="listingHistory">
-              <p id="listing">Listing <strong><%= Time.now.strftime("%B %Y")%></strong> History:</p>
+              <p id="listing"><strong><%= Time.now.strftime("%B %Y")%></strong> History:</p>
               <ul id="history">
                 <% @historyListing.each do |t|%>
                 <li><%= t.username%> <%= history_output(t)%></li>
