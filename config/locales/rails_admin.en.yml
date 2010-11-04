@@ -44,4 +44,4 @@ en:
     flash:
       successful: "%{name} was successfully %{action}"
       error: "%{name} failed to be %{action}"
-      noaction: "No actions where taken!"
+      noaction: "No actions were taken"
