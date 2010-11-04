@@ -424,7 +424,7 @@ module RailsAdmin
       end
 
       def excluded?
-        RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }
+        @excluded ||= !RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }.nil?
       end
 
       # Bind variables to be used by the configuration options
