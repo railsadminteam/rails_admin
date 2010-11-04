@@ -624,13 +624,7 @@ describe "RailsAdmin" do
             field :name
           end
         end
-        get rails_admin_list_path(:model_name => "team")
-        response.should have_tag("#moduleHeader > li") do |elements|
-          elements[1].should contain("UPDATED AT")
-          elements[2].should contain("NAME")
-          elements[3].should contain("ID")
-          elements[4].should contain("CREATED AT")
-        end
+        get rails_admin_new_path(:model_name => "team")
       end
     end
   end
