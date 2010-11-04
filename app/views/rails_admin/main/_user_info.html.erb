@@ -1,3 +1,4 @@
+<% if current_user %>
 <ul class="breadcrumb">
   <li>
     <a href="#"><%= current_user.email.split("@")[0] %></a>
@@ -7,3 +8,4 @@
     <a href="<%= destroy_user_session_path() %>"><%= t("admin.credentials.log_out")%></a>
   </li>
 </ul>
+<% end %>
