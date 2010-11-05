@@ -12,8 +12,8 @@ It currently offers the following functionality:
 * Authentication (via Devise[http://github.com/plataformatec/devise])
 * User action history
 == Screenshots
-https://github.com/caiotarifa/rails_admin/raw/master/screenshots/list.png
-https://github.com/caiotarifa/rails_admin/raw/master/screenshots/edit.png
+http://github.com/caiotarifa/rails_admin/raw/master/screenshots/list.png
+http://github.com/caiotarifa/rails_admin/raw/master/screenshots/edit.png
 == Installation
 In your <tt>Gemfile</tt>, add the following dependency:
   gem 'devise' # Devise must be required before RailsAdmin
