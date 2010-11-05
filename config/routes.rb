@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     scope "history", :as => "history" do
       controller "history" do
         match "/list", :to => :list, :as => "list"
-        match "/show", :to => :show, :as => "show"
       end
     end
   end
