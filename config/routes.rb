@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       match "/", :to => :index, :as => "dashboard"
       match "/:model_name", :to => :list, :as => "list"
       match "/:model_name/get_pages", :to => :get_pages, :as => "get_pages"
-      match "/:model_name/history", :to => :model_history, :as => "model_history"
+      match "/:model_name/history", :to => :show_history, :as => "show_history"
       %w(new create edit update delete destroy).each do |action|
         match "/:model_name/#{action}", :to => action.to_sym, :as => action
       end

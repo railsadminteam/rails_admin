@@ -32,7 +32,7 @@
         <div id="quickAccess">
           <ul id="quick">
             <li>
-             <%= link_to(t("admin.history.name"), rails_admin_history_show_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
+             <%= link_to(t("admin.history.name"), rails_admin_show_history_path, :class => "addlink") %>
             </li>
             <li>
              <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>

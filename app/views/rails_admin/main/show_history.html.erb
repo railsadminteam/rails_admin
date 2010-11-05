@@ -70,7 +70,7 @@
           </li>
           <li class="intRow">
             <% unless object.message.match("Destroy") %>
-            <%= link_to object.item, rails_admin_history_show_path(:model_name => @abstract_model, :id => object.item), :class => "historyLink"%>
+            <%= link_to object.item, rails_admin_show_history_path(:id => object.item), :class => "historyLink"%>
             <% else %>
             <%= object.item %>
             <% end %>
