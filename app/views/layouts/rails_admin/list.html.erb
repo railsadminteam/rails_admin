@@ -66,11 +66,17 @@
         <ul class="breadcrumb">
           <li>
             <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
-            &rsaquo;
           </li>
           <li>
+            &rsaquo;
             <%= link_to(@abstract_model.pretty_name, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
           </li>
+          <% if @history %>
+          <li>
+            &rsaquo;
+            History
+          </li>
+          <% end%>
         </ul>
         <h1><%= @plugin_name %></h1>
       </div>
