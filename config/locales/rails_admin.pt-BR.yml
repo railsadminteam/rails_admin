@@ -31,7 +31,7 @@ pt-BR:
       one_char: "caracter."
       many_chars: "caracteres ou menos."
       chosen: "Selecionado %{name}"
-      select_choise: "Selecione sua(s) escolha(s) e clique"
+      select_choice: "Selecione sua(s) escolha(s) e clique"
       chose_all: "Escolher todos"
       clear_all: "Limpar todos"
       save: "Salvar"

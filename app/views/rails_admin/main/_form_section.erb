@@ -1,0 +1,7 @@
+<% visible_fields = form_section.registry.select{|f| f.visible?} %>
+<% if visible_fields.length > 0 %>
+            <h2><%= form_section.label %></h2>
+            <div class="formSection">
+<%= render(:partial => 'field', :collection => visible_fields) -%>
+            </div>
+<% end %>

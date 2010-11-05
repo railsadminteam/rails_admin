@@ -2,33 +2,11 @@ require 'builder'
 
 module RailsAdmin
   module MainHelper
-
-    def history_output(t)
-      if not t.message.downcase.rindex("changed").nil?
-        return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"
-      else
-        return t.message.downcase
-      end
-    end
-
     def get_indicator(percent)
       percent = 0 if percent.nil?
       return "" if percent.between?(0, 33)
       return "medium" if percent.between?(34, 67)
       return "high" if percent.between?(68, 100)
-    end
-
-    def format_output(property, output)
-      property_type = property[:type]
-
-      case property_type
-      when :text
-        return output[0..40]
-      when :string
-        return output[0..40]
-      else
-        return output
-      end
     end
 
     def get_column_set(properties)
@@ -41,42 +19,6 @@ module RailsAdmin
       style, other = justify_properties(sets, current_set)
 
       return style, other, selected_set
-    end
-
-    def get_column_type(property, type)
-      property_type = property[:type]
-      property_name = property[:name]
-
-      case property_type
-      when :boolean
-        "bool#{type}"
-      when :datetime, :timestamp
-        "dateTime#{type}"
-      when :date
-        "date#{type}"
-      when :time
-        "time#{type}"
-      when :string
-        if property[:length] < 100
-          "smallString#{type}"
-        else
-          "bigString#{type}"
-        end
-      when :text
-        "text#{type}"
-      when :integer
-        if property_name == :id
-          "id#{type}"
-        elsif association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
-          "smallString#{type}"
-        else
-          "int#{type}"
-        end
-      when :float
-        "float#{type}"
-      else
-        raise "Unsupported type: #{type}"
-      end
     end
 
     def object_label(object)
@@ -249,7 +191,7 @@ module RailsAdmin
       # loop through properties
       properties.each do |property|
         # get width for the current property
-        width = get_width_for_column(property)
+        width = property.column_width
 
         # if properties that were gathered so far have the width
         # over 697 make a set for them
@@ -285,8 +227,8 @@ module RailsAdmin
       offset = column_offset - per_property * properties.size
 
       properties.each do |property|
-        property_type = get_column_type(property, "")
-        property_width = get_width_for_column(property)
+        property_type = property.column_css_class
+        property_width = property.column_width
         style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
         style[property_type][:size] += per_property
         style[property_type][:occ] += 1
@@ -306,42 +248,6 @@ module RailsAdmin
       end
 
       return style, other
-    end
-
-    def get_width_for_column(property)
-      property_type = property[:type]
-      property_name = property[:name]
-
-      case property_type
-      when :boolean
-        return 60
-      when :datetime, :timestamp
-        return 170
-      when :date
-        return 90
-      when :time
-        return 60
-      when :string
-        if property[:length] < 100
-          return 180
-        else
-          return 250
-        end
-      when :text
-        return 250
-      when :integer
-        if property_name == :id
-          return 46
-        elsif association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
-          return 180
-        else
-          return 80
-        end
-      when :float
-        return 110
-      else
-        raise "Unsupported type: #{type}"
-      end
     end
 
   end

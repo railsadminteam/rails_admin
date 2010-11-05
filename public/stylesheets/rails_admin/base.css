@@ -12,6 +12,10 @@ body{
   font-size:12px;
 }
 
+a img {
+  border:0;
+}
+
 .image_replacement{
 	background-repeat:no-repeat;
 	text-indent:-9999px;
@@ -169,6 +173,7 @@ ul.breadcrumb li a:hover{
 ul#quick{
   list-style-type:none;
   font-size:11px;
+  float: right;
 }
 
 ul#quick li{

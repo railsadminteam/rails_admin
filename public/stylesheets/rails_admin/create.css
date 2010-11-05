@@ -41,6 +41,12 @@
   margin-left:2px;
 }
 
+.field{
+  margin-bottom: 1px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
 .stringField, .intField, .bigDecimalField, .floatField, .dateField, .timestampField, .timeField, .datetimeField, .textField{
   float:left;
   font-family:Verdana, Geneva, sans-serif;
@@ -154,13 +160,15 @@
 
 p.help{
   clear:both;
-  padding-top:0px;
+  padding-top:2px;
   padding-bottom:0px;
   margin-bottom:0px;
   height:15px;
   font-size:10px;
   margin-left:103px;
   display:block;
+  font-style: italic;
+  color: #999;
 }
 
 .selectField{
@@ -320,7 +328,6 @@ input.default:active{
 #deleteItem{
   float:right;
   text-decoration:none;
-  margin-top:-2px;
   margin-right:10px;
   color:#AD0208;
   font-weight:bold;

@@ -29,7 +29,7 @@ fr:
       one_char: "caractère."
       many_chars: "caractères ou moins."
       chosen: "%{name} choisi"
-      select_choise: "Sélectionnez votre choix"
+      select_choice: "Sélectionnez votre choix"
       chose_all: "Choisissez toutes"
       clear_all: "Effacer tout"
       save: "Enregistrer"

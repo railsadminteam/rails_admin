@@ -1,10 +1,2 @@
-<%
-  property_name = property[:name]
-  value = @object.send(property_name)
-  label = property[:pretty_name]
-  required = !property[:nullable?]
-  model_name = @abstract_model.to_param
-%>
-                <%= label_tag "#{property_name}", label %>
-
-                <%= text_field model_name, property_name, :class => "dateField #{errors_exist ? "errorField" : nil}", :value => object_property(@object, property) %>
+                <%= label_tag "#{field.abstract_model.to_param}_#{field.name}", field.label %>
+                <%= text_field field.abstract_model.to_param, field.name, :class => "dateField #{field.has_errors? ? "errorField" : nil}", :value => field.formatted_value %>

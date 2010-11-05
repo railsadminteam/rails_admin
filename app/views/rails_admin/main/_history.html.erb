@@ -1,0 +1,6 @@
+<p id="listing"><strong><%= Time.parse("#{year}-#{month}-01").strftime("%B %Y")%></strong> History:</p>
+<ul id="history">
+<% history.each do |t|%>
+<li><%= t.username%> <%= history_output(t)%></li>
+<% end %>
+</ul>

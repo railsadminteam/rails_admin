@@ -40,7 +40,6 @@ module RailsAdmin
     def new
       @object = @abstract_model.new
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -49,7 +48,6 @@ module RailsAdmin
       @modified_assoc = []
       @object = @abstract_model.new(@attributes)
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save && update_all_associations
@@ -61,7 +59,6 @@ module RailsAdmin
 
     def edit
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -70,7 +67,6 @@ module RailsAdmin
       @modified_assoc = []
 
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
 
       @old_object = @object.clone
@@ -84,7 +80,6 @@ module RailsAdmin
 
     def delete
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
@@ -131,7 +126,6 @@ module RailsAdmin
     end
 
     def show_history
-      @abstract_models = RailsAdmin::AbstractModel.all
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.history.page_name", :name => @abstract_model.pretty_name)
       @general = true
@@ -193,11 +187,14 @@ module RailsAdmin
     def get_model
       model_name = to_model_name(params[:model_name])
       @abstract_model = RailsAdmin::AbstractModel.new(model_name)
+      @model_config = RailsAdmin.config(@abstract_model)
+      not_found if @model_config.excluded?
       @properties = @abstract_model.properties
     end
 
     def get_object
       @object = @abstract_model.get(params[:id])
+      @model_config.bind(:object, @object)
       not_found unless @object
     end
 
@@ -217,9 +214,10 @@ module RailsAdmin
       statements = []
       values = []
       conditions = options[:conditions] || [""]
+      table_name = @abstract_model.model.table_name
 
       @properties.select{|property| property[:type] == :string}.each do |property|
-        statements << "(#{property[:name]} LIKE ?)"
+        statements << "(#{table_name}.#{property[:name]} LIKE ?)"
         values << "%#{query}%"
       end
 
@@ -235,10 +233,11 @@ module RailsAdmin
       statements = []
       values = []
       conditions = options[:conditions] || [""]
+      table_name = @abstract_model.model.table_name
 
       filter.each_pair do |key, value|
         @properties.select{|property| property[:type] == :boolean && property[:name] == key.to_sym}.each do |property|
-          statements << "(#{key} = ?)"
+          statements << "(#{table_name}.#{key} = ?)"
           values << (value == "true")
         end
       end
@@ -347,12 +346,12 @@ module RailsAdmin
       if not message.empty?
         date = Time.now
         History.create(
-        :message => message,
-        :item => @object.id,
-        :table => @abstract_model.pretty_name,
-        :username => current_user.email,
-        :month => Time.now.month,
-        :year => Time.now.year
+          :message => message,
+          :item => @object.id,
+          :table => @abstract_model.pretty_name,
+          :username => current_user ? current_user.email : "",
+          :month => Time.now.month,
+          :year => Time.now.year
         )
       end
     end
@@ -375,17 +374,18 @@ module RailsAdmin
     end
 
     def list_entries(other = {})
-      @abstract_models = RailsAdmin::AbstractModel.all
-
       options = {}
       options.merge!(get_sort_hash)
       options.merge!(get_sort_reverse_hash)
       options.merge!(get_query_hash(options))
       options.merge!(get_filter_hash(options))
-      per_page = 20 # HAX FIXME
+      per_page = @model_config.list.items_per_page
 
       # external filter
       options.merge!(other)
+
+      associations = @model_config.list.visible_fields.select {|f| f.association? }.map {|f| f.association[:name] }
+      options.merge!(:include => associations) unless associations.empty?
 
       if params[:all]
         options.merge!(:limit => per_page * 2)
@@ -399,10 +399,11 @@ module RailsAdmin
         options.delete(:offset)
         options.delete(:limit)
       end
+
       @record_count = @abstract_model.count(options)
 
-      @page_name = t("admin.list.select", :name => @abstract_model.pretty_name.downcase)
       @page_type = @abstract_model.pretty_name.downcase
+      @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)
     end
 
     def object_label(object)

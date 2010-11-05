@@ -1,0 +1,7 @@
+              <div class="field">
+<%= render :partial => field.partial.to_s, :locals => {:field => field} %>
+                <% if field.has_errors? %>
+                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+                <% end %>
+                <p class="help"><%= field.help %></p>
+              </div>

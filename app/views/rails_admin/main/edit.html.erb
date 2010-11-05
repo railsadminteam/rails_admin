@@ -7,23 +7,14 @@
              <%= link_to(t("admin.history.name"), rails_admin_history_show_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "addlink") %>
             </li>
           </ul>
-
-        </div>
           <a href="<%= rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
+        </div>
       </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
         <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id)) do %>
           <fieldset>
-            <h2><%= t("admin.new.basic_info")%></h2>
-            <div class="formSection">
-<%= render(:partial => 'properties', :properties => @properties) -%>
-            </div>
-
-<%= render(:partial => 'belongs_to_association', :collection => @abstract_model.belongs_to_associations) -%>
-<%= render(:partial => 'has_one_association', :collection => @abstract_model.has_one_associations) -%>
-<%= render(:partial => 'has_many_association', :collection => @abstract_model.has_many_associations) -%>
-<%= render(:partial => 'has_and_belongs_to_many_association', :collection => @abstract_model.has_and_belongs_to_many_associations) -%>
+<%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.groups) -%>
 
             <ul id="submitArea">
               <li id="saveContainer">
@@ -37,6 +28,5 @@
               </li>
             </ul>
           </fieldset>
-          </div>
         <% end %>
       </div>

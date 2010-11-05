@@ -31,7 +31,7 @@ en:
       one_char: "character."
       many_chars: "characters or fewer."
       chosen: "Chosen %{name}"
-      select_choise: "Select your choise(s) and click"
+      select_choice: "Select your choice(s) and click"
       chose_all: "Choose all"
       clear_all: "Clear all"
       save: "Save"
@@ -44,4 +44,4 @@ en:
     flash:
       successful: "%{name} was successfully %{action}"
       error: "%{name} failed to be %{action}"
-      noaction: "No actions where taken!"
+      noaction: "No actions were taken"

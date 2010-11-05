@@ -2,10 +2,10 @@
 *.log
 .DS_Store
 .bundle
-.rspec
 db/*.sqlite3
 db/*.sqlite3-journal
 doc/*
+coverage/*
 log/*.log
 pkg/*
 spec/dummy_app/db/schema.rb
