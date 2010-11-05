@@ -22,9 +22,9 @@
   }.compact
 
 %>
-              <%= label_tag field.label %>
+              <%= label_tag "#{field.abstract_model.to_param}_#{association_name}", field.label %>
               <div class="many_header">
-                <input type="text" class="searchMany" value="Search <%= association_name %>" ref="<%= association_name %>" used="0" />
+                <input type="text" id="<%= "#{field.abstract_model.to_param}_#{association_name}" %>" class="searchMany" value="Search <%= association_name %>" ref="<%= association_name %>" used="0" />
                 <p>
                   <strong><%= t("admin.new.chosen", :name => association_name) %></strong>
                   <%= t("admin.new.select_choice")%> <img src="/images/selector-add.gif" alt="Add" />

@@ -42,6 +42,16 @@ describe "RailsAdmin" do
     end
   end
 
+  
+  describe "authentication" do
+    it "should be disableable" do
+      logout
+      RailsAdmin.authenticate_with {}
+      get rails_admin_dashboard_path
+      response.should be_successful
+    end
+  end
+  
   describe "config" do
     
     after(:each) do
@@ -83,7 +93,7 @@ describe "RailsAdmin" do
       it "should be hidden from other models relations in the edit view" do
         get rails_admin_new_path(:model_name => "team")
         response.should_not have_tag("#team_division_id")
-        response.should_not have_tag("label", :content => "Fans")
+        response.should_not have_tag("input#team_fans")
       end
     end
 
@@ -600,6 +610,41 @@ describe "RailsAdmin" do
             end
           end
         end        
+      end
+    end
+
+    describe "edit" do
+
+      describe "items' fields" do
+
+        it "should show all by default" do
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag("select#team_league_id")
+          response.should have_tag("select#team_division_id")
+          response.should have_tag("input#team_name")
+          response.should have_tag("input#team_logo_url")
+          response.should have_tag("input#team_manager")
+          response.should have_tag("input#team_ballpark")
+          response.should have_tag("input#team_mascot")
+          response.should have_tag("input#team_founded")
+          response.should have_tag("input#team_wins")
+          response.should have_tag("input#team_losses")
+          response.should have_tag("input#team_win_percentage")
+          response.should have_tag("input#team_revenue")
+          response.should have_tag("input#team_players")
+          response.should have_tag("input#team_fans")
+        end
+      end
+
+      pending "should appear in order defined" do
+        RailsAdmin.config Team do
+          edit do
+            field :manager
+            field :division_id
+            field :name
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
       end
     end
   end

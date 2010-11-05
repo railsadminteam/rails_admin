@@ -346,12 +346,12 @@ module RailsAdmin
       if not message.empty?
         date = Time.now
         History.create(
-        :message => message,
-        :item => @object.id,
-        :table => @abstract_model.pretty_name,
-        :username => current_user.email,
-        :month => Time.now.month,
-        :year => Time.now.year
+          :message => message,
+          :item => @object.id,
+          :table => @abstract_model.pretty_name,
+          :username => current_user ? current_user.email : "",
+          :month => Time.now.month,
+          :year => Time.now.year
         )
       end
     end
