@@ -8,7 +8,7 @@ GIT
       rack-test (>= 0.5.3)
 
 PATH
-  remote: ../../
+  remote: /Users/caiotarifa/Sites/rails_admin
   specs:
     rails_admin (0.0.1)
       builder (~> 2.1.0)
@@ -64,6 +64,7 @@ GEM
       mime-types
       treetop (>= 1.4.5)
     mime-types (1.16)
+    mysql2 (0.2.4)
     nokogiri (1.4.3.1)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -113,6 +114,7 @@ DEPENDENCIES
   builder
   devise
   dummy_data
+  mysql2
   rails (= 3.0.1)
   rails_admin!
   rspec-rails (>= 2.0.1)

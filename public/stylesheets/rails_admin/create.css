@@ -167,6 +167,8 @@ p.help{
   font-size:10px;
   margin-left:103px;
   display:block;
+  font-style: italic;
+  color: #999;
 }
 
 .selectField{
@@ -326,7 +328,6 @@ input.default:active{
 #deleteItem{
   float:right;
   text-decoration:none;
-  margin-top:-2px;
   margin-right:10px;
   color:#AD0208;
   font-weight:bold;
