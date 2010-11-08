@@ -1,0 +1,332 @@
+RailsAdmin
+==========
+RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
+
+RailsAdmin was conceived as a port of [MerbAdmin](http://github.com/sferik/merb-admin) to
+Rails 3 and implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
+by [Bogdan Gaza](http://github.com/hurrycane) with mentors [Erik Michaels-Ober](http://github.com/sferik),
+[Yehuda Katz](http://github.com/wycats), [Rodrigo Rosenfeld Rosas](http://github.com/rosenfeld),
+[Luke van der Hoeven](http://github.com/plukevdh), and [Rein Henrichs](http://github.com/reinh).
+
+It currently offers the following functionality:
+
+* Show database tables
+* Easily update data
+* Create new data
+* Safely delete data
+* Automatic form validation
+* Search
+* Authentication (via [Devise](http://github.com/plataformatec/devise))
+* User action history
+
+Screenshots
+-----------
+![List view](http://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
+![Edit view](http://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
+
+Installation
+------------
+In your <tt>Gemfile</tt>, add the following dependency:
+    gem 'devise' # Devise must be required before RailsAdmin
+    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
+Run:
+    $ bundle install
+And then run:
+    $ rails generate rails_admin:install_admin
+This task will install RailsAdmin and [Devise](http://github.com/plataformatec/devise) if you
+don't already have it installed. [Devise](http://github.com/plataformatec/devise) is strongly
+recommended to protect your data from anonymous users.
+
+Usage
+-----
+Start the server:
+    $ rails server
+You should now be able to administer your site at <http://localhost:3000/admin>
+
+Configuration
+-------------
+RailsAdmin provides its out of the box administrative interface by inspecting your application's
+models and following some Rails conventions. For a more tailored experience, it also provides a
+configuration DSL which allows you to customize many aspects of the interface.
+
+The configuration code should be placed in an initializer file, for example:
+    config/initializers/rails_admin.rb
+
+### General
+
+You can customize authentication by providing a custom block for <tt>RailsAdmin.authenticate_with</tt>.
+To disable authentication, pass an empty block:
+
+    RailsAdmin.authenticate_with {}
+
+You can exclude models from RailsAdmin by appending those models to <tt>excluded_models</tt>:
+
+    RailsAdmin.config do |config|
+      config.excluded_models << ClassName
+    end
+
+### Navigation ###
+
+* hiding a model
+* setting the model's label
+* configuring the number of visible tabs
+
+You can hide a model from the top navigation by marking its <tt>visible</tt> option
+as false within the model's navigation configuration section:
+
+By using an accessor:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        navigation do
+          visible = false
+        end
+      end
+    end
+
+Or by passing the value as an argument:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        navigation do
+          visible false
+        end
+      end
+    end
+
+Or by passing a block that will be lazy evaluated each time the option is read:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        navigation do
+          visible { false }
+        end
+      end
+    end
+
+These three examples also work as a generic example of how most of the configuration options
+function within RailsAdmin. You can access them with <tt>option_name = value</tt>, you
+can pass a value as an argument <tt>option_name value</tt>, or you can pass in a block
+which will be evaluated each time the option is read. Notable is that boolean options'
+reader accessors will be appended with ? whereas the writers will not be. That is, if you
+want to get the <tt>Team</tt> model's visibility in navigation, you use
+<tt>RailsAdmin.config(Team).navigation.visible?</tt>.
+
+Back to navigation configuration - there is also an alias method that can be used:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        hide_from_navigation
+      end
+    end
+
+And also a reverse alias method to make it visible again:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        show_in_navigation
+      end
+    end
+
+Both also accept a block:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        # Hide Team from navigation on Sundays
+        hide_from_navigation do
+          Time.now.wday == 0
+        end
+      end
+    end
+
+If you need to customize the label of the model within the navigation tab, use:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        navigation do
+          label = "List of teams"
+        end
+      end
+    end
+
+Remember, you can also pass the value as an argument or as a block as with the before mentioned visibility options. Besides that, the label also has a shorthand syntax:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        label_for_navigation "List of teams"
+      end
+    end
+
+which allows all three forms of configuration value passing as well.
+
+You can configure the number of tabs visible in the top navigation:
+
+    RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 3
+
+Links to the rest of the models will be rendered in a drop down menu next to the tabs. Even though this option is not model specific, it shares the same semantics as the earlier ones - you can also pass in a block or pass the value as an argument by omitting the equals sign.
+
+### List view
+
+* number of items per page
+* number of items per page per model
+* visible fields and their order
+* field's output formatting
+* field's sortability
+* field's column CSS class
+* field's column width
+
+You can configure the default number of rows rendered per page:
+
+    RailsAdmin::Config::Sections::List.default_items_per_page = 50
+
+You can also configure it per model:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          items_per_page = 100
+        end
+      end
+    end
+
+By default all fields are visible, but they are not presented in any particular order. If you specifically declare fields, only defined fields will be visible and they will be presented in the order defined:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name
+          field :created_at
+        end
+      end
+    end
+
+This would show only "name" and "created at" columns in the list view.
+
+The field's output can be modified:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name do
+            formatted_value do
+              value.to_s.upcase
+            end
+          end
+          field :created_at
+        end
+      end
+    end
+
+This would render all the teams' names uppercased.
+
+Fields of different date types (date, datetime, time, timestamp) have an extra option to set the time formatting:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name
+          field :created_at do
+            strftime_format "%Y-%m-%d"
+          end
+        end
+      end
+    end
+
+This would render all the teams' "created at" dates in format YYYY-MM-DD.
+
+You can make a column non-sortable by setting the sortable option to false:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name
+          field :created_at do
+            sortable false
+          end
+        end
+      end
+    end
+
+By default each column has a CSS class set according to field's data type. You can customize this by:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name
+          field :created_at do
+            column_css_class "customClass"
+          end
+        end
+      end
+    end
+
+This would render the "created at" field's header column with a CSS class named <tt>customClassHeader</tt> and each "created at" value with a class named <tt>customClassRow</tt>.
+
+By default columns' widths are calculated from certain pre-defined, data-type-specific pixel values. If you want to ensure a minimum width for a column, you can:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name do
+            column_width 200
+          end
+          field :created_at
+        end
+      end
+    end
+
+Contributing
+------------
+In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
+
+Here are some ways *you* can contribute:
+
+* by using alpha, beta, and prerelease versions
+* by reporting bugs
+* by suggesting new features
+* by writing or editing documentation
+* by writing specifications
+* by writing code (**no patch is too small**: fix typos, add comments, clean up inconsistent whitespace)
+* by refactoring code
+* by resolving [issues](http://github.com/sferik/rails_admin/issues)
+* by reviewing patches
+
+Submitting an Issue
+-------------------
+We use the [GitHub issue tracker](http://github.com/sferik/rails_admin/issues) to track bugs and
+features. Before submitting a bug report or feature request, check to make sure it hasn't already
+been submitted. You can indicate support for an existing issuse by voting it up. When submitting a
+bug report, please include a [Gist](http://gist.github.com/) that includes a stack trace and any
+details that may be necessary to reproduce the bug, including your gem version, Ruby version, and
+operating system. Ideally, a bug report should include a pull request with failing specs.
+
+Submitting a Pull Request
+-------------------------
+1. Fork the project.
+2. Create a topic branch.
+3. Implement your feature or bug fix.
+4. Add documentation for your feature or bug fix.
+5. Run <tt>bundle exec rake doc:yard</tt>. If your changes are not 100% documented, go back to step 4.
+6. Add specs for your feature or bug fix.
+7. Run <tt>bundle exec rake spec:rcov</tt>. If your changes are not 100% covered, go back to step 6.
+8. Commit and push your changes.
+9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. (If you want to create your own version for some reason, please do so in a separate commit.)
+
+Contact
+-------
+If you have questions about contributing to RailsAdmin, please contact [Erik Michaels-Ober](http://github.com/sferik) and [Bogdan Gaza](http://github.com/hurrycane).
+
+Credits
+-------
+Many thanks to:
+
+* Everyone in the [Ruby Summer of Code](http://www.rubysoc.org) class of 2010
+* [Piotr Sarnacki](http://github.com/drogus) for [making RailsAdmin mountable](http://github.com/drogus/rails_admin/commit/3349b36db2d4eda296aad96f03b7e7a6a544bcd8)
+* [Daniel Neighman](http://github.com/hassox) for [generalizing authentication](http://github.com/sferik/rails_admin/commits/master?author=hassox)
+* [Jack Dempsey](http://github.com/jackdempsey) for [adding support for HABTM associations](http://github.com/sferik/rails_admin/commits/master?author=jackdempsey)
+* [Petteri Kääpä](http://github.com/kaapa) for [writing the configuration DSL](http://github.com/sferik/rails_admin/commits/master?author=kaapa)
+* [Cameron Priest](http://github.com/cameronpriest) for [removing an unused file](http://github.com/sferik/rails_admin/commits/master?author=cameronpriest)
+* [Christian Hølmer](http://github.com/hoelmer) for [a few random commits](http://github.com/sferik/rails_admin/commits/master?author=hoelmer)
+* [Caio Tarifa](http://github.com/caiotarifa) for [a new header design](http://github.com/sferik/rails_admin/commits/master?author=caiotarifa)
+* [Toby Cabot](http://github.com/ccabot) for [various history fixes](http://github.com/sferik/rails_admin/commits/master?author=ccabbot)
+* and everyone who contributed to [MerbAdmin](http://github.com/sferik/merb-admin).
