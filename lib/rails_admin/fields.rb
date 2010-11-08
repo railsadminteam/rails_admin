@@ -2,6 +2,66 @@ require 'builder'
 
 module RailsAdmin
   module Fields
+    module Groupable
+      # A container for groups of fields in edit views
+      class Group < RailsAdmin::Config::Configurable
+        include RailsAdmin::Config::Hideable
+
+        attr_reader :name
+
+        def initialize(parent, name)
+          super(parent)
+          @name = name
+        end
+
+        def fields
+          parent.fields.select {|f| self == f.group }
+        end
+
+        def visible_fields
+          fields.select {|f| f.visible? }
+        end
+        
+        register_instance_option(:label) do
+          name.to_s.underscore.gsub('_', ' ').capitalize
+        end
+      end
+
+      def self.extended(obj)
+        obj.instance_variable_set("@group", obj.parent.group(:default))
+        class << obj
+          def group=(name)
+            group(name)
+          end
+          def group(name = nil)
+            @group = parent.group(name) unless name.nil?
+            @group
+          end
+        end
+      end
+
+      def self.included(klass)
+        # Access fields by their group
+        klass.send(:define_method, :fields_of_group) do |group, &block|
+          selected = @fields.select {|f| group == f.group }
+          if block
+            selected.each {|f| f.instance_eval &block }
+          end
+          selected
+        end
+        klass.send(:define_method, :group) do |name, &block|
+          group = @groups.find {|g| name == g.name }
+          if group.nil?
+            group = (@groups << Group.new(self, name)).last
+          end
+          group.instance_eval &block if block
+          group
+        end
+        klass.send(:define_method, :groups) do
+          @groups
+        end
+      end
+    end
 
     def self.factory(parent, name, type, properties = [])
       if association = parent.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == name}.first
@@ -9,6 +69,7 @@ module RailsAdmin
       else
         field = Types.load(type).new(parent, name, properties)
       end
+      
       field
     end
 
@@ -25,6 +86,10 @@ module RailsAdmin
         @name = name
         @order = 0
         @properties = properties
+        
+        if parent.kind_of?(RailsAdmin::Fields::Groupable)
+          extend RailsAdmin::Fields::Groupable
+        end
       end
 
       # Accessor for field's help text displayed below input field.

@@ -184,59 +184,6 @@ module RailsAdmin
       end
     end
 
-    module Groupable
-      class Group < RailsAdmin::Config::Configurable
-        include RailsAdmin::Config::Hideable
-
-        attr_reader :name, :registry
-
-        def initialize(parent, name)
-          super(parent)
-          @name = name
-          @registry = []
-        end
-
-        def register(object)
-          @registry << object
-        end
-
-        def delete(object)
-          @registry.delete(object)
-        end
-
-        register_instance_option(:label) do
-          name.to_s.underscore.gsub('_', ' ').capitalize
-        end
-      end
-
-      def self.extended(obj)
-        obj.instance_variable_set("@group", obj.parent.group(:default))
-        class << obj
-          def group=(name)
-            group(name)
-          end
-          def group(name)
-            @group.delete(self)
-            @group = parent.group(name).register(self)
-          end
-        end
-      end
-
-      def self.included(klass)
-        klass.send(:define_method, :group) do |name, &block|
-          group = @groups.find {|g| name == g.name }
-          if group.nil?
-            group = (@groups << Group.new(self, name)).last
-          end
-          group.instance_eval &block if block
-          group
-        end
-        klass.send(:define_method, :groups) do
-          @groups
-        end
-      end
-    end
-
     require "rails_admin/fields"
 
     # Fields describe the configuration for model's properties that RailsAdmin will
@@ -333,7 +280,7 @@ module RailsAdmin
       # Configuration of the edit view
       class Edit < RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Fields
-        include RailsAdmin::Config::Groupable
+        include RailsAdmin::Fields::Groupable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Labelable
 
@@ -341,11 +288,10 @@ module RailsAdmin
           super(parent)
           extend RailsAdmin::Config::Fields
           # Populate @fields instance variable with model's properties
-          @groups = [ RailsAdmin::Config::Groupable::Group.new(self, :default) ]
-          @groups.first.label = I18n.translate("admin.new.basic_info")
+          @groups = [ RailsAdmin::Fields::Groupable::Group.new(self, :default) ]
+          @groups.first.label = proc { I18n.translate("admin.new.basic_info") }
           @fields = abstract_model.properties.map do |p|
             field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
-            field.extend RailsAdmin::Config::Groupable
             field.group = :default
             if field.serial? || [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(p[:name])
               field.hide
@@ -354,8 +300,7 @@ module RailsAdmin
           end
           # Append @fields instance variable with model's associations
           @fields += abstract_model.associations.select{|a| a[:type] != :belongs_to}.map do |a|
-            field = RailsAdmin::Fields.factory(self, a[:parent_model], "#{a[:type]}_association".to_sym, a)
-            field.extend RailsAdmin::Config::Groupable
+            field = RailsAdmin::Fields.factory(self, a[:name], "#{a[:type]}_association".to_sym, a)
             field.group = field.label
             field
           end
