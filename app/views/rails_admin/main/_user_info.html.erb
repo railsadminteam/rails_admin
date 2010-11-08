@@ -1,3 +1,4 @@
+<% if current_user %>
 <div class="user_info">
   <img src="http://www.gravatar.com/avatar/<%=Digest::MD5.hexdigest current_user.email %>?s=30" alt="" />
   <ul>
@@ -9,3 +10,4 @@
     </li>
   </ul>
 </div>
+<% end %>
