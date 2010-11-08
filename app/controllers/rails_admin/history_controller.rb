@@ -5,7 +5,7 @@ module RailsAdmin
         not_found
       else
         @history, @current_month = History.get_history_for_month(params[:ref], params[:section])
-        render :template => 'rails_admin/main/history'
+        render :template => 'rails_admin/main/history', :layout => false
       end
     end
   end
