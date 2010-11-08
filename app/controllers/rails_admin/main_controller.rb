@@ -34,7 +34,8 @@ module RailsAdmin
 
     def list
       list_entries
-      render :layout => 'rails_admin/list'
+      @xhr = request.xhr?
+      render :layout => @xhr ? false : 'rails_admin/list'
     end
 
     def new
@@ -92,12 +93,6 @@ module RailsAdmin
       check_history
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
-    end
-
-    def get_pages
-      list_entries
-      @xhr = true;
-      render :template => 'rails_admin/main/list'
     end
 
     def history

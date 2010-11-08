@@ -11,7 +11,7 @@
   <script type="text/javascript" language="javascript">
     function updatePage(paramList){
 
-      new Ajax.Updater('content', '/admin/<%= @abstract_model.pretty_name.downcase %>/get_pages',{
+      new Ajax.Updater('content', '/admin/<%= @abstract_model.pretty_name.downcase %>',{
         parameters: paramList,
         onComplete: function(){
           initPages();
