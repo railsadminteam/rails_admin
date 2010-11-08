@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data}
   s.email = ["sferik@gmail.com"]
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.extra_rdoc_files = ["README.rdoc"]
+  s.extra_rdoc_files = ["README.mkd"]
   s.files = `git ls-files`.split("\n")
   s.homepage = "http://rubygems.org/gems/rails_admin"
   s.name = "rails_admin"
