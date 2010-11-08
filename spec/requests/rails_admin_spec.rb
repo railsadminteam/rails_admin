@@ -42,7 +42,13 @@ describe "RailsAdmin" do
     end
   end
 
-  
+  describe "history ajax update" do
+    it "shouldn't use the application layout" do
+      post rails_admin_history_list_path, :ref => 0, :section => 4
+      response.should_not have_tag "h1#app_layout_warning"
+    end
+  end
+
   describe "authentication" do
     it "should be disableable" do
       logout
