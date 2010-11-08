@@ -1,10 +1,10 @@
 module RailsAdmin
   class BlankHistory
     attr_accessor :number, :month, :year, :fake
-    def initialize
+    def initialize(month, year)
       @number = 0
-      @month = "No data"
-      @year = "for this month"
+      @month = month
+      @year = year
       @fake = 1
     end
   end

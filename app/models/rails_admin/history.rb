@@ -42,22 +42,12 @@ module RailsAdmin
         results = History.find_by_sql("select count(*) as number, year, month from histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
       end
 
-      return self.add_blank_results(results)
+      add_blank_results(results, mstart, ystart)
     end
 
-    def self.add_blank_results(results)
-      if results.size < 5
-        empty_results_count = 5 - results.size
-        empty_results = []
-
-        empty_results_count.times do |t|
-          empty_results << BlankHistory.new()
-        end
-
-        return empty_results.concat(results)
-
-      else
-        return results
+    def self.add_blank_results(results, mstart, ystart)
+      results.tap do |r|
+        (4 - r.size).downto(0) { |m| r.unshift BlankHistory.new(((mstart+m) % 12)+1, ystart + ((mstart+m)/12)) }
       end
     end
 

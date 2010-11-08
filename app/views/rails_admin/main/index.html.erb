@@ -40,9 +40,13 @@
                   <% @history.each do |t| %>
                   <% percent = (t.number * 100) / max unless max == 0 %>
                   <% indicator_type = get_indicator(percent)%>
-                  <li><span><%= t.number != 0 ? Time.parse("#{t.year}-#{t.month}-01").strftime("%B %Y") : "No activity" %></span>
+                  <li><span><%= Time.parse("#{t.year}-#{t.month}-01").strftime("%B %Y") %></span>
                     <span class="bars">
+                      <% if t.number == 0 %>
+                      <br/><%= t("admin.history.no_activity") %>
+                      <% else %>
                       <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
+                      <% end %>
                     </span>
                   </li>
                   <% end %>
