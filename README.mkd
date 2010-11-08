@@ -327,5 +327,6 @@ Many thanks to:
 * [Petteri Kääpä](http://github.com/kaapa) for [writing the configuration DSL](http://github.com/sferik/rails_admin/commits/master?author=kaapa)
 * [Cameron Priest](http://github.com/cameronpriest) for [removing an unused file](http://github.com/sferik/rails_admin/commits/master?author=cameronpriest)
 * [Christian Hølmer](http://github.com/hoelmer) for [a few random commits](http://github.com/sferik/rails_admin/commits/master?author=hoelmer)
+* [Caio Tarifa](http://github.com/caiotarifa) for [a new header design](http://github.com/sferik/rails_admin/commits/master?author=caiotarifa)
 * and everyone who contributed to [MerbAdmin](http://github.com/sferik/merb-admin).
 
