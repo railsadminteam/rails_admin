@@ -46,7 +46,7 @@ You should now be able to administer your site at <http://localhost:3000/admin>
 Configuration
 -------------
 RailsAdmin provides its out of the box administrative interface by inspecting your application's
-models and following some Rails conventions. For a more tailored experience it also provides a
+models and following some Rails conventions. For a more tailored experience, it also provides a
 configuration DSL which allows you to customize many aspects of the interface.
 
 The configuration code should be placed in an initializer file, for example:
@@ -55,7 +55,7 @@ The configuration code should be placed in an initializer file, for example:
 ### General
 
 You can customize authentication by providing a custom block for <tt>RailsAdmin.authenticate_with</tt>.
-To disable authentication pass an empty block:
+To disable authentication, pass an empty block:
 
     RailsAdmin.authenticate_with {}
 
@@ -72,7 +72,7 @@ You can exclude models from RailsAdmin by appending those models to <tt>excluded
 * configuring the number of visible tabs
 
 You can hide a model from the top navigation by marking its <tt>visible</tt> option
-as false within model's navigation configuration section:
+as false within the model's navigation configuration section:
 
 By using an accessor:
 
@@ -104,12 +104,12 @@ Or by passing a block that will be lazy evaluated each time the option is read:
       end
     end
 
-These three examples also work as a generic example how most of the configuration options
+These three examples also work as a generic example of how most of the configuration options
 function within RailsAdmin. You can access them with <tt>option_name = value</tt>, you
-can pass a value as an argument <tt>option_name value</tt> or you can pass in a block
+can pass a value as an argument <tt>option_name value</tt>, or you can pass in a block
 which will be evaluated each time the option is read. Notable is that boolean options'
 reader accessors will be appended with ? whereas the writers will not be. That is, if you
-want to get <tt>Team</tt> model's visibility in navigation you use
+want to get the <tt>Team</tt> model's visibility in navigation, you use
 <tt>RailsAdmin.config(Team).navigation.visible?</tt>.
 
 Back to navigation configuration - there is also an alias method that can be used:
@@ -139,7 +139,7 @@ Both also accept a block:
       end
     end
 
-If you need to customize the label of the model within navigation tab use:
+If you need to customize the label of the model within the navigation tab, use:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -163,7 +163,7 @@ You can configure the number of tabs visible in the top navigation:
 
     RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 3
 
-Links to the rest of the models will be rendered in a drop down menu next to the tabs. Even though this option is not model specific it shares the same semantics as the earlier ones - you can also pass in a block or pass the value as an argument by omitting the equals sign.
+Links to the rest of the models will be rendered in a drop down menu next to the tabs. Even though this option is not model specific, it shares the same semantics as the earlier ones - you can also pass in a block or pass the value as an argument by omitting the equals sign.
 
 ### List view
 
@@ -172,7 +172,7 @@ Links to the rest of the models will be rendered in a drop down menu next to the
 * visible fields and their order
 * field's output formatting
 * field's sortability
-* field's column css class
+* field's column CSS class
 * field's column width
 
 You can configure the default number of rows rendered per page:
@@ -200,9 +200,9 @@ By default all fields are visible, but they are not presented in any particular 
       end
     end
 
-This would show only name and created at columns in the list view.
+This would show only "name" and "created at" columns in the list view.
 
-Field's output can be modified:
+The field's output can be modified:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -232,9 +232,9 @@ Fields of different date types (date, datetime, time, timestamp) have an extra o
       end
     end
 
-This would render all the teams' created at dates in format YYYY-MM-DD.
+This would render all the teams' "created at" dates in format YYYY-MM-DD.
 
-You can make a column non-sortable by defining sortable option to false:
+You can make a column non-sortable by setting the sortable option to false:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -247,7 +247,7 @@ You can make a column non-sortable by defining sortable option to false:
       end
     end
 
-By default each column has a css class set according to field's data type. You can customize this by:
+By default each column has a CSS class set according to field's data type. You can customize this by:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -260,9 +260,9 @@ By default each column has a css class set according to field's data type. You c
       end
     end
 
-This would render created at field's header column with a css class named <tt>customClassHeader</tt> and each created at value with a class named <tt>customClassRow</tt>.
+This would render the "created at" field's header column with a CSS class named <tt>customClassHeader</tt> and each "created at" value with a class named <tt>customClassRow</tt>.
 
-By default columns' widths are calculated from certain pre-defined data type specific pixel values. If you want to ensure a minimum width for a column you can:
+By default columns' widths are calculated from certain pre-defined, data-type-specific pixel values. If you want to ensure a minimum width for a column, you can:
 
     RailsAdmin.config do |config|
       config.model Team do
