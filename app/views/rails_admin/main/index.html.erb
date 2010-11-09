@@ -13,8 +13,7 @@
             <% @abstract_models.each do |abstract_model| %>
             <ul class="row">
               <li class="modelNameRow"><%= abstract_model.pretty_name %></li>
-              <!-- FIXME History stuff goes here-->
-              <li class="lastUsedRow">Yesterday</li>
+              <li class="lastUsedRow"><%= RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try :updated_at %>&nbsp;</li>
               <li class="recordsRow">
                 <div class="scale">
                   <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>

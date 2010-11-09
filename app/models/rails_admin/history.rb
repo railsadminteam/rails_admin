@@ -1,6 +1,8 @@
 module RailsAdmin
   class History < ActiveRecord::Base
 
+    scope :most_recent, lambda {|table| where('`table` = ?', table).order("updated_at")}
+
     def self.paginated(options = {})
       page = options.delete(:page) || 1
       per_page = options.delete(:per_page) || RailsAdmin[:per_page]

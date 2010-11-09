@@ -52,6 +52,7 @@ ul.menu li{
 .lastUsedRow{
   width:84px;
   text-align:center;
+  white-space:nowrap;
 }
 
 .scale{
