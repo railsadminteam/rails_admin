@@ -6,6 +6,7 @@ class Team < ActiveRecord::Base
   validates_numericality_of(:wins, :only_integer => true)
   validates_numericality_of(:losses, :only_integer => true)
   validates_numericality_of(:win_percentage)
+  validates_numericality_of(:revenue, :allow_nil => true)
 
   belongs_to(:league)
   belongs_to(:division)

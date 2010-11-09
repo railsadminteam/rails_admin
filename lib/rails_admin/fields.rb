@@ -115,11 +115,16 @@ module RailsAdmin
         type
       end
 
-      # Accessor for whether this is field is mandatory.
+      # Accessor for whether this is field is mandatory.  This is
+      # based on two factors: whether the field is nullable at the
+      # database level, and whether it has an ActiveRecord validation
+      # that requires its presence.
       #
       # @see RailsAdmin::AbstractModel.properties
       register_instance_option(:required?) do
-        !properties[:nullable?]
+        validators = @abstract_model.model.validators_on(@name)
+        required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
+        !properties[:nullable?] || required_by_validator
       end
 
       # Accessor for whether this is a serial field (aka. primary key, identifier).

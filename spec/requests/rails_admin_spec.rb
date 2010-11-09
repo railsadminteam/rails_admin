@@ -652,6 +652,34 @@ describe "RailsAdmin" do
         end
         get rails_admin_new_path(:model_name => "team")
       end
+
+      describe "fields which are nullable and have AR validations" do
+        it "should be required" do
+          # draft.notes is nullable and has no validation
+          field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
+          field.properties[:nullable?].should be true
+          field.required?.should be false
+
+          # draft.date is nullable in the schema but has an AR
+          # validates_presence_of validation that makes it required
+          field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :date}
+          field.properties[:nullable?].should be true
+          field.required?.should be true
+
+          # draft.round is nullable in the schema but has an AR
+          # validates_numericality_of validation that makes it required
+          field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :round}
+          field.properties[:nullable?].should be true
+          field.required?.should be true
+
+          # team.revenue is nullable in the schema but has an AR
+          # validates_numericality_of validation that allows nil
+          field = RailsAdmin::config("Team").edit.fields.find{|f| f.name == :revenue}
+          field.properties[:nullable?].should be true
+          field.required?.should be false
+        end
+      end
+
     end
   end
 
