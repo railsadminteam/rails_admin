@@ -222,7 +222,7 @@ module RailsAdmin
       end
 
       def errors
-        bindings[:object].errors[association[:child_key]]
+        bindings[:object].errors[child_key]
       end
 
       def has_errors?
