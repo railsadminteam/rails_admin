@@ -248,7 +248,7 @@ module RailsAdmin
         sections = obj.instance_variable_set("@sections", {});
         constants.each do |name|
           section = "RailsAdmin::Config::Sections::#{name}".constantize
-          name = name.to_s.downcase
+          name = name.to_s.downcase.to_sym
           sections[name] = section.new(obj)
         end
       end
@@ -257,7 +257,7 @@ module RailsAdmin
         # Register accessors for all the sections in this namespace
         constants.each do |name|
           section = "RailsAdmin::Config::Sections::#{name}".constantize
-          name = name.to_s.downcase
+          name = name.to_s.downcase.to_sym
           klass.send(:define_method, name) do |&block|
             @sections[name].instance_eval &block if block
             @sections[name]
@@ -277,8 +277,8 @@ module RailsAdmin
         end
       end
 
-      # Configuration of the edit view
-      class Edit < RailsAdmin::Config::Configurable
+      # Configuration of the edit view for an existing object
+      class Update < RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Fields
         include RailsAdmin::Fields::Groupable
         include RailsAdmin::Config::Hideable
@@ -307,7 +307,8 @@ module RailsAdmin
         end
       end
 
-      class Create < Edit
+      # Configuration of the edit view for a new object
+      class Create < Update
       end
 
       # Configuration of the list view
@@ -380,6 +381,15 @@ module RailsAdmin
           @bindings[key] = value
         end
         self
+      end
+
+      # Configure create and update views as a bulk operation with given block
+      # or get update view's configuration if no block is given
+      def edit(&block)
+        return @sections[:update] unless block_given?
+        [:create, :update].each do |s|
+          @sections[s].instance_eval &block
+        end
       end
 
       # Act as a proxy for the section configurations that actually
