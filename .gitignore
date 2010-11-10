@@ -1,5 +1,6 @@
 *.gem
 *.log
+*.rbc
 .DS_Store
 .bundle
 db/*.sqlite3
