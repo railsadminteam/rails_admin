@@ -683,17 +683,223 @@ describe "RailsAdmin" do
           response.should have_tag("input#team_players")
           response.should have_tag("input#team_fans")
         end
-      end
 
-      pending "should appear in order defined" do
-        RailsAdmin.config Team do
-          edit do
-            field :manager
-            field :division_id
-            field :name
+        it "should appear in order defined" do
+          RailsAdmin.config Team do
+            edit do
+              field :manager
+              field :division_id
+              field :name
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements[0].should have_tag("#team_manager")
+            elements[1].should have_tag("#team_division_id")
+            elements[2].should have_tag("#team_name")
           end
         end
-        get rails_admin_new_path(:model_name => "team")
+
+        it "should only show the defined fields if some fields are defined" do
+          RailsAdmin.config Team do
+            edit do
+              field :league_id
+              field :division_id
+              field :name
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements[0].should have_tag("#team_league_id")
+            elements[1].should have_tag("#team_division_id")
+            elements[2].should have_tag("#team_name")
+            elements.length.should == 3
+          end
+        end
+
+        it "should be renameable" do
+          RailsAdmin.config Team do
+            edit do
+              field :manager do
+                label "Renamed field"
+              end
+              field :division_id
+              field :name
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements[0].should have_tag("label", :content => "Renamed field")
+            elements[1].should have_tag("label", :content => "Division")
+            elements[2].should have_tag("label", :content => "Name")
+          end
+        end
+
+        it "should be renameable by type" do
+          RailsAdmin.config Team do
+            edit do
+              fields_of_type :string do
+                label { "#{label} (STRING)" }
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements.should have_tag("label", :content => "League")
+            elements.should have_tag("label", :content => "Division")
+            elements.should have_tag("label", :content => "Name (STRING)")
+            elements.should have_tag("label", :content => "Logo url (STRING)")
+            elements.should have_tag("label", :content => "Manager (STRING)")
+            elements.should have_tag("label", :content => "Ballpark (STRING)")
+            elements.should have_tag("label", :content => "Mascot (STRING)")
+            elements.should have_tag("label", :content => "Founded")
+            elements.should have_tag("label", :content => "Wins")
+            elements.should have_tag("label", :content => "Losses")
+            elements.should have_tag("label", :content => "Win percentage")
+            elements.should have_tag("label", :content => "Revenue")
+            elements.should have_tag("label", :content => "Players")
+            elements.should have_tag("label", :content => "Fans")
+          end
+        end
+
+        it "should be globally renameable by type" do
+          RailsAdmin::Config.model do
+            edit do
+              fields_of_type :string do
+                label { "#{label} (STRING)" }
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements.should have_tag("label", :content => "League")
+            elements.should have_tag("label", :content => "Division")
+            elements.should have_tag("label", :content => "Name (STRING)")
+            elements.should have_tag("label", :content => "Logo url (STRING)")
+            elements.should have_tag("label", :content => "Manager (STRING)")
+            elements.should have_tag("label", :content => "Ballpark (STRING)")
+            elements.should have_tag("label", :content => "Mascot (STRING)")
+            elements.should have_tag("label", :content => "Founded")
+            elements.should have_tag("label", :content => "Wins")
+            elements.should have_tag("label", :content => "Losses")
+            elements.should have_tag("label", :content => "Win percentage")
+            elements.should have_tag("label", :content => "Revenue")
+            elements.should have_tag("label", :content => "Players")
+            elements.should have_tag("label", :content => "Fans")
+          end
+        end
+
+        it "should be hideable" do
+          RailsAdmin.config Team do
+            edit do
+              field :manager do
+                hide
+              end
+              field :division_id
+              field :name
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements[0].should have_tag("#team_division_id")
+            elements[1].should have_tag("#team_name")
+          end
+        end
+
+        it "should be hideable by type" do
+          RailsAdmin.config Team do
+            edit do
+              fields_of_type :string do
+                hide
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements.should have_tag("label", :content => "League")
+            elements.should have_tag("label", :content => "Division")
+            elements.should_not have_tag("label", :content => "Name")
+            elements.should_not have_tag("label", :content => "Logo url")
+            elements.should_not have_tag("label", :content => "Manager")
+            elements.should_not have_tag("label", :content => "Ballpark")
+            elements.should_not have_tag("label", :content => "Mascot")
+            elements.should have_tag("label", :content => "Founded")
+            elements.should have_tag("label", :content => "Wins")
+            elements.should have_tag("label", :content => "Losses")
+            elements.should have_tag("label", :content => "Win percentage")
+            elements.should have_tag("label", :content => "Revenue")
+            elements.should have_tag("label", :content => "Players")
+            elements.should have_tag("label", :content => "Fans")
+          end
+        end
+
+        it "should be globally hideable by type" do
+          RailsAdmin::Config.model do
+            edit do
+              fields_of_type :string do
+                hide
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements.should have_tag("label", :content => "League")
+            elements.should have_tag("label", :content => "Division")
+            elements.should_not have_tag("label", :content => "Name")
+            elements.should_not have_tag("label", :content => "Logo url")
+            elements.should_not have_tag("label", :content => "Manager")
+            elements.should_not have_tag("label", :content => "Ballpark")
+            elements.should_not have_tag("label", :content => "Mascot")
+            elements.should have_tag("label", :content => "Founded")
+            elements.should have_tag("label", :content => "Wins")
+            elements.should have_tag("label", :content => "Losses")
+            elements.should have_tag("label", :content => "Win percentage")
+            elements.should have_tag("label", :content => "Revenue")
+            elements.should have_tag("label", :content => "Players")
+            elements.should have_tag("label", :content => "Fans")
+          end
+        end
+
+        it "should have option to customize the help text" do
+          RailsAdmin.config Team do
+            edit do
+              field :manager do
+                help "#{help} Additional help text for manager field."
+              end
+              field :division_id
+              field :name
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements[0].should have_tag("p.help", :content => "Required 100 characters or fewer. Additional help text for manager field.")
+            elements[1].should have_tag("p.help", :content => "Required")
+            elements[2].should have_tag("p.help", :content => "Optional 50 characters or fewer.")
+          end
+        end
+
+        it "should have option to override required status" do
+          RailsAdmin.config Team do
+            edit do
+              field :manager do
+                required false
+              end
+              field :division_id do
+                required false
+              end
+              field :name do
+                required true
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag(".field") do |elements|
+            elements[0].should have_tag("p.help", :content => "Optional 100 characters or fewer.")
+            elements[1].should have_tag("p.help", :content => "Optional")
+            elements[2].should have_tag("p.help", :content => "Required 50 characters or fewer.")
+          end
+        end
+
       end
 
       describe "fields which are nullable and have AR validations" do
