@@ -6,6 +6,7 @@ describe "RailsAdmin" do
   before(:each) do
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
+    RailsAdmin::AbstractModel.new("Fan").destroy_all!
     RailsAdmin::AbstractModel.new("League").destroy_all!
     RailsAdmin::AbstractModel.new("Player").destroy_all!
     RailsAdmin::AbstractModel.new("Team").destroy_all!
@@ -568,6 +569,9 @@ describe "RailsAdmin" do
             end
           end
 
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+
           get rails_admin_list_path(:model_name => "fan")
 
           response.should have_tag("style") {|css| css.should contain(/\.idHeader[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
@@ -588,6 +592,9 @@ describe "RailsAdmin" do
             end
           end
 
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+
           get rails_admin_list_path(:model_name => "fan")
 
           response.should have_tag(".infoRow") do |elements|
@@ -607,6 +614,9 @@ describe "RailsAdmin" do
               field :updated_at
             end
           end
+
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+          RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
 
           get rails_admin_list_path(:model_name => "fan")
 
