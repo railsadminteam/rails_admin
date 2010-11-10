@@ -892,10 +892,10 @@ describe "RailsAdmin" do
           RailsAdmin.config Team do
             edit do
               field :manager do
-                required false
+                optional true
               end
               field :division_id do
-                required false
+                optional true
               end
               field :name do
                 required true

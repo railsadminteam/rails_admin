@@ -149,6 +149,31 @@ module RailsAdmin
         !(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
       end
 
+      # Reader whether field is optional.
+      #
+      # @see RailsAdmin::Fields::Field.register_instance_option(:required?)
+      def optional?
+        not required
+      end
+
+      # Inverse accessor whether this field is required.
+      #
+      # @see RailsAdmin::Fields::Field.register_instance_option(:required?)
+      def optional(state = nil, &block)
+        if !state.nil? || block
+          required state.nil? ? proc { false == (instance_eval &block) } : false == state
+        else
+          optional?
+        end
+      end
+
+      # Writer to make field optional.
+      #
+      # @see RailsAdmin::Fields::Field.optional
+      def optional=(state)
+        optional(state)
+      end
+
       def to_hash
         {
           :name => name,
