@@ -60,6 +60,9 @@ module RailsAdmin
         klass.send(:define_method, :groups) do
           @groups
         end
+        klass.send(:define_method, :visible_groups) do
+          groups.select {|g| g.visible? }
+        end
       end
     end
 

@@ -14,7 +14,7 @@
       <div id="contentMainNew">
         <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id)) do %>
           <fieldset>
-<%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.groups) -%>
+<%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.visible_groups) -%>
 
             <ul id="submitArea">
               <li id="saveContainer">

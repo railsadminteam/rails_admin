@@ -621,6 +621,49 @@ describe "RailsAdmin" do
 
     describe "edit" do
 
+      describe "field groupings" do
+
+        it "should be hideable" do
+          RailsAdmin.config Team do
+            edit do
+              group :default do
+                label "Hidden group"
+                hide
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          # Should not have the group header
+          response.should_not have_tag("h2", :content => "Hidden Group")
+          # Should not have any of the group's fields either
+          response.should_not have_tag("select#team_league_id")
+          response.should_not have_tag("select#team_division_id")
+          response.should_not have_tag("input#team_name")
+          response.should_not have_tag("input#team_logo_url")
+          response.should_not have_tag("input#team_manager")
+          response.should_not have_tag("input#team_ballpark")
+          response.should_not have_tag("input#team_mascot")
+          response.should_not have_tag("input#team_founded")
+          response.should_not have_tag("input#team_wins")
+          response.should_not have_tag("input#team_losses")
+          response.should_not have_tag("input#team_win_percentage")
+          response.should_not have_tag("input#team_revenue")
+        end
+
+        it "should be renameable" do
+          RailsAdmin.config Team do
+            edit do
+              group :default do
+                label "Renamed group"
+              end
+            end
+          end
+          get rails_admin_new_path(:model_name => "team")
+          response.should have_tag("h2", :content => "Renamed group")
+        end
+
+      end
+
       describe "items' fields" do
 
         it "should show all by default" do
