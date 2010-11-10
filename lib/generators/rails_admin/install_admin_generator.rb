@@ -8,10 +8,7 @@ module RailsAdmin
       puts "Hello!
 Rails_admin works with devise. Checking for a current installation of devise!
 "
-      loaded_gems = Bundler.setup.gems
-      is_loaded = loaded_gems.reject{|t| t.name == "devise" ? false : true}.size == 1 ? true : false
-
-      if is_loaded
+      if defined?(Devise)
         check_for_devise_models
       else
         puts "Please put gem 'devise' into your Gemfile"
