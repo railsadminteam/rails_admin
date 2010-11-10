@@ -1,7 +1,9 @@
 module RailsAdmin
   class History < ActiveRecord::Base
 
-    scope :most_recent, lambda {|table| where('`table` = ?', table).order("updated_at")}
+    scope :most_recent, lambda {|table| 
+      where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
+    }
 
     def self.paginated(options = {})
       page = options.delete(:page) || 1
