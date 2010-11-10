@@ -21,7 +21,7 @@ module RailsAdmin
         def visible_fields
           fields.select {|f| f.visible? }
         end
-        
+
         register_instance_option(:label) do
           name.to_s.underscore.gsub('_', ' ').capitalize
         end
@@ -72,7 +72,7 @@ module RailsAdmin
       else
         field = Types.load(type).new(parent, name, properties)
       end
-      
+
       field
     end
 
@@ -89,7 +89,7 @@ module RailsAdmin
         @name = name
         @order = 0
         @properties = properties
-        
+
         if parent.kind_of?(RailsAdmin::Fields::Groupable)
           extend RailsAdmin::Fields::Groupable
         end

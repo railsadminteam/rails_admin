@@ -41,7 +41,7 @@ document.observe("dom:loaded", function() {
   })
 
   $$(".addAssoc").each(function(elem){
-    
+
     var assocName = elem.parentNode.parentNode.childElements()[4].childElements()[0].readAttribute('name');
 
     Event.observe(elem,'click',function(e){
@@ -111,9 +111,9 @@ document.observe("dom:loaded", function() {
   })
 
   $$(".addAllAssoc").each(function(elem){
-      
+
     var assocName = elem.parentNode.parentNode.childElements()[4].childElements()[0].readAttribute('name');
-    
+
     Event.observe(elem,'click',function(e){
 
       var parentDiv = e.findElement('a').parentNode.parentNode;

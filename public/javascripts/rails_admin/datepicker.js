@@ -124,7 +124,7 @@ Control.DatePicker.prototype = {
       case Event.KEY_TAB:
         this.hide();
         return;
-      case Event.KEY_DOWN:  
+      case Event.KEY_DOWN:
         if (!this.pickerActive) {
           this.show();
           Event.stop(e);
@@ -277,7 +277,7 @@ Control.DatePicker.Language = {
       'Select Time': 'Zeit Auswählen',
       'Open calendar': 'Kalender öffnen'
     }
-  }  
+  }
 };
 
 Control.DatePickerPanel = Class.create();
@@ -335,7 +335,7 @@ Object.extend(Control.DatePickerPanel.prototype, {
     this.documentKeyListener = this.keyHandler.bindAsEventListener(this);
     if (this.options.captureKeys)
       this.captureKeys();
-    
+
     return elt;
   },
   tr: function(str) {
@@ -378,7 +378,7 @@ Object.extend(Control.DatePickerPanel.prototype, {
         adjTable.cellSpacing = 0;
         adjTable.cellPadding = 0;
         adjTable.border = 0;
-        
+
         row = adjTable.insertRow(0);
 
         cell = row.insertCell(0);
@@ -616,7 +616,7 @@ Object.extend(Control.DatePickerPanel.prototype, {
       cell.width = '14%';
       cell.innerHTML = this.dayName((this.options.firstWeekDay + i) % 7);
     }
-    
+
     row = null;
     var workDate = new Date(date.getFullYear(), date.getMonth(), 1);
     var day = workDate.getDay();
@@ -866,7 +866,7 @@ Object.extend(Control.DatePickerPanel.prototype, {
           this.setDate(date);
         else
           this.currentDate = date;
-        
+
         if (date.getDate() < this.currentDays.length) {
           if (this.selectedDay)
             Element.removeClassName(this.selectedDay, 'current');

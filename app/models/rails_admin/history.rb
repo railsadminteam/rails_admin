@@ -1,7 +1,7 @@
 module RailsAdmin
   class History < ActiveRecord::Base
 
-    scope :most_recent, lambda {|table| 
+    scope :most_recent, lambda {|table|
       where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
     }
 

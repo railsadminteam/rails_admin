@@ -77,7 +77,7 @@ module RailsAdmin
   # If a model class is provided as the first argument model specific
   # configuration is loaded and returned.
   #
-  # Otherwise yields self for general configuration to be used in 
+  # Otherwise yields self for general configuration to be used in
   # an initializer.
   #
   # @see RailsAdmin::Config.load

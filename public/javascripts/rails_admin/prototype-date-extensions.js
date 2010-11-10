@@ -95,7 +95,7 @@ Object.extend(DateFormat, {
     var mm=now.getMinutes();
     var ss=now.getSeconds();
     var ampm="";
-    
+
     while (i_format < format.length) {
       // Get next token from format string
       c=format.charAt(i_format);

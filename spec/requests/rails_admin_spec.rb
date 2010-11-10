@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "RailsAdmin" do
   include Warden::Test::Helpers
-  
+
   before(:each) do
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
@@ -18,7 +18,7 @@ describe "RailsAdmin" do
 
     login_as user
   end
-  
+
   after(:each) do
     Warden.test_reset!
   end
@@ -57,9 +57,9 @@ describe "RailsAdmin" do
       response.should be_successful
     end
   end
-  
+
   describe "config" do
-    
+
     after(:each) do
       RailsAdmin::Config.reset
     end
@@ -74,10 +74,10 @@ describe "RailsAdmin" do
       after(:each) do
         RailsAdmin::Config.excluded_models = []
       end
-    
+
       it "should be hidden from navigation" do
         # Make query in team's edit view to make sure loading
-        # the related division model config will not mess the navigation 
+        # the related division model config will not mess the navigation
         get rails_admin_new_path(:model_name => "team")
         excluded_models.each do |model|
           response.should have_tag("#nav") do |navigation|
@@ -105,11 +105,11 @@ describe "RailsAdmin" do
 
     describe "navigation" do
 
-      describe "number of visible tabs" do    
+      describe "number of visible tabs" do
         after(:each) do
           RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 5
         end
-    
+
         it "should be editable" do
           RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 2
           get rails_admin_dashboard_path
@@ -120,7 +120,7 @@ describe "RailsAdmin" do
       end
 
       describe "label for a model" do
-    
+
         it "should be visible and sane by default" do
           get rails_admin_dashboard_path
           response.should have_tag("#nav") do |navigation|
@@ -183,7 +183,7 @@ describe "RailsAdmin" do
             navigation.should_not have_tag("li a", :content => "Fan")
           end
         end
-      
+
         it "should be hideable via shortcut" do
           RailsAdmin.config Fan do
             hide_in_navigation
@@ -193,7 +193,7 @@ describe "RailsAdmin" do
             navigation.should_not have_tag("li a", :content => "Fan")
           end
         end
-      
+
         it "should be hideable via navigation configuration" do
           RailsAdmin.config Fan do
             navigation do
@@ -221,11 +221,11 @@ describe "RailsAdmin" do
         end
       end
     end
-    
+
     describe "list" do
 
       describe "number of items per page" do
-        
+
         before(:each) do
           RailsAdmin::AbstractModel.new("League").create(:name => 'American')
           RailsAdmin::AbstractModel.new("League").create(:name => 'National')
@@ -286,9 +286,9 @@ describe "RailsAdmin" do
           end
         end
       end
-      
+
       describe "items' fields" do
-        
+
         it "should show all by default" do
           get rails_admin_list_path(:model_name => "fan")
           response.should have_tag("#moduleHeader > li") do |elements|
@@ -392,7 +392,7 @@ describe "RailsAdmin" do
             elements[4].should have_tag("a")
           end
         end
-        
+
         it "should have option to disable sortability" do
           RailsAdmin.config Fan do
             list do
@@ -450,7 +450,7 @@ describe "RailsAdmin" do
             elements[4].should_not have_tag("a")
           end
         end
-        
+
         it "should have option to hide fields by type" do
           RailsAdmin.config Fan do
             list do
@@ -494,12 +494,12 @@ describe "RailsAdmin" do
               field :name
             end
           end
-          
+
           RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
           RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
-          
+
           get rails_admin_list_path(:model_name => "fan")
-          
+
           response.should have_tag("#moduleHeader > li:nth-child(2).customClassHeader")
           response.should have_tag("#moduleHeader > li:nth-child(3).smallStringHeader")
           response.should have_tag(".infoRow") do |elements|
@@ -516,12 +516,12 @@ describe "RailsAdmin" do
               end
             end
           end
-          
+
           RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
           RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
-          
+
           get rails_admin_list_path(:model_name => "fan")
-          
+
           response.should have_tag("#moduleHeader > li:nth-child(3).customClassHeader")
           response.should have_tag("#moduleHeader > li:nth-child(4).customClassHeader")
           response.should have_tag("#moduleHeader > li:nth-child(5).smallStringHeader")
@@ -540,12 +540,12 @@ describe "RailsAdmin" do
               end
             end
           end
-          
+
           RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
           RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
-          
+
           get rails_admin_list_path(:model_name => "fan")
-          
+
           response.should have_tag("#moduleHeader > li:nth-child(3).customClassHeader")
           response.should have_tag("#moduleHeader > li:nth-child(4).customClassHeader")
           response.should have_tag("#moduleHeader > li:nth-child(5).smallStringHeader")
@@ -555,7 +555,7 @@ describe "RailsAdmin" do
             elements[0].should have_tag("li:nth-child(5).smallStringRow")
           end
         end
-        
+
         it "should have option to customize column width" do
           RailsAdmin.config Fan do
             list do
@@ -567,7 +567,7 @@ describe "RailsAdmin" do
               field :updated_at
             end
           end
-          
+
           get rails_admin_list_path(:model_name => "fan")
 
           response.should have_tag("style") {|css| css.should contain(/\.idHeader[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
@@ -587,14 +587,14 @@ describe "RailsAdmin" do
               field :updated_at
             end
           end
-          
+
           get rails_admin_list_path(:model_name => "fan")
 
           response.should have_tag(".infoRow") do |elements|
             elements[0].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN II") }
             elements[1].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN I") }
           end
-        end        
+        end
 
         it "should have option to customize output formatting of date fields" do
           RailsAdmin.config Fan do
@@ -607,15 +607,15 @@ describe "RailsAdmin" do
               field :updated_at
             end
           end
-          
+
           get rails_admin_list_path(:model_name => "fan")
 
           response.should have_tag(".infoRow") do |elements|
-            elements[0].should have_tag("li:nth-child(4)") do |li| 
+            elements[0].should have_tag("li:nth-child(4)") do |li|
               li.should contain(/\d{4}-\d{2}-\d{2}/)
             end
           end
-        end        
+        end
       end
     end
 
