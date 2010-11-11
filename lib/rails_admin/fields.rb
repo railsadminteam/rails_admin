@@ -651,6 +651,14 @@ module RailsAdmin
       # Virtual field mixin provides behaviour for columns that are calculated at runtime
       # for example record object methods.
       class Virtual < RailsAdmin::Fields::Field
+        register_instance_option(:column_css_class) do
+          "smallString"
+        end
+
+        register_instance_option(:column_width) do
+          180
+        end
+
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
             output

@@ -626,6 +626,28 @@ describe "RailsAdmin" do
             end
           end
         end
+
+        it "should allow addition of virtual fields (object methods)" do
+          RailsAdmin.config Team do
+            list do
+              field :id
+              field :name
+              field :player_names_truncated
+            end
+          end
+
+          team = RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team I", :manager => "Manager I", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+
+          RailsAdmin::AbstractModel.new("Player").create(:name => 'Player I', :number => 1, :team => team)
+          RailsAdmin::AbstractModel.new("Player").create(:name => 'Player II', :number => 2, :team => team)
+          RailsAdmin::AbstractModel.new("Player").create(:name => 'Player III', :number => 3, :team => team)
+
+          get rails_admin_list_path(:model_name => "team")
+
+          response.should have_tag(".infoRow") do |elements|
+            elements[0].should have_tag("li:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
+          end
+        end
       end
     end
 
