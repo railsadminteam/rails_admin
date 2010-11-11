@@ -10,6 +10,11 @@ module RailsAdmin
     @@excluded_models = []
     mattr_accessor :excluded_models
 
+    if defined?(::Devise)
+      @@exclude_devise_mappings = true
+      mattr_accessor :exclude_devise_mappings
+    end
+
     # Loads a model configuration instance from the registry or registers
     # a new one if one is yet to be added.
     #

@@ -87,6 +87,15 @@ describe "RailsAdmin" do
         end
       end
 
+      it "should make hiding Devise models configurable" do
+        if defined?(::Devise)
+          RailsAdmin::Config.exclude_devise_mappings = false
+          RailsAdmin::AbstractModel.all.detect {|am| am.model == User }.should be_present
+          RailsAdmin::Config.exclude_devise_mappings = true
+          RailsAdmin::AbstractModel.all.detect {|am| am.model == User }.should be_blank
+        end
+      end
+
       it "should raise NotFound for the list view" do
         get rails_admin_list_path(:model_name => "fan")
         response.status.should equal(404)
