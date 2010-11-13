@@ -14,19 +14,28 @@ module RailsAdmin
           @name = name
         end
 
+        # Reader for fields attached to this group
         def fields
           parent.fields.select {|f| self == f.group }
         end
 
+        # Reader for fields that are marked as visible
         def visible_fields
           fields.select {|f| f.visible? }
         end
 
+        # Configurable group label which by default is group's name humanized.
         register_instance_option(:label) do
           name.to_s.underscore.gsub('_', ' ').capitalize
         end
       end
 
+      # Register a group instance variable and accessor methods for objects
+      # extending the groupable mixin. The extended objects must implement
+      # reader for a parent object which includes this module.
+      #
+      # @see RailsAdmin::Fields::Groupable.group
+      # @see RailsAdmin::Fields::Groupable::Group
       def self.extended(obj)
         obj.instance_variable_set("@group", obj.parent.group(:default))
         class << obj
@@ -40,67 +49,106 @@ module RailsAdmin
         end
       end
 
-      def self.included(klass)
-        # Access fields by their group
-        klass.send(:define_method, :fields_of_group) do |group, &block|
-          selected = @fields.select {|f| group == f.group }
-          if block
-            selected.each {|f| f.instance_eval &block }
-          end
-          selected
+      # Access fields by their group
+      def fields_of_group(group, &block)
+        selected = @fields.select {|f| group == f.group }
+        if block
+          selected.each {|f| f.instance_eval &block }
         end
-        klass.send(:define_method, :group) do |name, &block|
-          group = @groups.find {|g| name == g.name }
-          if group.nil?
-            group = (@groups << Group.new(self, name)).last
-          end
-          group.instance_eval &block if block
-          group
+        selected
+      end
+
+      # Accessor for a group
+      #
+      # If group with given name does not yet exist it will be created. If a
+      # block is passed it will be evaluated in the context of the group
+      def group(name, &block)
+        group = @groups.find {|g| name == g.name }
+        if group.nil?
+          group = (@groups << Group.new(self, name)).last
         end
-        klass.send(:define_method, :groups) do
-          @groups
-        end
-        klass.send(:define_method, :visible_groups) do
-          groups.select {|g| g.visible? }
-        end
+        group.instance_eval &block if block
+        group
+      end
+
+      # Reader for groups
+      def groups
+        @groups
+      end
+
+      # Reader for groups that are marked as visible
+      def visible_groups
+        groups.select {|g| g.visible? }
       end
     end
 
+    # Default field factory loads fields based on their property type or
+    # association type.
+    #
+    # @see RailsAdmin::Fields.registry
     mattr_reader :default_factory
     @@default_factory = lambda do |parent, properties, fields|
-      if properties.has_key?(:parent_model)
-        if :belongs_to == properties[:type]
-          association = properties
-          properties = parent.abstract_model.properties.find {|p| association[:child_key].first == p[:name]}
-          fields << Types.load("belongs_to_association").new(parent, properties[:name], properties, association)
-        else
-          fields << Types.load("#{properties[:type]}_association").new(parent, properties[:name], properties)
-        end
-      else
+      # Belongs to association need special handling as they also include a column in the table
+      if association = parent.abstract_model.belongs_to_associations.find {|a| a[:child_key].first == properties[:name]}
+        fields << Types.load(:belongs_to_association).new(parent, properties[:name], properties, association)
+      # If it's an association
+      elsif properties.has_key?(:parent_model) && :belongs_to != properties[:type]
+        fields << Types.load("#{properties[:type]}_association").new(parent, properties[:name], properties)
+      # If it's a concrete column
+      elsif !properties.has_key?(:parent_model)
         fields << Types.load(properties[:type]).new(parent, properties[:name], properties)
       end
     end
 
+    # Registry of field factories.
+    #
+    # Field factory is an anonymous function that recieves the parent object,
+    # an array of field properties and an array of fields already instantiated.
+    #
+    # If the factory returns true then that property will not be run through
+    # the rest of the registered factories. If it returns false then the
+    # arguments will be passed to the next factory.
+    #
+    # By default a basic factory is registered which loads fields by their
+    # database column type. Also a password factory is registered which
+    # loads fields if their name is password. Third default factory is a
+    # devise specific factory which loads fields for devise user models.
+    #
+    # @see RailsAdmin::Fields.register_factory
     @@registry = [@@default_factory]
 
+    # Build an array of fields by the provided parent object's abstract_model's
+    # property and association information. Each property and association is
+    # passed to the registered field factories which will populate the fields
+    # array that will be returned.
+    #
+    # @see RailsAdmin::Fields.registry
     def self.factory(parent)
       fields = []
-
-      parent.abstract_model.associations.each do |association|
-        unless fields.find {|f| f.name == association[:name] }
-          @@registry.find {|factory| factory.call(parent, association, fields) }
-        end
-      end
-
+      # Load fields for all properties (columns)
       parent.abstract_model.properties.each do |properties|
+        # Unless a previous factory has already loaded current field as well
         unless fields.find {|f| f.name == properties[:name] }
+          # Loop through factories until one returns true
           @@registry.find {|factory| factory.call(parent, properties, fields) }
         end
       end
-
+      # Load fields for all associations (relations)
+      parent.abstract_model.associations.each do |association|
+        # Unless a previous factory has already loaded current field as well
+        unless fields.find {|f| f.name == association[:name] }
+          # Loop through factories until one returns true
+          @@registry.find {|factory| factory.call(parent, association, fields) }
+        end
+      end
       fields
     end
 
+    # Register a field factory to be included in the factory stack.
+    #
+    # Factories are invoked lifo (last in first out).
+    #
+    # @see RailsAdmin::Fields.registry
     def self.register_factory(&block)
       @@registry.unshift(block)
     end
@@ -166,14 +214,17 @@ module RailsAdmin
         properties[:serial?]
       end
 
+      # Is this an association
       def association?
         kind_of?(RailsAdmin::Fields::Association)
       end
 
+      # Reader for validation errors of the bound object
       def errors
         bindings[:object].errors[name]
       end
 
+      # Reader whether the bound object has validation errors
       def has_errors?
         !(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
       end
@@ -203,6 +254,7 @@ module RailsAdmin
         optional(state)
       end
 
+      # Legacy support
       def to_hash
         {
           :name => name,
@@ -216,6 +268,7 @@ module RailsAdmin
         }
       end
 
+      # Reader for field's type
       def type
         @type ||= self.class.name.split("::").last.underscore.to_sym
       end
@@ -228,6 +281,7 @@ module RailsAdmin
 
     class Association < Field
 
+      # Reader for the association information hash
       def association
         @properties
       end
@@ -256,36 +310,47 @@ module RailsAdmin
         false
       end
 
+      # Accessor whether association is visible or not. By default
+      # association checks whether the child model is excluded in
+      # configuration or not.
       register_instance_option(:visible?) do |p|
         !associated_model_config.excluded?
       end
 
+      # Reader for a collection of association's child models in an array of
+      # [label, id] arrays.
       def associated_collection
         associated_model_config.abstract_model.all.map do |object|
           [associated_model_config.bind(:object, object).list.object_label, object.id]
         end
       end
 
+      # Reader for the association's child model's configuration
       def associated_model_config
         @associated_model_config ||= RailsAdmin.config(association[:child_model])
       end
 
+      # Reader for the association's child key
       def child_key
         association[:child_key].first
       end
 
+      # Reader for the association's child key array
       def child_keys
         association[:child_key]
       end
 
+      # Reader for validation errors of the bound object
       def errors
         bindings[:object].errors[child_key]
       end
 
+      # Reader whether the bound object has validation errors
       def has_errors?
         !(bindings[:object].errors[child_key].nil? || bindings[:object].errors[child_key].empty?)
       end
 
+      # Reader for the association's value unformatted
       def value
         bindings[:object].send(association[:name])
       end
@@ -628,6 +693,11 @@ module RailsAdmin
         register_instance_option(:sortable?) do
           false
         end
+
+        # Password field's value does not need to be read
+        def value
+          ""
+        end
       end
 
       class Text < RailsAdmin::Fields::Field
@@ -782,9 +852,9 @@ module RailsAdmin
             fields << RailsAdmin::Fields::Types.load(:password).new(parent, :password, properties)
             fields.last.label "Password"
             fields << RailsAdmin::Fields::Types.load(:password).new(parent, :password_confirmation, properties)
-            fields.last.label "Password confirmation"
-            fields[-2..-1].each do |f|
-              f.class.send(:define_method, :value) { "" }
+            fields.last.instance_eval do
+              label "Password confirmation"
+              help "Retype password"
             end
             [:password_salt, :reset_password_token, :remember_token].each do |name|
               properties = parent.abstract_model.properties.find {|p| name == p[:name]}
