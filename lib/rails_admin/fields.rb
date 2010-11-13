@@ -66,14 +66,43 @@ module RailsAdmin
       end
     end
 
-    def self.factory(parent, name, type, properties = [])
-      if association = parent.abstract_model.belongs_to_associations.select{|a| a[:child_key].first == name}.first
-        field = Types.load("belongs_to_association").new(parent, name, properties, association)
+    mattr_reader :default_factory
+    @@default_factory = lambda do |parent, properties, fields|
+      if properties.has_key?(:parent_model)
+        if :belongs_to == properties[:type]
+          association = properties
+          properties = parent.abstract_model.properties.find {|p| association[:child_key].first == p[:name]}
+          fields << Types.load("belongs_to_association").new(parent, properties[:name], properties, association)
+        else
+          fields << Types.load("#{properties[:type]}_association").new(parent, properties[:name], properties)
+        end
       else
-        field = Types.load(type).new(parent, name, properties)
+        fields << Types.load(properties[:type]).new(parent, properties[:name], properties)
+      end
+    end
+
+    @@registry = [@@default_factory]
+
+    def self.factory(parent)
+      fields = []
+
+      parent.abstract_model.associations.each do |association|
+        unless fields.find {|f| f.name == association[:name] }
+          @@registry.find {|factory| factory.call(parent, association, fields) }
+        end
       end
 
-      field
+      parent.abstract_model.properties.each do |properties|
+        unless fields.find {|f| f.name == properties[:name] }
+          @@registry.find {|factory| factory.call(parent, properties, fields) }
+        end
+      end
+
+      fields
+    end
+
+    def self.register_factory(&block)
+      @@registry.unshift(block)
     end
 
     class Field < RailsAdmin::Config::Configurable
@@ -227,7 +256,7 @@ module RailsAdmin
         false
       end
 
-      register_instance_option(:visible?) do
+      register_instance_option(:visible?) do |p|
         !associated_model_config.excluded?
       end
 
@@ -266,12 +295,12 @@ module RailsAdmin
 
       @@registry = {}
 
-      def self.register(type, klass)
-        @@registry[type.to_sym] = klass
-      end
-
       def self.load(type)
         @@registry[type.to_sym] or raise "Unsupported field datatype: #{type}"
+      end
+
+      def self.register(type, klass)
+        @@registry[type.to_sym] = klass
       end
 
       class BelongsToAssociation < RailsAdmin::Fields::Association
@@ -562,6 +591,45 @@ module RailsAdmin
         end
       end
 
+      class Password < String
+        @column_names = [:password]
+
+        def self.column_names
+          @column_names
+        end
+
+        # Register a custom field factory for fields named as password. More
+        # field names can be registered to the column_names array
+        #
+        # @see RailsAdmin::Fields::Types::Password.column_names
+        # @see RailsAdmin::Fields.register_factory
+        RailsAdmin::Fields.register_factory do |parent, properties, fields|
+          if @column_names.include?(properties[:name])
+            fields << self.new(parent, properties[:name], properties)
+            true
+          else
+            false
+          end
+        end
+
+        def initialize(parent, name, properties)
+          super(parent, name, properties)
+          hide if parent.kind_of?(RailsAdmin::Config::Sections::List)
+        end
+
+        register_instance_option(:formatted_value) do
+          "".html_safe
+        end
+
+        register_instance_option(:searchable?) do
+          false
+        end
+
+        register_instance_option(:sortable?) do
+          false
+        end
+      end
+
       class Text < RailsAdmin::Fields::Field
         register_instance_option(:column_css_class) do
           "text"
@@ -705,6 +773,40 @@ module RailsAdmin
 
       constants.each do |it|
         @@registry[it.to_s.underscore.to_sym] = "RailsAdmin::Fields::Types::#{it}".constantize
+      end
+
+      # Register a custom field factory for devise model if Devise is defined
+      if defined?(::Devise)
+        RailsAdmin::Fields.register_factory do |parent, properties, fields|
+          if :encrypted_password == properties[:name]
+            fields << RailsAdmin::Fields::Types.load(:password).new(parent, :password, properties)
+            fields.last.label "Password"
+            fields << RailsAdmin::Fields::Types.load(:password).new(parent, :password_confirmation, properties)
+            fields.last.label "Password confirmation"
+            fields[-2..-1].each do |f|
+              f.class.send(:define_method, :value) { "" }
+            end
+            [:password_salt, :reset_password_token, :remember_token].each do |name|
+              properties = parent.abstract_model.properties.find {|p| name == p[:name]}
+              if properties
+                RailsAdmin::Fields.default_factory.call(parent, properties, fields)
+                fields.last.hide
+              end
+            end
+            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
+              [:remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip].each do |name|
+                properties = parent.abstract_model.properties.find {|p| name == p[:name]}
+                if properties
+                  RailsAdmin::Fields.default_factory.call(parent, properties, fields)
+                  fields.last.hide
+                end
+              end
+            end
+            true
+          else
+            false
+          end
+        end
       end
     end
   end

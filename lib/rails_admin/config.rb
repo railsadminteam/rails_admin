@@ -163,7 +163,7 @@ module RailsAdmin
     module Hideable
       # Visibility defaults to true.
       def self.included(klass)
-        klass.register_instance_option(:visible?) do
+        klass.register_instance_option(:visible?) do |p|
           !root.excluded?
         end
       end
@@ -195,18 +195,19 @@ module RailsAdmin
         # Specify field as virtual if type is not specifically set and field was not
         # found in default stack
         if field.nil? && type.nil?
-          field = (@fields << RailsAdmin::Fields.factory(self, name, :virtual)).last
+          field = (@fields << RailsAdmin::Fields::Types.load(:virtual).new(self, name, {})).last
         # Register a custom field type if one is provided and it is different from
         # one found in default stack
         elsif !type.nil? && type != (field.nil? ? nil : field.type)
           @fields.delete(field) unless field.nil?
-          field = (@fields << RailsAdmin::Fields.factory(self, name, type)).last
+          properties = parent.abstract_model.properties.find {|p| name == p[:name] }
+          field = (@fields <<  RailsAdmin::Fields::Types.load(type).new(self, name, properties)).last
         end
         # If field has not been yet defined add some default properties
         unless field.defined
           field.defined = true
           field.order = @fields.select {|f| f.defined }.length
-          field.visible = true
+          # field.hide
         end
         # If a block has been given evaluate it and sort fields after that
         if block
@@ -290,25 +291,27 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Labelable
 
+        # Default items per page value used if a model level option has not
+        # been configured
+        cattr_accessor :default_hidden_fields
+        @@default_hidden_fields = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+
         def initialize(parent)
           super(parent)
           extend RailsAdmin::Config::Fields
           # Populate @fields instance variable with model's properties
           @groups = [ RailsAdmin::Fields::Groupable::Group.new(self, :default) ]
           @groups.first.label = proc { I18n.translate("admin.new.basic_info") }
-          @fields = abstract_model.properties.map do |p|
-            field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
-            field.group = :default
-            if field.serial? || [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(p[:name])
-              field.hide
+          @fields = RailsAdmin::Fields.factory(self)
+          @fields.each do |f|
+            if f.association? && f.type != :belongs_to_association
+              f.group = f.label
+            else
+              f.group = :default
             end
-            field
-          end
-          # Append @fields instance variable with model's associations
-          @fields += abstract_model.associations.select{|a| a[:type] != :belongs_to}.map do |a|
-            field = RailsAdmin::Fields.factory(self, a[:name], "#{a[:type]}_association".to_sym, a)
-            field.group = field.label
-            field
+            if f.serial? || @@default_hidden_fields.include?(f.name)
+              f.visible = false
+            end
           end
         end
       end
@@ -327,8 +330,11 @@ module RailsAdmin
           super(parent)
           extend RailsAdmin::Config::Fields
           # Populate @fields instance variable with model's properties
-          @fields = abstract_model.properties.map do |p|
-            field = RailsAdmin::Fields.factory(self, p[:name], p[:type], p)
+          @fields = RailsAdmin::Fields.factory(self)
+          @fields.each do |f|
+            if f.association? && f.type != :belongs_to_association
+              f.visible = false
+            end
           end
         end
 
