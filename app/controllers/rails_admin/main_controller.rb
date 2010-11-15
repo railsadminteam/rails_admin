@@ -128,7 +128,7 @@ module RailsAdmin
       options = {}
       options[:order] = "created_at DESC"
       options[:conditions] = []
-      options[:conditions] << conditions = "`table` = ?"
+      options[:conditions] << conditions = "#{History.connection.quote_column_name(:table)} = ?"
       options[:conditions] << @abstract_model.pretty_name
 
       if params[:id]
