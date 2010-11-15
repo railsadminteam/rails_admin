@@ -1470,6 +1470,7 @@ describe "RailsAdmin" do
 
     it "should show an error message" do
       @response.body.should contain("Player failed to be created")
+      @response.body.should have_tag "form", :action => "/admin/player/create"
     end
   end
 
@@ -1578,6 +1579,20 @@ describe "RailsAdmin" do
 
     it "should respond sucessfully" do
       response.should be_successful
+    end
+  end
+
+  describe "update with errors" do
+    before(:each) do
+      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+    end
+
+    it "should return to edit page" do
+      fill_in "player[name]", :with => ""
+      res = click_button "Save"
+      res.should be_successful
+      res.should have_tag "form[action*=update]"
     end
   end
 

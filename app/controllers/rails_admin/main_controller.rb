@@ -75,7 +75,7 @@ module RailsAdmin
       if @object.update_attributes(@attributes) && update_all_associations
         redirect_to_on_success
       else
-        render_error
+        render_error :edit
       end
     end
 
@@ -351,10 +351,10 @@ module RailsAdmin
       end
     end
 
-    def render_error
+    def render_error whereto = :new
       action = params[:action]
       flash.now[:error] = t("admin.flash.error", :name => @abstract_model.pretty_name, :action => "#{action}d")
-      render :new, :layout => 'rails_admin/form'
+      render whereto, :layout => 'rails_admin/form'
     end
 
     def to_model_name(param)
