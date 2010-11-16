@@ -1160,7 +1160,7 @@ describe "RailsAdmin" do
     end
   end
 
-  describe "GET /admin/player with 20 objects, page 8" do
+  describe "GET /admin/player with 20 pages, page 8" do
     before(:each) do
       per_page = 20
       page_numers = 20
@@ -1180,7 +1180,7 @@ describe "RailsAdmin" do
     end
   end
 
-  describe "list with 20 objects, page 17" do
+  describe "list with 20 pages, page 17" do
     before(:each) do
       per_page = 20
       max_pages = 20
