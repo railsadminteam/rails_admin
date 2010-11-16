@@ -108,11 +108,15 @@ describe "RailsAdmin" do
 
       describe "number of visible tabs" do
         after(:each) do
-          RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 5
+          RailsAdmin.config do |config|
+            config.navigation.max_visible_tabs = 5
+          end
         end
 
         it "should be editable" do
-          RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 2
+          RailsAdmin.config do |config|
+            config.navigation.max_visible_tabs = 2
+          end
           get rails_admin_dashboard_path
           response.should have_tag("#nav > li") do |elements|
             elements.should have_at_most(4).items

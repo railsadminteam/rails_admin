@@ -161,7 +161,9 @@ which allows all three forms of configuration value passing as well.
 
 You can configure the number of tabs visible in the top navigation:
 
-    RailsAdmin::Config::Sections::Navigation.max_visible_tabs = 3
+    RailsAdmin.config do |config|
+      config.navigation.max_visible_tabs = 3
+    end
 
 Links to the rest of the models will be rendered in a drop down menu next to the tabs. Even though this option is not model specific, it shares the same semantics as the earlier ones - you can also pass in a block or pass the value as an argument by omitting the equals sign.
 
@@ -177,7 +179,9 @@ Links to the rest of the models will be rendered in a drop down menu next to the
 
 You can configure the default number of rows rendered per page:
 
-    RailsAdmin::Config::Sections::List.default_items_per_page = 50
+    RailsAdmin.config do |config|
+      config.list.default_items_per_page = 50
+    end
 
 You can also configure it per model:
 

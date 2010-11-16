@@ -10,6 +10,14 @@ module RailsAdmin
     @@excluded_models = []
     mattr_accessor :excluded_models
 
+    # Shortcut to access the list section's class configuration
+    # within a config DSL block
+    #
+    # @see RailsAdmin::Config::Sections::Navigation
+    def self.list
+      Sections::List
+    end
+
     # Loads a model configuration instance from the registry or registers
     # a new one if one is yet to be added.
     #
@@ -45,6 +53,14 @@ module RailsAdmin
         config.instance_eval &block if block
         config
       end
+    end
+
+    # Shortcut to access the navigation section's class configuration
+    # within a config DSL block
+    #
+    # @see RailsAdmin::Config::Sections::Navigation
+    def self.navigation
+      Sections::Navigation
     end
 
     # Returns all model configurations
