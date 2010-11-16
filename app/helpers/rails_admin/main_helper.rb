@@ -21,55 +21,6 @@ module RailsAdmin
       return style, other, selected_set
     end
 
-    def object_label(object)
-      if object.nil?
-        nil
-      elsif object.respond_to?(:name) && object.name
-        object.name[0..40]
-      elsif object.respond_to?(:title) && object.title
-        object.title[0..40]
-      else
-        "#{object.class.to_s} ##{object.id}"
-      end
-    end
-
-    def object_property(object, property)
-      property_type = property[:type]
-      property_name = property[:name]
-      return "".html_safe if object.send(property_name).nil?
-
-      case property_type
-      when :boolean
-        if object.send(property_name) == true
-          Builder::XmlMarkup.new.img(:src => image_path("bullet_black.png"), :alt => "True").html_safe
-        else
-          Builder::XmlMarkup.new.img(:src => image_path("bullet_white.png"), :alt => "False").html_safe
-        end
-      when :datetime, :timestamp
-        object.send(property_name).strftime("%b. %d, %Y, %I:%M%p")
-      when :date
-        object.send(property_name).strftime("%b. %d, %Y")
-      when :time
-        object.send(property_name).strftime("%I:%M%p")
-      when :string
-        if property_name.to_s =~ /(image|logo|photo|photograph|picture|thumb|thumbnail)_ur(i|l)/i
-          Builder::XmlMarkup.new.img(:src => object.send(property_name), :width => 10, :height => 10).html_safe
-        else
-          object.send(property_name)
-        end
-      when :text
-        object.send(property_name)
-      when :integer
-        if association = @abstract_model.belongs_to_associations.select{|a| a[:child_key].first == property_name}.first
-          object_label(object.send(association[:name]))
-        else
-          object.send(property_name)
-        end
-      else
-        object.send(property_name)
-      end
-    end
-
     # Given a page count and the current page, we generate a set of pagination
     # links.
     #

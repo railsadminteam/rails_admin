@@ -133,7 +133,7 @@ module RailsAdmin
 
       if params[:id]
         get_object
-        @page_name = t("admin.history.page_name", :name => object_label(@object))
+        @page_name = t("admin.history.page_name", :name => @model_config.bind(:object, @object).list.object_label)
         options[:conditions][0] += " and `item` = ?"
         options[:conditions] << params[:id]
         @general = false
@@ -304,7 +304,7 @@ module RailsAdmin
 
       case action
       when "create"
-        message = "#{action.capitalize}d #{object_label(@object)}"
+        message = "#{action.capitalize}d #{@model_config.bind(:object, @object).list.object_label}"
       when "update"
         # determine which fields changed ???
         changed_property_list = []
@@ -332,7 +332,7 @@ module RailsAdmin
           message = "Changed #{changed_property_list.join(", ")}"
         end
       when "destroy"
-        message = "Destroyed #{object_label(@object)}"
+        message = "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
       end
 
       if not message.empty?
@@ -342,8 +342,8 @@ module RailsAdmin
           :item => @object.id,
           :table => @abstract_model.pretty_name,
           :username => current_user ? current_user.email : "",
-          :month => Time.now.month,
-          :year => Time.now.year
+          :month => date.month,
+          :year => date.year
         )
       end
     end
@@ -396,18 +396,6 @@ module RailsAdmin
 
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)
-    end
-
-    def object_label(object)
-      if object.nil?
-        nil
-      elsif object.respond_to?(:name) && object.name
-        object.name[0..10]
-      elsif object.respond_to?(:title) && object.title
-        object.title[0..10]
-      else
-        "#{object.class.to_s} ##{object.id}"
-      end
     end
   end
 end
