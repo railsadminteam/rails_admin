@@ -281,20 +281,19 @@ module RailsAdmin
 
     def redirect_to_on_success
       param = @abstract_model.to_param
-      pretty_name = @abstract_model.pretty_name
+      pretty_name = @model_config.update.label
       action = params[:action]
 
       check_history
 
-      if params[:_add_another] == "Save and add another"
-
-        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
+      if params[:_add_another]
+        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
         redirect_to rails_admin_new_path(:model_name => param)
-      elsif params[:_add_edit] == "Save and edit"
-        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
+      elsif params[:_add_edit]
+        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
         redirect_to rails_admin_edit_path(:model_name => param, :id => @object.id)
-      elsif
-        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => "#{action}d")
+      else
+        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
         redirect_to rails_admin_list_path(:model_name => param)
       end
     end
@@ -351,7 +350,7 @@ module RailsAdmin
 
     def render_error whereto = :new
       action = params[:action]
-      flash.now[:error] = t("admin.flash.error", :name => @abstract_model.pretty_name, :action => "#{action}d")
+      flash.now[:error] = t("admin.flash.error", :name => @model_config.update.label, :action => t("admin.actions.#{action}d"))
       render whereto, :layout => 'rails_admin/form'
     end
 

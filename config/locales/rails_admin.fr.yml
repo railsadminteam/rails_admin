@@ -43,3 +43,7 @@ fr:
       successful: "%{name} a été  %{action} avec succès"
       error: "%{name} n'a pas pu être %{action}"
       noaction: "Aucune mesure où prendre!"
+    actions:
+      created: "created"
+      updated: "updated"
+      deleted: "deleted"

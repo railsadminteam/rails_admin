@@ -45,3 +45,7 @@ pt-BR:
       successful: "%{name} foi %{action} com sucesso"
       error: "%{name} falhou em %{action}"
       noaction: "Não ocorreram ações."
+    actions:
+      created: "created"
+      updated: "updated"
+      deleted: "deleted"
