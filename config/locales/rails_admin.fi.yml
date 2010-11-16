@@ -1,5 +1,7 @@
 
 fi:
+  home:
+    name: "home"
   admin:
     dashboard:
       pagename: "Ylläpito"

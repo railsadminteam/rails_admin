@@ -1,5 +1,7 @@
 
 fr:
+  home:
+    name: "home"
   admin:
     dashboard:
       pagename: "Administration du site"

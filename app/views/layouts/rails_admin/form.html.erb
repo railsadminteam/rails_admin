@@ -45,14 +45,18 @@
       <div id="headerLeft">
         <ul class="breadcrumb">
           <li>
+            <%= link_to(t('home.name'), '/') %>
+          </li>
+          <li>
+            &rsaquo;
             <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
-            &rsaquo;
           </li>
           <li>
+            &rsaquo;
             <%= link_to(@abstract_model.pretty_name, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
-            &rsaquo;
           </li>
           <li>
+            &rsaquo;
             <%= link_to(@page_name, rails_admin_new_path(:model_name => @abstract_model.to_param)) %>
           </li>
         </ul>
