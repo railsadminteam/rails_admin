@@ -73,11 +73,17 @@ module RailsAdmin
       @@registry.values
     end
 
-    # Reset all model configurations.
+    # Reset a provided model's configuration. If omitted, reset all model
+    # configurations.
     #
     # @see RailsAdmin::Config.registry
-    def self.reset
-      @@registry.clear
+    def self.reset(model = nil)
+      if model.kind_of?(Class) || model.kind_of?(String) || model.kind_of?(Symbol)
+        key = model.kind_of?(Class) ? model.name.to_sym : model.to_sym
+        @@registry.delete(key)
+      else
+        @@registry.clear
+      end
     end
 
     # A base for all configurables.

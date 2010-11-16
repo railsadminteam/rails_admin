@@ -61,10 +61,6 @@ describe "RailsAdmin" do
 
   describe "config" do
 
-    after(:each) do
-      RailsAdmin::Config.reset
-    end
-
     describe "excluded models" do
       excluded_models = [Division, Draft, Fan]
 
@@ -74,6 +70,7 @@ describe "RailsAdmin" do
 
       after(:each) do
         RailsAdmin::Config.excluded_models = []
+        RailsAdmin::AbstractModel.instance_variable_get("@models").clear
       end
 
       it "should be hidden from navigation" do
@@ -126,7 +123,14 @@ describe "RailsAdmin" do
 
       describe "label for a model" do
 
+        after(:each) do
+          RailsAdmin::Config.reset Fan
+        end
+
         it "should be visible and sane by default" do
+          # Reset
+          RailsAdmin::Config.reset Fan
+
           get rails_admin_dashboard_path
           response.should have_tag("#nav") do |navigation|
             navigation.should have_tag("li a", :content => "Fan")
@@ -252,6 +256,13 @@ describe "RailsAdmin" do
           response.should have_tag("#contentMainModules > .infoRow") do |elements|
             elements.should have_at_most(1).items
           end
+
+          # Reset
+          RailsAdmin::Config.model do
+            list do
+              items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
+            end
+          end
         end
 
         it "should be configurable per model" do
@@ -267,6 +278,13 @@ describe "RailsAdmin" do
           get rails_admin_list_path(:model_name => "player")
           response.should have_tag("#contentMainModules > .infoRow") do |elements|
             elements.should have_at_most(2).items
+          end
+
+          # Reset
+          RailsAdmin.config League do
+            list do
+              items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
+            end
           end
         end
 
@@ -288,6 +306,13 @@ describe "RailsAdmin" do
           get rails_admin_list_path(:model_name => "player")
           response.should have_tag("#contentMainModules > .infoRow") do |elements|
             elements.should have_at_most(2).items
+          end
+
+          # Reset
+          RailsAdmin::Config.model do
+            list do
+              items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
+            end
           end
         end
       end
@@ -320,6 +345,9 @@ describe "RailsAdmin" do
             elements[3].should contain("ID")
             elements[4].should contain("CREATED AT")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should only list the defined fields if some fields are defined" do
@@ -336,6 +364,9 @@ describe "RailsAdmin" do
             elements.should_not contain("CREATED AT")
             elements.should_not contain("UPDATED AT")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should be renameable" do
@@ -352,6 +383,9 @@ describe "RailsAdmin" do
             elements[1].should contain("IDENTIFIER")
             elements[2].should contain("NAME")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should be renameable by type" do
@@ -369,6 +403,9 @@ describe "RailsAdmin" do
             elements[3].should contain("UPDATED AT (DATETIME)")
             elements[4].should contain("NAME")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should be globally renameable by type" do
@@ -386,6 +423,9 @@ describe "RailsAdmin" do
             elements[3].should contain("UPDATED AT (DATETIME)")
             elements[4].should contain("NAME")
           end
+
+          # Reset
+          RailsAdmin::Config.reset
         end
 
         it "should be sortable by default" do
@@ -412,6 +452,9 @@ describe "RailsAdmin" do
             elements[1].should_not have_tag("a")
             elements[2].should have_tag("a")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to disable sortability by type" do
@@ -433,6 +476,9 @@ describe "RailsAdmin" do
             elements[3].should_not have_tag("a")
             elements[4].should_not have_tag("a")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to disable sortability by type globally" do
@@ -454,6 +500,9 @@ describe "RailsAdmin" do
             elements[3].should_not have_tag("a")
             elements[4].should_not have_tag("a")
           end
+
+          # Reset
+          RailsAdmin::Config.reset
         end
 
         it "should have option to hide fields by type" do
@@ -471,6 +520,9 @@ describe "RailsAdmin" do
             elements.should_not contain("CREATED AT")
             elements.should_not contain("UPDATED AT")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to hide fields by type globally" do
@@ -488,6 +540,9 @@ describe "RailsAdmin" do
             elements.should_not contain("CREATED AT")
             elements.should_not contain("UPDATED AT")
           end
+
+          # Reset
+          RailsAdmin::Config.reset
         end
 
         it "should have option to customize css class name" do
@@ -511,6 +566,9 @@ describe "RailsAdmin" do
             elements[0].should have_tag("li:nth-child(2).customClassRow")
             elements[0].should have_tag("li:nth-child(3).smallStringRow")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to customize css class name by type" do
@@ -535,6 +593,9 @@ describe "RailsAdmin" do
             elements[0].should have_tag("li:nth-child(4).customClassRow")
             elements[0].should have_tag("li:nth-child(5).smallStringRow")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to customize css class name by type globally" do
@@ -559,6 +620,9 @@ describe "RailsAdmin" do
             elements[0].should have_tag("li:nth-child(4).customClassRow")
             elements[0].should have_tag("li:nth-child(5).smallStringRow")
           end
+
+          # Reset
+          RailsAdmin::Config.reset
         end
 
         it "should have option to customize column width" do
@@ -580,6 +644,9 @@ describe "RailsAdmin" do
 
           response.should have_tag("style") {|css| css.should contain(/\.idHeader[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
           response.should have_tag("style") {|css| css.should contain(/\.idRow[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to customize output formatting" do
@@ -605,6 +672,9 @@ describe "RailsAdmin" do
             elements[0].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN II") }
             elements[1].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN I") }
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should have option to customize output formatting of date fields" do
@@ -629,6 +699,9 @@ describe "RailsAdmin" do
               li.should contain(/\d{4}-\d{2}-\d{2}/)
             end
           end
+
+          # Reset
+          RailsAdmin::Config.reset Fan
         end
 
         it "should allow addition of virtual fields (object methods)" do
@@ -651,6 +724,9 @@ describe "RailsAdmin" do
           response.should have_tag(".infoRow") do |elements|
             elements[0].should have_tag("li:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
       end
     end
@@ -684,6 +760,9 @@ describe "RailsAdmin" do
           response.should_not have_tag("input#team_losses")
           response.should_not have_tag("input#team_win_percentage")
           response.should_not have_tag("input#team_revenue")
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should be renameable" do
@@ -696,8 +775,10 @@ describe "RailsAdmin" do
           end
           get rails_admin_new_path(:model_name => "team")
           response.should have_tag("h2", :content => "Renamed group")
-        end
 
+          # Reset
+          RailsAdmin::Config.reset Team
+        end
       end
 
       describe "items' fields" do
@@ -734,6 +815,9 @@ describe "RailsAdmin" do
             elements[1].should have_tag("#team_division_id")
             elements[2].should have_tag("#team_name")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should only show the defined fields if some fields are defined" do
@@ -751,6 +835,9 @@ describe "RailsAdmin" do
             elements[2].should have_tag("#team_name")
             elements.length.should == 3
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should be renameable" do
@@ -769,6 +856,9 @@ describe "RailsAdmin" do
             elements[1].should have_tag("label", :content => "Division")
             elements[2].should have_tag("label", :content => "Name")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should be renameable by type" do
@@ -796,6 +886,9 @@ describe "RailsAdmin" do
             elements.should have_tag("label", :content => "Players")
             elements.should have_tag("label", :content => "Fans")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should be globally renameable by type" do
@@ -823,6 +916,9 @@ describe "RailsAdmin" do
             elements.should have_tag("label", :content => "Players")
             elements.should have_tag("label", :content => "Fans")
           end
+
+          # Reset
+          RailsAdmin::Config.reset
         end
 
         it "should be hideable" do
@@ -840,6 +936,9 @@ describe "RailsAdmin" do
             elements[0].should have_tag("#team_division_id")
             elements[1].should have_tag("#team_name")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should be hideable by type" do
@@ -867,6 +966,9 @@ describe "RailsAdmin" do
             elements.should have_tag("label", :content => "Players")
             elements.should have_tag("label", :content => "Fans")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should be globally hideable by type" do
@@ -894,6 +996,9 @@ describe "RailsAdmin" do
             elements.should have_tag("label", :content => "Players")
             elements.should have_tag("label", :content => "Fans")
           end
+
+          # Reset
+          RailsAdmin::Config.reset
         end
 
         it "should have option to customize the help text" do
@@ -912,6 +1017,9 @@ describe "RailsAdmin" do
             elements[1].should have_tag("p.help", :content => "Required")
             elements[2].should have_tag("p.help", :content => "Optional 50 characters or fewer.")
           end
+
+          # Reset
+          RailsAdmin::Config.reset Team
         end
 
         it "should have option to override required status" do
@@ -934,8 +1042,10 @@ describe "RailsAdmin" do
             elements[1].should have_tag("p.help", :content => "Optional")
             elements[2].should have_tag("p.help", :content => "Required 50 characters or fewer.")
           end
-        end
 
+          # Reset
+          RailsAdmin::Config.reset Team
+        end
       end
 
       describe "fields which are nullable and have AR validations" do
