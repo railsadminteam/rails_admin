@@ -1271,13 +1271,13 @@ describe "RailsAdmin" do
     end
   end
 
-  pending "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
+  describe "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
     before(:each) do
       (1..3).each do |number|
         RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
 
-      get rails_admin_new_path(:model_name => "team")
+      get rails_admin_new_path(:model_name => "fan")
     end
 
     it "should respond sucessfully" do
@@ -1285,7 +1285,7 @@ describe "RailsAdmin" do
     end
 
     it "should show associated objects" do
-      response.body.should contain(/Team 1/)
+      response.body.should contain(/Team 1.*Team 2.*Team 3/)
     end
   end
 
@@ -1415,7 +1415,7 @@ describe "RailsAdmin" do
     end
   end
 
-  pending "create with has-and-belongs-to-many association" do
+  describe "create with has-and-belongs-to-many association" do
     before(:each) do
       @teams = []
       (1..3).each do |number|
@@ -1536,14 +1536,14 @@ describe "RailsAdmin" do
     end
   end
 
-  pending "edit with has-and-belongs-to-many association" do
+  describe "edit with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = []
-      (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      teams = (1..3).collect do |number|
+        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      fan = RailsAdmin::AbstractModel.new("Fan").create(:name => "Fan 1")
+      fan.teams << teams[0]
+      get rails_admin_edit_path(:model_name => "fan", :id => fan.id)
     end
 
     it "should respond sucessfully" do
@@ -1551,7 +1551,13 @@ describe "RailsAdmin" do
     end
 
     it "should show associated objects" do
-      response.body.should contain(/Team 1Team 2Team 3/)
+      response.body.should have_tag "div.manySelector select.firstSelect" do |many|
+        many.should have_tag("option", :content => "Team 2")
+        many.should have_tag("option", :content => "Team 3")
+      end
+      response.body.should have_tag "div.manySelector select#associations_teams" do |assoc|
+        assoc.should have_tag("option", :content => "Team 1")
+      end
     end
   end
 
@@ -1707,37 +1713,27 @@ describe "RailsAdmin" do
     end
   end
 
-  pending "update with has-many association", :given => ["a league exists", "three teams exist"] do
+  describe "update with has-and-belongs-to-many association" do
     before(:each) do
-      @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
-
-      @teams = []
-      (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @teams = (1..3).collect do |number|
+        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
 
-      get rails_admin_edit_path(:model_name => "league", :id => @league.id)
+      @fan = RailsAdmin::AbstractModel.new("Fan").create(:name => "Fan 1")
+      @fan.teams << @teams[0]
 
-      fill_in "league[name]", :with => "National League"
-
-      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
-
+      get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
+      set_hidden_field "associations[teams][]", :to => @teams[1].id.to_s.to_i
       response = click_button "Save"
-      @league = RailsAdmin::AbstractModel.new("League").first
-    end
-
-    it "should update an object with correct attributes" do
-      @league.name.should eql("National League")
     end
 
     it "should update an object with correct associations" do
-      @teams[0].reload
-      @league.teams.should include(@teams[0])
+      @fan.teams.should include(@teams[0])
+      @fan.teams.should include(@teams[1])
     end
 
     it "should not update an object with incorrect associations" do
-      @league.teams.should_not include(@teams[1])
-      @league.teams.should_not include(@teams[2])
+      @fan.teams.should_not include(@teams[2])
     end
   end
 

@@ -257,7 +257,7 @@ module RailsAdmin
         case association[:type]
         when :has_one
           update_association(association, ids)
-        when :has_many
+        when :has_many, :has_and_belongs_to_many
           update_associations(association, ids.to_a)
         end
       end
@@ -274,10 +274,8 @@ module RailsAdmin
     end
 
     def update_associations(association, ids = [])
-      @object.send(association[:name]).clear
-      ids.each do |id|
-        update_association(association, id)
-      end
+      associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
+      @object.send "#{association[:name]}=", ids.collect{|id| associated_model.get(id)}.compact
       @object.save
     end
 
