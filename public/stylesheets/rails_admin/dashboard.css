@@ -18,12 +18,12 @@ ul.menu li{
 }
 
 #lastUsedHeader{
-  width:84px;
+  width:184px;
   text-align:center;
 }
 
 #recordsHeader{
-  width:475px;
+  width:375px;
   text-align:center;
 }
 
@@ -50,7 +50,7 @@ ul.menu li{
   width:250px;
 }
 .lastUsedRow{
-  width:84px;
+  width:184px;
   text-align:center;
   white-space:nowrap;
 }
@@ -73,7 +73,7 @@ ul.menu li{
 }
 
 .recordsRow{
-  width:475px;
+  width:375px;
   text-align:center;
 }
 .modifyRow{
