@@ -2,21 +2,25 @@ require 'rails_admin/generic_support'
 
 module RailsAdmin
   class AbstractModel
+
+    @models = []
+
     # Returns all models for a given Rails app
     def self.all
-      @models = []
-      str = ""
+      if @models.empty?
+        excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
+        excluded_models << ['History']
 
-      excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
-      excluded_models << ['History']
-
-      Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
-        File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
-          add_model(model_name) unless excluded_models.include?(model_name)
+        Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
+          File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
+            add_model(model_name) unless excluded_models.include?(model_name)
+          end
         end
+
+        @models.sort!{|x, y| x.model.to_s <=> y.model.to_s}
       end
 
-      @models.sort!{|x, y| x.model.to_s <=> y.model.to_s}
+      @models
     end
 
     def self.add_model(model_name)
