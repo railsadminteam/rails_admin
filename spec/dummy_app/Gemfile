@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.1'
+gem 'rails', '~> 3.0.2'
 gem 'builder'
 gem 'devise'
 gem 'rails_admin', :path => '../../'
