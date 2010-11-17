@@ -47,7 +47,8 @@ module RailsAdmin
 
     def create
       @modified_assoc = []
-      @object = @abstract_model.new(@attributes)
+      @object = @abstract_model.new
+      @object.send :attributes=, @attributes, false
       @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
@@ -72,7 +73,8 @@ module RailsAdmin
 
       @old_object = @object.clone
 
-      if @object.update_attributes(@attributes) && update_all_associations
+      @object.send :attributes=, @attributes, false
+      if @object.save && update_all_associations
         redirect_to_on_success
       else
         render_error :edit
