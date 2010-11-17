@@ -5,4 +5,6 @@ class Player < ActiveRecord::Base
 
   belongs_to(:team)
   has_one(:draft)
+
+  attr_protected :suspended
 end
