@@ -28,13 +28,14 @@ describe "RailsAdmin Config" do
     describe "excluded models" do
       excluded_models = [Division, Draft, Fan]
 
-      before(:each) do
+      before(:all) do
         RailsAdmin::Config.excluded_models = excluded_models
       end
 
-      after(:each) do
+      after(:all) do
         RailsAdmin::Config.excluded_models = []
         RailsAdmin::AbstractModel.instance_variable_get("@models").clear
+        RailsAdmin::Config.reset
       end
 
       it "should be hidden from navigation" do
@@ -63,6 +64,7 @@ describe "RailsAdmin Config" do
         response.should_not have_tag("#team_division_id")
         response.should_not have_tag("input#team_fans")
       end
+
     end
 
     describe "navigation" do
