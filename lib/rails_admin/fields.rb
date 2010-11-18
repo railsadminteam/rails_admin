@@ -181,7 +181,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::AbstractModel.properties
       register_instance_option(:label) do
-        properties[:pretty_name]
+        abstract_model.model.human_attribute_name name
       end
 
       # Accessor for field's maximum length.
