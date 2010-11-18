@@ -9,7 +9,6 @@ gem 'rails_admin', :path => '../../'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'ruby-prof'
   gem 'dummy_data'
   gem 'rspec-rails'
   gem 'sqlite3-ruby', :require => 'sqlite3'
