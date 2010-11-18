@@ -21,8 +21,8 @@ It currently offers the following functionality:
 
 Screenshots
 -----------
-![List view](http://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
-![Edit view](http://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
+![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
+![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
 
 Installation
 ------------
