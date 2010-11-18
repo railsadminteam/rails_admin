@@ -23,7 +23,7 @@ describe "RailsAdmin Basic New" do
   after(:each) do
     Warden.test_reset!
   end
-  
+
   #new
 
   describe "GET /admin/player/new" do
@@ -35,8 +35,8 @@ describe "RailsAdmin Basic New" do
       response.should be_successful
     end
 
-    it "should show \"New model\"" do
-      response.body.should contain("New player")
+    it "should show \"Create model\"" do
+      response.body.should contain("Create player")
     end
 
     it "should show required fields as \"Required\"" do

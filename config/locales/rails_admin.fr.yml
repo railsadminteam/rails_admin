@@ -24,6 +24,9 @@ fr:
       search_btn: "RECHERCHE"
       select: "Sélectionner %{name} pour modifier"
       show_all: "Afficher tous"
+      record_count:
+        one: "1 record"
+        other: "%{count} records"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"
@@ -46,6 +49,9 @@ fr:
       error: "%{name} n'a pas pu être %{action}"
       noaction: "Aucune mesure où prendre!"
     actions:
+      create: "create"
       created: "created"
+      update: "update"
       updated: "updated"
+      delete: "delete"
       deleted: "deleted"

@@ -1,11 +1,11 @@
 
 fi:
   home:
-    name: "home"
+    name: "koti"
   admin:
     dashboard:
       pagename: "Ylläpito"
-      name: "Kojelauta"
+      name: "Hallintapaneeli"
       model_name: "Tietuetyyppi"
       last_used: "Muokattu viimeksi"
       records: "Tietueet"
@@ -25,6 +25,9 @@ fi:
       search_btn: "HAKU"
       select: "Valitse muokattava %{name}"
       show_all: "Näytä kaikki"
+      record_count:
+        one: "1 tietue"
+        other: "%{count} tietuetta"
     new:
       basic_info: "PERUSTIEDOT"
       required: "Vaadittu"
@@ -47,6 +50,9 @@ fi:
       error: "Toimenpide epäonnistui eikä %{name} tyyppistä tietuetta %{action}"
       noaction: "Mitään ei tehty"
     actions:
+      create: "luo"
       created: "luotu"
+      update: "päivitä"
       updated: "päivitetty"
+      delete: "poista"
       deleted: "poistettu"

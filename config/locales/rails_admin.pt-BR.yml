@@ -26,6 +26,9 @@ pt-BR:
       search_btn: "BUSCAR"
       select: "Selecione %{name} para editar"
       show_all: "Exibir todos"
+      record_count:
+        one: "1 record"
+        other: "%{count} records"
     new:
       basic_info: "INFORMAÇÕES BÁSICAS"
       required: "Obrigatório"
@@ -48,6 +51,9 @@ pt-BR:
       error: "%{name} falhou em %{action}"
       noaction: "Não ocorreram ações."
     actions:
+      create: "create"
       created: "created"
+      update: "update"
       updated: "updated"
+      delete: "delete"
       deleted: "deleted"

@@ -95,7 +95,7 @@
       <% if @page_count.to_i > 1 %>
         <%= paginate(@current_page, @page_count, :url => params).html_safe %>
       <% end %>
-      <%= @record_count %> <%= @record_count == 1 ? @model_config.list.label.downcase : @model_config.list.label.downcase.pluralize %>
+      <%= t "admin.list.record_count", :count => @record_count %>
       <% if @page_count.to_i == 2 %>
         <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :class => "showall") %>
       <% end %>

@@ -27,6 +27,9 @@ en:
       search_btn: "SEARCH"
       select: "Select %{name} to edit"
       show_all: "Show all"
+      record_count:
+        one: "1 record"
+        other: "%{count} records"
     new:
       basic_info: "BASIC INFO"
       required: "Required"
@@ -49,6 +52,9 @@ en:
       error: "%{name} failed to be %{action}"
       noaction: "No actions were taken"
     actions:
+      create: "create"
       created: "created"
+      update: "update"
       updated: "updated"
+      delete: "delete"
       deleted: "deleted"

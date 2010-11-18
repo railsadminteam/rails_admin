@@ -23,7 +23,7 @@ describe "RailsAdmin Basic Edit" do
   after(:each) do
     Warden.test_reset!
   end
-  
+
   describe "edit" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
@@ -34,8 +34,8 @@ describe "RailsAdmin Basic Edit" do
       response.should be_successful
     end
 
-    it "should show \"Edit model\"" do
-      response.body.should contain("Edit player")
+    it "should show \"Update model\"" do
+      response.body.should contain("Update player")
     end
 
     it "should show required fields as \"Required\"" do

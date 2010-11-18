@@ -40,7 +40,7 @@ module RailsAdmin
 
     def new
       @object = @abstract_model.new
-      @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+      @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -49,7 +49,7 @@ module RailsAdmin
       @modified_assoc = []
       @object = @abstract_model.new
       @object.send :attributes=, @attributes, false
-      @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+      @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save && update_all_associations
@@ -60,7 +60,7 @@ module RailsAdmin
     end
 
     def edit
-      @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+      @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -68,7 +68,7 @@ module RailsAdmin
     def update
       @modified_assoc = []
 
-      @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+      @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       @old_object = @object.clone
@@ -82,7 +82,7 @@ module RailsAdmin
     end
 
     def delete
-      @page_name = action_name.capitalize + " " + @abstract_model.pretty_name.downcase
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
@@ -90,7 +90,7 @@ module RailsAdmin
 
     def destroy
       @object = @object.destroy
-      flash[:notice] = t("admin.delete.flash_confirmation", :name => @abstract_model.pretty_name)
+      flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
       check_history
 
@@ -124,7 +124,7 @@ module RailsAdmin
 
     def show_history
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.history.page_name", :name => @abstract_model.pretty_name)
+      @page_name = t("admin.history.page_name", :name => @model_config.list.label)
       @general = true
 
       options = {}
