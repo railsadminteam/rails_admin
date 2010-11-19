@@ -34,7 +34,6 @@ describe "RailsAdmin History" do
     end
 
     it "should pad at the beginning" do
-      @months.first.fake.should == 1
       @months.map(&:month).should == [11, 12, 1, 2, 3]
     end
 
