@@ -279,6 +279,48 @@ By default columns' widths are calculated from certain pre-defined, data-type-sp
       end
     end
 
+Authorization
+-------------
+
+Rails Admin has no specific authorization requirements so you can use
+whichever authz framework best suits your needs.
+
+### Declarative Authorization
+
+[Declarative Authorization](https://github.com/stffn/declarative_authorization)
+works well with Rails Admin.  You need to hook
+declarative_authorization's code into Rails Admin's controllers and
+write appropriate authz declarations.
+
+You can hook declarative_authorization into Rails Admin using code
+like this in an initializer (e.g., config/initializers/rails_admin):
+
+    require "rails_admin/main_controller"
+    require "rails_admin/history_controller"
+    
+    module RailsAdmin
+      class MainController < ApplicationController
+        filter_access_to :all
+      end
+      class HistoryController < ApplicationController
+        filter_access_to :all
+      end
+    end
+
+By default, access to the controllers will be denied to all users, so
+you need to write some authz rules so that the appropriate users can
+get access.  These rules will vary, but here's an example:
+
+    authorization do
+      role :admin do
+        has_permission_on :rails_admin_history, :to => :list
+        has_permission_on :rails_admin_main, :to => [:index, :show, :new, :edit, :create, :update, :destroy, :list, :delete, :get_pages, :show_history]
+      end
+    end
+
+This will allow the :admin role to do everything, and will prevent all
+other roles from doing anything.
+
 Contributing
 ------------
 In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
