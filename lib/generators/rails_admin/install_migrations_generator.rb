@@ -4,7 +4,7 @@ require 'rails/generators/migration'
 module RailsAdmin
   class InstallMigrationsGenerator < Rails::Generators::Base
     include Rails::Generators::Migration
-    source_root File.expand_path("../templates", __FILE__)
+    source_root File.expand_path('../templates', __FILE__)
 
     def self.next_migration_number(dirname)
       if ActiveRecord::Base.timestamped_migrations
