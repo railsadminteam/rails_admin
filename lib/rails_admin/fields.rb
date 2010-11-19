@@ -489,9 +489,13 @@ module RailsAdmin
           90
         end
 
+        register_instance_option(:date_format) do
+          "date.formats.default"
+        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
-            time.strftime(strftime_format)
+            I18n.l(time, :format => date_format, :default => I18n.l(time, :format => date_format, :locale => :en))
           else
             "".html_safe
           end
@@ -506,7 +510,7 @@ module RailsAdmin
         end
 
         register_instance_option(:strftime_format) do
-          "%b. %d, %Y"
+          false
         end
       end
 
@@ -519,9 +523,17 @@ module RailsAdmin
           170
         end
 
+        register_instance_option(:date_format) do
+          :long
+        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
-            time.strftime(strftime_format)
+            unless format = strftime_format
+              I18n.l(time, :format => date_format, :default => I18n.l(time, :format => date_format, :locale => :en))
+            else
+              time.strftime(format)
+            end
           else
             "".html_safe
           end
@@ -536,7 +548,7 @@ module RailsAdmin
         end
 
         register_instance_option(:strftime_format) do
-          "%b. %d, %Y, %I:%M%p"
+          false
         end
       end
 
@@ -765,9 +777,17 @@ module RailsAdmin
           170
         end
 
+        register_instance_option(:date_format) do
+          :long
+        end
+
         register_instance_option(:formatted_value) do
           unless (time = value).nil?
-            time.strftime(strftime_format)
+            unless format = strftime_format
+              I18n.l(time, :format => date_format, :default => I18n.l(time, :format => date_format, :locale => :en))
+            else
+              time.strftime(format)
+            end
           else
             "".html_safe
           end
@@ -782,7 +802,7 @@ module RailsAdmin
         end
 
         register_instance_option(:strftime_format) do
-          "%b. %d, %Y, %I:%M%p"
+          false
         end
       end
 

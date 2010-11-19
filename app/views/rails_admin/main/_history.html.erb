@@ -1,4 +1,7 @@
-<p id="listing"><strong><%= Time.parse("#{year}-#{month}-01").strftime("%B %Y")%></strong> History:</p>
+<p id="listing">
+  <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
+  <strong><%= month_names[month] %> <%= year %></strong> <%= t("admin.history.name").downcase %>:
+</p>
 <%= t("admin.history.no_activity") if history.empty? %>
 <ul id="history">
 <% history.each do |t|%>

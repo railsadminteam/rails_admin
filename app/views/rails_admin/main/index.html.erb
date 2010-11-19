@@ -13,7 +13,11 @@
             <% @abstract_models.each do |abstract_model| %>
             <ul class="row">
               <li class="modelNameRow"><%= abstract_model.pretty_name %></li>
-              <li class="lastUsedRow"><%= RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try :updated_at %>&nbsp;</li>
+              <li class="lastUsedRow">
+              <% unless (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)).nil? %>
+              <%= l(last_used, :format => :long, :default => l(last_used, :format => :long, :locale => :en)) %>
+              <% end %>
+              &nbsp;</li>
               <li class="recordsRow">
                 <div class="scale">
                   <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
@@ -39,7 +43,9 @@
                   <% @history.each do |t| %>
                   <% percent = (t.number * 100) / max unless max == 0 %>
                   <% indicator_type = get_indicator(percent)%>
-                  <li><span><%= Time.parse("#{t.year}-#{t.month}-01").strftime("%B %Y") %></span>
+                  <li>
+                    <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
+                    <span><%= month_names[t.month] %> <%= t.year %></span>
                     <span class="bars">
                       <% if t.number == 0 %>
                       <br/><%= t("admin.history.no_activity") %>

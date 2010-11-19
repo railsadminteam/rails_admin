@@ -23,7 +23,7 @@ describe "RailsAdmin Config List" do
   after(:each) do
     Warden.test_reset!
   end
-  
+
   describe "list" do
 
     describe "number of items per page" do
@@ -470,7 +470,33 @@ describe "RailsAdmin Config List" do
         RailsAdmin::Config.reset Fan
       end
 
-      it "should have option to customize output formatting of date fields" do
+      it "should have a simple option to customize output formatting of date fields" do
+        RailsAdmin.config Fan do
+          list do
+            field :id
+            field :name
+            field :created_at do
+              date_format :short
+            end
+            field :updated_at
+          end
+        end
+
+        RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
+        RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+
+        get rails_admin_list_path(:model_name => "fan")
+
+        response.should have_tag(".infoRow") do |elements|
+          elements[0].should have_tag("li:nth-child(4)") do |li|
+            li.should contain(/\d{2} \w{3} \d{1,2}:\d{1,2}/)
+          end
+        end
+
+        # Reset
+        RailsAdmin::Config.reset Fan
+      end
+            it "should have option to customize output formatting of date fields" do
         RailsAdmin.config Fan do
           list do
             field :id

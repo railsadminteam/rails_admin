@@ -63,7 +63,9 @@
         <% @history.each_with_index do |object, index| %>
         <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
           <li class="dateTimeRow">
-            <%= object.created_at %>
+            <% unless object.created_at.nil? %>
+            <%= l(object.created_at, :format => :long, :default => l(object.created_at, :format => :long, :locale => :en)) %>
+            <% end %>
           </li>
           <li class="smallStringRow">
             <%= object.username %>
