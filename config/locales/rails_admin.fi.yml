@@ -25,9 +25,6 @@ fi:
       search_btn: "HAKU"
       select: "Valitse muokattava %{name}"
       show_all: "Näytä kaikki"
-      record_count:
-        one: "1 tietue"
-        other: "%{count} tietuetta"
     new:
       basic_info: "PERUSTIEDOT"
       required: "Vaadittu"

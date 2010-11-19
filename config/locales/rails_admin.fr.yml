@@ -24,9 +24,6 @@ fr:
       search_btn: "RECHERCHE"
       select: "Sélectionner %{name} pour modifier"
       show_all: "Afficher tous"
-      record_count:
-        one: "1 record"
-        other: "%{count} records"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"

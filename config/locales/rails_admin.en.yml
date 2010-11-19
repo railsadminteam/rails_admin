@@ -27,9 +27,6 @@ en:
       search_btn: "SEARCH"
       select: "Select %{name} to edit"
       show_all: "Show all"
-      record_count:
-        one: "1 record"
-        other: "%{count} records"
     new:
       basic_info: "BASIC INFO"
       required: "Required"

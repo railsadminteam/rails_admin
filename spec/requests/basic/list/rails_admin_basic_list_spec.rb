@@ -193,7 +193,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should show \"2 results\"" do
-      response.body.should contain("2 records")
+      response.body.should contain("2 players")
     end
   end
 
@@ -212,7 +212,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should show \"20 results\"" do
-      @response.body.should contain("20 records")
+      @response.body.should contain("20 players")
     end
   end
 
