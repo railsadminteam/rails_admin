@@ -14,8 +14,8 @@
             <ul class="row">
               <li class="modelNameRow"><%= abstract_model.pretty_name %></li>
               <li class="lastUsedRow">
-              <% unless (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)).nil? %>
-              <%= l(last_used, :format => :long, :default => l(last_used, :format => :long, :locale => :en)) %>
+              <% if (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)) %>
+              <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
               <% end %>
               &nbsp;</li>
               <li class="recordsRow">

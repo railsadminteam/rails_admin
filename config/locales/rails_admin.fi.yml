@@ -12,6 +12,7 @@ fi:
       modify: "Muokkaa"
       add_new: "Lisää uusi"
       show: "Näytä"
+      ago: "ago"
     history:
       name: "Historia"
       page_name: "Historia kohteelle %{name}"

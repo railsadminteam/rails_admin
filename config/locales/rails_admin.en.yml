@@ -14,6 +14,7 @@ en:
       modify: "Modify"
       add_new: "Add new"
       show: "Show"
+      ago: "ago"
     history:
       name: "History"
       page_name: "History for %{name}"

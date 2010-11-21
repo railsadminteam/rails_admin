@@ -12,6 +12,7 @@ fr:
       modify: "Modifier"
       add_new: "Nouv"
       show: "Voir"
+      ago: "ago"
     history:
       name: "Histoire"
       page_name: "Histoire de %{name}"

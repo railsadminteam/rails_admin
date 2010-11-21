@@ -14,6 +14,7 @@ pt-BR:
       modify: "Modificar"
       add_new: "Adicionar"
       show: "Exibir"
+      ago: "ago"
     history:
       name: "Histórico"
       page_name: "Histórico de %{name}"
