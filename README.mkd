@@ -206,6 +206,41 @@ By default all fields are visible, but they are not presented in any particular 
 
 This would show only "name" and "created at" columns in the list view.
 
+If you need to hide fields based on some logic on runtime (for instance authorization to view field) you can pass a block for the <tt>visible</tt> option (including its <tt>hide</tt> and <tt>show</tt> accessors):
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name
+          field :created_at
+          field :revenue do
+            visible do
+              current_user.roles.include?(:accounting) # metacode
+            end
+          end
+        end
+      end
+    end
+
+Note that above example's authorization conditional is not runnable code, just an imaginary example. You need to provide RailsAdmin with your own authorization scheme for which you can find a guide at the end of this file.
+
+The header of a list view column can be changed with the familiar label method:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name do
+            label "Title"
+          end
+          field :created_at do
+            label "Created on"
+          end
+        end
+      end
+    end
+
+As in the previous example this would show only columns for fields "name" and "created at" and their headers would have been renamed to "Title" and "Created on".
+
 The field's output can be modified:
 
     RailsAdmin.config do |config|
@@ -223,20 +258,23 @@ The field's output can be modified:
 
 This would render all the teams' names uppercased.
 
-Fields of different date types (date, datetime, time, timestamp) have an extra option to set the time formatting:
+Fields of different date types (date, datetime, time, timestamp) have two extra options to set the time formatting:
 
     RailsAdmin.config do |config|
       config.model Team do
         list do
           field :name
           field :created_at do
+            date_format :short
+          end
+          field :updated_at do
             strftime_format "%Y-%m-%d"
           end
         end
       end
     end
 
-This would render all the teams' "created at" dates in format YYYY-MM-DD.
+This would render all the teams' "created at" dates in the short format of your application's locale and "updated at" dates in format YYYY-MM-DD. If both options are defined for a single field, strftime_format has precedence over date_format option. For more information about localizing rails see [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats) and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
 
 You can make a column non-sortable by setting the sortable option to false:
 
@@ -279,6 +317,42 @@ By default columns' widths are calculated from certain pre-defined, data-type-sp
       end
     end
 
+### Create and update views
+
+* field groupings
+
+By default RailsAdmin groups fields in the edit views (create and update views) by including all database columns and belongs to associations to "Basic info" group which is displayed on top of form. Below that are displayed all the other associations a model has, one group per association.
+
+The configuration accessors are <tt>edit</tt>, <tt>create</tt> and <tt>update</tt>. <tt>Edit</tt> is a batch accessor which configures both create and update views. For consistency, these examples only include the batch accessor <tt>edit</tt>, but if you need differing create and update views just replace <tt>edit</tt> with <tt>create</tt> and/or <tt>update</tt>.
+
+Field groups can be hidden:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          group :default do
+            hide
+          end
+        end
+      end
+    end
+
+This would hide the "Basic info" group which is accessed by the symbol :default. Associations' groups can be accessed by the name of the association, such as :fans or :players. The hide method is just a shortcut for the actual <tt>visible</tt> option which was mentioned in the beginning of the navigation section.
+
+Field groups can be renamed:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          group :default do
+            label "Team information"
+          end
+        end
+      end
+    end
+
+This would render "Team information" instead of "Basic info" as the groups label.
+
 Authorization
 -------------
 
@@ -297,7 +371,7 @@ like this in an initializer (e.g., config/initializers/rails_admin):
 
     require "rails_admin/main_controller"
     require "rails_admin/history_controller"
-    
+
     module RailsAdmin
       class MainController < ApplicationController
         filter_access_to :all
