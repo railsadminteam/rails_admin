@@ -41,14 +41,27 @@
   margin-left:2px;
 }
 
+.formSection label.inline{
+  display:inline;
+  float:none;
+  font-weight:normal;
+}
+
 .field{
   margin-bottom: 1px;
   padding-bottom: 5px;
   padding-top: 5px;
 }
 
+.field .input{
+  margin-left: 103px;
+}
+
+.field .row{
+  margin: 10px 0;
+}
+
 .stringField, .intField, .bigDecimalField, .floatField, .dateField, .timestampField, .timeField, .datetimeField, .textField{
-  float:left;
   font-family:Verdana, Geneva, sans-serif;
   font-size:12px;
   padding:5px;
