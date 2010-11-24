@@ -1,5 +1,6 @@
+<% field.root.bind(:view, self) %>
               <div class="field">
-<%= render :partial => field.partial.to_s, :locals => {:field => field} %>
+<%= field.render %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
