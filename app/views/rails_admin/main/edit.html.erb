@@ -12,7 +12,7 @@
       </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
-        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id)) do %>
+        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :multipart => true }) do %>
           <fieldset>
 <%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.visible_groups) -%>
 
