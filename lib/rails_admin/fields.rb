@@ -672,6 +672,12 @@ module RailsAdmin
         end
       end
 
+      class FileUpload < String
+        register_instance_option(:help) do
+          required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
+        end
+      end
+
       class Password < String
         @column_names = [:password]
 
