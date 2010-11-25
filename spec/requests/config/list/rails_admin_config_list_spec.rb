@@ -34,7 +34,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be configurable" do
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           items_per_page 1
         end
@@ -49,7 +49,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
 
       # Reset
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
         end
@@ -80,7 +80,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be globally configurable and overrideable per model" do
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           items_per_page 20
         end
@@ -100,7 +100,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
 
       # Reset
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
         end
@@ -200,7 +200,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be globally renameable by type" do
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           fields_of_type :datetime do
             label { "#{label} (DATETIME)" }
@@ -273,7 +273,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to disable sortability by type globally" do
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           fields_of_type :datetime do
             sortable false
@@ -317,7 +317,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to hide fields by type globally" do
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           fields_of_type :datetime do
             hide
@@ -390,7 +390,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to customize css class name by type globally" do
-      RailsAdmin::Config.model do
+      RailsAdmin::Config.models do
         list do
           fields_of_type :datetime do
             column_css_class "customClass"

@@ -27,32 +27,37 @@ module RailsAdmin
     #
     # If a block is given it is evaluated in the context of configuration instance.
     #
-    # If first argument is omitted and a block is given it will be evaluated in
-    # the context of all model configurations.
-    #
-    # Returns given model's configuration or the shared fallback model configuration.
+    # Returns given model's configuration
     #
     # @see RailsAdmin::Config.registry
-    def self.model(entity = nil, &block)
-      if entity.nil?
-        if block
-          models.each {|config| config.instance_eval &block }
-        end
+    def self.model(entity, &block)
+      if entity.kind_of?(RailsAdmin::AbstractModel)
+        key = entity.model.name.to_sym
+        config = @@registry[key] ||= Model.new(entity)
+      elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+        key = entity.kind_of?(Class) ? entity.name.to_sym : entity.to_sym
+        config = @@registry[key] ||= Model.new(RailsAdmin::AbstractModel.new(entity))
       else
-        if entity.kind_of?(RailsAdmin::AbstractModel)
-          key = entity.model.name.to_sym
-          config = @@registry[key] ||= Model.new(entity)
-        elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
-          key = entity.kind_of?(Class) ? entity.name.to_sym : entity.to_sym
-          config = @@registry[key] ||= Model.new(RailsAdmin::AbstractModel.new(entity))
-        else
-          key = entity.class.name.to_sym
-          config = @@registry[key] ||= Model.new(RailsAdmin::AbstractModel.new(entity.class))
-          config.bind(:object, entity)
-        end
-        config.instance_eval &block if block
-        config
+        key = entity.class.name.to_sym
+        config = @@registry[key] ||= Model.new(RailsAdmin::AbstractModel.new(entity.class))
+        config.bind(:object, entity)
       end
+      config.instance_eval &block if block
+      config
+    end
+
+    # Returns all model configurations
+    #
+    # If a block is given it is evaluated in the context of configuration
+    # instances.
+    #
+    # @see RailsAdmin::Config.registry
+    def self.models(&block)
+      RailsAdmin::AbstractModel.all.each do |m|
+        @@registry[m.model.name.to_sym] ||= Model.new(m)
+      end
+      @@registry.each_value {|config| config.instance_eval &block } if block
+      @@registry.values
     end
 
     # Shortcut to access the navigation section's class configuration
@@ -61,16 +66,6 @@ module RailsAdmin
     # @see RailsAdmin::Config::Sections::Navigation
     def self.navigation
       Sections::Navigation
-    end
-
-    # Returns all model configurations
-    #
-    # @see RailsAdmin::Config.registry
-    def self.models
-      RailsAdmin::AbstractModel.all.each do |m|
-        @@registry[m.model.name.to_sym] ||= Model.new(m)
-      end
-      @@registry.values
     end
 
     # Reset a provided model's configuration. If omitted, reset all model
