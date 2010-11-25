@@ -70,6 +70,67 @@ describe "RailsAdmin Config DSL Edit Section" do
       # Reset
       RailsAdmin::Config.reset Team
     end
+
+    it "should have accessor for its fields" do
+      RailsAdmin.config Team do
+        edit do
+          group :default do
+            field :name
+            field :logo_url
+          end
+          group :belongs_to_associations do
+            label "Belong's to associations"
+            field :league_id
+            field :division_id
+          end
+        end
+      end
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag("h2", :content => "Basic info")
+      response.should have_tag("h2", :content => "Belong's to associations")
+      response.should have_tag(".field") do |elements|
+        elements[0].should have_tag("#team_name")
+        elements[1].should have_tag("#team_logo_url")
+        elements[2].should have_tag("#team_league_id")
+        elements[3].should have_tag("#team_division_id")
+        elements.length.should == 4
+      end
+
+      # Reset
+      RailsAdmin::Config.reset Team
+    end
+
+    it "should have accessor for its fields by type" do
+      RailsAdmin.config Team do
+        edit do
+          group :default do
+            field :league_id
+            field :name
+            field :logo_url
+          end
+          group :other do
+            field :division_id
+            field :manager
+            field :ballpark
+            fields_of_type :string do
+              label { "#{label} (STRING)" }
+            end
+          end
+        end
+      end
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag(".field") do |elements|
+        elements.should have_tag("label", :content => "League")
+        elements.should have_tag("label", :content => "Name")
+        elements.should have_tag("label", :content => "Logo url")
+        elements.should have_tag("label", :content => "Division")
+        elements.should have_tag("label", :content => "Manager (STRING)")
+        elements.should have_tag("label", :content => "Ballpark (STRING)")
+      end
+
+      # Reset
+      RailsAdmin::Config.reset Team
+    end
   end
 
   describe "items' fields" do
