@@ -27,7 +27,7 @@ fi:
       select: "Valitse muokattava %{name}"
       show_all: "Näytä kaikki"
     new:
-      basic_info: "PERUSTIEDOT"
+      basic_info: "Perustiedot"
       required: "Vaadittu"
       optional: "Vapaaehtoinen"
       one_char: "merkki."

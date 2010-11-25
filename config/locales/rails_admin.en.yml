@@ -29,7 +29,7 @@ en:
       select: "Select %{name} to edit"
       show_all: "Show all"
     new:
-      basic_info: "BASIC INFO"
+      basic_info: "Basic info"
       required: "Required"
       optional: "Optional"
       one_char: "character."
