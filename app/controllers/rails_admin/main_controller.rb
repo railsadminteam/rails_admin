@@ -35,7 +35,11 @@ module RailsAdmin
     def list
       list_entries
       @xhr = request.xhr?
-      render :layout => @xhr ? false : 'rails_admin/list'
+      respond_to do |format|
+        format.html { render :layout => @xhr ? false : 'rails_admin/list' }
+        format.json { render :json => @objects }
+        format.xml { render :xml => @objects }
+      end
     end
 
     def new
