@@ -26,7 +26,7 @@ Screenshots
 
 Installation
 ------------
-In your <tt>Gemfile</tt>, add the following dependency:
+In your `Gemfile`, add the following dependency:
     gem 'devise' # Devise must be required before RailsAdmin
     gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 Run:
@@ -54,12 +54,12 @@ The configuration code should be placed in an initializer file, for example:
 
 ### General
 
-You can customize authentication by providing a custom block for <tt>RailsAdmin.authenticate_with</tt>.
+You can customize authentication by providing a custom block for `RailsAdmin.authenticate_with`.
 To disable authentication, pass an empty block:
 
     RailsAdmin.authenticate_with {}
 
-You can exclude models from RailsAdmin by appending those models to <tt>excluded_models</tt>:
+You can exclude models from RailsAdmin by appending those models to `excluded_models`:
 
     RailsAdmin.config do |config|
       config.excluded_models << ClassName
@@ -71,7 +71,7 @@ You can exclude models from RailsAdmin by appending those models to <tt>excluded
 * setting the model's label
 * configuring the number of visible tabs
 
-You can hide a model from the top navigation by marking its <tt>visible</tt> option
+You can hide a model from the top navigation by marking its `visible` option
 as false within the model's navigation configuration section:
 
 By using an accessor:
@@ -105,12 +105,12 @@ Or by passing a block that will be lazy evaluated each time the option is read:
     end
 
 These three examples also work as a generic example of how most of the configuration options
-function within RailsAdmin. You can access them with <tt>option_name = value</tt>, you
-can pass a value as an argument <tt>option_name value</tt>, or you can pass in a block
+function within RailsAdmin. You can access them with `option_name = value`, you
+can pass a value as an argument `option_name value`, or you can pass in a block
 which will be evaluated each time the option is read. Notable is that boolean options'
 reader accessors will be appended with ? whereas the writers will not be. That is, if you
-want to get the <tt>Team</tt> model's visibility in navigation, you use
-<tt>RailsAdmin.config(Team).navigation.visible?</tt>.
+want to get the Team model's visibility in navigation, you use
+`RailsAdmin.config(Team).navigation.visible?`.
 
 Back to navigation configuration - there is also an alias method that can be used:
 
@@ -144,12 +144,14 @@ If you need to customize the label of the model within the navigation tab, use:
     RailsAdmin.config do |config|
       config.model Team do
         navigation do
-          label = "List of teams"
+          label "List of teams"
         end
       end
     end
 
-Remember, you can also pass the value as an argument or as a block as with the before mentioned visibility options. Besides that, the label also has a shorthand syntax:
+Remember, you can also pass the value as an argument or as a block as with the
+before mentioned visibility options. Besides that, the label also has a
+shorthand syntax:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -165,7 +167,10 @@ You can configure the number of tabs visible in the top navigation:
       config.navigation.max_visible_tabs = 3
     end
 
-Links to the rest of the models will be rendered in a drop down menu next to the tabs. Even though this option is not model specific, it shares the same semantics as the earlier ones - you can also pass in a block or pass the value as an argument by omitting the equals sign.
+Links to the rest of the models will be rendered in a drop down menu next to the
+tabs. Even though this option is not model specific, it shares the same
+semantics as the earlier ones - you can also pass in a block or pass the value
+as an argument by omitting the equals sign.
 
 ### List view
 
@@ -188,12 +193,14 @@ You can also configure it per model:
     RailsAdmin.config do |config|
       config.model Team do
         list do
-          items_per_page = 100
+          items_per_page 100
         end
       end
     end
 
-By default all fields are visible, but they are not presented in any particular order. If you specifically declare fields, only defined fields will be visible and they will be presented in the order defined:
+By default all fields are visible, but they are not presented in any particular
+order. If you specifically declare fields, only defined fields will be visible
+and they will be presented in the order defined:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -206,7 +213,9 @@ By default all fields are visible, but they are not presented in any particular 
 
 This would show only "name" and "created at" columns in the list view.
 
-If you need to hide fields based on some logic on runtime (for instance authorization to view field) you can pass a block for the <tt>visible</tt> option (including its <tt>hide</tt> and <tt>show</tt> accessors):
+If you need to hide fields based on some logic on runtime (for instance
+authorization to view field) you can pass a block for the `visible` option
+(including its `hide` and `show` accessors):
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -222,7 +231,9 @@ If you need to hide fields based on some logic on runtime (for instance authoriz
       end
     end
 
-Note that above example's authorization conditional is not runnable code, just an imaginary example. You need to provide RailsAdmin with your own authorization scheme for which you can find a guide at the end of this file.
+Note that above example's authorization conditional is not runnable code, just
+an imaginary example. You need to provide RailsAdmin with your own
+authorization scheme for which you can find a guide at the end of this file.
 
 The header of a list view column can be changed with the familiar label method:
 
@@ -239,7 +250,9 @@ The header of a list view column can be changed with the familiar label method:
       end
     end
 
-As in the previous example this would show only columns for fields "name" and "created at" and their headers would have been renamed to "Title" and "Created on".
+As in the previous example this would show only columns for fields "name" and
+"created at" and their headers would have been renamed to "Title" and
+"Created on".
 
 The field's output can be modified:
 
@@ -258,7 +271,8 @@ The field's output can be modified:
 
 This would render all the teams' names uppercased.
 
-Fields of different date types (date, datetime, time, timestamp) have two extra options to set the time formatting:
+Fields of different date types (date, datetime, time, timestamp) have two extra
+options to set the time formatting:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -274,7 +288,12 @@ Fields of different date types (date, datetime, time, timestamp) have two extra 
       end
     end
 
-This would render all the teams' "created at" dates in the short format of your application's locale and "updated at" dates in format YYYY-MM-DD. If both options are defined for a single field, strftime_format has precedence over date_format option. For more information about localizing rails see [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats) and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
+This would render all the teams' "created at" dates in the short format of your
+application's locale and "updated at" dates in format YYYY-MM-DD. If both
+options are defined for a single field, `strftime_format` has precedence over
+`date_format` option. For more information about localizing Rails see
+[Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats)
+and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
 
 You can make a column non-sortable by setting the sortable option to false:
 
@@ -289,7 +308,8 @@ You can make a column non-sortable by setting the sortable option to false:
       end
     end
 
-By default each column has a CSS class set according to field's data type. You can customize this by:
+By default each column has a CSS class set according to field's data type. You
+can customize this by:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -302,9 +322,13 @@ By default each column has a CSS class set according to field's data type. You c
       end
     end
 
-This would render the "created at" field's header column with a CSS class named <tt>customClassHeader</tt> and each "created at" value with a class named <tt>customClassRow</tt>.
+This would render the "created at" field's header column with a CSS class named
+"customClassHeader" and each "created at" value with a class named
+"customClassRow".
 
-By default columns' widths are calculated from certain pre-defined, data-type-specific pixel values. If you want to ensure a minimum width for a column, you can:
+By default columns' widths are calculated from certain pre-defined,
+data-type-specific pixel values. If you want to ensure a minimum width for a
+column, you can:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -321,9 +345,15 @@ By default columns' widths are calculated from certain pre-defined, data-type-sp
 
 * field groupings
 
-By default RailsAdmin groups fields in the edit views (create and update views) by including all database columns and belongs to associations to "Basic info" group which is displayed on top of form. Below that are displayed all the other associations a model has, one group per association.
+By default RailsAdmin groups fields in the edit views (create and update views)
+by including all database columns and belongs to associations to "Basic info"
+group which is displayed on top of form. Below that are displayed all the other
+associations a model has, one group per association.
 
-The configuration accessors are <tt>edit</tt>, <tt>create</tt> and <tt>update</tt>. <tt>Edit</tt> is a batch accessor which configures both create and update views. For consistency, these examples only include the batch accessor <tt>edit</tt>, but if you need differing create and update views just replace <tt>edit</tt> with <tt>create</tt> and/or <tt>update</tt>.
+The configuration accessors are `edit`, `create` and `update`. First one is a
+batch accessor which configures both create and update views. For consistency,
+these examples only include the batch accessor `edit`, but if you need differing
+create and update views just replace `edit` with `create` or `update`.
 
 Field groups can be hidden:
 
@@ -337,7 +367,10 @@ Field groups can be hidden:
       end
     end
 
-This would hide the "Basic info" group which is accessed by the symbol :default. Associations' groups can be accessed by the name of the association, such as :fans or :players. The hide method is just a shortcut for the actual <tt>visible</tt> option which was mentioned in the beginning of the navigation section.
+This would hide the "Basic info" group which is accessed by the symbol :default.
+Associations' groups can be accessed by the name of the association, such as
+:fans or :players. The hide method is just a shortcut for the actual `visible`
+option which was mentioned in the beginning of the navigation section.
 
 Field groups can be renamed:
 
@@ -422,9 +455,9 @@ Submitting a Pull Request
 2. Create a topic branch.
 3. Implement your feature or bug fix.
 4. Add documentation for your feature or bug fix.
-5. Run <tt>bundle exec rake doc:yard</tt>. If your changes are not 100% documented, go back to step 4.
+5. Run `bundle exec rake doc:yard`. If your changes are not 100% documented, go back to step 4.
 6. Add specs for your feature or bug fix.
-7. Run <tt>bundle exec rake spec</tt>. If your changes are not 100% covered, go back to step 6.
+7. Run `bundle exec rake spec`. If your changes are not 100% covered, go back to step 6.
 8. Commit and push your changes.
 9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. (If you want to create your own version for some reason, please do so in a separate commit.)
 
