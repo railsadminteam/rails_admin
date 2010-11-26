@@ -364,19 +364,15 @@ whichever authz framework best suits your needs.
 [Declarative Authorization](https://github.com/stffn/declarative_authorization)
 works well with Rails Admin.  You need to hook
 declarative_authorization's code into Rails Admin's controllers and
-write appropriate authz declarations.
+write appropriate authorization declarations.
 
 You can hook declarative_authorization into Rails Admin using code
-like this in an initializer (e.g., config/initializers/rails_admin):
+like this in an initializer (e.g., config/initializers/rails_admin.rb):
 
-    require "rails_admin/main_controller"
-    require "rails_admin/history_controller"
-
+    require "rails_admin/application_controller"
+    
     module RailsAdmin
-      class MainController < ApplicationController
-        filter_access_to :all
-      end
-      class HistoryController < ApplicationController
+      class ApplicationController < ::ApplicationController
         filter_access_to :all
       end
     end
