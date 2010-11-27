@@ -386,6 +386,55 @@ Field groups can be renamed:
 
 This would render "Team information" instead of "Basic info" as the groups label.
 
+As in the list view, the edit views' configuration blocks can directly
+contain field configurations, but in edit views those configurations can
+also be nested within group configurations. Below examples result an
+equal configuration:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          group :default do
+            label "Default group"
+          end
+          field :name do
+            label "Title"
+            group :default
+          end
+        end
+      end
+    end
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          group :default do
+            label "Default group"
+            field :name do
+              label "Title"
+            end
+          end
+        end
+      end
+    end
+
+In fact the first examples `group :default` configuration is unnecessary
+as the default group has already initialized all fields and belongs to
+associations for itself.
+
+Just like in the list view, all fields are visible by default. If you specifically
+declare fields, only defined fields will be visible and they will be presented
+in the order defined. Thus both examples would render a form with
+only one group (labeled "Default group") that would contain only one
+element (labeled "Title").
+
+In the list view label is the text displayed in the field's column header, but
+in the edit views label literally means the html label element associated with
+field's input element.
+
+Naturally edit views' fields also have the visible option along with
+hide and show accessors as the list view has.
+
 Authorization
 -------------
 
