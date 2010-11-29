@@ -1,26 +1,12 @@
-      <div id="contentHeader">
-        <h2><%= @page_name %></h2>
-      </div>
+<div id="contentHeader">
+  <h2><%= @page_name %></h2>
+</div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-      <div id="contentMainNew">
-        <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param), :multipart => true) do %>
-          <fieldset>
-<%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).create.visible_groups) -%>
-
-            <ul id="submitArea">
-              <li id="saveContainer">
-                <%= submit_tag t("admin.new.save"), :class => "button default", :name => "_save", :id => "save_btn" %>
-              </li>
-              <li id="saveAddContainer">
-                <%= submit_tag t("admin.new.save_and_add_another"), :class => "button", :name => "_add_another", :id => "saveAdd_btn" %>
-              </li>
-              <li id="saveEditContainer">
-                <%= submit_tag t("admin.new.save_and_edit"), :class => "button", :name => "_add_edit", :id => "saveEdit_btn" %>
-              </li>
-              <li id="cancelContainer">
-                <%= submit_tag t("admin.new.cancel"), :class => "button", :name => "_continue", :id => "cancel_btn" %>
-              </li>
-            </ul>
-          </fieldset>
-        <% end %>
-      </div>
+<div id="contentMainNew">
+  <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param), :multipart => true) do %>
+    <fieldset>
+      <%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).create.visible_groups) -%>
+      <%= render :partial => 'new_submit_buttons' %>
+    </fieldset>
+  <% end %>
+</div>
