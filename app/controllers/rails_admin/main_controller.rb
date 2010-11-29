@@ -141,13 +141,13 @@ module RailsAdmin
       if params[:id]
         get_object
         @page_name = t("admin.history.page_name", :name => @model_config.bind(:object, @object).list.object_label)
-        options[:conditions][0] += " and `item` = ?"
+        options[:conditions][0] += " and #{History.connection.quote_column_name(:item)} = ?"
         options[:conditions] << params[:id]
         @general = false
       end
 
       if params[:query]
-        options[:conditions][0] += " and (`message` LIKE ? or `username` LIKE ?)"
+        options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
         options[:conditions] << "%#{params["query"]}%"
         options[:conditions] << "%#{params["query"]}%"
       end
