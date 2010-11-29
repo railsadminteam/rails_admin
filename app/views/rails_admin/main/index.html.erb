@@ -12,7 +12,9 @@
             </ul>
             <% @abstract_models.each do |abstract_model| %>
               <ul class="row<%= cycle ' ',' greyRow' %>">
-                <li class="modelNameRow"><%= abstract_model.pretty_name %></li>
+                <li class="modelNameRow">
+                  <%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                </li>
                 <li class="lastUsedRow">
                 <% if (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)) %>
                 <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
