@@ -517,7 +517,7 @@ module RailsAdmin
         end
 
         register_instance_option(:date_format) do
-          "date.formats.default"
+          :long
         end
 
         register_instance_option(:formatted_value) do
