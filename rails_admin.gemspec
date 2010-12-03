@@ -6,12 +6,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('dummy_data', '~> 0.9')
   s.add_development_dependency('rspec-rails', '~> 2.2')
   s.add_development_dependency('simplecov', '~> 0.3')
-  if 'java' == RUBY_PLATFORM
-    s.add_development_dependency('jdbc-sqlite3', '~> 3.6')
-    s.add_development_dependency('activerecord-jdbcsqlite3-adapter', '~> 0.9')
-  else
-    s.add_development_dependency('sqlite3-ruby', '~> 1.3')
-  end
   s.add_runtime_dependency('builder', '~> 2.1.0')
   s.add_runtime_dependency('rails', '~> 3.0.3')
   s.authors = ["Erik Michaels-Ober", "Bogdan Gaza"]
