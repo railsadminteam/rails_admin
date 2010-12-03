@@ -7,7 +7,7 @@
 
 body{
   text-align:center;
-  background:#fff url(/images/background.png) repeat-x;
+  background:#fff url(/images/rails_admin/background.png) repeat-x;
   font-family:Verdana, Geneva, sans-serif;
   font-size:12px;
 }
@@ -111,7 +111,7 @@ ul.breadcrumb li a:hover{
   font-size:22px;
 }
 #headerLeft h1#logo span.image_replacement{
-	background-image:url(/images/logo.png);
+	background-image:url(/images/rails_admin/logo.png);
 	width:64px;
 	height:46px;
 }
@@ -196,7 +196,7 @@ ul#quick li:hover ul a{
 }
 
 ul#quick li a {
-  background:url(/images/fast_btn.png) repeat-x;
+  background:url(/images/rails_admin/fast_btn.png) repeat-x;
   border:1px solid #DDD;
   padding:5px;
   text-decoration:none;
@@ -264,7 +264,7 @@ ul#nav{
   padding:8px;
   padding-left:12px;
   padding-right:12px;
-  background:#fff url(/images/menu_hover.png) bottom repeat-x;
+  background:#fff url(/images/rails_admin/menu_hover.png) bottom repeat-x;
 }
 
 #nav li a:hover{
@@ -314,7 +314,7 @@ ul#nav li.more ul li{
 }
 
 #nav li.more a{
-  background:url(/images/navigation_more.png) no-repeat;
+  background:url(/images/rails_admin/navigation_more.png) no-repeat;
   display:block;
   text-indent:-9999px;
 }

@@ -7,7 +7,7 @@
              <%= link_to(t("admin.history.name"), rails_admin_show_history_path(:id => params[:id]), :class => "addlink") %>
             </li>
           </ul>
-          <a href="<%= rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
+          <a href="<%= rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/rails_admin/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
         </div>
       </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>

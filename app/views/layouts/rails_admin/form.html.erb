@@ -20,17 +20,17 @@
 
   document.observe("dom:loaded", function() {
     $$(".dateField").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/calendar.png'});
+      new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png'});
     });
     // .dateField, .timestampField, .timeField, .datetimeField
     $$(".timestampField").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/clock.png', timePicker: true, timePickerAdjacent: true});
+      new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, timePickerAdjacent: true});
     });
     $$(".timeField").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/clock.png', timePicker: true, datePicker :false});
+      new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, datePicker :false});
     });
     $$(".datetimeField").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/calendar.png', timePicker: true, timePickerAdjacent: true});
+      new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png', timePicker: true, timePickerAdjacent: true});
     });
   });
 
