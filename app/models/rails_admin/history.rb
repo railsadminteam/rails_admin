@@ -46,6 +46,10 @@ module RailsAdmin
         results = History.find_by_sql("select count(*) as number, year, month from histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
       end
 
+      results.each do |result|
+        result.number = result.number.to_i
+      end
+
       add_blank_results(results, mstart, ystart)
     end
 
