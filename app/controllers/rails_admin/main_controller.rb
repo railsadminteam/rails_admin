@@ -260,12 +260,14 @@ module RailsAdmin
 
     def update_all_associations
       @abstract_model.associations.each do |association|
-        ids = (params[:associations] || {}).delete(association[:name])
-        case association[:type]
-        when :has_one
-          update_association(association, ids)
-        when :has_many, :has_and_belongs_to_many
-          update_associations(association, ids.to_a)
+        if params[:associations] && params[:associations].has_key?(association[:name]) 
+          ids = (params[:associations] || {}).delete(association[:name])
+          case association[:type]
+          when :has_one
+            update_association(association, ids)
+          when :has_many, :has_and_belongs_to_many
+            update_associations(association, ids.to_a)
+          end
         end
       end
     end
