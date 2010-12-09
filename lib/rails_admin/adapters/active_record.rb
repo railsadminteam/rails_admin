@@ -1,8 +1,9 @@
 require 'active_record'
+require 'rails_admin/config/sections/list'
 
 module RailsAdmin
-  class AbstractModel
-    module ActiverecordSupport
+  class Adapters
+    module ActiveRecord
       def get(id)
         model.find_by_id(id)
       rescue ActiveRecord::RecordNotFound
@@ -144,7 +145,6 @@ module RailsAdmin
           raise "Unknown association type: #{association.macro.inspect}"
         end
       end
-
     end
   end
 end

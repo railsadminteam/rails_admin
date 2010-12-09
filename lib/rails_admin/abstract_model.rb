@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string/inflections'
 require 'rails_admin/generic_support'
 
 module RailsAdmin
@@ -31,7 +32,6 @@ module RailsAdmin
     # Given a string +model_name+, finds the corresponding model class
     def self.lookup(model_name)
       begin
-        # TODO: Should probably require the right part of ActiveSupport for this
         model = model_name.constantize
       rescue NameError
         raise "RailsAdmin could not find model #{model_name}"
@@ -51,8 +51,8 @@ module RailsAdmin
       @model = model
       self.extend(GenericSupport)
       ### TODO more ORMs support
-      require 'rails_admin/active_record_support'
-      self.extend(ActiverecordSupport)
+      require 'rails_admin/adapters/active_record'
+      self.extend(RailsAdmin::Adapters::ActiveRecord)
     end
 
     private
@@ -65,6 +65,5 @@ module RailsAdmin
       end
       superclasses
     end
-
   end
 end
