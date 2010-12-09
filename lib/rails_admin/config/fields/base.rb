@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string/inflections'
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
 require 'rails_admin/config/has_groups'
@@ -130,7 +131,7 @@ module RailsAdmin
 
         # Reader for field's type
         def type
-          @type ||= self.class.name.split("::").last.underscore.to_sym
+          @type ||= self.class.name.to_s.demodulize.underscore.to_sym
         end
 
         # Reader for field's value

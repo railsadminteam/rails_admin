@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string/inflections'
 require 'rails_admin/config/hideable'
 
 module RailsAdmin
@@ -49,7 +50,7 @@ module RailsAdmin
 
         # Configurable group label which by default is group's name humanized.
         register_instance_option(:label) do
-          name.to_s.underscore.gsub('_', ' ').capitalize
+          name.to_s.humanize
         end
       end
     end

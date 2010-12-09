@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string/inflections'
 require 'rails_admin/config/fields/base'
 
 module RailsAdmin
@@ -28,7 +29,7 @@ module RailsAdmin
 
           # Accessor for field's label.
           register_instance_option(:label) do
-            name.to_s.underscore.gsub('_', ' ').capitalize
+            name.to_s.humanize
           end
 
           # Accessor for field's maximum length.
