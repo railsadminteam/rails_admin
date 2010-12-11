@@ -108,7 +108,7 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
-    warden (1.0.2)
+    warden (1.0.3)
       rack (>= 1.0.0)
     weakling (0.0.4-java)
 
