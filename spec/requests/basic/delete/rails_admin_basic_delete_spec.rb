@@ -8,7 +8,7 @@ describe "RailsAdmin Basic Delete" do
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -35,7 +35,7 @@ describe "RailsAdmin Basic Delete" do
       get rails_admin_delete_path(:model_name => "league", :id => @league.id)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       @response.should be_successful
     end
   end

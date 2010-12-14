@@ -7,7 +7,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_dashboard_path
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.code.should == "200"
     end
 
@@ -18,7 +18,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -42,7 +42,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :sort => "name", :set => 1)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -59,7 +59,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -76,7 +76,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :query => "Jackie Robinson", :set => 1)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       @response.should be_successful
     end
 
@@ -98,7 +98,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :query => "Sandy Koufax", :filter => {:injured => "true"}, :set => 1)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -120,7 +120,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"}, :set => 1)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -142,7 +142,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       @response.should be_successful
     end
 
@@ -166,7 +166,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -185,7 +185,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       @response.should be_successful
     end
 
@@ -205,7 +205,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :page => 8)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -225,7 +225,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :page => 18)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -243,7 +243,7 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :all => true)
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       @response.should be_successful
     end
   end

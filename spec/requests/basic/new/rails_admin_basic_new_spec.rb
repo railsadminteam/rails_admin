@@ -7,7 +7,7 @@ describe "RailsAdmin Basic New" do
       get rails_admin_new_path(:model_name => "player")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -34,7 +34,7 @@ describe "RailsAdmin Basic New" do
 
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -52,7 +52,7 @@ describe "RailsAdmin Basic New" do
       get rails_admin_new_path(:model_name => "player")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -70,7 +70,7 @@ describe "RailsAdmin Basic New" do
       get rails_admin_new_path(:model_name => "fan")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
 
@@ -87,7 +87,7 @@ describe "RailsAdmin Basic New" do
       get rails_admin_new_path(:model_name => "player")
     end
 
-    it "should respond sucessfully" do
+    it "should respond successfully" do
       response.should be_successful
     end
   end
