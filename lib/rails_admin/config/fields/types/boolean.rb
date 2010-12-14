@@ -18,9 +18,9 @@ module RailsAdmin
 
           register_instance_option(:formatted_value) do
             if value == true
-              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_black.png"), :alt => "True").html_safe
+              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("rails_admin/bullet_black.png"), :alt => "True").html_safe
             else
-              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_white.png"), :alt => "False").html_safe
+              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("rails_admin/bullet_white.png"), :alt => "False").html_safe
             end
           end
 
