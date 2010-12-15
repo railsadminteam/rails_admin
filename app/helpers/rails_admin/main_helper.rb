@@ -189,12 +189,12 @@ module RailsAdmin
       other = []
 
       if total == 784
-        other = ["otherHeaderLeft", "otherHeaderRight", "otherLeft", "otherRight"]
+        other = ["left", "right"]
       elsif total == 744
         if current_set == 0
-          other = ["otherHeaderLeft", "otherLeft"]
+          other = ["left"]
         else
-          other = ["otherHeaderRight", "otherRight"]
+          other = ["right"]
         end
       end
 

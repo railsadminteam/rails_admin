@@ -1,44 +1,44 @@
-
-#contentMainModules table {
+.grid {
+  width: 100%;
   border-collapse:collapse;
 }
 
-#moduleHeader th {
+.grid thead th {
   border-bottom:2px solid #b9b9b9;
   padding: 9px;
   font-size:10px;
   text-align:center;
 }
 
-#moduleHeader th a {
+.grid thead th a {
   text-decoration:none;
   color:#000;
 }
 
-.boolRow{
+.grid tbody .bool {
   margin-bottom:-5px;
 }
 
-.dateRow{
+.grid tbody .date {
   white-space: nowrap;
 }
-.timeHeader{
+.grid thead .time {
   background:#F99;
 }
-.timeRow{
+.grid tbody .time {
   white-space: nowrap;
 }
-.dateTimeRow{
+.grid tbody .dateTime {
   white-space: nowrap;
 }
-.bigDecimalHeader{
+.grid thead .bigDecimal {
   background:#CC6;
 }
-.otherHeader{
+.grid thead .other {
   width:40px;
 }
 
-.otherRow a{
+.grid tbody .other a {
   padding-left:2px;
   padding-right:2px;
   text-decoration:none;
@@ -47,50 +47,49 @@
   color:#494949;
 }
 
-.otherRow a:hover{
+.grid tbody .other a:hover {
   border:1px solid #494949;
 }
 
-.actionRow a{
+.grid tbody .action a {
   text-decoration:none;
   font-weight:bold;
-  /* 6C9 */
 }
 
-.actionRow a:hover{
+.grid tbody .action a:hover {
   text-decoration:underline;
 }
 
-.editAction a{
+.grid .action.edit a {
   color:#5182ab;
 }
 
-.deleteAction a{
+.grid .action.delete a {
   color:#ad0208;
 }
 
-.actionHeader{
+.grid thead .action {
   width:80px;
   font-size:10px;
   margin-top:1px;
 }
 
-.columnSelected{
+.grid thead .selected {
   font-weight:bold;
 }
 
-tr.infoRow td{
+.grid tbody td {
   border-bottom:1px solid #b9b9b9;
   padding: 9px;
   text-align:center;
   font-size:11px;
 }
 
-.greyRow{
+.grid tbody .even {
   background:#f2f2f2;
 }
 
-.searchBox{
+.searchBox {
   padding:5px;
   height:23px;
   background:#e0ecfc;
@@ -98,11 +97,11 @@ tr.infoRow td{
   border-bottom:1px solid #B9B9B9;
 }
 
-.searchBox fieldset{
+.searchBox fieldset {
   border:none;
 }
 
-#searchBar{
+#searchBar {
   border:1px solid #cbcbcb;
   font-size:12px;
   padding:4px;
@@ -110,7 +109,7 @@ tr.infoRow td{
   width:300px;
 }
 
-.searchBox span{
+.searchBox span {
   float:left;
   display:block;
   font-size:10px;
@@ -120,22 +119,21 @@ tr.infoRow td{
   padding-left:6px;
   padding-right:6px;
   margin-left:5px;
-
 }
 
-#moduleHeader th a img{
+.grid thead th a img, #moduleHeader th a img {
   margin-bottom:-4px;
   border:none;
 }
 
-#pagination{
+#pagination {
   clear:both;
   text-align:center;
   margin-bottom:15px;
   padding-top:10px;
 }
 
-#pagination a{
+#pagination a {
   background:#FFF;
   color:#000;
   border:1px solid #DDD;
@@ -145,12 +143,12 @@ tr.infoRow td{
   text-decoration:none;
 }
 
-#pagination a:hover{
+#pagination a:hover {
   background:#EEE;
   border:1px solid #494949;
 }
 
-#searchbar_btn{
+#searchbar_btn {
   background:#DDD;
   border:1px solid #CBCBCB;
   font-size:10px;
@@ -161,15 +159,15 @@ tr.infoRow td{
   margin-left:3px;
 }
 
-.this-page{
+.this-page {
   padding:3px;
 }
 
-.historyLink{
+.historyLink {
   color:#000;
   text-decoration:none;
 }
 
-.historyLink:hover{
+.historyLink:hover {
   text-decoration:underline;
 }
