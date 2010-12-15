@@ -7,7 +7,7 @@ module RailsAdmin
       end
 
       def pretty_name
-        model.to_s.humanize
+        model.to_s
       end
     end
   end
