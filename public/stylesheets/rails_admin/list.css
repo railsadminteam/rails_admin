@@ -5,14 +5,11 @@
 
 #moduleHeader th{
   border-bottom:2px solid #b9b9b9;
-  padding-top:4px;
-  padding-bottom:4px;
+  padding: 9px;
   text-align:center;
 }
 
 #moduleHeader th a {
-  padding-top:9px;
-  padding-bottom:9px;
   text-decoration:none;
   font-size:10px;
   color:#000;
@@ -84,8 +81,7 @@
 
 tr.infoRow td{
   border-bottom:1px solid #b9b9b9;
-  padding-top:9px;
-  padding-bottom:9px;
+  padding: 9px;
   text-align:center;
   font-size:11px;
 }

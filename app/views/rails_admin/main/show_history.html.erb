@@ -20,64 +20,68 @@
             </fieldset>
           </form>
         </div>
-        <ul id="moduleHeader">
+        <table>
+        <tr id="moduleHeader">
           <% property_name = "created_at"%>
-          <li class="dateTimeHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+          <th class="dateTimeHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => :created_at).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to("DATE/TIME", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
             <% if sort == property_name.to_s %>
             <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
-          </li>
+          </th>
           <% property_name = "username"%>
-          <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+          <th class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to("USER", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
             <% if sort == property_name.to_s %>
             <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
-          </li>
+          </th>
           <% if @general %>
           <% property_name = "item"%>
-          <li class="intHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+          <th class="intHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to("ITEM", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
             <% if sort == property_name.to_s %>
             <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
-          </li>
+          </th>
           <% end %>
           <% property_name = "message"%>
-          <li class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
+          <th class="smallStringHeader <%= sort == property_name.to_s ? "columnSelected" : nil %>" >
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to("ACTION", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
             <% if sort == property_name.to_s %>
             <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
             <% end %>
-          </li>
-        </ul>
+          </th>
+        </tr>
         <% @history.each_with_index do |object, index| %>
-        <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
-          <li class="dateTimeRow">
+        <tr class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
+          <td class="dateTimeRow">
             <% unless object.created_at.nil? %>
             <%= l(object.created_at, :format => :long, :default => l(object.created_at, :format => :long, :locale => :en)) %>
             <% end %>
-          </li>
-          <li class="smallStringRow">
+          </td>
+          <td class="smallStringRow">
             <%= object.username %>
-          </li>
-          <li class="intRow">
+          </td>
+          <% if @general %>
+          <td class="intRow">
             <% unless object.message.match("Destroy") %>
             <%= link_to object.item, rails_admin_show_history_path(:id => object.item), :class => "historyLink"%>
             <% else %>
             <%= object.item %>
             <% end %>
-          </li>
-          <li class="smallStringRow">
+          </td>
+          <% end %>
+          <td class="smallStringRow">
             <%= object.message %>
-          </li>
-        </ul>
+          </td>
+        </tr>
         <% end %>
+      </table>
       </div>
     </div>
     <% if @general %>
