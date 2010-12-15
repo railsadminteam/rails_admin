@@ -50,12 +50,13 @@
             </fieldset>
           </form>
         </div>
-        <ul id="moduleHeader">
-          <li class="otherHeader otherHeaderLeft">...</li>
+        <table>
+        <tr id="moduleHeader">
+          <th class="otherHeader otherHeaderLeft">...</th>
           <% properties.each do |property| %>
           <% property_name = property.name %>
           <% property_pretty_name = property.label %>
-          <li class="<%= "#{property.column_css_class}Header" %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
+          <th class="<%= "#{property.column_css_class}Header" %> <%= sort == property_name.to_s ? "columnSelected" : nil %>">
             <% if property.sortable? %>
             <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
             <%= link_to(property_pretty_name.upcase, sort_location, :ref => sort_location.to_json, :class => "headerSort") %>
@@ -66,27 +67,28 @@
             <% else %>
             <%= property_pretty_name.upcase %>
             <% end %>
-          </li>
+          </th>
           <% end %>
-          <li class="otherHeader otherHeaderRight">...</li>
-          <li class="actionHeader"><%= t("admin.list.edit_action").upcase%></li>
-          <li class="actionHeader"><%= t("admin.list.delete_action").upcase%></li>
-        </ul>
+          <th class="otherHeader otherHeaderRight">...</th>
+          <th class="actionHeader"><%= t("admin.list.edit_action").upcase%></th>
+          <th class="actionHeader"><%= t("admin.list.delete_action").upcase%></th>
+        </tr>
 
         <% @objects.each_with_index do |object, index| %>
         <% @model_config.bind(:object, object) %>
-        <ul class="infoRow <%= index % 2 == 0 ? nil : "greyRow" %>">
+        <tr class="infoRow<%= index % 2 == 0 ? nil : " greyRow" %>">
           <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-          <li class="otherRow otherLeft"><%= link_to("...", other_left, :ref => other_left.to_json) %></li>
+          <td class="otherRow otherLeft"><%= link_to("...", other_left, :ref => other_left.to_json) %></td>
           <% properties.each do |property| %>
-          <li class="<%= "#{property.column_css_class}Row" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></li>
+          <td class="<%= "#{property.column_css_class}Row" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
           <% end %>
           <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
-          <li class="otherRow otherRight"><%= link_to("...", other_right, :ref => other_right.to_json)%></li>
-          <li class="actionRow editAction"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
-          <li class="actionRow deleteAction"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></li>
-        </ul>
+          <td class="otherRow otherRight"><%= link_to("...", other_right, :ref => other_right.to_json)%></td>
+          <td class="actionRow editAction"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
+          <td class="actionRow deleteAction"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
+        </tr>
         <% end %>
+      </table>
       </div>
     </div>
     <% unless @xhr %>

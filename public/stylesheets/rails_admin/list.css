@@ -1,19 +1,17 @@
 
-#moduleHeader{
-  border-top:1px solid #b9b9b9;
-  border-bottom:2px solid #b9b9b9;
-  list-style-type:none;
-  height:22px;
+#contentMainModules table {
+  border-collapse:collapse;
 }
 
-#moduleHeader li{
+#moduleHeader th{
+  border-bottom:2px solid #b9b9b9;
   padding-top:4px;
   padding-bottom:4px;
-  float:left;
-
 }
 
-#moduleHeader li a {
+#moduleHeader th a {
+  padding-top:9px;
+  padding-bottom:9px;
   text-decoration:none;
   font-size:10px;
   color:#000;
@@ -178,14 +176,8 @@
   font-weight:bold;
 }
 
-ul.infoRow{
+tr.infoRow td{
   border-bottom:1px solid #b9b9b9;
-  list-style-type:none;
-  height:31px;
-}
-
-ul.infoRow li{
-  float:left;
   padding-top:9px;
   padding-bottom:9px;
   font-size:11px;
@@ -204,6 +196,7 @@ ul.infoRow li{
   height:23px;
   background:#e0ecfc;
   border-top:1px solid #B9B9B9;
+  border-bottom:1px solid #B9B9B9;
 }
 
 .quickInsert{
@@ -253,7 +246,7 @@ ul.infoRow li{
   margin-left:5px;
 }
 
-#moduleHeader li a img{
+#moduleHeader th a img{
   margin-bottom:-4px;
   border:none;
 }

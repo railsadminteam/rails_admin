@@ -18,11 +18,11 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "league")
-      response.should have_tag("#contentMainModules > .infoRow") do |elements|
+      response.should have_tag("#contentMainModules > table > .infoRow") do |elements|
         elements.should have_at_most(1).items
       end
       get rails_admin_list_path(:model_name => "player")
-      response.should have_tag("#contentMainModules > .infoRow") do |elements|
+      response.should have_tag("#contentMainModules > table > .infoRow") do |elements|
         elements.should have_at_most(1).items
       end
 
@@ -41,11 +41,11 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "league")
-      response.should have_tag("#contentMainModules > .infoRow") do |elements|
+      response.should have_tag("#contentMainModules > table > .infoRow") do |elements|
         elements.should have_at_most(1).items
       end
       get rails_admin_list_path(:model_name => "player")
-      response.should have_tag("#contentMainModules > .infoRow") do |elements|
+      response.should have_tag("#contentMainModules > table > .infoRow") do |elements|
         elements.should have_at_most(2).items
       end
 
@@ -69,11 +69,11 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "league")
-      response.should have_tag("#contentMainModules > .infoRow") do |elements|
+      response.should have_tag("#contentMainModules > table > .infoRow") do |elements|
         elements.should have_at_most(1).items
       end
       get rails_admin_list_path(:model_name => "player")
-      response.should have_tag("#contentMainModules > .infoRow") do |elements|
+      response.should have_tag("#contentMainModules > table > .infoRow") do |elements|
         elements.should have_at_most(2).items
       end
 
@@ -90,7 +90,7 @@ describe "RailsAdmin Config DSL List Section" do
 
     it "should show all by default" do
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should contain("ID")
         elements[2].should contain("CREATED AT")
         elements[3].should contain("UPDATED AT")
@@ -108,7 +108,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should contain("UPDATED AT")
         elements[2].should contain("NAME")
         elements[3].should contain("ID")
@@ -127,7 +127,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements.should contain("ID")
         elements.should contain("NAME")
         elements.should_not contain("CREATED AT")
@@ -148,7 +148,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should contain("IDENTIFIER")
         elements[2].should contain("NAME")
       end
@@ -166,7 +166,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should contain("ID")
         elements[2].should contain("CREATED AT (DATETIME)")
         elements[3].should contain("UPDATED AT (DATETIME)")
@@ -186,7 +186,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should contain("ID")
         elements[2].should contain("CREATED AT (DATETIME)")
         elements[3].should contain("UPDATED AT (DATETIME)")
@@ -199,7 +199,7 @@ describe "RailsAdmin Config DSL List Section" do
 
     it "should be sortable by default" do
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should have_tag("a")
         elements[2].should have_tag("a")
         elements[3].should have_tag("a")
@@ -217,7 +217,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should_not have_tag("a")
         elements[2].should have_tag("a")
       end
@@ -239,7 +239,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should have_tag("a")
         elements[2].should have_tag("a")
         elements[3].should_not have_tag("a")
@@ -263,7 +263,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements[1].should have_tag("a")
         elements[2].should have_tag("a")
         elements[3].should_not have_tag("a")
@@ -283,7 +283,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements.should contain("ID")
         elements.should contain("NAME")
         elements.should_not contain("CREATED AT")
@@ -303,7 +303,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       get rails_admin_list_path(:model_name => "fan")
-      response.should have_tag("#moduleHeader > li") do |elements|
+      response.should have_tag("#moduleHeader > th") do |elements|
         elements.should contain("ID")
         elements.should contain("NAME")
         elements.should_not contain("CREATED AT")
@@ -329,11 +329,11 @@ describe "RailsAdmin Config DSL List Section" do
 
       get rails_admin_list_path(:model_name => "fan")
 
-      response.should have_tag("#moduleHeader > li:nth-child(2).customClassHeader")
-      response.should have_tag("#moduleHeader > li:nth-child(3).smallStringHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(2).customClassHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(3).smallStringHeader")
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(2).customClassRow")
-        elements[0].should have_tag("li:nth-child(3).smallStringRow")
+        elements[0].should have_tag("td:nth-child(2).customClassRow")
+        elements[0].should have_tag("td:nth-child(3).smallStringRow")
       end
 
       # Reset
@@ -354,13 +354,13 @@ describe "RailsAdmin Config DSL List Section" do
 
       get rails_admin_list_path(:model_name => "fan")
 
-      response.should have_tag("#moduleHeader > li:nth-child(3).customClassHeader")
-      response.should have_tag("#moduleHeader > li:nth-child(4).customClassHeader")
-      response.should have_tag("#moduleHeader > li:nth-child(5).smallStringHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(3).customClassHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(4).customClassHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(5).smallStringHeader")
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(3).customClassRow")
-        elements[0].should have_tag("li:nth-child(4).customClassRow")
-        elements[0].should have_tag("li:nth-child(5).smallStringRow")
+        elements[0].should have_tag("td:nth-child(3).customClassRow")
+        elements[0].should have_tag("td:nth-child(4).customClassRow")
+        elements[0].should have_tag("td:nth-child(5).smallStringRow")
       end
 
       # Reset
@@ -381,13 +381,13 @@ describe "RailsAdmin Config DSL List Section" do
 
       get rails_admin_list_path(:model_name => "fan")
 
-      response.should have_tag("#moduleHeader > li:nth-child(3).customClassHeader")
-      response.should have_tag("#moduleHeader > li:nth-child(4).customClassHeader")
-      response.should have_tag("#moduleHeader > li:nth-child(5).smallStringHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(3).customClassHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(4).customClassHeader")
+      response.should have_tag("#moduleHeader > th:nth-child(5).smallStringHeader")
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(3).customClassRow")
-        elements[0].should have_tag("li:nth-child(4).customClassRow")
-        elements[0].should have_tag("li:nth-child(5).smallStringRow")
+        elements[0].should have_tag("td:nth-child(3).customClassRow")
+        elements[0].should have_tag("td:nth-child(4).customClassRow")
+        elements[0].should have_tag("td:nth-child(5).smallStringRow")
       end
 
       # Reset
@@ -438,8 +438,8 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN II") }
-        elements[1].should have_tag("li:nth-child(3)") {|li| li.should contain("FAN I") }
+        elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN II") }
+        elements[1].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN I") }
       end
 
       # Reset
@@ -464,7 +464,7 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(4)") do |li|
+        elements[0].should have_tag("td:nth-child(4)") do |li|
           li.should contain(/\d{2} \w{3} \d{1,2}:\d{1,2}/)
         end
       end
@@ -490,7 +490,7 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(4)") do |li|
+        elements[0].should have_tag("td:nth-child(4)") do |li|
           li.should contain(/\d{4}-\d{2}-\d{2}/)
         end
       end
@@ -517,7 +517,7 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "team")
 
       response.should have_tag(".infoRow") do |elements|
-        elements[0].should have_tag("li:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
+        elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
       end
 
       # Reset
