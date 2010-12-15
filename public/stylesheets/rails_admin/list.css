@@ -98,6 +98,10 @@ tr.infoRow td{
   border-bottom:1px solid #B9B9B9;
 }
 
+.quickInsert{
+  border-bottom:1px solid #B9B9B9;
+}
+
 .searchBox fieldset{
   border:none;
 }
@@ -112,7 +116,6 @@ tr.infoRow td{
 
 .searchBox span{
   float:left;
-
   display:block;
   font-size:10px;
   border:1px solid #cbcbcb;
@@ -122,6 +125,19 @@ tr.infoRow td{
   padding-right:6px;
   margin-left:5px;
 
+}
+
+#searchBtn{
+  background:none;
+  border:none;
+  font-family:Verdana, Geneva, sans-serif;
+  font-size:10px;
+  background:#FFF;
+  border:1px solid #cbcbcb;
+  padding:4px;
+  padding-left:6px;
+  padding-right:6px;
+  margin-left:5px;
 }
 
 #moduleHeader th a img{
