@@ -42,7 +42,10 @@ module RailsAdmin
       @object = @abstract_model.new
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-      render :layout => 'rails_admin/form'
+      respond_to do |format|
+        format.html { render :layout => 'rails_admin/form' }
+        format.js   { render :layout => false }
+      end
     end
 
     def create
