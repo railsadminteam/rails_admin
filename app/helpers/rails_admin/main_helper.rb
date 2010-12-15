@@ -124,6 +124,11 @@ module RailsAdmin
       b.join(" ")
     end
 
+    def include_facebox
+      html  = javascript_include_tag('rails_admin/facebox.js')
+      html << stylesheet_link_tag('rails_admin/facebox.css')
+    end
+
     private
 
     def infinity
