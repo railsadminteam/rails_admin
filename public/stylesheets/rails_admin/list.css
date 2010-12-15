@@ -7,6 +7,7 @@
   border-bottom:2px solid #b9b9b9;
   padding-top:4px;
   padding-bottom:4px;
+  text-align:center;
 }
 
 #moduleHeader th a {
@@ -17,116 +18,27 @@
   color:#000;
 }
 
-.idHeader{
-  width:46px;
-  text-align:center;
-}
-
-.idRow{
-  width:46px;
-  text-align:center;
-}
-
 .boolRow{
-  width:50px;
   margin-bottom:-5px;
-  text-align:center;
 }
 
-.boolHeader{
-  width:50px;
-  text-align:center;
-}
-
-.dateHeader{
-  text-align:center;
-  width:90px;
-}
 .dateRow{
-  text-align:center;
-  width:90px;
+  white-space: nowrap;
 }
 .timeHeader{
   background:#F99;
-  text-align:center;
-  width:60px
 }
 .timeRow{
-  text-align:center;
-  width:60px
-}
-.dateTimeHeader{
-  text-align:center;
-  width:170px
+  white-space: nowrap;
 }
 .dateTimeRow{
-  text-align:center;
-  width:170px
-}
-.smallStringHeader{
-  text-align:center;
-  width:180px
-}
-.smallStringRow{
-  text-align:center;
-  width:180px;
-}
-
-.bigStringHeader{
-  text-align:center;
-  width:240px
-
-}
-.bigStringRow{
-  text-align:center;
-  width:240px
-}
-
-.textHeader{
-  text-align:center;
-  width:240px
-}
-.textRow{
-  text-align:center;
-  width:240px
-}
-.intHeader{
-  text-align:center;
-  width:80px
-}
-.intRow{
-  text-align:center;
-  width:80px
-
+  white-space: nowrap;
 }
 .bigDecimalHeader{
   background:#CC6;
-  text-align:center;
-  width:110px
-
 }
-.bigDecimalRow{
-  text-align:center;
-  width:110px
-
-}
-.floatHeader{
-  text-align:center;
-  width:110px
-}
-.floatRow{
-  text-align:center;
-  width:110px
-}
-
 .otherHeader{
   width:40px;
-  text-align:center;
-}
-
-.otherRow{
-  width:40px;
-  text-align:center;
 }
 
 .otherRow a{
@@ -140,11 +52,6 @@
 
 .otherRow a:hover{
   border:1px solid #494949;
-}
-
-.actionRow{
-  width:80px;
-  text-align:center;
 }
 
 .actionRow a{
@@ -167,7 +74,6 @@
 
 .actionHeader{
   width:80px;
-  text-align:center;
   font-size:10px;
   margin-top:1px;
 }
@@ -180,11 +86,8 @@ tr.infoRow td{
   border-bottom:1px solid #b9b9b9;
   padding-top:9px;
   padding-bottom:9px;
+  text-align:center;
   font-size:11px;
-}
-
-.boldRow{
-  font-weight:bold;
 }
 
 .greyRow{
@@ -199,19 +102,12 @@ tr.infoRow td{
   border-bottom:1px solid #B9B9B9;
 }
 
-.quickInsert{
-  border-bottom:1px solid #B9B9B9;
-  background:#f4e8d9;
-  height:23px;
-}
-
 .searchBox fieldset{
   border:none;
 }
 
 #searchBar{
   border:1px solid #cbcbcb;
-  font-family:Verdana, Geneva, sans-serif;
   font-size:12px;
   padding:4px;
   float:left;
@@ -232,20 +128,6 @@ tr.infoRow td{
 
 }
 
-#searchBtn{
-
-  background:none;
-  border:none;
-  font-family:Verdana, Geneva, sans-serif;
-  font-size:10px;
-  background:#FFF;
-  border:1px solid #cbcbcb;
-  padding:4px;
-  padding-left:6px;
-  padding-right:6px;
-  margin-left:5px;
-}
-
 #moduleHeader th a img{
   margin-bottom:-4px;
   border:none;
@@ -264,7 +146,7 @@ tr.infoRow td{
   border:1px solid #DDD;
   padding:6px;
   padding-top:3px;
-  padding-bottom:3px;
+  padding-bottom:4px;
   text-decoration:none;
 }
 
@@ -276,9 +158,9 @@ tr.infoRow td{
 #searchbar_btn{
   background:#DDD;
   border:1px solid #CBCBCB;
-  font-family:Verdana,Geneva,sans-serif;
   font-size:10px;
-  padding:5px;
+  padding-top:3px;
+  padding-bottom:4px;
   padding-left:6px;
   padding-right:6px;
   margin-left:3px;
