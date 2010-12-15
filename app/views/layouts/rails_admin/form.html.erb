@@ -15,6 +15,11 @@
   <%= javascript_include_tag('rails_admin/dashboard.js') %>
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
 
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+  <%= include_facebox %>
+  <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js","rails_admin/create-related.js" %>
+  
+
   <script type="text/javascript" language="javascript">
   Control.DatePicker.Locale['en_US'] = {
     dateTimeFormat: 'yyyy-MM-dd HH:mm',
