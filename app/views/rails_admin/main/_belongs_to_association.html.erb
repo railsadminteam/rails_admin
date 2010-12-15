@@ -10,3 +10,5 @@
 %>
                   <%= label_tag "#{model_name}_#{field.name}", field.label %>
                   <%= select model_name, field.child_key, collection, {:include_blank => true, :selected => selected}, :class => "selectField #{field.has_errors? ? "errorField" : nil}" %>
+
+<%= link_to "Add new #{field.label}", rails_admin_new_path(:model_name => model_name), :remote => true, :rel => 'facebox'  %>
