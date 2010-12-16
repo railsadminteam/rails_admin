@@ -332,9 +332,8 @@ can customize this by:
       end
     end
 
-This would render the "created at" field's header column with a CSS class named
-"customClassHeader" and each "created at" value with a class named
-"customClassRow".
+This would render the "created at" field's header and body columns with a CSS class named
+"customClass".
 
 By default columns' widths are calculated from certain pre-defined,
 data-type-specific pixel values. If you want to ensure a minimum width for a

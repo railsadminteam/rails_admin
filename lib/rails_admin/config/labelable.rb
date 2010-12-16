@@ -4,7 +4,7 @@ module RailsAdmin
     module Labelable
       def self.included(klass)
         klass.register_instance_option(:label) do
-          abstract_model.model.model_name.titleize
+          abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
         end
         klass.register_instance_option(:object_label) do
           if bindings[:object].respond_to?(:name) && bindings[:object].name
