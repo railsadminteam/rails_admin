@@ -25,6 +25,10 @@ Join us for an upcoming [Bugmash](https://github.com/sferik/rails_admin/wiki/bug
 Saturday, December 18, starting at [8 AM Pacific time](http://everytimezone.com/) in
 [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin). See you there!
 
+Mailing List
+------------
+Questions about RailsAdmin can be asked on the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin).
+
 Screenshots
 -----------
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
