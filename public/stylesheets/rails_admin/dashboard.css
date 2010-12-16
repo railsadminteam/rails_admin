@@ -9,7 +9,6 @@ ul.menu{
 
 ul.menu li{
   float:left;
-  font-size:11px;
 }
 
 #modelNameHeader{
@@ -112,7 +111,7 @@ a.show:hover{
 
 .section h2{
   margin-top:2px;
-  font-size:11px;
+  font-size:12px;
   border-bottom:1px solid #DDD;
   padding-bottom:4px;
   font-weight:normal;
@@ -191,7 +190,6 @@ a.show:hover{
 
 #listing{
   margin-top:40px;
-  font-size:11px;
   margin-bottom:5px;
 }
 
