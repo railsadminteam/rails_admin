@@ -2,22 +2,28 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-RailsAdmin was conceived as a port of [MerbAdmin](http://github.com/sferik/merb-admin) to
-Rails 3 and implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
+RailsAdmin started as a port of [MerbAdmin](http://github.com/sferik/merb-admin) to Rails 3
+and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
 by [Bogdan Gaza](http://github.com/hurrycane) with mentors [Erik Michaels-Ober](http://github.com/sferik),
 [Yehuda Katz](http://github.com/wycats), [Rodrigo Rosenfeld Rosas](http://github.com/rosenfeld),
 [Luke van der Hoeven](http://github.com/plukevdh), and [Rein Henrichs](http://github.com/reinh).
 
-It currently offers the following functionality:
+It currently offers the following features:
 
-* Show database tables
-* Easily update data
+* Display database tables
 * Create new data
+* Easily update data
 * Safely delete data
 * Automatic form validation
 * Search
 * Authentication (via [Devise](http://github.com/plataformatec/devise))
 * User action history
+
+Bugmash
+-------
+Join us for an upcoming [Bugmash](https://github.com/sferik/rails_admin/wiki/bugmash) event on
+Saturday, December 18, starting at [8 AM Pacific time](http://everytimezone.com/) in
+[#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin). See you there!
 
 Screenshots
 -----------
