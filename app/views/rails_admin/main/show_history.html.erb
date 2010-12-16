@@ -28,8 +28,7 @@
                 <% sort_location = params.merge(:sort => :created_at).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
                 <%= link_to("DATE/TIME", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
                 <% if sort == property_name.to_s %>
-                <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
-                <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+                <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
                 <% end %>
               </th>
               <% property_name = "username"%>
@@ -37,8 +36,7 @@
                 <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
                 <%= link_to("USER", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
                 <% if sort == property_name.to_s %>
-                <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
-                <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+                <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
                 <% end %>
               </th>
               <% if @general %>
@@ -47,8 +45,7 @@
                 <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
                 <%= link_to("ITEM", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
                 <% if sort == property_name.to_s %>
-                <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
-                <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+                <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
                 <% end %>
               </th>
               <% end %>
@@ -57,8 +54,7 @@
                 <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
                 <%= link_to("ACTION", sort_location, :ref => sort_location.to_json, :class => "historySort") %>
                 <% if sort == property_name.to_s %>
-                <% image_name = sort_reverse ? "bullet_arrow_down.png" : "bullet_arrow_up.png"%>
-                <%= link_to image_tag(image_name), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
+                <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "headerSort" %>
                 <% end %>
               </th>
             </tr>
