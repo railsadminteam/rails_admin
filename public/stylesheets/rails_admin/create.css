@@ -365,3 +365,6 @@ input.default:active{
   margin-left: 100px;
 }
 
+#facebox .content {
+    width: 800px;
+}

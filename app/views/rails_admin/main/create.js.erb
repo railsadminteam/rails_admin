@@ -1,5 +1,6 @@
 <%  if @saved %>
+  $j.facebox.close();
+  $j('#case_client_id').trigger('update_with_new_element',[<%= @object.id %>, '<%= @object.class.to_s %>']);
 <% else %>
-  alert('aaaa');
-  $.facebox(<%= render :template => 'new'  %>);
+  $j.facebox('<%= escape_javascript(render :partial => 'new') %>');
 <% end %>
