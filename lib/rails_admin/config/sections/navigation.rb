@@ -20,7 +20,9 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Hideable
         def self.visible_models
-          RailsAdmin::Config.models.select {|m| m.navigation.visible? }.sort {|a, b| a.navigation.label <=> b.navigation.label }
+          RailsAdmin::Config.models.select {|m| m.navigation.visible? }.sort do |a, b|
+            a.navigation.label.downcase <=> b.navigation.label.downcase
+          end
         end
       end
     end
