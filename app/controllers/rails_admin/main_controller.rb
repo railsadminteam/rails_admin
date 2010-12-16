@@ -55,10 +55,19 @@ module RailsAdmin
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      if @object.save && update_all_associations
-        redirect_to_on_success
-      else
-        render_error
+      @saved = (@object.save && update_all_associations)
+      respond_to do |format|
+        format.html do
+          @saved ? redirect_to_on_success : render_error
+        end
+        format.js #do
+          #render_error
+#          if @saved
+#            render :text => "OK"
+#          else
+#            render :layout => false
+#          end
+       # end
       end
     end
 
