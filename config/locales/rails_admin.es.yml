@@ -5,7 +5,7 @@ es:
     dashboard:
       pagename: "Administración del sitio"
       name: "Panel"
-      model_name: "Nombre del model"
+      model_name: "Nombre del modelo"
       last_used: "Último uso"
       records: "Registros"
       modify: "Modificar"
