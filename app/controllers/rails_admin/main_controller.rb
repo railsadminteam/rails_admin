@@ -169,7 +169,7 @@ module RailsAdmin
         @page_count, @history = History.paginated(options)
       end
 
-      render :layout => 'rails_admin/list'
+      render :layout => request.xhr? ? false : 'rails_admin/list'
     end
 
     def handle_error(e)
@@ -260,7 +260,7 @@ module RailsAdmin
 
     def update_all_associations
       @abstract_model.associations.each do |association|
-        if params[:associations] && params[:associations].has_key?(association[:name]) 
+        if params[:associations] && params[:associations].has_key?(association[:name])
           ids = (params[:associations] || {}).delete(association[:name])
           case association[:type]
           when :has_one

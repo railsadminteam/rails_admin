@@ -1,6 +1,7 @@
 module RailsAdmin
   class InstallAdminGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
+    argument :model_name, :type => :string, :default => 'user'
 
     desc "RailsAdmin Install"
 
@@ -61,7 +62,7 @@ Rails_admin works with devise. Checking for a current installation of devise!
     def set_devise
       puts "Setting up devise for you!
 ======================================================"
-      invoke 'devise', ['user']
+      invoke 'devise', [model_name]
     end
 
     def copy_locales_files
