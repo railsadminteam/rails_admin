@@ -54,8 +54,13 @@ module RailsAdmin
     end
 
     def self.add_blank_results(results, mstart, ystart)
-      results.tap do |r|
-        (4 - r.size).downto(0) { |m| r.unshift BlankHistory.new(((mstart+m) % 12)+1, ystart + ((mstart+m)/12)) }
+      # fill in an array with BlankHistory
+      blanks = Array.new(5) { |i| BlankHistory.new(((mstart+i) % 12)+1, ystart + ((mstart+i)/12)) }
+      # replace BlankHistory array entries with the real History entries that were provided
+      blanks.each_index do |i|
+        if results[0] && results[0].year == blanks[i].year && results[0].month == blanks[i].month
+          blanks[i] = results.delete_at 0
+        end
       end
     end
 

@@ -2,13 +2,34 @@ require 'spec_helper'
 
 describe "RailsAdmin History" do
 
-  describe "history blank results" do
+  describe "handle nil results" do
     before(:each) do
-      @months = RailsAdmin::History.add_blank_results([RailsAdmin::BlankHistory.new(3, 2011)], 10, 2010)
+      @months = RailsAdmin::History.add_blank_results([], 5, 2010)
     end
 
     it "should pad the correct number of months" do
       @months.length.should == 5
+      @months.map(&:month).should == [6, 7, 8, 9, 10]
+    end
+  end
+
+  describe "history blank results single year" do
+    before(:each) do
+      @months = RailsAdmin::History.add_blank_results([RailsAdmin::BlankHistory.new(7, 2010), RailsAdmin::BlankHistory.new(9, 2011)], 5, 2010)
+    end
+
+    it "should pad the correct number of months" do
+      @months.length.should == 5
+    end
+
+    it "should pad at the beginning" do
+      @months.map(&:month).should == [6, 7, 8, 9, 10]
+    end
+  end
+
+  describe "history blank results wraparound" do
+    before(:each) do
+      @months = RailsAdmin::History.add_blank_results([RailsAdmin::BlankHistory.new(12, 2010), RailsAdmin::BlankHistory.new(2, 2011)], 10, 2010)
     end
 
     it "should pad at the beginning" do
