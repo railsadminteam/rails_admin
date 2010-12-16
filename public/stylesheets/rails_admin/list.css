@@ -11,8 +11,22 @@
 }
 
 .grid thead th a {
+  padding-right: 20px;
+  position: relative;
+  left: 10px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: right;
   text-decoration:none;
   color:#000;
+}
+
+.grid thead th a.ascending {
+  background-image: url(/images/rails_admin/bullet_arrow_up.png);
+}
+
+.grid thead th a.descending {
+  background-image: url(/images/rails_admin/bullet_arrow_down.png);
 }
 
 .grid tbody .bool {
@@ -119,11 +133,6 @@
   padding-left:6px;
   padding-right:6px;
   margin-left:5px;
-}
-
-.grid thead th a img, #moduleHeader th a img {
-  margin-bottom:-4px;
-  border:none;
 }
 
 #pagination {

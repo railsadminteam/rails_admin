@@ -43,7 +43,7 @@
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainModules">
         <div class="searchBox">
-          <form action="#" action="" method="get">
+          <form action="" method="get">
             <fieldset>
               <input type="text" id="searchBar" name="query" value="<%= query %>"/>
               <input type="submit" id="searchbar_btn" value="<%= t("admin.list.search_btn")%>" />
@@ -57,13 +57,12 @@
               <% properties.each do |property| %>
               <% property_name = property.name %>
               <% property_pretty_name = property.label %>
-              <th class="<%= "#{property.column_css_class}" %> <%= sort == property_name.to_s ? "selected" : nil %>">
+              <% selected = sort == property_name.to_s %>
+              <th class="<%= "#{property.column_css_class}" %> <%= selected ? "selected" : nil %>">
                 <% if property.sortable? %>
-                <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(sort == property_name.to_s && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
-                <%= link_to(property_pretty_name.upcase, sort_location, :ref => sort_location.to_json, :class => "headerSort") %>
-                <% if sort == property_name.to_s %>
-                <%= link_to sort_arrow_image(sort_reverse), sort_location, :ref => sort_location.to_json, :class => "sort" %>
-                <% end %>
+                <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+                <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
+                <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction) %>
                 <% else %>
                 <%= property_pretty_name.upcase %>
                 <% end %>
@@ -79,12 +78,12 @@
             <% @model_config.bind(:object, object) %>
             <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
               <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-              <td class="other left"><%= link_to("...", other_left, :ref => other_left.to_json) %></td>
+              <td class="other left"><%= link_to("...", other_left) %></td>
               <% properties.each do |property| %>
               <td class="<%= "#{property.column_css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
               <% end %>
               <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
-              <td class="other right"><%= link_to("...", other_right, :ref => other_right.to_json)%></td>
+              <td class="other right"><%= link_to("...", other_right)%></td>
               <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
               <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
             </tr>

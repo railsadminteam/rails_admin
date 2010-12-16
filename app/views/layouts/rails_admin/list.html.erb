@@ -9,54 +9,19 @@
   <%= javascript_include_tag('rails_admin/prototype.js') %>
 
   <script type="text/javascript" language="javascript">
-    function updatePage(paramList){
-
-      new Ajax.Updater('content', '/admin/<%= @abstract_model.to_param %>',{
-        parameters: paramList,
-        onComplete: function(){
-          initPages();
-        }
-      });
-    }
-
-    function initPages(){
-      $$(".headerSort").each(function(elem){
-        elem.writeAttribute("href", "javascript:void(0)");
-
+    var bindEvents = function(){
+      $$(".grid .other a, .grid thead a").each(function(elem){
         Event.observe(elem, 'click', function(e){
-          elem.writeAttribute("href", "javascript:void(0)");
-          var ref = elem.readAttribute("ref");
-          updatePage(JSON.parse(ref));
+          e.preventDefault();
+          new Ajax.Updater('content', elem.readAttribute("href"), {
+            onComplete: function(){
+              bindEvents();
+            }
+          });
         })
-      })
-
-      $$(".otherLeft").each(function(elem){
-        elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
-
-        Event.observe(elem, 'click', function(e){
-          elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
-          var ref = elem.childElements()[0].readAttribute("ref");
-          updatePage(JSON.parse(ref));
-//          updatePage
-        })
-
-      })
-
-      $$(".otherRight").each(function(elem){
-        elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
-
-        Event.observe(elem, 'click', function(e){
-          elem.childElements()[0].writeAttribute("href", "javascript:void(0)");
-          var ref = elem.childElements()[0].readAttribute("ref");
-          updatePage(JSON.parse(ref));
-        })
-
       })
     }
-
-    document.observe("dom:loaded", function() {
-      initPages();
-    })
+    document.observe("dom:loaded", bindEvents)
   </script>
 </head>
 <body>
