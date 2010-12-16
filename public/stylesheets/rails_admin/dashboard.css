@@ -1,61 +1,16 @@
-
-ul.menu{
-  list-style-type:none;
-  display:block;
-  height:18px;
-  border-bottom:1px solid #DDDDDD;
-  margin-bottom:2px;
-}
-
-ul.menu li{
-  float:left;
-}
-
-#modelNameHeader{
+#modelNameHeader {
   margin-left:5px;
-  width:247px;
+  text-align: left;
 }
 
-#lastUsedHeader{
-  width:184px;
-  text-align:center;
+.grid tbody td.modelNameRow {
+  text-align: left;
+  margin-left:5px;
 }
 
-#recordsHeader{
-  width:375px;
-  text-align:center;
-}
-
-#modifyHeader{
-  width:135px;
-  text-align:center;
-}
-
-.row{
-  list-style-type:none;
-  display:block;
-  padding-top:4px;
-  padding-bottom:4px;
-  height:16px;
-}
-
-.greyRow{
-  background: #f2f2f2;
-}
-
-.row li{
-  float:left;
-}
-
-.modelNameRow{
-  font-weight:bold;
-  margin-left:2px;
-  width:250px;
-}
-.lastUsedRow{
-  width:184px;
-  text-align:center;
-  white-space:nowrap;
+.grid tbody td {
+  padding: 4px;
+  border: none;
 }
 
 .scale{
@@ -70,18 +25,6 @@ ul.menu li{
   background:#bcceb6;
   display:block;
   height:13px;
-}
-
-.low{
-}
-
-.recordsRow{
-  width:375px;
-  text-align:center;
-}
-.modifyRow{
-  width:135px;
-  text-align:center;
 }
 
 .add{
@@ -104,9 +47,6 @@ a.add:hover{
 
 a.show:hover{
   text-decoration:underline;
-}
-
-.section{
 }
 
 .section h2{

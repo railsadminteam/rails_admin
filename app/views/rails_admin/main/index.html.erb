@@ -3,36 +3,40 @@
         </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
         <div id="contentMain">
-          <div class="section">
-            <ul class="menu">
-              <li id="modelNameHeader"><%= t "admin.dashboard.model_name" %></li>
-              <li id="lastUsedHeader"><%= t "admin.dashboard.last_used" %></li>
-              <li id="recordsHeader"><%= t "admin.dashboard.records" %></li>
-              <li id="modifyHeader"><%= t "admin.dashboard.modify" %></li>
-            </ul>
+          <table class="grid">
+            <thead>
+              <tr>
+                <th id="modelNameHeader"><%= t "admin.dashboard.model_name" %></th>
+                <th><%= t "admin.dashboard.last_used" %></th>
+                <th><%= t "admin.dashboard.records" %></th>
+                <th><%= t "admin.dashboard.modify" %></th>
+              </tr>
+            </thead>
+          <tbody>
             <% @abstract_models.each do |abstract_model| %>
-              <ul class="row<%= cycle ' ',' greyRow' %>">
-                <li class="modelNameRow">
+              <tr class="<%= cycle 'odd', 'even' %>">
+                <td class="modelNameRow">
                   <%= link_to(abstract_model.pretty_name, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
-                </li>
-                <li class="lastUsedRow">
+                </td>
+                <td>
                 <% if (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)) %>
                 <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
                 <% end %>
-                &nbsp;</li>
-                <li class="recordsRow">
+                </td>
+                <td>
                   <div class="scale">
                     <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
                     <% percent = 1 if percent.nil? %>
                     <div class="bar <%= get_indicator(percent)%>" style="width:<%= percent %>%;"></div>
                   </div>
-                </li>
-                <li class="modifyRow">
+                </td>
+                <td>
                   <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
-                </li>
-              </ul>
+                </td>
+              </tr>
             <% end %>
-          </div>
+          </tbody>
+          </table>
 
           <div class="section">
             <h2><%= t("admin.history.name") %></h2>
