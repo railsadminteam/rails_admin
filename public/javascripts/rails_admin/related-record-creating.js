@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
     })
 
     $('.selectField').bind('update_with_new_element', function(event, option_value, option_name) {
-        $(event.target).append('<option value="' + option_value + '">' + option_name + ' ' + option_value + '</option>' );
+        $(event.target).append('<option value="' + option_value + '">' + option_name + '</option>' );
     });
 
     //$('#facebox #new_record_form').bind("ajax")

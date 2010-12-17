@@ -1,6 +1,7 @@
 <%  if @saved %>
+  <% label_field = RailsAdmin.config(@object.class).bind(:object, @object).list.object_label %>
   $j.facebox.close();
-  $j('#case_client_id').trigger('update_with_new_element',[<%= @object.id %>, '<%= @object.class.to_s %>']);
+  $j('.<%=  @object.class.to_s.tableize.singularize %>_id').trigger('update_with_new_element',[<%= @object.id %>, '<%= label_field  %>']);
 <% else %>
   $j.facebox('<%= escape_javascript(render :partial => 'new') %>');
 <% end %>
