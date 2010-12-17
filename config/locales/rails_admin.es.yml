@@ -1,6 +1,6 @@
 es:
   home:
-    name: "home"
+    name: "inicio"
   admin:
     dashboard:
       pagename: "Administración del sitio"
