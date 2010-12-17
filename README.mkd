@@ -535,5 +535,5 @@ Many thanks to:
 * [Cameron Priest](http://github.com/cameronpriest) for [removing an unused file](http://github.com/sferik/rails_admin/commits/master?author=cameronpriest)
 * [Christian Hølmer](http://github.com/hoelmer) for [a few random commits](http://github.com/sferik/rails_admin/commits/master?author=hoelmer)
 * [Caio Tarifa](http://github.com/caiotarifa) for [a new header design](http://github.com/sferik/rails_admin/commits/master?author=caiotarifa)
-* [Toby Cabot](http://github.com/ccabot) for [various history fixes](http://github.com/sferik/rails_admin/commits/master?author=ccabbot)
+* [Toby Cabot](http://github.com/ccabot) for [various history fixes](http://github.com/sferik/rails_admin/commits/master?author=ccabot)
 * and everyone who contributed to [MerbAdmin](http://github.com/sferik/merb-admin).
