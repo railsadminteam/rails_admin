@@ -3,7 +3,7 @@
 </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
 <div id="contentMainNew">
-  <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param), :multipart => true, :id => 'new_record_form') do %>
+  <%= form_tag(rails_admin_create_path(:model_name => @abstract_model.to_param), :multipart => true) do %>
     <fieldset>
       <%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).create.visible_groups) -%>
       <%= render :partial => 'new_submit_buttons' %>

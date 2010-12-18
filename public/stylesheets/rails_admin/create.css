@@ -31,6 +31,14 @@
   margin-bottom:5px;
 }
 
+.formSection a {
+  color: #000;
+}
+
+.formSection a.showAssociatedRecordForm {
+    margin: 5px;
+}
+
 .formSection label{
   width:100px;
   display:block;

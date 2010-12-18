@@ -14,4 +14,4 @@
 <%= label_tag "#{model_name}_#{field.name}", field.label %>
 <%= select model_name, field.child_key, collection, {:include_blank => true, :selected => selected}, :class => "#{field.child_key} selectField #{field.has_errors? ? "errorField" : nil}" %>
 
-<%= link_to "Add new #{associated_model_name}", rails_admin_new_path(:model_name => associated_model_name ),  :remote => true, :class => "show_associated_record_form"  %>
+<%= link_to "Add new #{associated_model_name}", rails_admin_new_path(:model_name => associated_model_name ),  :remote => true, :class => "showAssociatedRecordForm"  %>
