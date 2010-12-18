@@ -2,12 +2,14 @@
   <li id="saveContainer">
     <%= submit_tag t("admin.new.save"), :class => "button default save_button", :name => "_save", :id => "save_btn" %>
   </li>
-  <li id="saveAddContainer">
-    <%= submit_tag t("admin.new.save_and_add_another"), :class => "button save_and_add_another_button", :name => "_add_another", :id => "saveAdd_btn" %>
-  </li>
-  <li id="saveEditContainer">
-    <%= submit_tag t("admin.new.save_and_edit"), :class => "button save_and_edit_button", :name => "_add_edit", :id => "saveEdit_btn" %>
-  </li>
+  <% unless request.xhr?  %>
+    <li id="saveAddContainer">
+      <%= submit_tag t("admin.new.save_and_add_another"), :class => "button save_and_add_another_button", :name => "_add_another", :id => "saveAdd_btn" %>
+    </li>
+    <li id="saveEditContainer">
+      <%= submit_tag t("admin.new.save_and_edit"), :class => "button save_and_edit_button", :name => "_add_edit", :id => "saveEdit_btn" %>
+    </li>
+  <% end %>
   <li id="cancelContainer">
     <%= submit_tag t("admin.new.cancel"), :class => "button cancel_button", :name => "_continue", :id => "cancel_btn" %>
   </li>
