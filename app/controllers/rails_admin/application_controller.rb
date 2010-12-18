@@ -6,6 +6,8 @@ module RailsAdmin
     before_filter :_authorize!
     before_filter :set_plugin_name
 
+    helper_method :_current_user
+
     private
 
     def _authenticate!
@@ -14,6 +16,10 @@ module RailsAdmin
 
     def _authorize!
       instance_eval &RailsAdmin.authorize_with
+    end
+
+    def _current_user
+      instance_eval &RailsAdmin.current_user_method
     end
 
     def set_plugin_name
