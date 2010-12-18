@@ -444,6 +444,54 @@ field's input element.
 Naturally edit views' fields also have the visible option along with
 hide and show accessors as the list view has.
 
+### Mass Assignment Operations ###
+
+* Mass assign for every model configuration
+* Mass assign for every section (create, list, navigation and update)
+* Mass assign by field type
+
+Mass assignment operations are used to pass in configuration blocks for multiple targets at once. For instance, the code below configures every models' label displayed uppercased in the list view.
+     
+    RailsAdmin.config do |config|
+      config.models do
+        list do
+          label do
+            label.upcase # in this context label refers to default label method
+          end
+        end
+      end
+    end
+
+If one would like to assign that same behavior for all the different views in RailsAdmin (create, list, navigation and update) one could pass the label definition one level higher:
+
+    RailsAdmin.config do |config|
+      config.models do
+        label do
+          label.upcase
+        end
+      end
+    end
+
+Naturally this also works for a single model configuration:
+
+    RailsAdmin.config do |config|
+      config Team do
+        label do
+          label.upcase
+        end
+      end
+    end
+
+One can also assign configurations for all fields by type. For instance modifying the date presentation of all datetime fields in all sections can be accomplished like this:
+
+    RailsAdmin.config do |config|
+      config.models do
+        fields_of_type :datetime do
+          strftime_format "%Y-%m-%d"
+        end
+      end
+    end
+
 Authorization
 -------------
 
