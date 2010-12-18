@@ -511,7 +511,7 @@ Submitting a Pull Request
 -------------------------
 1. Fork the project.
 2. Create a topic branch.
-3. Implement your feature or bug fix.
+3. Implement your feature or bug fix.  *NOTE* - there's a small test app located in the spec/dummy_app directory that you can use to experiment with rails_admin.
 4. Add documentation for your feature or bug fix.
 5. Run `bundle exec rake doc:yard`. If your changes are not 100% documented, go back to step 4.
 6. Add specs for your feature or bug fix.
