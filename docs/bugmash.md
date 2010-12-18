@@ -14,3 +14,10 @@ Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channe
         sferik: I have finished working on issue #101. Please review the code in my iss101 branch.
     I'll let you know if any changes need to be made before the code can be pulled.
 8. `GOTO 1`
+
+Writing code is great but there are other ways to help besides writing code, including:
+
+* Writing documentation
+* Translating RailsAdmin into a new language
+* Manual testing
+* Writing failing specs for existing bugs
