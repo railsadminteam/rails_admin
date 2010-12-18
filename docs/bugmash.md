@@ -1,4 +1,4 @@
-# BugMash
+## Thank you for participating in the RailsAdmin BugMash!
 
 Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin) and then:
 
