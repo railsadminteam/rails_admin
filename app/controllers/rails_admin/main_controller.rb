@@ -350,7 +350,7 @@ module RailsAdmin
           :message => message,
           :item => @object.id,
           :table => @abstract_model.pretty_name,
-          :username => current_user ? current_user.email : "",
+          :username => _current_user ? _current_user.email : "",
           :month => date.month,
           :year => date.year
         )
