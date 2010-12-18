@@ -1,9 +1,15 @@
-# Bugmash
+# BugMash
 
-Help us smash [bugs in RailsAdmin](https://github.com/sferik/rails_admin/issues) on Saturday, **December 18**, starting at **[8 AM Pacific time](http://everytimezone.com/)** and continuing throughout the day.
+Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin) and then:
 
-To join, simply show up in **[#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin)** at some point on the 18th and let us know what you plan to work on.
-
-Feel free to take an early look at the list of bugs and start thinking about solutions to some of the problems.
-
-If you're planning on attend or have an idea of something you'd like to work on, please [send me a message](https://github.com/inbox/new/sferik).
+1. Take a look at the [list of open issues](https://github.com/sferik/rails_admin/issues).
+2. Find an issue you'd like to work on that doesn't have an @name label.
+3. Let me know which issue you will be working on in the IRC channel.
+        sferik: I will be working on issue #101
+    Then, I will label that issue with your @name.
+4. Fork RailsAdmin on GitHub.
+5. In your fork, create a topic branch for the issue you're working on.
+6. Fix the issue.
+7. Submit a pull request and ping me in the IRC channel.
+        sferik: I have finished working on issue #101. Please pull from the iss101 branch.
+8. `GOTO 1`
