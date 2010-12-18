@@ -32,6 +32,10 @@ module RailsAdmin
 
   DEFAULT_AUTHORIZE = Proc.new {}
 
+  DEFAULT_CURRENT_USER = Proc.new do
+    current_user
+  end
+
   # Setup authentication to be run as a before filter
   # This is run inside the controller instance so you can setup any authentication you need to
   #
@@ -70,6 +74,22 @@ module RailsAdmin
   def self.authorize_with(&blk)
     @authorize = blk if blk
     @authorize || DEFAULT_AUTHORIZE
+  end
+
+  # Setup a different method to determine the current user or admin logged in.
+  # This is run inside the controller instance and made available as a helper.
+  #
+  # By default, _current_user_ will be used.
+  #
+  # @example Custom
+  #   RailsAdmin.current_user_method do
+  #     current_admin
+  #   end
+  #
+  # @see RailsAdmin::DEFAULT_CURRENT_USER
+  def self.current_user_method(&blk)
+    @current_user = blk if blk
+    @current_user || DEFAULT_CURRENT_USER
   end
 
   # Setup RailsAdmin
