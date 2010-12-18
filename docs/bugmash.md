@@ -9,7 +9,8 @@ Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channe
     Then, I will label that issue with your @name.
 4. Fork RailsAdmin on GitHub.
 5. In your fork, create a topic branch for the issue you're working on.
-6. Fix the issue.
+6. Fix the issue. If you're adding functionality, please include specs!
 7. Submit a pull request and ping me in the IRC channel.
-        sferik: I have finished working on issue #101. Please pull from the iss101 branch.
+        sferik: I have finished working on issue #101. Please review the code in my iss101 branch.
+    I'll let you know if any changes need to be made before the code can be pulled.
 8. `GOTO 1`
