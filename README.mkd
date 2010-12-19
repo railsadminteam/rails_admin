@@ -149,6 +149,10 @@ Both also accept a block:
       end
     end
 
+*NOTE* - The hide_from_navigation method was originally implemented as
+ hide_in_navigation but that name is now deprecated - you should
+ change your code to use hide_from_navigation.
+
 If you need to customize the label of the model within the navigation tab, use:
 
     RailsAdmin.config do |config|

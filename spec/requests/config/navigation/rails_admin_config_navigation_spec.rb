@@ -94,7 +94,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
     it "should be hideable via shortcut" do
       RailsAdmin.config Fan do
-        hide_in_navigation
+        hide_from_navigation
       end
       get rails_admin_dashboard_path
       response.should have_tag("#nav") do |navigation|
