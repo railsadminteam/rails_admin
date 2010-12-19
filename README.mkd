@@ -451,7 +451,7 @@ hide and show accessors as the list view has.
 * Mass assign by field type
 
 Mass assignment operations are used to pass in configuration blocks for multiple targets at once. For instance, the code below configures every models' label displayed uppercased in the list view.
-     
+
     RailsAdmin.config do |config|
       config.models do
         list do
@@ -475,7 +475,7 @@ If one would like to assign that same behavior for all the different views in Ra
 Naturally this also works for a single model configuration:
 
     RailsAdmin.config do |config|
-      config Team do
+      config.model Team do
         label do
           label.upcase
         end
@@ -509,7 +509,7 @@ You can hook declarative_authorization into Rails Admin using code
 like this in an initializer (e.g., config/initializers/rails_admin.rb):
 
     require "rails_admin/application_controller"
-    
+
     module RailsAdmin
       class ApplicationController < ::ApplicationController
         filter_access_to :all
