@@ -41,5 +41,16 @@ describe "RailsAdmin Config DSL" do
       response.should_not have_tag("#team_division_id")
       response.should_not have_tag("input#team_fans")
     end
+
+    it "should raise NoMethodError when an unknown method is called" do
+      begin
+        RailsAdmin::Config.model Team do
+          method_that_doesnt_exist
+          fail "calling an unknown method should have failed"
+        end
+      rescue NoMethodError
+        # this is what we want to happen
+      end
+    end
   end
 end
