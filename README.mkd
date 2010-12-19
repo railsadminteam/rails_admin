@@ -574,18 +574,3 @@ Submitting a Pull Request
 Contact
 -------
 If you have questions about contributing to RailsAdmin, please contact [Erik Michaels-Ober](http://github.com/sferik) and [Bogdan Gaza](http://github.com/hurrycane).
-
-Credits
--------
-Many thanks to:
-
-* Everyone in the [Ruby Summer of Code](http://www.rubysoc.org) class of 2010
-* [Piotr Sarnacki](http://github.com/drogus) for [making RailsAdmin mountable](http://github.com/drogus/rails_admin/commit/3349b36db2d4eda296aad96f03b7e7a6a544bcd8)
-* [Daniel Neighman](http://github.com/hassox) for [generalizing authentication](http://github.com/sferik/rails_admin/commits/master?author=hassox)
-* [Jack Dempsey](http://github.com/jackdempsey) for [adding support for HABTM associations](http://github.com/sferik/rails_admin/commits/master?author=jackdempsey)
-* [Petteri Kääpä](http://github.com/kaapa) for [writing the configuration DSL](http://github.com/sferik/rails_admin/commits/master?author=kaapa)
-* [Cameron Priest](http://github.com/cameronpriest) for [removing an unused file](http://github.com/sferik/rails_admin/commits/master?author=cameronpriest)
-* [Christian Hølmer](http://github.com/hoelmer) for [a few random commits](http://github.com/sferik/rails_admin/commits/master?author=hoelmer)
-* [Caio Tarifa](http://github.com/caiotarifa) for [a new header design](http://github.com/sferik/rails_admin/commits/master?author=caiotarifa)
-* [Toby Cabot](http://github.com/ccabot) for [various history fixes](http://github.com/sferik/rails_admin/commits/master?author=ccabot)
-* and everyone who contributed to [MerbAdmin](http://github.com/sferik/merb-admin).
