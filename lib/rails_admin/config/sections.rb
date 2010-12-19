@@ -37,7 +37,14 @@ module RailsAdmin
             send(name).label(block ? block : args[0])
           end
           # Register a shortcut to hide the model for each section.
+          # NOTE: "hide_in_" is deprecated, use "hide_from_" instead.
+          # FIXME: remove this after giving people an appropriate time
+          # to change their code.
           klass.send(:define_method, "hide_in_#{name}") do |&block|
+            send(name).visible(block ? proc { false == (instance_eval &block) } : false)
+          end
+          # Register a shortcut to hide the model for each section.
+          klass.send(:define_method, "hide_from_#{name}") do |&block|
             send(name).visible(block ? proc { false == (instance_eval &block) } : false)
           end
           # Register a shortcut to show the model for each section.
