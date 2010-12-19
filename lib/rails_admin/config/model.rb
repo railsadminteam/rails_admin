@@ -42,11 +42,14 @@ module RailsAdmin
       # Act as a proxy for the section configurations that actually
       # store the configurations.
       def method_missing(m, *args, &block)
-        if block || args
-          @sections.each do |key, s|
-            s.send(m, *args, &block) if s.respond_to?(m)
+        responded_to = false
+        @sections.each do |key, s|
+          if s.respond_to?(m)
+            responded_to = true
+            s.send(m, *args, &block)
           end
         end
+        raise NoMethodError.new("#{self} has no method #{m}") unless responded_to
       end
     end
   end
