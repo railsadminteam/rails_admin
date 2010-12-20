@@ -92,7 +92,7 @@ module RailsAdmin
         model.columns.map do |property|
           {
             :name => property.name.to_sym,
-            :pretty_name => property.human_name,
+            :pretty_name => property.name.to_s.gsub('_', ' ').capitalize,
             :type => property.type,
             :length => property.limit,
             :nullable? => property.null,
