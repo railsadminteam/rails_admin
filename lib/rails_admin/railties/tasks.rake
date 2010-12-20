@@ -21,7 +21,8 @@ namespace :admin do
     Rails::Generators::Base.source_root(origin)
     copier = Rails::Generators::Base.new
     %w( stylesheets images javascripts ).each do |directory|
-      Dir[File.join(origin,directory,'rails_admin','*')].each do |file|
+      base_dir = File.join(origin,directory,'rails_admin')
+      Dir[File.join(base_dir,'**','*.*')].each do |file|
         relative = file.gsub(/^#{origin}\//, '')
         copier.copy_file(file, File.join(destination,relative))
       end
