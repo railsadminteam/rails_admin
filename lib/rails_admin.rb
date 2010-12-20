@@ -67,7 +67,7 @@ module RailsAdmin
   #
   # @example Custom
   #   RailsAdmin.authorize_with do
-  #     warden.user.is_admin?
+  #     redirect_to root_path unless warden.user.is_admin?
   #   end
   #
   # @see RailsAdmin::DEFAULT_AUTHORIZE
