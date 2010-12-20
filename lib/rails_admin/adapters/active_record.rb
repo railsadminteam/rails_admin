@@ -1,5 +1,6 @@
 require 'active_record'
 require 'rails_admin/config/sections/list'
+require 'rails_admin/abstract_object'
 
 module RailsAdmin
   module Adapters
@@ -41,7 +42,7 @@ module RailsAdmin
       end
 
       def new(params = {})
-        model.new(params)
+        RailsAdmin::AbstractObject.new(model.new)
       end
 
       def destroy_all!
