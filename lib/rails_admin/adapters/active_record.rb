@@ -106,7 +106,7 @@ module RailsAdmin
       def merge_order(options)
         @sort ||= options.delete(:sort) || "id"
         @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
-        options.merge(:order => ["#{@sort} #{@sort_order}"])
+        options.merge(:order => "#{@sort} #{@sort_order}")
       end
 
       def association_parent_model_lookup(association)
