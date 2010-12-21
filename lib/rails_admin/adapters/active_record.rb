@@ -6,8 +6,13 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       def get(id)
-        model.find_by_id(id)
-      rescue ActiveRecord::RecordNotFound
+        if object = model.find_by_id(id)
+          RailsAdmin::AbstractObject.new object
+        else
+          nil
+        end
+      # TODO: ActiveRecord::Base.find_by_id will never raise RecordNotFound, will it?
+      rescue ActiveRecord::RecordNotFound 
         nil
       end
 
