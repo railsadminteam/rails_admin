@@ -1,10 +1,23 @@
 FactoryGirl.define do
-  %w[team manager division league].each do |type|
+  %w[player team manager division league].each do |type|
     sequence :"#{type}_name" do |n|
       "#{type.capitalize} #{n}"
     end
   end
   
+  factory :player do
+    name Factory.next(:player_name)
+    sequence(:number) { |n| n }
+  end
+    
+  factory :draft do
+    date 1.week.ago
+    round rand(100000)
+    pick rand(100000)
+    overall rand(100000)
+    association :team
+    association :player
+  end
   
   factory :team do
     league_id rand(99999)
