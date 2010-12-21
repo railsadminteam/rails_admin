@@ -8,8 +8,15 @@ module RailsAdmin
       self.object = object
     end
     
+    def attributes=(attributes)
+      object.send :attributes=, attributes, false
+    end
+      
+      
     def method_missing(name, *args, &block)
       self.object.send name, *args, &block
     end
+    
+
   end
 end

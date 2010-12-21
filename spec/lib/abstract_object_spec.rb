@@ -13,22 +13,25 @@ describe "AbstractObject" do
   end
   
   describe "creating" do
-    let(:player) { Player.new }
-    let(:object) { RailsAdmin::AbstractObject.new player }
-    let(:name) { "Stefan" }
-    let(:number) { "87" }
-    let(:position) { "Fifth baseman" }
+    describe "a record without associations with protected attributes" do
+      let(:object) { RailsAdmin::AbstractObject.new Player.new }
+      let(:name) { "Stefan" }
+      let(:number) { "87" }
+      let(:position) { "Fifth baseman" }
+      let(:suspended) { true }
     
-    before do
-      player.attributes = { :name => name, :number => number, :position => position }
-      player.save
-    end
+      before do
+        object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended }
+      end
     
-    it "should create a Player with given attributes" do
-      player = Player.first
-      player.name.should == name
-      player.number.should == number.to_i
-      player.position.should == position
+      it "should create a Player with given attributes" do
+        object.save.should be_true
+        player = Player.first
+        player.name.should == name
+        player.number.should == number.to_i
+        player.position.should == position
+        player.suspended.should == suspended
+      end
     end
   end
 end
