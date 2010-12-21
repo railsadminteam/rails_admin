@@ -19,9 +19,10 @@ It currently offers the following features:
 * Authentication (via [Devise](http://github.com/plataformatec/devise))
 * User action history
 
-Mailing List
-------------
-Questions about RailsAdmin can be asked on the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin).
+Help
+----
+If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
+or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 
 Screenshots
 -----------
