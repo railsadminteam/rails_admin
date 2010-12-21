@@ -376,3 +376,5 @@ input.default:active{
 #facebox .content {
     width: 800px;
 }
+
+.createRelatedDialog li.save.add, .createRelatedDialog li.save.edit { display: none; }
