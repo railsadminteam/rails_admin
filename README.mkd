@@ -19,12 +19,6 @@ It currently offers the following features:
 * Authentication (via [Devise](http://github.com/plataformatec/devise))
 * User action history
 
-Bugmash
--------
-Join us for an upcoming [Bugmash](https://github.com/sferik/rails_admin/wiki/bugmash) event on
-Saturday, December 18, starting at [8 AM Pacific time](http://everytimezone.com/) in
-[#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin). See you there!
-
 Mailing List
 ------------
 Questions about RailsAdmin can be asked on the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin).
