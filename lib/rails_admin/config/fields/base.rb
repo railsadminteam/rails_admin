@@ -13,6 +13,13 @@ module RailsAdmin
         attr_reader :name, :properties
         attr_accessor :defined, :order
 
+        def self.inherited(klass)
+            klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
+            klass.instance_variable_set("@column_width", 110)
+            klass.instance_variable_set("@searchable", false)
+            klass.instance_variable_set("@sortable", true)
+        end
+
         include RailsAdmin::Config::Hideable
 
         def initialize(parent, name, properties)
@@ -26,6 +33,40 @@ module RailsAdmin
           # If parent is able to group fields the field should be aware of it
           if parent.kind_of?(RailsAdmin::Config::HasGroups)
             extend RailsAdmin::Config::Fields::Groupable
+          end
+        end
+
+        register_instance_option(:css_class) do
+          self.class.instance_variable_get("@css_class")
+        end
+
+        # NOTE: "css_class_name" is deprecated, use "css_class" instead.
+        # FIXME: remove this after giving people an appropriate time
+        # to change their code.
+        def column_css_class(*args, &block)
+          if !args[0].nil? || block
+            @css_class = args[0].nil? ? block : args[0]
+          else
+            css_class
+          end
+        end
+
+        # NOTE: "css_class_name" is deprecated, use "css_class" instead.
+        # FIXME: remove this after giving people an appropriate time
+        # to change their code.
+        def column_css_class=(value)
+          @css_class = value
+        end
+
+        register_instance_option(:column_width) do
+          self.class.instance_variable_get("@column_width")
+        end
+
+        register_instance_option(:formatted_value) do
+          unless (output = value).nil?
+            output
+          else
+            "".html_safe
           end
         end
 
@@ -68,11 +109,19 @@ module RailsAdmin
           !properties[:nullable?] || required_by_validator
         end
 
+        register_instance_option(:searchable?) do
+          self.class.instance_variable_get("@searchable")
+        end
+
         # Accessor for whether this is a serial field (aka. primary key, identifier).
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:serial?) do
           properties[:serial?]
+        end
+
+        register_instance_option(:sortable?) do
+          self.class.instance_variable_get("@sortable")
         end
 
         # Is this an association

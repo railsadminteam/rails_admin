@@ -28,25 +28,23 @@
   background-image: url(/images/rails_admin/bullet_arrow_down.png);
 }
 
-.grid tbody .bool {
+.grid tbody .boolean {
   margin-bottom:-5px;
 }
 
 .grid tbody .date {
   white-space: nowrap;
 }
-.grid thead .time {
-  background:#F99;
+
+.grid tbody .datetime {
+  white-space: nowrap;
 }
+
 .grid tbody .time {
+  background:#F99;
   white-space: nowrap;
 }
-.grid tbody .dateTime {
-  white-space: nowrap;
-}
-.grid thead .bigDecimal {
-  background:#CC6;
-}
+
 .grid thead .other {
   width:40px;
 }

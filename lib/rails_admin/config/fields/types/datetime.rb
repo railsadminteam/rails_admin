@@ -8,13 +8,7 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:column_css_class) do
-            "dateTime"
-          end
-
-          register_instance_option(:column_width) do
-            170
-          end
+          @column_width = 170
 
           register_instance_option(:date_format) do
             :long
@@ -30,14 +24,6 @@ module RailsAdmin
             else
               "".html_safe
             end
-          end
-
-          register_instance_option(:searchable?) do
-            false
-          end
-
-          register_instance_option(:sortable?) do
-            true
           end
 
           register_instance_option(:strftime_format) do

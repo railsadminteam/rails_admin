@@ -47,21 +47,30 @@
   font-weight:normal;
 }
 
-.field{
+.field {
   margin-bottom: 1px;
   padding-bottom: 5px;
   padding-top: 5px;
 }
 
-.field .input{
+.field .input {
   margin-left: 103px;
 }
 
-.field .row{
+.field .row {
   margin: 10px 0;
 }
 
-.stringField, .intField, .bigDecimalField, .floatField, .dateField, .timestampField, .timeField, .datetimeField, .textField{
+.field .date,
+.field .datetime,
+.field .decimal,
+.field .float,
+.field .integer,
+.field .text,
+.field .time,
+.field .timestamp,
+.field .password,
+.field .string {
   font-family:Verdana, Geneva, sans-serif;
   font-size:12px;
   padding:5px;
@@ -72,21 +81,29 @@
   border-right:1px solid #dbdfe6;
 }
 
-.intField{
-  width:90px;
+.field .boolean {
+  float:left;
+  margin-top:6px;
 }
 
-.bigDecimalField{
+.field .decimal {
   width:170px;
 }
 
-.floatField{
+.field .float {
   width:120px;
 }
 
-.boolField{
-  float:left;
-  margin-top:6px;
+.field .date, .field .timestamp, .field .time, .field .datetime {
+  width:150px;
+}
+
+.field .integer {
+  width:90px;
+}
+
+.field .text {
+  height:100px;
 }
 
 .formSection p.boolPlace{
@@ -144,10 +161,6 @@
   color:#bd2b14;
 }
 
-.dateField, .timestampField, .timeField, .datetimeField{
-  width:150px;
-}
-
 #submitArea{
   display:block;
   list-style-type:none;
@@ -157,10 +170,6 @@
 #submitArea li{
   float:left;
   margin-right:4px;
-}
-
-.textField{
-  height:100px;
 }
 
 .breakSpan{

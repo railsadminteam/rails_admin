@@ -11,21 +11,8 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:column_css_class) do
-            "smallString"
-          end
-
-          register_instance_option(:column_width) do
-            180
-          end
-
-          register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
-          end
+          @column_width = 180
+          @sortable = false
 
           # Accessor for field's label.
           register_instance_option(:label) do
@@ -42,24 +29,9 @@ module RailsAdmin
             false
           end
 
-          # Accessor for whether this is field is searchable.
-          register_instance_option(:searchable?) do
-            false
-          end
-
           # Reader for whether this is a serial field (aka. primary key, identifier).
           register_instance_option(:serial?) do
             false
-          end
-
-          # Accessor for whether this is field is sortable.
-          register_instance_option(:sortable?) do
-            false
-          end
-
-          # Reader for field's value
-          def value
-            bindings[:object].send(name)
           end
         end
       end

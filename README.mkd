@@ -330,7 +330,7 @@ can customize this by:
         list do
           field :name
           field :created_at do
-            column_css_class "customClass"
+            css_class "customClass"
           end
         end
       end

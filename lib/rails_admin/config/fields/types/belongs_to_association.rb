@@ -10,24 +10,11 @@ module RailsAdmin
 
           attr_reader :association
 
+          @column_width = 250
+
           def initialize(parent, name, properties, association)
             super(parent, name, properties)
             @association = association
-          end
-
-          register_instance_option(:column_css_class) do
-            "bigString"
-          end
-
-          register_instance_option(:column_width) do
-            250
-          end
-
-          # Accessor for field's maximum length.
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          register_instance_option(:length) do
-            properties[:length]
           end
 
           # Accessor for whether this is field is mandatory.
@@ -35,13 +22,6 @@ module RailsAdmin
           # @see RailsAdmin::AbstractModel.properties
           register_instance_option(:required?) do
             properties[:nullable?]
-          end
-
-          # Accessor for whether this is a serial field (aka. primary key, identifier).
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          register_instance_option(:serial?) do
-            properties[:serial?]
           end
 
           # Accessor for field's formatted value

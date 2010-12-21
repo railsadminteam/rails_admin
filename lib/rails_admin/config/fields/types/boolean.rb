@@ -8,13 +8,7 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:column_css_class) do
-            "bool"
-          end
-
-          register_instance_option(:column_width) do
-            60
-          end
+          @column_width = 60
 
           register_instance_option(:formatted_value) do
             if value == true
@@ -27,14 +21,6 @@ module RailsAdmin
           # Accessor for field's help text displayed below input field.
           register_instance_option(:help) do
             ""
-          end
-
-          register_instance_option(:searchable?) do
-            false
-          end
-
-          register_instance_option(:sortable?) do
-            true
           end
         end
       end

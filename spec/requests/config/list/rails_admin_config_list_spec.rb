@@ -318,7 +318,7 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin.config Fan do
         list do
           field :id do
-            column_css_class "customClass"
+            css_class "customClass"
           end
           field :name
         end
@@ -329,11 +329,13 @@ describe "RailsAdmin Config DSL List Section" do
 
       get rails_admin_list_path(:model_name => "fan")
 
-      response.should have_tag(".grid thead th:nth-child(2).customClass")
-      response.should have_tag(".grid thead th:nth-child(3).smallString")
-      response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(2).customClass")
-        elements[0].should have_tag("td:nth-child(3).smallString")
+      response.should have_tag(".grid") do |table|
+        table.should have_tag("thead th:nth-child(2).customClass")
+        table.should have_tag("thead th:nth-child(3).string")
+        table.should have_tag("tbody tr") do |rows|
+          rows[0].should have_tag("td:nth-child(2).customClass")
+          rows[0].should have_tag("td:nth-child(3).string")
+        end
       end
 
       # Reset
@@ -344,7 +346,7 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
-            column_css_class "customClass"
+            css_class "customClass"
           end
         end
       end
@@ -354,13 +356,15 @@ describe "RailsAdmin Config DSL List Section" do
 
       get rails_admin_list_path(:model_name => "fan")
 
-      response.should have_tag(".grid thead th:nth-child(3).customClass")
-      response.should have_tag(".grid thead th:nth-child(4).customClass")
-      response.should have_tag(".grid thead th:nth-child(5).smallString")
-      response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(3).customClass")
-        elements[0].should have_tag("td:nth-child(4).customClass")
-        elements[0].should have_tag("td:nth-child(5).smallString")
+      response.should have_tag(".grid") do |table|
+        table.should have_tag("thead th:nth-child(3).customClass")
+        table.should have_tag("thead th:nth-child(4).customClass")
+        table.should have_tag("thead th:nth-child(5).string")
+        table.should have_tag("tbody tr") do |rows|
+          rows[0].should have_tag("td:nth-child(3).customClass")
+          rows[0].should have_tag("td:nth-child(4).customClass")
+          rows[0].should have_tag("td:nth-child(5).string")
+        end
       end
 
       # Reset
@@ -371,7 +375,7 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin::Config.models do
         list do
           fields_of_type :datetime do
-            column_css_class "customClass"
+            css_class "customClass"
           end
         end
       end
@@ -381,13 +385,15 @@ describe "RailsAdmin Config DSL List Section" do
 
       get rails_admin_list_path(:model_name => "fan")
 
-      response.should have_tag(".grid thead th:nth-child(3).customClass")
-      response.should have_tag(".grid thead th:nth-child(4).customClass")
-      response.should have_tag(".grid thead th:nth-child(5).smallString")
-      response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(3).customClass")
-        elements[0].should have_tag("td:nth-child(4).customClass")
-        elements[0].should have_tag("td:nth-child(5).smallString")
+      response.should have_tag(".grid") do |table|
+        table.should have_tag("thead th:nth-child(3).customClass")
+        table.should have_tag("thead th:nth-child(4).customClass")
+        table.should have_tag("thead th:nth-child(5).string")
+        table.should have_tag("tbody tr") do |rows|
+          rows[0].should have_tag("td:nth-child(3).customClass")
+          rows[0].should have_tag("td:nth-child(4).customClass")
+          rows[0].should have_tag("td:nth-child(5).string")
+        end
       end
 
       # Reset
