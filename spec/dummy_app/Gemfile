@@ -15,7 +15,7 @@ group :development, :test do
       gem 'jdbc-mysql', '~> 5.1'
       gem 'activerecord-jdbcmysql-adapter', '~> 1.1'
     when 'postgresql'
-      gem 'jdbc-postgres', '~> 9.0'
+      gem 'jdbc-postgres', '~> 8.4'
       gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1'
     else
       gem 'jdbc-sqlite3', '~> 3.6'
