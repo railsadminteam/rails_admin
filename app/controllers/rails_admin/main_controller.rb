@@ -20,15 +20,9 @@ module RailsAdmin
       @abstract_models.each do |t|
         current_count = t.count
         @max = current_count > @max ? current_count : @max
-
         @count[t.pretty_name] = current_count
       end
 
-      users = User.find(:all)
-      @users = {}
-      users.each do |t|
-        @users[t.id] = t.email
-      end
       render :layout => 'rails_admin/dashboard'
     end
 
