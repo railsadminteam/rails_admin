@@ -9,14 +9,14 @@ group :development, :test do
   if 'java' == RUBY_PLATFORM
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
-      gem 'jdbc-mysql', '~> 5.1'
-      gem 'activerecord-jdbcmysql-adapter', '~> 1.1'
+      gem 'activerecord-jdbcmysql-adapter', '~> 1.1', :platform => :jruby
+      gem 'jdbc-mysql', '~> 5.1', :platform => :jruby
     when 'postgresql'
-      gem 'jdbc-postgres', '~> 8.4'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1', :platform => :jruby
+      gem 'jdbc-postgres', '~> 9.0', :platform => :jruby
     else
-      gem 'jdbc-sqlite3', '~> 3.6'
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 0.9'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.1', :platform => :jruby
+      gem 'jdbc-sqlite3', '~> 3.6', :platform => :jruby
     end
   else
     case ENV['CI_DB_ADAPTER']
