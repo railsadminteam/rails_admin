@@ -424,4 +424,18 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should contain(/CKEDITOR\.replace.*?draft_notes/)
     end
   end
+
+  describe "Paperclip Support" do
+
+    it "should show a file upload field" do
+      RailsAdmin.config User do
+        edit do
+          field :avatar
+        end
+      end
+      get rails_admin_new_path(:model_name => "user")
+      response.should have_tag("input#user_avatar")
+    end
+
+  end
 end
