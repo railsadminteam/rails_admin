@@ -7,9 +7,25 @@ gemspec
 # and rake tasks are available in development mode:
 group :development, :test do
   if 'java' == RUBY_PLATFORM
-    gem 'activerecord-jdbc-adapter', '~> 1.0', :platform => :jruby
-    gem 'jdbc-sqlite3', '~> 3.6', :platform => :jruby
+    case ENV['CI_DB_ADAPTER']
+    when 'mysql'
+      gem 'jdbc-mysql', '~> 5.1'
+      gem 'activerecord-jdbcmysql-adapter', '~> 1.1'
+    when 'postgresql'
+      gem 'jdbc-postgres', '~> 8.4'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1'
+    else
+      gem 'jdbc-sqlite3', '~> 3.6'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 0.9'
+    end
   else
-    gem 'sqlite3-ruby', '~> 1.3'
+    case ENV['CI_DB_ADAPTER']
+    when 'mysql'
+      gem 'mysql', '~> 2.8'
+    when 'postgresql'
+      gem 'pg', '~> 0.10'
+    else
+      gem 'sqlite3-ruby', '~> 1.3'
+    end
   end
 end
