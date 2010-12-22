@@ -30,10 +30,14 @@ namespace :admin do
 
   desc "Prepare Continuous Integration environment"
   task :prepare_ci_env do
+
+    adapter = ENV["CI_DB_ADAPTER"] || "sqlite3"
+    database = ENV["CI_DB_DATABASE"] || ("sqlite3" == adapter ? "db/development.sqlite3" : "rails_admin")
+
     configuration = {
       "test" => {
-        "adapter" => ENV["CI_DB_ADAPTER"] || "sqlite3",
-        "database" => ENV["CI_DB_DATABASE"] || "db/development.sqlite3",
+        "adapter" => adapter,
+        "database" => database,
         "username" => ENV["CI_DB_USERNAME"] || "rails_admin",
         "password" => ENV["CI_DB_PASSWORD"] || "rails_admin",
         "host" => ENV["CI_DB_HOST"] || "localhost",
