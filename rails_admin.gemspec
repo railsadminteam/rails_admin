@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('dummy_data', '~> 0.9')
   s.add_development_dependency('rspec-rails', '~> 2.3')
   s.add_development_dependency('simplecov', '~> 0.3')
+  s.add_development_dependency('webrat', '~> 0.7')
   s.add_development_dependency('ZenTest', '~> 4.4')
   s.add_runtime_dependency('builder', '~> 2.1.0')
   s.add_runtime_dependency('rails', '~> 3.0.3')
