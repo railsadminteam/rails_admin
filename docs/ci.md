@@ -1,6 +1,8 @@
 # Continuous integration
 
-RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration server. Test builds are available for public browsing at [178.79.146.205:8080](http://178.79.146.205:8080/).
+RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration server.
+
+**Coming soon:** _Test builds will be available for public browsing at [ci.railsadmin.org](http://ci.railsadmin.org/)_.
 
 This document describes the Hudson setup used with RailsAdmin in case there's need to duplicate it manually. 
 
@@ -113,8 +115,12 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
     Configuration Matrix
 
     User-defined Axis
-    Name   [ RUBY_VERSION ]
+    Name   [ CI_RUBY_VERSION ]
     Values [ 1.9.2 1.8.7 ree jruby ]
+
+    User-defined Axis
+    Name   [ CI_DB_ADAPTER ]
+    Values [ sqlite3 postgresql ]
 
     [*] Run each configuration sequentially
 
@@ -122,7 +128,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
     Build
 
     Execute shell
-    Command [ bash -l -c "rvm use $RUBY_VERSION && bundle install && bundle exec rake" ]
+    Command [ bash -l -c "rvm use $CI_RUBY_VERSION && export CI_DB_ADAPTER=$CI_DB_ADAPTER && bundle install && cd spec/dummy_app && bundle install && rake admin:prepare_ci_env && cd ../../ && bundle exec rake" ]
 ```
 
 4. Save the job
@@ -136,6 +142,16 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 3. Type http://YOUR_SERVER_IP:8080/job/RailsAdmin/build?token=YOUR_TOKEN to URL
 
+### Additional tasks not covered in this document
+
+* Install Postgres 8.4, create user `rails_admin` and database `ci_rails_admin`
+* Configure Nginx as proxy for Hudson accessible at `http://ci.railsadmin.org`
+
+### Links
+* [Hudson wiki: Installing Hudson on Ubuntu](http://wiki.hudson-ci.org/display/HUDSON/Installing+Hudson+on+Ubuntu)
+* [Install CI Hudson for Ruby on Ubuntu](http://www.allenwei.cn/install-ci-hudson-for-ruby-on-ubuntu/)
+* [Setting up Hudson behind Nginx](http://www.elfsternberg.com/2009/11/11/continual-integration-testing-for-web-applications-setting-up-hudson-behind-nginx/)
+* [Setting up Hudson on port 80 on a Debian or Ubuntu machine](http://www.zzorn.net/2009/11/setting-up-hudson-on-port-80-on-debian.html)
 
 ### Postscript
 
