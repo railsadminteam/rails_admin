@@ -32,7 +32,7 @@ namespace :admin do
   task :prepare_ci_env do
 
     adapter = ENV["CI_DB_ADAPTER"] || "sqlite3"
-    database = ENV["CI_DB_DATABASE"] || ("sqlite3" == adapter ? "db/development.sqlite3" : "rails_admin")
+    database = ENV["CI_DB_DATABASE"] || ("sqlite3" == adapter ? "db/development.sqlite3" : "ci_rails_admin")
 
     configuration = {
       "test" => {
