@@ -6,7 +6,7 @@ require 'rails_admin/config/fields/types/file_upload'
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   paperclip_columns = [:file_name, :content_type, :file_size, :updated_at]
   model = parent.abstract_model.model
-  if defined?(::Paperclip) && model.kind_of?(Paperclip::ClassMethods)
+  if defined?(::Paperclip) and model.kind_of?(Paperclip::ClassMethods)
     if part = paperclip_columns.detect {|it| properties[:name].to_s.strip =~ /^(.+)_#{it}$/ }
       attachment_name = properties[:name].to_s.scan(/^(.+)_#{part}$/).first.first.to_sym
       if model.attachment_definitions.has_key?(attachment_name) && fields.find{|f| attachment_name == f.name}.nil?
