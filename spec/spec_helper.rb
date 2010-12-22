@@ -14,6 +14,7 @@ end
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 require "rails/test_help"
 require "rspec/rails"
+require "database_helpers"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -21,8 +22,10 @@ ActionMailer::Base.default_url_options[:host] = "test.com"
 
 Rails.backtrace_cleaner.remove_silencers!
 
+include DatabaseHelpers
 # Run any available migration
-ActiveRecord::Migrator.migrate File.expand_path('../dummy_app/db/migrate/', __FILE__)
+puts 'setting up database'
+migrate_database
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each{|f| require f}
@@ -39,6 +42,7 @@ RSpec.configure do |config|
   config.include RSpec::Matchers
   config.include Webrat::Matchers
   config.include Webrat::HaveTagMatcher
+  config.include DatabaseHelpers
 
   # == Mock Framework
   config.mock_with :rspec
