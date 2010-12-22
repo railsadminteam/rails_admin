@@ -7,7 +7,7 @@ gemspec
 # and rake tasks are available in development mode:
 group :development, :test do
   if 'java' == RUBY_PLATFORM
-    gem 'activerecord-jdbc-adapter', '~> 1.0', :platform => :jruby
+    gem 'activerecord-jdbc-adapter', '~> 1.1', :platform => :jruby
     gem 'jdbc-sqlite3', '~> 3.6', :platform => :jruby
   else
     gem 'sqlite3-ruby', '~> 1.3'
