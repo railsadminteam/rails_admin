@@ -13,7 +13,7 @@ group :development, :test do
       gem 'jdbc-mysql', '~> 5.1', :platform => :jruby
     when 'postgresql'
       gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1', :platform => :jruby
-      gem 'jdbc-postgres', '~> 9.0', :platform => :jruby
+      gem 'jdbc-postgres', '~> 8.4', :platform => :jruby
     else
       gem 'activerecord-jdbcsqlite3-adapter', '~> 1.1', :platform => :jruby
       gem 'jdbc-sqlite3', '~> 3.6', :platform => :jruby
