@@ -414,7 +414,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       get rails_admin_new_path(:model_name => "user")
-      response.should_not have_tag("input#user_avatar2")
+      response.should have_tag("input#user_avatar")
     end
 
   end
