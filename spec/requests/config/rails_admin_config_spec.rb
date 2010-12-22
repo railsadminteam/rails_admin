@@ -42,4 +42,22 @@ describe "RailsAdmin Config DSL" do
       response.should_not have_tag("input#team_fans")
     end
   end
+  
+  describe "model store does not exist" do
+    before(:each)  { drop_all_tables }
+    after(:all)    { migrate_database }
+    
+    it "should not raise an error when the model tables do not exists" do
+      config_setup = lambda do
+        RailsAdmin.config Team do
+          edit do
+            field :name
+          end
+        end
+      end
+      
+      config_setup.should_not raise_error
+    end
+  end
+  
 end
