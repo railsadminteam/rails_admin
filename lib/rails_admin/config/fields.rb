@@ -80,3 +80,4 @@ end
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/factories/password'
 require 'rails_admin/config/fields/factories/devise'
+require 'rails_admin/config/fields/factories/paperclip'

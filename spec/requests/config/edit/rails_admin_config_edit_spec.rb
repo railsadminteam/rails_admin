@@ -404,4 +404,18 @@ describe "RailsAdmin Config DSL Edit Section" do
       field.required?.should be false
     end
   end
+
+  describe "Paperclip Support" do
+
+    it "should show a file upload field" do
+      RailsAdmin.config User do
+        edit do
+          field :avatar
+        end
+      end
+      get rails_admin_new_path(:model_name => "user")
+      response.should_not have_tag("input#user_avatar2")
+    end
+
+  end
 end
