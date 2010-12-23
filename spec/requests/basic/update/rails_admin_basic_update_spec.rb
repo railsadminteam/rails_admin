@@ -181,4 +181,22 @@ describe "RailsAdmin Basic Update" do
       @req.body.should contain("Player failed to be updated")
     end
   end
+
+  describe "update with serialized objects" do
+    before(:each) do
+      @user = RailsAdmin::AbstractModel.new("User").create(
+        :email => "test@example.com",
+        :password => "test1234",
+        :password_confirmation => 'test1234')
+      get rails_admin_edit_path(:model_name => "user", :id => @user.id)
+      fill_in "user[roles]", :with => "[\"admin\", \"user\"]"
+      @req = click_button "Save"
+      @user = RailsAdmin::AbstractModel.new("User").model.find(@user.id)
+    end
+
+    it "should save the serialized data" do
+      @user.roles.should eql(['admin','user'])
+    end
+  end
+
 end
