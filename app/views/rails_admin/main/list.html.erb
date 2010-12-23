@@ -50,46 +50,51 @@
             </fieldset>
           </form>
         </div>
-        <table class="grid">
-          <thead>
-            <tr>
-              <th class="other left">...</th>
-              <% properties.each do |property| %>
-              <% property_name = property.name %>
-              <% property_pretty_name = property.label %>
-              <% selected = sort == property_name.to_s %>
-              <th class="<%= "#{property.column_css_class}" %> <%= selected ? "selected" : nil %>">
-                <% if property.sortable? %>
-                <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
-                <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
-                <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction) %>
-                <% else %>
-                <%= property_pretty_name.upcase %>
+        <%= form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do %>
+          <table class="grid">
+            <thead>
+              <tr>
+                <th class="other left">...</th>
+                <% properties.each do |property| %>
+                <% property_name = property.name %>
+                <% property_pretty_name = property.label %>
+                <% selected = sort == property_name.to_s %>
+                <th class="<%= "#{property.column_css_class}" %> <%= selected ? "selected" : nil %>">
+                  <% if property.sortable? %>
+                  <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+                  <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
+                  <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction) %>
+                  <% else %>
+                  <%= property_pretty_name.upcase %>
+                  <% end %>
+                </th>
                 <% end %>
-              </th>
+                <th class="other right">...</th>
+                <th class="action"><%= t("admin.list.edit_action").upcase%></th>
+                <th class="action"><%= t("admin.list.delete_action").upcase%></th>
+                <th class="action"><%= t("admin.list.select_action").upcase %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @objects.each_with_index do |object, index| %>
+              <% @model_config.bind(:object, object) %>
+              <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
+                <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+                <td class="other left"><%= link_to("...", other_left) %></td>
+                <% properties.each do |property| %>
+                <td class="<%= "#{property.column_css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
+                <% end %>
+                <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+                <td class="other right"><%= link_to("...", other_right)%></td>
+                <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
+                <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
+                <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
+              </tr>
               <% end %>
-              <th class="other right">...</th>
-              <th class="action"><%= t("admin.list.edit_action").upcase%></th>
-              <th class="action"><%= t("admin.list.delete_action").upcase%></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @objects.each_with_index do |object, index| %>
-            <% @model_config.bind(:object, object) %>
-            <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
-              <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-              <td class="other left"><%= link_to("...", other_left) %></td>
-              <% properties.each do |property| %>
-              <td class="<%= "#{property.column_css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
-              <% end %>
-              <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
-              <td class="other right"><%= link_to("...", other_right)%></td>
-              <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-              <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+          <%= submit_tag t("admin.list.delete_selected") %>
+        <% end %>
       </div>
     </div>
     <% unless @xhr %>

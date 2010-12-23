@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       match "/:model_name", :to => :list, :as => "list"
       match "/:model_name/get_pages", :to => :get_pages, :as => "get_pages"
       match "/:model_name/history", :to => :show_history, :as => "show_history"
-      %w(new create edit update delete destroy).each do |action|
+      %w(new create edit update delete destroy bulk_delete bulk_destroy).each do |action|
         match "/:model_name/#{action}", :to => action.to_sym, :as => action
       end
     end
