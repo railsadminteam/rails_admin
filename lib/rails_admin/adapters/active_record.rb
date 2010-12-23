@@ -9,6 +9,12 @@ module RailsAdmin
       rescue ActiveRecord::RecordNotFound
         nil
       end
+      
+      def get_bulk(ids)
+        model.find(ids)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
 
       def count(options = {})
         model.count(options.reject{|key, value| [:sort, :sort_reverse].include?(key)})
@@ -42,6 +48,10 @@ module RailsAdmin
 
       def new(params = {})
         model.new(params)
+      end
+      
+      def destroy(ids)
+        model.destroy(ids)
       end
 
       def destroy_all!

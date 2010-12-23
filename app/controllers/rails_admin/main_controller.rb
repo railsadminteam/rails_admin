@@ -2,6 +2,7 @@ module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index, :history, :get_history]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
+    before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy]
 
@@ -94,6 +95,20 @@ module RailsAdmin
 
       check_history
 
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+    end
+    
+    def bulk_delete
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
+      @page_type = @abstract_model.pretty_name.downcase
+      
+      render :layout => 'rails_admin/delete'
+    end
+    
+    def bulk_destroy
+      logger.debug @abstract_model.inspect
+      @abstract_model.destroy(params[:bulk_ids])
+      
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
 
@@ -193,6 +208,12 @@ module RailsAdmin
       @object = @abstract_model.get(params[:id])
       @model_config.bind(:object, @object)
       not_found unless @object
+    end
+    
+    def get_bulk_objects
+      @bulk_ids = params[:bulk_ids]
+      @bulk_objects = @abstract_model.get_bulk(@bulk_ids)
+      not_found unless @bulk_objects
     end
 
     def get_sort_hash
