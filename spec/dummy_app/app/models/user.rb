@@ -8,4 +8,6 @@ class User < ActiveRecord::Base
 
   # Add Paperclip support for avatars
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+
+  serialize :roles, Array
 end
