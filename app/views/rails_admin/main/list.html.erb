@@ -16,10 +16,6 @@
   .grid thead <%= ".#{key}" %>{
     width: <%= value[:width] %>px;
   }
-
-  .grid tbody <%= ".#{key}" %>{
-    width: <%= value[:width] %>px;
-  }
 <% end %>
 <% @other.each do |t| %>
   .grid .other.<%= t %>{
