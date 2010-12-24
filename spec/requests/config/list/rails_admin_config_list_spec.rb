@@ -418,7 +418,6 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag("style") {|css| css.should contain(/\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
-      response.should have_tag("style") {|css| css.should contain(/\.grid tbody \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
 
       # Reset
       RailsAdmin::Config.reset Fan
