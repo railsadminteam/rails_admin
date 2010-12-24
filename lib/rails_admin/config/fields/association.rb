@@ -24,13 +24,6 @@ module RailsAdmin
           association[:pretty_name]
         end
 
-        # Accessor for whether this is field is required.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:required?) do
-          false
-        end
-
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.

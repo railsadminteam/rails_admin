@@ -17,13 +17,6 @@ module RailsAdmin
             @association = association
           end
 
-          # Accessor for whether this is field is mandatory.
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          register_instance_option(:required?) do
-            properties[:nullable?]
-          end
-
           # Accessor for field's formatted value
           register_instance_option(:formatted_value) do
             object = bindings[:object].send(association[:name])
