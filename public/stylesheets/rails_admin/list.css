@@ -11,8 +11,7 @@
 
 .grid thead th a {
   padding-right: 20px;
-  position: relative;
-  left: 10px;
+  padding-left: 10px;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: right;
