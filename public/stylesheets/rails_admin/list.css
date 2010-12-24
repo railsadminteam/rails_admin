@@ -45,10 +45,6 @@
   white-space: nowrap;
 }
 
-.grid thead .other {
-  width:40px;
-}
-
 .grid tbody .other a {
   padding-left:2px;
   padding-right:2px;
@@ -80,7 +76,6 @@
 }
 
 .grid thead .action {
-  width:80px;
   font-size:10px;
   margin-top:1px;
 }
