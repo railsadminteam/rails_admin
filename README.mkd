@@ -89,7 +89,7 @@ By using an accessor:
     RailsAdmin.config do |config|
       config.model Team do
         navigation do
-          visible = false
+          self.visible = false
         end
       end
     end
