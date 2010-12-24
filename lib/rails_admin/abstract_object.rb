@@ -18,8 +18,7 @@
     end
     
     def save(options = { :validate => true })
-      object.save options
-      update_all_associations
+      object.save(options) and update_all_associations
     end
     
     protected
