@@ -4,6 +4,8 @@
 *.swp
 .DS_Store
 .bundle
+.rvmrc
+.yardoc
 Gemfile.lock
 coverage/*
 db/*.sqlite3
