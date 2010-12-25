@@ -46,6 +46,7 @@ module RailsAdmin
       # @see RailsAdmin::Config::Fields.registry
       def self.factory(parent)
         fields = []
+        return fields unless parent.abstract_model.model_store_exists?
         # Load fields for all properties (columns)
         parent.abstract_model.properties.each do |properties|
           # Unless a previous factory has already loaded current field as well
@@ -80,3 +81,4 @@ end
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/factories/password'
 require 'rails_admin/config/fields/factories/devise'
+require 'rails_admin/config/fields/factories/paperclip'

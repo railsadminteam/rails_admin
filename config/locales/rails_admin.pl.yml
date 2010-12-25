@@ -35,7 +35,7 @@ pl:
       one_char: "znak."
       many_chars: "znaków lub mniej."
       chosen: "Wybrane %{name}"
-      select_choice: "Wybierz kilka i kliknijs"
+      select_choice: "Wybierz kilka i kliknij"
       chose_all: "Wybierz wszystkie"
       clear_all: "Wyczyść"
       save: "Zapisz"
@@ -47,7 +47,7 @@ pl:
       confirmation: "Tak, jestem pewien."
     flash:
       successful: "%{name} został %{action}"
-      error: "%{name} nie zosstał %{action}"
+      error: "%{name} nie został %{action}"
       noaction: "Nie się nie stało"
     actions:
       create: "dodaj"

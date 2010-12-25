@@ -8,28 +8,18 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:column_css_class) do
-            "text"
+          @column_width = 250
+          @searchable = true
+
+          # CKEditor is disabled by default
+          register_instance_option(:ckeditor) do
+            false 
           end
 
-          register_instance_option(:column_width) do
-            250
-          end
-
-          register_instance_option(:formatted_value) do
-            unless (output = value).nil?
-              output
-            else
-              "".html_safe
-            end
-          end
-
-          register_instance_option(:searchable?) do
-            true
-          end
-
-          register_instance_option(:sortable?) do
-            true
+          # If you want to have a different toolbar configuration for CKEditor
+          # create your own custom config.js and override this configuration
+          register_instance_option(:ckeditor_config_js) do
+            "/javascripts/ckeditor/config.js"
           end
         end
       end

@@ -20,15 +20,9 @@ module RailsAdmin
       @abstract_models.each do |t|
         current_count = t.count
         @max = current_count > @max ? current_count : @max
-
         @count[t.pretty_name] = current_count
       end
 
-      users = User.find(:all)
-      @users = {}
-      users.each do |t|
-        @users[t.id] = t.email
-      end
       render :layout => 'rails_admin/dashboard'
     end
 
@@ -254,8 +248,12 @@ module RailsAdmin
 
     def get_attributes
       @attributes = params[@abstract_model.to_param] || {}
-      # Delete fields that are blank
       @attributes.each do |key, value|
+        # Deserialize the attribute if attribute is serialized
+        if @abstract_model.model.serialized_attributes.keys.include?(key)
+          @attributes[key] = YAML::load(value)
+        end
+        # Delete fields that are blank
         @attributes[key] = nil if value.blank?
       end
     end

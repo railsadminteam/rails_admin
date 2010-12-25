@@ -19,15 +19,10 @@ It currently offers the following features:
 * Authentication (via [Devise](http://github.com/plataformatec/devise))
 * User action history
 
-Bugmash
--------
-Join us for an upcoming [Bugmash](https://github.com/sferik/rails_admin/wiki/bugmash) event on
-Saturday, December 18, starting at [8 AM Pacific time](http://everytimezone.com/) in
-[#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin). See you there!
-
-Mailing List
-------------
-Questions about RailsAdmin can be asked on the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin).
+Help
+----
+If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
+or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 
 Screenshots
 -----------
@@ -46,6 +41,11 @@ And then run:
 This task will install RailsAdmin and [Devise](http://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](http://github.com/plataformatec/devise) is strongly
 recommended to protect your data from anonymous users.
+
+If you plan to use Devise, but want to use a custom model for authentication
+(default is User) you can provide that as an argument for the installer. For example
+to override the default with a Member model run:
+    $ rails generate rails_admin:install_admin member
 
 Usage
 -----
@@ -89,7 +89,7 @@ By using an accessor:
     RailsAdmin.config do |config|
       config.model Team do
         navigation do
-          visible = false
+          self.visible = false
         end
       end
     end
@@ -330,7 +330,7 @@ can customize this by:
         list do
           field :name
           field :created_at do
-            column_css_class "customClass"
+            css_class "customClass"
           end
         end
       end

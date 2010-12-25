@@ -5,6 +5,13 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
+
+        def self.inherited(klass)
+            klass.instance_variable_set("@searchable", false)
+            klass.instance_variable_set("@sortable", false)
+            super(klass)
+        end
+
         # Reader for the association information hash
         def association
           @properties
@@ -15,23 +22,6 @@ module RailsAdmin
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:label) do
           association[:pretty_name]
-        end
-
-        # Accessor for whether this is field is required.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:required?) do
-          false
-        end
-
-        # Accessor for whether this is field is searchable.
-        register_instance_option(:searchable?) do
-          false
-        end
-
-        # Accessor for whether this is field is sortable.
-        register_instance_option(:sortable?) do
-          false
         end
 
         # Accessor whether association is visible or not. By default

@@ -404,4 +404,38 @@ describe "RailsAdmin Config DSL Edit Section" do
       field.required?.should be false
     end
   end
+
+  describe "CKEditor Support" do
+    it "should start with CKEditor disabled" do
+       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
+       field.ckeditor.should be false
+    end
+
+    it "should add Javascript to enable CKEditor" do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes do
+            ckeditor true
+          end
+        end
+      end
+
+      get rails_admin_new_path(:model_name => "draft")
+      response.should contain(/CKEDITOR\.replace.*?draft_notes/)
+    end
+  end
+
+  describe "Paperclip Support" do
+
+    it "should show a file upload field" do
+      RailsAdmin.config User do
+        edit do
+          field :avatar
+        end
+      end
+      get rails_admin_new_path(:model_name => "user")
+      response.should have_tag("input#user_avatar")
+    end
+
+  end
 end

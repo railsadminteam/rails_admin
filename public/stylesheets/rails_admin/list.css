@@ -11,8 +11,7 @@
 
 .grid thead th a {
   padding-right: 20px;
-  position: relative;
-  left: 10px;
+  padding-left: 10px;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: right;
@@ -28,27 +27,21 @@
   background-image: url(/images/rails_admin/bullet_arrow_down.png);
 }
 
-.grid tbody .bool {
+.grid tbody .boolean {
   margin-bottom:-5px;
 }
 
 .grid tbody .date {
   white-space: nowrap;
 }
-.grid thead .time {
-  background:#F99;
+
+.grid tbody .datetime {
+  white-space: nowrap;
 }
+
 .grid tbody .time {
+  background:#F99;
   white-space: nowrap;
-}
-.grid tbody .dateTime {
-  white-space: nowrap;
-}
-.grid thead .bigDecimal {
-  background:#CC6;
-}
-.grid thead .other {
-  width:40px;
 }
 
 .grid tbody .other a {
@@ -82,7 +75,6 @@
 }
 
 .grid thead .action {
-  width:80px;
   font-size:10px;
   margin-top:1px;
 }

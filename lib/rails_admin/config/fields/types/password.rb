@@ -11,6 +11,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           @column_names = [:password]
+          @sortable = false
 
           def self.column_names
             @column_names
@@ -23,14 +24,6 @@ module RailsAdmin
 
           register_instance_option(:formatted_value) do
             "".html_safe
-          end
-
-          register_instance_option(:searchable?) do
-            false
-          end
-
-          register_instance_option(:sortable?) do
-            false
           end
 
           # Password field's value does not need to be read

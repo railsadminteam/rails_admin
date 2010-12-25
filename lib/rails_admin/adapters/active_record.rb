@@ -107,6 +107,10 @@ module RailsAdmin
         end
       end
 
+      def model_store_exists?
+        model.table_exists?
+      end
+
       private
 
       def merge_order(options)

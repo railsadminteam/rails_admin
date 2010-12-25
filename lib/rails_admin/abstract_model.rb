@@ -12,7 +12,7 @@ module RailsAdmin
         excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
         excluded_models << ['History']
 
-        Dir.glob(Rails.root.join("app/models/**/*.rb")).each do |filename|
+        Dir.glob(Rails.application.paths.app.models.collect { |path| File.join(path, "**/*.rb") }).each do |filename|
           File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten.each do |model_name|
             add_model(model_name) unless excluded_models.include?(model_name)
           end
