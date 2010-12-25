@@ -1,6 +1,6 @@
-namespace :ckeditor do
+namespace :admin do
   desc "Download CKEditor to your public javascript folder"
-  task :download do
+  task :ckeditor_download do
     require 'fileutils'
     ckeditor_url = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.5/ckeditor_3.5.tar.gz"
     ckeditor_file = "/tmp/ckeditor_3.5.tar.gz"

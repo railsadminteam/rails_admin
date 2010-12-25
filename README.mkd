@@ -50,7 +50,7 @@ to override the default with a Member model run:
 If you want to use the CKEditor, you need to [download it](http://ckeditor.com/download) from source
 and unpack the 'ckeditor' folder into your default 'public/javascripts' folder. If you're using any
 non-Windows system, you can try to use the automatic downloader:
-    $ rake ckeditor:download
+    $ rake admin:ckeditor_download
 
 Usage
 -----
