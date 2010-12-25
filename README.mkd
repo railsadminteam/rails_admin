@@ -5,7 +5,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 RailsAdmin started as a port of [MerbAdmin](http://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
 by [Bogdan Gaza](http://github.com/hurrycane) with mentors [Erik Michaels-Ober](http://github.com/sferik),
-[Yehuda Katz](http://github.com/wycats), [Rodrigo Rosenfeld Rosas](http://github.com/rosenfeld),
+[Yehuda Katz](http://github.com/wycats),
 [Luke van der Hoeven](http://github.com/plukevdh), and [Rein Henrichs](http://github.com/reinh).
 
 It currently offers the following features:
