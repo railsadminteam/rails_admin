@@ -139,6 +139,11 @@ module RailsAdmin
           !(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
         end
 
+        # Override inspect for nicer console output
+        def inspect
+          "#{to_s} - Configuration for #{name} field in #{abstract_model.model.name}'s #{parent.class.name.demodulize.downcase} view"
+        end
+
         # Reader whether field is optional.
         #
         # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)

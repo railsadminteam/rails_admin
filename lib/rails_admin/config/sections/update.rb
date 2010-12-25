@@ -38,6 +38,11 @@ module RailsAdmin
             end
           end
         end
+
+        # Override inspect for nicer console output
+        def inspect
+          "#{self.to_s} - Configuration for #{abstract_model.model.name}'s update view"
+        end
       end
     end
   end

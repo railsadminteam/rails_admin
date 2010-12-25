@@ -24,6 +24,11 @@ module RailsAdmin
           end
         end
 
+        # Override inspect for nicer console output
+        def inspect
+          "#{self.to_s} - Configuration for #{abstract_model.model.name}'s list view"
+        end
+
         # Default items per page value used if a model level option has not
         # been configured
         cattr_accessor :default_items_per_page

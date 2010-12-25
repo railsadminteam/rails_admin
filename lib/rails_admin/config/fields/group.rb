@@ -43,6 +43,11 @@ module RailsAdmin
           selected
         end
 
+        # Override inspect for nicer console output
+        def inspect
+          "#{to_s} - Configuration for #{name} group in #{abstract_model.model.name}'s #{parent.class.name.demodulize.downcase} view"
+        end
+
         # Reader for fields that are marked as visible
         def visible_fields
           fields.select {|f| f.visible? }

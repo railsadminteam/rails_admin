@@ -39,6 +39,11 @@ module RailsAdmin
         end
       end
 
+      # Override inspect for nicer console output
+      def inspect
+        "#{self.to_s} - Configuration object for #{abstract_model.model.name} model"
+      end
+
       # Act as a proxy for the section configurations that actually
       # store the configurations.
       def method_missing(m, *args, &block)
