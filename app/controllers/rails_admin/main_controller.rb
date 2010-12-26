@@ -362,7 +362,7 @@ module RailsAdmin
     end
 
     def to_model_name(param)
-      param.split("::").map{|x| x.camelize}.join("::")
+      param.split("::").map{|x| x.singularize.camelize}.join("::")
     end
 
     def check_for_cancel
