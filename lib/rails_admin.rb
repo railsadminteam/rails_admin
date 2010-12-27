@@ -33,8 +33,8 @@ module RailsAdmin
   DEFAULT_AUTHORIZE = Proc.new {}
 
   DEFAULT_CURRENT_USER = Proc.new do
-    return nil unless resource = Devise::mappings.keys.first {|r| signed_in?(r)}
-    send("current_#{resource}")
+    devise_resource = defined?(Devise) && Devise::mappings.keys.first {|r| signed_in?(r)}
+    send("current_#{devise_resource||'user'}")
   end
 
   # Setup authentication to be run as a before filter
