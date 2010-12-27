@@ -25,7 +25,7 @@
               </ul>
             </li>
           </ul>
-          <%= form_for(@object, :url => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :method => :delete) do %>
+          <%= form_for(@object, :url => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do %>
 
             <div id="deleteConfirmation">
               <ul id="submitArea">

@@ -176,7 +176,7 @@ describe "RailsAdmin Basic Create" do
 
     it "should show an error message" do
       @response.body.should contain("Player failed to be created")
-      @response.body.should have_tag "form", :action => "/admin/players/create"
+      @response.body.should have_tag "form", :action => "/admin/players"
     end
   end
 end

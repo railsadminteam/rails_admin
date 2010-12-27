@@ -12,7 +12,7 @@ describe "RailsAdmin Basic Update" do
       fill_in "players[name]", :with => ""
       res = click_button "Save"
       res.should be_successful
-      res.should have_tag "form[action*=update]"
+      res.should have_tag "form", :action => "/admin/players/#{@player.id}"
     end
   end
 
