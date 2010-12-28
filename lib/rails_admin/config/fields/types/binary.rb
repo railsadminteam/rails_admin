@@ -1,40 +1,17 @@
-require 'builder'
+require 'rails_admin/config/fields/types/boolean'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Binary < RailsAdmin::Config::Fields::Base
+        class Binary < RailsAdmin::Config::Fields::Types::Boolean
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:column_css_class) do
-            "bool"
-          end
+          @column_width = 60
 
-          register_instance_option(:column_width) do
-            60
-          end
-
-          register_instance_option(:formatted_value) do
-            if value == true
-              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_black.png"), :alt => "True").html_safe
-            else
-              Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("bullet_white.png"), :alt => "False").html_safe
-            end
-          end
-
-          # Accessor for field's help text displayed below input field.
-          register_instance_option(:help) do
-            ""
-          end
-
-          register_instance_option(:searchable?) do
-            false
-          end
-
-          register_instance_option(:sortable?) do
-            true
+          register_instance_option(:partial) do
+            "boolean"
           end
         end
       end
