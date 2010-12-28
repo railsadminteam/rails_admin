@@ -89,17 +89,7 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
 You can hide a model from the top navigation by marking its `visible` option
 as false within the model's navigation configuration section:
 
-By using an accessor:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        navigation do
-          self.visible = false
-        end
-      end
-    end
-
-Or by passing the value as an argument:
+By passing the value as an argument:
 
     RailsAdmin.config do |config|
       config.model Team do
