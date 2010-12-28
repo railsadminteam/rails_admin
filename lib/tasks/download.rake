@@ -6,13 +6,13 @@ namespace :admin do
     ckeditor_file = "/tmp/ckeditor_3.5.tar.gz"
     destination_folder = File.join(FileUtils.pwd, 'public', 'javascripts')
 
-    raise "CKEditor is already installed in your public." if File.exists? File.join(destination_folder, 'ckeditor')
+    raise "CKEditor is already installed in your public." if File.exists? File.join(destination_folder, 'ckeditor', 'LICENSE.html')
     raise "Missing public/javascripts folder. Create it." unless File.exists?(destination_folder)
 
     puts "Downloading CKEditor (you need to have wither wget or curl installed)"
     `curl #{ckeditor_url} -o '#{ckeditor_file}' || wget #{ckeditor_url} -O #{ckeditor_file}`
     puts "Deflating to your public javascript folder"
-    `cd /tmp && tar xvfz ckeditor_3.5.tar.gz && mv ckeditor #{destination_folder}`
+    `cd #{destination_folder} && tar xvfz #{ckeditor_file}`
     puts "Finished."
   end
 end
