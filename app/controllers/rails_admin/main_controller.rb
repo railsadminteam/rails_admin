@@ -338,10 +338,10 @@ module RailsAdmin
           removed_ids = (@cached_assocations_hash[key] - current).map{|m| '#' + m.to_s}
           added_ids = (current - @cached_assocations_hash[key]).map{|m| '#' + m.to_s}
           if removed_ids.any?
-            message << "Removed #{key.capitalize} #{removed_ids.join(', ')} associations"
+            message << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
           end
           if added_ids.any?
-            message << "Added #{key.capitalize} #{added_ids.join(', ')} associations"
+            message << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
           end
         end
 
