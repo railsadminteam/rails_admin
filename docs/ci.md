@@ -102,6 +102,10 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
     Github project [ https://github.com/sferik/rails_admin/ ]
 
 
+    [*] Discard Old Builds
+    Max number of builds to keep [ 10 ]
+
+
     Source Code Management
 
     [*] Git
