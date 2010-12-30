@@ -42,11 +42,6 @@ module RailsAdmin
           end
         end
 
-        # Define setter by the option name
-        scope.send(:define_method, "#{option_name}=") do |value|
-          instance_variable_set("@#{option_name}", value)
-        end
-
         # Define getter/setter by the option name
         scope.send(:define_method, option_name) do |*args, &block|
           if !args[0].nil? || block
