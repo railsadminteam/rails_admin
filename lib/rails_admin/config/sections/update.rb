@@ -29,7 +29,7 @@ module RailsAdmin
           @fields = RailsAdmin::Config::Fields.factory(self)
           @fields.each do |f|
             if f.association? && f.type != :belongs_to_association
-              f.group = f.label
+              f.group = f.label.to_sym
             else
               f.group = :default
             end
