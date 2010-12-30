@@ -2,7 +2,8 @@
 
 RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration server.
 
-**Coming soon:** _Test builds will be available for public browsing at [ci.railsadmin.org](http://ci.railsadmin.org/)_.
+* Test builds are available for public browsing at [ci.railsadmin.org](http://ci.railsadmin.org/)
+* An RSS feed for following failed builds is available at [feed://ci.railsadmin.org/job/RailsAdmin/rssFailed](feed://ci.railsadmin.org/job/RailsAdmin/rssFailed)
 
 This document describes the Hudson setup used with RailsAdmin in case there's need to duplicate it manually. 
 
@@ -24,7 +25,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
    sudo apt-get install hudson
 ```
 
-4. Install RVM for the user hudson with rubies ruby 1.8.7, 1.9.2, ree and jruby.
+4. Install RVM for the user hudson with rubies 1.8.7, 1.9.2, rbx-1.1.0, ree and jruby. Also install bundler gem for each ruby.
 
 5. Start Hudson:
 ```bash
@@ -81,9 +82,13 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 2. Go to `Manage Hudson > Configure system`
 
-3. Type `en` in to `Locale => Default Language` and check `Ignore browser preference and force this language to all users`. Note: At the time of writing Finnish translation was incomplete and confusing so I wanted to disable translations completely.
+3. Type `1` in to `# of executors` to lower CPU usage.
 
-4. Save (Button is in the very bottom of the screen)
+4. Type `1800` in to `Quiet period` which will make Hudson wait half an hour before starting builds. This will conserve CPU and disk usage a lot during times when commits get pushed at high rate as each new build request during the quiet period will reset the build stack and restart quiet period.
+
+5. Type `en` in to `Locale => Default Language` and check `Ignore browser preference and force this language to all users`. Note: At the time of writing Finnish translation was incomplete and confusing so I wanted to disable translations completely.
+
+6. Save (Button is in the very bottom of the screen)
 
 
 ### Create a job for RailsAdmin:
