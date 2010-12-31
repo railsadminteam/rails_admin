@@ -1,5 +1,3 @@
-require 'rails_admin/config/fields/types/boolean'
-
 module RailsAdmin
   module Config
     module Fields
