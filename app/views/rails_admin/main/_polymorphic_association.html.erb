@@ -1,0 +1,14 @@
+<%
+  type_collection = field.polymorphic_type_collection
+  foreign_type = field.association[:options][:foreign_type]
+  selected_type = params["associations"] ? params["associations"][foreign_type] : type_collection.first[1]
+
+  collection = field.associated_collection
+  selected = params["associations"] ? params["associations"][field.name] : nil
+
+  model_name = field.abstract_model.to_param
+%>
+                  <%= label_tag "#{model_name}_#{field.name}", field.label %>
+                  <%= select model_name, foreign_type, type_collection, {:selected => selected_type}, :class => "selectField #{field.has_errors? ? "errorField" : nil}" %>
+
+                  <%= select model_name, field.name, collection, {:include_blank => true, :selected => selected}, :class => "selectField #{field.has_errors? ? "errorField" : nil}", :style => "margin-left:10px;" %>
