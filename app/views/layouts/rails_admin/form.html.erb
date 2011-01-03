@@ -11,7 +11,7 @@
   <%= javascript_include_tag('rails_admin/prototype-date-extensions.js') %>
   <%= javascript_include_tag('rails_admin/datepicker.js') %>
   <%= javascript_include_tag('rails_admin/associations.js') %>
-  <%= javascript_include_tag('ckeditor/ckeditor.js') %>
+  <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
   <%= javascript_include_tag('rails_admin/dashboard.js') %>
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
 
