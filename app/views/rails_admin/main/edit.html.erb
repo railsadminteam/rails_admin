@@ -7,12 +7,12 @@
              <%= link_to(t("admin.history.name"), rails_admin_show_history_path(:id => params[:id]), :class => "addlink") %>
             </li>
           </ul>
-          <a href="<%= rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/rails_admin/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
+          <a href="<%= rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><img src="/images/rails_admin/cross.png" alt="Delete"><%= t("admin.list.delete_action") %></a>
         </div>
       </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
       <div id="contentMainNew">
-        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :multipart => true }) do %>
+        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do %>
           <fieldset>
             <%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.visible_groups) -%>
             <%= render :partial => 'edit_submit_buttons' %>

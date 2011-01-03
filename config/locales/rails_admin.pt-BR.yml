@@ -3,7 +3,7 @@
 
 pt-BR:
   home:
-    name: "home"
+    name: "início"
   admin:
     dashboard:
       pagename: "Administração do site"
@@ -18,14 +18,15 @@ pt-BR:
     history:
       name: "Histórico"
       page_name: "Histórico de %{name}"
+      no_activity: "Sem Atividade"
     credentials:
       log_out: "Desconectar"
     list:
-      edit_action: "Editar"
-      delete_action: "Deletar"
+      edit_action: "Alterar"
+      delete_action: "Excluir"
       add_new: "Adicionar"
       search_btn: "BUSCAR"
-      select: "Selecione %{name} para editar"
+      select: "Selecione %{name} para alterar"
       show_all: "Exibir todos"
     new:
       basic_info: "INFORMAÇÕES BÁSICAS"
@@ -37,9 +38,9 @@ pt-BR:
       select_choice: "Selecione sua(s) escolha(s) e clique"
       chose_all: "Escolher todos"
       clear_all: "Limpar todos"
-      save: "Salvar"
-      save_and_add_another: "Salvar e adicionar outro"
-      save_and_edit: "Salvar e editar"
+      save: "Gravar"
+      save_and_add_another: "Gravar e adicionar outro"
+      save_and_edit: "Gravar e alterar"
       cancel: "Cancelar"
     delete:
       flash_confirmation: "%{name} foi apagado com sucesso"
@@ -53,5 +54,5 @@ pt-BR:
       created: "criado"
       update: "atualizar"
       updated: "atualizado"
-      delete: "deletar"
-      deleted: "deletado"
+      delete: "excluir"
+      deleted: "excluído"

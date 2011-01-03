@@ -66,6 +66,7 @@ module RailsAdmin
     end
 
     def update
+      @cached_assocations_hash = associations_hash
       @modified_assoc = []
 
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
@@ -277,17 +278,18 @@ module RailsAdmin
       end
     end
 
+    # TODO: Move this logic to the History class?
     def check_history
       action = params[:action]
-      message = ""
+      message = []
 
       case action
       when "create"
-        message = "#{action.capitalize}d #{@model_config.bind(:object, @object).list.object_label}"
+        message << "#{action.capitalize}d #{@model_config.bind(:object, @object).list.object_label}"
       when "update"
         # determine which fields changed ???
         changed_property_list = []
-        @properties = @abstract_model.properties.reject{|property| [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on].include?(property[:name])}
+        @properties = @abstract_model.properties.reject{|property| RailsAdmin::History::IGNORED_ATTRS.include?(property[:name])}
 
         @properties.each do |property|
           property_name = property[:name].to_param
@@ -303,21 +305,33 @@ module RailsAdmin
           end
         end
 
+        # Determine if any associations were added or removed
+        associations_hash.each do |key, current|
+          removed_ids = (@cached_assocations_hash[key] - current).map{|m| '#' + m.to_s}
+          added_ids = (current - @cached_assocations_hash[key]).map{|m| '#' + m.to_s}
+          if removed_ids.any?
+            message << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
+          end
+          if added_ids.any?
+            message << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
+          end
+        end
+
         @modified_assoc.uniq.each do |t|
           changed_property_list << "associated #{t}"
         end
 
         if not changed_property_list.empty?
-          message = "Changed #{changed_property_list.join(", ")}"
+          message << "Changed #{changed_property_list.join(", ")}"
         end
       when "destroy"
-        message = "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
+        message << "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
       end
 
       if not message.empty?
         date = Time.now
         History.create(
-          :message => message,
+          :message => message.join(', '),
           :item => @object.id,
           :table => @abstract_model.pretty_name,
           :username => _current_user ? _current_user.email : "",
@@ -334,7 +348,7 @@ module RailsAdmin
     end
 
     def to_model_name(param)
-      param.split("::").map{|x| x.camelize}.join("::")
+      param.split("::").map{|x| x.singularize.camelize}.join("::")
     end
 
     def check_for_cancel
@@ -376,5 +390,17 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)
     end
+
+    def associations_hash
+      associations = {}
+      @abstract_model.associations.each do |association|
+        if [:has_many, :has_and_belongs_to_many].include?(association[:type])
+          records = Array(@object.send(association[:name]))
+          associations[association[:name]] = records.collect(&:id)
+        end
+      end
+      associations
+    end
+
   end
 end

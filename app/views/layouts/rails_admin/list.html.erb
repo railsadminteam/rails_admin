@@ -14,6 +14,7 @@
         Event.observe(elem, 'click', function(e){
           e.preventDefault();
           new Ajax.Updater('content', elem.readAttribute("href"), {
+            method:'get',
             onComplete: function(){
               bindEvents();
             }

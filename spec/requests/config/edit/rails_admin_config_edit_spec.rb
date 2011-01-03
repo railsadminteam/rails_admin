@@ -67,10 +67,10 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should have_tag("h2", :content => "Basic info")
       response.should have_tag("h2", :content => "Belong's to associations")
       response.should have_tag(".field") do |elements|
-        elements[0].should have_tag("#team_name")
-        elements[1].should have_tag("#team_logo_url")
-        elements[2].should have_tag("#team_league_id")
-        elements[3].should have_tag("#team_division_id")
+        elements[0].should have_tag("#teams_name")
+        elements[1].should have_tag("#teams_logo_url")
+        elements[2].should have_tag("#teams_league_id")
+        elements[3].should have_tag("#teams_division_id")
         elements.length.should == 4
       end
 
@@ -115,20 +115,20 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     it "should show all by default" do
       get rails_admin_new_path(:model_name => "team")
-      response.should have_tag("select#team_league_id")
-      response.should have_tag("select#team_division_id")
-      response.should have_tag("input#team_name")
-      response.should have_tag("input#team_logo_url")
-      response.should have_tag("input#team_manager")
-      response.should have_tag("input#team_ballpark")
-      response.should have_tag("input#team_mascot")
-      response.should have_tag("input#team_founded")
-      response.should have_tag("input#team_wins")
-      response.should have_tag("input#team_losses")
-      response.should have_tag("input#team_win_percentage")
-      response.should have_tag("input#team_revenue")
-      response.should have_tag("input#team_players")
-      response.should have_tag("input#team_fans")
+      response.should have_tag("select#teams_league_id")
+      response.should have_tag("select#teams_division_id")
+      response.should have_tag("input#teams_name")
+      response.should have_tag("input#teams_logo_url")
+      response.should have_tag("input#teams_manager")
+      response.should have_tag("input#teams_ballpark")
+      response.should have_tag("input#teams_mascot")
+      response.should have_tag("input#teams_founded")
+      response.should have_tag("input#teams_wins")
+      response.should have_tag("input#teams_losses")
+      response.should have_tag("input#teams_win_percentage")
+      response.should have_tag("input#teams_revenue")
+      response.should have_tag("input#teams_players")
+      response.should have_tag("input#teams_fans")
     end
 
     it "should appear in order defined" do
@@ -141,9 +141,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements[0].should have_tag("#team_manager")
-        elements[1].should have_tag("#team_division_id")
-        elements[2].should have_tag("#team_name")
+        elements[0].should have_tag("#teams_manager")
+        elements[1].should have_tag("#teams_division_id")
+        elements[2].should have_tag("#teams_name")
       end
 
       # Reset
@@ -160,9 +160,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements[0].should have_tag("#team_league_id")
-        elements[1].should have_tag("#team_division_id")
-        elements[2].should have_tag("#team_name")
+        elements[0].should have_tag("#teams_league_id")
+        elements[1].should have_tag("#teams_division_id")
+        elements[2].should have_tag("#teams_name")
         elements.length.should == 3
       end
 
@@ -263,8 +263,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements[0].should have_tag("#team_division_id")
-        elements[1].should have_tag("#team_name")
+        elements[0].should have_tag("#teams_division_id")
+        elements[1].should have_tag("#teams_name")
       end
 
       # Reset
@@ -421,7 +421,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       get rails_admin_new_path(:model_name => "draft")
-      response.should contain(/CKEDITOR\.replace.*?draft_notes/)
+      response.should contain(/CKEDITOR\.replace.*?drafts_notes/)
     end
   end
 
@@ -434,7 +434,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       get rails_admin_new_path(:model_name => "user")
-      response.should have_tag("input#user_avatar")
+      response.should have_tag("input#users_avatar")
     end
 
   end

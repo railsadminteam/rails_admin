@@ -5,7 +5,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 RailsAdmin started as a port of [MerbAdmin](http://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
 by [Bogdan Gaza](http://github.com/hurrycane) with mentors [Erik Michaels-Ober](http://github.com/sferik),
-[Yehuda Katz](http://github.com/wycats), [Rodrigo Rosenfeld Rosas](http://github.com/rosenfeld),
+[Yehuda Katz](http://github.com/wycats),
 [Luke van der Hoeven](http://github.com/plukevdh), and [Rein Henrichs](http://github.com/reinh).
 
 It currently offers the following features:
@@ -47,6 +47,11 @@ If you plan to use Devise, but want to use a custom model for authentication
 to override the default with a Member model run:
     $ rails generate rails_admin:install_admin member
 
+If you want to use the CKEditor, you need to [download it](http://ckeditor.com/download) from source
+and unpack the 'ckeditor' folder into your default 'public/javascripts' folder. If you're using any
+non-Windows system, you can try to use the automatic downloader:
+    $ rake admin:ckeditor_download
+
 Usage
 -----
 Start the server:
@@ -84,17 +89,7 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
 You can hide a model from the top navigation by marking its `visible` option
 as false within the model's navigation configuration section:
 
-By using an accessor:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        navigation do
-          self.visible = false
-        end
-      end
-    end
-
-Or by passing the value as an argument:
+By passing the value as an argument:
 
     RailsAdmin.config do |config|
       config.model Team do
@@ -114,12 +109,12 @@ Or by passing a block that will be lazy evaluated each time the option is read:
       end
     end
 
-These three examples also work as a generic example of how most of the configuration options
-function within RailsAdmin. You can access them with `option_name = value`, you
-can pass a value as an argument `option_name value`, or you can pass in a block
-which will be evaluated each time the option is read. Notable is that boolean options'
-reader accessors will be appended with ? whereas the writers will not be. That is, if you
-want to get the Team model's visibility in navigation, you use
+These two examples also work as a generic example of how most of the
+configuration options function within RailsAdmin. You can pass a value as an
+argument `option_name value`, or you can pass in a block which will be
+evaluated each time the option is read. Notable is that boolean options' reader
+accessors will be appended with ? whereas the writers will not be. That is, if
+you want to get the Team model's visibility in navigation, you use
 `RailsAdmin.config(Team).navigation.visible?`.
 
 Back to navigation configuration - there is also an alias method that can be used:
@@ -178,7 +173,7 @@ which allows all three forms of configuration value passing as well.
 You can configure the number of tabs visible in the top navigation:
 
     RailsAdmin.config do |config|
-      config.navigation.max_visible_tabs = 3
+      config.navigation.max_visible_tabs 3
     end
 
 Links to the rest of the models will be rendered in a drop down menu next to the
