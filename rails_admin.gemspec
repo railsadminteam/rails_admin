@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('dummy_data', '~> 0.9')
   s.add_development_dependency('maruku', '~> 0.6')
   s.add_development_dependency('paperclip', '~> 2.3')
-  s.add_development_dependency('rspec-rails', '~> 2.3')
+  s.add_development_dependency('rspec-rails', '~> 2.4')
   s.add_development_dependency('simplecov', '~> 0.3')
   s.add_development_dependency('webrat', '~> 0.7')
   s.add_development_dependency('yard', '~> 0.6')
