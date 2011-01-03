@@ -40,8 +40,8 @@
       next unless form_section.visible_fields.length > 0
       form_section.visible_fields.select { |field| field.respond_to?(:column_width) }.each do |field|
     %>
-    $("<%= "##{field.abstract_model.to_param}_#{field.name}" %>").style.width = "<%= field.column_width%>px";
-    <% 
+    $("<%= "#{field.abstract_model.to_param}_#{field.name}" %>").style.width = "<%= field.column_width%>px";
+    <%
       end
     end
     %>
