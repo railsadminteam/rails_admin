@@ -1,5 +1,5 @@
 module RailsAdmin
-  class MainController < ApplicationController
+  class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index, :history, :get_history]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_attributes, :only => [:create, :update]
