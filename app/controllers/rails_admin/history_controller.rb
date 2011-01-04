@@ -1,5 +1,5 @@
 module RailsAdmin
-  class HistoryController < ApplicationController
+  class HistoryController < RailsAdmin::ApplicationController
     def list
       if params[:ref].nil? or params[:section].nil?
         not_found
