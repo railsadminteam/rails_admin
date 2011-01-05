@@ -286,6 +286,28 @@ The field's output can be modified:
 
 This would render all the teams' names uppercased.
 
+The field declarations also have access to a bindings hash which contains the
+current record instance in key :object and the view instance in key :view.
+Via :object we can access other columns' values and via :view we can access our
+application's view helpers:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name do
+            formatted_value do
+              bindings[:view].tag(:img, { :src => bindings[:object].logo_url }) << value
+            end
+          end
+          field :created_at
+        end
+      end
+    end
+
+This would output the name column prepended with team's logo using the `tag`
+view helper. This example uses `value` method to access the name field's value,
+but that could be written more verbosely as `bindings[:object].name`.
+
 Fields of different date types (date, datetime, time, timestamp) have two extra
 options to set the time formatting:
 
