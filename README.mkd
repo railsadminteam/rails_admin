@@ -19,6 +19,12 @@ It currently offers the following features:
 * Authentication (via [Devise](http://github.com/plataformatec/devise))
 * User action history
 
+Supported ORMs:
+
+* ActiveRecord
+
+_[Information](https://github.com/sferik/rails_admin/issues/105) about support for other ORMs._
+
 Help
 ----
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
