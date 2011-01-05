@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option(:css_class) do
-            serial? ? "id" : "int"
+            serial? ? "id" : "integer"
           end
 
           register_instance_option(:column_width) do
