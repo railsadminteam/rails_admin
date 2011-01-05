@@ -101,14 +101,18 @@ module RailsAdmin
     def bulk_delete
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-      
+
       render :layout => 'rails_admin/delete'
     end
     
     def bulk_destroy
-      logger.debug @abstract_model.inspect
-      @abstract_model.destroy(params[:bulk_ids])
-      
+      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids])
+
+      @destroyed_objects.each do |object|
+        message = "Destroyed #{@model_config.bind(:object, object).list.object_label}"
+        create_history_item(message, object, @abstract_model)
+      end
+
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
 
@@ -377,17 +381,20 @@ module RailsAdmin
         message << "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
       end
 
-      if not message.empty?
-        date = Time.now
-        History.create(
-          :message => message.join(', '),
-          :item => @object.id,
-          :table => @abstract_model.pretty_name,
-          :username => _current_user ? _current_user.email : "",
-          :month => date.month,
-          :year => date.year
-        )
-      end
+      create_history_item(message, @object, @abstract_model) unless message.empty?
+    end
+
+    def create_history_item(message, object, abstract_model)
+      message = message.join(', ') if message.is_a? Array
+      date = Time.now
+      History.create(
+        :message => message,
+        :item => object.id,
+        :table => abstract_model.pretty_name,
+        :username => _current_user ? _current_user.email : "",
+        :month => date.month,
+        :year => date.year
+      )
     end
 
     def render_error whereto = :new
