@@ -93,7 +93,9 @@
               <% end %>
             </tbody>
           </table>
-          <%= submit_tag t("admin.list.delete_selected") %>
+          <div id="tableFooter">
+            <%= submit_tag t("admin.list.delete_selected"), :id => "bulkdelete_btn" %>
+          </div>
         <% end %>
       </div>
     </div>

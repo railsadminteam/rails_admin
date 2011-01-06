@@ -155,7 +155,7 @@
   border:1px solid #494949;
 }
 
-#searchbar_btn {
+#searchbar_btn, #bulkdelete_btn {
   background:#DDD;
   border:1px solid #CBCBCB;
   font-size:10px;
@@ -164,6 +164,15 @@
   padding-left:6px;
   padding-right:6px;
   margin-left:3px;
+}
+
+#bulkdelete_btn {
+  float: right;
+  margin-top: 3px;
+}
+
+#tableFooter {
+  height: 24px;
 }
 
 .this-page {
