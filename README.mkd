@@ -92,6 +92,8 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
 * setting the model's label
 * configuring the number of visible tabs
 
+**Hiding a model**
+
 You can hide a model from the top navigation by marking its `visible` option
 as false within the model's navigation configuration section:
 
@@ -154,6 +156,8 @@ Both also accept a block:
  hide_in_navigation but that name is now deprecated - you should
  change your code to use hide_from_navigation.
 
+**Setting the model's label**
+
 If you need to customize the label of the model within the navigation tab, use:
 
     RailsAdmin.config do |config|
@@ -174,7 +178,9 @@ shorthand syntax:
       end
     end
 
-which allows all three forms of configuration value passing as well.
+which allows both forms of configuration value passing as well.
+
+**Configuring the number of visible tabs**
 
 You can configure the number of tabs visible in the top navigation:
 
@@ -192,16 +198,21 @@ as an argument by omitting the equals sign.
 * number of items per page
 * number of items per page per model
 * visible fields and their order
+* field's label
 * field's output formatting
 * field's sortability
 * field's column CSS class
 * field's column width
+
+**Number of items per page**
 
 You can configure the default number of rows rendered per page:
 
     RailsAdmin.config do |config|
       config.list.default_items_per_page = 50
     end
+
+**Number of items per page per model**
 
 You can also configure it per model:
 
@@ -212,6 +223,8 @@ You can also configure it per model:
         end
       end
     end
+
+**Visible fields and their order**
 
 By default all fields are visible, but they are not presented in any particular
 order. If you specifically declare fields, only defined fields will be visible
@@ -250,6 +263,8 @@ Note that above example's authorization conditional is not runnable code, just
 an imaginary example. You need to provide RailsAdmin with your own
 authorization scheme for which you can find a guide at the end of this file.
 
+**Field's label**
+
 The header of a list view column can be changed with the familiar label method:
 
     RailsAdmin.config do |config|
@@ -268,6 +283,8 @@ The header of a list view column can be changed with the familiar label method:
 As in the previous example this would show only columns for fields "name" and
 "created at" and their headers would have been renamed to "Title" and
 "Created on".
+
+**Field's output formatting**
 
 The field's output can be modified:
 
@@ -332,6 +349,8 @@ options are defined for a single field, `strftime_format` has precedence over
 [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats)
 and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
 
+**Field's sortability**
+
 You can make a column non-sortable by setting the sortable option to false:
 
     RailsAdmin.config do |config|
@@ -344,6 +363,8 @@ You can make a column non-sortable by setting the sortable option to false:
         end
       end
     end
+
+**Field's column CSS class**
 
 By default each column has a CSS class set according to field's data type. You
 can customize this by:
@@ -362,6 +383,8 @@ can customize this by:
 This would render the "created at" field's header and body columns with a CSS class named
 "customClass".
 
+**Field's column width**
+
 By default columns' widths are calculated from certain pre-defined,
 data-type-specific pixel values. If you want to ensure a minimum width for a
 column, you can:
@@ -379,7 +402,17 @@ column, you can:
 
 ### Create and update views
 
-* field groupings
+* Field groupings
+  * Visibility
+  * Labels
+  * Syntax
+* Fields
+  * Rendering
+  * Overriding field type
+  * Creating a custom field type
+  * Creating a custom field factory
+
+**Field groupings**
 
 By default RailsAdmin groups fields in the edit views (create and update views)
 by including all database columns and belongs to associations to "Basic info"
@@ -390,6 +423,8 @@ The configuration accessors are `edit`, `create` and `update`. First one is a
 batch accessor which configures both create and update views. For consistency,
 these examples only include the batch accessor `edit`, but if you need differing
 create and update views just replace `edit` with `create` or `update`.
+
+**Field groupings - visibility**
 
 Field groups can be hidden:
 
@@ -408,6 +443,8 @@ Associations' groups can be accessed by the name of the association, such as
 :fans or :players. The hide method is just a shortcut for the actual `visible`
 option which was mentioned in the beginning of the navigation section.
 
+**Field groupings - labels**
+
 Field groups can be renamed:
 
     RailsAdmin.config do |config|
@@ -421,6 +458,8 @@ Field groups can be renamed:
     end
 
 This would render "Team information" instead of "Basic info" as the groups label.
+
+**Field groupings - syntax**
 
 As in the list view, the edit views' configuration blocks can directly
 contain field configurations, but in edit views those configurations can
@@ -458,6 +497,8 @@ In fact the first examples `group :default` configuration is unnecessary
 as the default group has already initialized all fields and belongs to
 associations for itself.
 
+**Fields**
+
 Just like in the list view, all fields are visible by default. If you specifically
 declare fields, only defined fields will be visible and they will be presented
 in the order defined. Thus both examples would render a form with
@@ -471,13 +512,112 @@ field's input element.
 Naturally edit views' fields also have the visible option along with
 hide and show accessors as the list view has.
 
+**Fields - rendering**
+
+The edit view's fields are rendered using partials. Each field type has its own
+partial per default, but that can be overridden:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :name do
+            partial "my_awesome_partial"
+          end
+        end
+      end
+    end
+
+The partial should be placed in your applications template folder, such as
+`app/views/rails_admin/main/_my_awesome_partial.html.erb`.
+
+One can also completely override the rendering logic:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :name do
+            render do
+              bindings[:view].render :partial => partial.to_s, :locals => {:field => self}
+            end
+          end
+        end
+      end
+    end
+
+That example is just the default rendering method, but it shows you that you
+have access to the current template's scope with bindings[:view]. There's also
+bindings[:object] available, which is the database record being edited.
+Bindings concept was introduced earlier in this document and the
+functionality is the same.
+
+**Fields - overriding field type**
+
+If you'd like to override the type of the field that get's instantiated the
+field method provides second parameter which is field type as a symbol. For
+instance, if we have a column that's a text column in the database, but we'd
+like to have it as a string type we could accomplish that like this:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :description, :string do
+             # configuration here
+          end
+        end
+      end
+    end
+
+If no configuration needs to take place the configuration block could have been
+left out:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :description, :string
+        end
+      end
+    end
+
+A word of warning, if you make field declarations for the same field a number
+of times with a type defining second argument in place, the type definition
+will ditch the old field configuration and load a new field instance in place.
+
+**Fields - Creating a custom field type**
+
+If you have a reuseable field you can define a custom class extending
+`RailsAdmin::Config::Fields::Base` and register it for RailsAdmin:
+
+    RailsAdmin::Config::Fields::Types::register(:my_awesome_type, MyAwesomeFieldClass)
+
+Then you can use your custom class in a field:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :name, :my_awesome_type do
+             # configuration here
+          end
+        end
+      end
+    end
+
+**Fields - Creating a custom field factory**
+
+Type guessing can be overridden by registering a custom field "factory", but
+for now you need to study `lib/rails_admin/config/fields/factories/*` for
+examples if you want to use that mechanism.
+
 ### Mass Assignment Operations ###
 
 * Mass assign for every model configuration
 * Mass assign for every section (create, list, navigation and update)
 * Mass assign by field type
 
-Mass assignment operations are used to pass in configuration blocks for multiple targets at once. For instance, the code below configures every models' label displayed uppercased in the list view.
+**Mass assign for every model configuration**
+
+Mass assignment operations are used to pass in configuration blocks for
+multiple targets at once. For instance, the code below configures every models'
+label displayed uppercased in the list view.
 
     RailsAdmin.config do |config|
       config.models do
@@ -489,7 +629,11 @@ Mass assignment operations are used to pass in configuration blocks for multiple
       end
     end
 
-If one would like to assign that same behavior for all the different views in RailsAdmin (create, list, navigation and update) one could pass the label definition one level higher:
+**Mass assign for every section (create, list, navigation and update)**
+
+If one would like to assign that same behavior for all the different views in
+RailsAdmin (create, list, navigation and update) one could pass the label
+definition one level higher:
 
     RailsAdmin.config do |config|
       config.models do
@@ -509,7 +653,11 @@ Naturally this also works for a single model configuration:
       end
     end
 
-One can also assign configurations for all fields by type. For instance modifying the date presentation of all datetime fields in all sections can be accomplished like this:
+**Mass assign by field type**
+
+One can also assign configurations for all fields by type. For instance
+modifying the date presentation of all datetime fields in all sections can be
+accomplished like this:
 
     RailsAdmin.config do |config|
       config.models do
