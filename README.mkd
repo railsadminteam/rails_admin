@@ -418,15 +418,15 @@ related models and as part of the audit information stored in the history
 records - so keep in mind that this configuration option has widespread
 effects.
 
-RailsAdmin.config do |config|
-  config.model Team do
-    list do
-      object_label do
-        "#{bindings[:object].name} - #{bindings[:object].league.name}"
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          object_label do
+            "#{bindings[:object].name} - #{bindings[:object].league.name}"
+          end
+        end
       end
     end
-  end
-end
 
 This would output "Team's name - Team's league's name" in all the places
 mentioned in paragraph above example.
@@ -623,20 +623,20 @@ RailsAdmin ships with the following field types:
 * date
 * datetime
 * decimal
-* file_upload, does not initialize automatically
-* paperclip_file, initializes automatically if Paperclip is present
+* file_upload _does not initialize automatically_
+* paperclip_file _initializes automatically if Paperclip is present_
 * float
 * has_and_belongs_to_many_association
 * has_many_association
 * has_one_association
 * integer
-* password, initializes if string type column's name is password
+* password _initializes if string type column's name is password_
 * string
 * text
 * time
 * timestamp
-* virtual, useful for displaying data that is calculated a runtime
-(for example a method call on model instance)
+* virtual _useful for displaying data that is calculated a runtime
+(for example a method call on model instance)_
 
 **Fields - Creating a custom field type**
 
