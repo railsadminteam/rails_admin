@@ -195,14 +195,16 @@ as an argument by omitting the equals sign.
 
 ### List view
 
-* number of items per page
-* number of items per page per model
-* visible fields and their order
-* field's label
-* field's output formatting
-* field's sortability
-* field's column CSS class
-* field's column width
+* Number of items per page
+* Number of items per page per model
+* Fields
+  * Visibility and ordering
+  * Label
+  * Output formatting
+  * Sortability
+  * Column CSS class
+  * Column width
+  * The object_label method
 
 **Number of items per page**
 
@@ -224,7 +226,7 @@ You can also configure it per model:
       end
     end
 
-**Visible fields and their order**
+**Fields - Visibility and ordering**
 
 By default all fields are visible, but they are not presented in any particular
 order. If you specifically declare fields, only defined fields will be visible
@@ -263,7 +265,7 @@ Note that above example's authorization conditional is not runnable code, just
 an imaginary example. You need to provide RailsAdmin with your own
 authorization scheme for which you can find a guide at the end of this file.
 
-**Field's label**
+**Fields - Label**
 
 The header of a list view column can be changed with the familiar label method:
 
@@ -284,7 +286,7 @@ As in the previous example this would show only columns for fields "name" and
 "created at" and their headers would have been renamed to "Title" and
 "Created on".
 
-**Field's output formatting**
+**Fields - Output formatting**
 
 The field's output can be modified:
 
@@ -349,7 +351,7 @@ options are defined for a single field, `strftime_format` has precedence over
 [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats)
 and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
 
-**Field's sortability**
+**Fields - Sortability**
 
 You can make a column non-sortable by setting the sortable option to false:
 
@@ -364,7 +366,7 @@ You can make a column non-sortable by setting the sortable option to false:
       end
     end
 
-**Field's column CSS class**
+**Fields - Column CSS class**
 
 By default each column has a CSS class set according to field's data type. You
 can customize this by:
@@ -383,7 +385,7 @@ can customize this by:
 This would render the "created at" field's header and body columns with a CSS class named
 "customClass".
 
-**Field's column width**
+**Fields - Column width**
 
 By default columns' widths are calculated from certain pre-defined,
 data-type-specific pixel values. If you want to ensure a minimum width for a
@@ -400,6 +402,35 @@ column, you can:
       end
     end
 
+**Fields - The object_label method**
+
+List section has a configuration option `object_label` which configures
+the title of a single database record.
+
+By default it queries if the record in question has columns named "name" or
+"title". If neither is found it returns the model's classname appended with its
+database identifier.
+
+This value is used in a number of places in RailsAdmin - for instance as the
+output of belongs to associations in the listing views of related models, as
+the option labels of the relational fields' input widgets in the edit views of
+related models and as part of the audit information stored in the history
+records - so keep in mind that this configuration option has widespread
+effects.
+
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      object_label do
+        "#{bindings[:object].name} - #{bindings[:object].league.name}"
+      end
+    end
+  end
+end
+
+This would output "Team's name - Team's league's name" in all the places
+mentioned in paragraph above example.
+
 ### Create and update views
 
 * Field groupings
@@ -409,6 +440,7 @@ column, you can:
 * Fields
   * Rendering
   * Overriding field type
+  * Available field types
   * Creating a custom field type
   * Creating a custom field factory
 
@@ -552,7 +584,7 @@ functionality is the same.
 
 **Fields - overriding field type**
 
-If you'd like to override the type of the field that get's instantiated the
+If you'd like to override the type of the field that gets instantiated, the
 field method provides second parameter which is field type as a symbol. For
 instance, if we have a column that's a text column in the database, but we'd
 like to have it as a string type we could accomplish that like this:
@@ -581,6 +613,30 @@ left out:
 A word of warning, if you make field declarations for the same field a number
 of times with a type defining second argument in place, the type definition
 will ditch the old field configuration and load a new field instance in place.
+
+**Fields - Available field types**
+
+RailsAdmin ships with the following field types:
+
+* belongs_to_association
+* boolean
+* date
+* datetime
+* decimal
+* file_upload, does not initialize automatically
+* paperclip_file, initializes automatically if Paperclip is present
+* float
+* has_and_belongs_to_many_association
+* has_many_association
+* has_one_association
+* integer
+* password, initializes if string type column's name is password
+* string
+* text
+* time
+* timestamp
+* virtual, useful for displaying data that is calculated a runtime
+(for example a method call on model instance)
 
 **Fields - Creating a custom field type**
 
