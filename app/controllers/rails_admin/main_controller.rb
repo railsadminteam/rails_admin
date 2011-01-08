@@ -4,7 +4,7 @@ module RailsAdmin
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
-    before_filter :check_for_cancel, :only => [:create, :update, :destroy]
+    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy]
 
     def index
       @page_name = t("admin.dashboard.pagename")
