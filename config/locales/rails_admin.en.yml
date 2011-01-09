@@ -24,6 +24,8 @@ en:
     list:
       edit_action: "Edit"
       delete_action: "Delete"
+      select_action: "Select"
+      delete_selected: "Delete selected"
       add_new: "Add new"
       search_btn: "SEARCH"
       select: "Select %{name} to edit"
