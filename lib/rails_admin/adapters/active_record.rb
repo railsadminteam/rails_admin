@@ -85,7 +85,7 @@ module RailsAdmin
       end
 
       def associations
-        model.reflect_on_all_associations.map do |association|
+        model.reflect_on_all_associations.select { |association| not association.options[:polymorphic] }.map do |association|
           {
             :name => association.name,
             :pretty_name => association.name.to_s.gsub('_', ' ').capitalize,
