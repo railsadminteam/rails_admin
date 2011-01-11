@@ -26,7 +26,8 @@ Rails.backtrace_cleaner.remove_silencers!
 
 include DatabaseHelpers
 # Run any available migration
-puts 'setting up database'
+puts 'Setting up database...'
+drop_all_tables
 migrate_database
 
 # Load support files

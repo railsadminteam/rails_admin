@@ -435,6 +435,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "user")
       response.should have_tag("input#users_avatar")
+
+      #Reset
+      RailsAdmin::Config.reset User
     end
 
   end

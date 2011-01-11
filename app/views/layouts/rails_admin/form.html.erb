@@ -11,7 +11,7 @@
   <%= javascript_include_tag('rails_admin/prototype-date-extensions.js') %>
   <%= javascript_include_tag('rails_admin/datepicker.js') %>
   <%= javascript_include_tag('rails_admin/associations.js') %>
-  <%= javascript_include_tag('ckeditor/ckeditor.js') %>
+  <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
   <%= javascript_include_tag('rails_admin/dashboard.js') %>
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
 
@@ -40,8 +40,8 @@
       next unless form_section.visible_fields.length > 0
       form_section.visible_fields.select { |field| field.respond_to?(:column_width) }.each do |field|
     %>
-    $("<%= "##{field.abstract_model.to_param}_#{field.name}" %>").style.width = "<%= field.column_width%>px";
-    <% 
+    $("<%= "#{field.abstract_model.to_param}_#{field.name}" %>").style.width = "<%= field.column_width%>px";
+    <%
       end
     end
     %>

@@ -15,6 +15,12 @@ module RailsAdmin
       rescue ActiveRecord::RecordNotFound 
         nil
       end
+      
+      def get_bulk(ids)
+        model.find(ids)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
 
       def count(options = {})
         model.count(options.reject{|key, value| [:sort, :sort_reverse].include?(key)})
@@ -49,6 +55,10 @@ module RailsAdmin
       def new(params = {})
         RailsAdmin::AbstractObject.new(model.new)
       end
+      
+      def destroy(ids)
+        model.destroy(ids)
+      end
 
       def destroy_all!
         model.all.each do |object|
@@ -81,7 +91,7 @@ module RailsAdmin
       end
 
       def associations
-        model.reflect_on_all_associations.map do |association|
+        model.reflect_on_all_associations.select { |association| not association.options[:polymorphic] }.map do |association|
           {
             :name => association.name,
             :pretty_name => association.name.to_s.gsub('_', ' ').capitalize,
