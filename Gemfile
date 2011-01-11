@@ -30,4 +30,5 @@ group :development, :test do
   end
   # gem 'webrat', :git => 'http://github.com/kalv/webrat.git'
   gem 'factory_girl', :git => 'http://github.com/thoughtbot/factory_girl.git'
+  gem 'orm_adapter'
 end
