@@ -2,8 +2,9 @@ module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index, :history, :get_history]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
+    before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
-    before_filter :check_for_cancel, :only => [:create, :update, :destroy]
+    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy]
 
     def index
       @page_name = t("admin.dashboard.pagename")
@@ -93,6 +94,24 @@ module RailsAdmin
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
       check_history
+
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+    end
+    
+    def bulk_delete
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
+      @page_type = @abstract_model.pretty_name.downcase
+
+      render :layout => 'rails_admin/delete'
+    end
+    
+    def bulk_destroy
+      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids])
+
+      @destroyed_objects.each do |object|
+        message = "Destroyed #{@model_config.bind(:object, object).list.object_label}"
+        create_history_item(message, object, @abstract_model)
+      end
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
@@ -193,6 +212,12 @@ module RailsAdmin
       @object = @abstract_model.get(params[:id])
       @model_config.bind(:object, @object)
       not_found unless @object
+    end
+    
+    def get_bulk_objects
+      @bulk_ids = params[:bulk_ids]
+      @bulk_objects = @abstract_model.get_bulk(@bulk_ids)
+      not_found unless @bulk_objects
     end
 
     def get_sort_hash
@@ -356,17 +381,20 @@ module RailsAdmin
         message << "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
       end
 
-      if not message.empty?
-        date = Time.now
-        History.create(
-          :message => message.join(', '),
-          :item => @object.id,
-          :table => @abstract_model.pretty_name,
-          :username => _current_user ? _current_user.email : "",
-          :month => date.month,
-          :year => date.year
-        )
-      end
+      create_history_item(message, @object, @abstract_model) unless message.empty?
+    end
+
+    def create_history_item(message, object, abstract_model)
+      message = message.join(', ') if message.is_a? Array
+      date = Time.now
+      History.create(
+        :message => message,
+        :item => object.id,
+        :table => abstract_model.pretty_name,
+        :username => _current_user ? _current_user.email : "",
+        :month => date.month,
+        :year => date.year
+      )
     end
 
     def render_error whereto = :new
