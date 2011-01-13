@@ -36,7 +36,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "should destroy an object" do
-      @player.should_not be_nil
+      @player.should be
     end
   end
 
