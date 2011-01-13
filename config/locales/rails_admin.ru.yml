@@ -23,6 +23,8 @@ ru:
     list:
       edit_action: "Редактировать"
       delete_action: "Удалить"
+      select_action: "Выбрать"
+      delete_selected: "Удалить выбранные"
       add_new: "Добавить"
       search_btn: "ПОИСК"
       select: "Выберите %{name} для редактирования"
