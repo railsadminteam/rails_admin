@@ -3,7 +3,7 @@ module RailsAdmin
   class AbstractModel
     module GenericSupport
       def to_param
-        model.to_s.underscore.pluralize
+        model.to_s.tableize.gsub("/", "::")
       end
 
       def pretty_name
