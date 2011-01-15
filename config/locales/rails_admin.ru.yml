@@ -6,9 +6,9 @@ ru:
   admin:
     dashboard:
       pagename: "Управление сайтом"
-      name: "Контрольная панель"
+      name: "Панель управления"
       model_name: "Название модели"
-      last_used: "Последнее раз использовалось"
+      last_used: "Последние изменения"
       records: "Записи"
       modify: "Изменить"
       add_new: "Добавить"
@@ -16,7 +16,7 @@ ru:
       ago: "назад"
     history:
       name: "История"
-      page_name: "История для %{name}"
+      page_name: "История объектов \"%{name}\""
       no_activity: "Без изменений"
     credentials:
       log_out: "Выйти"
@@ -27,7 +27,7 @@ ru:
       delete_selected: "Удалить выбранные"
       add_new: "Добавить"
       search_btn: "ПОИСК"
-      select: "Выберите %{name} для редактирования"
+      select: "%{name}: выберите объект для редактирования"
       show_all: "Показать все"
     new:
       basic_info: "Основное"
@@ -35,7 +35,7 @@ ru:
       optional: "Необязательное"
       one_char: "символ."
       many_chars: "символов или меньше."
-      chosen: "Выбрано %{name}"
+      chosen: "Выбран объект \"%{name}\""
       select_choice: "Выберите нужное и кликните"
       chose_all: "Выбрать все"
       clear_all: "Очистить"
@@ -44,11 +44,12 @@ ru:
       save_and_edit: "Сохранить и продолжить редактирование"
       cancel: "Отмена"
     delete:
-      flash_confirmation: "%{name} удалено"
+      flash_confirmation: "%{name}: объект удален"
       confirmation: "Да, я уверен"
+      notice: "По крайней мере один "
     flash:
-      successful: "%{name} был %{action}"
-      error: "Не получилось %{action} %{name}"
+      successful: "%{name}: объект был %{action}"
+      error: "%{name}: Не получилось %{action} объект"
       noaction: "Никаких изменений не выполнено"
     actions:
       create: "создать"
