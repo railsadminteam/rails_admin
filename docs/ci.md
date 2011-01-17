@@ -137,7 +137,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
     Build
 
     Execute shell
-    Command [ bash -l -c "rvm use $CI_RUBY_VERSION && export CI_DB_ADAPTER=$CI_DB_ADAPTER && bundle install && cd spec/dummy_app && bundle install && rake admin:prepare_ci_env && cd ../../ && bundle exec rake" ]
+    Command [ bash -l -c "rvm use $CI_RUBY_VERSION && export CI_DB_ADAPTER=$CI_DB_ADAPTER && bundle install && cd spec/dummy_app && bundle install && rake admin:prepare_ci_env --trace && cd ../../ && bundle exec rake spec --trace" ]
 ```
 
 4. Save the job
