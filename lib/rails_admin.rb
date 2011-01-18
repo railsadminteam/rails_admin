@@ -33,8 +33,14 @@ module RailsAdmin
   DEFAULT_AUTHORIZE = Proc.new {}
 
   DEFAULT_CURRENT_USER = Proc.new do
-    return nil unless resource = Devise::mappings.keys.first {|r| signed_in?(r)}
-    send("current_#{resource}")
+    warden = request.env["warden"]
+    if warden
+      warden.user
+    elsif respond_to?(:current_user)
+      current_user
+    else
+      raise "See RailsAdmin.current_user_method or setup Devise / Warden"
+    end
   end
 
   # Setup authentication to be run as a before filter
@@ -80,7 +86,7 @@ module RailsAdmin
   # Setup a different method to determine the current user or admin logged in.
   # This is run inside the controller instance and made available as a helper.
   #
-  # By default, _current_user_ will be used.
+  # By default, _request.env["warden"].user_ or _current_user_ will be used.
   #
   # @example Custom
   #   RailsAdmin.current_user_method do
