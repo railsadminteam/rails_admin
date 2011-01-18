@@ -21,17 +21,16 @@
     dateFormat: 'yyyy-MM-dd'}
 
   document.observe("dom:loaded", function() {
-    $$(".dateField").each(function(elem){
+    $$(".field .date").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png'});
     });
-    // .dateField, .timestampField, .timeField, .datetimeField
-    $$(".timestampField").each(function(elem){
+    $$(".field .timestamp").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, timePickerAdjacent: true});
     });
-    $$(".timeField").each(function(elem){
+    $$(".field .time").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, datePicker :false});
     });
-    $$(".datetimeField").each(function(elem){
+    $$(".field .datetime").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png', timePicker: true, timePickerAdjacent: true});
     });
 
