@@ -14,21 +14,16 @@ module RailsAdmin
     # configuration objects) store model specific configuration (such as the label of the
     # model to be used as the title in the main navigation tabs).
     module Sections
-      def self.extended(obj)
-        sections = obj.instance_variable_set("@sections", {});
-        constants.each do |name|
-          section = "RailsAdmin::Config::Sections::#{name}".constantize
-          name = name.to_s.downcase.to_sym
-          sections[name] = section.new(obj)
-        end
-      end
-
       def self.included(klass)
         # Register accessors for all the sections in this namespace
         constants.each do |name|
           section = "RailsAdmin::Config::Sections::#{name}".constantize
           name = name.to_s.downcase.to_sym
           klass.send(:define_method, name) do |&block|
+            @sections = {} unless @sections
+            unless @sections[name]
+              @sections[name] = section.new(self)
+            end
             @sections[name].instance_eval &block if block
             @sections[name]
           end

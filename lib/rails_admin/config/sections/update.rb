@@ -25,16 +25,18 @@ module RailsAdmin
           super(parent)
           # Populate @fields instance variable with model's properties
           @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default) ]
-          @groups.first.label = proc { I18n.translate("admin.new.basic_info") }
+          @groups.first.label do
+            I18n.translate("admin.new.basic_info")
+          end
           @fields = RailsAdmin::Config::Fields.factory(self)
           @fields.each do |f|
             if f.association? && f.type != :belongs_to_association
-              f.group = f.label.to_sym
+              f.group f.label
             else
-              f.group = :default
+              f.group :default
             end
             if f.serial? || @@default_hidden_fields.include?(f.name)
-              f.visible = false
+              f.hide
             end
           end
         end

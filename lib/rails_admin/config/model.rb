@@ -8,12 +8,19 @@ module RailsAdmin
     class Model < RailsAdmin::Config::Base
       include RailsAdmin::Config::Sections
 
-      def initialize(abstract_model)
-        @abstract_model = abstract_model
+      def initialize(entity)
+        @abstract_model = begin
+          if entity.kind_of?(RailsAdmin::AbstractModel)
+            entity
+          elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+            RailsAdmin::AbstractModel.new(entity)
+          else
+            RailsAdmin::AbstractModel.new(entity.class)
+          end
+        end
         @bindings = {}
         @parent = nil
         @root = self
-        extend RailsAdmin::Config::Sections
       end
 
       def excluded?
@@ -33,9 +40,9 @@ module RailsAdmin
       # Configure create and update views as a bulk operation with given block
       # or get update view's configuration if no block is given
       def edit(&block)
-        return @sections[:update] unless block_given?
+        return send(:update) unless block_given?
         [:create, :update].each do |s|
-          @sections[s].instance_eval &block
+          send(s, &block)
         end
       end
 
@@ -43,10 +50,11 @@ module RailsAdmin
       # store the configurations.
       def method_missing(m, *args, &block)
         responded_to = false
-        @sections.each do |key, s|
-          if s.respond_to?(m)
+        [:create, :list, :navigation, :update].each do |s|
+          section = send(s)
+          if section.respond_to?(m)
             responded_to = true
-            s.send(m, *args, &block)
+            section.send(m, *args, &block)
           end
         end
         raise NoMethodError.new("#{self} has no method #{m}") unless responded_to
