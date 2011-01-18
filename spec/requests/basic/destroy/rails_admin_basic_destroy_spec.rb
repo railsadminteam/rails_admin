@@ -35,7 +35,7 @@ describe "RailsAdmin Basic Destroy" do
       @req.should be_successful
     end
 
-    it "should destroy an object" do
+    it "should not destroy an object" do
       @player.should be
     end
   end
