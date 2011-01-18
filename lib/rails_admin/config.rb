@@ -47,7 +47,7 @@ module RailsAdmin
         end
       end
       config = @@registry[key] ||= RailsAdmin::Config::Model.new(entity)
-      config.bind(:object, entity) if entity.kind_of?(config.abstract_model.model)
+      config.bind(:object, entity.class.to_s == config.abstract_model.model.name ? entity : nil)
       config.instance_eval &block if block
       config
     end
