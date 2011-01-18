@@ -16,22 +16,22 @@
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
 
   <script type="text/javascript" language="javascript">
-  Control.DatePicker.Locale['en_US'] = {
+  Control.DatePicker.Locale['pt_BR'] = {
     dateTimeFormat: 'yyyy-MM-dd HH:mm',
     dateFormat: 'yyyy-MM-dd'}
 
   document.observe("dom:loaded", function() {
-    $$(".dateField").each(function(elem){
+    $$(".date").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png'});
     });
-    // .dateField, .timestampField, .timeField, .datetimeField
-    $$(".timestampField").each(function(elem){
+    // .date, .timestamp, .time, .datetime
+    $$(".timestamp").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, timePickerAdjacent: true});
     });
-    $$(".timeField").each(function(elem){
+    $$(".time").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, datePicker :false});
     });
-    $$(".datetimeField").each(function(elem){
+    $$(".datetime").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png', timePicker: true, timePickerAdjacent: true});
     });
 
