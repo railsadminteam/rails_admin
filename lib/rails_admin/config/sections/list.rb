@@ -19,8 +19,7 @@ module RailsAdmin
           @fields = RailsAdmin::Config::Fields.factory(self)
           @fields.each do |f|
             if f.association? && f.type != :belongs_to_association
-              # Todo: f.hide not working here for some reason
-              f.instance_variable_set("@visible", false)
+              f.hide
             end
           end
         end

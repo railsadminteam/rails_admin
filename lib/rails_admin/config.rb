@@ -35,17 +35,19 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.registry
     def self.model(entity, &block)
-      if entity.kind_of?(RailsAdmin::AbstractModel)
-        key = entity.model.name.to_sym
-        config = @@registry[key] ||= RailsAdmin::Config::Model.new(entity)
-      elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
-        key = entity.kind_of?(Class) ? entity.name.to_sym : entity.to_sym
-        config = @@registry[key] ||= RailsAdmin::Config::Model.new(RailsAdmin::AbstractModel.new(entity))
-      else
-        key = entity.class.name.to_sym
-        config = @@registry[key] ||= RailsAdmin::Config::Model.new(RailsAdmin::AbstractModel.new(entity.class))
-        config.bind(:object, entity)
+      key = begin
+        if entity.kind_of?(RailsAdmin::AbstractModel)
+          entity.model.name.to_sym
+        elsif entity.kind_of?(Class)
+          entity.name.to_sym
+        elsif entity.kind_of?(String) || entity.kind_of?(Symbol)
+          entity.to_sym
+        else
+          entity.class.name.to_sym
+        end
       end
+      config = @@registry[key] ||= RailsAdmin::Config::Model.new(entity)
+      config.bind(:object, entity) if entity.kind_of?(config.abstract_model.model)
       config.instance_eval &block if block
       config
     end
