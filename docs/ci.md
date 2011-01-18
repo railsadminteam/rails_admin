@@ -153,7 +153,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 ### Additional tasks not covered in this document
 
-* Install Postgres 8.4, create user `rails_admin` and database `ci_rails_admin`
+* Install Postgres 9.0, create user `rails_admin` and database `ci_rails_admin`
 * Install MySQL 5.1 (+ dev package for the mysql gem), create user `rails_admin` and database `ci_rails_admin`
 * Configure Nginx as proxy for Hudson accessible at `http://ci.railsadmin.org`
 
