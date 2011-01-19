@@ -2,7 +2,7 @@ require 'rails_admin/abstract_history'
 
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
-    before_filter :get_model, :except => [:index, :history, :get_history]
+    before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
@@ -118,31 +118,6 @@ module RailsAdmin
       end
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
-    end
-
-    def history
-      ref = params[:ref].to_i
-
-      if ref.nil? or ref > 0
-        not_found
-      else
-        current_diff = -5 * ref
-        start_month = (5 + current_diff).month.ago.month
-        start_year = (5 + current_diff).month.ago.year
-        stop_month = (current_diff).month.ago.month
-        stop_year = (current_diff).month.ago.year
-
-        render :json => History.get_history_for_dates(start_month, stop_month, start_year, stop_year)
-      end
-    end
-
-    def get_history
-      if params[:ref].nil? or params[:section].nil?
-        not_found
-      else
-        @history, @current_month = History.get_history_for_month(params[:ref], params[:section])
-        render :template => 'rails_admin/main/history'
-      end
     end
 
     def show_history
