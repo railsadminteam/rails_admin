@@ -120,51 +120,6 @@ module RailsAdmin
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
 
-    def show_history
-      @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.history.page_name", :name => @model_config.list.label)
-      @general = true
-
-      options = {}
-      options[:order] = "created_at DESC"
-      options[:conditions] = []
-      options[:conditions] << conditions = "#{History.connection.quote_column_name(:table)} = ?"
-      options[:conditions] << @abstract_model.pretty_name
-
-      if params[:id]
-        get_object
-        @page_name = t("admin.history.page_name", :name => @model_config.bind(:object, @object).list.object_label)
-        options[:conditions][0] += " and #{History.connection.quote_column_name(:item)} = ?"
-        options[:conditions] << params[:id]
-        @general = false
-      end
-
-      if params[:query]
-        options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
-        options[:conditions] << "%#{params["query"]}%"
-        options[:conditions] << "%#{params["query"]}%"
-      end
-
-      if params["sort"]
-        options.delete(:order)
-        if params["sort_reverse"] == "true"
-          options[:order] = "#{params["sort"]} desc"
-        else
-          options[:order] = params["sort"]
-        end
-      end
-
-      @history = History.find(:all, options)
-
-      if @general and not params[:all]
-        @current_page = (params[:page] || 1).to_i
-        options.merge!(:page => @current_page, :per_page => 20)
-        @page_count, @history = History.paginated(options)
-      end
-
-      render :layout => request.xhr? ? false : 'rails_admin/list'
-    end
-
     def handle_error(e)
       if RailsAdmin::AuthenticationNotConfigured === e
         Rails.logger.error e.message
@@ -179,20 +134,6 @@ module RailsAdmin
 
     private
 
-    def get_model
-      model_name = to_model_name(params[:model_name])
-      @abstract_model = RailsAdmin::AbstractModel.new(model_name)
-      @model_config = RailsAdmin.config(@abstract_model)
-      not_found if @model_config.excluded?
-      @properties = @abstract_model.properties
-    end
-
-    def get_object
-      @object = @abstract_model.get(params[:id])
-      @model_config.bind(:object, @object)
-      not_found unless @object
-    end
-    
     def get_bulk_objects
       @bulk_ids = params[:bulk_ids]
       @bulk_objects = @abstract_model.get_bulk(@bulk_ids)
@@ -312,10 +253,6 @@ module RailsAdmin
       action = params[:action]
       flash.now[:error] = t("admin.flash.error", :name => @model_config.update.label, :action => t("admin.actions.#{action}d"))
       render whereto, :layout => 'rails_admin/form'
-    end
-
-    def to_model_name(param)
-      param.split("::").map{|x| x.singularize.camelize}.join("::")
     end
 
     def check_for_cancel
