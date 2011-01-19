@@ -53,6 +53,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save && update_all_associations
+        create_history_item("Created #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model)
         redirect_to_on_success
       else
         render_error
@@ -76,6 +77,7 @@ module RailsAdmin
 
       @object.send :attributes=, @attributes, false
       if @object.save && update_all_associations
+        check_history_update
         redirect_to_on_success
       else
         render_error :edit
@@ -93,11 +95,11 @@ module RailsAdmin
       @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
-      check_history
+      create_history_item("Destroyed #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model)
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
-    
+
     def bulk_delete
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
@@ -317,8 +319,6 @@ module RailsAdmin
       pretty_name = @model_config.update.label
       action = params[:action]
 
-      check_history
-
       if params[:_add_another]
         flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
         redirect_to rails_admin_new_path(:model_name => param)
@@ -332,53 +332,45 @@ module RailsAdmin
     end
 
     # TODO: Move this logic to the History class?
-    def check_history
-      action = params[:action]
+    def check_history_update
       message = []
 
-      case action
-      when "create"
-        message << "#{action.capitalize}d #{@model_config.bind(:object, @object).list.object_label}"
-      when "update"
-        # determine which fields changed ???
-        changed_property_list = []
-        @properties = @abstract_model.properties.reject{|property| RailsAdmin::History::IGNORED_ATTRS.include?(property[:name])}
+      # determine which fields changed ???
+      changed_property_list = []
+      @properties = @abstract_model.properties.reject{|property| RailsAdmin::History::IGNORED_ATTRS.include?(property[:name])}
 
-        @properties.each do |property|
-          property_name = property[:name].to_param
-          if @old_object.send(property_name) != @object.send(property_name)
-            changed_property_list << property_name
-          end
+      @properties.each do |property|
+        property_name = property[:name].to_param
+        if @old_object.send(property_name) != @object.send(property_name)
+          changed_property_list << property_name
         end
+      end
 
-        @abstract_model.associations.each do |t|
-          assoc = changed_property_list.index(t[:child_key].to_param)
-          if assoc
-            changed_property_list[assoc] = "associated #{t[:pretty_name]}"
-          end
+      @abstract_model.associations.each do |t|
+        assoc = changed_property_list.index(t[:child_key].to_param)
+        if assoc
+          changed_property_list[assoc] = "associated #{t[:pretty_name]}"
         end
+      end
 
-        # Determine if any associations were added or removed
-        associations_hash.each do |key, current|
-          removed_ids = (@cached_assocations_hash[key] - current).map{|m| '#' + m.to_s}
-          added_ids = (current - @cached_assocations_hash[key]).map{|m| '#' + m.to_s}
-          if removed_ids.any?
-            message << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
-          end
-          if added_ids.any?
-            message << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
-          end
+      # Determine if any associations were added or removed
+      associations_hash.each do |key, current|
+        removed_ids = (@cached_assocations_hash[key] - current).map{|m| '#' + m.to_s}
+        added_ids = (current - @cached_assocations_hash[key]).map{|m| '#' + m.to_s}
+        if removed_ids.any?
+          message << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
         end
+        if added_ids.any?
+          message << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
+        end
+      end
 
-        @modified_assoc.uniq.each do |t|
-          changed_property_list << "associated #{t}"
-        end
+      @modified_assoc.uniq.each do |t|
+        changed_property_list << "associated #{t}"
+      end
 
-        if not changed_property_list.empty?
-          message << "Changed #{changed_property_list.join(", ")}"
-        end
-      when "destroy"
-        message << "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
+      if not changed_property_list.empty?
+        message << "Changed #{changed_property_list.join(", ")}"
       end
 
       create_history_item(message, @object, @abstract_model) unless message.empty?
