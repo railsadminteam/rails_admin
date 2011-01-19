@@ -135,4 +135,8 @@ module RailsAdmin
     return History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
   end
 
+  def self.most_recent_history(name)
+    History.most_recent name
+  end
+
 end
