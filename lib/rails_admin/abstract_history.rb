@@ -57,4 +57,63 @@ module RailsAdmin
                                )
   end
 
+  def self.history_for_model(model, query, sort, sort_reverse, all, page)
+    options = {}
+    options[:order] = "created_at DESC"
+    options[:conditions] = []
+    options[:conditions] << "#{History.connection.quote_column_name(:table)} = ?"
+    options[:conditions] << model.pretty_name
+
+    if query
+      options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
+      options[:conditions] << "%#{query}%"
+      options[:conditions] << "%#{query}%"
+    end
+
+    if sort
+      options.delete(:order)
+      if sort_reverse == "true"
+        options[:order] = "#{sort} desc"
+      else
+        options[:order] = sort
+      end
+    end
+
+    if all
+      [1, History.find(:all, options)]
+    else
+      @current_page = (page || 1).to_i
+      options.merge!(:page => @current_page, :per_page => 10)
+      History.paginated(options)
+    end
+  end
+
+  def self.history_for_object(model, object, query, sort, sort_reverse)
+    options = {}
+    options[:order] = "created_at DESC"
+    options[:conditions] = []
+    options[:conditions] << "#{History.connection.quote_column_name(:table)} = ?"
+    options[:conditions] << model.pretty_name
+
+    options[:conditions][0] += " and #{History.connection.quote_column_name(:item)} = ?"
+    options[:conditions] << object.id
+
+    if query
+      options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
+      options[:conditions] << "%#{query}%"
+      options[:conditions] << "%#{query}%"
+    end
+
+    if sort
+      options.delete(:order)
+      if sort_reverse == "true"
+        options[:order] = "#{sort} desc"
+      else
+        options[:order] = sort
+      end
+    end
+
+    History.find(:all, options)
+  end
+
 end

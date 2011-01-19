@@ -67,7 +67,7 @@
               </td>
               <td class="int">
                 <% unless object.message.match("Destroy") %>
-                <%= link_to object.item, rails_admin_history_show_path(:id => object.item), :class => "historyLink"%>
+                <%= link_to object.item, rails_admin_history_object_path(:id => object.item), :class => "historyLink"%>
                 <% else %>
                 <%= object.item %>
                 <% end %>
