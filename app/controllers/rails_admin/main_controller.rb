@@ -1,3 +1,5 @@
+require 'rails_admin/abstract_history'
+
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index, :history, :get_history]
@@ -53,7 +55,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save && update_all_associations
-        create_history_item("Created #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model)
+        RailsAdmin.create_history_item("Created #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model, _current_user)
         redirect_to_on_success
       else
         render_error
@@ -77,7 +79,7 @@ module RailsAdmin
 
       @object.send :attributes=, @attributes, false
       if @object.save && update_all_associations
-        check_history_update
+        RailsAdmin.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
         redirect_to_on_success
       else
         render_error :edit
@@ -95,7 +97,7 @@ module RailsAdmin
       @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
-      create_history_item("Destroyed #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model)
+      RailsAdmin.create_history_item("Destroyed #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model, _current_user)
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
@@ -112,7 +114,7 @@ module RailsAdmin
 
       @destroyed_objects.each do |object|
         message = "Destroyed #{@model_config.bind(:object, object).list.object_label}"
-        create_history_item(message, object, @abstract_model)
+        RailsAdmin.create_history_item(message, object, @abstract_model, _current_user)
       end
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
@@ -329,64 +331,6 @@ module RailsAdmin
         flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
         redirect_to rails_admin_list_path(:model_name => param)
       end
-    end
-
-    # TODO: Move this logic to the History class?
-    def check_history_update
-      message = []
-
-      # determine which fields changed ???
-      changed_property_list = []
-      @properties = @abstract_model.properties.reject{|property| RailsAdmin::History::IGNORED_ATTRS.include?(property[:name])}
-
-      @properties.each do |property|
-        property_name = property[:name].to_param
-        if @old_object.send(property_name) != @object.send(property_name)
-          changed_property_list << property_name
-        end
-      end
-
-      @abstract_model.associations.each do |t|
-        assoc = changed_property_list.index(t[:child_key].to_param)
-        if assoc
-          changed_property_list[assoc] = "associated #{t[:pretty_name]}"
-        end
-      end
-
-      # Determine if any associations were added or removed
-      associations_hash.each do |key, current|
-        removed_ids = (@cached_assocations_hash[key] - current).map{|m| '#' + m.to_s}
-        added_ids = (current - @cached_assocations_hash[key]).map{|m| '#' + m.to_s}
-        if removed_ids.any?
-          message << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
-        end
-        if added_ids.any?
-          message << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
-        end
-      end
-
-      @modified_assoc.uniq.each do |t|
-        changed_property_list << "associated #{t}"
-      end
-
-      if not changed_property_list.empty?
-        message << "Changed #{changed_property_list.join(", ")}"
-      end
-
-      create_history_item(message, @object, @abstract_model) unless message.empty?
-    end
-
-    def create_history_item(message, object, abstract_model)
-      message = message.join(', ') if message.is_a? Array
-      date = Time.now
-      History.create(
-        :message => message,
-        :item => object.id,
-        :table => abstract_model.pretty_name,
-        :username => _current_user ? _current_user.email : "",
-        :month => date.month,
-        :year => date.year
-      )
     end
 
     def render_error whereto = :new
