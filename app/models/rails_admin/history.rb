@@ -21,17 +21,6 @@ module RailsAdmin
       [page_count, all(options)]
     end
 
-    def self.latest
-      mstart = 5.month.ago.month
-      mstop = Time.now.month
-
-      ystop = Time.now.year
-      ystart = 5.month.ago.year
-
-      self.get_history_for_dates(mstart, mstop, ystart, ystop)
-    end
-
-
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
       sql_in = ""
       if mstart > mstop
@@ -64,15 +53,6 @@ module RailsAdmin
           blanks[i] = results.delete_at 0
         end
       end
-    end
-
-    def self.get_history_for_month(ref, section)
-      current_ref = -5 * ref.to_i
-      current_diff = current_ref + 5 - (section.to_i + 1)
-
-      current_month = current_diff.month.ago
-
-      return History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
     end
   end
 end

@@ -12,9 +12,9 @@ module RailsAdmin
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
-      @history = History.latest
+      @history = RailsAdmin.history_latest_summaries
       # history listing with ref = 0 and section = 4
-      @historyListing, @current_month = History.get_history_for_month(0, 4)
+      @historyListing, @current_month = RailsAdmin.history_for_month(0, 4)
 
       @abstract_models = RailsAdmin::AbstractModel.all
 
