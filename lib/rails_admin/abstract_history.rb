@@ -89,31 +89,17 @@ module RailsAdmin
   end
 
   def self.history_for_object(model, object, query, sort, sort_reverse)
-    options = {}
-    options[:order] = "created_at DESC"
-    options[:conditions] = []
-    options[:conditions] << "#{History.connection.quote_column_name(:table)} = ?"
-    options[:conditions] << model.pretty_name
-
-    options[:conditions][0] += " and #{History.connection.quote_column_name(:item)} = ?"
-    options[:conditions] << object.id
+    history = History.where :table => model.pretty_name, :item => object.id
 
     if query
-      options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
-      options[:conditions] << "%#{query}%"
-      options[:conditions] << "%#{query}%"
+      history = history.where "#{History.connection.quote_column_name(:message)} LIKE ? OR #{History.connection.quote_column_name(:username)} LIKE ?", "%#{query}%", "%#{query}%"
     end
 
     if sort
-      options.delete(:order)
-      if sort_reverse == "true"
-        options[:order] = "#{sort} desc"
-      else
-        options[:order] = sort
-      end
+      history = history.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
     end
 
-    History.find(:all, options)
+    history
   end
 
   def self.history_latest_summaries
