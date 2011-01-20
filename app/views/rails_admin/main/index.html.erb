@@ -53,11 +53,7 @@
                     <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
                     <span><%= month_names[t.month] %> <%= t.year %></span>
                     <span class="bars">
-                      <% if t.number == 0 %>
-                      <br/><%= t("admin.history.no_activity") %>
-                      <% else %>
                       <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
-                      <% end %>
                     </span>
                   </li>
                   <% end %>
