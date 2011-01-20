@@ -1,5 +1,9 @@
+# Rails Admin's history API.  All access to history data should go
+# through this module so users can patch it to use other history/audit
+# packages.
 module RailsAdmin
 
+  # Create a history record for an update operation.
   def self.create_update_history(model, object, associations_before, associations_after, modified_associations, old_object, user)
     messages = []
 
@@ -44,6 +48,7 @@ module RailsAdmin
     create_history_item(messages, object, model, user) unless messages.empty?
   end
 
+  # Create a history item for any operation.
   def self.create_history_item(message, object, abstract_model, user)
     message = message.join(', ') if message.is_a? Array
     date = Time.now
@@ -57,6 +62,9 @@ module RailsAdmin
                                )
   end
 
+  # Fetch the history items for a model.  Returns an array containing
+  # the page count and an AR query result containing the history
+  # items.
   def self.history_for_model(model, query, sort, sort_reverse, all, page = 1, per_page = 10 || RailsAdmin::Config::Sections::List.default_items_per_page)
     history = History.where :table => model.pretty_name
 
@@ -76,6 +84,7 @@ module RailsAdmin
     end
   end
 
+  # Fetch the history items for a specific object instance.
   def self.history_for_object(model, object, query, sort, sort_reverse)
     history = History.where :table => model.pretty_name, :item => object.id
 
@@ -90,6 +99,7 @@ module RailsAdmin
     history
   end
 
+  # Fetch the history item counts for the most recent 5 months.
   def self.history_latest_summaries
     mstart = 5.month.ago.month
     mstop = Time.now.month
@@ -100,6 +110,7 @@ module RailsAdmin
     History.get_history_for_dates(mstart, mstop, ystart, ystop)
   end
 
+  # Fetch detailed history for one month.
   def self.history_for_month(ref, section)
     current_ref = -5 * ref.to_i
     current_diff = current_ref + 5 - (section.to_i + 1)
@@ -109,6 +120,7 @@ module RailsAdmin
     return History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
   end
 
+  # Fetch the most recent history item for a model.
   def self.most_recent_history(name)
     History.most_recent name
   end
