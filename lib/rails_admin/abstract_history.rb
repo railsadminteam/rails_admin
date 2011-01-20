@@ -99,15 +99,22 @@ module RailsAdmin
     history
   end
 
+  # Fetch the history item counts for a 5-month period.  Ref=0 ends at
+  # the present month, ref=-1 is the block before that, etc.
+  def self.history_summaries(ref)
+    current_diff = -5 * ref
+    start_month = (5 + current_diff).month.ago.month
+    start_year = (5 + current_diff).month.ago.year
+    stop_month = (current_diff).month.ago.month
+    stop_year = (current_diff).month.ago.year
+
+    History.get_history_for_dates(start_month, stop_month, start_year, stop_year)
+  end
+
+
   # Fetch the history item counts for the most recent 5 months.
   def self.history_latest_summaries
-    mstart = 5.month.ago.month
-    mstop = Time.now.month
-
-    ystop = Time.now.year
-    ystart = 5.month.ago.year
-
-    History.get_history_for_dates(mstart, mstop, ystart, ystop)
+    self.history_summaries(0)
   end
 
   # Fetch detailed history for one month.

@@ -2,8 +2,8 @@ require "rails_admin/abstract_history"
 
 module RailsAdmin
   class HistoryController < RailsAdmin::ApplicationController
-    before_filter :get_model, :except => [:list]
-    before_filter :get_object, :except => [:list, :for_model]
+    before_filter :get_model, :except => [:list, :slider]
+    before_filter :get_object, :except => [:list, :slider, :for_model]
 
     def list
       if params[:ref].nil? or params[:section].nil?
@@ -11,6 +11,16 @@ module RailsAdmin
       else
         @history, @current_month = RailsAdmin.history_for_month(params[:ref], params[:section])
         render :template => 'rails_admin/main/history', :layout => false
+      end
+    end
+
+    def slider
+      ref = params[:ref].to_i
+
+      if ref.nil? or ref > 0
+        not_found
+      else
+        render :json => RailsAdmin.history_summaries(ref)
       end
     end
 
