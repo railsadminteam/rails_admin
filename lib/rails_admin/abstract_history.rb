@@ -57,34 +57,22 @@ module RailsAdmin
                                )
   end
 
-  def self.history_for_model(model, query, sort, sort_reverse, all, page)
-    options = {}
-    options[:order] = "created_at DESC"
-    options[:conditions] = []
-    options[:conditions] << "#{History.connection.quote_column_name(:table)} = ?"
-    options[:conditions] << model.pretty_name
+  def self.history_for_model(model, query, sort, sort_reverse, all, page = 1, per_page = 10 || RailsAdmin::Config::Sections::List.default_items_per_page)
+    history = History.where :table => model.pretty_name
 
     if query
-      options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
-      options[:conditions] << "%#{query}%"
-      options[:conditions] << "%#{query}%"
+      history = history.where "#{History.connection.quote_column_name(:message)} LIKE ? OR #{History.connection.quote_column_name(:username)} LIKE ?", "%#{query}%", "%#{query}%"
     end
 
     if sort
-      options.delete(:order)
-      if sort_reverse == "true"
-        options[:order] = "#{sort} desc"
-      else
-        options[:order] = sort
-      end
+      history = history.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
     end
 
     if all
-      [1, History.find(:all, options)]
+      [1, history]
     else
-      @current_page = (page || 1).to_i
-      options.merge!(:page => @current_page, :per_page => 10)
-      History.paginated(options)
+      page_count = (history.count.to_f / per_page).ceil
+      [page_count, history.limit(per_page).offset((page.to_i - 1) * per_page)]
     end
   end
 

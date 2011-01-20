@@ -7,20 +7,6 @@ module RailsAdmin
       where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
     }
 
-    def self.paginated(options = {})
-      page = options.delete(:page) || 1
-      per_page = options.delete(:per_page) || RailsAdmin[:per_page]
-
-      page_count = (count(options).to_f / per_page).ceil
-
-      options.merge!({
-        :limit => per_page,
-        :offset => (page - 1) * per_page
-      })
-
-      [page_count, all(options)]
-    end
-
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
       sql_in = ""
       if mstart > mstop
