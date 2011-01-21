@@ -47,8 +47,7 @@ module RailsAdmin
         end
       end
       config = @@registry[key] ||= RailsAdmin::Config::Model.new(entity)
-      config.bind(:object, entity.class.to_s == config.abstract_model.model.name ? entity : nil)
-      config.instance_eval &block if block
+      config.instance_eval(&block) if block
       config
     end
 
@@ -59,11 +58,7 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.registry
     def self.models(&block)
-      RailsAdmin::AbstractModel.all.each do |m|
-        @@registry[m.model.name.to_sym] ||= Model.new(m)
-      end
-      @@registry.each_value {|config| config.instance_eval &block } if block
-      @@registry.values
+      RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
     end
 
     # Shortcut to access the navigation section's class configuration

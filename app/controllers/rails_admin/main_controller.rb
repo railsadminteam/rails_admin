@@ -97,19 +97,19 @@ module RailsAdmin
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
-    
+
     def bulk_delete
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
     end
-    
+
     def bulk_destroy
       @destroyed_objects = @abstract_model.destroy(params[:bulk_ids])
 
       @destroyed_objects.each do |object|
-        message = "Destroyed #{@model_config.bind(:object, object).list.object_label}"
+        message = "Destroyed #{@model_config.list.visit(:object => object).object_label}"
         create_history_item(message, object, @abstract_model)
       end
 
@@ -154,7 +154,7 @@ module RailsAdmin
 
       if params[:id]
         get_object
-        @page_name = t("admin.history.page_name", :name => @model_config.bind(:object, @object).list.object_label)
+        @page_name = t("admin.history.page_name", :name => @model_config.list.visit(:object => @object).object_label)
         options[:conditions][0] += " and #{History.connection.quote_column_name(:item)} = ?"
         options[:conditions] << params[:id]
         @general = false
@@ -210,10 +210,9 @@ module RailsAdmin
 
     def get_object
       @object = @abstract_model.get(params[:id])
-      @model_config.bind(:object, @object)
       not_found unless @object
     end
-    
+
     def get_bulk_objects
       @bulk_ids = params[:bulk_ids]
       @bulk_objects = @abstract_model.get_bulk(@bulk_ids)
@@ -338,7 +337,7 @@ module RailsAdmin
 
       case action
       when "create"
-        message << "#{action.capitalize}d #{@model_config.bind(:object, @object).list.object_label}"
+        message << "#{action.capitalize}d #{@model_config.list.visit(:object => @object).object_label}"
       when "update"
         # determine which fields changed ???
         changed_property_list = []
@@ -378,7 +377,7 @@ module RailsAdmin
           message << "Changed #{changed_property_list.join(", ")}"
         end
       when "destroy"
-        message << "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
+        message << "Destroyed #{@model_config.list.visit(:object => @object).object_label}"
       end
 
       create_history_item(message, @object, @abstract_model) unless message.empty?

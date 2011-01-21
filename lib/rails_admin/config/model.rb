@@ -27,16 +27,6 @@ module RailsAdmin
         @excluded ||= !RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }.nil?
       end
 
-      # Bind variables to be used by the configuration options
-      def bind(key, value = nil)
-        if key.kind_of?(Hash)
-          @bindings << key
-        else
-          @bindings[key] = value
-        end
-        self
-      end
-
       # Configure create and update views as a bulk operation with given block
       # or get update view's configuration if no block is given
       def edit(&block)
