@@ -65,13 +65,15 @@
               <td class="smallString">
                 <%= object.username %>
               </td>
+              <% if @general %>
               <td class="int">
                 <% unless object.message.match("Destroy") %>
-                <%= link_to object.item, rails_admin_show_history_path(:id => object.item), :class => "historyLink"%>
+                <%= link_to object.item, rails_admin_history_object_path(:id => object.item), :class => "historyLink"%>
                 <% else %>
                 <%= object.item %>
                 <% end %>
               </td>
+              <% end %>
               <td class="smallString">
                 <%= object.message %>
               </td>

@@ -19,7 +19,7 @@
                   <%= link_to(RailsAdmin.config(abstract_model).list.label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
                 </td>
                 <td>
-                <% if (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)) %>
+                <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
                 <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
                 <% end %>
                 </td>
@@ -53,11 +53,7 @@
                     <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
                     <span><%= month_names[t.month] %> <%= t.year %></span>
                     <span class="bars">
-                      <% if t.number == 0 %>
-                      <br/><%= t("admin.history.no_activity") %>
-                      <% else %>
                       <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
-                      <% end %>
                     </span>
                   </li>
                   <% end %>

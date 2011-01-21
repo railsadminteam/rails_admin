@@ -7,31 +7,6 @@ module RailsAdmin
       where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
     }
 
-    def self.paginated(options = {})
-      page = options.delete(:page) || 1
-      per_page = options.delete(:per_page) || RailsAdmin[:per_page]
-
-      page_count = (count(options).to_f / per_page).ceil
-
-      options.merge!({
-        :limit => per_page,
-        :offset => (page - 1) * per_page
-      })
-
-      [page_count, all(options)]
-    end
-
-    def self.latest
-      mstart = 5.month.ago.month
-      mstop = Time.now.month
-
-      ystop = Time.now.year
-      ystart = 5.month.ago.year
-
-      self.get_history_for_dates(mstart, mstop, ystart, ystop)
-    end
-
-
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
       sql_in = ""
       if mstart > mstop
@@ -64,15 +39,6 @@ module RailsAdmin
           blanks[i] = results.delete_at 0
         end
       end
-    end
-
-    def self.get_history_for_month(ref, section)
-      current_ref = -5 * ref.to_i
-      current_diff = current_ref + 5 - (section.to_i + 1)
-
-      current_month = current_diff.month.ago
-
-      return History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
     end
   end
 end

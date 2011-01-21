@@ -1,6 +1,6 @@
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
-    before_filter :get_model, :except => [:index, :history, :get_history]
+    before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
@@ -10,18 +10,20 @@ module RailsAdmin
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
-      @history = History.latest
+      @history = AbstractHistory.history_latest_summaries
       # history listing with ref = 0 and section = 4
-      @historyListing, @current_month = History.get_history_for_month(0, 4)
+      @historyListing, @current_month = AbstractHistory.history_for_month(0, 4)
 
       @abstract_models = RailsAdmin::AbstractModel.all
 
+      @most_recent_changes = {}
       @count = {}
       @max = 0
       @abstract_models.each do |t|
         current_count = t.count
         @max = current_count > @max ? current_count : @max
         @count[t.pretty_name] = current_count
+        @most_recent_changes[t.pretty_name] = AbstractHistory.most_recent_history(t.pretty_name).last.try(:updated_at)
       end
 
       render :layout => 'rails_admin/dashboard'
@@ -53,6 +55,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save && update_all_associations
+        AbstractHistory.create_history_item("Created #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model, _current_user)
         redirect_to_on_success
       else
         render_error
@@ -76,6 +79,7 @@ module RailsAdmin
 
       @object.send :attributes=, @attributes, false
       if @object.save && update_all_associations
+        AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
         redirect_to_on_success
       else
         render_error :edit
@@ -93,11 +97,11 @@ module RailsAdmin
       @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
-      check_history
+      AbstractHistory.create_history_item("Destroyed #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model, _current_user)
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
-    
+
     def bulk_delete
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
@@ -110,80 +114,10 @@ module RailsAdmin
 
       @destroyed_objects.each do |object|
         message = "Destroyed #{@model_config.bind(:object, object).list.object_label}"
-        create_history_item(message, object, @abstract_model)
+        AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
-    end
-
-    def history
-      ref = params[:ref].to_i
-
-      if ref.nil? or ref > 0
-        not_found
-      else
-        current_diff = -5 * ref
-        start_month = (5 + current_diff).month.ago.month
-        start_year = (5 + current_diff).month.ago.year
-        stop_month = (current_diff).month.ago.month
-        stop_year = (current_diff).month.ago.year
-
-        render :json => History.get_history_for_dates(start_month, stop_month, start_year, stop_year)
-      end
-    end
-
-    def get_history
-      if params[:ref].nil? or params[:section].nil?
-        not_found
-      else
-        @history, @current_month = History.get_history_for_month(params[:ref], params[:section])
-        render :template => 'rails_admin/main/history'
-      end
-    end
-
-    def show_history
-      @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.history.page_name", :name => @model_config.list.label)
-      @general = true
-
-      options = {}
-      options[:order] = "created_at DESC"
-      options[:conditions] = []
-      options[:conditions] << conditions = "#{History.connection.quote_column_name(:table)} = ?"
-      options[:conditions] << @abstract_model.pretty_name
-
-      if params[:id]
-        get_object
-        @page_name = t("admin.history.page_name", :name => @model_config.bind(:object, @object).list.object_label)
-        options[:conditions][0] += " and #{History.connection.quote_column_name(:item)} = ?"
-        options[:conditions] << params[:id]
-        @general = false
-      end
-
-      if params[:query]
-        options[:conditions][0] += " and (#{History.connection.quote_column_name(:message)} LIKE ? or #{History.connection.quote_column_name(:username)} LIKE ?)"
-        options[:conditions] << "%#{params["query"]}%"
-        options[:conditions] << "%#{params["query"]}%"
-      end
-
-      if params["sort"]
-        options.delete(:order)
-        if params["sort_reverse"] == "true"
-          options[:order] = "#{params["sort"]} desc"
-        else
-          options[:order] = params["sort"]
-        end
-      end
-
-      @history = History.find(:all, options)
-
-      if @general and not params[:all]
-        @current_page = (params[:page] || 1).to_i
-        options.merge!(:page => @current_page, :per_page => 20)
-        @page_count, @history = History.paginated(options)
-      end
-
-      render :layout => request.xhr? ? false : 'rails_admin/list'
     end
 
     def handle_error(e)
@@ -200,20 +134,6 @@ module RailsAdmin
 
     private
 
-    def get_model
-      model_name = to_model_name(params[:model_name])
-      @abstract_model = RailsAdmin::AbstractModel.new(model_name)
-      @model_config = RailsAdmin.config(@abstract_model)
-      not_found if @model_config.excluded?
-      @properties = @abstract_model.properties
-    end
-
-    def get_object
-      @object = @abstract_model.get(params[:id])
-      @model_config.bind(:object, @object)
-      not_found unless @object
-    end
-    
     def get_bulk_objects
       @bulk_ids = params[:bulk_ids]
       @bulk_objects = @abstract_model.get_bulk(@bulk_ids)
@@ -317,8 +237,6 @@ module RailsAdmin
       pretty_name = @model_config.update.label
       action = params[:action]
 
-      check_history
-
       if params[:_add_another]
         flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
         redirect_to rails_admin_new_path(:model_name => param)
@@ -331,80 +249,10 @@ module RailsAdmin
       end
     end
 
-    # TODO: Move this logic to the History class?
-    def check_history
-      action = params[:action]
-      message = []
-
-      case action
-      when "create"
-        message << "#{action.capitalize}d #{@model_config.bind(:object, @object).list.object_label}"
-      when "update"
-        # determine which fields changed ???
-        changed_property_list = []
-        @properties = @abstract_model.properties.reject{|property| RailsAdmin::History::IGNORED_ATTRS.include?(property[:name])}
-
-        @properties.each do |property|
-          property_name = property[:name].to_param
-          if @old_object.send(property_name) != @object.send(property_name)
-            changed_property_list << property_name
-          end
-        end
-
-        @abstract_model.associations.each do |t|
-          assoc = changed_property_list.index(t[:child_key].to_param)
-          if assoc
-            changed_property_list[assoc] = "associated #{t[:pretty_name]}"
-          end
-        end
-
-        # Determine if any associations were added or removed
-        associations_hash.each do |key, current|
-          removed_ids = (@cached_assocations_hash[key] - current).map{|m| '#' + m.to_s}
-          added_ids = (current - @cached_assocations_hash[key]).map{|m| '#' + m.to_s}
-          if removed_ids.any?
-            message << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
-          end
-          if added_ids.any?
-            message << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
-          end
-        end
-
-        @modified_assoc.uniq.each do |t|
-          changed_property_list << "associated #{t}"
-        end
-
-        if not changed_property_list.empty?
-          message << "Changed #{changed_property_list.join(", ")}"
-        end
-      when "destroy"
-        message << "Destroyed #{@model_config.bind(:object, @object).list.object_label}"
-      end
-
-      create_history_item(message, @object, @abstract_model) unless message.empty?
-    end
-
-    def create_history_item(message, object, abstract_model)
-      message = message.join(', ') if message.is_a? Array
-      date = Time.now
-      History.create(
-        :message => message,
-        :item => object.id,
-        :table => abstract_model.pretty_name,
-        :username => _current_user ? _current_user.email : "",
-        :month => date.month,
-        :year => date.year
-      )
-    end
-
     def render_error whereto = :new
       action = params[:action]
       flash.now[:error] = t("admin.flash.error", :name => @model_config.update.label, :action => t("admin.actions.#{action}d"))
       render whereto, :layout => 'rails_admin/form'
-    end
-
-    def to_model_name(param)
-      param.split("::").map{|x| x.singularize.camelize}.join("::")
     end
 
     def check_for_cancel

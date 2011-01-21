@@ -6,5 +6,11 @@ module RailsAdmin
       @month = month
       @year = year
     end
+
+    # Make BlankHistory look like History when it gets JSON-serialized.
+    def to_hash(*a)
+      {"history" => {"number" => @number, "month" => @month, "year" => @year}}
+    end
+
   end
 end
