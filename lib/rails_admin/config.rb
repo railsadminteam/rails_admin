@@ -1,6 +1,7 @@
 require 'rails_admin/config/model'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/navigation'
+require 'active_support/core_ext/class/attribute_accessors'
 
 module RailsAdmin
   module Config
