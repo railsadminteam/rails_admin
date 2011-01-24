@@ -50,11 +50,12 @@ module RailsAdmin
     def create
       @modified_assoc = []
       @object = @abstract_model.new
-      @object.send :attributes=, @attributes, false
+      @object.attributes = @attributes
+      @object.associations = params[:associations]
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      if @object.save && update_all_associations
+      if @object.save
         AbstractHistory.create_history_item("Created #{@model_config.bind(:object, @object).list.object_label}", @object, @abstract_model, _current_user)
         redirect_to_on_success
       else
@@ -77,8 +78,10 @@ module RailsAdmin
 
       @old_object = @object.clone
 
-      @object.send :attributes=, @attributes, false
-      if @object.save && update_all_associations
+      @object.attributes = @attributes
+      @object.associations = params[:associations]
+
+      if @object.save
         AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
         redirect_to_on_success
       else
@@ -200,36 +203,6 @@ module RailsAdmin
         # Delete fields that are blank
         @attributes[key] = nil if value.blank?
       end
-    end
-
-    def update_all_associations
-      @abstract_model.associations.each do |association|
-        if params[:associations] && params[:associations].has_key?(association[:name])
-          ids = (params[:associations] || {}).delete(association[:name])
-          case association[:type]
-          when :has_one
-            update_association(association, ids)
-          when :has_many, :has_and_belongs_to_many
-            update_associations(association, ids.to_a)
-          end
-        end
-      end
-    end
-
-    def update_association(association, id = nil)
-      associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
-      if object = associated_model.get(id)
-        if object.send(association[:child_key].first) != @object.id
-          @modified_assoc << association[:pretty_name]
-        end
-        object.update_attributes(association[:child_key].first => @object.id)
-      end
-    end
-
-    def update_associations(association, ids = [])
-      associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
-      @object.send "#{association[:name]}=", ids.collect{|id| associated_model.get(id)}.compact
-      @object.save
     end
 
     def redirect_to_on_success
