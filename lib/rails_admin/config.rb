@@ -15,6 +15,11 @@ module RailsAdmin
     @@excluded_models = []
     mattr_accessor :excluded_models
 
+    # Configuration option to specify which method names will be searched for 
+    # to be used as a label for object records. This defaults to [:name, :title]
+    mattr_accessor :label_methods
+    self.label_methods = [:name, :title]
+
     # Shortcut to access the list section's class configuration
     # within a config DSL block
     #
