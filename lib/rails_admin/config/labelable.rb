@@ -5,7 +5,7 @@ module RailsAdmin
       # Try to find a user-friendly label for an object, falling back
       # to its class and ID.
       def self.object_label(object)
-        Config.label_methods.each {|l| return object.send l if object.respond_to? l}
+        Config.label_methods.each {|l| label = (object.respond_to? l and object.send l) and return label}
         "#{object.class.to_s} ##{object.try :id}"
       end
 
