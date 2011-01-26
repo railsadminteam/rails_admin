@@ -11,14 +11,13 @@ module RailsAdmin
 end
 </pre>
 
-All we're doing here is stubbing out the method that writes history entries to the database.  This code doesn't make any assumptions about which history gem you're using.  You'll also want to tell RA to ignore PaperTrail's `Version` model:
+All we're doing here is stubbing out the method that writes history entries to the database.  This code doesn't make any assumptions about which history gem you're using.  You'll also want to tell RA to not let users mess with PaperTrail's `Version` model:
 
 <pre>
 RailsAdmin.config do |config|
-  config.excluded_models << Version
+  config.excluded_models &lt;&lt; Version
 end
 </pre>
-
 
 You'll also want to have RA display history from PaperTrail's `Version` model instead of RA's `History` model.  This is a little complicated - what you'll end up doing is patching RA's history interface code to use PaperTrail.  All of this code is in the RailsAdmin::AbstractHistory class that we patched above, so we'll be patching more methods for history display.  You'll need to patch 5 methods: `history_for_model`, `history_for_object`, `history_for_month`, `history_summaries`, and `most_recent_history`.  Add this code to the initializer you created above:
 
