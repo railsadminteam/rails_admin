@@ -80,5 +80,24 @@ You'll also want to have RA display history from PaperTrail's `Version` model in
     end
 </pre>
 
+The last step is to patch PaperTrail so that its `Version` objects quack like RA's `History` objects.  In an initializer called `config/initializers/paper_tail.rb` add the following code:
+
+<pre>
+require "paper_trail/version"
+
+# Make PaperTrail's Version class quack like RailsAdmin's History
+class Version
+
+  def username ; User.find(whodunnit).try(:email) || whodunnit ; end
+  def message ; "#{event} #{RailsAdmin::Config::Labelable.object_label item}" ; end
+  def table ; item_type ; end
+  def updated_at ; created_at ; end
+
+  # Make Version look like History when it gets JSON-serialized.
+  def as_json(*a)
+    {"history" => {"number" => number, "month" => month, "year" => year}}.as_json(*a)
+  end
+end
+</pre>
 
 
