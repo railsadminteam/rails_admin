@@ -53,7 +53,7 @@ You'll also want to have RA display history from PaperTrail's `Version` model in
       roughly = current_diff.month.ago
       start = Date.new(roughly.year, roughly.month)
 
-      return Version.find(:all, :conditions => ["created_at >= ? AND created_at < ?", start, start.advance(:months=>1)]), roughly
+      return Version.find(:all, :conditions => ["created_at >= ? AND created_at &lt; ?", start, start.advance(:months=>1)]), roughly
     end
 
     # Fetch the history item counts for a 5-month period.  Ref=0 ends at
@@ -67,7 +67,7 @@ You'll also want to have RA display history from PaperTrail's `Version` model in
       months = []
       5.times do
         stop = start.advance(:months=>1)
-        months += Version.find_by_sql(["select count(*) as number, ? as year, ? as month from versions where created_at >= ? AND created_at < ?", start.year, start.month, start, stop])
+        months += Version.find_by_sql(["select count(*) as number, ? as year, ? as month from versions where created_at >= ? AND created_at &lt; ?", start.year, start.month, start, stop])
         start = stop
       end
       p months
