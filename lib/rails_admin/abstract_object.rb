@@ -30,7 +30,7 @@
 
       abstract_model.associations.each do |association|
         if associations.has_key?(association[:name])
-          ids = (associations || {}).delete(association[:name])
+          ids = associations.delete(association[:name])
           case association[:type]
           when :has_one
             update_association(association, ids)
