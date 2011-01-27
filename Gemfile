@@ -28,6 +28,4 @@ group :development, :test do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  # gem 'webrat', :git => 'http://github.com/kalv/webrat.git'
-  gem 'factory_girl', :git => 'http://github.com/thoughtbot/factory_girl.git'
 end

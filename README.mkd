@@ -414,7 +414,9 @@ the title of a single database record.
 
 By default it queries if the record in question has columns named "name" or
 "title". If neither is found it returns the model's classname appended with its
-database identifier.
+database identifier. You can add label methods (or replace the default [:name, :title]) with:
+
+    RailsAdmin.config {|c| c.label_methods << :description}
 
 This value is used in a number of places in RailsAdmin - for instance as the
 output of belongs to associations in the listing views of related models, as

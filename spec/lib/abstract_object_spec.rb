@@ -4,32 +4,51 @@ describe "AbstractObject" do
   describe "proxy" do
     let(:object) { mock("A mock") }
     let(:abstract_object) {  RailsAdmin::AbstractObject.new(object) }
-  
+
     it "should act like a proxy" do
       object.should_receive(:method_call).once
-    
+
       abstract_object.method_call
     end
   end
-  
+
   describe "create" do
+    let(:player) { Player.new }
+    let(:object) { RailsAdmin::AbstractObject.new player }
+    let(:name) { "Stefan Kiszonka" }
+    let(:number) { 87 }
+    let(:position) { "Fifth baseman" }
+    let(:suspended) { true }
+
+    describe "a record without associations" do
+      before do
+        object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil }
+      end
+
+      it "should create a Player with given attributes" do
+        object.save.should be_true
+
+        player.reload
+        player.name.should == name
+        player.number.should == number
+        player.position.should == position
+        player.suspended.should == suspended
+        player.draft.should == nil
+        player.team.should == nil
+      end
+    end
+
     describe "a record with protected attributes and has_one association" do
-      let(:player) { Player.new }
-      let(:object) { RailsAdmin::AbstractObject.new player }
-      let(:name) { "Stefan Kiszonka" }
-      let(:number) { 87 }
-      let(:position) { "Fifth baseman" }
-      let(:suspended) { true }
-      let(:draft) { Factory :draft }
-      
+      let(:draft) { Draft.create(:date => 1.week.ago, :round => 1, :pick => 1, :overall => 1, :team_id => -1, :player_id => -1) }
+
       before do
         object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil }
         object.associations = { :draft => draft.id }
       end
-    
+
       it "should create a Player with given attributes" do
         object.save.should be_true
-        
+
         player.reload
         player.name.should == name
         player.number.should == number
@@ -39,21 +58,19 @@ describe "AbstractObject" do
         player.team.should == nil
       end
     end
-    
+
     describe "a record with has_many associations" do
       let(:league) { League.new }
       let(:object) { RailsAdmin::AbstractObject.new league }
       let(:name) { "Awesome League" }
-      let(:teams) { [Factory(:team)] }
-      let(:divisions) { [] }
-      
+      let(:divisions) { [Division.create(:name => "D1", :league_id => -1), Division.create(:name => "D2", :league_id => -1)] }
+      let(:teams) { [Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1), Team.create(:name => "T2", :manager => "M2", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1)] }
+
       before do
-        Factory :team
-        2.times { Factory :division }
         object.attributes = { :name  => name }
-        object.associations = { :teams => teams.map(&:id), :division => divisions }
+        object.associations = { :teams => teams.map(&:id), :divisions => divisions }
       end
-      
+
       it "should create a League with given attributes and associations" do
         object.save.should be_true
         league.reload
@@ -63,14 +80,14 @@ describe "AbstractObject" do
       end
     end
   end
-  
+
   describe "update" do
     describe "a record with protected attributes and has_one association" do
       let(:name) { "Stefan Koza" }
       let(:suspended) { true }
-      let(:player) { Factory :player, :suspended => true, :name => name, :draft => Factory(:draft) }
+      let(:player) { Player.create(:suspended => true, :number => 42, :name => name) }
       let(:object) { RailsAdmin::AbstractObject.new player }
-      let(:new_team) { Factory :team }
+      let(:new_team) { Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1) }
       let(:new_suspended) { false }
       let(:new_draft) { nil }
       let(:new_number) { player.number + 29 }
@@ -80,7 +97,7 @@ describe "AbstractObject" do
         object.associations = { :draft => new_draft }
         object.save
       end
-      
+
       it "should update a record and associations" do
         object.reload
         object.number.should == new_number
@@ -93,13 +110,13 @@ describe "AbstractObject" do
   end
 
   describe "destroy" do
-    let(:player) { Factory :player }
+    let(:player) { Player.create(:name => "P1") }
     let(:object) { RailsAdmin::AbstractObject.new player }
-    
+
     before do
       object.destroy
     end
-    
+
     it "should delete the record" do
       Player.exists?(player.id).should == false
     end
