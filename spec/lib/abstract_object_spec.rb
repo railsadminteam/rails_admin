@@ -63,13 +63,12 @@ describe "AbstractObject" do
       let(:league) { League.new }
       let(:object) { RailsAdmin::AbstractObject.new league }
       let(:name) { "Awesome League" }
-      let(:divisions) { [] }
-      let(:teams) { [Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1)] }
+      let(:divisions) { [Division.create(:name => "D1", :league_id => -1), Division.create(:name => "D2", :league_id => -1)] }
+      let(:teams) { [Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1), Team.create(:name => "T2", :manager => "M2", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1)] }
 
       before do
         object.attributes = { :name  => name }
-        object.save
-        object.associations = { :teams => teams.map(&:id), :division => divisions }
+        object.associations = { :teams => teams.map(&:id), :divisions => divisions }
       end
 
       it "should create a League with given attributes and associations" do
