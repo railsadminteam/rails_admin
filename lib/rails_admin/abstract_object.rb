@@ -26,7 +26,7 @@
     def update_all_associations
       return true if associations.nil?
 
-      abstract_model = AbstractModel.new(object.class.name)
+      abstract_model = AbstractModel.new(object.class)
 
       abstract_model.associations.each do |association|
         if associations.has_key?(association[:name])
