@@ -1,6 +1,7 @@
 require 'rails_admin/config/model'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/navigation'
+require 'active_support/core_ext/class/attribute_accessors'
 
 module RailsAdmin
   module Config
@@ -13,6 +14,11 @@ module RailsAdmin
     # Configuration option to specify which models you want to exclude.
     @@excluded_models = []
     mattr_accessor :excluded_models
+
+    # Configuration option to specify which method names will be searched for
+    # to be used as a label for object records. This defaults to [:name, :title]
+    mattr_accessor :label_methods
+    self.label_methods = [:name, :title]
 
     # Shortcut to access the list section's class configuration
     # within a config DSL block

@@ -1,15 +1,21 @@
 require 'active_record'
 require 'rails_admin/config/sections/list'
+require 'rails_admin/abstract_object'
 
 module RailsAdmin
   module Adapters
     module ActiveRecord
       def get(id)
-        model.find_by_id(id)
-      rescue ActiveRecord::RecordNotFound
+        if object = model.find_by_id(id)
+          RailsAdmin::AbstractObject.new object
+        else
+          nil
+        end
+      # TODO: ActiveRecord::Base.find_by_id will never raise RecordNotFound, will it?
+      rescue ActiveRecord::RecordNotFound 
         nil
       end
-      
+
       def get_bulk(ids)
         model.find(ids)
       rescue ActiveRecord::RecordNotFound
@@ -47,9 +53,9 @@ module RailsAdmin
       end
 
       def new(params = {})
-        model.new(params)
+        RailsAdmin::AbstractObject.new(model.new)
       end
-      
+
       def destroy(ids)
         model.destroy(ids)
       end
@@ -152,7 +158,7 @@ module RailsAdmin
       def association_child_key_lookup(association)
         case association.macro
         when :belongs_to
-          ["#{association.class_name.underscore}_id".to_sym]
+          [association.options[:foreign_key] || "#{association.name}_id".to_sym]
         when :has_one, :has_many, :has_and_belongs_to_many
           [association.primary_key_name.to_sym]
         else

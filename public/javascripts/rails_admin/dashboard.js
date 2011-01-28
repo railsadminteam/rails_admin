@@ -16,7 +16,7 @@ function get_indicator(percent){
 function loadHistory(param){
   var ref = param;
 
-  new Ajax.Request("/admin/history/list", { method: 'post', parameters: { "ref": ref },
+  new Ajax.Request("/admin/history/slider", { method: 'post', parameters: { "ref": ref },
   onSuccess: function(transport) {
 
     var response = JSON.parse(transport.responseText)
@@ -24,12 +24,9 @@ function loadHistory(param){
     var max = response[4].history.number;
 
     response.each(function(e){
-      if(e.fake != 1){
         if(e.history.number > max){
           max = e.history.number;
         }
-      }
-
     })
 
     var index = 0;
@@ -39,17 +36,17 @@ function loadHistory(param){
 
     $$("#timelineSlider ul li").each(function(e){
 
-      if(response[index].fake != 1){
+      var monthName = response[index].history.month;
+      var yearName = response[index].history.year;
+      var text = nameForMonths[monthName-1] + " " + yearName
+
+      if(response[index].history.number > 0){
         var percent = parseInt(response[index].history.number * 100 / max);
         var indicator = e.childElements()[1].childElements()[0];
         var setStyle = "height: "+percent+"%; background:"+get_indicator(percent);
-        var monthName = response[index].history.month;
-        var yearName = response[index].history.year;
-        var text = nameForMonths[monthName-1] + " " + yearName
       }else{
         var indicator = e.childElements()[1].childElements()[0];
-        var setStyle = "height: 0%; background:"+get_indicator(percent);
-        var text = "No data";
+        var setStyle = "height: 0%; background:0";
       }
 
       var morphEffect = new Effect.Morph(indicator, {

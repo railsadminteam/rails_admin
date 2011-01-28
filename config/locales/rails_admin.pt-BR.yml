@@ -28,6 +28,8 @@ pt-BR:
       search_btn: "BUSCAR"
       select: "Selecione %{name} para alterar"
       show_all: "Exibir todos"
+      select_action: "Selecionar"
+      delete_selected: "Excluir selecionados"
     new:
       basic_info: "INFORMAÇÕES BÁSICAS"
       required: "Obrigatório"
