@@ -110,7 +110,21 @@ module RailsAdmin
       stop_month = (current_diff).month.ago.month
       stop_year = (current_diff).month.ago.year
 
-      RailsAdmin::History.get_history_for_dates(start_month, stop_month, start_year, stop_year)
+      # try to be helpful if the user hasn't run the history table
+      # rename generator.  this happens to be the first spot that will
+      # cause a problem.
+      # FIXME: at some point, after a reasonable transition period,
+      # we can remove the rescue, etc.
+      begin
+        RailsAdmin::History.get_history_for_dates(start_month, stop_month, start_year, stop_year)
+      rescue ActiveRecord::StatementInvalid => e
+        if e.message =~ /rails_admin_histories/ # seems to be the only common text in the db-specific error messages
+          message = "Please run the generator \"rails generate rails_admin:install_admin\" then migrate your database.  #{e.message}"
+        else
+          message = e.message
+        end
+        raise ActiveRecord::StatementInvalid.new message
+      end
     end
 
 
