@@ -56,7 +56,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save
-        AbstractHistory.create_history_item("Created #{@model_config.list.visit(:object => @object).object_label}", @object, @abstract_model, _current_user)
+        AbstractHistory.create_history_item("Created #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         redirect_to_on_success
       else
         render_error
@@ -100,7 +100,7 @@ module RailsAdmin
       @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
-      AbstractHistory.create_history_item("Destroyed #{@model_config.list.visit(:object => @object).object_label}", @object, @abstract_model, _current_user)
+      AbstractHistory.create_history_item("Destroyed #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
@@ -116,7 +116,7 @@ module RailsAdmin
       @destroyed_objects = @abstract_model.destroy(params[:bulk_ids])
 
       @destroyed_objects.each do |object|
-        message = "Destroyed #{@model_config.list.visit(:object => object).object_label}"
+        message = "Destroyed #{@model_config.list.with(:object => object).object_label}"
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
 

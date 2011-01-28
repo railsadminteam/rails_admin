@@ -3,7 +3,7 @@
         </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
         <div id="contentMainDelete">
-          <p>Are you sure you want to delete the <%= @abstract_model.pretty_name.downcase %> &ldquo;<strong><%= @model_config.list.visit(:object => @object).object_label %></strong>&rdquo;? All of the following related items will be deleted:</p>
+          <p>Are you sure you want to delete the <%= @abstract_model.pretty_name.downcase %> &ldquo;<strong><%= @model_config.list.with(:object => @object).object_label %></strong>&rdquo;? All of the following related items will be deleted:</p>
           <%= render :partial => "delete_notice", :object => @object %>
           <%= form_for(@object, :url => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do %>
             <div id="deleteConfirmation">

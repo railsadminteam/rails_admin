@@ -1,6 +1,6 @@
 module RailsAdmin
   module Config
-    class Visitor
+    class Proxy
 
       instance_methods.each { |m| undef_method m unless m =~ /^__/ || m == "object_id" }
 
@@ -23,10 +23,13 @@ module RailsAdmin
 
       def method_missing(name, *args, &block)
         if @object.has_option?(name) || @object.respond_to?(name)
-          object_bindings = @object.bindings
-          @object.bind(bindings)
-          response = @object.__send__(name, *args, &block)
-          @object.bind(object_bindings)
+          reset = @object.instance_variable_get("@bindings")
+          begin
+            @object.instance_variable_set("@bindings", @bindings)
+            response = @object.__send__(name, *args, &block)
+          ensure
+            @object.instance_variable_set("@bindings", @reset)
+          end
           response
         else
           super(name, *args, &block)

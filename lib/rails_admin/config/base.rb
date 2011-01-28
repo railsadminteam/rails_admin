@@ -1,4 +1,4 @@
-require 'rails_admin/config/visitor'
+require 'rails_admin/config/proxy'
 
 module RailsAdmin
   module Config
@@ -24,16 +24,6 @@ module RailsAdmin
         @root = parent.root
       end
 
-      # Bind variables to be used by the configuration options
-      def bind(key, value = nil)
-        if key.kind_of?(Hash)
-          @bindings = key
-        else
-          @bindings[key] = value
-        end
-        self
-      end
-
       def has_option?(name)
         options = self.class.instance_variable_get("@config_options")
         options && options.has_key?(name)
@@ -45,8 +35,8 @@ module RailsAdmin
         self.class.register_instance_option(option_name, scope, &default)
       end
 
-      def visit(bindings = {})
-        RailsAdmin::Config::Visitor.new(self, bindings)
+      def with(bindings = {})
+        RailsAdmin::Config::Proxy.new(self, bindings)
       end
 
       # Register an instance option. Instance option is a configuration
