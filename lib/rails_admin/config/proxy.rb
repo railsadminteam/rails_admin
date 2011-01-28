@@ -22,7 +22,7 @@ module RailsAdmin
       end
 
       def method_missing(name, *args, &block)
-        if @object.has_option?(name) || @object.respond_to?(name)
+        if @object.respond_to?(name)
           reset = @object.instance_variable_get("@bindings")
           begin
             @object.instance_variable_set("@bindings", @bindings)
