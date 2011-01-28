@@ -144,13 +144,17 @@ module RailsAdmin
     end
 
     def get_sort_hash
-      sort = params[:sort]
-      sort ? {:sort => sort} : {}
+      sort = params[:sort] || RailsAdmin.config(@abstract_model).list.sort_by
+      {:sort => sort}
     end
 
     def get_sort_reverse_hash
-      sort_reverse = params[:sort_reverse]
-      sort_reverse ? {:sort_reverse => sort_reverse == "true"} : {}
+      sort_reverse = if params[:sort]
+          params[:sort_reverse] == 'true'
+      else
+        not RailsAdmin.config(@abstract_model).list.sort_reverse?
+      end
+      {:sort_reverse => sort_reverse}
     end
 
     def get_query_hash(options)
