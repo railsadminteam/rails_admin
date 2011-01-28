@@ -2,7 +2,7 @@ module RailsAdmin
   module Config
     class Proxy
 
-      instance_methods.each { |m| undef_method m unless m =~ /^__/ || m == "object_id" }
+      instance_methods.each {|m| undef_method m unless m =~ /^(__|instance_eval|object_id)/ }
 
       attr_reader :bindings
 
