@@ -447,7 +447,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       RailsAdmin.config Team do
         edit do
           field :color do
-            colorpicker true
+            color true
           end
         end
       end

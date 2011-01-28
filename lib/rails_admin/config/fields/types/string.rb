@@ -21,7 +21,7 @@ module RailsAdmin
             text
           end
 
-          register_instance_option(:colorpicker) do
+          register_instance_option(:color) do
             false
           end
         end
