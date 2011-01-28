@@ -20,6 +20,10 @@ module RailsAdmin
             text += length == 1 ? I18n.translate("admin.new.one_char") : I18n.translate("admin.new.many_chars")
             text
           end
+
+          register_instance_option(:colorpicker) do
+            false
+          end
         end
       end
     end
