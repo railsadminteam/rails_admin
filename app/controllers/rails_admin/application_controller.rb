@@ -17,7 +17,8 @@ module RailsAdmin
     end
 
     def to_model_name(param)
-      param.split("::").map{|x| x.singularize.camelize}.join("::")
+      parts = param.split("::")
+      parts.map{|x| x == parts.last ? x.singularize.camelize : x.camelize}.join("::")
     end
 
     def get_object
