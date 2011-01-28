@@ -202,6 +202,9 @@ as an argument by omitting the equals sign.
 
 * Number of items per page
 * Number of items per page per model
+* Default sorting
+  * Configure globaly
+  * Configure per model
 * Fields
   * Visibility and ordering
   * Label
@@ -227,6 +230,34 @@ You can also configure it per model:
       config.model Team do
         list do
           items_per_page 100
+        end
+      end
+    end
+
+**Default sorting**
+
+By default, rows sorted by the field `id` in reverse order
+
+You can change default behavior with use two options: `sort_by` and `sort_reverse`
+
+**Default sorting - Configure globaly**
+
+    RailsAdmin.config do |config|
+      config.models do
+        list do
+          sort_by :updated_at
+          sort_reverse true
+        end
+      end
+    end
+
+**Default sorting - Configure per model**
+
+    RailsAdmin.config do |config|
+      config.model Player do
+        list do
+          sort_by :name
+          sort_reverse { false }
         end
       end
     end
