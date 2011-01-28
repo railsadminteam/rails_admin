@@ -173,7 +173,7 @@ If you need to customize the label of the model within the navigation tab, use:
       end
     end
 
-Remember, you can also pass the value as an argument or as a block as with the
+Remember, you can pass the value as an argument or as a block as with the
 before mentioned visibility options. Besides that, the label also has a
 shorthand syntax:
 
@@ -195,8 +195,8 @@ You can configure the number of tabs visible in the top navigation:
 
 Links to the rest of the models will be rendered in a drop down menu next to the
 tabs. Even though this option is not model specific, it shares the same
-semantics as the earlier ones - you can also pass in a block or pass the value
-as an argument by omitting the equals sign.
+semantics as the earlier ones - you could also pass in a block which would be
+evaluated at runtime.
 
 ### List view
 
