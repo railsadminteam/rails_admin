@@ -170,6 +170,22 @@ describe "RailsAdmin Config DSL Edit Section" do
       RailsAdmin::Config.reset Team
     end
 
+    it "should delegates the label option to the ActiveModel API" do
+      RailsAdmin.config Team do
+        edit do
+          field :manager
+          field :fans
+        end
+      end
+
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag(".field") do |elements|
+        elements[0].should have_tag("label", :content => "Team Manager")
+        elements[1].should have_tag("label", :content => "Some Fans")
+      end
+      RailsAdmin::Config.reset Team
+    end
+
     it "should be renameable" do
       RailsAdmin.config Team do
         edit do
