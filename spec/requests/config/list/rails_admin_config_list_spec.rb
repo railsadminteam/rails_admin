@@ -550,7 +550,7 @@ describe "RailsAdmin Config DSL List Section" do
     let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
     let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
 
-    before(:each) { RailsAdmin::AbstractModel.new("Player").create(players) }
+    before(:each) { @players = RailsAdmin::AbstractModel.new("Player").create(players) }
 
     context "should be configurable" do
       it "globaly" do
@@ -562,7 +562,7 @@ describe "RailsAdmin Config DSL List Section" do
             end
           end
         end
-        
+
         get rails_admin_list_path(:model_name => "player")
         response.should have_tag(".grid tbody tr") do |elements|
           player_names_by_date.reverse.each_with_index do |name, i|
@@ -613,7 +613,7 @@ describe "RailsAdmin Config DSL List Section" do
 
         get rails_admin_list_path(:model_name => "player")
         response.should have_tag(".grid tbody tr") do |elements|
-          players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
+          @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
             elements[i].should contain(name)
           end
         end
