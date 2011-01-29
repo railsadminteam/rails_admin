@@ -22,6 +22,8 @@ fi:
     list:
       edit_action: "Muokkaa"
       delete_action: "Poista"
+      select_action: "Valitse"
+      delete_selected: "Poista valitut"
       add_new: "Lisää uusi"
       search_btn: "HAKU"
       select: "Valitse muokattava %{name}"
