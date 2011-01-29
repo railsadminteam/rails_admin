@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe "RailsAdmin Config DSL Edit Section" do
 
+  before(:each) do
+    RailsAdmin::Config.reset
+  end
+
   describe "field groupings" do
 
     it "should be hideable" do
@@ -29,9 +33,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should_not have_tag("input#team_losses")
       response.should_not have_tag("input#team_win_percentage")
       response.should_not have_tag("input#team_revenue")
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should be renameable" do
@@ -44,9 +45,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag("h2", :content => "Renamed group")
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should have accessor for its fields" do
@@ -73,9 +71,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[3].should have_tag("#teams_division_id")
         elements.length.should == 4
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should have accessor for its fields by type" do
@@ -105,9 +100,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements.should have_tag("label", :content => "Manager (STRING)")
         elements.should have_tag("label", :content => "Ballpark (STRING)")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
   end
 
@@ -145,9 +137,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[1].should have_tag("#teams_division_id")
         elements[2].should have_tag("#teams_name")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should only show the defined fields if some fields are defined" do
@@ -165,9 +154,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[2].should have_tag("#teams_name")
         elements.length.should == 3
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should delegates the label option to the ActiveModel API" do
@@ -183,7 +169,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[0].should have_tag("label", :content => "Team Manager")
         elements[1].should have_tag("label", :content => "Some Fans")
       end
-      RailsAdmin::Config.reset Team
     end
 
     it "should be renameable" do
@@ -202,9 +187,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[1].should have_tag("label", :content => "Division")
         elements[2].should have_tag("label", :content => "Name")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should be renameable by type" do
@@ -232,9 +214,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements.should have_tag("label", :content => "Players")
         elements.should have_tag("label", :content => "Fans")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should be globally renameable by type" do
@@ -262,9 +241,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements.should have_tag("label", :content => "Players")
         elements.should have_tag("label", :content => "Fans")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should be hideable" do
@@ -282,9 +258,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[0].should have_tag("#teams_division_id")
         elements[1].should have_tag("#teams_name")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should be hideable by type" do
@@ -312,9 +285,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements.should have_tag("label", :content => "Players")
         elements.should have_tag("label", :content => "Fans")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should be globally hideable by type" do
@@ -342,9 +312,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements.should have_tag("label", :content => "Players")
         elements.should have_tag("label", :content => "Fans")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to customize the help text" do
@@ -363,9 +330,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[1].should have_tag("p.help", :content => "Required")
         elements[2].should have_tag("p.help", :content => "Optional 50 characters or fewer.")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
 
     it "should have option to override required status" do
@@ -388,9 +352,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         elements[1].should have_tag("p.help", :content => "Optional")
         elements[2].should have_tag("p.help", :content => "Required 50 characters or fewer.")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
   end
 
@@ -451,9 +412,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "user")
       response.should have_tag("input#users_avatar")
-
-      #Reset
-      RailsAdmin::Config.reset User
     end
 
   end

@@ -9,6 +9,8 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin::AbstractModel.new("League").create(:name => 'National')
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
+
+      RailsAdmin::Config.reset
     end
 
     it "should be configurable" do
@@ -25,13 +27,6 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-
-      # Reset
-      RailsAdmin::Config.models do
-        list do
-          items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
-        end
-      end
     end
 
     it "should be configurable per model" do
@@ -47,13 +42,6 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
-      end
-
-      # Reset
-      RailsAdmin.config League do
-        list do
-          items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
-        end
       end
     end
 
@@ -76,17 +64,14 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
       end
-
-      # Reset
-      RailsAdmin::Config.models do
-        list do
-          items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
-        end
-      end
     end
   end
 
   describe "items' fields" do
+
+    before(:each) do
+      RailsAdmin::Config.reset
+    end
 
     it "should show all by default" do
       get rails_admin_list_path(:model_name => "fan")
@@ -114,9 +99,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should contain("ID")
         elements[4].should contain("CREATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should only list the defined fields if some fields are defined" do
@@ -133,9 +115,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements.should_not contain("CREATED AT")
         elements.should_not contain("UPDATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should delegate the label option to the ActiveModel API" do
@@ -148,9 +127,6 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("HIS NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should be renameable" do
@@ -167,9 +143,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[1].should contain("IDENTIFIER")
         elements[2].should contain("NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should be renameable by type" do
@@ -187,9 +160,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should contain("UPDATED AT (DATETIME)")
         elements[4].should contain("NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should be globally renameable by type" do
@@ -207,9 +177,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should contain("UPDATED AT (DATETIME)")
         elements[4].should contain("NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should be sortable by default" do
@@ -236,9 +203,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[1].should_not have_tag("a")
         elements[2].should have_tag("a")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to disable sortability by type" do
@@ -260,9 +224,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should_not have_tag("a")
         elements[4].should_not have_tag("a")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to disable sortability by type globally" do
@@ -284,9 +245,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should_not have_tag("a")
         elements[4].should_not have_tag("a")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to hide fields by type" do
@@ -304,9 +262,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements.should_not contain("CREATED AT")
         elements.should_not contain("UPDATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to hide fields by type globally" do
@@ -324,9 +279,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements.should_not contain("CREATED AT")
         elements.should_not contain("UPDATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to customize css class name" do
@@ -352,9 +304,6 @@ describe "RailsAdmin Config DSL List Section" do
           rows[0].should have_tag("td:nth-child(3).string")
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to customize css class name by type" do
@@ -381,9 +330,6 @@ describe "RailsAdmin Config DSL List Section" do
           rows[0].should have_tag("td:nth-child(5).string")
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to customize css class name by type globally" do
@@ -410,9 +356,6 @@ describe "RailsAdmin Config DSL List Section" do
           rows[0].should have_tag("td:nth-child(5).string")
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to customize column width" do
@@ -433,9 +376,6 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag("style") {|css| css.should contain(/\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to customize output formatting" do
@@ -461,9 +401,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN II") }
         elements[1].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN I") }
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have a simple option to customize output formatting of date fields" do
@@ -488,11 +425,9 @@ describe "RailsAdmin Config DSL List Section" do
           li.should contain(/\d{2} \w{3} \d{1,2}:\d{1,2}/)
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
-          it "should have option to customize output formatting of date fields" do
+
+    it "should have option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
           field :id
@@ -514,9 +449,6 @@ describe "RailsAdmin Config DSL List Section" do
           li.should contain(/\d{4}-\d{2}-\d{2}/)
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should allow addition of virtual fields (object methods)" do
@@ -539,9 +471,6 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_tag(".grid tbody tr") do |elements|
         elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
       end
-
-      # Reset
-      RailsAdmin::Config.reset Team
     end
   end
 
@@ -664,12 +593,6 @@ describe "RailsAdmin Config DSL List Section" do
           elements[i].should contain(name)
         end
       end
-    end
-
-    after :all do
-      # Reset
-      RailsAdmin::Config.reset Team
-      RailsAdmin::Config.reset Player
     end
   end
 end
