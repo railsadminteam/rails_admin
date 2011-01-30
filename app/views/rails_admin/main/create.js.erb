@@ -1,0 +1,7 @@
+<% if @saved %>
+  <% label_field = RailsAdmin.config(@object).list.object_label %>
+  $j.facebox.close();
+  $j('.<%=  @object.class.to_s.tableize.singularize %>_id').trigger('updateWithNewElement',[<%= @object.id %>, '<%= label_field  %>']);
+<% else %>
+  $j.facebox('<%= escape_javascript(render :partial => 'new') %>','createRelatedDialog');
+<% end %>

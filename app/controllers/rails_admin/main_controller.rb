@@ -44,7 +44,10 @@ module RailsAdmin
       @object = @abstract_model.new
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-      render :layout => 'rails_admin/form'
+      respond_to do |format|
+        format.html { render :layout => 'rails_admin/form' }
+        format.js   { render :layout => false }
+      end
     end
 
     def create
@@ -55,11 +58,15 @@ module RailsAdmin
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      if @object.save
+      if @saved = @object.save
         AbstractHistory.create_history_item("Created #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
-        redirect_to_on_success
-      else
-        render_error
+      end
+
+      respond_to do |format|
+        format.html do
+          @saved ? redirect_to_on_success : render_error
+        end
+        format.js
       end
     end
 

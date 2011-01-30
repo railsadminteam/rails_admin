@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title><%= @page_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('rails_admin/base.css') %>
+  <%= stylesheet_link_tag('rails_admin/facebox.css') %>
   <%= stylesheet_link_tag('rails_admin/create.css') %>
 
   <%= javascript_include_tag('rails_admin/prototype.js') %>
@@ -14,6 +15,12 @@
   <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
   <%= javascript_include_tag('rails_admin/dashboard.js') %>
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
+
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+  
+  <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js","rails_admin/create-related-record.js","rails_admin/facebox.js" %>
+  
+  
 
   <script type="text/javascript" language="javascript">
   Control.DatePicker.Locale['en_US'] = {

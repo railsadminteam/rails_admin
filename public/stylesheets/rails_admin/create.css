@@ -31,6 +31,14 @@
   margin-bottom:5px;
 }
 
+.formSection a {
+  color: #000;
+}
+
+.formSection a.showAssociatedRecordForm {
+    margin: 5px;
+}
+
 .formSection label{
   width:100px;
   display:block;
@@ -365,3 +373,8 @@ input.default:active{
   margin-left: 100px;
 }
 
+#facebox .content {
+    width: 800px;
+}
+
+.createRelatedDialog li.save.add, .createRelatedDialog li.save.edit { display: none; }

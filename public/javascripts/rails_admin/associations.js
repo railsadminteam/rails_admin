@@ -1,5 +1,8 @@
 var buffer = []
-document.observe("dom:loaded", function() {
+document.observe("dom:loaded", prepareManySelectors);
+
+
+function prepareManySelectors() {
 
   var counter = 0;
 
@@ -194,4 +197,5 @@ document.observe("dom:loaded", function() {
     })
   })
 
-});
+}
+
