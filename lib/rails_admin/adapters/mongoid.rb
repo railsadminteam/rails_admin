@@ -17,7 +17,7 @@ module RailsAdmin
       end
 
       def get(id)
-        if object = model.where(:id=>BSON::ObjectId(id))
+        if object = model.where(:_id=>BSON::ObjectId(id)).first
           RailsAdmin::AbstractObject.new object
         else
           nil
@@ -54,9 +54,7 @@ module RailsAdmin
           model.where(options).asc(sort)
         end
 
-        found = [page_count, Array(condition.limit(per_page).offset((page-1)*per_page))]
-        puts "paginated (#{options.inspect}) => #{found.inspect}"
-        found
+        [page_count, Array(condition.limit(per_page).offset((page-1)*per_page))]
       end
 
       def create(params = {})
