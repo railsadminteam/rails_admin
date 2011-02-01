@@ -4,7 +4,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title><%= @page_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('rails_admin/base.css') %>
-  <%= stylesheet_link_tag('rails_admin/facebox.css') %>
   <%= stylesheet_link_tag('rails_admin/create.css') %>
   <%= stylesheet_link_tag('rails_admin/jquery-ui-smoothness/jquery-ui-1.8.9.custom.css') %>
 
@@ -14,15 +13,12 @@
   <%= javascript_include_tag('rails_admin/datepicker.js') %>
   <%= javascript_include_tag('rails_admin/associations.js') %>
   <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
-  <%= javascript_include_tag('rails_admin/dashboard.js') %>
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
 
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
 
-  <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js","rails_admin/create-related-record.js","rails_admin/facebox.js" %>
-
-
+  <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js","rails_admin/ra.remoteform.js" %>
 
   <script type="text/javascript" language="javascript">
   Control.DatePicker.Locale['en_US'] = {
@@ -42,17 +38,6 @@
     $$(".field .datetime").each(function(elem){
       new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png', timePicker: true, timePickerAdjacent: true});
     });
-
-    <%
-    RailsAdmin::config(@object).edit.visible_groups.each do |form_section|
-      next unless form_section.visible_fields.length > 0
-      form_section.visible_fields.select { |field| field.respond_to?(:column_width) }.each do |field|
-    %>
-    $("<%= "#{field.abstract_model.to_param}_#{field.name}" %>").style.width = "<%= field.column_width%>px";
-    <%
-      end
-    end
-    %>
   });
 
   </script>

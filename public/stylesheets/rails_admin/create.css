@@ -35,8 +35,9 @@
   color: #000;
 }
 
-.formSection a.showAssociatedRecordForm {
-    margin: 5px;
+.formSection a.createAssociatedRecord {
+    line-height: 24px;
+    margin-left: 10px;
 }
 
 .formSection label{
@@ -373,8 +374,4 @@ input.default:active{
   margin-left: 100px;
 }
 
-#facebox .content {
-    width: 800px;
-}
-
-.createRelatedDialog li.save.add, .createRelatedDialog li.save.edit { display: none; }
+.createAssociatedRecordDialog li.save.add, .createAssociatedRecordDialog li.save.edit { display: none; }

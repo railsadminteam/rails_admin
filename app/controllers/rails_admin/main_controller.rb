@@ -58,15 +58,22 @@ module RailsAdmin
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      if @saved = @object.save
-        AbstractHistory.create_history_item("Created #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
-      end
-
-      respond_to do |format|
-        format.html do
-          @saved ? redirect_to_on_success : render_error
+      if @object.save
+        object_label = @model_config.list.with(:object => @object).object_label
+        AbstractHistory.create_history_item("Created #{object_label}", @object, @abstract_model, _current_user)
+        respond_to do |format|
+          format.html do
+            redirect_to_on_success
+          end
+          format.js do
+            render :json => {
+              :id => @object.id,
+              :label => object_label,
+            }
+          end
         end
-        format.js
+      else
+        render_error
       end
     end
 
@@ -236,7 +243,10 @@ module RailsAdmin
     def render_error whereto = :new
       action = params[:action]
       flash.now[:error] = t("admin.flash.error", :name => @model_config.update.label, :action => t("admin.actions.#{action}d"))
-      render whereto, :layout => 'rails_admin/form'
+      respond_to do |format|
+        format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
+        format.js   { render whereto, :layout => false, :status => :not_acceptable  }
+      end
     end
 
     def check_for_cancel
