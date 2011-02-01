@@ -126,8 +126,6 @@
 }
 
 #pagination {
-  clear:both;
-  text-align:center;
   margin-bottom:15px;
   padding-top:10px;
 }
@@ -160,11 +158,11 @@
 
 #bulkdelete_btn {
   float: right;
-  margin-top: 3px;
+  margin-top: 8px;
 }
 
 #tableFooter {
-  height: 24px;
+  height: 30px;
 }
 
 .this-page {

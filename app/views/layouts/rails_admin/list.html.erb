@@ -6,23 +6,20 @@
   <title><%= @abstract_model.pretty_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('rails_admin/base') %>
   <%= stylesheet_link_tag('rails_admin/list') %>
-  <%= javascript_include_tag('rails_admin/prototype.js') %>
 
-  <script type="text/javascript" language="javascript">
-    var bindEvents = function(){
-      $$(".grid .other a, .grid thead a").each(function(elem){
-        Event.observe(elem, 'click', function(e){
-          e.preventDefault();
-          new Ajax.Updater('content', elem.readAttribute("href"), {
-            method:'get',
-            onComplete: function(){
-              bindEvents();
-            }
-          });
-        })
-      })
-    }
-    document.observe("dom:loaded", bindEvents)
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+  <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js" %>
+
+  <script type="text/javascript">
+    $j(document).ready(function($){
+      $(".grid .other a, .grid thead a, #pagination a").live("click", function(e){
+        e.preventDefault();
+        $(this).bind("ajax:success", function(e, data, status, xhr){
+          $("#content").html(data);
+        });
+        $(this).callRemote();
+      });
+    });
   </script>
 </head>
 <body>
@@ -62,6 +59,7 @@
     </div>
     <div id="content">
 <%= content_for(:layout) %>
+    </div>
   </div>
 </body>
 </html>

@@ -101,9 +101,9 @@ module RailsAdmin
           when current_page
             b << Builder::XmlMarkup.new.span(page_number, :class => "this-page")
           when page_count
-            b << Builder::XmlMarkup.new.a(page_number, :class => "end", :href => "#{url}=#{page_number}")
+            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => true)
           else
-            b << Builder::XmlMarkup.new.a(page_number, :href => "#{url}=#{page_number}")
+            b << link_to(page_number, "#{url}=#{page_number}", :remote => true)
           end
         end
       end
