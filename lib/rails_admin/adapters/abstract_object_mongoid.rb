@@ -5,7 +5,11 @@ module RailsAdmin
      def attributes=(attributes)
        object.send :attributes=, attributes
      end
+
+     def destroy
+       object.destroy
+       object
+     end
     end
   end
 end
- 
