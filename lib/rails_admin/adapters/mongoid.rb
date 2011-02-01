@@ -1,6 +1,7 @@
 require 'mongoid'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/abstract_object'
+require 'rails_admin/adapters/abstract_object_mongoid'
 
 module RailsAdmin
   module Adapters
@@ -18,7 +19,7 @@ module RailsAdmin
 
       def get(id)
         if object = model.where(:_id=>BSON::ObjectId(id)).first
-          RailsAdmin::AbstractObject.new object
+          RailsAdmin::Adapters::AbstractObjectMongoid.new object
         else
           nil
         end
@@ -26,6 +27,10 @@ module RailsAdmin
 
       def get_bulk(ids)
         model.find(ids)
+      end
+
+      def keys
+        [:_id]
       end
 
       def count(options = {})
