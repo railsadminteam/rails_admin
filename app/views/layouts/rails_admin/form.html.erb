@@ -10,38 +10,13 @@
   <%= javascript_include_tag('rails_admin/prototype.js') %>
   <%= javascript_include_tag('rails_admin/prototype-base-extensions.js') %>
   <%= javascript_include_tag('rails_admin/prototype-date-extensions.js') %>
-  <%= javascript_include_tag('rails_admin/datepicker.js') %>
   <%= javascript_include_tag('rails_admin/associations.js') %>
   <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
-  <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
 
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
 
   <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js","rails_admin/ra.remoteform.js" %>
-
-  <script type="text/javascript" language="javascript">
-  Control.DatePicker.Locale['en_US'] = {
-    dateTimeFormat: 'yyyy-MM-dd HH:mm',
-    dateFormat: 'yyyy-MM-dd'}
-
-  document.observe("dom:loaded", function() {
-    $$(".field .date").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png'});
-    });
-    $$(".field .timestamp").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, timePickerAdjacent: true});
-    });
-    $$(".field .time").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/rails_admin/clock.png', timePicker: true, datePicker :false});
-    });
-    $$(".field .datetime").each(function(elem){
-      new Control.DatePicker(elem, {icon: '/images/rails_admin/calendar.png', timePicker: true, timePickerAdjacent: true});
-    });
-  });
-
-  </script>
-
 </head>
 
 <body>

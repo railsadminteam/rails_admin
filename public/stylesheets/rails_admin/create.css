@@ -107,6 +107,14 @@
   width:150px;
 }
 
+.field .date, .field .datetime {
+  background: url("/images/rails_admin/calendar.png") no-repeat right;
+}
+
+.field .time, .field .timestamp {
+  background: url("/images/rails_admin/clock.png") no-repeat right;
+}
+
 .field .integer {
   width:90px;
 }
