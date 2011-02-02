@@ -49,7 +49,8 @@ describe "RailsAdmin History" do
   end
 
   describe "model history fetch" do
-    before :each do
+    before :all do
+      @default_items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       @model = RailsAdmin::AbstractModel.new("Player")
       player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
       30.times do |i|
@@ -62,6 +63,17 @@ describe "RailsAdmin History" do
       histories = RailsAdmin::AbstractHistory.history_for_model @model, nil, false, false, false, nil, 20
       histories[0].should == 2
       histories[1].all.count.should == 20
+    end
+
+    it "should respect RailsAdmin::Config::Sections::List.default_items_per_page" do
+      RailsAdmin::Config::Sections::List.default_items_per_page = 15
+      histories = RailsAdmin::AbstractHistory.history_for_model @model, nil, false, false, false, nil
+      histories[0].should == 2
+      histories[1].all.count.should == 15
+    end
+
+    after :all do
+      RailsAdmin::Config::Sections::List.default_items_per_page = @default_items_per_page
     end
   end
 
