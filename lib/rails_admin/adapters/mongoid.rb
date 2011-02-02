@@ -34,32 +34,26 @@ module RailsAdmin
       end
 
       def count(options = {})
-        model.count(options.reject{|key, value| [:sort, :sort_reverse].include?(key)})
+        criteria_for_options(options).count
       end
 
       def first(options = {})
-        model.first(merge_order(options))
+        criteria_for_options(options).first
       end
 
       def all(options = {})
-        Array(model.where(merge_order(options)))
+        Array(criteria_for_options(options))
       end
-
+      
       def paginated(options = {})
         page = options.delete(:page) || 1
         per_page = options.delete(:per_page) || RailsAdmin::Config::Sections::List.default_items_per_page
-        sort = options.delete(:sort)
-        sort_reverse = options.delete(:sort_reverse)
+        criteria = criteria_for_options(options)
 
-        page_count = (count(options).to_f / per_page).ceil
+        page_count = (criteria.count.to_f / per_page).ceil
 
-        condition = if sort_reverse
-          model.where(options).desc(sort)
-        else
-          model.where(options).asc(sort)
-        end
 
-        [page_count, Array(condition.limit(per_page).offset((page-1)*per_page))]
+        [page_count, Array(criteria.limit(per_page).offset((page-1)*per_page))]
       end
 
       def create(params = {})
@@ -106,6 +100,10 @@ module RailsAdmin
 
       def model_name
         "todo"
+      end 
+      
+      def table_name
+        model.collection.name
       end
 
       def associations
@@ -146,7 +144,7 @@ module RailsAdmin
             :name => field.name.to_sym,
             :pretty_name => field.name.to_s.gsub('_', ' ').capitalize,
             :type => ar_type,
-            :length => 100,
+            :length => 255,
             :nullable? => true,
             :serial? => false,
           }
@@ -207,6 +205,23 @@ module RailsAdmin
           raise "Unknown association type: #{association.macro.inspect}"
         end
       end
+      
+      private
+      
+      def criteria_for_options(options)
+        puts "criteria_for_options #{options.inspect}"
+        sort = options.delete(:sort)
+        sort_reverse = options.delete(:sort_reverse)
+        criteria = if sort && sort_reverse
+          model.where(options).desc(sort)
+        elsif sort 
+          model.where(options).asc(sort)
+        else
+          model.where(options)
+        end
+      end
+
+      
     end
   end
 end
