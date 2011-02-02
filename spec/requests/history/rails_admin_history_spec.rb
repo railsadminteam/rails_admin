@@ -48,5 +48,21 @@ describe "RailsAdmin History" do
     end
   end
 
+  describe "model history fetch" do
+    before :each do
+      @model = RailsAdmin::AbstractModel.new("Player")
+      player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
+      30.times do |i|
+        player.number = i
+        RailsAdmin::AbstractHistory.create_history_item "change #{i}", player, @model, nil
+      end
+    end
+
+    it "should fetch one page of history" do
+      histories = RailsAdmin::AbstractHistory.history_for_model @model, nil, false, false, false, nil, 20
+      histories[0].should == 2
+      histories[1].all.count.should == 20
+    end
+  end
 
 end
