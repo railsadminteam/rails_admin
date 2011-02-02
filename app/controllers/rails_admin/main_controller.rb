@@ -32,10 +32,10 @@ module RailsAdmin
 
     def list
       list_entries
-      @xhr = request.xhr?
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
       respond_to do |format|
-        format.html { render :layout => @xhr ? false : 'rails_admin/list' }
+        format.html { render :layout => 'rails_admin/list' }
+        format.js
         format.json { render :json => @objects.to_json(:only => visible.call) }
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
       end

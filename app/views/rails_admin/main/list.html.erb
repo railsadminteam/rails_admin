@@ -58,7 +58,7 @@
                   <% if property.sortable? %>
                   <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
                   <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
-                  <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction) %>
+                  <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true) %>
                   <% else %>
                   <%= property_pretty_name.upcase %>
                   <% end %>

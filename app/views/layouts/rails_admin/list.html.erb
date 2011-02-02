@@ -12,12 +12,8 @@
 
   <script type="text/javascript">
     $j(document).ready(function($){
-      $(".grid .other a, .grid thead a, #pagination a").live("click", function(e){
-        e.preventDefault();
-        $(this).bind("ajax:success", function(e, data, status, xhr){
-          $("#content").html(data);
-        });
-        $(this).callRemote();
+      $(this).bind("ajax:success", function(e, data, status, xhr){
+        $("#content").html(data);
       });
     });
   </script>

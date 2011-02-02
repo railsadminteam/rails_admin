@@ -81,6 +81,7 @@ module RailsAdmin
       options[:url] ||= ""
 
       url = options.delete(:url)
+      url.delete(options[:page_param])
       url = url.to_a.collect{|x| x.join("=")}.join("&")
 
       url += (url.include?('=') ? '&' : '') + options[:page_param]
