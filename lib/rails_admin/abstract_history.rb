@@ -135,13 +135,8 @@ module RailsAdmin
     end
 
     # Fetch detailed history for one month.
-    def self.history_for_month(ref, section)
-      current_ref = -5 * ref.to_i
-      current_diff = current_ref + 5 - (section.to_i + 1)
-
-      current_month = current_diff.month.ago
-
-      return RailsAdmin::History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
+    def self.history_for_month(month, year)
+      return RailsAdmin::History.find(:all, :conditions => ["month = ? and year = ?", month, year])
     end
 
     # Fetch the most recent history item for a model.

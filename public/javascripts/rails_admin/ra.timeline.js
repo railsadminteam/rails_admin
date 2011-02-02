@@ -14,6 +14,7 @@
   $.widget("ra.timeline", {
     options: {
       date: new Date(),
+      monthChanged: function(month, year) {},
       months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
       range: 4,
       url: null
@@ -37,17 +38,32 @@
       this.months = $('<ul></ul>').appendTo(this.element);
 
       this.handle = $('<div class="handle"></div>').appendTo(this.element);
+
+      this.handleOffset = parseInt(this.element.css("padding-left"));
+      this.handle.css("left", this.months.width() - this.handle.width() + this.handleOffset);
     },
 
     _bindEvents: function()
     {
-      var widget = this;
+      var currentMonthIndex = 0
+          widget = this;
 
-      /* Todo: Bind handle to update detailed listing from
-       * "/admin/history/list" month changed */
       this.handle.draggable({
         axis: "x",
-        containment: this.element
+        containment: this.element,
+        drag: function(event, ui) {
+          var i = Math.floor((ui.position.left - widget.handleOffset) / widget.monthWidth);
+
+          if (i != currentMonthIndex) {
+              currentMonthIndex = i;
+
+              var el = $(widget.months.children().get(i));
+                  month = el.attr("data-month"),
+                  year = el.attr("data-year");
+
+              widget.options.monthChanged(month, year);
+          }
+        }
       });
 
       this.previous.bind("click.timeline", function(e){
@@ -72,12 +88,12 @@
 
       date.setTime(this.options.date.valueOf());
 
-      var width = Math.floor(this.months.width() / this.options.range) - 1;
+      this.monthWidth = Math.floor(this.months.width() / this.options.range) - 1;
 
       while (i--) {
 
         this.months.prepend(
-          '<li style="width:' + width + 'px" data-month="' + date.getFullYear() + '' + (parseInt(date.getMonth()) + 1) + '">' +
+          '<li style="width:' + this.monthWidth + 'px" data-year="' + date.getFullYear() + '" data-month="' + (parseInt(date.getMonth()) + 1) + '">' +
             '<span class="month">' + this.getMonthName(date) + '</span>' +
             '<span class="bar"><span></span</span>' +
           '</li>'
@@ -107,7 +123,7 @@
           var maxHeight = widget.months.find(".bar").first().height(), max = 0;
 
           var getHistoryIndicator = function(history) {
-            return widget.months.find("li[data-month=" + history.year + history.month + "]' .bar span").first();
+            return widget.months.find("li[data-year=" + history.year + "][data-month=" + history.month + "] .bar span").first();
           }
 
           $(data).each(function(i, e) {

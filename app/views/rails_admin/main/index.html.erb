@@ -42,11 +42,29 @@
             <h2><%= t("admin.history.name") %></h2>
             <div id="timeline"></div>
             <div id="listingHistory">
-<%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @historyListing}) -%>
+<%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history}) -%>
             </div>
             <script type="text/javascript">
             $j(document).ready(function($){
-               $("#timeline").timeline({ url: "/admin/history/slider" });
+              var cache = {};
+               $("#timeline").timeline({
+                 url: "/admin/history/slider",
+                 monthChanged: function(month, year) {
+                   if (cache[year] && cache[year][month]) {
+                     $("#listingHistory").html(cache[year][month]);
+                   } else {
+                     $j("#listingHistory").load(
+                       "/admin/history/list",
+                       { month: month, year: year },
+                       function(response, status, xhr) {
+                         if (!cache[year]) { cache[year] = {}; }
+                         cache[year][month] = response;
+                       }
+                     );
+                   }
+                 },
+                 monthNames: <%= ActiveSupport::JSON.encode(month_names).html_safe %>
+               });
             });
             </script>
           </div>

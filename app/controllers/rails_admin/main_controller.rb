@@ -11,8 +11,9 @@ module RailsAdmin
       @page_type = "dashboard"
 
       @history = AbstractHistory.history_latest_summaries
-      # history listing with ref = 0 and section = 4
-      @historyListing, @current_month = AbstractHistory.history_for_month(0, 4)
+      @month = DateTime.now.month
+      @year = DateTime.now.year
+      @history= AbstractHistory.history_for_month(@month, @year)
 
       @abstract_models = RailsAdmin::AbstractModel.all
 
