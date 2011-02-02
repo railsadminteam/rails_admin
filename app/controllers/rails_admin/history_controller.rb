@@ -13,12 +13,10 @@ module RailsAdmin
     end
 
     def slider
-      ref = params[:ref].to_i
-
-      if ref.nil? or ref > 0
+      if params[:from].nil? or params[:to].nil?
         not_found
       else
-        render :json => AbstractHistory.history_summaries(ref)
+        render :json => AbstractHistory.history_summaries(params[:from], params[:to])
       end
     end
 

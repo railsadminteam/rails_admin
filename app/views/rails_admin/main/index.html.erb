@@ -40,33 +40,14 @@
 
           <div class="section">
             <h2><%= t("admin.history.name") %></h2>
-            <div id="timeline">
-              <a href="javascript:void(0)" id="arrowLeft" ref="-1"><img src="/images/rails_admin/arrow_left.png" alt="Left" /></a>
-              <div id="timelineSlider">
-                <% max = @history[0].number %>
-                <% @history.each{|t| max = t.number if t.number > max} %>
-                <ul>
-                  <% @history.each do |t| %>
-                  <% percent = (t.number * 100) / max unless max == 0 %>
-                  <% indicator_type = get_indicator(percent)%>
-                  <li>
-                    <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
-                    <span><%= month_names[t.month] %> <%= t.year %></span>
-                    <span class="bars">
-                      <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
-                    </span>
-                  </li>
-                  <% end %>
-                </ul>
-                <div id="handler">
-                  <img src="/images/rails_admin/handler.png"/>
-                </div>
-              </div>
-
-              <a href="javascript:void(0)" id="arrowRight" ref="1"><img src="/images/rails_admin/arrow_right.png" alt="Right" /></a>
-            </div>
+            <div id="timeline"></div>
             <div id="listingHistory">
 <%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @historyListing}) -%>
             </div>
+            <script type="text/javascript">
+            $j(document).ready(function($){
+               $("#timeline").timeline({ url: "/admin/history/slider" });
+            });
+            </script>
           </div>
         </div>
