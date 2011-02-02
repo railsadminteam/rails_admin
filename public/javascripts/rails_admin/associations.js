@@ -20,10 +20,10 @@ document.observe("dom:loaded", function() {
       var select = elem.parentNode.parentNode.childElements()[2].childElements()[0];
       var aux = []
       var ref = select.readAttribute('ref')
-      var text = e.target.value;
+      var text = e.target.value.toLowerCase();
 
       buffer[ref].each(function(ev){
-        if(ev[0].indexOf(text)!=-1){
+        if(ev[0].toLowerCase().indexOf(text)!=-1){
           aux.push(ev)
         }
       })
