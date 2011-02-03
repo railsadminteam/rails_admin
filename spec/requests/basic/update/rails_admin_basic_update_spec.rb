@@ -11,7 +11,7 @@ describe "RailsAdmin Basic Update" do
     it "should return to edit page" do
       fill_in "players[name]", :with => ""
       res = click_button "Save"
-      res.should be_successful
+      res.response_code.should eql(406)
       res.should have_tag "form", :action => "/admin/players/#{@player.id}"
     end
   end
