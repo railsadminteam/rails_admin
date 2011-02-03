@@ -26,7 +26,8 @@ module RailsAdmin
       end
 
       def get_bulk(ids)
-        model.find(ids)
+        ids = ids.map{|i| BSON::ObjectId(i)}        
+        Array(model.where(:_id.in=>ids))
       end
 
       def keys
@@ -65,13 +66,14 @@ module RailsAdmin
       end
 
       def destroy(ids)
-        model.destroy(ids)
+        ids = ids.map{|i| BSON::ObjectId(i)}
+        destroyed = Array(model.where(:_id.in=>ids))
+        model.destroy_all(:conditions=>{:_id.in=>ids})
+        destroyed
       end
 
       def destroy_all!
-        model.all.each do |object|
-          object.destroy
-        end
+        model.destroy_all
       end
 
       def has_and_belongs_to_many_associations
@@ -160,12 +162,6 @@ module RailsAdmin
 
       private
 
-      def merge_order(options)
-        @sort ||= options.delete(:sort) || "id"
-        @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
-        options.merge(:order => "#{@sort} #{@sort_order}")
-      end
-
       def association_parent_model_lookup(association)
         puts "association_parent_model_lookup(#{association})"
         case association.macro
@@ -179,7 +175,7 @@ module RailsAdmin
       end
 
       def association_parent_key_lookup(association)
-        [:id]
+        [:_id]
       end
 
       def association_child_model_lookup(association)
