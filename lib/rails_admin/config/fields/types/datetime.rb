@@ -1,4 +1,5 @@
 require 'rails_admin/config/fields/base'
+require 'rails_admin/i18n_support'
 
 module RailsAdmin
   module Config
@@ -15,45 +16,9 @@ module RailsAdmin
 
           class << self
 
+            include RailsAdmin::I18nSupport
+
             attr_reader :datepicker_options, :format, :i18n_scope
-
-            def abbr_day_names
-              begin
-                I18n.t('date.abbr_day_names', :raise => true)
-              rescue I18n::ArgumentError
-                I18n.t('date.abbr_day_names', :locale => :en)
-              end
-            end
-
-            def abbr_month_names
-              begin
-                names = I18n.t('date.abbr_month_names', :raise => true)
-              rescue I18n::ArgumentError
-                names = I18n.t('date.abbr_month_names', :locale => :en)
-              end
-              names[1..-1]
-            end
-
-            def date_format
-              I18n.t('date.formats.default', :default => I18n.t('date.formats.default', :locale => :en))
-            end
-
-            def day_names
-              begin
-                I18n.t('date.day_names', :raise => true)
-              rescue I18n::ArgumentError
-                I18n.t('date.day_names', :locale => :en)
-              end
-            end
-
-            def month_names
-              begin
-                names = I18n.t('date.month_names', :raise => true)
-              rescue I18n::ArgumentError
-                names = I18n.t('date.month_names', :locale => :en)
-              end
-              names[1..-1]
-            end
 
             def normalize(date_string, format)
               unless I18n.locale == "en"
