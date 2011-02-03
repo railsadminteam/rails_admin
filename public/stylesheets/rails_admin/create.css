@@ -104,6 +104,7 @@
 }
 
 .field .date, .field .timestamp, .field .time, .field .datetime {
+  padding-right: 20px;
   width:150px;
 }
 

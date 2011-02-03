@@ -1,13 +1,7 @@
-                <%= label_tag "#{field.to_param}_localized", field.label %>
-                <%= text_field field.abstract_model.to_param, "#{field.name}_localized", :class => "#{field.css_class} #{field.has_errors? ? "errorField" : nil}", :value => field.formatted_value, :style => "width:#{field.column_width}px" %>
-                <%= hidden_field field.abstract_model.to_param, field.name %>
+                <%= label_tag "#{field.to_param}", field.label %>
+                <%= text_field field.abstract_model.to_param, "#{field.name}", :class => "#{field.css_class} #{field.has_errors? ? "errorField" : nil}", :value => field.formatted_value, :style => "width:#{field.column_width}px" %>
                 <script type="text/javascript">
                 $j(document).ready(function($){
-                  /* Todo: Add date picker with support for time entry */
-                  $("#<%= "#{field.to_param}_localized" %>").datepicker({
-                    altField: '#<%= "#{field.abstract_model.to_param}_#{field.name}" %>',
-                    altFormat: "yy-mm-dd",
-                    dateFormat: "dd.mm.yy"
-                  });
+                  $("#<%= "#{field.to_param}" %>").datepicker(<%= field.datepicker_options.html_safe %>);
                 });
                 </script>

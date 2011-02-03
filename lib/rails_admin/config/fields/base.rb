@@ -89,6 +89,8 @@ module RailsAdmin
           properties[:length]
         end
 
+        register_instance_option(:parse_input)
+
         register_instance_option(:partial) do
           type
         end
