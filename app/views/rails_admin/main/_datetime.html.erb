@@ -1,7 +1,7 @@
                 <%= label_tag "#{field.to_param}", field.label %>
                 <%= text_field field.abstract_model.to_param, "#{field.name}", :class => "#{field.css_class} #{field.has_errors? ? "errorField" : nil}", :value => field.formatted_value, :style => "width:#{field.column_width}px" %>
-                <script type="text/javascript">
-                $j(document).ready(function($){
-                  $("#<%= "#{field.to_param}" %>").datepicker(<%= field.datepicker_options.html_safe %>);
-                });
-                </script>
+                <%= javascript_tag do %>
+                  $j(document).ready(function($){
+                    $("#<%= "#{field.to_param}" %>").datepicker(<%= field.datepicker_options.html_safe %>);
+                  });
+                <% end %>

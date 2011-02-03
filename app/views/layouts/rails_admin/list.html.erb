@@ -10,13 +10,13 @@
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js" %>
 
-  <script type="text/javascript">
+  <%= javascript_tag do %>
     $j(document).ready(function($){
       $(this).bind("ajax:success", function(e, data, status, xhr){
         $("#content").html(data);
       });
     });
-  </script>
+  <% end %>
 </head>
 <body>
   <div id="wrapper">
