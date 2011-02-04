@@ -5,6 +5,18 @@ require 'rails_admin/abstract_object'
 module RailsAdmin
   module Adapters
     module ActiveRecord
+      def self.polymorphic_parents(name)
+        unless @polymorphic_parents
+          @polymorphic_parents = {}
+          RailsAdmin::AbstractModel.all.each do |abstract_model|
+            abstract_model.polymorphic_has_many_associations.each do |association|
+              (@polymorphic_parents[association[:options][:as]] ||= []) << abstract_model
+            end
+          end
+        end
+        @polymorphic_parents[name.to_sym]
+      end
+
       def get(id)
         if object = model.find_by_id(id)
           RailsAdmin::AbstractObject.new object
@@ -12,7 +24,7 @@ module RailsAdmin
           nil
         end
       # TODO: ActiveRecord::Base.find_by_id will never raise RecordNotFound, will it?
-      rescue ActiveRecord::RecordNotFound 
+      rescue ActiveRecord::RecordNotFound
         nil
       end
 
@@ -91,7 +103,7 @@ module RailsAdmin
       end
 
       def associations
-        model.reflect_on_all_associations.select { |association| not association.options[:polymorphic] }.map do |association|
+        model.reflect_on_all_associations.map do |association|
           {
             :name => association.name,
             :pretty_name => association.name.to_s.gsub('_', ' ').capitalize,
@@ -100,7 +112,14 @@ module RailsAdmin
             :parent_key => association_parent_key_lookup(association),
             :child_model => association_child_model_lookup(association),
             :child_key => association_child_key_lookup(association),
+            :options => association.options,
           }
+        end
+      end
+
+      def polymorphic_has_many_associations
+        has_many_associations.select do |association|
+          association[:options][:as]
         end
       end
 
@@ -132,7 +151,11 @@ module RailsAdmin
       def association_parent_model_lookup(association)
         case association.macro
         when :belongs_to
-          association.klass
+          if association.options[:polymorphic]
+            RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name)
+          else
+            association.klass
+          end
         when :has_one, :has_many, :has_and_belongs_to_many
           association.active_record
         else

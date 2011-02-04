@@ -64,6 +64,11 @@ module RailsAdmin
           !(bindings[:object].errors[child_key].nil? || bindings[:object].errors[child_key].empty?)
         end
 
+        # Reader whether this is a polymorphic association
+        def polymorphic?
+          association[:options][:polymorphic]
+        end
+
         # Reader for the association's value unformatted
         def value
           bindings[:object].send(association[:name])
