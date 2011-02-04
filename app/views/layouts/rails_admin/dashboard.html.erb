@@ -19,11 +19,11 @@
       <div id="headerLeft">
         <ul class="breadcrumb">
           <li>
-            <%= link_to(t('home.name'), '/') %>
+            <%= link_to(t('home.name'), root_path) %>
           </li>
           <li>
             &rsaquo;
-            <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
+            <span><%= t('admin.dashboard.name') %></span>
           </li>
         </ul>
         <h1 id="logo">
