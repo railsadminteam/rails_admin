@@ -1,5 +1,6 @@
 require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
+require 'rails_admin/abstract_history'
 require 'rails_admin/config'
 
 module RailsAdmin

@@ -35,7 +35,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection
           associated_model_config.abstract_model.all.map do |object|
-            [associated_model_config.bind(:object, object).list.object_label, object.id]
+            [associated_model_config.list.with(:object => object).object_label, object.id]
           end
         end
 

@@ -8,6 +8,24 @@ module RailsAdmin
 
     helper_method :_current_user
 
+    def get_model
+      model_name = to_model_name(params[:model_name])
+      @abstract_model = RailsAdmin::AbstractModel.new(model_name)
+      @model_config = RailsAdmin.config(@abstract_model)
+      not_found if @model_config.excluded?
+      @properties = @abstract_model.properties
+    end
+
+    def to_model_name(param)
+      parts = param.split("::")
+      parts.map{|x| x == parts.last ? x.singularize.camelize : x.camelize}.join("::")
+    end
+
+    def get_object
+      @object = @abstract_model.get(params[:id])
+      not_found unless @object
+    end
+
     private
 
     def _authenticate!

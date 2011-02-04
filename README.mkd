@@ -173,7 +173,7 @@ If you need to customize the label of the model within the navigation tab, use:
       end
     end
 
-Remember, you can also pass the value as an argument or as a block as with the
+Remember, you can pass the value as an argument or as a block as with the
 before mentioned visibility options. Besides that, the label also has a
 shorthand syntax:
 
@@ -195,13 +195,16 @@ You can configure the number of tabs visible in the top navigation:
 
 Links to the rest of the models will be rendered in a drop down menu next to the
 tabs. Even though this option is not model specific, it shares the same
-semantics as the earlier ones - you can also pass in a block or pass the value
-as an argument by omitting the equals sign.
+semantics as the earlier ones - you could also pass in a block which would be
+evaluated at runtime.
 
 ### List view
 
 * Number of items per page
 * Number of items per page per model
+* Default sorting
+  * Configure globaly
+  * Configure per model
 * Fields
   * Visibility and ordering
   * Label
@@ -227,6 +230,34 @@ You can also configure it per model:
       config.model Team do
         list do
           items_per_page 100
+        end
+      end
+    end
+
+**Default sorting**
+
+By default, rows sorted by the field `id` in reverse order
+
+You can change default behavior with use two options: `sort_by` and `sort_reverse`
+
+**Default sorting - Configure globaly**
+
+    RailsAdmin.config do |config|
+      config.models do
+        list do
+          sort_by :updated_at
+          sort_reverse true
+        end
+      end
+    end
+
+**Default sorting - Configure per model**
+
+    RailsAdmin.config do |config|
+      config.model Player do
+        list do
+          sort_by :name
+          sort_reverse { false }
         end
       end
     end
@@ -414,7 +445,9 @@ the title of a single database record.
 
 By default it queries if the record in question has columns named "name" or
 "title". If neither is found it returns the model's classname appended with its
-database identifier.
+database identifier. You can add label methods (or replace the default [:name, :title]) with:
+
+    RailsAdmin.config {|c| c.label_methods << :description}
 
 This value is used in a number of places in RailsAdmin - for instance as the
 output of belongs to associations in the listing views of related models, as

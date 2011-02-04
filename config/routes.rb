@@ -8,7 +8,6 @@ Rails.application.routes.draw do
       get "/:model_name", :to => :list, :as => "list"
       get "/:model_name/new", :to => :new, :as => "new"
       match "/:model_name/get_pages", :to => :get_pages, :as => "get_pages"
-      match "/:model_name/history", :to => :show_history, :as => "show_history"
       post "/:model_name", :to => :create, :as => "create"
       get "/:model_name/:id/edit", :to => :edit, :as => "edit"
       put "/:model_name/:id", :to => :update, :as => "update"
@@ -20,6 +19,9 @@ Rails.application.routes.draw do
     scope "history", :as => "history" do
       controller "history" do
         match "/list", :to => :list, :as => "list"
+        match "/slider", :to => :slider, :as => "slider"
+        match "/:model_name", :to => :for_model, :as => "model"
+        match "/:model_name/:id", :to => :for_object, :as => "object"
       end
     end
   end

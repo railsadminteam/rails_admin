@@ -3,7 +3,8 @@ module RailsAdmin
   class AbstractModel
     module GenericSupport
       def to_param
-        model.to_s.underscore.pluralize
+        parts = model.to_s.split("::")
+        parts.map{|x| x == parts.last ? x.underscore.pluralize : x.underscore}.join("::")
       end
 
       def pretty_name

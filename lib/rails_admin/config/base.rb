@@ -1,3 +1,5 @@
+require 'rails_admin/config/proxy'
+
 module RailsAdmin
   module Config
     # A base class for all configurables.
@@ -11,16 +13,20 @@ module RailsAdmin
     # which is then used as the receiver of queries for property values.
     #
     # @see RailsAdmin::AbstractModel
-    # @see RailsAdmin::Config::Model#bindings
     # @see RailsAdmin::Config::Model#abstract_model
     class Base
       attr_reader :abstract_model, :bindings, :parent, :root
 
       def initialize(parent)
         @abstract_model = parent.abstract_model
-        @bindings = parent.bindings
+        @bindings = {}
         @parent = parent
         @root = parent.root
+      end
+
+      def has_option?(name)
+        options = self.class.instance_variable_get("@config_options")
+        options && options.has_key?(name)
       end
 
       # Register an instance option for this object only
@@ -29,11 +35,21 @@ module RailsAdmin
         self.class.register_instance_option(option_name, scope, &default)
       end
 
+      def with(bindings = {})
+        RailsAdmin::Config::Proxy.new(self, bindings)
+      end
+
       # Register an instance option. Instance option is a configuration
       # option that stores it's value within an instance variable and is
       # accessed by an instance method. Both go by the name of the option.
       def self.register_instance_option(option_name, scope = self, &default)
+        unless options = scope.instance_variable_get("@config_options")
+          options = scope.instance_variable_set("@config_options", {})
+        end
+
         option_name = option_name.to_s
+
+        options[option_name] = nil
 
         # If it's a boolean create an alias for it and remove question mark
         if "?" == option_name[-1, 1]

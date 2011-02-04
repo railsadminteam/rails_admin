@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/rails_admin/version', __FILE__)
 
 Gem::Specification.new do |s|
   # If you add a development dependency, please maintain alphabetical order
@@ -29,5 +28,8 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'rails_admin'
   s.summary = %q{Admin for Rails}
   s.test_files = Dir['spec/**/*']
-  s.version = RailsAdmin::VERSION
+  # FIXME: this should reference RailsAdmin::VERSION but because of
+  # http://jira.codehaus.org/browse/JRUBY-5319 we can't use "require"
+  # in our gemspec
+  s.version = '0.0.1'
 end

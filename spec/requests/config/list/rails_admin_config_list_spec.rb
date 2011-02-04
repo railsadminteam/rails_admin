@@ -529,4 +529,132 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin::Config.reset Team
     end
   end
+
+  # sort_by and sort_reverse options
+  describe "default sorting" do
+    before(:all) do
+      RailsAdmin.config(Player){ list { field :name } }
+    end
+
+    let(:today){ Date.today }
+    let(:players) do
+      [{ :name => "Jackie Robinson",  :created_at => today,            :team_id => rand(99999), :number => 42 },
+       { :name => "Deibinson Romero", :created_at => (today - 2.days), :team_id => rand(99999), :number => 13 },
+       { :name => "Sandy Koufax",     :created_at => (today - 1.days), :team_id => rand(99999), :number => 32 }]
+    end
+    let(:leagues) do
+      [{ :name => 'American',      :created_at => (today - 1.day) },
+       { :name => 'Florida State', :created_at => (today - 2.days)},
+       { :name => 'National',      :created_at => today }]
+    end
+    let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
+    let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
+
+    before(:each) { @players = RailsAdmin::AbstractModel.new("Player").create(players) }
+
+    context "should be configurable" do
+      it "globaly" do
+        RailsAdmin.config do |config|
+          config.models do
+            list do
+              sort_by :created_at
+              sort_reverse true
+            end
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "player")
+        response.should have_tag(".grid tbody tr") do |elements|
+          player_names_by_date.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+      end
+
+      it "per model" do
+        RailsAdmin.config Player do
+          list do
+            sort_by :created_at
+            sort_reverse true
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "player")
+        response.should have_tag(".grid tbody tr") do |elements|
+          player_names_by_date.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+      end
+
+      it "globaly and overrideable per model" do
+        RailsAdmin::AbstractModel.new("League").create(leagues)
+
+        RailsAdmin::Config.models do
+          list do
+            sort_by :created_at
+            sort_reverse true
+          end
+        end
+
+        RailsAdmin.config Player do
+          list do
+            sort_by :id
+            sort_reverse true
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "league")
+        response.should have_tag(".grid tbody tr") do |elements|
+          league_names_by_date.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "player")
+        response.should have_tag(".grid tbody tr") do |elements|
+          @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+      end
+    end
+
+    it "should have reverse direction by default" do
+      RailsAdmin.config Player do
+        list do
+          sort_by :created_at
+        end
+      end
+
+      get rails_admin_list_path(:model_name => "player")
+      response.should have_tag(".grid tbody tr") do |elements|
+        player_names_by_date.reverse.each_with_index do |name, i|
+          elements[i].should contain(name)
+        end
+      end
+    end
+
+    it "should allow change default direction" do
+      RailsAdmin.config Player do
+        list do
+          sort_by :created_at
+          sort_reverse false
+        end
+      end
+
+      get rails_admin_list_path(:model_name => "player")
+      response.should have_tag(".grid tbody tr") do |elements|
+        player_names_by_date.each_with_index do |name, i|
+          elements[i].should contain(name)
+        end
+      end
+    end
+
+    after :all do
+      # Reset
+      RailsAdmin::Config.reset Team
+      RailsAdmin::Config.reset Player
+    end
+  end
 end

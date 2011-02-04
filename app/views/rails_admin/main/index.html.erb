@@ -19,7 +19,7 @@
                   <%= link_to(RailsAdmin.config(abstract_model).list.label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
                 </td>
                 <td>
-                <% if (last_used = RailsAdmin::History.most_recent(abstract_model.pretty_name).last.try(:updated_at)) %>
+                <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
                 <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
                 <% end %>
                 </td>
@@ -41,7 +41,7 @@
           <div class="section">
             <h2><%= t("admin.history.name") %></h2>
             <div id="timeline">
-              <a href="javascript:void(0)" id="arrowLeft" ref="-1"><img src="/images/rails_admin/arrow_left.png" alt="Left" /></a>
+              <a href="javascript:void(0)" id="arrowLeft" ref="-1"><%= image_tag("rails_admin/arrow_left.png", :alt=>"Left")%></a>
               <div id="timelineSlider">
                 <% max = @history[0].number %>
                 <% @history.each{|t| max = t.number if t.number > max} %>
@@ -53,21 +53,15 @@
                     <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
                     <span><%= month_names[t.month] %> <%= t.year %></span>
                     <span class="bars">
-                      <% if t.number == 0 %>
-                      <br/><%= t("admin.history.no_activity") %>
-                      <% else %>
                       <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
-                      <% end %>
                     </span>
                   </li>
                   <% end %>
                 </ul>
-                <div id="handler">
-                  <img src="/images/rails_admin/handler.png"/>
-                </div>
+                <div id="handler"><%= image_tag("rails_admin/handler.png")%></div>
               </div>
 
-              <a href="javascript:void(0)" id="arrowRight" ref="1"><img src="/images/rails_admin/arrow_right.png" alt="Right" /></a>
+              <a href="javascript:void(0)" id="arrowRight" ref="1"><%= image_tag("rails_admin/arrow_right.png", :alt=>"Right")%></a>
             </div>
             <div id="listingHistory">
 <%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @historyListing}) -%>

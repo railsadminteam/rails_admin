@@ -1,11 +1,10 @@
 <%
- @model_config.bind(:view, self)
   params = request.params.except(:action, :controller, :model_name)
   query = params[:query]
   filter = params[:filter]
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
-  properties = @model_config.list.visible_fields
+  properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
   filters_exist = !properties.select{|property| property.type == :boolean}.empty?
   # columns paginate
   @style, @other, properties = get_column_set(properties)
@@ -28,7 +27,7 @@
         <div id="quickAccess">
           <ul id="quick">
             <li>
-             <%= link_to(t("admin.history.name"), rails_admin_show_history_path, :class => "addlink") %>
+             <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "addlink") %>
             </li>
             <li>
              <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
@@ -73,11 +72,10 @@
             </thead>
             <tbody>
               <% @objects.each_with_index do |object, index| %>
-              <% @model_config.bind(:object, object) %>
               <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
                 <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
                 <td class="other left"><%= link_to("...", other_left) %></td>
-                <% properties.each do |property| %>
+                <% properties.map{|property| property.bind(:object, object)}.each do |property| %>
                   <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
                 <% end %>
                 <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
