@@ -36,15 +36,20 @@
             &rsaquo;
             <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
           </li>
+          <% if @history %>
           <li>
             &rsaquo;
             <%= link_to(@model_config.list.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
           </li>
-          <% if @history %>
           <li>
             &rsaquo;
-            History
+            <span>History</span>
           </li>
+          <% else %>
+           <li>
+             &rsaquo;
+            <span><%= @model_config.list.label %></span>
+           </li>
           <% end%>
         </ul>
         <h1 id="logo">
