@@ -1,5 +1,5 @@
 /*
- * RailsAdmin RemoteDialog @VERSION
+ * RailsAdmin remote form @VERSION
  *
  * License
  *
@@ -11,7 +11,7 @@
  *   jquery.ui.dialog.js
  */
 (function($) {
-  $.widget("ra.remoteform", {
+  $.widget("ra.remoteForm", {
     dialog: null,
     options: {
       dialogClass: "",
