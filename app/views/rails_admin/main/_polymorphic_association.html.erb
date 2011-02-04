@@ -12,3 +12,25 @@
                   <%= select model_name, foreign_type, type_collection, {:selected => selected_type}, :class => "selectField #{field.has_errors? ? "errorField" : nil}" %>
 
                   <%= select model_name, field.name, collection, {:include_blank => true, :selected => selected}, :class => "selectField #{field.has_errors? ? "errorField" : nil}", :style => "margin-left:10px;" %>
+
+                  <%= javascript_tag do %>
+                    $j(document).ready(function($){
+                      var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
+                      $("#<%= "#{model_name}_#{foreign_type}" %>").bind("change", function(e){
+                        $.ajax({
+                          url: urls[$(this).val()],
+                          data: { compact: true },
+                          beforeSend: function(xhr) {
+                            xhr.setRequestHeader("Accept", "application/json");
+                          },
+                          success: function(data, status, xhr) {
+                            var html = '<option></option>';
+                            $(data).each(function(i, el) {
+                              html += '<option value="' + el.id + '">' + el.label + '</option>';
+                            });
+                            $("#<%= "#{model_name}_#{field.name}" %>").html(html);
+                          }
+                        });
+                      });
+                    });
+                  <% end %>

@@ -36,7 +36,17 @@ module RailsAdmin
       respond_to do |format|
         format.html { render :layout => 'rails_admin/list' }
         format.js
-        format.json { render :json => @objects.to_json(:only => visible.call) }
+        format.json do
+          if params[:compact]
+            objects = []
+            @objects.each do |object|
+               objects << { :id => object.id, :label => @model_config.list.with(:object => object).object_label }
+            end
+            render :json => objects
+          else
+            render :json => @objects.to_json(:only => visible.call)
+          end
+        end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
       end
     end

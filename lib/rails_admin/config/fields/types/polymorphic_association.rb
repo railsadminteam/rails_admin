@@ -34,6 +34,16 @@ module RailsAdmin
             end
           end
 
+          def polymorphic_type_urls
+            types = associated_model_config.map do |config|
+              [config.abstract_model.model.name, config.abstract_model.to_param]
+            end
+
+            Hash[*types.collect { |v|
+                  [v[0], bindings[:view].rails_admin_list_path(v[1])]
+                }.flatten]
+          end
+
           # Reader for field's value
           def value
             bindings[:object].send(name)
