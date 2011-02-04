@@ -9,7 +9,7 @@
 }
 
 .ra-multiselect-search {
-  background: url(/images/rails_admin/magnifier.png) no-repeat;
+  background: url(../../images/rails_admin/magnifier.png) no-repeat;
   padding-left: 19px;
   padding-top: 5px;
   font-size: 11px;
