@@ -1,1 +1,0 @@
-var $j = jQuery.noConflict();
