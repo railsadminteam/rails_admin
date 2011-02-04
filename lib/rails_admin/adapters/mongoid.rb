@@ -137,6 +137,8 @@ module RailsAdmin
               :datetime
             when "Float"
               :float
+            when "Array"
+              :string
             else
               # this will likely bomb, will fix as it does
               field.type
