@@ -201,7 +201,7 @@ module RailsAdmin
       @attributes = params[@abstract_model.to_param] || {}
       @attributes.each do |key, value|
         # Deserialize the attribute if attribute is serialized
-        if @abstract_model.model.serialized_attributes.keys.include?(key)
+        if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
           @attributes[key] = YAML::load(value)
         end
         # Delete fields that are blank
