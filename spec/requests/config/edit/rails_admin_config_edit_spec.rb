@@ -127,8 +127,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should have_tag("input#teams_losses")
       response.should have_tag("input#teams_win_percentage")
       response.should have_tag("input#teams_revenue")
-      response.should have_tag("input#teams_players")
-      response.should have_tag("input#teams_fans")
+      response.should have_tag("select#associations_players")
+      response.should have_tag("select#associations_fans")
     end
 
     it "should appear in order defined" do

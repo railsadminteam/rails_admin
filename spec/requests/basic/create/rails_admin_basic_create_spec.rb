@@ -104,7 +104,7 @@ describe "RailsAdmin Basic Create" do
 
       fill_in "leagues[name]", :with => "National League"
 
-      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
+      select @teams[0].name, :from => "associations_teams"
       @req = click_button "Save"
 
       @league = RailsAdmin::AbstractModel.new("League").first
@@ -132,7 +132,7 @@ describe "RailsAdmin Basic Create" do
 
       fill_in "leagues[name]", :with => "National League"
 
-      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
+      select @teams[0].name, :from => "associations_teams"
       @req = click_button "Save"
 
       @league = RailsAdmin::AbstractModel.new("League").first

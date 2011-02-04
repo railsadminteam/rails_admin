@@ -6,16 +6,13 @@
   <%= stylesheet_link_tag('rails_admin/base.css') %>
   <%= stylesheet_link_tag('rails_admin/create.css') %>
   <%= stylesheet_link_tag('rails_admin/jquery-ui-smoothness/jquery-ui-1.8.9.custom.css') %>
+  <%= stylesheet_link_tag('rails_admin/ra.filtering-multiselect.css') %>
 
-  <%= javascript_include_tag('rails_admin/prototype.js') %>
-  <%= javascript_include_tag('rails_admin/prototype-base-extensions.js') %>
-  <%= javascript_include_tag('rails_admin/prototype-date-extensions.js') %>
-  <%= javascript_include_tag('rails_admin/associations.js') %>
   <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
 
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
-  <%= javascript_include_tag "rails_admin/jquery.no-conflict.js","rails_admin/rails.js","rails_admin/ra.remoteform.js" %>
+  <%= javascript_include_tag "rails_admin/application.js", "rails_admin/rails.js","rails_admin/ra.filtering-multiselect.js", "rails_admin/ra.remote-form.js" %>
 </head>
 
 <body>

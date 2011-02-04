@@ -110,7 +110,7 @@ describe "RailsAdmin Basic Update" do
 
       fill_in "leagues[name]", :with => "National League"
 
-      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
+      select @teams[0].name, :from => "associations_teams"
 
       response = click_button "Save"
       @league = RailsAdmin::AbstractModel.new("League").first
@@ -138,7 +138,7 @@ describe "RailsAdmin Basic Update" do
     describe "removing has-many associations" do
       before(:each) do
         get rails_admin_edit_path(:model_name => "league", :id => @league.id)
-        set_hidden_field "associations[teams][]", :to => nil
+        unselect @teams[0].name, :from => "associations_teams"
         response = click_button "Save"
         @league = RailsAdmin::AbstractModel.new("League").first
         @histories.reload
@@ -164,7 +164,7 @@ describe "RailsAdmin Basic Update" do
       @fan.teams << @teams[0]
 
       get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
-      set_hidden_field "associations[teams][]", :to => @teams[1].id.to_s.to_i
+      select @teams[1].name, :from => "associations_teams"
       response = click_button "Save"
     end
 

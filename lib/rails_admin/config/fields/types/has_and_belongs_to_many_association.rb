@@ -12,6 +12,10 @@ module RailsAdmin
           register_instance_option(:help) do
             ""
           end
+
+          register_instance_option(:partial) do
+            "filtering_multiselect"
+          end
         end
       end
     end
