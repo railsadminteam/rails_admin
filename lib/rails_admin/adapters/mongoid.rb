@@ -207,7 +207,6 @@ module RailsAdmin
       private
       
       def criteria_for_options(options)
-        puts "criteria_for_options #{options.inspect}"
         sort = options.delete(:sort)
         sort_reverse = options.delete(:sort_reverse)
         criteria = if sort && sort_reverse
