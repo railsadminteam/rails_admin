@@ -30,6 +30,7 @@ module RailsAdmin
     end
 
     def list
+      @authorization_adapter.authorize(:index, @abstract_model.model) if @authorization_adapter
       list_entries
       @xhr = request.xhr?
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
@@ -42,6 +43,12 @@ module RailsAdmin
 
     def new
       @object = @abstract_model.new
+      if @authorization_adapter
+        @authorization_adapter.attributes_for(:new, @abstract_model.model).each do |name, value|
+          @object.send("#{name}=", value)
+        end
+        @authorization_adapter.authorize(:new, @abstract_model.model, @object)
+      end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
@@ -50,6 +57,12 @@ module RailsAdmin
     def create
       @modified_assoc = []
       @object = @abstract_model.new
+      if @authorization_adapter
+        @authorization_adapter.attributes_for(:create, @abstract_model.model).each do |name, value|
+          @object.send("#{name}=", value)
+        end
+        @authorization_adapter.authorize(:create, @abstract_model.model, @object)
+      end
       @object.attributes = @attributes
       @object.associations = params[:associations]
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
@@ -64,12 +77,17 @@ module RailsAdmin
     end
 
     def edit
+      @authorization_adapter.authorize(:edit, @abstract_model.model, @object) if @authorization_adapter
+
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
+
       render :layout => 'rails_admin/form'
     end
 
     def update
+      @authorization_adapter.authorize(:update, @abstract_model.model, @object) if @authorization_adapter
+
       @cached_assocations_hash = associations_hash
       @modified_assoc = []
 
@@ -90,6 +108,8 @@ module RailsAdmin
     end
 
     def delete
+      @authorization_adapter.authorize(:destroy, @abstract_model.model, @object) if @authorization_adapter
+
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
@@ -97,6 +117,8 @@ module RailsAdmin
     end
 
     def destroy
+      @authorization_adapter.authorize(:destroy, @abstract_model.model, @object) if @authorization_adapter
+
       @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 

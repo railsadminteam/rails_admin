@@ -2,6 +2,7 @@ require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
 require 'rails_admin/abstract_history'
 require 'rails_admin/config'
+require 'rails_admin/authorization_adapters/cancan_adapter'
 
 module RailsAdmin
   class AuthenticationNotConfigured < StandardError; end
@@ -79,8 +80,12 @@ module RailsAdmin
   #   end
   #
   # @see RailsAdmin::DEFAULT_AUTHORIZE
-  def self.authorize_with(&blk)
-    @authorize = blk if blk
+  def self.authorize_with(adapter = nil, &blk)
+    if adapter == :cancan
+      @authorize = Proc.new { @authorization_adapter = AuthorizationAdapters::CanCanAdapter.new(self) }
+    else
+      @authorize = blk if blk
+    end
     @authorize || DEFAULT_AUTHORIZE
   end
 
