@@ -1,7 +1,6 @@
               <div class="field">
 <%= field.render %>
-                <% if field.has_errors? %>
-                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
-                <% end %>
+                <% if @object.errors.on(field.name) %>
+                <span class="errorMessage"><%= "#{field.label } #{@object.errors.on(field.name)}" %></span>
                 <p class="help"><%= field.help %></p>
               </div>
