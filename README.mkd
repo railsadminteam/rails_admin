@@ -185,6 +185,20 @@ shorthand syntax:
 
 which allows both forms of configuration value passing as well.
 
+**To enable CKEditor for a field**
+
+Configure the model/field like so:
+
+    config.model MyModel do
+      edit do
+        field :description, :text do
+          ckeditor do 
+            true
+          end
+        end
+      end
+    end
+
 **Configuring the number of visible tabs**
 
 You can configure the number of tabs visible in the top navigation:
