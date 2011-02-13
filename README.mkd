@@ -189,6 +189,8 @@ which allows both forms of configuration value passing as well.
 
 Configure the model/field like so:
 
+    RailsAdmin.config do |config|
+
     config.model MyModel do
       edit do
         field :description, :text do
@@ -197,6 +199,8 @@ Configure the model/field like so:
           end
         end
       end
+    end
+
     end
 
 **Configuring the number of visible tabs**
