@@ -43,7 +43,7 @@ module RailsAdmin
       end
 
       def all(options = {})
-        Array(criteria_for_options(options))
+        criteria_for_options(options)
       end
       
       def paginated(options = {})
@@ -127,22 +127,24 @@ module RailsAdmin
       end
 
       def properties
-        model.fields.map do |name,field|
-         ar_type =  case field.type.to_s
-            when "String"
-              :string
-            when "Integer"
-              :integer
-            when "Time"
-              :datetime
-            when "Float"
-              :float
-            when "Array"
-              :string
-            else
-              # this will likely bomb, will fix as it does
-              field.type
-            end
+        @properties if @properties
+        @properties = model.fields.map do |name,field|
+          ar_type =  case field.type.to_s
+                     when "String"
+                       :string
+                     when "Integer"
+                       :integer
+                     when "DateTime"
+                       :datetime
+                     when "Time"
+                       :datetime
+                     when "Float"
+                       :float
+                     when "Array"
+                       :string
+                     else
+                       raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
+                     end
 
           {
             :name => field.name.to_sym,
@@ -205,16 +207,28 @@ module RailsAdmin
       end
       
       private
+
+      def criteria_for_search(options)
+        # get the wanted string as the last argument and remove the percent signs
+        wanted = Regexp.new(options[:conditions][1][1..-2])
+        model.any_of(properties.select{|p| p[:type]==:string}.map{|p| {p[:name].to_sym=>wanted}})
+      end
       
       def criteria_for_options(options)
         sort = options.delete(:sort)
         sort_reverse = options.delete(:sort_reverse)
+        # detect a LIKE condition 
+        criteria = if options[:conditions][0][' LIKE ']
+                     criteria_for_search(options)
+                   else
+                     model.where(options)
+                   end
         criteria = if sort && sort_reverse
-          model.where(options).desc(sort)
+          criteria.desc(sort)
         elsif sort 
-          model.where(options).asc(sort)
+          criteria.asc(sort)
         else
-          model.where(options)
+          criteria
         end
       end
 
