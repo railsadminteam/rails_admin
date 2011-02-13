@@ -218,7 +218,7 @@ module RailsAdmin
         sort = options.delete(:sort)
         sort_reverse = options.delete(:sort_reverse)
         # detect a LIKE condition 
-        criteria = if options[:conditions][0][' LIKE ']
+        criteria = if options && options[:conditions] && options[:conditions][0][' LIKE ']
                      criteria_for_search(options)
                    else
                      model.where(options)
