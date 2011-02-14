@@ -11,12 +11,13 @@
 
   <%= javascript_include_tag('rails_admin/prototype-base-extensions.js') %>
   <%= javascript_include_tag('rails_admin/prototype-date-extensions.js') %>
-
+  <%= javascript_include_tag('rails_admin/scriptaculous.js') %>
   <%= javascript_include_tag('rails_admin/datepicker.js') %>
   <%= javascript_include_tag('rails_admin/associations.js') %>
   <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
   <%= javascript_include_tag('rails_admin/dashboard.js') %>
   <%= stylesheet_link_tag('rails_admin/datepicker.css') %>
+  <%= stylesheet_link_tag('rails_admin/colorpicker.css') %>
 
   <script type="text/javascript" language="javascript">
   Control.DatePicker.Locale['en_US'] = {
@@ -92,5 +93,7 @@
 <%= yield %>
     </div>
   </div>
+  <%= javascript_include_tag('rails_admin/yahoo.color.js') %>
+  <%= javascript_include_tag('rails_admin/colorpicker.js') %>
 </body>
 </html>
