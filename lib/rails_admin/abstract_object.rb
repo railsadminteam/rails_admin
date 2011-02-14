@@ -30,12 +30,17 @@
 
       abstract_model.associations.each do |association|
         if associations.has_key?(association[:name])
-          ids = associations.delete(association[:name])
-          case association[:type]
-          when :has_one
-            update_association(association, ids)
-          when :has_many, :has_and_belongs_to_many
-            update_associations(association, ids.to_a)
+          ids = associations[association[:name]]
+          begin
+            case association[:type]
+            when :has_one
+              update_association(association, ids)
+            when :has_many, :has_and_belongs_to_many
+              update_associations(association, ids.to_a)
+            end
+          rescue Exception => e
+            object.errors.add association[:name], e.to_s
+            return false
           end
         end
       end
