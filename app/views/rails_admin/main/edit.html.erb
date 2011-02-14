@@ -1,7 +1,7 @@
 <div id="contentHeader">
   <h2><%= @page_name %></h2>
-  <% if @object.errors.on :base %>
-    <%= @object.errors.on :base %>
+  <% if @object.errors[:base].size > 0 %>
+    <%= @object.errors[:base] %>
   <% end %>
   <div id="quickAccess">
     <ul id="quick">
