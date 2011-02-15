@@ -27,6 +27,10 @@ module RailsAdmin
             end
           end
 
+          register_instance_option(:partial) do
+            :form_belongs_to
+          end
+
           def associated_collection
             associated_model_config.abstract_model.all.map do |object|
               [associated_model_config.list.with(:object => object).object_label, object.id]

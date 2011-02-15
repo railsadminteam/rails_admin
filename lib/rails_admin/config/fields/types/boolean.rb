@@ -9,6 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           @column_width = 60
+          @view_helper = :check_box
 
           register_instance_option(:formatted_value) do
             if value == true
@@ -21,6 +22,14 @@ module RailsAdmin
           # Accessor for field's help text displayed below input field.
           register_instance_option(:help) do
             ""
+          end
+
+          register_instance_option(:html_attributes) do
+            {
+              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+              :checked => value ? true : false,
+              :style => "width:#{column_width}px",
+            }
           end
         end
       end

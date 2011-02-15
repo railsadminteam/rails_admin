@@ -1,5 +1,6 @@
               <div class="field <%= field.to_param %>">
-<%= field.render %>
+                <%= label_tag field.to_param, field.label %>
+                <%= form.send field.view_helper, field.name, field.html_attributes %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>

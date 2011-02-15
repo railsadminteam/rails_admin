@@ -1,0 +1,26 @@
+<%
+  name = field.association[:name]
+  collection = field.associated_collection.sort_by{|object| object.first}
+
+  if params["associations"]
+    selected = params["associations"][name].to_a.map{|o| o.to_i}
+  else
+    selected = field.bindings[:object].send(name).map{|o| o.id }
+  end
+
+%>
+              <div class="field <%= field.to_param %>">
+                <%= label_tag "associations_#{name}", field.label %>
+                <%= select "associations", name, collection, { :selected => selected }, field.html_attributes %>
+                <% if field.has_errors? %>
+                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+                <% end %>
+                <p class="help"><%= field.help %></p>
+                <%= javascript_tag do %>
+                  $j(document).ready(function($){
+                    $("#<%= "associations_#{name}" %>").filteringMultiselect({
+
+                    });
+                  });
+                <% end %>
+              </div>

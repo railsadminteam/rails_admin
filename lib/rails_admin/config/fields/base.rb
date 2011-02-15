@@ -18,6 +18,7 @@ module RailsAdmin
             klass.instance_variable_set("@column_width", 110)
             klass.instance_variable_set("@searchable", false)
             klass.instance_variable_set("@sortable", true)
+            klass.instance_variable_set("@view_helper", :text_field)
         end
 
         include RailsAdmin::Config::Hideable
@@ -75,6 +76,14 @@ module RailsAdmin
           required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
         end
 
+        register_instance_option(:html_attributes) do
+          {
+            :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+            :value => value,
+            :style => "width:#{column_width}px",
+          }
+        end
+
         # Accessor for field's label.
         #
         # @see RailsAdmin::AbstractModel.properties
@@ -92,11 +101,11 @@ module RailsAdmin
         register_instance_option(:parse_input)
 
         register_instance_option(:partial) do
-          type
+          :form_field
         end
 
         register_instance_option(:render) do
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self}
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
         end
 
         # Accessor for whether this is field is mandatory.  This is
@@ -124,6 +133,10 @@ module RailsAdmin
 
         register_instance_option(:sortable?) do
           self.class.instance_variable_get("@sortable")
+        end
+
+        register_instance_option(:view_helper) do
+          self.class.instance_variable_get("@view_helper")
         end
 
         # Is this an association

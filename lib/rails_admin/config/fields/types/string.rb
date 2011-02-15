@@ -20,6 +20,16 @@ module RailsAdmin
             text += length == 1 ? I18n.translate("admin.new.one_char") : I18n.translate("admin.new.many_chars")
             text
           end
+
+          register_instance_option(:html_attributes) do
+            {
+              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+              :maxlength => length,
+              :size => [50, length].min,
+              :style => "width:#{column_width}px",
+              :value => value,
+            }
+          end
         end
       end
     end

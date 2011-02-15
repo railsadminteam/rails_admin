@@ -1,21 +1,12 @@
-require 'rails_admin/config/fields/association'
+require 'rails_admin/config/fields/types/has_many_association'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class HasAndBelongsToManyAssociation < RailsAdmin::Config::Fields::Association
+        class HasAndBelongsToManyAssociation < RailsAdmin::Config::Fields::Types::HasManyAssociation
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
-
-          # Accessor for field's help text displayed below input field.
-          register_instance_option(:help) do
-            ""
-          end
-
-          register_instance_option(:partial) do
-            "filtering_multiselect"
-          end
         end
       end
     end
