@@ -1,6 +1,5 @@
 .ra-timeline {
   padding: 0 12px;
-  margin-top: 8px;
   background-color: #f6f6f6;
   border: 1px solid #dbdbdb;
   height: 53px;
@@ -54,7 +53,7 @@
 
 .ra-timeline .bar {
   display: block;
-  height: 39px;
+  height: 41px;
   position: relative;
 }
 
