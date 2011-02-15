@@ -15,6 +15,42 @@ a img {
   border:0;
 }
 
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after {
+  clear: both;
+  content: ' ';
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+* html .clearfix {
+  height: 1%;
+}
+
+.clearfix {
+  display: block;
+}
+
+fieldset {
+  border:none;
+}
+
 .image_replacement{
 	background-repeat:no-repeat;
 	text-indent:-9999px;
@@ -109,6 +145,7 @@ ul.breadcrumb li a:hover{
   font-weight:normal;
   font-size:22px;
 }
+
 #headerLeft h1#logo span.image_replacement{
 	background-image:url(../../images/rails_admin/logo.png);
 	width:64px;
@@ -119,83 +156,43 @@ ul.breadcrumb li a:hover{
   float:right;
 }
 
-#searchbar{
-  margin-left:-60px;
-  margin-top:8px;
-}
-
-#searchbar fieldset{
-  border:none;
-}
-
-#searchbar input#search{
-  border:none;
-  background:#f6f6f6;
-  font-size:12px;
-  font-family:Verdana, Geneva, sans-serif;
-  padding:4px;
-  width:200px;
-}
-
-#search_btn{
-  margin-left:-4px;
-  position:relative;
-  top:6px;
-}
-
-#content{
+#content {
   width:960px;
-  float:left;
   background:#FFF;
   border:1px solid #e6e6e6;
+  margin-bottom: 20px;
 }
 
-#contentHeader{
+.block .header {
   background:#eee;
   padding:8px;
 	text-transform:lowercase;
 	color:#900;
 }
 
-#contentHeader h2{
+.block .header h2 {
   font-size:150%;
 }
 
-#contentMain{
-  padding:5px;
+.block .content .header h2 {
+  font-size:120%;
 }
 
-#contentMainModules{
-  padding:7px;
-}
-
-ul#quick{
+.block .header ul {
   list-style-type:none;
   font-size:11px;
   float: right;
+  margin-top:-24px;
+  float:right;
 }
 
-ul#quick li{
+.block .header ul li {
   float:left;
   margin-left:3px;
 }
 
-ul#quick li ul{
-  display:none;
-  list-style-type:none;
-}
-
-ul#quick li:hover ul{
-  display:block;
-}
-
-ul#quick li:hover ul a{
-  background:none;
-  background:#f0eeda;
-}
-
-ul#quick li a {
-  background:url(../../images/rails_admin/fast_btn.png) repeat-x;
+.block .header ul li a {
+  display: block;
   border:1px solid #DDD;
   padding:5px;
   text-decoration:none;
@@ -206,11 +203,87 @@ ul#quick li a {
   margin-bottom:1px;
   width:80px;
   text-align:center;
+  background: #fff url(../../images/rails_admin/menu_hover.png) bottom repeat-x;  
 }
 
-#quickAccess{
-  margin-top:-24px;
-  float:right;
+.block .header ul li a:hover {
+  background-image: none;
+}
+
+.block .header ul li a .icon {
+  text-align: center;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+.delete .icon {
+  background-image: url(../../images/rails_admin/cross.png);
+}
+
+.block .content {
+  padding:10px;
+}
+
+.block .content .highlight {
+  padding:5px;
+  background:#e0ecfc;
+  border-top:1px solid #B9B9B9;
+  border-bottom:1px solid #B9B9B9;
+}
+
+input {
+  font-family:Verdana, Geneva, sans-serif;
+  font-size:12px;
+  padding:5px;
+  border-left:1px solid #e2e3ea;
+  border-top:1px solid #abadb3;
+  border-bottom:1px solid #e3e9ef;
+  border-right:1px solid #dbdfe6;
+}
+
+input.button.default {
+  color:#d9eef7;
+  border: solid 1px #0076c3;
+  background: #007ead;
+  background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+  background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+}
+
+input.button.default:active {
+  background: #00adee;
+  background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+  background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}
+
+.button:active {
+  background: #CCCCCC;
+  background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
+  background: -moz-linear-gradient(top,  #CCCCCC,  #DDDDDD);
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#DDDDDD');
+}
+
+.button {
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-size: 10px;
+  padding:5px;
+  padding-left:10px;
+  padding-right:10px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  color: #000;
+  border: solid 1px #CDCDCD;
+  background: #DDDDDD;
+  background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
+  background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');
 }
 
 #highlight{
@@ -341,4 +414,31 @@ ul#nav li.more ul li a:hover{
 
 ul#nav li.more ul li.active a{
   background:#ccc;
+}
+
+.submit {
+  display:block;
+  list-style-type:none;
+}
+
+.submit li {
+  float: left;
+  margin-right: 4px;
+}
+
+ul.items {
+  margin: 10px 10px 10px 14px;
+}
+
+ul.items li {
+  margin-bottom: 3px;
+  margin-left: 5px;
+}
+
+ul.items li a {
+  color: #000;
+}
+
+ul.items li a:hover {
+  text-decoration: none;
 }

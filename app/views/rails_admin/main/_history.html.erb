@@ -1,9 +1,15 @@
-<p id="listing">
-  <strong><%= month_names[month] %> <%= year %></strong> <%= t("admin.history.name").downcase %>:
-</p>
-<%= t("admin.history.no_activity") if history.empty? %>
-<ul id="history">
-<% history.each do |t|%>
-<li><%= t.username%> <%= history_output(t)%></li>
-<% end %>
-</ul>
+<div class="header">
+  <h2><%= month_names[month] %> <%= year %> <%= t("admin.history.name").downcase %></h2>
+</div>
+<div class="content">
+  <table class="grid">
+    <tbody>
+      <% history.each do |t|%>
+      <tr class="<%= cycle 'odd', 'even' %>">
+         <td style="text-align: left;"><%= t.username%></td>
+         <td style="text-align: left;"><%= history_output(t) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -3,7 +3,7 @@
 <% #Factor out to controller
   model_config = RailsAdmin.config(@abstract_model)
 %>
-<ul>
+<ul class="items">
   <li>
     <%= @abstract_model.pretty_name %>: <%= link_to(model_config.list.with(:object => object).object_label, rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %>
     <ul>

@@ -1,20 +1,20 @@
-        <div id="contentHeader">
+      <div class="block form edit">
+        <div class="header">
           <h2>Delete confirmation</h2>
         </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-        <div id="contentMainDelete">
+        <div class="content">
           <p>Are you sure you want to delete the following object along with all of the following related items will be deleted:</p>
           <%= render :partial => "delete_notice", :collection => @bulk_objects %>
           <%= form_tag rails_admin_bulk_destroy_path(:model_name => @abstract_model.to_param, :bulk_ids => @bulk_ids) do %>
-            <div id="deleteConfirmation">
-              <ul id="submitArea">
-                <li>
-                  <%= submit_tag t("admin.delete.confirmation"), :class => "button default" %>
-                </li>
-                <li id="cancelContainer">
-                  <%= submit_tag t("admin.new.cancel"), :class => "button", :name => "_continue", :id => "cancel_btn" %>
-                </li>
-              </ul>
-            </div>
+            <ul class="submit clearfix">
+              <li>
+                <%= submit_tag t("admin.delete.confirmation"), :class => "button default" %>
+              </li>
+              <li id="cancelContainer">
+                <%= submit_tag t("admin.new.cancel"), :class => "button", :name => "_continue", :id => "cancel_btn" %>
+              </li>
+            </ul>
           <% end =%>
         </div>
+      </div>

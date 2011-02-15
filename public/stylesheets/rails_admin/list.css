@@ -86,51 +86,18 @@
 .grid tbody td {
   border-bottom:1px solid #b9b9b9;
   padding: 9px;
-  text-align:center;
+  text-align: center;
 }
 
 .grid tbody .even {
   background:#f2f2f2;
 }
 
-.searchBox {
-  padding:5px;
-  height:23px;
-  background:#e0ecfc;
-  border-top:1px solid #B9B9B9;
-  border-bottom:1px solid #B9B9B9;
-}
-
-.searchBox fieldset {
-  border:none;
-}
-
-#searchBar {
-  border:1px solid #cbcbcb;
-  font-size:12px;
-  padding:4px;
-  float:left;
-  width:300px;
-}
-
-.searchBox span {
-  float:left;
-  display:block;
-  font-size:10px;
-  border:1px solid #cbcbcb;
-  background:#FFF;
-  padding:5px;
-  padding-left:6px;
-  padding-right:6px;
-  margin-left:5px;
-}
-
-#pagination {
-  margin-bottom:15px;
+.grid .pagination {
   padding-top:10px;
 }
 
-#pagination a {
+.grid .pagination a {
   background:#FFF;
   color:#000;
   border:1px solid #DDD;
@@ -140,29 +107,14 @@
   text-decoration:none;
 }
 
-#pagination a:hover {
+.grid .pagination a:hover {
   background:#EEE;
   border:1px solid #494949;
 }
 
-#searchbar_btn, #bulkdelete_btn {
-  background:#DDD;
-  border:1px solid #CBCBCB;
-  font-size:10px;
-  padding-top:3px;
-  padding-bottom:4px;
-  padding-left:6px;
-  padding-right:6px;
-  margin-left:3px;
-}
-
-#bulkdelete_btn {
+.grid tfoot .bulk {
   float: right;
   margin-top: 8px;
-}
-
-#tableFooter {
-  height: 30px;
 }
 
 .this-page {

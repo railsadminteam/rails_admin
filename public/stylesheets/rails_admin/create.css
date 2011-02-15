@@ -1,13 +1,31 @@
-#contentMainNew{
+#error {
+  background:#903333;
+  padding:6px;
+  padding-bottom:3px;
+  color:#FFF;
+  margin-top:2px;
+  margin-bottom:5px;
+}
+
+#error h3{
+  margin-bottom:5px;
+}
+
+#error ul{
+  list-style-type:none;
+}
+
+#error ul li{
+  margin-bottom:5px;
+}
+
+.block.form {
   padding:5px;
   margin-bottom:5px;
 }
 
-#contentMainNew fieldset{
-  border:none;
-}
-
-#contentMainNew h2{
+.block.form legend {
+  width: 100%;
   clear:both;
   margin-top:2px;
   margin-bottom:3px;
@@ -20,27 +38,28 @@
   font-size:10px;
 }
 
-.formSection p{
+.block.form fieldset {
+  border:none;
+  margin-bottom:5px;
+}
+
+.block.form p {
   padding-top:5px;
   padding-bottom:5px;
   margin-bottom:1px;
   height:26px;
 }
 
-.formSection{
-  margin-bottom:5px;
-}
-
-.formSection a {
+.block.form a {
   color: #000;
 }
 
-.formSection a.createAssociatedRecord {
+.block.form a.createAssociatedRecord {
     line-height: 24px;
     margin-left: 10px;
 }
 
-.formSection label{
+.block.form label {
   width:100px;
   display:block;
   float:left;
@@ -50,7 +69,7 @@
   margin-left:2px;
 }
 
-.formSection label.inline{
+.block.form label.inline {
   display:inline;
   float:none;
   font-weight:normal;
@@ -125,80 +144,18 @@
   width: 450px;
 }
 
-.formSection p.boolPlace{
-  padding-top:2px;
-}
-
-.modifyInt{
-  float:left;
-  margin-left:5px;
-}
-
-.modifyInt a{
-  display:block;
-  width:9px;
-  height:7px;
-}
-
-.modifyInt a img{
-  border:none;
-}
-
-.modifyDown{
-  margin-top:2px;
-}
-
-#error{
-  background:#903333;
-  padding:6px;
-  padding-bottom:3px;
-  color:#FFF;
-  margin-top:2px;
-  margin-bottom:5px;
-}
-
-#error h3{
-  margin-bottom:5px;
-}
-
-#error ul{
-  list-style-type:none;
-}
-
-#error ul li{
-  margin-bottom:5px;
-}
-
-.errorField{
+.errorField {
   border:1px solid #bd2b14;
 }
 
-.errorMessage{
+.errorMessage {
   display:block;
   margin-top:5px;
   margin-left:103px;
   color:#bd2b14;
 }
 
-#submitArea{
-  display:block;
-  list-style-type:none;
-  margin-bottom:-7px;
-}
-
-#submitArea li{
-  float:left;
-  margin-right:4px;
-}
-
-.breakSpan{
-  float:left;
-  width:100%;
-  display:block;
-  height:1px;
-}
-
-p.help{
+p.help {
   clear:both;
   padding-top:2px;
   padding-bottom:0px;
@@ -211,70 +168,9 @@ p.help{
   color: #999;
 }
 
-.selectField{
+.selectField {
   float:left;
   margin-top:4px;
-}
-
-input.default{
-  color:#d9eef7;
-  border: solid 1px #0076c3;
-  background: #007ead;
-  background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
-  background: -moz-linear-gradient(top,  #00adee,  #0078a5);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
-}
-
-input.default:active{
-  background: #00adee;
-  background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
-  background: -moz-linear-gradient(top,  #0078a5,  #00adee);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
-}
-
-.button:active{
-  background: #CCCCCC;
-  background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
-  background: -moz-linear-gradient(top,  #CCCCCC,  #DDDDDD);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#DDDDDD');
-}
-
-.button{
-  display: inline-block;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  font-size: 10px;
-  padding:5px;
-  padding-left:10px;
-  padding-right:10px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.2);
-  -moz-box-shadow: 0 1px 1px rgba(0,0,0,.2);
-  box-shadow: 0 1px 2px rgba(0,0,0,.2);
-  color: #000;
-  border: solid 1px #CDCDCD;
-  background: #DDDDDD;
-  background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
-  background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');
-}
-
-#deleteItem{
-  float:right;
-  text-decoration:none;
-  margin-right:10px;
-  color:#AD0208;
-  font-weight:bold;
-}
-
-#deleteItem img{
-  position:relative;
-  top:4px;
-  right:2px;
 }
 
 .cke_skin_kama {
