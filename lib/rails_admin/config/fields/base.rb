@@ -180,7 +180,7 @@ module RailsAdmin
         end
 
         def to_param
-          "#{abstract_model.to_param}_#{name}"
+          "#{abstract_model.to_param.singularize}_#{name}"
         end
 
         # Legacy support
