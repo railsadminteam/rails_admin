@@ -31,6 +31,10 @@ module RailsAdmin
               :value => value,
             }
           end
+
+          register_instance_option(:partial) do
+            :form_text
+          end
         end
       end
     end
