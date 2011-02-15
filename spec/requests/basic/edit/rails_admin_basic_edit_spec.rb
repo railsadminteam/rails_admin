@@ -22,9 +22,9 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show non-required fields as \"Optional\"" do
-      response.body.should have_tag(".players_position .help", :content => "Optional")
-      response.body.should have_tag(".players_born_on .help", :content => "Optional")
-      response.body.should have_tag(".players_notes .help", :content => "Optional")
+      response.body.should have_tag(".player_position .help", :content => "Optional")
+      response.body.should have_tag(".player_born_on .help", :content => "Optional")
+      response.body.should have_tag(".player_notes .help", :content => "Optional")
     end
   end
 

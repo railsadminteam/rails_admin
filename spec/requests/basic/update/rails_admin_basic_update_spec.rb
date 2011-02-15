@@ -9,7 +9,7 @@ describe "RailsAdmin Basic Update" do
     end
 
     it "should return to edit page" do
-      fill_in "players[name]", :with => ""
+      fill_in "player[name]", :with => ""
       res = click_button "Save"
       res.response_code.should eql(406)
       res.should have_tag "form", :action => "/admin/players/#{@player.id}"
@@ -20,10 +20,10 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "42"
-      fill_in "players[position]", :with => "Second baseman"
-      check "players[suspended]"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      check "player[suspended]"
 
       @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -46,10 +46,10 @@ describe "RailsAdmin Basic Update" do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "42"
-      fill_in "players[position]", :with => "Second baseman"
-      check "players[suspended]"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      check "player[suspended]"
 
       @req = click_button "Save and edit"
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -74,9 +74,9 @@ describe "RailsAdmin Basic Update" do
 
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "42"
-      fill_in "players[position]", :with => "Second baseman"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
 
       select "Draft ##{@draft.id}"
 
@@ -108,7 +108,7 @@ describe "RailsAdmin Basic Update" do
 
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
 
-      fill_in "leagues[name]", :with => "National League"
+      fill_in "league[name]", :with => "National League"
 
       select @teams[0].name, :from => "associations_teams"
 
@@ -193,9 +193,9 @@ describe "RailsAdmin Basic Update" do
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "a"
-      fill_in "players[position]", :with => "Second baseman"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "a"
+      fill_in "player[position]", :with => "Second baseman"
       @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -212,7 +212,7 @@ describe "RailsAdmin Basic Update" do
         :password => "test1234",
         :password_confirmation => 'test1234')
       get rails_admin_edit_path(:model_name => "user", :id => @user.id)
-      fill_in "users[roles]", :with => "[\"admin\", \"user\"]"
+      fill_in "user[roles]", :with => "[\"admin\", \"user\"]"
       @req = click_button "Save"
       @user = RailsAdmin::AbstractModel.new("User").model.find(@user.id)
     end
