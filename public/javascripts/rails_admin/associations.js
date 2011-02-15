@@ -18,9 +18,19 @@ document.observe("dom:loaded", function() {
 
     Event.observe(elem,'keyup',function(e){
       var select = elem.parentNode.parentNode.childElements()[2].childElements()[0];
+      var select_two = elem.parentNode.parentNode.childElements()[2].childElements()[3]
       var aux = []
       var ref = select.readAttribute('ref')
       var text = e.target.value.toLowerCase();
+
+      function already_selected(value){
+        var selected;
+        select_two.childElements().each(function(e){
+          selected = e.readAttribute('value') == value;
+          if(selected) throw $break;
+        })
+        return(selected);
+      }
 
       buffer[ref].each(function(ev){
         if(ev[0].toLowerCase().indexOf(text)!=-1){
@@ -33,8 +43,10 @@ document.observe("dom:loaded", function() {
       })
 
       aux.each(function(ev){
-        var option = new Element('option',{"value":ev[1]}).update(ev[0])
-        select.insert({bottom:option});
+        if(!already_selected(ev[1])){
+          var option = new Element('option',{"value":ev[1]}).update(ev[0])
+          select.insert({bottom:option});
+        }
       })
 
     })
@@ -62,11 +74,6 @@ document.observe("dom:loaded", function() {
           hiddenFields.insert({bottom:hidden});
         }
 
-      })
-
-      buffer[counter] = []
-      select.childElements().each(function(e){
-        buffer[counter].push([e.innerHTML,e.readAttribute('value')])
       })
     })
   })
@@ -102,11 +109,6 @@ document.observe("dom:loaded", function() {
           }
         }
 
-      })
-
-      buffer[counter] = []
-      select.childElements().each(function(e){
-        buffer[counter].push([e.innerHTML,e.readAttribute('value')])
       })
     })
   })
