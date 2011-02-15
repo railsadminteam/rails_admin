@@ -28,8 +28,7 @@
       this.refresh();
     },
 
-    _build: function()
-    {
+    _build: function() {
       this.element.addClass("ra-timeline");
 
       this.next = $('<a class="range next" href="javascript:void();">Next</a>').appendTo(this.element);
@@ -40,11 +39,11 @@
       this.handle = $('<div class="handle"></div>').appendTo(this.element);
 
       this.handleOffset = parseInt(this.element.css("padding-left"));
-      this.handle.css("left", this.months.width() - this.handle.width() + this.handleOffset);
+
+      this._moveHandleToRight();
     },
 
-    _bindEvents: function()
-    {
+    _bindEvents: function() {
       var currentMonthIndex = 0
           widget = this;
 
@@ -68,25 +67,59 @@
 
       this.previous.bind("click.timeline", function(e){
         e.preventDefault();
-        widget.options.date.setMonth(widget.options.date.getMonth() - 1 * widget.options.range);
+        widget.options.date.setMonth(widget.options.date.getMonth() - widget.options.range);
+        widget._moveHandleToRight();
+        widget.options.monthChanged(
+          widget.options.date.getMonth() + 1,
+          widget.options.date.getFullYear()
+        );
         widget.refresh();
       });
 
       this.next.bind("click.timeline", function(e){
         e.preventDefault();
-        widget.options.date.setMonth(widget.options.date.getMonth() + 1 * widget.options.range);
+        var date = widget._getNextMonthDate();
+        widget.options.monthChanged(
+          date.getMonth() + 1,
+          date.getFullYear()
+        );
+        widget.options.date.setMonth(widget.options.date.getMonth() + widget.options.range);
+        widget._moveHandleToLeft();
         widget.refresh();
       });
     },
 
-    refresh: function()
-    {
+    _getCurrentDate: function() {
+        var date = new Date();
+        date.setTime(this.options.date.valueOf());
+        return date;
+    },
+
+    _getNextMonthDate: function() {
+        var date = this._getCurrentDate();
+        date.setMonth(widget.options.date.getMonth() + 1);
+        return date;
+    },
+
+    _getPreviousMonthDate: function() {
+        var date = this._getCurrentDate();
+        date.setMonth(widget.options.date.getMonth() - 1);
+        return date;
+    },
+
+    _moveHandleToLeft: function() {
+      this.handle.css("left", 0 + this.handleOffset);
+    },
+
+    _moveHandleToRight: function() {
+      this.handle.css("left", this.months.width() - this.handle.width() + this.handleOffset);
+    },
+
+    refresh: function() {
       this.months.find("li").remove();
 
       var i = this.options.range,
-          date = new Date();
-
-      date.setTime(this.options.date.valueOf());
+          date = this._getCurrentDate();
 
       this.monthWidth = Math.floor(this.months.width() / this.options.range) - 1;
 
