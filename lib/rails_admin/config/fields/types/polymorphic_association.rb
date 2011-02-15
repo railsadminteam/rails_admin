@@ -21,8 +21,9 @@ module RailsAdmin
             associated_model_config.length > 0
           end
 
-          def associated_collection
-            config = associated_model_config.first
+          def associated_collection(type)
+            return [] if type.nil?
+            config = RailsAdmin.config(type)
             config.abstract_model.all.map do |object|
               [config.list.with(:object => object).object_label, object.id]
             end
