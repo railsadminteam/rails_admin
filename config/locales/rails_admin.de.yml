@@ -27,7 +27,7 @@ de:
       select_action: "Auswählen"
       delete_selected: "Auswahl löschen"
       add_new: "Neu hinzufügen"
-      search_btn: "Suchen"
+      search: "Suchen"
       select: "Auswählen %{name} zum Bearbeiten"
       show_all: "Alle anzeigen"
     new:
