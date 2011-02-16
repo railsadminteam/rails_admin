@@ -95,7 +95,7 @@ ul.breadcrumb li a{
 	color:#999 !important;
 }
 
-ul.breadcrumb li:last-child a{
+ul.breadcrumb li:last-child span {
 	color:#666 !important;
 }
 

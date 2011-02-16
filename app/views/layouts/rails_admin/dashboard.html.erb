@@ -13,6 +13,8 @@
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
   <%= javascript_include_tag "rails_admin/application.js", "rails_admin/rails.js", "rails_admin/ra.timeline.js" %>
+
+  <%= csrf_meta_tag %>
 </head>
 <body>
   <div id="wrapper">
@@ -20,11 +22,11 @@
       <div id="headerLeft">
         <ul class="breadcrumb">
           <li>
-            <%= link_to(t('home.name'), '/') %>
+            <%= link_to(t('home.name'), root_path) %>
           </li>
           <li>
             &rsaquo;
-            <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
+            <span><%= t('admin.dashboard.name') %></span>
           </li>
         </ul>
         <h1 id="logo">

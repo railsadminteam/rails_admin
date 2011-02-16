@@ -441,4 +441,21 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
   end
+
+  describe "ColorPicker Support" do
+    it "should show input with class color" do
+      RailsAdmin.config Team do
+        edit do
+          field :color do
+            color true
+          end
+        end
+      end
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag("input.color")
+
+      #Reset
+      RailsAdmin::Config.reset Team
+    end
+  end
 end

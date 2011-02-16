@@ -1,6 +1,9 @@
       <div class="block form edit">
         <div class="header">
           <h2><%= @page_name %></h2>
+          <% if @object.errors[:base].size > 0 %>
+            <%= @object.errors[:base] %>
+          <% end %>
           <ul class="actions">
             <li class="action history">
              <%= link_to(t("admin.history.name"), rails_admin_history_object_path(:id => params[:id])) %>

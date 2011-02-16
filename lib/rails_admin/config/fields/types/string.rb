@@ -23,12 +23,16 @@ module RailsAdmin
 
           register_instance_option(:html_attributes) do
             {
-              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+              :class => "#{css_class} #{has_errors? ? "errorField" : nil} #{color? ? 'color' : nil}",
               :maxlength => length,
               :size => [50, length].min,
               :style => "width:#{column_width}px",
               :value => value,
             }
+           end
+
+          register_instance_option(:color?) do
+            false
           end
         end
       end

@@ -7,12 +7,15 @@
   <%= stylesheet_link_tag('rails_admin/create.css') %>
   <%= stylesheet_link_tag('rails_admin/jquery-ui-smoothness/jquery-ui-1.8.9.custom.css') %>
   <%= stylesheet_link_tag('rails_admin/ra.filtering-multiselect.css') %>
+  <%= stylesheet_link_tag('rails_admin/colorpicker.css') %>
 
   <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
 
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
   <%= javascript_include_tag "rails_admin/application.js", "rails_admin/rails.js","rails_admin/ra.filtering-multiselect.js", "rails_admin/ra.remote-form.js" %>
+
+  <%= csrf_meta_tag %>
 </head>
 
 <body>
@@ -33,7 +36,7 @@
           </li>
           <li>
             &rsaquo;
-            <%= link_to(@page_name, rails_admin_new_path(:model_name => @abstract_model.to_param)) %>
+            <span><%= @page_name %></span>
           </li>
         </ul>
         <h1 id="logo">
@@ -53,5 +56,7 @@
 <%= yield %>
     </div>
   </div>
+  <%= javascript_include_tag('rails_admin/yahoo.color.js') %>
+  <%= javascript_include_tag('rails_admin/colorpicker.js') %>
 </body>
 </html>
