@@ -8,5 +8,11 @@
     selected = params["associations"][child_key.to_param.pluralize].to_i
   end
 %>
-                  <label for="associations[<%= association_name%>]"><%= field.label %></label>
-                  <%= select("associations", association_name, collection, {:id => association_name, :include_blank => true, :selected => selected}, :class => "#{field.has_errors? ? "errorField" : nil}") %>
+              <div class="field <%= field.to_param %>">
+                <label for="associations[<%= association_name%>]"><%= field.label %></label>
+                <%= select("associations", association_name, collection, field.html_attributes) %>
+                <% if field.has_errors? %>
+                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+                <% end %>
+                <p class="help"><%= field.help %></p>
+              </div>                  
