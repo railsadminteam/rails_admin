@@ -232,6 +232,11 @@ ul.breadcrumb li a:hover{
   border-bottom:1px solid #B9B9B9;
 }
 
+.block .messages {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
 input {
   font-family:Verdana, Geneva, sans-serif;
   font-size:12px;
@@ -284,33 +289,6 @@ input.button.default:active {
   background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
   background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');
-}
-
-#highlight{
-  background:#eabb60;
-  padding:8px;
-  margin:5px;
-  font-size:11px;
-  font-family:Verdana, Geneva, sans-serif;
-  color:#FFF;
-}
-
-#notice{
-  background:#bd2b14;
-  padding:8px;
-  margin:5px;
-  font-size:11px;
-  font-family:Verdana, Geneva, sans-serif;
-  color:#FFF;
-  padding-top:5px;
-  padding-bottom:10px;
-  padding-left:9px;
-}
-
-#notice img{
-  position:relative;
-  top:4px;
-  right:3px;
 }
 
 ul#nav{

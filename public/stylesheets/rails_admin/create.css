@@ -31,7 +31,6 @@
   margin-bottom:3px;
   border-bottom:1px solid #b9b9b9;
   padding-bottom:4px;
-  font-weight:normal;
   color:#9e988e;
   text-transform:uppercase;
   font-weight:bold;
@@ -47,7 +46,6 @@
   padding-top:5px;
   padding-bottom:5px;
   margin-bottom:1px;
-  height:26px;
 }
 
 .block.form a {
@@ -160,7 +158,6 @@ p.help {
   padding-top:2px;
   padding-bottom:0px;
   margin-bottom:0px;
-  height:15px;
   font-size:10px;
   margin-left:103px;
   display:block;

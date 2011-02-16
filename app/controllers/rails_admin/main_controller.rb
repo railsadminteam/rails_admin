@@ -256,7 +256,13 @@ module RailsAdmin
 
     def render_error whereto = :new
       action = params[:action]
+      
       flash.now[:error] = t("admin.flash.error", :name => @model_config.update.label, :action => t("admin.actions.#{action}d"))
+
+      if @object.errors[:base].size > 0
+        flash.now[:error] << ". " << @object.errors[:base]
+      end
+
       respond_to do |format|
         format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
         format.js   { render whereto, :layout => false, :status => :not_acceptable  }

@@ -34,8 +34,8 @@
             </li>
           </ul>
         </div>
-        <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
         <div class="content">
+          <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
           <div class="highlight search">
             <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
               <fieldset>
