@@ -48,11 +48,9 @@
 
       for (var i in this.columns) { this.wrapper.append(this.columns[i]); };
 
-      this.collection = this.element.clone();
+      this.collection = $('<select multiple="multiple"></select>');
 
-      this.collection.attr("name", "")
-          .addClass("ra-multiselect-collection")
-          .attr("id", "");
+      this.collection.addClass("ra-multiselect-collection");
 
       this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>Add all</a>');
 
@@ -138,12 +136,13 @@
     _buildCache: function(options) {
       var widget = this;
 
-      this.collection.find("option").each(function(i, option) {
+      this.element.find("option").each(function(i, option) {
         if (option.selected) {
           widget._cache[option.value] = [option.innerHTML, true];
-          $(option).appendTo(widget.selection).attr('selected', false);
+          $(option).clone().appendTo(widget.selection).attr("selected", false);
         } else {
           widget._cache[option.value] = [option.innerHTML, false];
+          $(option).clone().appendTo(widget.collection).attr("selected", false);
         }
       });
     },
@@ -152,7 +151,7 @@
       var widget = this;
       options.each(function(i, option) {
         widget._cache[option.value][1] = false;
-        widget.element.find("option[value=" + option.value + "]").remove();
+        widget.element.find("option[value=" + option.value + "]").removeAttr("selected");
       });
       $(options).appendTo(this.collection).attr('selected', false);
     },
@@ -161,7 +160,7 @@
       var widget = this;
       options.each(function(i, option) {
         widget._cache[option.value][1] = true;
-        widget.element.append($(option).clone().attr("selected", true));
+        widget.element.find("option[value=" + option.value + "]").attr("selected", "selected");
       });
       $(options).appendTo(this.selection).attr('selected', false);
     },

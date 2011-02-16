@@ -11,6 +11,7 @@
 %>
               <div class="field <%= field.to_param %>">
                 <%= label_tag "associations_#{name}", field.label %>
+                <input type="hidden" name="associations[<%= name  %>][]" />
                 <%= select "associations", name, collection, { :selected => selected }, field.html_attributes %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
