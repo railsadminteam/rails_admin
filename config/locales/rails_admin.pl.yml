@@ -25,7 +25,7 @@ pl:
       edit_action: "Edytuj"
       delete_action: "Usuń"
       add_new: "Dodaj"
-      search_btn: "SZUKAJ"
+      search: "SZUKAJ"
       select: "Wybierz %{name} do edycji"
       show_all: "Wybierz wszystkie"
     new:
