@@ -1,7 +1,7 @@
-<div class="header">
-  <h2><%= month_names[month - 1] %> <%= year %> <%= t("admin.history.name").downcase %></h2>
+<div class="ui-widget-header">
+  <%= month_names[month - 1] %> <%= year %> <%= t("admin.history.name").downcase %>
 </div>
-<div class="content">
+<div class="ra-block-content">
   <table class="grid">
     <tbody>
       <% history.each do |t|%>

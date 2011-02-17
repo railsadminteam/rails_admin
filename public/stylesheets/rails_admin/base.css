@@ -131,11 +131,6 @@ ul.breadcrumb li a:hover{
 	color:#333;
 }
 
-.here{
-  margin-left:4px;
-  margin-right:4px;
-}
-
 #headerLeft{
   float:left;
 }
@@ -159,82 +154,49 @@ ul.breadcrumb li a:hover{
 #content {
   width:960px;
   background:#FFF;
-  border:1px solid #e6e6e6;
   margin-bottom: 20px;
+  border-bottom: 1px solid #e6e6e6;
 }
 
-.block .header {
-  background:#eee;
+.ra-block .ui-widget-header {
   padding:8px;
-	text-transform:lowercase;
-	color:#900;
 }
 
-.block .header h2 {
-  font-size:150%;
+.ra-block-content {
+  padding:10px;
+  border-left:1px solid #e6e6e6;
+  border-right:1px solid #e6e6e6;
 }
 
-.block .content .header h2 {
-  font-size:120%;
+.ra-block-content .ra-block-content {
+  border: none;
 }
 
-.block .header ul {
+.ra-block .ra-block-toolbar {
+  border-top:1px solid #e6e6e6;
+  border-bottom:1px solid #e6e6e6;
+  border-left: none;
+  border-right: none;
+  padding:5px;
+}
+
+.ra-block-toolbar ul {
   list-style-type:none;
-  font-size:11px;
   float: right;
-  margin-top:-24px;
-  float:right;
 }
 
-.block .header ul li {
+.ra-block-toolbar ul li {
   float:left;
   margin-left:3px;
 }
 
-.block .header ul li a {
-  display: block;
-  border:1px solid #DDD;
-  padding:5px;
-  text-decoration:none;
-  color:#000;
-  padding-left:10px;
-  padding-right:10px;
-  display:block;
-  margin-bottom:1px;
-  width:80px;
-  text-align:center;
-  background: #fff url(../../images/rails_admin/menu_hover.png) bottom repeat-x;  
-}
-
-.block .header ul li a:hover {
-  background-image: none;
-}
-
-.block .header ul li a .icon {
-  text-align: center;
-  display: block;
-  background-repeat: no-repeat;
-  background-position: left center;
-}
-
-.delete .icon {
-  background-image: url(../../images/rails_admin/cross.png);
-}
-
-.block .content {
-  padding:10px;
-}
-
-.block .content .highlight {
-  padding:5px;
-  background:#e0ecfc;
-  border-top:1px solid #B9B9B9;
-  border-bottom:1px solid #B9B9B9;
-}
-
-.block .messages {
+.ra-message {
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.ra-button {
+  padding: 5px 10px !important;
 }
 
 input {
@@ -245,50 +207,6 @@ input {
   border-top:1px solid #abadb3;
   border-bottom:1px solid #e3e9ef;
   border-right:1px solid #dbdfe6;
-}
-
-input.button.default {
-  color:#d9eef7;
-  border: solid 1px #0076c3;
-  background: #007ead;
-  background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
-  background: -moz-linear-gradient(top,  #00adee,  #0078a5);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
-}
-
-input.button.default:active {
-  background: #00adee;
-  background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
-  background: -moz-linear-gradient(top,  #0078a5,  #00adee);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
-}
-
-.button:active {
-  background: #CCCCCC;
-  background: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#DDDDDD));
-  background: -moz-linear-gradient(top,  #CCCCCC,  #DDDDDD);
-  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#DDDDDD');
-}
-
-.button {
-  display: inline-block;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  font-size: 10px;
-  padding:5px;
-  padding-left:10px;
-  padding-right:10px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  color: #000;
-  border: solid 1px #CDCDCD;
-  background: #DDDDDD;
-  background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#CCCCCC));
-  background: -moz-linear-gradient(top,  #DDDDDD,  #CCCCCC);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#CCCCCC');
 }
 
 ul#nav{
@@ -395,6 +313,7 @@ ul#nav li.more ul li.active a{
 }
 
 .submit {
+  margin-top: 15px;
   display:block;
   list-style-type:none;
 }

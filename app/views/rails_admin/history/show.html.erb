@@ -6,17 +6,17 @@
   sort_reverse = params[:sort_reverse]
 
 %>
-      <div class="block list">
-        <div class="header">
-          <h2><%= @page_name %></h2>
+      <div class="ra-block">
+        <div class="ui-widget-header">
+          <%= @page_name %>
         </div>
-        <div class="content">
+        <div class="ra-block-content">
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-          <div class="highlight search">
+          <div class="ra-block-toolbar">
             <form action="" method="get">
               <fieldset>
-                <input type="text" name="query" value="<%= query %>"/>
-                <input type="submit" class="button" value="<%= t("admin.list.search_btn")%>" />
+                <input type="text" name="query" value="<%= query %>" size="32" />
+                <input type="submit" class="ra-button" value="<%= t("admin.list.search_btn")%>" />
               </fieldset>
             </form>
           </div>

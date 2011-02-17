@@ -1,8 +1,8 @@
-        <div class="block list">
-          <div class="header">
-            <h2><%= @page_name %></h2>
+        <div class="ra-block">
+          <div class="ui-widget-header clearfix">
+            <%= @page_name %>
           </div>
-          <div class="content">
+          <div class="ra-block-content">
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
             <table class="grid">
               <thead>
@@ -41,11 +41,11 @@
           </div>
         </div>
 
-        <div class="block widget">
-          <div class="header">
-            <h2><%= t("admin.history.name") %></h2>
+        <div class="ra-block">
+          <div class="ui-widget-header">
+            <%= t("admin.history.name") %>
           </div>
-          <div class="content">
+          <div class="ra-block-content">
             <div id="timeline"></div>
             <div style="margin-top: 10px;" id="listingHistory" class="block list">
     <%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history}) -%>

@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title><%= @page_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('rails_admin/base.css') %>
-  <%= stylesheet_link_tag('rails_admin/create.css') %>
+  <%= stylesheet_link_tag('rails_admin/form.css') %>
   <%= stylesheet_link_tag('rails_admin/jquery-ui-smoothness/jquery-ui-1.8.9.custom.css') %>
   <%= stylesheet_link_tag('rails_admin/ra.filtering-multiselect.css') %>
   <%= stylesheet_link_tag('rails_admin/colorpicker.css') %>
@@ -56,7 +56,5 @@
 <%= yield %>
     </div>
   </div>
-  <%= javascript_include_tag('rails_admin/yahoo.color.js') %>
-  <%= javascript_include_tag('rails_admin/colorpicker.js') %>
 </body>
 </html>

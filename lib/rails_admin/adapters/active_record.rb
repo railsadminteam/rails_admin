@@ -24,13 +24,13 @@ module RailsAdmin
           nil
         end
       # TODO: ActiveRecord::Base.find_by_id will never raise RecordNotFound, will it?
-      rescue ActiveRecord::RecordNotFound
+      rescue ::ActiveRecord::RecordNotFound
         nil
       end
 
       def get_bulk(ids)
         model.find(ids)
-      rescue ActiveRecord::RecordNotFound
+      rescue ::ActiveRecord::RecordNotFound
         nil
       end
 

@@ -1,30 +1,9 @@
-#error {
-  background:#903333;
-  padding:6px;
-  padding-bottom:3px;
-  color:#FFF;
-  margin-top:2px;
+form fieldset {
+  border:none;
   margin-bottom:5px;
 }
 
-#error h3{
-  margin-bottom:5px;
-}
-
-#error ul{
-  list-style-type:none;
-}
-
-#error ul li{
-  margin-bottom:5px;
-}
-
-.block.form {
-  padding:5px;
-  margin-bottom:5px;
-}
-
-.block.form legend {
+form legend {
   width: 100%;
   clear:both;
   margin-top:2px;
@@ -37,27 +16,22 @@
   font-size:10px;
 }
 
-.block.form fieldset {
-  border:none;
-  margin-bottom:5px;
-}
-
-.block.form p {
+form p {
   padding-top:5px;
   padding-bottom:5px;
   margin-bottom:1px;
 }
 
-.block.form a {
+form a {
   color: #000;
 }
 
-.block.form a.createAssociatedRecord {
+form a.createAssociatedRecord {
     line-height: 24px;
     margin-left: 10px;
 }
 
-.block.form label {
+form label {
   width:100px;
   display:block;
   float:left;
@@ -67,16 +41,15 @@
   margin-left:2px;
 }
 
-.block.form label.inline {
+form label.inline {
   display:inline;
   float:none;
   font-weight:normal;
 }
 
+
 .field {
-  margin-bottom: 1px;
-  padding-bottom: 5px;
-  padding-top: 5px;
+  padding: 15px 0 0 0;
 }
 
 .field .input {
@@ -163,11 +136,6 @@ p.help {
   display:block;
   font-style: italic;
   color: #999;
-}
-
-.selectField {
-  float:left;
-  margin-top:4px;
 }
 
 .cke_skin_kama {

@@ -6,8 +6,10 @@
   <title><%= @abstract_model.pretty_name %> | <%= @plugin_name %></title>
   <%= stylesheet_link_tag('rails_admin/base') %>
   <%= stylesheet_link_tag('rails_admin/list') %>
+  <%= stylesheet_link_tag('rails_admin/jquery-ui-smoothness/jquery-ui-1.8.9.custom.css') %>
 
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
   <%= javascript_include_tag "rails_admin/application.js", "rails_admin/rails.js" %>
 
   <%= javascript_tag do %>

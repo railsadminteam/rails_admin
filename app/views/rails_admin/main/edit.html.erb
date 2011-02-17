@@ -1,17 +1,20 @@
-      <div class="block form edit">
-        <div class="header">
-          <h2><%= @page_name %></h2>
-          <ul class="actions">
-            <li class="action history">
-             <%= link_to(t("admin.history.name"), rails_admin_history_object_path(:id => params[:id])) %>
-            </li>
-            <li class="action delete">
-              <a href="<%= rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>"><span class="icon"><%= t("admin.list.delete_action") %></span></a>
-            </li>
-          </ul>
+      <div class="ra-block">
+        <div class="ui-widget-header">
+          <%= @page_name %>
         </div>
-        <div class="content">
-          <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+        </div>
+        <div class="ra-block-content">
+          <div class="ra-block-toolbar clearfix">
+            <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+            <ul>
+              <li>
+               <%= link_to t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => 'ra-button' %>
+              </li>
+              <li>
+               <%= link_to t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => 'ra-button' %>
+              </li>
+            </ul>
+          </div>
           <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do |form| %>
             <% @model_config.edit.with(:object => @object).visible_groups.each do |fieldset| %>
               <%= render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object } -%>

@@ -1,11 +1,11 @@
       <% if flash && flash[:error] %>
-      <div class="messages ui-state-error ui-corner-all">
+      <div class="ra-message ui-state-error ui-corner-all">
         <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
         <%= flash[:error] %>
       </div>
       <% end %>
       <% if flash && flash[:notice] %>
-      <div class="messages ui-state-highlight ui-corner-all">
+      <div class="ra-message ui-state-highlight ui-corner-all">
         <span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
         <%= flash[:notice] %>
       </div>
