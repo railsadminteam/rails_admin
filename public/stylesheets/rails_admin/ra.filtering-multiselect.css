@@ -48,21 +48,43 @@
 .ra-multiselect-center {
   width: 30px;
   padding-top: 40px;
+  text-align: center;
 }
 
 .ra-multiselect-center .ui-icon {
   margin: 5px auto;
 }
 
-.ra-multiselect a, .ra-multiselect a {
+.ra-multiselect a {
   font-weight: bold;
   font-size: 11px;
 }
 
-.ra-multiselect a .ui-icon, .ra-multiselect a .ui-icon {
-  margin-right: 4px;
+.ra-multiselect .ui-icon {
+  cursor: pointer;
   display: inline-block;
   vertical-align: top;
+  background-image: url(../../images/rails_admin/icon_sprite.png);
+}
+
+.ra-multiselect span.ui-icon {
+  margin-right: 4px;
+}
+
+.ra-multiselect .ui-icon-circle-triangle-e {
+  background-position: -16px -32px !important;  
+}
+
+.ra-multiselect .ui-icon-circle-triangle-e:hover {
+  background-position: -16px -48px !important;  
+}
+
+.ra-multiselect .ui-icon-circle-triangle-w {
+  background-position: 0px -32px !important;  
+}
+
+.ra-multiselect .ui-icon-circle-triangle-w:hover {
+  background-position: 0px -48px !important;  
 }
 
 .ra-multiselect-collection, .ra-multiselect-selection {
@@ -77,74 +99,12 @@
   border-bottom: 1px solid #e3e9ef;
   border-right: 1px solid #dbdfe6;
 }
-
 /*
-
-.add_elem{
-  float:left;
-  border:none;
-  margin-top:50px;
-  margin-right:3px;
-  margin-left:3px;
-}
-
-.remove_elem{
-  float:left;
-  border:none;
-  margin-top:74px;
-  margin-left:-19px;
-}
-
-.many_controls{
-  margin-left:103px;
-  clear:both;
-}
-
-.many_controls a img{
-  border:none;
-  position:relative;
-  top:4px;
-}
-
-.add_all{
-  left:2px;
-}
-
-.many_controls a{
-  text-decoration:none;
-  color:#000;
-  font-size:11px;
-  font-weight:bold;
-}
-
-.clear_all{
-  margin-left:125px;
-  margin-right:3px;
-}
-
-.many_header{
-  margin-left:103px;
-  margin-top:8px;
-}
-
-.many_header p{
-  float:left;
-  margin-top:-5px;
-  margin-left:22px;
-  font-size:10px;
-  line-height:7px;
-}
-
-.many_header p img{
-  position:relative;
-  top:4px;
-}
-
-.many_header p strong{
-  display:block;
-}
-
-.searchMany{
-  float:left;
-}
+.ra-multiselect-prev, .ra-multiselect-next { position:absolute; top: 6px; width: 1.8em; height: 1.8em; }
+.ra-multiselect:hover, .ra-multiselectnext:hover { border: 1px none; }
+.ra-multiselect-prev span { background-position: 0px -32px !important; }
+.ra-multiselect-next span { background-position: -16px -32px !important; }
+.ra-multiselect-prev:hover span { background-position: 0px -48px !important; }
+.ra-multiselect-next:hover span { background-position: -16px -48px !important; }
+.ra-multiselect-prev span, .ra-multiselect-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(../../images/rails_admin/icon_sprite.png) no-repeat; }
 */
