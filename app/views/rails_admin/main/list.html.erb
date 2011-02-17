@@ -31,10 +31,10 @@
           <div class="ra-block-toolbar ui-state-highlight">
             <ul>
               <li>
-               <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button ui-button ui-state-default ui-corner-all") %>
+               <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
               <li>
-               <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "ra-button ui-button ui-state-default ui-corner-all") %>
+               <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "ra-button") %>
               </li>
             </ul>
             <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>

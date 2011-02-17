@@ -178,6 +178,7 @@ ul.breadcrumb li a:hover{
   border-left: none;
   border-right: none;
   padding:5px;
+  margin-bottom: 10px;
 }
 
 .ra-block-toolbar ul {
@@ -195,8 +196,8 @@ ul.breadcrumb li a:hover{
   margin-bottom: 10px;
 }
 
-.ra-button {
-  padding: 5px 10px !important;
+.ra-button .ui-button-text {
+  line-height: 1em;
 }
 
 input {

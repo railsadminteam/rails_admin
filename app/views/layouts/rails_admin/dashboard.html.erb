@@ -1,51 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="robots" content="NONE,NOARCHIVE" />
+<% content_for :head do %>
   <title><%= @page_name %> | <%= @plugin_name %></title>
-  <%= stylesheet_link_tag('rails_admin/base') %>
   <%= stylesheet_link_tag('rails_admin/list') %>
   <%= stylesheet_link_tag('rails_admin/dashboard') %>
   <%= stylesheet_link_tag('rails_admin/ra.timeline') %>
-  <%= stylesheet_link_tag('rails_admin/jquery-ui-smoothness/jquery-ui-1.8.9.custom.css') %>
 
-  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
-  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
-  <%= javascript_include_tag "rails_admin/application.js", "rails_admin/rails.js", "rails_admin/ra.timeline.js" %>
-
-  <%= csrf_meta_tag %>
-</head>
+  <%= javascript_include_tag "rails_admin/ra.timeline.js" %>
+<% end %>
+<%= render(:partial => 'layouts/rails_admin/head') %>
 <body>
   <div id="wrapper">
-    <div id="header">
-      <div id="headerLeft">
-        <ul class="breadcrumb">
-          <li>
-            <%= link_to(t('home.name'), root_path) %>
-          </li>
-          <li>
-            &rsaquo;
-            <span><%= t('admin.dashboard.name') %></span>
-          </li>
-        </ul>
-        <h1 id="logo">
-          <%= link_to rails_admin_dashboard_path do %>
-            <span class="image_replacement"><%= @plugin_name %></span>
-          <% end -%>
-        </h1>
-      </div>
-
-<%= render(:partial => 'rails_admin/main/navigation') %>
-
-      <div id="headerRight">
-<%= render(:partial => 'rails_admin/main/user_info', :locals => {:current_user => _current_user}) %>
-      </div>
-    </div>
-
+    <% content_for :breadcrumb do %>
+      <li><%= link_to(t('home.name'), root_path) %></li>
+      <li>&rsaquo; <span><%= t('admin.dashboard.name') %></span></li>
+    <% end %>
+    <%= render(:partial => 'layouts/rails_admin/header') %>
     <div id="content">
-
-<%= content_for(:layout) %>
+<%= yield %>
     </div>
   </div>
 </body>
