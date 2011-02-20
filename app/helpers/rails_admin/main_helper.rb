@@ -76,11 +76,12 @@ module RailsAdmin
 
       properties.each do |property|
         property_type = property.column_css_class
-        property_width = property.column_width
-        style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
-        style[property_type][:size] += per_property
-        style[property_type][:occ] += 1
-        style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
+        if width = property.column_width
+          style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
+          style[property_type][:size] += per_property
+          style[property_type][:occ] += 1
+          style[property_type][:width] = width + style[property_type][:size] / style[property_type][:occ]
+        end
       end
 
       other = []
