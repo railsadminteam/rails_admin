@@ -1,14 +1,5 @@
 <% content_for :head do %>
   <title><%= @abstract_model.pretty_name %> | <%= @plugin_name %></title>
-  <%= stylesheet_link_tag('rails_admin/list') %>
-
-  <%= javascript_tag do %>
-    $j(document).ready(function($){
-      $(this).bind("ajax:success", function(e, data, status, xhr){
-        $("#content").html(data);
-      });
-    });
-  <% end %>
 <% end %>
 <%= render(:partial => 'layouts/rails_admin/head') %>
 <body>

@@ -1,10 +1,5 @@
 <% content_for :head do %>
   <title><%= @page_name %> | <%= @plugin_name %></title>
-  <%= stylesheet_link_tag('rails_admin/list') %>
-  <%= stylesheet_link_tag('rails_admin/dashboard') %>
-  <%= stylesheet_link_tag('rails_admin/ra.timeline') %>
-
-  <%= javascript_include_tag "rails_admin/ra.timeline.js" %>
 <% end %>
 <%= render(:partial => 'layouts/rails_admin/head') %>
 <body>

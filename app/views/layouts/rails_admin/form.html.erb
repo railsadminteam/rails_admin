@@ -1,12 +1,5 @@
 <% content_for :head do %>
   <title><%= @page_name %> | <%= @plugin_name %></title>
-  <%= stylesheet_link_tag('rails_admin/form.css') %>
-  <%= stylesheet_link_tag('rails_admin/ra.filtering-multiselect.css') %>
-  <%= stylesheet_link_tag('rails_admin/colorpicker.css') %>
-
-  <%= javascript_include_tag('ckeditor/ckeditor.js') if File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
-  <%= javascript_include_tag "rails_admin/ra.filtering-multiselect.js" %>
-  <%= javascript_include_tag "rails_admin/ra.remote-form.js" %>
 <% end %>
 <%= render(:partial => 'layouts/rails_admin/head') %>
 <body>

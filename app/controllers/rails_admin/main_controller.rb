@@ -57,7 +57,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html { render :layout => 'rails_admin/form' }
-        format.js   { render :layout => false }
+        format.js   { render :layout => 'rails_admin/plain.html.erb' }
       end
     end
 
@@ -265,7 +265,7 @@ module RailsAdmin
 
       respond_to do |format|
         format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
-        format.js   { render whereto, :layout => false, :status => :not_acceptable  }
+        format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }
       end
     end
 

@@ -10,18 +10,29 @@
   @style, @other, properties = get_column_set(properties)
 %>
 
-<style type="text/css">
-<% @style.each do |key, value| %>
-  .grid thead <%= ".#{key}" %>{
-    width: <%= value[:width] %>px;
-  }
+<% head_javascript "rails_admin/application.js" %>
+<% head_style "rails_admin/list" %>
+
+<% head_javascript do %>
+  $j(document).ready(function($){
+    $(this).bind("ajax:success", function(e, data, status, xhr){
+      $("#content").html(data);
+    });
+  });
 <% end %>
-<% @other.each do |t| %>
-  .grid .other.<%= t %>{
-    display:none;
-  }
+
+<% head_style do %>
+  <% @style.each do |key, value| %>
+    .grid thead <%= ".#{key}" %>{
+      width: <%= value[:width] %>px;
+    }
+  <% end %>
+  <% @other.each do |t| %>
+    .grid .other.<%= t %>{
+      display:none;
+    }
+  <% end %>
 <% end %>
-</style>
       <div class="ra-block">
         <div class="ui-widget-header">
           <%= @page_name %>

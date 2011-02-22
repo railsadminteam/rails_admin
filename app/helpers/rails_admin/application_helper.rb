@@ -5,6 +5,40 @@ module RailsAdmin
 
     include RailsAdmin::I18nSupport
 
+    def head_javascript(path = nil, &block)
+      if block
+        (@head_javascript ||= []) << capture(&block)
+      elsif path
+        (@head_javascript_paths ||= []) << path
+      else
+        html = ""
+        if paths = @head_javascript_paths
+          html << javascript_include_tag(paths.uniq)
+        end
+        if script = @head_javascript
+          html << javascript_tag(script.join("\n"))
+        end
+        return html.html_safe
+      end
+    end
+
+    def head_style(path = nil, &block)
+      if block
+        (@head_style ||= []) << capture(&block)
+      elsif path
+        (@head_stylesheet_paths ||= []) << path
+      else
+        html = ""
+        if paths = @head_stylesheet_paths
+          html << stylesheet_link_tag(paths.uniq)
+        end
+        if style = @head_style
+          html << content_tag(:style, style.join("\n"), :type => "text/css")
+        end
+        return html.html_safe
+      end
+    end
+
     def history_output(t)
       if not t.message.downcase.rindex("changed").nil?
         return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"

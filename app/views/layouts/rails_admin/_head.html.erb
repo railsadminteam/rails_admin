@@ -7,8 +7,9 @@
   <%= stylesheet_link_tag('rails_admin/base') %>
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" %>
-  <%= javascript_include_tag "rails_admin/application.js" %>
   <%= javascript_include_tag "rails_admin/rails.js" %>
-  <%= yield :head %>
+  <%= head_javascript %>
+  <%= head_style %>
   <%= csrf_meta_tag %>
+  <%= yield :head %>
 </head>

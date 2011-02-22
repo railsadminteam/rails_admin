@@ -6,7 +6,11 @@
                 <% end %>
                 <p class="help"><%= field.help %></p>
                 <% if field.ckeditor %>
-                  <%= javascript_tag do %>
+                  <% head_javascript "ckeditor/ckeditor.js" %>
+                  <% head_javascript do %>
+                    <% if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js')) %>
+                      alert("Install CKEditor using rake admin:ckeditor_download");
+                    <% end %>
                     $j(document).ready(function($){
                       CKEDITOR.replace('<%= "#{field.to_param}" %>',
                         {

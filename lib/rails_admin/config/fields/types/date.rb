@@ -8,8 +8,10 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 90
-          @datepicker_options = {}
+          @column_width = 120
+          @datepicker_options = {
+            "showTime" => false,
+          }
           @format = :long
           @i18n_scope = [:date, :formats]
         end
