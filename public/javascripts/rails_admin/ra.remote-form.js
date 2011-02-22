@@ -29,7 +29,6 @@
             xhr.setRequestHeader("Accept", "text/javascript");
           },
           success: function(data, status, xhr) {
-            /* Todo: Parse header to dialog title */
             dialog.html(data);
             widget._bindFormEvents();
           },
@@ -43,7 +42,27 @@
     _bindFormEvents: function() {
       var dialog = this._getDialog(),
           form = dialog.find("form"),
-          widget = this;
+          widget = this,
+          saveButtonText = dialog.find("input[name=_save]").val(),
+          cancelButtonText = dialog.find("input[name=_continue]").val();
+
+      dialog.dialog("option", "title", $(".ui-widget-header", dialog).remove().text());
+
+      form.attr("data-remote", true);
+      dialog.find(".submit").remove();
+      dialog.find(".ra-block-content").removeClass("ra-block-content");
+
+      var buttons = {}
+
+      buttons[saveButtonText] = function() {
+        dialog.find("form").submit();
+      }
+
+      buttons[cancelButtonText] = function() {
+        dialog.dialog("close");
+      }
+
+      dialog.dialog("option", "buttons", buttons);
 
       form.bind("ajax:success", function(e, data, status, xhr) {
         var input = widget.element.prev(), json = $.parseJSON(data);
@@ -54,16 +73,6 @@
       form.bind("ajax:error", function(e, xhr, status, error) {
         dialog.html(xhr.responseText);
         widget._bindFormEvents();
-      });
-
-      form.find("input[name=_save]").bind("click", function(e) {
-          e.preventDefault();
-          form.callRemote();
-      });
-
-      form.find("input[name=_continue]").bind("click", function(e) {
-          e.preventDefault();
-          dialog.dialog("close");
       });
     },
 
