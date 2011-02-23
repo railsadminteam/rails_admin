@@ -22,7 +22,7 @@ uk:
       edit_action: "Редагувати"
       delete_action: "Видалити"
       add_new: "Створити"
-      search_btn: "ПОШУК"
+      search: "ПОШУК"
       select: "Оберіть %{name} для редагування"
       show_all: "Показати все"
     new:

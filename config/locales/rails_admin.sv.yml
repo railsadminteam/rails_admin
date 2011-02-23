@@ -27,7 +27,7 @@ sv:
       select_action: "Marker"
       delete_selected: "Ta bort markerade"
       add_new: "Lägg till ny"
-      search_btn: "SÖK"
+      search: "SÖK"
       select: "Markera %{name} för att redigera"
       show_all: "Visa alla"
     new:

@@ -7,6 +7,7 @@
   <%= stylesheet_link_tag('rails_admin/base') %>
   <%= stylesheet_link_tag('rails_admin/list') %>
   <%= javascript_include_tag('rails_admin/prototype.js') %>
+  <%= javascript_include_tag('rails_admin/rails.js') %>
 
   <script type="text/javascript" language="javascript">
     var bindEvents = function(){
@@ -24,6 +25,8 @@
     }
     document.observe("dom:loaded", bindEvents)
   </script>
+
+  <%= csrf_meta_tag %>
 </head>
 <body>
   <div id="wrapper">

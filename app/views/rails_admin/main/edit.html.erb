@@ -1,21 +1,24 @@
-      <div id="contentHeader">
-        <h2><%= @page_name %></h2>
-        <div id="quickAccess">
-          <ul id="quick">
-            <!--<li><a href="#">Quick add</a></li>-->
-            <li>
-             <%= link_to(t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => "addlink") %>
-            </li>
-          </ul>
-          <a href="<%= rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><%= image_tag "rails_admin/cross.png", :alt => "Delete" %><%= t("admin.list.delete_action") %></a>
-        </div>
-      </div>
+<div id="contentHeader">
+  <h2><%= @page_name %></h2>
+  <% if @object.errors[:base].size > 0 %>
+    <%= @object.errors[:base] %>
+  <% end %>
+  <div id="quickAccess">
+    <ul id="quick">
+      <!--<li><a href="#">Quick add</a></li>-->
+      <li>
+      <%= link_to(t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => "addlink") %>
+      </li>
+    </ul>
+    <a href="<%= rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><%= image_tag "rails_admin/cross.png", :alt => "Delete" %><%= t("admin.list.delete_action") %></a>
+  </div>
+</div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-      <div id="contentMainNew">
-        <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do %>
-          <fieldset>
-            <%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.visible_groups) -%>
-            <%= render :partial => 'edit_submit_buttons' %>
-          </fieldset>
-        <% end %>
-      </div>
+<div id="contentMainNew">
+  <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do %>
+    <fieldset>
+      <%= render(:partial => 'form_section', :collection => RailsAdmin::config(@object).edit.visible_groups) -%>
+      <%= render :partial => 'edit_submit_buttons' %>
+    </fieldset>
+  <% end %>
+</div>
