@@ -12,6 +12,11 @@ module RailsAdmin
         @controller.current_ability.authorize!(action, model_object || model_class) if action
       end
 
+      def authorized?(action, model_class = nil, model_object = nil)
+        action = translate_action(action)
+        @controller.current_ability.can?(action, model_object || model_class) if action
+      end
+
       def query(model_class, action)
         action = translate_action(action)
         model_class.accessible_by(@controller.current_ability, action)
