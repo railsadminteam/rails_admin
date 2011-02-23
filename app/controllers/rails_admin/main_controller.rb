@@ -7,6 +7,7 @@ module RailsAdmin
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy]
 
     def index
+      @authorization_adapter.authorize(:index) if @authorization_adapter
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
@@ -30,7 +31,7 @@ module RailsAdmin
     end
 
     def list
-      @authorization_adapter.authorize(:index, @abstract_model.model) if @authorization_adapter
+      @authorization_adapter.authorize(:list, @abstract_model.model) if @authorization_adapter
       list_entries
       @xhr = request.xhr?
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
@@ -108,7 +109,7 @@ module RailsAdmin
     end
 
     def delete
-      @authorization_adapter.authorize(:destroy, @abstract_model.model, @object) if @authorization_adapter
+      @authorization_adapter.authorize(:delete, @abstract_model.model, @object) if @authorization_adapter
 
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase

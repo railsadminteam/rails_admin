@@ -4,6 +4,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
   class Ability
     include CanCan::Ability
     def initialize(user)
+      can :access, :rails_admin if user.roles.include? :admin
       can :read, Player, :retired => false if user.roles.include? :read_player
       can :create, Player, :suspended => true if user.roles.include? :create_player
       can :update, Player, :retired => false if user.roles.include? :update_player
@@ -23,6 +24,12 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         @user.update_attribute(:roles, [])
       end
 
+      it "GET /admin should raise CanCan::AccessDenied" do
+        lambda {
+          get rails_admin_dashboard_path
+        }.should raise_error(CanCan::AccessDenied)
+      end
+
       it "GET /admin/player should raise CanCan::AccessDenied" do
         lambda {
           get rails_admin_list_path(:model_name => "player")
@@ -33,7 +40,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
     describe "with read player role" do
       before(:each) do
-        @user.update_attribute(:roles, [:read_player])
+        @user.update_attribute(:roles, [:admin, :read_player])
       end
 
       it "GET /admin/player should render successfully but not list retired players" do
@@ -62,7 +69,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
     describe "with create and read player role" do
       before(:each) do
-        @user.update_attribute(:roles, [:read_player, :create_player])
+        @user.update_attribute(:roles, [:admin, :read_player, :create_player])
       end
 
       it "GET /admin/player/new should render and create record upon submission" do
@@ -90,7 +97,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
     describe "with update and read player role" do
       before(:each) do
-        @user.update_attribute(:roles, [:read_player, :update_player])
+        @user.update_attribute(:roles, [:admin, :read_player, :update_player])
       end
 
       it "GET /admin/player/1/edit should render and update record upon submission" do
@@ -121,7 +128,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
     describe "with destroy and read player role" do
       before(:each) do
-        @user.update_attribute(:roles, [:read_player, :destroy_player])
+        @user.update_attribute(:roles, [:admin, :read_player, :destroy_player])
       end
 
       it "GET /admin/player/1/delete should render and destroy record upon submission" do
