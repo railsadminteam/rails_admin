@@ -182,5 +182,5 @@ Control.ColorPicker.prototype = {
 }
 
 $$('.color').each(function (el) {
-  new Control.ColorPicker(el, {IMAGE_BASE: '/images/rails_admin/colorpicker/'});
+  new Control.ColorPicker(el, {IMAGE_BASE: '/images/rails_admin/colorpicker_'});
 });
