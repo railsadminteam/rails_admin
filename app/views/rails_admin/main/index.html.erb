@@ -14,26 +14,28 @@
             </thead>
           <tbody>
             <% @abstract_models.each do |abstract_model| %>
-              <tr class="<%= cycle 'odd', 'even' %>">
-                <td class="modelNameRow">
-                  <%= link_to(RailsAdmin.config(abstract_model).list.label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
-                </td>
-                <td>
-                <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
-                <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
-                <% end %>
-                </td>
-                <td>
-                  <div class="scale">
-                    <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
-                    <% percent = 1 if percent.nil? %>
-                    <div class="bar <%= get_indicator(percent)%>" style="width:<%= percent %>%;"></div>
-                  </div>
-                </td>
-                <td>
-                  <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
-                </td>
-              </tr>
+              <% if authorized? :index, abstract_model.model %>
+                <tr class="<%= cycle 'odd', 'even' %>">
+                  <td class="modelNameRow">
+                    <%= link_to(RailsAdmin.config(abstract_model).list.label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                  </td>
+                  <td>
+                  <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
+                  <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
+                  <% end %>
+                  </td>
+                  <td>
+                    <div class="scale">
+                      <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
+                      <% percent = 1 if percent.nil? %>
+                      <div class="bar <%= get_indicator(percent)%>" style="width:<%= percent %>%;"></div>
+                    </div>
+                  </td>
+                  <td>
+                    <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                  </td>
+                </tr>
+              <% end %>
             <% end %>
           </tbody>
           </table>

@@ -53,6 +53,13 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         response.body.should_not contain(/Splinter/)
       end
 
+      it "GET /admin should show Player but not League" do
+        get rails_admin_dashboard_path
+        response.code.should == "200"
+        response.body.should contain(/Player/)
+        response.body.should_not contain(/League/)
+      end
+
       it "GET /admin/team should raise CanCan::AccessDenied" do
         lambda {
           get rails_admin_list_path(:model_name => "team")
@@ -150,7 +157,6 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
     end
 
     # TODO: Authorize bulk_delete and bulk_destroy actions
-    # TODO: Figure out best way to handle authorization in index action, maybe with `can :access, :rails_admin` permission check on every action
   end
 
 end
