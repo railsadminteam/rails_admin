@@ -14,7 +14,7 @@
             </thead>
           <tbody>
             <% @abstract_models.each do |abstract_model| %>
-              <% if authorized? :index, abstract_model.model %>
+              <% if authorized? :list, abstract_model %>
                 <tr class="<%= cycle 'odd', 'even' %>">
                   <td class="modelNameRow">
                     <%= link_to(RailsAdmin.config(abstract_model).list.label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
