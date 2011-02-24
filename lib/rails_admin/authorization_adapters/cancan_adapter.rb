@@ -4,11 +4,11 @@ module RailsAdmin
       def initialize(controller)
         @controller = controller
         @controller.extend ControllerExtension
+        @controller.current_ability.authorize! :access, :rails_admin
       end
 
       def authorize(action, abstract_model = nil, model_object = nil)
         action = translate_action(action)
-        @controller.current_ability.authorize! :access, :rails_admin
         @controller.current_ability.authorize!(action, model_object || abstract_model.model) if action
       end
 
