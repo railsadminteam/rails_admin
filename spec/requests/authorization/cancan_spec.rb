@@ -49,15 +49,28 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
         get rails_admin_list_path(:model_name => "player", :set => 1)
         response.code.should == "200"
-        response.body.should contain(/Leonardo/)
-        response.body.should_not contain(/Splinter/)
+        response.body.should contain("Leonardo")
+        response.body.should_not contain("Splinter")
       end
 
       it "GET /admin should show Player but not League" do
         get rails_admin_dashboard_path
         response.code.should == "200"
-        response.body.should contain(/Player/)
-        response.body.should_not contain(/League/)
+        response.body.should contain("Player")
+        response.body.should_not contain("League")
+      end
+
+      it "GET /admin/player should list players but not show new, edit, or delete actions" do
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
+        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
+        get rails_admin_list_path(:model_name => "player", :set => 1)
+        response.code.should == "200"
+        response.body.should contain("Leonardo")
+        response.body.should_not contain("Add new")
+        response.body.should_not contain("EDIT")
+        response.body.should_not contain("DELETE")
+        response.body.should_not contain("Edit")
+        response.body.should_not contain("Delete")
       end
 
       it "GET /admin/team should raise CanCan::AccessDenied" do

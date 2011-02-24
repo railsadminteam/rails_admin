@@ -6,25 +6,25 @@ module RailsAdmin
         @controller.extend ControllerExtension
       end
 
-      def authorize(action, model_class = nil, model_object = nil)
+      def authorize(action, abstract_model = nil, model_object = nil)
         action = translate_action(action)
         @controller.current_ability.authorize! :access, :rails_admin
-        @controller.current_ability.authorize!(action, model_object || model_class) if action
+        @controller.current_ability.authorize!(action, model_object || abstract_model.model) if action
       end
 
-      def authorized?(action, model_class = nil, model_object = nil)
+      def authorized?(action, abstract_model = nil, model_object = nil)
         action = translate_action(action)
-        @controller.current_ability.can?(action, model_object || model_class) if action
+        @controller.current_ability.can?(action, model_object || abstract_model.model) if action
       end
 
-      def query(model_class, action)
+      def query(abstract_model, action)
         action = translate_action(action)
-        model_class.accessible_by(@controller.current_ability, action)
+        abstract_model.model.accessible_by(@controller.current_ability, action)
       end
 
-      def attributes_for(action, model_class)
+      def attributes_for(action, abstract_model)
         action = translate_action(action)
-        @controller.current_ability.attributes_for(action, model_class)
+        @controller.current_ability.attributes_for(action, abstract_model.model)
       end
 
       private
