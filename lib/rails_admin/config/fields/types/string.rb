@@ -10,10 +10,6 @@ module RailsAdmin
 
           @searchable = true
 
-          register_instance_option(:column_width) do
-            length > 100 ? 250 : 180
-          end
-
           register_instance_option(:help) do
             text = required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
             text += " #{length} "

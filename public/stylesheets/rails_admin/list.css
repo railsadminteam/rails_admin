@@ -5,13 +5,11 @@
 
 .grid thead th {
   border-bottom:2px solid #b9b9b9;
-  padding: 9px;
+  padding: 9px 0;
   text-align:center;
 }
 
 .grid thead th a {
-  padding-right: 20px;
-  padding-left: 10px;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: right;
@@ -85,7 +83,7 @@
 
 .grid tbody td {
   border-bottom:1px solid #b9b9b9;
-  padding: 9px;
+  padding: 9px 0;
   text-align:center;
 }
 
