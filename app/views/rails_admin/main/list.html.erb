@@ -67,12 +67,8 @@
                 </th>
                 <% end %>
                 <th class="other right">...</th>
-                <% if authorized? :edit, @abstract_model %>
-                  <th class="action"><%= t("admin.list.edit_action").upcase%></th>
-                <% end %>
-                <% if authorized? :delete, @abstract_model %>
-                  <th class="action"><%= t("admin.list.delete_action").upcase%></th>
-                <% end %>
+                <th class="action"><%= t("admin.list.edit_action").upcase if authorized? :edit, @abstract_model %></th>
+                <th class="action"><%= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model %></th>
                 <th class="action"><%= t("admin.list.select_action").upcase %></th>
               </tr>
             </thead>
@@ -86,12 +82,8 @@
                 <% end %>
                 <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
                 <td class="other right"><%= link_to("...", other_right)%></td>
-                <% if authorized? :edit, @abstract_model, object %>
-                  <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-                <% end %>
-                <% if authorized? :delete, @abstract_model, object %>
-                  <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-                <% end %>
+                <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :edit, @abstract_model, object %></td>
+                <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :delete, @abstract_model, object %></td>
                 <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
               </tr>
               <% end %>
