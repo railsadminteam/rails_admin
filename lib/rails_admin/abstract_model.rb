@@ -44,15 +44,17 @@ module RailsAdmin
       end
     end
 
-    attr_accessor :model
-
     def initialize(model)
       model = self.class.lookup(model.to_s.camelize) unless model.is_a?(Class)
-      @model = model
+      @model_name = model.name
       self.extend(GenericSupport)
       ### TODO more ORMs support
       require 'rails_admin/adapters/active_record'
       self.extend(RailsAdmin::Adapters::ActiveRecord)
+    end
+
+    def model
+      @model_name.constantize
     end
 
     private
