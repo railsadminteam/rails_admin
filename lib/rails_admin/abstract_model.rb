@@ -4,11 +4,11 @@ require 'rails_admin/generic_support'
 module RailsAdmin
   class AbstractModel
 
-    @models = []
+    @model_names = []
 
     # Returns all models for a given Rails app
     def self.all
-      if @models.empty?
+      if @model_names.empty?
         excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
         excluded_models << ['History']
 
@@ -20,26 +20,13 @@ module RailsAdmin
         end
         possible_models = Module.constants | class_names
         #Rails.logger.info "possible_models: #{possible_models.inspect}"
-        add_models(possible_models, excluded_models)
+        models = (possible_models - excluded_models).map { |name| lookup(name, false) }
 
-        #Rails.logger.info "final models: #{@models.map(&:model).inspect}"
-        @models.sort!{|x, y| x.model.to_s <=> y.model.to_s}
+        #Rails.logger.info "final models: #{models.compact.inspect}"
+        @model_names = models.compact.map(&:to_s).sort
       end
 
-      @models
-    end
-
-    def self.add_models(possible_models=[], excluded_models=[])
-      possible_models.each do |possible_model_name|
-        next if excluded_models.include?(possible_model_name)
-        #Rails.logger.info "possible_model_name: #{possible_model_name.inspect}"
-        add_model(possible_model_name)
-      end
-    end
-
-    def self.add_model(model_name)
-      model = lookup(model_name,false)
-      @models << new(model) if model
+      @model_names.map { |name| new(name.constantize) }
     end
 
     # Given a string +model_name+, finds the corresponding model class
