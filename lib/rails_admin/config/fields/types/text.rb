@@ -8,7 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 250
           @searchable = true
 
           # CKEditor is disabled by default
