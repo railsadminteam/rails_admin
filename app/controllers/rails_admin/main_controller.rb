@@ -270,6 +270,8 @@ module RailsAdmin
       options.merge!(get_filter_hash(options))
       per_page = @model_config.list.items_per_page
 
+      scope = @authorization_adapter && @authorization_adapter.query(:list, @abstract_model)
+
       # external filter
       options.merge!(other)
 
@@ -278,18 +280,18 @@ module RailsAdmin
 
       if params[:all]
         options.merge!(:limit => per_page * 2)
-        @objects = @abstract_model.all(options).reverse
+        @objects = @abstract_model.all(options, scope).reverse
       else
         @current_page = (params[:page] || 1).to_i
         options.merge!(:page => @current_page, :per_page => per_page)
-        @page_count, @objects = @abstract_model.paginated(options)
+        @page_count, @objects = @abstract_model.paginated(options, scope)
         options.delete(:page)
         options.delete(:per_page)
         options.delete(:offset)
         options.delete(:limit)
       end
 
-      @record_count = @abstract_model.count(options)
+      @record_count = @abstract_model.count(options, scope)
 
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)

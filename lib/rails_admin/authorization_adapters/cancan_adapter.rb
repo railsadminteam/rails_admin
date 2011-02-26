@@ -17,7 +17,7 @@ module RailsAdmin
         @controller.current_ability.can?(action, model_object || abstract_model.model) if action
       end
 
-      def query(abstract_model, action)
+      def query(action, abstract_model)
         action = translate_action(action)
         abstract_model.model.accessible_by(@controller.current_ability, action)
       end
