@@ -32,7 +32,10 @@
                     </div>
                   </td>
                   <td>
-                    <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                    <% if authorized? :new, abstract_model %>
+                      <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %> |
+                    <% end %>
+                    <%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
                   </td>
                 </tr>
               <% end %>

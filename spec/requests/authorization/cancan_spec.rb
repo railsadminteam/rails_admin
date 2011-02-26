@@ -48,6 +48,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         response.code.should == "200"
         response.body.should contain("Player")
         response.body.should_not contain("League")
+        response.body.should_not contain("Add new")
       end
 
       it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
