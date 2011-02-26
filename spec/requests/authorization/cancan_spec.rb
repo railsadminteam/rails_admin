@@ -86,6 +86,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/player/new should render and create record upon submission" do
         get rails_admin_new_path(:model_name => "player")
+        response.body.should_not contain("edit")
         fill_in "players[name]", :with => "Jackie Robinson"
         fill_in "players[number]", :with => "42"
         fill_in "players[position]", :with => "Second baseman"
@@ -115,6 +116,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/1/edit should render and update record upon submission" do
         @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
         get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+        response.body.should_not contain("Delete")
         fill_in "players[name]", :with => "Jackie Robinson"
         @req = click_button "Save"
         @player = RailsAdmin::AbstractModel.new("Player").first

@@ -10,7 +10,9 @@
       <%= link_to(t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => "addlink") %>
       </li>
     </ul>
-    <a href="<%= rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><%= image_tag "rails_admin/cross.png", :alt => "Delete" %><%= t("admin.list.delete_action") %></a>
+    <% if authorized? :delete, @abstract_model, @object %>
+      <a href="<%= rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]) %>" id="deleteItem"><%= image_tag "rails_admin/cross.png", :alt => "Delete" %><%= t("admin.list.delete_action") %></a>
+    <% end %>
   </div>
 </div>
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
