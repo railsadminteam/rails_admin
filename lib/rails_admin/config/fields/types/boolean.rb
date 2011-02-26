@@ -8,8 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 60
-
           register_instance_option(:formatted_value) do
             if value == true
               Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("rails_admin/bullet_black.png"), :alt => "True").html_safe

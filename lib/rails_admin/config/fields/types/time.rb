@@ -8,8 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 60
-
           register_instance_option(:formatted_value) do
             unless (time = value).nil?
               time.strftime(strftime_format)

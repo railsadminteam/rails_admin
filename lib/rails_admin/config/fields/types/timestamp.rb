@@ -7,8 +7,6 @@ module RailsAdmin
         class Timestamp < RailsAdmin::Config::Fields::Types::Datetime
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
-
-          @column_width = 170
         end
       end
     end
