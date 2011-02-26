@@ -35,3 +35,12 @@ end
 ```
 
 How you define the user roles is completely up to you. See the [[CanCan Documentation|https://github.com/ryanb/cancan/wiki]] if you aren't familiar with it already.
+
+# Running Specs
+
+If you are developing for Rails Admin, you can run the CanCan specs by setting the `AUTHORIZATION_ADAPTER=cancan` env variable. Like this.
+
+```bash
+AUTHORIZATION_ADAPTER=cancan bundle
+AUTHORIZATION_ADAPTER=cancan rake
+```
