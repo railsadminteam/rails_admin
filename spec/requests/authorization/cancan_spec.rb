@@ -43,16 +43,6 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         @user.update_attribute(:roles, [:admin, :read_player])
       end
 
-      it "GET /admin/player should render successfully but not list retired players" do
-        pending "Rails Admin currently buries fetching logic into AbstractModel so it is difficult to have it dependent upon CanCan authorization rules. I think this should be restructured to work with scopes."
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
-        get rails_admin_list_path(:model_name => "player", :set => 1)
-        response.code.should == "200"
-        response.body.should contain("Leonardo")
-        response.body.should_not contain("Splinter")
-      end
-
       it "GET /admin should show Player but not League" do
         get rails_admin_dashboard_path
         response.code.should == "200"
@@ -60,12 +50,13 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         response.body.should_not contain("League")
       end
 
-      it "GET /admin/player should list players but not show new, edit, or delete actions" do
+      it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
         get rails_admin_list_path(:model_name => "player", :set => 1)
         response.code.should == "200"
         response.body.should contain("Leonardo")
+        response.body.should_not contain("Splinter")
         response.body.should_not contain("Add new")
         response.body.should_not contain("EDIT")
         response.body.should_not contain("DELETE")
