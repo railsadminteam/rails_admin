@@ -11,15 +11,11 @@ module RailsAdmin
         else
           nil
         end
-      # TODO: ActiveRecord::Base.find_by_id will never raise RecordNotFound, will it?
-      rescue ActiveRecord::RecordNotFound 
-        nil
       end
 
-      def get_bulk(ids)
-        model.find(ids)
-      rescue ActiveRecord::RecordNotFound
-        nil
+      def get_bulk(ids, scope = nil)
+        scope ||= model
+        scope.find_all_by_id(ids)
       end
 
       def count(options = {}, scope = nil)
@@ -59,8 +55,9 @@ module RailsAdmin
         RailsAdmin::AbstractObject.new(model.new)
       end
 
-      def destroy(ids)
-        model.destroy(ids)
+      def destroy(ids, scope = nil)
+        scope ||= model
+        scope.destroy_all(:id => ids)
       end
 
       def destroy_all!

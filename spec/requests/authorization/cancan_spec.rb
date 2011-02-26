@@ -158,6 +158,21 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         }.should raise_error(CanCan::AccessDenied)
       end
 
+      it "GET /admin/player/bulk_delete should render and destroy records which are authorized to" do
+        active_player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
+        retired_player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
+
+        @delete_ids = [active_player, retired_player].map(&:id)
+        get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
+
+        response.body.should contain("Leonardo")
+        response.body.should_not contain("Splinter")
+        click_button "Yes, I'm sure"
+
+        Player.exists?(active_player.id).should be_false
+        Player.exists?(retired_player.id).should be_true
+      end
+
     end
 
     # TODO: Authorize bulk_delete and bulk_destroy actions

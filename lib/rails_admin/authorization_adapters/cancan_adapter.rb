@@ -34,7 +34,7 @@ module RailsAdmin
         case action
         when :index then nil # we don't want to do extra action authorization for dashboard
         when :list then :index
-        when :delete then :destroy
+        when :delete, :bulk_delete, :bulk_destroy then :destroy
         else action
         end
       end
