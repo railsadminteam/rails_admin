@@ -1,3 +1,8 @@
+# To run these specs, you need to pass AUTHORIZATION_ADAPTER=cancan environment variable. For example.
+#
+#   AUTHORIZATION_ADAPTER=cancan bundle
+#   AUTHORIZATION_ADAPTER=cancan rake
+#
 if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
   require 'spec_helper'
 
@@ -177,8 +182,6 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
     end
-
-    # TODO: Authorize bulk_delete and bulk_destroy actions
   end
 
 end

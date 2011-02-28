@@ -782,40 +782,19 @@ accomplished like this:
 Authorization
 -------------
 
-Rails Admin has no specific authorization requirements so you can use
-whichever authz framework best suits your needs.
+Authorization can be added using the `authorize_with` method. If you pass a block
+it will be triggered through a before filter on every action in Rails Admin.
 
-### Declarative Authorization
-
-[Declarative Authorization](https://github.com/stffn/declarative_authorization)
-works well with Rails Admin.  You need to hook
-declarative_authorization's code into Rails Admin's controllers and
-write appropriate authorization declarations.
-
-You can hook declarative_authorization into Rails Admin using code
-like this in an initializer (e.g., config/initializers/rails_admin.rb):
-
-    require "rails_admin/application_controller"
-
-    module RailsAdmin
-      class ApplicationController < ::ApplicationController
-        filter_access_to :all
-      end
+    RailsAdmin.authorize_with do
+      redirect_to root_path unless warden.user.is_admin?
     end
 
-By default, access to the controllers will be denied to all users, so
-you need to write some authz rules so that the appropriate users can
-get access.  These rules will vary, but here's an example:
+To use an authorization adapter, pass the name of the adapter. For example, to use
+with [CanCan](https://github.com/ryanb/cancan), pass it like this.
 
-    authorization do
-      role :admin do
-        has_permission_on :rails_admin_history, :to => :list
-        has_permission_on :rails_admin_main, :to => [:index, :show, :new, :edit, :create, :update, :destroy, :list, :delete, :get_pages, :show_history]
-      end
-    end
+    RailsAdmin.authorize_with :cancan
 
-This will allow the :admin role to do everything, and will prevent all
-other roles from doing anything.
+See the [wiki](https://github.com/sferik/rails_admin/wiki) for more on authorization.
 
 Contributing
 ------------
