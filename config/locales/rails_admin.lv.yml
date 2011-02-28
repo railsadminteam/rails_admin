@@ -21,8 +21,10 @@ lv:
     list:
       edit_action: "Labot"
       delete_action: "Dzēst"
+      select_action: "Izvēlies"
+      delete_selected: "Dzēst izvēlētos"
       add_new: "Pievienot jaunu"
-      search: "MEKLĒT"
+      search: "Meklēt"
       select: "Izvēlieties %{name}, lai labotu"
       show_all: "Parādīt visu"
     new:
