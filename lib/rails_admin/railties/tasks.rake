@@ -1,4 +1,5 @@
 require 'rails_admin/railties/extratasks'
+require 'pp'
 
 namespace :admin do
   desc "Populate history tabel with a year of data"
@@ -22,8 +23,15 @@ namespace :admin do
     copier = Rails::Generators::Base.new
     %w( stylesheets images javascripts ).each do |directory|
       Dir[File.join(origin,directory,'rails_admin','**/*')].each do |file|
-        relative = file.gsub(/^#{origin}\//, '')
-        copier.copy_file(file, File.join(destination,relative)) unless File.directory?(file)
+        relative  = file.gsub(/^#{origin}\//, '')
+        dest_file = File.join(destination, relative)
+        dest_dir  = File.dirname(dest_file)
+
+        if !File.exist?(dest_dir)
+          FileUtils.mkdir_p(dest_dir)
+        end
+
+        copier.copy_file(file, dest_file) unless File.directory?(file)
       end
     end
   end
