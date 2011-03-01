@@ -31,16 +31,10 @@
   margin-bottom:-5px;
 }
 
-.grid tbody .date {
-  white-space: nowrap;
-}
-
-.grid tbody .datetime {
-  white-space: nowrap;
-}
-
-.grid tbody .time {
-  background:#F99;
+.grid tbody .date,
+.grid tbody .datetime,
+.grid tbody .time,
+.grid tbody .timestamp {
   white-space: nowrap;
 }
 
