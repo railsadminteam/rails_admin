@@ -28,4 +28,5 @@ group :development, :test do
       gem 'sqlite3', '~> 1.3'
     end
   end
+  gem "cancan" if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 end

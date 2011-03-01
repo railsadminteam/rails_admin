@@ -1,6 +1,6 @@
 <%
   max_visible_tabs = RailsAdmin::Config::Sections::Navigation.max_visible_tabs
-  models = RailsAdmin::Config::Sections::Navigation.visible_models
+  models = RailsAdmin::Config::Sections::Navigation.visible_models.select { |model| authorized?(:list, model.abstract_model) }
 %>
       <ul id="nav">
         <li <%if @page_type == "dashboard" %>class="active"<% end %>><%= link_to(t("admin.dashboard.name"), rails_admin_dashboard_path) %></li>

@@ -25,7 +25,7 @@ tr:
       edit_action: "Düzenle"
       delete_action: "Sil"
       add_new: "Yeni ekle"
-      search_btn: "ARA"
+      search: "ARA"
       select: "Düzenlemek için seçin: %{name}"
       show_all: "Hepsini göster"
     new:

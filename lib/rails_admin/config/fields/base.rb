@@ -15,7 +15,6 @@ module RailsAdmin
 
         def self.inherited(klass)
             klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
-            klass.instance_variable_set("@column_width", 110)
             klass.instance_variable_set("@searchable", false)
             klass.instance_variable_set("@sortable", true)
             klass.instance_variable_set("@view_helper", :text_field)

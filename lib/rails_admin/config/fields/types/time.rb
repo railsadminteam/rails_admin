@@ -8,12 +8,11 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 60
           @format = :short
+          @i18n_scope = [:time, :formats]
           @js_plugin_options = {
             "showDate" => false,
           }
-          @i18n_scope = [:time, :formats]
 
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)

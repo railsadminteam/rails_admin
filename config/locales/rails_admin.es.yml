@@ -22,7 +22,7 @@ es:
       edit_action: "Editar"
       delete_action: "Eliminar"
       add_new: "Agregar"
-      search_btn: "BUSCAR"
+      search: "BUSCAR"
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
     new:

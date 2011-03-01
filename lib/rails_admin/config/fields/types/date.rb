@@ -8,12 +8,11 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 120
           @format = :long
+          @i18n_scope = [:date, :formats]
           @js_plugin_options = {
             "showTime" => false,
           }
-          @i18n_scope = [:date, :formats]
 
           def parse_input(params)
             params[name] = self.class.normalize(params[name], localized_date_format) if params[name]

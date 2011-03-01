@@ -7,6 +7,7 @@ module RailsAdmin
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy]
 
     def index
+      @authorization_adapter.authorize(:index) if @authorization_adapter
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
@@ -31,6 +32,7 @@ module RailsAdmin
     end
 
     def list
+      @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
       list_entries
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
       respond_to do |format|
@@ -53,6 +55,12 @@ module RailsAdmin
 
     def new
       @object = @abstract_model.new
+      if @authorization_adapter
+        @authorization_adapter.attributes_for(:new, @abstract_model).each do |name, value|
+          @object.send("#{name}=", value)
+        end
+        @authorization_adapter.authorize(:new, @abstract_model, @object)
+      end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
@@ -65,6 +73,12 @@ module RailsAdmin
       @modified_assoc = []
       @object = @abstract_model.new
       @model_config.create.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
+      if @authorization_adapter
+        @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
+          @object.send("#{name}=", value)
+        end
+        @authorization_adapter.authorize(:create, @abstract_model, @object)
+      end
       @object.attributes = @attributes
       @object.associations = params[:associations]
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
@@ -90,12 +104,17 @@ module RailsAdmin
     end
 
     def edit
+      @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
+
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
+
       render :layout => 'rails_admin/form'
     end
 
     def update
+      @authorization_adapter.authorize(:update, @abstract_model, @object) if @authorization_adapter
+
       @cached_assocations_hash = associations_hash
       @modified_assoc = []
 
@@ -118,6 +137,8 @@ module RailsAdmin
     end
 
     def delete
+      @authorization_adapter.authorize(:delete, @abstract_model, @object) if @authorization_adapter
+
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
@@ -125,6 +146,8 @@ module RailsAdmin
     end
 
     def destroy
+      @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
+
       @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
@@ -134,6 +157,8 @@ module RailsAdmin
     end
 
     def bulk_delete
+      @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
+
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
@@ -141,7 +166,10 @@ module RailsAdmin
     end
 
     def bulk_destroy
-      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids])
+      @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
+
+      scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
+      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
 
       @destroyed_objects.each do |object|
         message = "Destroyed #{@model_config.list.with(:object => object).object_label}"
@@ -166,8 +194,10 @@ module RailsAdmin
     private
 
     def get_bulk_objects
+      scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
       @bulk_ids = params[:bulk_ids]
-      @bulk_objects = @abstract_model.get_bulk(@bulk_ids)
+      @bulk_objects = @abstract_model.get_bulk(@bulk_ids, scope)
+
       not_found unless @bulk_objects
     end
 
@@ -284,6 +314,8 @@ module RailsAdmin
       options.merge!(get_filter_hash(options))
       per_page = @model_config.list.items_per_page
 
+      scope = @authorization_adapter && @authorization_adapter.query(:list, @abstract_model)
+
       # external filter
       options.merge!(other)
 
@@ -292,18 +324,18 @@ module RailsAdmin
 
       if params[:all]
         options.merge!(:limit => per_page * 2)
-        @objects = @abstract_model.all(options).reverse
+        @objects = @abstract_model.all(options, scope).reverse
       else
         @current_page = (params[:page] || 1).to_i
         options.merge!(:page => @current_page, :per_page => per_page)
-        @page_count, @objects = @abstract_model.paginated(options)
+        @page_count, @objects = @abstract_model.paginated(options, scope)
         options.delete(:page)
         options.delete(:per_page)
         options.delete(:offset)
         options.delete(:limit)
       end
 
-      @record_count = @abstract_model.count(options)
+      @record_count = @abstract_model.count(options, scope)
 
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)

@@ -10,8 +10,6 @@ module RailsAdmin
 
           attr_reader :association
 
-          @column_width = 250
-
           def initialize(parent, name, properties, association)
             super(parent, name, properties)
             @association = association
