@@ -101,14 +101,14 @@
                 <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
                   <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
                   <td class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>
-                    <%= link_to("...", other_left, remote: true) %>
+                    <%= link_to("...", other_left, :remote => true) %>
                   </td>
                   <% properties.map{|property| property.bind(:object, object)}.each do |property| %>
                     <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
                   <% end %>
                   <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
                   <td class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>
-                    <%= link_to("...", other_right, remote: true)%>
+                    <%= link_to("...", other_right, :remote => true)%>
                   </td>
                   <td class="action edit">
                     <%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :edit, @abstract_model, object %>

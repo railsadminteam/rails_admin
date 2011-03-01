@@ -125,12 +125,12 @@ module RailsAdmin
     # Fetch the history item counts for the most recent 5 months.
     def self.history_latest_summaries
       from = {
-        month: 5.month.ago.month,
-        year: 5.month.ago.year,
+        :month => 5.month.ago.month,
+        :year => 5.month.ago.year,
       }
       to = {
-        month: DateTime.now.month,
-        year: DateTime.now.year,
+        :month => DateTime.now.month,
+        :year => DateTime.now.year,
       }
       self.history_summaries(from, to)
     end
