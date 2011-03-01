@@ -37,7 +37,7 @@ module RailsAdmin
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
       respond_to do |format|
         format.html { render :layout => 'rails_admin/list' }
-        format.js
+        format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
           if params[:compact]
             objects = []
