@@ -25,7 +25,7 @@ bg:
       edit_action: "Редактирай"
       delete_action: "Изтрий"
       add_new: "Добави"
-      search_btn: "ТЪРСИ"
+      search: "ТЪРСИ"
       select: "Избор на %{name} за редакция"
       show_all: "Покажи всички"
     new:

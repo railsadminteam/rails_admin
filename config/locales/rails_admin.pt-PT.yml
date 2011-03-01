@@ -24,7 +24,7 @@ pt-PT:
       edit_action: "Editar"
       delete_action: "Remover"
       add_new: "Adicionar"
-      search_btn: "PROCURAR"
+      search: "PROCURAR"
       select: "Selecione %{name} para editar"
       show_all: "Exibir todos"
     new:

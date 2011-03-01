@@ -27,11 +27,6 @@
       width: <%= value[:width] %>px;
     }
   <% end %>
-  <% @other.each do |t| %>
-    .grid .other.<%= t %>{
-      display:none;
-    }
-  <% end %>
 <% end %>
       <div class="ra-block">
         <div class="ui-widget-header">
@@ -44,14 +39,16 @@
               <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
-              <li>
-               <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "ra-button") %>
-              </li>
+              <% if authorized? :new, @abstract_model %>
+                <li>
+                 <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "ra-button") %>
+                </li>
+              <% end %>
             </ul>
             <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
-                <input type="submit" class="ra-button" value="<%= t("admin.list.search_btn") %>" />
+                <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
               </fieldset>
             <% end %>
           </div>
@@ -59,7 +56,7 @@
             <table class="grid">
               <thead>
                 <tr>
-                  <th class="other left">...</th>
+                  <th class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>...</th>
                   <% properties.each do |property| %>
                   <% property_name = property.name %>
                   <% property_pretty_name = property.label %>
@@ -74,16 +71,18 @@
                     <% end %>
                   </th>
                   <% end %>
-                  <th class="other right">...</th>
-                  <th class="action"><%= t("admin.list.edit_action").upcase %></th>
-                  <th class="action"><%= t("admin.list.delete_action").upcase %></th>
+                  <th class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>...</th>
+                  <th class="action"><%= t("admin.list.edit_action").upcase if authorized? :edit, @abstract_model %></th>
+                  <th class="action"><%= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model %></th>
                   <th class="action"><%= t("admin.list.select_action").upcase %></th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <td colspan="<%= properties.length + 5 %>">
-                    <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;" %>
+                    <% if authorized? :delete, @abstract_model %>
+                      <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;" %>
+                    <% end %>
                     <div class="pagination">
                       <% if @page_count.to_i > 1 %>
                         <%= paginate(@current_page, @page_count, :url => params).html_safe %>
@@ -101,14 +100,22 @@
                 <% @objects.each_with_index do |object, index| %>
                 <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
                   <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-                  <td class="other left"><%= link_to("...", other_left, remote: true) %></td>
+                  <td class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>
+                    <%= link_to("...", other_left, :remote => true) %>
+                  </td>
                   <% properties.map{|property| property.bind(:object, object)}.each do |property| %>
                     <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
                   <% end %>
                   <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
-                  <td class="other right"><%= link_to("...", other_right, remote: true)%></td>
-                  <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-                  <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
+                  <td class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>
+                    <%= link_to("...", other_right, :remote => true)%>
+                  </td>
+                  <td class="action edit">
+                    <%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :edit, @abstract_model, object %>
+                  </td>
+                  <td class="action delete">
+                    <%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :delete, @abstract_model, object %>
+                  </td>
                   <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
                 </tr>
                 <% end %>

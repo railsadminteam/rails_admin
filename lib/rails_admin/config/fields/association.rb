@@ -17,13 +17,6 @@ module RailsAdmin
           @properties
         end
 
-        # Accessor for field's label.
-        #
-        # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:label) do
-          association[:pretty_name]
-        end
-
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.

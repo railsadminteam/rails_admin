@@ -5,13 +5,11 @@
 
 .grid thead th {
   border-bottom:2px solid #b9b9b9;
-  padding: 9px;
+  padding: 9px 0;
   text-align:center;
 }
 
 .grid thead th a {
-  padding-right: 20px;
-  padding-left: 10px;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: right;
@@ -31,16 +29,10 @@
   margin-bottom:-5px;
 }
 
-.grid tbody .date {
-  white-space: nowrap;
-}
-
-.grid tbody .datetime {
-  white-space: nowrap;
-}
-
-.grid tbody .time {
-  background:#F99;
+.grid tbody .date,
+.grid tbody .datetime,
+.grid tbody .time,
+.grid tbody .timestamp {
   white-space: nowrap;
 }
 
@@ -85,8 +77,8 @@
 
 .grid tbody td {
   border-bottom:1px solid #b9b9b9;
-  padding: 9px;
-  text-align: center;
+  padding: 9px 0;
+  text-align:center;
 }
 
 .grid tbody .even {

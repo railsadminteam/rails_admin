@@ -15,7 +15,6 @@ module RailsAdmin
 
         def self.inherited(klass)
             klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
-            klass.instance_variable_set("@column_width", 110)
             klass.instance_variable_set("@searchable", false)
             klass.instance_variable_set("@sortable", true)
             klass.instance_variable_set("@view_helper", :text_field)
@@ -97,8 +96,6 @@ module RailsAdmin
         register_instance_option(:length) do
           properties[:length]
         end
-
-        register_instance_option(:parse_input)
 
         register_instance_option(:partial) do
           :form_field

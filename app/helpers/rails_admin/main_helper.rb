@@ -39,7 +39,7 @@ module RailsAdmin
       # loop through properties
       properties.each do |property|
         # get width for the current property
-        width = property.column_width
+        width = property.column_width || 120
 
         # if properties that were gathered so far have the width
         # over 697 make a set for them
@@ -76,11 +76,12 @@ module RailsAdmin
 
       properties.each do |property|
         property_type = property.column_css_class
-        property_width = property.column_width
-        style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
-        style[property_type][:size] += per_property
-        style[property_type][:occ] += 1
-        style[property_type][:width] = property_width + style[property_type][:size] / style[property_type][:occ]
+        if width = property.column_width
+          style[property_type] ||= {:size => 0, :occ => 0, :width => 0}
+          style[property_type][:size] += per_property
+          style[property_type][:occ] += 1
+          style[property_type][:width] = width + style[property_type][:size] / style[property_type][:occ]
+        end
       end
 
       other = []

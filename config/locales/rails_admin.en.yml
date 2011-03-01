@@ -27,7 +27,7 @@ en:
       select_action: "Select"
       delete_selected: "Delete selected"
       add_new: "Add new"
-      search_btn: "SEARCH"
+      search: "Search"
       select: "Select %{name} to edit"
       show_all: "Show all"
     new:

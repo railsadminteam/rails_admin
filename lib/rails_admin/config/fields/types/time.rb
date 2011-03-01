@@ -8,17 +8,21 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 60
-          @datepicker_options = {
+          @format = :short
+          @i18n_scope = [:time, :formats]
+          @js_plugin_options = {
             "showDate" => false,
           }
-          @i18n_scope = [:time, :formats]
 
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
+          def parse_input(params)
+            params[name] = self.class.normalize(params[name], localized_time_format) if params[name]
+          end
+
           register_instance_option(:strftime_format) do
-            "%I:%M%p"
+            (localized_format.include? "%p") ? "%I:%M %p" : "%H:%M"
           end
         end
       end

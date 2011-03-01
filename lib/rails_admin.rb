@@ -2,6 +2,7 @@ require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
 require 'rails_admin/abstract_history'
 require 'rails_admin/config'
+require 'rails_admin/authorization_adapters/cancan_adapter'
 
 module RailsAdmin
   class AuthenticationNotConfigured < StandardError; end
@@ -69,7 +70,7 @@ module RailsAdmin
   end
 
   # Setup authorization to be run as a before filter
-  # This is run inside the controller instance so you can setup any authorization you need to
+  # This is run inside the controller instance so you can setup any authorization you need to.
   #
   # By default, there is no authorization.
   #
@@ -78,9 +79,21 @@ module RailsAdmin
   #     redirect_to root_path unless warden.user.is_admin?
   #   end
   #
+  # To use an authorization adapter, pass the name of the adapter. For example,
+  # to use with CanCan[https://github.com/ryanb/cancan], pass it like this.
+  #
+  # @example CanCan
+  #   RailsAdmin.authorize_with :cancan
+  #
+  # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
+  #
   # @see RailsAdmin::DEFAULT_AUTHORIZE
-  def self.authorize_with(&blk)
-    @authorize = blk if blk
+  def self.authorize_with(adapter = nil, &blk)
+    if adapter == :cancan
+      @authorize = Proc.new { @authorization_adapter = AuthorizationAdapters::CanCanAdapter.new(self) }
+    else
+      @authorize = blk if blk
+    end
     @authorize || DEFAULT_AUTHORIZE
   end
 

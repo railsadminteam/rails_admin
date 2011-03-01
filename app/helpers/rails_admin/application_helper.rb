@@ -151,5 +151,8 @@ module RailsAdmin
       b.join(" ")
     end
 
+    def authorized?(*args)
+      @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
+    end
   end
 end

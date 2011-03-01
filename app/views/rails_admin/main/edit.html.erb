@@ -12,9 +12,11 @@
               <li>
                <%= link_to t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => 'ra-button' %>
               </li>
+              <% if authorized? :delete, @abstract_model, @object %>
               <li>
                <%= link_to t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => 'ra-button' %>
               </li>
+              <% end %>
             </ul>
           </div>
           <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do |form| %>

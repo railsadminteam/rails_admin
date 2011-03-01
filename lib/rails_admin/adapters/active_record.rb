@@ -23,41 +23,40 @@ module RailsAdmin
         else
           nil
         end
-      # TODO: ActiveRecord::Base.find_by_id will never raise RecordNotFound, will it?
-      rescue ::ActiveRecord::RecordNotFound
-        nil
       end
 
-      def get_bulk(ids)
-        model.find(ids)
-      rescue ::ActiveRecord::RecordNotFound
-        nil
+      def get_bulk(ids, scope = nil)
+        scope ||= model
+        scope.find_all_by_id(ids)
       end
 
-      def count(options = {})
-        model.count(options.reject{|key, value| [:sort, :sort_reverse].include?(key)})
+      def count(options = {}, scope = nil)
+        scope ||= model
+        scope.count(options.reject{|key, value| [:sort, :sort_reverse].include?(key)})
       end
 
-      def first(options = {})
-        model.first(merge_order(options))
+      def first(options = {}, scope = nil)
+        scope ||= model
+        scope.first(merge_order(options))
       end
 
-      def all(options = {})
-        model.all(merge_order(options))
+      def all(options = {}, scope = nil)
+        scope ||= model
+        scope.all(merge_order(options))
       end
 
-      def paginated(options = {})
+      def paginated(options = {}, scope = nil)
         page = options.delete(:page) || 1
         per_page = options.delete(:per_page) || RailsAdmin::Config::Sections::List.default_items_per_page
 
-        page_count = (count(options).to_f / per_page).ceil
+        page_count = (count(options, scope).to_f / per_page).ceil
 
         options.merge!({
           :limit => per_page,
           :offset => (page - 1) * per_page
         })
 
-        [page_count, all(options)]
+        [page_count, all(options, scope)]
       end
 
       def create(params = {})
@@ -68,8 +67,9 @@ module RailsAdmin
         RailsAdmin::AbstractObject.new(model.new)
       end
 
-      def destroy(ids)
-        model.destroy(ids)
+      def destroy(ids, scope = nil)
+        scope ||= model
+        scope.destroy_all(:id => ids)
       end
 
       def destroy_all!
