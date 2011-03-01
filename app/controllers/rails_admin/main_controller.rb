@@ -64,7 +64,7 @@ module RailsAdmin
     def create
       @modified_assoc = []
       @object = @abstract_model.new
-      @model_config.create.fields.each {|f| f.parse_input(@attributes) }
+      @model_config.create.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
       @object.attributes = @attributes
       @object.associations = params[:associations]
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
@@ -104,7 +104,7 @@ module RailsAdmin
 
       @old_object = @object.clone
 
-      @model_config.create.fields.each {|f| f.parse_input(@attributes) }
+      @model_config.update.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
 
       @object.attributes = @attributes
       @object.associations = params[:associations]

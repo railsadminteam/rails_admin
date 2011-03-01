@@ -9,8 +9,8 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           @column_width = 170
-          @datepicker_options = {}
           @format = :long
+          @js_plugin_options = {}
           @i18n_scope = [:time, :formats]
         end
       end

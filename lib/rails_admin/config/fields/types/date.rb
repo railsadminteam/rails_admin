@@ -9,11 +9,15 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           @column_width = 120
-          @datepicker_options = {
+          @format = :long
+          @js_plugin_options = {
             "showTime" => false,
           }
-          @format = :long
           @i18n_scope = [:date, :formats]
+
+          def parse_input(params)
+            params[name] = self.class.normalize(params[name], localized_date_format) if params[name]
+          end
         end
       end
     end
