@@ -7,7 +7,6 @@
         </div>
         <div class="ra-block-content">
           <div class="ra-block-toolbar ui-state-highlight clearfix">
-            <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
             <ul>
               <li>
                <%= link_to t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => 'ra-button' %>
@@ -19,6 +18,7 @@
               <% end %>
             </ul>
           </div>
+          <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
           <%= form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do |form| %>
             <% @model_config.edit.with(:object => @object).visible_groups.each do |fieldset| %>
               <%= render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object } -%>
