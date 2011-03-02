@@ -13,8 +13,11 @@
   $.widget("ra.filteringMultiselect", {
     _cache: {},
     options: {
+      createQuery: function(query) {
+        return { query: query }
+      },
       searchDelay: 400,
-      url: null
+      source: null
     },
 
     _create: function() {
@@ -105,28 +108,17 @@
 
         var search = function() {
 
-          var html = '';
+          widget._query(widget.filter.val(), function(matches) {
+            var html = "";
 
-          if ("" == widget.filter.val()) {
-
-            for (key in widget._cache) {
-              if (!widget._cache[key][1]) {
-                html += '<option value="' + key + '">' + widget._cache[key][0] + '</option>';
+            for (key in matches) {
+              if (!widget.selected(matches[key]["id"])) {
+                html += '<option value="' + matches[key]["id"] + '">' + matches[key]["label"] + '</option>';
               }
-            }
+            }            
 
-          } else {
-
-            var query = new RegExp(widget.filter.val() + '.*', 'i');
-
-            for (key in widget._cache) {
-              if (!widget._cache[key][1] && query.test(widget._cache[key][0])) {
-                html += '<option value="' + key + '">' + widget._cache[key][0] + '</option>';
-              }
-            };
-          }
-
-          widget.collection.html(html);
+            widget.collection.html(html);
+          });
         }
 
         timeout = setTimeout(search, widget.options.searchDelay);
@@ -138,10 +130,10 @@
 
       this.element.find("option").each(function(i, option) {
         if (option.selected) {
-          widget._cache[option.value] = [option.innerHTML, true];
+          widget._cache[option.value] = option.innerHTML;
           $(option).clone().appendTo(widget.selection).attr("selected", false);
         } else {
-          widget._cache[option.value] = [option.innerHTML, false];
+          widget._cache[option.value] = option.innerHTML;
           $(option).clone().appendTo(widget.collection).attr("selected", false);
         }
       });
@@ -150,19 +142,68 @@
     _deSelect: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        widget._cache[option.value][1] = false;
         widget.element.find("option[value=" + option.value + "]").removeAttr("selected");
       });
       $(options).appendTo(this.collection).attr('selected', false);
     },
 
+    _query: function(query, success) {
+      
+      var matches = [];
+
+      if (query == "") {
+
+        if (!this.options.source) {
+          for (key in this._cache) {
+            matches.push({id: key, label: this._cache[key]});
+          }
+        }
+
+        success.apply(this, [matches]);
+      
+      } else {
+
+        if (this.options.source) {
+
+          $.ajax({
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader("Accept", "application/json");
+            },
+            url: this.options.source, 
+            data: this.options.createQuery(query), 
+            success: success
+          });
+          
+        } else {
+
+          query = new RegExp(query + '.*', 'i');
+          
+          for (key in this._cache) {
+            if (query.test(this._cache[key])) {
+              matches.push({id: key, label: this._cache[key]});
+            }
+          }
+
+          success.apply(this, [matches]);
+        }
+      }
+    },
+
     _select: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        widget._cache[option.value][1] = true;
-        widget.element.find("option[value=" + option.value + "]").attr("selected", "selected");
+        var el = widget.element.find("option[value=" + option.value + "]");
+        if (el.length) {
+          el.attr("selected", "selected");
+        } else {
+          widget.element.append($('<option value="' + option.value + '" selected="selected"></option>'));
+        }
       });
       $(options).appendTo(this.selection).attr('selected', false);
+    },
+
+    selected: function(value) {
+      return this.element.find("option[value=" + value + "]").attr("selected");
     },
 
     destroy: function() {

@@ -1,11 +1,20 @@
 <%
   name = field.association[:name]
-  collection = field.associated_collection.sort_by{|object| object.first}
+  xhr = field.associated_collection_count > 100
 
   if params["associations"]
     selected = params["associations"][name].to_a.map{|o| o.to_i}
   else
     selected = field.bindings[:object].send(name).map{|o| o.id }
+  end
+
+  if xhr
+    config = field.associated_model_config
+    collection = config.abstract_model.get_bulk(selected).map do |o|
+      [config.list.with(:object => o).object_label, o.id]
+    end
+  else
+    collection = field.associated_collection.sort_by{|object| object.first}
   end
 
 %>
@@ -22,7 +31,12 @@
                 <% head_javascript do %>
                   $j(document).ready(function($){
                     $("#<%= "associations_#{name}" %>").filteringMultiselect({
-
+                      <% if xhr %>
+                        createQuery: function(query) {
+                          return { filter: { '<%= field.parent.with(:object => field.bindings[:object]).object_label_method %>': query } }
+                        },
+                        source: "<%= rails_admin_list_path(field.associated_model_config.abstract_model.to_param, :compact => true) %>"
+                      <% end %>
                     });
                   });
                 <% end %>

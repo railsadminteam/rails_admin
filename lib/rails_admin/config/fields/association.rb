@@ -32,6 +32,11 @@ module RailsAdmin
           end
         end
 
+        # Reader how many records the associated model has
+        def associated_collection_count
+          associated_model_config.abstract_model.count
+        end
+
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association[:child_model])

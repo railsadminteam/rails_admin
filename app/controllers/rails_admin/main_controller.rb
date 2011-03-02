@@ -243,9 +243,15 @@ module RailsAdmin
       table_name = @abstract_model.model.table_name
 
       filter.each_pair do |key, value|
-        @properties.select{|property| property[:type] == :boolean && property[:name] == key.to_sym}.each do |property|
-          statements << "(#{table_name}.#{key} = ?)"
-          values << (value == "true")
+        if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
+          case field.type
+          when :string, :text
+            statements << "(#{table_name}.#{key} LIKE ?)"
+            values << value + "%"
+          when :boolean
+            statements << "(#{table_name}.#{key} = ?)"
+            values << (value == "true")
+          end
         end
       end
 
