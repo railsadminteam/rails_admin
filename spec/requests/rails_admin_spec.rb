@@ -22,5 +22,14 @@ describe "RailsAdmin" do
       response.should contain("Dashboard")
     end
   end
+  
+  describe "html head" do
+    it "should include the required css and js files" do
+      get rails_admin_dashboard_path
+      
+      response.should have_selector('link[href^="/stylesheets/rails_admin/ra.timeline.css"]')
+      response.should have_selector('script[src^="/javascripts/rails_admin/application.js"]')
+    end
+  end
 
 end
