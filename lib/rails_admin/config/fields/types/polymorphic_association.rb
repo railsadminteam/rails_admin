@@ -17,7 +17,7 @@ module RailsAdmin
           # Accessor whether association is visible or not. By default
           # association checks that any of the child models are included in
           # configuration.
-          register_instance_option(:visible?) do |p|
+          register_instance_option(:visible?) do
             associated_model_config.length > 0
           end
 
