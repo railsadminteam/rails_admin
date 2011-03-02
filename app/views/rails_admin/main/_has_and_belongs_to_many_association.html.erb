@@ -1,6 +1,6 @@
 <%
   association_name = field.association[:name]
-  collection = field.associated_collection.sort_by{|object| object.first}
+  collection = field.associated_collection(authorization_adapter).sort_by{|object| object.first}
 
   # for edit action
   selected = field.bindings[:object].send(association_name).map{|object|
