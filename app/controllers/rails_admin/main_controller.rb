@@ -148,7 +148,7 @@ module RailsAdmin
     def destroy
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
-      @object = @object.destroy
+      @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
       AbstractHistory.create_history_item("Destroyed #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
