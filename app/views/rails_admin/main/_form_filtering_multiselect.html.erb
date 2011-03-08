@@ -14,7 +14,7 @@
       [config.list.with(:object => o).object_label, o.id]
     end
   else
-    collection = field.associated_collection.sort_by{|object| object.first}
+    collection = field.associated_collection.sort_by{|object| object.first.to_s}
   end
 
 %>
