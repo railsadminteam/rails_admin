@@ -52,5 +52,5 @@ describe "RailsAdmin" do
       response.should have_tag("select#comment_commentable_id")
     end
   end
-  
+
 end
