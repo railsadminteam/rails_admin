@@ -8,7 +8,7 @@ module RailsAdmin
       mattr_reader :default_factory
       @@default_factory = lambda do |parent, properties, fields|
         # Belongs to association need special handling as they also include a column in the table
-        if association = parent.abstract_model.belongs_to_associations.find {|a| a[:child_key].first == properties[:name]}
+        if association = parent.abstract_model.belongs_to_associations.find {|a| a[:child_key].first.to_s == properties[:name].to_s}
           type = association[:options][:polymorphic] ? :polymorphic_association : :belongs_to_association
           fields << RailsAdmin::Config::Fields::Types.load(type).new(parent, properties[:name], properties, association)
           # Polymorphic associations type column should be hidden
