@@ -22,7 +22,7 @@ describe "RailsAdmin" do
       response.should contain("Dashboard")
     end
   end
-  
+
   describe "html head" do
     it "should include the required css and js files" do
       get rails_admin_dashboard_path
@@ -32,4 +32,25 @@ describe "RailsAdmin" do
     end
   end
 
+  describe "polymorphic associations" do
+    before :each do
+      @team = RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Commentable Team", :manager => "Manager", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @comment = RailsAdmin::AbstractModel.new("Comment").create(:content => "Comment on a team", :commentable => @team)
+    end
+
+    it "should work like belongs to associations in the list view" do
+      get rails_admin_list_path(:model_name => "comment")
+
+      response.body.should contain(@team.name)
+    end
+
+    it "should be editable" do
+      get rails_admin_edit_path(:model_name => "comment", :id => @comment.id)
+
+      response.should have_tag("legend", :content => "Commentable")
+      response.should have_tag("select#comment_commentable_type")
+      response.should have_tag("select#comment_commentable_id")
+    end
+  end
+  
 end
