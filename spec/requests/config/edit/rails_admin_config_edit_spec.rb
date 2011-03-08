@@ -371,8 +371,8 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     describe "a datetime field" do
 
-      it "should should default to %B %d, %Y %H:%M" do
-        get rails_admin_new_path(:model_name => "field_tests")
+      it "should default to %B %d, %Y %H:%M" do
+        get rails_admin_new_path(:model_name => "field_test")
 
         fill_in "field_test[datetime_field]", :with => @time.strftime("%B %d, %Y %H:%M")
         click_button "Save"
@@ -391,7 +391,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_tests")
+        get rails_admin_new_path(:model_name => "field_test")
 
         fill_in "field_test[datetime_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
         click_button "Save"
@@ -410,7 +410,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_tests")
+        get rails_admin_new_path(:model_name => "field_test")
 
         fill_in "field_test[datetime_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
         click_button "Save"
@@ -423,7 +423,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     describe "a timestamp field" do
 
-      it "should should default to %B %d, %Y %H:%M" do
+      it "should default to %B %d, %Y %H:%M" do
         get rails_admin_new_path(:model_name => "field_test")
 
         fill_in "field_test[timestamp_field]", :with => @time.strftime("%B %d, %Y %H:%M")
@@ -475,7 +475,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     describe "a time field" do
 
-      it "should should default to %H:%M" do
+      it "should default to %H:%M" do
         get rails_admin_new_path(:model_name => "field_test")
 
         fill_in "field_test[time_field]", :with => @time.strftime("%H:%M")
@@ -508,7 +508,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     describe "a date field" do
 
-      it "should should default to %B %d, %Y" do
+      it "should default to %B %d, %Y" do
         get rails_admin_new_path(:model_name => "field_test")
 
         fill_in "field_test[date_field]", :with => @time.strftime("%B %d, %Y")
