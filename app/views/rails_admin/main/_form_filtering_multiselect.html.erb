@@ -33,7 +33,7 @@
                     $("#<%= "associations_#{name}" %>").filteringMultiselect({
                       <% if xhr %>
                         createQuery: function(query) {
-                          return { filter: { '<%= field.parent.with(:object => field.bindings[:object]).object_label_method %>': query } }
+                          return { filter: { '<%= field.associated_label_method %>': query + '%' } }
                         },
                         source: "<%= rails_admin_list_path(field.associated_model_config.abstract_model.to_param, :compact => true) %>"
                       <% end %>

@@ -42,6 +42,12 @@ module RailsAdmin
           @associated_model_config ||= RailsAdmin.config(association[:child_model])
         end
 
+        # Reader for the association's child model object's label method
+        def associated_label_method
+          object = associated_model_config.abstract_model.new
+          associated_model_config.list.with(:object => object).object_label_method
+        end
+
         # Reader for the association's child key
         def child_key
           association[:child_key].first

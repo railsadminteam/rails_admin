@@ -247,7 +247,7 @@ module RailsAdmin
           case field.type
           when :string, :text
             statements << "(#{table_name}.#{key} LIKE ?)"
-            values << value + "%"
+            values << value
           when :boolean
             statements << "(#{table_name}.#{key} = ?)"
             values << (value == "true")
