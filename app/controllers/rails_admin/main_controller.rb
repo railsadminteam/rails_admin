@@ -215,17 +215,29 @@ module RailsAdmin
       {:sort_reverse => sort_reverse}
     end
 
+
     def get_query_hash(options)
       query = params[:query]
       return {} unless query
+      field_search = !!query.index(":")
       statements = []
       values = []
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
-
-      @properties.select{|property| property[:type] == :string}.each do |property|
-        statements << "(#{table_name}.#{property[:name]} LIKE ?)"
-        values << "%#{query}%"
+      # field search allows a search of the type "<fieldname>:<query>"
+      if field_search
+        field, query = query.split ":"
+        return {} unless field && query
+        @properties.select{|property| property[:name] == field.to_sym}.each do |property|
+          statements << "(#{table_name}.#{property[:name]} LIKE ?)"
+          values << "%#{query}%"
+        end
+      # search over all string fields  
+      else
+        @properties.select{|property| property[:type] == :string }.each do |property|
+          statements << "(#{table_name}.#{property[:name]} LIKE ?)"
+          values << "%#{query}%"
+        end
       end
 
       conditions[0] += " AND " unless conditions == [""]
