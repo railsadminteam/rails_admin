@@ -21,7 +21,9 @@
     },
 
     _create: function() {
-      if (!this.options.url) alert("Timeline widget needs to be initialized with url option");
+      if (!this.options.url) {
+        alert("Timeline widget needs to be initialized with url option");
+      }
 
       this._build();
       this._bindEvents();
@@ -38,13 +40,13 @@
 
       this.handle = $('<div class="handle"></div>').appendTo(this.element);
 
-      this.handleOffset = parseInt(this.element.css("padding-left"));
+      this.handleOffset = parseInt(this.element.css("padding-left"), 10);
 
       this._moveHandleToRight();
     },
 
     _bindEvents: function() {
-      var currentMonthIndex = 0
+      var currentMonthIndex = 0,
           widget = this;
 
       this.handle.draggable({
@@ -53,10 +55,10 @@
         drag: function(event, ui) {
           var i = Math.floor((ui.position.left - widget.handleOffset) / widget.monthWidth);
 
-          if (i != currentMonthIndex) {
+          if (i !== currentMonthIndex) {
               currentMonthIndex = i;
 
-              var el = $(widget.months.children().get(i));
+              var el = $(widget.months.children().get(i)),
                   month = el.attr("data-month"),
                   year = el.attr("data-year");
 
@@ -97,18 +99,18 @@
 
     _getNextMonthDate: function() {
         var date = this._getCurrentDate();
-        date.setMonth(widget.options.date.getMonth() + 1);
+        date.setMonth(this.options.date.getMonth() + 1);
         return date;
     },
 
     _getPreviousMonthDate: function() {
         var date = this._getCurrentDate();
-        date.setMonth(widget.options.date.getMonth() - 1);
+        date.setMonth(this.options.date.getMonth() - 1);
         return date;
     },
 
     _moveHandleToLeft: function() {
-      this.handle.css("left", 0 + this.handleOffset);
+      this.handle.css("left", this.handleOffset);
     },
 
     _moveHandleToRight: function() {
@@ -126,7 +128,7 @@
       while (i--) {
 
         this.months.prepend(
-          '<li style="width:' + this.monthWidth + 'px" data-year="' + date.getFullYear() + '" data-month="' + (parseInt(date.getMonth()) + 1) + '">' +
+          '<li style="width:' + this.monthWidth + 'px" data-year="' + date.getFullYear() + '" data-month="' + (parseInt(date.getMonth(), 10) + 1) + '">' +
             '<span class="month">' + this.getMonthName(date) + '</span>' +
             '<span class="bar"><span></span</span>' +
           '</li>'
@@ -157,7 +159,7 @@
 
           var getHistoryIndicator = function(history) {
             return widget.months.find("li[data-year=" + history.year + "][data-month=" + history.month + "] .bar span").first();
-          }
+          };
 
           $(data).each(function(i, e) {
             if (getHistoryIndicator(e.history).length && e.history.number > max) {
@@ -190,9 +192,9 @@
     },
 
     getBarClass: function(percent) {
-      if (percent < .33) {
+      if (percent < 0.33) {
         return "low";
-      } else if (percent < .67) {
+      } else if (percent < 0.67) {
         return "medium";
       } else {
         return "high";
