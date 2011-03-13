@@ -49,9 +49,9 @@
         right: $('<div class="ra-multiselect-column ra-multiselect-right">')
       };
 
-      for (i in this.columns) { 
+      for (i in this.columns) {
         if (this.columns.hasOwnProperty(i)) {
-          this.wrapper.append(this.columns[i]); 
+          this.wrapper.append(this.columns[i]);
         }
       }
 
