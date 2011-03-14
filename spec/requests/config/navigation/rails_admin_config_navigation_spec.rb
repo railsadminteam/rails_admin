@@ -46,6 +46,16 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
+    it 'should display edited model name in model name column' do
+      RailsAdmin.config Fan do
+        label_for_navigation "NewFan"
+      end
+      get rails_admin_dashboard_path
+      response.should have_tag("td.modelNameRow") do |model_name_cells|
+        model_name_cells.should have_tag("a[href='/admin/fans']", :content => "NewFan")
+      end
+    end
+
     it "should be editable via shortcut" do
       RailsAdmin.config Fan do
         label_for_navigation "Fan test 2"
