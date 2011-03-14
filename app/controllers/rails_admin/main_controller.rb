@@ -111,7 +111,7 @@ module RailsAdmin
     def delete
       @authorization_adapter.authorize(:delete, @abstract_model, @object) if @authorization_adapter
 
-      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.navigation.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
@@ -131,7 +131,7 @@ module RailsAdmin
     def bulk_delete
       @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
 
-      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.navigation.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'

@@ -24,7 +24,7 @@ module RailsAdmin
 
     def for_model
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.history.page_name", :name => @model_config.list.label)
+      @page_name = t("admin.history.page_name", :name => @model_config.navigation.label)
       @general = true
 
       @page_count, @history = AbstractHistory.history_for_model @abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]
