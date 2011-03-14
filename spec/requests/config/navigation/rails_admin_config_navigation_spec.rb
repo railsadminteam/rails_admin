@@ -56,6 +56,24 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
+    it 'should use edited model name in breadcrumbs' do
+      RailsAdmin.config Fan do
+        label_for_navigation "NewFan"
+      end
+      get rails_admin_list_path(:model_name => 'fans')
+      response.should have_tag(".breadcrumb li") do |model_name_cells|
+        model_name_cells.should have_tag("span", :content => "NewFan")
+      end
+    end
+
+    it 'should use edited model name in @page_name' do
+      RailsAdmin.config Fan do
+        label_for_navigation "NewFan"
+      end
+      get rails_admin_list_path(:model_name => 'fans')
+      assigns[:page_name].should =~ /NewFan/i
+    end
+
     it "should be editable via shortcut" do
       RailsAdmin.config Fan do
         label_for_navigation "Fan test 2"

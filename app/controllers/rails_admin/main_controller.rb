@@ -301,7 +301,7 @@ module RailsAdmin
       @record_count = @abstract_model.count(options, scope)
 
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)
+      @page_name = t("admin.list.select", :name => @model_config.navigation.label.downcase)
     end
 
     def associations_hash

@@ -43,7 +43,7 @@
           <% if @history %>
           <li>
             &rsaquo;
-            <%= link_to(@model_config.list.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
+            <%= link_to(@model_config.navigation.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
           </li>
           <li>
             &rsaquo;
@@ -52,7 +52,7 @@
           <% else %>
            <li>
              &rsaquo;
-            <span><%= @model_config.list.label %></span>
+            <span><%= @model_config.navigation.label %></span>
            </li>
           <% end%>
         </ul>
