@@ -90,6 +90,13 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
     RailsAdmin.config do |config|
       config.excluded_models << ClassName
     end
+    
+You can include exclusively models from RailsAdmin by appending those models to `exclusive_models`:
+
+    RailsAdmin.config do |config|
+      config.exclusive_models << ClassName
+    end
+
 
 ### Navigation ###
 
