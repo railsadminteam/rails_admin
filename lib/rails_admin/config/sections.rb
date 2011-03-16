@@ -11,8 +11,8 @@ module RailsAdmin
     #
     # Each section's class object can store generic configuration about that section (such as the
     # number of visible tabs in the main navigation), while the instances (accessed via model
-    # configuration objects) store model specific configuration (such as the label of the
-    # model to be used as the title in the main navigation tabs).
+    # configuration objects) store model specific configuration (such as the visibility of the
+    # model).
     module Sections
       def self.included(klass)
         # Register accessors for all the sections in this namespace
@@ -28,8 +28,9 @@ module RailsAdmin
             @sections[name]
           end
           # Register a shortcut to define the model's label for each section.
-          klass.send(:define_method, "label_for_#{name}") do |*args, &block|
-            send(name).label(block ? block : args[0])
+          klass.send(:define_method, "label_for_#{name}") do
+            # TODO: Remove this warning in the next release, after people have updated their applications
+            $stderr.puts("WARNING: label_for_#{name} has been removed. This configuration will be ignored. Model names can be configured with 'label' and section-specific names are no longer supported. See README for details.")
           end
           # Register a shortcut to hide the model for each section.
           # NOTE: "hide_in_" is deprecated, use "hide_from_" instead.
