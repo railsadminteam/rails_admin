@@ -24,11 +24,23 @@ describe "RailsAdmin" do
   end
 
   describe "html head" do
-    it "should include the required css and js files" do
-      get rails_admin_dashboard_path
-      
-      response.should have_selector('link[href^="/stylesheets/rails_admin/ra.timeline.css"]')
-      response.should have_selector('script[src^="/javascripts/rails_admin/application.js"]')
+    before { get rails_admin_dashboard_path }
+    subject { response }
+    
+    # Note: the [href^="/sty... syntax matches the start of a value. The reason
+    # we just do that is to avoid being confused by rails' asset_ids.
+    it "should load stylesheets" do
+      should have_selector('link[href^="/stylesheets/rails_admin/ra.timeline.css"]')
+    end
+    
+    it "should load javascript files" do
+      scripts = %w[ /javascripts/rails_admin/application.js
+                http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
+                http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js ]
+
+      scripts.each do |script|
+        should have_selector(%Q{script[src^="#{script}"]})
+      end
     end
   end
 
