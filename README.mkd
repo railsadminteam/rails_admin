@@ -33,7 +33,7 @@ or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freeno
 API Update Note
 ---------------
 The ability to set model labels for each section (list, navigation, update, ...) has been removed,
-as it was deemed unnecessarily granular and was not fully honored all displays.
+as it was deemed unnecessarily granular and was not fully honored in all displays.
 That also means that the methods `label_for_navigation`, etc. are no longer functional. They print a warning at the moment.
 See details in the examples below for the currently supported way to label models.
 This change was motivated by the conversation following a [bug report](https://github.com/sferik/rails_admin/issues/319/#issue/319/comment/875868)
@@ -87,6 +87,7 @@ configuration DSL which allows you to customize many aspects of the interface.
 The configuration code should be placed in an initializer file, for example:
     config/initializers/rails_admin.rb
 
+
 ### General
 
 You can customize authentication by providing a custom block for `RailsAdmin.authenticate_with`.
@@ -99,6 +100,58 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
     RailsAdmin.config do |config|
       config.excluded_models << ClassName
     end
+
+
+### Model Class and Instance Labels ###
+
+**Setting the model's label**
+
+If you need to customize the label of the model, use:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        label "List of teams"
+      end
+    end
+
+This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
+Dashboard page, list pages, etc.
+
+**The object_label method**
+
+The model configuration has another option `object_label` which configures
+the title display of a single database record, i.e. an instance of a model.
+
+By default it tries to call "name" or "title" methods on the record in question. If the object responds to neither,
+then the label will be constructed from the model's classname appended with its
+database identifier. You can add label methods (or replace the default [:name, :title]) with:
+
+    RailsAdmin.config {|c| c.label_methods << :description}
+
+This `object_label` value is used in a number of places in RailsAdmin--for instance as the
+output of belongs to associations in the listing views of related models, as
+the option labels of the relational fields' input widgets in the edit views of
+related models and as part of the audit information stored in the history
+records--so keep in mind that this configuration option has widespread
+effects.
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        object_label do
+          "#{bindings[:object].name} - #{bindings[:object].league.name}"
+        end
+      end
+    end
+
+This would output "Team's name - Team's league's name" in all the places
+mentioned in paragraph above example.
+
+*Difference between `label` and `object_label`*
+
+`label` and `object_label` are both model configuration options. `label` is used
+whenever Rails Admin refers to a model class, while `object_label` is used whenever
+Rails Admin refers to an instance of a model class (representing a single database record).
+
 
 ### Navigation ###
 
@@ -170,54 +223,6 @@ Both also accept a block:
  hide_in_navigation but that name is now deprecated - you should
  change your code to use hide_from_navigation.
 
-**Setting the model's label**
-
-If you need to customize the label of the model, use:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        label "List of teams"
-      end
-    end
-
-This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
-Dashboard page, list pages, etc.
-
-**The object_label method**
-
-The model configuration has another option `object_label` which configures
-the title display of a single database record.
-
-By default it queries if the record in question has columns named "name" or
-"title". If neither is found it returns the model's classname appended with its
-database identifier. You can add label methods (or replace the default [:name, :title]) with:
-
-    RailsAdmin.config {|c| c.label_methods << :description}
-
-This value is used in a number of places in RailsAdmin - for instance as the
-output of belongs to associations in the listing views of related models, as
-the option labels of the relational fields' input widgets in the edit views of
-related models and as part of the audit information stored in the history
-records - so keep in mind that this configuration option has widespread
-effects.
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        object_label do
-          "#{bindings[:object].name} - #{bindings[:object].league.name}"
-        end
-      end
-    end
-
-This would output "Team's name - Team's league's name" in all the places
-mentioned in paragraph above example.
-
-*Difference between `label` and `object_label`*
-
-`label` and `object_label` are both model configuration options. `label` is used
-whenever Rails Admin refers to a model class, while `object_label` is used whenever
-Rails Admin refers to an instance of a model class (representing a single database record).
-
 **To enable CKEditor for a field**
 
 Configure the model/field like so:
@@ -249,7 +254,8 @@ tabs. Even though this option is not model specific, it shares the same
 semantics as the earlier ones - you could also pass in a block which would be
 evaluated at runtime.
 
-### List view
+
+### List view ###
 
 * Number of items per page
 * Number of items per page per model
