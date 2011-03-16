@@ -10,10 +10,21 @@ module RailsAdmin
 
           @searchable = true
 
+          # Display a colorpicker widget instead of text input.
+          # Todo: refactor to a dedicated field type
+          register_instance_option(:color?) do
+            false
+          end
+
           register_instance_option(:help) do
             text = required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
-            text += " #{length} "
-            text += length == 1 ? I18n.translate("admin.new.one_char") : I18n.translate("admin.new.many_chars")
+
+            # Length requirement isn't necessary to display in case a colorpicker is rendered
+            unless color?
+              text += " #{length} "
+              text += length == 1 ? I18n.translate("admin.new.one_char") : I18n.translate("admin.new.many_chars")
+            end
+
             text
           end
 
@@ -27,8 +38,8 @@ module RailsAdmin
             }
            end
 
-          register_instance_option(:color?) do
-            false
+          register_instance_option(:partial) do
+            color? ? :form_colorpicker : :form_field
           end
         end
       end

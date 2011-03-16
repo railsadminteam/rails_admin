@@ -1,5 +1,5 @@
 <%
-  collection = field.associated_collection.sort_by{|object| object.first}
+  collection = field.associated_collection.sort_by{|object| object.first.to_s }
   selected = field.bindings[:object].send(field.child_key)
 
   if selected.nil? && params["associations"]

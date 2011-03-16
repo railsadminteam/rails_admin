@@ -52,21 +52,21 @@
       dialog.find(".submit").remove();
       dialog.find(".ra-block-content").removeClass("ra-block-content");
 
-      var buttons = {}
+      var buttons = {};
 
       buttons[saveButtonText] = function() {
         dialog.find("form").submit();
-      }
+      };
 
       buttons[cancelButtonText] = function() {
         dialog.dialog("close");
-      }
+      };
 
       dialog.dialog("option", "buttons", buttons);
 
       form.bind("ajax:success", function(e, data, status, xhr) {
         var input = widget.element.prev(), json = $.parseJSON(data);
-        input.append('<option value="' + json["id"] + '">' + json["label"] + '</option>' );
+        input.append('<option value="' + json.id + '">' + json.label + '</option>' );
         dialog.dialog("close");
       });
 
@@ -79,7 +79,7 @@
     _getDialog: function() {
       if (!this.dialog) {
         var widget = this;
-        this.dialog = $('<div class="' + this.options["dialogClass"] + '"></div>').dialog({
+        this.dialog = $('<div class="' + this.options.dialogClass + '"></div>').dialog({
           autoShow: false,
           close: function(e, ui) {
             $(this).dialog("destroy");
@@ -87,7 +87,7 @@
             widget.dialog = null;
           },
           modal: true,
-          width: this.options["width"]
+          width: this.options.width
         });
       }
       return this.dialog;

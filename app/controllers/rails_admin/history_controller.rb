@@ -24,7 +24,7 @@ module RailsAdmin
 
     def for_model
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.history.page_name", :name => @model_config.list.label)
+      @page_name = t("admin.history.page_name", :name => @model_config.label)
       @general = true
 
       @page_count, @history = AbstractHistory.history_for_model @abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]
@@ -34,7 +34,7 @@ module RailsAdmin
 
     def for_object
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.history.page_name", :name => @model_config.list.with(:object => @object).object_label)
+      @page_name = t("admin.history.page_name", :name => @model_config.with(:object => @object).object_label)
       @general = false
 
       @history = AbstractHistory.history_for_object @abstract_model, @object, params[:query], params[:sort], params[:sort_reverse]

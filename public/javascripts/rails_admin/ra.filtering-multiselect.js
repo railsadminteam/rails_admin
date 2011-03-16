@@ -14,7 +14,7 @@
     _cache: {},
     options: {
       createQuery: function(query) {
-        return { query: query }
+        return { query: query };
       },
       searchDelay: 400,
       source: null
@@ -28,7 +28,7 @@
     },
 
     _build: function() {
-      var widget = this;
+      var i;
 
       this.wrapper = $('<div class="ra-multiselect">');
 
@@ -49,7 +49,11 @@
         right: $('<div class="ra-multiselect-column ra-multiselect-right">')
       };
 
-      for (var i in this.columns) { this.wrapper.append(this.columns[i]); };
+      for (i in this.columns) {
+        if (this.columns.hasOwnProperty(i)) {
+          this.wrapper.append(this.columns[i]);
+        }
+      }
 
       this.collection = $('<select multiple="multiple"></select>');
 
@@ -57,20 +61,20 @@
 
       this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>Add all</a>');
 
-      this.columns["left"].append(this.collection)
+      this.columns.left.append(this.collection)
                           .append(this.addAll);
 
       this.add = $('<a class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">Add</a>');
 
       this.remove = $('<a class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">Remove</a>');
 
-      this.columns["center"].append(this.add).append(this.remove);
+      this.columns.center.append(this.add).append(this.remove);
 
       this.selection = $('<select multiple="multiple" class="ra-multiselect-selection"></select>');
 
       this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>Remove all</a>');
 
-      this.columns["right"].append(this.selection)
+      this.columns.right.append(this.selection)
                            .append(this.removeAll);
 
       this.element.css({display: "none"});
@@ -109,17 +113,16 @@
         var search = function() {
 
           widget._query(widget.filter.val(), function(matches) {
-            var html = "";
-
-            for (key in matches) {
-              if (!widget.selected(matches[key]["id"])) {
-                html += '<option value="' + matches[key]["id"] + '">' + matches[key]["label"] + '</option>';
+            var i, html = "";
+            for (i in matches) {
+              if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
+                html += '<option value="' + matches[i].id + '">' + matches[i].label + '</option>';
               }
             }            
 
             widget.collection.html(html);
           });
-        }
+        };
 
         timeout = setTimeout(search, widget.options.searchDelay);
       });
@@ -149,13 +152,16 @@
 
     _query: function(query, success) {
       
-      var matches = [];
+      var i, matches = [];
 
-      if (query == "") {
+      if (query === "") {
 
         if (!this.options.source) {
-          for (key in this._cache) {
-            matches.push({id: key, label: this._cache[key]});
+
+          for (i in this._cache) {
+            if (this._cache.hasOwnProperty(i)) {
+              matches.push({id: i, label: this._cache[i]});
+            }
           }
         }
 
@@ -177,10 +183,10 @@
         } else {
 
           query = new RegExp(query + '.*', 'i');
-          
-          for (key in this._cache) {
-            if (query.test(this._cache[key])) {
-              matches.push({id: key, label: this._cache[key]});
+
+          for (i in this._cache) {
+            if (this._cache.hasOwnProperty(i) && query.test(this._cache[i])) {
+              matches.push({id: i, label: this._cache[i]});
             }
           }
 

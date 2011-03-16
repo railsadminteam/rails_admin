@@ -25,7 +25,7 @@ module RailsAdmin
             return [] if type.nil?
             config = RailsAdmin.config(type)
             config.abstract_model.all.map do |object|
-              [config.list.with(:object => object).object_label, object.id]
+              [config.with(:object => object).object_label, object.id]
             end
           end
 
@@ -35,7 +35,7 @@ module RailsAdmin
 
           def polymorphic_type_collection
             associated_model_config.map do |config|
-              [config.list.label, config.abstract_model.model.name]
+              [config.label, config.abstract_model.model.name]
             end
           end
 
