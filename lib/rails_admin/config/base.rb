@@ -40,7 +40,7 @@ module RailsAdmin
       end
 
       # Register an instance option. Instance option is a configuration
-      # option that stores it's value within an instance variable and is
+      # option that stores its value within an instance variable and is
       # accessed by an instance method. Both go by the name of the option.
       def self.register_instance_option(option_name, scope = self, &default)
         unless options = scope.instance_variable_get("@config_options")

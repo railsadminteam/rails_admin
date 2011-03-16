@@ -28,7 +28,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection
           associated_model_config.abstract_model.all.map do |object|
-            [associated_model_config.list.with(:object => object).object_label, object.id]
+            [associated_model_config.with(:object => object).object_label, object.id]
           end
         end
 
@@ -44,8 +44,7 @@ module RailsAdmin
 
         # Reader for the association's child model object's label method
         def associated_label_method
-          object = associated_model_config.abstract_model.new
-          associated_model_config.list.with(:object => object).object_label_method
+          associated_model_config.object_label_method
         end
 
         # Reader for the association's child key

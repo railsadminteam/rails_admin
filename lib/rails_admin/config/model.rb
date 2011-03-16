@@ -36,6 +36,27 @@ module RailsAdmin
         end
       end
 
+      # The display for a model instance (i.e. a single database record).
+      # Unless configured in a model config block, it'll try to use :name followed by :title methods, then
+      # any methods that may have been added to the label_methods array via Configuration.
+      # Failing all of these, it'll return the class name followed by the model's id.
+      register_instance_option(:object_label) do
+        if method = object_label_method(bindings[:object])
+          bindings[:object].send method
+        else
+          "#{bindings[:object].class.to_s} ##{bindings[:object].try :id}"
+        end
+      end
+
+      def object_label_method(object = nil)
+        object ||= abstract_model.new
+        Config.label_methods.find {|method| object.respond_to? method }
+      end
+
+      register_instance_option(:label) do
+        abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
+      end
+
       # Act as a proxy for the section configurations that actually
       # store the configurations.
       def method_missing(m, *args, &block)
