@@ -19,10 +19,6 @@ module RailsAdmin
     @@exclusive_models = []
     mattr_accessor :exclusive_models
     
-    # Configuration option to specify the hierarchy tree of the navigation bar.
-    @@nav_bar = []
-    mattr_accessor :nav_bar
-
     # Configuration option to specify which method names will be searched for
     # to be used as a label for object records. This defaults to [:name, :title]
     mattr_accessor :label_methods
