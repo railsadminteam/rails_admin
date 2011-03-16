@@ -195,24 +195,6 @@ accessors will be appended with ? whereas the writers will not be. That is, if
 you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
 
-**To enable CKEditor for a field**
-
-Configure the model/field like so:
-
-    RailsAdmin.config do |config|
-
-    config.model MyModel do
-      edit do
-        field :description, :text do
-          ckeditor do 
-            true
-          end
-        end
-      end
-    end
-
-    end
-
 **Configuring the number of visible tabs**
 
 You can configure the number of tabs visible in the top navigation:
@@ -478,6 +460,7 @@ column, you can:
   * Available field types
   * Creating a custom field type
   * Creating a custom field factory
+  * CKEditor integration
 
 **Field groupings**
 
@@ -697,6 +680,25 @@ Then you can use your custom class in a field:
 Type guessing can be overridden by registering a custom field "factory", but
 for now you need to study `lib/rails_admin/config/fields/factories/*` for
 examples if you want to use that mechanism.
+
+**Fields - CKEditor integration**
+
+CKEditor can be enabled on fields of type text:
+
+    RailsAdmin.config do |config|
+      config.model MyModel do
+        edit do
+          field :description, :text do
+            ckeditor true
+          end
+        end
+      end
+    end
+
+In this example we configured a field named description to instantiate as a
+text field and set ckeditor option to true. If the database column is a text
+field, explicitly setting the type as the second argument is not
+necessary.
 
 ### Mass Assignment Operations ###
 
