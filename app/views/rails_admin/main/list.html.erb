@@ -15,7 +15,7 @@
 
 <% head_javascript do %>
   $j(document).ready(function($){
-    $(this).bind("ajax:success", function(e, data, status, xhr){
+    $(this).one("ajax:success", function(e, data, status, xhr){
       $("#content").html(data);
     });
   });

@@ -1,5 +1,7 @@
-var $j = jQuery.noConflict();
+if (typeof($j) === "undefined" && typeof(jQuery) !== "undefined") {
+  var $j = jQuery.noConflict();
+}
 
 $j(document).ready(function($){
-	$(".ra-button").button({});
+  $(".ra-button").not(".ui-button").button({});
 });
