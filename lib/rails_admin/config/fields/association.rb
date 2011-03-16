@@ -27,8 +27,10 @@ module RailsAdmin
         # Reader for a collection of association's child models in an array of
         # [label, id] arrays.
         def associated_collection
-          associated_model_config.abstract_model.all.map do |object|
-            [associated_model_config.list.with(:object => object).object_label, object.id]
+          objects = associated_model_config.abstract_model.all
+          label_method = associated_model_config.list.with(:object => objects.first).object_label_method unless objects.empty?
+          objects.map do |object|
+            [object.send(label_method), object.id]
           end
         end
 
