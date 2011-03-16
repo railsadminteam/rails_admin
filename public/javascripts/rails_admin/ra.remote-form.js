@@ -67,6 +67,7 @@
       form.bind("ajax:success", function(e, data, status, xhr) {
         var input = widget.element.prev(), json = $.parseJSON(data);
         input.append('<option value="' + json.id + '">' + json.label + '</option>' );
+				input[0].value = json.id;
         dialog.dialog("close");
       });
 
