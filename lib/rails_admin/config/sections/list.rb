@@ -9,7 +9,6 @@ module RailsAdmin
       # Configuration of the list view
       class List < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
-        include RailsAdmin::Config::Hideable
 
         def initialize(parent)
           super(parent)

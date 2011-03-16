@@ -16,7 +16,7 @@ module RailsAdmin
       @year = DateTime.now.year
       @history= AbstractHistory.history_for_month(@month, @year)
 
-      @abstract_models = RailsAdmin::AbstractModel.all
+      @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
 
       @most_recent_changes = {}
       @count = {}

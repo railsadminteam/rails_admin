@@ -12,7 +12,6 @@ module RailsAdmin
       class Update < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
         include RailsAdmin::Config::HasGroups
-        include RailsAdmin::Config::Hideable
 
         # Default items per page value used if a model level option has not
         # been configured

@@ -6,6 +6,7 @@ module RailsAdmin
   module Config
     # Model specific configuration object.
     class Model < RailsAdmin::Config::Base
+      include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
 
       def initialize(entity)

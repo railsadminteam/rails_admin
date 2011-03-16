@@ -87,5 +87,14 @@ module RailsAdmin
         @@registry.clear
       end
     end
+
+    # Get all models that are configured as visible sorted by their label.
+    #
+    # @see RailsAdmin::Config::Hideable
+    def self.visible_models
+      RailsAdmin::Config.models.select {|m| m.visible? }.sort do |a, b|
+        a.label.downcase <=> b.label.downcase
+      end
+    end
   end
 end
