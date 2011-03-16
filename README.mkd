@@ -97,7 +97,6 @@ You can include exclusively models from RailsAdmin by appending those models to 
       config.exclusive_models << ClassName
     end
 
-
 ### Navigation ###
 
 * hiding a model
