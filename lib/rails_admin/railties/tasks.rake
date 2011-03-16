@@ -1,5 +1,4 @@
 require 'rails_admin/railties/extratasks'
-require 'pp'
 
 namespace :admin do
   desc "Populate history tabel with a year of data"
