@@ -1,6 +1,5 @@
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/labelable'
 
 module RailsAdmin
   module Config
@@ -8,7 +7,6 @@ module RailsAdmin
       # Configuration of the navigation view
       class Navigation < RailsAdmin::Config::Base
         include RailsAdmin::Config::Hideable
-        include RailsAdmin::Config::Labelable
 
         # Defines the number of tabs to be renderer in the main navigation.
         # Rest of the links will be rendered to a drop down menu.
@@ -21,7 +19,7 @@ module RailsAdmin
         # @see RailsAdmin::Config::Hideable
         def self.visible_models
           RailsAdmin::Config.models.select {|m| m.navigation.visible? }.sort do |a, b|
-            a.navigation.label.downcase <=> b.navigation.label.downcase
+            a.label.downcase <=> b.label.downcase
           end
         end
       end

@@ -26,10 +26,11 @@ module RailsAdmin
 
         # Reader for a collection of association's child models in an array of
         # [label, id] arrays.
+
         def associated_collection(authorization_adapter)
           scope = authorization_adapter && authorization_adapter.query(:read, associated_model_config.abstract_model)
           associated_model_config.abstract_model.all({}, scope).map do |object|
-            [associated_model_config.list.with(:object => object).object_label, object.id]
+            [associated_model_config.with(:object => object).object_label, object.id]
           end
         end
 
