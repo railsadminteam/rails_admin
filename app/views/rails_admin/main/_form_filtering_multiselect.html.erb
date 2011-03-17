@@ -1,4 +1,5 @@
 <%
+  config = field.associated_model_config
   name = field.association[:name]
   xhr = field.associated_collection_count > 100
 
@@ -9,7 +10,6 @@
   end
 
   if xhr
-    config = field.associated_model_config
     collection = config.abstract_model.get_bulk(selected).map do |o|
       [config.list.with(:object => o).object_label, o.id]
     end
@@ -35,8 +35,14 @@
                         createQuery: function(query) {
                           return { filter: { '<%= field.associated_label_method %>': query + '%' } }
                         },
-                        source: "<%= rails_admin_list_path(field.associated_model_config.abstract_model.to_param, :compact => true) %>"
+                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true) %>",
                       <% end %>
+                      regional: {
+                        chooseAll: "<%= t("admin.new.chose_all") %>",
+                        chosen: "<%= t("admin.new.chosen", :name => config.abstract_model.model.model_name.human(:count => 2, :default => config.label.pluralize)) %>",
+                        clearAll:  "<%= t("admin.new.clear_all") %>",
+                        selectChoice: "<%= t("admin.new.select_choice") %>"
+                      }
                     });
                   });
                 <% end %>
