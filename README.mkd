@@ -214,7 +214,7 @@ evaluated at runtime.
 * Number of items per page
 * Number of items per page per model
 * Default sorting
-  * Configure globaly
+  * Configure globally
   * Configure per model
 * Fields
   * Visibility and ordering
@@ -250,7 +250,7 @@ By default, rows sorted by the field `id` in reverse order
 
 You can change default behavior with use two options: `sort_by` and `sort_reverse`
 
-**Default sorting - Configure globaly**
+**Default sorting - Configure globally**
 
     RailsAdmin.config do |config|
       config.models do
@@ -658,7 +658,7 @@ RailsAdmin ships with the following field types:
 
 **Fields - Creating a custom field type**
 
-If you have a reuseable field you can define a custom class extending
+If you have a reusable field you can define a custom class extending
 `RailsAdmin::Config::Fields::Base` and register it for RailsAdmin:
 
     RailsAdmin::Config::Fields::Types::register(:my_awesome_type, MyAwesomeFieldClass)
@@ -807,7 +807,7 @@ Submitting an Issue
 -------------------
 We use the [GitHub issue tracker](http://github.com/sferik/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
-been submitted. You can indicate support for an existing issuse by voting it up. When submitting a
+been submitted. You can indicate support for an existing issue by voting it up. When submitting a
 bug report, please include a [Gist](http://gist.github.com/) that includes a stack trace and any
 details that may be necessary to reproduce the bug, including your gem version, Ruby version, and
 operating system. Ideally, a bug report should include a pull request with failing specs.
