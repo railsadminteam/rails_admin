@@ -42,7 +42,7 @@ module RailsAdmin
           if params[:compact]
             objects = []
             @objects.each do |object|
-               objects << { :id => object.id, :label => @model_config.list.with(:object => object).object_label }
+               objects << { :id => object.id, :label => @model_config.with(:object => object).object_label }
             end
             render :json => objects
           else
