@@ -120,7 +120,7 @@ module RailsAdmin
     def destroy
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
-      @object = @object.destroy
+      @object = destroy_object
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
       AbstractHistory.create_history_item("Destroyed #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
@@ -141,7 +141,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
 
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
-      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
+      @destroyed_objects = bulk_destroy_objects(params[:bulk_ids], scope)
 
       @destroyed_objects.each do |object|
         message = "Destroyed #{@model_config.list.with(:object => object).object_label}"
@@ -164,6 +164,38 @@ module RailsAdmin
     end
 
     private
+
+    # Destroy an object selecting the destroy strategy
+    def destroy_object
+      soft_destroy_method = get_soft_destroy_method
+
+      if soft_destroy_method
+        @object.send soft_destroy_method
+      else
+        @object.destroy
+      end
+    end
+
+    # Destroy bulk objects selecting the destroy strategy
+    def bulk_destroy_objects bulk_ids, scope
+      soft_destroy_method = get_soft_destroy_method
+
+      if soft_destroy_method
+        @destroyed_objects = bulk_soft_destroy(scope, bulk_ids, soft_destroy_method)
+      else
+        @destroyed_objects = @abstract_model.destroy(bulk_ids, scope)
+      end
+    end
+
+    # Performs a soft_destroy on the objects whose IDs are present in the bulk_ids array
+    def bulk_soft_destroy scope, bulk_ids, soft_destroy_method
+      scope ||= @abstract_model.model
+      scope = scope.where(:id => bulk_ids)
+      scope.to_a.each do |object|
+        object.send soft_destroy_method
+      end
+    end
+
 
     def get_bulk_objects
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
@@ -239,6 +271,28 @@ module RailsAdmin
       end
     end
 
+    # If soft_destroy is configured as a Symbol it invokes a method with that name
+    # If soft_destory is not a Symbol it invokes soft_destroy method
+    # Else invokes destroy method
+    def get_soft_destroy_method
+      soft_destroy = @model_config.destroy.soft_destroy
+
+      method = nil
+      if Symbol === soft_destroy
+        method = soft_destroy
+
+      elsif soft_destroy
+        method = :soft_destroy
+      end
+
+      if method
+        return method if @abstract_model.model.instance_methods.include? method
+        raise NoMethodError.new("#{@object} has no method #{soft_destroy}")
+      else
+        return nil
+      end
+    end
+      
     def redirect_to_on_success
       param = @abstract_model.to_param
       pretty_name = @model_config.update.label
