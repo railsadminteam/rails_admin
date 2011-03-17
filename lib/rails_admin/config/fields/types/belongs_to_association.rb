@@ -19,7 +19,7 @@ module RailsAdmin
           register_instance_option(:formatted_value) do
             object = bindings[:object].send(association[:name])
             unless object.nil?
-              RailsAdmin::Config.model(object).with(:object => object).object_label
+              RailsAdmin::Config.model(object).list.with(:object => object).object_label
             else
               nil
             end
@@ -28,7 +28,7 @@ module RailsAdmin
           def associated_collection(authorization_adapter)
             scope = authorization_adapter && authorization_adapter.query(:read, associated_model_config.abstract_model)
             associated_model_config.abstract_model.all({}, scope).map do |object|
-              [associated_model_config.with(:object => object).object_label, object.id]
+              [associated_model_config.list.with(:object => object).object_label, object.id]
             end
           end
 

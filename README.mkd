@@ -30,15 +30,6 @@ Help
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 
-API Update Note
----------------
-The ability to set model labels for each section (list, navigation, update, ...) has been removed,
-as it was deemed unnecessarily granular and was not fully honored in all displays.
-That also means that the methods `label_for_navigation`, etc. are no longer functional. They print a warning at the moment.
-See details in the examples below for the currently supported way to label models.
-This change was motivated by the conversation following a [bug report](https://github.com/sferik/rails_admin/issues/319/#issue/319/comment/875868)
-about label display errors.
-
 Screenshots
 -----------
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
@@ -269,6 +260,7 @@ evaluated at runtime.
   * Sortability
   * Column CSS class
   * Column width
+  * The object_label method
 
 **Number of items per page**
 
@@ -493,6 +485,37 @@ column, you can:
         end
       end
     end
+
+**Fields - The object_label method**
+
+List section has a configuration option `object_label` which configures
+the title of a single database record.
+
+By default it queries if the record in question has columns named "name" or
+"title". If neither is found it returns the model's classname appended with its
+database identifier. You can add label methods (or replace the default [:name, :title]) with:
+
+    RailsAdmin.config {|c| c.label_methods << :description}
+
+This value is used in a number of places in RailsAdmin - for instance as the
+output of belongs to associations in the listing views of related models, as
+the option labels of the relational fields' input widgets in the edit views of
+related models and as part of the audit information stored in the history
+records - so keep in mind that this configuration option has widespread
+effects.
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          object_label do
+            "#{bindings[:object].name} - #{bindings[:object].league.name}"
+          end
+        end
+      end
+    end
+
+This would output "Team's name - Team's league's name" in all the places
+mentioned in paragraph above example.
 
 ### Create and update views
 

@@ -4,7 +4,7 @@
 
   # for edit action
   selected = field.bindings[:object].send(association_name).map{|object|
-    [field.associated_model_config.with(:object => object).object_label, object.id]
+    [field.associated_model_config.list.with(:object => object).object_label, object.id]
   }.sort_by{|object| object.first}
 
   # if error accurs - show the selected associations
