@@ -70,5 +70,18 @@ describe "RailsAdmin Config DSL" do
       config_setup.should_not raise_error
     end
   end
-  
+
+  describe "object_label" do
+    it 'should be configurable' do
+      RailsAdmin.config League do
+        object_label { "League '#{bindings[:object].name}'"}
+      end
+
+      league = RailsAdmin::AbstractModel.new('League').create(:name => "Bundesliga")
+      league.should be_persisted
+
+      RailsAdmin.config('League').with(:object => league).object_label.should == "League 'Bundesliga'"
+    end
+  end
+
 end
