@@ -20,6 +20,11 @@
   height:13px;
 }
 
+.scale .bar {
+  display: block;
+  height: 100%;
+}
+
 .add{
   color:#9a012f;
   font-weight:bold;
