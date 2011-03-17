@@ -46,42 +46,6 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
-    it "should be editable via shortcut" do
-      RailsAdmin.config Fan do
-        label_for_navigation "Fan test 2"
-      end
-      get rails_admin_dashboard_path
-      response.should have_tag("#nav") do |navigation|
-        navigation.should have_tag("li a", :content => "Fan test 2")
-      end
-    end
-
-    it "should be editable via navigation configuration" do
-      RailsAdmin.config Fan do
-        navigation do
-          label "Fan test 3"
-        end
-      end
-      get rails_admin_dashboard_path
-      response.should have_tag("#nav") do |navigation|
-        navigation.should have_tag("li a", :content => "Fan test 3")
-      end
-    end
-
-    it "should be editable with a block via navigation configuration" do
-      RailsAdmin.config Fan do
-        navigation do
-          label do
-            "#{label} test 4"
-          end
-        end
-      end
-      get rails_admin_dashboard_path
-      response.should have_tag("#nav") do |navigation|
-        navigation.should have_tag("li a", :content => "Fan test 4")
-      end
-    end
-
     it "should be hideable" do
       RailsAdmin.config Fan do
         hide
