@@ -50,7 +50,7 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
-      @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       render :layout => 'rails_admin/form'
     end
@@ -66,11 +66,11 @@ module RailsAdmin
       end
       @object.attributes = @attributes
       @object.associations = params[:associations]
-      @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.create").capitalize + " " + @model_config.create.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save
-        AbstractHistory.create_history_item("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
+        AbstractHistory.create_history_item("Created #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         redirect_to_on_success
       else
         render_error
@@ -80,7 +80,7 @@ module RailsAdmin
     def edit
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
 
-      @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/form'
@@ -92,7 +92,7 @@ module RailsAdmin
       @cached_assocations_hash = associations_hash
       @modified_assoc = []
 
-      @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       @old_object = @object.clone
@@ -111,7 +111,7 @@ module RailsAdmin
     def delete
       @authorization_adapter.authorize(:delete, @abstract_model, @object) if @authorization_adapter
 
-      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
@@ -121,9 +121,9 @@ module RailsAdmin
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
       @object = @object.destroy
-      flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.label)
+      flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.list.label)
 
-      AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
+      AbstractHistory.create_history_item("Destroyed #{@model_config.list.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
@@ -131,7 +131,7 @@ module RailsAdmin
     def bulk_delete
       @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
 
-      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.list.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
       render :layout => 'rails_admin/delete'
@@ -144,7 +144,7 @@ module RailsAdmin
       @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
 
       @destroyed_objects.each do |object|
-        message = "Destroyed #{@model_config.with(:object => object).object_label}"
+        message = "Destroyed #{@model_config.list.with(:object => object).object_label}"
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
 
@@ -241,7 +241,7 @@ module RailsAdmin
 
     def redirect_to_on_success
       param = @abstract_model.to_param
-      pretty_name = @model_config.label
+      pretty_name = @model_config.update.label
       action = params[:action]
 
       if params[:_add_another]
@@ -258,7 +258,7 @@ module RailsAdmin
 
     def render_error whereto = :new
       action = params[:action]
-      flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
+      flash.now[:error] = t("admin.flash.error", :name => @model_config.update.label, :action => t("admin.actions.#{action}d"))
       render whereto, :layout => 'rails_admin/form'
     end
 
@@ -301,7 +301,7 @@ module RailsAdmin
       @record_count = @abstract_model.count(options, scope)
 
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.list.select", :name => @model_config.label.downcase)
+      @page_name = t("admin.list.select", :name => @model_config.list.label.downcase)
     end
 
     def associations_hash

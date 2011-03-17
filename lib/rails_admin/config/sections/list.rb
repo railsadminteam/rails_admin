@@ -1,5 +1,6 @@
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
+require 'rails_admin/config/labelable'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
 
@@ -10,6 +11,7 @@ module RailsAdmin
       class List < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
         include RailsAdmin::Config::Hideable
+        include RailsAdmin::Config::Labelable
 
         def initialize(parent)
           super(parent)
