@@ -8,7 +8,7 @@ module RailsAdmin
       end
 
       def pretty_name
-        model.to_s
+        model.human_name
       end
     end
   end
