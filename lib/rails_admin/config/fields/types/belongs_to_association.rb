@@ -33,7 +33,7 @@ module RailsAdmin
             objects = associated_model_config.abstract_model.all
             label_method = associated_model_config.list.with(:object => objects.first).object_label_method unless objects.empty?
             objects.map do |object|
-              [object.send(label_method), object.id]
+              [label_method ? object.send(label_method) : "#{object.class.to_s} ##{object.id}", object.id]
             end
           end
 

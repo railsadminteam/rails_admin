@@ -109,7 +109,10 @@ module RailsAdmin
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.update.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      render :layout => 'rails_admin/form'
+      respond_to do |format|
+        format.html { render :layout => 'rails_admin/form' }
+        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+      end
     end
 
     def update
@@ -129,8 +132,21 @@ module RailsAdmin
       @object.associations = params[:associations]
 
       if @object.save
+        object_label = @model_config.list.with(:object => @object).object_label
         AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
-        redirect_to_on_success
+
+        respond_to do |format|
+          format.html do
+            redirect_to_on_success
+          end
+          format.js do
+            render :json => {
+              :id => @object.id,
+              :label => object_label,
+            }
+          end
+        end
+
       else
         render_error :edit
       end

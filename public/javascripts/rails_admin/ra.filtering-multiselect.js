@@ -39,7 +39,6 @@
       this.filter = $('<input type="text" class="ra-multiselect-search"/>');
 
       this.header.append(this.filter)
-                 .append('<div class="help"><strong>Chosen teams</strong><br />Select your choice(s) and click</div><div class="ui-icon ui-icon-circle-triangle-e"></div>');
 
       this.wrapper.append(this.header);
 
@@ -59,7 +58,7 @@
 
       this.collection.addClass("ra-multiselect-collection");
 
-      this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>Add all</a>');
+      this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>Ajouter tout</a>');
 
       this.columns.left.append(this.collection)
                           .append(this.addAll);
@@ -72,7 +71,7 @@
 
       this.selection = $('<select multiple="multiple" class="ra-multiselect-selection"></select>');
 
-      this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>Remove all</a>');
+      this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>Ôter tout</a>');
 
       this.columns.right.append(this.selection)
                            .append(this.removeAll);

@@ -1,0 +1,26 @@
+<%
+  name = field.association[:name]
+  
+  if params["associations"]
+    selected = params["associations"][name].to_a.map{|o| o.to_i}
+  else
+    selected = field.bindings[:object].send(name).map{|o| o.id }
+  end
+  
+  model_name = field.abstract_model.to_param
+  associated_model = field.associated_model_config
+  associated_model_name = associated_model.abstract_model.to_param
+
+%>
+
+<div class="field <%= field.to_param %>">
+  <%= label_tag "associations_#{name}", field.label %>
+  <div>
+    <% if selected.empty? %>
+      <p>Pas de <%= name %> trouvé !</p>
+    <% else %>
+      <p><%= selected.map{|id| link_to("#{associated_model_name} ##{id}", rails_admin_edit_path(:model_name => associated_model_name, :id => id)) }.to_sentence %></p>
+    <% end %>
+    <p class="help"><%= field.help %></p>
+  </div>
+</div>

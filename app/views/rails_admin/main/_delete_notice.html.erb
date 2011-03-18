@@ -18,7 +18,7 @@
       <% child = object.send(association[:name]) %>
       <% next if child.nil? %>
       <li>
-        A <%= @abstract_model.pretty_name.downcase %> in <%= association[:pretty_name].downcase %>: <%= link_to(RailsAdmin.config(child).list.with(:object => child).object_label, rails_admin_edit_path(:model_name => association[:name], :id => child.id)) %>
+        A <%= @abstract_model.pretty_name.downcase %> in <%= association[:pretty_name].downcase %> : <%= link_to(RailsAdmin.config(child).list.with(:object => child).object_label, rails_admin_edit_path(:model_name => association[:name], :id => child.id)) %>
       </li>
       <% end %>
     </ul>
