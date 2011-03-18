@@ -39,6 +39,13 @@ See details in the examples below for the currently supported way to label model
 This change was motivated by the conversation following a [bug report](https://github.com/sferik/rails_admin/issues/319/#issue/319/comment/875868)
 about label display errors.
 
+The ability to set model visibility for each section has been removed due to
+same reasons as section specific label configuration (see above paragraph).
+This also means that methods such as `hide_from_navigation` and `show_in_list`
+are no longer functional and have been deprecated. For now on use model level
+configuration of visibility or for more granular control integrate an
+authorization framework as outlined later in this document.
+
 Screenshots
 -----------
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
@@ -162,15 +169,13 @@ Rails Admin refers to an instance of a model class (representing a single databa
 **Hiding a model**
 
 You can hide a model from the top navigation by marking its `visible` option
-as false within the model's navigation configuration section:
+as false:
 
 By passing the value as an argument:
 
     RailsAdmin.config do |config|
       config.model Team do
-        navigation do
-          visible false
-        end
+        visible false
       end
     end
 
@@ -178,9 +183,7 @@ Or by passing a block that will be lazy evaluated each time the option is read:
 
     RailsAdmin.config do |config|
       config.model Team do
-        navigation do
-          visible { false }
-        end
+        visible { false }
       end
     end
 
@@ -189,57 +192,8 @@ configuration options function within RailsAdmin. You can pass a value as an
 argument `option_name value`, or you can pass in a block which will be
 evaluated each time the option is read. Notable is that boolean options' reader
 accessors will be appended with ? whereas the writers will not be. That is, if
-you want to get the Team model's visibility in navigation, you use
-`RailsAdmin.config(Team).navigation.visible?`.
-
-Back to navigation configuration - there is also an alias method that can be used:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        hide_from_navigation
-      end
-    end
-
-And also a reverse alias method to make it visible again:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        show_in_navigation
-      end
-    end
-
-Both also accept a block:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        # Hide Team from navigation on Sundays
-        hide_from_navigation do
-          Time.now.wday == 0
-        end
-      end
-    end
-
-*NOTE* - The hide_from_navigation method was originally implemented as
- hide_in_navigation but that name is now deprecated - you should
- change your code to use hide_from_navigation.
-
-**To enable CKEditor for a field**
-
-Configure the model/field like so:
-
-    RailsAdmin.config do |config|
-
-    config.model MyModel do
-      edit do
-        field :description, :text do
-          ckeditor do 
-            true
-          end
-        end
-      end
-    end
-
-    end
+you want to get the Team model's visibility, you use
+`RailsAdmin.config(Team).visible?`.
 
 **Configuring the number of visible tabs**
 
@@ -260,7 +214,7 @@ evaluated at runtime.
 * Number of items per page
 * Number of items per page per model
 * Default sorting
-  * Configure globaly
+  * Configure globally
   * Configure per model
 * Fields
   * Visibility and ordering
@@ -296,7 +250,7 @@ By default, rows sorted by the field `id` in reverse order
 
 You can change default behavior with use two options: `sort_by` and `sort_reverse`
 
-**Default sorting - Configure globaly**
+**Default sorting - Configure globally**
 
     RailsAdmin.config do |config|
       config.models do
@@ -506,6 +460,7 @@ column, you can:
   * Available field types
   * Creating a custom field type
   * Creating a custom field factory
+  * CKEditor integration
 
 **Field groupings**
 
@@ -703,7 +658,7 @@ RailsAdmin ships with the following field types:
 
 **Fields - Creating a custom field type**
 
-If you have a reuseable field you can define a custom class extending
+If you have a reusable field you can define a custom class extending
 `RailsAdmin::Config::Fields::Base` and register it for RailsAdmin:
 
     RailsAdmin::Config::Fields::Types::register(:my_awesome_type, MyAwesomeFieldClass)
@@ -726,6 +681,25 @@ Type guessing can be overridden by registering a custom field "factory", but
 for now you need to study `lib/rails_admin/config/fields/factories/*` for
 examples if you want to use that mechanism.
 
+**Fields - CKEditor integration**
+
+CKEditor can be enabled on fields of type text:
+
+    RailsAdmin.config do |config|
+      config.model MyModel do
+        edit do
+          field :description, :text do
+            ckeditor true
+          end
+        end
+      end
+    end
+
+In this example we configured a field named description to instantiate as a
+text field and set ckeditor option to true. If the database column is a text
+field, explicitly setting the type as the second argument is not
+necessary.
+
 ### Mass Assignment Operations ###
 
 * Mass assign for every model configuration
@@ -736,13 +710,15 @@ examples if you want to use that mechanism.
 
 Mass assignment operations are used to pass in configuration blocks for
 multiple targets at once. For instance, the code below configures every models'
-label displayed uppercased in the list view.
+every field with an uppercased label in the list view.
 
     RailsAdmin.config do |config|
       config.models do
         list do
-          label do
-            label.upcase # in this context label refers to default label method
+          fields do
+            label do
+              label.upcase # in this context label refers to default label method
+            end
           end
         end
       end
@@ -756,18 +732,25 @@ definition one level higher:
 
     RailsAdmin.config do |config|
       config.models do
-        label do
-          label.upcase
+        fields do
+          label do
+            label.upcase
+          end
         end
       end
     end
+
+As the navigation section does not define the `fields` method this
+configuration is only effective for create, list and update views.
 
 Naturally this also works for a single model configuration:
 
     RailsAdmin.config do |config|
       config.model Team do
-        label do
-          label.upcase
+        fields do
+          label do
+            label.upcase
+          end
         end
       end
     end
@@ -824,7 +807,7 @@ Submitting an Issue
 -------------------
 We use the [GitHub issue tracker](http://github.com/sferik/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
-been submitted. You can indicate support for an existing issuse by voting it up. When submitting a
+been submitted. You can indicate support for an existing issue by voting it up. When submitting a
 bug report, please include a [Gist](http://gist.github.com/) that includes a stack trace and any
 details that may be necessary to reproduce the bug, including your gem version, Ruby version, and
 operating system. Ideally, a bug report should include a pull request with failing specs.

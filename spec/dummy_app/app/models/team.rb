@@ -12,6 +12,7 @@ class Team < ActiveRecord::Base
   belongs_to(:division)
   has_many(:players)
   has_and_belongs_to_many :fans
+  has_many :comments, :as => :commentable
 
   def player_names_truncated
     players.map{|p| p.name}.join(", ")[0..32]

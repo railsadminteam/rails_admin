@@ -4,21 +4,21 @@ module RailsAdmin
     before_filter :get_object, :except => [:list, :slider, :for_model]
 
     def list
-      if params[:ref].nil? or params[:section].nil?
+      if params[:month].nil? or params[:year].nil?
         not_found
       else
-        @history, @current_month = AbstractHistory.history_for_month(params[:ref], params[:section])
+        @month = params[:month].to_i
+        @year = params[:year].to_i
+        @history = AbstractHistory.history_for_month(@month, @year)
         render :template => 'rails_admin/main/history', :layout => false
       end
     end
 
     def slider
-      ref = params[:ref].to_i
-
-      if ref.nil? or ref > 0
+      if params[:from].nil? or params[:to].nil?
         not_found
       else
-        render :json => AbstractHistory.history_summaries(ref)
+        render :json => AbstractHistory.history_summaries(params[:from], params[:to])
       end
     end
 

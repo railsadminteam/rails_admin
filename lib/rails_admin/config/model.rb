@@ -6,6 +6,7 @@ module RailsAdmin
   module Config
     # Model specific configuration object.
     class Model < RailsAdmin::Config::Base
+      include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
 
       def initialize(entity)
@@ -40,22 +41,21 @@ module RailsAdmin
       # Unless configured in a model config block, it'll try to use :name followed by :title methods, then
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
-      def object_label
-        object = @bindings[:object]
-        Config.label_methods.each {|l| label = (object.respond_to? l and object.send l) and return label}
-        "#{object.class.to_s} ##{object.try :id}"
+      register_instance_option(:object_label) do
+        if method = object_label_method(bindings[:object])
+          bindings[:object].send method
+        else
+          "#{bindings[:object].class.to_s} ##{bindings[:object].try :id}"
+        end
+      end
+
+      def object_label_method(object = nil)
+        object ||= abstract_model.new
+        Config.label_methods.find {|method| object.respond_to? method }
       end
 
       register_instance_option(:label) do
         abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
-      end
-
-      register_instance_option(:object_label) do
-        object = bindings[:object]
-        label = ''
-        Config.label_methods.any? { |method|
-          object.respond_to?(method) and (label=object.send(method)).present?
-        } ? label : "#{object.class.to_s} ##{object.try :id}"
       end
 
       # Act as a proxy for the section configurations that actually

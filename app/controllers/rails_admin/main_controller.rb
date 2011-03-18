@@ -12,10 +12,11 @@ module RailsAdmin
       @page_type = "dashboard"
 
       @history = AbstractHistory.history_latest_summaries
-      # history listing with ref = 0 and section = 4
-      @historyListing, @current_month = AbstractHistory.history_for_month(0, 4)
+      @month = DateTime.now.month
+      @year = DateTime.now.year
+      @history= AbstractHistory.history_for_month(@month, @year)
 
-      @abstract_models = RailsAdmin::AbstractModel.all
+      @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
 
       @most_recent_changes = {}
       @count = {}
@@ -33,11 +34,21 @@ module RailsAdmin
     def list
       @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
       list_entries
-      @xhr = request.xhr?
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
       respond_to do |format|
-        format.html { render :layout => @xhr ? false : 'rails_admin/list' }
-        format.json { render :json => @objects.to_json(:only => visible.call) }
+        format.html { render :layout => 'rails_admin/list' }
+        format.js { render :layout => 'rails_admin/plain.html.erb' }
+        format.json do
+          if params[:compact]
+            objects = []
+            @objects.each do |object|
+               objects << { :id => object.id, :label => @model_config.with(:object => object).object_label }
+            end
+            render :json => objects
+          else
+            render :json => @objects.to_json(:only => visible.call)
+          end
+        end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
       end
     end
@@ -52,12 +63,16 @@ module RailsAdmin
       end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-      render :layout => 'rails_admin/form'
+      respond_to do |format|
+        format.html { render :layout => 'rails_admin/form' }
+        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+      end
     end
 
     def create
       @modified_assoc = []
       @object = @abstract_model.new
+      @model_config.create.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
       if @authorization_adapter
         @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
           @object.send("#{name}=", value)
@@ -70,8 +85,19 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save
-        AbstractHistory.create_history_item("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
-        redirect_to_on_success
+        object_label = @model_config.with(:object => @object).object_label
+        AbstractHistory.create_history_item("Created #{object_label}", @object, @abstract_model, _current_user)
+        respond_to do |format|
+          format.html do
+            redirect_to_on_success
+          end
+          format.js do
+            render :json => {
+              :id => @object.id,
+              :label => object_label,
+            }
+          end
+        end
       else
         render_error
       end
@@ -97,6 +123,8 @@ module RailsAdmin
 
       @old_object = @object.clone
 
+      @model_config.update.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
+
       @object.attributes = @attributes
       @object.associations = params[:associations]
 
@@ -120,7 +148,7 @@ module RailsAdmin
     def destroy
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
-      @object = @object.destroy
+      @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.label)
 
       AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
@@ -215,9 +243,15 @@ module RailsAdmin
       table_name = @abstract_model.model.table_name
 
       filter.each_pair do |key, value|
-        @properties.select{|property| property[:type] == :boolean && property[:name] == key.to_sym}.each do |property|
-          statements << "(#{table_name}.#{key} = ?)"
-          values << (value == "true")
+        if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
+          case field.type
+          when :string, :text
+            statements << "(#{table_name}.#{key} LIKE ?)"
+            values << value
+          when :boolean
+            statements << "(#{table_name}.#{key} = ?)"
+            values << (value == "true")
+          end
         end
       end
 
@@ -228,7 +262,7 @@ module RailsAdmin
     end
 
     def get_attributes
-      @attributes = params[@abstract_model.to_param] || {}
+      @attributes = params[@abstract_model.to_param.singularize] || {}
       @attributes.each do |key, value|
         # Deserialize the attribute if attribute is serialized
         if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
@@ -258,8 +292,17 @@ module RailsAdmin
 
     def render_error whereto = :new
       action = params[:action]
+
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
-      render whereto, :layout => 'rails_admin/form'
+
+      if @object.errors[:base].size > 0
+        flash.now[:error] << ". " << @object.errors[:base]
+      end
+
+      respond_to do |format|
+        format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
+        format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }
+      end
     end
 
     def check_for_cancel
@@ -282,7 +325,7 @@ module RailsAdmin
       # external filter
       options.merge!(other)
 
-      associations = @model_config.list.visible_fields.select {|f| f.association? }.map {|f| f.association[:name] }
+      associations = @model_config.list.visible_fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
       options.merge!(:include => associations) unless associations.empty?
 
       if params[:all]

@@ -55,41 +55,5 @@ describe "RailsAdmin Config DSL Navigation Section" do
         navigation.should_not have_tag("li a", :content => "Fan")
       end
     end
-
-    it "should be hideable via shortcut" do
-      RailsAdmin.config Fan do
-        hide_from_navigation
-      end
-      get rails_admin_dashboard_path
-      response.should have_tag("#nav") do |navigation|
-        navigation.should_not have_tag("li a", :content => "Fan")
-      end
-    end
-
-    it "should be hideable via navigation configuration" do
-      RailsAdmin.config Fan do
-        navigation do
-          hide
-        end
-      end
-      get rails_admin_dashboard_path
-      response.should have_tag("#nav") do |navigation|
-        navigation.should_not have_tag("li a", :content => "Fan")
-      end
-    end
-
-    it "should be hideable with a block via navigation configuration" do
-      RailsAdmin.config Fan do
-        navigation do
-          show do
-            false
-          end
-        end
-      end
-      get rails_admin_dashboard_path
-      response.should have_tag("#nav") do |navigation|
-        navigation.should_not have_tag("li a", :content => "Fan")
-      end
-    end
   end
 end

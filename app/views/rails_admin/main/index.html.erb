@@ -1,75 +1,85 @@
-        <div id="contentHeader">
-          <h2><%= @page_name %></h2>
-        </div>
+<% head_style "rails_admin/list" %>
+<% head_style "rails_admin/dashboard" %>
+<% head_style "rails_admin/ra.timeline.css" %>
+<% head_javascript "rails_admin/application.js" %>
+<% head_javascript "rails_admin/ra.timeline.js" %>
+        <div class="ra-block">
+          <div class="ui-widget-header clearfix">
+            <%= @page_name %>
+          </div>
+          <div class="ra-block-content">
 <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-        <div id="contentMain">
-          <table class="grid">
-            <thead>
-              <tr>
-                <th id="modelNameHeader"><%= t "admin.dashboard.model_name" %></th>
-                <th><%= t "admin.dashboard.last_used" %></th>
-                <th><%= t "admin.dashboard.records" %></th>
-                <th><%= t "admin.dashboard.modify" %></th>
-              </tr>
-            </thead>
-          <tbody>
-            <% @abstract_models.each do |abstract_model| %>
-              <% if authorized? :list, abstract_model %>
-                <tr class="<%= cycle 'odd', 'even' %>">
-                  <td class="modelNameRow">
-                    <%= link_to(RailsAdmin.config(abstract_model).label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
-                  </td>
-                  <td>
-                  <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
-                  <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
-                  <% end %>
-                  </td>
-                  <td>
-                    <div class="scale">
-                      <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
-                      <% percent = 1 if percent.nil? %>
-                      <div class="bar <%= get_indicator(percent)%>" style="width:<%= percent %>%;"></div>
-                    </div>
-                  </td>
-                  <td>
-                    <% if authorized? :new, abstract_model %>
-                      <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %> |
-                    <% end %>
-                    <%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
-                  </td>
+            <table class="grid">
+              <thead>
+                <tr>
+                  <th id="modelNameHeader"><%= t "admin.dashboard.model_name" %></th>
+                  <th><%= t "admin.dashboard.last_used" %></th>
+                  <th><%= t "admin.dashboard.records" %></th>
+                  <th><%= t "admin.dashboard.modify" %></th>
                 </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-          </table>
-
-          <div class="section">
-            <h2><%= t("admin.history.name") %></h2>
-            <div id="timeline">
-              <a href="javascript:void(0)" id="arrowLeft" ref="-1"><%= image_tag("rails_admin/arrow_left.png", :alt=>"Left")%></a>
-              <div id="timelineSlider">
-                <% max = @history[0].number %>
-                <% @history.each{|t| max = t.number if t.number > max} %>
-                <ul>
-                  <% @history.each do |t| %>
-                  <% percent = (t.number * 100) / max unless max == 0 %>
-                  <% indicator_type = get_indicator(percent)%>
-                  <li>
-                    <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
-                    <span><%= month_names[t.month] %> <%= t.year %></span>
-                    <span class="bars">
-                      <span class="indicator <%= indicator_type %>" style="height:<%= percent %>%"></span>
-                    </span>
-                  </li>
+              </thead>
+              <tbody>
+                <% @abstract_models.each do |abstract_model| %>
+                  <% if authorized? :list, abstract_model %>
+                    <tr class="<%= cycle 'odd', 'even' %>">
+                      <td class="modelNameRow">
+                        <%= link_to(RailsAdmin.config(abstract_model).label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                      </td>
+                      <td>
+                      <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
+                      <%= time_ago_in_words last_used %> <%= t "admin.dashboard.ago" %>
+                      <% end %>
+                      </td>
+                      <td>
+                        <div class="scale">
+                          <% percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0 %>
+                          <% percent = 1 if percent.nil? %>
+                          <div class="bar <%= get_indicator(percent)%>" style="width:<%= percent %>%;"></div>
+                        </div>
+                      </td>
+                      <td>
+                        <% if authorized? :new, abstract_model %>
+                          <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                        <% end %>
+                      </td>
+                    </tr>
                   <% end %>
-                </ul>
-                <div id="handler"><%= image_tag("rails_admin/handler.png")%></div>
-              </div>
-
-              <a href="javascript:void(0)" id="arrowRight" ref="1"><%= image_tag("rails_admin/arrow_right.png", :alt=>"Right")%></a>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ra-block">
+          <div class="ui-widget-header">
+            <%= t("admin.history.name") %>
+          </div>
+          <div class="ra-block-content">
+            <div id="timeline"></div>
+            <div style="margin-top: 10px;" id="listingHistory" class="block list">
+    <%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history}) -%>
             </div>
-            <div id="listingHistory">
-<%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @historyListing}) -%>
-            </div>
+            <%= javascript_tag do %>
+              $j(document).ready(function($){
+                var cache = {};
+                 $("#timeline").timeline({
+                   url: "/admin/history/slider",
+                   monthChanged: function(month, year) {
+                     if (cache[year] && cache[year][month]) {
+                       $("#listingHistory").html(cache[year][month]);
+                     } else {
+                       $j("#listingHistory").load(
+                         "/admin/history/list",
+                         { month: month, year: year },
+                         function(response, status, xhr) {
+                           if (!cache[year]) { cache[year] = {}; }
+                           cache[year][month] = response;
+                         }
+                       );
+                     }
+                   },
+                   monthNames: <%= ActiveSupport::JSON.encode(month_names).html_safe %>
+                 });
+              });
+            <% end %>
           </div>
         </div>

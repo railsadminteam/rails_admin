@@ -7,6 +7,16 @@ module RailsAdmin
         class Date < RailsAdmin::Config::Fields::Types::Datetime
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
+
+          @format = :long
+          @i18n_scope = [:date, :formats]
+          @js_plugin_options = {
+            "showTime" => false,
+          }
+
+          def parse_input(params)
+            params[name] = self.class.normalize(params[name], localized_date_format) if params[name]
+          end
         end
       end
     end

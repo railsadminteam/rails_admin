@@ -34,9 +34,19 @@ module RailsAdmin
           end
         end
 
+        # Reader how many records the associated model has
+        def associated_collection_count
+          associated_model_config.abstract_model.count
+        end
+
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association[:child_model])
+        end
+
+        # Reader for the association's child model object's label method
+        def associated_label_method
+          associated_model_config.object_label_method
         end
 
         # Reader for the association's child key
@@ -57,6 +67,11 @@ module RailsAdmin
         # Reader whether the bound object has validation errors
         def has_errors?
           !(bindings[:object].errors[child_key].nil? || bindings[:object].errors[child_key].empty?)
+        end
+
+        # Reader whether this is a polymorphic association
+        def polymorphic?
+          association[:options][:polymorphic]
         end
 
         # Reader for the association's value unformatted
