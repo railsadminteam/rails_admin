@@ -19,7 +19,7 @@ module RailsAdmin
           register_instance_option(:formatted_value) do
             object = bindings[:object].send(association[:name])
             unless object.nil?
-              RailsAdmin::Config.model(object).list.with(:object => object).object_label
+              RailsAdmin::Config.model(object).with(:object => object).object_label
             else
               nil
             end
@@ -31,7 +31,7 @@ module RailsAdmin
 
           def associated_collection
             objects = associated_model_config.abstract_model.all
-            label_method = associated_model_config.list.with(:object => objects.first).object_label_method unless objects.empty?
+            label_method = associated_model_config.with(:object => objects.first).object_label_method unless objects.empty?
             objects.map do |object|
               [label_method ? object.send(label_method) : "#{object.class.to_s} ##{object.id}", object.id]
             end

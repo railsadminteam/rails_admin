@@ -16,6 +16,14 @@
       createQuery: function(query) {
         return { query: query };
       },
+      regional: {
+        add: "Add",
+        chooseAll: "Choose all",
+        chosen: "Chosen records",
+        clearAll: "Clear all",
+        remove: "Remove",
+        selectChoice: "Select your choice(s) and click"
+      },
       searchDelay: 400,
       source: null
     },
@@ -39,6 +47,7 @@
       this.filter = $('<input type="text" class="ra-multiselect-search"/>');
 
       this.header.append(this.filter)
+                 .append('<div class="help"><strong>' + this.options.regional.chosen + '</strong><br />' + this.options.regional.selectChoice + '</div><div class="ui-icon ui-icon-circle-triangle-e"></div>');
 
       this.wrapper.append(this.header);
 
@@ -58,20 +67,28 @@
 
       this.collection.addClass("ra-multiselect-collection");
 
+<<<<<<< HEAD
       this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>Ajouter tout</a>');
+=======
+      this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
+>>>>>>> 3b593947526cb59665999f453e11320842fe220d
 
       this.columns.left.append(this.collection)
                           .append(this.addAll);
 
-      this.add = $('<a class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">Add</a>');
+      this.add = $('<a class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
 
-      this.remove = $('<a class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">Remove</a>');
+      this.remove = $('<a class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
 
       this.columns.center.append(this.add).append(this.remove);
 
       this.selection = $('<select multiple="multiple" class="ra-multiselect-selection"></select>');
 
+<<<<<<< HEAD
       this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>Ôter tout</a>');
+=======
+      this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
+>>>>>>> 3b593947526cb59665999f453e11320842fe220d
 
       this.columns.right.append(this.selection)
                            .append(this.removeAll);

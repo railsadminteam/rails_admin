@@ -34,10 +34,15 @@ module RailsAdmin
       # have been defined returns all fields. Defined fields are sorted to match their
       # order property. If order was not specified it will match the order in which fields
       # were defined.
-      def fields
+      #
+      # If a block is passed it will be evaluated in the context of each field
+      def fields(&block)
         defined = @fields.select {|f| f.defined }
         defined.sort! {|a, b| a.order <=> b.order }
         defined = @fields if defined.empty?
+        if block
+          defined.each {|f| f.instance_eval &block }
+        end
         defined
       end
 

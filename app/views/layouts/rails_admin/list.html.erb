@@ -8,10 +8,10 @@
       <li><%= link_to(t('home.name'), '/') %></li>
       <li>&rsaquo; <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %></li>
       <% if @history %>
-        <li>&rsaquo; <%= link_to(@model_config.list.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %></li>
+        <li>&rsaquo; <%= link_to(@model_config.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %></li>
         <li>&rsaquo; <span>History</span></li>
       <% else %>
-       <li>&rsaquo; <span><%= @model_config.list.label %></span></li>
+       <li>&rsaquo; <span><%= @model_config.label %></span></li>
       <% end%>
     <% end %>
     <%= render(:partial => 'layouts/rails_admin/header') %>

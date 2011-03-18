@@ -4,7 +4,7 @@ module RailsAdmin
   module MainHelper
     def get_indicator(percent)
       percent = 0 if percent.nil?
-      return "" if percent.between?(0, 33)
+      return "low" if percent.between?(0, 33)
       return "medium" if percent.between?(34, 67)
       return "high" if percent.between?(68, 100)
     end

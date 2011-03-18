@@ -28,7 +28,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection
           objects = associated_model_config.abstract_model.all
-          label_method = associated_model_config.list.with(:object => objects.first).object_label_method unless objects.empty?
+          label_method = associated_model_config.with(:object => objects.first).object_label_method unless objects.empty?
           objects.map do |object|
             [label_method ? object.send(label_method) : "#{object.class.to_s} ##{object.id}", object.id]
           end
@@ -46,8 +46,7 @@ module RailsAdmin
 
         # Reader for the association's child model object's label method
         def associated_label_method
-          object = associated_model_config.abstract_model.new
-          associated_model_config.list.with(:object => object).object_label_method
+          associated_model_config.object_label_method
         end
 
         # Reader for the association's child key
