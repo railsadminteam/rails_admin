@@ -67,11 +67,7 @@
 
       this.collection.addClass("ra-multiselect-collection");
 
-<<<<<<< HEAD
-      this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>Ajouter tout</a>');
-=======
       this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
->>>>>>> 3b593947526cb59665999f453e11320842fe220d
 
       this.columns.left.append(this.collection)
                           .append(this.addAll);
@@ -84,11 +80,7 @@
 
       this.selection = $('<select multiple="multiple" class="ra-multiselect-selection"></select>');
 
-<<<<<<< HEAD
-      this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>Ôter tout</a>');
-=======
       this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
->>>>>>> 3b593947526cb59665999f453e11320842fe220d
 
       this.columns.right.append(this.selection)
                            .append(this.removeAll);
