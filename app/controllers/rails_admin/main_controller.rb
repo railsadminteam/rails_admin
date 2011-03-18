@@ -132,7 +132,7 @@ module RailsAdmin
       @object.associations = params[:associations]
 
       if @object.save
-        object_label = @model_config.list.with(:object => @object).object_label
+        object_label = @model_config.with(:object => @object).object_label
         AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
 
         respond_to do |format|
