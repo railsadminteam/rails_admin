@@ -25,7 +25,11 @@ module RailsAdmin
             end
           end
 
-          def associated_collection(authorization_adapter)
+          register_instance_option(:partial) do
+            :form_belongs_to
+          end
+
+          def associated_collection
             scope = authorization_adapter && authorization_adapter.query(:read, associated_model_config.abstract_model)
             associated_model_config.abstract_model.all({}, scope).map do |object|
               [associated_model_config.with(:object => object).object_label, object.id]
@@ -34,10 +38,6 @@ module RailsAdmin
 
           def associated_model_config
             @associated_model_config ||= RailsAdmin.config(association[:parent_model])
-          end
-
-          register_instance_option(:partial) do
-            "form_belongs_to"
           end
 
           # Reader for field's value
