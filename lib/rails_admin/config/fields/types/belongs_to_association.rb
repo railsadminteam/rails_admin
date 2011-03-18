@@ -36,6 +36,10 @@ module RailsAdmin
             @associated_model_config ||= RailsAdmin.config(association[:parent_model])
           end
 
+          register_instance_option(:partial) do
+            "form_belongs_to"
+          end
+
           # Reader for field's value
           def value
             bindings[:object].send(name)
