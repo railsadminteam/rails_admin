@@ -68,6 +68,15 @@ module RailsAdmin
       image_tag "/stylesheets/themes/activo/images/session/#{image_name}.png", :alt => title, :title => title
     end
     
+    # shown beside every entry in the list view,
+    # perhaps 60 times per page, thus this string-heavy approach.
+    def action_icon link, icon, text
+      %Q{<a href="#{link}"><img alt="#{text}" title="#{text}"
+        onmouseout="this.src='/stylesheets/themes/activo/images/icons/24/#{icon}.png'"
+        onmouseover="this.src='/stylesheets/themes/activo/images/icons/24/#{icon}-hover.png'"
+        src="/stylesheets/themes/activo/images/icons/24/#{icon}.png"></a>}.html_safe
+    end
+    
     # Used for the history entries in the sidebar
     def history_link user, text
       content_tag :p, "<b>#{user}</b> #{text}".html_safe
