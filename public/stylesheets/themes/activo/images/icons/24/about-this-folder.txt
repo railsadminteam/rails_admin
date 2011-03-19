@@ -1,0 +1,12 @@
+The icons listed here belong to the "Fugue Icons" library available at "http://p.yusukekamiyamane.com".
+
+To add a new icon, enlarge the icon canvas to 24x24 pixels.
+Give it the name 'action-hover.png', where 'action' is the name of the action related to the button.
+
+To create an icon 'action.png' using an icon 'action-hover.png' do the following steps:
+- Transparency 40%
+- Saturation -30 (in a range between -100 and 100)
+- Brightness +30 (in a range between -100 and 100)
+- Yellow channel -20 (color_balance tool, in a range between -100 and 100).
+
+Gimp was used to create this.
