@@ -62,6 +62,11 @@ module RailsAdmin
       end
       html+"\n"
     end
+    
+    # Used for the icons in the admins very top right.
+    def icon(image_name, title)
+      image_tag "/stylesheets/themes/activo/images/session/#{image_name}.png", :alt => title, :title => title
+    end
 
     def history_output(t)
       if not t.message.downcase.rindex("changed").nil?
