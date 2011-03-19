@@ -1,17 +1,21 @@
-<%= label_tag("#{field.abstract_model.to_param}_#{field.name}", field.label) %>
-<div class="input">
-  <% if field.bindings[:object].send(field.name) %>
-    <div class="row">
-      <% if field.bindings[:object].send(field.name).mime_type.include? 'image' %>
-        <%= image_tag(field.bindings[:object].send(field.name).url) %><br />
-      <% else %>
-        <%= link_to field.bindings[:object].send(field.name).url, field.bindings[:object].send(field.name).url %> 
-      <% end %>
-    </div>
-  <% end %>
-  <div class="row">
-    <%= file_field(field.abstract_model.to_param, field.name, :class => "fileUploadField #{field.has_errors? ? "errorField" : nil}") %>
-  </div>
+<div class="field <%= field.to_param %>">
+ <%= label_tag("#{field.abstract_model.to_param}_#{field.name}", field.label) %>
+ <div class="input">
+   <% if field.bindings[:object].send(field.name) %>
+     <div class="row">
+       <% if field.bindings[:object].send(field.name).mime_type.include? 'image' %>
+         <%= image_tag(field.bindings[:object].send(field.name).url) %><br />
+       <% else %>
+         <%= link_to field.bindings[:object].send(field.name).url, field.bindings[:object].send(field.name).url %>
+       <% end %>
+     </div>
+   <% end %>
+   <div class="row">
+     <%= form.file_field(field.name, field.html_attributes) %>
+   </div>
+ </div>
+ <% if field.has_errors? %>
+ <span class="errorMessage"><%= "#{field.label} #{field.errors.first}" %></span>
+ <% end %>
+ <p class="help"><%= field.help %></p>
 </div>
-
-
