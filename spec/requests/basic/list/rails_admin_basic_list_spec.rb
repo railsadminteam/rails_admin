@@ -8,7 +8,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should respond successfully" do
-      response.code.should == "200"
+      response.should be_successful
     end
 
   end
