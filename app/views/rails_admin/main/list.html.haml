@@ -61,18 +61,19 @@
                 - else
                   = property_pretty_name.upcase
             %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
-            / %th.action= t("admin.list.edit_action").upcase if authorized? :edit, @abstract_model
-            / %th.action= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model
-            / %th.action= t("admin.list.select_action").upcase
+            
+            %th.action= t("admin.list.edit_action").upcase   if authorized? :edit, @abstract_model
+            %th.action= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model
+            
             - @objects.each_with_index do |object, index|
               %tr{:class => index % 2 == 0 ? " odd" : " even"}
                 %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}", :class => "checkbox"
                 - other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)
-                %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
+                %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
                   %td{:class => "#{property.css_class}"}= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value
                 - other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)
-                %th.other.left{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
+                %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.action.edit
                   = link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :edit, @abstract_model, object
                 %td.action.delete
