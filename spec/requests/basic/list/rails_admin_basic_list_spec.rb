@@ -10,7 +10,6 @@ describe "RailsAdmin Basic List" do
     it "should respond successfully" do
       response.should be_successful
     end
-
   end
 
   describe "GET /admin/player as list" do
@@ -66,6 +65,26 @@ describe "RailsAdmin Basic List" do
     it "should be sorted correctly" do
       response.body.should contain(/Sandy Koufax/)
       response.body.should contain(/Jackie Robinson/)
+    end
+  end
+
+  describe "GET /admin/player with field search" do
+    before(:each) do
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
+      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
+      get rails_admin_list_path(:model_name => "player", :query => "number:42", :set => 1)
+    end
+
+    it "should respond successfully" do
+      @response.should be_successful
+    end
+
+    it "should show a correct result" do
+      @response.body.should contain("Jackie Robinson")
+    end
+
+    it "should not contain an incorrect result" do
+      @response.body.should_not contain("Sandy Koufax")
     end
   end
 
