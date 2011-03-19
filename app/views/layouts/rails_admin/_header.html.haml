@@ -1,0 +1,10 @@
+#header
+  #headerLeft
+    %ul.breadcrumb
+      = yield :breadcrumb
+    %h1#logo
+      = link_to rails_admin_dashboard_path do
+        %span.image_replacement= @plugin_name
+  = render(:partial => 'rails_admin/main/navigation')
+  #headerRight
+    = render(:partial => 'rails_admin/main/user_info', :locals => {:current_user => _current_user})

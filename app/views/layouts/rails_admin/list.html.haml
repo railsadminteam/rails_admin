@@ -1,0 +1,24 @@
+- content_for :head do
+  %title
+    = @abstract_model.pretty_name
+    | #{@plugin_name}
+= render(:partial => 'layouts/rails_admin/head')
+%body
+  #wrapper
+    - content_for :breadcrumb do
+      %li= link_to(t('home.name'), '/')
+      %li
+        \&rsaquo; #{link_to(t('admin.dashboard.name'), rails_admin_dashboard_path)}
+      - if @history
+        %li
+          \&rsaquo; #{link_to(@model_config.label, rails_admin_list_path(:model_name => @abstract_model.to_param))}
+        %li
+          \&rsaquo;
+          %span History
+      - else
+        %li
+          \&rsaquo;
+          %span= @model_config.label
+    = render(:partial => 'layouts/rails_admin/header')
+    #content
+      = content_for(:layout)
