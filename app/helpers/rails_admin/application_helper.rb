@@ -173,7 +173,7 @@ module RailsAdmin
           when String
             b << page_number
           when current_page
-            b << Builder::XmlMarkup.new.span(page_number, :class => "this-page")
+            b << Builder::XmlMarkup.new.span(page_number, :class => "current")
           when page_count
             b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => true)
           else
