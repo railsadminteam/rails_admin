@@ -1,0 +1,11 @@
+.ui-widget-header
+  = month_names[month - 1]
+  = year
+  = t("admin.history.name").downcase
+.ra-block-content
+  %table.grid
+    %tbody
+      - history.each do |t|
+        %tr{:class => cycle('odd', 'even')}
+          %td{:style => "text-align: left;"}= t.username
+          %td{:style => "text-align: left;"}= history_output(t)

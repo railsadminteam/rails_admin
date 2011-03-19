@@ -1,0 +1,13 @@
+- association_name = field.association[:name]
+- child_key = field.association[:child_key].first
+- collection = field.associated_collection.sort_by{|object| object.first}
+- selected = field.value
+
+- if selected.nil? && params["associations"]
+  - selected = params["associations"][child_key.to_param.pluralize].to_i
+%div{:class => "field #{field.to_param}"}
+  %label{:for => "associations[#{association_name}]"}= field.label
+  = select("associations", association_name, collection, field.html_attributes)
+  - if field.has_errors?
+    %span.errorMessage= "#{field.label } #{field.errors.first}"
+  %p.help= field.help
