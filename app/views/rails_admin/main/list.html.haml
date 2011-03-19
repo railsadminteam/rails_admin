@@ -65,8 +65,8 @@
             %th.action= t("admin.list.edit_action").upcase   if authorized? :edit, @abstract_model
             %th.action= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model
             
-            - @objects.each_with_index do |object, index|
-              %tr{:class => index % 2 == 0 ? " odd" : " even"}
+            - @objects.each do |object|
+              %tr{:class => cycle("odd", "even")}
                 %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}", :class => "checkbox"
                 - other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
