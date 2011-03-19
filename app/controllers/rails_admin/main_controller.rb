@@ -215,7 +215,6 @@ module RailsAdmin
       {:sort_reverse => sort_reverse}
     end
 
-
     def get_query_hash(options)
       query = params[:query]
       return {} unless query
