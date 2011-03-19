@@ -1,7 +1,5 @@
-- content_for :head do
-  %title
-    = @abstract_model.pretty_name
-    | #{@plugin_name}
+- content_for :title do
+  #{@abstract_model.pretty_name} | #{@plugin_name}
 = render(:partial => 'layouts/rails_admin/head')
 %body
   #wrapper
