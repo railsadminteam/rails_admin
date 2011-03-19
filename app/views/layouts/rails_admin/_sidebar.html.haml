@@ -1,0 +1,23 @@
+#sidebar
+  .block
+    %h3 Navigation
+    %ul.navigation
+      = render(:partial => 'rails_admin/main/navigation')
+      / - %w[Division Draft League Fan Player].each do |model|
+      /   %li= link_to model, "#block-#{model.downcase}", :class => "anchor"
+  .block.notice
+    %h4 Notice Title
+    %p Morbi posuere urna vitae nunc. Curabitur ultrices, lorem ac aliquam blandit, lectus eros hendrerit eros, at eleifend libero ipsum hendrerit urna. Suspendisse viverra.
+  .block
+    .sidebar-block
+      %h4 History
+      = history_link :gunn, "deleted player #5"
+      = history_link :gunn, "created player #38"
+      = history_link :cameron, "edited name, surname and hometown for player #39"
+      = history_link :cameron, "created player #39"
+      = history_link :cameron, "created player #40"
+      = history_link :gunn, "created player #41"
+      = history_link :cameron, "created team #2"
+      = history_link :gunn, "created player #42"
+      %p
+        %span= link_to "and <b>75 more</b> changes".html_safe, '#'

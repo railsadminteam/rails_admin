@@ -67,6 +67,11 @@ module RailsAdmin
     def icon(image_name, title)
       image_tag "/stylesheets/themes/activo/images/session/#{image_name}.png", :alt => title, :title => title
     end
+    
+    # Used for the history entries in the sidebar
+    def history_link user, text
+      content_tag :p, "<b>#{user}</b> #{text}".html_safe
+    end
 
     def history_output(t)
       if not t.message.downcase.rindex("changed").nil?
