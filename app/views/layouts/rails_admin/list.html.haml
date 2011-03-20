@@ -3,20 +3,6 @@
 = render(:partial => 'layouts/rails_admin/head')
 %body
   #container
-    / - content_for :breadcrumb do
-    /   %li= link_to(t('home.name'), '/')
-    /   %li
-    /     \&rsaquo; #{link_to(t('admin.dashboard.name'), rails_admin_dashboard_path)}
-    /   - if @history
-    /     %li
-    /       \&rsaquo; #{link_to(@model_config.label, rails_admin_list_path(:model_name => @abstract_model.to_param))}
-    /     %li
-    /       \&rsaquo;
-    /       %span History
-    /   - else
-    /     %li
-    /       \&rsaquo;
-    /       %span= @model_config.label
     = render(:partial => 'layouts/rails_admin/header')
     #wrapper.wat-cf
       #main
