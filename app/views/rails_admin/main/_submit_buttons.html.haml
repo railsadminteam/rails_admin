@@ -1,9 +1,11 @@
-%ul.submit.clearfix
-  %li.save
-    = submit_tag t("admin.new.save"), :class => "ra-button ui-state-highlight", :name => "_save"
-  %li.save.add
-    = submit_tag t("admin.new.save_and_add_another"), :class => "ra-button", :name => "_add_another"
-  %li.save.edit
-    = submit_tag t("admin.new.save_and_edit"), :class => "ra-button", :name => "_add_edit"
-  %li.cancel
-    = submit_tag t("admin.new.cancel"), :class => "ra-button", :name => "_continue"
+%br
+%br
+.group.navform.wat-cf
+  %button.button{:type => "submit", :name => "_save"}
+    = image_tag "/stylesheets/themes/activo/images/icons/tick.png", :alt => t("admin.new.save")
+    = t("admin.new.save")
+  %button.button{:type => "submit", :name => "_add_another"}= t("admin.new.save_and_add_another")
+  %button.button{:type => "submit", :name => "_add_edit"}= t("admin.new.save_and_edit")
+  %button.button{:type => "submit", :name => "_continue"}
+    %img{:alt => "Cancel", :src => "/stylesheets/themes/activo/images/icons/cross.png"}
+    Cancel

@@ -1,19 +1,27 @@
 - head_style "rails_admin/form.css"
 - head_javascript "rails_admin/application.js"
 - head_javascript "rails_admin/ra.remote-form.js"
-.ra-block
-  .ui-widget-header
-    = @page_name
-  .ra-block-content
-    .ra-block-toolbar.ui-state-highlight.clearfix
-      %ul
-        %li
-          = link_to t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => 'ra-button'
-        - if authorized? :delete, @abstract_model, @object
-          %li
-            = link_to t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => 'ra-button'
-    = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-    = form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do |form|
-      - @model_config.edit.with(:object => @object).visible_groups.each do |fieldset|
-        = render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object }
+
+#block-tables.block
+  .secondary-navigation
+    %ul.wat-cf
+      %li.first= link_to "Index", rails_admin_list_path(@abstract_model)
+      %li
+        %a{:href => "#block-tables"} Show
+      %li.active
+        %a{:href => "#block-forms"} Edit
+  .content
+    .control
+      = link_to rails_admin_history_object_path(:id => params[:id]), :class => "button" do
+        = t("admin.history.name")
+      - if authorized? :delete, @abstract_model, @object
+        %a.button{:href => "#"}
+          %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/delete.png"}
+            = t("admin.list.delete_action")
+    %h2.title= @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      = form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :class => "form", :html => { :method => "put", :multipart => true }) do |form|
+        - @model_config.edit.with(:object => @object).visible_groups.each do |fieldset|
+          = render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object }
       = render :partial => 'submit_buttons'
