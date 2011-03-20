@@ -57,7 +57,7 @@
                 - if property.sortable?
                   - sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
                   - sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil
-                  = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true)
+                  = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => false)
                 - else
                   = property_pretty_name.upcase
             %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
@@ -68,11 +68,11 @@
               %tr{:class => cycle("odd", "even")}
                 %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}", :class => "checkbox"
                 - other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)
-                %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
+                %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => false
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
                   %td{:class => "#{property.css_class}"}= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value
                 - other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)
-                %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
+                %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => false
                 %td.last
                   = action_icon("#", :show, "Show")   
                   - if authorized? :edit, @abstract_model, object
@@ -86,9 +86,9 @@
           = @record_count
           = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
           - if @page_count.to_i == 2
-            = link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => true, :class => "showall")
+            = link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => false, :class => "showall")
             
-      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true, :class => "search") do
+      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => false, :class => "search") do
         .columns.wat-cf
           .column.right
             %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
