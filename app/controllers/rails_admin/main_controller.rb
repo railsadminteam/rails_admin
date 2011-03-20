@@ -201,7 +201,7 @@ module RailsAdmin
         field, query = query.split ":"
         return {} unless field && query
         @properties.select{|property| property[:name] == field.to_sym}.each do |property|
-          statements << "(#{table_name}.#{property[:name]} LIKE ?)"
+          statements << "(#{table_name}.#{property[:name]} = ?)"
           values << "%#{query}%"
         end
       # search over all string fields  
