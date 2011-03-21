@@ -21,6 +21,10 @@ module RailsAdmin
           end
           possible_models = Module.constants | class_names
         end
+
+        excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
+        excluded_models << ['History']
+        
         # orig regexp -- found 'class' even if it's within a comment or a quote
         filenames = Dir.glob(Rails.application.paths.app.models.collect { |path| File.join(path, "**/*.rb") })
         class_names = []
@@ -29,8 +33,6 @@ module RailsAdmin
         end
         possible_models = Module.constants | class_names
 
-        excluded_models = possible_models - exclusive_models unless exclusive_models.blank?
-        
         #Rails.logger.info "possible_models: #{possible_models.inspect}"
         add_models(possible_models, excluded_models)
 
