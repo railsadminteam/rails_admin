@@ -50,7 +50,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin should show Player but not League" do
         get rails_admin_dashboard_path
-        response.code.should == "200"
+        response.should be_successful
         response.body.should contain("Player")
         response.body.should_not contain("League")
         response.body.should_not contain("Add new")
@@ -60,7 +60,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
         RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
         get rails_admin_list_path(:model_name => "player", :set => 1)
-        response.code.should == "200"
+        response.should be_successful
         response.body.should contain("Leonardo")
         response.body.should_not contain("Splinter")
         response.body.should_not contain("Add new")

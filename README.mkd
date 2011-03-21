@@ -466,6 +466,7 @@ column, you can:
   * Available field types
   * Creating a custom field type
   * Creating a custom field factory
+  * Overriding field help texts
   * CKEditor integration
 
 **Field groupings**
@@ -686,6 +687,22 @@ Then you can use your custom class in a field:
 Type guessing can be overridden by registering a custom field "factory", but
 for now you need to study `lib/rails_admin/config/fields/factories/*` for
 examples if you want to use that mechanism.
+
+**Fields - Overriding field help texts**
+
+Every field is accompanied by a hint/text help based on model's validations.
+Everything can be overridden with `help`:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :name
+          field :email do
+            help 'Required - popular webmail addresses not allowed'
+          end
+        end
+      end
+    end
 
 **Fields - CKEditor integration**
 
