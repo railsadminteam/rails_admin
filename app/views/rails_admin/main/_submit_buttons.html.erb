@@ -2,11 +2,13 @@
   <li class="save">
     <%= submit_tag t("admin.new.save"), :class => "ra-button ui-state-highlight", :name => "_save" %>
   </li>
-
-  <li class="save add">
-    <%= submit_tag t("admin.new.save_and_add_another"), :class => "ra-button", :name => "_add_another" %>
-  </li>
-
+  
+  <% if authorized? :new, @abstract_model %>
+    <li class="save add">
+      <%= submit_tag t("admin.new.save_and_add_another"), :class => "ra-button", :name => "_add_another" %>
+    </li>
+  <% end %>
+  
   <li class="save edit">
     <%= submit_tag t("admin.new.save_and_edit"), :class => "ra-button", :name => "_add_edit" %>
   </li>
