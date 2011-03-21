@@ -1,6 +1,5 @@
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/labelable'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
 require 'rails_admin/config/has_groups'
@@ -13,8 +12,6 @@ module RailsAdmin
       class Update < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
         include RailsAdmin::Config::HasGroups
-        include RailsAdmin::Config::Hideable
-        include RailsAdmin::Config::Labelable
 
         # Default items per page value used if a model level option has not
         # been configured

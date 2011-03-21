@@ -1,5 +1,68 @@
+require 'rails_admin/i18n_support'
+
 module RailsAdmin
   module ApplicationHelper
+
+    include RailsAdmin::I18nSupport
+
+    def head_javascript(path = nil, &block)
+      if block
+        (@head_javascript ||= []) << capture(&block)
+      elsif path
+        (@head_javascript_paths ||= []) << path
+      else
+        html = ""
+        if paths = @head_javascript_paths
+          html << javascript_include_tag(paths.uniq)
+        end
+        if script = @head_javascript
+          html << javascript_tag(script.join("\n"))
+        end
+        return html.html_safe
+      end
+    end
+
+    def head_style(path = nil, &block)
+      if block
+        (@head_style ||= []) << capture(&block)
+      elsif path
+        (@head_stylesheet_paths ||= []) << path
+      else
+        html = ""
+        if paths = @head_stylesheet_paths
+          html << stylesheet_link_tag(paths.uniq)
+        end
+        if style = @head_style
+          html << content_tag(:style, style.join("\n"), :type => "text/css")
+        end
+        return html.html_safe
+      end
+    end
+    
+    # A Helper to load from a CDN but with fallbacks in case the primary source is unavailable
+    # The best of both worlds - fast clevery cached service from google when available and the
+    # ability to work offline too.
+    # 
+    # @example Loading jquery from google
+    #   javascript_fallback "http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js",
+    #     "/javascripts/jquery-1.4.3.min.js",
+    #     "typeof jQuery == 'undefined'"
+    # @param [String] primary a string to be passed to javascript_include_tag that represents the primary source e.g. A script on googles CDN.
+    # @param [String] fallback a path to the secondary javascript file that is (hopefully) more resilliant than the primary.
+    # @param [String] test a test written in javascript that evaluates to true if it is necessary to load the fallback javascript.
+    # @reurns [String] the resulting html to be inserted into your page.
+    def javascript_fallback(primary, fallback, test)
+      html = javascript_include_tag( primary )
+      html << "\n" << content_tag(:script, :type => "text/javascript") do
+        %Q{
+          if (#{test}) {
+            document.write(unescape("%3Cscript src='#{fallback}' type='text/javascript'%3E%3C/script%3E"));
+          }
+        }.gsub(/^ {8}/, '').html_safe
+      end
+      html+"\n"
+    end
+
     def history_output(t)
       if not t.message.downcase.rindex("changed").nil?
         return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"
@@ -51,6 +114,7 @@ module RailsAdmin
       options[:url] ||= ""
 
       url = options.delete(:url)
+      url.delete(options[:page_param])
       url = url.to_a.collect{|x| x.join("=")}.join("&")
 
       url += (url.include?('=') ? '&' : '') + options[:page_param]
@@ -101,9 +165,9 @@ module RailsAdmin
           when current_page
             b << Builder::XmlMarkup.new.span(page_number, :class => "this-page")
           when page_count
-            b << Builder::XmlMarkup.new.a(page_number, :class => "end", :href => "#{url}=#{page_number}")
+            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => true)
           else
-            b << Builder::XmlMarkup.new.a(page_number, :href => "#{url}=#{page_number}")
+            b << link_to(page_number, "#{url}=#{page_number}", :remote => true)
           end
         end
       end

@@ -6,10 +6,10 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       get rails_admin_new_path(:model_name => "player")
 
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "42"
-      fill_in "players[position]", :with => "Second baseman"
-      check "players[suspended]"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      check "player[suspended]"
 
       @req = click_button "Save"
 
@@ -31,10 +31,10 @@ describe "RailsAdmin Basic Create" do
   describe "create and edit" do
     before(:each) do
       get rails_admin_new_path(:model_name => "player")
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "42"
-      fill_in "players[position]", :with => "Second baseman"
-      check "players[suspended]"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      check "player[suspended]"
       @req = click_button "Save and edit"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -55,10 +55,10 @@ describe "RailsAdmin Basic Create" do
   describe "create and add another" do
     before(:each) do
       get rails_admin_new_path(:model_name => "player")
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => "42"
-      fill_in "players[position]", :with => "Second baseman"
-      check "players[suspended]"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => "42"
+      fill_in "player[position]", :with => "Second baseman"
+      check "player[suspended]"
       @req = click_button "Save and add another"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -79,9 +79,9 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
       get rails_admin_new_path(:model_name => "player")
-      fill_in "players[name]", :with => "Jackie Robinson"
-      fill_in "players[number]", :with => 42
-      fill_in "players[position]", :with => "Second baseman"
+      fill_in "player[name]", :with => "Jackie Robinson"
+      fill_in "player[number]", :with => 42
+      fill_in "player[position]", :with => "Second baseman"
       select "Draft ##{@draft.id}"
       @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -102,9 +102,9 @@ describe "RailsAdmin Basic Create" do
 
       get rails_admin_new_path(:model_name => "league")
 
-      fill_in "leagues[name]", :with => "National League"
+      fill_in "league[name]", :with => "National League"
 
-      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
+      select @teams[0].name, :from => "associations_teams"
       @req = click_button "Save"
 
       @league = RailsAdmin::AbstractModel.new("League").first
@@ -130,9 +130,9 @@ describe "RailsAdmin Basic Create" do
 
       get rails_admin_new_path(:model_name => "league")
 
-      fill_in "leagues[name]", :with => "National League"
+      fill_in "league[name]", :with => "National League"
 
-      set_hidden_field "associations[teams][]", :to => @teams[0].id.to_s.to_i
+      select @teams[0].name, :from => "associations_teams"
       @req = click_button "Save"
 
       @league = RailsAdmin::AbstractModel.new("League").first
@@ -156,10 +156,10 @@ describe "RailsAdmin Basic Create" do
 
       get rails_admin_new_path(:model_name => "player")
 
-      fill_in "players[name]", :with => @player.name
-      fill_in "players[number]", :with => @player.number.to_s
-      fill_in "players[position]", :with => @player.position
-      select "#{@team.name}", :from => "players[team_id]"
+      fill_in "player[name]", :with => @player.name
+      fill_in "player[number]", :with => @player.number.to_s
+      fill_in "player[position]", :with => @player.position
+      select "#{@team.name}", :from => "player[team_id]"
 
       @req = click_button "Save"
     end

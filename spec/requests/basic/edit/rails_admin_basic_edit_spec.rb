@@ -22,9 +22,9 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show non-required fields as \"Optional\"" do
-      response.body.should contain(/Position\n\s*Optional/)
-      response.body.should contain(/Born on\n\s*Optional/)
-      response.body.should contain(/Notes\n\s*Optional/)
+      response.body.should have_tag(".player_position .help", :content => "Optional")
+      response.body.should have_tag(".player_born_on .help", :content => "Optional")
+      response.body.should have_tag(".player_notes .help", :content => "Optional")
     end
   end
 
@@ -79,12 +79,10 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      response.body.should have_tag "div.manySelector select.firstSelect" do |many|
-        many.should have_tag("option", :content => "Team 2")
-        many.should have_tag("option", :content => "Team 3")
-      end
-      response.body.should have_tag "div.manySelector select#associations_teams" do |assoc|
-        assoc.should have_tag("option", :content => "Team 1")
+      response.body.should have_tag "#associations_teams" do |select|
+        select[0].should have_selector 'option[selected="selected"]'
+        select[1].should_not have_selector 'option[selected="selected"]'
+        select[2].should_not have_selector 'option[selected="selected"]'
       end
     end
   end

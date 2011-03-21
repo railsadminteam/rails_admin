@@ -1,6 +1,5 @@
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/labelable'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
 
@@ -10,16 +9,14 @@ module RailsAdmin
       # Configuration of the list view
       class List < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
-        include RailsAdmin::Config::Hideable
-        include RailsAdmin::Config::Labelable
 
         def initialize(parent)
           super(parent)
           # Populate @fields instance variable with model's properties
           @fields = RailsAdmin::Config::Fields.factory(self)
           @fields.each do |f|
-            if f.association? && f.type != :belongs_to_association
-              f.hide
+            if f.association? && !f.kind_of?(RailsAdmin::Config::Fields::Types::BelongsToAssociation)
+              f.visible false
             end
           end
         end

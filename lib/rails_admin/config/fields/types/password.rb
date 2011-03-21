@@ -12,6 +12,7 @@ module RailsAdmin
 
           @column_names = [:password]
           @sortable = false
+          @view_helper = :password_field
 
           def self.column_names
             @column_names

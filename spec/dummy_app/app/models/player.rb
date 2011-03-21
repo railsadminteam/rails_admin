@@ -5,6 +5,7 @@ class Player < ActiveRecord::Base
 
   belongs_to(:team)
   has_one(:draft)
+  has_many :comments, :as => :commentable
 
   attr_protected :suspended
 end

@@ -1,10 +1,15 @@
-<p id="listing">
-  <% month_names = t("date.month_names", :locale => :en) if (month_names = t("date.month_names")) =~ /translation/ %>
-  <strong><%= month_names[month] %> <%= year %></strong> <%= t("admin.history.name").downcase %>:
-</p>
-<%= t("admin.history.no_activity") if history.empty? %>
-<ul id="history">
-<% history.each do |t|%>
-<li><%= t.username%> <%= history_output(t)%></li>
-<% end %>
-</ul>
+<div class="ui-widget-header">
+  <%= month_names[month - 1] %> <%= year %> <%= t("admin.history.name").downcase %>
+</div>
+<div class="ra-block-content">
+  <table class="grid">
+    <tbody>
+      <% history.each do |t|%>
+      <tr class="<%= cycle 'odd', 'even' %>">
+         <td style="text-align: left;"><%= t.username%></td>
+         <td style="text-align: left;"><%= history_output(t) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

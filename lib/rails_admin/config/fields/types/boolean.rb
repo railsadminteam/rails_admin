@@ -8,6 +8,8 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
+          @view_helper = :check_box
+
           register_instance_option(:formatted_value) do
             if value == true
               Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("rails_admin/bullet_black.png"), :alt => "True").html_safe
@@ -19,6 +21,14 @@ module RailsAdmin
           # Accessor for field's help text displayed below input field.
           register_instance_option(:help) do
             ""
+          end
+
+          register_instance_option(:html_attributes) do
+            {
+              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+              :checked => value ? true : false,
+              :style => "width:#{column_width}px",
+            }
           end
         end
       end

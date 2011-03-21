@@ -1,23 +1,28 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/datetime'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Time < RailsAdmin::Config::Fields::Base
+        class Time < RailsAdmin::Config::Fields::Types::Datetime
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:formatted_value) do
-            unless (time = value).nil?
-              time.strftime(strftime_format)
-            else
-              "".html_safe
-            end
+          @format = :short
+          @i18n_scope = [:time, :formats]
+          @js_plugin_options = {
+            "showDate" => false,
+          }
+
+          # Register field type for the type loader
+          RailsAdmin::Config::Fields::Types::register(self)
+
+          def parse_input(params)
+            params[name] = self.class.normalize(params[name], localized_time_format) if params[name]
           end
 
           register_instance_option(:strftime_format) do
-            "%I:%M%p"
+            (localized_format.include? "%p") ? "%I:%M %p" : "%H:%M"
           end
         end
       end
