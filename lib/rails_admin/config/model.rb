@@ -25,7 +25,8 @@ module RailsAdmin
       end
 
       def excluded?
-        @excluded ||= !RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }.nil?
+        return @excluded unless @excluded.nil?
+        @excluded = !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
       end
 
       # Configure create and update views as a bulk operation with given block
