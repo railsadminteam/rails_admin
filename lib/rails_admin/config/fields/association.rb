@@ -61,12 +61,12 @@ module RailsAdmin
 
         # Reader for validation errors of the bound object
         def errors
-          bindings[:object].errors[child_key]
+          Array(bindings[:object].errors.on(association[:name]))
         end
 
         # Reader whether the bound object has validation errors
         def has_errors?
-          !(bindings[:object].errors[child_key].nil? || bindings[:object].errors[child_key].empty?)
+          bindings[:object].errors.invalid?(association[:name])
         end
 
         # Reader whether this is a polymorphic association
