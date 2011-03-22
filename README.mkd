@@ -627,6 +627,7 @@ left out:
         end
       end
     end
+  
 
 A word of warning, if you make field declarations for the same field a number
 of times with a type defining second argument in place, the type definition
@@ -650,6 +651,7 @@ RailsAdmin ships with the following field types:
 * integer
 * password _initializes if string type column's name is password_
 * string
+* enum
 * text
 * time
 * timestamp
@@ -692,6 +694,34 @@ Everything can be overridden with `help`:
           field :name
           field :email do
             help 'Required - popular webmail addresses not allowed'
+          end
+        end
+      end
+    end
+
+**Fields - Enum**
+
+Fields of datatype string, integer, text can be rendered with select boxes, if object responds to `method_enum`.
+
+    class Team < ActiveRecord::Base
+      ...
+      def color_enum
+        self.team.available_color_choices
+        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]]
+      end
+      ...
+    end
+    
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :name
+          field :color
+          field :created_at do
+            date_format :short
+          end
+          field :updated_at do
+            strftime_format "%Y-%m-%d"
           end
         end
       end
