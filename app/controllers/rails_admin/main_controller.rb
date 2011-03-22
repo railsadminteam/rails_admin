@@ -323,7 +323,7 @@ module RailsAdmin
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
 
       if @object.errors[:base].size > 0
-        flash.now[:error] << ". " << @object.errors[:base]
+        flash.now[:error] << ". " << @object.errors[:base].to_s
       end
 
       respond_to do |format|
