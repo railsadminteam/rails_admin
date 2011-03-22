@@ -635,6 +635,29 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
   end
+  
+  describe "Enum field support" do
+    it "should show input with class enum" do
+      class Team
+        def color_enum
+          ["blue", "green", "red"]
+        end
+      end
+      
+      RailsAdmin.config Team do
+        edit do
+          field :color
+        end
+      end
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag("select.enum")
+      
+      #Reset
+      Team.send(:remove_method, :color_enum)  
+      RailsAdmin::Config.reset Team
+    end
+
+  end
 
   describe "ColorPicker Support" do
     it "should show input with class color" do
