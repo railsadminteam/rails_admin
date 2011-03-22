@@ -10,7 +10,7 @@ fr:
       last_used: "Utilisé"
       records: "Enregistrements"
       modify: "Modifier"
-      add_new: "Nouv"
+      add_new: "Nouv."
       show: "Voir"
       ago: ""
     history:
@@ -30,7 +30,7 @@ fr:
       required: "Obligatoire"
       optional: "Facultatif"
       one_char: "caractère."
-      many_chars: "caractères ou moins."
+      many_chars: "caractères max."
       chosen: "%{name} choisi(e)"
       select_choice: "Sélectionnez votre choix"
       chose_all: "Tous"
@@ -39,6 +39,7 @@ fr:
       save_and_add_another: "Enregistrer et créer un(e) autre"
       save_and_edit: "Enregistrer et re-modifier"
       cancel: "Annuler"
+      add_new: "Ajouter un(e) %{name}"
     delete:
       flash_confirmation: "%{name} a été détruit(e) avec succès"
       confirmation: "Oui, je suis sûr(e)"
