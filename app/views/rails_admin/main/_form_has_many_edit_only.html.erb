@@ -17,7 +17,7 @@
   <%= label_tag "associations_#{name}", field.label %>
   <div>
     <% if selected.empty? %>
-      <p>Pas de <%= name %> trouvé !</p>
+      <p>Pas de <%= field.label.singularize.downcase %> trouvé(e) !</p>
     <% else %>
       <p><%= selected.map{|id| link_to("#{associated_model_name} ##{id}", rails_admin_edit_path(:model_name => associated_model_name, :id => id)) }.to_sentence %></p>
     <% end %>
