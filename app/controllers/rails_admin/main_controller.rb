@@ -218,15 +218,13 @@ module RailsAdmin
     def get_query_hash(options)
       query = params[:query]
       return {} unless query
-      field_search = !!query.index(":")
+      field = params[:field] != "all" ? params[:field] : nil
       statements = []
       values = []
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
-      # field search allows a search of the type "<fieldname>:<query>"
-      if field_search
-        field, query = query.split ":"
-        return {} unless field && query
+      # search over a field if a field was passed
+      if field
         @properties.select{|property| property[:name] == field.to_sym}.each do |property|
           statements << "(#{table_name}.#{property[:name]} = ?)"
           values << query
@@ -353,7 +351,7 @@ module RailsAdmin
       end
 
       @record_count = @abstract_model.count(options, scope)
-
+      @current_search_field = (params[:field] || "all").to_sym
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.list.select", :name => @model_config.label.downcase)
     end

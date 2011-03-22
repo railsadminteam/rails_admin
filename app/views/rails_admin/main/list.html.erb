@@ -49,6 +49,17 @@
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
                 <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
+                <em>Over Field(s): </em>
+                <select id="search_fields" name="field">
+                  <option value="all">All</option>
+                  <% properties.each do |property| %>
+                    <% if @current_search_field == property.name %>
+                       <option value="<%=property.name %>" selected="selected"><%=property.name %></option>
+                    <% else %>
+                       <option value="<%=property.name %>"><%=property.name %></option> 
+                    <% end %>   
+                  <% end %>
+                </select>
               </fieldset>
             <% end %>
           </div>
