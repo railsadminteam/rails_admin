@@ -12,7 +12,7 @@ module RailsAdmin
 
         def initialize(parent, name)
           super(parent)
-          @name = name
+          @name = name.to_s.gsub(' ', '_').downcase.to_sym
         end
 
         # Defines a configuration for a field by proxying parent's field method
