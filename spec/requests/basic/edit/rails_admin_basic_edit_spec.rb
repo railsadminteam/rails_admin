@@ -86,7 +86,7 @@ describe "RailsAdmin Basic Edit" do
       end
     end
   end
-
+  
   describe "edit with missing object" do
     before(:each) do
       get rails_admin_edit_path(:model_name => "player", :id => 1)
