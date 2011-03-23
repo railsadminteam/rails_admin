@@ -64,11 +64,7 @@ module RailsAdmin
     end
 
     def history_output(t)
-      if not t.message.downcase.rindex("changed").nil?
-        return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"
-      else
-        return t.message.downcase
-      end
+      t.message.downcase + " [#{t.table.capitalize} ##{t.item}]"
     end
 
     # Given a page count and the current page, we generate a set of pagination
