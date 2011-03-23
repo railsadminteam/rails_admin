@@ -35,6 +35,21 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should_not have_tag("input#team_revenue")
     end
 
+    it "should hide association groupings by the name of the association" do
+      RailsAdmin.config Team do
+        edit do
+          group :players do
+            hide
+          end
+        end
+      end
+      get rails_admin_new_path(:model_name => "team")
+      # Should not have the group header
+      response.should_not have_tag("legend", :content => "Players")
+      # Should not have any of the group's fields either
+      response.should_not have_tag("select#associations_players")
+    end
+
     it "should be renameable" do
       RailsAdmin.config Team do
         edit do
