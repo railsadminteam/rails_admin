@@ -106,7 +106,7 @@ module RailsAdmin
         model.reflect_on_all_associations.map do |association|
           {
             :name => association.name,
-            :pretty_name => association.name.to_s.split('_').join(' ').capitalize,
+            :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
             :type => association.macro,
             :parent_model => association_parent_model_lookup(association),
             :parent_key => association_parent_key_lookup(association),
@@ -127,7 +127,7 @@ module RailsAdmin
         model.columns.map do |property|
           {
             :name => property.name.to_sym,
-            :pretty_name => property.name.to_s.split('_').join(' ').capitalize,
+            :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
             :type => property.type,
             :length => property.limit,
             :nullable? => property.null,
