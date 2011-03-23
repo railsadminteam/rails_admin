@@ -4,7 +4,6 @@ module RailsAdmin
   # through this module so users can patch it to use other history/audit
   # packages.
   class AbstractHistory
-    extend ActionView::Helpers::SanitizeHelper
     
     # Create a history record for an update operation.
     def self.create_update_history(model, object, associations_before, associations_after, modified_associations, old_object, user)
