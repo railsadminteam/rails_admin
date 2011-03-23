@@ -4,7 +4,8 @@ module RailsAdmin
   # through this module so users can patch it to use other history/audit
   # packages.
   class AbstractHistory
-
+    extend ActionView::Helpers::SanitizeHelper
+    
     # Create a history record for an update operation.
     def self.create_update_history(model, object, associations_before, associations_after, modified_associations, old_object, user)
       messages = []
@@ -15,8 +16,8 @@ module RailsAdmin
 
       properties.each do |property|
         property_name = property[:name].to_param
-        if old_object.send(property_name) != object.send(property_name)
-          changed_property_list << property_name
+        if (old_value = old_object.send(property_name)) != (new_value = object.send(property_name))
+          changed_property_list << "#{property_name} (#{old_value.blank? ? '<empty>' : old_value.to_s} -> #{new_value.blank? ? '<empty>' : new_value.to_s})"
         end
       end
 
