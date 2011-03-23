@@ -23,6 +23,14 @@ module RailsAdmin
               :multiple => "multiple",
             }
           end
+
+          def selected(params)
+            if params["associations"]
+              params["associations"][association[:name]].to_a.map{|o| o.to_i}
+            else
+              bindings[:object].send(association[:name]).map{|o| o.id }
+            end
+          end
         end
       end
     end

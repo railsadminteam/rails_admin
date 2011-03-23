@@ -176,10 +176,6 @@ module RailsAdmin
           optional(state)
         end
 
-        def to_param
-          "#{abstract_model.to_param.singularize}_#{name}"
-        end
-
         # Legacy support
         def to_hash
           {
