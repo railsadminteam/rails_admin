@@ -23,7 +23,7 @@ module RailsAdmin
       model.associations.each do |t|
         assoc = changed_property_list.index(t[:child_key].to_param)
         if assoc
-          changed_property_list[assoc] = "associated #{t[:pretty_name]}"
+          changed_property_list[assoc] = "Associated #{t[:pretty_name]}"
         end
       end
 
@@ -32,19 +32,19 @@ module RailsAdmin
         removed_ids = (associations_before[key] - current).map{|m| '#' + m.to_s}
         added_ids = (current - associations_before[key]).map{|m| '#' + m.to_s}
         if removed_ids.any?
-          messages << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations"
+          messages << "#{I18n.t("admin.actions.deleted").capitalize} associations #{key.to_s.capitalize} #{removed_ids.join(', ')}"
         end
         if added_ids.any?
-          messages << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations"
+          messages << "#{I18n.t("admin.actions.created").capitalize} associations #{key.to_s.capitalize} #{added_ids.join(', ')}"
         end
       end
 
       modified_associations.uniq.each do |t|
-        changed_property_list << "associated #{t}"
+        changed_property_list << "Associated #{t}"
       end
 
       if not changed_property_list.empty?
-        messages << "Changed #{changed_property_list.join(", ")}"
+        messages << "#{I18n.t("admin.actions.updated").capitalize} #{changed_property_list.join(", ")}"
       end
 
       create_history_item(messages, object, model, user) unless messages.empty?
