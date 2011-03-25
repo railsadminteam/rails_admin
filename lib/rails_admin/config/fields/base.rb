@@ -201,7 +201,7 @@ module RailsAdmin
 
         # Reader for field's value
         def value
-          bindings[:object].send(name)
+          bindings[:object].read_attribute(name)
         end
       end
     end
