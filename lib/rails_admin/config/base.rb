@@ -62,15 +62,16 @@ module RailsAdmin
         scope.send(:define_method, option_name) do |*args, &block|
           if !args[0].nil? || block
             # Invocation with args --> This is the declaration of the option, i.e. setter
-            # set up an alias method chain to avoid infinite recursion in a situation such as
-            # label { "#{label}".upcase }
-
             instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
           else
             # Invocation without args nor block --> It's the use of the option, i.e. getter
             value = instance_variable_get("@#{option_name}")
             case value
               when Proc
+                # Track recursive invocation with an instance variable. This prevents run-away recursion
+                # and allows configurations such as
+                # label { "#{label}".upcase }
+                # This will use the default definition when called recursively.
                 if instance_variable_get("@#{option_name}_recurring")
                   value = instance_eval &default
                 else
@@ -82,21 +83,6 @@ module RailsAdmin
                 value = instance_eval &default
             end
             value
-
-#            value = instance_variable_get("@#{option_name}")
-#            value = default if value.nil?
-#            if value.kind_of?(Proc)
-#              # Override current method with the block containing this option's default value.
-#              # This prevents accidental infinite loops and allows configurations such as
-#              # label { "#{label}".upcase }
-#              scope.alias_method_chain
-#
-#              option_method = scope.instance_method(option_name)
-#              scope.send(:define_method, option_name, default)
-#              value = instance_eval &value
-#              scope.send(:define_method, option_name, option_method) # Return the original method
-#            end
-#            value
           end
         end
       end
