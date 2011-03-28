@@ -44,6 +44,8 @@ de:
       save_and_add_another: "Speichern und einen weiteren hinzufügen"
       save_and_edit: "Speichern und bearbeiten"
       cancel: "Abbrechen"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} wurde erfolgreich entfernt"
       confirmation: "Ja, ich bin sicher"

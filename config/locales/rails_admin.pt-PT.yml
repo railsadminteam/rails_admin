@@ -41,6 +41,8 @@ pt-PT:
       save_and_add_another: "Guardar e adicionar outro"
       save_and_edit: "Guardar e editar"
       cancel: "Cancelar"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} foi apagado com sucesso"
       confirmation: "Sim, com certeza."

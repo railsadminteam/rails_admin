@@ -44,6 +44,8 @@ en:
       save_and_add_another: "Save and add another"
       save_and_edit: "Save and edit"
       cancel: "Cancel"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} was successfully destroyed"
       confirmation: "Yes, I'm sure"

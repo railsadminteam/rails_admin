@@ -44,6 +44,8 @@ sv:
       save_and_add_another: "Spara och lägg till ny"
       save_and_edit: "Spara och redigera"
       cancel: "Avbryt"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} har förstörts"
       confirmation: "Ja, jag är säker"

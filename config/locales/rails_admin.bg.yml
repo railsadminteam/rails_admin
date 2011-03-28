@@ -42,6 +42,8 @@ bg:
       save_and_add_another: "Запамети и добави друг"
       save_and_edit: "Запамети и редактирай"
       cancel: "Откажи"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} е успешно изтрит"
       confirmation: "Да, сигурен съм"

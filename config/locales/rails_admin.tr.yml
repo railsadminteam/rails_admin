@@ -42,6 +42,8 @@ tr:
       save_and_add_another: "Kaydet ve başka ekle"
       save_and_edit: "Kaydet ve düzenle"
       cancel: "İptal et"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} başarıyla silindi"
       confirmation: "Evet, eminim"

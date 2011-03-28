@@ -39,6 +39,8 @@ lv:
       save_and_add_another: "Saglabāt un pievienot jaunu"
       save_and_edit: "Saglabāt un labot"
       cancel: "Atcelt"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} veiksmīgi izdzēsts"
       confirmation: "Jā, esmu pārliecināts"

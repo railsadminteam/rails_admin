@@ -39,6 +39,8 @@ fr:
       save_and_add_another: "Enregistrer et ajouter une autre"
       save_and_edit: "Enregistrer et modifier"
       cancel: "Annuler"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} a été détruit avec succès"
       confirmation: "Oui, je suis sûr"

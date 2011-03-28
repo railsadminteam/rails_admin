@@ -39,6 +39,8 @@ da:
       save_and_add_another: "Gem og tilføj ny"
       save_and_edit: "Gem og rediger"
       cancel: "Fortryd"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} er nu slettet"
       confirmation: "Ja, jeg er sikker"

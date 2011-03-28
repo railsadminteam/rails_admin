@@ -43,6 +43,8 @@ lt:
       save_and_add_another: "Išsaugoti ir pridėti naują"
       save_and_edit: "Išsaugoti ir tęsti redagavimą"
       cancel: "Atšaukti"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} ištrintas"
       confirmation: "Taip, aš sutinku"

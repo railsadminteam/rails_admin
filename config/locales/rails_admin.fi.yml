@@ -42,6 +42,8 @@ fi:
       save_and_add_another: "Tallenna ja lisää uusi"
       save_and_edit: "Tallenna ja muokkaa"
       cancel: "Peruuta"
+    edit:
+      add_new_associated_model_name: "Add new %{name}"
     delete:
       flash_confirmation: "%{name} poistettiin onnistuneesti"
       confirmation: "Kyllä, olen varma"
