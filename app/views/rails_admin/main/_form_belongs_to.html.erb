@@ -14,7 +14,7 @@
                 <%= label_tag field.to_param, field.label %>
                 <%= form.select field.name, collection, {:include_blank => true, :selected => selected}, field.html_attributes %>
                 <% if authorized? :new, @abstract_model %>
-                  <%= link_to t("admin.edit.add_new_associated_model_name", :name => associated_model_name), rails_admin_new_path(:model_name => associated_model_name ), :class => "createAssociatedRecord" %>
+                  <%= link_to t("admin.edit.add_new_associated_model_name", :name => associated_model_name), rails_admin_new_path(:model_name => associated_model.abstract_model.to_param), :class => "createAssociatedRecord" %>
                 <% end %>  
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
