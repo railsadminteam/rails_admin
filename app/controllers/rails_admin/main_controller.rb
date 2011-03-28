@@ -273,7 +273,7 @@ module RailsAdmin
     end
 
     def get_attributes
-      @attributes = params[@abstract_model.to_param.singularize] || {}
+      @attributes = params[@abstract_model.to_param.singularize.gsub('~','_')] || {}
       @attributes.each do |key, value|
         # Deserialize the attribute if attribute is serialized
         if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
