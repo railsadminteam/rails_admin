@@ -62,7 +62,7 @@ module RailsAdmin
       # store the configurations.
       def method_missing(m, *args, &block)
         responded_to = false
-        [:create, :destroy, :list, :navigation, :update].each do |s|
+        [:create, :list, :navigation, :update].each do |s|
           section = send(s)
           if section.respond_to?(m)
             responded_to = true
