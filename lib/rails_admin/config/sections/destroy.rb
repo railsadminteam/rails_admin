@@ -10,6 +10,10 @@ module RailsAdmin
         register_instance_option(:soft_destroy) do
           false
         end
+        # Defines if we should display the related objects on delete
+        register_instance_option(:related) do
+          true
+        end
       end
     end
   end
