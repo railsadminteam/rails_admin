@@ -62,13 +62,13 @@
               $j(document).ready(function($){
                 var cache = {};
                  $("#timeline").timeline({
-                   url: "/admin/history/slider",
+                   url: "<%= rails_admin_history_slider_path %>",
                    monthChanged: function(month, year) {
                      if (cache[year] && cache[year][month]) {
                        $("#listingHistory").html(cache[year][month]);
                      } else {
                        $j("#listingHistory").load(
-                         "/admin/history/list",
+                         "<%= rails_admin_history_list_path %>",
                          { month: month, year: year },
                          function(response, status, xhr) {
                            if (!cache[year]) { cache[year] = {}; }
