@@ -46,7 +46,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/player/new with has-many association" do
     before(:each) do
       (1..3).each do |number|
-        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
 
       get rails_admin_new_path(:model_name => "player")
@@ -64,7 +64,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
     before(:each) do
       (1..3).each do |number|
-        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
 
       get rails_admin_new_path(:model_name => "fan")
@@ -82,7 +82,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/player/new with missing label" do
     before(:each) do
       (1..3).each do |number|
-        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
       get rails_admin_new_path(:model_name => "player")
     end
