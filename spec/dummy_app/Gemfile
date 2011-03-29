@@ -4,6 +4,7 @@ gem 'rails', '~> 3.0.4'
 gem 'devise', '~> 1.1'
 gem 'paperclip', '~> 2.3'
 gem 'rails_admin', :path => '../../'
+gem 'mlb'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
