@@ -786,6 +786,21 @@ accomplished like this:
       end
     end
 
+**Soft destroys**
+
+When the admin interface deletes an object it invokes the destroy method on the object. But if another method must be invoked instead of destroy one can assign a configuration to achieve that:
+
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        destroy do
+          soft_destroy :custom_destroy
+        end
+      end
+    end
+
+If the soft_destroy configuration receives `true` instead of a `:symbol`, the method soft_destroy will be invoked by default.
+
 Authorization
 -------------
 

@@ -1,5 +1,6 @@
 require 'active_support/core_ext/string/inflections'
 require 'rails_admin/config/sections/create'
+require 'rails_admin/config/sections/destroy'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/navigation'
 require 'rails_admin/config/sections/update'
