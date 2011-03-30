@@ -46,7 +46,7 @@ describe "RailsAdmin" do
 
   describe "polymorphic associations" do
     before :each do
-      @team = RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Commentable Team", :manager => "Manager", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @team = RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Commentable Team", :manager => "Manager", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       @comment = RailsAdmin::AbstractModel.new("Comment").create(:content => "Comment on a team", :commentable => @team)
     end
 

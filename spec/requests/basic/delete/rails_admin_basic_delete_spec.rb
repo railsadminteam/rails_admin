@@ -30,7 +30,7 @@ describe "RailsAdmin Basic Delete" do
   describe "delete with missing label" do
     before(:each) do
       @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
-      @team = RailsAdmin::AbstractModel.new("Team").create(:league_id => @league.id, :division_id => rand(99999), :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @team = RailsAdmin::AbstractModel.new("Division").create(:league_id => @league.id, :name => "Division 1")
 
       get rails_admin_delete_path(:model_name => "league", :id => @league.id)
     end

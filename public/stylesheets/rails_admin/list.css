@@ -17,6 +17,10 @@
   color:#000;
 }
 
+.grid thead th.selected a {
+  padding: 0 20px 0 0;
+}
+
 .grid thead th a.ascending {
   background-image: url(../../images/rails_admin/bullet_arrow_up.png);
 }

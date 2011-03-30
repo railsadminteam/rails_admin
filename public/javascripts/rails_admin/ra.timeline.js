@@ -92,21 +92,19 @@
     },
 
     _getCurrentDate: function() {
-        var date = new Date();
-        date.setTime(this.options.date.valueOf());
-        return date;
+      return new Date(this.options.date.getFullYear(), this.options.date.getMonth(), 1);
     },
 
     _getNextMonthDate: function() {
-        var date = this._getCurrentDate();
-        date.setMonth(this.options.date.getMonth() + 1);
-        return date;
+      var date = this._getCurrentDate();
+      date.setMonth(this.options.date.getMonth() + 1);
+      return date;
     },
 
     _getPreviousMonthDate: function() {
-        var date = this._getCurrentDate();
-        date.setMonth(this.options.date.getMonth() - 1);
-        return date;
+      var date = this._getCurrentDate();
+      date.setMonth(this.options.date.getMonth() - 1);
+      return date;
     },
 
     _moveHandleToLeft: function() {

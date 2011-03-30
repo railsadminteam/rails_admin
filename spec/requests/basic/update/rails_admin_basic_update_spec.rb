@@ -101,16 +101,16 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
 
-      @teams = []
+      @divisions = []
       (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @divisions << RailsAdmin::AbstractModel.new("Division").create(:league_id => rand(99999), :name => "Division #{number}")
       end
 
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
 
       fill_in "league[name]", :with => "National League"
 
-      select @teams[0].name, :from => "associations_teams"
+      select @divisions[0].name, :from => "associations_divisions"
 
       response = click_button "Save"
       @league = RailsAdmin::AbstractModel.new("League").first
@@ -122,34 +122,34 @@ describe "RailsAdmin Basic Update" do
     end
 
     it "should update an object with correct associations" do
-      @teams[0].reload
-      @league.teams.should include(@teams[0])
+      @divisions[0].reload
+      @league.divisions.should include(@divisions[0])
     end
 
     it "should not update an object with incorrect associations" do
-      @league.teams.should_not include(@teams[1])
-      @league.teams.should_not include(@teams[2])
+      @league.divisions.should_not include(@divisions[1])
+      @league.divisions.should_not include(@divisions[2])
     end
 
     it "should log a history message about the update" do
-      @histories.collect(&:message).should include("Added Teams ##{@teams[0].id} associations, Changed name")
+      @histories.collect(&:message).should include("Added Divisions ##{@divisions[0].id} associations, Changed name")
     end
 
     describe "removing has-many associations" do
       before(:each) do
         get rails_admin_edit_path(:model_name => "league", :id => @league.id)
-        unselect @teams[0].name, :from => "associations_teams"
+        unselect @divisions[0].name, :from => "associations_divisions"
         response = click_button "Save"
         @league = RailsAdmin::AbstractModel.new("League").first
         @histories.reload
       end
 
       it "should have empty associations" do
-        @league.teams.should be_empty
+        @league.divisions.should be_empty
       end
 
       it "should log a message to history about removing associations" do
-        @histories.collect(&:message).should include("Removed Teams ##{@teams[0].id} associations")
+        @histories.collect(&:message).should include("Removed Divisions ##{@divisions[0].id} associations")
       end
     end
   end
@@ -157,7 +157,7 @@ describe "RailsAdmin Basic Update" do
   describe "update with has-and-belongs-to-many association" do
     before(:each) do
       @teams = (1..3).collect do |number|
-        RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
 
       @fan = RailsAdmin::AbstractModel.new("Fan").create(:name => "Fan 1")

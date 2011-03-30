@@ -21,7 +21,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       # Should not have the group header
       response.should_not have_tag("legend", :content => "Hidden Group")
       # Should not have any of the group's fields either
-      response.should_not have_tag("select#team_league_id")
       response.should_not have_tag("select#team_division_id")
       response.should_not have_tag("input#team_name")
       response.should_not have_tag("input#team_logo_url")
@@ -72,7 +71,6 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
           group :belongs_to_associations do
             label "Belong's to associations"
-            field :league_id
             field :division_id
           end
         end
@@ -83,9 +81,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("#team_name")
         elements[1].should have_tag("#team_logo_url")
-        elements[2].should have_tag("#team_league_id")
-        elements[3].should have_tag("#team_division_id")
-        elements.length.should == 4
+        elements[2].should have_tag("#team_division_id")
+        elements.length.should == 3
       end
     end
 
@@ -93,7 +90,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       RailsAdmin.config Team do
         edit do
           group :default do
-            field :league_id
             field :name
             field :logo_url
           end
@@ -109,7 +105,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements.should have_tag("label", :content => "League")
         elements.should have_tag("label", :content => "Name")
         elements.should have_tag("label", :content => "Logo url")
         elements.should have_tag("label", :content => "Division")
@@ -123,7 +118,6 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     it "should show all by default" do
       get rails_admin_new_path(:model_name => "team")
-      response.should have_tag("select#team_league_id")
       response.should have_tag("select#team_division_id")
       response.should have_tag("input#team_name")
       response.should have_tag("input#team_logo_url")
@@ -158,17 +152,15 @@ describe "RailsAdmin Config DSL Edit Section" do
     it "should only show the defined fields if some fields are defined" do
       RailsAdmin.config Team do
         edit do
-          field :league_id
           field :division_id
           field :name
         end
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements[0].should have_tag("#team_league_id")
-        elements[1].should have_tag("#team_division_id")
-        elements[2].should have_tag("#team_name")
-        elements.length.should == 3
+        elements[0].should have_tag("#team_division_id")
+        elements[1].should have_tag("#team_name")
+        elements.length.should == 2
       end
     end
 
@@ -215,7 +207,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements.should have_tag("label", :content => "League")
         elements.should have_tag("label", :content => "Division")
         elements.should have_tag("label", :content => "Name (STRING)")
         elements.should have_tag("label", :content => "Logo url (STRING)")
@@ -242,7 +233,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements.should have_tag("label", :content => "League")
         elements.should have_tag("label", :content => "Division")
         elements.should have_tag("label", :content => "Name (STRING)")
         elements.should have_tag("label", :content => "Logo url (STRING)")
@@ -286,7 +276,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements.should have_tag("label", :content => "League")
         elements.should have_tag("label", :content => "Division")
         elements.should_not have_tag("label", :content => "Name")
         elements.should_not have_tag("label", :content => "Logo url")
@@ -313,7 +302,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
-        elements.should have_tag("label", :content => "League")
         elements.should have_tag("label", :content => "Division")
         elements.should_not have_tag("label", :content => "Name")
         elements.should_not have_tag("label", :content => "Logo url")

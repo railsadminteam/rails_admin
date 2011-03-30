@@ -16,18 +16,18 @@ module RailsAdmin
         sql_in = (mstart + 1..12).to_a.join(", ")
         sql_in_two = (1..mstop).to_a.join(", ")
 
-        results = History.find_by_sql("select count(*) as number, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
-        results_two = History.find_by_sql("select count(*) as number, year, month from rails_admin_histories where month IN (#{sql_in_two}) and year = #{ystop} group by year, month")
+        results = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
+        results_two = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in_two}) and year = #{ystop} group by year, month")
 
         results.concat(results_two)
       else
         sql_in =  (mstart + 1..mstop).to_a.join(", ")
 
-        results = History.find_by_sql("select count(*) as number, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
+        results = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
       end
 
       results.each do |result|
-        result.number = result.number.to_i
+        result.record_count = result.record_count.to_i
       end
 
       add_blank_results(results, mstart, ystart)
