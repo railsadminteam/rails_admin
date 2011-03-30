@@ -41,6 +41,10 @@ module RailsAdmin
         register_instance_option(:sort_reverse?) do
           true # By default show latest first
         end
+
+        register_instance_option(:searches) do
+          {:all => :text}
+        end
       end
     end
   end
