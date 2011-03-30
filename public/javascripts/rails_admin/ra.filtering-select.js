@@ -15,45 +15,46 @@
  */
 (function($) {
   $.widget("ra.filteringSelect", {
+    options: {
+      createQuery: function(query) {
+        return { query: query };
+      },
+      minLength: 0,
+      searchDelay: 400,
+      source: null
+    },
+
     _create: function() {
       var self = this,
         select = this.element.hide(),
         selected = select.children(":selected"),
         value = selected.val() ? selected.text() : "";
+
+      if (!this.options.source) {
+        this.options.source = select.children("option").map(function() {
+          return { label: $(this).text(), value: this.value };
+        }).toArray();
+      }
+
       var input = this.input = $("<input>")
         .insertAfter(select)
         .val(value)
         .addClass("ra-filtering-select-input")
         .autocomplete({
-          delay: 0,
-          minLength: 0,
-          source: function(request, response) {
-            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-            response(select.children("option").map(function() {
-              var text = $(this).text();
-              if (this.value && (!request.term || matcher.test(text)))
-                return {
-                  label: text.replace(
-                    new RegExp(
-                      "(?![^&;]+;)(?!<[^<>]*)(" +
-                      $.ui.autocomplete.escapeRegex(request.term) +
-                      ")(?![^<>]*>)(?![^&;]+;)", "gi"
-                   ), "<strong>$1</strong>"),
-                  value: text,
-                  option: this
-                };
-            }));
-          },
+          delay: this.options.searchDelay,
+          minLength: this.options.minLength,
+          source: this._getSourceFunction(this.options.source),
           select: function(event, ui) {
-            ui.item.option.selected = true;
+            var option = $('<option value="' + ui.item.id + '" selected="selected">' + ui.item.value + '</option>');
+            select.html(option);
             self._trigger("selected", event, {
-              item: ui.item.option
+              item: option
             });
           },
           change: function(event, ui) {
             if (!ui.item) {
               var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
-                valid = false;
+                  valid = false;
               select.children("option").each(function() {
                 if ($(this).text().match(matcher)) {
                   this.selected = valid = true;
@@ -102,6 +103,67 @@
           input.autocomplete("search", "");
           input.focus();
         });
+    },
+
+    _getResultSet: function(request, data) {
+      var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+      return $.map(data, function(el, i) {
+        if ((el.id || el.value) && (!request.term || matcher.test(el.label))) {
+          return {
+            label: el.label.replace(
+              new RegExp(
+                "(?![^&;]+;)(?!<[^<>]*)(" +
+                $.ui.autocomplete.escapeRegex(request.term) +
+                ")(?![^<>]*>)(?![^&;]+;)", "gi"
+             ), "<strong>$1</strong>"),
+            value: el.label,
+            id: el.id || el.value
+          };
+        }
+      });
+    },
+
+    _getSourceFunction: function(source) {
+
+      var self = this,
+          requestIndex = 0;
+
+      if ($.isArray(source)) {
+
+        return function(request, response) {
+          response(self._getResultSet(request, source));
+        };
+
+      } else if (typeof source === "string") {
+
+        return function(request, response) {
+
+          if (this.xhr) {
+            this.xhr.abort();
+          }
+
+          this.xhr = $.ajax({
+            url: source,
+            data: self.options.createQuery(request.term),
+            dataType: "json",
+            autocompleteRequest: ++requestIndex,
+            success: function(data, status) {
+              if (this.autocompleteRequest === requestIndex) {
+                response(self._getResultSet(request, data));
+              }
+            },
+            error: function() {
+              if (this.autocompleteRequest === requestIndex) {
+                response([]);
+              }
+            }
+          });
+        };
+
+      } else {
+
+        return source;
+      }
     },
 
     destroy: function() {
