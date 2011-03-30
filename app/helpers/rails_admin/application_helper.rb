@@ -179,13 +179,15 @@ module RailsAdmin
       @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
     end
 
-    # returns link to "/".  FIXME - at the moment this returns just
-    # text, not a link.  depending on how the discussion on issue 345
-    # works out we might put some code here to try a link but fall
-    # back to plain text.
+    # returns a link to "/" unless there's a problem, which will
+    # probably be caused by root_path not being configured.  see
+    # https://github.com/sferik/rails_admin/issues/345 .
     def home_link
-      # FIXME - link_to(t('home.name'), '/')
-      t('home.name')
+      begin
+        link_to(t('home.name'), '/')
+      rescue ActionView::Template::Error
+        t('home.name')
+      end
     end
 
   end
