@@ -20,7 +20,7 @@ get access.  These rules will vary, but here's an example:
 authorization do
   role :admin do
     has_permission_on :rails_admin_history, :to => :list
-    has_permission_on :rails_admin_main, :to => [:index, :show, :new, :edit, :create, :update, :destroy, :list, :delete, :get_pages, :show_history]
+    has_permission_on :rails_admin_main, :to => [:index, :show, :new, :edit, :create, :update, :destroy, :list, :delete, :bulk_delete, :bulk_destroy, :get_pages, :show_history]
   end
 end
 ```
