@@ -35,6 +35,7 @@ GEM
       activemodel (= 3.0.5)
       activesupport (= 3.0.5)
     activesupport (3.0.5)
+    addressable (2.2.4)
     arel (2.0.9)
     bcrypt-ruby (2.1.4)
     bcrypt-ruby (2.1.4-java)
@@ -45,6 +46,12 @@ GEM
       warden (~> 1.0.3)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    faraday (0.5.7)
+      addressable (~> 2.2.4)
+      multipart-post (~> 1.1.0)
+      rack (< 2, >= 1.1.0)
+    faraday_middleware (0.3.2)
+      faraday (~> 0.5.4)
     i18n (0.5.0)
     mail (2.2.15)
       activesupport (>= 2.3.6)
@@ -52,6 +59,12 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mlb (0.5.3)
+      faraday (~> 0.5.3)
+      faraday_middleware (~> 0.3.1)
+      multi_json (~> 0.0.5)
+    multi_json (0.0.5)
+    multipart-post (1.1.0)
     orm_adapter (0.0.4)
     paperclip (2.3.8)
       activerecord
@@ -90,6 +103,7 @@ PLATFORMS
 
 DEPENDENCIES
   devise (~> 1.1)
+  mlb
   paperclip (~> 2.3)
   rails (~> 3.0.4)
   rails_admin!
