@@ -5,7 +5,7 @@
 <body>
   <div id="wrapper">
     <% content_for :breadcrumb do %>
-      <li><%= t('home.name') %></li>
+      <li><%= home_link %></li>
       <li>&rsaquo; <span><%= t('admin.dashboard.name') %></span></li>
     <% end %>
     <%= render(:partial => 'layouts/rails_admin/header') %>

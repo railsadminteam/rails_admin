@@ -178,5 +178,15 @@ module RailsAdmin
     def authorized?(*args)
       @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
     end
+
+    # returns link to "/".  FIXME - at the moment this returns just
+    # text, not a link.  depending on how the discussion on issue 345
+    # works out we might put some code here to try a link but fall
+    # back to plain text.
+    def home_link
+      # FIXME - link_to(t('home.name'), '/')
+      t('home.name')
+    end
+
   end
 end
