@@ -15,8 +15,8 @@ class RenderingTest < ActionDispatch::PerformanceTest
 
   def setup
     user = RailsAdmin::AbstractModel.new("User").create(
-      :email => "test@test.com",
-      :password => "test1234"
+      :email => "username@example.com",
+      :password => "password"
     )
 
     login_as user

@@ -3,4 +3,8 @@ class League < ActiveRecord::Base
 
   has_many(:divisions)
   has_many(:teams)
+
+  def teams
+  	Team.joins(:division).where("divisions.league_id" => id)
+  end
 end

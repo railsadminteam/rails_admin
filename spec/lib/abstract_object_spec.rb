@@ -64,11 +64,10 @@ describe "AbstractObject" do
       let(:object) { RailsAdmin::AbstractObject.new league }
       let(:name) { "Awesome League" }
       let(:divisions) { [Division.create(:name => "D1", :league_id => -1), Division.create(:name => "D2", :league_id => -1)] }
-      let(:teams) { [Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1), Team.create(:name => "T2", :manager => "M2", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1)] }
 
       before do
         object.attributes = { :name  => name }
-        object.associations = { :teams => teams.map(&:id), :divisions => divisions }
+        object.associations = { :divisions => divisions }
       end
 
       it "should create a League with given attributes and associations" do
@@ -76,7 +75,6 @@ describe "AbstractObject" do
         league.reload
         league.name.should == name
         league.divisions.should == divisions
-        league.teams.should == teams
       end
     end
   end
@@ -87,7 +85,7 @@ describe "AbstractObject" do
       let(:suspended) { true }
       let(:player) { Player.create(:suspended => true, :number => 42, :name => name) }
       let(:object) { RailsAdmin::AbstractObject.new player }
-      let(:new_team) { Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :league_id => -1, :division_id => -1) }
+      let(:new_team) { Team.create(:name => "T1", :manager => "M1", :founded => 1, :wins => 1, :losses => 1, :win_percentage => 1, :division_id => -1) }
       let(:new_suspended) { false }
       let(:new_draft) { nil }
       let(:new_number) { player.number + 29 }
