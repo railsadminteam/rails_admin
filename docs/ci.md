@@ -5,6 +5,19 @@ RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration se
 * Test builds are available for public browsing at [ci.railsadmin.org](http://ci.railsadmin.org/)
 * An RSS feed for following failed builds is available at [feed://ci.railsadmin.org/job/RailsAdmin/rssFailed](feed://ci.railsadmin.org/job/RailsAdmin/rssFailed)
 
+RailsAdmin is tested with
+
+* jruby-1.6.0 [ linux-i386-java ]
+* ree-1.8.7-2011.03 [ i386 ]
+* ruby-1.8.7-p334 [ i386 ]
+* ruby-1.9.2-p180 [ i386 ]
+
+and
+
+* MySQL
+* PostgreSQL
+* SQLite3
+
 This document describes the Hudson setup used with RailsAdmin in case there's need to duplicate it manually. 
 
 ### Installing Hudson on Ubuntu
