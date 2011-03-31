@@ -5,7 +5,9 @@
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
   properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
+  search_fields = @model_config.list.fields.select{|field| @model_config.list.searches.include?(field.name)} rescue nil 
   filters_exist = !properties.select{|property| property.type == :boolean}.empty?
+
   # columns paginate
   @style, @other, properties = get_column_set(properties)
 %>
@@ -50,11 +52,23 @@
                 </li>
               <% end %>
             </ul>
-            <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
-              <fieldset>
+            <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do |form| %>
+              
+               <fieldset>
+              <% if @filters %>
+              <%  @filters.each do |filter|  %>
+                <%= render :partial => 'filter', :locals => {:filter => filter } %>
+              <%  end %>
+              <% end %>  
+              <% if search_fields.nil? or search_fields.empty? %>
                 <input type="text" name="query" value="<%= query %>" size="32" />
-                <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
-              </fieldset>
+             <% else %>
+                <% search_fields.each do |field| %>
+                  <%= render :partial => "search_#{field.type}", :locals => {:query => query, :field => field}-%>
+                <% end %>
+              <% end %>
+               <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
+             </fieldset>
             <% end %>
           </div>
           <%= form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do %>
