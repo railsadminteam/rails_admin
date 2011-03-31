@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       delete "/:model_name/:id", :to => :destroy, :as => "destroy"
       get "/:model_name/bulk_delete", :to => :bulk_delete, :as => "bulk_delete"
       post "/:model_name/bulk_destroy", :to => :bulk_destroy, :as => "bulk_destroy"
+      match "/:model_name/export", :to => :export, :as => "export"
     end
     scope "history", :as => "history" do
       controller "history" do

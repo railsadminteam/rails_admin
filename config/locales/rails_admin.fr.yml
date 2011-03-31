@@ -31,7 +31,7 @@ fr:
       optional: "Facultatif"
       one_char: "caractère."
       many_chars: "caractères max."
-      chosen: "%{name} choisi(e)"
+      chosen: "%{name} choisi(e)s"
       select_choice: "Sélectionnez votre choix"
       chose_all: "Tous"
       clear_all: "Vider"
@@ -40,6 +40,8 @@ fr:
       save_and_edit: "Enregistrer et re-modifier"
       cancel: "Annuler"
       add_new: "Ajouter un(e) %{name}"
+    export:
+      confirmation: "Exporter"
     delete:
       flash_confirmation: "%{name} a été détruit(e) avec succès"
       confirmation: "Oui, je suis sûr(e)"
@@ -54,3 +56,5 @@ fr:
       updated: "modifié"
       delete: "suppression"
       deleted: "supprimé"
+      export: "export"
+      exported: "exporté"

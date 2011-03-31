@@ -45,6 +45,8 @@ en:
       save_and_edit: "Save and edit"
       cancel: "Cancel"
       add_new: "Add new %{name}"
+    export:
+      confirmation: "Export"
     delete:
       flash_confirmation: "%{name} was successfully destroyed"
       confirmation: "Yes, I'm sure"
@@ -59,3 +61,5 @@ en:
       updated: "updated"
       delete: "delete"
       deleted: "deleted"
+      export: "export"
+      exported: "exporté"

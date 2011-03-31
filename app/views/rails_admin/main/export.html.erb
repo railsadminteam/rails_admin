@@ -1,0 +1,21 @@
+<% head_javascript "rails_admin/application.js" %>
+<div class="ra-block">
+  <div class="ui-widget-header">
+    What will you export?
+  </div>
+<%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+  <div class="ra-block-content">
+    <p>Chose fields:</p>
+
+    <%= form_tag rails_admin_list_path(:model_name => @abstract_model.to_param, :all => true, :format => 'csv'), :method => 'get' do %>
+      <ul class="submit clearfix">
+        <li>
+          <%= submit_tag t("admin.export.confirmation"), :class => "ra-button ui-state-highlight" %>
+        </li>
+        <li>
+          <%= submit_tag t("admin.new.cancel"), :class => "ra-button", :name => "_continue" %>
+        </li>
+      </ul>
+    <% end =%>
+  </div>
+</div>

@@ -39,6 +39,11 @@
               <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
+              <% if authorized? :export, @abstract_model %>
+                <li>
+                 <%= link_to(t("admin.list.export"), rails_admin_export_path(:model_name => @abstract_model.to_param), :class => "ra-button") %>
+                </li>
+              <% end %>
               <% if authorized? :new, @abstract_model %>
                 <li>
                  <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "ra-button") %>

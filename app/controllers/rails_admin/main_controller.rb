@@ -4,7 +4,7 @@ module RailsAdmin
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
-    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy]
+    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy, :list]
 
     def index
       @authorization_adapter.authorize(:index) if @authorization_adapter
@@ -50,6 +50,7 @@ module RailsAdmin
           end
         end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
+        format.csv { send_data @objects.to_csv }
       end
     end
 
@@ -171,6 +172,15 @@ module RailsAdmin
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
+    
+    def export
+      @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
+
+      @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
+      @page_type = @abstract_model.pretty_name.downcase
+
+      render :layout => 'rails_admin/export'
+    end
 
     def bulk_delete
       @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
@@ -233,7 +243,7 @@ module RailsAdmin
 
     def get_query_hash(options)
       query = params[:query]
-      return {} unless query
+      return {} if query.blank?
       field_search = !!query.index(":")
       statements = []
       values = []
@@ -263,7 +273,7 @@ module RailsAdmin
 
     def get_filter_hash(options)
       filter = params[:filter]
-      return {} unless filter
+      return {} if filter.blank?
       statements = []
       values = []
       conditions = options[:conditions] || [""]
@@ -356,8 +366,8 @@ module RailsAdmin
       options.merge!(:include => associations) unless associations.empty?
 
       if params[:all]
-        options.merge!(:limit => per_page * 2)
-        @objects = @abstract_model.all(options, scope).reverse
+        options.merge!(:limit => 100)
+        @objects = @abstract_model.all(options, scope)
       else
         @current_page = (params[:page] || 1).to_i
         options.merge!(:page => @current_page, :per_page => per_page)
