@@ -1,7 +1,7 @@
 <%
   config = field.associated_model_config
   selected = field.selected(params)
-  xhr = field.associated_collection_count > 100
+  xhr = true #field.associated_collection_count > 100
 
   if xhr
     collection = [[field.formatted_value, selected]]
@@ -28,9 +28,9 @@
                     $("#<%= "#{form.object_name}_#{field.name}" %>").filteringSelect({
                       <% if xhr %>
                         createQuery: function(query) {
-                          return { filter: { '<%= field.associated_label_method %>': query + '%' } }
+                          return { query: query }
                         },
-                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true) %>"
+                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true, :all => true) %>"
                       <% end %>
                     });
                   });

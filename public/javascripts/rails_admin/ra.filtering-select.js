@@ -106,9 +106,8 @@
     },
 
     _getResultSet: function(request, data) {
-      var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
       return $.map(data, function(el, i) {
-        if ((el.id || el.value) && (!request.term || matcher.test(el.label))) {
+        if (el.id || el.value) {
           return {
             label: el.label.replace(
               new RegExp(

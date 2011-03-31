@@ -27,9 +27,9 @@
                     $("#<%= "#{form.object_name}_#{field.name}" %>").filteringMultiselect({
                       <% if xhr %>
                         createQuery: function(query) {
-                          return { filter: { '<%= field.associated_label_method %>': query + '%' } }
+                          return { query: query }
                         },
-                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true) %>",
+                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true, :all => true) %>"
                       <% end %>
                       regional: {
                         chooseAll: "<%= t("admin.new.chose_all") %>",
