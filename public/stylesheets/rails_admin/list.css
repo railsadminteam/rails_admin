@@ -1,3 +1,7 @@
+.ra-block-toolbar fieldset>select, .ra-block-toolbar fieldset>div, .ra-block-toolbar fieldset>input {
+	margin: 5px;
+}
+
 .grid {
   width: 100%;
   border-collapse:collapse;

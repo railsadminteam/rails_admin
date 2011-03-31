@@ -267,8 +267,8 @@ module RailsAdmin
              end
           end
         end
-          conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += statements.join(" AND ")
+        conditions[0] += " AND " unless conditions == [""]
+        conditions[0] += statements.join(" AND ")
 
       # field search allows a search of the type "<fieldname>:<query>"
       elsif(!!query.index(":"))
@@ -289,8 +289,7 @@ module RailsAdmin
         end
 
           conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += statements.join(" OR ")
-
+          conditions[0] += ' ( ' + statements.join(" OR ") + ' ) '
       end
 
       conditions += values
@@ -305,22 +304,26 @@ module RailsAdmin
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
 
-      filter.keys.each do |key|
-        if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
-          case field.type
-          when :string, :text, :belongs_to_association
-            statements << "(#{table_name}.#{key} LIKE ?)"
-            values << filter[key]
-          when :boolean
-            statements << "(#{table_name}.#{key} = ?)"
-            values << (filter[key] == "true")
+      filter.each do |key, value|
+        unless value.blank?
+          if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
+            case field.type
+            when :string, :text, :belongs_to_association
+              statements << "(#{table_name}.#{key} LIKE ?)"
+              values << value
+            when :boolean
+              statements << "(#{table_name}.#{key} = ?)"
+              values << (value == "true")
+            end
           end
         end
       end
 
-      conditions[0] += " AND " unless conditions == [""]
-      conditions[0] += statements.join(" AND ")
-      conditions += values
+      unless statements.blank?
+        conditions[0] += " AND " unless conditions == [""]
+        conditions[0] += statements.join(" AND ")
+        conditions += values
+      end
       conditions != [""] ? {:conditions => conditions} : {}
     end
 
@@ -335,9 +338,9 @@ module RailsAdmin
         else
           klass = eval(filter_option.to_s.capitalize)
           objects = klass.all()
-          filter[:key] = filter_option.to_s+"_id"
+          filter[:key] = filter_option.to_s+"_id"  #TODO real key
           filter[:values] = objects.collect{|obj| obj.id}
-          filter[:display_values] = objects.collect{|obj| obj.to_s}
+          filter[:display_values] = objects.collect{|obj| obj.to_s}  #TODO object_label
         end
         @filters << filter
       end

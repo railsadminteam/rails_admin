@@ -60,7 +60,7 @@
                 <%= render :partial => 'filter', :locals => {:filter => filter } %>
               <%  end %>
               <% end %>  
-              <% if search_fields.nil? or search_fields.empty? %>
+              <% if search_fields.blank? %>
                 <input type="text" name="query" value="<%= query %>" size="32" />
              <% else %>
                 <% search_fields.each do |field| %>
