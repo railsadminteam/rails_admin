@@ -340,3 +340,13 @@ ul.items li a {
 ul.items li a:hover {
   text-decoration: none;
 }
+
+div.search {
+   margin: 5px;
+}
+
+div.search label.main_label {
+display:inline-block;
+width:80px;
+ 
+}

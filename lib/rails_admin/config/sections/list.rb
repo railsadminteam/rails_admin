@@ -43,7 +43,11 @@ module RailsAdmin
         end
 
         register_instance_option(:searches) do
-          {:all => :text}
+          :all
+        end
+
+        register_instance_option(:filters) do
+          []
         end
       end
     end

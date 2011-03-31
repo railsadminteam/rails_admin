@@ -35,6 +35,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
       list_entries
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
+      build_filters
       respond_to do |format|
         format.html { render :layout => 'rails_admin/list' }
         format.js { render :layout => 'rails_admin/plain.html.erb' }
@@ -217,30 +218,56 @@ module RailsAdmin
 
     def get_query_hash(options)
       query = params[:query]
+      
       return {} unless query
-      field_search = !!query.index(":")
       statements = []
       values = []
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
+      
+      if(!query.is_a? String)
+        query.keys.each do |param_key|
+          if(!query[param_key].is_a? String)
+            puts  query[param_key].inspect
+             if(!query[param_key]['from'].nil? and !query[param_key]['from'].empty? and
+                !query[param_key]['to'].nil? and !query[param_key]['to'].empty?)
+                statements << "(#{table_name}.#{param_key} between ? and ?)"
+                values << Date.parse(query[param_key]['from'])
+                values << Date.parse(query[param_key]['to'])
+             end
+          else
+             if(!query[param_key].blank?)
+               statements << "(#{table_name}.#{param_key} LIKE ?)"
+               values << "%"+query[param_key]+"%"
+             end
+          end
+        end
+          conditions[0] += " AND " unless conditions == [""]
+          conditions[0] += statements.join(" AND ")
+
       # field search allows a search of the type "<fieldname>:<query>"
-      if field_search
+      elsif(!!query.index(":"))
         field, query = query.split ":"
         return {} unless field && query
         @properties.select{|property| property[:name] == field.to_sym}.each do |property|
           statements << "(#{table_name}.#{property[:name]} = ?)"
           values << query
         end
+          conditions[0] += " AND " unless conditions == [""]
+          conditions[0] += statements.join(" OR  ")
+
       # search over all string fields  
       else
         @properties.select{|property| property[:type] == :string }.each do |property|
           statements << "(#{table_name}.#{property[:name]} LIKE ?)"
           values << "%#{query}%"
         end
+
+          conditions[0] += " AND " unless conditions == [""]
+          conditions[0] += statements.join(" OR ")
+
       end
 
-      conditions[0] += " AND " unless conditions == [""]
-      conditions[0] += statements.join(" OR ")
       conditions += values
       conditions != [""] ? {:conditions => conditions} : {}
     end
@@ -253,15 +280,15 @@ module RailsAdmin
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
 
-      filter.each_pair do |key, value|
+      filter.keys.each do |key|
         if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
           case field.type
-          when :string, :text
+          when :string, :text, :belongs_to_association
             statements << "(#{table_name}.#{key} LIKE ?)"
-            values << value
+            values << filter[key]
           when :boolean
             statements << "(#{table_name}.#{key} = ?)"
-            values << (value == "true")
+            values << (filter[key] == "true")
           end
         end
       end
@@ -270,6 +297,26 @@ module RailsAdmin
       conditions[0] += statements.join(" AND ")
       conditions += values
       conditions != [""] ? {:conditions => conditions} : {}
+    end
+
+    def build_filters
+      @filters = []
+      @model_config.list.filters.each do |filter_option|
+        filter = {}
+        property_filter = @abstract_model.properties.any?{|prop| prop[:name] == filter_option}
+        if(property_filter)
+          filter[:key] = filter_option
+          filter[:display_values] = filter[:values] = @abstract_model.all( :select => "DISTINCT(#{filter_option})", :order => "#{filter_option} desc").collect{|c| c.send filter_option}
+        else
+          klass = eval(filter_option.to_s.capitalize)
+          objects = klass.all()
+          filter[:key] = filter_option.to_s+"_id"
+          filter[:values] = objects.collect{|obj| obj.id}
+          filter[:display_values] = objects.collect{|obj| obj.to_s}
+        end
+        @filters << filter
+      end
+
     end
 
     def get_attributes
