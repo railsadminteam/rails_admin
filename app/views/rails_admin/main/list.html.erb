@@ -51,9 +51,11 @@
               
                <fieldset>
               <% if @filters %>
+               <div class="search ">
               <%  @filters.each do |filter|  %>
                 <%= render :partial => 'filter', :locals => {:filter => filter } %>
               <%  end %>
+              </div>
               <% end %>  
               <% if search_fields.nil? or search_fields.empty? %>
                 <input type="text" name="query" value="<%= query %>" size="32" />

@@ -350,3 +350,7 @@ display:inline-block;
 width:80px;
  
 }
+
+label.filter{
+margin-right: 10px;
+}

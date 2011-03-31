@@ -243,7 +243,7 @@ module RailsAdmin
           end
         end
           conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += statements.join(" AND ")
+          conditions[0] += "( " + statements.join(" AND ") + " ) " unless statements.empty?
 
       # field search allows a search of the type "<fieldname>:<query>"
       elsif(!!query.index(":"))
@@ -254,7 +254,7 @@ module RailsAdmin
           values << query
         end
           conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += statements.join(" OR  ")
+          conditions[0] += "( " +  statements.join(" OR  ") + " ) " unless statements.empty?
 
       # search over all string fields  
       else
@@ -264,7 +264,7 @@ module RailsAdmin
         end
 
           conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += statements.join(" OR ")
+          conditions[0] += " ( " + statements.join(" OR ") + " ) " unless statements.empty?
 
       end
 
@@ -281,19 +281,22 @@ module RailsAdmin
       table_name = @abstract_model.model.table_name
 
       filter.keys.each do |key|
-        if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
+        if (!filter[key].blank? and field = @model_config.list.fields.find {|f| f.name == key.to_sym})
           case field.type
-          when :string, :text, :belongs_to_association
+          when :string, :text
             statements << "(#{table_name}.#{key} LIKE ?)"
-            values << filter[key]
+            values << "%"+filter[key]+"%"
           when :boolean
             statements << "(#{table_name}.#{key} = ?)"
             values << (filter[key] == "true")
+          when :belongs_to_association
+            statements << "(#{table_name}.#{key} = ?)"
+            values << filter[key]
           end
         end
       end
 
-      conditions[0] += " AND " unless conditions == [""]
+      conditions[0] += " AND " unless (conditions == [""] or statements.empty?)
       conditions[0] += statements.join(" AND ")
       conditions += values
       conditions != [""] ? {:conditions => conditions} : {}
@@ -302,7 +305,7 @@ module RailsAdmin
     def build_filters
       @filters = []
       @model_config.list.filters.each do |filter_option|
-        filter = {}
+        filter = {:name => filter_option}
         property_filter = @abstract_model.properties.any?{|prop| prop[:name] == filter_option}
         if(property_filter)
           filter[:key] = filter_option

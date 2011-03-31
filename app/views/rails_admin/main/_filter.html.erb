@@ -1,4 +1,4 @@
-<select name="filter[<%=filter[:key]%>]">
+<label class="filter">Filter by <%= filter[:name] %></label><select name="filter[<%=filter[:key]%>]">
   <option value="">None Selected</option>
   <% filter[:values].each_with_index do |v,i| %>
     <option value=<%=v%>><%= filter[:display_values][i] %></option>
