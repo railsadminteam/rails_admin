@@ -2,20 +2,18 @@
   type_collection = field.polymorphic_type_collection
   type_column = field.association[:options][:foreign_type]
 
-  if params["associations"]
-    selected_type = params["associations"][type_column]
+  if params[form.object_name]
+    selected_type = params[form.object_name][type_column]
     collection = field.associated_collection(selected_type)
   else
     selected_type = field.bindings[:object].send(type_column)
     collection = field.associated_collection(selected_type)
   end
 
-  selected = params["associations"] ? params["associations"][field.name] : field.value
-
-  model_name = field.abstract_model.to_param.singularize
+  selected = field.selected(params)
 %>
-              <div class="field <%= field.to_param %>">
-                <%= label_tag field.to_param, field.label %>
+              <div class="field <%= "#{form.object_name}_#{field.name}" %>">
+                <%= form.label field.name, field.label %>
                 <%= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :class => "#{field.has_errors? ? "errorField" : nil}" %>
                 <%= form.select field.name, collection, {:include_blank => true, :selected => selected}, :class => "#{field.has_errors? ? "errorField" : nil}", :style => "margin-left:10px;" %>
                 <% if field.has_errors? %>
@@ -25,9 +23,9 @@
                 <%= javascript_tag do %>
                   $j(document).ready(function($){
                     var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
-                    $("#<%= "#{model_name}_#{type_column}" %>").bind("change", function(e){
+                    $("#<%= "#{form.object_name}_#{type_column}" %>").bind("change", function(e){
                       if ("" == $(this).val()) {
-                        $("#<%= "#{model_name}_#{field.name}" %>").html('<option value=""></option>');  
+                        $("#<%= "#{form.object_name}_#{field.name}" %>").html('<option value=""></option>');  
                       } else {
                         $.ajax({
                           url: urls[$(this).val()],
@@ -40,7 +38,7 @@
                             $(data).each(function(i, el) {
                               html += '<option value="' + el.id + '">' + el.label + '</option>';
                             });
-                            $("#<%= "#{model_name}_#{field.name}" %>").html(html);
+                            $("#<%= "#{form.object_name}_#{field.name}" %>").html(html);
                           }
                         });
                       }
