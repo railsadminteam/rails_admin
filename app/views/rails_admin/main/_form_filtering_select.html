@@ -1,7 +1,7 @@
 <%
   config = field.associated_model_config
   selected = field.selected(params)
-  xhr = true #field.associated_collection_count > 100
+  xhr = field.associated_collection_count > 100
 
   if xhr
     collection = [[field.formatted_value, selected]]
