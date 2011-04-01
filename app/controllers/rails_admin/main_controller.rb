@@ -51,7 +51,7 @@ module RailsAdmin
           end
         end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
-        format.csv { send_data @objects.to_csv(:include => [:user]) }
+        format.csv { send_data @objects.to_csv(:only => params[:only], :include => params[:include]) }
       end
     end
 

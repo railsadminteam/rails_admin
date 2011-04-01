@@ -1,13 +1,45 @@
+<%
+  params = request.params.except(:action, :controller, :model_name, :utf8)
+  query = params[:query]
+  filter = params[:filter]
+  sort = params[:sort]
+  sort_reverse = params[:sort_reverse]
+  properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
+  search_fields = @model_config.list.fields.select{|field| @model_config.list.searches.include?(field.name)} rescue nil 
+  filters_exist = !properties.select{|property| property.type == :boolean}.empty?
+%>
+
+
 <% head_javascript "rails_admin/application.js" %>
 <div class="ra-block">
   <div class="ui-widget-header">
     What will you export?
   </div>
-<%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
   <div class="ra-block-content">
-    <p>Chose fields:</p>
-
+    <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+    
     <%= form_tag rails_admin_list_path(:model_name => @abstract_model.to_param, :all => true, :format => 'csv'), :method => 'get' do %>
+      <div class="ra-block-toolbar ui-state-highlight">
+        <fieldset>
+        <% if @filters %>
+        <%  @filters.each do |filter|  %>
+          <%= render :partial => 'filter', :locals => {:filter => filter } %>
+        <%  end %>
+        <% end %>  
+        <% if search_fields.blank? %>
+          <input type="text" name="query" value="<%= query %>" size="32" />
+       <% else %>
+          <% search_fields.each do |field| %>
+            <%= render :partial => "search_#{field.type}", :locals => {:query => query, :field => field} -%>
+          <% end %>
+        <% end %>
+       </fieldset>
+      </div>
+      
+      <fieldset>
+        
+      </fieldset>
+      
       <ul class="submit clearfix">
         <li>
           <%= submit_tag t("admin.export.confirmation"), :class => "ra-button ui-state-highlight" %>
