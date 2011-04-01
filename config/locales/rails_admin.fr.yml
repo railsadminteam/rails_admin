@@ -21,7 +21,7 @@ fr:
     list:
       edit_action: "Éditer"
       delete_action: "Supprimer"
-      add_new: "Nouv"
+      add_new: "Nouveau"
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tous"
@@ -51,10 +51,10 @@ fr:
       noaction: "Aucune action !"
     actions:
       create: "création"
-      created: "créé"
+      created: "créé(e)"
       update: "modification"
-      updated: "modifié"
+      updated: "modifié(e)"
       delete: "suppression"
-      deleted: "supprimé"
+      deleted: "supprimé(e)"
       export: "export"
-      exported: "exporté"
+      exported: "exporté(e)"
