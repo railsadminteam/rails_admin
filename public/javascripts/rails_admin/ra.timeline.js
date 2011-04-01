@@ -160,8 +160,8 @@
           };
 
           $(data).each(function(i, e) {
-            if (getHistoryIndicator(e.history).length && e.history.number > max) {
-              max = e.history.number;
+            if (getHistoryIndicator(e.history).length && e.history.record_count > max) {
+              max = e.history.record_count;
             }
           });
 
@@ -172,8 +172,8 @@
                 percent = 0;
 
             if (el.length) {
-              if (e.history.number > 0) {
-                percent = parseFloat(e.history.number / max);
+              if (e.history.record_count > 0) {
+                percent = parseFloat(e.history.record_count / max);
                 className = widget.getBarClass(percent);
                 height = Math.floor(maxHeight * percent);
               }
