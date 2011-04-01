@@ -65,7 +65,7 @@ module RailsAdmin
         register_instance_option(:formatted_value) do
           if (output = value).nil?
             "".html_safe
-          elsif value === Boolean
+          elsif [true, false].include?(value)
               Builder::XmlMarkup.new.img(:src => bindings[:view].image_path("rails_admin/bullet_#{value ? 'black' : 'white'}.png"), :alt => value.to_s).html_safe
           else
             output
