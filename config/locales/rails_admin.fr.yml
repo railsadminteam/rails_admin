@@ -25,6 +25,7 @@ fr:
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tous"
+      export: "Exporter"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"
