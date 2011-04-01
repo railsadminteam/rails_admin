@@ -109,7 +109,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
 
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
-      @page_name +=  " " + t("admin.actions.created") + " " + I18n.l(@object.created_at, :format => localized_time_format)
+      @page_name +=  " " + t("admin.actions.created") + " " + I18n.l(@object.created_at, :format => :long) if @object.respond_to?(:created_at)
       @page_type = @abstract_model.pretty_name.downcase
 
       respond_to do |format|
