@@ -51,7 +51,7 @@ module RailsAdmin
           end
         end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
-        format.csv { send_data @objects.to_csv }
+        format.csv { send_data @objects.to_csv(:include => [:user]) }
       end
     end
 
@@ -108,7 +108,7 @@ module RailsAdmin
     def edit
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
 
-      @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase + " " + I18n.l(value, :format => @object.created_at)
       @page_type = @abstract_model.pretty_name.downcase
 
       respond_to do |format|
@@ -176,7 +176,9 @@ module RailsAdmin
     
     def export
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
-
+      list_entries
+      visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
+      build_filters
       @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
