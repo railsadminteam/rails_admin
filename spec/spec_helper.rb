@@ -18,7 +18,7 @@ require "database_helpers"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.default_url_options[:host] = "test.com"
+ActionMailer::Base.default_url_options[:host] = "example.com"
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -60,8 +60,8 @@ RSpec.configure do |config|
     RailsAdmin::AbstractModel.new("User").destroy_all!
 
     user = RailsAdmin::AbstractModel.new("User").create(
-      :email => "test@test.com",
-      :password => "test1234"
+      :email => "username@example.com",
+      :password => "password"
     )
 
     login_as user

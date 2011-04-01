@@ -20,7 +20,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
   describe "RailsAdmin CanCan Authorization" do
     before(:each) do
       RailsAdmin.authorize_with :cancan
-      @user = RailsAdmin::AbstractModel.new("User").create(:email => "tester@test.com", :password => "tester1234")
+      @user = RailsAdmin::AbstractModel.new("User").create(:email => "username@example.com", :password => "password")
       login_as @user
     end
 

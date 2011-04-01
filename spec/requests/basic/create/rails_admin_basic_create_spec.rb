@@ -95,29 +95,29 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-many association" do
     before(:each) do
-      @teams = []
+      @divisions = []
       (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @divisions << RailsAdmin::AbstractModel.new("Division").create(:league_id => rand(99999), :name => "Division #{number}")
       end
 
       get rails_admin_new_path(:model_name => "league")
 
       fill_in "league[name]", :with => "National League"
 
-      select @teams[0].name, :from => "associations_teams"
+      select @divisions[0].name, :from => "associations_divisions"
       @req = click_button "Save"
 
       @league = RailsAdmin::AbstractModel.new("League").first
     end
 
     it "should create an object with correct associations" do
-      @teams[0].reload
-      @league.teams.should include(@teams[0])
+      @divisions[0].reload
+      @league.divisions.should include(@divisions[0])
     end
 
     it "should not create an object with incorrect associations" do
-      @league.teams.should_not include(@teams[1])
-      @league.teams.should_not include(@teams[2])
+      @league.divisions.should_not include(@divisions[1])
+      @league.divisions.should_not include(@divisions[2])
     end
   end
 
@@ -125,33 +125,33 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @teams = []
       (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+        @teams << RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       end
 
-      get rails_admin_new_path(:model_name => "league")
+      get rails_admin_new_path(:model_name => "fan")
 
-      fill_in "league[name]", :with => "National League"
+      fill_in "fan[name]", :with => "John Doe"
 
       select @teams[0].name, :from => "associations_teams"
       @req = click_button "Save"
 
-      @league = RailsAdmin::AbstractModel.new("League").first
+      @fan = RailsAdmin::AbstractModel.new("Fan").first
     end
 
     it "should create an object with correct associations" do
       @teams[0].reload
-      @league.teams.should include(@teams[0])
+      @fan.teams.should include(@teams[0])
     end
 
     it "should not create an object with incorrect associations" do
-      @league.teams.should_not include(@teams[1])
-      @league.teams.should_not include(@teams[2])
+      @fan.teams.should_not include(@teams[1])
+      @fan.teams.should_not include(@teams[2])
     end
   end
 
   describe "create with uniqueness constraint violated", :given => "a player exists" do
     before(:each) do
-      @team =  RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
+      @team =  RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
       @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => @team.id, :number => 1, :name => "Player 1")
 
       get rails_admin_new_path(:model_name => "player")

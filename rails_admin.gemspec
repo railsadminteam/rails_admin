@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('ZenTest', '~> 4.5')
   # If you add a runtime dependency, please maintain alphabetical order
   s.add_runtime_dependency('builder', '~> 2.1.0')
-  s.add_runtime_dependency('rails', '~> 3.0.3')
+  s.add_runtime_dependency('rails', '~> 3.0.5')
   s.authors = ["Erik Michaels-Ober", "Bogdan Gaza"]
   s.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data}
   s.email = ['sferik@gmail.com']
@@ -31,5 +31,5 @@ Gem::Specification.new do |s|
   # FIXME: this should reference RailsAdmin::VERSION but because of
   # http://jira.codehaus.org/browse/JRUBY-5319 we can't use "require"
   # in our gemspec
-  s.version = '0.0.2'
+  s.version = '0.0.1'
 end
