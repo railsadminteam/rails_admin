@@ -93,7 +93,7 @@ GEM
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
-    tzinfo (0.3.25)
+    tzinfo (0.3.26)
     warden (1.0.3)
       rack (>= 1.0.0)
 
