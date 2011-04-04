@@ -45,7 +45,7 @@
                 </li>
               <% end %>
             </ul>
-            <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
+            <%= form_tag("", :method => "get", :remote => true) do %>
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
                 <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
