@@ -9,8 +9,6 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin::AbstractModel.new("League").create(:name => 'National')
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
       RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
-
-      RailsAdmin::Config.reset
     end
 
     it "should be configurable" do
@@ -68,10 +66,6 @@ describe "RailsAdmin Config DSL List Section" do
   end
 
   describe "items' fields" do
-
-    before(:each) do
-      RailsAdmin::Config.reset
-    end
 
     it "should show all by default" do
       get rails_admin_list_path(:model_name => "fan")
@@ -476,7 +470,7 @@ describe "RailsAdmin Config DSL List Section" do
 
   # sort_by and sort_reverse options
   describe "default sorting" do
-    before(:all) do
+    before(:each) do
       RailsAdmin.config(Player){ list { field :name } }
     end
 

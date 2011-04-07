@@ -51,6 +51,10 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.before(:each) do
+    RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
+    RailsAdmin::AbstractModel.instance_variable_get("@models").clear
+    RailsAdmin::Config.reset
+
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
     RailsAdmin::AbstractModel.new("Fan").destroy_all!

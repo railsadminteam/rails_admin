@@ -22,14 +22,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
   describe "label for a model" do
 
-    after(:each) do
-      RailsAdmin::Config.reset Fan
-    end
-
     it "should be visible and sane by default" do
-      # Reset
-      RailsAdmin::Config.reset Fan
-
       get rails_admin_dashboard_path
       response.should have_tag("#nav") do |navigation|
         navigation.should have_tag("li a", :content => "Fan")

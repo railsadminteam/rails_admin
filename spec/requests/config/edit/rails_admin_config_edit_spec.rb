@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe "RailsAdmin Config DSL Edit Section" do
 
-  before(:each) do
-    RailsAdmin::Config.reset
-  end
-
   describe "field groupings" do
 
     it "should be hideable" do
@@ -361,15 +357,9 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "input format of" do
 
-    before(:all) do
+    before(:each) do
       RailsAdmin::Config.excluded_models = [RelTest]
       @time = ::Time.now.getutc
-    end
-
-    after(:all) do
-      RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
-      RailsAdmin::AbstractModel.instance_variable_get("@models").clear
-      RailsAdmin::Config.reset
     end
 
     describe "a datetime field" do
@@ -560,7 +550,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
         @record.date_field.should eql(::Date.parse(@time.to_s))
       end
-    end      
+    end
   end
 
   describe "fields which are nullable and have AR validations" do
@@ -635,9 +625,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag("input.color")
-
-      #Reset
-      RailsAdmin::Config.reset Team
     end
   end
 end
