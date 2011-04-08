@@ -127,6 +127,8 @@ module RailsAdmin
         :right => []
       }
 
+      infinity = (1/0.0)
+
       # Only worry about using our 'windows' if the page count is less then
       # our windows combined.
       if options[:inner_window].nil? || ((options[:outer_window] * 2) + options[:inner_window] + 2) >= page_count

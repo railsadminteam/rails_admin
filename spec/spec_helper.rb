@@ -17,7 +17,6 @@ require "rspec/rails"
 require "factory_girl"
 require "factories"
 require "database_helpers"
-require "selector_helpers"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
