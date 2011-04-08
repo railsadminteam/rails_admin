@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = Factory.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -30,9 +30,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with has-one association" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
-
+      @player = Factory.create :player
+      @draft = Factory.create :draft
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -47,11 +46,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with has-many association" do
     before(:each) do
-      @teams = []
-      (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      end
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @teams = 3.times.map { Factory.create :team }
+      @player = Factory.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -60,18 +56,15 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      response.body.should contain(/Team 1Team 2Team 3/)
+      @teams.each { |team| response.body.should contain(/#{team.name}/) }
     end
   end
 
   describe "edit with has-and-belongs-to-many association" do
     before(:each) do
-      teams = (1..3).collect do |number|
-        RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      end
-      fan = RailsAdmin::AbstractModel.new("Fan").create(:name => "Fan 1")
-      fan.teams << teams[0]
-      get rails_admin_edit_path(:model_name => "fan", :id => fan.id)
+      @teams = 3.times.map { Factory.create :team }
+      @fan = Factory.create :fan, :teams => [@teams[0]]
+      get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
     end
 
     it "should respond successfully" do
@@ -99,13 +92,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with missing label", :given => ["a player exists", "three teams with no name exist"] do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-
-      @teams = []
-      (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      end
-
+      @player = Factory.create :player
+      @teams = 3.times.map { Factory.create :team, :name => "" }
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 

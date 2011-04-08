@@ -14,7 +14,10 @@ end
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 require "rails/test_help"
 require "rspec/rails"
+require "factory_girl"
+require "factories"
 require "database_helpers"
+require "selector_helpers"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true

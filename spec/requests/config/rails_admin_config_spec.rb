@@ -71,10 +71,9 @@ describe "RailsAdmin Config DSL" do
         object_label { "League '#{bindings[:object].name}'"}
       end
 
-      league = RailsAdmin::AbstractModel.new('League').create(:name => "Bundesliga")
-      league.should be_persisted
+      @league = Factory.create :league
 
-      RailsAdmin.config('League').with(:object => league).object_label.should == "League 'Bundesliga'"
+      RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end
   end
 

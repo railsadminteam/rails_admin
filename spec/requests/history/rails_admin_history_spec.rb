@@ -52,7 +52,7 @@ describe "RailsAdmin History" do
     before :all do
       @default_items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       @model = RailsAdmin::AbstractModel.new("Player")
-      player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
+      player = Factory.create :player
       30.times do |i|
         player.number = i
         RailsAdmin::AbstractHistory.create_history_item "change #{i}", player, @model, nil

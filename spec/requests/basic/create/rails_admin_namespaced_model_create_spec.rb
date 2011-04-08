@@ -10,13 +10,13 @@ describe "RailsAdmin Namespaced Model Create" do
   end
 
   it 'should be successful' do
-    @req  = click_button "Save"
-    @req.should be_successful
+    click_button "Save"
+    response.should be_successful
   end
 
   it 'should create object with correct attributes' do
     expect {
-      @req  = click_button "Save"
+      click_button "Save"
     }.to change(Cms::BasicPage, :count).by(1)
   end
 

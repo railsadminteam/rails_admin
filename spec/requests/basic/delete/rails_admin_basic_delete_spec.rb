@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Delete" do
 
   describe "delete" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = Factory.create :player
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
     end
 
@@ -23,20 +23,19 @@ describe "RailsAdmin Basic Delete" do
     end
 
     it "should raise NotFound" do
-      @response.status.should equal(404)
+      response.status.should equal(404)
     end
   end
 
   describe "delete with missing label" do
     before(:each) do
-      @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
-      @team = RailsAdmin::AbstractModel.new("Division").create(:league_id => @league.id, :name => "Division 1")
-
-      get rails_admin_delete_path(:model_name => "league", :id => @league.id)
+      @division = Factory.create :division
+      @team = Factory.create :team, :name => "", :division => @division
+      get rails_admin_delete_path(:model_name => "division", :id => @division.id)
     end
 
     it "should respond successfully" do
-      @response.should be_successful
+      response.should be_successful
     end
   end
 end

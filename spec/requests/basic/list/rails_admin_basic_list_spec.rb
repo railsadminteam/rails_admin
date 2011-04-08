@@ -36,8 +36,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with sort" do
     before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
+      @players = 2.times.map { Factory.create :player }
       get rails_admin_list_path(:model_name => "player", :sort => "name", :set => 1)
     end
 
@@ -46,15 +45,14 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should be sorted correctly" do
-      response.body.should contain(/Sandy Koufax/)
-      response.body.should contain(/Jackie Robinson/)
+      2.times { |i| response.body.should contain(/#{@players[i].name}/) }
     end
   end
 
   describe "GET /admin/player with reverse sort" do
+
     before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
+      @players = 2.times.map { Factory.create :player }
       get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
     end
 
@@ -63,58 +61,14 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should be sorted correctly" do
-      response.body.should contain(/Sandy Koufax/)
-      response.body.should contain(/Jackie Robinson/)
+      2.times { |i| response.body.should contain(/#{@players.reverse[i].name}/) }
     end
   end
 
   describe "GET /admin/player with field search" do
     before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
-      get rails_admin_list_path(:model_name => "player", :query => "number:42", :set => 1)
-    end
-
-    it "should respond successfully" do
-      @response.should be_successful
-    end
-
-    it "should show a correct result" do
-      @response.body.should contain("Jackie Robinson")
-    end
-
-    it "should not contain an incorrect result" do
-      @response.body.should_not contain("Sandy Koufax")
-    end
-  end
-
-  describe "GET /admin/player with query" do
-    before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
-      get rails_admin_list_path(:model_name => "player", :query => "Jackie Robinson", :set => 1)
-    end
-
-    it "should respond successfully" do
-      @response.should be_successful
-    end
-
-    it "should show a correct result" do
-      @response.body.should contain("Jackie Robinson")
-    end
-
-    it "should not contain an incorrect result" do
-      @response.body.should_not contain("Sandy Koufax")
-    end
-  end
-
-  describe "GET /admin/player with query and boolean filter" do
-    before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
-      get rails_admin_list_path(:model_name => "player", :query => "Sandy Koufax", :filter => {:injured => "true"}, :set => 1)
+      @players = 2.times.map { Factory.create :player }
+      get rails_admin_list_path(:model_name => "player", :query => "number:#{@players[0].number}", :set => 1)
     end
 
     it "should respond successfully" do
@@ -122,20 +76,65 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should show a correct result" do
-      response.body.should contain("Sandy Koufax")
+      response.body.should contain(@players[0].name)
     end
 
     it "should not contain an incorrect result" do
-      response.body.should_not contain("Jackie Robinson")
-      response.body.should_not contain("Moises Alou")
-      response.body.should_not contain("David Wright")
+      response.body.should_not contain(@players[1].name)
+    end
+  end
+
+  describe "GET /admin/player with query" do
+    before(:each) do
+      @players = 2.times.map { Factory.create :player }
+      get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :set => 1)
+    end
+
+    it "should respond successfully" do
+      response.should be_successful
+    end
+
+    it "should show a correct result" do
+      response.body.should contain(@players[0].name)
+    end
+
+    it "should not contain an incorrect result" do
+      response.body.should_not contain(@players[1].name)
+    end
+  end
+
+  describe "GET /admin/player with query and boolean filter" do
+    before(:each) do
+      @players = [
+        Factory.create(:player, :injured => true),
+        Factory.create(:player, :injured => false),
+        Factory.create(:player, :injured => true),
+        Factory.create(:player, :injured => false),
+      ]
+      get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :filter => {:injured => "true"}, :set => 1)
+    end
+
+    it "should respond successfully" do
+      response.should be_successful
+    end
+
+    it "should show a correct result" do
+      response.body.should contain(@players[0].name)
+    end
+
+    it "should not contain an incorrect result" do
+      (1..3).each do |i|
+        response.body.should_not contain(@players[i].name)
+      end
     end
   end
 
   describe "GET /admin/player with boolean filter" do
     before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :injured => false)
+      @players = [
+        Factory.create(:player, :injured => true),
+        Factory.create(:player, :injured => false),
+      ]
       get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"}, :set => 1)
     end
 
@@ -144,44 +143,43 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should show a correct result" do
-      response.body.should contain("Moises Alou")
+      response.body.should contain(@players[0].name)
     end
 
     it "should not contain an incorrect result" do
-      response.body.should_not contain("David Wright")
+      response.body.should_not contain(@players[1].name)
     end
   end
 
   describe "GET /admin/player with boolean filters" do
     before(:each) do
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 18, :name => "Moises Alou", :position => "Left fielder", :retired => false, :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 5, :name => "David Wright", :position => "Third baseman", :retired => false, :injured => false)
+      @players = [
+        Factory.create(:player, :retired => true, :injured => true),
+        Factory.create(:player, :retired => true, :injured => false),
+        Factory.create(:player, :retired => false, :injured => true),
+        Factory.create(:player, :retired => false, :injured => false),
+      ]
       get rails_admin_list_path(:model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
     end
 
     it "should respond successfully" do
-      @response.should be_successful
+      response.should be_successful
     end
 
     it "should show a correct result" do
+      response.body.should contain(@players[0].name)
     end
 
     it "should not contain an incorrect result" do
-      @response.body.should_not contain("Jackie Robinson")
-      @response.body.should_not contain("Moises Alou")
-      @response.body.should_not contain("David Wright")
+      (1..3).each do |i|
+        response.body.should_not contain(@players[i].name)
+      end
     end
   end
 
   describe "GET /admin/player with 2 objects" do
     before(:each) do
-
-      (1..2).each do |number|
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
-      end
-
+      @players = 2.times.map { Factory.create :player }
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -196,31 +194,23 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with 20 objects" do
     before(:each) do
-
-      (1..20).each do |number|
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
-      end
-
+      @players = 20.times.map { Factory.create :player }
       get rails_admin_list_path(:model_name => "player")
     end
 
     it "should respond successfully" do
-      @response.should be_successful
+      response.should be_successful
     end
 
     it "should show \"20 results\"" do
-      @response.body.should contain("20 players")
+      response.body.should contain("20 players")
     end
   end
 
   describe "GET /admin/player with 20 pages, page 8" do
     before(:each) do
-      per_page = 20
-      page_numers = 20
-      (1..per_page * page_numers).each do |number|
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
-      end
-
+      items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
+      (items_per_page * 20).times { Factory.create(:player) }
       get rails_admin_list_path(:model_name => "player", :page => 8)
     end
 
@@ -235,12 +225,8 @@ describe "RailsAdmin Basic List" do
 
   describe "list with 20 pages, page 17" do
     before(:each) do
-      per_page = 20
-      max_pages = 20
-      (1..per_page * max_pages).each do |number|
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
-      end
-
+      items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
+      (items_per_page * 20).times { Factory.create(:player) }
       get rails_admin_list_path(:model_name => "player", :page => 18)
     end
 
@@ -249,21 +235,18 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly" do
-      @response.body.should contain(/1 2[^0-9]*12 13 14 15 16 17 18 19 20/)
+      response.body.should contain(/1 2[^0-9]*12 13 14 15 16 17 18 19 20/)
     end
   end
 
   describe "GET /admin/player show all" do
     before(:each) do
-      (1..2).each do |number|
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => number, :name => "Player #{number}")
-      end
-
+      2.times.map { Factory.create :player }
       get rails_admin_list_path(:model_name => "player", :all => true)
     end
 
     it "should respond successfully" do
-      @response.should be_successful
+      response.should be_successful
     end
   end
 end
