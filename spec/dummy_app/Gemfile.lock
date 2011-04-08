@@ -66,7 +66,7 @@ GEM
     multi_json (0.0.5)
     multipart-post (1.1.0)
     orm_adapter (0.0.4)
-    paperclip (2.3.10)
+    paperclip (2.3.11)
       activerecord (>= 2.3.0)
       activesupport (>= 2.3.2)
     polyglot (0.3.1)
