@@ -15,6 +15,14 @@ module RailsAdmin
     @@excluded_models = []
     mattr_accessor :excluded_models
 
+    # Configuration option to specify a whitelist of models you want to RailsAdmin to work with.
+    # The excluded_models list applies against the whitelist as well and further reduces the models
+    # RailsAdmin will use.
+    # If included_models is left empty ([]), then RailsAdmin will automatically use all the models
+    # in your application (less any excluded_models you may have specified).
+    @@included_models = []
+    mattr_accessor :included_models
+
     # Configuration option to specify which method names will be searched for
     # to be used as a label for object records. This defaults to [:name, :title]
     mattr_accessor :label_methods
