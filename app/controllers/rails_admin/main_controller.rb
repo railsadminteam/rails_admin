@@ -271,7 +271,7 @@ module RailsAdmin
           end
         end
         conditions[0] += " AND " unless conditions == [""]
-        conditions[0] += statements.join(" AND ")
+        conditions[0] += "( " + statements.join(" AND ") + " ) " unless statements.empty?
 
       # field search allows a search of the type "<fieldname>:<query>"
       elsif(!!query.index(":"))
@@ -282,15 +282,14 @@ module RailsAdmin
           values << query
         end
         conditions[0] += " AND " unless conditions == [""]
-        conditions[0] += statements.join(" OR  ")
+        conditions[0] += "( " +  statements.join(" OR  ") + " ) " unless statements.empty?
       else
         @properties.select{|property| property[:type] == :string }.each do |property|
           statements << "(#{table_name}.#{property[:name]} LIKE ?)"
           values << "%#{query}%"
         end
-
         conditions[0] += " AND " unless conditions == [""]
-        conditions[0] += ' ( ' + statements.join(" OR ") + ' ) '
+        conditions[0] += " ( " + statements.join(" OR ") + " ) " unless statements.empty?
       end
 
       conditions += values
@@ -305,33 +304,32 @@ module RailsAdmin
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
 
-      filter.each do |key, value|
-        unless value.blank?
-          if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
-            case field.type
-            when :string, :text, :belongs_to_association
-              statements << "(#{table_name}.#{key} LIKE ?)"
-              values << value
-            when :boolean
-              statements << "(#{table_name}.#{key} = ?)"
-              values << (value == "true")
-            end
+      filter.keys.each do |key|
+        if (!filter[key].blank? and field = @model_config.list.fields.find {|f| f.name == key.to_sym})
+          case field.type
+          when :string, :text
+            statements << "(#{table_name}.#{key} LIKE ?)"
+            values << "%"+filter[key]+"%"
+          when :boolean
+            statements << "(#{table_name}.#{key} = ?)"
+            values << (filter[key] == "true")
+          when :belongs_to_association
+            statements << "(#{table_name}.#{key} = ?)"
+            values << filter[key]
           end
         end
       end
 
-      unless statements.blank?
-        conditions[0] += " AND " unless conditions == [""]
-        conditions[0] += statements.join(" AND ")
-        conditions += values
-      end
+      conditions[0] += " AND " unless (conditions == [""] or statements.empty?)
+      conditions[0] += statements.join(" AND ")
+      conditions += values
       conditions != [""] ? {:conditions => conditions} : {}
     end
 
     def build_filters
       @filters = []
       @model_config.list.filters.each do |filter_option|
-        filter = {}
+        filter = {:name => filter_option}
         property_filter = @abstract_model.properties.any?{|prop| prop[:name] == filter_option}
         if(property_filter)
           filter[:key] = filter_option

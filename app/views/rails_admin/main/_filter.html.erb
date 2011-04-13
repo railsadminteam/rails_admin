@@ -1,9 +1,8 @@
 <% current_value = params[:filter] && params[:filter][filter[:key]] %>
 
-<select name="filter[<%=filter[:key]%>]">
-  <option value="">[ <%= filter[:key] %> ]</option>
+<label class="filter"><%= filter[:name] %></label><select name="filter[<%=filter[:key]%>]">
+  <option value=""> - </option>
   <% filter[:values].each_with_index do |v,i| %>
     <option <%= 'selected="selected"' if !v.blank? && v == current_value  %> value="<%=v%>"><%= filter[:display_values][i] %></option>
   <% end %>
 </select>
-
