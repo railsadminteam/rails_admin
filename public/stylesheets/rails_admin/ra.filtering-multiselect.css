@@ -72,19 +72,19 @@
 }
 
 .ra-multiselect .ui-icon-circle-triangle-e {
-  background-position: -16px -32px !important;  
+  background-position: -16px -32px !important;
 }
 
 .ra-multiselect .ui-icon-circle-triangle-e:hover {
-  background-position: -16px -48px !important;  
+  background-position: -16px -48px !important;
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w {
-  background-position: 0px -32px !important;  
+  background-position: 0px -32px !important;
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w:hover {
-  background-position: 0px -48px !important;  
+  background-position: 0px -48px !important;
 }
 
 .ra-multiselect-collection, .ra-multiselect-selection {

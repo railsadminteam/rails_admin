@@ -59,7 +59,7 @@
     <%= render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history}) -%>
             </div>
             <%= javascript_tag do %>
-              $j(document).ready(function($){
+              $j(document).ready(function($) {
                 var cache = {};
                  $("#timeline").timeline({
                    url: "<%= rails_admin_history_slider_path %>",

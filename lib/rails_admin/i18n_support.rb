@@ -1,4 +1,4 @@
-require "i18n"
+require 'i18n'
 
 module RailsAdmin
   module I18nSupport
