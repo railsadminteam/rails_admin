@@ -4,6 +4,7 @@ module GeneratorHelpers
     config_path = File.join(destination_root, 'config')
     FileUtils.mkdir config_path
     FileUtils.mkdir File.join(config_path, 'initializers')
+    
     FileUtils.mkdir_p File.join(destination_root, 'app', 'models')
   end
 

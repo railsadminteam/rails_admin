@@ -13,16 +13,15 @@ end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
-require 'rails/test_help'
+require "rails/test_help"
 require 'generator_spec/test_case'
-require 'generators/rails_admin/install_admin_generator'
-require 'generators/rails_admin/install_migrations_generator'
-require 'generators/rails_admin/rails_admin_generator'
-require 'rspec/rails'
-require 'factory_girl'
-require 'factories'
-require 'database_helpers'
-require 'generator_helpers'
+Dir['lib/generators/rails_admin/*.rb'].each { |f| require f }
+
+require "rspec/rails"
+require "factory_girl"
+require "factories"
+require "database_helpers"
+require "generator_helpers"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -55,7 +54,7 @@ RSpec.configure do |config|
   config.include GeneratorHelpers
 
   # == Mock Framework
-  config.mock_with :rr
+  config.mock_with :rspec
 
   config.include Warden::Test::Helpers
 

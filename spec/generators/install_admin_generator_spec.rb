@@ -14,9 +14,11 @@ describe 'RailsAdmin::InstallAdminGenerator' do
 
     context "when devise is installed" do
       before do
+        
         create_devise_initializer
         create_routes_with_devise
         assert_no_file "config/locales/rails_admin.en.yml"
+
         run_generator
       end
 
@@ -28,8 +30,10 @@ describe 'RailsAdmin::InstallAdminGenerator' do
 
     context "when devise is not installed" do
       before(:each) do
+
         create_routes_without_devise
         assert_no_file destination_root + "/config/initializers/devise.rb"
+
         run_generator
       end
 
