@@ -128,7 +128,7 @@ describe "RailsAdmin Basic Update" do
     end
 
     it "should log a history message about the update" do
-      @histories.collect(&:message).should include("Created associations Divisions ##{@divisions[0].id}")
+      @histories.collect(&:message).should include("Created associations Divisions ##{@divisions[0].id}, Updated name (League 22 -> National League)")
     end
 
     describe "removing has-many associations" do
