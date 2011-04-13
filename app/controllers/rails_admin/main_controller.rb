@@ -281,18 +281,16 @@ module RailsAdmin
           statements << "(#{table_name}.#{property[:name]} = ?)"
           values << query
         end
-          conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += statements.join(" OR  ")
-
-      # search over all string fields  
+        conditions[0] += " AND " unless conditions == [""]
+        conditions[0] += statements.join(" OR  ")
       else
         @properties.select{|property| property[:type] == :string }.each do |property|
           statements << "(#{table_name}.#{property[:name]} LIKE ?)"
           values << "%#{query}%"
         end
 
-          conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += ' ( ' + statements.join(" OR ") + ' ) '
+        conditions[0] += " AND " unless conditions == [""]
+        conditions[0] += ' ( ' + statements.join(" OR ") + ' ) '
       end
 
       conditions += values

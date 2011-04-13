@@ -16,8 +16,8 @@
 <% head_style "rails_admin/list" %>
 
 <% head_javascript do %>
-  $j(document).ready(function($){
-    $(this).one("ajax:success", function(e, data, status, xhr){
+  $j(document).ready(function($) {
+    $(this).one("ajax:success", function(e, data, status, xhr) {
       $("#content").html(data);
     });
   });

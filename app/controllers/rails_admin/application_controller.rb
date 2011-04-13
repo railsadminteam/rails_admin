@@ -47,5 +47,9 @@ module RailsAdmin
     def not_found
       render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404
     end
+
+    def rails_admin_controller?
+      true
+    end
   end
 end

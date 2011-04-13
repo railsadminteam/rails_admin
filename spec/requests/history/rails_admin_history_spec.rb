@@ -52,7 +52,7 @@ describe "RailsAdmin History" do
     before :all do
       @default_items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       @model = RailsAdmin::AbstractModel.new("Player")
-      player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
+      player = Factory.create :player
       30.times do |i|
         player.number = i
         RailsAdmin::AbstractHistory.create_history_item "change #{i}", player, @model, nil
@@ -70,6 +70,35 @@ describe "RailsAdmin History" do
       histories = RailsAdmin::AbstractHistory.history_for_model @model, nil, false, false, false, nil
       histories[0].should == 2
       histories[1].all.count.should == 15
+    end
+
+    context "GET admin/history/@model" do
+      before :each do
+        get rails_admin_history_model_path(@model)
+      end
+
+      it "should render successfully" do
+        response.should be_successful
+      end
+
+      context "with a lot of histories" do
+        before :all do
+          player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
+          1000.times do |i|
+            player.number = i
+            RailsAdmin::AbstractHistory.create_history_item "change #{i}", player, @model, nil
+          end
+        end
+
+        it "should render successfully" do
+          response.should be_successful
+        end
+
+        it "should render a XHR request successfully" do
+          xhr :get, rails_admin_history_model_path(@model, :page => 2)
+          response.should be_successful
+        end
+      end
     end
 
     after :all do

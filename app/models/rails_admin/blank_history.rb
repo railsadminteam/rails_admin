@@ -1,6 +1,6 @@
 module RailsAdmin
   class BlankHistory
-    attr_accessor :number, :month, :year
+    attr_accessor :record_count, :month, :year
     def initialize(month, year)
       @record_count = 0
       @month = month

@@ -1,4 +1,4 @@
-require "mlb"
+require 'mlb'
 
 User.create(:email => 'username@example.com', :password => 'password', :password_confirmation => 'password')
 

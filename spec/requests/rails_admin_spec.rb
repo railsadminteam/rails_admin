@@ -26,13 +26,13 @@ describe "RailsAdmin" do
   describe "html head" do
     before { get rails_admin_dashboard_path }
     subject { response }
-    
+
     # Note: the [href^="/sty... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it "should load stylesheets" do
       should have_selector('link[href^="/stylesheets/rails_admin/ra.timeline.css"]')
     end
-    
+
     it "should load javascript files" do
       scripts = %w[ /javascripts/rails_admin/application.js
                 http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
@@ -46,8 +46,8 @@ describe "RailsAdmin" do
 
   describe "polymorphic associations" do
     before :each do
-      @team = RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Commentable Team", :manager => "Manager", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      @comment = RailsAdmin::AbstractModel.new("Comment").create(:content => "Comment on a team", :commentable => @team)
+      @team = Factory.create :team
+      @comment = Factory.create :comment, :commentable => @team
     end
 
     it "should work like belongs to associations in the list view" do

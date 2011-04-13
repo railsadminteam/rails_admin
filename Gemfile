@@ -31,4 +31,6 @@ group :development, :test do
     end
   end
   gem "cancan" if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
+  gem 'factory_girl', '2.0.0.beta2'
+  gem 'generator_spec'
 end
