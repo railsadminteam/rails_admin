@@ -105,9 +105,12 @@
         });
     },
 
-    _getResultSet: function(request, data) {
-      return $.map(data, function(el, i) {
-        if (el.id || el.value) {
+    _getResultSet: function(request, data, xhr) {
+	    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+			
+      return $.map(data, function(el, i) {	
+				// match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
+        if ((el.id || el.value) && (xhr || matcher.test(el.label))) { 
           return {
             label: el.label.replace(
               new RegExp(
@@ -130,7 +133,7 @@
       if ($.isArray(source)) {
 
         return function(request, response) {
-          response(self._getResultSet(request, source));
+          response(self._getResultSet(request, source, false));
         };
 
       } else if (typeof source === "string") {
@@ -148,7 +151,7 @@
             autocompleteRequest: ++requestIndex,
             success: function(data, status) {
               if (this.autocompleteRequest === requestIndex) {
-                response(self._getResultSet(request, data));
+                response(self._getResultSet(request, data, true));
               }
             },
             error: function() {
