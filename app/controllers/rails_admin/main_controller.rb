@@ -63,7 +63,7 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
-      @page_name = t("admin.actions.created").capitalize + " " + @model_config.label.downcase
+      @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html { render :layout => 'rails_admin/form' }
@@ -109,7 +109,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
 
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
-      @page_name +=  " " + t("admin.actions.created") + " " + I18n.l(@object.created_at, :format => :long) if @object.respond_to?(:created_at)
+      @page_name +=  " " + t("admin.actions.created")
       @page_type = @abstract_model.pretty_name.downcase
 
       respond_to do |format|
