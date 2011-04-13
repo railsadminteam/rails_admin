@@ -12,11 +12,16 @@ SimpleCov.start do
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
+
 require "rails/test_help"
+require 'generator_spec/test_case'
+Dir['lib/generators/rails_admin/*.rb'].each { |f| require f }
+
 require "rspec/rails"
 require "factory_girl"
 require "factories"
 require "database_helpers"
+require "generator_helpers"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -46,6 +51,7 @@ RSpec.configure do |config|
   config.include Webrat::Matchers
   config.include Webrat::HaveTagMatcher
   config.include DatabaseHelpers
+  config.include GeneratorHelpers
 
   # == Mock Framework
   config.mock_with :rspec
