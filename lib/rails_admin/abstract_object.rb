@@ -35,7 +35,7 @@
             case association[:type]
             when :has_one
               object.save
-              update_association(association, ids)              
+              update_association(association, ids)
             when :has_many, :has_and_belongs_to_many
               update_associations(association, ids.to_a)
             end
