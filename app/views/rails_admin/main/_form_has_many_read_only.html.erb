@@ -19,7 +19,7 @@
     <% if selected.empty? %>
       <p>Pas de <%= field.label.singularize.downcase %> trouvé(e) !</p>
     <% else %>
-      <p><%= selected.map{|id| link_to("#{associated_model_name} ##{id}", rails_admin_edit_path(:model_name => associated_model_name, :id => id)) }.to_sentence %></p>
+      <p><%= selected.map{|id| link_to("#{associated_model_name} ##{id}", rails_admin_edit_path(:model_name => associated_model_name, :id => id)) }.to_sentence.html_safe %></p>
     <% end %>
     <p class="help"><%= field.help %></p>
   </div>
