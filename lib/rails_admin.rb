@@ -2,13 +2,11 @@ require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
 require 'rails_admin/abstract_history'
 require 'rails_admin/config'
-require 'rails_admin/authorization_adapters/cancan_adapter'
+require 'rails_admin/extension'
+require 'rails_admin/extensions/cancan'
 
 module RailsAdmin
   class AuthenticationNotConfigured < StandardError; end
-
-  EXTENSIONS = []
-  AUTHORIZATION_ADAPTERS = {}
 
   # RailsAdmin is setup to try and authenticate with warden
   # If warden is found, then it will try to authenticate
@@ -93,13 +91,9 @@ module RailsAdmin
   # @see RailsAdmin::DEFAULT_AUTHORIZE
   def self.authorize_with(adapter = nil, &blk)
     if(adapter)
-      if(adapter == :cancan)
-        @authorize = Proc.new { @authorization_adapter = AuthorizationAdapters::CanCanAdapter.new(self) }
-      else
-        @authorize = Proc.new {
-          @authorization_adapter = AUTHORIZATION_ADAPTERS[adapter].new(self)
-        }
-      end
+      @authorize = Proc.new {
+        @authorization_adapter = AUTHORIZATION_ADAPTERS[adapter].new(self)
+      }
     else
       @authorize = blk if blk
     end
@@ -121,44 +115,5 @@ module RailsAdmin
   def self.current_user_method(&blk)
     @current_user = blk if blk
     @current_user || DEFAULT_CURRENT_USER
-  end
-
-  # Setup RailsAdmin
-  #
-  # If a model class is provided as the first argument model specific
-  # configuration is loaded and returned.
-  #
-  # Otherwise yields self for general configuration to be used in
-  # an initializer.
-  #
-  # @see RailsAdmin::Config.load
-  def self.config(entity = nil, &block)
-    if not entity
-      yield RailsAdmin::Config
-    else
-      RailsAdmin::Config.model(entity, &block)
-    end
-  end
-
-  # Extend RailsAdmin
-  #
-  # The extension may define various adapters (e.g., for authorization) and
-  # register those via the options hash.
-  def self.add_extension(extension_key, extension_definition, options = {})
-    options.assert_valid_keys(:authorization)
-
-    EXTENSIONS << extension_key
-
-    if(authorization = options[:authorization])
-      AUTHORIZATION_ADAPTERS[extension_key] = extension_definition::AuthorizationAdapter
-    end
-  end
-
-  # Clear all registered extensions
-  def self.clear_extensions
-    @authorize = nil
-
-    EXTENSIONS.clear
-    AUTHORIZATION_ADAPTERS.clear
   end
 end

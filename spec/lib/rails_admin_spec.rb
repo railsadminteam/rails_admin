@@ -1,19 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin do
-  describe ".clear_extensions" do
-    before do
-      RailsAdmin::EXTENSIONS << :example
-      RailsAdmin::AUTHORIZATION_ADAPTERS[:example] = Object
-    end
-
-    it "removes all extensions and respective adapters" do
-      RailsAdmin.clear_extensions
-      RailsAdmin::EXTENSIONS.should be_empty
-      RailsAdmin::AUTHORIZATION_ADAPTERS.should be_empty
-    end
-  end
-
   describe ".add_extension" do
     it "registers the extension with RailsAdmin" do
       RailsAdmin.add_extension(:example, ExampleModule)
@@ -31,6 +18,10 @@ describe RailsAdmin do
   end
 
   describe ".authorize_with" do
+    after do
+      RailsAdmin.authorize_with(nil) { @authorization_adapter = nil }
+    end
+
     context "given a key for a extension with authorization" do
       let(:proc) { RailsAdmin.authorize_with(:example) }
 
