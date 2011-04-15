@@ -7,6 +7,9 @@ require 'rails_admin/authorization_adapters/cancan_adapter'
 module RailsAdmin
   class AuthenticationNotConfigured < StandardError; end
 
+  MODULES = []
+  AUTHORIZATION_ADAPTERS = {}
+
   # RailsAdmin is setup to try and authenticate with warden
   # If warden is found, then it will try to authenticate
   #
@@ -89,11 +92,18 @@ module RailsAdmin
   #
   # @see RailsAdmin::DEFAULT_AUTHORIZE
   def self.authorize_with(adapter = nil, &blk)
-    if adapter == :cancan
-      @authorize = Proc.new { @authorization_adapter = AuthorizationAdapters::CanCanAdapter.new(self) }
+    if(adapter)
+      if(adapter == :cancan)
+        @authorize = Proc.new { @authorization_adapter = AuthorizationAdapters::CanCanAdapter.new(self) }
+      else
+        @authorize = Proc.new {
+          @authorization_adapter = AUTHORIZATION_ADAPTERS[adapter].new(self)
+        }
+      end
     else
       @authorize = blk if blk
     end
+
     @authorize || DEFAULT_AUTHORIZE
   end
 
@@ -128,5 +138,27 @@ module RailsAdmin
     else
       RailsAdmin::Config.model(entity, &block)
     end
+  end
+
+  # Extend RailsAdmin with a "module"
+  #
+  # The module may define various adapters (e.g., for authorization) and
+  # indicate register those extensions via the options hash.
+  def self.add_module(module_key, module_definition, options = {})
+    options.assert_valid_keys(:authorization)
+
+    MODULES << module_key
+
+    if(authorization = options[:authorization])
+      AUTHORIZATION_ADAPTERS[module_key] = module_definition::AuthorizationAdapter
+    end
+  end
+
+  # Clear all registered modules
+  def self.clear_modules
+    @authorize = nil
+
+    MODULES.clear
+    AUTHORIZATION_ADAPTERS.clear
   end
 end

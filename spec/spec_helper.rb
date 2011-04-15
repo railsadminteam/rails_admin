@@ -48,11 +48,12 @@ RSpec.configure do |config|
   config.include DatabaseHelpers
 
   # == Mock Framework
-  config.mock_with :rspec
+  config.mock_with :rr
 
   config.include Warden::Test::Helpers
 
   config.before(:each) do
+    RailsAdmin::clear_modules
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
     RailsAdmin::AbstractModel.instance_variable_get("@models").clear
     RailsAdmin::Config.reset
