@@ -65,8 +65,8 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         get rails_admin_list_path(:model_name => "player", :set => 1)
 
         response.should be_successful
-        response.body.should contain(@player[0].name)
-        response.body.should_not contain(@player[1].name)
+        response.body.should contain(@players[0].name)
+        response.body.should_not contain(@players[1].name)
         response.body.should_not contain("Add new")
         response.body.should_not contain("EDIT")
         response.body.should_not contain("DELETE")
@@ -96,9 +96,9 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/new should render and create record upon submission" do
         get rails_admin_new_path(:model_name => "player")
         response.body.should_not contain("edit")
-        fill_in "players[name]", :with => "Jackie Robinson"
-        fill_in "players[number]", :with => "42"
-        fill_in "players[position]", :with => "Second baseman"
+        fill_in "player[name]", :with => "Jackie Robinson"
+        fill_in "player[number]", :with => "42"
+        fill_in "player[position]", :with => "Second baseman"
         @req = click_button "Save"
         @player = RailsAdmin::AbstractModel.new("Player").first
         @req.should be_successful
@@ -126,7 +126,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         @player = Factory.create :player
         get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         response.body.should_not contain("Delete")
-        fill_in "players[name]", :with => "Jackie Robinson"
+        fill_in "player[name]", :with => "Jackie Robinson"
         click_button "Save"
         @player.reload
         response.should be_successful
@@ -155,12 +155,13 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/delete should render and destroy record upon submission" do
-        @player = Factory.create_player
-        get rails_admin_delete_path(:model_name => "player", :id => @player.id)
+        @player = Factory.create :player
+        player_id = @player.id
+        get rails_admin_delete_path(:model_name => "player", :id => player_id)
+
         click_button "Yes, I'm sure"
-        @player.reload
         response.should be_successful
-        @player.should be_nil
+        Player.exists?(player_id).should be_false
       end
 
       it "GET /admin/player/1/delete with retired player should raise access denied" do
