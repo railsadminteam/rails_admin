@@ -1,28 +1,28 @@
 require 'spec_helper'
 
 describe RailsAdmin do
-  describe ".clear_modules" do
+  describe ".clear_extensions" do
     before do
-      RailsAdmin::MODULES << :example
+      RailsAdmin::EXTENSIONS << :example
       RailsAdmin::AUTHORIZATION_ADAPTERS[:example] = Object
     end
 
-    it "removes all modules and respective adapters" do
-      RailsAdmin.clear_modules
-      RailsAdmin::MODULES.should be_empty
+    it "removes all extensions and respective adapters" do
+      RailsAdmin.clear_extensions
+      RailsAdmin::EXTENSIONS.should be_empty
       RailsAdmin::AUTHORIZATION_ADAPTERS.should be_empty
     end
   end
 
-  describe ".add_module" do
-    it "registers the module with RailsAdmin" do
-      RailsAdmin.add_module(:example, ExampleModule)
-      RailsAdmin::MODULES.select { |name| name == :example }.length.should == 1
+  describe ".add_extension" do
+    it "registers the extension with RailsAdmin" do
+      RailsAdmin.add_extension(:example, ExampleModule)
+      RailsAdmin::EXTENSIONS.select { |name| name == :example }.length.should == 1
     end
 
-    context "given a module with an authorization adapter" do
+    context "given a extension with an authorization adapter" do
       it "registers the adapter" do
-        RailsAdmin.add_module(:example, ExampleModule, {
+        RailsAdmin.add_extension(:example, ExampleModule, {
           :authorization => true
         })
         RailsAdmin::AUTHORIZATION_ADAPTERS[:example].should == ExampleModule::AuthorizationAdapter
@@ -31,11 +31,11 @@ describe RailsAdmin do
   end
 
   describe ".authorize_with" do
-    context "given a key for a module with authorization" do
+    context "given a key for a extension with authorization" do
       let(:proc) { RailsAdmin.authorize_with(:example) }
 
       before do
-        RailsAdmin.add_module(:example, ExampleModule, {
+        RailsAdmin.add_extension(:example, ExampleModule, {
           :authorization => true
         })
       end

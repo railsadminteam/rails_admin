@@ -53,7 +53,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.before(:each) do
-    RailsAdmin::clear_modules
+    RailsAdmin::clear_extensions
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
     RailsAdmin::AbstractModel.instance_variable_get("@models").clear
     RailsAdmin::Config.reset
