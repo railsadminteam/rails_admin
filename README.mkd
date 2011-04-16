@@ -53,13 +53,19 @@ Screenshots
 
 Installation
 ------------
-In your `Gemfile`, add the following dependency:
+In your `Gemfile`, add the following dependencies:
+
     gem 'devise' # Devise must be required before RailsAdmin
     gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
+
 Run:
+
     $ bundle install
+
 And then run:
+
     $ rails generate rails_admin:install_admin
+
 This task will install RailsAdmin and [Devise](http://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](http://github.com/plataformatec/devise) is strongly
 recommended to protect your data from anonymous users.
@@ -67,22 +73,27 @@ recommended to protect your data from anonymous users.
 If you plan to use Devise, but want to use a custom model for authentication
 (default is User) you can provide that as an argument for the installer. For example
 to override the default with a Member model run:
+
     $ rails generate rails_admin:install_admin member
 
 If you want to use the CKEditor, you need to [download it](http://ckeditor.com/download) from source
 and unpack the 'ckeditor' folder into your default 'public/javascripts' folder. If you're using any
 non-Windows system, you can try to use the automatic downloader:
+
     $ rake admin:ckeditor_download
 
 When running RailsAdmin in production the images, stylesheets, and javascript assets may return 404
 not found error's depending on your servers static assets configuration.  To prevent this issue you
 can copy assets directly into your application by running:
+
     $ rake admin:copy_assets
-        
+
 Usage
 -----
 Start the server:
+
     $ rails server
+
 You should now be able to administer your site at <http://localhost:3000/admin>
 
 Configuration
@@ -92,6 +103,7 @@ models and following some Rails conventions. For a more tailored experience, it 
 configuration DSL which allows you to customize many aspects of the interface.
 
 The configuration code should be placed in an initializer file, for example:
+
     config/initializers/rails_admin.rb
 
 
