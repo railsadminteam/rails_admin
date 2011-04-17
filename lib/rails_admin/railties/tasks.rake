@@ -1,6 +1,6 @@
 require 'rails_admin/railties/extratasks'
 
-namespace :admin do
+namespace :rails_admin do
   desc "Populate history table with a year of data"
   task :populate_history do
     RailsAdmin::ExtraTasks.populateDatabase
