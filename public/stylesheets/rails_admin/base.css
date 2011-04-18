@@ -272,6 +272,7 @@ ul#nav{
 
 ul#nav li.more:hover ul{
   display:block;
+	z-index:1;
 }
 
 ul#nav li.more ul{
@@ -289,12 +290,12 @@ ul#nav li.more ul li{
 }
 
 #nav li.more a{
-  background:url(../../images/rails_admin/navigation_more.png) no-repeat;
   display:block;
-  text-indent:-9999px;
 }
 
-ul#nav li.more a{
+ul#nav li.plus.more>a{
+  background:url(../../images/rails_admin/navigation_more.png) no-repeat;
+  text-indent:-9999px;
 	border: 1px solid #ededed;
   width:25px;
   height:31px;
