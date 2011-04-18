@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.0.6'
+gem 'rails', '~> 3.0.7'
 gem 'devise', '~> 1.1'
 gem 'paperclip', '~> 2.3'
 gem 'rails_admin', :path => '../../'

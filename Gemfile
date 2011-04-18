@@ -6,7 +6,7 @@ gemspec
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'rails', '~> 3.0.6.rc2'
+  gem 'rails', '~> 3.0.7'
 
   if 'java' == RUBY_PLATFORM
     case ENV['CI_DB_ADAPTER']
