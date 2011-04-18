@@ -10,6 +10,9 @@
   <%= javascript_fallback "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js",
     "/javascripts/rails_admin/jquery-ui-1.8.11.min.js", "!jQuery.ui" %>
   <%= javascript_include_tag "rails_admin/rails.js" %>
+  <script type="text/javascript">
+    CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
+  </script>
   <%= head_javascript %>
   <%= head_style %>
   <%= csrf_meta_tag %>
