@@ -89,15 +89,15 @@ module RailsAdmin
   # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
   #
   # @see RailsAdmin::DEFAULT_AUTHORIZE
-  def self.authorize_with(*args, &blk)
-    adapter = args.shift
+  def self.authorize_with(*args, &block)
+    extension = args.shift
 
-    if(adapter)
+    if(extension)
       @authorize = Proc.new {
-        @authorization_adapter = AUTHORIZATION_ADAPTERS[adapter].new(*([self] + args).compact)
+        @authorization_adapter = AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
       }
     else
-      @authorize = blk if blk
+      @authorize = block if block
     end
 
     @authorize || DEFAULT_AUTHORIZE
@@ -114,9 +114,28 @@ module RailsAdmin
   #   end
   #
   # @see RailsAdmin::DEFAULT_CURRENT_USER
-  def self.current_user_method(&blk)
-    @current_user = blk if blk
+  def self.current_user_method(&block)
+    @current_user = block if block
     @current_user || DEFAULT_CURRENT_USER
+  end
+
+  # Setup configuration using an extension-provided ConfigurationAdapter
+  #
+  # @example Custom configuration for role-based setup.
+  #   RailsAdmin.configure_with(:custom) do |config|
+  #     config.models = ['User', 'Comment']
+  #     config.roles  = {
+  #       'Admin' => :all,
+  #       'User'  => ['User']
+  #     }
+  #   end
+  #
+  #   RailsAdmin.config do
+  #     # standard config still applies...
+  #   end
+  def self.configure_with(extension)
+    configuration = CONFIGURATION_ADAPTERS[extension].new
+    yield(configuration) if block_given?
   end
 
   # Setup RailsAdmin

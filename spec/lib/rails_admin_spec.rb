@@ -7,12 +7,21 @@ describe RailsAdmin do
       RailsAdmin::EXTENSIONS.select { |name| name == :example }.length.should == 1
     end
 
-    context "given a extension with an authorization adapter" do
+    context "given an extension with an authorization adapter" do
       it "registers the adapter" do
         RailsAdmin.add_extension(:example, ExampleModule, {
           :authorization => true
         })
         RailsAdmin::AUTHORIZATION_ADAPTERS[:example].should == ExampleModule::AuthorizationAdapter
+      end
+    end
+
+    context "given an extension with a configuration adapter" do
+      it "registers the adapter" do
+        RailsAdmin.add_extension(:example, ExampleModule, {
+          :configuration => true
+        })
+        RailsAdmin::CONFIGURATION_ADAPTERS[:example].should == ExampleModule::ConfigurationAdapter
       end
     end
   end
@@ -46,8 +55,33 @@ describe RailsAdmin do
       end
     end
   end
+
+  describe ".configure_with" do
+    context "given a key for a extension with configuration" do
+      before do
+        RailsAdmin.add_extension(:example, ExampleModule, {
+          :configuration => true
+        })
+      end
+
+      it "initializes configuration adapter" do
+        mock(ExampleModule::ConfigurationAdapter).new
+        RailsAdmin.configure_with(:example)
+      end
+
+      it "yields the (optionally) provided block, passing the initialized adapter" do
+        configurator = nil
+
+        RailsAdmin.configure_with(:example) do |config|
+          configurator = config
+        end
+        configurator.should be_a(ExampleModule::ConfigurationAdapter)
+      end
+    end
+  end
 end
 
 module ExampleModule
   class AuthorizationAdapter ; end
+  class ConfigurationAdapter ; end
 end
