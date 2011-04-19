@@ -118,4 +118,21 @@ module RailsAdmin
     @current_user = blk if blk
     @current_user || DEFAULT_CURRENT_USER
   end
+
+  # Setup RailsAdmin
+  #
+  # If a model class is provided as the first argument model specific
+  # configuration is loaded and returned.
+  #
+  # Otherwise yields self for general configuration to be used in
+  # an initializer.
+  #
+  # @see RailsAdmin::Config.load
+  def self.config(entity = nil, &block)
+    if not entity
+      yield RailsAdmin::Config
+    else
+      RailsAdmin::Config.model(entity, &block)
+    end
+  end
 end
