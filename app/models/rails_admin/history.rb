@@ -4,8 +4,8 @@ module RailsAdmin
 
     IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 
-    scope :most_recent, lambda {|table|
-      where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
+    scope :most_recent, lambda {|model|
+      where("#{retrieve_connection.quote_column_name(:table)} = ?", model.pretty_name).order("updated_at DESC")
     }
 
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
