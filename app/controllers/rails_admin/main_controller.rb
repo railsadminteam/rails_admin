@@ -231,9 +231,9 @@ module RailsAdmin
           statements << "(#{table_name}.#{property[:name]} = ?)"
           values << query
         end
-      # search over all string fields  
+      # search over all string and text fields
       else
-        @properties.select{|property| property[:type] == :string }.each do |property|
+        @properties.select{|property| property[:type] == :string || property[:type] == :text }.each do |property|
           statements << "(#{table_name}.#{property[:name]} LIKE ?)"
           values << "%#{query}%"
         end
