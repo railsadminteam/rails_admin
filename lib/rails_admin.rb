@@ -89,10 +89,12 @@ module RailsAdmin
   # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
   #
   # @see RailsAdmin::DEFAULT_AUTHORIZE
-  def self.authorize_with(adapter = nil, &blk)
+  def self.authorize_with(*args, &blk)
+    adapter = args.shift
+
     if(adapter)
       @authorize = Proc.new {
-        @authorization_adapter = AUTHORIZATION_ADAPTERS[adapter].new(self)
+        @authorization_adapter = AUTHORIZATION_ADAPTERS[adapter].new(*([self] + args).compact)
       }
     else
       @authorize = blk if blk

@@ -23,8 +23,6 @@ describe RailsAdmin do
     end
 
     context "given a key for a extension with authorization" do
-      let(:proc) { RailsAdmin.authorize_with(:example) }
-
       before do
         RailsAdmin.add_extension(:example, ExampleModule, {
           :authorization => true
@@ -32,7 +30,18 @@ describe RailsAdmin do
       end
 
       it "initializes the authorization adapter" do
+        options = nil
+        proc    = RailsAdmin.authorize_with(:example, options)
+
         mock(ExampleModule::AuthorizationAdapter).new(RailsAdmin)
+        proc.call
+      end
+
+      it "passes through any additional arguments to the initializer" do
+        options = { :option => true }
+        proc    = RailsAdmin.authorize_with(:example, options)
+
+        mock(ExampleModule::AuthorizationAdapter).new(RailsAdmin, options)
         proc.call
       end
     end
