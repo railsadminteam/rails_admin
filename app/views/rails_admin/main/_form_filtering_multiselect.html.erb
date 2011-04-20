@@ -29,7 +29,7 @@
                 <% head_style('rails_admin/ra.filtering-multiselect.css') %>
                 <% head_javascript "rails_admin/ra.filtering-multiselect.js" %>
                 <% head_javascript do %>
-                  $j(document).ready(function($){
+                  $j(document).ready(function($) {
                     $("#<%= "associations_#{name}" %>").filteringMultiselect({
                       <% if xhr %>
                         createQuery: function(query) {

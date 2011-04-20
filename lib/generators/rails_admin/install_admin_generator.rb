@@ -25,7 +25,7 @@ Rails_admin works with devise. Checking for a current installation of devise!
 
     def check_for_devise_models
       # File.exists?
-      devise_path =  FileUtils.pwd + "/config/initializers/devise.rb"
+      devise_path = destination_root + "/config/initializers/devise.rb"
 
       if File.exists?(devise_path)
         parse_route_files
@@ -39,10 +39,7 @@ Rails_admin works with devise. Checking for a current installation of devise!
 
     def parse_route_files
       # check if migrations exist
-      app_path = Rails.public_path.split("/")
-      app_path.delete_at(-1)
-      app_path = app_path.join("/")
-      routes_path = app_path + "/config/routes.rb"
+      routes_path = destination_root + "/config/routes.rb"
 
       content = ""
 
@@ -75,11 +72,7 @@ Rails_admin works with devise. Checking for a current installation of devise!
       ###
       locales_path = gem_path + "/config/locales/*.yml"
 
-      app_path = Rails.public_path.split("/")
-      app_path.delete_at(-1)
-      app_path = app_path.join("/")
-
-      app_path = app_path + "/config/locales"
+      app_path = destination_root + "/config/locales"
 
       unless File.directory?(app_path)
         FileUtils.mkdir app_path

@@ -15,13 +15,13 @@
                 <%= form.select field.name, collection, {:include_blank => true, :selected => selected}, field.html_attributes %>
                 <% if authorized? :new, @abstract_model %>
                   <%= link_to "Add new #{associated_model_name}", rails_admin_new_path(:model_name => associated_model_name ), :class => "createAssociatedRecord" %>
-                <% end %>  
+                <% end %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
                 <%= javascript_tag do %>
-                  $j(document).ready(function($){
+                  $j(document).ready(function($) {
                     $(".createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
                   });
                 <% end %>

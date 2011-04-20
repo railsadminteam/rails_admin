@@ -23,11 +23,11 @@
                 <% end %>
                 <p class="help"><%= field.help %></p>
                 <%= javascript_tag do %>
-                  $j(document).ready(function($){
+                  $j(document).ready(function($) {
                     var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
-                    $("#<%= "#{model_name}_#{type_column}" %>").bind("change", function(e){
+                    $("#<%= "#{model_name}_#{type_column}" %>").bind("change", function(e) {
                       if ("" == $(this).val()) {
-                        $("#<%= "#{model_name}_#{field.name}" %>").html('<option value=""></option>');  
+                        $("#<%= "#{model_name}_#{field.name}" %>").html('<option value=""></option>');
                       } else {
                         $.ajax({
                           url: urls[$(this).val()],
