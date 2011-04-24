@@ -15,8 +15,9 @@ require File.expand_path('../dummy_app/config/environment', __FILE__)
 
 require 'rails/test_help'
 require 'generator_spec/test_case'
-require 'generators/rails_admin/install_admin_generator'
 require 'generators/rails_admin/install_migrations_generator'
+require File.dirname(__FILE__) + '/../lib/tasks/tasks'
+require 'generators/rails_admin/uninstall_migrations_generator'
 require 'generators/rails_admin/rails_admin_generator'
 require 'rspec/rails'
 require 'factory_girl'

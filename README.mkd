@@ -64,7 +64,7 @@ Run:
 
 And then run:
 
-    $ rails generate rails_admin:install_admin
+    $ rake rails_admin:install
 
 This task will install RailsAdmin and [Devise](http://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](http://github.com/plataformatec/devise) is strongly
@@ -74,19 +74,19 @@ If you plan to use Devise, but want to use a custom model for authentication
 (default is User) you can provide that as an argument for the installer. For example
 to override the default with a Member model run:
 
-    $ rails generate rails_admin:install_admin member
+    $ rake rails_admin:install model_name=member
 
 If you want to use the CKEditor, you need to [download it](http://ckeditor.com/download) from source
 and unpack the 'ckeditor' folder into your default 'public/javascripts' folder. If you're using any
 non-Windows system, you can try to use the automatic downloader:
 
-    $ rake admin:ckeditor_download
+    $ rake rails_admin:ckeditor_download
 
 When running RailsAdmin in production the images, stylesheets, and javascript assets may return 404
 not found error's depending on your servers static assets configuration.  To prevent this issue you
 can copy assets directly into your application by running:
 
-    $ rake admin:copy_assets
+    $ rake rails_admin:copy_assets
 
 Usage
 -----

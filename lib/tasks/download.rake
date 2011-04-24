@@ -1,4 +1,4 @@
-namespace :admin do
+namespace :rails_admin do
   desc "Download CKEditor to your public javascript folder"
   task :ckeditor_download do
     require 'fileutils'
