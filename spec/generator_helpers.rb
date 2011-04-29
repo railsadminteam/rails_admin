@@ -1,18 +1,14 @@
 module GeneratorHelpers
 
+  ['devise', 'rails_admin'].each do |name|
+    define_method("create_#{name}_initializer".to_sym) { FileUtils.touch File.join(destination_root, 'config', 'initializers', "#{name}.rb") }
+  end
+
   def create_rails_folder_structure
     config_path = File.join(destination_root, 'config')
     FileUtils.mkdir config_path
     FileUtils.mkdir File.join(config_path, 'initializers')
     FileUtils.mkdir File.join(config_path, 'locales')
-  end
-
-  def create_devise_initializer
-    FileUtils.touch File.join(destination_root, 'config', 'initializers', 'devise.rb')
-  end
-
-  def create_rails_admin_initializer
-    FileUtils.touch File.join(destination_root, 'config', 'initializers', 'rails_admin.rb')
   end
 
   def create_routes_with_devise
