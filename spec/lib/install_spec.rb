@@ -20,7 +20,7 @@ describe "rails_admin:install Rake task" do
       create_routes_with_devise
       assert_no_file destination_root + "/config/locales/devise.en.yml"
       assert_no_file destination_root + "/config/locales/rails_admin.en.yml"
-      RailsAdmin::ExtraTasks.install
+      silence_stream(STDOUT) { RailsAdmin::ExtraTasks.install }
     end
 
     it "creates locales files" do
