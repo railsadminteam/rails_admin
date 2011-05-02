@@ -63,6 +63,12 @@ describe "RailsAdmin" do
       response.should have_tag("select#comment_commentable_type")
       response.should have_tag("select#comment_commentable_id")
     end
+
+    it "should be hidden in the owning end" do
+      get rails_admin_edit_path(:model_name => "team", :id => @team.id)
+
+      response.should_not have_tag("legend", :content => "Comments")
+    end
   end
 
   describe "model whitelist:" do
