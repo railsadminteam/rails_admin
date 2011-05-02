@@ -11,7 +11,12 @@ describe "rails_admin:uninstall Rake task" do
   before(:each) do
     prepare_destination
     create_rails_folder_structure
+    @rails_root = Rails.configuration.root
     Rails.configuration.root = Pathname.new(destination_root)
+  end
+  
+  after(:each) do
+    Rails.configuration.root = @rails_root
   end
 
   context "initializer" do
