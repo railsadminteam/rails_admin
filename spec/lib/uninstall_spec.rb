@@ -6,7 +6,7 @@ end
 
 describe "rails_admin:uninstall Rake task" do
   include GeneratorSpec::TestCase
-  destination File.expand_path("../tmp", __FILE__)
+  destination ::File.expand_path("../tmp", __FILE__)
 
   before(:each) do
     prepare_destination
@@ -33,7 +33,7 @@ describe "rails_admin:uninstall Rake task" do
 
   context "locales" do
     before(:each) do
-      FileUtils.touch File.join(destination_root, 'config', 'locales', 'rails_admin.en.yml')
+      FileUtils.touch ::File.join(destination_root, 'config', 'locales', 'rails_admin.en.yml')
       silence_stream(STDOUT) { RailsAdmin::ExtraTasks.uninstall }
     end
 
@@ -44,7 +44,7 @@ describe "rails_admin:uninstall Rake task" do
 
   context "Gemfile" do
     before(:each) do
-      File.open(destination_root + '/Gemfile', 'w') do |f|
+      ::File.open(destination_root + '/Gemfile', 'w') do |f|
         f.puts "source 'http://rubygems.org'
           gem 'rails'
           gem 'devise' # Devise must be required before RailsAdmin
@@ -56,7 +56,7 @@ describe "rails_admin:uninstall Rake task" do
 
     it "should be updated" do
 
-      actual = File.open(destination_root + '/Gemfile', 'r').read
+      actual = ::File.open(destination_root + '/Gemfile', 'r').read
       expected = "source 'http://rubygems.org'
           gem 'rails'
           gem 'devise' # Devise must be required before RailsAdmin
