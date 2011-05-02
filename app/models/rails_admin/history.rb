@@ -4,32 +4,31 @@ module RailsAdmin
 
     IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 
-    scope :most_recent, lambda {|model|
-      where("#{retrieve_connection.quote_column_name(:table)} = ?", model.pretty_name).order("updated_at DESC")
+    scope :most_recent, lambda {|table|
+      where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
     }
 
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
       sql_in = ""
       if mstart > mstop
-        sql_in_end = (1..mstop).to_a.join(", ")
+        # fix by Dan Choi
+        #sql_in = (mstart + 1..12).to_a.join(", ") <== possible culprit May month bug
+        sql_in = (mstart..12).to_a.join(", ")
+        sql_in_two = (1..mstop).to_a.join(", ")
 
-        results = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in_end}) and year = #{ystop} group by year, month")
+        results = History.find_by_sql("select count(*) as number, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
+        results_two = History.find_by_sql("select count(*) as number, year, month from rails_admin_histories where month IN (#{sql_in_two}) and year = #{ystop} group by year, month")
 
-        if mstart < 12
-          sql_in_start = (mstart + 1..12).to_a.join(", ")
-          results_start = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in_start}) and year = #{ystart} group by year, month")
-          results = results_start.concat(results)
-        end
-
-        results
+        results.concat(results_two)
       else
-        sql_in =  (mstart + 1..mstop).to_a.join(", ")
+        #sql_in =  (mstart + 1..mstop).to_a.join(", ")  <=== may be defective too
+        sql_in =  (mstart..mstop).to_a.join(", ")
 
-        results = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
+        results = History.find_by_sql("select count(*) as number, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
       end
 
       results.each do |result|
-        result.record_count = result.record_count.to_i
+        result.number = result.number.to_i
       end
 
       add_blank_results(results, mstart, ystart)
