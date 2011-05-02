@@ -17,9 +17,9 @@ Factory.define :team do |f|
   f.sequence(:name) { |n| "Team #{n}" }
   f.sequence(:manager) { |n| "Manager #{n}" }
   f.founded 1869 + rand(130)
-  f.wins (wins = rand(163))
+  f.wins(wins = rand(163))
   f.losses 162 - wins
-  f.win_percentage ("%.3f" % (wins.to_f / 162).to_f)
+  f.win_percentage("%.3f" % (wins.to_f / 162).to_f)
 end
 
 Factory.define :league do |f|
