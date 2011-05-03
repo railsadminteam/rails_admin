@@ -15,7 +15,7 @@ module RailsAdmin
     end
 
     def slider
-      if params[:from].nil? or params[:to].nil?
+      if params[:from].blank? or params[:to].blank?
         not_found
       else
         render :json => AbstractHistory.history_summaries(params[:from], params[:to])
