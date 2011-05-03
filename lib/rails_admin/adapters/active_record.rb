@@ -10,7 +10,7 @@ module RailsAdmin
           @polymorphic_parents = {}
           RailsAdmin::AbstractModel.all.each do |abstract_model|
             abstract_model.polymorphic_associations.each do |association|
-              (@polymorphic_parents[association[:options][:as]] ||= []) << abstract_model
+              (@polymorphic_parents[association[:options][:as].to_sym] ||= []) << abstract_model
             end
           end
         end
