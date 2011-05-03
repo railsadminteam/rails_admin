@@ -1,4 +1,4 @@
-require File.expand_path('../tasks', __FILE__)
+require File.expand_path('../extra_tasks', __FILE__)
 
 namespace :rails_admin do
   desc "Install rails_admin"
