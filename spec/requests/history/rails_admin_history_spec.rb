@@ -13,6 +13,13 @@ describe "RailsAdmin History" do
     end
   end
 
+  describe "when range starts in December" do
+    it "does not produce SQL with empty IN () range" do
+      RailsAdmin::History.should_receive(:find_by_sql).with("select count(*) as number, year, month from rails_admin_histories where month IN (1, 2, 3, 4) and year = 2011 group by year, month").and_return([])
+      RailsAdmin::History.get_history_for_dates(12, 4, 2010, 2011)
+    end
+  end
+
   describe "history blank results single year" do
     before(:each) do
       @months = RailsAdmin::History.add_blank_results([RailsAdmin::BlankHistory.new(7, 2010), RailsAdmin::BlankHistory.new(9, 2011)], 5, 2010)
