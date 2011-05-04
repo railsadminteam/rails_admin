@@ -177,4 +177,16 @@ describe "RailsAdmin Basic Create" do
       response.body.should have_tag "form", :action => "/admin/players"
     end
   end
+  
+  describe "create with object with errors on base" do
+    before(:each) do
+      get rails_admin_new_path(:model_name => "player")
+      fill_in "player[name]", :with => "Jackie Robinson on steroids"
+      click_button "Save and add another"
+    end
+
+    it "should show error base error message in flash" do
+      response.body.should contain("Player failed to be created. Player is cheating")
+    end
+  end
 end
