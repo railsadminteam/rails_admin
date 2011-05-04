@@ -305,11 +305,8 @@ module RailsAdmin
       action = params[:action]
 
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
-
-      if @object.errors[:base].size > 0
-        flash.now[:error] << ". " << @object.errors[:base].to_s
-      end
-
+      flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
+      
       respond_to do |format|
         format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
         format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }
