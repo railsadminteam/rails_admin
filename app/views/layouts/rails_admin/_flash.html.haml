@@ -1,8 +1,9 @@
-- if flash && flash[:error]
-  .ra-message.ui-state-error.ui-corner-all
-    %span.ui-icon.ui-icon-alert{:style => "float: left; margin-right: .3em;"}
-    = flash[:error]
-- if flash && flash[:notice]
-  .ra-message.ui-state-highlight.ui-corner-all
-    %span.ui-icon.ui-icon-info{:style => "float: left; margin-right: .3em;"}
-    = flash[:notice]
+- if flash && (flash[:error] || flash[:notice])
+  .flash
+    - if flash && flash[:error]
+      .message.error
+        %p= flash[:error]
+    
+    - if flash && flash[:notice]
+      .message.notice
+        %p= flash[:notice]
