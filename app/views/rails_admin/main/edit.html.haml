@@ -24,4 +24,4 @@
       = form_for(@object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :class => "form", :html => { :method => "put", :multipart => true }) do |form|
         - @model_config.edit.with(:object => @object).visible_groups.each do |fieldset|
           = render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object }
-      = render :partial => 'submit_buttons'
+        = render :partial => 'submit_buttons'
