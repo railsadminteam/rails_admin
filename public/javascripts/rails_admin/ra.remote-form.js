@@ -70,9 +70,19 @@
       dialog.dialog("option", "buttons", buttons);
 
       form.bind("ajax:success", function(e, data, status, xhr) {
-        var input = widget.element.prev(), json = $.parseJSON(data);
-        input.append('<option value="' + json.id + '">' + json.label + '</option>' );
-        dialog.dialog("close");
+				var json = $.parseJSON(data);
+       	var select = widget.element.siblings('select');
+				var input = widget.element.siblings('.ra-filtering-select-input');
+ 				
+				if(input.length > 0) {
+ 					input[0].value = json.label;
+ 				}
+				
+ 				if(select.length > 0) {
+ 					select.html('<option value="' + json.id + '">' + json.label + '</option>' );
+ 					select[0].value = json.id;
+ 				}
+				dialog.dialog("close");
       });
 
       form.bind("ajax:error", function(e, xhr, status, error) {

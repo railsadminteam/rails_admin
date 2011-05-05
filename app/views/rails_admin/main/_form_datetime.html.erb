@@ -1,6 +1,6 @@
-              <div class="field <%= "#{form.object_name}_#{field.name}" %>">
-                <%= form.label field.name, field.label %>
-                <%= form.send field.view_helper, field.name, field.html_attributes %>
+              <div class="field <%= field.dom_id %>">
+                <%= form.label field.method_name, field.label %>
+                <%= form.send field.view_helper, field.method_name, field.html_attributes %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label} #{field.errors.first}" %></span>
                 <% end %>
@@ -10,7 +10,7 @@
                 <% head_javascript "rails_admin/ra.datetimepicker.js" %>
                 <% head_javascript do %>
                   $j(document).ready(function($){
-                    $("#<%= "#{form.object_name}_#{field.name}" %>").datetimepicker(<%= field.js_plugin_options.html_safe %>);
+                    $("#<%= field.dom_id %>").datetimepicker(<%= field.js_plugin_options.html_safe %>);
                   });
                 <% end %>
               </div>

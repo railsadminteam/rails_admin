@@ -43,17 +43,17 @@ module RailsAdmin
             @associated_model_config ||= RailsAdmin.config(association[:parent_model])
           end
 
-          def selected(params)
-            if params[name]
-              params[name].to_i
-            else
-              bindings[:object].send(child_key)
-            end
+          def selected_id
+            bindings[:object].send(child_key)
           end
 
           # Reader for field's value
           def value
             bindings[:object].send(name)
+          end
+          
+          def method_name
+            name.to_s
           end
         end
       end

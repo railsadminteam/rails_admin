@@ -1,5 +1,5 @@
-<div class="field <%= "#{form.object_name}_#{field.name}" %>">
- <%= form.label field.name, field.label) %>
+<div class="field <%= field.dom_id %>">
+  <%= form.label field.method_name, field.label %>
  <div class="input">
    <% if field.bindings[:object].send(field.name) %>
      <div class="row">

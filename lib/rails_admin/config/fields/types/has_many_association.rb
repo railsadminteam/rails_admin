@@ -23,13 +23,18 @@ module RailsAdmin
               :multiple => "multiple",
             }
           end
+          
+          # orderable associated objects
+          register_instance_option(:orderable?) do
+            false
+          end
 
-          def selected(params)
-            if params["associations"]
-              params["associations"][association[:name]].to_a.map{|o| o.to_i}
-            else
-              bindings[:object].send(association[:name]).map{|o| o.id }
-            end
+          def dom_name
+            "#{super}[]" # model_name[name_ids][]
+          end
+        
+          def method_name
+            "#{super.singularize}_ids" # name_ids
           end
         end
       end

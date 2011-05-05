@@ -79,7 +79,7 @@ module RailsAdmin
     def model
       @model_name.constantize
     end
-
+    
     private
 
     def self.superclasses(klass)

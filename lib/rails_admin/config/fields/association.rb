@@ -17,14 +17,6 @@ module RailsAdmin
           @properties
         end
 
-        register_instance_option(:render) do
-          object_name = bindings[:form].object_name
-          bindings[:form].object_name = "associations"
-          html = bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
-          bindings[:form].object_name = object_name
-          html
-        end
-
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.

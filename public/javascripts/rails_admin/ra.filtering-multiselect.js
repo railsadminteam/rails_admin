@@ -16,7 +16,10 @@
       createQuery: function(query) {
         return { query: query };
       },
+      sortable: false,
       regional: {
+        up: "Up",
+        down: "Down",
         add: "Add",
         chooseAll: "Choose all",
         chosen: "Chosen records",
@@ -76,9 +79,14 @@
 
       this.remove = $('<a class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
 
-      this.columns.center.append(this.add).append(this.remove);
+      this.columns.center.append(this.add).append(this.remove)
+      if (this.options.sortable) {
+        this.up = $('<a class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + this.options.regional.up + '</a>');
+        this.down = $('<a class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + this.options.regional.down + '</a>');
+        this.columns.center.append(this.up).append(this.down);
+      }
 
-      this.selection = $('<select multiple="multiple" class="ra-multiselect-selection"></select>');
+      this.selection = $('<select class="ra-multiselect-selection" multiple="multiple"></select>');
 
       this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
 
@@ -112,7 +120,18 @@
       });
 
       var timeout = null;
-
+      if(this.options.sortable) {
+        /* Move selection up */
+        this.up.click(function(e){
+          widget._move('up', $(':selected', widget.selection));    
+        });
+      
+        /* Move selection down */
+        this.down.click(function(e){
+          widget._move('down', $(':selected', widget.selection));
+        });
+      }
+	
       /* Typing to the filter */
       this.filter.keyup(function(e){
 
@@ -214,6 +233,32 @@
         }
       });
       $(options).appendTo(this.selection).attr('selected', false);
+    },
+
+    _move: function(direction, options) {
+      var widget = this;
+      if(direction == 'up') {
+        options.each(function(i, option) {
+          var prev = $(option).prev();
+          if (prev.length > 0) {
+            var el = widget.element.find("option[value=" + option.value + "]");
+            var el_prev = widget.element.find("option[value=" + prev[0].value + "]");
+            el_prev.before(el);
+            prev.before($(option));
+          }
+        });
+      } else {
+        $.fn.reverse = [].reverse; // needed to lower last items first
+        options.reverse().each(function(i, option) {
+          var next = $(option).next();
+          if (next.length > 0) {
+            var el = widget.element.find("option[value=" + option.value + "]");
+            var el_next = widget.element.find("option[value=" + next[0].value + "]");
+            el_next.after(el);
+            next.after($(option));
+          }
+        });
+      }
     },
 
     selected: function(value) {
