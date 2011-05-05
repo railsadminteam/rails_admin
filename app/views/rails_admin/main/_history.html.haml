@@ -1,0 +1,11 @@
+%br
+%h4= "#{month_names[month - 1]} #{year} #{t("admin.history.name").downcase}"
+%table.table.grid
+  / %tr
+  /   %th User
+  /   %th Changes
+  %tbody
+    - history.each do |t|
+      %tr{:class => cycle('even', 'odd')}
+        %td{:style => "text-align: left;"}= t.username
+        %td{:style => "text-align: left;"}= history_output(t)
