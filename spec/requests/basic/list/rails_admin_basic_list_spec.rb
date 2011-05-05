@@ -30,7 +30,8 @@ describe "RailsAdmin Basic List" do
       response.body.should contain(/CREATED AT\n\s*UPDATED AT\n\s*/)
     end
 
-    it "should show column headers" do
+    pending "should show column headers" do
+      # We now have little icons too small to have big text headers.
       response.body.should contain(/EDIT\n\s*DELETE\n\s*/)
     end
   end
