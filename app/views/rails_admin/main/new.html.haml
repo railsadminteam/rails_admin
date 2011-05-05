@@ -1,0 +1,24 @@
+-# FIXME: too much duplication between this page and edit page
+- head_style "rails_admin/form.css"
+- head_javascript "rails_admin/application.js"
+- head_javascript "rails_admin/ra.remote-form.js"
+
+#block-tables.block
+  -# FIXME: Need to create some kind of secondary-navigation helper.
+  .secondary-navigation
+    %ul.wat-cf
+      %li.first= link_to "Index", rails_admin_list_path(@abstract_model)
+      %li
+        %a{:href => "#"} Show
+      %li
+        %a{:href => "#"} Edit
+      %li.active
+        %a{:href => "#"} New
+  .content
+    %h2.title= @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      = form_for(@object, :url => rails_admin_create_path(:model_name => @abstract_model.to_param, :id => @object.id), :class => "form", :html => { :multipart => true }) do |form|
+        - @model_config.create.with(:object => @object).visible_groups.each do |fieldset|
+          = render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object }
+        = render :partial => 'submit_buttons'
