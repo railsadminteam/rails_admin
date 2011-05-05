@@ -245,8 +245,7 @@ evaluated at runtime.
 
 **Create a dropdown menu in navigation**
 
-This will desactivate config.navigation.max_visible_tabs, you'll need to make check 
-you don't break the layout.
+This will desactivate config.navigation.max_visible_tabs.
 
     RailsAdmin.config do |config|
       config.model Team do
