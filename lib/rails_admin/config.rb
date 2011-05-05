@@ -96,12 +96,12 @@ module RailsAdmin
       end
     end
 
-    # Get all models that are configured as visible sorted by their label.
+    # Get all models that are configured as visible sorted by their weight and label.
     #
     # @see RailsAdmin::Config::Hideable
     def self.visible_models
       RailsAdmin::Config.models.select {|m| m.visible? }.sort do |a, b|
-        a.label.downcase <=> b.label.downcase
+        (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
       end
     end
   end

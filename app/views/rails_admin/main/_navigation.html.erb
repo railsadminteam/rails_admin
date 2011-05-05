@@ -1,20 +1,44 @@
 <%
-  max_visible_tabs = RailsAdmin::Config::Sections::Navigation.max_visible_tabs
   models = RailsAdmin::Config.visible_models.select { |model| authorized?(:list, model.abstract_model) }
+  root_models = models.select { |model| model.parent == :root }
+  max_visible_tabs = (root_models.length == models.length ? RailsAdmin::Config::Sections::Navigation.max_visible_tabs : root_models.length)
 %>
       <ul id="nav">
-        <li <%if @page_type == "dashboard" %>class="active"<% end %>><%= link_to(t("admin.dashboard.name"), rails_admin_dashboard_path) %></li>
-<% models[0..max_visible_tabs-1].each do |model| %>
-        <li <%if @page_type == model.abstract_model.pretty_name.downcase %>class="active"<% end %>><%= link_to(model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param)) %></li>
-<% end %>
-<% if models.size > max_visible_tabs %>
-        <li class="more">
-          <a href="#">&raquo;</a>
-          <ul>
-          <% models[max_visible_tabs..models.size].each do |model| %>
-          <li <%if @page_type == model.abstract_model.pretty_name.downcase %>class="active"<% end %>><%= link_to(model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param)) %></li>
-          <% end %>
-          </ul>
+        <li class="<%= "active" if @page_type == "dashboard" %>">
+          <%= link_to(t("admin.dashboard.name"), rails_admin_dashboard_path) %>
         </li>
-<% end %>
+        <% root_models[0..max_visible_tabs-1].each do |model| %>
+          <%
+            tab_titles = [model.abstract_model.pretty_name.downcase]
+            children = models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
+            children.each { |child| tab_titles << child.abstract_model.pretty_name.downcase } 
+          %>
+          <li class="<%= "active" if tab_titles.include? @page_type %> <%= "more" unless children.empty? %>">
+            <% unless model.dropdown %>
+              <%= link_to(model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param)) %>
+            <% else %>
+              <a href="#"><%= t(model.dropdown.to_s, :default => model.dropdown.to_s) %></a>
+              <% children = [model] + children %>
+            <% end %>
+            <ul>
+              <% children.each do |child| %>
+                <li class="<%= "active" if @page_type == child.abstract_model.pretty_name.downcase %>">
+                  <%= link_to(child.label, rails_admin_list_path(:model_name => child.abstract_model.to_param)) %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+        <% if root_models.size > max_visible_tabs %>
+          <li class="more plus">
+            <a href="#">&raquo;</a>
+            <ul>
+            <% models[max_visible_tabs..root_models.size].each do |model| %>
+              <li <%if @page_type == model.abstract_model.pretty_name.downcase %>class="active"<% end %>>
+                <%= link_to(model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param)) %>
+              </li>
+            <% end %>
+            </ul>
+          </li>
+        <% end %>
       </ul>
