@@ -26,13 +26,13 @@ describe "RailsAdmin" do
   describe "html head" do
     before { get rails_admin_dashboard_path }
     subject { response }
-    
+
     # Note: the [href^="/sty... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it "should load stylesheets" do
       should have_selector('link[href^="/stylesheets/rails_admin/ra.timeline.css"]')
     end
-    
+
     it "should load javascript files" do
       scripts = %w[ /javascripts/rails_admin/application.js
                 http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
@@ -46,8 +46,8 @@ describe "RailsAdmin" do
 
   describe "polymorphic associations" do
     before :each do
-      @team = RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Commentable Team", :manager => "Manager", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      @comment = RailsAdmin::AbstractModel.new("Comment").create(:content => "Comment on a team", :commentable => @team)
+      @team = Factory.create :team
+      @comment = Factory.create :comment, :commentable => @team
     end
 
     it "should work like belongs to associations in the list view" do
@@ -63,6 +63,60 @@ describe "RailsAdmin" do
       response.should have_tag("select#comment_commentable_type")
       response.should have_tag("select#comment_commentable_id")
     end
+
+    it "should be hidden in the owning end" do
+      get rails_admin_edit_path(:model_name => "team", :id => @team.id)
+
+      response.should_not have_tag("legend", :content => "Comments")
+    end
+  end
+
+  describe "model whitelist:" do
+
+    before do
+      RailsAdmin::AbstractModel.instance_variable_get("@models").clear
+      RailsAdmin::Config.excluded_models = []
+      RailsAdmin::Config.included_models = []
+      RailsAdmin::Config.reset
+    end
+
+    after :all do
+      RailsAdmin::AbstractModel.instance_variable_get("@models").clear
+      RailsAdmin::Config.excluded_models = []
+      RailsAdmin::Config.included_models = []
+      RailsAdmin::Config.reset
+    end
+
+    it 'should only use included models' do
+      RailsAdmin::Config.included_models = [Team, League]
+      RailsAdmin::AbstractModel.all.map(&:model).should == [League, Team] #it gets sorted
+    end
+
+    it 'should not restrict models if included_models is left empty' do
+      RailsAdmin::Config.included_models = []
+      RailsAdmin::AbstractModel.all.map(&:model).should include(Team, League)
+    end
+
+    it 'should further remove excluded models (whitelist - blacklist)' do
+      RailsAdmin::Config.excluded_models = [Team]
+      RailsAdmin::Config.included_models = [Team, League]
+      RailsAdmin::AbstractModel.all.map(&:model).should == [League]
+    end
+
+    it 'should always exclude history' do
+      RailsAdmin::AbstractModel.all.map(&:model).should_not include(RailsAdmin::History)
+    end
+
+    it 'excluded? returns true for any model not on the list' do
+      RailsAdmin::Config.included_models = [Team, League]
+
+      team_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Team'))
+      fan_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Fan'))
+
+      fan_config.should be_excluded
+      team_config.should_not be_excluded
+    end
+    
   end
 
 end

@@ -38,11 +38,11 @@ module RailsAdmin
         return html.html_safe
       end
     end
-    
+
     # A Helper to load from a CDN but with fallbacks in case the primary source is unavailable
     # The best of both worlds - fast clevery cached service from google when available and the
     # ability to work offline too.
-    # 
+    #
     # @example Loading jquery from google
     #   javascript_fallback "http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js",
     #     "/javascripts/jquery-1.4.3.min.js",
@@ -126,6 +126,8 @@ module RailsAdmin
         :center => [],
         :right => []
       }
+
+      infinity = (1/0.0)
 
       # Only worry about using our 'windows' if the page count is less then
       # our windows combined.

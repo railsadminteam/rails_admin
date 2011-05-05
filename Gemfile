@@ -1,12 +1,13 @@
 source 'http://rubygems.org'
 
-gemspec
-
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  if 'java' == RUBY_PLATFORM
+  gem 'rails', '~> 3.0.7'
+
+  platforms :jruby do
+    gem 'jruby-openssl', '~> 0.7'
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
       gem 'activerecord-jdbcmysql-adapter', '~> 1.1', :platform => :jruby
@@ -18,7 +19,9 @@ group :development, :test do
       gem 'activerecord-jdbcsqlite3-adapter', '~> 1.1', :platform => :jruby
       gem 'jdbc-sqlite3', '~> 3.6', :platform => :jruby
     end
-  else
+  end
+
+  platforms :ruby, :mswin, :mingw do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
       gem 'mysql', '~> 2.8'
@@ -28,5 +31,10 @@ group :development, :test do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem "cancan" if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
+
+  gem 'cancan' if ENV['AUTHORIZATION_ADAPTER'] == 'cancan'
+  gem 'factory_girl', '2.0.0.beta2'
+  gem 'generator_spec'
 end
+
+gemspec

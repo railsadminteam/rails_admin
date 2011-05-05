@@ -15,7 +15,7 @@ module RailsAdmin
     end
 
     def slider
-      if params[:from].nil? or params[:to].nil?
+      if params[:from].blank? or params[:to].blank?
         not_found
       else
         render :json => AbstractHistory.history_summaries(params[:from], params[:to])
@@ -26,6 +26,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.history.page_name", :name => @model_config.label)
       @general = true
+      @current_page = params[:page].try(:to_i) || 1
 
       @page_count, @history = AbstractHistory.history_for_model @abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]
 

@@ -12,9 +12,18 @@ SimpleCov.start do
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
-require "rails/test_help"
-require "rspec/rails"
-require "database_helpers"
+
+require 'rails/test_help'
+require 'generator_spec/test_case'
+require 'generators/rails_admin/install_migrations_generator'
+require File.dirname(__FILE__) + '/../lib/tasks/extra_tasks'
+require 'generators/rails_admin/uninstall_migrations_generator'
+require 'generators/rails_admin/rails_admin_generator'
+require 'rspec/rails'
+require 'factory_girl'
+require 'factories'
+require 'database_helpers'
+require 'generator_helpers'
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -44,13 +53,18 @@ RSpec.configure do |config|
   config.include Webrat::Matchers
   config.include Webrat::HaveTagMatcher
   config.include DatabaseHelpers
+  config.include GeneratorHelpers
 
   # == Mock Framework
-  config.mock_with :rspec
+  config.mock_with :rr
 
   config.include Warden::Test::Helpers
 
   config.before(:each) do
+    RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
+    RailsAdmin::AbstractModel.instance_variable_get("@models").clear
+    RailsAdmin::Config.reset
+
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
     RailsAdmin::AbstractModel.new("Fan").destroy_all!

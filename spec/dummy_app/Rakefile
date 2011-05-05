@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Dummy::Application.load_tasks
+DummyApp::Application.load_tasks

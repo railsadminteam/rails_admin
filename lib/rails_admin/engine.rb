@@ -1,5 +1,5 @@
-require "rails_admin"
-require "rails"
+require 'rails_admin'
+require 'rails'
 
 module RailsAdmin
   class Engine < Rails::Engine
@@ -7,10 +7,6 @@ module RailsAdmin
       if app.config.serve_static_assets
         app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
       end
-    end
-    
-    rake_tasks do
-      load "rails_admin/railties/tasks.rake"
     end
   end
 end

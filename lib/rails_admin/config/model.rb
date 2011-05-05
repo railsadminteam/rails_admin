@@ -25,7 +25,8 @@ module RailsAdmin
       end
 
       def excluded?
-        @excluded ||= !RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }.nil?
+        return @excluded unless @excluded.nil?
+        @excluded = !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
       end
 
       # Configure create and update views as a bulk operation with given block
@@ -57,7 +58,19 @@ module RailsAdmin
       register_instance_option(:label) do
         abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
       end
-
+      
+      register_instance_option(:weight) do
+        0
+      end
+      
+      register_instance_option(:parent) do
+        :root
+      end
+      
+      register_instance_option(:dropdown) do
+        false
+      end
+      
       # Act as a proxy for the section configurations that actually
       # store the configurations.
       def method_missing(m, *args, &block)

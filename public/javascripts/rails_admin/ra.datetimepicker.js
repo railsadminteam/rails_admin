@@ -47,7 +47,7 @@
         this.datepicker.bind("change", function() { widget._onChange(); });
 
         this.datepicker.datepicker(this.options.datepicker);
-      }      
+      }
     },
 
     _onChange: function() {

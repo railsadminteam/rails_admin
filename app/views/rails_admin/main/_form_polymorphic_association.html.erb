@@ -21,7 +21,7 @@
                 <% end %>
                 <p class="help"><%= field.help %></p>
                 <%= javascript_tag do %>
-                  $j(document).ready(function($){
+                  $j(document).ready(function($) {
                     var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
                     $("#<%= "#{form.object_name}_#{type_column}" %>").bind("change", function(e){
                       if ("" == $(this).val()) {

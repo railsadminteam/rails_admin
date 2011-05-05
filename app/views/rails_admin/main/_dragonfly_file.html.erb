@@ -4,7 +4,7 @@
    <% if field.bindings[:object].send(field.name) %>
      <div class="row">
        <% if field.bindings[:object].send(field.name).mime_type.include? 'image' %>
-         <%= image_tag(field.bindings[:object].send(field.name).url) %><br />
+         <%= image_tag(field.bindings[:object].send(field.name).thumb("450x100").url) %><br />
        <% else %>
          <%= link_to field.bindings[:object].send(field.name).url, field.bindings[:object].send(field.name).url %>
        <% end %>

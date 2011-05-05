@@ -23,8 +23,8 @@
                 <% head_style 'rails_admin/ra.filtering-multiselect.css' %>
                 <% head_javascript "rails_admin/ra.filtering-multiselect.js" %>
                 <% head_javascript do %>
-                  $j(document).ready(function($){
-                    $("#<%= "#{form.object_name}_#{field.name}" %>").filteringMultiselect({
+                  $j(document).ready(function($) {
+                    $("#<%= "associations_#{name}" %>").filteringMultiselect({
                       <% if xhr %>
                         createQuery: function(query) {
                           return { filter: { '<%= field.associated_label_method %>': query + '%' } }

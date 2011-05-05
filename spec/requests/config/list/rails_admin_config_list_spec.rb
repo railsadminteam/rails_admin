@@ -5,12 +5,10 @@ describe "RailsAdmin Config DSL List Section" do
   describe "number of items per page" do
 
     before(:each) do
-      RailsAdmin::AbstractModel.new("League").create(:name => 'American')
-      RailsAdmin::AbstractModel.new("League").create(:name => 'National')
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
-
-      RailsAdmin::Config.reset
+      2.times.each do
+        Factory.create :league
+        Factory.create :player
+      end
     end
 
     it "should be configurable" do
@@ -68,10 +66,6 @@ describe "RailsAdmin Config DSL List Section" do
   end
 
   describe "items' fields" do
-
-    before(:each) do
-      RailsAdmin::Config.reset
-    end
 
     it "should show all by default" do
       get rails_admin_list_path(:model_name => "fan")
@@ -291,8 +285,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -315,8 +308,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -341,8 +333,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -370,8 +361,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -392,14 +382,13 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN II") }
-        elements[1].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN I") }
+        elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain(@fans[1].name.upcase) }
+        elements[1].should have_tag("td:nth-child(3)") {|li| li.should contain(@fans[0].name.upcase) }
       end
     end
 
@@ -415,8 +404,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -439,8 +427,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -460,23 +447,20 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      team = RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team I", :manager => "Manager I", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-
-      RailsAdmin::AbstractModel.new("Player").create(:name => 'Player I', :number => 1, :team => team)
-      RailsAdmin::AbstractModel.new("Player").create(:name => 'Player II', :number => 2, :team => team)
-      RailsAdmin::AbstractModel.new("Player").create(:name => 'Player III', :number => 3, :team => team)
+      @team = Factory.create :team
+      @players = 2.times.map { Factory.create :player, :team => @team }
 
       get rails_admin_list_path(:model_name => "team")
 
       response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
+        elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain(@players.collect(&:name).join(", ")) }
       end
     end
   end
 
   # sort_by and sort_reverse options
   describe "default sorting" do
-    before(:all) do
+    before(:each) do
       RailsAdmin.config(Player){ list { field :name } }
     end
 

@@ -10,14 +10,13 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       check "player[suspended]"
-
-      @req = click_button "Save"
+      click_button "Save"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
-      @req.should be_successful
+      response.should be_successful
     end
 
     it "should create an object with correct attributes" do
@@ -31,17 +30,18 @@ describe "RailsAdmin Basic Create" do
   describe "create and edit" do
     before(:each) do
       get rails_admin_new_path(:model_name => "player")
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       check "player[suspended]"
-      @req = click_button "Save and edit"
+      click_button "Save and edit"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
-      @response.should be_successful
+      response.should be_successful
     end
 
     it "should create an object with correct attributes" do
@@ -55,16 +55,18 @@ describe "RailsAdmin Basic Create" do
   describe "create and add another" do
     before(:each) do
       get rails_admin_new_path(:model_name => "player")
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       check "player[suspended]"
-      @req = click_button "Save and add another"
+      click_button "Save and add another"
+
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
-      @req.should be_successful
+      response.should be_successful
     end
 
     it "should create an object with correct attributes" do
@@ -77,13 +79,17 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-one association" do
     before(:each) do
-      @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      @draft = Factory.create :draft
+
       get rails_admin_new_path(:model_name => "player")
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => 42
       fill_in "player[position]", :with => "Second baseman"
       select "Draft ##{@draft.id}"
-      @req = click_button "Save"
+
+      click_button "Save"
+
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
@@ -95,17 +101,14 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-many association" do
     before(:each) do
-      @divisions = []
-      (1..3).each do |number|
-        @divisions << RailsAdmin::AbstractModel.new("Division").create(:league_id => rand(99999), :name => "Division #{number}")
-      end
+      @divisions = 3.times.map { Factory.create :division }
 
       get rails_admin_new_path(:model_name => "league")
 
       fill_in "league[name]", :with => "National League"
-
       select @divisions[0].name, :from => "associations_divisions"
-      @req = click_button "Save"
+
+      click_button "Save"
 
       @league = RailsAdmin::AbstractModel.new("League").first
     end
@@ -123,17 +126,13 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = []
-      (1..3).each do |number|
-        @teams << RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      end
+      @teams = 3.times.map { Factory.create :team }
 
       get rails_admin_new_path(:model_name => "fan")
 
       fill_in "fan[name]", :with => "John Doe"
-
       select @teams[0].name, :from => "associations_teams"
-      @req = click_button "Save"
+      click_button "Save"
 
       @fan = RailsAdmin::AbstractModel.new("Fan").first
     end
@@ -151,8 +150,8 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with uniqueness constraint violated", :given => "a player exists" do
     before(:each) do
-      @team =  RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team 1", :manager => "Manager 1", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => @team.id, :number => 1, :name => "Player 1")
+      @team = Factory.create :team
+      @player = Factory.create :player, :team => @team
 
       get rails_admin_new_path(:model_name => "player")
 
@@ -160,23 +159,34 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[number]", :with => @player.number.to_s
       fill_in "player[position]", :with => @player.position
       select "#{@team.name}", :from => "player[team_id]"
-
-      @req = click_button "Save"
+      click_button "Save"
     end
 
     it "should show an error message" do
-      @req.body.should contain("There is already a player with that number on this team")
+      response.body.should contain("There is already a player with that number on this team")
     end
   end
 
   describe "create with invalid object" do
     before(:each) do
-        @response = visit(rails_admin_create_path(:model_name => "player"), :post, :params => {:player => {}})
+      visit(rails_admin_create_path(:model_name => "player"), :post, :params => {:player => {}})
     end
 
     it "should show an error message" do
-      @response.body.should contain("Player failed to be created")
-      @response.body.should have_tag "form", :action => "/admin/players"
+      response.body.should contain("Player failed to be created")
+      response.body.should have_tag "form", :action => "/admin/players"
+    end
+  end
+  
+  describe "create with object with errors on base" do
+    before(:each) do
+      get rails_admin_new_path(:model_name => "player")
+      fill_in "player[name]", :with => "Jackie Robinson on steroids"
+      click_button "Save and add another"
+    end
+
+    it "should show error base error message in flash" do
+      response.body.should contain("Player failed to be created. Player is cheating")
     end
   end
 end

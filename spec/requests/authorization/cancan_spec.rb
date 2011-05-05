@@ -20,7 +20,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
   describe "RailsAdmin CanCan Authorization" do
     before(:each) do
       RailsAdmin.authorize_with :cancan
-      @user = RailsAdmin::AbstractModel.new("User").create(:email => "username@example.com", :password => "password")
+      @user = Factory.create :user
       login_as @user
     end
 
@@ -57,12 +57,16 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
-        RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
+        @players = [
+          Factory.create(:player, :retired => false),
+          Factory.create(:player, :retired => true),
+        ]
+
         get rails_admin_list_path(:model_name => "player", :set => 1)
+
         response.should be_successful
-        response.body.should contain("Leonardo")
-        response.body.should_not contain("Splinter")
+        response.body.should contain(@players[0].name)
+        response.body.should_not contain(@players[1].name)
         response.body.should_not contain("Add new")
         response.body.should_not contain("EDIT")
         response.body.should_not contain("DELETE")
@@ -92,9 +96,9 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/new should render and create record upon submission" do
         get rails_admin_new_path(:model_name => "player")
         response.body.should_not contain("edit")
-        fill_in "players[name]", :with => "Jackie Robinson"
-        fill_in "players[number]", :with => "42"
-        fill_in "players[position]", :with => "Second baseman"
+        fill_in "player[name]", :with => "Jackie Robinson"
+        fill_in "player[number]", :with => "42"
+        fill_in "player[position]", :with => "Second baseman"
         @req = click_button "Save"
         @player = RailsAdmin::AbstractModel.new("Player").first
         @req.should be_successful
@@ -105,7 +109,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/edit should raise access denied" do
-        @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+        @player = Factory.create :player
         lambda {
           get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
@@ -119,25 +123,25 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/edit should render and update record upon submission" do
-        @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+        @player = Factory.create :player
         get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         response.body.should_not contain("Delete")
-        fill_in "players[name]", :with => "Jackie Robinson"
-        @req = click_button "Save"
-        @player = RailsAdmin::AbstractModel.new("Player").first
-        @req.should be_successful
+        fill_in "player[name]", :with => "Jackie Robinson"
+        click_button "Save"
+        @player.reload
+        response.should be_successful
         @player.name.should eql("Jackie Robinson")
       end
 
       it "GET /admin/player/1/edit with retired player should raise access denied" do
-        @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1", :retired => true)
+        @player = Factory.create :player, :retired => true
         lambda {
           get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player/1/delete should raise access denied" do
-        @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+        @player = Factory.create :player
         lambda {
           get rails_admin_delete_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
@@ -151,30 +155,31 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/delete should render and destroy record upon submission" do
-        @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-        get rails_admin_delete_path(:model_name => "player", :id => @player.id)
-        @req = click_button "Yes, I'm sure"
-        @player = RailsAdmin::AbstractModel.new("Player").first
-        @req.should be_successful
-        @player.should be_nil
+        @player = Factory.create :player
+        player_id = @player.id
+        get rails_admin_delete_path(:model_name => "player", :id => player_id)
+
+        click_button "Yes, I'm sure"
+        response.should be_successful
+        Player.exists?(player_id).should be_false
       end
 
       it "GET /admin/player/1/delete with retired player should raise access denied" do
-        @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1", :retired => true)
+        @player = Factory.create :player, :retired => true
         lambda {
           get rails_admin_delete_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player/bulk_delete should render and destroy records which are authorized to" do
-        active_player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Leonardo", :retired => false)
-        retired_player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Splinter", :retired => true)
+        active_player = Factory.create :player, :retired => false
+        retired_player = Factory.create :player, :retired => true
 
         @delete_ids = [active_player, retired_player].map(&:id)
         get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
 
-        response.body.should contain("Leonardo")
-        response.body.should_not contain("Splinter")
+        response.body.should contain(active_player.name)
+        response.body.should_not contain(retired_player.name)
         click_button "Yes, I'm sure"
 
         Player.exists?(active_player.id).should be_false

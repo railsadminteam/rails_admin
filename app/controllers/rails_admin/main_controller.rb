@@ -25,7 +25,7 @@ module RailsAdmin
         current_count = t.count
         @max = current_count > @max ? current_count : @max
         @count[t.pretty_name] = current_count
-        @most_recent_changes[t.pretty_name] = AbstractHistory.most_recent_history(t.pretty_name).last.try(:updated_at)
+        @most_recent_changes[t.pretty_name] = AbstractHistory.most_recent_history(t).limit(1).first.try(:updated_at)
       end
 
       render :layout => 'rails_admin/dashboard'
@@ -231,9 +231,9 @@ module RailsAdmin
           statements << "(#{table_name}.#{property[:name]} = ?)"
           values << query
         end
-      # search over all string fields  
+      # search over all string and text fields
       else
-        @properties.select{|property| property[:type] == :string }.each do |property|
+        @properties.select{|property| property[:type] == :string || property[:type] == :text }.each do |property|
           statements << "(#{table_name}.#{property[:name]} LIKE ?)"
           values << "%#{query}%"
         end
@@ -305,11 +305,8 @@ module RailsAdmin
       action = params[:action]
 
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
-
-      if @object.errors[:base].size > 0
-        flash.now[:error] << ". " << @object.errors[:base].to_s
-      end
-
+      flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
+      
       respond_to do |format|
         format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
         format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }

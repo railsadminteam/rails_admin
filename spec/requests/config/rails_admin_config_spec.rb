@@ -5,14 +5,8 @@ describe "RailsAdmin Config DSL" do
   describe "excluded models" do
     excluded_models = [Division, Draft, Fan]
 
-    before(:all) do
+    before(:each) do
       RailsAdmin::Config.excluded_models = excluded_models
-    end
-
-    after(:all) do
-      RailsAdmin::Config.excluded_models = []
-      RailsAdmin::AbstractModel.instance_variable_get("@models").clear
-      RailsAdmin::Config.reset
     end
 
     it "should be hidden from navigation" do
@@ -53,11 +47,11 @@ describe "RailsAdmin Config DSL" do
       end
     end
   end
-  
+
   describe "model store does not exist" do
     before(:each)  { drop_all_tables }
     after(:all)    { migrate_database }
-    
+
     it "should not raise an error when the model tables do not exists" do
       config_setup = lambda do
         RailsAdmin.config Team do
@@ -66,7 +60,7 @@ describe "RailsAdmin Config DSL" do
           end
         end
       end
-      
+
       config_setup.should_not raise_error
     end
   end
@@ -77,10 +71,9 @@ describe "RailsAdmin Config DSL" do
         object_label { "League '#{bindings[:object].name}'"}
       end
 
-      league = RailsAdmin::AbstractModel.new('League').create(:name => "Bundesliga")
-      league.should be_persisted
+      @league = Factory.create :league
 
-      RailsAdmin.config('League').with(:object => league).object_label.should == "League 'Bundesliga'"
+      RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end
   end
 

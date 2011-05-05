@@ -4,33 +4,35 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with errors" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = Factory.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should return to edit page" do
       fill_in "player[name]", :with => ""
-      res = click_button "Save"
-      res.response_code.should eql(406)
-      res.should have_tag "form", :action => "/admin/players/#{@player.id}"
+      click_button "Save"
+      response.response_code.should eql(406)
+      response.should have_tag "form", :action => "/admin/players/#{@player.id}"
     end
   end
 
   describe "update and add another" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = Factory.create :player
+
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       check "player[suspended]"
+      click_button "Save"
 
-      @req = click_button "Save"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
     it "should be successful" do
-      @req.should be_successful
+      response.should be_successful
     end
 
     it "should update an object with correct attributes" do
@@ -43,20 +45,21 @@ describe "RailsAdmin Basic Update" do
 
   describe "update and edit" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = Factory.create :player
+
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       check "player[suspended]"
+      click_button "Save and edit"
 
-      @req = click_button "Save and edit"
-      @player = RailsAdmin::AbstractModel.new("Player").first
+      @player.reload
     end
 
     it "should be successful" do
-      @req.should be_successful
+      response.should be_successful
     end
 
     it "should update an object with correct attributes" do
@@ -69,20 +72,18 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with has-one association" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
-      @draft = RailsAdmin::AbstractModel.new("Draft").create(:player_id => rand(99999), :team_id => rand(99999), :date => Date.today, :round => rand(50), :pick => rand(30), :overall => rand(1500))
+      @player = Factory.create :player
+      @draft = Factory.create :draft
 
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-
       select "Draft ##{@draft.id}"
+      click_button "Save"
 
-      @req = click_button "Save"
-      @player = RailsAdmin::AbstractModel.new("Player").first
-      # @response = rails_admin_update, :model_name => "player", :id => @player.id), :put, :params => {:player => {:name => "Jackie Robinson", :number => 42, :team_id => 1, :position => "Second baseman"}, :associations => {:draft => @draft.id}})
+      @player.reload
     end
 
     it "should update an object with correct attributes" do
@@ -99,21 +100,16 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with has-many association", :given => ["a league exists", "three teams exist"] do
     before(:each) do
-      @league = RailsAdmin::AbstractModel.new("League").create(:name => "League 1")
-
-      @divisions = []
-      (1..3).each do |number|
-        @divisions << RailsAdmin::AbstractModel.new("Division").create(:league_id => rand(99999), :name => "Division #{number}")
-      end
+      @league = Factory.create :league
+      @divisions = 3.times.map { Factory.create :division }
 
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
 
       fill_in "league[name]", :with => "National League"
-
       select @divisions[0].name, :from => "associations_divisions"
+      click_button "Save"
 
-      response = click_button "Save"
-      @league = RailsAdmin::AbstractModel.new("League").first
+      @league.reload
       @histories = RailsAdmin::History.where(:item => @league.id)
     end
 
@@ -138,9 +134,11 @@ describe "RailsAdmin Basic Update" do
     describe "removing has-many associations" do
       before(:each) do
         get rails_admin_edit_path(:model_name => "league", :id => @league.id)
+
         unselect @divisions[0].name, :from => "associations_divisions"
-        response = click_button "Save"
-        @league = RailsAdmin::AbstractModel.new("League").first
+        click_button "Save"
+
+        @league.reload
         @histories.reload
       end
 
@@ -156,16 +154,15 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = (1..3).collect do |number|
-        RailsAdmin::AbstractModel.new("Team").create(:division_id => rand(99999), :name => "Team #{number}", :manager => "Manager #{number}", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-      end
-
-      @fan = RailsAdmin::AbstractModel.new("Fan").create(:name => "Fan 1")
-      @fan.teams << @teams[0]
+      @teams = 3.times.map { Factory.create :team }
+      @fan = Factory.create :fan, :teams => [@teams[0]]
 
       get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
+
       select @teams[1].name, :from => "associations_teams"
-      response = click_button "Save"
+      click_button "Save"
+
+      @fan.reload
     end
 
     it "should update an object with correct associations" do
@@ -180,41 +177,43 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with missing object" do
     before(:each) do
-      @response = visit(rails_admin_update_path(:model_name => "player", :id => 1), :put, {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
+      visit(rails_admin_update_path(:model_name => "player", :id => 1), :put, {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
     end
 
     it "should raise NotFound" do
-      @response.status.should equal(404)
+      response.status.should equal(404)
     end
   end
 
   describe "update with invalid object" do
     before(:each) do
-      @player = RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 1, :name => "Player 1")
+      @player = Factory.create :player
+
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "a"
       fill_in "player[position]", :with => "Second baseman"
-      @req = click_button "Save"
-      @player = RailsAdmin::AbstractModel.new("Player").first
+      click_button "Save"
+
+      @player.reload
     end
 
     it "should show an error message" do
-      @req.body.should contain("Player failed to be updated")
+      response.body.should contain("Player failed to be updated")
     end
   end
 
   describe "update with serialized objects" do
     before(:each) do
-      @user = RailsAdmin::AbstractModel.new("User").create(
-        :email => "test@example.com",
-        :password => "test1234",
-        :password_confirmation => 'test1234')
+      @user = Factory.create :user
+
       get rails_admin_edit_path(:model_name => "user", :id => @user.id)
+
       fill_in "user[roles]", :with => "[\"admin\", \"user\"]"
-      @req = click_button "Save"
-      @user = RailsAdmin::AbstractModel.new("User").model.find(@user.id)
+      click_button "Save"
+
+      @user.reload
     end
 
     it "should save the serialized data" do

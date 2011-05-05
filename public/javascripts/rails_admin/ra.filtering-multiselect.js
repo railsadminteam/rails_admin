@@ -126,7 +126,7 @@
               if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
                 html += '<option value="' + matches[i].id + '">' + matches[i].label + '</option>';
               }
-            }            
+            }
 
             widget.collection.html(html);
           });
@@ -159,7 +159,7 @@
     },
 
     _query: function(query, success) {
-      
+
       var i, matches = [];
 
       if (query === "") {
@@ -174,7 +174,7 @@
         }
 
         success.apply(this, [matches]);
-      
+
       } else {
 
         if (this.options.source) {
@@ -183,11 +183,11 @@
             beforeSend: function(xhr) {
               xhr.setRequestHeader("Accept", "application/json");
             },
-            url: this.options.source, 
-            data: this.options.createQuery(query), 
+            url: this.options.source,
+            data: this.options.createQuery(query),
             success: success
           });
-          
+
         } else {
 
           query = new RegExp(query + '.*', 'i');
