@@ -1,5 +1,7 @@
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
+    layout "rails_admin/main"
+    
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
@@ -27,8 +29,6 @@ module RailsAdmin
         @count[t.pretty_name] = current_count
         @most_recent_changes[t.pretty_name] = AbstractHistory.most_recent_history(t.pretty_name).last.try(:updated_at)
       end
-
-      render :layout => 'rails_admin/dashboard'
     end
 
     def list
@@ -36,7 +36,7 @@ module RailsAdmin
       list_entries
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
       respond_to do |format|
-        format.html { render :layout => 'rails_admin/list' }
+        format.html
         format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
           if params[:compact]
@@ -64,7 +64,7 @@ module RailsAdmin
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
-        format.html { render :layout => 'rails_admin/form' }
+        format.html
         format.js   { render :layout => 'rails_admin/plain.html.erb' }
       end
     end
@@ -108,8 +108,6 @@ module RailsAdmin
 
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-
-      render :layout => 'rails_admin/form'
     end
 
     def update
@@ -141,8 +139,6 @@ module RailsAdmin
 
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-
-      render :layout => 'rails_admin/delete'
     end
 
     def destroy
@@ -161,8 +157,6 @@ module RailsAdmin
 
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-
-      render :layout => 'rails_admin/delete'
     end
 
     def bulk_destroy
@@ -300,7 +294,7 @@ module RailsAdmin
       end
 
       respond_to do |format|
-        format.html { render whereto, :layout => 'rails_admin/form', :status => :not_acceptable }
+        format.html { render whereto, :status => :not_acceptable }
         format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }
       end
     end

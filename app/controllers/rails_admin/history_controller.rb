@@ -29,7 +29,7 @@ module RailsAdmin
 
       @page_count, @history = AbstractHistory.history_for_model @abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]
 
-      render "show", :layout => request.xhr? ? false : 'rails_admin/list'
+      render "show", :layout => request.xhr? ? false : 'rails_admin/main'
     end
 
     def for_object
@@ -39,7 +39,7 @@ module RailsAdmin
 
       @history = AbstractHistory.history_for_object @abstract_model, @object, params[:query], params[:sort], params[:sort_reverse]
 
-      render "show", :layout => request.xhr? ? false : 'rails_admin/list'
+      render "show", :layout => request.xhr? ? false : 'rails_admin/main'
     end
 
   end
