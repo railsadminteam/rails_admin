@@ -45,7 +45,7 @@
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      = form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get, :id => "bulk_delete_form" do
+      = form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get, :id => "bulk_delete_form", :class => "form" do
         %table.table.grid
           %tr
             %th.first
@@ -86,10 +86,12 @@
         .pagination
           - if @page_count.to_i > 1
             = paginate(@current_page, @page_count, :url => params).html_safe
-          = @record_count
-          = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
           - if @page_count.to_i == 2
             = link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => false, :class => "showall")
+        .left(style="float:left; padding-top:0.5em;")
+          - if @page_count.to_i > 1
+            = @record_count
+            = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
         
       = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => false, :class => "search") do
         .columns.wat-cf
