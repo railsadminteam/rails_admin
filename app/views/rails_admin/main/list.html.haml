@@ -77,7 +77,8 @@
                   - other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)
                   %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                   %td.last
-                    = action_icon("#", :show, "Show")   
+                    - if show_url = url_for(object) rescue nil
+                      = action_icon(show_url, :show, "Show")   
                     - if authorized? :edit, @abstract_model, object
                       = action_icon(rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id), :edit, t("admin.list.edit_action"))                  
                     - if authorized? :delete, @abstract_model, object
