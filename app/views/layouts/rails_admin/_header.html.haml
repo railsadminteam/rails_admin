@@ -3,7 +3,7 @@
   #user-navigation
     %ul.wat-cf
       - { :home => "Dashboard", :account => "Profile", :config => "Preferences", :logout => "Logout" }.each do |image, title|
-        %li= link_to icon(image, title), '#'
+        %li= link_to icon(image, title), rails_admin_dashboard_path
       
 /   %h1#logo
 /     = link_to rails_admin_dashboard_path do
