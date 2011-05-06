@@ -145,9 +145,10 @@
       this.redraw();
       
       var widget = this;
+      var date = this._getCurrentDate();
       
       $(window).resize(function() {
-        widget.refresh();
+        widget.redraw();
       });
       
       $.ajax({
