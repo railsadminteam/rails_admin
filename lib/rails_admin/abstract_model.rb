@@ -9,16 +9,22 @@ module RailsAdmin
     # Returns all models for a given Rails app
     def self.all
       if @models.empty?
+        if RailsAdmin::Config.included_models.any?
+          # Whitelist approach, use only models explicitly listed
+          possible_models = RailsAdmin::Config.included_models.map(&:to_s)
+        else
+          # orig regexp -- found 'class' even if it's within a comment or a quote
+          filenames = Dir.glob(Rails.application.paths.app.models.collect { |path| File.join(path, "**/*.rb") })
+          class_names = []
+          filenames.each do |filename|
+            class_names += File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten
+          end
+          possible_models = Module.constants | class_names
+        end
+
         excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
         excluded_models << ['History']
 
-        # orig regexp -- found 'class' even if it's within a comment or a quote
-        filenames = Dir.glob(Rails.application.paths.app.models.collect { |path| File.join(path, "**/*.rb") })
-        class_names = []
-        filenames.each do |filename|
-          class_names += File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten
-        end
-        possible_models = Module.constants | class_names
         #Rails.logger.info "possible_models: #{possible_models.inspect}"
         add_models(possible_models, excluded_models)
 

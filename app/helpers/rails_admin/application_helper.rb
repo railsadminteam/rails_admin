@@ -38,11 +38,11 @@ module RailsAdmin
         return html.html_safe
       end
     end
-    
+
     # A Helper to load from a CDN but with fallbacks in case the primary source is unavailable
     # The best of both worlds - fast clevery cached service from google when available and the
     # ability to work offline too.
-    # 
+    #
     # @example Loading jquery from google
     #   javascript_fallback "http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js",
     #     "/javascripts/jquery-1.4.3.min.js",
@@ -146,6 +146,8 @@ module RailsAdmin
         :right => []
       }
 
+      infinity = (1/0.0)
+
       # Only worry about using our 'windows' if the page count is less then
       # our windows combined.
       if options[:inner_window].nil? || ((options[:outer_window] * 2) + options[:inner_window] + 2) >= page_count
@@ -197,5 +199,17 @@ module RailsAdmin
     def authorized?(*args)
       @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
     end
+
+    # returns a link to "/" unless there's a problem, which will
+    # probably be caused by root_path not being configured.  see
+    # https://github.com/sferik/rails_admin/issues/345 .
+    def home_link
+      begin
+        link_to(t('home.name'), '/')
+      rescue ActionView::Template::Error
+        t('home.name')
+      end
+    end
+
   end
 end

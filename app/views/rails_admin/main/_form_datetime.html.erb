@@ -9,7 +9,7 @@
                 <% head_javascript "rails_admin/jquery.ui.timepicker.js" %>
                 <% head_javascript "rails_admin/ra.datetimepicker.js" %>
                 <% head_javascript do %>
-                  $j(document).ready(function($){
+                  $j(document).ready(function($) {
                     $("#<%= "#{field.to_param}" %>").datetimepicker(<%= field.js_plugin_options.html_safe %>);
                   });
                 <% end %>

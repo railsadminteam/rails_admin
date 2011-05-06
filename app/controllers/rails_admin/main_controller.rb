@@ -27,7 +27,7 @@ module RailsAdmin
         current_count = t.count
         @max = current_count > @max ? current_count : @max
         @count[t.pretty_name] = current_count
-        @most_recent_changes[t.pretty_name] = AbstractHistory.most_recent_history(t.pretty_name).last.try(:updated_at)
+        @most_recent_changes[t.pretty_name] = AbstractHistory.most_recent_history(t).limit(1).first.try(:updated_at)
       end
     end
 
@@ -144,7 +144,7 @@ module RailsAdmin
     def destroy
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
-      @object.destroy
+      @object = @object.destroy
       flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.label)
 
       AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
@@ -212,14 +212,25 @@ module RailsAdmin
     def get_query_hash(options)
       query = params[:query]
       return {} unless query
+      field_search = !!query.index(":")
       statements = []
       values = []
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
-
-      @properties.select{|property| property[:type] == :string}.each do |property|
-        statements << "(#{table_name}.#{property[:name]} LIKE ?)"
-        values << "%#{query}%"
+      # field search allows a search of the type "<fieldname>:<query>"
+      if field_search
+        field, query = query.split ":"
+        return {} unless field && query
+        @properties.select{|property| property[:name] == field.to_sym}.each do |property|
+          statements << "(#{table_name}.#{property[:name]} = ?)"
+          values << query
+        end
+      # search over all string and text fields
+      else
+        @properties.select{|property| property[:type] == :string || property[:type] == :text }.each do |property|
+          statements << "(#{table_name}.#{property[:name]} LIKE ?)"
+          values << "%#{query}%"
+        end
       end
 
       conditions[0] += " AND " unless conditions == [""]
@@ -256,7 +267,7 @@ module RailsAdmin
     end
 
     def get_attributes
-      @attributes = params[@abstract_model.to_param.singularize] || {}
+      @attributes = params[@abstract_model.to_param.singularize.gsub('~','_')] || {}
       @attributes.each do |key, value|
         # Deserialize the attribute if attribute is serialized
         if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
@@ -288,11 +299,8 @@ module RailsAdmin
       action = params[:action]
 
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
-
-      if @object.errors[:base].size > 0
-        flash.now[:error] << ". " << @object.errors[:base]
-      end
-
+      flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
+      
       respond_to do |format|
         format.html { render whereto, :status => :not_acceptable }
         format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }

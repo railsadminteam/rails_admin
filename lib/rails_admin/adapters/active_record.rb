@@ -9,8 +9,8 @@ module RailsAdmin
         unless @polymorphic_parents
           @polymorphic_parents = {}
           RailsAdmin::AbstractModel.all.each do |abstract_model|
-            abstract_model.polymorphic_has_many_associations.each do |association|
-              (@polymorphic_parents[association[:options][:as]] ||= []) << abstract_model
+            abstract_model.polymorphic_associations.each do |association|
+              (@polymorphic_parents[association[:options][:as].to_sym] ||= []) << abstract_model
             end
           end
         end
@@ -106,7 +106,7 @@ module RailsAdmin
         model.reflect_on_all_associations.map do |association|
           {
             :name => association.name,
-            :pretty_name => association.name.to_s.gsub('_', ' ').capitalize,
+            :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
             :type => association.macro,
             :parent_model => association_parent_model_lookup(association),
             :parent_key => association_parent_key_lookup(association),
@@ -117,8 +117,8 @@ module RailsAdmin
         end
       end
 
-      def polymorphic_has_many_associations
-        has_many_associations.select do |association|
+      def polymorphic_associations
+        (has_many_associations + has_one_associations).select do |association|
           association[:options][:as]
         end
       end
@@ -127,7 +127,7 @@ module RailsAdmin
         model.columns.map do |property|
           {
             :name => property.name.to_sym,
-            :pretty_name => property.name.to_s.gsub('_', ' ').capitalize,
+            :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
             :type => property.type,
             :length => property.limit,
             :nullable? => property.null,
@@ -144,6 +144,7 @@ module RailsAdmin
 
       def merge_order(options)
         @sort ||= options.delete(:sort) || "id"
+        @sort = (@sort.to_s.include?('.') ? @sort : "#{model.table_name}.#{@sort}")
         @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
         options.merge(:order => "#{@sort} #{@sort_order}")
       end

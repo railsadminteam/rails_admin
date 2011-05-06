@@ -2,7 +2,7 @@
   association_name = field.association[:name]
   child_key = field.association[:child_key].first
   collection = field.associated_collection.sort_by{|object| object.first}
-  selected = field.value
+  selected = field.value.try(:id)
 
   if selected.nil? && params["associations"]
     selected = params["associations"][child_key.to_param.pluralize].to_i
@@ -10,9 +10,9 @@
 %>
               <div class="field <%= field.to_param %>">
                 <label for="associations[<%= association_name%>]"><%= field.label %></label>
-                <%= select("associations", association_name, collection, field.html_attributes) %>
+                <%= select("associations", association_name, collection, { :include_blank => true, :selected => selected }, field.html_attributes) %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
-              </div>                  
+              </div>

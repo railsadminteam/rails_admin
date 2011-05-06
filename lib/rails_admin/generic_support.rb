@@ -4,11 +4,11 @@ module RailsAdmin
     module GenericSupport
       def to_param
         parts = model.to_s.split("::")
-        parts.map{|x| x == parts.last ? x.underscore.pluralize : x.underscore}.join("::")
+        parts.map{|x| x == parts.last ? x.underscore.pluralize : x.underscore}.join("~")
       end
 
       def pretty_name
-        model.to_s
+        model.model_name.human
       end
     end
   end

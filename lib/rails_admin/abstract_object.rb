@@ -1,6 +1,11 @@
  module RailsAdmin
   class AbstractObject
-    instance_methods.each { |m| undef_method m unless m =~ /(^__|^send$|^object_id$)/ }
+    # undef almost all of this class's methods so it will pass almost
+    # everything through to its delegate using method_missing (below).
+    instance_methods.each { |m| undef_method m unless m.to_s =~ /(^__|^send$|^object_id$)/ }
+    #                                                  ^^^^^
+    # the unnecessary "to_s" above is a workaround for meta_where, see
+    # https://github.com/sferik/rails_admin/issues/374
 
     attr_accessor :object
     attr_accessor :associations
@@ -18,7 +23,7 @@
     end
 
     def save(options = { :validate => true })
-      object.save(options) and update_all_associations
+      update_all_associations and object.save(options)
     end
 
     protected
@@ -34,6 +39,7 @@
           begin
             case association[:type]
             when :has_one
+              object.save
               update_association(association, ids)
             when :has_many, :has_and_belongs_to_many
               update_associations(association, ids.to_a)
@@ -49,7 +55,6 @@
     def update_associations(association, ids = [])
       associated_model = RailsAdmin::AbstractModel.new(association[:child_model])
       object.send "#{association[:name]}=", ids.collect{|id| associated_model.get(id)}.compact
-      object.save
     end
 
     def update_association(association, id = nil)

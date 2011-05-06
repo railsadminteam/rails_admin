@@ -65,10 +65,8 @@ fieldset {
 }
 
 #header{
-	margin-bottom: 25px;
   font-size:10px;
-  color:#FFF;
-  height:120px;
+  height:50px;
 }
 
 #header a{
@@ -135,26 +133,34 @@ ul.breadcrumb li a:hover{
   float:left;
 }
 
-#headerLeft h1#logo{
-	margin-top:62px;
+h1#logo{
+  float:left;
+  padding-top:12px;
   font-weight:normal;
   font-size:22px;
+  width:64px;
 }
 
-#headerLeft h1#logo span.image_replacement{
+h1#logo span.image_replacement{
 	background-image:url(../../images/rails_admin/logo.png);
 	width:64px;
 	height:46px;
+        float: left;
 }
 
 #headerRight{
   float:right;
 }
 
+#header2{
+  font-size:10px;
+  height:70px;
+}
+
 #content {
   width:960px;
   background:#FFF;
-  margin-bottom: 20px;
+  margin: 20px 0;
   border-bottom: 1px solid #e6e6e6;
 }
 
@@ -213,7 +219,7 @@ input {
 ul#nav{
   float:left;
   list-style-type:none;
-  margin-top:88px;
+  margin-top:38px;
   margin-left:20px;
 }
 
@@ -266,6 +272,7 @@ ul#nav{
 
 ul#nav li.more:hover ul{
   display:block;
+	z-index:1;
 }
 
 ul#nav li.more ul{
@@ -283,12 +290,12 @@ ul#nav li.more ul li{
 }
 
 #nav li.more a{
-  background:url(../../images/rails_admin/navigation_more.png) no-repeat;
   display:block;
-  text-indent:-9999px;
 }
 
-ul#nav li.more a{
+ul#nav li.plus.more>a{
+  background:url(../../images/rails_admin/navigation_more.png) no-repeat;
+  text-indent:-9999px;
 	border: 1px solid #ededed;
   width:25px;
   height:31px;

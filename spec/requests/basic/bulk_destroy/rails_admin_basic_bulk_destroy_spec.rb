@@ -4,15 +4,9 @@ describe "RailsAdmin Basic Bulk Destroy" do
   describe "successful bulk delete of records" do
     before(:each) do
       RailsAdmin::History.destroy_all
-
-      to_delete = []
-      to_delete << RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      to_delete << RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 23, :name => "Michael Jackson", :position => "Shooting guard")
-
-      @delete_ids = to_delete.map(&:id)
+      @players = 3.times.map { Factory.create(:player) }
+      @delete_ids = @players[0..1].map(&:id)
       get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
-
       click_button "Yes, I'm sure"
     end
 
@@ -44,15 +38,9 @@ describe "RailsAdmin Basic Bulk Destroy" do
   describe "cancelled bulk_deletion" do
     before(:each) do
       RailsAdmin::History.destroy_all
-
-      to_delete = []
-      to_delete << RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher")
-      to_delete << RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman")
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 23, :name => "Michael Jackson", :position => "Shooting guard")
-
-      @delete_ids = to_delete.map(&:id)
+      @players = 3.times.map { Factory.create(:player) }
+      @delete_ids = @players[0..1].map(&:id)
       get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
-
       click_button "Cancel"
     end
 

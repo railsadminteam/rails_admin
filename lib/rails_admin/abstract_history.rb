@@ -141,8 +141,8 @@ module RailsAdmin
     end
 
     # Fetch the most recent history item for a model.
-    def self.most_recent_history(name)
-      RailsAdmin::History.most_recent name
+    def self.most_recent_history(model)
+      RailsAdmin::History.most_recent model
     end
 
   end

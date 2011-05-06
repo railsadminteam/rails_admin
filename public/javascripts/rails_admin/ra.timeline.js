@@ -96,21 +96,19 @@
     },
 
     _getCurrentDate: function() {
-        var date = new Date();
-        date.setTime(this.options.date.valueOf());
-        return date;
+      return new Date(this.options.date.getFullYear(), this.options.date.getMonth(), 1);
     },
 
     _getNextMonthDate: function() {
-        var date = this._getCurrentDate();
-        date.setMonth(this.options.date.getMonth() + 1);
-        return date;
+      var date = this._getCurrentDate();
+      date.setMonth(this.options.date.getMonth() + 1);
+      return date;
     },
 
     _getPreviousMonthDate: function() {
-        var date = this._getCurrentDate();
-        date.setMonth(this.options.date.getMonth() - 1);
-        return date;
+      var date = this._getCurrentDate();
+      date.setMonth(this.options.date.getMonth() - 1);
+      return date;
     },
 
     _moveHandleToLeft: function() {
@@ -174,8 +172,8 @@
           };
 
           $(data).each(function(i, e) {
-            if (getHistoryIndicator(e.history).length && e.history.number > max) {
-              max = e.history.number;
+            if (getHistoryIndicator(e.history).length && e.history.record_count > max) {
+              max = e.history.record_count;
             }
           });
 
@@ -186,8 +184,8 @@
                 percent = 0;
 
             if (el.length) {
-              if (e.history.number > 0) {
-                percent = parseFloat(e.history.number / max);
+              if (e.history.record_count > 0) {
+                percent = parseFloat(e.history.record_count / max);
                 className = widget.getBarClass(percent);
                 height = Math.floor(maxHeight * percent);
               }

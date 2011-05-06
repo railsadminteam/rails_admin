@@ -9,7 +9,7 @@
 	            <% head_style "rails_admin/jquery.colorpicker.css" %>
 	            <% head_javascript "rails_admin/jquery.colorpicker.js" %>
                 <% head_javascript do %>
-                  $j(document).ready(function($){
+                  $j(document).ready(function($) {
                     var input = $('#<%= field.to_param %>').hide();
                     $('#<%= field.to_param %>Helper div').css('backgroundColor', '#' + input.val());
 					$('#<%= field.to_param %>Helper').ColorPicker({
