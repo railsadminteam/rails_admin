@@ -35,12 +35,16 @@
     .control
       = link_to rails_admin_history_model_path, :class => "button" do
         = t("admin.history.name")
+        
       - if authorized? :new, @abstract_model
         = link_to rails_admin_new_path, :class => "button" do
-          %img{:alt => "Add", :src => "/stylesheets/themes/activo/images/icons/add.png"}= t("admin.list.add_new")
+          %img{:alt => "Add", :src => "/stylesheets/themes/activo/images/icons/add.png"}
+          = t("admin.list.add_new")
+          
       - if authorized? :delete, @abstract_model
         %button.button{:type => "submit", :onclick => "$j('#bulk_delete_form').submit(); return false;"}
-          %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/delete.png"}= t("admin.list.delete_selected")
+          %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/delete.png"}
+          = t("admin.list.delete_selected")
           
     %h2.title= @page_name
     .inner
@@ -66,23 +70,23 @@
         
             %th.last
         
-            %tbody
-              - @objects.each do |object|
-                %tr{:class => cycle("odd", "even")}
-                  %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}", :class => "checkbox"
-                  - other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)
-                  %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
-                  - properties.map{|property| property.bind(:object, object)}.each do |property|
-                    %td{:class => "#{property.css_class}"}= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value
-                  - other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)
-                  %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
-                  %td.last
-                    - if show_url = url_for(object) rescue nil
-                      = action_icon(show_url, :show, "Show")   
-                    - if authorized? :edit, @abstract_model, object
-                      = action_icon(rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id), :edit, t("admin.list.edit_action"))                  
-                    - if authorized? :delete, @abstract_model, object
-                      = action_icon(rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id), :cross, t("admin.list.delete_action")) 
+          %tbody
+            - @objects.each do |object|
+              %tr{:class => cycle("odd", "even")}
+                %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}", :class => "checkbox"
+                - other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)
+                %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
+                - properties.map{|property| property.bind(:object, object)}.each do |property|
+                  %td{:class => "#{property.css_class}"}= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value
+                - other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)
+                %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
+                %td.last
+                  - if show_url = url_for(object) rescue nil
+                    = action_icon(show_url, :show, "Show")   
+                  - if authorized? :edit, @abstract_model, object
+                    = action_icon(rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id), :edit, t("admin.list.edit_action"))                  
+                  - if authorized? :delete, @abstract_model, object
+                    = action_icon(rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id), :cross, t("admin.list.delete_action")) 
       
         .pagination
           - if @page_count.to_i > 1
