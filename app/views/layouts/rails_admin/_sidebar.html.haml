@@ -1,14 +1,14 @@
 #sidebar
   .block
     %h3 Navigation
-    %ul.navigation
-      = render(:partial => 'rails_admin/main/navigation')
-      / - %w[Division Draft League Fan Player].each do |model|
-      /   %li= link_to model, "#block-#{model.downcase}", :class => "anchor"
+    = render(:partial => 'rails_admin/main/navigation')
   .block.notice
+    %h4 Welcome!
+    %p You're using Rails Admin with activo styling. Very nice!
+  -#.block.notice
     %h4 Notice Title
-    %p Morbi posuere urna vitae nunc. Curabitur ultrices, lorem ac aliquam blandit, lectus eros hendrerit eros, at eleifend libero ipsum hendrerit urna. Suspendisse viverra.
-  .block
+    %p Maybe some inline help e.g. This is your Player list page. From here you find players to edit, and can apply actions to multiple players at once.
+  -#.block
     .sidebar-block
       %h4 History
       = history_link :gunn, "deleted player #5"

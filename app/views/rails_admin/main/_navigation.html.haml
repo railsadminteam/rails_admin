@@ -1,0 +1,16 @@
+- max_visible_tabs = RailsAdmin::Config::Sections::Navigation.max_visible_tabs
+- models = RailsAdmin::Config.visible_models.select { |model| authorized?(:list, model.abstract_model) }
+
+%ul#nav.navigation
+  %li{:class => ("active" if @page_type == "dashboard")}
+    = link_to t("admin.dashboard.name"), rails_admin_dashboard_path
+  - models[0..max_visible_tabs-1].each do |model|
+    %li{:class => ("active" if @page_type == model.abstract_model.pretty_name.downcase)}
+      = link_to model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param)
+  - if models.size > max_visible_tabs
+    %li.more
+      %a{:href => "#"} &raquo;
+      %ul
+        - models[max_visible_tabs..models.size].each do |model|
+          %li{:class => ("active" if @page_type == model.abstract_model.pretty_name.downcase)}
+            = link_to model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param)
