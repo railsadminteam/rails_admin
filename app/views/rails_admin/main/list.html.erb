@@ -1,111 +1,126 @@
 <%
- @model_config.bind(:view, self)
-  params = request.params.except(:action, :controller, :model_name)
+  params = request.params.except(:action, :controller, :model_name, :utf8)
   query = params[:query]
   filter = params[:filter]
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
-  properties = @model_config.list.visible_fields
+  properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
   filters_exist = !properties.select{|property| property.type == :boolean}.empty?
   # columns paginate
   @style, @other, properties = get_column_set(properties)
 %>
 
-<style type="text/css">
-<% @style.each do |key, value| %>
-  .grid thead <%= ".#{key}" %>{
-    width: <%= value[:width] %>px;
-  }
+<% head_javascript "rails_admin/application.js" %>
+<% head_style "rails_admin/list" %>
+
+<% head_javascript do %>
+  $j(document).ready(function($) {
+    $(this).one("ajax:success", function(e, data, status, xhr) {
+      $("#content").html(data);
+    });
+  });
 <% end %>
-<% @other.each do |t| %>
-  .grid .other.<%= t %>{
-    display:none;
-  }
+
+<% head_style do %>
+  <% @style.each do |key, value| %>
+    .grid thead <%= ".#{key}" %>{
+      width: <%= value[:width] %>px;
+    }
+  <% end %>
 <% end %>
-</style>
-      <div id="contentHeader">
-        <h2><%= @page_name %></h2>
-        <div id="quickAccess">
-          <ul id="quick">
-            <li>
-             <%= link_to(t("admin.history.name"), rails_admin_show_history_path, :class => "addlink") %>
-            </li>
-            <li>
-             <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "addlink") %>
-            </li>
-          </ul>
+      <div class="ra-block">
+        <div class="ui-widget-header">
+          <%= @page_name %>
         </div>
-      </div>
-<%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-      <div id="contentMainModules">
-        <div class="searchBox">
-          <form action="" method="get">
-            <fieldset>
-              <input type="text" id="searchBar" name="query" value="<%= query %>"/>
-              <input type="submit" id="searchbar_btn" value="<%= t("admin.list.search_btn")%>" />
-            </fieldset>
-          </form>
-        </div>
-        <%= form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do %>
-          <table class="grid">
-            <thead>
-              <tr>
-                <th class="other left">...</th>
-                <% properties.each do |property| %>
-                <% property_name = property.name %>
-                <% property_pretty_name = property.label %>
-                <% selected = sort == property_name.to_s %>
-                <th class="<%= "#{property.css_class}" %> <%= selected ? "selected" : nil %>">
-                  <% if property.sortable? %>
-                  <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
-                  <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
-                  <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction) %>
-                  <% else %>
-                  <%= property_pretty_name.upcase %>
-                  <% end %>
-                </th>
-                <% end %>
-                <th class="other right">...</th>
-                <th class="action"><%= t("admin.list.edit_action").upcase%></th>
-                <th class="action"><%= t("admin.list.delete_action").upcase%></th>
-                <th class="action"><%= t("admin.list.select_action").upcase %></th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @objects.each_with_index do |object, index| %>
-              <% @model_config.bind(:object, object) %>
-              <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
-                <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
-                <td class="other left"><%= link_to("...", other_left) %></td>
-                <% properties.each do |property| %>
-                  <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
-                <% end %>
-                <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
-                <td class="other right"><%= link_to("...", other_right)%></td>
-                <td class="action edit"><%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-                <td class="action delete"><%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) %></td>
-                <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
-              </tr>
+        <div class="ra-block-content">
+          <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+          <div class="ra-block-toolbar ui-state-highlight">
+            <ul>
+              <li>
+               <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
+              </li>
+              <% if authorized? :new, @abstract_model %>
+                <li>
+                 <%= link_to(t("admin.list.add_new"), rails_admin_new_path(:model_name => @abstract_model.to_param), :class => "ra-button") %>
+                </li>
               <% end %>
-            </tbody>
-          </table>
-          <div id="tableFooter">
-            <%= submit_tag t("admin.list.delete_selected"), :id => "bulkdelete_btn" %>
+            </ul>
+            <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
+              <fieldset>
+                <input type="text" name="query" value="<%= query %>" size="32" />
+                <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
+              </fieldset>
+            <% end %>
           </div>
-        <% end %>
+          <%= form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do %>
+            <table class="grid">
+              <thead>
+                <tr>
+                  <th class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>...</th>
+                  <% properties.each do |property| %>
+                  <% property_name = property.name %>
+                  <% property_pretty_name = property.label %>
+                  <% selected = sort == property_name.to_s %>
+                  <th class="<%= "#{property.css_class}" %> <%= selected ? "selected" : nil %>">
+                    <% if property.sortable? %>
+                    <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+                    <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
+                    <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true) %>
+                    <% else %>
+                    <%= property_pretty_name.upcase %>
+                    <% end %>
+                  </th>
+                  <% end %>
+                  <th class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>...</th>
+                  <th class="action"><%= t("admin.list.edit_action").upcase if authorized? :edit, @abstract_model %></th>
+                  <th class="action"><%= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model %></th>
+                  <th class="action"><%= t("admin.list.select_action").upcase %></th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td colspan="<%= properties.length + 5 %>">
+                    <% if authorized? :delete, @abstract_model %>
+                      <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;" %>
+                    <% end %>
+                    <div class="pagination">
+                      <% if @page_count.to_i > 1 %>
+                        <%= paginate(@current_page, @page_count, :url => params).html_safe %>
+                      <% end %>
+                      <%= @record_count %>
+                      <%= @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase) %>
+                      <% if @page_count.to_i == 2 %>
+                        <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => true, :class => "showall") %>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+              <tbody>
+                <% @objects.each_with_index do |object, index| %>
+                <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
+                  <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+                  <td class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>
+                    <%= link_to("...", other_left, :remote => true) %>
+                  </td>
+                  <% properties.map{|property| property.bind(:object, object)}.each do |property| %>
+                    <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
+                  <% end %>
+                  <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+                  <td class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>
+                    <%= link_to("...", other_right, :remote => true)%>
+                  </td>
+                  <td class="action edit">
+                    <%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :edit, @abstract_model, object %>
+                  </td>
+                  <td class="action delete">
+                    <%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :delete, @abstract_model, object %>
+                  </td>
+                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+        </div>
       </div>
-    </div>
-    <% unless @xhr %>
-    <div id="pagination">
-      <p class="paginator">
-      <% if @page_count.to_i > 1 %>
-        <%= paginate(@current_page, @page_count, :url => params).html_safe %>
-      <% end %>
-      <%= @record_count %>
-      <%= @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.list.label.downcase.pluralize : @model_config.list.label.downcase) %>
-      <% if @page_count.to_i == 2 %>
-        <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :class => "showall") %>
-      <% end %>
-      </p>
-    </div>
-    <% end %>

@@ -22,7 +22,7 @@ da:
       edit_action: "Rediger"
       delete_action: "Slet"
       add_new: "Tilføj ny"
-      search_btn: "SØG"
+      search: "SØG"
       select: "Vælg %{name} der skal redigeres"
       show_all: "Vis alle"
     new:

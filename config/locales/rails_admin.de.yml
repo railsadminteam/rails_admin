@@ -6,10 +6,10 @@ de:
     name: "Home"
   admin:
     dashboard:
-      pagename: "Seiten Administration"
+      pagename: "Administration"
       name: "Dashboard"
       model_name: "Modell Name"
-      last_used: "Zuletzt verwendetet"
+      last_used: "Zuletzt verwendet"
       records: "Einträge"
       modify: "Ändern"
       add_new: "Neu hinzufügen"
@@ -18,14 +18,16 @@ de:
     history:
       name: "Verlauf"
       page_name: "Verlauf von %{name}"
-      no_activity: "keine Aktivität"
+      no_activity: "Keine Aktivität"
     credentials:
-      log_out: "ausloggen"
+      log_out: "abmelden"
     list:
       edit_action: "Bearbeiten"
       delete_action: "Löschen"
+      select_action: "Auswählen"
+      delete_selected: "Auswahl löschen"
       add_new: "Neu hinzufügen"
-      search_btn: "SUCHEN"
+      search: "Suchen"
       select: "Auswählen %{name} zum Bearbeiten"
       show_all: "Alle anzeigen"
     new:
@@ -35,7 +37,7 @@ de:
       one_char: "Zeichen."
       many_chars: "Zeichen oder weniger."
       chosen: "Ausgewählt %{name}"
-      select_choice: "Treffen sie ihre Auswahl und klicken sie"
+      select_choice: "Treffen Sie Ihre Auswahl und klicken Sie"
       chose_all: "Alle auswählen"
       clear_all: "Alle zurücksetzen"
       save: "Speichern"
@@ -44,7 +46,7 @@ de:
       cancel: "Abbrechen"
     delete:
       flash_confirmation: "%{name} wurde erfolgreich entfernt"
-      confirmation: "Ja, Ich bin sicher"
+      confirmation: "Ja, ich bin sicher"
     flash:
       successful: "%{name} wurde erfolgreich %{action}"
       error: "%{name} wurde nicht %{action}"

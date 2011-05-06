@@ -1,45 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<% content_for :head do %>
   <title><%= @page_name %> | <%= @plugin_name %></title>
-  <%= stylesheet_link_tag('rails_admin/base.css') %>
-  <%= stylesheet_link_tag('rails_admin/delete.css') %>
-</head>
+<% end %>
+<% content_for :breadcrumb do %>
+  <li><%= home_link %></li>
+  <li>&rsaquo; <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %></li>
+  <li>&rsaquo; <%= link_to(@model_config.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %></li>
+  <li>&rsaquo; <span><%= @page_name %></span></li>
+<% end %>
+
+<%= render(:partial => 'layouts/rails_admin/head') %>
 <body>
   <div id="wrapper">
-    <div id="header">
-      <div id="headerLeft">
-        <ul class="breadcrumb">
-          <li>
-            <%= link_to(t('home.name'), '/') %>
-          </li>
-          <li>
-            &rsaquo;
-            <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %>
-          </li>
-          <li>
-            &rsaquo;
-            <%= link_to(@model_config.list.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %>
-          </li>
-          <li>
-            &rsaquo;
-            <%= link_to(@page_name, rails_admin_new_path(:model_name => @abstract_model.to_param)) %>
-          </li>
-        </ul>
-        <h1 id="logo">
-          <%= link_to rails_admin_dashboard_path do %>
-            <span class="image_replacement"><%= @plugin_name %></span>
-          <% end -%>
-        </h1>
-      </div>
-
-<%= render(:partial => 'rails_admin/main/navigation') %>
-
-      <div id="headerRight">
-<%= render(:partial => 'rails_admin/main/user_info', :locals => {:current_user => _current_user}) %>
-      </div>
-    </div>
+    <%= render(:partial => 'layouts/rails_admin/header') %>
     <div id="content">
 <%= yield %>
     </div>

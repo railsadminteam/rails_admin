@@ -8,6 +8,10 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
+          register_instance_option(:partial) do
+            :form_has_one
+          end
+
           # Accessor for whether this is field is required.  In this
           # case the field is "virtual" to this table - it actually
           # lives in the table on the "belongs_to" side of this

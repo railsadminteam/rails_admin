@@ -6,14 +6,49 @@
 }
 
 body{
-  text-align:center;
-  background:#fff url(/images/rails_admin/background.png) repeat-x;
+  background:#fff url(../../images/rails_admin/background.png) repeat-x;
   font-family:Verdana, Geneva, sans-serif;
   font-size:12px;
 }
 
 a img {
   border:0;
+}
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after {
+  clear: both;
+  content: ' ';
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+* html .clearfix {
+  height: 1%;
+}
+
+.clearfix {
+  display: block;
+}
+
+fieldset {
+  border:none;
 }
 
 .image_replacement{
@@ -30,10 +65,8 @@ a img {
 }
 
 #header{
-	margin-bottom: 25px;
   font-size:10px;
-  color:#FFF;
-  height:120px;
+  height:50px;
 }
 
 #header a{
@@ -60,7 +93,7 @@ ul.breadcrumb li a{
 	color:#999 !important;
 }
 
-ul.breadcrumb li:last-child a{
+ul.breadcrumb li:last-child span {
 	color:#666 !important;
 }
 
@@ -96,155 +129,97 @@ ul.breadcrumb li a:hover{
 	color:#333;
 }
 
-.here{
-  margin-left:4px;
-  margin-right:4px;
-}
-
 #headerLeft{
   float:left;
 }
 
-#headerLeft h1#logo{
-	margin-top:62px;
+h1#logo{
+  float:left;
+  padding-top:12px;
   font-weight:normal;
   font-size:22px;
+  width:64px;
 }
-#headerLeft h1#logo span.image_replacement{
-	background-image:url(/images/rails_admin/logo.png);
+
+h1#logo span.image_replacement{
+	background-image:url(../../images/rails_admin/logo.png);
 	width:64px;
 	height:46px;
+        float: left;
 }
 
 #headerRight{
   float:right;
 }
 
-#searchbar{
-  margin-left:-60px;
-  margin-top:8px;
+#header2{
+  font-size:10px;
+  height:70px;
 }
 
-#searchbar fieldset{
-  border:none;
-}
-
-#searchbar input#search{
-  border:none;
-  background:#f6f6f6;
-  font-size:12px;
-  font-family:Verdana, Geneva, sans-serif;
-  padding:4px;
-  width:200px;
-}
-
-#search_btn{
-  margin-left:-4px;
-  position:relative;
-  top:6px;
-}
-
-#content{
+#content {
   width:960px;
-  float:left;
   background:#FFF;
-  border:1px solid #e6e6e6;
+  margin: 20px 0;
+  border-bottom: 1px solid #e6e6e6;
 }
 
-#contentHeader{
-  background:#eee;
+.ra-block .ui-widget-header {
   padding:8px;
-	text-transform:lowercase;
-	color:#900;
 }
 
-#contentHeader h2{
-  font-size:150%;
+.ra-block-content {
+  padding:10px;
+  border-left:1px solid #e6e6e6;
+  border-right:1px solid #e6e6e6;
 }
 
-#contentMain{
+.ra-block-content .ra-block-content {
+  border: none;
+}
+
+.ra-block .ra-block-toolbar {
+  border-top:1px solid #e6e6e6;
+  border-bottom:1px solid #e6e6e6;
+  border-left: none;
+  border-right: none;
   padding:5px;
+  margin-bottom: 10px;
 }
 
-#contentMainModules{
-  padding:7px;
-}
-
-ul#quick{
+.ra-block-toolbar ul {
   list-style-type:none;
-  font-size:11px;
   float: right;
 }
 
-ul#quick li{
+.ra-block-toolbar ul li {
   float:left;
   margin-left:3px;
 }
 
-ul#quick li ul{
-  display:none;
-  list-style-type:none;
+.ra-message {
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
-ul#quick li:hover ul{
-  display:block;
+.ra-button .ui-button-text {
+  line-height: 1em;
 }
 
-ul#quick li:hover ul a{
-  background:none;
-  background:#f0eeda;
-}
-
-ul#quick li a {
-  background:url(/images/rails_admin/fast_btn.png) repeat-x;
-  border:1px solid #DDD;
+input {
+  font-family:Verdana, Geneva, sans-serif;
+  font-size:12px;
   padding:5px;
-  text-decoration:none;
-  color:#000;
-  padding-left:10px;
-  padding-right:10px;
-  display:block;
-  margin-bottom:1px;
-  width:80px;
-  text-align:center;
-}
-
-#quickAccess{
-  margin-top:-24px;
-  float:right;
-}
-
-#highlight{
-  background:#eabb60;
-  padding:8px;
-  margin:5px;
-  font-size:11px;
-  font-family:Verdana, Geneva, sans-serif;
-  color:#FFF;
-}
-
-#notice{
-  background:#bd2b14;
-  padding:8px;
-  margin:5px;
-  font-size:11px;
-  font-family:Verdana, Geneva, sans-serif;
-  color:#FFF;
-  padding-top:5px;
-  padding-bottom:10px;
-  padding-left:9px;
-}
-
-#notice img{
-  position:relative;
-  top:4px;
-  right:3px;
+  border-left:1px solid #e2e3ea;
+  border-top:1px solid #abadb3;
+  border-bottom:1px solid #e3e9ef;
+  border-right:1px solid #dbdfe6;
 }
 
 ul#nav{
   float:left;
   list-style-type:none;
-  margin-top:88px;
+  margin-top:38px;
   margin-left:20px;
 }
 
@@ -264,7 +239,7 @@ ul#nav{
   padding:8px;
   padding-left:12px;
   padding-right:12px;
-  background:#fff url(/images/rails_admin/menu_hover.png) bottom repeat-x;
+  background:#fff url(../../images/rails_admin/menu_hover.png) bottom repeat-x;
 }
 
 #nav li a:hover{
@@ -297,6 +272,7 @@ ul#nav{
 
 ul#nav li.more:hover ul{
   display:block;
+	z-index:1;
 }
 
 ul#nav li.more ul{
@@ -314,12 +290,12 @@ ul#nav li.more ul li{
 }
 
 #nav li.more a{
-  background:url(/images/rails_admin/navigation_more.png) no-repeat;
   display:block;
-  text-indent:-9999px;
 }
 
-ul#nav li.more a{
+ul#nav li.plus.more>a{
+  background:url(../../images/rails_admin/navigation_more.png) no-repeat;
+  text-indent:-9999px;
 	border: 1px solid #ededed;
   width:25px;
   height:31px;
@@ -342,4 +318,32 @@ ul#nav li.more ul li a:hover{
 
 ul#nav li.more ul li.active a{
   background:#ccc;
+}
+
+.submit {
+  margin-top: 15px;
+  display:block;
+  list-style-type:none;
+}
+
+.submit li {
+  float: left;
+  margin-right: 4px;
+}
+
+ul.items {
+  margin: 10px 10px 10px 14px;
+}
+
+ul.items li {
+  margin-bottom: 3px;
+  margin-left: 5px;
+}
+
+ul.items li a {
+  color: #000;
+}
+
+ul.items li a:hover {
+  text-decoration: none;
 }

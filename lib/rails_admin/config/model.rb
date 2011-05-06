@@ -6,47 +6,80 @@ module RailsAdmin
   module Config
     # Model specific configuration object.
     class Model < RailsAdmin::Config::Base
+      include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
 
-      def initialize(abstract_model)
-        @abstract_model = abstract_model
+      def initialize(entity)
+        @abstract_model = begin
+          if entity.kind_of?(RailsAdmin::AbstractModel)
+            entity
+          elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+            RailsAdmin::AbstractModel.new(entity)
+          else
+            RailsAdmin::AbstractModel.new(entity.class)
+          end
+        end
         @bindings = {}
         @parent = nil
         @root = self
-        extend RailsAdmin::Config::Sections
       end
 
       def excluded?
-        @excluded ||= !RailsAdmin::Config.excluded_models.find {|klass| klass.to_s == abstract_model.model.name }.nil?
-      end
-
-      # Bind variables to be used by the configuration options
-      def bind(key, value = nil)
-        if key.kind_of?(Hash)
-          @bindings << key
-        else
-          @bindings[key] = value
-        end
-        self
+        return @excluded unless @excluded.nil?
+        @excluded = !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
       end
 
       # Configure create and update views as a bulk operation with given block
       # or get update view's configuration if no block is given
       def edit(&block)
-        return @sections[:update] unless block_given?
+        return send(:update) unless block_given?
         [:create, :update].each do |s|
-          @sections[s].instance_eval &block
+          send(s, &block)
         end
       end
 
+      # The display for a model instance (i.e. a single database record).
+      # Unless configured in a model config block, it'll try to use :name followed by :title methods, then
+      # any methods that may have been added to the label_methods array via Configuration.
+      # Failing all of these, it'll return the class name followed by the model's id.
+      register_instance_option(:object_label) do
+        if method = object_label_method(bindings[:object])
+          bindings[:object].send method
+        else
+          "#{bindings[:object].class.to_s} ##{bindings[:object].try :id}"
+        end
+      end
+
+      def object_label_method(object = nil)
+        object ||= abstract_model.new
+        Config.label_methods.find {|method| object.respond_to? method }
+      end
+
+      register_instance_option(:label) do
+        abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
+      end
+      
+      register_instance_option(:weight) do
+        0
+      end
+      
+      register_instance_option(:parent) do
+        :root
+      end
+      
+      register_instance_option(:dropdown) do
+        false
+      end
+      
       # Act as a proxy for the section configurations that actually
       # store the configurations.
       def method_missing(m, *args, &block)
         responded_to = false
-        @sections.each do |key, s|
-          if s.respond_to?(m)
+        [:create, :list, :navigation, :update].each do |s|
+          section = send(s)
+          if section.respond_to?(m)
             responded_to = true
-            s.send(m, *args, &block)
+            section.send(m, *args, &block)
           end
         end
         raise NoMethodError.new("#{self} has no method #{m}") unless responded_to

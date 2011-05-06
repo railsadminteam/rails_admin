@@ -22,7 +22,7 @@ lv:
       edit_action: "Labot"
       delete_action: "Dzēst"
       add_new: "Pievienot jaunu"
-      search_btn: "MEKLĒT"
+      search: "MEKLĒT"
       select: "Izvēlieties %{name}, lai labotu"
       show_all: "Parādīt visu"
     new:

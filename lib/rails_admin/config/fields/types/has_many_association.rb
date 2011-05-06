@@ -12,6 +12,17 @@ module RailsAdmin
           register_instance_option(:help) do
             ""
           end
+
+          register_instance_option(:partial) do
+            "form_filtering_multiselect"
+          end
+
+          register_instance_option(:html_attributes) do
+            {
+              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+              :multiple => "multiple",
+            }
+          end
         end
       end
     end

@@ -1,3 +1,7 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+if (typeof($j) === "undefined" && typeof(jQuery) !== "undefined") {
+  var $j = jQuery.noConflict();
+}
 
+$j(document).ready(function($){
+  $(".ra-button").not(".ui-button").button({});
+});

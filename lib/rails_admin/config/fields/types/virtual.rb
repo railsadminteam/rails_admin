@@ -11,7 +11,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 180
           @sortable = false
 
           # Accessor for field's label.

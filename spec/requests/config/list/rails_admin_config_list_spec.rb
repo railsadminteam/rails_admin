@@ -5,10 +5,10 @@ describe "RailsAdmin Config DSL List Section" do
   describe "number of items per page" do
 
     before(:each) do
-      RailsAdmin::AbstractModel.new("League").create(:name => 'American')
-      RailsAdmin::AbstractModel.new("League").create(:name => 'National')
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 32, :name => "Sandy Koufax", :position => "Starting patcher", :retired => true, :injured => true)
-      RailsAdmin::AbstractModel.new("Player").create(:team_id => rand(99999), :number => 42, :name => "Jackie Robinson", :position => "Second baseman", :retired => true, :injured => false)
+      2.times.each do
+        Factory.create :league
+        Factory.create :player
+      end
     end
 
     it "should be configurable" do
@@ -25,13 +25,6 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-
-      # Reset
-      RailsAdmin::Config.models do
-        list do
-          items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
-        end
-      end
     end
 
     it "should be configurable per model" do
@@ -47,13 +40,6 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
-      end
-
-      # Reset
-      RailsAdmin.config League do
-        list do
-          items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
-        end
       end
     end
 
@@ -75,13 +61,6 @@ describe "RailsAdmin Config DSL List Section" do
       get rails_admin_list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
-      end
-
-      # Reset
-      RailsAdmin::Config.models do
-        list do
-          items_per_page RailsAdmin::Config::Sections::List.default_items_per_page
-        end
       end
     end
   end
@@ -114,9 +93,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should contain("ID")
         elements[4].should contain("CREATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should only list the defined fields if some fields are defined" do
@@ -133,9 +109,18 @@ describe "RailsAdmin Config DSL List Section" do
         elements.should_not contain("CREATED AT")
         elements.should_not contain("UPDATED AT")
       end
+    end
 
-      # Reset
-      RailsAdmin::Config.reset Fan
+    it "should delegate the label option to the ActiveModel API" do
+      RailsAdmin.config Fan do
+        list do
+          field :name
+        end
+      end
+      get rails_admin_list_path(:model_name => "fan")
+      response.should have_tag(".grid thead th") do |elements|
+        elements[1].should contain("HIS NAME")
+      end
     end
 
     it "should be renameable" do
@@ -152,9 +137,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[1].should contain("IDENTIFIER")
         elements[2].should contain("NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should be renameable by type" do
@@ -172,9 +154,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should contain("UPDATED AT (DATETIME)")
         elements[4].should contain("NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should be globally renameable by type" do
@@ -192,9 +171,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should contain("UPDATED AT (DATETIME)")
         elements[4].should contain("NAME")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should be sortable by default" do
@@ -221,9 +197,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[1].should_not have_tag("a")
         elements[2].should have_tag("a")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to disable sortability by type" do
@@ -245,9 +218,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should_not have_tag("a")
         elements[4].should_not have_tag("a")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to disable sortability by type globally" do
@@ -269,9 +239,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements[3].should_not have_tag("a")
         elements[4].should_not have_tag("a")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to hide fields by type" do
@@ -289,9 +256,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements.should_not contain("CREATED AT")
         elements.should_not contain("UPDATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to hide fields by type globally" do
@@ -309,9 +273,6 @@ describe "RailsAdmin Config DSL List Section" do
         elements.should_not contain("CREATED AT")
         elements.should_not contain("UPDATED AT")
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to customize css class name" do
@@ -324,8 +285,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -337,9 +297,6 @@ describe "RailsAdmin Config DSL List Section" do
           rows[0].should have_tag("td:nth-child(3).string")
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to customize css class name by type" do
@@ -351,8 +308,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -366,9 +322,6 @@ describe "RailsAdmin Config DSL List Section" do
           rows[0].should have_tag("td:nth-child(5).string")
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to customize css class name by type globally" do
@@ -380,8 +333,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -395,9 +347,6 @@ describe "RailsAdmin Config DSL List Section" do
           rows[0].should have_tag("td:nth-child(5).string")
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset
     end
 
     it "should have option to customize column width" do
@@ -412,15 +361,11 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag("style") {|css| css.should contain(/\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have option to customize output formatting" do
@@ -437,18 +382,14 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
       response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN II") }
-        elements[1].should have_tag("td:nth-child(3)") {|li| li.should contain("FAN I") }
+        elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain(@fans[1].name.upcase) }
+        elements[1].should have_tag("td:nth-child(3)") {|li| li.should contain(@fans[0].name.upcase) }
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should have a simple option to customize output formatting of date fields" do
@@ -463,8 +404,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -473,11 +413,9 @@ describe "RailsAdmin Config DSL List Section" do
           li.should contain(/\d{2} \w{3} \d{1,2}:\d{1,2}/)
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
-          it "should have option to customize output formatting of date fields" do
+
+    it "should have option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
           field :id
@@ -489,8 +427,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan I')
-      RailsAdmin::AbstractModel.new("Fan").create(:name => 'Fan II')
+      @fans = 2.times.map { Factory.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -499,9 +436,6 @@ describe "RailsAdmin Config DSL List Section" do
           li.should contain(/\d{4}-\d{2}-\d{2}/)
         end
       end
-
-      # Reset
-      RailsAdmin::Config.reset Fan
     end
 
     it "should allow addition of virtual fields (object methods)" do
@@ -513,20 +447,136 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      team = RailsAdmin::AbstractModel.new("Team").create(:league_id => rand(99999), :division_id => rand(99999), :name => "Team I", :manager => "Manager I", :founded => 1869 + rand(130), :wins => (wins = rand(163)), :losses => 162 - wins, :win_percentage => ("%.3f" % (wins.to_f / 162)).to_f)
-
-      RailsAdmin::AbstractModel.new("Player").create(:name => 'Player I', :number => 1, :team => team)
-      RailsAdmin::AbstractModel.new("Player").create(:name => 'Player II', :number => 2, :team => team)
-      RailsAdmin::AbstractModel.new("Player").create(:name => 'Player III', :number => 3, :team => team)
+      @team = Factory.create :team
+      @players = 2.times.map { Factory.create :player, :team => @team }
 
       get rails_admin_list_path(:model_name => "team")
 
       response.should have_tag(".grid tbody tr") do |elements|
-        elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain("Player I, Player II, Player III") }
+        elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain(@players.collect(&:name).join(", ")) }
+      end
+    end
+  end
+
+  # sort_by and sort_reverse options
+  describe "default sorting" do
+    before(:each) do
+      RailsAdmin.config(Player){ list { field :name } }
+    end
+
+    let(:today){ Date.today }
+    let(:players) do
+      [{ :name => "Jackie Robinson",  :created_at => today,            :team_id => rand(99999), :number => 42 },
+       { :name => "Deibinson Romero", :created_at => (today - 2.days), :team_id => rand(99999), :number => 13 },
+       { :name => "Sandy Koufax",     :created_at => (today - 1.days), :team_id => rand(99999), :number => 32 }]
+    end
+    let(:leagues) do
+      [{ :name => 'American',      :created_at => (today - 1.day) },
+       { :name => 'Florida State', :created_at => (today - 2.days)},
+       { :name => 'National',      :created_at => today }]
+    end
+    let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
+    let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
+
+    before(:each) { @players = RailsAdmin::AbstractModel.new("Player").create(players) }
+
+    context "should be configurable" do
+      it "globaly" do
+        RailsAdmin.config do |config|
+          config.models do
+            list do
+              sort_by :created_at
+              sort_reverse true
+            end
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "player")
+        response.should have_tag(".grid tbody tr") do |elements|
+          player_names_by_date.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
       end
 
-      # Reset
-      RailsAdmin::Config.reset Team
+      it "per model" do
+        RailsAdmin.config Player do
+          list do
+            sort_by :created_at
+            sort_reverse true
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "player")
+        response.should have_tag(".grid tbody tr") do |elements|
+          player_names_by_date.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+      end
+
+      it "globaly and overrideable per model" do
+        RailsAdmin::AbstractModel.new("League").create(leagues)
+
+        RailsAdmin::Config.models do
+          list do
+            sort_by :created_at
+            sort_reverse true
+          end
+        end
+
+        RailsAdmin.config Player do
+          list do
+            sort_by :id
+            sort_reverse true
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "league")
+        response.should have_tag(".grid tbody tr") do |elements|
+          league_names_by_date.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+
+        get rails_admin_list_path(:model_name => "player")
+        response.should have_tag(".grid tbody tr") do |elements|
+          @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
+            elements[i].should contain(name)
+          end
+        end
+      end
+    end
+
+    it "should have reverse direction by default" do
+      RailsAdmin.config Player do
+        list do
+          sort_by :created_at
+        end
+      end
+
+      get rails_admin_list_path(:model_name => "player")
+      response.should have_tag(".grid tbody tr") do |elements|
+        player_names_by_date.reverse.each_with_index do |name, i|
+          elements[i].should contain(name)
+        end
+      end
+    end
+
+    it "should allow change default direction" do
+      RailsAdmin.config Player do
+        list do
+          sort_by :created_at
+          sort_reverse false
+        end
+      end
+
+      get rails_admin_list_path(:model_name => "player")
+      response.should have_tag(".grid tbody tr") do |elements|
+        player_names_by_date.each_with_index do |name, i|
+          elements[i].should contain(name)
+        end
+      end
     end
   end
 end

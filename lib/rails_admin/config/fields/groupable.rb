@@ -13,9 +13,6 @@ module RailsAdmin
         def self.extended(obj)
           obj.instance_variable_set("@group", obj.parent.group(:default))
           class << obj
-            def group=(name)
-              group(name)
-            end
             def group(name = nil)
               @group = parent.group(name) unless name.nil?
               @group
