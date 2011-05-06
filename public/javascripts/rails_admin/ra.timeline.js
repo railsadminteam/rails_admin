@@ -48,7 +48,11 @@
     _bindEvents: function() {
       var currentMonthIndex = 0,
           widget = this;
-
+      
+      $(window).resize(function() {
+        widget.redraw();
+      });
+      
       this.handle.draggable({
         axis: "x",
         containment: this.element,
@@ -146,10 +150,6 @@
       
       var widget = this;
       var date = this._getCurrentDate();
-      
-      $(window).resize(function() {
-        widget.redraw();
-      });
       
       $.ajax({
         url: this.options.url,
