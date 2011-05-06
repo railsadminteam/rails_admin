@@ -142,7 +142,7 @@ The blacklist is effective on top of that, still, so that if you also have:
 then only `Class2` and `Class3` would be made available to RailsAdmin.
 
 The whitelist approach may be useful if RailsAdmin is used only for a part of the application and you want to make
-sure that new models are not automatically added to RailsAdmin, e.g. because of security concerns. 
+sure that new models are not automatically added to RailsAdmin, e.g. because of security concerns.
 
 ### Model Class and Instance Labels ###
 
@@ -241,7 +241,7 @@ You can configure the number of tabs visible in the top navigation:
 Links to the rest of the models will be rendered in a drop down menu next to the
 tabs. Even though this option is not model specific, it shares the same
 semantics as the earlier ones - you could also pass in a block which would be
-evaluated at runtime. 
+evaluated at runtime.
 
 **Create a dropdown menu in navigation**
 
@@ -292,9 +292,9 @@ Obtained navigation:
 **Change models order in navigation**
 
 By default, they are ordered by alphabetical order. If you need to override this, specify
-a weight attribute. Default is 0. Lower values will bubble items to the left, higher values 
+a weight attribute. Default is 0. Lower values will bubble items to the left, higher values
 will move them to the right. Items with same weight will still be ordered by alphabetical order.
-The mecanism is fully compatible with dropdown menus. Items will be ordered within their own 
+The mecanism is fully compatible with dropdown menus. Items will be ordered within their own
 menu subset.
 
 Example:
