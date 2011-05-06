@@ -10,8 +10,8 @@
 - head_javascript "rails_admin/application.js"
 - head_style "rails_admin/list"
 - head_javascript do
-  $j(document).ready(function($){
-  $(this).one("ajax:success", function(e, data, status, xhr){
+  $j(document).ready(function($) {
+  $(this).one("ajax:success", function(e, data, status, xhr) {
   $("#block-tables.block").html(data);
   });
   });
@@ -103,3 +103,4 @@
             %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
             %input.search_submit{:type => "submit", :value => ""}
       .wat-cf
+      
