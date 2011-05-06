@@ -1,12 +1,17 @@
 #header
   %h1
+  
+  / TODO: make the logo customisable:
+  
+  / %h1#logo
+  /   = link_to rails_admin_dashboard_path do
+  /     %span.image_replacement= @plugin_name
+  
   #user-navigation
     %ul.wat-cf
-      - { :home => "Dashboard", :account => "Profile", :config => "Preferences", :logout => "Logout" }.each do |image, title|
-        %li= link_to icon(image, title), rails_admin_dashboard_path
+      %li= link_to icon(:home, "Dashboard"), rails_admin_dashboard_path
+      - if current_user
+        %li= link_to icon(:account, current_user.email), (rails_admin_edit_path(:user, current_user) rescue '#')
+      %li= link_to icon(:config, "Preferences"), rails_admin_dashboard_path
+      %li= link_to icon(:logout, t("admin.credentials.log_out")), (destroy_session_path(current_user) rescue '#')
       
-/   %h1#logo
-/     = link_to rails_admin_dashboard_path do
-/       %span.image_replacement= @plugin_name
-/   #headerRight
-/     = render(:partial => 'rails_admin/main/user_info', :locals => {:current_user => _current_user})
