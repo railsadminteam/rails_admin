@@ -30,20 +30,21 @@
         %a{:href => "#block-tables"} Show
       %li.disabled
         %a{:href => "#block-forms"} Edit
-  .content
-    .control
-      = link_to rails_admin_history_model_path, :class => "button" do
-        = t("admin.history.name")
-      - if authorized? :new, @abstract_model
-        = link_to rails_admin_new_path, :class => "button" do
-          %img{:alt => "Add", :src => "/stylesheets/themes/activo/images/icons/add.png"}= t("admin.list.add_new")
-      - if authorized? :delete, @abstract_model
-        %a.button{:href => "#"}
-          %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/delete.png"}= t("admin.list.delete_selected")
-    %h2.title= @page_name
-    .inner
-      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      = form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do
+    
+  = form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do
+    .content
+      .control
+        = link_to rails_admin_history_model_path, :class => "button" do
+          = t("admin.history.name")
+        - if authorized? :new, @abstract_model
+          = link_to rails_admin_new_path, :class => "button" do
+            %img{:alt => "Add", :src => "/stylesheets/themes/activo/images/icons/add.png"}= t("admin.list.add_new")
+        - if authorized? :delete, @abstract_model
+          %button.button{:type => "submit"}
+            %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/delete.png"}= t("admin.list.delete_selected")
+      %h2.title= @page_name
+      .inner
+        = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
         %table.table.grid
           %tr
             %th.first
@@ -61,9 +62,9 @@
                 - else
                   = property_pretty_name.upcase
             %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
-            
+          
             %th.last
-            
+          
             %tbody
               - @objects.each do |object|
                 %tr{:class => cycle("odd", "even")}
@@ -80,7 +81,7 @@
                       = action_icon(rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id), :edit, t("admin.list.edit_action"))                  
                     - if authorized? :delete, @abstract_model, object
                       = action_icon(rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id), :cross, t("admin.list.delete_action")) 
-          
+        
         .pagination
           - if @page_count.to_i > 1
             = paginate(@current_page, @page_count, :url => params).html_safe
@@ -88,10 +89,10 @@
           = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
           - if @page_count.to_i == 2
             = link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => false, :class => "showall")
-            
-      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => false, :class => "search") do
-        .columns.wat-cf
-          .column.right
-            %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
-            %input.search_submit{:type => "submit", :value => ""}
-      .wat-cf
+          
+        = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => false, :class => "search") do
+          .columns.wat-cf
+            .column.right
+              %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
+              %input.search_submit{:type => "submit", :value => ""}
+        .wat-cf
