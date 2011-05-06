@@ -47,13 +47,13 @@
         $j(document).ready(function($) {
           var cache = {};
            $("#timeline").timeline({
-             url: #{ rails_admin_history_slider_path },
+             url: "#{ rails_admin_history_slider_path }",
              monthChanged: function(month, year) {
                if (cache[year] && cache[year][month]) {
                  $("#listingHistory").html(cache[year][month]);
                } else {
                  $j("#listingHistory").load(
-                   #{ rails_admin_history_list_path },
+                   "#{ rails_admin_history_list_path }",
                    { month: month, year: year },
                    function(response, status, xhr) {
                      if (!cache[year]) { cache[year] = {}; }
