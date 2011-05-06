@@ -89,9 +89,8 @@
           - if @page_count.to_i == 2
             = link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => false, :class => "showall")
         .left(style="float:left; padding-top:0.5em;")
-          - if @page_count.to_i > 1
-            = @record_count
-            = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
+          = @record_count
+          = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
         
       = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => false, :class => "search") do
         .columns.wat-cf
