@@ -71,7 +71,7 @@ module RailsAdmin
             app_path.mkdir
           end
 
-          puts ""
+          puts
           Dir.glob(locales_path).each do |file|
             copier.copy_file file, File.join(app_path, File.basename(file))
           end
@@ -83,7 +83,7 @@ module RailsAdmin
           origin = File.join(gem_path, 'public')
           destination = Rails.root.join('public')
 
-          puts ""
+          puts
           %w( stylesheets images javascripts ).each do |directory|
             Dir[File.join(origin, directory, 'rails_admin', '**/*')].each do |file|
               relative  = file.gsub(/^#{origin}\//, '')

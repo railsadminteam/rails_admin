@@ -16,7 +16,7 @@ namespace :rails_admin do
     puts "Downloading CKEditor (you need to have either wget or curl installed)"
     `curl #{ckeditor_url} -o '#{ckeditor_file}' || wget #{ckeditor_url} -O #{ckeditor_file}`
     puts "Deflating to your public javascript folder"
-    `cd "#{destination_folder}" && tar xvfz #{ckeditor_file}`
+    Dir.chdir(destination_folder) { `tar xvfz #{ckeditor_file}` }
     puts "Finished."
   end
 end
