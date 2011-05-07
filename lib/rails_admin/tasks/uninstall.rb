@@ -2,7 +2,7 @@ require 'rails/generators'
 
 module RailsAdmin
   module Tasks
-    module Uninstall
+    class Uninstall
       def self.run
         puts "Creating uninstall migrations"
         `rails g rails_admin:uninstall_migrations`

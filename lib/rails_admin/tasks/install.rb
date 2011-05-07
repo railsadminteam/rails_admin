@@ -2,7 +2,7 @@ require 'rails/generators'
 
 module RailsAdmin
   module Tasks
-    module Install
+    class Install
       class << self
 
         def run(model_name = 'user')
