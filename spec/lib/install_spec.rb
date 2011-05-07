@@ -29,7 +29,7 @@ describe "rails_admin:install Rake task" do
       assert_no_file destination_root + "/public/javascripts/rails_admin/application.js"
       assert_no_directory destination_root + "/public/stylesheets/rails_admin"
       assert_no_directory destination_root + "/public/images/rails_admin"
-      silence_stream(STDOUT) { RailsAdmin::ExtraTasks.install }
+      silence_stream(STDOUT) { RailsAdmin::Tasks::Install.run }
     end
 
     it "creates locales files" do
