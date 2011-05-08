@@ -62,12 +62,12 @@ module RailsAdmin
       end
       html+"\n"
     end
-    
+
     # Used for the icons in the admins very top right.
     def icon(image_name, title)
       image_tag "/stylesheets/themes/activo/images/session/#{image_name}.png", :alt => title, :title => title
     end
-    
+
     # shown beside every entry in the list view,
     # perhaps 60 times per page, thus this string-heavy approach.
     def action_icon link, icon, text
@@ -76,7 +76,7 @@ module RailsAdmin
         onmouseover="this.src='/stylesheets/themes/activo/images/icons/24/#{icon}-hover.png'"
         src="/stylesheets/themes/activo/images/icons/24/#{icon}.png"></a>}.html_safe
     end
-    
+
     # Used for the history entries in the sidebar
     def history_link user, text
       content_tag :p, "<b>#{user}</b> #{text}".html_safe
