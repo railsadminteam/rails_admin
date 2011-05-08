@@ -2,11 +2,11 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-RailsAdmin started as a port of [MerbAdmin](http://github.com/sferik/merb-admin) to Rails 3
+RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
-by [Bogdan Gaza](http://github.com/hurrycane) with mentors [Erik Michaels-Ober](http://github.com/sferik),
-[Yehuda Katz](http://github.com/wycats),
-[Luke van der Hoeven](http://github.com/plukevdh), and [Rein Henrichs](http://github.com/reinh).
+by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober](https://github.com/sferik),
+[Yehuda Katz](https://github.com/wycats),
+[Luke van der Hoeven](https://github.com/plukevdh), and [Rein Henrichs](https://github.com/reinh).
 
 It currently offers the following features:
 
@@ -16,7 +16,7 @@ It currently offers the following features:
 * Safely delete data
 * Automatic form validation
 * Search
-* Authentication (via [Devise](http://github.com/plataformatec/devise))
+* Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
 Supported ORMs:
@@ -66,8 +66,8 @@ And then run:
 
     $ rake rails_admin:install
 
-This task will install RailsAdmin and [Devise](http://github.com/plataformatec/devise) if you
-don't already have it installed. [Devise](http://github.com/plataformatec/devise) is strongly
+This task will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
+don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
 recommended to protect your data from anonymous users.
 
 If you plan to use Devise, but want to use a custom model for authentication
@@ -916,15 +916,15 @@ Here are some ways *you* can contribute:
 * by writing specifications
 * by writing code (**no patch is too small**: fix typos, add comments, clean up inconsistent whitespace)
 * by refactoring code
-* by resolving [issues](http://github.com/sferik/rails_admin/issues)
+* by resolving [issues](https://github.com/sferik/rails_admin/issues)
 * by reviewing patches
 
 Submitting an Issue
 -------------------
-We use the [GitHub issue tracker](http://github.com/sferik/rails_admin/issues) to track bugs and
+We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
 been submitted. You can indicate support for an existing issue by voting it up. When submitting a
-bug report, please include a [Gist](http://gist.github.com/) that includes a stack trace and any
+bug report, please include a [Gist](https://gist.github.com/) that includes a stack trace and any
 details that may be necessary to reproduce the bug, including your gem version, Ruby version, and
 operating system. Ideally, a bug report should include a pull request with failing specs.
 
@@ -942,4 +942,4 @@ Submitting a Pull Request
 
 Contact
 -------
-If you have questions about contributing to RailsAdmin, please contact [Erik Michaels-Ober](http://github.com/sferik) and [Bogdan Gaza](http://github.com/hurrycane).
+If you have questions about contributing to RailsAdmin, please contact [Erik Michaels-Ober](https://github.com/sferik) and [Bogdan Gaza](https://github.com/hurrycane).
