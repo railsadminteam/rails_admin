@@ -29,6 +29,11 @@
   background-image: url(../../images/rails_admin/bullet_arrow_down.png);
 }
 
+.grid tr.link:hover {
+  background-color: #B9DAFC;
+  cursor: pointer;
+}
+
 .grid tbody .boolean {
   margin-bottom:-5px;
 }
