@@ -15,7 +15,7 @@
       = link_to rails_admin_history_object_path(:id => params[:id]), :class => "button" do
         = t("admin.history.name")
       - if authorized? :delete, @abstract_model, @object
-        %a.button{:href => "#"}
+        = link_to rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => "button" do
           %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/cross.png"}
             = t("admin.list.delete_action")
     %h2.title= @page_name
