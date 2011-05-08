@@ -19,4 +19,12 @@ $j(document).ready(function($){
       
     });
   });
+  
+  $("table.table tr.link").click(function(e) {
+    // trs and tds are things that we want to link to the edit page
+    // if the click's target is a button for instance, we don't want to move the user.
+    if ($(e.target).is('tr') || $(e.target).is('td')) {
+      window.location.href = $(this).attr("data-link");
+    };
+  });
 });
