@@ -30,22 +30,22 @@
         %a{:href => "#block-tables"} Show
       %li.disabled
         %a{:href => "#block-forms"} Edit
-        
+
   .content
     .control
       = link_to rails_admin_history_model_path, :class => "button" do
         = t("admin.history.name")
-        
+
       - if authorized? :new, @abstract_model
         = link_to rails_admin_new_path, :class => "button" do
           %img{:alt => "Add", :src => "/stylesheets/themes/activo/images/icons/add.png"}
           = t("admin.list.add_new")
-          
+
       - if authorized? :delete, @abstract_model
         %button.button{:type => "submit", :onclick => "$j('#bulk_delete_form').submit(); return false;"}
           %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/cross.png"}
           = t("admin.list.delete_selected")
-          
+
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
@@ -67,17 +67,17 @@
                 - else
                   = property_pretty_name.upcase
             %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
-        
+
             %th.last
-            
+
           %tbody
             - @objects.each do |object|
               - can_edit  = authorized?(:edit, @abstract_model, object)
               - edit_path = rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id) if can_edit
               - row_class = "#{cycle("odd", "even")}#{" link" if can_edit}"
-              
+
               %tr{:class => row_class, :"data-link" => (edit_path if can_edit)}
-              
+
                 %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}", :class => "checkbox"
                 - other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
@@ -87,12 +87,12 @@
                 %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.last
                   - if show_url = url_for(object) rescue nil
-                    = action_icon(show_url, :show, "Show")   
+                    = action_icon(show_url, :show, "Show")
                   - if can_edit
-                    = action_icon(edit_path, :edit, t("admin.list.edit_action"))                  
+                    = action_icon(edit_path, :edit, t("admin.list.edit_action"))
                   - if authorized? :delete, @abstract_model, object
-                    = action_icon(rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id), :cross, t("admin.list.delete_action")) 
-      
+                    = action_icon(rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id), :cross, t("admin.list.delete_action"))
+
         .pagination
           - if @page_count.to_i > 1
             = paginate(@current_page, @page_count, :url => params).html_safe
@@ -101,11 +101,11 @@
         .left(style="float:left; padding-top:0.5em;")
           = @record_count
           = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
-        
+
       = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true, :class => "search") do
         .columns.wat-cf
           .column.right
             %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
             %input.search_submit{:type => "submit", :value => ""}
       .wat-cf
-      
+

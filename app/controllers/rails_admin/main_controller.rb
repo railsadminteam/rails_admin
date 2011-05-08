@@ -1,7 +1,7 @@
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     layout "rails_admin/main"
-    
+
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
@@ -300,7 +300,7 @@ module RailsAdmin
 
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
       flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
-      
+
       respond_to do |format|
         format.html { render whereto, :status => :not_acceptable }
         format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }
