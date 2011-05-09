@@ -3,7 +3,6 @@ if (typeof($j) === "undefined" && typeof(jQuery) !== "undefined") {
 }
 
 $j(document).ready(function($){
-  $(".ra-button").not(".ui-button").button({});
   
   // On the list page, the checkbox in th table's header toggles all the checkboxes underneath it.
   $("table.table input.checkbox.toggle").click(function() {
