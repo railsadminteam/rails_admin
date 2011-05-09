@@ -23,15 +23,8 @@
     }
 
 #block-tables.block
-  .secondary-navigation
-    %ul.wat-cf
-      %li.first.active
-        %a{:href => "#block-text"} Index
-      %li.disabled
-        %a{:href => "#block-tables"} Show
-      %li.disabled
-        %a{:href => "#block-forms"} Edit
-
+  = breadcrumbs_for :list, @abstract_model
+  
   .content
     .control
       = link_to rails_admin_history_model_path, :class => "button" do
@@ -50,7 +43,7 @@
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      = form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get, :id => "bulk_delete_form", :class => "form" do
+      = form_tag rails_admin_bulk_delete_path(@abstract_model), :method => :get, :id => "bulk_delete_form", :class => "form" do
         %table.table.grid
           %thead
             %tr
@@ -93,7 +86,7 @@
                   - if can_edit
                     = action_icon(edit_path, :edit, t("admin.list.edit_action"))
                   - if authorized? :delete, @abstract_model, object
-                    = action_icon(rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id), :cross, t("admin.list.delete_action"))
+                    = action_icon(rails_admin_delete_path(@abstract_model, object), :cross, t("admin.list.delete_action"))
 
         .pagination
           - if @page_count.to_i > 1

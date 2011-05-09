@@ -5,6 +5,8 @@
 - head_javascript "rails_admin/ra.timeline.js"
 
 #block-tables.block
+  = breadcrumbs_for :dashboard, nil
+  
   .content
     %h2.title= @page_name
     .inner

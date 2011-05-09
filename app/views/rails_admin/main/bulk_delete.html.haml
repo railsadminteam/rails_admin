@@ -1,6 +1,8 @@
 - head_javascript "rails_admin/application.js"
 
 #block-tables.block
+  = breadcrumbs_for :bulk_delete, @abstract_model
+  
   .content
     %h2.title Delete confirmation
     .inner

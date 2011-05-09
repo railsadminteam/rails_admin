@@ -210,6 +210,74 @@ module RailsAdmin
         t('home.name')
       end
     end
+    
+    # Creative whitespace:
+    ViewType   =          Struct.new(:name,      :parent,    :type,   :authorization, :path_method)
+    VIEW_TYPES = {
+      :delete        => ViewType.new("Delete",   :edit,      :object, :delete),
+      :history       => ViewType.new("History",  :edit,      :object, nil,            :history_object),
+      :edit          => ViewType.new("Edit",     :list,      :object, :edit),
+      :bulk_delete   => ViewType.new("Delete",   :list,      :model,  :delete),
+      :new           => ViewType.new("New",      :list,      :model,  :new),
+      :model_history => ViewType.new("History",  :list,      :model,  nil,            :history_model),
+      :list          => ViewType.new("List",     :dashboard, :model,  :list),
+      :dashboard     => ViewType.new("Dashboard")
+    }
+    
+    def breadcrumbs_for view, abstract_model_or_object
+      # create an array of all the names of the views we want breadcrumb links to
+      views = []
+      parent = view
+      begin
+        views << parent
+      end while parent = VIEW_TYPES[parent].parent
+
+      # get a breadcrumb for each view name
+      breadcrumbs = views.reverse.map do |v|
+        breadcrumb_for v, abstract_model_or_object, (v==view)
+      end
+
+      # join the breadcrumbs together inside some other tags
+      content_tag(:div, :class => "secondary-navigation") do
+        content_tag(:ul, :class => "wat-cf") do
+          breadcrumbs.join("\n").html_safe
+        end
+      end
+
+    end
+
+    private
+
+      def abstract_model_and_object abstract_model_or_object
+        if abstract_model_or_object.is_a?(AbstractModel)
+          abstract_model = abstract_model_or_object
+          object = nil
+        else
+          object = abstract_model_or_object
+          abstract_model = AbstractModel.new(object.class)
+        end
+        [abstract_model, object]
+      end
+
+      def breadcrumb_for view, abstract_model_or_object, active
+        abstract_model, object = abstract_model_and_object( abstract_model_or_object )
+
+        vt = VIEW_TYPES[view]
+        
+        # TODO: write tests and enable authorization checking:
+        # if vt.authorization.nil? || authorized?(vt.authorization, abstract_model, object)
+          css_classes = []
+          css_classes << "first" if view == :dashboard
+          css_classes << "active" if active
+
+          content_tag(:li, :class => css_classes) do
+            path_method = vt.path_method || view
+            link_to vt.name, self.send("rails_admin_#{path_method}_path")
+          end
+        # end
+
+      end
+    
 
   end
 end

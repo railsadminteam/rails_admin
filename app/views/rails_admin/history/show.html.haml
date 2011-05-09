@@ -8,6 +8,11 @@
 - head_style "rails_admin/list"
 
 #block-tables.block
+  - if @object
+    = breadcrumbs_for :history, @object
+  - else
+    = breadcrumbs_for :model_history, @abstract_model
+    
   .content
     %h2.title= @page_name
     .inner

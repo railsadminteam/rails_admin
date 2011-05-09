@@ -4,16 +4,8 @@
 - head_javascript "rails_admin/ra.remote-form.js"
 
 #block-tables.block
-  -# FIXME: Need to create some kind of secondary-navigation helper.
-  .secondary-navigation
-    %ul.wat-cf
-      %li.first= link_to "Index", rails_admin_list_path(@abstract_model)
-      %li
-        %a{:href => "#"} Show
-      %li
-        %a{:href => "#"} Edit
-      %li.active
-        %a{:href => "#"} New
+  = breadcrumbs_for :new, @abstract_model
+  
   .content
     %h2.title= @page_name
     .inner
