@@ -52,24 +52,25 @@
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       = form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get, :id => "bulk_delete_form", :class => "form" do
         %table.table.grid
-          %tr
-            %th.first
-              %input.checkbox.toggle{:type => "checkbox"}
-            %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
-            - properties.each do |property|
-              - property_name = property.name
-              - property_pretty_name = property.label
-              - selected = sort == property_name.to_s
-              %th{:class => "#{property.css_class} #{selected ? "selected" : nil}"}
-                - if property.sortable?
-                  - sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
-                  - sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil
-                  = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true)
-                - else
-                  = property_pretty_name.upcase
-            %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
+          %thead
+            %tr
+              %th.first
+                %input.checkbox.toggle{:type => "checkbox"}
+              %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
+              - properties.each do |property|
+                - property_name = property.name
+                - property_pretty_name = property.label
+                - selected = sort == property_name.to_s
+                %th{:class => "#{property.css_class} #{selected ? "selected" : nil}"}
+                  - if property.sortable?
+                    - sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
+                    - sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil
+                    = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true)
+                  - else
+                    = property_pretty_name.upcase
+              %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
 
-            %th.last
+              %th.last
 
           %tbody
             - @objects.each do |object|
