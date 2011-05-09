@@ -1,5 +1,12 @@
 module GeneratorHelpers
 
+  def prepare_rake_task_environment
+    prepare_destination
+    create_rails_folder_structure
+    @rails_root = Rails.configuration.root
+    Rails.configuration.root = Pathname.new(destination_root)
+  end
+
   ['devise', 'rails_admin'].each do |name|
     define_method("create_#{name}_initializer".to_sym) { FileUtils.touch File.join(destination_root, 'config', 'initializers', "#{name}.rb") }
   end
