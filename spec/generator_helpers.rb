@@ -20,11 +20,12 @@ module GeneratorHelpers
 
   def create_routes_with_devise
     File.open(File.join(destination_root, 'config', 'routes.rb'), 'w') do |f|
-      f.puts "DummyApp::Application.routes.draw do
+      f.puts <<-ROUTES
+      DummyApp::Application.routes.draw do
         devise_for :users
         root :to => 'rails_admin::Main#index'
       end
-"
+      ROUTES
     end
   end
 
