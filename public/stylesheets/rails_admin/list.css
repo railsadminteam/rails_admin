@@ -59,6 +59,14 @@
   border:1px solid #494949;
 }
 
+.grid tbody td.last {
+  white-space: nowrap;
+}
+
+.grid thead th.first {
+  padding-left: 5px;
+}
+
 .grid tbody td {
-  padding: 9px 0;
+  padding: 7px 5px;
 }
