@@ -13,6 +13,10 @@
   border: none;
 }
 
+.count .number {
+  float: left;
+}
+
 .scale{
   margin:0 auto;
   display:block;
