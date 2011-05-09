@@ -82,12 +82,6 @@ non-Windows system, you can try to use the automatic downloader:
 
     $ rake rails_admin:ckeditor_download
 
-When running RailsAdmin in production the images, stylesheets, and javascript assets may return 404
-not found error's depending on your servers static assets configuration.  To prevent this issue you
-can copy assets directly into your application by running:
-
-    $ rake rails_admin:copy_assets
-
 Usage
 -----
 Start the server:
