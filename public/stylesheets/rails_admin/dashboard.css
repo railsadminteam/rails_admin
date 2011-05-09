@@ -8,16 +8,15 @@
   margin-left:5px;
 }
 
-.grid tbody td {
-  padding: 4px;
-  border: none;
+.grid .start {
+  padding-left: 5px;
 }
 
 .count .number {
   float: left;
 }
 
-.scale{
+.scale {
   margin:0 auto;
   display:block;
   width:200px;
@@ -41,10 +40,7 @@ a.add:hover{
 }
 
 .show{
-  padding-left:3px;
-  color:#215086;
   font-weight:bold;
-  text-decoration:none;
 }
 
 a.show:hover{

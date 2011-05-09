@@ -10,17 +10,22 @@
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       %table.table.grid
-        %tr
-          %th#modelNameHeader= t "admin.dashboard.model_name"
-          %th= t "admin.dashboard.last_used"
-          %th= t "admin.dashboard.records"
-          %th= t "admin.dashboard.modify"
+        %thead
+          %tr
+            %th#modelNameHeader.start
+              = t "admin.dashboard.model_name"
+            %th= t "admin.dashboard.last_used"
+            %th= t "admin.dashboard.records"
+            %th=# t "admin.dashboard.modify"
         %tbody
           - @abstract_models.each do |abstract_model|
             - if authorized? :list, abstract_model
-              %tr{:class => cycle('odd', 'even')}
-                %td.modelNameRow
-                  = link_to(RailsAdmin.config(abstract_model).label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show")
+              - list_path = rails_admin_list_path(:model_name => abstract_model.to_param)
+              - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
+              
+              %tr{:class => row_class, :"data-link" => list_path}
+                %td.modelNameRow.start
+                  %span.show= RailsAdmin.config(abstract_model).label
                 %td
                   - if (last_used = @most_recent_changes[abstract_model.pretty_name])
                     = time_ago_in_words last_used
@@ -31,11 +36,12 @@
                     - percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0
                     - percent = 1 if percent.nil?
                     %div{:class => "bar #{get_indicator(percent)}", :style => "width:#{percent}%;"}
-                %td
+                %td.last
                   - if authorized? :new, abstract_model
-                    = link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add")
-                    |#{link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show")}
-
+                    - new_path = rails_admin_new_path(:model_name => abstract_model.to_param)
+                    = action_icon(new_path, :add, t("admin.dashboard.add_new"))
+                  - history_path = rails_admin_history_model_path(:model_name => abstract_model.to_param)
+                  = action_icon(history_path, :calendar, t("admin.history.name"))
 
 #block-tables.block
   .content
