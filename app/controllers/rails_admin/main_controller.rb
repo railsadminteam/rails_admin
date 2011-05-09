@@ -29,6 +29,7 @@ module RailsAdmin
         @count[t.pretty_name] = current_count
         @most_recent_changes[t.pretty_name] = t.model.order("updated_at desc").first.try(:updated_at) rescue nil
       end
+      render :dashboard
     end
 
     def list
