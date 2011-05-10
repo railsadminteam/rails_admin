@@ -27,18 +27,13 @@
   
   .content
     .control
-      = link_to rails_admin_history_model_path, :class => "button" do
-        = t("admin.history.name")
+      = action_button rails_admin_history_model_path, t("admin.history.name")
 
       - if authorized? :new, @abstract_model
-        = link_to rails_admin_new_path, :class => "button" do
-          %img{:alt => "Add", :src => "/stylesheets/themes/activo/images/icons/add.png"}
-          = t("admin.list.add_new")
+        = action_button rails_admin_new_path, t("admin.list.add_new"), :add
 
       - if authorized? :delete, @abstract_model
-        %button.button{:type => "submit", :onclick => "$j('#bulk_delete_form').submit(); return false;"}
-          %img{:alt => "Remove", :src => "/stylesheets/themes/activo/images/icons/cross.png"}
-          = t("admin.list.delete_selected")
+        = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_delete_form').submit(); return false;"
 
     %h2.title= @page_name
     .inner
