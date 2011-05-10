@@ -62,19 +62,30 @@ module RailsAdmin
       end
       html+"\n"
     end
-
-    # Used for the icons in the admins very top right.
-    def icon(image_name, title)
-      image_tag "/stylesheets/themes/activo/images/session/#{image_name}.png", :alt => title, :title => title
+    
+    def action_button link, text, icon=nil, options={}
+      options.reverse_merge! :class => "button"
+      link_to link, options do
+        image = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/#{icon}.png" if icon
+        [image, text].compact.join("\n").html_safe
+      end.html_safe
     end
-
-    # shown beside every entry in the list view,
-    # perhaps 60 times per page, thus this string-heavy approach.
+    
+    # the icon shown beside every entry in the list view
     def action_icon link, icon, text
-      %Q{<a href="#{link}"><img alt="#{text}" title="#{text}"
-        onmouseout="this.src='/stylesheets/themes/activo/images/icons/24/#{icon}.png'"
-        onmouseover="this.src='/stylesheets/themes/activo/images/icons/24/#{icon}-hover.png'"
-        src="/stylesheets/themes/activo/images/icons/24/#{icon}.png"></a>}.html_safe
+      icon_path = "/stylesheets/rails_admin/theme/activo/images/icons/24/%s.png"
+      icon_change = "this.src='#{icon_path}'"
+      link_to link do
+        image_tag (icon_path % icon),
+          :alt => text, :title => text,
+          :onmouseout  => (icon_change % icon),
+          :onmouseover => (icon_change % "#{icon}-hover")
+      end.html_safe
+    end
+    
+    # Used for the icons in the admins very top right.
+    def header_icon(image_name, title)
+      image_tag "/stylesheets/rails_admin/theme/activo/images/session/#{image_name}.png", :alt => title, :title => title
     end
 
     # Used for the history entries in the sidebar
