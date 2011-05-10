@@ -32,6 +32,13 @@ describe "RailsAdmin Basic List" do
     it "should show column headers" do
       response.body.should contain(/EDIT\n\s*DELETE\n\s*/)
     end
+
+    # https://github.com/sferik/rails_admin/issues/362
+    # test that no link uses the "wildcard route" with the main
+    # controller and list method
+    it "should not use the 'wildcard route'" do
+      assert_no_tag "a", :attributes => {:href => /^\/rails_admin\/main\/list/}
+    end
   end
 
   describe "GET /admin/player with sort" do

@@ -45,7 +45,7 @@
                 </li>
               <% end %>
             </ul>
-            <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
+            <%= form_tag(rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page}), :method => "get", :remote => true) do %>
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
                 <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
@@ -63,7 +63,7 @@
                   <% selected = sort == property_name.to_s %>
                   <th class="<%= "#{property.css_class}" %> <%= selected ? "selected" : nil %>">
                     <% if property.sortable? %>
-                    <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+                    <% sort_location = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})) %>
                     <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
                     <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true) %>
                     <% else %>
@@ -99,14 +99,14 @@
               <tbody>
                 <% @objects.each_with_index do |object, index| %>
                 <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
-                  <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+                  <% other_left = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)) %>
                   <td class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>
                     <%= link_to("...", other_left, :remote => true) %>
                   </td>
                   <% properties.map{|property| property.bind(:object, object)}.each do |property| %>
                     <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
                   <% end %>
-                  <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+                  <% other_right = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)) %>
                   <td class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>
                     <%= link_to("...", other_right, :remote => true)%>
                   </td>
