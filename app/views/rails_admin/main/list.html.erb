@@ -90,7 +90,7 @@
                       <%= @record_count %>
                       <%= @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase) %>
                       <% if @page_count.to_i == 2 %>
-                        <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => true, :class => "showall") %>
+                        <%= link_to(t("admin.list.show_all"), rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :all => true, :remote => true, :class => "showall"))) %>
                       <% end %>
                     </div>
                   </td>

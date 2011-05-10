@@ -88,6 +88,14 @@ describe "RailsAdmin History" do
         response.should be_successful
       end
 
+      # https://github.com/sferik/rails_admin/issues/362
+      # test that no link uses the "wildcard route" with the history
+      # controller and for_model method
+      it "should not use the 'wildcard route'" do
+        assert_tag "a", :attributes => {:href => /all=true/} # make sure we're fully testing pagination
+        assert_no_tag "a", :attributes => {:href => /^\/rails_admin\/history\/for_model/}
+      end
+
       context "with a lot of histories" do
         before :all do
           player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
