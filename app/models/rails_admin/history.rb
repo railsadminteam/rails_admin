@@ -18,7 +18,7 @@ module RailsAdmin
         results.concat(results_two)
       else
         results = History.find_by_sql(["select count(*) as number, year, month from histories where month IN (?) and year = ? group by year, month", 
-                                      (mstart == 12 ? 1 : mstart + 1)..mstop).to_a, ystart])
+                                      ((mstart == 12 ? 1 : mstart + 1)..mstop).to_a, ystart])
       end
 
       results.each do |result|
