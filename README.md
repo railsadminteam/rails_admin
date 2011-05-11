@@ -88,7 +88,8 @@ Start the server:
 
     $ rails server
 
-You should now be able to administer your site at <http://localhost:3000/admin>
+You should now be able to administer your site at
+[http://localhost:3000/admin](http://localhost:3000/admin).
 
 Configuration
 -------------
