@@ -25,7 +25,7 @@ module RailsAdmin
           end
           
           # orderable associated objects
-          register_instance_option(:orderable?) do
+          register_instance_option(:orderable) do
             false
           end
 
