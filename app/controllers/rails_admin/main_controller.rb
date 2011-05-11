@@ -54,7 +54,7 @@ module RailsAdmin
             csv << visible.call
 
             @objects.each do |object|
-              csv << [object.id].tap do |row|
+              csv << [].tap do |row|
                 visible.call.each do |field|
                   row << object.send(field)
                 end
