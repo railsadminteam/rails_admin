@@ -106,7 +106,7 @@ describe "RailsAdmin Basic Create" do
       get rails_admin_new_path(:model_name => "league")
 
       fill_in "league[name]", :with => "National League"
-      select @divisions[0].name, :from => "associations_divisions"
+      select @divisions[0].name, :from => "league_division_ids"
 
       click_button "Save"
 
@@ -131,7 +131,7 @@ describe "RailsAdmin Basic Create" do
       get rails_admin_new_path(:model_name => "fan")
 
       fill_in "fan[name]", :with => "John Doe"
-      select @teams[0].name, :from => "associations_teams"
+      select @teams[0].name, :from => "fan_team_ids"
       click_button "Save"
 
       @fan = RailsAdmin::AbstractModel.new("Fan").first

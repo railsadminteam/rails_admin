@@ -1,7 +1,7 @@
-              <div class="field <%= field.to_param %>">
-                <%= label_tag field.to_param, field.label %>
+            <div class="field <%= field.dom_id %>">
+                <%= form.label field.method_name, field.label %>
                 <%= form.send field.view_helper, field.name, field.html_attributes %>
-                <div id="<%= "#{field.to_param}Helper" %>" class="colorSelector"><div></div></div>
+                <div id="<%= field.dom_id %>Helper" class="colorSelector"><div></div></div>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
@@ -9,10 +9,10 @@
 	            <% head_style "rails_admin/jquery.colorpicker.css" %>
 	            <% head_javascript "rails_admin/jquery.colorpicker.js" %>
                 <% head_javascript do %>
-                  $j(document).ready(function($) {
-                    var input = $('#<%= field.to_param %>').hide();
-                    $('#<%= field.to_param %>Helper div').css('backgroundColor', '#' + input.val());
-					$('#<%= field.to_param %>Helper').ColorPicker({
+                  $j(document).ready(function($){
+                    var input = $('#<%= field.dom_id %>').hide();
+                    $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + input.val());
+					$('#<%= field.dom_id %>Helper').ColorPicker({
 					  color: input.val(),
 					  onShow: function (el) {
 					    $(el).fadeIn(500);
@@ -24,7 +24,7 @@
 					  },
 					  onChange: function (hsb, hex, rgb) {
 					    input.val(hex);
-					    $('#<%= field.to_param %>Helper div').css('backgroundColor', '#' + hex);
+					    $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + hex);
 					  }
 					});
                   });

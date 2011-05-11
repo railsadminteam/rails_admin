@@ -42,8 +42,7 @@ describe "AbstractObject" do
       let(:draft) { Factory :draft }
 
       before do
-        object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil }
-        object.associations = { :draft => draft.id }
+        object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil, :draft_id => draft.id }
       end
 
       it "should create a Player with given attributes" do
@@ -67,8 +66,7 @@ describe "AbstractObject" do
       let(:divisions) { [Factory(:division), Factory(:division)] }
 
       before do
-        object.attributes = { :name  => name }
-        object.associations = { :divisions => divisions }
+        object.attributes = { :name  => name, :division_ids => divisions.map(&:id) }
       end
 
       it "should create a League with given attributes and associations" do
@@ -92,8 +90,7 @@ describe "AbstractObject" do
       let(:new_number) { player.number + 29 }
 
       before do
-        object.attributes = { :number => new_number, :team_id => new_team.id, :suspended => new_suspended }
-        object.associations = { :draft => new_draft }
+        object.attributes = { :number => new_number, :team_id => new_team.id, :suspended => new_suspended, :draft_id => new_draft }
         object.save
       end
 
