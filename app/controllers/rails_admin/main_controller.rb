@@ -1,3 +1,5 @@
+require  RUBY_VERSION =~ /^1\.9\./ ? 'csv' : 'fastercsv'
+
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index]
