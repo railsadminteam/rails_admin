@@ -920,6 +920,18 @@ accomplished like this:
         end
       end
     end
+    
+Or even scope it like this:
+
+    RailsAdmin.config do |config|
+      config.models do
+        list do
+          fields_of_type :datetime do
+            date_format :compact
+          end
+        end
+      end
+    end
 
 Authorization
 -------------
