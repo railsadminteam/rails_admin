@@ -2,34 +2,52 @@ require 'spec_helper'
 
 describe "AbstractObject" do
   describe "proxy" do
-    let(:object) { mock("A mock") }
+    let(:object) { Object.new }
     let(:abstract_object) {  RailsAdmin::AbstractObject.new(object) }
-  
+
     it "should act like a proxy" do
-      object.should_receive(:method_call).once
-    
+      mock(object).method_call
+
       abstract_object.method_call
     end
   end
-  
+
   describe "create" do
-    describe "a record with protected attributes and has_one association" do
-      let(:player) { Player.new }
-      let(:object) { RailsAdmin::AbstractObject.new player }
-      let(:name) { "Stefan Kiszonka" }
-      let(:number) { 87 }
-      let(:position) { "Fifth baseman" }
-      let(:suspended) { true }
-      let(:draft) { Factory :draft }
-      
+    let(:player) { Player.new }
+    let(:object) { RailsAdmin::AbstractObject.new player }
+    let(:name) { "Stefan Kiszonka" }
+    let(:number) { 87 }
+    let(:position) { "Fifth baseman" }
+    let(:suspended) { true }
+
+    describe "a record without associations" do
       before do
         object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil }
-        object.associations = { :draft => draft.id }
       end
-    
+
       it "should create a Player with given attributes" do
         object.save.should be_true
-        
+
+        player.reload
+        player.name.should == name
+        player.number.should == number
+        player.position.should == position
+        player.suspended.should == suspended
+        player.draft.should == nil
+        player.team.should == nil
+      end
+    end
+
+    describe "a record with protected attributes and has_one association" do
+      let(:draft) { Factory :draft }
+
+      before do
+        object.attributes = { :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil, :draft_id => draft.id }
+      end
+
+      it "should create a Player with given attributes" do
+        object.save.should be_true
+
         player.reload
         player.name.should == name
         player.number.should == number
@@ -39,31 +57,27 @@ describe "AbstractObject" do
         player.team.should == nil
       end
     end
-    
+
     describe "a record with has_many associations" do
       let(:league) { League.new }
       let(:object) { RailsAdmin::AbstractObject.new league }
       let(:name) { "Awesome League" }
       let(:teams) { [Factory(:team)] }
-      let(:divisions) { [] }
-      
+      let(:divisions) { [Factory(:division), Factory(:division)] }
+
       before do
-        Factory :team
-        2.times { Factory :division }
-        object.attributes = { :name  => name }
-        object.associations = { :teams => teams.map(&:id), :division => divisions }
+        object.attributes = { :name  => name, :division_ids => divisions.map(&:id) }
       end
-      
+
       it "should create a League with given attributes and associations" do
         object.save.should be_true
         league.reload
         league.name.should == name
         league.divisions.should == divisions
-        league.teams.should == teams
       end
     end
   end
-  
+
   describe "update" do
     describe "a record with protected attributes and has_one association" do
       let(:name) { "Stefan Koza" }
@@ -76,11 +90,10 @@ describe "AbstractObject" do
       let(:new_number) { player.number + 29 }
 
       before do
-        object.attributes = { :number => new_number, :team_id => new_team.id, :suspended => new_suspended }
-        object.associations = { :draft => new_draft }
+        object.attributes = { :number => new_number, :team_id => new_team.id, :suspended => new_suspended, :draft_id => new_draft }
         object.save
       end
-      
+
       it "should update a record and associations" do
         object.reload
         object.number.should == new_number
@@ -95,11 +108,11 @@ describe "AbstractObject" do
   describe "destroy" do
     let(:player) { Factory :player }
     let(:object) { RailsAdmin::AbstractObject.new player }
-    
+
     before do
       object.destroy
     end
-    
+
     it "should delete the record" do
       Player.exists?(player.id).should == false
     end

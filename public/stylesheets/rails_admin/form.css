@@ -1,0 +1,147 @@
+form fieldset {
+  border:none;
+  margin-bottom:15px;
+}
+
+form legend {
+  width: 100%;
+  clear:both;
+  margin-top:2px;
+  margin-bottom:3px;
+  border-bottom:1px solid #b9b9b9;
+  padding-bottom:4px;
+  color:#9e988e;
+  text-transform:uppercase;
+  font-weight:bold;
+  font-size:10px;
+}
+
+form p {
+  padding-top:5px;
+  padding-bottom:5px;
+  margin-bottom:1px;
+}
+
+form a {
+  color: #000;
+}
+
+form a.createAssociatedRecord {
+    line-height: 24px;
+    margin-left: 10px;
+}
+
+form label {
+  width:100px;
+  display:block;
+  float:left;
+  margin-top:6px;
+  font-size:11px;
+  font-weight:bold;
+  margin-left:2px;
+}
+
+form label.inline {
+  display:inline;
+  float:none;
+  font-weight:normal;
+}
+
+
+.field {
+  padding: 15px 0 0 0;
+}
+
+.field .input {
+  margin-left: 103px;
+}
+
+.field .row {
+  margin: 10px 0;
+}
+
+.field .date,
+.field .datetime,
+.field .decimal,
+.field .float,
+.field .integer,
+.field .text,
+.field .time,
+.field .timestamp,
+.field .password,
+.field .string {
+  font-family:Verdana, Geneva, sans-serif;
+  font-size:12px;
+  padding:5px;
+  width:250px;
+  border-left:1px solid #e2e3ea;
+  border-top:1px solid #abadb3;
+  border-bottom:1px solid #e3e9ef;
+  border-right:1px solid #dbdfe6;
+}
+
+.field .boolean {
+  float:left;
+  margin-top:6px;
+}
+
+.field .decimal {
+  width:170px;
+}
+
+.field .float {
+  width:120px;
+}
+
+.field .date, .field .timestamp, .field .time, .field .datetime {
+  padding-right: 20px;
+  width:150px;
+}
+
+.field .date, .field .datetime {
+  background: url("../../images/rails_admin/calendar.png") no-repeat right;
+}
+
+.field .time, .field .timestamp {
+  background: url("../../images/rails_admin/clock.png") no-repeat right;
+}
+
+.ui-datepicker .ui-datepicker-today .ui-state-highlight { border-color: #4F4F4F; }
+
+.field .integer {
+  width:90px;
+}
+
+.field .text {
+  height:100px;
+  width: 450px;
+}
+
+.errorField {
+  border:1px solid #bd2b14;
+}
+
+.errorMessage {
+  display:block;
+  margin-top:5px;
+  margin-left:103px;
+  color:#bd2b14;
+}
+
+p.help {
+  clear:both;
+  padding-top:2px;
+  padding-bottom:0px;
+  margin-bottom:0px;
+  font-size:10px;
+  margin-left:103px;
+  display:block;
+  font-style: italic;
+  color: #999;
+}
+
+.cke_skin_kama {
+  margin-left: 100px;
+}
+
+.createAssociatedRecordDialog li.save.add, .createAssociatedRecordDialog li.save.edit { display: none; }

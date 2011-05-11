@@ -20,11 +20,9 @@
   height:13px;
 }
 
-.bar{
-  margin:0 auto;
-  background:#bcceb6;
-  display:block;
-  height:13px;
+.scale .bar {
+  display: block;
+  height: 100%;
 }
 
 .add{
@@ -57,75 +55,6 @@ a.show:hover{
   font-weight:normal;
   padding-left:5px;
   margin-top:5px;
-}
-
-#timeline {
-  margin-top:8px;
-  background-color:#f6f6f6;
-  border:1px solid #dbdbdb;
-  height:53px;
-}
-#timeline a img{
-  border:none;
-}
-
-#arrowLeft{
-  float:left;
-  margin-top:16px;
-}
-#arrowRight{
-  float:right;
-  margin-top:16px;
-}
-
-#timelineSlider{
-  float:left;
-  position:relative;
-}
-
-#timelineSlider ul{
-  list-style-type:none;
-}
-
-#timelineSlider ul li{
-  float:left;
-  font-size:10px;
-  width:183px;
-  text-align:center;
-  border-left:1px solid #DDD;
-  height:53px;
-}
-#timelineSlider ul li:first-child{
-  border:none;
-}
-
-.bars{
-  display:block;
-  height:39px;
-  margin-top:2px;
-  position:relative;
-}
-
-.indicator{
-  display:block;
-  background:#bcceb6;
-  position:absolute;
-  bottom:0;
-  width:183px;
-}
-
-.high{
-  background:#bf2531;
-}
-
-.medium{
-  background:#d2a71c;
-}
-
-#handler{
-  position:absolute;
-  top:-12px;
-  left:-5px;
 }
 
 #listing{

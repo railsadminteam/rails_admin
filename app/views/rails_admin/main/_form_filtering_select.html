@@ -1,0 +1,38 @@
+<%
+  config = field.associated_model_config
+  selected_id = field.selected_id
+  xhr = field.associated_collection_count > 100
+
+  if xhr
+    collection = [[field.formatted_value, selected_id]]
+  else
+    collection = field.associated_collection
+  end
+%>
+
+              <div class="field <%= "#{field.dom_id}" %>">
+                <%= form.label field.method_name, field.label %>
+                <%= form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes %>
+                <% if authorized? :new, @abstract_model %>
+                  <%= link_to "Add new #{config.abstract_model.to_param}", rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord" %>
+                <% end %>
+                <% if field.has_errors? %>
+                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+                <% end %>
+                <p class="help"><%= field.help %></p>
+                <% head_style 'rails_admin/ra.filtering-select.css' %>
+                <% head_javascript "rails_admin/ra.filtering-select.js" %>
+                <% head_javascript do %>
+                  $j(document).ready(function($){
+                    $(".<%= "#{field.dom_id}" %> .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+                    $("#<%= "#{field.dom_id}" %>").filteringSelect({
+                      <% if xhr %>
+                        createQuery: function(query) {
+                          return { query: query }
+                        },
+                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true) %>"
+                      <% end %>
+                    });
+                  });
+                <% end %>
+              </div>

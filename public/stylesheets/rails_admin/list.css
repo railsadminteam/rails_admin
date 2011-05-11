@@ -5,13 +5,11 @@
 
 .grid thead th {
   border-bottom:2px solid #b9b9b9;
-  padding: 9px;
+  padding: 9px 0;
   text-align:center;
 }
 
 .grid thead th a {
-  padding-right: 20px;
-  padding-left: 10px;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: right;
@@ -19,28 +17,26 @@
   color:#000;
 }
 
+.grid thead th.selected a {
+  padding: 0 20px 0 0;
+}
+
 .grid thead th a.ascending {
-  background-image: url(/images/rails_admin/bullet_arrow_up.png);
+  background-image: url(../../images/rails_admin/bullet_arrow_up.png);
 }
 
 .grid thead th a.descending {
-  background-image: url(/images/rails_admin/bullet_arrow_down.png);
+  background-image: url(../../images/rails_admin/bullet_arrow_down.png);
 }
 
 .grid tbody .boolean {
   margin-bottom:-5px;
 }
 
-.grid tbody .date {
-  white-space: nowrap;
-}
-
-.grid tbody .datetime {
-  white-space: nowrap;
-}
-
-.grid tbody .time {
-  background:#F99;
+.grid tbody .date,
+.grid tbody .datetime,
+.grid tbody .time,
+.grid tbody .timestamp {
   white-space: nowrap;
 }
 
@@ -85,7 +81,7 @@
 
 .grid tbody td {
   border-bottom:1px solid #b9b9b9;
-  padding: 9px;
+  padding: 9px 0;
   text-align:center;
 }
 
@@ -93,46 +89,11 @@
   background:#f2f2f2;
 }
 
-.searchBox {
-  padding:5px;
-  height:23px;
-  background:#e0ecfc;
-  border-top:1px solid #B9B9B9;
-  border-bottom:1px solid #B9B9B9;
-}
-
-.searchBox fieldset {
-  border:none;
-}
-
-#searchBar {
-  border:1px solid #cbcbcb;
-  font-size:12px;
-  padding:4px;
-  float:left;
-  width:300px;
-}
-
-.searchBox span {
-  float:left;
-  display:block;
-  font-size:10px;
-  border:1px solid #cbcbcb;
-  background:#FFF;
-  padding:5px;
-  padding-left:6px;
-  padding-right:6px;
-  margin-left:5px;
-}
-
-#pagination {
-  clear:both;
-  text-align:center;
-  margin-bottom:15px;
+.grid .pagination {
   padding-top:10px;
 }
 
-#pagination a {
+.grid .pagination a {
   background:#FFF;
   color:#000;
   border:1px solid #DDD;
@@ -142,29 +103,14 @@
   text-decoration:none;
 }
 
-#pagination a:hover {
+.grid .pagination a:hover {
   background:#EEE;
   border:1px solid #494949;
 }
 
-#searchbar_btn, #bulkdelete_btn {
-  background:#DDD;
-  border:1px solid #CBCBCB;
-  font-size:10px;
-  padding-top:3px;
-  padding-bottom:4px;
-  padding-left:6px;
-  padding-right:6px;
-  margin-left:3px;
-}
-
-#bulkdelete_btn {
+.grid tfoot .bulk {
   float: right;
-  margin-top: 3px;
-}
-
-#tableFooter {
-  height: 24px;
+  margin-top: 8px;
 }
 
 .this-page {

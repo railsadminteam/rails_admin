@@ -1,6 +1,5 @@
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/labelable'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
 require 'rails_admin/config/has_groups'
@@ -13,8 +12,6 @@ module RailsAdmin
       class Update < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
         include RailsAdmin::Config::HasGroups
-        include RailsAdmin::Config::Hideable
-        include RailsAdmin::Config::Labelable
 
         # Default items per page value used if a model level option has not
         # been configured
@@ -34,6 +31,12 @@ module RailsAdmin
               f.group f.label.to_sym
             else
               f.group :default
+            end
+            # Hide owning ends of polymorphic associations in edit views as
+            # they'd need special handling in RailsAdmin::AbstractObject that
+            # has not been implemented
+            if f.association? && f.association[:options][:as]
+              f.hide
             end
             if f.serial? || @@default_hidden_fields.include?(f.name)
               f.hide

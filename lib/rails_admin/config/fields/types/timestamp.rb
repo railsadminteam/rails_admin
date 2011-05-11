@@ -8,7 +8,9 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 170
+          @format = :long
+          @i18n_scope = [:time, :formats]
+          @js_plugin_options = {}
         end
       end
     end

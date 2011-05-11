@@ -15,9 +15,9 @@ module RailsAdmin
 
         def self.inherited(klass)
             klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
-            klass.instance_variable_set("@column_width", 110)
             klass.instance_variable_set("@searchable", false)
             klass.instance_variable_set("@sortable", true)
+            klass.instance_variable_set("@view_helper", :text_field)
         end
 
         include RailsAdmin::Config::Hideable
@@ -40,22 +40,12 @@ module RailsAdmin
           self.class.instance_variable_get("@css_class")
         end
 
-        # NOTE: "css_class_name" is deprecated, use "css_class" instead.
-        # FIXME: remove this after giving people an appropriate time
-        # to change their code.
         def column_css_class(*args, &block)
           if !args[0].nil? || block
             @css_class = args[0].nil? ? block : args[0]
           else
             css_class
           end
-        end
-
-        # NOTE: "css_class_name" is deprecated, use "css_class" instead.
-        # FIXME: remove this after giving people an appropriate time
-        # to change their code.
-        def column_css_class=(value)
-          @css_class = value
         end
 
         register_instance_option(:column_width) do
@@ -75,6 +65,14 @@ module RailsAdmin
           required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
         end
 
+        register_instance_option(:html_attributes) do
+          {
+            :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+            :value => value,
+            :style => "width:#{column_width}px",
+          }
+        end
+
         # Accessor for field's label.
         #
         # @see RailsAdmin::AbstractModel.properties
@@ -90,11 +88,11 @@ module RailsAdmin
         end
 
         register_instance_option(:partial) do
-          type
+          :form_field
         end
 
         register_instance_option(:render) do
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self}
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
         end
 
         # Accessor for whether this is field is mandatory.  This is
@@ -122,6 +120,10 @@ module RailsAdmin
 
         register_instance_option(:sortable?) do
           self.class.instance_variable_get("@sortable")
+        end
+        
+        register_instance_option(:view_helper) do
+          self.class.instance_variable_get("@view_helper")
         end
 
         # Is this an association
@@ -186,6 +188,24 @@ module RailsAdmin
         # Reader for field's value
         def value
           bindings[:object].send(name)
+        end
+                
+        # Reader for field's name
+        def dom_name
+          @dom_name ||= "#{bindings[:form].object_name}#{(index = bindings[:form].options[:index]) && "[#{index}]"}[#{method_name}]"
+        end
+        
+        # Reader for field's id
+        def dom_id
+          @dom_id ||= [
+            bindings[:form].object_name, 
+            bindings[:form].options[:index], 
+            method_name
+          ].reject(&:blank?).join('_')
+        end
+
+        def method_name
+          name.to_s
         end
       end
     end

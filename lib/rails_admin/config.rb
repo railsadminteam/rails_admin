@@ -15,7 +15,15 @@ module RailsAdmin
     @@excluded_models = []
     mattr_accessor :excluded_models
 
-    # Configuration option to specify which method names will be searched for 
+    # Configuration option to specify a whitelist of models you want to RailsAdmin to work with.
+    # The excluded_models list applies against the whitelist as well and further reduces the models
+    # RailsAdmin will use.
+    # If included_models is left empty ([]), then RailsAdmin will automatically use all the models
+    # in your application (less any excluded_models you may have specified).
+    @@included_models = []
+    mattr_accessor :included_models
+
+    # Configuration option to specify which method names will be searched for
     # to be used as a label for object records. This defaults to [:name, :title]
     mattr_accessor :label_methods
     self.label_methods = [:name, :title]
@@ -53,8 +61,7 @@ module RailsAdmin
         end
       end
       config = @@registry[key] ||= RailsAdmin::Config::Model.new(entity)
-      config.bind(:object, entity) if entity.class.to_s == config.abstract_model.model.name
-      config.instance_eval &block if block
+      config.instance_eval(&block) if block
       config
     end
 
@@ -65,11 +72,7 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.registry
     def self.models(&block)
-      RailsAdmin::AbstractModel.all.each do |m|
-        @@registry[m.model.name.to_sym] ||= Model.new(m)
-      end
-      @@registry.each_value {|config| config.instance_eval &block } if block
-      @@registry.values
+      RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
     end
 
     # Shortcut to access the navigation section's class configuration
@@ -90,6 +93,15 @@ module RailsAdmin
         @@registry.delete(key)
       else
         @@registry.clear
+      end
+    end
+
+    # Get all models that are configured as visible sorted by their weight and label.
+    #
+    # @see RailsAdmin::Config::Hideable
+    def self.visible_models
+      RailsAdmin::Config.models.select {|m| m.visible? }.sort do |a, b|
+        (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
       end
     end
   end

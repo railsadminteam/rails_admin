@@ -1,14 +1,14 @@
 module RailsAdmin
   class History < ActiveRecord::Base
+    set_table_name :rails_admin_histories
 
     IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 
-    scope :most_recent, lambda {|table|
-      where("#{retrieve_connection.quote_column_name(:table)} = ?", table).order("updated_at")
+    scope :most_recent, lambda {|model|
+      where("#{retrieve_connection.quote_column_name(:table)} = ?", model.pretty_name).order("updated_at DESC")
     }
 
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
-      sql_in = ""
       if mstart > mstop
         results = History.find_by_sql(["select count(*) as number, year, month from histories where month IN (?) and year = ? group by year, month",
                                       ((mstart + 1)..12).to_a, ystart])
@@ -18,11 +18,11 @@ module RailsAdmin
         results.concat(results_two)
       else
         results = History.find_by_sql(["select count(*) as number, year, month from histories where month IN (?) and year = ? group by year, month", 
-                                      ((mstart + 1)..mstop).to_a, ystart])
+                                      (mstart == 12 ? 1 : mstart + 1)..mstop).to_a, ystart])
       end
 
       results.each do |result|
-        result.number = result.number.to_i
+        result.record_count = result.record_count.to_i
       end
 
       add_blank_results(results, mstart, ystart)

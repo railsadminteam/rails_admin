@@ -67,7 +67,8 @@ module RailsAdmin
     # Fetch the history items for a model.  Returns an array containing
     # the page count and an AR query result containing the history
     # items.
-    def self.history_for_model(model, query, sort, sort_reverse, all, page = 1, per_page = 10 || RailsAdmin::Config::Sections::List.default_items_per_page)
+    def self.history_for_model(model, query, sort, sort_reverse, all, page, per_page = RailsAdmin::Config::Sections::List.default_items_per_page || 20)
+      page ||= "1"
       history = History.where :table => model.pretty_name
 
       if query
@@ -101,37 +102,47 @@ module RailsAdmin
       history
     end
 
-    # Fetch the history item counts for a 5-month period.  Ref=0 ends at
-    # the present month, ref=-1 is the block before that, etc.
-    def self.history_summaries(ref)
-      current_diff = -5 * ref
-      start_month = (5 + current_diff).month.ago.month
-      start_year = (5 + current_diff).month.ago.year
-      stop_month = (current_diff).month.ago.month
-      stop_year = (current_diff).month.ago.year
-
-      RailsAdmin::History.get_history_for_dates(start_month, stop_month, start_year, stop_year)
+    # Fetch the history item counts for a requested period of months
+    def self.history_summaries(from, to)
+      # try to be helpful if the user hasn't run the history table
+      # rename generator.  this happens to be the first spot that will
+      # cause a problem.
+      # FIXME: at some point, after a reasonable transition period,
+      # we can remove the rescue, etc.
+      begin
+        RailsAdmin::History.get_history_for_dates(from[:month].to_i, to[:month].to_i, from[:year].to_i, to[:year].to_i)
+      rescue ActiveRecord::StatementInvalid => e
+        if e.message =~ /rails_admin_histories/ # seems to be the only common text in the db-specific error messages
+          message = "Please run the generator \"rails generate rails_admin:install_admin\" then migrate your database.  #{e.message}"
+        else
+          message = e.message
+        end
+        raise ActiveRecord::StatementInvalid.new message
+      end
     end
 
 
     # Fetch the history item counts for the most recent 5 months.
     def self.history_latest_summaries
-      self.history_summaries(0)
+      from = {
+        :month => 5.month.ago.month,
+        :year => 5.month.ago.year,
+      }
+      to = {
+        :month => DateTime.now.month,
+        :year => DateTime.now.year,
+      }
+      self.history_summaries(from, to)
     end
 
     # Fetch detailed history for one month.
-    def self.history_for_month(ref, section)
-      current_ref = -5 * ref.to_i
-      current_diff = current_ref + 5 - (section.to_i + 1)
-
-      current_month = current_diff.month.ago
-
-      return RailsAdmin::History.find(:all, :conditions => ["month = ? and year = ?", current_month.month, current_month.year]), current_month
+    def self.history_for_month(month, year)
+      return RailsAdmin::History.find(:all, :conditions => ["month = ? and year = ?", month, year])
     end
 
     # Fetch the most recent history item for a model.
-    def self.most_recent_history(name)
-      RailsAdmin::History.most_recent name
+    def self.most_recent_history(model)
+      RailsAdmin::History.most_recent model
     end
 
   end
