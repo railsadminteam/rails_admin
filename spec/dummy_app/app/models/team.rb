@@ -15,4 +15,8 @@ class Team < ActiveRecord::Base
   def player_names_truncated
     players.map{|p| p.name}.join(", ")[0..32]
   end
+  
+  def color_enum
+    ['white', 'black', 'red', 'green', 'blue']
+  end
 end

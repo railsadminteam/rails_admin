@@ -106,7 +106,7 @@ describe "RailsAdmin Basic Update" do
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
 
       fill_in "league[name]", :with => "National League"
-      select @divisions[0].name, :from => "associations_divisions"
+      select @divisions[0].name, :from => "league_division_ids"
       click_button "Save"
 
       @league.reload
@@ -135,7 +135,7 @@ describe "RailsAdmin Basic Update" do
       before(:each) do
         get rails_admin_edit_path(:model_name => "league", :id => @league.id)
 
-        unselect @divisions[0].name, :from => "associations_divisions"
+        unselect @divisions[0].name, :from => "league_division_ids"
         click_button "Save"
 
         @league.reload
@@ -159,7 +159,7 @@ describe "RailsAdmin Basic Update" do
 
       get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
 
-      select @teams[1].name, :from => "associations_teams"
+      select @teams[1].name, :from => "fan_team_ids"
       click_button "Save"
 
       @fan.reload

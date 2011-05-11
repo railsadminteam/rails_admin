@@ -1,5 +1,5 @@
-<div class="field <%= field.to_param %>">
- <%= label_tag("#{field.abstract_model.to_param}_#{field.name}", field.label) %>
+<div class="field <%= field.dom_id %>">
+  <%= form.label field.method_name, field.label %>
  <div class="input">
    <% if field.bindings[:object].send(field.name) %>
      <div class="row">

@@ -1,17 +1,17 @@
-              <div class="field <%= field.to_param %>">
-                <%= label_tag field.to_param, field.label %>
+              <div class="field <%= field.dom_id %>">
+                <%= form.label field.method_name, field.label %>
                 <div class="input">
-                  <% if field.bindings[:object].send(field.name).file? %>
+                  <% if field.bindings[:object].send(field.method_name).file? %>
                     <div class="row">
-                      <%= image_tag(field.bindings[:object].send(field.name).url) %><br />
+                      <%= image_tag(field.bindings[:object].send(field.method_name).url) %><br />
                     </div>
                   <% end %>
                   <div class="row">
-                    <%= form.file_field(field.name, field.html_attributes) %>
+                    <%= form.file_field(field.method_name, field.html_attributes) %>
                   </div>
                 </div>
                 <% if field.has_errors? %>
-                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+                <span class="errorMessage"><%= "#{field.label} #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
               </div>
