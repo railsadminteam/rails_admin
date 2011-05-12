@@ -10,17 +10,15 @@ module RailsAdmin
 
     def self.get_history_for_dates(mstart, mstop, ystart, ystop)
       if mstart > mstop && mstart < 12
-        sql_in = ((mstart + 1)..12).to_a.join(", ")
-        sql_in_two = (1..mstop).to_a.join(", ")
-
-        results = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystart} group by year, month")
-        results_two = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in_two}) and year = #{ystop} group by year, month")
+        results = History.find_by_sql(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month",
+                                      ((mstart + 1)..12).to_a, ystart])
+        results_two = History.find_by_sql(["select count(*) as number, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", 
+                                          (1..mstop).to_a, ystop])
 
         results.concat(results_two)
       else
-        sql_in = ((mstart == 12 ? 1 : mstart + 1)..mstop).to_a.join(", ")
-
-        results = History.find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (#{sql_in}) and year = #{ystop} group by year, month")
+        results = History.find_by_sql(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", 
+                                      ((mstart == 12 ? 1 : mstart + 1)..mstop).to_a, ystop])
       end
 
       results.each do |result|

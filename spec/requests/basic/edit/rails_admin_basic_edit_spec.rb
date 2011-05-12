@@ -72,7 +72,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      response.body.should have_tag "#associations_teams" do |select|
+      response.body.should have_tag "#fan_team_ids" do |select|
         select[0].should have_selector 'option[selected="selected"]'
         select[1].should_not have_selector 'option[selected="selected"]'
         select[2].should_not have_selector 'option[selected="selected"]'

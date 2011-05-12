@@ -26,7 +26,11 @@ module RailsAdmin
           end
 
           register_instance_option(:partial) do
-            :form_belongs_to
+            :form_filtering_select
+          end
+
+          register_instance_option(:render) do
+            bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
           end
 
           def associated_collection
@@ -39,9 +43,17 @@ module RailsAdmin
             @associated_model_config ||= RailsAdmin.config(association[:parent_model])
           end
 
+          def selected_id
+            bindings[:object].send(child_key)
+          end
+
           # Reader for field's value
           def value
             bindings[:object].send(name)
+          end
+          
+          def method_name
+            name.to_s
           end
         end
       end

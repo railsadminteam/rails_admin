@@ -2,32 +2,35 @@
   type_collection = field.polymorphic_type_collection
   type_column = field.association[:options][:foreign_type]
 
-  if params["associations"]
-    selected_type = params["associations"][type_column]
+  if params[form.object_name]
+    selected_type = params[form.object_name][type_column]
     collection = field.associated_collection(selected_type)
   else
     selected_type = field.bindings[:object].send(type_column)
     collection = field.associated_collection(selected_type)
   end
 
-  selected = params["associations"] ? params["associations"][field.name] : field.value
-
-  model_name = field.abstract_model.to_param.singularize
+  selected = field.bindings[:object].send(field.association[:name])
+  column_type_dom_id = field.dom_id.sub(field.method_name, type_column) 
 %>
-              <div class="field <%= field.to_param %>">
-                <%= label_tag field.to_param, field.label %>
-                <%= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :class => "#{field.has_errors? ? "errorField" : nil}" %>
-                <%= form.select field.name, collection, {:include_blank => true, :selected => selected}, :class => "#{field.has_errors? ? "errorField" : nil}", :style => "margin-left:10px;" %>
+              <div class="field <%= field.dom_id %>">
+                <%= form.label field.method_name, field.label %>
+                <%= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, 
+                  :class => "#{field.has_errors? ? "errorField" : nil}", :id => column_type_dom_id %>
+                <%= form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :class => "#{field.has_errors? ? "errorField" : nil}", :style => "margin-left:10px;" %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
+                <% head_style 'rails_admin/ra.filtering-select.css' %>
+                <% head_javascript "rails_admin/ra.filtering-select.js" %>
+
                 <%= javascript_tag do %>
                   $j(document).ready(function($) {
                     var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
-                    $("#<%= "#{model_name}_#{type_column}" %>").bind("change", function(e) {
+                    $("#<%= column_type_dom_id %>").bind("change", function(e){
                       if ("" == $(this).val()) {
-                        $("#<%= "#{model_name}_#{field.name}" %>").html('<option value=""></option>');
+                        $("#<%= field.dom_id %>").html('<option value=""></option>');  
                       } else {
                         $.ajax({
                           url: urls[$(this).val()],
@@ -40,11 +43,13 @@
                             $(data).each(function(i, el) {
                               html += '<option value="' + el.id + '">' + el.label + '</option>';
                             });
-                            $("#<%= "#{model_name}_#{field.name}" %>").html(html);
+                            $("#<%= field.dom_id %>").html(html);
                           }
                         });
                       }
                     });
                   });
                 <% end %>
+
+                
               </div>

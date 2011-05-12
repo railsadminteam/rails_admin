@@ -47,7 +47,7 @@ module RailsAdmin
           end
 
           def formatted_date_value
-            value.nil? ? "" : I18n.l(value, :format => localized_date_format)
+            value.nil? ? "" : I18n.l(value, :format => localized_date_format).strip
           end
 
           def formatted_time_value

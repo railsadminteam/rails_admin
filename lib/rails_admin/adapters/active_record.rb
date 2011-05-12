@@ -5,6 +5,23 @@ require 'rails_admin/abstract_object'
 module RailsAdmin
   module Adapters
     module ActiveRecord
+      def self.extended(abstract_model)
+        
+        # ActiveRecord does not handle has_one relationships the way it does for has_many, 
+        # and does not create any association_id and association_id= methods. 
+        # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
+        # Support is hackish at best. Atomicity is respected for creation, but not while updating.
+        abstract_model.has_one_associations.each do |association|
+          abstract_model.model.send(:define_method, "#{association[:name]}_id") do
+            self.send(association[:name]).try(:id)
+          end
+          abstract_model.model.send(:define_method, "#{association[:name]}_id=") do |id|
+            association[:child_model].update_all({ association[:child_key].first => nil }, { association[:child_key].first => self.id }) if self.id
+            self.send(association[:name].to_s + '=', associated = (id.blank? ? nil : association[:child_model].find_by_id(id)))
+          end
+        end
+      end
+            
       def self.polymorphic_parents(name)
         unless @polymorphic_parents
           @polymorphic_parents = {}
