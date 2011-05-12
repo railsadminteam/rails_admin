@@ -119,7 +119,7 @@
                   <td class="action delete">
                     <%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :delete, @abstract_model, object %>
                   </td>
-                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
+                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" if authorized? :delete, @abstract_model, object %></td>
                   <% end %>
                 </tr>
                 <% end %>
