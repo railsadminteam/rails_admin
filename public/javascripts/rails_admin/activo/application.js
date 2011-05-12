@@ -2,8 +2,10 @@
   $(document).ready(function()
   {
     // jQuery uniform controls (http://pixelmatrixdesign.com/uniform)
-    $("select, input:checkbox, input:radio, input:file").uniform();
-
+    $("input:checkbox, input:radio, input:file").uniform();
+    // consider enabling uniform for non filtering select elements:
+    // $("select.uniform").uniform();
+    
     // jQuery datepicker for formtastic (http://gist.github.com/271377)
     $('input.ui-datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
 
