@@ -263,7 +263,7 @@ module RailsAdmin
         if abstract_model_or_object.is_a?(AbstractModel)
           abstract_model = abstract_model_or_object
           object = nil
-        else
+        elsif abstract_model_or_object.present?
           object = abstract_model_or_object
           abstract_model = AbstractModel.new(object.class)
         end
