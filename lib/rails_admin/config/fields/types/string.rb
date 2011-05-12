@@ -32,7 +32,7 @@ module RailsAdmin
             {
               :class => "#{css_class} #{has_errors? ? "errorField" : nil} #{color? ? 'color' : nil}",
               :maxlength => length,
-              :size => [50, length].min,
+              :size => [50, length.to_i].min,
               :style => "width:#{column_width}px",
               :value => value,
             }
