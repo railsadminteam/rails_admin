@@ -11,13 +11,13 @@ module RailsAdmin
         # and does not create any association_id and association_id= methods. 
         # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
         # Support is hackish at best. Atomicity is respected for creation, but not while updating.
-        abstract_model.has_one_associations.each do |association|
-          abstract_model.model.send(:define_method, "#{association[:name]}_id") do
-            self.send(association[:name]).try(:id)
+        abstract_model.model.reflect_on_all_associations.select{|assoc| assoc.macro.to_s == 'has_one'}.each do |association|
+          abstract_model.model.send(:define_method, "#{association.name}_id") do
+            self.send(association.name).try(:id)
           end
-          abstract_model.model.send(:define_method, "#{association[:name]}_id=") do |id|
-            association[:child_model].update_all({ association[:child_key].first => nil }, { association[:child_key].first => self.id }) if self.id
-            self.send(association[:name].to_s + '=', associated = (id.blank? ? nil : association[:child_model].find_by_id(id)))
+          abstract_model.model.send(:define_method, "#{association.name}_id=") do |id|
+            association.klass.update_all({ association.primary_key_name => nil }, { association.primary_key_name => self.id }) if self.id
+            self.send(association.name.to_s + '=', associated = (id.blank? ? nil : association.klass.find_by_id(id)))
           end
         end
       end
