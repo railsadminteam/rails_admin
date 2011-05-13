@@ -35,6 +35,14 @@ group :development, :test do
   gem 'cancan' if ENV['AUTHORIZATION_ADAPTER'] == 'cancan'
   gem 'factory_girl', '2.0.0.beta2'
   gem 'generator_spec'
+
+  platform :mri_18 do
+    gem 'ruby-debug'
+  end
+
+  platform :mri_19 do
+    gem 'ruby-debug19'
+  end
 end
 
 gemspec
