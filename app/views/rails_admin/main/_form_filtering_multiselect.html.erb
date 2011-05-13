@@ -16,7 +16,7 @@
               <div class="field <%= field.dom_id %>">
                 <%= form.label field.method_name, field.label %>
                 <input type="hidden" name="<%= field.dom_name %>" value=""/>
-                <%= form.select field.method_name, collection, { :selected => selected_ids }, field.html_attributes %>
+                <%= form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes %>
                 <% if field.has_errors? %>
                   <span class="errorMessage"><%= "#{field.label} #{field.errors.first}" %></span>
                 <% end %>
