@@ -4,7 +4,7 @@
 }
 
 .grid thead th {
-  padding: 9px 0;
+  padding: 9px 0 9px 5px;
 }
 
 .grid thead th a {
