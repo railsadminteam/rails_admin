@@ -14,6 +14,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player as list" do
     before(:each) do
+      21.times { Factory.create :player } # two pages of players
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -31,6 +32,14 @@ describe "RailsAdmin Basic List" do
 
     it "should show column headers" do
       response.body.should contain(/EDIT\n\s*DELETE\n\s*/)
+    end
+
+    # https://github.com/sferik/rails_admin/issues/362
+    # test that no link uses the "wildcard route" with the main
+    # controller and list method
+    it "should not use the 'wildcard route'" do
+      assert_tag "a", :attributes => {:href => /all=true/} # make sure we're fully testing pagination
+      assert_no_tag "a", :attributes => {:href => /^\/rails_admin\/main\/list/}
     end
   end
 

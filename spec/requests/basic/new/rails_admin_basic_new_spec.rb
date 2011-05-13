@@ -25,6 +25,13 @@ describe "RailsAdmin Basic New" do
       response.body.should have_tag(".player_born_on .help", :content => "Optional")
       response.body.should have_tag(".player_notes .help", :content => "Optional")
     end
+
+    # https://github.com/sferik/rails_admin/issues/362
+    # test that no link uses the "wildcard route" with the main
+    # controller and new method
+    it "should not use the 'wildcard route'" do
+      assert_no_tag "a", :attributes => {:href => /^\/rails_admin\/main\/new/}
+    end
   end
 
   describe "GET /admin/player/new with has-one association" do

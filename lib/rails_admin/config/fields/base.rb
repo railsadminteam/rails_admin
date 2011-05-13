@@ -40,22 +40,12 @@ module RailsAdmin
           self.class.instance_variable_get("@css_class")
         end
 
-        # NOTE: "css_class_name" is deprecated, use "css_class" instead.
-        # FIXME: remove this after giving people an appropriate time
-        # to change their code.
         def column_css_class(*args, &block)
           if !args[0].nil? || block
             @css_class = args[0].nil? ? block : args[0]
           else
             css_class
           end
-        end
-
-        # NOTE: "css_class_name" is deprecated, use "css_class" instead.
-        # FIXME: remove this after giving people an appropriate time
-        # to change their code.
-        def column_css_class=(value)
-          @css_class = value
         end
 
         register_instance_option(:column_width) do
@@ -131,7 +121,7 @@ module RailsAdmin
         register_instance_option(:sortable?) do
           self.class.instance_variable_get("@sortable")
         end
-
+        
         register_instance_option(:view_helper) do
           self.class.instance_variable_get("@view_helper")
         end
@@ -176,10 +166,6 @@ module RailsAdmin
           optional(state)
         end
 
-        def to_param
-          "#{abstract_model.to_param.singularize}_#{name}"
-        end
-
         # Legacy support
         def to_hash
           {
@@ -202,6 +188,24 @@ module RailsAdmin
         # Reader for field's value
         def value
           bindings[:object].send(name)
+        end
+                
+        # Reader for field's name
+        def dom_name
+          @dom_name ||= "#{bindings[:form].object_name}#{(index = bindings[:form].options[:index]) && "[#{index}]"}[#{method_name}]"
+        end
+        
+        # Reader for field's id
+        def dom_id
+          @dom_id ||= [
+            bindings[:form].object_name, 
+            bindings[:form].options[:index], 
+            method_name
+          ].reject(&:blank?).join('_')
+        end
+
+        def method_name
+          name.to_s
         end
       end
     end

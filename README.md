@@ -88,7 +88,8 @@ Start the server:
 
     $ rails server
 
-You should now be able to administer your site at <http://localhost:3000/admin>
+You should now be able to administer your site at
+[http://localhost:3000/admin](http://localhost:3000/admin).
 
 Configuration
 -------------
@@ -543,6 +544,7 @@ column, you can:
 
 ### Create and update views
 
+* Form rendering
 * Field groupings
   * Visibility
   * Labels
@@ -555,6 +557,37 @@ column, you can:
   * Creating a custom field factory
   * Overriding field help texts
   * CKEditor integration
+
+**Form rendering**
+
+RailsAdmin renders these views with Rails' form builder (form_for). If you want to use a different
+form builder then provide an override for the edit view or independingly for the
+create and update views. The argument is a symbol or string that is sent to the view
+to process the form. This is handy for integrating things like the nested form builder (https://github.com/ryanb/nested_form) if you need to override a field's edit template.
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          form_builder :nested_form_for
+          field :name
+        end
+      end
+    end
+
+or independently
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        create do
+          form_builder :create_form_for
+          field :name
+        end
+        update do
+          form_builder :update_form_for
+          field :name
+        end
+      end
+    end
 
 **Field groupings**
 
@@ -744,6 +777,7 @@ RailsAdmin ships with the following field types:
 * integer
 * password _initializes if string type column's name is password_
 * string
+* enum
 * text
 * time
 * timestamp
@@ -791,6 +825,34 @@ Everything can be overridden with `help`:
       end
     end
 
+**Fields - Enum**
+
+Fields of datatype string, integer, text can be rendered with select boxes, if object responds to `method_enum`.
+
+    class Team < ActiveRecord::Base
+      ...
+      def color_enum
+        self.team.available_color_choices
+        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]]
+      end
+      ...
+    end
+    
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :name
+          field :color
+          field :created_at do
+            date_format :short
+          end
+          field :updated_at do
+            strftime_format "%Y-%m-%d"
+          end
+        end
+      end
+    end
+
 **Fields - CKEditor integration**
 
 CKEditor can be enabled on fields of type text:
@@ -805,10 +867,22 @@ CKEditor can be enabled on fields of type text:
       end
     end
 
-In this example we configured a field named description to instantiate as a
-text field and set ckeditor option to true. If the database column is a text
-field, explicitly setting the type as the second argument is not
-necessary.
+**Fields - Ordered has_many/has_and_belongs_to_many/has_many :through associations**
+
+Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
+RailsAdmin will handle ordering in and out of the form.
+
+    RailsAdmin.config do |config|
+      config.model Player do
+        edit do
+          field :fans do
+            orderable true
+          end
+        end
+      end
+    end
+
+You'll need to handle ordering in your model with a position column for example.
 
 ### Mass Assignment Operations ###
 
@@ -875,6 +949,18 @@ accomplished like this:
       config.models do
         fields_of_type :datetime do
           strftime_format "%Y-%m-%d"
+        end
+      end
+    end
+    
+Or even scope it like this:
+
+    RailsAdmin.config do |config|
+      config.models do
+        list do
+          fields_of_type :datetime do
+            date_format :compact
+          end
         end
       end
     end

@@ -8,7 +8,7 @@ class Player < ActiveRecord::Base
   end
   
   belongs_to(:team)
-  has_one(:draft)
+  has_one :draft
   has_many :comments, :as => :commentable
 
   attr_protected :suspended

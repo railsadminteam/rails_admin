@@ -1,0 +1,39 @@
+zh_cn:
+  errors:
+    messages:
+      not_found: "没找到"
+      already_confirmed: "已经确认"
+      not_locked: "没有锁定"
+
+  devise:
+    failure:
+      unauthenticated: '你需要登录或注册后才能继续'
+      unconfirmed: '你需要验证账户后才能继续'
+      locked: '你的账户已经被锁定'
+      invalid: '邮箱或地址无效'
+      invalid_token: '身份验证令牌无效'
+      timeout: '你的会话已过期，请重新登陆后继续'
+      inactive: '你的账户还没有激活'
+    sessions:
+      signed_in: '登陆成功'
+      signed_out: '登出成功'
+    passwords:
+      send_instructions: '几分钟后你会收到一份关于如何重置密码说明的邮件'
+      updated: '你的密码已成功更新。现在你已经登陆'
+    confirmations:
+      send_instructions: '几分钟后你会收到一份关于如何验证账户说明的邮件'
+      confirmed: '你的账户已成功验证。现在你已经登陆'
+    registrations:
+      signed_up: '你已经成功注册。不出意外的话，一份验证邮件已发往你的邮箱'
+      updated: '你已成功更新你的账户'
+      destroyed: '再见！你的账户已被成功取消。我们希望再次看到你'
+    unlocks:
+      send_instructions: '几分钟后你会收到一份关于如何解锁账户说明的邮件'
+      unlocked: '你的账户已被成功解锁。现在你已经登陆'
+    mailer:
+      confirmation_instructions:
+        subject: '确认账户'
+      reset_password_instructions:
+        subject: '重置密码'
+      unlock_instructions:
+        subject: '解锁账户'
