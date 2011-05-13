@@ -10,10 +10,12 @@
 .grid thead th a {
   background-repeat: no-repeat;
   background-position: right;
+  /* so as to not strech when selected: */
   padding: 0 20px 0 0;
 }
 
 .grid thead th.selected a {
+  /* to accomodate the sort arrow: */
   padding: 0 20px 0 0;
   font-weight:bold;
 }
@@ -69,4 +71,11 @@
 
 .grid tbody td {
   padding: 7px 5px;
+}
+
+.grid tbody td.boolean, .grid thead th.boolean {
+  text-align: center;
+}
+.grid tbody td.boolean {
+  padding: 0 20px 0 0;
 }
