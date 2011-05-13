@@ -1,7 +1,7 @@
-          <% if (fields = fieldset.visible_fields).length > 0 %>
+          <% if (fields = fieldset.fields.map{ |f| f.with(:form => form, :object => object, :view => self) }.select(&:visible)).length > 0 %>
           <fieldset>
             <legend><%= fieldset.label %></legend>
-            <% fields.map{|field| field.with(:form => form, :object => object, :view => self)}.each do |field| %>
+            <% fields.each do |field| %>
               <%= field.render -%>
             <% end %>
           </fieldset>
