@@ -25,6 +25,7 @@ tr:
       edit_action: "Düzenle"
       delete_action: "Sil"
       add_new: "Yeni ekle"
+      export_csv: "Export as CSV"
       search: "ARA"
       select: "Düzenlemek için seçin: %{name}"
       show_all: "Hepsini göster"

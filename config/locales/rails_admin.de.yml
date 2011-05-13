@@ -27,6 +27,7 @@ de:
       select_action: "Auswählen"
       delete_selected: "Auswahl löschen"
       add_new: "Neu hinzufügen"
+      export_csv: "Export as CSV"
       search: "Suchen"
       select: "Auswählen %{name} zum Bearbeiten"
       show_all: "Alle anzeigen"

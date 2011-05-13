@@ -27,6 +27,7 @@ sv:
       select_action: "Marker"
       delete_selected: "Ta bort markerade"
       add_new: "Lägg till ny"
+      export_csv: "Export as CSV"
       search: "SÖK"
       select: "Markera %{name} för att redigera"
       show_all: "Visa alla"

@@ -40,15 +40,28 @@ module RailsAdmin
         format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
           if params[:compact]
-            objects = []
-            
-            @objects.each do |object|
-               objects << { :id => object.id, :label => object.send(@model_config.object_label_method) }
+            render :json => @objects.map do |object|
+              { :id => object.id, :label => object.send(@model_config.object_label_method) }
             end
-            render :json => objects
           else
             render :json => @objects.to_json(:only => visible.call)
           end
+        end
+        format.csv do
+          csv_string = (CSV.const_defined?(:Reader) ? FasterCSV : CSV).generate do |csv|
+            csv << visible.call
+
+            @objects.each do |object|
+              csv << [object.id].tap do |row|
+                visible.call.each do |field|
+                  row << object.send(field)
+                end
+              end
+            end
+          end
+
+          send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present',
+                    :disposition => "attachment; filename=#{@abstract_model.pretty_name.downcase}s.csv"
         end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
       end

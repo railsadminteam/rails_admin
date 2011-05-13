@@ -25,6 +25,7 @@ pl:
       edit_action: "Edytuj"
       delete_action: "Usuń"
       add_new: "Dodaj"
+      export_csv: "Export as CSV"
       search: "SZUKAJ"
       select: "Wybierz %{name} do edycji"
       show_all: "Wybierz wszystkie"

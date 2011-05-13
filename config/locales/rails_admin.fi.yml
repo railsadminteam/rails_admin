@@ -25,6 +25,7 @@ fi:
       select_action: "Valitse"
       delete_selected: "Poista valitut"
       add_new: "Lisää uusi"
+      export_csv: "Export as CSV"
       search: "HAKU"
       select: "Valitse muokattava %{name}"
       show_all: "Näytä kaikki"

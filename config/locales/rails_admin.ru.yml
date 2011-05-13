@@ -26,6 +26,7 @@ ru:
       select_action: "Выбрать"
       delete_selected: "Удалить выбранные"
       add_new: "Добавить"
+      export_csv: "Export as CSV"
       search: "ПОИСК"
       select: "Выберите %{name} для редактирования"
       show_all: "Показать все"

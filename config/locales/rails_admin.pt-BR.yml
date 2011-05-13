@@ -25,6 +25,7 @@ pt-BR:
       edit_action: "Alterar"
       delete_action: "Excluir"
       add_new: "Adicionar"
+      export_csv: "Export as CSV"
       search: "BUSCAR"
       select: "Selecione %{name} para alterar"
       show_all: "Exibir todos"

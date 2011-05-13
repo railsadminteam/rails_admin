@@ -37,6 +37,9 @@
           <div class="ra-block-toolbar ui-state-highlight">
             <ul>
               <li>
+               <%= link_to(t("admin.list.export_csv"), rails_admin_list_path(:model_name => @abstract_model.to_param, :format => :csv), :class => "ra-button") %>
+              </li>
+              <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
               <% if authorized? :new, @abstract_model %>

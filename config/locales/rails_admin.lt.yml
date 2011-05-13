@@ -26,6 +26,7 @@ lt:
       select_action: "Pasirinkti"
       delete_selected: "Pašalinti pasirinktus"
       add_new: "Pridėti"
+      export_csv: "Export as CSV"
       search: "IEŠKOTI"
       select: "Pasirinkti %{name} redagavimui"
       show_all: "Rodyti visus įrašus"

@@ -22,6 +22,7 @@ uk:
       edit_action: "Редагувати"
       delete_action: "Видалити"
       add_new: "Створити"
+      export_csv: "Export as CSV"
       search: "ПОШУК"
       select: "Оберіть %{name} для редагування"
       show_all: "Показати все"
