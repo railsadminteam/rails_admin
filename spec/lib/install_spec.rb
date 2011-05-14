@@ -4,7 +4,7 @@ module Kernel
   def `(cmd); end
 end
 
-describe "rails_admin:install Rake task" do
+describe "rails_admin:install_migrations Rake task" do
   include GeneratorSpec::TestCase
   destination File.expand_path("../tmp", __FILE__)
 
