@@ -1,38 +1,18 @@
-require 'rails/generators'
+require File.expand_path('assets_copier', File.dirname(__FILE__))
 
 module RailsAdmin
   module Tasks
     class UpdateAssets
-      class << self
+      include AssetsCopier
 
-        def run
-          origin = File.join(gem_path, 'public')
-          destination = Rails.root.join('public')
+      def copy_file(original, destination)
+        FileUtils.copy(original, destination)
+      end
 
-          puts
-          %w( stylesheets images javascripts ).each do |directory|
-            FileUtils.remove_dir File.join(destination, directory, 'rails_admin'), true
-            Dir[File.join(origin, directory, 'rails_admin', '**/*')].each do |file|
-              relative  = file.gsub(/^#{origin}\//, '')
-              dest_file = File.join(destination, relative)
-              dest_dir  = File.dirname(dest_file)
-
-              if !File.exist?(dest_dir)
-                FileUtils.mkdir_p(dest_dir)
-              end
-
-              FileUtils.copy(file, dest_file) unless File.directory?(file)
-            end
-          end
-          puts "RailsAdmin assets updated."
-        end
-
-        private
-
-        def gem_path
-          File.expand_path('../../..', File.dirname(__FILE__))
-        end
-
+      def run
+        TYPES.each {|directory| FileUtils.remove_dir File.join(destination, directory, 'rails_admin'), true }
+        copy_assets_files
+        puts "RailsAdmin assets updated."
       end
     end
   end
