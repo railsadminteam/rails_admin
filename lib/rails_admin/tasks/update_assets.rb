@@ -10,9 +10,14 @@ module RailsAdmin
       end
 
       def run
-        TYPES.each {|directory| FileUtils.remove_dir File.join(destination, directory, 'rails_admin'), true }
-        copy_assets_files
-        puts "RailsAdmin assets updated."
+        puts 'This will completely overwite your public rails_admin folders. Type "yes" if you want to proceed: '
+        if $stdin.gets.chomp == 'yes'
+          TYPES.each {|directory| FileUtils.remove_dir File.join(destination, directory, 'rails_admin'), true }
+          copy_assets_files
+          puts "RailsAdmin assets updated."
+        else
+          puts "Aborting"
+        end
       end
     end
   end

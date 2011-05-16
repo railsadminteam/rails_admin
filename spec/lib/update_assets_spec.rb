@@ -7,6 +7,7 @@ describe "rails_admin:update_assets Rake task" do
   before(:each) do
     prepare_rake_task_environment
     @gem_root = File.expand_path('../../..', __FILE__)
+    stub($stdin).gets { 'yes' }
   end
 
   context "when assets wasn't previously installed" do
