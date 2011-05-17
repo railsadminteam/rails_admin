@@ -1,4 +1,12 @@
-require  RUBY_VERSION =~ /^1\.9\./ ? 'csv' : 'fastercsv'
+CSV_LIB = if RUBY_VERSION.to_f >= 1.9
+  require 'csv'
+  CSV
+else
+  require 'fastercsv'
+  FasterCSV
+end
+
+require 'iconv'
 
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
@@ -6,7 +14,7 @@ module RailsAdmin
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
-    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy]
+    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy, :list]
 
     def index
       @authorization_adapter.authorize(:index) if @authorization_adapter
@@ -49,21 +57,68 @@ module RailsAdmin
             render :json => @objects.to_json(:only => visible.call)
           end
         end
+        
         format.csv do
-          csv_string = (CSV.const_defined?(:Reader) ? FasterCSV : CSV).generate do |csv|
-            csv << visible.call
-
-            @objects.each do |object|
-              csv << [].tap do |row|
-                visible.call.each do |field|
-                  row << object.send(field)
+          allowed_field_for_main_object = @model_config.update.visible_fields.map(&:name)
+          mapping_methods_to_association_names = {}
+          csv_string = CSV_LIB.generate(:col_sep => ';') do |csv|
+            if params[:fields].blank?
+              ''
+            else
+              csv << params[:fields].map do |object_or_association, fields| 
+                if object_or_association == @abstract_model.to_param
+                  fields.map do |field| 
+                    raise Exception.new("Non-allowed method #{field.intern.inspect} for model #{@abstract_model.pretty_name}: authorized are #{allowed_field_for_main_object.inspect}") unless allowed_field_for_main_object.include?(field.intern)
+                    @abstract_model.model.human_attribute_name(field)
+                  end
+                else
+                  raise Exception.new("Non-allowed association #{object_or_association.intern.inspect} for model #{@abstract_model.pretty_name}: authorized are #{allowed_field_for_main_object.inspect}") unless allowed_field_for_main_object.include?(object_or_association.intern)
+                  association = @abstract_model.associations.find{ |a| a[:name] == object_or_association.intern || [a[:child_key]].flatten.include?(object_or_association.intern) }
+                  mapping_methods_to_association_names[object_or_association.intern] = association
+                  associated_model = association[:parent_model] == @abstract_model.model ? association[:child_model] : [association[:parent_model]].flatten.first
+                  unless associated_model.is_a?(AbstractModel)
+                    associated_model = RailsAdmin::AbstractModel.new(associated_model)
+                  end
+                  
+                  allowed_fields = RailsAdmin.config(associated_model).update.visible_fields.select{ |p| !p.association? }.map(&:name) + [:id, :class, :object_label]
+                  fields.map do |field| 
+                    raise Exception.new("Non-allowed method #{field.intern.inspect} for model #{associated_model.pretty_name}: authorized are #{allowed_fields.inspect}") unless allowed_fields.include?(field.intern)
+                    "#{associated_model.model.human_attribute_name(field)} (#{@abstract_model.model.human_attribute_name(object_or_association)})"
+                  end
+                end
+              end.flatten
+              
+              @objects.each do |object|
+                csv << [].tap do |row|
+                  params[:fields].each do |object_or_association, methods|
+                    if object_or_association == @abstract_model.to_param
+                      methods.each do |method|
+                        row << object.send(method)
+                      end
+                    else
+                      associated_objects = [object.send(mapping_methods_to_association_names[object_or_association.intern][:name])].flatten.compact
+                      methods.each do |method|
+                        if method == 'object_label'
+                          row << associated_objects.map{|obj| RailsAdmin::Config::Model.new(obj).with(:object => obj).send(method) }.to_sentence
+                        else
+                          row << associated_objects.map{|obj| obj.send(method) }.to_sentence
+                        end
+                      end                    
+                    end
+                  end
                 end
               end
             end
           end
-
-          send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present',
-                    :disposition => "attachment; filename=#{@abstract_model.pretty_name.downcase}s.csv"
+          
+          no_conv = true
+          encoding_from = params[:encoding_from] || Rails.configuration.database_configuration[Rails.env]["encoding"] || "UTF-8"
+          encoding_to = no_conv ? encoding_from : (params[:encoding_to] || "iso-8859-1")
+          cvs_string = no_conv ? csv_string : Iconv.conv(encoding_to, encoding_from, csv_string)
+          send_data cvs_string, :type => "text/csv; charset=#{encoding_to}; header=present",
+                    :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:filename]}.csv"
+                    
+          
         end
         format.xml { render :xml => @objects.to_json(:only => visible.call) }
       end
@@ -169,13 +224,22 @@ module RailsAdmin
 
       redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
     end
+    
+    def export
+      @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
+
+      @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
+      @page_type = @abstract_model.pretty_name.downcase
+
+      render :layout => 'rails_admin/export'
+    end
 
     def bulk_delete
       @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
 
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-
+      
       render :layout => 'rails_admin/delete'
     end
 

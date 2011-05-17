@@ -27,7 +27,7 @@ en:
       select_action: "Select"
       delete_selected: "Delete selected"
       add_new: "Add new"
-      export_csv: "Export as CSV"
+      export: "Export current view"
       search: "Search"
       select: "Select %{name} to edit"
       show_all: "Show all"
@@ -50,6 +50,8 @@ en:
     delete:
       flash_confirmation: "%{name} was successfully destroyed"
       confirmation: "Yes, I'm sure"
+    export:
+      confirmation: "Export"
     flash:
       successful: "%{name} was successfully %{action}"
       error: "%{name} failed to be %{action}"
@@ -61,3 +63,5 @@ en:
       updated: "updated"
       delete: "delete"
       deleted: "deleted"
+      export: "export"
+      exported: "exported"

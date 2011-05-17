@@ -22,7 +22,7 @@ fr:
       edit_action: "Éditer"
       delete_action: "Supprimer"
       add_new: "Nouveau"
-      export_csv: "Export as CSV"
+      export: "Exporter la vue actuelle"
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tous"

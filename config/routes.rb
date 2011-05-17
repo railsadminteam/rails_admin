@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     controller "main" do
       match "/", :to => :index, :as => "dashboard"
       get "/:model_name", :to => :list, :as => "list"
+      post "/:model_name", :to => :list, :as => "list"
+      get "/:model_name/export", :to => :export, :as => "export"
       get "/:model_name/new", :to => :new, :as => "new"
       match "/:model_name/get_pages", :to => :get_pages, :as => "get_pages"
       post "/:model_name", :to => :create, :as => "create"

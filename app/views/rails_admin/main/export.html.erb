@@ -1,0 +1,81 @@
+<%
+  params = request.params.except(:action, :controller, :utf8, :page, :per_page)
+  
+  visible_fields = @model_config.update.visible_fields
+%>
+<% head_javascript "rails_admin/application.js" %>
+<% head_style "rails_admin/form.css" %>
+
+<div class="ra-block">
+  <div class="ui-widget-header">
+    Export data
+  </div>
+  <div class="ra-block-content">
+    <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+
+    <%= form_tag rails_admin_list_path(params.merge(:all => true, :format => 'csv')), :method => 'post' do %>
+      <fieldset>
+        <legend><%= "Fields for #{@abstract_model.pretty_name}"%></legend>
+        <% visible_fields.select{ |p| !p.association? }.each do |field| %>
+          <div class='field'>
+            <label for="<%= "#{@abstract_model.to_param}_#{field.name}" %>"><%= @abstract_model.model.human_attribute_name(field.name) %></label>
+            <%= check_box_tag "fields[#{@abstract_model.to_param}][]", field.name, true, { :id => "#{@abstract_model.to_param}_#{field.name}" } %>
+            <p class="help"><%= "Display '#{field.name}' [#{field.type}]" %></p>
+          </div>
+        <% end %>
+      </fieldset>
+      
+      <% visible_fields.select(&:association?).each do |field| %>
+        
+        <% association = field.association %>
+        <fieldset>
+          <legend><%= "Fields for associated #{association[:pretty_name]}" %></legend>
+          <% if association[:options][:polymorphic] %>
+            <div class='field'>
+              <label for="<%= "fields_#{field.name}_id" %>">Id</label>
+              <%= check_box_tag "fields[#{field.name}][]", :id, true, { :id => "fields_#{field.name}_id" } %>
+              <p class="help"><%= "Display 'id'" %></p>
+            </div>
+            <div class='field'>
+              <label for="<%= "fields_#{field.name}_class" %>">Type</label>
+              <%= check_box_tag "fields[#{field.name}][]", :class, true, { :id => "fields_#{field.name}_class" } %>
+              <p class="help"><%= "Display 'class'" %></p>
+            </div>
+            <div class='field'>
+              <label for="<%= "fields_#{field.name}_object_label" %>">Label</label>
+              <%= check_box_tag "fields[#{field.name}][]", :object_label, true, { :id => "fields_#{field.name}_object_label" } %>
+              <p class="help"><%= "Display 'object_label'" %></p>
+            </div>
+          <% else %>
+            <% associated_model = association[:parent_model].model_name == @abstract_model.model.model_name ? association[:child_model] : association[:parent_model] %>
+            <% fields = RailsAdmin.config(associated_model).update.visible_fields.select{ |p| !p.association? } %>
+            <% fields.each do |subfield| %>
+              <div class='field'>
+                <label for="<%= "fields_#{field.name}_#{subfield.name}" %>"><%= associated_model.human_attribute_name(subfield.name) %></label>
+                <%= check_box_tag "fields[#{field.name}][]", subfield.name, true, { :id => "fields_#{field.name}_#{subfield.name}" } %>
+                <p class="help"><%= "Display '#{subfield.name}' [#{subfield.type}]" %></p>
+              </div>
+            <% end %>
+          <% end %>
+        </fieldset>
+      <% end %>
+      
+      <fieldset>
+          <legend>Options</legend>
+          <div class='field'>
+            <label for='filename'>File name</label>
+            <%= text_field_tag "filename", {}, :value => params[:model_name] %>
+          </div>
+      </fieldset>
+    
+      <ul class="submit clearfix">
+        <li>
+          <%= submit_tag t("admin.export.confirmation"), :class => "ra-button ui-state-highlight" %>
+        </li>
+        <li>
+          <%= submit_tag t("admin.new.cancel"), :class => "ra-button", :name => "_continue" %>
+        </li>
+      </ul>
+    <% end =%>
+  </div>
+</div>
