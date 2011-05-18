@@ -13,7 +13,7 @@
   <div class="ra-block-content">
     <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
 
-    <%= form_tag rails_admin_list_path(params.merge(:all => true, :format => 'csv')), :method => 'post' do %>
+    <%= form_tag rails_admin_export_path(params.merge(:all => true, :format => 'csv')), :method => 'post' do %>
       <fieldset>
         <legend><%= "Fields for #{@abstract_model.pretty_name}"%></legend>
         <% visible_fields.select{ |p| !p.association? }.each do |field| %>
