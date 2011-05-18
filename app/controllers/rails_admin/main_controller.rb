@@ -335,8 +335,7 @@ module RailsAdmin
       options.merge!(:include => associations) unless associations.empty?
 
       if params[:all]
-        options.merge!(:limit => per_page * 2)
-        @objects = @abstract_model.all(options, scope).reverse
+        @objects = @abstract_model.all(options, scope)
       else
         @current_page = (params[:page] || 1).to_i
         options.merge!(:page => @current_page, :per_page => per_page)
