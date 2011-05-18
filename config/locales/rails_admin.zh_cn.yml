@@ -41,6 +41,8 @@ zh_cn:
       save_and_add_another: "保存并添加新的"
       save_and_edit: "保存并再编辑"
       cancel: "取消"
+      up: "上移"
+      down: "下移"
     edit:
       add_new_associated_model_name: "添加新的%{name}"
     delete:
