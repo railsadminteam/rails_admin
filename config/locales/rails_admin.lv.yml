@@ -37,6 +37,8 @@ lv:
       select_choice: "Izvēlieties nepieciešamo un spiediet"
       chose_all: "Izvēlēties visus"
       clear_all: "Notīrīt"
+      up: "Up"
+      down: "Down"
       save: "Saglabāt"
       save_and_add_another: "Saglabāt un pievienot jaunu"
       save_and_edit: "Saglabāt un labot"

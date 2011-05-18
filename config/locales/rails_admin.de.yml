@@ -40,6 +40,8 @@ de:
       select_choice: "Treffen Sie Ihre Auswahl und klicken Sie"
       chose_all: "Alle auswählen"
       clear_all: "Alle zurücksetzen"
+      up: "Up"
+      down: "Down"
       save: "Speichern"
       save_and_add_another: "Speichern und einen weiteren hinzufügen"
       save_and_edit: "Speichern und bearbeiten"

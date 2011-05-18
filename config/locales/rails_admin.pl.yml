@@ -38,6 +38,8 @@ pl:
       select_choice: "Wybierz kilka i kliknij"
       chose_all: "Wybierz wszystkie"
       clear_all: "Wyczyść"
+      up: "Up"
+      down: "Down"
       save: "Zapisz"
       save_and_add_another: "Zapisz i dodaj kolejny"
       save_and_edit: "Zapisz i wróć do edycji"

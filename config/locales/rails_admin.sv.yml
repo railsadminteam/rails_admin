@@ -40,6 +40,8 @@ sv:
       select_choice: "Välj dina val och klicka"
       chose_all: "Välja alla"
       clear_all: "Rensa alla"
+      up: "Up"
+      down: "Down"
       save: "Spara"
       save_and_add_another: "Spara och lägg till ny"
       save_and_edit: "Spara och redigera"

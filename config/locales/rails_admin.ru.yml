@@ -39,6 +39,8 @@ ru:
       select_choice: "Выберите нужное и кликните"
       chose_all: "Выбрать все"
       clear_all: "Очистить"
+      up: "Up"
+      down: "Down"
       save: "Сохранить"
       save_and_add_another: "Сохранить и добавить новый"
       save_and_edit: "Сохранить и продолжить редактирование"

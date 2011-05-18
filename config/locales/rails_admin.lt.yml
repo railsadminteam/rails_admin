@@ -39,6 +39,8 @@ lt:
       select_choice: "Pasirinkti reikalingus ir patvirtinti"
       chose_all: "Pasirinkti visus"
       clear_all: "Išvalyti"
+      up: "Up"
+      down: "Down"
       save: "Išsaugoti"
       save_and_add_another: "Išsaugoti ir pridėti naują"
       save_and_edit: "Išsaugoti ir tęsti redagavimą"

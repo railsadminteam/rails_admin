@@ -35,6 +35,8 @@ uk:
       select_choice: "Оберіть один чи декілька і натисніть"
       chose_all: "Обрати все"
       clear_all: "Очистити все"
+      up: "Up"
+      down: "Down"
       save: "Зберегти"
       save_and_add_another: "Зберегти і добавити ще"
       save_and_edit: "Зберегти і поредагувати"
