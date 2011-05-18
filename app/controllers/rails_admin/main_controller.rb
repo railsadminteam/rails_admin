@@ -50,9 +50,11 @@ module RailsAdmin
         format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
           if params[:compact]
-            render :json => @objects.map do |object|
-              { :id => object.id, :label => object.send(@model_config.object_label_method) }
+            objects = []
+            @objects.each do |object|
+              objects << { :id => object.id, :label => object.send(@model_config.object_label_method) }
             end
+            render :json => objects
           else
             render :json => @objects.to_json(:only => visible.call)
           end
