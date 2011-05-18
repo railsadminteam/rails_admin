@@ -34,7 +34,7 @@
                       } else {
                         $.ajax({
                           url: urls[$(this).val()],
-                          data: { compact: true },
+                          data: { compact: true, all: true },
                           beforeSend: function(xhr) {
                             xhr.setRequestHeader("Accept", "application/json");
                           },
