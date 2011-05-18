@@ -290,8 +290,11 @@ module RailsAdmin
         end
       # search over all string and text fields
       else
+        # Search case insensitively even on postgresql:
+        like_operator =  "ILIKE" if ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
+        like_operator ||= "LIKE"
         @properties.select{|property| property[:type] == :string || property[:type] == :text }.each do |property|
-          statements << "(#{table_name}.#{property[:name]} LIKE ?)"
+          statements << "(#{table_name}.#{property[:name]} #{like_operator} ?)"
           values << "%#{query}%"
         end
       end
