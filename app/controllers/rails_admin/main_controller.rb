@@ -1,14 +1,15 @@
-CSV_LIB = if RUBY_VERSION.to_f >= 1.9
-  require 'csv'
-  CSV
-else
-  require 'fastercsv'
-  FasterCSV
-end
-
-require 'iconv'
-
 module RailsAdmin
+  
+  CSV_LIB = if RUBY_VERSION.to_f >= 1.9
+    require 'csv'
+    ::CSV
+  else
+    require 'fastercsv'
+    ::FasterCSV
+  end unless defined? CSV_LIB
+
+  require 'iconv'
+
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
@@ -228,12 +229,14 @@ module RailsAdmin
     end
     
     def export
-      @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
-
-      @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
-      @page_type = @abstract_model.pretty_name.downcase
-
-      render :layout => 'rails_admin/export'
+      unless request.post?
+        @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
+        @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
+        @page_type = @abstract_model.pretty_name.downcase
+        render :layout => 'rails_admin/export'
+      else
+        list
+      end
     end
 
     def bulk_delete
