@@ -38,6 +38,8 @@ tr:
       select_choice: "Şık veya şıkları seçin ve tıklayın"
       chose_all: "Hepsini seç"
       clear_all: "Hepsini temizle"
+      up: "Up"
+      down: "Down"
       save: "Kaydet"
       save_and_add_another: "Kaydet ve başka ekle"
       save_and_edit: "Kaydet ve düzenle"

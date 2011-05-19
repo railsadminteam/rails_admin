@@ -40,6 +40,8 @@ mn:
       select_choice: "Сонголтоо сонгоно уу"
       chose_all: "Бүгдийг сонгох"
       clear_all: "Бүгдийг цэвэрлэ"
+      up: "Up"
+      down: "Down"
       save: "Хадгал"
       save_and_add_another: "Хадгалаад шинээр"
       save_and_edit: "Хадгалаад засах"

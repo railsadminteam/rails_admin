@@ -35,6 +35,8 @@ es:
       select_choice: "Seleccione su(s) elección(es) y haga clic"
       chose_all: "Elegir todos"
       clear_all: "Limpiar todos"
+      up: "Up"
+      down: "Down"
       save: "Guardar"
       save_and_add_another: "Guardar y agregar otro"
       save_and_edit: "Guardar y editar"
