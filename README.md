@@ -544,6 +544,7 @@ column, you can:
 
 ### Create and update views
 
+* Form rendering
 * Field groupings
   * Visibility
   * Labels
@@ -556,6 +557,37 @@ column, you can:
   * Creating a custom field factory
   * Overriding field help texts
   * CKEditor integration
+
+**Form rendering**
+
+RailsAdmin renders these views with Rails' form builder (form_for). If you want to use a different
+form builder then provide an override for the edit view or independingly for the
+create and update views. The argument is a symbol or string that is sent to the view
+to process the form. This is handy for integrating things like the nested form builder (https://github.com/ryanb/nested_form) if you need to override a field's edit template.
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          form_builder :nested_form_for
+          field :name
+        end
+      end
+    end
+
+or independently
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        create do
+          form_builder :create_form_for
+          field :name
+        end
+        update do
+          form_builder :update_form_for
+          field :name
+        end
+      end
+    end
 
 **Field groupings**
 

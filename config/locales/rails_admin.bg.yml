@@ -38,6 +38,8 @@ bg:
       select_choice: "Избери и кликни"
       chose_all: "Избери всички"
       clear_all: "Изчисти всички"
+      up: "Up"
+      down: "Down"
       save: "Запамети"
       save_and_add_another: "Запамети и добави друг"
       save_and_edit: "Запамети и редактирай"

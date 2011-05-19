@@ -40,6 +40,8 @@ pt-BR:
       select_choice: "Selecione sua(s) escolha(s) e clique"
       chose_all: "Escolher todos"
       clear_all: "Limpar todos"
+      up: "Up"
+      down: "Down"
       save: "Gravar"
       save_and_add_another: "Gravar e adicionar outro"
       save_and_edit: "Gravar e alterar"

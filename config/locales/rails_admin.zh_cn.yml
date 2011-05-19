@@ -1,0 +1,66 @@
+zh_cn:
+  home:
+    name: "主页"
+  admin:
+    dashboard:
+      pagename: "网站管理"
+      name: "Dashboard"
+      model_name: "模型名称"
+      last_used: "最后使用"
+      records: "记录"
+      modify: "修改"
+      add_new: "添加"
+      show: "查看"
+      ago: "以前"
+    history:
+      name: "历史"
+      page_name: "%{name}的历史"
+      no_activity: "非激活"
+    credentials:
+      log_out: "登出"
+    list:
+      edit_action: "编辑"
+      delete_action: "删除"
+      select_action: "选择"
+      delete_selected: "删除已选择的"
+      add_new: "添加"
+      search: "搜索"
+      select: "%{name}编辑"
+      show_all: "查看全部"
+    new:
+      basic_info: "基本信息"
+      required: "必须"
+      optional: "可选"
+      one_char: "限一个字符"
+      many_chars: "多个字符"
+      chosen: "选择%{name}"
+      select_choice: "选择并点击"
+      chose_all: "选择全部"
+      clear_all: "取消全部"
+      save: "保存"
+      save_and_add_another: "保存并添加新的"
+      save_and_edit: "保存并再编辑"
+      cancel: "取消"
+      up: "上移"
+      down: "下移"
+    edit:
+      add_new_associated_model_name: "添加新的%{name}"
+    delete:
+      flash_confirmation: "%{name}被成功删除"
+      confirmation: "是的，我确定"
+    flash:
+      successful: "%{name} {action}成功"
+      error: "%{name} %{action}失败"
+      noaction: "没作任何动作"
+    actions:
+      create: "创建"
+      created: "已创建"
+      update: "更新"
+      updated: "已更新"
+      delete: "删除"
+      deleted: "已删除"
+  datetime:
+    distance_in_words:
+      x_days: "%{count}天"
+      x_hours: "%{count}小时"
+      x_minutes: "%{count}分钟"

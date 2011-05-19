@@ -1,0 +1,62 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+mn:
+  home:
+    name: "нүүр"
+  admin:
+    dashboard:
+      pagename: "Сайтын удирдлага"
+      name: "Хянах хэсэг"
+      model_name: "Моделийн нэр"
+      last_used: "Сүүлд ашигласан"
+      records: "Бичлэгүүд"
+      modify: "Засах"
+      add_new: "Шинээр нэмэх"
+      show: "Харах"
+      ago: "ago"
+    history:
+      name: "Түүх"
+      page_name: "%{name}-н түүх"
+      no_activity: "No Activity"
+    credentials:
+      log_out: "Гарах"
+    list:
+      edit_action: "Засах"
+      delete_action: "Устгах"
+      select_action: "Сонгох"
+      delete_selected: "Сонгосны устгах"
+      add_new: "Шинээр нэмэх"
+      search_btn: "ХАЙХ"
+      select: "%{name}-г сонгож засах"
+      show_all: "Бүгдийг харуул"
+    new:
+      basic_info: "Үндсэн мэдээлэл"
+      required: "Шаардлагатай"
+      optional: "Шаардлагатай бус"
+      one_char: "тэмдэг."
+      many_chars: " тэмдэгтүүд."
+      chosen: "Chosen %{name}"
+      select_choice: "Сонголтоо сонгоно уу"
+      chose_all: "Бүгдийг сонгох"
+      clear_all: "Бүгдийг цэвэрлэ"
+      up: "Up"
+      down: "Down"
+      save: "Хадгал"
+      save_and_add_another: "Хадгалаад шинээр"
+      save_and_edit: "Хадгалаад засах"
+      cancel: "Болих"
+    delete:
+      flash_confirmation: "%{name} -г устгалаа"
+      confirmation: "Итгэлтэй байна уу"
+    flash:
+      successful: "%{name} was successfully %{action}"
+      error: "%{name} failed to be %{action}"
+      noaction: "No actions were taken"
+    actions:
+      create: "үүсгэх"
+      created: "үүссэн"
+      update: "шинэчлэх"
+      updated: "шинэчилсэн"
+      delete: "устгах"
+      deleted: "устгасан"

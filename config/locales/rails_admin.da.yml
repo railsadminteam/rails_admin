@@ -35,6 +35,8 @@ da:
       select_choice: "Vælg og klik"
       chose_all: "Vælg alle"
       clear_all: "Fravælg alle"
+      up: "Up"
+      down: "Down"
       save: "Gem"
       save_and_add_another: "Gem og tilføj ny"
       save_and_edit: "Gem og rediger"

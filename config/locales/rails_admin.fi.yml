@@ -38,6 +38,8 @@ fi:
       select_choice: "Tee valinnat ja klikkaa"
       chose_all: "Valitse kaikki"
       clear_all: "Tyhjennä"
+      up: "Up"
+      down: "Down"
       save: "Tallenna"
       save_and_add_another: "Tallenna ja lisää uusi"
       save_and_edit: "Tallenna ja muokkaa"

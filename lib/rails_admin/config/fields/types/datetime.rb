@@ -41,7 +41,7 @@ module RailsAdmin
                   end
                 end
               end
-              ::DateTime.parse(date_string, format)
+              ::Time.zone.parse(date_string, format)
             end
 
           end
