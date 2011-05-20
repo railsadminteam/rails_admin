@@ -1,13 +1,4 @@
-#modelNameHeader {
-  margin-left:5px;
-  text-align: left;
-}
-
-.grid tbody td.modelNameRow {
-  text-align: left;
-  margin-left:5px;
-}
-
+/* Styles for the site admin summary: */
 .grid .start {
   padding-left: 8px;
 }
@@ -28,39 +19,11 @@
   height: 100%;
 }
 
-.add{
-  color:#9a012f;
-  font-weight:bold;
-  text-decoration:none;
-  padding-right:3px;
-}
-
-a.add:hover{
-  text-decoration:underline;
-}
-
 .show{
   font-weight:bold;
 }
 
-a.show:hover{
-  text-decoration:underline;
-}
-
-.section h2{
-  margin-top:2px;
-  font-size:12px;
-  border-bottom:1px solid #DDD;
-  padding-bottom:4px;
-  font-weight:normal;
-  padding-left:5px;
-  margin-top:5px;
-}
-
-#listing{
-  margin-top:40px;
-  margin-bottom:5px;
-}
+/* Styles for the history table: */
 
 table#history .start {
   padding-right: 20px;

@@ -14,7 +14,7 @@
       %table.table.grid
         %thead
           %tr
-            %th#modelNameHeader.start
+            %th.start
               = t "admin.dashboard.model_name"
             %th= t "admin.dashboard.last_used"
             %th= t "admin.dashboard.records"
@@ -26,7 +26,7 @@
               - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
               
               %tr{:class => row_class, :"data-link" => list_path}
-                %td.modelNameRow.start
+                %td.start
                   %span.show= RailsAdmin.config(abstract_model).label
                 %td
                   - if (last_used = @most_recent_changes[abstract_model.pretty_name])
