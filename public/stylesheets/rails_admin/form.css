@@ -109,16 +109,15 @@ form label.inline {
   color:#bd2b14;
 }
 
-p.help {
+#main .block .content p.help {
   clear:both;
-  padding-top:2px;
-  padding-bottom:0px;
-  margin-bottom:0px;
-  font-size:10px;
+  font-size: 11px;
   margin-left:103px;
   display:block;
-  font-style: italic;
   color: #999;
+  margin-bottom: 0;
+  margin-top: 6px;
+  font-style: italic;
 }
 
 .cke_skin_kama {
