@@ -16,15 +16,6 @@ form legend {
   font-size:10px;
 }
 
-form p {
-  padding-top:5px;
-  padding-bottom:5px;
-  margin-bottom:1px;
-}
-
-form a {
-  color: #000;
-}
 
 form a.createAssociatedRecord {
     line-height: 24px;
@@ -52,13 +43,6 @@ form label.inline {
   padding: 15px 0 0 0;
 }
 
-.field .input {
-  margin-left: 103px;
-}
-
-.field .row {
-  margin: 10px 0;
-}
 
 .field .date,
 .field .datetime,
@@ -80,11 +64,6 @@ form label.inline {
   border-top:1px solid #abadb3;
   border-bottom:1px solid #e3e9ef;
   border-right:1px solid #dbdfe6;
-}
-
-.field .boolean {
-  float:left;
-  margin-top:6px;
 }
 
 .field .decimal {
