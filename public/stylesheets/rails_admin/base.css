@@ -28,3 +28,8 @@ ul#nav li:hover {
   font-weight: bold;
   color: inherit;
 }
+
+/* Fix for uniform.js checkbox css: */
+div.checker input.checkbox {
+  margin: 0;
+}
