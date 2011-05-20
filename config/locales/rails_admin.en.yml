@@ -62,9 +62,11 @@ en:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Encode to..."
-        encoding_to_help: "Choose which encoding should be used (Microsoft Excel will try to open .csv file with your system default encoding)"
+        encoding_to_help: "Choose which encoding should be used (Microsoft Excel will try to open .csv file with your system default encoding). Leave empty for input encoding: %{name}"
         skip_header: "No header"
         skip_header_help: "Do not output a header (no fields description, not recommended)"
+        col_sep: "Column separator"
+        col_sep_help: "Default is ',', but depending on your locale, ';' may be a better fit for Excel"
     flash:
       successful: "%{name} was successfully %{action}"
       error: "%{name} failed to be %{action}"

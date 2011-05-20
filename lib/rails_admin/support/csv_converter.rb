@@ -42,13 +42,13 @@ module RailsAdmin
       # encoding shenanigans first
       # 
       encoding_from = if [nil, '', 'utf8', 'utf-8', 'UTF8', 'UTF-8'].include?(encoding = Rails.configuration.database_configuration[Rails.env]['encoding'])
-        'utf-8'
+        'UTF-8'
       else
         encoding
       end
       
-      unless options[:encoding_to].nie
-        encoding_to = options[:encoding_to].nie
+      unless options[:encoding_to].blank?
+        encoding_to = options[:encoding_to]
         unless encoding_to == encoding_from
           require 'iconv'
           @iconv = Iconv.new("#{encoding_to}//TRANSLIT//IGNORE", encoding_from)
@@ -58,7 +58,7 @@ module RailsAdmin
       end
 
       
-      csv_string = CSVClass.generate(options[:csv_generator] || {}) do |csv|
+      csv_string = CSVClass.generate(options[:generator] || {}) do |csv|
         unless options[:skip_header]
           csv << @methods.map do |method|
             output(::I18n.t('admin.export.csv.header_for_root_methods', :name => @model.human_attribute_name(method), :model => @abstract_model.pretty_name))
@@ -83,8 +83,8 @@ module RailsAdmin
         end
       end
             
-      csv_string = "\xEF\xBB\xBF#{csv_string}" if encoding_to == 'utf-8' && !options[:no_encoding_conversion]
-      [encoding_to, csv_string]
+      csv_string = "\xEF\xBB\xBF#{csv_string}" if encoding_to == 'UTF-8'
+      [!options[:skip_header], encoding_to, csv_string]
     end
     
     

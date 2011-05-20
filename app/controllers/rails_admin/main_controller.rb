@@ -42,19 +42,30 @@ module RailsAdmin
         format.html { render :layout => 'rails_admin/list' }
         format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
-          if params[:compact]
-            render :json => @objects.map{ |o| { :id => o.id, :label => object.send(@model_config.object_label_method) } }
+          output = if params[:compact]
+            @objects.map{ |o| { :id => o.id, :label => object.send(@model_config.object_label_method) } }
           else
-            render :json => @objects.to_json(@schema)
+            @objects.to_json(@schema)
+          end
+          
+          if params[:send_data]
+            send_data output
+          else
+            render :json => output
           end
         end
-        format.xml { 
-          render :xml => @objects.to_xml(@schema)
-        }
+        format.xml do
+          xml_string = @objects.to_xml(@schema)
+          if params[:send_data]
+            send_data output
+          else  
+            render :xml => output
+          end
+        end
         format.csv do
-          encoding, csv_string = CSVConverter.new(@objects, @schema).to_csv(params[:csv_options])
-          send_data csv_string, 
-            :type => "text/csv; charset=#{encoding}; #{"header=present" unless params[:csv_options][:no_header]}",
+          header, encoding, output = CSVConverter.new(@objects, @schema).to_csv(params[:csv_options])
+          send_data output, 
+            :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
             :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:model_name]}.csv"
         end
       end
@@ -165,25 +176,19 @@ module RailsAdmin
     def export
       # todo :
       #   i18n
-      #     wording for default encoding
-      #     default locale separator choices
       #     check header translations
-      #   configurable separator choices
-      #   download or inline
-      #   more encoding
       #   tests
-      #   sanitize schema before sending to CSV library
+      #   sanitize schema before sending to rendering (refactor with view)
       #   check associations
       #      belongs_to
       #      has_many
       #      habtm
       #      polymorphic
       #      has_one
-      #   use another namespace for fields config
       #   write documentation
       #   check for virtual methods
       #   write a filtering engine
-      #   model_config#with for labels? Perf-optimize it first?
+      #   model_config#with for :methods inside csv content? Perf-optimize it first?
       
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
       

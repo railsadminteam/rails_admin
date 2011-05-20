@@ -1,7 +1,7 @@
 <%
   params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format)
   
-  visible_fields = @model_config.update.visible_fields
+  visible_fields = @model_config.export.visible_fields
 %>
 <% head_javascript "rails_admin/application.js" %>
 <% head_style "rails_admin/form.css" %>
@@ -12,8 +12,11 @@
   </div>
   <div class="ra-block-content">
     <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
+
     <%= form_tag rails_admin_export_path(params.merge(:all => true)), :method => 'post' do %>
-    
+
+      <input type="hidden" name="send_data" value="true"></input>
+
       <fieldset>
         <legend><%= t('admin.export.fields_from', :name => @abstract_model.pretty_name) %></legend>
         <% visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.each do |field| %>
@@ -32,7 +35,7 @@
         <% 
           association = field.association
           associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
-          fields = RailsAdmin.config(associated_model).update.visible_fields.select{ |f| !f.association? }
+          fields = RailsAdmin.config(associated_model).export.visible_fields.select{ |f| !f.association? }
         %>
       <fieldset>
         <legend><%= t('admin.export.fields_from_associated', :name => association[:pretty_name]) %></legend>
@@ -50,17 +53,77 @@
       <% end %>
       
       <fieldset>
-          <legend><%= t('admin.export.options_for', :name => 'csv') %></legend>
-          <div class='field'>
-            <label for='csv_options_encoding_to'><%= t('admin.export.csv.encoding_to') %></label>
-            <%= select_tag 'csv_options[encoding_to]', options_for_select({ ' - ' => '', 'UTF-8 (unicode)' => 'utf-8', 'LATIN1' => 'latin1' }) %>
-            <p class="help"><%= t('admin.export.csv.encoding_to_help') %></p>
-          </div>
-          <div class='field'>
-            <label for='csv_options_skip_header'><%= t('admin.export.csv.skip_header') %></label>
-            <%= check_box_tag 'csv_options[skip_header]', 'true' %>
-            <p class="help"><%= t('admin.export.csv.skip_header_help') %></p>
-          </div>
+        <legend><%= t('admin.export.options_for', :name => 'csv') %></legend>
+        <% guessed_encoding = Rails.configuration.database_configuration[Rails.env]['encoding'].nie || 'UTF-8' %>
+        <div class='field'>
+          <label for='csv_options_encoding_to'><%= t('admin.export.csv.encoding_to') %></label>
+          <%= select_tag 'csv_options[encoding_to]', 
+            options_for_select([
+'', 
+'UTF-8', 
+'UTF-16LE',
+'UTF-16BE', 
+'UTF-32LE', 
+'UTF-32BE', 
+'UTF-7',
+
+'ISO-8859-1', 
+'ISO-8859-15', 
+'IBM-850',
+'MacRoman', 
+'Windows-1252', 
+
+'ISO-8859-3',
+
+'IBM-852',
+'ISO-8859-2',
+'MacCE',
+'Windows-1250',
+
+'IBM-855',
+'ISO-8859-5',
+'ISO-IR-111',
+'KOI8-R',
+'MacCyrillic',
+'Windows-1251',
+'CP-866',
+'KOI-U',
+'MacUkranian',
+
+'GB2312', 
+'GBK', 
+'GB18030', 
+'HZ', 
+'ISO-2022-CN', 
+
+'Big5', 
+'Big5-HKSCS',
+'EUC-TW',
+
+'EUC-JP',
+'ISO-2022-JP',
+'Shift_JIS',
+
+'EUC-KR',
+'UHC',
+'JOHAB',
+'ISO-2022-KR'	
+]
+# from http://books.google.com/support/partner/bin/answer.py?hl=fr&answer=30990
+ %>
+          %>
+          <p class="help"><%= t('admin.export.csv.encoding_to_help', :name => guessed_encoding) %></p>
+        </div>
+        <div class='field'>
+          <label for='csv_options_skip_header'><%= t('admin.export.csv.skip_header') %></label>
+          <%= check_box_tag 'csv_options[skip_header]', 'true' %>
+          <p class="help"><%= t('admin.export.csv.skip_header_help') %></p>
+        </div>
+        <div class='field'>
+          <label for='csv_options_generator_col_sep'><%= t('admin.export.csv.col_sep') %></label>
+          <%= select_tag 'csv_options[generator][col_sep]', options_for_select({ '","' => ',', "';'" => ';', '<tabs>' => "'\t'" }) %>
+          <p class="help"><%= t('admin.export.csv.col_sep_help') %></p>
+        </div>
       </fieldset>
       
       <ul class="submit clearfix">
