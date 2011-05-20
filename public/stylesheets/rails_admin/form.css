@@ -62,6 +62,8 @@ form label.inline {
 
 .field .date,
 .field .datetime,
+.field .hasDatepicker,
+.field .hasTimepicker,
 .field .decimal,
 .field .float,
 .field .integer,
@@ -93,16 +95,16 @@ form label.inline {
   width:120px;
 }
 
-.field .date, .field .timestamp, .field .time, .field .datetime {
+.field .date, .field .timestamp, .field .time, .field .datetime, .field .hasDatepicker {
   padding-right: 20px;
   width:150px;
 }
 
-.field .date, .field .datetime {
+.field .date, .field .datetime, .field .hasDatepicker {
   background: url("../../images/rails_admin/calendar.png") no-repeat right;
 }
 
-.field .time, .field .timestamp {
+.field .time, .field .timestamp, .field .hasTimepicker {
   background: url("../../images/rails_admin/clock.png") no-repeat right;
 }
 
