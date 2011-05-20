@@ -18,6 +18,7 @@ require 'generator_spec/test_case'
 require 'generators/rails_admin/install_migrations_generator'
 require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/install'
 require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/uninstall'
+require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/update_assets'
 require 'generators/rails_admin/uninstall_migrations_generator'
 require 'generators/rails_admin/rails_admin_generator'
 require 'rspec/rails'
@@ -43,6 +44,10 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each{|f| require f}
 
 Webrat.configure do |config|
   config.mode = :rails
+end
+
+module Kernel
+  def `(cmd); end
 end
 
 RSpec.configure do |config|

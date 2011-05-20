@@ -76,6 +76,11 @@ to override the default with a Member model run:
 
     $ rake rails_admin:install model_name=member
 
+If you want to update RailsAdmin assets(stylesheets, javascripts and images) that is stored
+in your application's public folder, you can run:
+
+    $ rake rails_admin:update_assets
+
 If you want to use the CKEditor, you need to [download it](http://ckeditor.com/download) from source
 and unpack the 'ckeditor' folder into your default 'public/javascripts' folder. If you're using any
 non-Windows system, you can try to use the automatic downloader:
