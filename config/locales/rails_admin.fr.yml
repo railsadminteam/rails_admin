@@ -22,6 +22,7 @@ fr:
       edit_action: "Éditer"
       delete_action: "Supprimer"
       add_new: "Nouveau"
+      export_selected: "Export selected"
       export: "Exporter la vue actuelle"
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
@@ -45,7 +46,7 @@ fr:
       cancel: "Annuler"
       add_new: "Ajouter un(e) %{name}"
     export:
-      confirmation: "Exporter"
+      confirmation: "Exporter en %{name}"
     delete:
       flash_confirmation: "%{name} a été détruit(e) avec succès"
       confirmation: "Oui, je suis sûr(e)"

@@ -25,7 +25,7 @@ tr:
       edit_action: "Düzenle"
       delete_action: "Sil"
       add_new: "Yeni ekle"
-      export_csv: "Export as CSV"
+      export: "Export current view"
       search: "ARA"
       select: "Düzenlemek için seçin: %{name}"
       show_all: "Hepsini göster"
@@ -59,3 +59,6 @@ tr:
       updated: "güncellendi"
       delete: "sil"
       deleted: "silindi"
+      export: "export"
+      exported: "exporté(e)"
+      
