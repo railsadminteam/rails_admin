@@ -22,7 +22,7 @@ es:
       edit_action: "Editar"
       delete_action: "Eliminar"
       add_new: "Agregar"
-      export_csv: "Export as CSV"
+      export: "Export current view"
       search: "BUSCAR"
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
@@ -56,3 +56,6 @@ es:
       updated: "actualizado"
       delete: "borrar"
       deleted: "borrado"
+      export: "export"
+      exported: "exporté(e)"
+      

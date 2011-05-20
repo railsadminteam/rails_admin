@@ -59,6 +59,8 @@ zh_cn:
       updated: "已更新"
       delete: "删除"
       deleted: "已删除"
+      export: "export"
+      exported: "exporté(e)"
   datetime:
     distance_in_words:
       x_days: "%{count}天"

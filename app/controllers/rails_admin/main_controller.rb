@@ -1,21 +1,11 @@
 module RailsAdmin
-  
-  CSV_LIB = if RUBY_VERSION.to_f >= 1.9
-    require 'csv'
-    ::CSV
-  else
-    require 'fastercsv'
-    ::FasterCSV
-  end unless defined? CSV_LIB
-
-  require 'iconv'
 
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
     before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
     before_filter :get_attributes, :only => [:create, :update]
-    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :bulk_destroy, :list]
+    before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
     def index
       @authorization_adapter.authorize(:index) if @authorization_adapter
@@ -46,84 +36,27 @@ module RailsAdmin
       @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
       list_entries
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
+      @schema ||= { :only => visible.call }
+      
       respond_to do |format|
         format.html { render :layout => 'rails_admin/list' }
         format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
           if params[:compact]
-            objects = []
-            @objects.each do |object|
-              objects << { :id => object.id, :label => object.send(@model_config.object_label_method) }
-            end
-            render :json => objects
+            render :json => @objects.map{ |o| { :id => o.id, :label => object.send(@model_config.object_label_method) } }
           else
-            render :json => @objects.to_json(:only => visible.call)
+            render :json => @objects.to_json(@schema)
           end
         end
-        
+        format.xml { 
+          render :xml => @objects.to_xml(@schema)
+        }
         format.csv do
-          allowed_field_for_main_object = @model_config.update.visible_fields.map(&:name)
-          mapping_methods_to_association_names = {}
-          csv_string = CSV_LIB.generate(:col_sep => ';') do |csv|
-            if params[:fields].blank?
-              ''
-            else
-              csv << params[:fields].map do |object_or_association, fields| 
-                if object_or_association == @abstract_model.to_param
-                  fields.map do |field| 
-                    raise Exception.new("Non-allowed method #{field.intern.inspect} for model #{@abstract_model.pretty_name}: authorized are #{allowed_field_for_main_object.inspect}") unless allowed_field_for_main_object.include?(field.intern)
-                    @abstract_model.model.human_attribute_name(field)
-                  end
-                else
-                  raise Exception.new("Non-allowed association #{object_or_association.intern.inspect} for model #{@abstract_model.pretty_name}: authorized are #{allowed_field_for_main_object.inspect}") unless allowed_field_for_main_object.include?(object_or_association.intern)
-                  association = @abstract_model.associations.find{ |a| a[:name] == object_or_association.intern || [a[:child_key]].flatten.include?(object_or_association.intern) }
-                  mapping_methods_to_association_names[object_or_association.intern] = association
-                  associated_model = association[:parent_model] == @abstract_model.model ? association[:child_model] : [association[:parent_model]].flatten.first
-                  unless associated_model.is_a?(AbstractModel)
-                    associated_model = RailsAdmin::AbstractModel.new(associated_model)
-                  end
-                  
-                  allowed_fields = RailsAdmin.config(associated_model).update.visible_fields.select{ |p| !p.association? }.map(&:name) + [:id, :class, :object_label]
-                  fields.map do |field| 
-                    raise Exception.new("Non-allowed method #{field.intern.inspect} for model #{associated_model.pretty_name}: authorized are #{allowed_fields.inspect}") unless allowed_fields.include?(field.intern)
-                    "#{associated_model.model.human_attribute_name(field)} (#{@abstract_model.model.human_attribute_name(object_or_association)})"
-                  end
-                end
-              end.flatten
-              
-              @objects.each do |object|
-                csv << [].tap do |row|
-                  params[:fields].each do |object_or_association, methods|
-                    if object_or_association == @abstract_model.to_param
-                      methods.each do |method|
-                        row << object.send(method)
-                      end
-                    else
-                      associated_objects = [object.send(mapping_methods_to_association_names[object_or_association.intern][:name])].flatten.compact
-                      methods.each do |method|
-                        if method == 'object_label'
-                          row << associated_objects.map{|obj| RailsAdmin::Config::Model.new(obj).with(:object => obj).send(method) }.to_sentence
-                        else
-                          row << associated_objects.map{|obj| obj.send(method) }.to_sentence
-                        end
-                      end                    
-                    end
-                  end
-                end
-              end
-            end
-          end
-          
-          no_conv = true
-          encoding_from = params[:encoding_from] || Rails.configuration.database_configuration[Rails.env]["encoding"] || "UTF-8"
-          encoding_to = no_conv ? encoding_from : (params[:encoding_to] || "iso-8859-1")
-          cvs_string = no_conv ? csv_string : Iconv.conv(encoding_to, encoding_from, csv_string)
-          send_data cvs_string, :type => "text/csv; charset=#{encoding_to}; header=present",
-                    :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:filename]}.csv"
-                    
-          
+          encoding, csv_string = CSVConverter.new(@objects, @schema).to_csv(params[:csv_options])
+          send_data csv_string, 
+            :type => "text/csv; charset=#{encoding}; #{"header=present" unless params[:csv_options][:no_header]}",
+            :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:model_name]}.csv"
         end
-        format.xml { render :xml => @objects.to_json(:only => visible.call) }
       end
     end
 
@@ -221,7 +154,8 @@ module RailsAdmin
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
       @object = @object.destroy
-      flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.label)
+      
+      flash[:notice] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
 
       AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
 
@@ -229,12 +163,39 @@ module RailsAdmin
     end
     
     def export
+      # todo :
+      #   i18n
+      #     wording for default encoding
+      #     default locale separator choices
+      #     check header translations
+      #   configurable separator choices
+      #   download or inline
+      #   more encoding
+      #   tests
+      #   sanitize schema before sending to CSV library
+      #   check associations
+      #      belongs_to
+      #      has_many
+      #      habtm
+      #      polymorphic
+      #      has_one
+      #   use another namespace for fields config
+      #   write documentation
+      #   check for virtual methods
+      #   write a filtering engine
+      #   model_config#with for labels? Perf-optimize it first?
+      
+      @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
+      
       unless request.post?
-        @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
         @page_type = @abstract_model.pretty_name.downcase
+        
         render :layout => 'rails_admin/export'
       else
+        request.format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml || raise('Unsupported format')
+        @schema = params[:schema].symbolize # to_json and to_xml expect symbols for keys AND values.
+        
         list
       end
     end
@@ -447,6 +408,5 @@ module RailsAdmin
       end
       associations
     end
-
   end
 end

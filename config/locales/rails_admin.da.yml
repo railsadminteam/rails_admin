@@ -22,7 +22,7 @@ da:
       edit_action: "Rediger"
       delete_action: "Slet"
       add_new: "Tilføj ny"
-      export_csv: "Export as CSV"
+      export: "Export current view"
       search: "SØG"
       select: "Vælg %{name} der skal redigeres"
       show_all: "Vis alle"
@@ -56,4 +56,5 @@ da:
       updated: "opdateret"
       delete: "slet"
       deleted: "slettet"
-
+      export: "export"
+      exported: "exporté(e)"

@@ -60,3 +60,5 @@ mn:
       updated: "шинэчилсэн"
       delete: "устгах"
       deleted: "устгасан"
+      export: "export"
+      exported: "exporté(e)"
