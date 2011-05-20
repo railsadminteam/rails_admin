@@ -109,7 +109,7 @@ form label.inline {
   color:#bd2b14;
 }
 
-#main .block .content p.help {
+#main .block .content p.help, p.help {
   clear:both;
   font-size: 11px;
   margin-left:103px;
@@ -124,4 +124,11 @@ form label.inline {
   margin-left: 100px;
 }
 
-.createAssociatedRecordDialog li.save.add, .createAssociatedRecordDialog li.save.edit { display: none; }
+.createAssociatedRecordDialog {
+  padding: 10px;
+}
+
+.createAssociatedRecordDialog div.secondary-navigation,
+.createAssociatedRecordDialog span.extra_buttons {
+  display: none;
+}
