@@ -6,7 +6,7 @@
     <tbody>
       <% history.each do |t|%>
       <tr class="<%= cycle 'odd', 'even' %>">
-         <td style="text-align: left;"><%= t.username%></td>
+         <td style="text-align: left;"><%= t.try(:username)%></td>
          <td style="text-align: left;"><%= history_output(t) %></td>
       </tr>
       <% end %>
