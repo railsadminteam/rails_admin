@@ -43,13 +43,13 @@
       var dialog = this._getDialog(),
           form = dialog.find("form"),
           widget = this,
-          saveButtonText = dialog.find("input[name=_save]").val(),
-          cancelButtonText = dialog.find("input[name=_continue]").val();
+          saveButtonText = dialog.find(":submit[name=_save]").text(),
+          cancelButtonText = dialog.find(":submit[name=_continue]").text();
 
       dialog.dialog("option", "title", $(".ui-widget-header", dialog).remove().text());
 
       form.attr("data-remote", true);
-      dialog.find(".submit").remove();
+      dialog.find(":submit").remove();
       dialog.find(".ra-block-content").removeClass("ra-block-content");
 
       var buttons = {};
