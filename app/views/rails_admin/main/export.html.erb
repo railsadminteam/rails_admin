@@ -1,5 +1,5 @@
 <%
-  params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format)
+  params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :bulk_export)
   
   visible_fields = @model_config.export.visible_fields
 %>
@@ -108,10 +108,10 @@
 'UHC',
 'JOHAB',
 'ISO-2022-KR'	
-]
-# from http://books.google.com/support/partner/bin/answer.py?hl=fr&answer=30990
+])
+# from http://books.google.com/support/partner/bin/answer.py?answer=30990
  %>
-          %>
+
           <p class="help"><%= t('admin.export.csv.encoding_to_help', :name => guessed_encoding) %></p>
         </div>
         <div class='field'>
@@ -121,7 +121,7 @@
         </div>
         <div class='field'>
           <label for='csv_options_generator_col_sep'><%= t('admin.export.csv.col_sep') %></label>
-          <%= select_tag 'csv_options[generator][col_sep]', options_for_select({ '","' => ',', "';'" => ';', '<tabs>' => "'\t'" }) %>
+          <%= select_tag 'csv_options[generator][col_sep]', options_for_select({ "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" }) %>
           <p class="help"><%= t('admin.export.csv.col_sep_help') %></p>
         </div>
       </fieldset>
@@ -140,6 +140,6 @@
           <%= submit_tag t("admin.new.cancel"), :class => "ra-button", :name => "_continue" %>
         </li>
       </ul>
-    <% end =%>
+    <% end %>
   </div>
 </div>

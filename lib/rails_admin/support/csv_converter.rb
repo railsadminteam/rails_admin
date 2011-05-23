@@ -14,7 +14,7 @@ module RailsAdmin
       @model = objects.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = RailsAdmin.config(@abstract_model)
-      @empty = t('admin.export.empty_value')
+      @empty = ::I18n.t('admin.export.empty_value')
       @associations = {}
       (schema.delete(:include) || {}).each do |key, values|
         
@@ -31,8 +31,6 @@ module RailsAdmin
           :model_config => model_config,
           :methods => [(values[:only] || []) + (values[:methods] || [])].flatten.compact
         }
-        
-        puts @associations.inspect
       end
     end
 
@@ -58,7 +56,7 @@ module RailsAdmin
       end
 
       
-      csv_string = CSVClass.generate(options[:generator] || {}) do |csv|
+      csv_string = CSVClass.generate() do |csv|
         unless options[:skip_header]
           csv << @methods.map do |method|
             output(::I18n.t('admin.export.csv.header_for_root_methods', :name => @model.human_attribute_name(method), :model => @abstract_model.pretty_name))
@@ -75,9 +73,9 @@ module RailsAdmin
             output(object.send(method))
           end +
           @associations.map do |association_name, option_hash|
-            associated_objects = object.send(association_name)
+            associated_objects = [object.send(association_name)].flatten.compact
             option_hash[:methods].map do |method|
-              output([associated_objects].flatten.compact.map{ |obj| obj.send(method).nie || @empty }.to_sentence)
+              output(associated_objects.map{ |obj| obj.send(method).nie || @empty }.join('\n'))
             end
           end.flatten
         end

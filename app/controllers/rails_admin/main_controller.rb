@@ -3,7 +3,7 @@ module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
-    before_filter :get_bulk_objects, :only => [:bulk_delete, :bulk_destroy]
+    before_filter :get_bulk_objects, :only => [:bulk_action, :bulk_destroy] CHECK
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
@@ -34,7 +34,7 @@ module RailsAdmin
 
     def list
       @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
-      list_entries
+      list_entries unless @bulk_objects
       visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
       @schema ||= { :only => visible.call }
       
@@ -187,31 +187,39 @@ module RailsAdmin
       #      has_one
       #   write documentation
       #   check for virtual methods
-      #   write a filtering engine
+      #   write a filtering engine from the list page
+      #   export selected rows from the list page
       #   model_config#with for :methods inside csv content? Perf-optimize it first?
-      
+      #   n-levels ?
+            
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
       
-      unless request.post?
+      if params[:bulk_export] && request.get? || request.get?
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
         @page_type = @abstract_model.pretty_name.downcase
         
-        render :layout => 'rails_admin/export'
+        render :action => 'export', :layout => 'rails_admin/export'
       else
         request.format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml || raise('Unsupported format')
         @schema = params[:schema].symbolize # to_json and to_xml expect symbols for keys AND values.
-        
+        get_bulk_objects if params[:bulk_export]
         list
       end
     end
-
-    def bulk_delete
-      @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
-
-      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
-      @page_type = @abstract_model.pretty_name.downcase
+    
+    def bulk_action
+      if params[:bulk_delete]
       
-      render :layout => 'rails_admin/delete'
+        @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
+
+        @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
+        @page_type = @abstract_model.pretty_name.downcase
+        
+        render :action => 'delete', :layout => 'rails_admin/delete'
+      elsif params[:bulk_export]
+        
+        export
+      end
     end
 
     def bulk_destroy

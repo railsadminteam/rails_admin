@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       put "/:model_name/:id", :to => :update, :as => "update"
       get "/:model_name/:id/delete", :to => :delete, :as => "delete"
       delete "/:model_name/:id", :to => :destroy, :as => "destroy"
-      get "/:model_name/bulk_delete", :to => :bulk_delete, :as => "bulk_delete"
+      get "/:model_name/bulk_action", :to => :bulk_action, :as => "bulk_action"
       post "/:model_name/bulk_destroy", :to => :bulk_destroy, :as => "bulk_destroy"
     end
     scope "history", :as => "history" do
