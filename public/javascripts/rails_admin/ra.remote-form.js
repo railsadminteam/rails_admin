@@ -54,18 +54,22 @@
 
       var buttons = {};
 
-      buttons[saveButtonText] = function() {
-				// We need to manually update CKeditor mapped textarea before ajax submit
-				if(typeof CKEDITOR != 'undefined') {
-					for ( instance in CKEDITOR.instances )
-        		CKEDITOR.instances[instance].updateElement();
-				}
-        dialog.find("form").submit();
-      };
+      if (saveButtonText) {
+        buttons[saveButtonText] = function() {
+          // We need to manually update CKeditor mapped textarea before ajax submit
+          if(typeof CKEDITOR != 'undefined') {
+            for ( instance in CKEDITOR.instances )
+              CKEDITOR.instances[instance].updateElement();
+          }
+          dialog.find("form").submit();
+        };
+      }
 
-      buttons[cancelButtonText] = function() {
-        dialog.dialog("close");
-      };
+      if (cancelButtonText) {
+        buttons[cancelButtonText] = function() {
+          dialog.dialog("close");
+        };
+      }
 
       dialog.dialog("option", "buttons", buttons);
 
