@@ -10,7 +10,7 @@ describe "rails_admin:uninstall Rake task" do
     before(:each) do
       create_rails_admin_initializer
       assert_file "#{destination_root}/config/initializers/rails_admin.rb"
-      silence_stream(STDOUT) { RailsAdmin::Tasks::Uninstall.run }
+      silence_stream(STDOUT) { RailsAdmin::Tasks::Uninstall.new.invoke_all }
     end
 
     it "should be deleted" do
@@ -21,7 +21,7 @@ describe "rails_admin:uninstall Rake task" do
   context "locales" do
     before(:each) do
       FileUtils.touch ::File.join(destination_root, 'config', 'locales', 'rails_admin.en.yml')
-      silence_stream(STDOUT) { RailsAdmin::Tasks::Uninstall.run }
+      silence_stream(STDOUT) { RailsAdmin::Tasks::Uninstall.new.invoke_all }
     end
 
     it "should be deleted" do
@@ -39,7 +39,7 @@ describe "rails_admin:uninstall Rake task" do
           gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
         GEMFILE
       end
-      silence_stream(STDOUT) { RailsAdmin::Tasks::Uninstall.run }
+      silence_stream(STDOUT) { RailsAdmin::Tasks::Uninstall.new.invoke_all }
     end
 
     it "should be updated" do

@@ -15,7 +15,7 @@ describe "rails_admin:update_assets Rake task" do
       assert_no_directory "#{destination_root}/public/javascripts/rails_admin"
       assert_no_directory "#{destination_root}/public/stylesheets/rails_admin"
       assert_no_directory "#{destination_root}/public/images/rails_admin"
-      silence_stream(STDOUT) { RailsAdmin::Tasks::UpdateAssets.new.run }
+      silence_stream(STDOUT) { RailsAdmin::Tasks::UpdateAssets.new.invoke_all }
     end
 
     it "creates assets files" do
@@ -35,7 +35,7 @@ describe "rails_admin:update_assets Rake task" do
       FileUtils.touch destination_root + @relative_path
       FileUtils.mkdir_p @orphaned_dir
       FileUtils.touch @orphaned_file
-      silence_stream(STDOUT) { RailsAdmin::Tasks::UpdateAssets.new.run }
+      silence_stream(STDOUT) { RailsAdmin::Tasks::UpdateAssets.new.invoke_all }
     end
 
     it "updates assets" do

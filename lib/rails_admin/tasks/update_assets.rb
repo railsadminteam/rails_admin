@@ -1,22 +1,16 @@
-require File.expand_path('assets_copier', File.dirname(__FILE__))
+require File.expand_path('base', File.dirname(__FILE__))
 
 module RailsAdmin
   module Tasks
-    class UpdateAssets
-      include AssetsCopier
+    class UpdateAssets < Base
 
-      def copy_file(original, destination)
-        FileUtils.copy(original, destination)
-      end
-
-      def run
-        puts 'This will completely overwite your public rails_admin folders. Type "yes" if you want to proceed: '
-        if $stdin.gets.chomp == 'yes'
-          TYPES.each {|directory| FileUtils.remove_dir File.join(destination, directory, 'rails_admin'), true }
-          copy_assets_files
-          puts "RailsAdmin assets updated."
+      def copy_assets_files
+        unless yes? 'This will completely overwite your public rails_admin folders. Type "y" or "yes" if you want to proceed: ', :yellow
+          say 'Aborting', :green
         else
-          puts "Aborting"
+          TYPES.each {|directory| remove_dir File.join(destination, directory, 'rails_admin'), :verbose => false }
+          super({:verbose => false})
+          say 'RailsAdmin assets updated.', :green
         end
       end
     end

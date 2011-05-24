@@ -12,15 +12,15 @@ SimpleCov.start do
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
+$:.unshift(File.join(File.dirname(__FILE__), ".."))
 
 require 'rails/test_help'
 require 'generator_spec/test_case'
 require 'generators/rails_admin/install_migrations_generator'
-require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/install'
-require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/uninstall'
-require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/update_assets'
 require 'generators/rails_admin/uninstall_migrations_generator'
-require 'generators/rails_admin/rails_admin_generator'
+require 'lib/rails_admin/tasks/install'
+require 'lib/rails_admin/tasks/uninstall'
+require 'lib/rails_admin/tasks/update_assets'
 require 'rspec/rails'
 require 'factory_girl'
 require 'factories'
