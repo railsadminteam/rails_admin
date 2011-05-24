@@ -3,7 +3,7 @@
 }
 
 .ra-filtering-select-button .ui-icon {
-  margin-left: 0px;
+  margin-left: -8px;
 }
 
 
@@ -21,11 +21,14 @@
 }
 
 .ra-filtering-select-button {
-  height: 28px;
+  height: 27px;
   width: 24px;
   padding: 5px 3px;
   position: relative;
   top: 9px;
+  border: 1px solid #e1e1e1;
+  border-top-style: solid;
+  border-top-color: #ccc;
 }
 
 ul.ui-autocomplete.ui-menu.ui-widget-content.ui-corner-all {
