@@ -3,7 +3,6 @@ module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
-    before_filter :get_bulk_objects, :only => [:bulk_action, :bulk_destroy] CHECK
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
@@ -34,9 +33,12 @@ module RailsAdmin
 
     def list
       @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
-      list_entries unless @bulk_objects
-      visible = lambda { @model_config.list.visible_fields.map {|f| f.name } }
-      @schema ||= { :only => visible.call }
+      
+      @page_type = @abstract_model.pretty_name.downcase
+      @page_name = t("admin.list.select", :name => @model_config.label.downcase)
+      
+      @objects, @current_page, @page_count, @record_count = list_entries
+      @schema ||= { :only => @model_config.list.visible_fields.map {|f| f.name } }
       
       respond_to do |format|
         format.html { render :layout => 'rails_admin/list' }
@@ -47,7 +49,6 @@ module RailsAdmin
           else
             @objects.to_json(@schema)
           end
-          
           if params[:send_data]
             send_data output
           else
@@ -55,7 +56,7 @@ module RailsAdmin
           end
         end
         format.xml do
-          xml_string = @objects.to_xml(@schema)
+          output = @objects.to_xml(@schema)
           if params[:send_data]
             send_data output
           else  
@@ -64,9 +65,13 @@ module RailsAdmin
         end
         format.csv do
           header, encoding, output = CSVConverter.new(@objects, @schema).to_csv(params[:csv_options])
-          send_data output, 
-            :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
-            :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:model_name]}.csv"
+          if params[:send_data]
+            send_data output, 
+              :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
+              :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:model_name]}.csv"
+          else
+            render :text => output
+          end
         end
       end
     end
@@ -102,8 +107,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save
-        object_label = @model_config.with(:object => @object).object_label
-        AbstractHistory.create_history_item("Created #{object_label}", @object, @abstract_model, _current_user)
+        AbstractHistory.create_history_item("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         respond_to do |format|
           format.html do
             redirect_to_on_success
@@ -111,7 +115,7 @@ module RailsAdmin
           format.js do
             render :json => {
               :id => @object.id,
-              :label => object_label,
+              :label => @model_config.with(:object => @object).object_label,
             }
           end
         end
@@ -146,7 +150,17 @@ module RailsAdmin
 
       if @object.save
         AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
-        redirect_to_on_success
+        respond_to do |format|
+          format.html do
+            redirect_to_on_success
+          end
+          format.js do
+            render :json => {
+              :id => @object.id,
+              :label => @model_config.with(:object => @object).object_label,
+            }
+          end
+        end
       else
         handle_save_error :edit
       end
@@ -166,11 +180,9 @@ module RailsAdmin
 
       @object = @object.destroy
       
-      flash[:notice] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
-
       AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
 
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
     end
     
     def export
@@ -178,6 +190,7 @@ module RailsAdmin
       #   i18n
       #     check header translations
       #   tests
+      #   send params to FasterCsv (col_sep ??)
       #   sanitize schema before sending to rendering (refactor with view)
       #   check associations
       #      belongs_to
@@ -188,52 +201,52 @@ module RailsAdmin
       #   write documentation
       #   check for virtual methods
       #   write a filtering engine from the list page
-      #   export selected rows from the list page
       #   model_config#with for :methods inside csv content? Perf-optimize it first?
       #   n-levels ?
             
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
       
-      if params[:bulk_export] && request.get? || request.get?
+      if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
+        request.format = format
+        @schema = params[:schema].symbolize # to_json and to_xml expect symbols for keys AND values.
+        
+        list
+      else
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
         @page_type = @abstract_model.pretty_name.downcase
         
         render :action => 'export', :layout => 'rails_admin/export'
-      else
-        request.format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml || raise('Unsupported format')
-        @schema = params[:schema].symbolize # to_json and to_xml expect symbols for keys AND values.
-        get_bulk_objects if params[:bulk_export]
-        list
       end
     end
     
     def bulk_action
-      if params[:bulk_delete]
+      redirect_to rails_admin_list_path, :notice => t("admin.flash.noaction") and return if params[:bulk_ids].blank?
       
-        @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
-
-        @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
-        @page_type = @abstract_model.pretty_name.downcase
-        
-        render :action => 'delete', :layout => 'rails_admin/delete'
-      elsif params[:bulk_export]
-        
-        export
-      end
+      params[:bulk_delete] ? bulk_delete : (params[:bulk_export] ? export : redirect_to(rails_admin_list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.noaction")))
+    end
+    
+    def bulk_delete
+      @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
+      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
+      @page_type = @abstract_model.pretty_name.downcase
+      
+      @bulk_objects, @current_page, @page_count, @record_count = list_entries
+      
+      render :action => 'bulk_delete', :layout => 'rails_admin/delete'
     end
 
     def bulk_destroy
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
-
+      
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
       @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
-
+      
       @destroyed_objects.each do |object|
         message = "Destroyed #{@model_config.with(:object => object).object_label}"
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
 
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+      redirect_to rails_admin_list_path, :notice => t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
     end
 
     def handle_error(e)
@@ -252,10 +265,10 @@ module RailsAdmin
 
     def get_bulk_objects
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
-      @bulk_ids = params[:bulk_ids]
-      @bulk_objects = @abstract_model.get_bulk(@bulk_ids, scope)
+      objects = @abstract_model.get_bulk(params[:bulk_ids], scope)
 
-      not_found unless @bulk_objects
+      not_found unless objects
+      objects
     end
 
     def get_sort_hash
@@ -342,19 +355,13 @@ module RailsAdmin
     end
 
     def redirect_to_on_success
-      param = @abstract_model.to_param
-      pretty_name = @model_config.label
-      action = params[:action]
-
+      notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{params[:action]}d"))
       if params[:_add_another]
-        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
-        redirect_to rails_admin_new_path(:model_name => param)
+        redirect_to rails_admin_new_path, :notice => notice
       elsif params[:_add_edit]
-        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
-        redirect_to rails_admin_edit_path(:model_name => param, :id => @object.id)
+        redirect_to rails_admin_edit_path(:id => @object.id), :notice => notice
       else
-        flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
-        redirect_to rails_admin_list_path(:model_name => param)
+        redirect_to rails_admin_list_path, :notice => notice
       end
     end
 
@@ -371,13 +378,15 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      if params[:_continue]
-        flash[:notice] = t("admin.flash.noaction")
-        redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
-      end
+      redirect_to rails_admin_list_path, :notice => t("admin.flash.noaction") if params[:_continue]
     end
 
     def list_entries(other = {})
+      if params[:bulk_ids]
+        objects = get_bulk_objects
+        return [objects, 1, 1, objects.size]
+      end
+      
       options = {}
       options.merge!(get_sort_hash)
       options.merge!(get_sort_reverse_hash)
@@ -392,23 +401,24 @@ module RailsAdmin
 
       associations = @model_config.list.visible_fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
       options.merge!(:include => associations) unless associations.empty?
-
+      
+      current_page = (params[:page] || 1).to_i
+      
       if params[:all]
-        @objects = @abstract_model.all(options, scope)
+        objects = @abstract_model.all(options, scope)
+        page_count = 1
       else
-        @current_page = (params[:page] || 1).to_i
         options.merge!(:page => @current_page, :per_page => per_page)
-        @page_count, @objects = @abstract_model.paginated(options, scope)
+        page_count, objects = @abstract_model.paginated(options, scope)
         options.delete(:page)
         options.delete(:per_page)
         options.delete(:offset)
         options.delete(:limit)
       end
 
-      @record_count = @abstract_model.count(options, scope)
-
-      @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.list.select", :name => @model_config.label.downcase)
+      record_count = @abstract_model.count(options, scope)
+      
+      [objects, current_page, page_count, record_count]
     end
 
     def associations_hash
