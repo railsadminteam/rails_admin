@@ -1,5 +1,5 @@
 <%
-  params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :bulk_export)
+  params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
   
   visible_fields = @model_config.export.visible_fields
 %>
@@ -54,7 +54,7 @@
       
       <fieldset>
         <legend><%= t('admin.export.options_for', :name => 'csv') %></legend>
-        <% guessed_encoding = Rails.configuration.database_configuration[Rails.env]['encoding'].nie || 'UTF-8' %>
+        <% guessed_encoding = Rails.configuration.database_configuration[Rails.env]['encoding'].presence || 'UTF-8' %>
         <div class='field'>
           <label for='csv_options_encoding_to'><%= t('admin.export.csv.encoding_to') %></label>
           <%= select_tag 'csv_options[encoding_to]', 

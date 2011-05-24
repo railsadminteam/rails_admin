@@ -37,7 +37,7 @@
           <div class="ra-block-toolbar ui-state-highlight">
             <ul>
               <li>
-               <%= link_to(t("admin.list.export"), rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), :class => "ra-button") %>
+               <%= link_to(t("admin.list.export"), rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), :class => "ra-button", :method => :post) %>
               </li>
               <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
@@ -55,7 +55,7 @@
               </fieldset>
             <% end %>
           </div>
-          <%= form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :get do %>
+          <%= form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :post do %>
             <table class="grid">
               <thead>
                 <tr>

@@ -42,12 +42,3 @@ class Hash
     end
   end
 end
-
-class Object
-  
-  def nil_if_empty
-    self.blank? ? nil : self
-  end
-  
-  alias :nie :nil_if_empty
-end
