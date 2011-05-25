@@ -187,17 +187,7 @@ module RailsAdmin
     
     def export
       # todo :
-      #   i18n
-      #     check header translations
-      #   tests
       #   sanitize schema before sending to rendering (refactor with view)
-      #   check associations
-      #      belongs_to
-      #      has_many
-      #      habtm
-      #      polymorphic
-      #      has_one
-      #   write documentation
       #   check for virtual methods
       #   write a filtering engine from the list page
       #   model_config#with for :methods inside csv content? Perf-optimize it first?
@@ -207,7 +197,7 @@ module RailsAdmin
       
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
         request.format = format
-        @schema = params[:schema].symbolize # to_json and to_xml expect symbols for keys AND values.
+        @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
         
         list
       else

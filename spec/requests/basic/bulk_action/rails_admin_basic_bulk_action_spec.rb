@@ -26,7 +26,7 @@ describe "RailsAdmin Basic Bulk Action" do
       response.should be_successful
     end
 
-    it 'should show names of to-be-deleted players' do
+    it 'should show form for export' do
       @players.each { |player| response.body.should contain("Select fields to export") }
     end
   end

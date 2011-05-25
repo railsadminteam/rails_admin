@@ -28,6 +28,18 @@
             <%= check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" } %>
             <p class="help"><%= t('admin.export.display', :name => field.name, :type => field.type) %></p>
           </div>
+          
+            <% if field.association? && field.association[:options][:polymorphic] %>
+              <div class='field'>
+                <% polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name] %>
+                <label for="<%= "schema_#{list}_#{polymorphic_type_column_name}" %>">
+                  <%= @abstract_model.model.human_attribute_name(polymorphic_type_column_name) %>
+                </label>
+                <%= check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }  %>
+                <p class="help"><%= t('admin.export.display', :name => polymorphic_type_column_name, :type => field.type) %></p>
+              </div>
+            <% end %>
+          
         <% end %>
       </fieldset>
       

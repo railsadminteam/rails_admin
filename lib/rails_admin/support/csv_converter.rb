@@ -34,7 +34,8 @@ module RailsAdmin
       end
     end
 
-    def to_csv(options = {})
+    def to_csv(options)
+      options ||= {}
       return '' if @objects.blank?
       
       # encoding shenanigans first
@@ -56,7 +57,7 @@ module RailsAdmin
       end
 
       
-      csv_string = CSVClass.generate(options[:generator].symbolize_keys.delete_if {|key, value| value.blank? }) do |csv|
+      csv_string = CSVClass.generate(options[:generator] ? options[:generator].symbolize_keys.delete_if {|key, value| value.blank? } : {}) do |csv|
         unless options[:skip_header]
           csv << @methods.map do |method|
             output(::I18n.t('admin.export.csv.header_for_root_methods', :name => @model.human_attribute_name(method), :model => @abstract_model.pretty_name))
@@ -75,7 +76,7 @@ module RailsAdmin
           @associations.map do |association_name, option_hash|
             associated_objects = [object.send(association_name)].flatten.compact
             option_hash[:methods].map do |method|
-              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join('\n'))
+              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join("\n"))
             end
           end.flatten
         end
