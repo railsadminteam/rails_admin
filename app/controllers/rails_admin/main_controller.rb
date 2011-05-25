@@ -407,6 +407,7 @@ module RailsAdmin
       if params[:all]
         objects = @abstract_model.all(options, scope)
         page_count = 1
+        record_count = objects.count
       else
         options.merge!(:page => @current_page, :per_page => per_page)
         page_count, objects = @abstract_model.paginated(options, scope)
@@ -414,10 +415,9 @@ module RailsAdmin
         options.delete(:per_page)
         options.delete(:offset)
         options.delete(:limit)
+        record_count = @abstract_model.count(options, scope)
       end
 
-      record_count = @abstract_model.count(options, scope)
-      
       [objects, current_page, page_count, record_count]
     end
 
