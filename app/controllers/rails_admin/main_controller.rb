@@ -190,7 +190,6 @@ module RailsAdmin
       #   i18n
       #     check header translations
       #   tests
-      #   send params to FasterCsv (col_sep ??)
       #   sanitize schema before sending to rendering (refactor with view)
       #   check associations
       #      belongs_to

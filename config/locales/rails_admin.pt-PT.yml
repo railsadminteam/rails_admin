@@ -65,8 +65,9 @@ pt-PT:
         encoding_to_help: "Choose output encoding. Leave empty to let current input encoding untouched: (%{name})"
         skip_header: "No header"
         skip_header_help: "Do not output a header (no fields description)"
+        default_col_sep: ","
         col_sep: "Column separator"
-        col_sep_help: "Leave blank for default (',')"
+        col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
     flash:
       successful: "Um registo de %{name}, foi %{action} com sucesso"
       error: "Um registo de %{name} falhou ao ser %{action}"

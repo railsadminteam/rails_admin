@@ -56,7 +56,7 @@ module RailsAdmin
       end
 
       
-      csv_string = CSVClass.generate() do |csv|
+      csv_string = CSVClass.generate(options[:generator].symbolize_keys.delete_if {|key, value| value.blank? }) do |csv|
         unless options[:skip_header]
           csv << @methods.map do |method|
             output(::I18n.t('admin.export.csv.header_for_root_methods', :name => @model.human_attribute_name(method), :model => @abstract_model.pretty_name))
@@ -80,8 +80,13 @@ module RailsAdmin
           end.flatten
         end
       end
-            
-      csv_string = "\xEF\xBB\xBF#{csv_string}" if encoding_to == 'UTF-8'
+
+      # Add a BOM for utf8 encodings, helps with utf8 auto-detect for some versions of Excel. 
+      # Don't add if utf8 but user don't want to touch input encoding:
+      # If user chooses utf8, he will open it in utf8 and BOM will disappear at reading. 
+      # But that way "English" users who don't bother and chooses to let utf8 by default won't get BOM added
+      # and will not see it if Excel opens the file with a different encoding.
+      csv_string = "\xEF\xBB\xBF#{csv_string}" if options[:encoding_to] == 'UTF-8' 
       [!options[:skip_header], encoding_to, csv_string]
     end
     
@@ -89,7 +94,7 @@ module RailsAdmin
     private 
     
     def output(str)
-      (@iconv ? @iconv.conv(str.to_s) : str.to_s) rescue str
+      (@iconv ? @iconv.iconv(str.to_s) : str.to_s) rescue str
     end
   end
 end
