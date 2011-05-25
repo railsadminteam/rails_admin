@@ -24,8 +24,9 @@ pt-BR:
     list:
       edit_action: "Alterar"
       delete_action: "Excluir"
+      export_action: "Export current view"
+      export_selected: "Export selected"
       add_new: "Adicionar"
-      export: "Export current view"
       search: "BUSCAR"
       select: "Selecione %{name} para alterar"
       show_all: "Exibir todos"
@@ -50,6 +51,23 @@ pt-BR:
     delete:
       flash_confirmation: "%{name} foi apagado com sucesso"
       confirmation: "Sim, com certeza."
+    export:
+      confirmation: "Export to %{name}"
+      select: "Select fields to export"
+      fields_from: "Fields from %{name}"
+      fields_from_associated: "Fields from associated %{name}"
+      display: "Display %{name}: %{type}"
+      options_for: "Options for %{name}"
+      empty_value_for_associated_objects: "<empty>"
+      csv: 
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Encode to"
+        encoding_to_help: "Choose output encoding. Leave empty to let current input encoding untouched: (%{name})"
+        skip_header: "No header"
+        skip_header_help: "Do not output a header (no fields description)"
+        col_sep: "Column separator"
+        col_sep_help: "Leave blank for default (',')"
     flash:
       successful: "%{name} foi %{action} com sucesso"
       error: "%{name} falhou em %{action}"
@@ -62,4 +80,4 @@ pt-BR:
       delete: "excluir"
       deleted: "excluído"
       export: "export"
-      exported: "exporté(e)"
+      exported: "exported"
