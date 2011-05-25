@@ -982,6 +982,34 @@ with [CanCan](https://github.com/ryanb/cancan), pass it like this.
 
 See the [wiki](https://github.com/sferik/rails_admin/wiki) for more on authorization.
 
+Static Assets & Locales
+-----------------------
+
+When running `rake rails_admin:install` the locale files (`config/locales/...`) and the static asset files
+(javascript files, images, stylesheets) are copied to your local application tree.
+
+Should you update the gem to a new version that perhaps includes updated locale or asset files, then you won't automatically
+be able to take advantage of these. In fact, you may choose for this reason, to not commit locale files and asset
+files to your local repository and instead have them loaded from the gem.
+
+You can choose to commit locale files to your local application tree, if you want to modify them from what the gem
+supplies; then you also need to manage updates by hand. Locale files will be automatically loaded from the gem
+unless overrides exist.
+
+For asset files, the following applies: When running in development mode, the rails_admin engine will inject a middleware
+to serve static assets (javascript files, images, stylesheets) from the gem's location. This generally isn't a good
+setup for high-traffic production environments. Depending on your web server configuration is may also just plain fail.
+You may need to serve the asset files from the local application tree (public/...). You can choose to have the assets
+served from the gem in development mode but from the local application tree in production mode. In that case, you
+need to copy the assets during deployment (e.g. via a capistrano hook).
+
+Two rake tasks have been provided to copy locale and asset files to the local application tree:
+
+    rake rails_admin:copy_locales
+    rake rails_admin:copy_assets
+
+These tasks run automatically during installation, but are provided separately, e.g. for updates or deployments.
+
 Contributing
 ------------
 In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
