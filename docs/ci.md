@@ -150,7 +150,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
     Build
 
     Execute shell
-    Command [ bash -l -c "rvm use $CI_RUBY_VERSION && export CI_DB_ADAPTER=$CI_DB_ADAPTER && rm Gemfile.lock && bundle install && cd spec/dummy_app && bundle install && bundle exec rake rails_admin:prepare_ci_env --trace && cd ../../ && bundle exec rake spec --trace" ]
+    Command [ bash -l -c "rvm use $CI_RUBY_VERSION && export CI_DB_ADAPTER=$CI_DB_ADAPTER && rm -f Gemfile.lock && bundle install && cd spec/dummy_app && rm -f Gemfile.lock && bundle install && bundle exec rake rails_admin:prepare_ci_env --trace && cd ../../ && bundle exec rake spec --trace" ]
 ```
 
 4. Save the job
