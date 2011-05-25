@@ -187,28 +187,21 @@ module RailsAdmin
     
     def export
       # todo :
-      #   i18n
-      #     check header translations
-      #   tests
+      #   limitation: need to display at least one real attribute ('only') so that the full object doesn't get displayed
       #   sanitize schema before sending to rendering (refactor with view)
-      #   check associations
-      #      belongs_to
-      #      has_many
-      #      habtm
-      #      polymorphic
-      #      has_one
-      #   write documentation
       #   check for virtual methods
-      #   write a filtering engine from the list page
+      #   write a filtering engine for the list page
       #   model_config#with for :methods inside csv content? Perf-optimize it first?
       #   n-levels ?
+      #   check if hidden model don't get into visible fields by default   
+      
             
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
       
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
         request.format = format
-        @schema = params[:schema].symbolize # to_json and to_xml expect symbols for keys AND values.
-        
+        @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
+        check_for_injections(@schema)
         list
       else
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
@@ -429,6 +422,23 @@ module RailsAdmin
         end
       end
       associations
+    end
+    
+    def check_for_injections(schema)
+      check_injections_for(@model_config, (schema[:only] || []) + (schema[:methods] || []))
+      allowed_associations = @model_config.export.visible_fields.select{ |f| f.association? && !f.association[:options][:polymorphic] }.map(&:association)
+      (schema[:include] || []).each do |association_name, schema|
+        association = allowed_associations.find { |aa| aa[:name] == association_name }
+        raise("Security Exception: #{association[:name]} association not available for #{@model_config.abstract_model.pretty_name}") unless association
+        associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
+        check_injections_for(RailsAdmin.config(AbstractModel.new(associated_model)), (schema[:only] || []) + (schema[:methods] || []))
+      end
+    end
+    
+    def check_injections_for(model_config, methods_name)
+      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map(&:name)
+      unallowed_fields = (available_fields - methods_name)
+      raise("Security Exception: #{unallowed_fields.inspect} methods not available for #{@model_config.abstract_model.pretty_name}") unless unallowed_fields.empty?
     end
   end
 end
