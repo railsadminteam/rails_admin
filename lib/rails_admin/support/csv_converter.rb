@@ -14,7 +14,7 @@ module RailsAdmin
       @model = objects.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = RailsAdmin.config(@abstract_model)
-      @empty = ::I18n.t('admin.export.empty_value')
+      @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       @associations = {}
       (schema.delete(:include) || {}).each do |key, values|
         
