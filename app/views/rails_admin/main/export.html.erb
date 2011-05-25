@@ -121,8 +121,8 @@
         </div>
         <div class='field'>
           <label for='csv_options_generator_col_sep'><%= t('admin.export.csv.col_sep') %></label>
-          <%= select_tag 'csv_options[generator][col_sep]', options_for_select({ "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" }) %>
-          <p class="help"><%= t('admin.export.csv.col_sep_help') %></p>
+          <%= select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" }) %>
+          <p class="help"><%= t('admin.export.csv.col_sep_help', :value => t('admin.export.csv.default_col_sep')) %></p>
         </div>
       </fieldset>
       

@@ -64,8 +64,9 @@ fr:
         encoding_to_help: "Choisir l'encodage de sortie. Laisser vide pour garder l'encodage d'entrée : (%{name})"
         skip_header: "Pas d'en-tête"
         skip_header_help: "Ne pas afficher d'en-tête (pas de champs de description)"
+        default_col_sep: ";"
         col_sep: "Séparateur de colonnes"
-        col_sep_help: "Laisser vide pour le défaut (',')"
+        col_sep_help: "Laisser vide pour utiliser la valeur par défaut recommandée pour votre système ('%{value}')"
     flash:
       successful: "%{name} a été  %{action} avec succès"
       error: "%{name} n'a pas pu être %{action}"
