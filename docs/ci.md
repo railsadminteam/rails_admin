@@ -7,7 +7,7 @@ RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration se
 
 RailsAdmin is tested with
 
-* jruby-1.6.0 [ linux-i386-java ]
+* jruby-1.6.2 [ linux-i386-java ]
 * ree-1.8.7-2011.03 [ i386 ]
 * ruby-1.8.7-p334 [ i386 ]
 * ruby-1.9.2-p180 [ i386 ]
