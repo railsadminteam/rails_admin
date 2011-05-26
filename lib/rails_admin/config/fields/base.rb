@@ -68,9 +68,8 @@ module RailsAdmin
         register_instance_option(:html_attributes) do
           {
             :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
-            :value => value,
-            :style => "width:#{column_width}px",
-          }
+            :value => value
+          }.merge(column_width.present? ? { :style => "width:#{column_width}px" } : {})
         end
 
         # Accessor for field's label.
