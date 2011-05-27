@@ -43,16 +43,12 @@ module RailsAdmin
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
       register_instance_option(:object_label) do
-        if method = object_label_method(bindings[:object])
-          bindings[:object].send method
-        else
-          "#{bindings[:object].class.to_s} ##{bindings[:object].try :id}"
-        end
+        bindings[:object].send object_label_method(bindings[:object])
       end
 
       def object_label_method(object = nil)
         object ||= abstract_model.new
-        Config.label_methods.find {|method| object.respond_to? method }
+        Config.label_methods.find {|method| object.respond_to? method } || :rails_admin_default_object_label_method
       end
 
       register_instance_option(:label) do
