@@ -9,6 +9,11 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           @column_width = 250
+          
+          def initialize(parent, name, properties, association)
+            super(parent, name, properties, association)
+            instance_variable_set("@sortable", false)
+          end
 
           register_instance_option(:partial) do
             :form_polymorphic_association

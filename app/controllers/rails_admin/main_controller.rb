@@ -273,6 +273,9 @@ module RailsAdmin
     end
 
     def get_query_hash(options)
+      like_operator =  "ILIKE" if ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
+      like_operator ||= "LIKE"
+
       query = params[:query]
       return {} unless query
       field_search = !!query.index(":")
@@ -280,25 +283,42 @@ module RailsAdmin
       values = []
       conditions = options[:conditions] || [""]
       table_name = @abstract_model.model.table_name
-      # field search allows a search of the type "<fieldname>:<query>"
-      if field_search
-        field, query = query.split ":"
-        return {} unless field && query
-        @properties.select{|property| property[:name] == field.to_sym}.each do |property|
-          statements << "(#{table_name}.#{property[:name]} = ?)"
-          values << query
-        end
-      # search over all string and text fields
-      else
-        # Search case insensitively even on postgresql:
-        like_operator =  "ILIKE" if ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
-        like_operator ||= "LIKE"
-        @properties.select{|property| property[:type] == :string || property[:type] == :text }.each do |property|
-          statements << "(#{table_name}.#{property[:name]} #{like_operator} ?)"
-          values << "%#{query}%"
+      
+      @searchable_fields = @model_config.search.visible_fields
+      
+      # todo
+      #   BEFORE release
+      #     remove use of sortable?, clumsy. We're searching, not sorting. Plus testing is_a?(String) is ugly
+      #     accept an array of fields for searching over a relation
+      #     tests
+      #     documentation
+      #   AFTER release, we can
+      #     do same for has_one
+      #     implement filters on relations
+      #     implement filters visually
+      
+      
+      
+      if query.present?
+        if ['true', 'false'].include?(query)
+          @searchable_fields.select{ |p| p.type == :boolean }.each do |p|
+            statements << "(#{p.model.table_name}.#{p.name} = ?)"
+            values << (query == "true")
+          end
+        else
+          if (query.to_i.to_s == query)
+            @searchable_fields.select{ |p| p.type == :integer }.each do |p|
+              statements << "(#{p.model.table_name}.#{p.name} = ?)"
+              values << query.to_i
+            end
+          end
+          @searchable_fields.select{ |p| [:text, :string].include?(p.type) }.each do |p|
+            statements << "(#{p.model.table_name}.#{p.name} #{like_operator} ?)"
+            values << "%#{query}%"
+          end
         end
       end
-
+      
       conditions[0] += " AND " unless conditions == [""]
       conditions[0] += statements.join(" OR ")
       conditions += values
@@ -318,10 +338,13 @@ module RailsAdmin
           case field.type
           when :string, :text
             statements << "(#{table_name}.#{key} LIKE ?)"
-            values << value
+            values << "%#{value}%"
           when :boolean
             statements << "(#{table_name}.#{key} = ?)"
             values << (value == "true")
+          when :integer
+            statements << "(#{table_name}.#{key} = ?)"
+            values <<  value
           end
         end
       end

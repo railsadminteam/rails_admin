@@ -15,7 +15,6 @@ module RailsAdmin
 
         def self.inherited(klass)
             klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
-            klass.instance_variable_set("@searchable", false)
             klass.instance_variable_set("@sortable", true)
             klass.instance_variable_set("@view_helper", :text_field)
         end
@@ -106,10 +105,6 @@ module RailsAdmin
           !properties[:nullable?] || required_by_validator
         end
 
-        register_instance_option(:searchable?) do
-          self.class.instance_variable_get("@searchable")
-        end
-
         # Accessor for whether this is a serial field (aka. primary key, identifier).
         #
         # @see RailsAdmin::AbstractModel.properties
@@ -173,7 +168,6 @@ module RailsAdmin
             :type => type,
             :length => length,
             :nullable? => required?,
-            :searchable? => searchable?,
             :serial? => serial?,
             :sortable? => sortable?,
           }
