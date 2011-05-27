@@ -17,6 +17,12 @@ module RailsAdmin
         model.respond_to?(:collection) && model.collection.is_a?(::Mongoid::Collection)
       end
 
+      def self.extend(abstract_model)
+        abstract_model.model.send(:define_method, :rails_admin_default_object_label_method) do 
+          "#{self.class.to_s} ##{self.try :id}"
+        end
+      end
+
       def get(id)
         if object = model.where(:_id=>BSON::ObjectId(id)).first
           RailsAdmin::Adapters::AbstractObjectMongoid.new object
@@ -25,7 +31,7 @@ module RailsAdmin
         end
       end
 
-      def get_bulk(ids)
+      def get_bulk(ids,scope=nil)
         ids = ids.map{|i| BSON::ObjectId(i)}        
         Array(model.where(:_id.in=>ids))
       end
@@ -34,19 +40,19 @@ module RailsAdmin
         [:_id]
       end
 
-      def count(options = {})
+      def count(options = {},scope=nil)
         criteria_for_options(options).count
       end
 
-      def first(options = {})
+      def first(options = {},scope=nil)
         criteria_for_options(options).first
       end
 
-      def all(options = {})
+      def all(options = {},scope=nil)
         criteria_for_options(options)
       end
       
-      def paginated(options = {})
+      def paginated(options = {},scope=nil)
         page = options.delete(:page) || 1
         per_page = options.delete(:per_page) || RailsAdmin::Config::Sections::List.default_items_per_page
         criteria = criteria_for_options(options)
@@ -100,6 +106,9 @@ module RailsAdmin
         end
       end
 
+      def polymorphic_associations
+      end
+
       def model_name
         "todo"
       end 
@@ -130,6 +139,8 @@ module RailsAdmin
         @properties if @properties
         @properties = model.fields.map do |name,field|
           ar_type =  case field.type.to_s
+                     when 'BSON::ObjectId'
+                       :string
                      when "String"
                        :string
                      when "Integer"
@@ -150,7 +161,7 @@ module RailsAdmin
             :name => field.name.to_sym,
             :pretty_name => field.name.to_s.gsub('_', ' ').capitalize,
             :type => ar_type,
-            :length => 255,
+            :length => 1024,
             :nullable? => true,
             :serial? => false,
           }
