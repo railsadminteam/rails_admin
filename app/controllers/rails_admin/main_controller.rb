@@ -41,8 +41,9 @@ module RailsAdmin
         format.json do
           if params[:compact]
             objects = []
+            
             @objects.each do |object|
-               objects << { :id => object.id, :label => @model_config.with(:object => object).object_label }
+               objects << { :id => object.id, :label => object.send(@label_method ||= @model_config.with(:object => object).object_label_method) }
             end
             render :json => objects
           else
