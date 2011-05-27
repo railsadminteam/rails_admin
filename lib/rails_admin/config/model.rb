@@ -48,7 +48,7 @@ module RailsAdmin
 
       def object_label_method(object = nil)
         object ||= abstract_model.new
-        Config.label_methods.find {|method| object.respond_to? method }
+        Config.label_methods.find {|method| object.respond_to? method } || :rails_admin_default_object_label_method
       end
 
       register_instance_option(:label) do

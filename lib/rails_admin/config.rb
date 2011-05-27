@@ -26,7 +26,7 @@ module RailsAdmin
     # Configuration option to specify which method names will be searched for
     # to be used as a label for object records. This defaults to [:name, :title]
     mattr_accessor :label_methods
-    self.label_methods = [:name, :title, :rails_admin_default_object_label_method]
+    self.label_methods = [:name, :title]
 
     # Shortcut to access the list section's class configuration
     # within a config DSL block
