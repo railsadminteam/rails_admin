@@ -514,6 +514,26 @@ hr
   @include rounded-corner(top, right, 13px)
   @include rounded-corner(bottom, right, 13px)
 
+// MULTI-SELECT STYLE OVERRIDES (REMOVE IF ra-multi-select plugin is removed)
+#wrapper .ra-multiselect-search
+  background: transparent url('images/search-button.png') no-repeat scroll 166px center
+  border: 1px solid #c1c1c1
+  @include box-shadow(inset 0 1px 3px rgba(0,0,0,.15))
+  @include rounded-corners(13px)
+  float: left
+  font-family: 'MuseoSans500', helvetica, arial, sans-serif
+  font-size: 13px
+  height: 25px
+  margin: 0 25px 15px 0
+  outline: none
+  padding: 0 25px 0 10px
+  width: 155px
+
+#wrapper .ra-multiselect-collection, .ra-multiselect-selection
+  @include box-shadow(inset 0 1px 3px rgba(0,0,0,.1))
+
+// END MULTI-SELECT STYLE OVERRIDES
+
 
 // FLASH-MESSAGES
 
