@@ -86,8 +86,13 @@
 
 .grid tbody td {
   border-bottom:1px solid #b9b9b9;
-  padding: 9px 0;
-  text-align:center;
+  padding: 9px 0 9px 10px;
+  text-align:left;
+}
+.grid tbody th,
+.grid tbody td {
+  padding: 9px 0 9px 10px;
+  text-align:left;
 }
 
 .grid tbody .even {
