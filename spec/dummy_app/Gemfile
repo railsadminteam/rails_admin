@@ -6,6 +6,7 @@ gem 'paperclip', '~> 2.3'
 gem 'haml-rails', '~> 0.3.4'
 gem 'rails_admin', :path => '../../'
 gem 'mlb'
+gem 'sass'
 
 group :development, :test do
 
