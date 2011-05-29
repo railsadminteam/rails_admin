@@ -62,6 +62,27 @@ module RailsAdmin
           end
         end
 
+        def copy_view_files
+          print "Now copying view files "
+          origin = File.join(gem_path, 'app/views')
+          destination = Rails.root.join('app/views')
+
+          puts
+          %w( layouts . ).each do |directory|
+            Dir[File.join(origin, directory, 'rails_admin', '**/*')].each do |file|
+              relative  = file.gsub(/^#{origin}\//, '')
+              dest_file = File.join(destination, relative)
+              dest_dir  = File.dirname(dest_file)
+
+              if !File.exist?(dest_dir)
+                FileUtils.mkdir_p(dest_dir)
+              end
+
+              copier.copy_file(file, dest_file) unless File.directory?(file)
+            end
+          end
+        end
+
         private
 
         def check_for_devise_models

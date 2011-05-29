@@ -16,5 +16,10 @@ namespace :rails_admin do
     RailsAdmin::Tasks::Install.copy_assets_files
   end
 
+  desc "Copy only app/view files"
+  task :copy_views do
+    RailsAdmin::Tasks::Install.copy_view_files
+  end
+
 end
 
