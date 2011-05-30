@@ -40,6 +40,8 @@
         .insertAfter(select)
         .val(value)
         .addClass("ra-filtering-select-input")
+        .attr('style', select.attr('style'))
+        .show()
         .autocomplete({
           delay: this.options.searchDelay,
           minLength: this.options.minLength,

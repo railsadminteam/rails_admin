@@ -94,6 +94,7 @@ module RailsAdmin
     end
 
     def history_output(t)
+      return unless t
       if not t.message.downcase.rindex("changed").nil?
         return t.message.downcase + " for #{t.table.capitalize} ##{t.item}"
       else

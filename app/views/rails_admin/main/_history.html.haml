@@ -8,5 +8,5 @@
   %tbody
     - history.each do |t|
       %tr{:class => cycle('even', 'odd')}
-        %td.start= t.username
+        %td.start= t.try :username
         %td= history_output(t)
