@@ -33,12 +33,6 @@ module RailsAdmin
             bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
           end
 
-          def associated_collection
-            associated_model_config.abstract_model.all.map do |object|
-              [associated_model_config.with(:object => object).object_label, object.id]
-            end
-          end
-
           def associated_model_config
             @associated_model_config ||= RailsAdmin.config(association[:parent_model])
           end

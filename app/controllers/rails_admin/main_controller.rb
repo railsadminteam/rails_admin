@@ -41,8 +41,9 @@ module RailsAdmin
         format.json do
           if params[:compact]
             objects = []
+            
             @objects.each do |object|
-               objects << { :id => object.id, :label => @model_config.with(:object => object).object_label }
+               objects << { :id => object.id, :label => object.send(@label_method ||= @model_config.with(:object => object).object_label_method) }
             end
             render :json => objects
           else
@@ -98,7 +99,7 @@ module RailsAdmin
           end
         end
       else
-        render_error
+        handle_save_error
       end
     end
 
@@ -130,7 +131,7 @@ module RailsAdmin
         AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
         redirect_to_on_success
       else
-        render_error :edit
+        handle_save_error :edit
       end
     end
 
@@ -299,7 +300,7 @@ module RailsAdmin
       end
     end
 
-    def render_error whereto = :new
+    def handle_save_error whereto = :new
       action = params[:action]
 
       flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
