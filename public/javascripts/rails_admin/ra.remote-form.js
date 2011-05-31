@@ -73,6 +73,11 @@
 
       dialog.dialog("option", "buttons", buttons);
 
+      /* Remove original button container if it's now empty */
+      if (0 == $("form > .navform :submit", dialog).length) {
+        $("form > .navform", dialog).remove();
+      }
+
       form.bind("ajax:success", function(e, data, status, xhr) {
         var json = $.parseJSON(data);
         var select = widget.element.siblings('select');
