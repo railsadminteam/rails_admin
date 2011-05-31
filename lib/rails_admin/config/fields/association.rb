@@ -28,7 +28,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection
           associated_model_config.abstract_model.all.map do |object|
-            [object.send(@label_method ||= associated_model_config.with(:object => object).object_label_method), object.id]
+            [object.send(associated_model_config.object_label_method), object.id]
           end
         end
 

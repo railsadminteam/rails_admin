@@ -65,10 +65,10 @@ describe "RailsAdmin Config DSL" do
     end
   end
 
-  describe "object_label" do
+  describe "object_label_method" do
     it 'should be configurable' do
       RailsAdmin.config League do
-        object_label { "League '#{bindings[:object].name}'"}
+        object_label_method { :custom_name }
       end
 
       @league = Factory.create :league

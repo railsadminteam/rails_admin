@@ -7,4 +7,8 @@ class League < ActiveRecord::Base
   def teams
   	Team.joins(:division).where("divisions.league_id" => id)
   end
+  
+  def custom_name
+    "League '#{self.name}'"
+  end
 end
