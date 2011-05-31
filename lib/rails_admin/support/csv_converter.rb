@@ -76,7 +76,7 @@ module RailsAdmin
           @associations.map do |association_name, option_hash|
             associated_objects = [object.send(association_name)].flatten.compact
             option_hash[:methods].map do |method|
-              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join("\n"))
+              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join(','))
             end
           end.flatten
         end
