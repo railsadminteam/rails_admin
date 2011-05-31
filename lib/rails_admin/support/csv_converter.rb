@@ -16,10 +16,9 @@ module RailsAdmin
       @model_config = RailsAdmin.config(@abstract_model)
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       @associations = {}
+
       (schema.delete(:include) || {}).each do |key, values|
-        
         association = @abstract_model.associations.find{ |association| association[:name] == key }
-        
         model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
         abstract_model = RailsAdmin::AbstractModel.new(model)
         model_config = RailsAdmin.config(abstract_model)
@@ -76,7 +75,7 @@ module RailsAdmin
           @associations.map do |association_name, option_hash|
             associated_objects = [object.send(association_name)].flatten.compact
             option_hash[:methods].map do |method|
-              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join("\n"))
+              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join(','))
             end
           end.flatten
         end

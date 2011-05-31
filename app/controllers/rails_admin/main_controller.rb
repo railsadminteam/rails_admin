@@ -50,7 +50,7 @@ module RailsAdmin
             @objects.to_json(@schema)
           end
           if params[:send_data]
-            send_data output
+            send_data output, :filename => "#{params[:model_name]} #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}.json"
           else
             render :json => output
           end
@@ -58,7 +58,7 @@ module RailsAdmin
         format.xml do
           output = @objects.to_xml(@schema)
           if params[:send_data]
-            send_data output
+            send_data output, :filename => "#{params[:model_name]} #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}.xml"
           else  
             render :xml => output
           end
@@ -68,7 +68,7 @@ module RailsAdmin
           if params[:send_data]
             send_data output, 
               :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
-              :disposition => "attachment; filename=#{DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")}_#{params[:model_name]}.csv"
+              :disposition => "attachment; filename=#{params[:model_name]} #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}.csv"
           else
             render :text => output
           end
@@ -186,16 +186,11 @@ module RailsAdmin
     end
     
     def export
-      # todo :
-      #   limitation: need to display at least one real attribute ('only') so that the full object doesn't get displayed
-      #   sanitize schema before sending to rendering (refactor with view)
-      #   check for virtual methods
-      #   write a filtering engine for the list page
-      #   model_config#with for :methods inside csv content? Perf-optimize it first?
-      #   n-levels ?
-      #   check if hidden model don't get into visible fields by default   
-      
-            
+      # todo
+      #   limitation: need to display at least one real attribute ('only') so that the full object doesn't get displayed, a way to fix this? maybe force :only => [""]
+      #   model_config#with for :methods inside csv content? Perf-optimize it first? Optionnal? Right-now raw data is outputed.
+      # maybe
+      #   n-levels (backend: possible with xml&json, frontend: not possible, injections check: quite easy)
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
       
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
@@ -436,8 +431,14 @@ module RailsAdmin
     end
     
     def check_injections_for(model_config, methods_name)
-      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map(&:name)
-      unallowed_fields = (available_fields - methods_name)
+      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map do |field|
+        if field.association? && field.association[:options][:polymorphic]
+          [field.name, model_config.abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name]]
+        else
+          field.name
+        end
+      end.flatten
+      unallowed_fields = (methods_name - available_fields)
       raise("Security Exception: #{unallowed_fields.inspect} methods not available for #{@model_config.abstract_model.pretty_name}") unless unallowed_fields.empty?
     end
   end
