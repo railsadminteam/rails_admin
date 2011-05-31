@@ -5,7 +5,7 @@ source 'http://rubygems.org'
 # and rake tasks are available in development mode:
 group :development, :test do
   gem 'rake', '~> 0.8.7'
-  gem 'rails', '~> 3.0.7'
+  gem 'rails', '~> 3.1.0.rc1'
 
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
