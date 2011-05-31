@@ -20,7 +20,8 @@
       <fieldset>
         <legend><%= t('admin.export.fields_from', :name => @abstract_model.pretty_name) %></legend>
         <% visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.each do |field| %>
-          <% list = field.type != 'virtual' ? 'only' : 'methods' %>
+        
+          <% list = field.type != :virtual ? 'only' : 'methods' %>
           <div class='field'>
             <label for="<%= "schema_#{list}_#{field.name}" %>">
               <%= @abstract_model.model.human_attribute_name(field.name) %>
@@ -44,6 +45,7 @@
       </fieldset>
       
       <% visible_fields.select{ |f| f.association? && !f.association[:options][:polymorphic] }.each do |field| %>
+      
         <% 
           association = field.association
           associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]

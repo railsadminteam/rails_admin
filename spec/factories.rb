@@ -1,3 +1,5 @@
+# coding: utf-8
+
 Factory.define :player do |f|
   f.sequence(:name) { |n| "Player #{n}" }
   f.sequence(:number) { |n| n }
