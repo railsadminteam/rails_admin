@@ -243,35 +243,37 @@ evaluated at runtime.
 This will desactivate config.navigation.max_visible_tabs.
 
     RailsAdmin.config do |config|
+      ..
       config.model Team do
         parent League
       end
-    end
-
-    RailsAdmin.config do |config|
       config.model Division do
         parent League
       end
+      ..
     end
 
 Obtained navigation:
 
     Dashboard
     ...
-    League
+    League # (non-clickable)
+      League
       Division
       Team
     ...
 
-If you want a non-clickable root menu entry, add 'dropdown ENTRY_NAME' to your parent.
-Your parent will then be placed INSIDE his dropdown, in FIRST position.
+You probably want to change the name of the dropdown. 
+This can be easily achieved with the 'dropdown' attribute of the parent model.
 
 Added to previous example:
 
     RailsAdmin.config do |config|
+      ...
       config.model League do
         dropdown 'League related'
       end
+      ...
     end
 
 Obtained navigation:
@@ -290,7 +292,7 @@ By default, they are ordered by alphabetical order. If you need to override this
 a weight attribute. Default is 0. Lower values will bubble items to the left, higher values
 will move them to the right. Items with same weight will still be ordered by alphabetical order.
 The mecanism is fully compatible with dropdown menus. Items will be ordered within their own
-menu subset.
+menu subset. (but parent will always be first inside his submenu).
 
 Example:
 
