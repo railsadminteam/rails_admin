@@ -188,8 +188,6 @@ module RailsAdmin
     def export
       # todo :
       #   limitation: need to display at least one real attribute ('only') so that the full object doesn't get displayed
-      #   sanitize schema before sending to rendering (refactor with view)
-      #   check for virtual methods
       #   write a filtering engine for the list page
       #   model_config#with for :methods inside csv content? Perf-optimize it first?
       #   n-levels ?
@@ -436,8 +434,14 @@ module RailsAdmin
     end
     
     def check_injections_for(model_config, methods_name)
-      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map(&:name)
-      unallowed_fields = (available_fields - methods_name)
+      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map do |field|
+        if field.association? && field.association[:options][:polymorphic]
+          [field.name, model_config.abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name]]
+        else
+          field.name
+        end
+      end.flatten
+      unallowed_fields = (methods_name - available_fields)
       raise("Security Exception: #{unallowed_fields.inspect} methods not available for #{@model_config.abstract_model.pretty_name}") unless unallowed_fields.empty?
     end
   end
