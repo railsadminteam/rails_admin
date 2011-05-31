@@ -15,6 +15,7 @@
     dialog: null,
     options: {
       dialogClass: "",
+      height: 600,
       width: 720
     },
 
@@ -111,7 +112,8 @@
             widget.dialog = null;
           },
           modal: true,
-          width: this.options.width
+          width: this.options.width,
+          height: this.options.height
         });
       }
       return this.dialog;
