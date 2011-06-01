@@ -27,7 +27,15 @@ module RailsAdmin
               nil
             end
           end
-
+          
+          register_instance_option(:sort_with) do
+            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : :self
+          end
+          
+          register_instance_option(:search_with) do
+            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : nil
+          end
+          
           register_instance_option(:partial) do
             :form_filtering_select
           end

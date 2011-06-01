@@ -14,11 +14,6 @@ module RailsAdmin
           super(parent)
           # Populate @fields instance variable with model's properties
           @fields = RailsAdmin::Config::Fields.factory(self)
-          @fields.each do |f|
-            unless [:text, :string, :integer, :boolean].include?(f.type) || f.sortable?.is_a?(String) # belongs_to
-              f.visible false
-            end
-          end
         end
       end
     end

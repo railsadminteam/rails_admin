@@ -15,7 +15,15 @@ module RailsAdmin
         def association
           @properties
         end
-
+        
+        register_instance_option(:sort_with) do
+          nil
+        end
+        
+        register_instance_option(:search_with) do
+          []
+        end
+        
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.

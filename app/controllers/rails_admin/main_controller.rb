@@ -260,7 +260,17 @@ module RailsAdmin
 
     def get_sort_hash
       sort = params[:sort] || RailsAdmin.config(@abstract_model).list.sort_by
-      {:sort => sort}
+      field = @model_config.list.visible_fields.find{ |f| f.name.to_s == sort.to_s }
+      
+      raise("Sorting on column #{sort.inspect} not configured for model #{@model_config.abstract_model.pretty_name}") unless field && field.sort_with
+      column = if field.sort_with == :self 
+        sort
+      elsif field.association? && !field.polymorphic?
+        "#{field.associated_model_config.abstract_model.model.table_name}.#{field.sort_with}"
+      else
+        field.sort_with.to_s
+      end
+      {:sort => column}
     end
 
     def get_sort_reverse_hash
@@ -278,42 +288,39 @@ module RailsAdmin
 
       query = params[:query]
       return {} unless query
-      field_search = !!query.index(":")
       statements = []
       values = []
       conditions = options[:conditions] || [""]
-      table_name = @abstract_model.model.table_name
-      
-      @searchable_fields = @model_config.search.visible_fields
-      
+
       # todo
       #   BEFORE release
-      #     remove use of sortable?, clumsy. We're searching, not sorting. Plus testing is_a?(String) is ugly
-      #     accept an array of fields for searching over a relation
       #     tests
       #     documentation
+      #     enum???
+      #     virtual refactor???
+      #     belongs_to searchs, has_many searches
       #   AFTER release, we can
-      #     do same for has_one
-      #     implement filters on relations
-      #     implement filters visually
-      
-      
-      
+      #     implement filters
+      #     implement filtering engine
+
       if query.present?
+        @searchable_fields = @model_config.list.searchable_fields
+        # search for boolean values
         if ['true', 'false'].include?(query)
-          @searchable_fields.select{ |p| p.type == :boolean }.each do |p|
-            statements << "(#{p.model.table_name}.#{p.name} = ?)"
+          @searchable_fields[:boolean].each do |f|
+            statements << "(#{f} = ?)"
             values << (query == "true")
           end
         else
+          # search for exact integer values
           if (query.to_i.to_s == query)
-            @searchable_fields.select{ |p| p.type == :integer }.each do |p|
-              statements << "(#{p.model.table_name}.#{p.name} = ?)"
-              values << query.to_i
+            @searchable_fields[:integer].each do |f|
+              statements << "(#{f} = ?)"
+              values << query
             end
           end
-          @searchable_fields.select{ |p| [:text, :string].include?(p.type) }.each do |p|
-            statements << "(#{p.model.table_name}.#{p.name} #{like_operator} ?)"
+          (@searchable_fields[:text] + @searchable_fields[:string]).each do |f|
+            statements << "(#{f} #{like_operator} ?)"
             values << "%#{query}%"
           end
         end

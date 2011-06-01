@@ -50,6 +50,14 @@ module RailsAdmin
         register_instance_option(:column_width) do
           self.class.instance_variable_get("@column_width")
         end
+        
+        register_instance_option(:sort_with) do
+          :self
+        end
+
+        register_instance_option(:search_with) do
+          :self
+        end
 
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
@@ -111,10 +119,6 @@ module RailsAdmin
         register_instance_option(:serial?) do
           properties[:serial?]
         end
-
-        register_instance_option(:sortable?) do
-          self.class.instance_variable_get("@sortable")
-        end
         
         register_instance_option(:view_helper) do
           self.class.instance_variable_get("@view_helper")
@@ -168,8 +172,7 @@ module RailsAdmin
             :type => type,
             :length => length,
             :nullable? => required?,
-            :serial? => serial?,
-            :sortable? => sortable?,
+            :serial? => serial?
           }
         end
 

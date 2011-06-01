@@ -32,6 +32,14 @@ module RailsAdmin
           register_instance_option(:serial?) do
             false
           end
+          
+          register_instance_option(:sort_with) do
+            nil
+          end
+          
+          register_instance_option(:search_with) do
+            []
+          end
         end
       end
     end
