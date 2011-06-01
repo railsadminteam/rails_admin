@@ -296,9 +296,7 @@ module RailsAdmin
       #   BEFORE release
       #     tests
       #     documentation
-      #     enum???
-      #     virtual refactor???
-      #     belongs_to searchs, has_many searches
+      #     belongs_to searches, has_many searches
       #   AFTER release, we can
       #     implement filters
       #     implement filtering engine
@@ -322,6 +320,10 @@ module RailsAdmin
           (@searchable_fields[:text] + @searchable_fields[:string]).each do |f|
             statements << "(#{f} #{like_operator} ?)"
             values << "%#{query}%"
+          end
+          @searchable_fields[:enum].each do |f|
+            statements << "(#{f} LIKE ?)"
+            values << "#{query}%"
           end
         end
       end
