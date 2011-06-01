@@ -99,11 +99,11 @@ form label.inline {
 }
 
 .field .date, .field .datetime {
-  background: url("../../images/rails_admin/calendar.png") no-repeat right;
+  background: url("/assets/rails_admin/calendar.png") no-repeat right;
 }
 
 .field .time, .field .timestamp {
-  background: url("../../images/rails_admin/clock.png") no-repeat right;
+  background: url("/assets/rails_admin/clock.png") no-repeat right;
 }
 
 .ui-datepicker .ui-datepicker-today .ui-state-highlight { border-color: #4F4F4F; }

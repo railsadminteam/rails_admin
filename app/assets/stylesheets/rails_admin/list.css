@@ -22,11 +22,11 @@
 }
 
 .grid thead th a.ascending {
-  background-image: url(../../images/rails_admin/bullet_arrow_up.png);
+  background-image: url(/assets/rails_admin/bullet_arrow_up.png);
 }
 
 .grid thead th a.descending {
-  background-image: url(../../images/rails_admin/bullet_arrow_down.png);
+  background-image: url(/assets/rails_admin/bullet_arrow_down.png);
 }
 
 .grid tbody .boolean {

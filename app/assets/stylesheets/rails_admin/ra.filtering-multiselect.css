@@ -9,7 +9,7 @@
 }
 
 .ra-multiselect-search {
-  background: url(../../images/rails_admin/magnifier.png) no-repeat;
+  background: url(/assets/rails_admin/magnifier.png) no-repeat;
   padding-left: 19px;
   padding-top: 5px;
   font-size: 11px;
@@ -72,22 +72,22 @@
 
 .ra-multiselect .ui-icon-circle-triangle-e {
   background-position: -16px -32px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(/assets/rails_admin/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-e:hover {
   background-position: -16px -48px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(/assets/rails_admin/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w {
   background-position: 0px -32px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(/assets/rails_admin/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w:hover {
   background-position: 0px -48px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(/assets/rails_admin/icon_sprite.png);
 }
 
 .ra-multiselect-collection, .ra-multiselect-selection {
@@ -109,5 +109,5 @@
 .ra-multiselect-next span { background-position: -16px -32px !important; }
 .ra-multiselect-prev:hover span { background-position: 0px -48px !important; }
 .ra-multiselect-next:hover span { background-position: -16px -48px !important; }
-.ra-multiselect-prev span, .ra-multiselect-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(../../images/rails_admin/icon_sprite.png) no-repeat; }
+.ra-multiselect-prev span, .ra-multiselect-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(/assets/rails_admin/icon_sprite.png) no-repeat; }
 */
