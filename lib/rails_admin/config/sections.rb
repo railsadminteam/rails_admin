@@ -3,6 +3,7 @@ require 'rails_admin/config/sections/create'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/navigation'
 require 'rails_admin/config/sections/update'
+require 'rails_admin/config/sections/export'
 
 module RailsAdmin
   module Config

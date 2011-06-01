@@ -6,7 +6,7 @@ source 'http://rubygems.org'
 group :development, :test do
   gem 'rake', '~> 0.8.7'
   gem 'rails', '~> 3.0.7'
-
+  gem 'rake', '~> 0.8.7'
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
     case ENV['CI_DB_ADAPTER']
