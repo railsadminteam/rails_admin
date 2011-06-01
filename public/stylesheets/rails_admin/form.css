@@ -131,3 +131,9 @@ form label.inline {
 .createAssociatedRecordDialog span.extra_buttons {
   display: none;
 }
+
+.group.navform.wat-cf {
+  /* position the submit_buttons correctly: */
+  margin-top: 30px;
+  margin-bottom: 0;
+}
