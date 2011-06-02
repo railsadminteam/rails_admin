@@ -45,7 +45,7 @@ module RailsAdmin
         format.js { render :layout => 'rails_admin/plain.html.erb' }
         format.json do
           output = if params[:compact]
-            @objects.map{ |o| { :id => o.id, :label => object.send(@model_config.object_label_method) } }
+            @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }
           else
             @objects.to_json(@schema)
           end

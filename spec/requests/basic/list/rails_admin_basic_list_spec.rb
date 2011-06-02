@@ -258,4 +258,26 @@ describe "RailsAdmin Basic List" do
       response.should be_successful
     end
   end
+
+  describe "list as compact json" do
+    before(:each) do
+      2.times.map { Factory.create :player }
+      get rails_admin_list_path(:model_name => "player", :compact => true, :format => :json)
+    end
+
+    it "should respond successfully" do
+      response.should be_successful
+    end
+
+    it "should contain an array with 2 elements" do
+      ActiveSupport::JSON.decode(response.body).length.should eql(2)
+    end
+
+    it "should contain an array of elements with keys id and label" do
+      ActiveSupport::JSON.decode(response.body).each do |object|
+        object.should have_key("id")
+        object.should have_key("label")
+      end
+    end
+  end
 end
