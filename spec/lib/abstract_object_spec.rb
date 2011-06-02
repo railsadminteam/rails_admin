@@ -2,12 +2,11 @@ require 'spec_helper'
 
 describe "AbstractObject" do
   describe "proxy" do
-    let(:object) { Object.new }
-    let(:abstract_object) {  RailsAdmin::AbstractObject.new(object) }
+    let(:object) { mock("object") }
+    let(:abstract_object) { RailsAdmin::AbstractObject.new(object) }
 
     it "should act like a proxy" do
-      mock(object).method_call
-
+      object.should_receive(:method_call)
       abstract_object.method_call
     end
   end
