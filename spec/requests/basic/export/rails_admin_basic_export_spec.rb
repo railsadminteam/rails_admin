@@ -29,6 +29,7 @@ describe "RailsAdmin Export" do
       post rails_admin_export_path(:model_name => 'player')
       response.should be_successful
       response.body.should contain 'Select fields to export'
+      select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
       response.should be_successful
       response.body.should contain "Id,Created at,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended"
@@ -58,6 +59,7 @@ describe "RailsAdmin Export" do
 
     it "should export polymorphic fields the easy way for now" do
       post rails_admin_export_path(:model_name => 'comment')
+      select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
       response.body.should contain "Id,Commentable,Commentable type,Content,Created at,Updated at"
       response.body.should contain "#{@player.comments.first.id},#{@player.id},#{@player.class}"
@@ -66,7 +68,7 @@ describe "RailsAdmin Export" do
   
   describe "POST /admin/players/export :format => :csv" do
     it "should export with modified schema" do
-      post rails_admin_export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true)
+      post rails_admin_export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } })
       response.body.should contain "Id,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended" # no created_at
     end
   end
