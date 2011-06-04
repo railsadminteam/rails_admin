@@ -5,11 +5,11 @@ describe "RailsAdmin Export" do
   before(:each) do
     Comment.all.map &:destroy # rspec bug => doesn't get destroyed with transaction
 
-    @players = 4.times.map { Factory.create :player }
+    @players = 4.times.map { FactoryGirl.create :player }
     @player = @players.first
-    @player.team = Factory.create :team
-    @player.draft = Factory.create :draft
-    @player.comments = (@comments = 2.times.map { Factory.create(:comment) })
+    @player.team = FactoryGirl.create :team
+    @player.draft = FactoryGirl.create :draft
+    @player.comments = (@comments = 2.times.map { FactoryGirl.create(:comment) })
     @player.save
     
     # removed schema=>only=>created_at

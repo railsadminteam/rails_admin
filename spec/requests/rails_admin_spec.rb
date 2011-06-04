@@ -46,8 +46,8 @@ describe "RailsAdmin" do
 
   describe "polymorphic associations" do
     before :each do
-      @team = Factory.create :team
-      @comment = Factory.create :comment, :commentable => @team
+      @team = FactoryGirl.create :team
+      @comment = FactoryGirl.create :comment, :commentable => @team
     end
 
     it "should work like belongs to associations in the list view" do

@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
   describe "successful bulk delete of records" do
     before(:each) do
       RailsAdmin::History.destroy_all
-      @players = 3.times.map { Factory.create(:player) }
+      @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
       post rails_admin_bulk_action_path(:bulk_delete => '', :model_name => "player", :bulk_ids => @delete_ids)
       click_button "Yes, I'm sure"
@@ -38,7 +38,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
   describe "cancelled bulk_deletion" do
     before(:each) do
       RailsAdmin::History.destroy_all
-      @players = 3.times.map { Factory.create(:player) }
+      @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
       post rails_admin_bulk_action_path(:bulk_delete => '', :model_name => "player", :bulk_ids => @delete_ids)
       click_button "Cancel"

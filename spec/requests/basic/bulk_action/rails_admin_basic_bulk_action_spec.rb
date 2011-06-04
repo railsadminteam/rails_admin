@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "RailsAdmin Basic Bulk Action" do
   describe "bulk_delete" do
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       post rails_admin_bulk_action_path(:bulk_delete => '', :model_name => "player", :bulk_ids => @players.map(&:id))
     end
 
@@ -18,7 +18,7 @@ describe "RailsAdmin Basic Bulk Action" do
   
   describe "bulk_export" do
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       post rails_admin_bulk_action_path(:bulk_export => '', :model_name => "player", :bulk_ids => @players.map(&:id))
     end
 

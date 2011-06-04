@@ -71,7 +71,7 @@ describe "RailsAdmin Config DSL" do
         object_label_method { :custom_name }
       end
 
-      @league = Factory.create :league
+      @league = FactoryGirl.create :league
 
       RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end

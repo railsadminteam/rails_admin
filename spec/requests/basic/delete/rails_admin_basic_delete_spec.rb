@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Delete" do
 
   describe "delete" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
     end
 
@@ -29,8 +29,8 @@ describe "RailsAdmin Basic Delete" do
 
   describe "delete with missing label" do
     before(:each) do
-      @division = Factory.create :division
-      @team = Factory.create :team, :name => "", :division => @division
+      @division = FactoryGirl.create :division
+      @team = FactoryGirl.create :team, :name => "", :division => @division
       get rails_admin_delete_path(:model_name => "division", :id => @division.id)
     end
 

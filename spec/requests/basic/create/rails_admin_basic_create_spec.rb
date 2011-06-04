@@ -79,7 +79,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-one association" do
     before(:each) do
-      @draft = Factory.create :draft
+      @draft = FactoryGirl.create :draft
 
       get rails_admin_new_path(:model_name => "player")
 
@@ -101,7 +101,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-many association" do
     before(:each) do
-      @divisions = 3.times.map { Factory.create :division }
+      @divisions = 3.times.map { FactoryGirl.create :division }
 
       get rails_admin_new_path(:model_name => "league")
 
@@ -126,7 +126,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = 3.times.map { Factory.create :team }
+      @teams = 3.times.map { FactoryGirl.create :team }
 
       get rails_admin_new_path(:model_name => "fan")
 
@@ -150,8 +150,8 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with uniqueness constraint violated", :given => "a player exists" do
     before(:each) do
-      @team = Factory.create :team
-      @player = Factory.create :player, :team => @team
+      @team = FactoryGirl.create :team
+      @player = FactoryGirl.create :player, :team => @team
 
       get rails_admin_new_path(:model_name => "player")
 

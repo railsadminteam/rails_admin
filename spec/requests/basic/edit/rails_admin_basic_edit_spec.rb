@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -30,8 +30,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with has-one association" do
     before(:each) do
-      @player = Factory.create :player
-      @draft = Factory.create :draft
+      @player = FactoryGirl.create :player
+      @draft = FactoryGirl.create :draft
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -46,8 +46,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with has-many association" do
     before(:each) do
-      @teams = 3.times.map { Factory.create :team }
-      @player = Factory.create :player
+      @teams = 3.times.map { FactoryGirl.create :team }
+      @player = FactoryGirl.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -62,8 +62,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = 3.times.map { Factory.create :team }
-      @fan = Factory.create :fan, :teams => [@teams[0]]
+      @teams = 3.times.map { FactoryGirl.create :team }
+      @fan = FactoryGirl.create :fan, :teams => [@teams[0]]
       get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
     end
 
@@ -92,8 +92,8 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with missing label", :given => ["a player exists", "three teams with no name exist"] do
     before(:each) do
-      @player = Factory.create :player
-      @teams = 3.times.map { Factory.create :team, :name => "" }
+      @player = FactoryGirl.create :player
+      @teams = 3.times.map { FactoryGirl.create :team, :name => "" }
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 

@@ -775,7 +775,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should have_tag("input#player_name")
       response.should_not contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
       response.should have_tag("input#player_name")
       response.should_not contain(TF_CREATE_OUTPUT)
@@ -784,7 +784,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       get rails_admin_new_path(:model_name => "team")
       response.should contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
-      @team = Factory.create :team
+      @team = FactoryGirl.create :team
       get rails_admin_edit_path(:model_name => "team", :id => @team.id)
       response.should contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
@@ -792,7 +792,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       get rails_admin_new_path(:model_name => "league")
       response.should contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
-      @league = Factory.create :league
+      @league = FactoryGirl.create :league
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
       response.should_not contain(TF_CREATE_OUTPUT)
       response.should contain(TF_UPDATE_OUTPUT)
