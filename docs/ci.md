@@ -8,6 +8,7 @@ RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration se
 RailsAdmin is tested with
 
 * jruby-1.6.2 [ linux-i386-java ]
+* rbx-1.2.3-20110315 [ ]
 * ree-1.8.7-2011.03 [ i386 ]
 * ruby-1.8.7-p334 [ i386 ]
 * ruby-1.9.2-p180 [ i386 ]
@@ -38,14 +39,19 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
    sudo apt-get install hudson
 ```
 
-4. Install RVM for the user hudson with rubies 1.8.7, 1.9.2, ree and jruby. Also install bundler gem for each ruby.
+4. Install ruby1.9-dev to enable native extension building on Rubinius:
+```bash
+   sudo apt-get install ruby1.9-dev
+```
 
-5. Start Hudson:
+5. Install RVM for the user hudson with rubies 1.8.7, 1.9.2, jruby, rbx-1.2.3 and ree. Also install bundler gem for each ruby.
+
+6. Start Hudson:
 ```bash
    sudo /etc/init.d/hudson start
 ```
 
-6. Hudson should be now accessible with a web browser at:
+7. Hudson should be now accessible with a web browser at:
 ```bash
    http://YOUR_SERVER_IP:8080/
 ```
@@ -138,7 +144,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
     User-defined Axis
     Name   [ CI_RUBY_VERSION ]
-    Values [ 1.9.2 1.8.7 ree jruby ]
+    Values [ 1.9.2 1.8.7 ree jruby rbx-1.2.3 ]
 
     User-defined Axis
     Name   [ CI_DB_ADAPTER ]
