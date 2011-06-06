@@ -232,11 +232,11 @@ describe "RailsAdmin Basic List" do
     end
   end
 
-  describe "list with 20 pages, page 17" do
+  describe "list with 20 pages, page 20" do
     before(:each) do
       items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
-      (items_per_page * 20).times { FactoryGirl.create(:player) }
-      get rails_admin_list_path(:model_name => "player", :page => 18)
+      @players = (items_per_page * 20).times.map { FactoryGirl.create(:player) }
+      get rails_admin_list_path(:model_name => "player", :page => 20)
     end
 
     it "should respond successfully" do
@@ -245,6 +245,10 @@ describe "RailsAdmin Basic List" do
 
     it "should paginate correctly" do
       response.body.should contain(/1 2[^0-9]*12 13 14 15 16 17 18 19 20/)
+    end
+    
+    it "should countain the right item" do
+      response.body.should contain(@players.first.id.to_s)
     end
   end
 
