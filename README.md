@@ -29,6 +29,14 @@ Help
 ----
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
+Please don't use the issue tracker, which is for issues only.
+If you have good reasons to think you found a *rails_admin* bug, submit a ticket providing link to gists with:
+1. used rails_admin commit (in your Gemfile.lock)
+2. obtained stacktrace
+3. your initializers/rails_admin.rb
+4. models declarations that matter
+5. and anything else you find relevant
+
 
 API Update Note
 ---------------
