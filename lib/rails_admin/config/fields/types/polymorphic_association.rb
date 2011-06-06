@@ -25,7 +25,7 @@ module RailsAdmin
             return [] if type.nil?
             config = RailsAdmin.config(type)
             config.abstract_model.all.map do |object|
-              [config.with(:object => object).object_label, object.id]
+              [object.send(config.object_label_method), object.id]
             end
           end
 

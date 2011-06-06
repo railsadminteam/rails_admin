@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option(:partial) do
-            :form_has_one
+            :form_filtering_select
           end
 
           # Accessor for whether this is field is required.  In this
@@ -20,6 +20,14 @@ module RailsAdmin
           # @see RailsAdmin::AbstractModel.properties
           register_instance_option(:required?) do
             false
+          end
+
+          def selected_id
+            (object = value).nil? ? nil : object.id
+          end
+          
+          def method_name
+            super.singularize + '_id'
           end
         end
       end

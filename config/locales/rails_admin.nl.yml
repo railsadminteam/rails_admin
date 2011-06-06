@@ -1,0 +1,116 @@
+# Localization file for Dutch.
+# Translated from the English locale by Luuk Hendriks (DRiKE on github), used the date and datetime
+# from https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/nl.yml
+# credits for those sections to Ariejan de Vroom and Floris Huetink
+ 
+nl:
+  home:
+    name: "home"
+  admin:
+    dashboard:
+      pagename: "Site-administratie"
+      name: "Dashboard"
+      model_name: "Model"
+      last_used: "Laatst gebruikt"
+      records: "Rijen"
+      modify: "Aanpassen"
+      add_new: "Nieuw toevoegen"
+      show: "Tonen"
+      ago: "geleden"
+    history:
+      name: "Geschiedenis"
+      page_name: "Geschiedenis van %{name}"
+      no_activity: "Geen activiteit"
+    credentials:
+      log_out: "Uitloggen"
+    list:
+      edit_action: "Aanpassen"
+      delete_action: "Verwijderen"
+      select_action: "Selecteren"
+      delete_selected: "Verwijder selectie"
+      add_new: "Nieuw toevoegen"
+      search: "Zoeken"
+      select: "Selecteer %{name} om aan te passen"
+      show_all: "Toon allen"
+    new:
+      basic_info: "Basisinfo"
+      required: "Vereist"
+      optional: "Optioneel"
+      one_char: "karakter."
+      many_chars: "of minder karakters."
+      chosen: "Chosen %{name}"
+      select_choice: "Selecteer keuzes en klik"
+      chose_all: "Kies allen"
+      clear_all: "Verwijder allen"
+      up: "Omhoog"
+      down: "Omlaag"
+      save: "Opslaan"
+      save_and_add_another: "Opslaan en nieuwe toevoegen"
+      save_and_edit: "Opslaan en aanpassen"
+      cancel: "Annuleren"
+    delete:
+      flash_confirmation: "%{name} succesvol verwijderd"
+      confirmation: "Ja, ik weet het zeker"
+    flash:
+      successful: "%{name} succesvol %{action}"
+      error: "%{name} onsuccesvol %{action}"
+      noaction: "Geen acties uitgevoerd"
+    actions:
+      create: "aanmaken"
+      created: "aangemaakt"
+      update: "updaten"
+      updated: "geüpdate"
+      delete: "verwijderen"
+      deleted: "verwijderd"
+  datetime:
+    distance_in_words:
+      half_a_minute: "een halve minuut"
+      less_than_x_seconds:
+        one: "minder dan \xC3\xA9\xC3\xA9n seconde"
+        other: "minder dan %{count} seconden"
+      x_seconds:
+        one: "1 seconde"
+        other: "%{count} seconden"
+      less_than_x_minutes:
+        one: "minder dan \xC3\xA9\xC3\xA9n minuut"
+        other: "minder dan %{count} minuten"
+      x_minutes:
+        one: "1 minuut"
+        other: "%{count} minuten"
+      about_x_hours:
+        one: "ongeveer \xC3\xA9\xC3\xA9n uur"
+        other: "ongeveer %{count} uur"
+      x_days:
+        one: "1 dag"
+        other: "%{count} dagen"
+      about_x_months:
+        one: "ongeveer \xC3\xA9\xC3\xA9n maand"
+        other: "ongeveer %{count} maanden"
+      x_months:
+        one: "1 maand"
+        other: "%{count} maanden"
+      about_x_years:
+        one: "ongeveer \xC3\xA9\xC3\xA9n jaar"
+        other: "ongeveer %{count} jaar"
+      over_x_years:
+        one: "meer dan \xC3\xA9\xC3\xA9n jaar"
+        other: "meer dan %{count} jaar"
+      almost_x_years:
+        one: "bijna \xC3\xA9\xC3\xA9n jaar"
+        other: "bijna %{count} jaar" 
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%e %b"
+      long: "%e %B %Y"
+      only_day: "%e"
+
+    day_names: [zondag, maandag, dinsdag, woensdag, donderdag, vrijdag, zaterdag]
+    abbr_day_names: [zon, maa, din, woe, don, vri, zat]
+
+    month_names: [~, januari, februari, maart, april, mei, juni, juli, augustus, september, oktober, november, december]
+    abbr_month_names: [~, jan, feb, mar, apr, mei, jun, jul, aug, sep, okt, nov, dec]
+    order:
+      - :day
+      - :month
+      - :year

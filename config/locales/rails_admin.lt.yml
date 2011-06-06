@@ -25,6 +25,8 @@ lt:
       delete_action: "Pašalinti"
       select_action: "Pasirinkti"
       delete_selected: "Pašalinti pasirinktus"
+      export_action: "Export current view"
+      export_selected: "Export selected"
       add_new: "Pridėti"
       search: "IEŠKOTI"
       select: "Pasirinkti %{name} redagavimui"
@@ -39,6 +41,8 @@ lt:
       select_choice: "Pasirinkti reikalingus ir patvirtinti"
       chose_all: "Pasirinkti visus"
       clear_all: "Išvalyti"
+      up: "Up"
+      down: "Down"
       save: "Išsaugoti"
       save_and_add_another: "Išsaugoti ir pridėti naują"
       save_and_edit: "Išsaugoti ir tęsti redagavimą"
@@ -46,6 +50,24 @@ lt:
     delete:
       flash_confirmation: "%{name} ištrintas"
       confirmation: "Taip, aš sutinku"
+    export:
+      confirmation: "Export to %{name}"
+      select: "Select fields to export"
+      fields_from: "Fields from %{name}"
+      fields_from_associated: "Fields from associated %{name}"
+      display: "Display %{name}: %{type}"
+      options_for: "Options for %{name}"
+      empty_value_for_associated_objects: "<empty>"
+      csv: 
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Encode to"
+        encoding_to_help: "Choose output encoding. Leave empty to let current input encoding untouched: (%{name})"
+        skip_header: "No header"
+        skip_header_help: "Do not output a header (no fields description)"
+        default_col_sep: ","
+        col_sep: "Column separator"
+        col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
     flash:
       successful: "%{name} buvo sėkmingai %{action}"
       error: "Nepavyko %{action} %{name}"
@@ -57,3 +79,5 @@ lt:
       updated: "pakeistas"
       delete: "pašalinti"
       deleted: "pašalintas"
+      export: "export"
+      exported: "exported"

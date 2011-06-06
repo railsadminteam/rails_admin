@@ -1,0 +1,84 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+mn:
+  home:
+    name: "нүүр"
+  admin:
+    dashboard:
+      pagename: "Сайтын удирдлага"
+      name: "Хянах хэсэг"
+      model_name: "Моделийн нэр"
+      last_used: "Сүүлд ашигласан"
+      records: "Бичлэгүүд"
+      modify: "Засах"
+      add_new: "Шинээр нэмэх"
+      show: "Харах"
+      ago: "ago"
+    history:
+      name: "Түүх"
+      page_name: "%{name}-н түүх"
+      no_activity: "No Activity"
+    credentials:
+      log_out: "Гарах"
+    list:
+      edit_action: "Засах"
+      delete_action: "Устгах"
+      select_action: "Сонгох"
+      delete_selected: "Сонгосны устгах"
+      export_action: "Export current view"
+      export_selected: "Export selected"
+      add_new: "Шинээр нэмэх"
+      search_btn: "ХАЙХ"
+      select: "%{name}-г сонгож засах"
+      show_all: "Бүгдийг харуул"
+    new:
+      basic_info: "Үндсэн мэдээлэл"
+      required: "Шаардлагатай"
+      optional: "Шаардлагатай бус"
+      one_char: "тэмдэг."
+      many_chars: " тэмдэгтүүд."
+      chosen: "Chosen %{name}"
+      select_choice: "Сонголтоо сонгоно уу"
+      chose_all: "Бүгдийг сонгох"
+      clear_all: "Бүгдийг цэвэрлэ"
+      up: "Up"
+      down: "Down"
+      save: "Хадгал"
+      save_and_add_another: "Хадгалаад шинээр"
+      save_and_edit: "Хадгалаад засах"
+      cancel: "Болих"
+    delete:
+      flash_confirmation: "%{name} -г устгалаа"
+      confirmation: "Итгэлтэй байна уу"
+    export:
+      confirmation: "Export to %{name}"
+      select: "Select fields to export"
+      fields_from: "Fields from %{name}"
+      fields_from_associated: "Fields from associated %{name}"
+      display: "Display %{name}: %{type}"
+      options_for: "Options for %{name}"
+      empty_value_for_associated_objects: "<empty>"
+      csv: 
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Encode to"
+        encoding_to_help: "Choose output encoding. Leave empty to let current input encoding untouched: (%{name})"
+        skip_header: "No header"
+        skip_header_help: "Do not output a header (no fields description)"
+        default_col_sep: ","
+        col_sep: "Column separator"
+        col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
+    flash:
+      successful: "%{name} was successfully %{action}"
+      error: "%{name} failed to be %{action}"
+      noaction: "No actions were taken"
+    actions:
+      create: "үүсгэх"
+      created: "үүссэн"
+      update: "шинэчлэх"
+      updated: "шинэчилсэн"
+      delete: "устгах"
+      deleted: "устгасан"
+      export: "export"
+      exported: "exported"

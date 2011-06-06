@@ -14,6 +14,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player as list" do
     before(:each) do
+      21.times { FactoryGirl.create :player } # two pages of players
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -32,11 +33,19 @@ describe "RailsAdmin Basic List" do
     it "should show column headers" do
       response.body.should contain(/EDIT\n\s*DELETE\n\s*/)
     end
+
+    # https://github.com/sferik/rails_admin/issues/362
+    # test that no link uses the "wildcard route" with the main
+    # controller and list method
+    it "should not use the 'wildcard route'" do
+      assert_tag "a", :attributes => {:href => /all=true/} # make sure we're fully testing pagination
+      assert_no_tag "a", :attributes => {:href => /^\/rails_admin\/main\/list/}
+    end
   end
 
   describe "GET /admin/player with sort" do
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player", :sort => "name", :set => 1)
     end
 
@@ -52,7 +61,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with reverse sort" do
 
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
     end
 
@@ -67,7 +76,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with field search" do
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player", :query => "number:#{@players[0].number}", :set => 1)
     end
 
@@ -86,7 +95,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with query" do
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :set => 1)
     end
 
@@ -106,10 +115,10 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with query and boolean filter" do
     before(:each) do
       @players = [
-        Factory.create(:player, :injured => true),
-        Factory.create(:player, :injured => false),
-        Factory.create(:player, :injured => true),
-        Factory.create(:player, :injured => false),
+        FactoryGirl.create(:player, :injured => true),
+        FactoryGirl.create(:player, :injured => false),
+        FactoryGirl.create(:player, :injured => true),
+        FactoryGirl.create(:player, :injured => false),
       ]
       get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :filter => {:injured => "true"}, :set => 1)
     end
@@ -132,8 +141,8 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with boolean filter" do
     before(:each) do
       @players = [
-        Factory.create(:player, :injured => true),
-        Factory.create(:player, :injured => false),
+        FactoryGirl.create(:player, :injured => true),
+        FactoryGirl.create(:player, :injured => false),
       ]
       get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"}, :set => 1)
     end
@@ -154,10 +163,10 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with boolean filters" do
     before(:each) do
       @players = [
-        Factory.create(:player, :retired => true, :injured => true),
-        Factory.create(:player, :retired => true, :injured => false),
-        Factory.create(:player, :retired => false, :injured => true),
-        Factory.create(:player, :retired => false, :injured => false),
+        FactoryGirl.create(:player, :retired => true, :injured => true),
+        FactoryGirl.create(:player, :retired => true, :injured => false),
+        FactoryGirl.create(:player, :retired => false, :injured => true),
+        FactoryGirl.create(:player, :retired => false, :injured => false),
       ]
       get rails_admin_list_path(:model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
     end
@@ -179,7 +188,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with 2 objects" do
     before(:each) do
-      @players = 2.times.map { Factory.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -194,7 +203,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with 20 objects" do
     before(:each) do
-      @players = 20.times.map { Factory.create :player }
+      @players = 20.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player")
     end
 
@@ -210,7 +219,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with 20 pages, page 8" do
     before(:each) do
       items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
-      (items_per_page * 20).times { Factory.create(:player) }
+      (items_per_page * 20).times { FactoryGirl.create(:player) }
       get rails_admin_list_path(:model_name => "player", :page => 8)
     end
 
@@ -226,7 +235,7 @@ describe "RailsAdmin Basic List" do
   describe "list with 20 pages, page 17" do
     before(:each) do
       items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
-      (items_per_page * 20).times { Factory.create(:player) }
+      (items_per_page * 20).times { FactoryGirl.create(:player) }
       get rails_admin_list_path(:model_name => "player", :page => 18)
     end
 
@@ -241,12 +250,34 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player show all" do
     before(:each) do
-      2.times.map { Factory.create :player }
+      2.times.map { FactoryGirl.create :player }
       get rails_admin_list_path(:model_name => "player", :all => true)
     end
 
     it "should respond successfully" do
       response.should be_successful
+    end
+  end
+
+  describe "list as compact json" do
+    before(:each) do
+      2.times.map { FactoryGirl.create :player }
+      get rails_admin_list_path(:model_name => "player", :compact => true, :format => :json)
+    end
+
+    it "should respond successfully" do
+      response.should be_successful
+    end
+
+    it "should contain an array with 2 elements" do
+      ActiveSupport::JSON.decode(response.body).length.should eql(2)
+    end
+
+    it "should contain an array of elements with keys id and label" do
+      ActiveSupport::JSON.decode(response.body).each do |object|
+        object.should have_key("id")
+        object.should have_key("label")
+      end
     end
   end
 end

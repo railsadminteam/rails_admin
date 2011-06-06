@@ -1,53 +1,58 @@
-Factory.define :player do |f|
-  f.sequence(:name) { |n| "Player #{n}" }
-  f.sequence(:number) { |n| n }
-end
+# coding: utf-8
 
-Factory.define :draft do |f|
-  f.date 1.week.ago
-  f.round rand(100000)
-  f.pick rand(100000)
-  f.overall rand(100000)
-  f.association :team
-  f.association :player
-end
+FactoryGirl.define do
+  factory :player do
+    sequence(:name) { |n| "Player #{n}" }
+    sequence(:number) { |n| n }
+  end
 
-Factory.define :team do |f|
-  f.division_id rand(99999)
-  f.sequence(:name) { |n| "Team #{n}" }
-  f.sequence(:manager) { |n| "Manager #{n}" }
-  f.founded 1869 + rand(130)
-  f.wins(wins = rand(163))
-  f.losses 162 - wins
-  f.win_percentage("%.3f" % (wins.to_f / 162).to_f)
-end
+  factory :draft do
+    date 1.week.ago
+    round rand(100000)
+    pick rand(100000)
+    overall rand(100000)
+    sequence(:college) {|n| "College #{n}"}
+    association :team
+    association :player
+  end
 
-Factory.define :league do |f|
-  f.sequence(:name) { |n| "League #{n}" }
-end
+  factory :team do
+    division_id rand(99999)
+    sequence(:name) { |n| "Team #{n}" }
+    sequence(:manager) { |n| "Manager #{n}" }
+    founded 1869 + rand(130)
+    wins(wins = rand(163))
+    losses 162 - wins
+    win_percentage("%.3f" % (wins.to_f / 162).to_f)
+  end
 
-Factory.define :division do |f|
-  f.sequence(:name) { |n| "Division #{n}" }
-  f.association :league
-end
+  factory :league do
+    sequence(:name) { |n| "League #{n}" }
+  end
 
-Factory.define :fan do |f|
-  f.sequence(:name) { |n| "Fan #{n}" }
-end
+  factory :division do
+    sequence(:name) { |n| "Division #{n}" }
+    association :league
+  end
 
-Factory.define :user do |f|
-  f.sequence(:email) { |n| "username_#{n}@example.com" }
-  f.sequence(:password) { |n| "password" }
-end
+  factory :fan do
+    sequence(:name) { |n| "Fan #{n}" }
+  end
 
-Factory.define :comment do |f|
-  f.association :commentable
-  f.content <<-EOF
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  EOF
+  factory :user do
+    sequence(:email) { |n| "username_#{n}@example.com" }
+    sequence(:password) { |n| "password" }
+  end
+
+  factory :comment do
+    sequence(:content) do |n| <<-EOF
+        Lorém --#{n}-- ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      EOF
+    end
+  end
 end

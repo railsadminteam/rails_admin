@@ -1,5 +1,5 @@
 <%
-  params = request.params.except(:action, :controller, :model_name, :utf8)
+  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
   query = params[:query]
   filter = params[:filter]
   sort = params[:sort]
@@ -37,6 +37,9 @@
           <div class="ra-block-toolbar ui-state-highlight">
             <ul>
               <li>
+               <%= link_to(t("admin.list.export_action"), rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), :class => "ra-button", :method => :post) %>
+              </li>
+              <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
               <% if authorized? :new, @abstract_model %>
@@ -45,14 +48,14 @@
                 </li>
               <% end %>
             </ul>
-            <%= form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true) do %>
+            <%= form_tag(rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page}), :method => "get", :remote => true) do %>
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
                 <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
               </fieldset>
             <% end %>
           </div>
-          <%= form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do %>
+          <%= form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :post do %>
             <table class="grid">
               <thead>
                 <tr>
@@ -63,7 +66,7 @@
                   <% selected = sort == property_name.to_s %>
                   <th class="<%= "#{property.css_class}" %> <%= selected ? "selected" : nil %>">
                     <% if property.sortable? %>
-                    <% sort_location = params.merge(:sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}) %>
+                    <% sort_location = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})) %>
                     <% sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil %>
                     <%= link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true) %>
                     <% else %>
@@ -73,7 +76,9 @@
                   <% end %>
                   <th class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>...</th>
                   <th class="action"><%= t("admin.list.edit_action").upcase if authorized? :edit, @abstract_model %></th>
-                  <th class="action"><%= t("admin.list.delete_action").upcase if authorized? :delete, @abstract_model %></th>
+                  <% if authorized? :delete, @abstract_model %>
+                  <th class="action"><%= t("admin.list.delete_action").upcase %></th>
+                  <% end %>
                   <th class="action"><%= t("admin.list.select_action").upcase %></th>
                 </tr>
               </thead>
@@ -81,7 +86,10 @@
                 <tr>
                   <td colspan="<%= properties.length + 5 %>">
                     <% if authorized? :delete, @abstract_model %>
-                      <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;" %>
+                      <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;", :name => :bulk_delete %>
+                    <% end %>
+                    <% if authorized? :export, @abstract_model %>
+                      <%= submit_tag t("admin.list.export_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;", :name => :bulk_export %>
                     <% end %>
                     <div class="pagination">
                       <% if @page_count.to_i > 1 %>
@@ -90,7 +98,7 @@
                       <%= @record_count %>
                       <%= @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase) %>
                       <% if @page_count.to_i == 2 %>
-                        <%= link_to(t("admin.list.show_all"), params.merge(:all => true), :remote => true, :class => "showall") %>
+                        <%= link_to(t("admin.list.show_all"), rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :all => true, :remote => true, :class => "showall"))) %>
                       <% end %>
                     </div>
                   </td>
@@ -99,24 +107,26 @@
               <tbody>
                 <% @objects.each_with_index do |object, index| %>
                 <tr class="<%= index % 2 == 0 ? " odd" : " even" %>">
-                  <% other_left = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1) %>
+                  <% other_left = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1)) %>
                   <td class="other left" <% if @other.include? "left" %>style="display: none"<% end %>>
                     <%= link_to("...", other_left, :remote => true) %>
                   </td>
                   <% properties.map{|property| property.bind(:object, object)}.each do |property| %>
                     <td class="<%= "#{property.css_class}" %>"><%= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value %></td>
                   <% end %>
-                  <% other_right = params.reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1) %>
+                  <% other_right = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1)) %>
                   <td class="other right" <% if @other.include? "right" %>style="display: none"<% end %>>
                     <%= link_to("...", other_right, :remote => true)%>
                   </td>
                   <td class="action edit">
                     <%= link_to(t("admin.list.edit_action"), rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :edit, @abstract_model, object %>
                   </td>
+                  <% if authorized? :delete, @abstract_model %>
                   <td class="action delete">
                     <%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :delete, @abstract_model, object %>
                   </td>
-                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" %></td>
+                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}" %></td>
+                  <% end %>
                 </tr>
                 <% end %>
               </tbody>

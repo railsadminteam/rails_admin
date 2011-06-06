@@ -15,7 +15,7 @@ describe "RailsAdmin History" do
 
   describe "when range starts in December" do
     it "does not produce SQL with empty IN () range" do
-      mock(RailsAdmin::History).find_by_sql("select count(*) as record_count, year, month from rails_admin_histories where month IN (1, 2, 3, 4) and year = 2011 group by year, month").returns([])
+      RailsAdmin::History.should_receive(:find_by_sql).with(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", [1, 2, 3, 4], 2011]).and_return([])
       RailsAdmin::History.get_history_for_dates(12, 4, 2010, 2011)
     end
   end
@@ -59,7 +59,7 @@ describe "RailsAdmin History" do
     before :all do
       @default_items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       @model = RailsAdmin::AbstractModel.new("Player")
-      player = Factory.create :player
+      player = FactoryGirl.create :player
       30.times do |i|
         player.number = i
         RailsAdmin::AbstractHistory.create_history_item "change #{i}", player, @model, nil
@@ -86,6 +86,14 @@ describe "RailsAdmin History" do
 
       it "should render successfully" do
         response.should be_successful
+      end
+
+      # https://github.com/sferik/rails_admin/issues/362
+      # test that no link uses the "wildcard route" with the history
+      # controller and for_model method
+      it "should not use the 'wildcard route'" do
+        assert_tag "a", :attributes => {:href => /all=true/} # make sure we're fully testing pagination
+        assert_no_tag "a", :attributes => {:href => /^\/rails_admin\/history\/for_model/}
       end
 
       context "with a lot of histories" do

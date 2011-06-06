@@ -23,6 +23,19 @@ module RailsAdmin
               :multiple => "multiple",
             }
           end
+          
+          # orderable associated objects
+          register_instance_option(:orderable) do
+            false
+          end
+
+          def dom_name
+            "#{super}[]" # model_name[name_ids][]
+          end
+        
+          def method_name
+            "#{super.singularize}_ids" # name_ids
+          end
         end
       end
     end
