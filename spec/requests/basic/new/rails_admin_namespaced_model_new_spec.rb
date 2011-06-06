@@ -16,7 +16,7 @@ describe "RailsAdmin Namespaced Model New" do
 
   describe "GET /admin/cms_basic_page/new" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "cms~basic_page")
+      get new_path(:model_name => "cms~basic_page")
     end
 
     it "should respond successfully", :only =>true do

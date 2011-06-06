@@ -55,6 +55,7 @@ RSpec.configure do |config|
   config.include Webrat::HaveTagMatcher
   config.include DatabaseHelpers
   config.include GeneratorHelpers
+  config.include RailsAdmin::Engine.routes.url_helpers
 
   # == Mock Framework
   config.mock_with :rr

@@ -9,17 +9,17 @@
           <div class="ra-block-toolbar ui-state-highlight clearfix">
             <ul>
               <li>
-               <%= link_to t("admin.history.name"), rails_admin_history_object_path(:id => params[:id]), :class => 'ra-button' %>
+               <%= link_to t("admin.history.name"), history_object_path(:id => params[:id]), :class => 'ra-button' %>
               </li>
               <% if authorized? :delete, @abstract_model, @object %>
               <li>
-               <%= link_to t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => 'ra-button' %>
+               <%= link_to t("admin.list.delete_action"), delete_path(:model_name => @abstract_model.to_param, :id => params[:id]), :class => 'ra-button' %>
               </li>
               <% end %>
             </ul>
           </div>
           <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
-          <%= send(@model_config.update.form_builder, @object, :url => rails_admin_update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do |form| %>
+          <%= send(@model_config.update.form_builder, @object, :url => update_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :method => "put", :multipart => true }) do |form| %>
             <% @model_config.edit.with(:object => @object).visible_groups.each do |fieldset| %>
               <%= render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object } -%>
             <% end %>

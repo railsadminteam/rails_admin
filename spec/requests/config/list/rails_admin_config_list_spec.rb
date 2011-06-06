@@ -17,11 +17,11 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      get rails_admin_list_path(:model_name => "league")
+      get list_path(:model_name => "league")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
@@ -33,11 +33,11 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      get rails_admin_list_path(:model_name => "league")
+      get list_path(:model_name => "league")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
       end
@@ -54,11 +54,11 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      get rails_admin_list_path(:model_name => "league")
+      get list_path(:model_name => "league")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
       end
@@ -68,7 +68,7 @@ describe "RailsAdmin Config DSL List Section" do
   describe "items' fields" do
 
     it "should show all by default" do
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("ID")
         elements[2].should contain("CREATED AT")
@@ -86,7 +86,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :created_at
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("UPDATED AT")
         elements[2].should contain("NAME")
@@ -102,7 +102,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements.should contain("ID")
         elements.should contain("NAME")
@@ -117,7 +117,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("HIS NAME")
       end
@@ -132,7 +132,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("IDENTIFIER")
         elements[2].should contain("NAME")
@@ -147,7 +147,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("ID")
         elements[2].should contain("CREATED AT (DATETIME)")
@@ -164,7 +164,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should contain("ID")
         elements[2].should contain("CREATED AT (DATETIME)")
@@ -174,7 +174,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be sortable by default" do
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should have_tag("a")
         elements[2].should have_tag("a")
@@ -192,7 +192,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should_not have_tag("a")
         elements[2].should have_tag("a")
@@ -211,7 +211,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :updated_at
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should have_tag("a")
         elements[2].should have_tag("a")
@@ -232,7 +232,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :updated_at
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements[1].should have_tag("a")
         elements[2].should have_tag("a")
@@ -249,7 +249,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements.should contain("ID")
         elements.should contain("NAME")
@@ -266,7 +266,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
       response.should have_tag(".grid thead th") do |elements|
         elements.should contain("ID")
         elements.should contain("NAME")
@@ -287,7 +287,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag(".grid") do |table|
         table.should have_tag("thead th:nth-child(2).customClass")
@@ -310,7 +310,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag(".grid") do |table|
         table.should have_tag("thead th:nth-child(3).customClass")
@@ -335,7 +335,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag(".grid") do |table|
         table.should have_tag("thead th:nth-child(3).customClass")
@@ -363,7 +363,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag("style") {|css| css.should contain(/\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
     end
@@ -384,7 +384,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag(".grid tbody tr") do |elements|
         elements[0].should have_tag("td:nth-child(3)") {|li| li.should contain(@fans[1].name.upcase) }
@@ -406,7 +406,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag(".grid tbody tr") do |elements|
         elements[0].should have_tag("td:nth-child(4)") do |li|
@@ -429,7 +429,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { Factory.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      get list_path(:model_name => "fan")
 
       response.should have_tag(".grid tbody tr") do |elements|
         elements[0].should have_tag("td:nth-child(4)") do |li|
@@ -450,7 +450,7 @@ describe "RailsAdmin Config DSL List Section" do
       @team = Factory.create :team
       @players = 2.times.map { Factory.create :player, :team => @team }
 
-      get rails_admin_list_path(:model_name => "team")
+      get list_path(:model_name => "team")
 
       response.should have_tag(".grid tbody tr") do |elements|
         elements[0].should have_tag("td:nth-child(4)") {|li| li.should contain(@players.collect(&:name).join(", ")) }
@@ -491,7 +491,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
 
-        get rails_admin_list_path(:model_name => "player")
+        get list_path(:model_name => "player")
         response.should have_tag(".grid tbody tr") do |elements|
           player_names_by_date.reverse.each_with_index do |name, i|
             elements[i].should contain(name)
@@ -507,7 +507,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
 
-        get rails_admin_list_path(:model_name => "player")
+        get list_path(:model_name => "player")
         response.should have_tag(".grid tbody tr") do |elements|
           player_names_by_date.reverse.each_with_index do |name, i|
             elements[i].should contain(name)
@@ -532,14 +532,14 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
 
-        get rails_admin_list_path(:model_name => "league")
+        get list_path(:model_name => "league")
         response.should have_tag(".grid tbody tr") do |elements|
           league_names_by_date.reverse.each_with_index do |name, i|
             elements[i].should contain(name)
           end
         end
 
-        get rails_admin_list_path(:model_name => "player")
+        get list_path(:model_name => "player")
         response.should have_tag(".grid tbody tr") do |elements|
           @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
             elements[i].should contain(name)
@@ -555,7 +555,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         player_names_by_date.reverse.each_with_index do |name, i|
           elements[i].should contain(name)
@@ -571,7 +571,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
       response.should have_tag(".grid tbody tr") do |elements|
         player_names_by_date.each_with_index do |name, i|
           elements[i].should contain(name)

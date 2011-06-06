@@ -23,7 +23,7 @@
                   <% if authorized? :list, abstract_model %>
                     <tr class="<%= cycle 'odd', 'even' %>">
                       <td class="modelNameRow">
-                        <%= link_to(RailsAdmin.config(abstract_model).label, rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                        <%= link_to(RailsAdmin.config(abstract_model).label, list_path(:model_name => abstract_model.to_param), :class => "show") %>
                       </td>
                       <td>
                       <% if (last_used = @most_recent_changes[abstract_model.pretty_name]) %>
@@ -39,7 +39,7 @@
                       </td>
                       <td>
                         <% if authorized? :new, abstract_model %>
-                          <%= link_to(t("admin.dashboard.add_new"), rails_admin_new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), rails_admin_list_path(:model_name => abstract_model.to_param), :class => "show") %>
+                          <%= link_to(t("admin.dashboard.add_new"), new_path(:model_name => abstract_model.to_param), :class => "add") %>|<%= link_to(t("admin.dashboard.show"), list_path(:model_name => abstract_model.to_param), :class => "show") %>
                         <% end %>
                       </td>
                     </tr>
@@ -62,13 +62,13 @@
               $j(document).ready(function($) {
                 var cache = {};
                  $("#timeline").timeline({
-                   url: "<%= rails_admin_history_slider_path %>",
+                   url: "<%= history_slider_path %>",
                    monthChanged: function(month, year) {
                      if (cache[year] && cache[year][month]) {
                        $("#listingHistory").html(cache[year][month]);
                      } else {
                        $j("#listingHistory").load(
-                         "<%= rails_admin_history_list_path %>",
+                         "<%= history_list_path %>",
                          { month: month, year: year },
                          function(response, status, xhr) {
                            if (!cache[year]) { cache[year] = {}; }

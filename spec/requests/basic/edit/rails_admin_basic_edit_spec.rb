@@ -5,7 +5,7 @@ describe "RailsAdmin Basic Edit" do
   describe "edit" do
     before(:each) do
       @player = Factory.create :player
-      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      get edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -32,7 +32,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @player = Factory.create :player
       @draft = Factory.create :draft
-      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      get edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -48,7 +48,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @teams = 3.times.map { Factory.create :team }
       @player = Factory.create :player
-      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      get edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -64,7 +64,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @teams = 3.times.map { Factory.create :team }
       @fan = Factory.create :fan, :teams => [@teams[0]]
-      get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
+      get edit_path(:model_name => "fan", :id => @fan.id)
     end
 
     it "should respond successfully" do
@@ -82,7 +82,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with missing object" do
     before(:each) do
-      get rails_admin_edit_path(:model_name => "player", :id => 1)
+      get edit_path(:model_name => "player", :id => 1)
     end
 
     it "should raise NotFound" do
@@ -94,7 +94,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @player = Factory.create :player
       @teams = 3.times.map { Factory.create :team, :name => "" }
-      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      get edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do

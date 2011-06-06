@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "RailsAdmin Namespaced Model Create" do
 
   before(:each) do
-    get rails_admin_new_path(:model_name => "cms~basic_page")
+    get new_path(:model_name => "cms~basic_page")
 
     fill_in "cms_basic_page[title]", :with => "Hello"
     fill_in "cms_basic_page[content]", :with => "World"

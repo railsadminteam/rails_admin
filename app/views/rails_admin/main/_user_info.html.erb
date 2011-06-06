@@ -6,7 +6,7 @@
       <strong><a href="#"><%= current_user.email %></a></strong>
     </li>
     <li class="desc">
-      <a href="<%= destroy_session_path(current_user) %>"><%= t("admin.credentials.log_out")%></a>
+      <a href="<%# FIXME destroy_session_path(current_user) %>"><%= t("admin.credentials.log_out")%></a>
     </li>
   </ul>
 </div>

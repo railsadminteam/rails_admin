@@ -4,7 +4,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin" do
     before(:each) do
-      get rails_admin_dashboard_path
+      get dashboard_path
     end
 
     it "should respond successfully" do
@@ -15,7 +15,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player as list" do
     before(:each) do
       21.times { Factory.create :player } # two pages of players
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
     end
 
     it "should respond successfully" do
@@ -46,7 +46,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with sort" do
     before(:each) do
       @players = 2.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player", :sort => "name", :set => 1)
+      get list_path(:model_name => "player", :sort => "name", :set => 1)
     end
 
     it "should respond successfully" do
@@ -62,7 +62,7 @@ describe "RailsAdmin Basic List" do
 
     before(:each) do
       @players = 2.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
+      get list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
     end
 
     it "should respond successfully" do
@@ -77,7 +77,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with field search" do
     before(:each) do
       @players = 2.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player", :query => "number:#{@players[0].number}", :set => 1)
+      get list_path(:model_name => "player", :query => "number:#{@players[0].number}", :set => 1)
     end
 
     it "should respond successfully" do
@@ -96,7 +96,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with query" do
     before(:each) do
       @players = 2.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :set => 1)
+      get list_path(:model_name => "player", :query => @players[0].name, :set => 1)
     end
 
     it "should respond successfully" do
@@ -120,7 +120,7 @@ describe "RailsAdmin Basic List" do
         Factory.create(:player, :injured => true),
         Factory.create(:player, :injured => false),
       ]
-      get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :filter => {:injured => "true"}, :set => 1)
+      get list_path(:model_name => "player", :query => @players[0].name, :filter => {:injured => "true"}, :set => 1)
     end
 
     it "should respond successfully" do
@@ -144,7 +144,7 @@ describe "RailsAdmin Basic List" do
         Factory.create(:player, :injured => true),
         Factory.create(:player, :injured => false),
       ]
-      get rails_admin_list_path(:model_name => "player", :filter => {:injured => "true"}, :set => 1)
+      get list_path(:model_name => "player", :filter => {:injured => "true"}, :set => 1)
     end
 
     it "should respond successfully" do
@@ -168,7 +168,7 @@ describe "RailsAdmin Basic List" do
         Factory.create(:player, :retired => false, :injured => true),
         Factory.create(:player, :retired => false, :injured => false),
       ]
-      get rails_admin_list_path(:model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
+      get list_path(:model_name => "player", :filter => {:retired => "true", :injured => "true"}, :set => 1)
     end
 
     it "should respond successfully" do
@@ -189,7 +189,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with 2 objects" do
     before(:each) do
       @players = 2.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
     end
 
     it "should respond successfully" do
@@ -204,7 +204,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with 20 objects" do
     before(:each) do
       @players = 20.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player")
+      get list_path(:model_name => "player")
     end
 
     it "should respond successfully" do
@@ -220,7 +220,7 @@ describe "RailsAdmin Basic List" do
     before(:each) do
       items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       (items_per_page * 20).times { Factory.create(:player) }
-      get rails_admin_list_path(:model_name => "player", :page => 8)
+      get list_path(:model_name => "player", :page => 8)
     end
 
     it "should respond successfully" do
@@ -236,7 +236,7 @@ describe "RailsAdmin Basic List" do
     before(:each) do
       items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       (items_per_page * 20).times { Factory.create(:player) }
-      get rails_admin_list_path(:model_name => "player", :page => 18)
+      get list_path(:model_name => "player", :page => 18)
     end
 
     it "should respond successfully" do
@@ -251,7 +251,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player show all" do
     before(:each) do
       2.times.map { Factory.create :player }
-      get rails_admin_list_path(:model_name => "player", :all => true)
+      get list_path(:model_name => "player", :all => true)
     end
 
     it "should respond successfully" do

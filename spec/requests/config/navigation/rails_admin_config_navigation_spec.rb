@@ -13,7 +13,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config do |config|
         config.navigation.max_visible_tabs 2
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav > li") do |elements|
         elements.should have_at_most(4).items
       end
@@ -41,7 +41,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config do |config|
         config.navigation.max_visible_tabs 20
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Cms/Basic Page", "Comment", "Division", "Draft", "Fan", "League", "Player", "Team", "User"]
       end
@@ -54,7 +54,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           weight -1
         end
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Team", "Cms/Basic Page", "Comment", "Division", "Draft", "Fan", "League", "Player", "User"]
       end
@@ -67,7 +67,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           parent Cms::BasicPage
         end
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Cms/Basic Page", "Division", "Draft", "Fan", "League", "Player", "Team", "User"]
       end
@@ -85,7 +85,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           dropdown "CMS related"
         end
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["CMS related", "Division", "Draft", "Fan", "League", "Player", "Team", "User"]
       end
@@ -104,7 +104,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           weight 1
         end
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Division", "Draft", "Fan", "League", "Player", "Team", "User", "CMS related"]
       end
@@ -114,7 +114,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
   describe "label for a model" do
 
     it "should be visible and sane by default" do
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav") do |navigation|
         navigation.should have_tag("li a", :content => "Fan")
       end
@@ -124,7 +124,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config Fan do
         label "Fan test 1"
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav") do |navigation|
         navigation.should have_tag("li a", :content => "Fan test 1")
       end
@@ -134,7 +134,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config Fan do
         hide
       end
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should have_tag("#nav") do |navigation|
         navigation.should_not have_tag("li a", :content => "Fan")
       end

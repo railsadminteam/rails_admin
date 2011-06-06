@@ -3,9 +3,9 @@
 <% end %>
 <% content_for :breadcrumb do %>
   <li><%= home_link %></li>
-  <li>&rsaquo; <%= link_to(t('admin.dashboard.name'), rails_admin_dashboard_path) %></li>
+  <li>&rsaquo; <%= link_to(t('admin.dashboard.name'), dashboard_path) %></li>
   <% if @history %>
-    <li>&rsaquo; <%= link_to(@model_config.label, rails_admin_list_path(:model_name => @abstract_model.to_param)) %></li>
+    <li>&rsaquo; <%= link_to(@model_config.label, list_path(:model_name => @abstract_model.to_param)) %></li>
     <li>&rsaquo; <span>History</span></li>
   <% else %>
     <li>&rsaquo; <span><%= @model_config.label %></span></li>
