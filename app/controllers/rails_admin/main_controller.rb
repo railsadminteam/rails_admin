@@ -389,7 +389,7 @@ module RailsAdmin
       associations = @model_config.list.visible_fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
       options.merge!(:include => associations) unless associations.empty?
       
-      current_page = (params[:page] || 1).to_i
+      @current_page = (params[:page] || 1).to_i
       
       if params[:all]
         objects = @abstract_model.all(options, scope)
