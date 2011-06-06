@@ -129,7 +129,7 @@ module RailsAdmin
             :parent_key => association_parent_key_lookup(association),
             :child_model => association_child_model_lookup(association),
             :child_key => association_child_key_lookup(association),
-            :options => association.options,
+            :options => association_options(association),
           }
         end
       end
@@ -164,6 +164,21 @@ module RailsAdmin
         @sort = (@sort.to_s.include?('.') ? @sort : "#{model.table_name}.#{@sort}")
         @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
         options.merge(:order => "#{@sort} #{@sort_order}")
+      end
+      
+      def association_options(association)
+        if association.options[:polymorphic]
+          { 
+            :polymorphic => true, 
+            :foreign_type => association.options[:foreign_type] || "#{association.name}_type"
+          }
+        elsif association.options[:as]
+          {
+            :as => association.options[:as]
+          }
+        else
+          {}
+        end
       end
 
       def association_parent_model_lookup(association)
