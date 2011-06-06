@@ -1,4 +1,3 @@
-
 fr:
   home:
     name: "/"
@@ -24,11 +23,11 @@ fr:
       add_new: "Nouveau"
       select_action: "Sélectionner"
       export_action: "Exporter la vue actuelle"
-      export_selected: "Exporter les entrées cochés"
-      delete_selected: "Supprimer les entrées cochés"
+      export_selected: "Exporter les entrées cochées"
+      delete_selected: "Supprimer les entrées cochées"
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
-      show_all: "Afficher tous"
+      show_all: "Afficher tout"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"
