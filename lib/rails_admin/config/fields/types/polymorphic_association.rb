@@ -12,7 +12,6 @@ module RailsAdmin
           
           def initialize(parent, name, properties, association)
             super(parent, name, properties, association)
-            instance_variable_set("@sortable", false)
           end
 
           register_instance_option(:partial) do
@@ -24,6 +23,14 @@ module RailsAdmin
           # configuration.
           register_instance_option(:visible?) do
             associated_model_config.length > 0
+          end
+          
+          register_instance_option(:sortable) do
+            nil
+          end
+          
+          register_instance_option(:searchable) do
+            nil
           end
 
           def associated_collection(type)

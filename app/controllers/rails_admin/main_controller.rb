@@ -260,15 +260,14 @@ module RailsAdmin
 
     def get_sort_hash
       sort = params[:sort] || RailsAdmin.config(@abstract_model).list.sort_by
-      field = @model_config.list.visible_fields.find{ |f| f.name.to_s == sort.to_s }
+      field = @model_config.list.fields.find{ |f| f.name.to_s == sort.to_s }
       
-      raise("Sorting on column #{sort.inspect} not configured for model #{@model_config.abstract_model.pretty_name}") unless field && field.sort_with
-      column = if field.sort_with == :self 
+      column = if field.nil? || field && [true, false].include?(field.sortable)
         sort
-      elsif field.association? && !field.polymorphic?
-        "#{field.associated_model_config.abstract_model.model.table_name}.#{field.sort_with}"
+      elsif field.association?
+        "#{field.associated_model_config.abstract_model.model.table_name}.#{field.sortable}"
       else
-        field.sort_with.to_s
+        field.sortable
       end
       {:sort => column}
     end
@@ -322,7 +321,7 @@ module RailsAdmin
             values << "%#{query}%"
           end
           @searchable_fields[:enum].each do |f|
-            statements << "(#{f} LIKE ?)"
+            statements << "(#{f} #{like_operator} ?)"
             values << "#{query}%"
           end
         end

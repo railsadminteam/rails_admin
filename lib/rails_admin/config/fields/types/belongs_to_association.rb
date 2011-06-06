@@ -13,9 +13,6 @@ module RailsAdmin
           def initialize(parent, name, properties, association)
             super(parent, name, properties)
             @association = association
-            if !associated_model_config.is_a?(Array) && associated_model_config.search.visible_fields.map(&:name).include?(associated_model_config.object_label_method)
-              instance_variable_set("@sortable", "#{associated_model_config.abstract_model.model.table_name}.#{associated_model_config.object_label_method}")
-            end
           end
 
           # Accessor for field's formatted value
@@ -28,11 +25,11 @@ module RailsAdmin
             end
           end
           
-          register_instance_option(:sort_with) do
-            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : :self
+          register_instance_option(:sortable) do
+            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : true
           end
           
-          register_instance_option(:search_with) do
+          register_instance_option(:searchable) do
             associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : nil
           end
           

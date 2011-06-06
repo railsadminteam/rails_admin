@@ -77,7 +77,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with field search" do
     before(:each) do
       @players = 2.times.map { FactoryGirl.create :player }
-      get rails_admin_list_path(:model_name => "player", :query => "number:#{@players[0].number}", :set => 1)
+      get rails_admin_list_path(:model_name => "player", :filter => {:number => @players[0].number}, :set => 1)
     end
 
     it "should respond successfully" do

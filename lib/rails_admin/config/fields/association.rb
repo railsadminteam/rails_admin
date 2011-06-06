@@ -7,7 +7,6 @@ module RailsAdmin
       class Association < RailsAdmin::Config::Fields::Base
         
         def self.inherited(klass)
-          klass.instance_variable_set("@sortable", false)
           super(klass)
         end
 
@@ -16,12 +15,12 @@ module RailsAdmin
           @properties
         end
         
-        register_instance_option(:sort_with) do
+        register_instance_option(:sortable) do
           nil
         end
         
-        register_instance_option(:search_with) do
-          []
+        register_instance_option(:searchable) do
+          nil
         end
         
         # Accessor whether association is visible or not. By default

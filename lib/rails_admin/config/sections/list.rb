@@ -50,10 +50,10 @@ module RailsAdmin
           base_table_name = model_config.abstract_model.model.table_name
           base_properties = self.abstract_model.properties
           @searchable_fields ||= @fields.inject(Hash.new { |hash, key| hash[key] = Array.new }) do |collector, field|
-            if field.search_with
+            if field.searchable
               field_table_name = field.association? ? field.associated_model_config.abstract_model.model.table_name : base_table_name
-              associated_model_methods = case field.search_with
-              when :self
+              associated_model_methods = case field.searchable
+              when true
                 collector[field.type] << "#{base_table_name}.#{field.name}" # force use of base table_name
               when :all # valid only for associations
                 if field.association?
@@ -61,11 +61,11 @@ module RailsAdmin
                     collector[f.type] << "#{field_table_name}.#{f.name}"
                   end
                 else
-                  raise('search_with :all for non-association fields doesn\'t make sense')
+                  raise('searchable :all for non-association fields doesn\'t make sense')
                 end
               else
                 properties = field.association? ? field.associated_model_config.abstract_model.properties : base_properties
-                [field.search_with].flatten.each do |field_name| 
+                [field.searchable].flatten.each do |field_name| 
                   properties.select do |p| 
                     p[:name] == field_name
                   end.each do |p|

@@ -11,8 +11,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @sortable = false
-
           # Accessor for field's label.
           register_instance_option(:label) do
             name.to_s.humanize
@@ -33,12 +31,12 @@ module RailsAdmin
             false
           end
           
-          register_instance_option(:sort_with) do
+          register_instance_option(:sortable) do
             nil
           end
           
-          register_instance_option(:search_with) do
-            []
+          register_instance_option(:searchable) do
+            nil
           end
         end
       end

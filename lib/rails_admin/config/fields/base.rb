@@ -15,7 +15,6 @@ module RailsAdmin
 
         def self.inherited(klass)
             klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
-            klass.instance_variable_set("@sortable", true)
             klass.instance_variable_set("@view_helper", :text_field)
         end
 
@@ -51,12 +50,12 @@ module RailsAdmin
           self.class.instance_variable_get("@column_width")
         end
         
-        register_instance_option(:sort_with) do
-          :self
+        register_instance_option(:sortable) do
+          true
         end
 
-        register_instance_option(:search_with) do
-          :self
+        register_instance_option(:searchable) do
+          true
         end
 
         register_instance_option(:formatted_value) do
