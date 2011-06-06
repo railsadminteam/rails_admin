@@ -5,7 +5,7 @@ describe "RailsAdmin Basic Destroy" do
   describe "destroy" do
     before(:each) do
       @player = Factory.create :player
-      get rails_admin_delete_path(:model_name => "player", :id => @player.id)
+      get delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -22,7 +22,7 @@ describe "RailsAdmin Basic Destroy" do
   describe "destroy" do
     before(:each) do
       @player = Factory.create :player
-      get rails_admin_delete_path(:model_name => "player", :id => @player.id)
+      get delete_path(:model_name => "player", :id => @player.id)
       click_button "Cancel"
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -38,7 +38,7 @@ describe "RailsAdmin Basic Destroy" do
 
   describe "destroy with missing object" do
     before(:each) do
-      response = visit(rails_admin_destroy_path(:model_name => "player", :id => 1), :delete)
+      response = visit(destroy_path(:model_name => "player", :id => 1), :delete)
     end
 
     it "should raise NotFound" do

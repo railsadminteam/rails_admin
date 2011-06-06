@@ -13,7 +13,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       # Should not have the group header
       response.should_not have_tag("legend", :content => "Hidden Group")
       # Should not have any of the group's fields either
@@ -38,7 +38,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       # Should not have the group header
       response.should_not have_tag("legend", :content => "Players")
       # Should not have any of the group's fields either
@@ -53,7 +53,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
 
       response.should have_tag("legend", :content => "Renamed group")
     end
@@ -71,7 +71,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag("legend", :content => "Basic info")
       response.should have_tag("legend", :content => "Belong's to associations")
       response.should have_tag(".field") do |elements|
@@ -99,7 +99,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements.should have_tag("label", :content => "Name")
         elements.should have_tag("label", :content => "Logo url")
@@ -113,7 +113,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   describe "items' fields" do
 
     it "should show all by default" do
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag("select#team_division_id")
       response.should have_tag("input#team_name")
       response.should have_tag("input#team_logo_url")
@@ -137,7 +137,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("#team_manager")
         elements[1].should have_tag("#team_division_id")
@@ -152,7 +152,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("#team_division_id")
         elements[1].should have_tag("#team_name")
@@ -168,7 +168,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("label", :content => "Team Manager")
         elements[1].should have_tag("label", :content => "Some Fans")
@@ -185,7 +185,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("label", :content => "Renamed field")
         elements[1].should have_tag("label", :content => "Division")
@@ -201,7 +201,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements.should have_tag("label", :content => "Division")
         elements.should have_tag("label", :content => "Name (STRING)")
@@ -227,7 +227,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements.should have_tag("label", :content => "Division")
         elements.should have_tag("label", :content => "Name (STRING)")
@@ -255,7 +255,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("#team_division_id")
         elements[1].should have_tag("#team_name")
@@ -270,7 +270,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements.should have_tag("label", :content => "Division")
         elements.should_not have_tag("label", :content => "Name")
@@ -296,7 +296,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements.should have_tag("label", :content => "Division")
         elements.should_not have_tag("label", :content => "Name")
@@ -324,7 +324,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("p.help", :content => "Required 100 characters or fewer. Additional help text for manager field.")
         elements[1].should have_tag("p.help", :content => "Required")
@@ -346,7 +346,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag(".field") do |elements|
         elements[0].should have_tag("p.help", :content => "Optional 100 characters or fewer.")
         elements[1].should have_tag("p.help", :content => "Optional")
@@ -365,7 +365,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     describe "a datetime field" do
 
       it "should default to %B %d, %Y %H:%M" do
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[datetime_field]", :with => @time.strftime("%B %d, %Y %H:%M")
         click_button "Save"
@@ -384,7 +384,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[datetime_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
         click_button "Save"
@@ -403,7 +403,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[datetime_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
         click_button "Save"
@@ -417,7 +417,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     describe "a timestamp field" do
 
       it "should default to %B %d, %Y %H:%M" do
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[timestamp_field]", :with => @time.strftime("%B %d, %Y %H:%M")
         click_button "Save"
@@ -436,7 +436,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[timestamp_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
         click_button "Save"
@@ -455,7 +455,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[timestamp_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
         click_button "Save"
@@ -469,7 +469,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     describe "a time field" do
 
       it "should default to %H:%M" do
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[time_field]", :with => @time.strftime("%H:%M")
         click_button "Save"
@@ -488,7 +488,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[time_field]", :with => @time.strftime("%I:%M %p")
         click_button "Save"
@@ -502,7 +502,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     describe "a date field" do
 
       it "should default to %B %d, %Y" do
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[date_field]", :with => @time.strftime("%B %d, %Y")
         click_button "Save"
@@ -522,7 +522,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[date_field]", :with => @time.strftime("%Y-%m-%d")
         click_button "Save"
@@ -541,7 +541,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
 
         fill_in "field_test[date_field]", :with => @time.strftime("%Y-%m-%d")
         click_button "Save"
@@ -595,7 +595,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      get rails_admin_new_path(:model_name => "draft")
+      get new_path(:model_name => "draft")
       response.should contain(/CKEDITOR\.replace.*?draft_notes/)
     end
   end
@@ -608,7 +608,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :avatar
         end
       end
-      get rails_admin_new_path(:model_name => "user")
+      get new_path(:model_name => "user")
       response.should have_tag("input#user_avatar")
     end
 
@@ -627,7 +627,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :color
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag("select.enum")
       
       #Reset
@@ -645,7 +645,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag("input.color")
     end
   end
@@ -771,29 +771,29 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
       response.should have_tag("input#player_name")
       response.should_not contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
       @player = Factory.create :player
-      get rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      get edit_path(:model_name => "player", :id => @player.id)
       response.should have_tag("input#player_name")
       response.should_not contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
 
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
       @team = Factory.create :team
-      get rails_admin_edit_path(:model_name => "team", :id => @team.id)
+      get edit_path(:model_name => "team", :id => @team.id)
       response.should contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
 
-      get rails_admin_new_path(:model_name => "league")
+      get new_path(:model_name => "league")
       response.should contain(TF_CREATE_OUTPUT)
       response.should_not contain(TF_UPDATE_OUTPUT)
       @league = Factory.create :league
-      get rails_admin_edit_path(:model_name => "league", :id => @league.id)
+      get edit_path(:model_name => "league", :id => @league.id)
       response.should_not contain(TF_CREATE_OUTPUT)
       response.should contain(TF_UPDATE_OUTPUT)
     end

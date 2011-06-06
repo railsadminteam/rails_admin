@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -29,7 +29,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create and edit" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -54,7 +54,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create and add another" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -81,7 +81,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @draft = Factory.create :draft
 
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => 42
@@ -103,7 +103,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @divisions = 3.times.map { Factory.create :division }
 
-      get rails_admin_new_path(:model_name => "league")
+      get new_path(:model_name => "league")
 
       fill_in "league[name]", :with => "National League"
       select @divisions[0].name, :from => "league_division_ids"
@@ -128,7 +128,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @teams = 3.times.map { Factory.create :team }
 
-      get rails_admin_new_path(:model_name => "fan")
+      get new_path(:model_name => "fan")
 
       fill_in "fan[name]", :with => "John Doe"
       select @teams[0].name, :from => "fan_team_ids"
@@ -153,7 +153,7 @@ describe "RailsAdmin Basic Create" do
       @team = Factory.create :team
       @player = Factory.create :player, :team => @team
 
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
 
       fill_in "player[name]", :with => @player.name
       fill_in "player[number]", :with => @player.number.to_s
@@ -169,7 +169,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with invalid object" do
     before(:each) do
-      visit(rails_admin_create_path(:model_name => "player"), :post, :params => {:player => {}})
+      visit(create_path(:model_name => "player"), :post, :params => {:player => {}})
     end
 
     it "should show an error message" do
@@ -180,7 +180,7 @@ describe "RailsAdmin Basic Create" do
   
   describe "create with object with errors on base" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      get new_path(:model_name => "player")
       fill_in "player[name]", :with => "Jackie Robinson on steroids"
       click_button "Save and add another"
     end
