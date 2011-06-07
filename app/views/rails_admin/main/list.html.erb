@@ -84,13 +84,16 @@
               </thead>
               <tfoot>
                 <tr>
-                  <td colspan="<%= properties.length + 5 %>">
-                    <% if authorized? :delete, @abstract_model %>
-                      <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;", :name => :bulk_delete %>
-                    <% end %>
-                    <% if authorized? :export, @abstract_model %>
-                      <%= submit_tag t("admin.list.export_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;", :name => :bulk_export %>
-                    <% end %>
+                  <td colspan="<%= properties.length + 5 %>" class="ra-block-toolbar">
+                    <ul>
+                      <% if authorized? :delete, @abstract_model %>
+                        <li><%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :name => :bulk_delete %></li>
+                      <% end %>
+                     
+                      <% if authorized? :export, @abstract_model %>
+                        <li><%= submit_tag t("admin.list.export_selected"), :class => "ra-button", :name => :bulk_export %></li>
+                      <% end %>
+                    </ul>
                     <div class="pagination">
                       <% if @page_count.to_i > 1 %>
                         <%= paginate(@current_page, @page_count, :url => params).html_safe %>
