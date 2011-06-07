@@ -363,7 +363,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     describe "a datetime field" do
-
+      
       it "should default to %B %d, %Y %H:%M" do
         get rails_admin_new_path(:model_name => "field_test")
 
@@ -465,6 +465,27 @@ describe "RailsAdmin Config DSL Edit Section" do
         @record.timestamp_field.should eql(::DateTime.parse(@time.to_s))
       end
     end
+    
+    describe " a field with 'format' as a name (Kernel function)" do
+      it "should be updatable without any error" do
+      
+        RailsAdmin.config FieldTest do
+          edit do
+            field :format
+          end
+        end
+
+        get rails_admin_new_path(:model_name => "field_test")
+        
+        fill_in "field_test[format]", :with => "test for format"
+        click_button "Save"
+
+        @record = RailsAdmin::AbstractModel.new("FieldTest").first
+
+        @record.format.should eql("test for format")
+      end
+    end
+
 
     describe "a time field" do
 
@@ -579,7 +600,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       field.required?.should be false
     end
   end
-
+  
+  
   describe "CKEditor Support" do
     it "should start with CKEditor disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}

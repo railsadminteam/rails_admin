@@ -15,7 +15,7 @@ module RailsAdmin
 
       properties.each do |property|
         property_name = property[:name].to_param
-        if old_object.send(property_name) != object.send(property_name)
+        if old_object.safe_send(property_name) != object.safe_send(property_name)
           changed_property_list << property_name
         end
       end
