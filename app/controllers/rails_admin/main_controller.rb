@@ -152,7 +152,7 @@ module RailsAdmin
 
       AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
 
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+      redirect_to list_path(:model_name => @abstract_model.to_param)
     end
 
     def bulk_delete
@@ -175,7 +175,7 @@ module RailsAdmin
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
 
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+      redirect_to list_path(:model_name => @abstract_model.to_param)
     end
 
     def handle_error(e)
@@ -290,13 +290,13 @@ module RailsAdmin
 
       if params[:_add_another]
         flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
-        redirect_to rails_admin_new_path(:model_name => param)
+        redirect_to new_path(:model_name => param)
       elsif params[:_add_edit]
         flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
-        redirect_to rails_admin_edit_path(:model_name => param, :id => @object.id)
+        redirect_to edit_path(:model_name => param, :id => @object.id)
       else
         flash[:notice] = t("admin.flash.successful", :name => pretty_name, :action => t("admin.actions.#{action}d"))
-        redirect_to rails_admin_list_path(:model_name => param)
+        redirect_to list_path(:model_name => param)
       end
     end
 
@@ -315,7 +315,7 @@ module RailsAdmin
     def check_for_cancel
       if params[:_continue]
         flash[:notice] = t("admin.flash.noaction")
-        redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+        redirect_to list_path(:model_name => @abstract_model.to_param)
       end
     end
 

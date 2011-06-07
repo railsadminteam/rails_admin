@@ -6,7 +6,7 @@ describe "RailsAdmin" do
     it "should be disableable" do
       logout
       RailsAdmin.authenticate_with {}
-      get rails_admin_dashboard_path
+      get dashboard_path
       response.should be_successful
     end
   end
@@ -16,7 +16,7 @@ describe "RailsAdmin" do
   # file as template for a new translation).
   describe "localization" do
     it "should default to English" do
-      get rails_admin_dashboard_path
+      get dashboard_path
 
       response.should contain("Site administration")
       response.should contain("Dashboard")
@@ -24,7 +24,7 @@ describe "RailsAdmin" do
   end
 
   describe "html head" do
-    before { get rails_admin_dashboard_path }
+    before { get dashboard_path }
     subject { response }
 
     # Note: the [href^="/sty... syntax matches the start of a value. The reason
@@ -51,13 +51,13 @@ describe "RailsAdmin" do
     end
 
     it "should work like belongs to associations in the list view" do
-      get rails_admin_list_path(:model_name => "comment")
+      get list_path(:model_name => "comment")
 
       response.body.should contain(@team.name)
     end
 
     it "should be editable" do
-      get rails_admin_edit_path(:model_name => "comment", :id => @comment.id)
+      get edit_path(:model_name => "comment", :id => @comment.id)
 
       response.should have_tag("legend", :content => "Commentable")
       response.should have_tag("select#comment_commentable_type")
@@ -65,7 +65,7 @@ describe "RailsAdmin" do
     end
 
     it "should be hidden in the owning end" do
-      get rails_admin_edit_path(:model_name => "team", :id => @team.id)
+      get edit_path(:model_name => "team", :id => @team.id)
 
       response.should_not have_tag("legend", :content => "Comments")
     end

@@ -50,7 +50,7 @@ describe "RailsAdmin History" do
 
   describe "history ajax update" do
     it "shouldn't use the application layout" do
-      post rails_admin_history_list_path, :ref => 0, :section => 4
+      post history_list_path, :ref => 0, :section => 4
       response.should_not have_tag "h1#app_layout_warning"
     end
   end
@@ -81,7 +81,7 @@ describe "RailsAdmin History" do
 
     context "GET admin/history/@model" do
       before :each do
-        get rails_admin_history_model_path(@model)
+        get history_model_path(@model)
       end
 
       it "should render successfully" do
@@ -110,7 +110,7 @@ describe "RailsAdmin History" do
         end
 
         it "should render a XHR request successfully" do
-          xhr :get, rails_admin_history_model_path(@model, :page => 2)
+          xhr :get, history_model_path(@model, :page => 2)
           response.should be_successful
         end
       end
