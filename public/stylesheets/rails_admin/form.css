@@ -106,8 +106,6 @@ form label.inline {
   background: url("../../images/rails_admin/clock.png") no-repeat right;
 }
 
-.ui-datepicker .ui-datepicker-today .ui-state-highlight { border-color: #4F4F4F; }
-
 .field .integer {
   width:90px;
 }
