@@ -847,9 +847,9 @@ Everything can be overridden with `help`:
     class Team < ActiveRecord::Base
       has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
   
-      # handling delete in your model, if needed. Replace *all* _image_ occurences with your asset name.
+      # handling delete in your model, if needed. Replace all image occurences with your asset name.
       attr_accessor :delete_image
-      before_validation { self.image = nil if self.delete_image == '1' }
+      before_save { self.image = nil if self.delete_image == '1' }
     end
     
     RailsAdmin.config do |config|
@@ -871,7 +871,7 @@ Fields of datatype string, integer, text can be rendered with select boxes, if o
       ...
       def color_enum
         self.team.available_color_choices
-        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]]
+        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]] or { "Red" => :red, ...
       end
       ...
     end
