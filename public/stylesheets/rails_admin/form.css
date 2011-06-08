@@ -31,14 +31,14 @@ form a.createAssociatedRecord {
     margin-left: 10px;
 }
 
-form .field>label { # do not target checkbox labels
-  width:100px;
+form .field>label, form .field>.field_with_errors>label {
   display:block;
   float:left;
   margin-top:6px;
   font-size:11px;
   font-weight:bold;
   margin-left:2px;
+  width:100px;
 }
 
 form label.inline {

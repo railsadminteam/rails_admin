@@ -7,10 +7,11 @@
       thumb_url = object.send(field.method_name).url(field.thumb_method) if file_is_image && field.thumb_method
     end
   %>
+  
               <div class="field <%= field.dom_id %>">
                 <%= form.label field.method_name, field.label %>
                 <div class="input">
-                  <div class="toggle">
+                  <div class="toggle" style="<%= 'display:none;' if file_present && field.delete_method && object.send(field.delete_method) == '1' %>">
                     <% if file_is_image %>
                       <%= link_to image_tag(thumb_url || url), url %><br />
                     <% else %>
@@ -21,7 +22,6 @@
                   <% if file_present && field.delete_method %>
                     <%= form.check_box(field.delete_method, :onclick => %{
                         if(this.checked) {
-                          console.log( jQuery(this).parents(".#{field.dom_id}"));
                           var parent = jQuery(this).parents(".#{field.dom_id}")[0];
                           var old_input = jQuery(parent).find("input[type='file']")[0]
                           var new_input = document.createElement('input');
