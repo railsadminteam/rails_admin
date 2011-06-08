@@ -842,6 +842,27 @@ Everything can be overridden with `help`:
       end
     end
 
+**Fields - Paperclip**
+    
+    class Team < ActiveRecord::Base
+      has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  
+      # handling delete in your model, if needed. Replace *all* _image_ occurences with your asset name.
+      attr_accessor :delete_image
+      before_validation { self.image = nil if self.delete_image == '1' }
+    end
+    
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :image do
+            thumb_method :thumb # for images. Will default to full size image, which might break the layout
+            delete_method :delete_image # actually not needed in this case: default is "delete_#{field_name}" if the object responds to it
+          end
+        end
+      end
+    end
+    
 **Fields - Enum**
 
 Fields of datatype string, integer, text can be rendered with select boxes, if object responds to `method_enum`.

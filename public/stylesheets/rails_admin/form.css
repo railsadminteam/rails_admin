@@ -31,7 +31,7 @@ form a.createAssociatedRecord {
     margin-left: 10px;
 }
 
-form label {
+form .field>label { # do not target checkbox labels
   width:100px;
   display:block;
   float:left;
