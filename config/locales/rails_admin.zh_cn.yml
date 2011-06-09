@@ -69,7 +69,7 @@ zh_cn:
         col_sep: "Column separator"
         col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
     flash:
-      successful: "%{name} {action}成功"
+      successful: "%{name} %{action}成功"
       error: "%{name} %{action}失败"
       noaction: "没作任何动作"
     actions:
