@@ -250,9 +250,9 @@ module RailsAdmin
 
     private
 
-    def get_bulk_objects
+    def get_bulk_objects(ids)
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
-      objects = @abstract_model.get_bulk(params[:bulk_ids], scope)
+      objects = @abstract_model.get_bulk(ids, scope)
 
       not_found unless objects
       objects
@@ -281,86 +281,86 @@ module RailsAdmin
       {:sort_reverse => sort_reverse}
     end
 
-    def get_query_hash(options)
-      like_operator =  "ILIKE" if ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
-      like_operator ||= "LIKE"
+    def get_conditions_hash(query, filters)
+      
+      # TODO for filtering engine
+      #   some more tests for back (can't test front, too bad.. :/ )
+      #   some severe styling, it's fugly
+      #   some severe javascript refactoring, it's fugly too
+      #   API in the readme, it's good enought
+      #   extend engine to :
+      #      :boolean with checkboxes
+      #      :belongs_to_association with dropdown/autocomplete
+      #      :enum with dropdown
+      #      :string, :text with starts_with/ends_with/exact options
+      #  LATER
+      #   find a way for complex request (OR/AND)?
+      #   find a way to force a column?
+      
+      
+      return {} if query.blank? && filters.blank? # perf
+      
+      @like_operator =  "ILIKE" if ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
+      @like_operator ||= "LIKE"
+      @searchable_fields = @model_config.list.fields.inject({}){ |memo, field| memo[field.name] = field.searchable_columns; memo }
 
-      query = params[:query]
-      return {} unless query
-      statements = []
+      query_statements = []
+      filters_statements = []
       values = []
-      conditions = options[:conditions] || [""]
+      conditions = [""]
 
-      # todo
-      #   BEFORE release
-      #     tests
-      #     documentation
-      #     belongs_to searches, has_many searches
-      #   AFTER release, we can
-      #     implement filters
-      #     implement filtering engine
-
+      
       if query.present?
-        @searchable_fields = @model_config.list.searchable_fields
-        # search for boolean values
-        if ['true', 'false'].include?(query)
-          @searchable_fields[:boolean].each do |f|
-            statements << "(#{f} = ?)"
-            values << (query == "true")
-          end
-        else
-          # search for exact integer values
-          if (query.to_i.to_s == query)
-            @searchable_fields[:integer].each do |f|
-              statements << "(#{f} = ?)"
-              values << query
-            end
-          end
-          (@searchable_fields[:text] + @searchable_fields[:string]).each do |f|
-            statements << "(#{f} #{like_operator} ?)"
-            values << "%#{query}%"
-          end
-          @searchable_fields[:enum].each do |f|
-            statements << "(#{f} #{like_operator} ?)"
-            values << "#{query}%"
+        @searchable_fields.map{|k,v|v}.flatten.each do |field_infos|
+          statement, value = build_statement(field_infos[:column], field_infos[:type], query, 'default')
+          if statement && value
+            query_statements << statement
+            values << value
           end
         end
       end
       
-      conditions[0] += " AND " unless conditions == [""]
-      conditions[0] += statements.join(" OR ")
-      conditions += values
-      conditions != [""] ? {:conditions => conditions} : {}
-    end
-
-    def get_filter_hash(options)
-      filter = params[:filter]
-      return {} unless filter
-      statements = []
-      values = []
-      conditions = options[:conditions] || [""]
-      table_name = @abstract_model.model.table_name
-
-      filter.each_pair do |key, value|
-        if field = @model_config.list.fields.find {|f| f.name == key.to_sym}
-          case field.type
-          when :string, :text
-            statements << "(#{table_name}.#{key} LIKE ?)"
-            values << "%#{value}%"
-          when :boolean
-            statements << "(#{table_name}.#{key} = ?)"
-            values << (value == "true")
-          when :integer
-            statements << "(#{table_name}.#{key} = ?)"
-            values <<  value
+      unless query_statements.empty?
+        conditions[0] += " AND " unless conditions == [""]
+        conditions[0] += "(#{query_statements.join(" OR ")})"  # any column field will do
+      end
+      
+      if filters.present?
+        filters.each_pair do |field_name, values_dump|
+          values_dump.each do |value_dump|
+            field_statements = []
+            @searchable_fields[field_name.intern].each do |field_infos|
+              statement, value = build_statement(field_infos[:column], field_infos[:type], value_dump[:value], (value_dump[:operator] || 'default'))
+              if statement && value
+                field_statements << statement
+                values << value
+              end
+            end
+            filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
           end
         end
       end
-
-      conditions[0] += " AND " unless conditions == [""]
-      conditions[0] += statements.join(" AND ")
+      
+      unless filters_statements.empty?
+       conditions[0] += " AND " unless conditions == [""]
+       conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
+      end
+      
       conditions += values
-      conditions != [""] ? {:conditions => conditions} : {}
+      conditions != [""] ? { :conditions => conditions } : {}
+    end
+    
+    def build_statement(column, type, value, operator)
+      case type
+      when :boolean
+         ["(#{column} #{operator == 'default' ? '=' : operator} ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
+      when :integer, :belongs_to_association
+         ["(#{column} #{operator == 'default' ? '=' : operator} ?)", value.to_i] if value.to_i.to_s == value
+      when :string, :text
+        ["(#{column} #{@like_operator} ?)", "%#{value}%"]
+      when :enum
+        ["(#{column} #{@like_operator} ?)", value]
+      end
     end
 
     def get_attributes
@@ -403,26 +403,12 @@ module RailsAdmin
     end
 
     def list_entries(other = {})
-      if params[:bulk_ids]
-        objects = get_bulk_objects
-        return [objects, 1, 1, objects.size]
-      end
+      return [get_bulk_objects(params[:bulk_ids]), 1, 1, "unknown"] if params[:bulk_ids].present?
       
-      options = {}
-      options.merge!(get_sort_hash)
-      options.merge!(get_sort_reverse_hash)
-      options.merge!(get_query_hash(options))
-      options.merge!(get_filter_hash(options))
-      per_page = @model_config.list.items_per_page
+      associations = @model_config.list.fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
+      options = get_sort_hash.merge(get_sort_reverse_hash).merge(get_conditions_hash(params[:query], params[:filters])).merge(other).merge(associations.empty? ? {} : { :include => associations })
 
       scope = @authorization_adapter && @authorization_adapter.query(:list, @abstract_model)
-
-      # external filter
-      options.merge!(other)
-
-      associations = @model_config.list.visible_fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
-      options.merge!(:include => associations) unless associations.empty?
-      
       current_page = (params[:page] || 1).to_i
       
       if params[:all]
@@ -430,7 +416,7 @@ module RailsAdmin
         page_count = 1
         record_count = objects.count
       else
-        options.merge!(:page => current_page, :per_page => per_page)
+        options.merge!(:page => current_page, :per_page => @model_config.list.items_per_page)
         page_count, objects = @abstract_model.paginated(options, scope)
         options.delete(:page)
         options.delete(:per_page)

@@ -16,11 +16,11 @@ module RailsAdmin
         end
         
         register_instance_option(:sortable) do
-          nil
+          false
         end
         
         register_instance_option(:searchable) do
-          nil
+          false
         end
         
         # Accessor whether association is visible or not. By default

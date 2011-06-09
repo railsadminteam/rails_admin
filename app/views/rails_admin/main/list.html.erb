@@ -1,25 +1,19 @@
 <%
-  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
+  filters = params[:filters]
   query = params[:query]
-  filter = params[:filter]
+  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export, :filters)
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
   properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
-  filters_exist = !properties.select{|property| property.type == :boolean}.empty?
   # columns paginate
+  @searchable_fields = @model_config.list.fields.select(&:searchable)
   @style, @other, properties = get_column_set(properties)
 %>
 
 <% head_javascript "rails_admin/application.js" %>
-<% head_style "rails_admin/list" %>
+<% head_javascript "rails_admin/filter-box.js" %>
 
-<% head_javascript do %>
-  $j(document).ready(function($) {
-    $(this).one("ajax:success", function(e, data, status, xhr) {
-      $("#content").html(data);
-    });
-  });
-<% end %>
+<% head_style "rails_admin/list" %>
 
 <% head_style do %>
   <% @style.each do |key, value| %>
@@ -28,6 +22,22 @@
     }
   <% end %>
 <% end %>
+
+<script>
+  $j(document).ready(function($) {
+    $(this).one("ajax:success", function(e, data, status, xhr) {
+      $("#content").html(data);
+    });
+    
+    <%= filters.map do |field_name, values_hash|
+          field = @searchable_fields.find{ |field| field.name == field_name.intern }
+          values_hash.map do |value_hash|
+            "append_filter('#{field.label}', '#{field_name}', '#{value_hash['value']}');"
+          end.join
+        end.join unless filters.blank? %>
+  });
+</script>
+
       <div class="ra-block">
         <div class="ui-widget-header">
           <%= @page_name %>
@@ -54,6 +64,15 @@
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
                 <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
+                
+                <select id="filter_select">
+                  <option value="">Add filter</option>
+                  <% @searchable_fields.each do |field| %>
+                    <option value="<%= field.name %>"><%=field.label %></option>
+                  <% end %>
+                </select>
+                <div id="filters_box" style="clear:both; margin: 10px 10px;">
+                <div>
               </fieldset>
             <% end %>
           </div>
@@ -139,3 +158,4 @@
           <% end %>
         </div>
       </div>
+      
