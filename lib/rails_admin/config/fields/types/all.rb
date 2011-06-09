@@ -1,5 +1,6 @@
 require 'rails_admin/config/fields/types/belongs_to_association'
 require 'rails_admin/config/fields/types/boolean'
+require 'rails_admin/config/fields/types/bson_object_id'
 require 'rails_admin/config/fields/types/date'
 require 'rails_admin/config/fields/types/datetime'
 require 'rails_admin/config/fields/types/decimal'

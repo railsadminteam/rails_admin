@@ -139,27 +139,39 @@ module RailsAdmin
         @properties if @properties
         @properties = model.fields.map do |name,field|
           ar_type =  case field.type.to_s
-                     when 'BSON::ObjectId'
+                     when "Array"
                        :string
-                     when "String"
+                     when "Array"
                        :string
-                     when "Integer"
-                       :integer
-                     when "DateTime"
+                     when "BigDecimal"
+                       :string
+                     when "Boolean"
+                       :boolean
+                     when "Date"
                        :datetime
-                     when "Time"
+                     when "DateTime"
                        :datetime
                      when "Float"
                        :float
-                     when "Array"
+                     when "Hash"
                        :string
+                     when "Integer"
+                       :integer
+                     when "String"
+                       :string
+                     when "Time"
+                       :datetime
+                     when "BSON::ObjectId"
+                       :bson_object_id
+                     when "Object"
+                       :bson_object_id
                      else
                        raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
                      end
 
           {
             :name => field.name.to_sym,
-            :pretty_name => field.name.to_s.gsub('_', ' ').capitalize,
+            :pretty_name => field.name.to_s.gsub('_', ' ').strip.capitalize,
             :type => ar_type,
             :length => 1024,
             :nullable? => true,
