@@ -284,18 +284,22 @@ module RailsAdmin
     def get_conditions_hash(query, filters)
       
       # TODO for filtering engine
-      #   some more tests for back (can't test front, too bad.. :/ )
       #   some severe styling, it's fugly
       #   some severe javascript refactoring, it's fugly too
-      #   API in the readme, it's good enought
+      #   DOC: finish searchable
+      #   error messages for the tricky cases where:
+      #     query can't be made on any of the avalaible attributes (will it happen a lot?)
+      #     filter can't apply to the targetted attribute
+      
       #   extend engine to :
       #      :boolean with checkboxes
       #      :belongs_to_association with dropdown/autocomplete
       #      :enum with dropdown
       #      :string, :text with starts_with/ends_with/exact options
+      
       #  LATER
       #   find a way for complex request (OR/AND)?
-      #   find a way to force a column?
+      #   find a way to force a column? Handy for 
       
       
       return {} if query.blank? && filters.blank? # perf
@@ -417,6 +421,7 @@ module RailsAdmin
         record_count = objects.count
       else
         options.merge!(:page => current_page, :per_page => @model_config.list.items_per_page)
+        
         page_count, objects = @abstract_model.paginated(options, scope)
         options.delete(:page)
         options.delete(:per_page)

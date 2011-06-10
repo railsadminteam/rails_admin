@@ -510,18 +510,43 @@ and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/
 
 **Fields - Sortability**
 
-You can make a column non-sortable by setting the sortable option to false:
+You can make a column non-sortable by setting the sortable option to false (1)
+You can change the column that the field will actually sort on (2)
+Belongs_to associations : 
+  will be sorted on their label if label is not virtual (:name, :title, etc.)
+  otherwise on the foreign_key (:team_id)
+  you can also specify a column on the targetted table (see example) (3)
+
 
     RailsAdmin.config do |config|
       config.model Team do
         list do
-          field :name
-          field :created_at do
+          field :created_at do # (1)
             sortable false
+          end
+          field :name do # (2)
+            sortable :last_name # imagine there is a :last_name column and that :name is virtual
+          end
+          field :team_id do # (3)
+            sortable :win_percentage 
+            # Will order by players playing with the best teams, 
+            # rather than the team name (by default), 
+            # or the team id (dull but default if label is not a column name)
           end
         end
       end
     end
+    
+**Fields - Searchability**
+
+You can make a column non-searchable by setting the searchable option to false (1)
+You can change the column that the field will actually search on (2)
+You can specify a list of column that will be searched over (3)
+Belongs_to associations : 
+  will be searched on their label if label is not virtual (:name, :title, etc.)
+  otherwise on the foreign_key (:team_id)
+  you can also specify a column on the targetted table (see example) (3)
+
 
 **Fields - Column CSS class**
 

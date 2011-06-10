@@ -30,7 +30,7 @@ module RailsAdmin
           end
           
           register_instance_option(:searchable) do
-            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : nil
+            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : true
           end
           
           register_instance_option(:partial) do
