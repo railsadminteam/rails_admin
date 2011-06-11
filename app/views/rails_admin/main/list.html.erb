@@ -36,9 +36,11 @@
           <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
           <div class="ra-block-toolbar ui-state-highlight">
             <ul>
+              <% if authorized? :export, @abstract_model %>
               <li>
                <%= link_to(t("admin.list.export_action"), rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), :class => "ra-button", :method => :post) %>
               </li>
+              <% end %>
               <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
