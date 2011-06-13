@@ -199,7 +199,7 @@ module RailsAdmin
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
         @page_type = @abstract_model.pretty_name.downcase
         
-        render :action => 'export', :layout => 'rails_admin/export'
+        render :action => 'export'
       end
     end
     
