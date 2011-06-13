@@ -206,7 +206,11 @@ module RailsAdmin
     def bulk_action
       redirect_to rails_admin_list_path, :notice => t("admin.flash.noaction") and return if params[:bulk_ids].blank?
       
-      params[:bulk_delete] ? bulk_delete : (params[:bulk_export] ? export : redirect_to(rails_admin_list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.noaction")))
+      case params[:bulk_action]
+      when "delete" then bulk_delete
+      when "export" then export
+      else redirect_to(rails_admin_list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.noaction"))
+      end
     end
     
     def bulk_delete
@@ -216,7 +220,7 @@ module RailsAdmin
       
       @bulk_objects, @current_page, @page_count, @record_count = list_entries
       
-      render :action => 'bulk_delete', :layout => 'rails_admin/delete'
+      render :action => 'bulk_delete'
     end
 
     def bulk_destroy
