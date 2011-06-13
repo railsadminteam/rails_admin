@@ -206,7 +206,6 @@ describe "RailsAdmin Basic List" do
       response.body.should_not contain(@players[2].name)
       response.body.should_not contain(@players[3].name)
     end
-
   end
 
   describe "GET /admin/player with 2 objects" do

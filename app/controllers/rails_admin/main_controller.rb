@@ -259,26 +259,23 @@ module RailsAdmin
     end
 
     def get_sort_hash
-      sort = params[:sort] || RailsAdmin.config(@abstract_model).list.sort_by
-      field = @model_config.list.fields.find{ |f| f.name.to_s == sort.to_s }
+      params[:sort] ||= @model_config.list.sort_by.to_s
+      params[:sort_reverse] ||= 'false'
       
-      column = if field.nil? || field && [true, false].include?(field.sortable)
-        sort
-      elsif field.association?
+      field = @model_config.list.fields.find{ |f| f.name.to_s == params[:sort] }
+      
+      column = if field.nil? || field.sortable == true # use params[:sort] on the base table
+        "#{@abstract_model.model.table_name}.#{params[:sort]}"
+      elsif field.sortable == false # use default sort, asked field is not sortable
+        "#{@abstract_model.model.table_name}.#{@model_config.list.sort_by.to_s}"
+      elsif field.association? # use column on target table
         "#{field.associated_model_config.abstract_model.model.table_name}.#{field.sortable}"
-      else
-        field.sortable
+      else # use described column in the field conf.
+        "#{@abstract_model.model.table_name}.#{field.sortable}"
       end
-      {:sort => column}
-    end
-
-    def get_sort_reverse_hash
-      sort_reverse = if params[:sort]
-          params[:sort_reverse] == 'true'
-      else
-        not RailsAdmin.config(@abstract_model).list.sort_reverse?
-      end
-      {:sort_reverse => sort_reverse}
+      
+      reversed_sort = (field ? field.sort_reverse? : @model_config.list.sort_reverse?)
+      {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
     end
 
     def get_conditions_hash(query, filters)
@@ -286,20 +283,19 @@ module RailsAdmin
       # TODO for filtering engine
       #   some severe styling, it's fugly
       #   some severe javascript refactoring, it's fugly too
-      #   DOC: finish searchable
-      #   error messages for the tricky cases where:
-      #     query can't be made on any of the avalaible attributes (will it happen a lot?)
-      #     filter can't apply to the targetted attribute
+      #   Tricky cases where:
+      #     query can't be made on any of the avalaible attributes (will it happen a lot0 Error messages?)
+      #     filter can't apply to the targetted attribute (should be sanitized front)
       
       #   extend engine to :
-      #      :boolean with checkboxes
       #      :belongs_to_association with dropdown/autocomplete
       #      :enum with dropdown
       #      :string, :text with starts_with/ends_with/exact options
       
       #  LATER
       #   find a way for complex request (OR/AND)?
-      #   find a way to force a column? Handy for 
+      #   multiple words queries
+      #   find a way to force a column nonetheless? 
       
       
       return {} if query.blank? && filters.blank? # perf
@@ -328,19 +324,21 @@ module RailsAdmin
         conditions[0] += " AND " unless conditions == [""]
         conditions[0] += "(#{query_statements.join(" OR ")})"  # any column field will do
       end
-      
+            
       if filters.present?
         filters.each_pair do |field_name, values_dump|
           values_dump.each do |value_dump|
-            field_statements = []
-            @searchable_fields[field_name.intern].each do |field_infos|
-              statement, value = build_statement(field_infos[:column], field_infos[:type], value_dump[:value], (value_dump[:operator] || 'default'))
-              if statement && value
-                field_statements << statement
-                values << value
+            unless value_dump['disabled']
+              field_statements = []
+              @searchable_fields[field_name.intern].each do |field_infos|
+                statement, value = build_statement(field_infos[:column], field_infos[:type], value_dump[:value], (value_dump[:operator] || 'default'))
+                unless statement.nil? || value.nil?
+                  field_statements << statement
+                  values << value
+                end
               end
+              filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
             end
-            filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
           end
         end
       end
@@ -361,7 +359,19 @@ module RailsAdmin
       when :integer, :belongs_to_association
          ["(#{column} #{operator == 'default' ? '=' : operator} ?)", value.to_i] if value.to_i.to_s == value
       when :string, :text
-        ["(#{column} #{@like_operator} ?)", "%#{value}%"]
+        value = case operator
+        when 'default', 'like'
+          "%#{value}%"
+        when 'starts_with'
+          "#{value}%"
+        when 'ends_with'
+          "%#{value}"
+        when 'is', '='
+          "#{value}"
+        end
+        ["(#{column} #{@like_operator} ?)", value]
+      when :datetime
+        ["(#{column} #{operator == 'before' ? '<=' : '>='} ?)", value]
       when :enum
         ["(#{column} #{@like_operator} ?)", value]
       end
@@ -410,7 +420,7 @@ module RailsAdmin
       return [get_bulk_objects(params[:bulk_ids]), 1, 1, "unknown"] if params[:bulk_ids].present?
       
       associations = @model_config.list.fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
-      options = get_sort_hash.merge(get_sort_reverse_hash).merge(get_conditions_hash(params[:query], params[:filters])).merge(other).merge(associations.empty? ? {} : { :include => associations })
+      options = get_sort_hash.merge(get_conditions_hash(params[:query], params[:filters])).merge(other).merge(associations.empty? ? {} : { :include => associations })
 
       scope = @authorization_adapter && @authorization_adapter.query(:list, @abstract_model)
       current_page = (params[:page] || 1).to_i
@@ -421,7 +431,6 @@ module RailsAdmin
         record_count = objects.count
       else
         options.merge!(:page => current_page, :per_page => @model_config.list.items_per_page)
-        
         page_count, objects = @abstract_model.paginated(options, scope)
         options.delete(:page)
         options.delete(:per_page)

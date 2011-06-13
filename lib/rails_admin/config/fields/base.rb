@@ -58,6 +58,11 @@ module RailsAdmin
           true
         end
         
+        # serials and dates are reversed in list, which is more natural (last modified items first).
+        register_instance_option(:sort_reverse?) do
+          false
+        end
+
         # list of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
         register_instance_option(:searchable_columns) do
           @searchable_columns ||= case self.searchable 

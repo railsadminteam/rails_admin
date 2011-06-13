@@ -359,7 +359,7 @@ You can also configure it per model:
 
 By default, rows sorted by the field `id` in reverse order
 
-You can change default behavior with use two options: `sort_by` and `sort_reverse`
+You can change default behavior with use two options: `sort_by` and `sort_reverse?`
 
 **Default sorting - Configure globally**
 
@@ -367,7 +367,7 @@ You can change default behavior with use two options: `sort_by` and `sort_revers
       config.models do
         list do
           sort_by :updated_at
-          sort_reverse true
+          sort_reverse true # already default for serials ids and dates
         end
       end
     end
@@ -378,7 +378,97 @@ You can change default behavior with use two options: `sort_by` and `sort_revers
       config.model Player do
         list do
           sort_by :name
-          sort_reverse { false }
+          sort_reverse false
+        end
+      end
+    end
+
+**Fields - Sortability**
+
+You can make a column non-sortable by setting the sortable option to false (1)
+You can change the column that the field will actually sort on (2)
+Belongs_to associations : 
+  will be sorted on their label if label is not virtual (:name, :title, etc.)
+  otherwise on the foreign_key (:team_id)
+  you can also specify a column on the targetted table (see example) (3)
+
+
+    RailsAdmin.config do |config|
+      config.model Player do
+        list do
+          field :created_at do # (1)
+            sortable false
+          end
+          field :name do # (2)
+            sortable :last_name # imagine there is a :last_name column and that :name is virtual
+          end
+          field :team_id do # (3)
+            sortable :win_percentage 
+            # Will order by players playing with the best teams, 
+            # rather than the team name (by default), 
+            # or the team id (dull but default if label is not a column name)
+          end
+        end
+      end
+    end
+
+Default sort column is :id for ActiveRecord version
+To change it:
+    RailsAdmin.config do |config|
+      config.model Team do
+        sort_by :nam
+      end
+    end
+    
+By default, dates and serial ids are reversed when first-sorted ('desc' instead of 'asc' in SQL).
+If you want to reverse (or cancel it) the default sort order (first column click or the default sort column):
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :id do
+            sort_reverse? false   # will sort id increasing ('asc') first ones first (default is last ones first)
+          end
+          field :created_at do
+            sort_reverse? false   # will sort dates increasing ('asc') first ones first (default is last ones first)
+          end
+          field :name do
+            sort_reverse? true    # will sort name decreasing ('dec') z->a (default is a->z)
+          end
+        end
+      end
+    end
+
+**Fields - Searchability**
+
+You can make a column non-searchable by setting the searchable option to false (1)
+You can change the column that the field will actually search on (2)
+You can specify a list of column that will be searched over (3)
+Belongs_to associations : 
+  will be searched on their label if label is not virtual (:name, :title, etc.)
+  otherwise on the foreign_key (:team_id)
+  you can also specify columns on the targetted table (see example) (4)
+
+    RailsAdmin.config do |config|
+      config.model Player do
+        list do
+          field :created_at do # (1)
+            searchable false
+          end 
+          
+          field :name do (2)
+            searchable :last_name
+          end
+          # OR
+          field :name do (3)
+            searchable [:first_name, :last_name]
+          end
+          
+          field :team_id do # (4)
+            searchable [:name, :id]  # default model is the target. 
+            # eq. to [{Team => :name}, {Team => :id}] 
+            # or even [:name, {Player => :team_id}]
+          end
         end
       end
     end
@@ -507,46 +597,6 @@ options are defined for a single field, `strftime_format` has precedence over
 `date_format` option. For more information about localizing Rails see
 [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats)
 and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
-
-**Fields - Sortability**
-
-You can make a column non-sortable by setting the sortable option to false (1)
-You can change the column that the field will actually sort on (2)
-Belongs_to associations : 
-  will be sorted on their label if label is not virtual (:name, :title, etc.)
-  otherwise on the foreign_key (:team_id)
-  you can also specify a column on the targetted table (see example) (3)
-
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :created_at do # (1)
-            sortable false
-          end
-          field :name do # (2)
-            sortable :last_name # imagine there is a :last_name column and that :name is virtual
-          end
-          field :team_id do # (3)
-            sortable :win_percentage 
-            # Will order by players playing with the best teams, 
-            # rather than the team name (by default), 
-            # or the team id (dull but default if label is not a column name)
-          end
-        end
-      end
-    end
-    
-**Fields - Searchability**
-
-You can make a column non-searchable by setting the searchable option to false (1)
-You can change the column that the field will actually search on (2)
-You can specify a list of column that will be searched over (3)
-Belongs_to associations : 
-  will be searched on their label if label is not virtual (:name, :title, etc.)
-  otherwise on the foreign_key (:team_id)
-  you can also specify a column on the targetted table (see example) (3)
-
 
 **Fields - Column CSS class**
 
