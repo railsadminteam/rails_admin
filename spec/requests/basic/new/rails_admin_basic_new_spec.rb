@@ -36,7 +36,7 @@ describe "RailsAdmin Basic New" do
 
   describe "GET /admin/player/new with has-one association" do
     before(:each) do
-      Factory.create :draft
+      FactoryGirl.create :draft
       get rails_admin_new_path(:model_name => "player")
     end
 
@@ -51,7 +51,7 @@ describe "RailsAdmin Basic New" do
 
   describe "GET /admin/player/new with has-many association" do
     before(:each) do
-      @teams = 3.times.map { Factory.create :team }
+      @teams = 3.times.map { FactoryGirl.create :team }
       get rails_admin_new_path(:model_name => "player")
     end
 
@@ -68,7 +68,7 @@ describe "RailsAdmin Basic New" do
 
   describe "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = 3.times.map { Factory.create :team }
+      @teams = 3.times.map { FactoryGirl.create :team }
       get rails_admin_new_path(:model_name => "fan")
     end
 
@@ -85,7 +85,7 @@ describe "RailsAdmin Basic New" do
 
   describe "GET /admin/player/new with missing label" do
     before(:each) do
-      Factory.create :team, :name => ""
+      FactoryGirl.create :team, :name => ""
       get rails_admin_new_path(:model_name => "player")
     end
 

@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Destroy" do
 
   describe "destroy" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -21,7 +21,7 @@ describe "RailsAdmin Basic Destroy" do
 
   describe "destroy" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       get rails_admin_delete_path(:model_name => "player", :id => @player.id)
       click_button "Cancel"
       @player = RailsAdmin::AbstractModel.new("Player").first

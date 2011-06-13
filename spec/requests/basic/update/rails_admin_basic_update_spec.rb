@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with errors" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
 
@@ -18,7 +18,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update and add another" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
 
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
@@ -45,7 +45,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update and edit" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
 
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
@@ -72,8 +72,8 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with has-one association" do
     before(:each) do
-      @player = Factory.create :player
-      @draft = Factory.create :draft
+      @player = FactoryGirl.create :player
+      @draft = FactoryGirl.create :draft
 
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
@@ -100,8 +100,8 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with has-many association", :given => ["a league exists", "three teams exist"] do
     before(:each) do
-      @league = Factory.create :league
-      @divisions = 3.times.map { Factory.create :division }
+      @league = FactoryGirl.create :league
+      @divisions = 3.times.map { FactoryGirl.create :division }
 
       get rails_admin_edit_path(:model_name => "league", :id => @league.id)
 
@@ -154,8 +154,8 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with has-and-belongs-to-many association" do
     before(:each) do
-      @teams = 3.times.map { Factory.create :team }
-      @fan = Factory.create :fan, :teams => [@teams[0]]
+      @teams = 3.times.map { FactoryGirl.create :team }
+      @fan = FactoryGirl.create :fan, :teams => [@teams[0]]
 
       get rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
 
@@ -187,7 +187,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with invalid object" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
 
       get rails_admin_edit_path(:model_name => "player", :id => @player.id)
 
@@ -206,7 +206,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with serialized objects" do
     before(:each) do
-      @user = Factory.create :user
+      @user = FactoryGirl.create :user
 
       get rails_admin_edit_path(:model_name => "user", :id => @user.id)
 

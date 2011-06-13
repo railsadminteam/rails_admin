@@ -20,7 +20,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
   describe "RailsAdmin CanCan Authorization" do
     before(:each) do
       RailsAdmin.authorize_with :cancan
-      @user = Factory.create :user
+      @user = FactoryGirl.create :user
       login_as @user
     end
 
@@ -58,8 +58,8 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
         @players = [
-          Factory.create(:player, :retired => false),
-          Factory.create(:player, :retired => true),
+          FactoryGirl.create(:player, :retired => false),
+          FactoryGirl.create(:player, :retired => true),
         ]
 
         get rails_admin_list_path(:model_name => "player", :set => 1)
@@ -109,7 +109,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/edit should raise access denied" do
-        @player = Factory.create :player
+        @player = FactoryGirl.create :player
         lambda {
           get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
@@ -123,7 +123,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/edit should render and update record upon submission" do
-        @player = Factory.create :player
+        @player = FactoryGirl.create :player
         get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         response.body.should_not contain("Delete")
         fill_in "player[name]", :with => "Jackie Robinson"
@@ -134,14 +134,14 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/edit with retired player should raise access denied" do
-        @player = Factory.create :player, :retired => true
+        @player = FactoryGirl.create :player, :retired => true
         lambda {
           get rails_admin_edit_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player/1/delete should raise access denied" do
-        @player = Factory.create :player
+        @player = FactoryGirl.create :player
         lambda {
           get rails_admin_delete_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
@@ -155,7 +155,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/delete should render and destroy record upon submission" do
-        @player = Factory.create :player
+        @player = FactoryGirl.create :player
         player_id = @player.id
         get rails_admin_delete_path(:model_name => "player", :id => player_id)
 
@@ -165,15 +165,15 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/1/delete with retired player should raise access denied" do
-        @player = Factory.create :player, :retired => true
+        @player = FactoryGirl.create :player, :retired => true
         lambda {
           get rails_admin_delete_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player/bulk_delete should render and destroy records which are authorized to" do
-        active_player = Factory.create :player, :retired => false
-        retired_player = Factory.create :player, :retired => true
+        active_player = FactoryGirl.create :player, :retired => false
+        retired_player = FactoryGirl.create :player, :retired => true
 
         @delete_ids = [active_player, retired_player].map(&:id)
         get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)

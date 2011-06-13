@@ -17,14 +17,13 @@
 
 .ui-timepicker-table .ui-timepicker-title { line-height: 1.8em; text-align: center; }
 .ui-timepicker-table td { padding: 0.1em; width: 2.2em; }
-.ui-timepicker-table th.periods { padding: 0.1em; width: 2.2em; }
+.ui-timepicker-table th.periods { width: 2.2em; }
 
 /* span for disabled cells */
 .ui-timepicker-table td span {
 	display:block;
     padding:0.2em 0.3em 0.2em 0.5em;
     width: 1.2em;
-
     text-align:right;
     text-decoration:none;
 }

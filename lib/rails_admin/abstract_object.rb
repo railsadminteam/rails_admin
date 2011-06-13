@@ -18,7 +18,7 @@
     end
 
     def method_missing(name, *args, &block)
-      self.object.send name, *args, &block
+      self.object.send(name, *args, &block)
     end
 
     def save(options = { :validate => true })

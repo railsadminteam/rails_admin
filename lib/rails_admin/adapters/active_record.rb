@@ -20,10 +20,6 @@ module RailsAdmin
             self.send(association.name.to_s + '=', associated = (id.blank? ? nil : association.klass.find_by_id(id)))
           end
         end
-        
-        abstract_model.model.send(:define_method, :rails_admin_default_object_label_method) do 
-          "#{self.class.to_s} ##{self.try :id}"
-        end
       end
             
       def self.polymorphic_parents(name)

@@ -6,7 +6,7 @@
 
   if xhr
     collection = selected.map do |o|
-      [o.send(@label_method ||= config.with(:object => o).object_label_method), o.id]
+      [o.send(config.object_label_method), o.id]
     end
   else
     collection = field.associated_collection.sort_by {|a| selected_ids.index(a[1]) || selected_ids.size }

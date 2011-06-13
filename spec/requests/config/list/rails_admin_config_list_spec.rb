@@ -6,8 +6,8 @@ describe "RailsAdmin Config DSL List Section" do
 
     before(:each) do
       2.times.each do
-        Factory.create :league
-        Factory.create :player
+        FactoryGirl.create :league
+        FactoryGirl.create :player
       end
     end
 
@@ -285,7 +285,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -308,7 +308,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -333,7 +333,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -361,7 +361,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -382,7 +382,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -404,7 +404,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -427,7 +427,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @fans = 2.times.map { Factory.create :fan }
+      @fans = 2.times.map { FactoryGirl.create :fan }
 
       get rails_admin_list_path(:model_name => "fan")
 
@@ -447,8 +447,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      @team = Factory.create :team
-      @players = 2.times.map { Factory.create :player, :team => @team }
+      @team = FactoryGirl.create :team
+      @players = 2.times.map { FactoryGirl.create :player, :team => @team }
 
       get rails_admin_list_path(:model_name => "team")
 

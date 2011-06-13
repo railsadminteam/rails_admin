@@ -46,8 +46,6 @@ Webrat.configure do |config|
 end
 
 RSpec.configure do |config|
-  # Remove this line if you don't want RSpec's should and should_not
-  # methods or matchers
   require 'rspec/expectations'
 
   config.include RSpec::Matchers
@@ -55,9 +53,6 @@ RSpec.configure do |config|
   config.include Webrat::HaveTagMatcher
   config.include DatabaseHelpers
   config.include GeneratorHelpers
-
-  # == Mock Framework
-  config.mock_with :rr
 
   config.include Warden::Test::Helpers
 

@@ -15,7 +15,7 @@ describe "RailsAdmin History" do
 
   describe "when range starts in December" do
     it "does not produce SQL with empty IN () range" do
-      mock(RailsAdmin::History).find_by_sql(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", [1, 2, 3, 4], 2011]).returns([])
+      RailsAdmin::History.should_receive(:find_by_sql).with(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", [1, 2, 3, 4], 2011]).and_return([])
       RailsAdmin::History.get_history_for_dates(12, 4, 2010, 2011)
     end
   end
@@ -59,7 +59,7 @@ describe "RailsAdmin History" do
     before :all do
       @default_items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
       @model = RailsAdmin::AbstractModel.new("Player")
-      player = Factory.create :player
+      player = FactoryGirl.create :player
       30.times do |i|
         player.number = i
         RailsAdmin::AbstractHistory.create_history_item "change #{i}", player, @model, nil
