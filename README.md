@@ -29,9 +29,21 @@ Help
 ----
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
+Please don't use the issue tracker, which is for issues only.
+
+If you have good reasons to think you found a *rails_admin* bug, submit a ticket providing link to gists with:
+
+1. used rails_admin commit (in your Gemfile.lock)
+2. obtained stacktrace
+3. your initializers/rails_admin.rb
+4. models declarations that matter
+5. and anything else you find relevant
 
 API Update Note
 ---------------
+`object_label` is not directly configurable anymore, as it lead to performance issues when used with a list of records.
+Please use object_label_method instead.
+
 The ability to set model labels for each section (list, navigation, update, ...) has been removed,
 as it was deemed unnecessarily granular and was not fully honored in all displays.
 That also means that the methods `label_for_navigation`, etc. are no longer functional. They print a warning at the moment.
@@ -154,9 +166,9 @@ If you need to customize the label of the model, use:
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
 Dashboard page, list pages, etc.
 
-**The object_label method**
+**The object_label_method method**
 
-The model configuration has another option `object_label` which configures
+The model configuration has another option `object_label_method` which configures
 the title display of a single database record, i.e. an instance of a model.
 
 By default it tries to call "name" or "title" methods on the record in question. If the object responds to neither,
@@ -165,23 +177,26 @@ database identifier. You can add label methods (or replace the default [:name, :
 
     RailsAdmin.config {|c| c.label_methods << :description}
 
-This `object_label` value is used in a number of places in RailsAdmin--for instance as the
-output of belongs to associations in the listing views of related models, as
+This `object_label_method` value is used in a number of places in RailsAdmin--for instance for the
+output of belongs to associations in the listing views of related models, for
 the option labels of the relational fields' input widgets in the edit views of
-related models and as part of the audit information stored in the history
+related models and for part of the audit information stored in the history
 records--so keep in mind that this configuration option has widespread
 effects.
 
     RailsAdmin.config do |config|
       config.model Team do
-        object_label do
-          "#{bindings[:object].name} - #{bindings[:object].league.name}"
+        object_label_method do
+          :custom_label_method
         end
       end
     end
-
-This would output "Team's name - Team's league's name" in all the places
-mentioned in paragraph above example.
+    
+    def Team<ActiveRecord::Base
+      def custom_label_method
+        "Team #{self.name}"
+      end
+    end
 
 *Difference between `label` and `object_label`*
 
@@ -243,35 +258,37 @@ evaluated at runtime.
 This will desactivate config.navigation.max_visible_tabs.
 
     RailsAdmin.config do |config|
+      ..
       config.model Team do
         parent League
       end
-    end
-
-    RailsAdmin.config do |config|
       config.model Division do
         parent League
       end
+      ..
     end
 
 Obtained navigation:
 
     Dashboard
     ...
-    League
+    League # (non-clickable)
+      League
       Division
       Team
     ...
 
-If you want a non-clickable root menu entry, add 'dropdown ENTRY_NAME' to your parent.
-Your parent will then be placed INSIDE his dropdown, in FIRST position.
+You probably want to change the name of the dropdown. 
+This can be easily achieved with the 'dropdown' attribute of the parent model.
 
 Added to previous example:
 
     RailsAdmin.config do |config|
+      ...
       config.model League do
         dropdown 'League related'
       end
+      ...
     end
 
 Obtained navigation:
@@ -290,7 +307,7 @@ By default, they are ordered by alphabetical order. If you need to override this
 a weight attribute. Default is 0. Lower values will bubble items to the left, higher values
 will move them to the right. Items with same weight will still be ordered by alphabetical order.
 The mecanism is fully compatible with dropdown menus. Items will be ordered within their own
-menu subset.
+menu subset. (but parent will always be first inside his submenu).
 
 Example:
 
@@ -825,6 +842,27 @@ Everything can be overridden with `help`:
       end
     end
 
+**Fields - Paperclip**
+    
+    class Team < ActiveRecord::Base
+      has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  
+      # handling delete in your model, if needed. Replace all image occurences with your asset name.
+      attr_accessor :delete_image
+      before_save { self.image = nil if self.delete_image == '1' }
+    end
+    
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :image do
+            thumb_method :thumb # for images. Will default to full size image, which might break the layout
+            delete_method :delete_image # actually not needed in this case: default is "delete_#{field_name}" if the object responds to it
+          end
+        end
+      end
+    end
+    
 **Fields - Enum**
 
 Fields of datatype string, integer, text can be rendered with select boxes, if object responds to `method_enum`.
@@ -833,7 +871,7 @@ Fields of datatype string, integer, text can be rendered with select boxes, if o
       ...
       def color_enum
         self.team.available_color_choices
-        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]]
+        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]] or { "Red" => :red, ...
       end
       ...
     end

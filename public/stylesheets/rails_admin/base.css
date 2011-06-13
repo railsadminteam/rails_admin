@@ -202,8 +202,23 @@ h1#logo span.image_replacement{
   margin-bottom: 10px;
 }
 
-.ra-button .ui-button-text {
-  line-height: 1em;
+/* 
+  Buttons fine-tweacking for FF/Webkit 
+  All values are dependent, and should not be side-effected from anywhere else, hence the ugly '!important' flags
+*/
+input.ui-button, .ui-button-text-only .ui-button-text {
+  font-family: Helvetica,Arial,sans-serif !important;
+  font-size:14px !important;
+}
+input.ui-button {
+  height: 28px !important;
+  padding-top: 5px !important; 
+  padding-bottom: 7px !important;
+}
+.ui-button-text-only .ui-button-text {
+  height: 20px !important;
+  padding-top: 4px !important;
+  padding-bottom: 2px !important;
 }
 
 input {

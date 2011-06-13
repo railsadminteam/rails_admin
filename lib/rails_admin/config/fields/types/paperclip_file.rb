@@ -12,7 +12,15 @@ module RailsAdmin
           register_instance_option(:partial) do
             :form_paperclip_file
           end
-
+          
+          register_instance_option(:delete_method) do
+            "delete_#{name}" if bindings[:object].respond_to?("delete_#{name}")
+          end
+          
+          register_instance_option(:thumb_method) do
+            nil
+          end
+          
           def value
             if bindings[:object].send(name).file?
               bindings[:object].send(name).url

@@ -1,5 +1,5 @@
 <%
-  params = request.params.except(:action, :controller, :model_name, :utf8)
+  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
   query = params[:query]
   filter = params[:filter]
   sort = params[:sort]
@@ -36,6 +36,11 @@
           <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
           <div class="ra-block-toolbar ui-state-highlight">
             <ul>
+              <% if authorized? :export, @abstract_model %>
+              <li>
+               <%= link_to(t("admin.list.export_action"), rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), :class => "ra-button", :method => :post) %>
+              </li>
+              <% end %>
               <li>
                <%= link_to(t("admin.history.name"), rails_admin_history_model_path, :class => "ra-button") %>
               </li>
@@ -52,7 +57,7 @@
               </fieldset>
             <% end %>
           </div>
-          <%= form_tag rails_admin_bulk_delete_path(:model_name => @abstract_model.to_param), :method => :get do %>
+          <%= form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :post do %>
             <table class="grid">
               <thead>
                 <tr>
@@ -75,16 +80,22 @@
                   <th class="action"><%= t("admin.list.edit_action").upcase if authorized? :edit, @abstract_model %></th>
                   <% if authorized? :delete, @abstract_model %>
                   <th class="action"><%= t("admin.list.delete_action").upcase %></th>
-                  <th class="action"><%= t("admin.list.select_action").upcase %></th>
                   <% end %>
+                  <th class="action"><%= t("admin.list.select_action").upcase %></th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
-                  <td colspan="<%= properties.length + 3 + (authorized?(:delete, @abstract_model) ? 2 : 0) %>">
-                    <% if authorized? :delete, @abstract_model %>
-                      <%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :style => "float:right;margin-top: 10px;" %>
-                    <% end %>
+                  <td colspan="<%= properties.length + 5 %>" class="ra-block-toolbar">
+                    <ul>
+                      <% if authorized? :delete, @abstract_model %>
+                        <li><%= submit_tag t("admin.list.delete_selected"), :class => "ra-button", :name => :bulk_delete %></li>
+                      <% end %>
+                     
+                      <% if authorized? :export, @abstract_model %>
+                        <li><%= submit_tag t("admin.list.export_selected"), :class => "ra-button", :name => :bulk_export %></li>
+                      <% end %>
+                    </ul>
                     <div class="pagination">
                       <% if @page_count.to_i > 1 %>
                         <%= paginate(@current_page, @page_count, :url => params).html_safe %>
@@ -119,7 +130,7 @@
                   <td class="action delete">
                     <%= link_to(t("admin.list.delete_action"), rails_admin_delete_path(:model_name => @abstract_model.to_param, :id => object.id)) if authorized? :delete, @abstract_model, object %>
                   </td>
-                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_destroy_#{object.id}" if authorized? :delete, @abstract_model, object %></td>
+                  <td class="action select"><%= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}" %></td>
                   <% end %>
                 </tr>
                 <% end %>

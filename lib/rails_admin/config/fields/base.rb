@@ -186,7 +186,7 @@ module RailsAdmin
 
         # Reader for field's value
         def value
-          bindings[:object].send(name)
+          bindings[:object].safe_send(name)
         end
                 
         # Reader for field's name

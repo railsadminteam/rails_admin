@@ -42,7 +42,7 @@ describe RailsAdmin do
         options = nil
         proc    = RailsAdmin.authorize_with(:example, options)
 
-        mock(ExampleModule::AuthorizationAdapter).new(RailsAdmin)
+        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin)
         proc.call
       end
 
@@ -50,7 +50,7 @@ describe RailsAdmin do
         options = { :option => true }
         proc    = RailsAdmin.authorize_with(:example, options)
 
-        mock(ExampleModule::AuthorizationAdapter).new(RailsAdmin, options)
+        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin, options)
         proc.call
       end
     end
@@ -65,7 +65,7 @@ describe RailsAdmin do
       end
 
       it "initializes configuration adapter" do
-        mock(ExampleModule::ConfigurationAdapter).new
+        ExampleModule::ConfigurationAdapter.should_receive(:new)
         RailsAdmin.configure_with(:example)
       end
 
