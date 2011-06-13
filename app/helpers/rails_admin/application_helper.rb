@@ -229,7 +229,7 @@ module RailsAdmin
       :delete        => ViewType.new("Delete",   :edit,      :object, :delete),
       :history       => ViewType.new("History",  :edit,      :object, nil,            :history_object),
       :edit          => ViewType.new("Edit",     :list,      :object, :edit),
-      :bulk_delete   => ViewType.new("Delete",   :list,      :model,  :delete),
+      :bulk_destroy  => ViewType.new("Delete",   :list,      :model,  :delete),
       :new           => ViewType.new("New",      :list,      :model,  :new),
       :model_history => ViewType.new("History",  :list,      :model,  nil,            :history_model),
       :list          => ViewType.new("List",     :dashboard, :model,  :list),
