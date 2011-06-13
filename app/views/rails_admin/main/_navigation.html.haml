@@ -10,23 +10,21 @@
   %li{:class => ("active" if @page_type == "dashboard")}
     = link_to(t("admin.dashboard.name"), rails_admin_dashboard_path)
   - root_models[0..max_visible_tabs-1].each do |model|
-    - tab_titles = [model.abstract_model.pretty_name.downcase]
-    - children = models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
-    - children.each { |child| tab_titles << child.abstract_model.pretty_name.downcase }
+    - children = [model] + models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
+    - tab_titles = children.map { |child| child.abstract_model.pretty_name.downcase }
     %li{:class => "#{"active" if tab_titles.include? @page_type} #{"more" unless children.empty?}"}
-      - unless model.dropdown
-        = link_to(model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param))
+      - if children.size == 1
+        = link_to(model.label.pluralize, rails_admin_list_path(:model_name => model.abstract_model.to_param))
       - else
-        %a{:href => "#"}= t(model.dropdown.to_s, :default => model.dropdown.to_s)
-        - children = [model] + children
-      %ul
-        - children.each do |child|
-          %li{:class => ("active" if @page_type == child.abstract_model.pretty_name.downcase)}
-            = link_to(child.label, rails_admin_list_path(:model_name => child.abstract_model.to_param))
+        %a{:href => "#"}= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label.pluralize
+        %ul
+          - children.each_with_index do |child, index|
+            %li{:class => "active" if @page_type == tab_titles[index]}
+              = link_to(child.label.pluralize, rails_admin_list_path(:model_name => child.abstract_model.to_param))
   - if root_models.size > max_visible_tabs
     %li.more.plus
       %a{:href => "#"} &raquo;
       %ul
         - models[max_visible_tabs..root_models.size].each do |model|
           %li{:class => ("active" if @page_type == model.abstract_model.pretty_name.downcase)}
-            = link_to(model.label, rails_admin_list_path(:model_name => model.abstract_model.to_param))
+            = link_to(model.label.pluralize, rails_admin_list_path(:model_name => model.abstract_model.to_param))
