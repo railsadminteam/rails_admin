@@ -19,7 +19,7 @@
         %a{:href => "#"}= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label.pluralize
         %ul
           - children.each_with_index do |child, index|
-            %li{:class => "active" if @page_type == tab_titles[index]}
+            %li{:class => ("active" if @page_type == tab_titles[index])}
               = link_to(child.label.pluralize, rails_admin_list_path(:model_name => child.abstract_model.to_param))
   - if root_models.size > max_visible_tabs
     %li.more.plus
