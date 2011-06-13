@@ -213,13 +213,10 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_delete, @abstract_model) if @authorization_adapter
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
-<<<<<<< HEAD
-=======
       
       @bulk_objects, @current_page, @page_count, @record_count = list_entries
       
       render :action => 'bulk_delete', :layout => 'rails_admin/delete'
->>>>>>> master
     end
 
     def bulk_destroy
