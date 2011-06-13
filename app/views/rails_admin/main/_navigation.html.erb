@@ -16,7 +16,7 @@
             <% if children.size == 1 %>
               <%= link_to(model.label.pluralize, rails_admin_list_path(:model_name => model.abstract_model.to_param)) %>
             <% else %>
-              <a href="#"><%= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label %></a>
+              <a href="#"><%= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label.pluralize %></a>
               <ul>
                 <% children.each_with_index do |child, index| %>
                   <li class="<%= "active" if @page_type == tab_titles[index] %>">

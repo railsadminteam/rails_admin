@@ -43,7 +43,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       get rails_admin_dashboard_path
       response.should have_tag("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Cms/Basic Page", "Comment", "Division", "Draft", "Fan", "League", "Player", "Team", "User"]
+        as.map(&:content)[1..-1].should == ["Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
       end
     end
     
@@ -56,7 +56,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       get rails_admin_dashboard_path
       response.should have_tag("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Team", "Cms/Basic Page", "Comment", "Division", "Draft", "Fan", "League", "Player", "User"]
+        as.map(&:content)[1..-1].should == ["Teams", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"]
       end
     end
     
@@ -69,10 +69,10 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       get rails_admin_dashboard_path
       response.should have_tag("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Cms/Basic Page", "Division", "Draft", "Fan", "League", "Player", "Team", "User"]
+        as.map(&:content)[1..-1].should == ["Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
       end
       response.should have_tag("#nav>li.more>ul>li>a") do |as|
-        as.map(&:content).should == ["Cms/Basic Page", "Comment"]
+        as.map(&:content).should == ["Cms/Basic Pages", "Comments"]
       end
     end
 
@@ -87,10 +87,10 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       get rails_admin_dashboard_path
       response.should have_tag("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["CMS related", "Division", "Draft", "Fan", "League", "Player", "Team", "User"]
+        as.map(&:content)[1..-1].should == ["CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
       end
       response.should have_tag("#nav>li.more>ul>li>a") do |as|
-        as.map(&:content).should == ["Cms/Basic Page", "Comment"]
+        as.map(&:content).should == ["Cms/Basic Pages", "Comments"]
       end
     end
     
@@ -106,7 +106,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       get rails_admin_dashboard_path
       response.should have_tag("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Division", "Draft", "Fan", "League", "Player", "Team", "User", "CMS related"]
+        as.map(&:content)[1..-1].should == ["Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"]
       end
     end
   end
