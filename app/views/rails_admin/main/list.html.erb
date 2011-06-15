@@ -34,10 +34,10 @@
             unless value_hash['disabled']
               field_options = case field.type
               when :enum
-                options_for_select(field.with(:object => @abstract_model.model.new).enum, value_hash['value']).gsub("\n", '')
+                options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
               else
                 ''
-              end
+              end 
               "append_filter('#{field.label}', '#{field.name}', '#{field.type}', '#{value_hash['value']}', '#{value_hash['operator']}', '#{field_options}');"
             end
           end.join
@@ -76,7 +76,7 @@
                   <% @searchable_fields.each do |field| %>
                     <% field_options = case field.type
                     when :enum
-                      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum)
+                      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
                     else
                       ''
                     end %>

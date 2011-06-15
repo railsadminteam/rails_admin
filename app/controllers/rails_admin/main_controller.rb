@@ -281,20 +281,26 @@ module RailsAdmin
     def get_conditions_hash(query, filters)
       
       # TODO for filtering engine
-      #   some severe styling, it's fugly
-      #   some severe javascript refactoring, it's fugly too
+      #   icon for delete
+      #   use a hidden field to store serialized params and send them through post (pagination, export links, show all link, sort links)
       #   Tricky cases where:
-      #     query can't be made on any of the avalaible attributes (will it happen a lot0 Error messages?)
+      #     query can't be made on any of the avalaible attributes (will it happen a lot Error messages?)
       #     filter can't apply to the targetted attribute (should be sanitized front)
-      
       #   extend engine to :
-      #      :belongs_to_association with dropdown/autocomplete
-      #      :implement datetime
+      #      belongs_to autocomplete id (optionnal)
+      #      datetime (front done, todo controller)
+      #      date & time ?
       
       #  LATER
       #   find a way for complex request (OR/AND)?
       #   multiple words queries
       #   find a way to force a column nonetheless? 
+      
+      # TODO else
+      #   searchable & filtering engine
+      #   has_one ?
+      #   has_many ?
+      #   polymorphic ?
       
       
       return {} if query.blank? && filters.blank? # perf

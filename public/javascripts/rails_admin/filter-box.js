@@ -23,15 +23,15 @@ var append_filter = function(field_label, field_name, field_type, field_value, f
       '</select>';
       break;
     case 'datetime':
-      var control = '<select value="' + field_operator + '" name="filters[' +  field_name + '][][operator]">' + 
-        '<option value="today" data-additional-fieldset="false" data-additional-wording="">Today</option>' +
-        '<option value="yesterday" data-additional-fieldset="false" data-additional-wording="">Yesterday</option>' +
-        '<option value="this_week" data-additional-fieldset="false" data-additional-wording="">This week</option>' +
-        '<option value="last_week" data-additional-fieldset="false" data-additional-wording="">Last week</option>' +
-        '<option value="less_than" data-additional-input="true" data-additional-wording="days">Less than ... days ago</option>' +
-        '<option value="more_than" data-additional-input="true" data-additional-wording="days">More than ... days ago</option>' +
+      var control = '<select class="switch-additionnal-fieldsets" value="' + field_operator + '" name="filters[' +  field_name + '][][operator]">' + 
+        '<option value="today" data-additional-fieldset="false">Today</option>' +
+        '<option value="yesterday" data-additional-fieldset="false">Yesterday</option>' +
+        '<option value="this_week" data-additional-fieldset="false">This week</option>' +
+        '<option value="last_week" data-additional-fieldset="false">Last week</option>' +
+        '<option value="less_than" data-additional-fieldset="true">Less than ... days ago</option>' +
+        '<option value="more_than" data-additional-fieldset="true">More than ... days ago</option>' +
       '</select>' +
-      '<input type="text" name="filters[' +  field_name + '][][value]" value="' + field_value + '" /> ';
+      '<input class="additional-fieldset" style="display:none;" type="text" name="filters[' +  field_name + '][][value]" value="' + field_value + '" /> ';
       break;
     case 'enum':
       
@@ -62,4 +62,16 @@ var append_filter = function(field_label, field_name, field_type, field_value, f
       control +
     '</div>'
   );
+  
+  $j('.switch-additionnal-fieldsets').live('change', function() {
+    var selected_option = $j(this).find('option:selected');
+    if($j(selected_option).data('additional-fieldset')) {
+      $j(this).siblings('.additional-fieldset').val('');
+      $j(this).siblings('.additional-fieldset').show();
+    } else {
+      $j(this).siblings('.additional-fieldset').hide();
+    }
+  });
+  
+
 }
