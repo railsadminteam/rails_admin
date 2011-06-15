@@ -73,7 +73,7 @@ describe "RailsAdmin Basic List" do
     end
     
     it "should allow to query on any attribute" do
-      get rails_admin_list_path(:model_name => "player", :query => @players[0].id, :set => 1)
+      get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :set => 1)
       response.body.should contain(@players[0].name)
       (1..3).each do |i|
         response.body.should_not contain(@players[i].name)
