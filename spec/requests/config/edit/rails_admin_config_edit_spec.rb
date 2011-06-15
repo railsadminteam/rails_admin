@@ -637,7 +637,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
   
   describe "Enum field support" do
-    it "should show input with class enum" do
+    it "should auto-detect enumeration when object responds to '\#{method}_enum'" do
       class Team
         def color_enum
           ["blue", "green", "red"]
@@ -651,11 +651,64 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       get rails_admin_new_path(:model_name => "team")
       response.should have_tag("select.enum")
+      response.should contain("green")
       
       #Reset
       Team.send(:remove_method, :color_enum)  
       RailsAdmin::Config.reset Team
     end
+    
+    it "should allow configuration of the enum method" do
+      class Team
+        def color_list
+          ["blue", "green", "red"]
+        end
+      end
+      
+      RailsAdmin.config Team do
+        edit do
+          field :color, :enum do
+            enum_method :color_list
+          end
+        end
+      end
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag("select.enum")
+      response.should contain("green")
+      
+      #Reset
+      Team.send(:remove_method, :color_list)
+      RailsAdmin::Config.reset Team
+    end
+    
+    it "should allow direct listing of enumeration options and override enum method" do
+      class Team
+        def color_list
+          ["blue", "green", "red"]
+        end
+      end
+      
+      RailsAdmin.config Team do
+        edit do
+          field :color, :enum do
+            enum_method :color_list
+            enum do
+              ["yellow", "black"]
+            end
+          end
+        end
+      end
+      
+      get rails_admin_new_path(:model_name => "team")
+      response.should have_tag("select.enum")
+      response.should_not contain("green")
+      response.should contain("yellow")
+    
+      #Reset
+      Team.send(:remove_method, :color_list)
+      RailsAdmin::Config.reset Team
+    end
+
   end
   
   describe "ColorPicker Support" do

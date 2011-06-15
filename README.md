@@ -940,13 +940,16 @@ Everything can be overridden with `help`:
     
 **Fields - Enum**
 
-Fields of datatype string, integer, text can be rendered with select boxes, if object responds to `method_enum`.
+Fields of datatype string, integer, text can be rendered with select boxes. Auto-detected if object responds to `#{method_name}_enum`.
+You can use `enum_method` to indicate the name of the enumeration method in your model.
+You can use `enum` to override any `enum_method` and give back a `FormOptionsHelper#options_for_select` collection.
 
     class Team < ActiveRecord::Base
       ...
       def color_enum
-        self.team.available_color_choices
-        # return collection like ["blue", "yellow", "red"] or [["blue", 1], ["yellow", 2], ["red", 3]] or { "Red" => :red, ...
+        [['blue', 'red'], 'red']
+        # should return any collection accepted by `FormOptionsHelper#options_for_select`
+        # See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select
       end
       ...
     end
@@ -954,13 +957,26 @@ Fields of datatype string, integer, text can be rendered with select boxes, if o
     RailsAdmin.config do |config|
       config.model Team do
         edit do
-          field :name
           field :color
-          field :created_at do
-            date_format :short
-          end
-          field :updated_at do
-            strftime_format "%Y-%m-%d"
+          # defaults to 
+          # field :color, :enum do
+          #   enum_method do
+          #     :color_enum
+          #   end
+          # end
+        end
+      end
+    end
+    
+If you don't have any enumeration method in your model, this will work:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :color, :enum do
+            enum do
+              ['green', 'white']
+            end
           end
         end
       end

@@ -289,8 +289,7 @@ module RailsAdmin
       
       #   extend engine to :
       #      :belongs_to_association with dropdown/autocomplete
-      #      :enum with dropdown
-      #      :string, :text with starts_with/ends_with/exact options
+      #      :implement datetime
       
       #  LATER
       #   find a way for complex request (OR/AND)?
@@ -324,17 +323,19 @@ module RailsAdmin
         conditions[0] += " AND " unless conditions == [""]
         conditions[0] += "(#{query_statements.join(" OR ")})"  # any column field will do
       end
-            
+      
       if filters.present?
         filters.each_pair do |field_name, values_dump|
           values_dump.each do |value_dump|
             unless value_dump['disabled']
               field_statements = []
               @searchable_fields[field_name.intern].each do |field_infos|
-                statement, value = build_statement(field_infos[:column], field_infos[:type], value_dump[:value], (value_dump[:operator] || 'default'))
-                unless statement.nil? || value.nil?
-                  field_statements << statement
-                  values << value
+                unless field_infos[:disabled]
+                  statement, value = build_statement(field_infos[:column], field_infos[:type], value_dump[:value], (value_dump[:operator] || 'default'))
+                  unless statement.nil? || value.nil?
+                    field_statements << statement
+                    values << value
+                  end
                 end
               end
               filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?

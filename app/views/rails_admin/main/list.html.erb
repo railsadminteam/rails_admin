@@ -28,11 +28,18 @@
       $("#content").html(data);
     });
     
-    
     <%= params[:filters].map do |field_name, values_hash|
           field = @searchable_fields.find{ |field| field.name == field_name.intern }
           values_hash.map do |value_hash|
-            "append_filter('#{field.label}', '#{field.name}', '#{field.type}', '#{value_hash['value']}', '#{value_hash['operator']}', '');" unless value_hash['disabled']
+            unless value_hash['disabled']
+              field_options = case field.type
+              when :enum
+                options_for_select(field.with(:object => @abstract_model.model.new).enum, value_hash['value']).gsub("\n", '')
+              else
+                ''
+              end
+              "append_filter('#{field.label}', '#{field.name}', '#{field.type}', '#{value_hash['value']}', '#{value_hash['operator']}', '#{field_options}');"
+            end
           end.join
         end.join unless params[:filters].blank? %>
   });
@@ -59,7 +66,7 @@
                 </li>
               <% end %>
             </ul>
-            <%= form_tag(rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page}), :method => "get", :remote => true) do %>
+            <%= form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page || key.to_sym == :filters}), :method => :post, :remote => true) do %>
               <fieldset>
                 <input type="text" name="query" value="<%= query %>" size="32" />
                 <input type="submit" class="ra-button" value="<%= t("admin.list.search").upcase %>" />
@@ -67,10 +74,16 @@
                 <select id="filter_select">
                   <option value="">Add filter</option>
                   <% @searchable_fields.each do |field| %>
-                    <option data-field-options="" data-field-value="" data-field-type="<%= field.type %>" data-field-name="<%= field.name %>" data-field-label="<%= field.label %>"><%=field.label %></option>
+                    <% field_options = case field.type
+                    when :enum
+                      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum)
+                    else
+                      ''
+                    end %>
+                    <option data-field-options="<%= field_options %>" data-field-value="" data-field-type="<%= field.type %>" data-field-name="<%= field.name %>" data-field-label="<%= field.label %>"><%=field.label %></option>
                   <% end %>
                 </select>
-                <div id="filters_box" style="clear:both; margin: 10px 10px;">
+                <div id="filters_box">
                 </div>
               </fieldset>
             <% end %>
@@ -120,8 +133,8 @@
                       <% end %>
                       <%= @record_count %>
                       <%= @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase) %>
-                      <% if @page_count.to_i == 2 %>
-                        <%= link_to(t("admin.list.show_all"), rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :all => true, :remote => true, :class => "showall"))) %>
+                      <% if @record_count.to_i <= 100 && @page_count.to_i > 1 %>
+                        <%= link_to(t("admin.list.show_all"), rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")), :method => :get, :remote => true) %>
                       <% end %>
                     </div>
                   </td>
