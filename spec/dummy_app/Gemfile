@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.8'
+gem 'rails', '3.0.9'
 gem 'rails_admin', :path => '../../'
 gem 'devise', '~> 1.3.4'
 gem 'mlb', '~> 0.5.4'
