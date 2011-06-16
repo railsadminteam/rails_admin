@@ -1,10 +1,6 @@
-<%
-  collection = field.bindings[:object].send("#{field.method_name}_enum")
-%>
-
 <div class="field <%= field.dom_id %>">
   <%= form.label field.method_name, field.label %>
-  <%= form.select field.method_name, collection, {:include_blank => true}, field.html_attributes.merge({ :class => "enum" }) %>
+  <%= form.select field.method_name, field.enum, {:include_blank => true}, field.html_attributes.merge({ :class => "enum" }) %>
   <% if field.has_errors? %>
     <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
   <% end %>

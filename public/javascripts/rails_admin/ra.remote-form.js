@@ -35,7 +35,8 @@
           },
           error: function(xhr, status, error) {
             dialog.html(xhr.responseText);
-          }
+          },
+          dataType: 'text'
         });
       });
     },

@@ -79,3 +79,29 @@
 .grid tbody td.boolean {
   padding: 0 20px 0 0;
 }
+
+.filter {
+  display:block;
+  float:left;
+  margin-top:10px;
+}
+
+.filter>* {
+  display:block;
+  float:left;
+}
+
+.filter input, .filter select {
+  padding:0px;
+  margin-left:8px;
+}
+
+.filter label {
+  color:black;
+  width: 100px;
+  margin-left:10px;
+}
+
+.filter .delete {
+  color:red;
+}

@@ -11,8 +11,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @sortable = false
-
           # Accessor for field's label.
           register_instance_option(:label) do
             name.to_s.humanize
@@ -30,6 +28,14 @@ module RailsAdmin
 
           # Reader for whether this is a serial field (aka. primary key, identifier).
           register_instance_option(:serial?) do
+            false
+          end
+          
+          register_instance_option(:sortable) do
+            false
+          end
+          
+          register_instance_option(:searchable) do
             false
           end
         end
