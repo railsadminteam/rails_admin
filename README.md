@@ -79,11 +79,9 @@ to override the default with a Member model run:
 
     $ rake rails_admin:install model_name=member
 
-If you want to use the CKEditor, you need to [download it](http://ckeditor.com/download) from source
-and unpack the 'ckeditor' folder into your default 'public/javascripts' folder. If you're using any
-non-Windows system, you can try to use the automatic downloader:
+Mount rails_admin engine in your config/routes.rb file
 
-    $ rake rails_admin:ckeditor_download
+    mount RailsAdmin::Engine => "/admin"
 
 Usage
 -----
