@@ -6,8 +6,6 @@ module RailsAdmin
       module Types
         class FileUpload < RailsAdmin::Config::Fields::Types::String
 
-          @searchable = true
-
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 

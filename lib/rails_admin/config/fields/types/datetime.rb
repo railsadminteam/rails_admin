@@ -129,6 +129,10 @@ module RailsAdmin
           def parse_input(params)
             params[name] = self.class.normalize(params[name], "#{localized_date_format} #{localized_time_format}") if params[name]
           end
+          
+          register_instance_option(:sort_reverse?) do
+            true
+          end
 
           register_instance_option(:date_format) do
             self.class.format

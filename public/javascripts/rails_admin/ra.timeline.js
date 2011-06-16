@@ -128,7 +128,7 @@
         this.months.prepend(
           '<li style="width:' + this.monthWidth + 'px" data-year="' + date.getFullYear() + '" data-month="' + (parseInt(date.getMonth(), 10) + 1) + '">' +
             '<span class="month">' + this.getMonthName(date) + '</span>' +
-            '<span class="bar"><span></span</span>' +
+            '<span class="bar"><span></span></span>' +
           '</li>'
         );
 

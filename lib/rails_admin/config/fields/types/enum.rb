@@ -4,8 +4,7 @@ module RailsAdmin
   module Config
     module Fields
       module Types
-        class Enum < RailsAdmin::Config::Fields::Base          
-          @searchable = true
+        class Enum < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types::register(self)
           
           register_instance_option(:partial) do
@@ -21,6 +20,14 @@ module RailsAdmin
               :class => "#{css_class} #{has_errors? ? "errorField" : nil} enum",
               :value => value
             }
+          end
+          
+          register_instance_option(:enum_method) do
+            @enum_method ||= (bindings[:object].respond_to?("#{name}_enum") ? "#{name}_enum" : name)
+          end
+          
+          register_instance_option(:enum) do
+            bindings[:object].send(self.enum_method)
           end
         end
       end

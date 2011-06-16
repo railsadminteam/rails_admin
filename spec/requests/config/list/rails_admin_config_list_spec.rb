@@ -506,7 +506,7 @@ describe "RailsAdmin Config DSL List Section" do
             sort_reverse true
           end
         end
-
+        
         get rails_admin_list_path(:model_name => "player")
         response.should have_tag(".grid tbody tr") do |elements|
           player_names_by_date.reverse.each_with_index do |name, i|
