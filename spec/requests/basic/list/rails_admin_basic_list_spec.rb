@@ -81,7 +81,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to filter on one attribute" do
-      get rails_admin_list_path(:model_name => "player", :filters => {:injured => [{:value => "true"}]}, :set => 1)
+      get rails_admin_list_path(:model_name => "player", :filters => {:injured => {"1" => {:value => "true"}}}, :set => 1)
       response.body.should contain(@players[0].name)
       response.body.should_not contain(@players[1].name)
       response.body.should contain(@players[2].name)
@@ -89,7 +89,7 @@ describe "RailsAdmin Basic List" do
     end
     
     it "should allow to combine filters on two different attributes" do
-      get rails_admin_list_path(:model_name => "player", :filters => {:retired => [{ :value => "true"}], :injured => [{ :value => "true" }]}, :set => 1)
+      get rails_admin_list_path(:model_name => "player", :filters => {:retired => {"1" => {:value => "true"}}, :injured => {"1" => {:value => "true"}}}, :set => 1)
       response.body.should contain(@players[0].name)
       (1..3).each do |i|
         response.body.should_not contain(@players[i].name)
@@ -97,7 +97,7 @@ describe "RailsAdmin Basic List" do
     end
     
     it "should allow to filter on belongs_to relationships" do
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{ :value => @teams[0].name }]}, :set => 1)
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => { :value => @teams[0].name }}}, :set => 1)
       response.body.should contain(@players[0].name)
       response.body.should contain(@players[1].name)
       response.body.should_not contain(@players[2].name)
@@ -127,7 +127,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{:value => @teams.first.id}]})
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.id}}})
       response.body.should contain(@players[0].name)
       response.body.should contain(@players[1].name)
       response.body.should_not contain(@players[2].name)
@@ -145,7 +145,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{:value => @teams.first.name}]})
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
       response.body.should contain(@players[0].name)
       response.body.should contain(@players[1].name)
       response.body.should_not contain(@players[2].name)
@@ -160,7 +160,7 @@ describe "RailsAdmin Basic List" do
           field :team_id
         end
       end
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{:value => @teams.first.name}]})
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
       response.body.should contain(@players[0].name)
       response.body.should contain(@players[1].name)
       response.body.should_not contain(@players[2].name)
@@ -177,7 +177,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{:value => @teams.first.name}]})
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
       response.body.should contain(@players[0].name)
       response.body.should contain(@players[1].name)
       response.body.should_not contain(@players[2].name)
@@ -194,13 +194,13 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{:value => @teams.first.name}, {:value => @teams.first.id}]})
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.first.id}}})
       response.body.should contain(@players[0].name)
       response.body.should contain(@players[1].name)
       response.body.should_not contain(@players[2].name)
       response.body.should_not contain(@players[3].name)
       # same with a different id
-      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => [{:value => @teams.first.name}, {:value => @teams.last.id}]})
+      get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.last.id}}})
       response.body.should_not contain(@players[0].name)
       response.body.should_not contain(@players[1].name)
       response.body.should_not contain(@players[2].name)

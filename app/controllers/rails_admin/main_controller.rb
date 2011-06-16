@@ -281,15 +281,12 @@ module RailsAdmin
     def get_conditions_hash(query, filters)
       
       # TODO for filtering engine
-      #   icon for delete
       #   use a hidden field to store serialized params and send them through post (pagination, export links, show all link, sort links)
       #   Tricky cases where:
       #     query can't be made on any of the avalaible attributes (will it happen a lot Error messages?)
       #     filter can't apply to the targetted attribute (should be sanitized front)
       #   extend engine to :
       #      belongs_to autocomplete id (optionnal)
-      #      datetime (front done, todo controller)
-      #      date & time ?
       
       #  LATER
       #   find a way for complex request (OR/AND)?
@@ -299,7 +296,6 @@ module RailsAdmin
       # TODO else
       #   searchable & filtering engine
       #   has_one ?
-      #   has_many ?
       #   polymorphic ?
       
       
@@ -307,8 +303,7 @@ module RailsAdmin
       
       @like_operator =  "ILIKE" if ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
       @like_operator ||= "LIKE"
-      @searchable_fields = @model_config.list.fields.inject({}){ |memo, field| memo[field.name] = field.searchable_columns; memo }
-
+      
       query_statements = []
       filters_statements = []
       values = []
@@ -316,8 +311,9 @@ module RailsAdmin
 
       
       if query.present?
-        @searchable_fields.map{|k,v|v}.flatten.each do |field_infos|
-          statement, value = build_statement(field_infos[:column], field_infos[:type], query, 'default')
+        @queryable_fields = @model_config.list.fields.select(&:queryable?).map(&:searchable_columns).flatten
+        @queryable_fields.each do |field_infos|
+          statement, *value = build_statement(field_infos[:column], field_infos[:type], query, 'default')
           if statement && value
             query_statements << statement
             values << value
@@ -331,21 +327,20 @@ module RailsAdmin
       end
       
       if filters.present?
-        filters.each_pair do |field_name, values_dump|
-          values_dump.each do |value_dump|
-            unless value_dump['disabled']
-              field_statements = []
-              @searchable_fields[field_name.intern].each do |field_infos|
-                unless field_infos[:disabled]
-                  statement, value = build_statement(field_infos[:column], field_infos[:type], value_dump[:value], (value_dump[:operator] || 'default'))
-                  unless statement.nil? || value.nil?
-                    field_statements << statement
-                    values << value
-                  end
+        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name] = field.searchable_columns; memo }
+        filters.each_pair do |field_name, filters_dump|
+          filters_dump.each do |filter_index, filter_dump|
+            field_statements = []
+            @filterable_fields[field_name.intern].each do |field_infos|
+              unless filter_dump[:disabled]
+                statement, *value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
+                unless statement.nil? || value.nil?
+                  field_statements << statement
+                  values << value
                 end
               end
-              filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
             end
+            filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
           end
         end
       end
@@ -355,7 +350,7 @@ module RailsAdmin
        conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
       end
       
-      conditions += values
+      conditions += values.flatten
       conditions != [""] ? { :conditions => conditions } : {}
     end
     
@@ -377,8 +372,23 @@ module RailsAdmin
           "#{value}"
         end
         ["(#{column} #{@like_operator} ?)", value]
-      when :datetime
-        ["(#{column} #{operator == 'before' ? '<=' : '>='} ?)", value]
+      when :datetime, :timestamp, :date
+        return unless operator != 'default'
+        values = case operator
+        when 'today'
+          [Date.today.beginning_of_day, Date.today.end_of_day]
+        when 'yesterday'
+          [Date.yesterday.beginning_of_day, Date.yesterday.end_of_day]
+        when 'this_week'
+          [Date.today.beginning_of_week.beginning_of_day, Date.today.end_of_week.end_of_day]
+        when 'last_week'
+          [1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
+        when 'less_than'
+          [value.to_i.days.ago, DateTime.now]
+        when 'more_than'
+          [2000.years.ago, value.to_i.days.ago]
+        end
+        ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
         ["(#{column} #{@like_operator} ?)", value]
       end
@@ -426,7 +436,7 @@ module RailsAdmin
     def list_entries(other = {})
       return [get_bulk_objects(params[:bulk_ids]), 1, 1, "unknown"] if params[:bulk_ids].present?
       
-      associations = @model_config.list.fields.select {|f| f.association? && !f.polymorphic? }.map {|f| f.association[:name] }
+      associations = @model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = get_sort_hash.merge(get_conditions_hash(params[:query], params[:filters])).merge(other).merge(associations.empty? ? {} : { :include => associations })
 
       scope = @authorization_adapter && @authorization_adapter.query(:list, @abstract_model)

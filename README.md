@@ -445,8 +445,8 @@ You can make a column non-searchable by setting the searchable option to false (
 You can change the column that the field will actually search on (2)
 You can specify a list of column that will be searched over (3)
 Belongs_to associations : 
+  will be searched on their foreign_key (:team_id)
   will be searched on their label if label is not virtual (:name, :title, etc.)
-  otherwise on the foreign_key (:team_id)
   you can also specify columns on the targetted table (see example) (4)
 
     RailsAdmin.config do |config|
@@ -465,12 +465,21 @@ Belongs_to associations :
           end
           
           field :team_id do # (4)
-            searchable [:name, :id]  # default model is the target. 
+            searchable [:name, :id]
             # eq. to [{Team => :name}, {Team => :id}] 
             # or even [:name, {Player => :team_id}]
           end
         end
       end
+    end
+
+Searchable definitions will be used for searches and filters.
+You can independently desactivate querying (search) or filtering for each field with:
+
+    field :team do
+      searchable [:name, :color]
+      queryable? true # default
+      filterable? false
     end
 
 **Fields - Visibility and ordering**

@@ -58,6 +58,14 @@ module RailsAdmin
           true
         end
         
+        register_instance_option(:queryable?) do
+          !!searchable
+        end
+
+        register_instance_option(:filterable?) do
+          !!searchable
+        end
+        
         # serials and dates are reversed in list, which is more natural (last modified items first).
         register_instance_option(:sort_reverse?) do
           false
