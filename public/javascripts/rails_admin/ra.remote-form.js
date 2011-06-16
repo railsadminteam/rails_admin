@@ -33,8 +33,10 @@
             widget._bindFormEvents();
           },
           error: function(xhr, status, error) {
+            alert(error);
             dialog.html(xhr.responseText);
-          }
+          },
+          dataType: 'text'
         });
       });
     },
