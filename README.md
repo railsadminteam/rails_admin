@@ -2,6 +2,8 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+See the demo here: http://demo.railsadmin.org/
+
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
 by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober](https://github.com/sferik),
@@ -15,7 +17,8 @@ It currently offers the following features:
 * Easily update data
 * Safely delete data
 * Automatic form validation
-* Search
+* Search and filtering
+* Export data to CSV/JSON/XML
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
@@ -24,12 +27,15 @@ Supported ORMs:
 * ActiveRecord
 
 _[Information](https://github.com/sferik/rails_admin/issues/105) about support for other ORMs._
+We plan to support Mongoid soon.
 
 Help
 ----
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 Please don't use the issue tracker, which is for issues only.
+
+Check if the build is green here: http://ci.railsadmin.org/job/RailsAdmin/
 
 If you have good reasons to think you found a *rails_admin* bug, submit a ticket providing link to gists with:
 
