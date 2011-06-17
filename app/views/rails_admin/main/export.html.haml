@@ -48,7 +48,7 @@
           .field
             %label{:for => "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
             -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
-            = select_tag 'csv_options[encoding_to]', options_for_select(%w[UTF-8 UTF-16LE UTF-16BE UTF-32LE UTF-32BE UTF-7 ISO-8859-1 ISO-8859-15 IBM-850 MacRoman Windows-1252 ISO-8859-3 IBM-852 ISO-8859-2 MacCE Windows-1250 IBM-855 ISO-8859-5 ISO-IR-111 KOI8-R MacCyrillic Windows-1251 CP-866 KOI-U MacUkranian GB2312 GBK GB18030 HZ ISO-2022-CN Big5 Big5-HKSCS EUC-TW EUC-JP ISO-2022-JP Shift_JIS EUC-KR UHC JOHAB ISO-2022-KR])
+            = select_tag 'csv_options[encoding_to]', options_for_select(%w[UTF-8 UTF-16LE UTF-16BE UTF-32LE UTF-32BE UTF-7 ISO-8859-1 ISO-8859-15 IBM-850 MacRoman Windows-1252 ISO-8859-3 IBM-852 ISO-8859-2 MacCE Windows-1250 IBM-855 ISO-8859-5 ISO-IR-111 KOI8-R MacCyrillic Windows-1251 CP-866 KOI-U MacUkranian GB2312 GBK GB18030 HZ ISO-2022-CN Big5 Big5-HKSCS EUC-TW EUC-JP ISO-2022-JP Shift_JIS EUC-KR UHC JOHAB ISO-2022-KR]), :class => "uniform"
           
             %p.help= t('admin.export.csv.encoding_to_help', :name => guessed_encoding)
           .field
@@ -57,7 +57,7 @@
             %p.help= t('admin.export.csv.skip_header_help')
           .field
             %label{:for => "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
-            = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" })
+            = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" }), :class => "uniform"
             %p.help= t('admin.export.csv.col_sep_help', :value => t('admin.export.csv.default_col_sep'))
         
         .group.navform.wat-cf
