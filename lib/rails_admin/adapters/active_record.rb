@@ -11,6 +11,7 @@ module RailsAdmin
         # and does not create any association_id and association_id= methods. 
         # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
         # Support is hackish at best. Atomicity is respected for creation, but not while updating.
+        # It means a failed validation at update on the parent object could still modify target belongs_to foreign ids.
         abstract_model.model.reflect_on_all_associations.select{|assoc| assoc.macro.to_s == 'has_one'}.each do |association|
           abstract_model.model.send(:define_method, "#{association.name}_id") do
             self.send(association.name).try(:id)

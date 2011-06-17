@@ -5,18 +5,24 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
-
+        
         def self.inherited(klass)
-            klass.instance_variable_set("@searchable", false)
-            klass.instance_variable_set("@sortable", false)
-            super(klass)
+          super(klass)
         end
 
         # Reader for the association information hash
         def association
           @properties
         end
-
+        
+        register_instance_option(:sortable) do
+          false
+        end
+        
+        register_instance_option(:searchable) do
+          false
+        end
+        
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.

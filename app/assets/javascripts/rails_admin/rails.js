@@ -64,7 +64,7 @@
     enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled',
 
     // Form required input elements
-    requiredInputSelector: 'input[name][required],textarea[name][required]',
+    requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
 
     // Form file input elements
     fileInputSelector: 'input:file',
@@ -80,6 +80,16 @@
       var event = $.Event(name);
       obj.trigger(event, data);
       return event.result !== false;
+    },
+
+    // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
+    confirm: function(message) {
+      return confirm(message);
+    },
+
+    // Default ajax function, may be overridden with custom function in $.rails.ajax
+    ajax: function(options) {
+      return $.ajax(options);
     },
 
     // Submits "remote" forms and links with ajax
@@ -102,10 +112,10 @@
         } else {
           method = element.data('method');
           url = element.attr('href');
-          data = null;
-        }
+          data = element.data('params') || null; 
+       }
 
-        $.ajax({
+        rails.ajax({
           url: url, type: method || 'GET', data: data, dataType: dataType,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
@@ -171,11 +181,26 @@
       });
     },
 
-    // If message provided in 'data-confirm' attribute, fires `confirm` event and returns result of confirm dialog.
-    // Attaching a handler to the element's `confirm` event that returns false cancels the confirm dialog.
+   /* For 'data-confirm' attribute:
+      - Fires `confirm` event
+      - Shows the confirmation dialog
+      - Fires the `confirm:complete` event
+
+      Returns `true` if no function stops the chain and user chose yes; `false` otherwise.
+      Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
+      Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
+      return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
+   */
     allowAction: function(element) {
-      var message = element.data('confirm');
-      return !message || (rails.fire(element, 'confirm') && confirm(message));
+      var message = element.data('confirm'),
+          answer = false, callback;
+      if (!message) { return true; }
+
+      if (rails.fire(element, 'confirm')) {
+        answer = rails.confirm(message);
+        callback = rails.fire(element, 'confirm:complete', [answer]);
+      }
+      return answer && callback;
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
@@ -199,6 +224,7 @@
 
     // Helper function, needed to provide consistent behavior in IE
     stopEverything: function(e) {
+      $(e.target).trigger('ujs:everythingStopped');
       e.stopImmediatePropagation();
       return false;
     },
@@ -246,7 +272,7 @@
 
     // skip other logic when required values are missing or file upload is present
     if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
-      return !remote;
+      return rails.stopEverything(e);
     }
 
     if (remote) {

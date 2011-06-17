@@ -25,6 +25,8 @@ ru:
       delete_action: "Удалить"
       select_action: "Выбрать"
       delete_selected: "Удалить выбранные"
+      export_action: "Экспортировать данное представление"
+      export_selected: "Эспортировать выделенное"
       add_new: "Добавить"
       search: "ПОИСК"
       select: "Выберите %{name} для редактирования"
@@ -39,8 +41,8 @@ ru:
       select_choice: "Выберите нужное и кликните"
       chose_all: "Выбрать все"
       clear_all: "Очистить"
-      up: "Up"
-      down: "Down"
+      up: "Выше"
+      down: "Ниже"
       save: "Сохранить"
       save_and_add_another: "Сохранить и добавить новый"
       save_and_edit: "Сохранить и продолжить редактирование"
@@ -48,6 +50,24 @@ ru:
     delete:
       flash_confirmation: "%{name} удалено"
       confirmation: "Да, я уверен"
+    export:
+      confirmation: "Экспортировать как %{name}"
+      select: "Выберите поля для экспорта"
+      fields_from: "Поля из %{name}"
+      fields_from_associated: "Поля из ассоциированной %{name}"
+      display: "Показать %{name}: %{type}"
+      options_for: "Настройки для %{name}"
+      empty_value_for_associated_objects: "<пусто>"
+      csv: 
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Декодировать как"
+        encoding_to_help: "Выберите результирующую кодировку. Оставьте пустой, чтобы оставить исходную кодировку нетронутой: (%{name})"
+        skip_header: "Без заголовка"
+        skip_header_help: "Не выводить заголовок (без описаний полей)"
+        default_col_sep: ","
+        col_sep: "Разделитель столбцов"
+        col_sep_help: "Оставьте пустым, чтобы было по умолчанию ('%{value}')" # value is default_col_sep
     flash:
       successful: "%{name} был %{action}"
       error: "Не получилось %{action} %{name}"
@@ -59,3 +79,5 @@ ru:
       updated: "обновлен"
       delete: "удалить"
       deleted: "удален"
+      export: "экспортировать"
+      exported: "экспортировано"

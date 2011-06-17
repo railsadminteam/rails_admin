@@ -14,13 +14,13 @@
           %>
           <li class="<%= "active" if tab_titles.include? @page_type %> <%= "more" unless children.empty? %>">
             <% if children.size == 1 %>
-              <%= link_to(model.label, list_path(:model_name => model.abstract_model.to_param)) %>
+              <%= link_to(model.label.pluralize, list_path(:model_name => model.abstract_model.to_param)) %>
             <% else %>
-              <a href="#"><%= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label %></a>
+              <a href="#"><%= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label.pluralize %></a>
               <ul>
                 <% children.each_with_index do |child, index| %>
                   <li class="<%= "active" if @page_type == tab_titles[index] %>">
-                    <%= link_to(child.label, list_path(:model_name => child.abstract_model.to_param)) %>
+                    <%= link_to(child.label.pluralize, list_path(:model_name => child.abstract_model.to_param)) %>
                   </li>
                 <% end %>
               </ul>
@@ -33,7 +33,7 @@
             <ul>
             <% models[max_visible_tabs..root_models.size].each do |model| %>
               <li <%if @page_type == model.abstract_model.pretty_name.downcase %>class="active"<% end %>>
-                <%= link_to(model.label, list_path(:model_name => model.abstract_model.to_param)) %>
+                <%= link_to(model.label.pluralize, list_path(:model_name => model.abstract_model.to_param)) %>
               </li>
             <% end %>
             </ul>

@@ -30,14 +30,14 @@ module RailsAdmin
         register_instance_option(:items_per_page) do
           RailsAdmin::Config::Sections::List.default_items_per_page
         end
-
+        
         register_instance_option(:sort_by) do
           # TODO
           # Once composite-primary-keys branch is merged
           # we should use parent.abstract_model.primary_keys.first as the default
           :id
         end
-
+        
         register_instance_option(:sort_reverse?) do
           true # By default show latest first
         end

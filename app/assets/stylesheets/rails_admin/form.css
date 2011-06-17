@@ -31,14 +31,14 @@ form a.createAssociatedRecord {
     margin-left: 10px;
 }
 
-form label {
-  width:100px;
+form .field>label, form .field>.field_with_errors>label {
   display:block;
   float:left;
   margin-top:6px;
   font-size:11px;
   font-weight:bold;
   margin-left:2px;
+  width:100px;
 }
 
 form label.inline {
@@ -105,8 +105,6 @@ form label.inline {
 .field .time, .field .timestamp {
   background: url("/assets/rails_admin/clock.png") no-repeat right;
 }
-
-.ui-datepicker .ui-datepicker-today .ui-state-highlight { border-color: #4F4F4F; }
 
 .field .integer {
   width:90px;

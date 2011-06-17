@@ -25,10 +25,8 @@ module RailsAdmin
         excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
         excluded_models << ['History']
 
-        #Rails.logger.info "possible_models: #{possible_models.inspect}"
         add_models(possible_models, excluded_models)
 
-        #Rails.logger.info "final models: #{@models.map(&:model).inspect}"
         @models.sort!{|x, y| x.model.to_s <=> y.model.to_s}
       end
 
@@ -38,7 +36,6 @@ module RailsAdmin
     def self.add_models(possible_models=[], excluded_models=[])
       possible_models.each do |possible_model_name|
         next if excluded_models.include?(possible_model_name)
-        #Rails.logger.info "possible_model_name: #{possible_model_name.inspect}"
         add_model(possible_model_name)
       end
     end
@@ -53,16 +50,13 @@ module RailsAdmin
       begin
         model = model_name.constantize
       rescue NameError
-        #Rails.logger.info "#{model_name} wasn't a model"
         raise "RailsAdmin could not find model #{model_name}" if raise_error
         return nil
       end
 
       if model.is_a?(Class) && superclasses(model).include?(ActiveRecord::Base)
-        #Rails.logger.info "#{model_name} is a model"
         model
       else
-        #Rails.logger.info "#{model_name} is NOT a model"
         nil
       end
     end

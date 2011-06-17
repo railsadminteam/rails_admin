@@ -46,8 +46,6 @@ Webrat.configure do |config|
 end
 
 RSpec.configure do |config|
-  # Remove this line if you don't want RSpec's should and should_not
-  # methods or matchers
   require 'rspec/expectations'
 
   config.include RSpec::Matchers
@@ -56,9 +54,6 @@ RSpec.configure do |config|
   config.include DatabaseHelpers
   config.include GeneratorHelpers
   config.include RailsAdmin::Engine.routes.url_helpers
-
-  # == Mock Framework
-  config.mock_with :rr
 
   config.include Warden::Test::Helpers
 

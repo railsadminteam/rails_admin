@@ -8,7 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @searchable = true
           @view_helper = :text_area
 
           # CKEditor is disabled by default
@@ -30,7 +29,7 @@ module RailsAdmin
               :value => value,
             }
           end
-
+          
           register_instance_option(:partial) do
             :form_text
           end
