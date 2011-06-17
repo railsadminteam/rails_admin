@@ -22,7 +22,11 @@ describe "RailsAdmin Basic List" do
       response.should be_successful
       response.body.should contain("Select player to edit")
       response.body.should contain(/CREATED AT\n\s*UPDATED AT\n\s*/)
-      response.body.should contain(/EDIT\n\s*DELETE\n\s*/)
+    end
+    
+    it "shows the edit and delete links" do
+      response.body.should have_selector("td a img[alt='Edit']")
+      response.body.should have_selector("td a img[alt='Delete']")
     end
 
     # https://github.com/sferik/rails_admin/issues/362
