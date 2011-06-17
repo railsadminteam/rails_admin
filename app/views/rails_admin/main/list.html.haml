@@ -60,18 +60,27 @@
   
   .content
     .control
-      - if authorized? :export, @abstract_model
-        = action_button rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), t("admin.list.export_action"), nil, :method => :post
-        = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
-      
-      = action_button rails_admin_history_model_path, t("admin.history.name")
-
+      %span(style="margin: 3px 10px")
+        %select#filter_select.uniform
+          %option{:value => ""} Add filter...
+          - @filterable_fields.each do |field|
+            - field_options = case field.type
+            - when :enum
+              - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
+            - else
+              - ''
+            %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
+    
       - if authorized? :new, @abstract_model
         = action_button rails_admin_new_path, t("admin.list.add_new"), :add
 
       - if authorized? :delete, @abstract_model
         = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
-
+      
+      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true, :class => "search") do
+        %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
+        %input.search_submit{:type => "submit", :value => ""}
+      #filters_box
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
@@ -129,11 +138,13 @@
         .left(style="white-space: nowrap; padding-top:0.5em;")
           = @record_count
           = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
-
-      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true, :class => "search") do
+        
         .columns.wat-cf
           .column.right
-            %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
-            %input.search_submit{:type => "submit", :value => ""}
+            - if authorized? :export, @abstract_model
+              = action_button rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), t("admin.list.export_action"), nil, :method => :post
+              = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
+            
+            = action_button rails_admin_history_model_path, t("admin.history.name")
       .wat-cf
 
