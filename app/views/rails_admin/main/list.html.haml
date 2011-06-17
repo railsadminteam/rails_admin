@@ -1,54 +1,58 @@
-- query = params[:query]
-- params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
-- sort = params[:sort]
-- sort_reverse = params[:sort_reverse]
-- properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
-- # columns paginate
-- @filterable_fields = @model_config.list.fields.select(&:queryable?)
-- @style, @other, properties = get_column_set(properties)
-
-- head_javascript "rails_admin/application.js"
-- head_javascript "rails_admin/activo/application.js"
-- head_javascript "rails_admin/ra.filter-box.js"
-- head_style "rails_admin/list"
+:ruby
+  query = params[:query]
+  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
+  sort = params[:sort]
+  sort_reverse = params[:sort_reverse]
+  properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
+  # columns paginate
+  @filterable_fields = @model_config.list.fields.select(&:queryable?)
+  @style, @other, properties = get_column_set(properties)
+  
+  head_javascript "rails_admin/application.js"
+  head_javascript "rails_admin/activo/application.js"
+  head_javascript "rails_admin/ra.filter-box.js"
+  head_style "rails_admin/list"
+    
+  params[:filters] ||= []
+  @ordered_filters = params[:filters].inject({}) do |memo, filter|
+    field_name = filter.first
+    filter.last.each do |index, filter_hash|
+      memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
+    end
+    memo
+  end
+  
+  @ordered_filters = @ordered_filters.to_a.sort_by(&:first) unless params[:filters].blank?
+  
+  @ordered_filter_string = @ordered_filters.map do |duplet|
+    filter_index = duplet[0]
+    filter_for_field = duplet[1]
+    filter_name = filter_for_field.keys.first
+    filter_hash = filter_for_field.values.first
+    field = @filterable_fields.find{ |field| field.name == filter_name.intern }
+  
+    field_options = case field.type
+    when :enum
+      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
+    else
+      ''
+    end
+    "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
+  end.join if @ordered_filters
 
 - head_style do
   - @style.each do |key, value|
     \.grid thead #{".#{key}"}{
     width: #{value[:width]}px;
     }
-
-- @ordered_filters = params[:filters].inject({}) do |memo, filter|
--   field_name = filter.first
--   filter.last.each do |index, filter_hash|
--     memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
--   end
--   memo
-- end.to_a.sort_by(&:first) unless params[:filters].blank?
-
-:script
+      
+:javascript
   $j(document).ready(function($) {
     $(this).one("ajax:success", function(e, data, status, xhr) {
       $("#content").html(data);
     });
     
-    <%= 
-      @ordered_filters.map do |duplet|
-        filter_index = duplet[0]
-        filter_for_field = duplet[1]
-        filter_name = filter_for_field.keys.first
-        filter_hash = filter_for_field.values.first
-        field = @filterable_fields.find{ |field| field.name == filter_name.intern }
-        
-        field_options = case field.type
-        when :enum
-          options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
-        else
-          ''
-        end
-        "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
-      end.join if @ordered_filters
-    %>  
+    #{@ordered_filter_string}
   });
 
 #block-tables.block
