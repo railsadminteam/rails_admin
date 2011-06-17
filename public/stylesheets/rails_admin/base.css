@@ -33,3 +33,8 @@ ul#nav li:hover {
 div.checker input.checkbox {
   margin: 0;
 }
+
+/* Buttons on the list pages bottom right can be aligned hard right: */
+.form .columns .column {
+  width: inherit;
+}
