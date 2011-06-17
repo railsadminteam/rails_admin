@@ -41,7 +41,7 @@
               %td{:colspan => "4"}
                 .pagination
                   - if @page_count.to_i > 1
-                    = paginate(@current_page, @page_count, :url => params.except("page", "all")).html_safe
+                    = paginate(@current_page, @page_count, :url => params.except("page", "all"), :remote => false).html_safe
                   - if @page_count.to_i == 2
                     = link_to(t("admin.list.show_all"), rails_admin_history_model_path(params.except("page").merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")))
         %tbody

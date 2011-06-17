@@ -143,6 +143,7 @@ module RailsAdmin
       options[:inner_window] ||= 7
       options[:page_param] ||= 'page'
       options[:url] ||= ""
+      options[:remote] = true unless options.has_key?(:remote)
 
       url = options.delete(:url)
       url.delete(options[:page_param])
@@ -198,9 +199,9 @@ module RailsAdmin
           when current_page
             b << Builder::XmlMarkup.new.span(page_number, :class => "current")
           when page_count
-            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => true)
+            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => options[:remote])
           else
-            b << link_to(page_number, "#{url}=#{page_number}", :remote => true)
+            b << link_to(page_number, "#{url}=#{page_number}", :remote => options[:remote])
           end
         end
       end
