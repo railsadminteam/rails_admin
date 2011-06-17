@@ -79,7 +79,7 @@
       
       = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page || key.to_sym == :filters}), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
         %span.search
-          %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
+          %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
           %input.search_submit{:type => "submit", :value => ""}
         #filters_box
     %h2.title= @page_name

@@ -28,6 +28,10 @@ describe "RailsAdmin Basic List" do
       response.body.should have_selector("td a img[alt='Edit']")
       response.body.should have_selector("td a img[alt='Delete']")
     end
+    
+    it "has the search box with some prompt text" do
+      response.body.should have_selector("input#search[placeholder='Search']")
+    end
 
     # https://github.com/sferik/rails_admin/issues/362
     # test that no link uses the "wildcard route" with the main

@@ -64,6 +64,6 @@
       = form_tag("", :method => "get", :class => "search") do
         .columns.wat-cf
           .column.right
-            %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
+            %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
             %input.search_submit{:type => "submit", :value => ""}
       .wat-cf
