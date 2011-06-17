@@ -77,7 +77,7 @@
       - if authorized? :delete, @abstract_model
         = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
       
-      = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| %w[page filters query].include?(key.to_s)}), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
+      = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
         %span.search
           %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
           %input.search_submit{:type => "submit", :value => ""}
@@ -99,7 +99,7 @@
                 - selected = sort == property_name.to_s
                 %th{:class => "#{property.css_class} #{selected ? "selected" : nil}"}
                   - if property.sortable
-                    - sort_location = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {:sort_reverse => "false"}))
+                    - sort_location = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).except("sort_reverse").merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {:sort_reverse => "false"}))
                     - sort_direction = selected ? (sort_reverse == 'true' ? "ascending" : "descending") : nil
                     = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true)
                   - else
