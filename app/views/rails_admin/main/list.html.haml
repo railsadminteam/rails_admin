@@ -77,10 +77,11 @@
       - if authorized? :delete, @abstract_model
         = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
       
-      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true, :class => "search") do
-        %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
-        %input.search_submit{:type => "submit", :value => ""}
-      #filters_box
+      = form_tag(params.reject{|key, value| key.to_sym == :page}, :method => "get", :remote => true, style: "display:inline") do
+        %span.search
+          %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
+          %input.search_submit{:type => "submit", :value => ""}
+        #filters_box
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
