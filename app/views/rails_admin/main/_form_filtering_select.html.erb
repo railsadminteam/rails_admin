@@ -6,7 +6,7 @@
   if xhr
     collection = [[field.formatted_value, selected_id]]
   else
-    collection = field.associated_collection
+    collection = field.associated_collection(@authorization_adapter)
   end
 %>
 
