@@ -77,7 +77,7 @@
       - if authorized? :delete, @abstract_model
         = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
       
-      = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page || key.to_sym == :filters}), :method => :post, :remote => true, :class => "form", style: "display:inline") do
+      = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key.to_sym == :page || key.to_sym == :filters}), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
         %span.search
           %input#search.search_box{:name => "query", :type => "text", :value => query, :onblur => "if (!value) { value = '#{t("admin.list.search")}' }", :onfocus => "if (value == '#{t("admin.list.search")}') { value = '' }"}
           %input.search_submit{:type => "submit", :value => ""}
