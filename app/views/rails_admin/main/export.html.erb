@@ -13,7 +13,7 @@
   <div class="ra-block-content">
     <%= render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash}) -%>
 
-    <%= form_tag rails_admin_export_path(params.merge(:all => true)), :method => 'post' do %>
+    <%= form_tag export_path(params.merge(:all => true)), :method => 'post' do %>
 
       <input type="hidden" name="send_data" value="true"></input>
 

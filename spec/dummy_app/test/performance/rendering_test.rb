@@ -23,10 +23,10 @@ class RenderingTest < ActionDispatch::PerformanceTest
   end
 
   def test_render_list_view
-    get rails_admin_list_path(:model_name => "player")
+    get list_path(:model_name => "player")
   end
 
   def test_render_create_view
-    get rails_admin_new_path(:model_name => "player")
+    get new_path(:model_name => "player")
   end
 end

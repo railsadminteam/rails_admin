@@ -475,7 +475,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
 
-        get rails_admin_new_path(:model_name => "field_test")
+        get new_path(:model_name => "field_test")
         
         fill_in "field_test[format]", :with => "test for format"
         click_button "Save"
@@ -672,7 +672,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag("select.enum")
       response.should contain("green")
       
@@ -699,7 +699,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       
-      get rails_admin_new_path(:model_name => "team")
+      get new_path(:model_name => "team")
       response.should have_tag("select.enum")
       response.should_not contain("green")
       response.should contain("yellow")

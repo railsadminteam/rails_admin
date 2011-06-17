@@ -26,7 +26,7 @@ describe "RailsAdmin Export" do
   describe "POST /admin/players/export (prompt)" do
     
     it "should allow to export to CSV with associations and default schema, containing properly translated header" do
-      post rails_admin_export_path(:model_name => 'player')
+      post export_path(:model_name => 'player')
       response.should be_successful
       response.body.should contain 'Select fields to export'
       select "<comma> ','", :from => "csv_options_generator_col_sep"
@@ -44,21 +44,21 @@ describe "RailsAdmin Export" do
     end
     
     it "should allow to export to JSON" do
-      post rails_admin_export_path(:model_name => 'player')
+      post export_path(:model_name => 'player')
       click_button 'Export to json'
       response.should be_successful
       response.body.should contain @player.team.name
     end
 
     it "should allow to export to XML" do
-      post rails_admin_export_path(:model_name => 'player')
+      post export_path(:model_name => 'player')
       click_button 'Export to xml'
       response.should be_successful
       response.body.should contain @player.team.name
     end
 
     it "should export polymorphic fields the easy way for now" do
-      post rails_admin_export_path(:model_name => 'comment')
+      post export_path(:model_name => 'comment')
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
       response.body.should contain "Id,Commentable,Commentable type,Content,Created at,Updated at"
@@ -68,7 +68,7 @@ describe "RailsAdmin Export" do
   
   describe "POST /admin/players/export :format => :csv" do
     it "should export with modified schema" do
-      post rails_admin_export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } })
+      post export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } })
       response.body.should contain "Id,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended" # no created_at
     end
   end
