@@ -55,6 +55,7 @@
           control +
         '</div>'
       );
+      $("#filters_box select").uniform();
     }
   }
 
