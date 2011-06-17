@@ -38,3 +38,8 @@ div.checker input.checkbox {
 .form .columns .column {
   width: inherit;
 }
+
+.filter input.text_field {
+  width: 150px;
+  height: 20px;
+}
