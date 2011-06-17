@@ -24,7 +24,7 @@
             '<option ' + (field_operator == "less_than" ? 'selected="selected"' : '') + ' value="less_than" data-additional-fieldset="true">Less than ... days ago</option>' +
             '<option ' + (field_operator == "more_than" ? 'selected="selected"' : '') + ' value="more_than" data-additional-fieldset="true">More than ... days ago</option>' +
           '</select>' +
-          '<input class="additional-fieldset" style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" class="text_field" /> ';
+          '<input class="additional-fieldset text_field" style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'enum':
           field_options = $j('<div/>').html(field_options).text(); // entities decode
@@ -86,10 +86,10 @@
     $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
       var selected_option = $(this).find('option:selected');
       if($(selected_option).data('additional-fieldset')) {
-        $(this).siblings('.additional-fieldset').val('');
-        $(this).siblings('.additional-fieldset').show();
+        $(this).parent().siblings('.additional-fieldset').val('');
+        $(this).parent().siblings('.additional-fieldset').show();
       } else {
-        $(this).siblings('.additional-fieldset').hide();
+        $(this).parent().siblings('.additional-fieldset').hide();
       }
     });
   });
