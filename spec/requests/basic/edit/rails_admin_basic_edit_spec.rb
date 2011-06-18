@@ -13,12 +13,12 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show \"Update model\"" do
-      response.body.should have_text("Update player")
+      response.body.should have_content("Update player")
     end
 
     it "should show required fields as \"Required\"" do
-      response.body.should have_text(/Name\n\s*Required/)
-      response.body.should have_text(/Number\n\s*Required/)
+      response.body.should have_content(/Name\n\s*Required/)
+      response.body.should have_content(/Number\n\s*Required/)
     end
 
     it "should show non-required fields as \"Optional\"" do
@@ -40,7 +40,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      response.body.should have_text(/Draft #\d+/)
+      response.body.should have_content(/Draft #\d+/)
     end
   end
 
@@ -56,7 +56,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      @teams.each { |team| response.body.should have_text(/#{team.name}/) }
+      @teams.each { |team| response.body.should have_content(/#{team.name}/) }
     end
   end
 

@@ -619,7 +619,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       visit rails_admin_new_path(:model_name => "draft")
-      should have_text(/CKEDITOR\.replace.*?draft_notes/)
+      should have_content(/CKEDITOR\.replace.*?draft_notes/)
     end
   end
 
@@ -653,7 +653,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit rails_admin_new_path(:model_name => "team")
       debugger
       should have_selector("select.enum")
-      should have_text("green")
+      should have_content("green")
       
       #Reset
       Team.send(:remove_method, :color_enum)  
@@ -676,7 +676,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector("select.enum")
-      should have_text("green")
+      should have_content("green")
       
       #Reset
       Team.send(:remove_method, :color_list)
@@ -704,7 +704,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit rails_admin_new_path(:model_name => "team")
       should have_selector("select.enum")
       should_not contain("green")
-      should have_text("yellow")
+      should have_content("yellow")
     
       #Reset
       Team.send(:remove_method, :color_list)
@@ -859,20 +859,20 @@ describe "RailsAdmin Config DSL Edit Section" do
       should_not contain(TF_UPDATE_OUTPUT)
 
       visit rails_admin_new_path(:model_name => "team")
-      should have_text(TF_CREATE_OUTPUT)
+      should have_content(TF_CREATE_OUTPUT)
       should_not contain(TF_UPDATE_OUTPUT)
       @team = FactoryGirl.create :team
       visit rails_admin_edit_path(:model_name => "team", :id => @team.id)
-      should have_text(TF_CREATE_OUTPUT)
+      should have_content(TF_CREATE_OUTPUT)
       should_not contain(TF_UPDATE_OUTPUT)
 
       visit rails_admin_new_path(:model_name => "league")
-      should have_text(TF_CREATE_OUTPUT)
+      should have_content(TF_CREATE_OUTPUT)
       should_not contain(TF_UPDATE_OUTPUT)
       @league = FactoryGirl.create :league
       visit rails_admin_edit_path(:model_name => "league", :id => @league.id)
       should_not contain(TF_CREATE_OUTPUT)
-      should have_text(TF_UPDATE_OUTPUT)
+      should have_content(TF_UPDATE_OUTPUT)
     end
 
   end

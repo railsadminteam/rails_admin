@@ -28,48 +28,48 @@ describe "RailsAdmin Export" do
     it "should allow to export to CSV with associations and default schema, containing properly translated header" do
       post rails_admin_export_path(:model_name => 'player')
       response.should be_successful
-      response.body.should have_text 'Select fields to export'
+      response.body.should have_content 'Select fields to export'
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
       response.should be_successful
-      response.body.should have_text "Id,Created at,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended"
-      response.body.should have_text "Id [Team],Created at [Team],Updated at [Team],Name [Team],Logo url [Team],Team Manager [Team],Ballpark [Team],Mascot [Team],Founded [Team],Wins [Team],Losses [Team],Win percentage [Team],Revenue [Team],Color [Team]"
-      response.body.should have_text "Id [Draft],Created at [Draft],Updated at [Draft],Date [Draft],Round [Draft],Pick [Draft],Overall [Draft],College [Draft],Notes [Draft]"
-      response.body.should have_text "Id [Comments],Content [Comments],Created at [Comments],Updated at [Comments]"
-      response.body.should have_text @player.name
-      response.body.should have_text @player.team.name
-      response.body.should have_text @player.draft.college
-      response.body.should have_text @player.comments.first.content.split("\n").first.strip # can't match for more than one line
-      response.body.should have_text @player.comments.second.content.split("\n").first.strip
+      response.body.should have_content "Id,Created at,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended"
+      response.body.should have_content "Id [Team],Created at [Team],Updated at [Team],Name [Team],Logo url [Team],Team Manager [Team],Ballpark [Team],Mascot [Team],Founded [Team],Wins [Team],Losses [Team],Win percentage [Team],Revenue [Team],Color [Team]"
+      response.body.should have_content "Id [Draft],Created at [Draft],Updated at [Draft],Date [Draft],Round [Draft],Pick [Draft],Overall [Draft],College [Draft],Notes [Draft]"
+      response.body.should have_content "Id [Comments],Content [Comments],Created at [Comments],Updated at [Comments]"
+      response.body.should have_content @player.name
+      response.body.should have_content @player.team.name
+      response.body.should have_content @player.draft.college
+      response.body.should have_content @player.comments.first.content.split("\n").first.strip # can't match for more than one line
+      response.body.should have_content @player.comments.second.content.split("\n").first.strip
     end
     
     it "should allow to export to JSON" do
       post rails_admin_export_path(:model_name => 'player')
       click_button 'Export to json'
       response.should be_successful
-      response.body.should have_text @player.team.name
+      response.body.should have_content @player.team.name
     end
 
     it "should allow to export to XML" do
       post rails_admin_export_path(:model_name => 'player')
       click_button 'Export to xml'
       response.should be_successful
-      response.body.should have_text @player.team.name
+      response.body.should have_content @player.team.name
     end
 
     it "should export polymorphic fields the easy way for now" do
       post rails_admin_export_path(:model_name => 'comment')
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
-      response.body.should have_text "Id,Commentable,Commentable type,Content,Created at,Updated at"
-      response.body.should have_text "#{@player.comments.first.id},#{@player.id},#{@player.class}"
+      response.body.should have_content "Id,Commentable,Commentable type,Content,Created at,Updated at"
+      response.body.should have_content "#{@player.comments.first.id},#{@player.id},#{@player.class}"
     end
   end
   
   describe "POST /admin/players/export :format => :csv" do
     it "should export with modified schema" do
       post rails_admin_export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } })
-      response.body.should have_text "Id,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended" # no created_at
+      response.body.should have_content "Id,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended" # no created_at
     end
   end
 end

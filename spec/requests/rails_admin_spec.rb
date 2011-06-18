@@ -18,8 +18,8 @@ describe "RailsAdmin" do
     it "should default to English" do
       get rails_admin_dashboard_path
 
-      response.should have_text("Site administration")
-      response.should have_text("Dashboard")
+      response.should have_content("Site administration")
+      response.should have_content("Dashboard")
     end
   end
 
@@ -53,7 +53,7 @@ describe "RailsAdmin" do
     it "should work like belongs to associations in the list view" do
       get rails_admin_list_path(:model_name => "comment")
 
-      response.body.should have_text(@team.name)
+      response.body.should have_content(@team.name)
     end
 
     it "should be editable" do

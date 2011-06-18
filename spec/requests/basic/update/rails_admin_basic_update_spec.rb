@@ -200,7 +200,7 @@ describe "RailsAdmin Basic Update" do
     end
 
     it "should show an error message" do
-      response.body.should have_text("Player failed to be updated")
+      response.body.should have_content("Player failed to be updated")
     end
   end
 
