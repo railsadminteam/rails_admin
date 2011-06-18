@@ -163,7 +163,7 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should show an error message" do
-      response.body.should contain("There is already a player with that number on this team")
+      response.body.should have_text("There is already a player with that number on this team")
     end
   end
 
@@ -173,8 +173,8 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should show an error message" do
-      response.body.should contain("Player failed to be created")
-      response.body.should have_tag "form", :action => "/admin/players"
+      response.body.should have_text("Player failed to be created")
+      response.body.should have_selector "form", :action => "/admin/players"
     end
   end
   
@@ -186,7 +186,7 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should show error base error message in flash" do
-      response.body.should contain("Player failed to be created. Player is cheating")
+      response.body.should have_text("Player failed to be created. Player is cheating")
     end
   end
 end

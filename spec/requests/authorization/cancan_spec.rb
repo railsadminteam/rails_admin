@@ -51,7 +51,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin should show Player but not League" do
         get rails_admin_dashboard_path
         response.should be_successful
-        response.body.should contain("Player")
+        response.body.should have_text("Player")
         response.body.should_not contain("League")
         response.body.should_not contain("Add new")
       end
@@ -65,7 +65,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         get rails_admin_list_path(:model_name => "player", :set => 1)
 
         response.should be_successful
-        response.body.should contain(@players[0].name)
+        response.body.should have_text(@players[0].name)
         response.body.should_not contain(@players[1].name)
         response.body.should_not contain("Add new")
         response.body.should_not contain("EDIT")
@@ -178,7 +178,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         @delete_ids = [active_player, retired_player].map(&:id)
         get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
 
-        response.body.should contain(active_player.name)
+        response.body.should have_text(active_player.name)
         response.body.should_not contain(retired_player.name)
         click_button "Yes, I'm sure"
 

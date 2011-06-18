@@ -12,7 +12,7 @@ describe "RailsAdmin Basic Bulk Action" do
     end
 
     it 'should show names of to-be-deleted players' do
-      @players.each { |player| response.body.should contain(player.name) }
+      @players.each { |player| response.body.should have_text(player.name) }
     end
   end
   
@@ -27,7 +27,7 @@ describe "RailsAdmin Basic Bulk Action" do
     end
 
     it 'should show form for export' do
-      @players.each { |player| response.body.should contain("Select fields to export") }
+      @players.each { |player| response.body.should have_text("Select fields to export") }
     end
   end
 end

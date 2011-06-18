@@ -13,18 +13,18 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show \"Update model\"" do
-      response.body.should contain("Update player")
+      response.body.should have_text("Update player")
     end
 
     it "should show required fields as \"Required\"" do
-      response.body.should contain(/Name\n\s*Required/)
-      response.body.should contain(/Number\n\s*Required/)
+      response.body.should have_text(/Name\n\s*Required/)
+      response.body.should have_text(/Number\n\s*Required/)
     end
 
     it "should show non-required fields as \"Optional\"" do
-      response.body.should have_tag(".player_position .help", :content => "Optional")
-      response.body.should have_tag(".player_born_on .help", :content => "Optional")
-      response.body.should have_tag(".player_notes .help", :content => "Optional")
+      response.body.should have_selector(".player_position .help", :content => "Optional")
+      response.body.should have_selector(".player_born_on .help", :content => "Optional")
+      response.body.should have_selector(".player_notes .help", :content => "Optional")
     end
   end
 
@@ -40,7 +40,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      response.body.should contain(/Draft #\d+/)
+      response.body.should have_text(/Draft #\d+/)
     end
   end
 
@@ -56,7 +56,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      @teams.each { |team| response.body.should contain(/#{team.name}/) }
+      @teams.each { |team| response.body.should have_text(/#{team.name}/) }
     end
   end
 
@@ -72,7 +72,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show associated objects" do
-      response.body.should have_tag "#fan_team_ids" do |select|
+      response.body.should have_selector "#fan_team_ids" do |select|
         select[0].should have_selector 'option[selected="selected"]'
         select[1].should_not have_selector 'option[selected="selected"]'
         select[2].should_not have_selector 'option[selected="selected"]'
