@@ -41,16 +41,10 @@ migrate_database
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each{|f| require f}
 
-Webrat.configure do |config|
-  config.mode = :rails
-end
-
 RSpec.configure do |config|
   require 'rspec/expectations'
 
   config.include RSpec::Matchers
-  config.include Webrat::Matchers
-  config.include Webrat::HaveTagMatcher
   config.include DatabaseHelpers
   config.include GeneratorHelpers
 
