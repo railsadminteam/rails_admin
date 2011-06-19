@@ -651,7 +651,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit rails_admin_new_path(:model_name => "team")
-      debugger
       should have_selector("select.enum")
       should have_content("green")
       
@@ -703,7 +702,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       
       visit rails_admin_new_path(:model_name => "team")
       should have_selector("select.enum")
-      should_not contain("green")
+      should have_no_content("green")
       should have_content("yellow")
     
       #Reset
@@ -850,28 +849,28 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       visit rails_admin_new_path(:model_name => "player")
       should have_selector("input#player_name")
-      should_not contain(TF_CREATE_OUTPUT)
-      should_not contain(TF_UPDATE_OUTPUT)
+      should have_no_content(TF_CREATE_OUTPUT)
+      should have_no_content(TF_UPDATE_OUTPUT)
       @player = FactoryGirl.create :player
       visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
       should have_selector("input#player_name")
-      should_not contain(TF_CREATE_OUTPUT)
-      should_not contain(TF_UPDATE_OUTPUT)
+      should have_no_content(TF_CREATE_OUTPUT)
+      should have_no_content(TF_UPDATE_OUTPUT)
 
       visit rails_admin_new_path(:model_name => "team")
       should have_content(TF_CREATE_OUTPUT)
-      should_not contain(TF_UPDATE_OUTPUT)
+      should have_no_content(TF_UPDATE_OUTPUT)
       @team = FactoryGirl.create :team
       visit rails_admin_edit_path(:model_name => "team", :id => @team.id)
       should have_content(TF_CREATE_OUTPUT)
-      should_not contain(TF_UPDATE_OUTPUT)
+      should have_no_content(TF_UPDATE_OUTPUT)
 
       visit rails_admin_new_path(:model_name => "league")
       should have_content(TF_CREATE_OUTPUT)
-      should_not contain(TF_UPDATE_OUTPUT)
+      should have_no_content(TF_UPDATE_OUTPUT)
       @league = FactoryGirl.create :league
       visit rails_admin_edit_path(:model_name => "league", :id => @league.id)
-      should_not contain(TF_CREATE_OUTPUT)
+      should have_no_content(TF_CREATE_OUTPUT)
       should have_content(TF_UPDATE_OUTPUT)
     end
 

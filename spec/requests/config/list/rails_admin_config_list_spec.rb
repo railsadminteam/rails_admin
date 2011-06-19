@@ -106,8 +106,8 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_selector(".grid th") do |elements|
         elements.should have_content("ID")
         elements.should have_content("NAME")
-        elements.should_not contain("CREATED AT")
-        elements.should_not contain("UPDATED AT")
+        elements.should have_no_content("CREATED AT")
+        elements.should have_no_content("UPDATED AT")
       end
     end
 
@@ -253,8 +253,8 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_selector(".grid th") do |elements|
         elements.should have_content("ID")
         elements.should have_content("NAME")
-        elements.should_not contain("CREATED AT")
-        elements.should_not contain("UPDATED AT")
+        elements.should have_no_content("CREATED AT")
+        elements.should have_no_content("UPDATED AT")
       end
     end
 
@@ -270,8 +270,8 @@ describe "RailsAdmin Config DSL List Section" do
       response.should have_selector(".grid th") do |elements|
         elements.should have_content("ID")
         elements.should have_content("NAME")
-        elements.should_not contain("CREATED AT")
-        elements.should_not contain("UPDATED AT")
+        elements.should have_no_content("CREATED AT")
+        elements.should have_no_content("UPDATED AT")
       end
     end
 

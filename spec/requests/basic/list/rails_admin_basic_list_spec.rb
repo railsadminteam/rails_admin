@@ -84,23 +84,23 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :query => @players[0].name, :set => 1)
       response.body.should have_content(@players[0].name)
       (1..3).each do |i|
-        response.body.should_not contain(@players[i].name)
+        response.body.should have_no_content(@players[i].name)
       end
     end
 
     it "should allow to filter on one attribute" do
       get rails_admin_list_path(:model_name => "player", :filters => {:injured => {"1" => {:value => "true"}}}, :set => 1)
       response.body.should have_content(@players[0].name)
-      response.body.should_not contain(@players[1].name)
+      response.body.should have_no_content(@players[1].name)
       response.body.should have_content(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[3].name)
     end
     
     it "should allow to combine filters on two different attributes" do
       get rails_admin_list_path(:model_name => "player", :filters => {:retired => {"1" => {:value => "true"}}, :injured => {"1" => {:value => "true"}}}, :set => 1)
       response.body.should have_content(@players[0].name)
       (1..3).each do |i|
-        response.body.should_not contain(@players[i].name)
+        response.body.should have_no_content(@players[i].name)
       end
     end
     
@@ -108,8 +108,8 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => { :value => @teams[0].name }}}, :set => 1)
       response.body.should have_content(@players[0].name)
       response.body.should have_content(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
     end
     
     it "should allow to disable search on attributes" do
@@ -122,7 +122,7 @@ describe "RailsAdmin Basic List" do
         end
       end
       get rails_admin_list_path(:model_name => "player", :query => @players[0].name)
-      response.body.should_not contain(@players[0].name)
+      response.body.should have_no_content(@players[0].name)
     end
     
     it "should allow to search a belongs_to attribute over the base table" do
@@ -138,8 +138,8 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.id}}})
       response.body.should have_content(@players[0].name)
       response.body.should have_content(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
     end
 
 
@@ -156,8 +156,8 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
       response.body.should have_content(@players[0].name)
       response.body.should have_content(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
     end
 
     it "should allow to search a belongs_to attribute over the label method by default" do
@@ -171,8 +171,8 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
       response.body.should have_content(@players[0].name)
       response.body.should have_content(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
     end
 
     it "should allow to search a belongs_to attribute over the target table when an attribute is specified" do
@@ -188,8 +188,8 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
       response.body.should have_content(@players[0].name)
       response.body.should have_content(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
     end
     
     it "should allow to search over more than one attribute" do
@@ -205,14 +205,14 @@ describe "RailsAdmin Basic List" do
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.first.id}}})
       response.body.should have_content(@players[0].name)
       response.body.should have_content(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
       # same with a different id
       get rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.last.id}}})
-      response.body.should_not contain(@players[0].name)
-      response.body.should_not contain(@players[1].name)
-      response.body.should_not contain(@players[2].name)
-      response.body.should_not contain(@players[3].name)
+      response.body.should have_no_content(@players[0].name)
+      response.body.should have_no_content(@players[1].name)
+      response.body.should have_no_content(@players[2].name)
+      response.body.should have_no_content(@players[3].name)
     end
   end
 
