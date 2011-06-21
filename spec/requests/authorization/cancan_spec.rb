@@ -51,9 +51,9 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin should show Player but not League" do
         get rails_admin_dashboard_path
         response.should be_successful
-        response.body.should contain("Player")
-        response.body.should_not contain("League")
-        response.body.should_not contain("Add new")
+        response.body.should have_content("Player")
+        response.body.should have_no_content("League")
+        response.body.should have_no_content("Add new")
       end
 
       it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
@@ -65,13 +65,13 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         get rails_admin_list_path(:model_name => "player", :set => 1)
 
         response.should be_successful
-        response.body.should contain(@players[0].name)
-        response.body.should_not contain(@players[1].name)
-        response.body.should_not contain("Add new")
-        response.body.should_not contain("EDIT")
-        response.body.should_not contain("DELETE")
-        response.body.should_not contain("Edit")
-        response.body.should_not contain("Delete")
+        response.body.should have_content(@players[0].name)
+        response.body.should have_no_content(@players[1].name)
+        response.body.should have_no_content("Add new")
+        response.body.should have_no_content("EDIT")
+        response.body.should have_no_content("DELETE")
+        response.body.should have_no_content("Edit")
+        response.body.should have_no_content("Delete")
       end
 
       it "GET /admin/team should raise CanCan::AccessDenied" do
@@ -95,7 +95,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/player/new should render and create record upon submission" do
         get rails_admin_new_path(:model_name => "player")
-        response.body.should_not contain("edit")
+        response.body.should have_no_content("edit")
         fill_in "player[name]", :with => "Jackie Robinson"
         fill_in "player[number]", :with => "42"
         fill_in "player[position]", :with => "Second baseman"
@@ -125,7 +125,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/1/edit should render and update record upon submission" do
         @player = FactoryGirl.create :player
         get rails_admin_edit_path(:model_name => "player", :id => @player.id)
-        response.body.should_not contain("Delete")
+        response.body.should have_no_content("Delete")
         fill_in "player[name]", :with => "Jackie Robinson"
         click_button "Save"
         @player.reload
@@ -178,8 +178,8 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         @delete_ids = [active_player, retired_player].map(&:id)
         get rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
 
-        response.body.should contain(active_player.name)
-        response.body.should_not contain(retired_player.name)
+        response.body.should have_content(active_player.name)
+        response.body.should have_no_content(retired_player.name)
         click_button "Yes, I'm sure"
 
         Player.exists?(active_player.id).should be_false

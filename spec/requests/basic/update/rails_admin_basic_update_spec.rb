@@ -12,7 +12,7 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => ""
       click_button "Save"
       response.response_code.should eql(406)
-      response.should have_tag "form", :action => "/admin/players/#{@player.id}"
+      response.should have_selector "form", :action => "/admin/players/#{@player.id}"
     end
   end
 
@@ -200,7 +200,7 @@ describe "RailsAdmin Basic Update" do
     end
 
     it "should show an error message" do
-      response.body.should contain("Player failed to be updated")
+      response.body.should have_content("Player failed to be updated")
     end
   end
 

@@ -13,7 +13,7 @@ describe "RailsAdmin Basic Delete" do
     end
 
     it "should show \"Delete model\"" do
-      response.body.should contain("delete the player")
+      response.body.should have_content("delete the player")
     end
   end
 

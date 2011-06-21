@@ -18,8 +18,8 @@ describe "RailsAdmin" do
     it "should default to English" do
       get rails_admin_dashboard_path
 
-      response.should contain("Site administration")
-      response.should contain("Dashboard")
+      response.should have_content("Site administration")
+      response.should have_content("Dashboard")
     end
   end
 
@@ -53,21 +53,21 @@ describe "RailsAdmin" do
     it "should work like belongs to associations in the list view" do
       get rails_admin_list_path(:model_name => "comment")
 
-      response.body.should contain(@team.name)
+      response.body.should have_content(@team.name)
     end
 
     it "should be editable" do
       get rails_admin_edit_path(:model_name => "comment", :id => @comment.id)
 
-      response.should have_tag("legend", :content => "Commentable")
-      response.should have_tag("select#comment_commentable_type")
-      response.should have_tag("select#comment_commentable_id")
+      response.should have_selector("legend", :content => "Commentable")
+      response.should have_selector("select#comment_commentable_type")
+      response.should have_selector("select#comment_commentable_id")
     end
 
     it "should be hidden in the owning end" do
       get rails_admin_edit_path(:model_name => "team", :id => @team.id)
 
-      response.should_not have_tag("legend", :content => "Comments")
+      response.should_not have_selector("legend", :content => "Comments")
     end
   end
 
