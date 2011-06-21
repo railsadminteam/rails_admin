@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe "RailsAdmin Config DSL Navigation Section" do
 
+  subject { page }
+
   describe "number of visible tabs" do
     after(:each) do
       RailsAdmin.config do |config|
@@ -13,8 +15,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config do |config|
         config.navigation.max_visible_tabs 2
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav > li") do |elements|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav > li") do |elements|
         elements.should have_at_most(4).items
       end
     end
@@ -41,8 +43,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config do |config|
         config.navigation.max_visible_tabs 20
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav>li>a") do |as|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
       end
     end
@@ -54,8 +56,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
           weight -1
         end
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav>li>a") do |as|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Teams", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"]
       end
     end
@@ -67,11 +69,11 @@ describe "RailsAdmin Config DSL Navigation Section" do
           parent Cms::BasicPage
         end
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav>li>a") do |as|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
       end
-      response.should have_selector("#nav>li.more>ul>li>a") do |as|
+      should have_selector("#nav>li.more>ul>li>a") do |as|
         as.map(&:content).should == ["Cms/Basic Pages", "Comments"]
       end
     end
@@ -85,11 +87,11 @@ describe "RailsAdmin Config DSL Navigation Section" do
           dropdown "CMS related"
         end
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav>li>a") do |as|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
       end
-      response.should have_selector("#nav>li.more>ul>li>a") do |as|
+      should have_selector("#nav>li.more>ul>li>a") do |as|
         as.map(&:content).should == ["Cms/Basic Pages", "Comments"]
       end
     end
@@ -104,8 +106,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
           weight 1
         end
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav>li>a") do |as|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav>li>a") do |as|
         as.map(&:content)[1..-1].should == ["Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"]
       end
     end
@@ -114,8 +116,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
   describe "label for a model" do
 
     it "should be visible and sane by default" do
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav") do |navigation|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav") do |navigation|
         navigation.should have_selector("li a", :content => "Fan")
       end
     end
@@ -124,8 +126,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config Fan do
         label "Fan test 1"
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav") do |navigation|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav") do |navigation|
         navigation.should have_selector("li a", :content => "Fan test 1")
       end
     end
@@ -134,8 +136,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config Fan do
         hide
       end
-      get rails_admin_dashboard_path
-      response.should have_selector("#nav") do |navigation|
+      visit rails_admin_dashboard_path
+      should have_selector("#nav") do |navigation|
         navigation.should_not have_selector("li a", :content => "Fan")
       end
     end

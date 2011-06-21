@@ -2,16 +2,14 @@ require 'spec_helper'
 
 describe "RailsAdmin Basic Destroy" do
 
+  subject { page }
+
   describe "destroy" do
     before(:each) do
       @player = FactoryGirl.create :player
-      get rails_admin_delete_path(:model_name => "player", :id => @player.id)
+      visit rails_admin_delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
       @player = RailsAdmin::AbstractModel.new("Player").first
-    end
-
-    it "should be successful" do
-      response.should be_successful
     end
 
     it "should destroy an object" do
@@ -22,13 +20,9 @@ describe "RailsAdmin Basic Destroy" do
   describe "destroy" do
     before(:each) do
       @player = FactoryGirl.create :player
-      get rails_admin_delete_path(:model_name => "player", :id => @player.id)
+      visit rails_admin_delete_path(:model_name => "player", :id => @player.id)
       click_button "Cancel"
       @player = RailsAdmin::AbstractModel.new("Player").first
-    end
-
-    it "should be successful" do
-      response.should be_successful
     end
 
     it "should not destroy an object" do
@@ -42,7 +36,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "should raise NotFound" do
-      response.status.should equal(404)
+      page.driver.status_code.should eql(404)
     end
   end
 

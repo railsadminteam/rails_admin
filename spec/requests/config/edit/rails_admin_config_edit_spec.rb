@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "RailsAdmin Config DSL Edit Section" do
+  
   subject { page }
   
   describe "field groupings" do
@@ -619,7 +620,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       visit rails_admin_new_path(:model_name => "draft")
-      should have_content(/CKEDITOR\.replace.*?draft_notes/)
+      should have_selector("script", :text => /CKEDITOR\.replace.*?draft_notes/)
     end
   end
 
