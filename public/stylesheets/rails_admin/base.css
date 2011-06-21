@@ -43,3 +43,25 @@ div.checker input.checkbox {
   width: 150px;
   height: 20px;
 }
+
+/* Override activo styles to make the search box smaller */
+.control .search {
+  width: 200px;
+}
+
+.control .search_box {
+  width: 166px;
+}
+
+.control .search_submit {
+  left: 173px;
+}
+
+/* Make the select box in the list page's controls area smaller */
+.selector.small {
+  width: 132px;
+}
+
+.selector.small span {
+  width: 100px;
+}
