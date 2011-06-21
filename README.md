@@ -66,6 +66,7 @@ authorization framework as outlined later in this document.
 
 Screenshots
 -----------
+![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
 ![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
 
@@ -197,7 +198,7 @@ effects.
         end
       end
     end
-    
+
     def Team<ActiveRecord::Base
       def custom_label_method
         "Team #{self.name}"
@@ -284,7 +285,7 @@ Obtained navigation:
       Team
     ...
 
-You probably want to change the name of the dropdown. 
+You probably want to change the name of the dropdown.
 This can be easily achieved with the 'dropdown' attribute of the parent model.
 
 Added to previous example:
@@ -393,7 +394,7 @@ You can change default behavior with use two options: `sort_by` and `sort_revers
 
 You can make a column non-sortable by setting the sortable option to false (1)
 You can change the column that the field will actually sort on (2)
-Belongs_to associations : 
+Belongs_to associations :
   will be sorted on their label if label is not virtual (:name, :title, etc.)
   otherwise on the foreign_key (:team_id)
   you can also specify a column on the targetted table (see example) (3)
@@ -409,9 +410,9 @@ Belongs_to associations :
             sortable :last_name # imagine there is a :last_name column and that :name is virtual
           end
           field :team_id do # (3)
-            sortable :win_percentage 
-            # Will order by players playing with the best teams, 
-            # rather than the team name (by default), 
+            sortable :win_percentage
+            # Will order by players playing with the best teams,
+            # rather than the team name (by default),
             # or the team id (dull but default if label is not a column name)
           end
         end
@@ -425,7 +426,7 @@ To change it:
         sort_by :nam
       end
     end
-    
+
 By default, dates and serial ids are reversed when first-sorted ('desc' instead of 'asc' in SQL).
 If you want to reverse (or cancel it) the default sort order (first column click or the default sort column):
 
@@ -450,7 +451,7 @@ If you want to reverse (or cancel it) the default sort order (first column click
 You can make a column non-searchable by setting the searchable option to false (1)
 You can change the column that the field will actually search on (2)
 You can specify a list of column that will be searched over (3)
-Belongs_to associations : 
+Belongs_to associations :
   will be searched on their foreign_key (:team_id)
   will be searched on their label if label is not virtual (:name, :title, etc.)
   you can also specify columns on the targetted table (see example) (4)
@@ -460,8 +461,8 @@ Belongs_to associations :
         list do
           field :created_at do # (1)
             searchable false
-          end 
-          
+          end
+
           field :name do (2)
             searchable :last_name
           end
@@ -469,10 +470,10 @@ Belongs_to associations :
           field :name do (3)
             searchable [:first_name, :last_name]
           end
-          
+
           field :team_id do # (4)
             searchable [:name, :id]
-            # eq. to [{Team => :name}, {Team => :id}] 
+            # eq. to [{Team => :name}, {Team => :id}]
             # or even [:name, {Player => :team_id}]
           end
         end
@@ -933,15 +934,15 @@ Everything can be overridden with `help`:
     end
 
 **Fields - Paperclip**
-    
+
     class Team < ActiveRecord::Base
       has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
-  
+
       # handling delete in your model, if needed. Replace all image occurences with your asset name.
       attr_accessor :delete_image
       before_save { self.image = nil if self.delete_image == '1' }
     end
-    
+
     RailsAdmin.config do |config|
       config.model Team do
         edit do
@@ -952,7 +953,7 @@ Everything can be overridden with `help`:
         end
       end
     end
-    
+
 **Fields - Enum**
 
 Fields of datatype string, integer, text can be rendered with select boxes. Auto-detected if object responds to `#{method_name}_enum`.
@@ -968,12 +969,12 @@ You can use `enum` to override any `enum_method` and give back a `FormOptionsHel
       end
       ...
     end
-    
+
     RailsAdmin.config do |config|
       config.model Team do
         edit do
           field :color
-          # defaults to 
+          # defaults to
           # field :color, :enum do
           #   enum_method do
           #     :color_enum
@@ -982,7 +983,7 @@ You can use `enum` to override any `enum_method` and give back a `FormOptionsHel
         end
       end
     end
-    
+
 If you don't have any enumeration method in your model, this will work:
 
     RailsAdmin.config do |config|
@@ -1096,7 +1097,7 @@ accomplished like this:
         end
       end
     end
-    
+
 Or even scope it like this:
 
     RailsAdmin.config do |config|
