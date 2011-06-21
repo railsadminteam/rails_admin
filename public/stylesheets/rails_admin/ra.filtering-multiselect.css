@@ -72,23 +72,49 @@
 
 .ra-multiselect .ui-icon-circle-triangle-e {
   background-position: -16px -32px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-e:hover {
   background-position: -16px -48px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w {
   background-position: 0px -32px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w:hover {
   background-position: 0px -48px !important;
-  background-image: url(../../images/rails_admin/icon_sprite.png);
+  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
 }
+
+.ra-multiselect .ui-icon-circle-triangle-n {
+  background-position: 0px 0px !important;
+  margin-left: 1px;
+  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-n-light.png);
+}
+
+.ra-multiselect .ui-icon-circle-triangle-n:hover {
+  background-position: 0px 0px !important;
+  margin-left: 1px;
+  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-n-dark.png);
+}
+
+.ra-multiselect .ui-icon-circle-triangle-s {
+  background-position: 0px 0px !important;
+  margin-left: 1px;
+  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-s-light.png);
+}
+
+.ra-multiselect .ui-icon-circle-triangle-s:hover {
+  background-position: 0px 0px !important;
+  margin-left: 1px;
+  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-s-dark.png);
+}
+
+
 
 .ra-multiselect-collection, .ra-multiselect-selection {
   height: 130px;
@@ -102,12 +128,3 @@
   border-bottom: 1px solid #e3e9ef;
   border-right: 1px solid #dbdfe6;
 }
-/*
-.ra-multiselect-prev, .ra-multiselect-next { position:absolute; top: 6px; width: 1.8em; height: 1.8em; }
-.ra-multiselect:hover, .ra-multiselectnext:hover { border: 1px none; }
-.ra-multiselect-prev span { background-position: 0px -32px !important; }
-.ra-multiselect-next span { background-position: -16px -32px !important; }
-.ra-multiselect-prev:hover span { background-position: 0px -48px !important; }
-.ra-multiselect-next:hover span { background-position: -16px -48px !important; }
-.ra-multiselect-prev span, .ra-multiselect-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(../../images/rails_admin/icon_sprite.png) no-repeat; }
-*/
