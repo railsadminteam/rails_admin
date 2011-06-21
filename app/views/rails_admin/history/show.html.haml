@@ -1,0 +1,66 @@
+- params = request.params.except(:action, :controller, :model_name)
+- query = params[:query]
+- filter = params[:filter]
+- sort = params[:sort]
+- sort_reverse = params[:sort_reverse]
+
+- head_javascript "rails_admin/application.js"
+- head_style "rails_admin/list"
+
+#block-tables.block
+  - if @object
+    = breadcrumbs_for :history, @object
+  - else
+    = breadcrumbs_for :model_history, @abstract_model
+    
+  .content
+    %h2.title= @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      %table.table.grid
+        %thead
+          %tr
+            - columns = []
+            - columns << { :property_name => "created_at", :css_class => "dateTime",    :link_text => "DATE/TIME" }
+            - columns << { :property_name => "username",   :css_class => "smallString", :link_text => "USER"      }
+            - columns << { :property_name => "item",       :css_class => "int",         :link_text => "ITEM"      } if @general
+            - columns << { :property_name => "message",    :css_class => "smallString", :link_text => "ACTION"    }
+            
+            - columns.each do |column|
+              - property_name = column[:property_name]
+              - selected = (sort == property_name)
+              - sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil
+            
+              %th{:class => "#{column[:css_class]}#{" selected" if selected}"}
+                - sort_location = rails_admin_history_model_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}))
+                = link_to(column[:link_text], sort_location, :class => sort_direction)
+                
+        %tbody
+          - @history.each_with_index do |object, index|
+            %tr{:class => index % 2 == 0 ? "odd" : "even"}
+              %td.dateTime
+                - unless object.created_at.nil?
+                  = l(object.created_at, :format => :long, :default => l(object.created_at, :format => :long, :locale => :en))
+              %td.smallString
+                = object.username
+              - if @general
+                %td.int
+                  - unless object.message.match("Destroy")
+                    = link_to object.item, rails_admin_history_object_path(:id => object.item), :class => "historyLink"
+                  - else
+                    = object.item
+              %td.smallString
+                = object.message
+      - if @general
+        .pagination
+          - if @page_count.to_i > 1
+            = paginate(@current_page, @page_count, :url => params.except("page", "all"), :remote => false).html_safe
+          - if @page_count.to_i == 2
+            = link_to(t("admin.list.show_all"), rails_admin_history_model_path(params.except("page").merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")))
+
+      = form_tag("", :method => "get", :class => "search") do
+        .columns.wat-cf
+          .column.right
+            %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
+            %input.search_submit{:type => "submit", :value => ""}
+      .wat-cf

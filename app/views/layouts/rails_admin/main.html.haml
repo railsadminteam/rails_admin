@@ -1,0 +1,14 @@
+- if @abstract_model && @plugin_name
+  - content_for :title do
+    #{@abstract_model.pretty_name} | #{@plugin_name}
+= render(:partial => 'layouts/rails_admin/head')
+%body
+  #container
+    = render(:partial => 'layouts/rails_admin/header')
+    #wrapper.wat-cf
+      #main
+        #content= yield
+        #footer
+          %p Rails Admin | 2011
+      = render :partial => "layouts/rails_admin/sidebar"
+

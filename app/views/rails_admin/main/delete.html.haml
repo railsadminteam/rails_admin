@@ -1,0 +1,27 @@
+- head_javascript "rails_admin/application.js"
+
+#block-tables.block
+  = breadcrumbs_for :delete, @object
+  
+  .content
+    %h2.title Delete confirmation
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      %p
+        Are you sure you want to delete the #{@abstract_model.pretty_name.downcase} &ldquo;
+        %strong>= @model_config.with(:object => @object).object_label
+        \&rdquo;? All of the following related items will be deleted:
+
+      %div{:style=>"padding-left:20px"}= render :partial => "delete_notice", :object => @object
+
+      = form_for(@object, :url => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
+
+        %br
+        %br
+        .group.navform.wat-cf
+          %button.button{:type => "submit"}
+            %img{:alt => "Remove", :src => "/stylesheets/rails_admin/theme/activo/images/icons/cross.png"}
+            = t("admin.delete.confirmation")
+
+          %button.button{:type => "submit", :name => "_continue"}
+            =t("admin.new.cancel")

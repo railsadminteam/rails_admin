@@ -24,7 +24,7 @@
             '<option ' + (field_operator == "less_than" ? 'selected="selected"' : '') + ' value="less_than" data-additional-fieldset="true">Less than ... days ago</option>' +
             '<option ' + (field_operator == "more_than" ? 'selected="selected"' : '') + ' value="more_than" data-additional-fieldset="true">More than ... days ago</option>' +
           '</select>' +
-          '<input class="additional-fieldset" style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          '<input class="additional-fieldset text_field" style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'enum':
           field_options = $j('<div/>').html(field_options).text(); // entities decode
@@ -40,21 +40,25 @@
             '<option value="ends_with" ' + (field_operator == "ends_with" ? 'selected="selected"' : '') + '>Ends with</option>' +
             '<option value="is" ' + (field_operator == "is" ? 'selected="selected"' : '') + '>Is exactly</option>' +
           '</select>' +
-          '<input type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          '<input type="text" name="' + value_name + '" value="' + field_value + '" class="text_field"/> ';
           break;
         default:
-          var control = '<input type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          var control = '<input type="text" name="' + value_name + '" value="' + field_value + '" class="text_field"/> ';
           break;
       }
     
       $('#filters_box').append(
-        '<div class="filter" style="clear:both;">' + 
+        '<div class="filter new" style="clear:both;">' + 
     
           '<div class="ui-state-default ui-corner-all"><span alt="delete" class="delete ui-icon ui-icon-trash" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]" style="cursor:pointer" title="delete"></span></div>' +
           '<label>' + field_label + '</label>' + 
           control +
         '</div>'
       );
+      
+      // this ensures that each select is only 'uniformed' once:
+      $("#filters_box .new select").uniform();
+      $("#filters_box .new").removeClass("new");
     }
   }
 
@@ -82,10 +86,10 @@
     $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
       var selected_option = $(this).find('option:selected');
       if($(selected_option).data('additional-fieldset')) {
-        $(this).siblings('.additional-fieldset').val('');
-        $(this).siblings('.additional-fieldset').show();
+        $(this).parent().siblings('.additional-fieldset').val('');
+        $(this).parent().siblings('.additional-fieldset').show();
       } else {
-        $(this).siblings('.additional-fieldset').hide();
+        $(this).parent().siblings('.additional-fieldset').hide();
       }
     });
   });

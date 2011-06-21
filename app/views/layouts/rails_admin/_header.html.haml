@@ -1,0 +1,14 @@
+#header
+  = render :partial => "rails_admin/main/title"
+  %h1
+
+  #user-navigation
+    %ul.wat-cf
+      %li= link_to header_icon(:config, "Dashboard"), rails_admin_dashboard_path
+      - if (root_path rescue nil)
+        %li= link_to header_icon(:home, t('home.name').capitalize), root_path
+      - if (current_user rescue nil)
+        %li= link_to header_icon(:account, current_user.email), (rails_admin_edit_path(:user, current_user) rescue '#')
+      - if (current_user rescue nil)
+        %li= link_to header_icon(:logout, t("admin.credentials.log_out")), (destroy_session_path(current_user) rescue '#')
+

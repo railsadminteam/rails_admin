@@ -1,22 +1,16 @@
-#modelNameHeader {
-  margin-left:5px;
-  text-align: left;
+/* Styles for the site admin summary: */
+.grid .start {
+  padding-left: 8px;
 }
 
-.grid tbody td.modelNameRow {
-  text-align: left;
-  margin-left:5px;
+.count .number {
+  float: left;
 }
 
-.grid tbody td {
-  padding: 4px;
-  border: none;
-}
-
-.scale{
+.scale {
   margin:0 auto;
   display:block;
-  width:200px;
+  width:300px;
   height:13px;
 }
 
@@ -25,64 +19,17 @@
   height: 100%;
 }
 
-.add{
-  color:#9a012f;
-  font-weight:bold;
-  text-decoration:none;
-  padding-right:3px;
-}
-
-a.add:hover{
-  text-decoration:underline;
-}
-
 .show{
-  padding-left:3px;
-  color:#215086;
   font-weight:bold;
-  text-decoration:none;
 }
 
-a.show:hover{
-  text-decoration:underline;
+/* Styles for the history table: */
+
+table#history .start {
+  padding-right: 20px;
 }
 
-.section h2{
-  margin-top:2px;
-  font-size:12px;
-  border-bottom:1px solid #DDD;
-  padding-bottom:4px;
-  font-weight:normal;
-  padding-left:5px;
-  margin-top:5px;
-}
-
-#listing{
-  margin-top:40px;
-  margin-bottom:5px;
-}
-
-#history{
-  list-style-type:none;
-}
-
-#history li{
-  padding-bottom:8px;
-}
-
-#history li a img{
-  border:none;
-  position:relative;
-  top:4px;
-  left:2px;
-}
-
-#history li em{
-  font-style:normal;
-  text-decoration:underline;
-}
-
-#history li{
-  font-size:11px;
-  font-weight:bold;
+table#history td.start {
+  font-weight: bold;
+  padding-right: 20px;
 }

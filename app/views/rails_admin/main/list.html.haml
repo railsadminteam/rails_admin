@@ -1,0 +1,150 @@
+:ruby
+  query = params[:query]
+  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
+  sort = params[:sort]
+  sort_reverse = params[:sort_reverse]
+  properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
+  # columns paginate
+  @filterable_fields = @model_config.list.fields.select(&:queryable?)
+  @style, @other, properties = get_column_set(properties)
+  
+  head_javascript "rails_admin/application.js"
+  head_javascript "rails_admin/activo/application.js"
+  head_javascript "rails_admin/ra.filter-box.js"
+  head_style "rails_admin/list"
+    
+  if params[:filters]
+    @ordered_filters = params[:filters].inject({}) { |memo, filter|
+      field_name = filter.first
+      filter.last.each do |index, filter_hash|
+        memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
+      end
+      memo
+    }.to_a.sort_by(&:first)
+  end
+  
+  @ordered_filter_string = @ordered_filters.map do |duplet|
+    filter_index = duplet[0]
+    filter_for_field = duplet[1]
+    filter_name = filter_for_field.keys.first
+    filter_hash = filter_for_field.values.first
+    field = @filterable_fields.find{ |field| field.name == filter_name.intern }
+  
+    field_options = case field.type
+    when :enum
+      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
+    else
+      ''
+    end
+    "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
+  end.join if @ordered_filters
+
+- head_style do
+  - @style.each do |key, value|
+    \.grid thead #{".#{key}"}{
+    width: #{value[:width]}px;
+    }
+      
+:javascript
+  $j(document).ready(function($) {
+    $(this).one("ajax:success", function(e, data, status, xhr) {
+      $("#content").html(data);
+    });
+    
+    #{@ordered_filter_string}
+  });
+
+#block-tables.block
+  = breadcrumbs_for :list, @abstract_model
+  
+  .content
+    .control
+      %span(style="margin: 3px 6px")
+        %select#filter_select.small-uniform
+          %option{:value => ""} Add filter...
+          - @filterable_fields.each do |field|
+            - field_options = case field.type
+            - when :enum
+              - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
+            - else
+              - ''
+            %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
+    
+      - if authorized? :new, @abstract_model
+        = action_button rails_admin_new_path, t("admin.list.add_new"), :add
+
+      - if authorized? :delete, @abstract_model
+        = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
+      
+      = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
+        %span.search
+          %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
+          %input.search_submit{:type => "submit", :value => ""}
+        #filters_box
+    %h2.title= @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      = form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
+        = hidden_field_tag :bulk_action
+        %table.table.grid
+          %thead
+            %tr
+              %th.first
+                %input.checkbox.toggle{:type => "checkbox"}
+              %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
+              - properties.each do |property|
+                - property_name = property.name
+                - property_pretty_name = property.label
+                - selected = sort == property_name.to_s
+                %th{:class => "#{property.css_class} #{selected ? "selected" : nil}"}
+                  - if property.sortable
+                    - sort_location = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).except("sort_reverse").merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {:sort_reverse => "false"}))
+                    - sort_direction = selected ? (sort_reverse == 'true' ? "ascending" : "descending") : nil
+                    = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true)
+                  - else
+                    = property_pretty_name.upcase
+              %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
+
+              %th.last
+
+          %tbody
+            - @objects.each do |object|
+              - can_edit  = authorized?(:edit, @abstract_model, object)
+              - edit_path = rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id) if can_edit
+              - row_class = "#{cycle("odd", "even")}#{" link" if can_edit}"
+
+              %tr{:class => row_class, :"data-link" => (edit_path if can_edit)}
+
+                %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
+                - other_left = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1))
+                %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
+                - properties.map{|property| property.bind(:object, object)}.each do |property|
+                  %td{:class => "#{property.css_class}"}= [:text, :string].include?(property.type) ? property.formatted_value[0..40] : property.formatted_value
+                - other_right = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1))
+                %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
+                %td.last
+                  - if show_url = url_for(object) rescue nil
+                    = action_icon(show_url, :show, "Show")
+                  - if can_edit
+                    = action_icon(edit_path, :edit, t("admin.list.edit_action"))
+                  - if authorized? :delete, @abstract_model, object
+                    = action_icon(rails_admin_delete_path(@abstract_model, object), :cross, t("admin.list.delete_action"))
+
+        .pagination
+          - if @page_count.to_i > 1
+            = paginate(@current_page, @page_count, :url => params).html_safe
+          - if @record_count.to_i <= 100 && @page_count.to_i > 1
+            = link_to(t("admin.list.show_all"), rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")), :method => :get, :remote => true)
+        .left(style="white-space: nowrap; padding-top:0.5em;")
+          = @record_count
+          = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
+        
+        .columns.wat-cf
+          .column.right
+            - if authorized? :export, @abstract_model
+              = action_button rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), t("admin.list.export_action"), nil, :method => :post
+              = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
+            
+            = action_button rails_admin_history_model_path, t("admin.history.name")
+      .wat-cf
+

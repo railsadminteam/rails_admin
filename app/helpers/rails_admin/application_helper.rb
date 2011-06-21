@@ -62,6 +62,36 @@ module RailsAdmin
       end
       html+"\n"
     end
+    
+    def action_button link, text, icon=nil, options={}
+      options.reverse_merge! :class => "button"
+      link_to link, options do
+        image = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/#{icon}.png" if icon
+        [image, text].compact.join("\n").html_safe
+      end.html_safe
+    end
+    
+    # the icon shown beside every entry in the list view
+    def action_icon link, icon, text
+      icon_path = "/stylesheets/rails_admin/theme/activo/images/icons/24/%s.png"
+      icon_change = "this.src='#{icon_path}'"
+      link_to link do
+        image_tag (icon_path % icon),
+          :alt => text, :title => text,
+          :onmouseout  => (icon_change % icon),
+          :onmouseover => (icon_change % "#{icon}-hover")
+      end.html_safe
+    end
+    
+    # Used for the icons in the admins very top right.
+    def header_icon(image_name, title)
+      image_tag "/stylesheets/rails_admin/theme/activo/images/session/#{image_name}.png", :alt => title, :title => title
+    end
+
+    # Used for the history entries in the sidebar
+    def history_link user, text
+      content_tag :p, "<b>#{user}</b> #{text}".html_safe
+    end
 
     def history_output(t)
       return unless t
@@ -113,6 +143,7 @@ module RailsAdmin
       options[:inner_window] ||= 7
       options[:page_param] ||= 'page'
       options[:url] ||= ""
+      options[:remote] = true unless options.has_key?(:remote)
 
       url = options.delete(:url)
       url.delete(options[:page_param])
@@ -166,11 +197,11 @@ module RailsAdmin
           when String
             b << page_number
           when current_page
-            b << Builder::XmlMarkup.new.span(page_number, :class => "this-page")
+            b << Builder::XmlMarkup.new.span(page_number, :class => "current")
           when page_count
-            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => true)
+            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => options[:remote])
           else
-            b << link_to(page_number, "#{url}=#{page_number}", :remote => true)
+            b << link_to(page_number, "#{url}=#{page_number}", :remote => options[:remote])
           end
         end
       end
@@ -192,6 +223,75 @@ module RailsAdmin
         t('home.name')
       end
     end
+    
+    # Creative whitespace:
+    ViewType   =          Struct.new(:name,      :parent,    :type,   :authorization, :path_method)
+    VIEW_TYPES = {
+      :delete        => ViewType.new("Delete",   :edit,      :object, :delete),
+      :history       => ViewType.new("History",  :edit,      :object, nil,            :history_object),
+      :edit          => ViewType.new("Edit",     :list,      :object, :edit),
+      :export        => ViewType.new("Export",   :list,      :model,  :export),
+      :bulk_destroy  => ViewType.new("Delete",   :list,      :model,  :delete),
+      :new           => ViewType.new("New",      :list,      :model,  :new),
+      :model_history => ViewType.new("History",  :list,      :model,  nil,            :history_model),
+      :list          => ViewType.new("List",     :dashboard, :model,  :list),
+      :dashboard     => ViewType.new("Dashboard")
+    }
+    
+    def breadcrumbs_for view, abstract_model_or_object
+      # create an array of all the names of the views we want breadcrumb links to
+      views = []
+      parent = view
+      begin
+        views << parent
+      end while parent = VIEW_TYPES[parent].parent
+
+      # get a breadcrumb for each view name
+      breadcrumbs = views.reverse.map do |v|
+        breadcrumb_for v, abstract_model_or_object, (v==view)
+      end
+
+      # join the breadcrumbs together inside some other tags
+      content_tag(:div, :class => "secondary-navigation") do
+        content_tag(:ul, :class => "wat-cf") do
+          breadcrumbs.join("\n").html_safe
+        end
+      end
+
+    end
+
+    private
+
+      def abstract_model_and_object abstract_model_or_object
+        if abstract_model_or_object.is_a?(AbstractModel)
+          abstract_model = abstract_model_or_object
+          object = nil
+        elsif abstract_model_or_object.present?
+          object = abstract_model_or_object
+          abstract_model = AbstractModel.new(object.class)
+        end
+        [abstract_model, object]
+      end
+
+      def breadcrumb_for view, abstract_model_or_object, active
+        abstract_model, object = abstract_model_and_object( abstract_model_or_object )
+
+        vt = VIEW_TYPES[view]
+        
+        # TODO: write tests and enable authorization checking:
+        # if vt.authorization.nil? || authorized?(vt.authorization, abstract_model, object)
+          css_classes = []
+          css_classes << "first" if view == :dashboard
+          css_classes << "active" if active
+
+          content_tag(:li, :class => css_classes) do
+            path_method = vt.path_method || view
+            link_to vt.name, self.send("rails_admin_#{path_method}_path")
+          end
+        # end
+
+      end
+    
 
   end
 end
