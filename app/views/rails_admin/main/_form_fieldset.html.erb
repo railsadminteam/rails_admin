@@ -1,5 +1,5 @@
           <% if (fields = fieldset.fields.map{ |f| f.with(:form => form, :object => object, :view => self) }.select(&:visible)).length > 0 %>
-          <fieldset>
+          <fieldset class="group">
             <legend><%= fieldset.label %></legend>
             <% fields.each do |field| %>
               <%= field.render -%>

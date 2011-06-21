@@ -1,0 +1,26 @@
+!!! Strict
+%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %title= yield :title || "#{@page_name} | #{@plugin_name}"
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
+    
+    - %w[base jquery-ui formtastic jquery.tipsy.css uniform.default.css].each do |file|
+      = stylesheet_link_tag "rails_admin/theme/#{file}"
+      
+    = stylesheet_link_tag "rails_admin/theme/activo/style"
+    = stylesheet_link_tag "rails_admin/base"
+
+    = javascript_fallback "//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js", "/javascripts/rails_admin/jquery-1.5.1.min.js", "typeof jQuery == 'undefined'"
+    = javascript_fallback "//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js", "/javascripts/rails_admin/jquery-ui-1.8.13.min.js", "!jQuery.ui"
+
+    - scripts = %w[jquery.localscroll.js jquery.scrollTo.js jquery.tipsy.js jquery.uniform.min.js ]
+    = javascript_include_tag *scripts.map{ |s| "rails_admin/activo/#{s}" }
+
+    - head_javascript "rails_admin/activo/application.js"
+
+    = javascript_include_tag "rails_admin/rails.js"
+
+    = head_javascript
+    = head_style
+    = csrf_meta_tag

@@ -1,0 +1,155 @@
+/*
+ *  Stylesheet for formtastic
+ *
+ *  David Marquês Francisco
+ *  (dfrancisc[at]gmail.com)
+ *
+ */
+
+#main .block .content .inner form.formtastic
+  padding-right: 7px
+
+form.formtastic
+  hr
+    // barra para subdividir grupos
+    height: 1px
+    border-bottom: solid #eaeaea 1px
+    padding-top: 10px
+    margin-bottom: 15px
+    background-color: #fff
+    margin-right: -5px
+  .wat-cf
+    padding-top: 10px
+
+  /* COLUMNS */
+
+  fieldset
+    // uma só coluna
+    font-size: 14px
+    width: 100%
+
+    &.column_left
+      // duas colunas - esquerda
+      float: left
+      width: 47%
+      margin-left: 0px
+
+    &.column_right
+      // duas colunas - direita
+      float: right
+      width: 48%
+      margin-right: 0px
+
+    /* LABELS */
+
+    > ol > li
+      label
+        color: #666666
+        // para ficar por cima do campo
+        width: 100%
+      fieldset ol
+        // para ficar por cima do campo nas datas
+        padding: 20px 0 0 0
+
+      /* FIELDS */
+
+      &.string input, &.password input, &.numeric input, &.text textarea, &.datepicker input
+        width: 100%
+        max-width: 100%
+        border: 1px solid #ddd
+        padding: 2px
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1)
+        -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1)
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1)
+
+      &.select select, &.file input
+        // comboboxes e input de ficheiros
+        width: 100%
+        max-width: 100%
+
+      &.datepicker input
+        // icone do datepicker
+        background: url('images/icons/calendar.png') no-repeat right
+
+      &.string input:focus, &.password input:focus, &.numeric input:focus, &.text textarea:focus
+        border: 1px solid #a2a294
+
+      &.datepicker input:focus
+        border: 1px solid #a2a294
+        // icone do datepicker quando rato está por cima
+        background: url('images/icons/calendar-hover.png') no-repeat right
+
+      &.string input[disabled='disabled'], &.password input[disabled='disabled'], &.numeric input[disabled='disabled'], &.text textarea[disabled='disabled'], &.datepicker input[disabled='disabled']
+        // campos que não podem ser preenchidos (disabled)
+        background-color: #f6f6f6
+        border: 1px solid #f6f6f6
+        -webkit-box-shadow: none
+        -moz-box-shadow: none
+
+      &.boolean label
+        // inline checkboxes (como as dos documentos anexos solicitados nos materiais)
+        padding-left: 0px
+
+#box .block .content form.formtastic fieldset > ol > li input
+  /* caixas (como a de login) têm tamanho fixo. Definir o
+   * width de text fields dá problemas no IE. Desta forma,
+   * ficou funcional */
+  width: auto
+  max-width: 430px
+
+form.formtastic
+  fieldset > ol > li
+    // espaço entre duas linhas de campos
+    margin-bottom: 10px
+
+    &.date fieldset ol li, &.time fieldset ol li, &.datetime fieldset ol li
+      // Campos de datas - para as duas colunas ficarem alinhadas
+      height: 20px
+
+    &.error input
+      // em caso de erro, borda do campo fica vermelha
+      border: 1px solid #fbb
+
+    &.radio fieldset ol li
+      // espaço entre várias linhas com radios
+      margin-bottom: 4px
+      label
+        // texto apresentado à frente de um radio button
+        color: #222
+        font-size: 13px
+        font-weight: normal
+
+    &.datepicker input
+      // datepicker (apagar a sombra que é colocada no jquery)
+      -webkit-box-shadow: none
+      -moz-box-shadow: none
+
+    select
+      // espaço entre duas linhas de campos quando se trata de uma combobox
+      margin-bottom: 4px
+
+    /* HINT */
+
+    p.inline-hints
+      // texto de ajuda - porque não fica itálico?
+      font-style: italic
+      color: #8C8C8C
+      font-size: .9em
+      margin: 2px 0 0 0
+
+  /* BUTTON */
+
+  button.button, a.button
+    font-size: 12px
+
+/* CHECK_BOXES */
+
+#box .block .content form.formtastic fieldset > ol > li
+  &.check_boxes fieldset ol
+    width: 440px
+    li label
+      // texto apresentado à frente de uma checkbox (nas boxes, por exemplo nos roles do editar perfil)
+      color: #222
+      font-size: 13px
+      font-weight: normal
+      padding-right: 50px

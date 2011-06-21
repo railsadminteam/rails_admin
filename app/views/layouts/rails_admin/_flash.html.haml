@@ -1,0 +1,9 @@
+- if flash && (flash[:error] || flash[:notice])
+  .flash
+    - if flash && flash[:error]
+      .message.error
+        %p= flash[:error]
+
+    - if flash && flash[:notice]
+      .message.notice
+        %p= flash[:notice]

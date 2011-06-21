@@ -1,0 +1,76 @@
+- head_style "rails_admin/list"
+- head_style "rails_admin/dashboard"
+- head_style "rails_admin/ra.timeline.css"
+- head_javascript "rails_admin/application.js"
+- head_javascript "rails_admin/ra.timeline.js"
+
+#block-tables.block
+  = breadcrumbs_for :dashboard, nil
+  
+  .content
+    %h2.title= @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      %table.table.grid
+        %thead
+          %tr
+            %th.start
+              = t "admin.dashboard.model_name"
+            %th= t "admin.dashboard.last_used"
+            %th= t "admin.dashboard.records"
+            %th=# t "admin.dashboard.modify"
+        %tbody
+          - @abstract_models.each do |abstract_model|
+            - if authorized? :list, abstract_model
+              - list_path = rails_admin_list_path(:model_name => abstract_model.to_param)
+              - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
+              
+              %tr{:class => row_class, :"data-link" => list_path}
+                %td.start
+                  %span.show= RailsAdmin.config(abstract_model).label
+                %td
+                  - if (last_used = @most_recent_changes[abstract_model.pretty_name])
+                    = time_ago_in_words last_used
+                    = t "admin.dashboard.ago"
+                %td.count
+                  %span.number= @count[abstract_model.pretty_name]
+                  %span.scale
+                    - percent = @count[abstract_model.pretty_name] * 100 / @max unless @max == 0
+                    - percent = 1 if percent.nil?
+                    %div{:class => "bar #{get_indicator(percent)}", :style => "width:#{percent}%;"}
+                %td.last
+                  - if authorized? :new, abstract_model
+                    - new_path = rails_admin_new_path(:model_name => abstract_model.to_param)
+                    = action_icon(new_path, :add, t("admin.dashboard.add_new"))
+                  - history_path = rails_admin_history_model_path(:model_name => abstract_model.to_param)
+                  = action_icon(history_path, :calendar, t("admin.history.name"))
+
+#block-tables.block
+  .content
+    %h2.title= t("admin.history.name")
+    .inner
+      #timeline
+      #listingHistory
+        = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
+      :javascript
+        $j(document).ready(function($) {
+          var cache = {};
+           $("#timeline").timeline({
+             url: "#{ rails_admin_history_slider_path }",
+             monthChanged: function(month, year) {
+               if (cache[year] && cache[year][month]) {
+                 $("#listingHistory").html(cache[year][month]);
+               } else {
+                 $j("#listingHistory").load(
+                   "#{ rails_admin_history_list_path }",
+                   { month: month, year: year },
+                   function(response, status, xhr) {
+                     if (!cache[year]) { cache[year] = {}; }
+                     cache[year][month] = response;
+                   }
+                 );
+               }
+             },
+             monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
+           });
+        });

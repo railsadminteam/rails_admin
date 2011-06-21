@@ -45,46 +45,55 @@
       var dialog = this._getDialog(),
           form = dialog.find("form"),
           widget = this,
-          saveButtonText = dialog.find("input[name=_save]").val(),
-          cancelButtonText = dialog.find("input[name=_continue]").val();
+          saveButtonText = dialog.find(":submit[name=_save]").text(),
+          cancelButtonText = dialog.find(":submit[name=_continue]").text();
 
-      dialog.dialog("option", "title", $(".ui-widget-header", dialog).remove().text());
+      dialog.dialog("option", "title", $("h2.title", dialog).remove().text());
 
       form.attr("data-remote", true);
-      dialog.find(".submit").remove();
+      dialog.find(":submit").remove();
       dialog.find(".ra-block-content").removeClass("ra-block-content");
 
       var buttons = {};
 
-      buttons[saveButtonText] = function() {
-				// We need to manually update CKeditor mapped textarea before ajax submit
-				if(typeof CKEDITOR != 'undefined') {
-					for ( instance in CKEDITOR.instances )
-        		CKEDITOR.instances[instance].updateElement();
-				}
-        dialog.find("form").submit();
-      };
+      if (saveButtonText) {
+        buttons[saveButtonText] = function() {
+          // We need to manually update CKeditor mapped textarea before ajax submit
+          if(typeof CKEDITOR != 'undefined') {
+            for ( instance in CKEDITOR.instances )
+              CKEDITOR.instances[instance].updateElement();
+          }
+          dialog.find("form").submit();
+        };
+      }
 
-      buttons[cancelButtonText] = function() {
-        dialog.dialog("close");
-      };
+      if (cancelButtonText) {
+        buttons[cancelButtonText] = function() {
+          dialog.dialog("close");
+        };
+      }
 
       dialog.dialog("option", "buttons", buttons);
 
+      /* Remove original button container if it's now empty */
+      if (0 == $("form > .navform :submit", dialog).length) {
+        $("form > .navform", dialog).remove();
+      }
+
       form.bind("ajax:success", function(e, data, status, xhr) {
-				var json = $.parseJSON(data);
-       	var select = widget.element.siblings('select');
-				var input = widget.element.siblings('.ra-filtering-select-input');
- 				
-				if(input.length > 0) {
- 					input[0].value = json.label;
- 				}
-				
- 				if(select.length > 0) {
- 					select.html('<option value="' + json.id + '">' + json.label + '</option>' );
- 					select[0].value = json.id;
- 				}
-				dialog.dialog("close");
+        var json = $.parseJSON(data);
+        var select = widget.element.siblings('select');
+        var input = widget.element.siblings('.ra-filtering-select-input');
+
+        if(input.length > 0) {
+          input[0].value = json.label;
+        }
+
+        if(select.length > 0) {
+          select.html('<option value="' + json.id + '">' + json.label + '</option>' );
+          select[0].value = json.id;
+        }
+        dialog.dialog("close");
       });
 
       form.bind("ajax:error", function(e, xhr, status, error) {

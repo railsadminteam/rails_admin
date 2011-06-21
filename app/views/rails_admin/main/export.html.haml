@@ -1,0 +1,67 @@
+- params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
+- visible_fields = @model_config.export.visible_fields
+- head_javascript "rails_admin/application.js"
+- head_style "rails_admin/form.css"
+
+#block-tables.block
+  = breadcrumbs_for :export, @abstract_model
+  .content
+    .control
+      -#
+    %h2.title= t('admin.export.select') # @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+      = form_tag rails_admin_export_path(params.merge(:all => true)), :method => 'post' do
+        %input{:name => "send_data", :type => "hidden", :value => "true"}/
+        %fieldset
+          %legend= t('admin.export.fields_from', :name => @abstract_model.pretty_name)
+          - visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.each do |field|
+            - list = field.type != :virtual ? 'only' : 'methods'
+            .field
+              %label{:for => "schema_#{list}_#{field.name}"}
+                = @abstract_model.model.human_attribute_name(field.name)
+              = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
+              %p.help= t('admin.export.display', :name => field.name, :type => field.type)
+            - if field.association? && field.association[:options][:polymorphic]
+              .field
+                - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name]
+                %label{:for => "schema_#{list}_#{polymorphic_type_column_name}"}
+                  = @abstract_model.model.human_attribute_name(polymorphic_type_column_name)
+                = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }
+                %p.help= t('admin.export.display', :name => polymorphic_type_column_name, :type => field.type)
+        - visible_fields.select{ |f| f.association? && !f.association[:options][:polymorphic] }.each do |field|
+          - association = field.association
+          - associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
+          - fields = RailsAdmin.config(associated_model).export.visible_fields.select{ |f| !f.association? }
+          %fieldset
+            %legend= t('admin.export.fields_from_associated', :name => association[:pretty_name])
+            - fields.each do |associated_model_field|
+              - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
+              .field
+                %label{:for => "schema_include_#{association[:name]}_#{list}_#{associated_model_field.name}"}
+                  = associated_model.human_attribute_name(associated_model_field.name)
+                = check_box_tag "schema[include][#{association[:name]}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{association[:name]}_#{list}_#{associated_model_field.name}" }
+                %p.help= t('admin.export.display', :name => associated_model_field.name, :type => associated_model_field.type)
+        %fieldset
+          %legend= t('admin.export.options_for', :name => 'csv')
+          - guessed_encoding = Rails.configuration.database_configuration[Rails.env]['encoding'].presence || 'UTF-8'
+          .field
+            %label{:for => "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
+            -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
+            = select_tag 'csv_options[encoding_to]', options_for_select(%w[UTF-8 UTF-16LE UTF-16BE UTF-32LE UTF-32BE UTF-7 ISO-8859-1 ISO-8859-15 IBM-850 MacRoman Windows-1252 ISO-8859-3 IBM-852 ISO-8859-2 MacCE Windows-1250 IBM-855 ISO-8859-5 ISO-IR-111 KOI8-R MacCyrillic Windows-1251 CP-866 KOI-U MacUkranian GB2312 GBK GB18030 HZ ISO-2022-CN Big5 Big5-HKSCS EUC-TW EUC-JP ISO-2022-JP Shift_JIS EUC-KR UHC JOHAB ISO-2022-KR]), :class => "uniform"
+          
+            %p.help= t('admin.export.csv.encoding_to_help', :name => guessed_encoding)
+          .field
+            %label{:for => "csv_options_skip_header"}= t('admin.export.csv.skip_header')
+            = check_box_tag 'csv_options[skip_header]', 'true'
+            %p.help= t('admin.export.csv.skip_header_help')
+          .field
+            %label{:for => "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
+            = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" }), :class => "uniform"
+            %p.help= t('admin.export.csv.col_sep_help', :value => t('admin.export.csv.default_col_sep'))
+        
+        .group.navform.wat-cf
+          - %w[csv json xml].each do |format|
+            %button.button{:type => "submit", :name => format}= t("admin.export.confirmation", :name => format)
+          %button.button{:type => "submit", :name => "_continue"}= t("admin.new.cancel")
+        
