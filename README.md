@@ -47,6 +47,9 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 
 API Update Note
 ---------------
+`navigation.max_visible_tabs` is not configurable anymore, as the new Activo
+theme implements the main navigation as a vertical list.
+
 `object_label` is not directly configurable anymore, as it lead to performance issues when used with a list of records.
 Please use object_label_method instead.
 
@@ -246,19 +249,6 @@ evaluated each time the option is read. Notable is that boolean options' reader
 accessors will be appended with ? whereas the writers will not be. That is, if
 you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
-
-**Configuring the number of visible tabs**
-
-You can configure the number of tabs visible in the top navigation:
-
-    RailsAdmin.config do |config|
-      config.navigation.max_visible_tabs 3
-    end
-
-Links to the rest of the models will be rendered in a drop down menu next to the
-tabs. Even though this option is not model specific, it shares the same
-semantics as the earlier ones - you could also pass in a block which would be
-evaluated at runtime.
 
 **Create a dropdown menu in navigation**
 
