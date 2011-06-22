@@ -268,9 +268,9 @@ describe "RailsAdmin Basic List" do
   describe "list as compact json" do
     it "should have_content an array with 2 elements and contain an array of elements with keys id and label" do
       2.times.map { FactoryGirl.create :player }
-      visit rails_admin_list_path(:model_name => "player", :compact => true, :format => :json)
-      ActiveSupport::JSON.decode(body).length.should eql(2)
-      ActiveSupport::JSON.decode(body).each do |object|
+      response = page.driver.get(rails_admin_list_path(:model_name => "player", :compact => true, :format => :json))
+      ActiveSupport::JSON.decode(response.body).length.should eql(2)
+      ActiveSupport::JSON.decode(response.body).each do |object|
         object.should have_key("id")
         object.should have_key("label")
       end

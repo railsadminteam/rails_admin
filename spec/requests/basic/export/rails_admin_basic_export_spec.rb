@@ -66,7 +66,7 @@ describe "RailsAdmin Export" do
   
   describe "POST /admin/players/export :format => :csv" do
     it "should export with modified schema" do
-      post rails_admin_export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } })
+      page.driver.post(rails_admin_export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } }))
       should have_content "Id,Updated at,Deleted at,Name,Position,Number,Retired,Injured,Born on,Notes,Suspended" # no created_at
     end
   end
