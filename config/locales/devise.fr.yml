@@ -1,0 +1,88 @@
+#########################################################################################################
+# I18n French translation for Devise (http://github.com/plataformatec/devise)
+# I18n traduction française pour Devise
+#
+# Mise à jour par Yabo-concept http://www.yabo-concept.ch  pour refléter les dernières clés utilisées par devise 
+# dans la branche "translated-views"
+# basé sur https://github.com/davidw/devise/blob/translated-views/config/locales/en.yml
+# 15.3.2011
+#########################################################################################################
+
+
+fr:
+  errors:
+    messages:
+      not_found: "n'a pas été trouvé(e)"
+      already_confirmed: "a déjà été confirmé(e)"
+      not_locked: "n'était pas verrouillé(e)"    
+      not_saved:
+        one: "1 erreur a empéché ce %{resource} d'être sauvegardé:"
+        other: "%{count} erreurs ont empéché ce %{resource} d'être sauvegardé:"
+  devise:
+    shared:
+      sign_in: "Se connecter"
+      sign_up: "S'enregistrer"
+      forgot_password: "Mot de passe oublié ?"
+      didnt_receive_confirmation_instructions?: "Vous n'avez pas reçu de courriel de confirmation ?"
+      didnt_receive_unlock_instructions?: "Vous n'avez pas reçu de courriel de déverrouillage de votre compte ?"
+      sign_in_with_omniauth: "Se connecter avec %{provider}"
+    failure:
+      unauthenticated: "Vous devez vous connecter ou vous inscrire pour continuer."
+      unconfirmed: "Vous devez confirmer votre compte pour continuer."
+      locked: "Votre compte est verrouillé."
+      invalid: "Courriel ou mot de passe incorrect."
+      invalid_token: "Jeton d'authentification incorrect."
+      timeout: "Votre session est expirée, veuillez vous reconnecter pour continuer."
+      inactive: "Votre compte n'est pas encore activé."  
+    sessions:
+      signed_in: "Connecté."
+      signed_out: "Déconnecté."
+    passwords:
+      change_your_password: "Changez votre mot de passe"
+      new_password: "Nouveau mot de passe"
+      confirm_new_password: "Confirmer le nouveau mot de passe"
+      change_my_password: "Changer mon mot de passe"
+      send_reset_password_instructions: "Envoyez moi les instructions de réinitialisation du mot de passe"
+      send_instructions: 'Vous allez recevoir contenant les instructions de réinitialisation de mot de passe dans quelques minutes'
+      updated: 'Votre mot de passe a été édité avec succès, vous êtes maintenant connectés'  
+    confirmations:
+      resend_instructions: 'Ré-envoyer les instructions de confirmation'
+      send_instructions: 'Vous allez recevoir contenant les instructions nécessaires à la confirmation de votre compte dans quelques minutes'
+      confirmed: 'Votre compte a été confirmé avec succès, vous êtes maintenant connectés'
+    registrations:
+      signed_up: 'Bienvenue, vous êtes connectés avec succès'
+      edit: "Editer %{resourcename}"
+      leave_blank: "laissez vide si vous ne désirez pas le changer"
+      current_password_label: "Nous avons besoin de votre mot de passe actuel pour confirmer les changements"
+      update: 'Modifier'
+      unhappy: "Mécontent"
+      cancel_my_account: "Annuler mon compte"
+      confirm: "Etes vous sur?"
+      back: "Retour"
+      inactive_signed_up: "Vous vous êtes connectés avec succès. Cependant, nous n'avons pas pu vous identifier car votre compte est %{reason}."
+      updated: 'Votre compte a été modifié avec succès.'
+      destroyed: 'Au revoir! Votre compte a été annulé avec succès. Nous espérons vous revoir bientôt.'
+    unlocks:
+      resend_instructions: "Ré-envoyer les instructions de débloquage"
+      send_instructions: 'Vous allez recevoir contenant les instructions nécessaires au débloquage de votre compte dans quelques minutes'
+      unlocked: 'Votre compte a été débloqué avec succès, vous êtes maintenant connectés.'
+    omniauth_callbacks:
+      success: 'Authorisé avec succès avec votre compte %{kind} .'
+      failure: "Nous n'avons pas pu vous authoriser à %{kind} pour la raison suivante: '%{reason}'."
+    mailer:
+      hello: "Bienvenue %{email}!"
+      welcome: "Bienvenue %{email}!"
+      confirm: "Confirmer mon compte"
+      change: 'Changer mon mot de passe'
+      someone_requested: "Un changement de mot de passe a été demandé. Vous pouvez le faire en cliquant sur le lien ci-dessous."
+      please_ignore: "Si vous n'avez pas fait cette demande, veuillez ignorer cet email."
+      password_wont_change: "Votre mot de passe ne sera pas changé tant que vous n'aurez pas accédé au lien ci-dessus pour en créer un nouveau."
+      locked: "Votre compte a été bloqué à cause d'un nombre excessif de tentatives de connection."
+      click_to_unlock: "Cliquez sur le lien ci-dessous pour déverrouiller votre compte"
+      unlock: "Déverrouiller mon compte"
+      confirmation_instructions:
+        subject: "Instructions de confirmation"
+      reset_password_instructions:
+        subject: "Instructions pour changer le mot de passe"
+      unlock_instructions:
+        subject: "Instructions pour déverrouiller le compte"

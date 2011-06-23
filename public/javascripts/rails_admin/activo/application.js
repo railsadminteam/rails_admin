@@ -3,8 +3,10 @@
   {
     // jQuery uniform controls (http://pixelmatrixdesign.com/uniform)
     $("input:checkbox, input:radio, input:file").uniform();
-    // consider enabling uniform for non filtering select elements:
+    // Enable uniform for non filtering select elements:
     $("select.uniform").uniform();
+    // For select boxes that we want to be smaller. Used in the controls area of the list view:
+    $("select.small-uniform").uniform({selectClass: 'selector small'});
     
     // jQuery datepicker for formtastic (http://gist.github.com/271377)
     $('input.ui-datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
