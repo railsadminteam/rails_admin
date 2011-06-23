@@ -88,8 +88,8 @@ describe "RailsAdmin History" do
       # test that no link uses the "wildcard route" with the history
       # controller and for_model method
       it "should not use the 'wildcard route'" do
-        page.should have_selector("a", :href => /all=true/) # make sure we're fully testing pagination
-        page.should have_no_selector("a", :href => /^\/rails_admin\/history\/for_model/)
+        page.should have_selector("a[href*='all=true']") # make sure we're fully testing pagination
+        page.should have_no_selector("a[href^='/rails_admin/history/for_model']")
       end
 
       context "with a lot of histories" do

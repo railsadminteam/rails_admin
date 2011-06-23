@@ -28,7 +28,7 @@ describe "RailsAdmin Basic New" do
     # test that no link uses the "wildcard route" with the main
     # controller and new method
     it "should not use the 'wildcard route'" do
-      should have_no_selector("a", :href => /^\/rails_admin\/main\/new/)
+      should have_no_selector("a[href^='/rails_admin/main/new']")
     end
   end
 

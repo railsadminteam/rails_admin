@@ -35,8 +35,8 @@ describe "RailsAdmin Basic List" do
     # test that no link uses the "wildcard route" with the main
     # controller and list method
     it "should not use the 'wildcard route'" do
-      should have_selector("a", :href => /all=true/) # make sure we're fully testing pagination
-      should have_no_selector("a", :href => /^\/rails_admin\/main\/list/)
+      should have_selector("a[href*='all=true']") # make sure we're fully testing pagination
+      should have_no_selector("a[href^='/rails_admin/main/list']")
     end
   end
 
