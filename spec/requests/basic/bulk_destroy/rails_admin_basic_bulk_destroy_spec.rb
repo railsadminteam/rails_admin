@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe "RailsAdmin Basic Bulk Destroy" do
+
+  subject { page }
+
   describe "successful bulk delete of records" do
     before(:each) do
       RailsAdmin::History.destroy_all
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      post rails_admin_bulk_action_path(:bulk_delete => '', :model_name => "player", :bulk_ids => @delete_ids)
-      click_button "Yes, I'm sure"
-    end
+      page.driver.post(rails_admin_bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
 
-    it "should be successful" do
-      response.should be_successful
+      click_button "Yes, I'm sure"
     end
 
     it "should not contain deleted records" do
@@ -40,12 +40,8 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin::History.destroy_all
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      post rails_admin_bulk_action_path(:bulk_delete => '', :model_name => "player", :bulk_ids => @delete_ids)
+      page.driver.post(rails_admin_bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
       click_button "Cancel"
-    end
-
-    it "should be successful" do
-      response.should be_successful
     end
 
     it "should not delete records" do

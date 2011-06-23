@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe "RailsAdmin Namespaced Model New" do
 
+  subject { page }
+
   describe "AbstractModel#to_param" do
     it 'turns namespaces into prefixes with ~' do
       RailsAdmin::AbstractModel.new("Cms::BasicPage").to_param.should == 'cms~basic_pages'
@@ -16,18 +18,14 @@ describe "RailsAdmin Namespaced Model New" do
 
   describe "GET /admin/cms_basic_page/new" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "cms~basic_page")
-    end
-
-    it "should respond successfully", :only =>true do
-      response.should be_successful
+      visit rails_admin_new_path(:model_name => "cms~basic_page")
     end
 
     it 'should have correct input field names' do
-      response.should have_selector("label[for=cms_basic_page_title]")
-      response.should have_selector("input#cms_basic_page_title[name='cms_basic_page[title]']")
-      response.should have_selector("label[for=cms_basic_page_content]")
-      response.should have_selector("textarea#cms_basic_page_content[name='cms_basic_page[content]']")
+      should have_selector("label[for=cms_basic_page_title]")
+      should have_selector("input#cms_basic_page_title[name='cms_basic_page[title]']")
+      should have_selector("label[for=cms_basic_page_content]")
+      should have_selector("textarea#cms_basic_page_content[name='cms_basic_page[content]']")
     end
   end
 end

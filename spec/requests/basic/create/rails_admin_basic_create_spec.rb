@@ -158,7 +158,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with invalid object" do
     before(:each) do
-      visit(rails_admin_create_path(:model_name => "player"), :post, :params => {:player => {}})
+      page.driver.post(rails_admin_create_path(:model_name => "player", :id => 1), :params => {:player => {}})
     end
 
     it "should show an error message" do

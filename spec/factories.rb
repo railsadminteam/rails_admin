@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :player do
     sequence(:name) { |n| "Player #{n}" }
     sequence(:number) { |n| n }
+    sequence(:position) { |n| "Position #{n}" }
   end
 
   factory :draft do

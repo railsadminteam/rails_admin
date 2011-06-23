@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe "RailsAdmin Config DSL List Section" do
 
+  subject { page }
+
   describe "number of items per page" do
 
     before(:each) do
@@ -17,12 +19,12 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      get rails_admin_list_path(:model_name => "league")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "league")
+      should have_selector(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-      get rails_admin_list_path(:model_name => "player")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "player")
+      should have_selector(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
     end
@@ -33,12 +35,12 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      get rails_admin_list_path(:model_name => "league")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "league")
+      should have_selector(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-      get rails_admin_list_path(:model_name => "player")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "player")
+      should have_selector(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
       end
     end
@@ -54,12 +56,12 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      get rails_admin_list_path(:model_name => "league")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "league")
+      should have_selector(".grid tbody tr") do |elements|
         elements.should have_at_most(1).items
       end
-      get rails_admin_list_path(:model_name => "player")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "player")
+      should have_selector(".grid tbody tr") do |elements|
         elements.should have_at_most(2).items
       end
     end
@@ -68,8 +70,8 @@ describe "RailsAdmin Config DSL List Section" do
   describe "items' fields" do
 
     it "should show all by default" do
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_content("ID")
         elements[3].should have_content("CREATED AT")
         elements[4].should have_content("UPDATED AT")
@@ -86,8 +88,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :created_at
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_content("UPDATED AT")
         elements[3].should have_content("NAME")
         elements[4].should have_content("ID")
@@ -102,8 +104,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements.should have_content("ID")
         elements.should have_content("NAME")
         elements.should have_no_content("CREATED AT")
@@ -117,8 +119,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_content("HIS NAME")
       end
     end
@@ -132,8 +134,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_content("IDENTIFIER")
         elements[3].should have_content("NAME")
       end
@@ -147,8 +149,8 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_content("ID")
         elements[3].should have_content("CREATED AT (DATETIME)")
         elements[4].should have_content("UPDATED AT (DATETIME)")
@@ -164,8 +166,8 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_content("ID")
         elements[3].should have_content("CREATED AT (DATETIME)")
         elements[4].should have_content("UPDATED AT (DATETIME)")
@@ -174,8 +176,8 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be sortable by default" do
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_selector("a")
         elements[3].should have_selector("a")
         elements[4].should have_selector("a")
@@ -192,8 +194,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should_not have_selector("a")
         elements[3].should have_selector("a")
       end
@@ -211,8 +213,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :updated_at
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_selector("a")
         elements[3].should have_selector("a")
         elements[4].should_not have_selector("a")
@@ -232,8 +234,8 @@ describe "RailsAdmin Config DSL List Section" do
           field :updated_at
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements[2].should have_selector("a")
         elements[3].should have_selector("a")
         elements[4].should_not have_selector("a")
@@ -249,8 +251,8 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements.should have_content("ID")
         elements.should have_content("NAME")
         elements.should have_no_content("CREATED AT")
@@ -266,8 +268,8 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      get rails_admin_list_path(:model_name => "fan")
-      response.should have_selector(".grid th") do |elements|
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
         elements.should have_content("ID")
         elements.should have_content("NAME")
         elements.should have_no_content("CREATED AT")
@@ -287,9 +289,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector(".grid") do |table|
+      should have_selector(".grid") do |table|
         table.should have_selector("th:nth-child(3).customClass")
         table.should have_selector("th:nth-child(4).string")
         table.should have_selector("tbody tr") do |rows|
@@ -310,9 +312,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector(".grid") do |table|
+      should have_selector(".grid") do |table|
         table.should have_selector("th:nth-child(4).customClass")
         table.should have_selector("th:nth-child(5).customClass")
         table.should have_selector("th:nth-child(6).string")
@@ -335,9 +337,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector(".grid") do |table|
+      should have_selector(".grid") do |table|
         table.should have_selector("th:nth-child(4).customClass")
         table.should have_selector("th:nth-child(5).customClass")
         table.should have_selector("th:nth-child(6).string")
@@ -363,9 +365,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector("style") {|css| css.should have_content(/\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
+      should have_selector("style") {|css| css.should have_content(/\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/) }
     end
 
     it "should have option to customize output formatting" do
@@ -384,9 +386,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector(".grid tbody tr") do |elements|
+      should have_selector(".grid tbody tr") do |elements|
         elements[0].should have_selector("td:nth-child(4)") {|li| li.should have_content(@fans[1].name.upcase) }
         elements[1].should have_selector("td:nth-child(4)") {|li| li.should have_content(@fans[0].name.upcase) }
       end
@@ -406,9 +408,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector(".grid tbody tr") do |elements|
+      should have_selector(".grid tbody tr") do |elements|
         elements[0].should have_selector("td:nth-child(5)") do |li|
           li.should have_content(/\d{2} \w{3} \d{1,2}:\d{1,2}/)
         end
@@ -429,9 +431,9 @@ describe "RailsAdmin Config DSL List Section" do
 
       @fans = 2.times.map { FactoryGirl.create :fan }
 
-      get rails_admin_list_path(:model_name => "fan")
+      visit rails_admin_list_path(:model_name => "fan")
 
-      response.should have_selector(".grid tbody tr") do |elements|
+      should have_selector(".grid tbody tr") do |elements|
         elements[0].should have_selector("td:nth-child(5)") do |li|
           li.should have_content(/\d{4}-\d{2}-\d{2}/)
         end
@@ -450,9 +452,9 @@ describe "RailsAdmin Config DSL List Section" do
       @team = FactoryGirl.create :team
       @players = 2.times.map { FactoryGirl.create :player, :team => @team }
 
-      get rails_admin_list_path(:model_name => "team")
+      visit rails_admin_list_path(:model_name => "team")
 
-      response.should have_selector(".grid tbody tr") do |elements|
+      should have_selector(".grid tbody tr") do |elements|
         elements[0].should have_selector("td:nth-child(5)") {|li| li.should have_content(@players.collect(&:name).join(", ")) }
       end
     end
@@ -491,8 +493,8 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
 
-        get rails_admin_list_path(:model_name => "player")
-        response.should have_selector(".grid tbody tr") do |elements|
+        visit rails_admin_list_path(:model_name => "player")
+        should have_selector(".grid tbody tr") do |elements|
           player_names_by_date.reverse.each_with_index do |name, i|
             elements[i].should have_content(name)
           end
@@ -507,8 +509,8 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
         
-        get rails_admin_list_path(:model_name => "player")
-        response.should have_selector(".grid tbody tr") do |elements|
+        visit rails_admin_list_path(:model_name => "player")
+        should have_selector(".grid tbody tr") do |elements|
           player_names_by_date.reverse.each_with_index do |name, i|
             elements[i].should have_content(name)
           end
@@ -532,15 +534,15 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
 
-        get rails_admin_list_path(:model_name => "league")
-        response.should have_selector(".grid tbody tr") do |elements|
+        visit rails_admin_list_path(:model_name => "league")
+        should have_selector(".grid tbody tr") do |elements|
           league_names_by_date.reverse.each_with_index do |name, i|
             elements[i].should have_content(name)
           end
         end
 
-        get rails_admin_list_path(:model_name => "player")
-        response.should have_selector(".grid tbody tr") do |elements|
+        visit rails_admin_list_path(:model_name => "player")
+        should have_selector(".grid tbody tr") do |elements|
           @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
             elements[i].should have_content(name)
           end
@@ -555,8 +557,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      get rails_admin_list_path(:model_name => "player")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "player")
+      should have_selector(".grid tbody tr") do |elements|
         player_names_by_date.reverse.each_with_index do |name, i|
           elements[i].should have_content(name)
         end
@@ -571,8 +573,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
 
-      get rails_admin_list_path(:model_name => "player")
-      response.should have_selector(".grid tbody tr") do |elements|
+      visit rails_admin_list_path(:model_name => "player")
+      should have_selector(".grid tbody tr") do |elements|
         player_names_by_date.each_with_index do |name, i|
           elements[i].should have_content(name)
         end

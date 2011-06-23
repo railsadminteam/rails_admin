@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe 'table relations' do
-  before :each do
+
+  before(:each) do
     @fields = RailsAdmin.config(RelTest).create.fields
   end
 
