@@ -9,7 +9,8 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
 
         attr_reader :name
-
+        attr_accessor :instructions
+        
         def initialize(parent, name)
           super(parent)
           @name = name.to_s.tr(' ', '_').downcase.to_sym
@@ -52,6 +53,12 @@ module RailsAdmin
         register_instance_option(:label) do
           name.to_s.humanize
         end
+
+        register_instance_option(:instructions) do
+          nil
+        end
+
+        
       end
     end
   end

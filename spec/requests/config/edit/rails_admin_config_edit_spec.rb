@@ -57,7 +57,57 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       response.should have_tag("legend", :content => "Renamed group")
     end
-
+    
+    describe "instructions" do
+    
+      it "should show instructions section if present" do
+        RailsAdmin.config Team do
+          edit do
+            group :default do
+              instructions "instructions paragraph to display"
+            end
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
+      
+        response.should have_tag('.instructions', :content => "instructions paragraph to display")    
+      end
+    
+      it "should not show instructions if not present" do
+        RailsAdmin.config Team do
+          edit do
+            group :default do
+              label 'no_instructions'
+            end
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
+      
+        response.should_not have_tag('.instructions')    
+      end
+      
+      it "should be able to display multiple instructions if there are multiple sections" do
+        RailsAdmin.config Team do
+          edit do
+            group :default do
+              field :name
+              instructions 'instructions for default'           
+            end
+            group :other_section do
+              label "Other Section"
+              field :division_id
+              instructions 'instructions for other section'                         
+            end
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
+        response.should have_tag(".instructions", :content => 'instructions for default')
+        response.should have_tag(".instructions", :content => 'instructions for other section')        
+        response.should have_tag(".instructions", :count => 2)
+      end  
+      
+    end
+    
     it "should have accessor for its fields" do
       RailsAdmin.config Team do
         edit do
