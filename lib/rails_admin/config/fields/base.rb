@@ -50,6 +50,10 @@ module RailsAdmin
           self.class.instance_variable_get("@column_width")
         end
         
+        register_instance_option(:truncated?) do
+          true
+        end
+        
         register_instance_option(:sortable) do
           true
         end
