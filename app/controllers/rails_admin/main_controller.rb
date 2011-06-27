@@ -260,6 +260,8 @@ module RailsAdmin
     end
 
     def get_sort_hash
+      params[:sort] = params[:sort_reverse] = nil unless @model_config.list.visible_fields.map {|f| f.name.to_s}.include? params[:sort]
+
       params[:sort] ||= @model_config.list.sort_by.to_s
       params[:sort_reverse] ||= 'false'
       
