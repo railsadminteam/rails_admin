@@ -28,6 +28,7 @@ fr:
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tout"
+      add_filter: "Add filter"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"
@@ -79,3 +80,13 @@ fr:
       deleted: "supprimé(e)"
       export: "export"
       exported: "exporté(e)"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

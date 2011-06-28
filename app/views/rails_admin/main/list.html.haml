@@ -61,7 +61,7 @@
     .control
       %span(style="margin: 3px 6px")
         %select#filter_select.small-uniform
-          %option{:value => ""} Add filter...
+          %option{:value => ""}= t('admin.list.add_filter')+"..."
           - @filterable_fields.each do |field|
             - field_options = case field.type
             - when :enum
