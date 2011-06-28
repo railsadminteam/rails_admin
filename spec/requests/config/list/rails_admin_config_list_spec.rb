@@ -454,9 +454,7 @@ describe "RailsAdmin Config DSL List Section" do
 
       visit rails_admin_list_path(:model_name => "team")
 
-      should have_selector(".grid tbody tr") do |elements|
-        elements[0].should have_selector("td:nth-child(5)") {|li| li.should have_content(@players.collect(&:name).join(", ")) }
-      end
+      should have_selector(".grid tbody tr:nth-child(1) td:nth-child(5)", :text => @players.collect(&:name).join(", "))
     end
   end
 
