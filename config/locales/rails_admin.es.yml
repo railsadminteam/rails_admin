@@ -29,6 +29,7 @@ es:
       search: "BUSCAR"
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
+      add_filter: "Add filter"
     new:
       basic_info: "Información Básica"
       required: "Obligatorio"
@@ -79,3 +80,13 @@ es:
       deleted: "borrado"
       export: "exportar"
       exported: "exportado"      
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

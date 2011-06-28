@@ -29,6 +29,7 @@ uk:
       search: "ПОШУК"
       select: "Оберіть %{name} для редагування"
       show_all: "Показати все"
+      add_filter: "Add filter"
     new:
       basic_info: "Основна інформація"
       required: "Необхідно"
@@ -79,3 +80,13 @@ uk:
       deleted: "видалено"
       export: "export"
       exported: "exported"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

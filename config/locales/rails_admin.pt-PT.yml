@@ -31,6 +31,7 @@ pt-PT:
       search: "PROCURAR"
       select: "Selecione %{name} para editar"
       show_all: "Exibir todos"
+      add_filter: "Add filter"
     new:
       basic_info: "INFORMAÇÕES BÁSICAS"
       required: "Obrigatório"
@@ -81,3 +82,13 @@ pt-PT:
       deleted: "removido"
       export: "export"
       exported: "exported"
+    breadcrumbs:
+      delete: "deletar"
+      history: "história"
+      edit: "editar"
+      export: "exportar"
+      bulk_destroy: "deletar"
+      new: "novo"
+      model_history: "história"
+      list: "listar"
+      dashboard: "administração"
