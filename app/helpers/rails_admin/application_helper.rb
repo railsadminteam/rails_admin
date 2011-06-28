@@ -227,15 +227,15 @@ module RailsAdmin
     # Creative whitespace:
     ViewType   =          Struct.new(:name,      :parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
-      :delete        => ViewType.new("Delete",   :edit,      :object, :delete),
-      :history       => ViewType.new("History",  :edit,      :object, nil,            :history_object),
-      :edit          => ViewType.new("Edit",     :list,      :object, :edit),
-      :export        => ViewType.new("Export",   :list,      :model,  :export),
-      :bulk_destroy  => ViewType.new("Delete",   :list,      :model,  :delete),
-      :new           => ViewType.new("New",      :list,      :model,  :new),
-      :model_history => ViewType.new("History",  :list,      :model,  nil,            :history_model),
-      :list          => ViewType.new("List",     :dashboard, :model,  :list),
-      :dashboard     => ViewType.new("Dashboard")
+      :delete        => ViewType.new(I18n.t('admin.breadcrumbs.delete').capitalize,   :edit,      :object, :delete),
+      :history       => ViewType.new(I18n.t('admin.breadcrumbs.history').capitalize,  :edit,      :object, nil,            :history_object),
+      :edit          => ViewType.new(I18n.t('admin.breadcrumbs.edit').capitalize,     :list,      :object, :edit),
+      :export        => ViewType.new(I18n.t('admin.breadcrumbs.export').capitalize,   :list,      :model,  :export),
+      :bulk_destroy  => ViewType.new(I18n.t('admin.breadcrumbs.bulk_destroy').capitalize,   :list,      :model,  :delete),
+      :new           => ViewType.new(I18n.t('admin.breadcrumbs.new').capitalize,      :list,      :model,  :new),
+      :model_history => ViewType.new(I18n.t('admin.breadcrumbs.model_history').capitalize,  :list,      :model,  nil,            :history_model),
+      :list          => ViewType.new(I18n.t('admin.breadcrumbs.list').capitalize,     :dashboard, :model,  :list),
+      :dashboard     => ViewType.new(I18n.t('admin.breadcrumbs.dashboard').capitalize)
     }
     
     def breadcrumbs_for view, abstract_model_or_object

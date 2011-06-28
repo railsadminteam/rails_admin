@@ -82,3 +82,13 @@ pt-BR:
       deleted: "excluído"
       export: "exportar"
       exported: "exportado"
+    breadcrumbs:
+      delete: "deletar"
+      history: "história"
+      edit: "editar"
+      export: "exportar"
+      bulk_destroy: "deletar"
+      new: "novo"
+      model_history: "história"
+      list: "listar"
+      dashboard: "administração"

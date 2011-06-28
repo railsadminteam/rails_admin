@@ -79,3 +79,13 @@ es:
       deleted: "borrado"
       export: "exportar"
       exported: "exportado"      
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

@@ -79,3 +79,13 @@ fr:
       deleted: "supprimé(e)"
       export: "export"
       exported: "exporté(e)"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

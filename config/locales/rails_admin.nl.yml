@@ -62,6 +62,16 @@ nl:
       updated: "geüpdate"
       delete: "verwijderen"
       deleted: "verwijderd"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"
   datetime:
     distance_in_words:
       half_a_minute: "een halve minuut"
