@@ -225,17 +225,17 @@ module RailsAdmin
     end
     
     # Creative whitespace:
-    ViewType   =          Struct.new(:name,      :parent,    :type,   :authorization, :path_method)
+    ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
-      :delete        => ViewType.new(I18n.t('admin.breadcrumbs.delete').capitalize,   :edit,      :object, :delete),
-      :history       => ViewType.new(I18n.t('admin.breadcrumbs.history').capitalize,  :edit,      :object, nil,            :history_object),
-      :edit          => ViewType.new(I18n.t('admin.breadcrumbs.edit').capitalize,     :list,      :object, :edit),
-      :export        => ViewType.new(I18n.t('admin.breadcrumbs.export').capitalize,   :list,      :model,  :export),
-      :bulk_destroy  => ViewType.new(I18n.t('admin.breadcrumbs.bulk_destroy').capitalize,   :list,      :model,  :delete),
-      :new           => ViewType.new(I18n.t('admin.breadcrumbs.new').capitalize,      :list,      :model,  :new),
-      :model_history => ViewType.new(I18n.t('admin.breadcrumbs.model_history').capitalize,  :list,      :model,  nil,            :history_model),
-      :list          => ViewType.new(I18n.t('admin.breadcrumbs.list').capitalize,     :dashboard, :model,  :list),
-      :dashboard     => ViewType.new(I18n.t('admin.breadcrumbs.dashboard').capitalize)
+      :delete        => ViewType.new(:edit,      :object, :delete),
+      :history       => ViewType.new(:edit,      :object, nil,            :history_object),
+      :edit          => ViewType.new(:list,      :object, :edit),
+      :export        => ViewType.new(:list,      :model,  :export),
+      :bulk_destroy  => ViewType.new(:list,      :model,  :delete),
+      :new           => ViewType.new(:list,      :model,  :new),
+      :model_history => ViewType.new(:list,      :model,  nil,            :history_model),
+      :list          => ViewType.new(:dashboard, :model,  :list),
+      :dashboard     => ViewType.new
     }
     
     def breadcrumbs_for view, abstract_model_or_object
@@ -286,7 +286,7 @@ module RailsAdmin
 
           content_tag(:li, :class => css_classes) do
             path_method = vt.path_method || view
-            link_to vt.name, self.send("rails_admin_#{path_method}_path")
+            link_to I18n.t("admin.breadcrumbs.#{view}").capitalize, self.send("rails_admin_#{path_method}_path")
           end
         # end
 
