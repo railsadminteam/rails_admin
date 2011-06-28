@@ -30,6 +30,7 @@ hr:
       search: "Traži"
       select: "Izaberi %{name} za uređivanje"
       show_all: "Prikaži sve"
+      add_filter: "Add filter"
     new:
       basic_info: "Osnovni podaci"
       required: "Obavezno"
@@ -60,3 +61,13 @@ hr:
       updated: "uređeno"
       delete: "obriši"
       deleted: "obrisano"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

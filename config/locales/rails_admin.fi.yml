@@ -30,6 +30,7 @@ fi:
       search: "Haku"
       select: "Valitse muokattava %{name}"
       show_all: "Näytä kaikki"
+      add_filter: "Add filter"
     new:
       basic_info: "Perustiedot"
       required: "Vaadittu"
@@ -80,3 +81,13 @@ fi:
       deleted: "poistettu"
       export: "vie"
       exported: "viety"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"
