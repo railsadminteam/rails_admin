@@ -31,6 +31,7 @@ bg:
       search: "ТЪРСИ"
       select: "Избор на %{name} за редакция"
       show_all: "Покажи всички"
+      add_filter: "Add filter"
     new:
       basic_info: "Информация"
       required: "Задължително"

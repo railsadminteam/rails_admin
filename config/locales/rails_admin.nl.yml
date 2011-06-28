@@ -32,6 +32,7 @@ nl:
       search: "Zoeken"
       select: "Selecteer %{name} om aan te passen"
       show_all: "Toon allen"
+      add_filter: "Add filter"
     new:
       basic_info: "Basisinfo"
       required: "Vereist"

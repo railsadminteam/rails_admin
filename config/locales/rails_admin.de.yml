@@ -32,6 +32,7 @@ de:
       search: "Suchen"
       select: "Auswählen %{name} zum Bearbeiten"
       show_all: "Alle anzeigen"
+      add_filter: "Add filter"
     new:
       basic_info: "Grundlegende Informationen"
       required: "Erforderlich"

@@ -29,6 +29,7 @@ zh_cn:
       search: "搜索"
       select: "%{name}编辑"
       show_all: "查看全部"
+      add_filter: "Add filter"
     new:
       basic_info: "基本信息"
       required: "必须"

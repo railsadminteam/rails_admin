@@ -32,6 +32,7 @@ en:
       search: "Search"
       select: "Select %{name} to edit"
       show_all: "Show all"
+      add_filter: "Add filter"
     new:
       basic_info: "Basic info"
       required: "Required"

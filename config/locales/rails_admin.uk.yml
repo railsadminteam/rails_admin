@@ -29,6 +29,7 @@ uk:
       search: "ПОШУК"
       select: "Оберіть %{name} для редагування"
       show_all: "Показати все"
+      add_filter: "Add filter"
     new:
       basic_info: "Основна інформація"
       required: "Необхідно"

@@ -32,6 +32,7 @@ mn:
       search_btn: "ХАЙХ"
       select: "%{name}-г сонгож засах"
       show_all: "Бүгдийг харуул"
+      add_filter: "Add filter"
     new:
       basic_info: "Үндсэн мэдээлэл"
       required: "Шаардлагатай"

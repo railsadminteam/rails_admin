@@ -28,6 +28,7 @@ fr:
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tout"
+      add_filter: "Add filter"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"

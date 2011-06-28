@@ -32,6 +32,7 @@ pl:
       search: "SZUKAJ"
       select: "Wybierz %{name} do edycji"
       show_all: "Wybierz wszystkie"
+      add_filter: "Add filter"
     new:
       basic_info: "Atrybuty"
       required: "Wymagane"

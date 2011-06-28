@@ -24,14 +24,15 @@ pt-BR:
     list:
       edit_action: "Alterar"
       delete_action: "Excluir"
-      export_action: "Export current view"
-      export_selected: "Export selected"
+      export_action: "Exportar tela corrente"
+      export_selected: "Exportar selecionados"
       add_new: "Adicionar"
       search: "BUSCAR"
       select: "Selecione %{name} para alterar"
       show_all: "Exibir todos"
       select_action: "Selecionar"
       delete_selected: "Excluir selecionados"
+      add_filter: "Adicionar filtro"
     new:
       basic_info: "INFORMAÇÕES BÁSICAS"
       required: "Obrigatório"

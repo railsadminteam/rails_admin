@@ -30,6 +30,7 @@ hr:
       search: "Traži"
       select: "Izaberi %{name} za uređivanje"
       show_all: "Prikaži sve"
+      add_filter: "Add filter"
     new:
       basic_info: "Osnovni podaci"
       required: "Obavezno"

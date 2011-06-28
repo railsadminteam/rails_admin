@@ -29,6 +29,7 @@ lv:
       search: "Meklēt"
       select: "Izvēlieties %{name}, lai labotu"
       show_all: "Parādīt visu"
+      add_filter: "Add filter"
     new:
       basic_info: "Pamatinformācija"
       required: "Nepieciešams"

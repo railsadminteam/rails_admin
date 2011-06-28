@@ -31,6 +31,7 @@ pt-PT:
       search: "PROCURAR"
       select: "Selecione %{name} para editar"
       show_all: "Exibir todos"
+      add_filter: "Add filter"
     new:
       basic_info: "INFORMAÇÕES BÁSICAS"
       required: "Obrigatório"

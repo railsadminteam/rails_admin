@@ -31,6 +31,7 @@ ru:
       search: "ПОИСК"
       select: "Выберите %{name} для редактирования"
       show_all: "Показать все"
+      add_filter: "Add filter"
     new:
       basic_info: "Основное"
       required: "Требуемое"

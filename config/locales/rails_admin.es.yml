@@ -29,6 +29,7 @@ es:
       search: "BUSCAR"
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
+      add_filter: "Add filter"
     new:
       basic_info: "Información Básica"
       required: "Obligatorio"

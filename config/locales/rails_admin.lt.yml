@@ -31,6 +31,7 @@ lt:
       search: "IEŠKOTI"
       select: "Pasirinkti %{name} redagavimui"
       show_all: "Rodyti visus įrašus"
+      add_filter: "Add filter"
     new:
       basic_info: "Pagrindinė informacija"
       required: "Privalomas laukas"

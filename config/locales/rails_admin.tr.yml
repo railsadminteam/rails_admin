@@ -32,6 +32,7 @@ tr:
       search: "ARA"
       select: "Düzenlemek için seçin: %{name}"
       show_all: "Hepsini göster"
+      add_filter: "Add filter"
     new:
       basic_info: "Kısa bilgi"
       required: "Gerekli"

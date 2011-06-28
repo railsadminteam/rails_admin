@@ -28,6 +28,7 @@ da:
       search: "SØG"
       select: "Vælg %{name} der skal redigeres"
       show_all: "Vis alle"
+      add_filter: "Add filter"
     new:
       basic_info: "Grundlæggende informationer"
       required: "Påkrævet"

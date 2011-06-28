@@ -32,6 +32,7 @@ sv:
       search: "SÖK"
       select: "Markera %{name} för att redigera"
       show_all: "Visa alla"
+      add_filter: "Add filter"
     new:
       basic_info: "Grundläggande information"
       required: "Obligatorisk"
