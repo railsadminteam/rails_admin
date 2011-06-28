@@ -20,9 +20,9 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show non-required fields as \"Optional\"" do
-      should have_selector(".player_position .help", :content => "Optional")
-      should have_selector(".player_born_on .help", :content => "Optional")
-      should have_selector(".player_notes .help", :content => "Optional")
+      should have_selector(".player_position .help", :text => "Optional")
+      should have_selector(".player_born_on .help", :text => "Optional")
+      should have_selector(".player_notes .help", :text => "Optional")
     end
   end
 

@@ -118,7 +118,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
     it "should be visible and sane by default" do
       visit rails_admin_dashboard_path
       should have_selector("#nav") do |navigation|
-        navigation.should have_selector("li a", :content => "Fan")
+        navigation.should have_selector("li a", :text => "Fan")
       end
     end
 
@@ -128,7 +128,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       visit rails_admin_dashboard_path
       should have_selector("#nav") do |navigation|
-        navigation.should have_selector("li a", :content => "Fan test 1")
+        navigation.should have_selector("li a", :text => "Fan test 1")
       end
     end
 
@@ -138,7 +138,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
       visit rails_admin_dashboard_path
       should have_selector("#nav") do |navigation|
-        navigation.should_not have_selector("li a", :content => "Fan")
+        navigation.should_not have_selector("li a", :text => "Fan")
       end
     end
   end

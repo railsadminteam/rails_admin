@@ -57,7 +57,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
 
-      should have_selector("legend", :content => "Renamed group")
+      should have_selector("legend", :text => "Renamed group")
     end
 
     it "should have accessor for its fields" do
@@ -74,8 +74,8 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit rails_admin_new_path(:model_name => "team")
-      should have_selector("legend", :content => "Basic info")
-      should have_selector("legend", :content => "Belong's to associations")
+      should have_selector("legend", :text => "Basic info")
+      should have_selector("legend", :text => "Belong's to associations")
       should have_selector(".field") do |elements|
         elements[0].should have_selector("#team_name")
         elements[1].should have_selector("#team_logo_url")
@@ -103,11 +103,11 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements.should have_selector("label", :content => "Name")
-        elements.should have_selector("label", :content => "Logo url")
-        elements.should have_selector("label", :content => "Division")
-        elements.should have_selector("label", :content => "Manager (STRING)")
-        elements.should have_selector("label", :content => "Ballpark (STRING)")
+        elements.should have_selector("label", :text => "Name")
+        elements.should have_selector("label", :text => "Logo url")
+        elements.should have_selector("label", :text => "Division")
+        elements.should have_selector("label", :text => "Manager (STRING)")
+        elements.should have_selector("label", :text => "Ballpark (STRING)")
       end
     end
   end
@@ -172,8 +172,8 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements[0].should have_selector("label", :content => "Team Manager")
-        elements[1].should have_selector("label", :content => "Some Fans")
+        elements[0].should have_selector("label", :text => "Team Manager")
+        elements[1].should have_selector("label", :text => "Some Fans")
       end
     end
 
@@ -189,9 +189,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements[0].should have_selector("label", :content => "Renamed field")
-        elements[1].should have_selector("label", :content => "Division")
-        elements[2].should have_selector("label", :content => "Name")
+        elements[0].should have_selector("label", :text => "Renamed field")
+        elements[1].should have_selector("label", :text => "Division")
+        elements[2].should have_selector("label", :text => "Name")
       end
     end
 
@@ -205,19 +205,19 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements.should have_selector("label", :content => "Division")
-        elements.should have_selector("label", :content => "Name (STRING)")
-        elements.should have_selector("label", :content => "Logo url (STRING)")
-        elements.should have_selector("label", :content => "Manager (STRING)")
-        elements.should have_selector("label", :content => "Ballpark (STRING)")
-        elements.should have_selector("label", :content => "Mascot (STRING)")
-        elements.should have_selector("label", :content => "Founded")
-        elements.should have_selector("label", :content => "Wins")
-        elements.should have_selector("label", :content => "Losses")
-        elements.should have_selector("label", :content => "Win percentage")
-        elements.should have_selector("label", :content => "Revenue")
-        elements.should have_selector("label", :content => "Players")
-        elements.should have_selector("label", :content => "Fans")
+        elements.should have_selector("label", :text => "Division")
+        elements.should have_selector("label", :text => "Name (STRING)")
+        elements.should have_selector("label", :text => "Logo url (STRING)")
+        elements.should have_selector("label", :text => "Manager (STRING)")
+        elements.should have_selector("label", :text => "Ballpark (STRING)")
+        elements.should have_selector("label", :text => "Mascot (STRING)")
+        elements.should have_selector("label", :text => "Founded")
+        elements.should have_selector("label", :text => "Wins")
+        elements.should have_selector("label", :text => "Losses")
+        elements.should have_selector("label", :text => "Win percentage")
+        elements.should have_selector("label", :text => "Revenue")
+        elements.should have_selector("label", :text => "Players")
+        elements.should have_selector("label", :text => "Fans")
       end
     end
 
@@ -231,19 +231,19 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements.should have_selector("label", :content => "Division")
-        elements.should have_selector("label", :content => "Name (STRING)")
-        elements.should have_selector("label", :content => "Logo url (STRING)")
-        elements.should have_selector("label", :content => "Manager (STRING)")
-        elements.should have_selector("label", :content => "Ballpark (STRING)")
-        elements.should have_selector("label", :content => "Mascot (STRING)")
-        elements.should have_selector("label", :content => "Founded")
-        elements.should have_selector("label", :content => "Wins")
-        elements.should have_selector("label", :content => "Losses")
-        elements.should have_selector("label", :content => "Win percentage")
-        elements.should have_selector("label", :content => "Revenue")
-        elements.should have_selector("label", :content => "Players")
-        elements.should have_selector("label", :content => "Fans")
+        elements.should have_selector("label", :text => "Division")
+        elements.should have_selector("label", :text => "Name (STRING)")
+        elements.should have_selector("label", :text => "Logo url (STRING)")
+        elements.should have_selector("label", :text => "Manager (STRING)")
+        elements.should have_selector("label", :text => "Ballpark (STRING)")
+        elements.should have_selector("label", :text => "Mascot (STRING)")
+        elements.should have_selector("label", :text => "Founded")
+        elements.should have_selector("label", :text => "Wins")
+        elements.should have_selector("label", :text => "Losses")
+        elements.should have_selector("label", :text => "Win percentage")
+        elements.should have_selector("label", :text => "Revenue")
+        elements.should have_selector("label", :text => "Players")
+        elements.should have_selector("label", :text => "Fans")
       end
     end
 
@@ -274,19 +274,19 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements.should have_selector("label", :content => "Division")
-        elements.should_not have_selector("label", :content => "Name")
-        elements.should_not have_selector("label", :content => "Logo url")
-        elements.should_not have_selector("label", :content => "Manager")
-        elements.should_not have_selector("label", :content => "Ballpark")
-        elements.should_not have_selector("label", :content => "Mascot")
-        elements.should have_selector("label", :content => "Founded")
-        elements.should have_selector("label", :content => "Wins")
-        elements.should have_selector("label", :content => "Losses")
-        elements.should have_selector("label", :content => "Win percentage")
-        elements.should have_selector("label", :content => "Revenue")
-        elements.should have_selector("label", :content => "Players")
-        elements.should have_selector("label", :content => "Fans")
+        elements.should have_selector("label", :text => "Division")
+        elements.should_not have_selector("label", :text => "Name")
+        elements.should_not have_selector("label", :text => "Logo url")
+        elements.should_not have_selector("label", :text => "Manager")
+        elements.should_not have_selector("label", :text => "Ballpark")
+        elements.should_not have_selector("label", :text => "Mascot")
+        elements.should have_selector("label", :text => "Founded")
+        elements.should have_selector("label", :text => "Wins")
+        elements.should have_selector("label", :text => "Losses")
+        elements.should have_selector("label", :text => "Win percentage")
+        elements.should have_selector("label", :text => "Revenue")
+        elements.should have_selector("label", :text => "Players")
+        elements.should have_selector("label", :text => "Fans")
       end
     end
 
@@ -300,19 +300,19 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements.should have_selector("label", :content => "Division")
-        elements.should_not have_selector("label", :content => "Name")
-        elements.should_not have_selector("label", :content => "Logo url")
-        elements.should_not have_selector("label", :content => "Manager")
-        elements.should_not have_selector("label", :content => "Ballpark")
-        elements.should_not have_selector("label", :content => "Mascot")
-        elements.should have_selector("label", :content => "Founded")
-        elements.should have_selector("label", :content => "Wins")
-        elements.should have_selector("label", :content => "Losses")
-        elements.should have_selector("label", :content => "Win percentage")
-        elements.should have_selector("label", :content => "Revenue")
-        elements.should have_selector("label", :content => "Players")
-        elements.should have_selector("label", :content => "Fans")
+        elements.should have_selector("label", :text => "Division")
+        elements.should_not have_selector("label", :text => "Name")
+        elements.should_not have_selector("label", :text => "Logo url")
+        elements.should_not have_selector("label", :text => "Manager")
+        elements.should_not have_selector("label", :text => "Ballpark")
+        elements.should_not have_selector("label", :text => "Mascot")
+        elements.should have_selector("label", :text => "Founded")
+        elements.should have_selector("label", :text => "Wins")
+        elements.should have_selector("label", :text => "Losses")
+        elements.should have_selector("label", :text => "Win percentage")
+        elements.should have_selector("label", :text => "Revenue")
+        elements.should have_selector("label", :text => "Players")
+        elements.should have_selector("label", :text => "Fans")
       end
     end
 
@@ -328,9 +328,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements[0].should have_selector("p.help", :content => "Required 100 characters or fewer. Additional help text for manager field.")
-        elements[1].should have_selector("p.help", :content => "Required")
-        elements[2].should have_selector("p.help", :content => "Optional 50 characters or fewer.")
+        elements[0].should have_selector("p.help", :text => "Required 100 characters or fewer. Additional help text for manager field.")
+        elements[1].should have_selector("p.help", :text => "Required")
+        elements[2].should have_selector("p.help", :text => "Optional 50 characters or fewer.")
       end
     end
 
@@ -350,9 +350,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "team")
       should have_selector(".field") do |elements|
-        elements[0].should have_selector("p.help", :content => "Optional 100 characters or fewer.")
-        elements[1].should have_selector("p.help", :content => "Optional")
-        elements[2].should have_selector("p.help", :content => "Required 50 characters or fewer.")
+        elements[0].should have_selector("p.help", :text => "Optional 100 characters or fewer.")
+        elements[1].should have_selector("p.help", :text => "Optional")
+        elements[2].should have_selector("p.help", :text => "Required 50 characters or fewer.")
       end
     end
   end

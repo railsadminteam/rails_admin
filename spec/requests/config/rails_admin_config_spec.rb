@@ -17,7 +17,7 @@ describe "RailsAdmin Config DSL" do
       visit rails_admin_new_path(:model_name => "team")
       excluded_models.each do |model|
         should have_selector("#nav") do |navigation|
-          navigation.should_not have_selector("li a", :content => model.to_s)
+          navigation.should_not have_selector("li a", :text => model.to_s)
         end
       end
     end
