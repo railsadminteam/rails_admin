@@ -734,7 +734,7 @@ Field groups can be renamed:
 
 This would render "Team information" instead of "Basic info" as the groups label.
 
-**Field groupings - instructions**
+**Field groupings - help**
 
 Field groups can have a set of instructions which is displayed under the label:
 
@@ -743,7 +743,7 @@ Field groups can have a set of instructions which is displayed under the label:
         edit do
           group :default do
             label "Team information"
-            instructions "Please fill all informations related to your team..."
+            help "Please fill all informations related to your team..."
           end
         end
       end
