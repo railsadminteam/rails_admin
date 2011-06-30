@@ -29,6 +29,7 @@ lv:
       search: "Meklēt"
       select: "Izvēlieties %{name}, lai labotu"
       show_all: "Parādīt visu"
+      add_filter: "Add filter"
     new:
       basic_info: "Pamatinformācija"
       required: "Nepieciešams"
@@ -79,3 +80,13 @@ lv:
       deleted: "dzēsts"
       export: "export"
       exported: "exported"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

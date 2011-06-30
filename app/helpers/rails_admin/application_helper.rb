@@ -141,17 +141,10 @@ module RailsAdmin
       options[:right_cut_label] ||= '&hellip;'
       options[:outer_window] ||= 2
       options[:inner_window] ||= 7
-      options[:page_param] ||= 'page'
-      options[:url] ||= ""
       options[:remote] = true unless options.has_key?(:remote)
-
-      url = options.delete(:url)
-      url.delete(options[:page_param])
-      url = url.to_a.collect{|x| x.join("=")}.join("&")
-
-      url += (url.include?('=') ? '&' : '') + options[:page_param]
-      url = "?"+url
-
+      options[:page_param] ||= :page
+      options[:url] ||= {}
+      
       pages = {
         :all => (1..page_count).to_a,
         :left => [],
@@ -189,7 +182,7 @@ module RailsAdmin
       end
 
       b = []
-
+      
       [pages[:left], pages[:center], pages[:right]].each do |p|
         p.each do |page_number|
 
@@ -199,9 +192,9 @@ module RailsAdmin
           when current_page
             b << Builder::XmlMarkup.new.span(page_number, :class => "current")
           when page_count
-            b << link_to(page_number, "#{url}=#{page_number}", :class => "end", :remote => options[:remote])
+            b << link_to(page_number, options[:url].merge(options[:page_param] => page_number), :class => "end", :remote => options[:remote])
           else
-            b << link_to(page_number, "#{url}=#{page_number}", :remote => options[:remote])
+            b << link_to(page_number, options[:url].merge(options[:page_param] => page_number), :remote => options[:remote])
           end
         end
       end
@@ -225,17 +218,17 @@ module RailsAdmin
     end
     
     # Creative whitespace:
-    ViewType   =          Struct.new(:name,      :parent,    :type,   :authorization, :path_method)
+    ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
-      :delete        => ViewType.new("Delete",   :edit,      :object, :delete),
-      :history       => ViewType.new("History",  :edit,      :object, nil,            :history_object),
-      :edit          => ViewType.new("Edit",     :list,      :object, :edit),
-      :export        => ViewType.new("Export",   :list,      :model,  :export),
-      :bulk_destroy  => ViewType.new("Delete",   :list,      :model,  :delete),
-      :new           => ViewType.new("New",      :list,      :model,  :new),
-      :model_history => ViewType.new("History",  :list,      :model,  nil,            :history_model),
-      :list          => ViewType.new("List",     :dashboard, :model,  :list),
-      :dashboard     => ViewType.new("Dashboard")
+      :delete        => ViewType.new(:edit,      :object, :delete),
+      :history       => ViewType.new(:edit,      :object, nil,            :history_object),
+      :edit          => ViewType.new(:list,      :object, :edit),
+      :export        => ViewType.new(:list,      :model,  :export),
+      :bulk_destroy  => ViewType.new(:list,      :model,  :delete),
+      :new           => ViewType.new(:list,      :model,  :new),
+      :model_history => ViewType.new(:list,      :model,  nil,            :history_model),
+      :list          => ViewType.new(:dashboard, :model,  :list),
+      :dashboard     => ViewType.new
     }
     
     def breadcrumbs_for view, abstract_model_or_object
@@ -286,7 +279,7 @@ module RailsAdmin
 
           content_tag(:li, :class => css_classes) do
             path_method = vt.path_method || view
-            link_to vt.name, self.send("rails_admin_#{path_method}_path")
+            link_to I18n.t("admin.breadcrumbs.#{view}").capitalize, self.send("rails_admin_#{path_method}_path")
           end
         # end
 

@@ -31,6 +31,7 @@ ru:
       search: "ПОИСК"
       select: "Выберите %{name} для редактирования"
       show_all: "Показать все"
+      add_filter: "Add filter"
     new:
       basic_info: "Основное"
       required: "Требуемое"
@@ -81,3 +82,13 @@ ru:
       deleted: "удален"
       export: "экспортировать"
       exported: "экспортировано"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"

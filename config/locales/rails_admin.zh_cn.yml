@@ -29,6 +29,7 @@ zh_cn:
       search: "搜索"
       select: "%{name}编辑"
       show_all: "查看全部"
+      add_filter: "Add filter"
     new:
       basic_info: "基本信息"
       required: "必须"
@@ -81,6 +82,16 @@ zh_cn:
       deleted: "已删除"
       export: "导出"
       exported: "已导出"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"
   datetime:
     distance_in_words:
       x_days: "%{count}天"
