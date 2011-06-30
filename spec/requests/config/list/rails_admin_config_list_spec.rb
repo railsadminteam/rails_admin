@@ -70,10 +70,87 @@ describe "RailsAdmin Config DSL List Section" do
     it "should show all by default" do
       get rails_admin_list_path(:model_name => "fan")
       response.should have_tag(".grid th") do |elements|
-        elements[2].should contain("ID")
-        elements[3].should contain("CREATED AT")
-        elements[4].should contain("UPDATED AT")
-        elements[5].should contain("NAME")
+        elements[1].should contain("ID")
+        elements[2].should contain("CREATED AT")
+        elements[3].should contain("UPDATED AT")
+        elements[4].should contain("HIS NAME")
+      end
+    end
+    
+    it "should hide some fields on demand with a block" do
+      RailsAdmin.config Fan do
+        list do
+          exclude_fields_if do
+            type == :datetime
+          end
+        end
+      end
+      get rails_admin_list_path(:model_name => "fan")
+      response.should have_tag(".grid th") do |elements|
+        elements[1].should contain("ID")
+        elements[2].should contain("HIS NAME")
+      end
+    end
+    
+    it "should hide some fields on demand with fields list" do
+      RailsAdmin.config Fan do
+        list do
+          exclude_fields :created_at, :updated_at
+        end
+      end
+      get rails_admin_list_path(:model_name => "fan")
+      response.should have_tag(".grid th") do |elements|
+        elements[1].should contain("ID")
+        elements[2].should contain("HIS NAME")
+      end
+    end
+    
+    it "should add some fields on demand with a block" do
+      RailsAdmin.config Fan do
+        list do
+          include_fields_if do
+            type != :datetime
+          end
+        end
+      end
+      get rails_admin_list_path(:model_name => "fan")
+      response.should have_tag(".grid th") do |elements|
+        elements[1].should contain("ID")
+        elements[2].should contain("HIS NAME")
+      end
+    end
+
+    it "should show some fields on demand with fields list, respect ordering and configure them" do
+      RailsAdmin.config Fan do
+        list do
+          fields :name, :id do
+            label do
+              "MODIFIED #{label}"
+            end
+          end
+        end
+      end
+      get rails_admin_list_path(:model_name => "fan")
+      response.should have_tag(".grid th") do |elements|
+        elements[1].should contain("MODIFIED HIS NAME")
+        elements[2].should contain("MODIFIED ID")
+      end
+    end
+    
+    it "should show all fields if asked" do
+      RailsAdmin.config Fan do
+        list do
+          include_all_fields
+          field :id
+          field :name
+        end
+      end
+      get rails_admin_list_path(:model_name => "fan")
+      response.should have_tag(".grid th") do |elements|
+        elements[1].should contain("ID")
+        elements[2].should contain("CREATED AT")
+        elements[3].should contain("UPDATED AT")
+        elements[4].should contain("NAME")
       end
     end
 
