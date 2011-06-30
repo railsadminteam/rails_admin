@@ -100,7 +100,7 @@ module RailsAdmin
 
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do
-          required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
+          (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional") + '. ')
         end
 
         register_instance_option(:html_attributes) do
