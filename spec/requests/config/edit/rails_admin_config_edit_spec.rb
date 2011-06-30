@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL Edit Section" do
 
   describe "field groupings" do
-
+    
     it "should be hideable" do
       RailsAdmin.config Team do
         edit do
@@ -58,52 +58,52 @@ describe "RailsAdmin Config DSL Edit Section" do
       response.should have_tag("legend", :content => "Renamed group")
     end
     
-    describe "instructions" do
+    describe "help" do
     
-      it "should show instructions section if present" do
+      it "should show help section if present" do
         RailsAdmin.config Team do
           edit do
             group :default do
-              instructions "instructions paragraph to display"
+              help "help paragraph to display"
             end
           end
         end
         get rails_admin_new_path(:model_name => "team")
       
-        response.should have_tag('.instructions', :content => "instructions paragraph to display")    
+        response.should have_tag('div.help', :content => "help paragraph to display")    
       end
     
-      it "should not show instructions if not present" do
+      it "should not show help if not present" do
         RailsAdmin.config Team do
           edit do
             group :default do
-              label 'no_instructions'
+              label 'no help'
             end
           end
         end
         get rails_admin_new_path(:model_name => "team")
       
-        response.should_not have_tag('.instructions')    
+        response.should_not have_tag('div.help')    
       end
       
-      it "should be able to display multiple instructions if there are multiple sections" do
+      it "should be able to display multiple help if there are multiple sections" do
         RailsAdmin.config Team do
           edit do
             group :default do
               field :name
-              instructions 'instructions for default'           
+              help 'help for default'           
             end
             group :other_section do
               label "Other Section"
               field :division_id
-              instructions 'instructions for other section'                         
+              help 'help for other section'                         
             end
           end
         end
         get rails_admin_new_path(:model_name => "team")
-        response.should have_tag(".instructions", :content => 'instructions for default')
-        response.should have_tag(".instructions", :content => 'instructions for other section')        
-        response.should have_tag(".instructions", :count => 2)
+        response.should have_tag("div.help", :content => 'help for default')
+        response.should have_tag("div.help", :content => 'help for other section')        
+        response.should have_tag("div.help", :count => 2)
       end  
       
     end

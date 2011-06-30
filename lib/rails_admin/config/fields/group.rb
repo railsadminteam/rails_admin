@@ -9,7 +9,7 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
 
         attr_reader :name
-        attr_accessor :instructions
+        attr_accessor :help
         
         def initialize(parent, name)
           super(parent)
@@ -54,7 +54,7 @@ module RailsAdmin
           name.to_s.humanize
         end
 
-        register_instance_option(:instructions) do
+        register_instance_option(:help) do
           nil
         end
 
