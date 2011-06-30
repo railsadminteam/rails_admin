@@ -734,6 +734,24 @@ Field groups can be renamed:
 
 This would render "Team information" instead of "Basic info" as the groups label.
 
+**Field groupings - instructions**
+
+Field groups can have a set of instructions which is displayed under the label:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          group :default do
+            label "Team information"
+            instructions "Please fill all informations related to your team..."
+          end
+        end
+      end
+    end
+
+This content is mostly useful when the admin doign the data entry is not familiar with the system or as a way to display inline documentation.
+
+
 **Field groupings - syntax**
 
 As in the list view, the edit views' configuration blocks can directly
