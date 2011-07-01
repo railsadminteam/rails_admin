@@ -4,13 +4,16 @@
   = breadcrumbs_for :delete, @object
   
   .content
-    %h2.title Delete confirmation
+    %h2.title= t("admin.delete.delete_confirmation")
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       %p
-        Are you sure you want to delete the #{@abstract_model.pretty_name.downcase} &ldquo;
+        = t("admin.delete.are_you_sure_you_want_to_delete_the_object", :model_name => @abstract_model.pretty_name.downcase)
+        &ldquo;
         %strong>= @model_config.with(:object => @object).object_label
-        \&rdquo;? All of the following related items will be deleted:
+        \&rdquo;
+        %span>
+        = t("admin.delete.all_of_the_following_related_items_will_be_deleted")
 
       %div{:style=>"padding-left:20px"}= render :partial => "delete_notice", :object => @object
 
@@ -24,4 +27,4 @@
             = t("admin.delete.confirmation")
 
           %button.button{:type => "submit", :name => "_continue"}
-            =t("admin.new.cancel")
+            = t("admin.new.cancel")

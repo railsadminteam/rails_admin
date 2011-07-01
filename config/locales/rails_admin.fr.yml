@@ -47,8 +47,10 @@ fr:
       cancel: "Annuler"
       add_new: "Ajouter un(e) %{name}"
     delete:
-      flash_confirmation: "%{name} a été détruit(e) avec succès"
+      all_of_the_following_related_items_will_be_deleted: "? All of the following related items will be deleted:"
+      are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete the %{model_name}"
       confirmation: "Oui, je suis sûr(e)"
+      delete_confirmation: "Delete confirmation"
     export:
       confirmation: "Exporter en %{name}"
       select: "Sélectionner les champs à exporter"
