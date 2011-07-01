@@ -47,8 +47,10 @@ lv:
       save_and_edit: "Saglabāt un labot"
       cancel: "Atcelt"
     delete:
-      flash_confirmation: "%{name} veiksmīgi izdzēsts"
+      all_of_the_following_related_items_will_be_deleted: "? All of the following related items will be deleted:"
+      are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete the %{model_name}"
       confirmation: "Jā, esmu pārliecināts"
+      delete_confirmation: "Delete confirmation"
     export:
       confirmation: "Export to %{name}"
       select: "Select fields to export"
