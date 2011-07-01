@@ -30,7 +30,7 @@ fi:
       search: "Haku"
       select: "Valitse muokattava %{name}"
       show_all: "Näytä kaikki"
-      add_filter: "Add filter"
+      add_filter: "Lisää suodatin"
     new:
       basic_info: "Perustiedot"
       required: "Vaadittu"
