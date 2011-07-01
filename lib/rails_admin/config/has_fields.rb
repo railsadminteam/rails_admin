@@ -24,7 +24,7 @@ module RailsAdmin
         # If a block has been given evaluate it and sort fields after that
         if block
           field.instance_eval &block
-          @fields.sort_by!(&:order)
+          @fields.sort! {|a, b| a.order <=> b.order }
         end
         field
       end
