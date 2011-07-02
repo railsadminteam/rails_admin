@@ -1,0 +1,43 @@
+# Norwegian, norsk bokmål (for Devise)
+# Contributors:
+# - Theodor Tonum - www.yenka.no
+
+nb:
+  errors:
+    messages:
+      not_found: "ble ikke funnet"
+      already_confirmed: "er allerede bekreftet"
+      not_locked: "er ikke låst"
+
+  devise:
+    failure:
+      unauthenticated: 'Du er nødt til å logge inn eller registrere deg for å fortsette.'
+      unconfirmed: 'Du må bekrefte din konto for å fortsette.'
+      locked: 'Din konto er låst.'
+      invalid: 'Ugyldig e-post eller passord.'
+      invalid_token: 'Ugyldig autentifiseringsnøkkel.'
+      timeout: 'Din sesjon er utløpt, vennligst logg inn på nytt for å fortsette.'
+      inactive: 'Din konto har ikke blitt aktivert enda.'
+    sessions:
+      signed_in: 'Du er nå innlogget!'
+      signed_out: 'Du er nå logget ut.'
+    passwords:
+      send_instructions: 'Du vil motta en e-post med instruksjoner om hvordan du tilbakestiller ditt passord innen et par minutter.'
+      updated: 'Ditt passord er nå endret. Du er nå innlogget.'
+    confirmations:
+      send_instructions: 'Du vil motta en -post med instruksjon om hvordan du bekrefter din konto innen et par minutter.'
+      confirmed: 'Din konto er nå bekreftet. Du er nå innlogget.'
+    registrations:
+      signed_up: 'Du har nå registrert deg. Du kan ha mottatt en bekreftelses e-post dersom dette er aktivert.'
+      updated: 'Du har nå oppdatert din konto.'
+      destroyed: 'Adjø! Din konto hos oss er nå avsluttet. Vi håper på å se deg igjen en gang.'
+    unlocks:
+      send_instructions: 'Du vil motta en e-post med instruksjoner om hvordan du låser opp din konto innen et par minutter.'
+      unlocked: 'Din konto er nå låst opp. Du er nå innlogget.'
+    mailer:
+      confirmation_instructions:
+        subject: 'Bekreftelse av konto'
+      reset_password_instructions:
+        subject: 'Tilbakestilling av passord'
+      unlock_instructions:
+        subject: 'Opplåsing av konto'
