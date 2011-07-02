@@ -409,6 +409,23 @@ hr {
       text-shadow: 0 1px 0 white; }
     #sidebar ul li.active a {
       color: #a4a4a4; }
+    #sidebar ul li ul {
+      background: white;
+      border: 2px solid white;
+      box-shadow: 0 0px 10px rgba(0, 0, 0, 0.6);
+      display: none;
+      left: -164px;
+      position: absolute;
+      top: -2px;
+      width: 160px; }
+      #sidebar ul li ul li {
+        background-position: 10px 50%; }
+        #sidebar ul li ul li:hover {
+          background-color: #dddddd; }
+        #sidebar ul li ul li:last-child {
+          border-bottom: none; }
+    #sidebar ul li:hover ul {
+      display: block; }
 
 .breadcrumb {
   background-color: #f4f4f4;
