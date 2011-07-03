@@ -10,7 +10,7 @@ RailsAdmin is tested with
 * jruby-1.6.2 [ linux-i386-java ]
 * rbx-1.2.3-20110315 [ ]
 * ree-1.8.7-2011.03 [ i386 ]
-* ruby-1.8.7-p334 [ i386 ]
+* ruby-1.8.7-p352 [ i386 ]
 * ruby-1.9.2-p180 [ i386 ]
 
 and
@@ -144,7 +144,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
     User-defined Axis
     Name   [ CI_RUBY_VERSION ]
-    Values [ 1.9.2 1.8.7 ree jruby rbx-1.2.3 ]
+    Values [ 1.9.2 ruby-1.8.7-p352 ree jruby rbx-1.2.3 ]
 
     User-defined Axis
     Name   [ CI_DB_ADAPTER ]
