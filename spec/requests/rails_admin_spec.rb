@@ -116,7 +116,5 @@ describe "RailsAdmin" do
       fan_config.should be_excluded
       team_config.should_not be_excluded
     end
-    
   end
-
 end

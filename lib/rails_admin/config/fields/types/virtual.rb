@@ -30,11 +30,11 @@ module RailsAdmin
           register_instance_option(:serial?) do
             false
           end
-          
+
           register_instance_option(:sortable) do
             false
           end
-          
+
           register_instance_option(:searchable) do
             false
           end

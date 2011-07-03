@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "RailsAdmin Basic List" do
 
   subject { page }
-  
+
   describe "GET /admin" do
     it "should respond successfully" do
       visit rails_admin_dashboard_path
@@ -21,12 +21,12 @@ describe "RailsAdmin Basic List" do
       should have_content("Created at")
       should have_content("Updated at")
     end
-    
+
     it "shows the edit and delete links" do
       should have_selector("td a img[alt='Edit']")
       should have_selector("td a img[alt='Delete']")
     end
-    
+
     it "has the search box with some prompt text" do
       should have_selector("input#search[placeholder='Search']")
     end
@@ -75,7 +75,7 @@ describe "RailsAdmin Basic List" do
         FactoryGirl.create(:player, :retired => false, :injured => false, :team => @teams[1]),
       ]
     end
-    
+
     it "should allow to query on any attribute" do
       visit rails_admin_list_path(:model_name => "player", :query => @players[0].name, :set => 1)
       should have_content(@players[0].name)
@@ -91,7 +91,7 @@ describe "RailsAdmin Basic List" do
       should have_content(@players[2].name)
       should have_no_content(@players[3].name)
     end
-    
+
     it "should allow to combine filters on two different attributes" do
       visit rails_admin_list_path(:model_name => "player", :filters => {:retired => {"1" => {:value => "true"}}, :injured => {"1" => {:value => "true"}}}, :set => 1)
       should have_content(@players[0].name)
@@ -99,7 +99,7 @@ describe "RailsAdmin Basic List" do
         should have_no_content(@players[i].name)
       end
     end
-    
+
     it "should allow to filter on belongs_to relationships" do
       visit rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => { :value => @teams[0].name }}}, :set => 1)
       should have_content(@players[0].name)
@@ -107,7 +107,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
     end
-    
+
     it "should allow to disable search on attributes" do
       RailsAdmin.config Player do
         list do
@@ -120,7 +120,7 @@ describe "RailsAdmin Basic List" do
       visit rails_admin_list_path(:model_name => "player", :query => @players[0].name)
       should have_no_content(@players[0].name)
     end
-    
+
     it "should allow to search a belongs_to attribute over the base table" do
       RailsAdmin.config Player do
         list do
@@ -187,7 +187,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
     end
-    
+
     it "should allow to search over more than one attribute" do
       RailsAdmin.config Player do
         list do

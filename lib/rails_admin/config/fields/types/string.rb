@@ -16,7 +16,7 @@ module RailsAdmin
 
           register_instance_option(:help) do
             text = (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
-            
+
             # Length requirement isn't necessary to display in case a colorpicker is rendered
             unless color?
               text += "#{length} "

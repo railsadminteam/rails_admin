@@ -12,7 +12,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
-    
+
     it "should be ordered by weight and alphabetical order" do
       RailsAdmin.config do |config|
         config.model Team do
@@ -24,7 +24,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
-    
+
     it "should nest menu items with parent" do
       RailsAdmin.config do |config|
         config.model Comment do
@@ -57,7 +57,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]/a").should have_content(content)
       end
     end
-    
+
     it "should order dropdown item according to parent weight" do
       RailsAdmin.config do |config|
         config.model Comment do

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe "RailsAdmin Config DSL Edit Section" do
-  
+
   subject { page }
-  
+
   describe "field groupings" do
-    
+
     it "should be hideable" do
       RailsAdmin.config Team do
         edit do
@@ -58,9 +58,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit rails_admin_new_path(:model_name => "team")
       should have_selector("legend", :text => "Renamed group")
     end
-    
+
     describe "help" do
-    
+
       it "should show help section if present" do
         RailsAdmin.config Team do
           edit do
@@ -72,7 +72,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit rails_admin_new_path(:model_name => "team")
         should have_selector('div.help', :text => "help paragraph to display")
       end
-    
+
       it "should not show help if not present" do
         RailsAdmin.config Team do
           edit do
@@ -84,7 +84,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit rails_admin_new_path(:model_name => "team")
         should_not have_selector('div.help')
       end
-      
+
       it "should be able to display multiple help if there are multiple sections" do
         RailsAdmin.config Team do
           edit do
@@ -103,8 +103,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         should have_selector("div.help", :text => 'help for default')
         should have_selector("div.help", :text => 'help for other section')
         should have_selector("div.help", :count => 2)
-      end  
-      
+      end
     end
 
     it "should have accessor for its fields" do
@@ -386,7 +385,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     describe "a datetime field" do
-      
+
       it "should default to %B %d, %Y %H:%M" do
         visit rails_admin_new_path(:model_name => "field_test")
         fill_in "field_test[datetime_field]", :with => @time.strftime("%B %d, %Y %H:%M")
@@ -466,9 +465,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         @record.timestamp_field.should eql(::DateTime.parse(@time.to_s))
       end
     end
-    
+
     describe " a field with 'format' as a name (Kernel function)" do
-      
+
       it "should be updatable without any error" do
         RailsAdmin.config FieldTest do
           edit do
@@ -554,7 +553,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "fields which are nullable and have AR validations" do
-    
+
     it "should be required" do
       # draft.notes is nullable and has no validation
       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
@@ -580,10 +579,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       field.required?.should be false
     end
   end
-  
-  
+
   describe "CKEditor Support" do
-    
+
     it "should start with CKEditor disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
        field.ckeditor.should be false
@@ -614,14 +612,14 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("input#user_avatar")
     end
   end
-  
+
   describe "Enum field support" do
     it "should auto-detect enumeration when object responds to '\#{method}_enum'" do
       class Team
         def color_enum
           ["blue", "green", "red"]
         end
-      end  
+      end
       RailsAdmin.config Team do
         edit do
           field :color
@@ -632,13 +630,13 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_content("green")
       Team.send(:remove_method, :color_enum) # Reset
     end
-    
+
     it "should allow configuration of the enum method" do
       class Team
         def color_list
           ["blue", "green", "red"]
         end
-      end 
+      end
       RailsAdmin.config Team do
         edit do
           field :color, :enum do
@@ -651,7 +649,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_content("green")
       Team.send(:remove_method, :color_list) # Reset
     end
-    
+
     it "should allow direct listing of enumeration options and override enum method" do
       class Team
         def color_list
@@ -676,7 +674,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
   end
-  
+
   describe "ColorPicker Support" do
     it "should show input with class color" do
       RailsAdmin.config Team do

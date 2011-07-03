@@ -8,9 +8,9 @@ module RailsAdmin
       DISABLED_COLUMN_TYPES = [:tsvector]
 
       def self.extended(abstract_model)
-        
-        # ActiveRecord does not handle has_one relationships the way it does for has_many, 
-        # and does not create any association_id and association_id= methods. 
+
+        # ActiveRecord does not handle has_one relationships the way it does for has_many,
+        # and does not create any association_id and association_id= methods.
         # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
         # Support is hackish at best. Atomicity is respected for creation, but not while updating.
         # It means a failed validation at update on the parent object could still modify target belongs_to foreign ids.
@@ -24,7 +24,7 @@ module RailsAdmin
           end
         end
       end
-            
+
       def self.polymorphic_parents(name)
         unless @polymorphic_parents
           @polymorphic_parents = {}

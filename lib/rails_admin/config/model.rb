@@ -41,7 +41,7 @@ module RailsAdmin
       def object_label
         bindings[:object].send object_label_method
       end
-      
+
       # The display for a model instance (i.e. a single database record).
       # Unless configured in a model config block, it'll try to use :name followed by :title methods, then
       # any methods that may have been added to the label_methods array via Configuration.
@@ -49,7 +49,7 @@ module RailsAdmin
       register_instance_option(:object_label_method) do
         @object_label_method ||= Config.label_methods.find { |method| abstract_model.model.new.respond_to? method } || :rails_admin_default_object_label_method
       end
-      
+
       register_instance_option(:label) do
         abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
       end

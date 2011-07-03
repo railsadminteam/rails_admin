@@ -28,12 +28,12 @@ module RailsAdmin
         end
         field
       end
-      
-      # include fields by name and apply an optionnal block to each (through a call to fields), 
+
+      # include fields by name and apply an optionnal block to each (through a call to fields),
       # or include fields by conditions if no field names
       def include_fields(*field_names, &block)
         if field_names.empty?
-          @fields.select {|f| f.instance_eval &block }.each do |f| 
+          @fields.select {|f| f.instance_eval &block }.each do |f|
             unless f.defined
               f.defined = true
               f.order = @fields.select(&:defined).length
@@ -43,14 +43,14 @@ module RailsAdmin
           fields(*field_names, &block)
         end
       end
-      
+
       # exclude fields by name or by condition (block)
       def exclude_fields(*field_names, &block)
         block ||= lambda { |f| field_names.include?(f.name) }
         @fields.each {|f| f.defined = true } if @fields.select(&:defined).empty?
         @fields.select {|f| f.instance_eval &block }.each {|f| f.defined = false }
       end
-      
+
       # API candy
       alias :exclude_fields_if :exclude_fields
       alias :include_fields_if :include_fields

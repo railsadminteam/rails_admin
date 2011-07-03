@@ -14,7 +14,7 @@ describe "RailsAdmin Basic Bulk Action" do
       @players.each { |player| should have_content(player.name) }
     end
   end
-  
+
   describe "bulk_export" do
     it 'should show form for export' do
       visit rails_admin_list_path(:model_name => "player")

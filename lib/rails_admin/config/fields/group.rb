@@ -9,7 +9,7 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
 
         attr_reader :name
-        
+
         def initialize(parent, name)
           super(parent)
           @name = name.to_s.tr(' ', '_').downcase.to_sym

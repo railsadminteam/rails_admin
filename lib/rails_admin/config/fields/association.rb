@@ -5,7 +5,7 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
-        
+
         def self.inherited(klass)
           super(klass)
         end
@@ -14,15 +14,15 @@ module RailsAdmin
         def association
           @properties
         end
-        
+
         register_instance_option(:sortable) do
           false
         end
-        
+
         register_instance_option(:searchable) do
           false
         end
-        
+
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "RailsAdmin Basic Create" do
   subject { page }
-  
+
   describe "create" do
     before(:each) do
       visit rails_admin_new_path(:model_name => "player")
@@ -166,7 +166,7 @@ describe "RailsAdmin Basic Create" do
       should have_selector "form", :action => "/admin/players"
     end
   end
-  
+
   describe "create with object with errors on base" do
     before(:each) do
       visit rails_admin_new_path(:model_name => "player")

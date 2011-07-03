@@ -49,15 +49,15 @@ module RailsAdmin
         register_instance_option(:column_width) do
           self.class.instance_variable_get("@column_width")
         end
-        
+
         register_instance_option(:sortable) do
           true
         end
-        
+
         register_instance_option(:searchable) do
           true
         end
-        
+
         register_instance_option(:queryable?) do
           !!searchable
         end
@@ -65,7 +65,7 @@ module RailsAdmin
         register_instance_option(:filterable?) do
           !!searchable
         end
-        
+
         # serials and dates are reversed in list, which is more natural (last modified items first).
         register_instance_option(:sort_reverse?) do
           false
@@ -73,7 +73,7 @@ module RailsAdmin
 
         # list of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
         register_instance_option(:searchable_columns) do
-          @searchable_columns ||= case self.searchable 
+          @searchable_columns ||= case self.searchable
           when true
             [{ :column => "#{self.abstract_model.model.table_name}.#{self.name}", :type => self.type }]
           when false
@@ -81,7 +81,7 @@ module RailsAdmin
           when :all # valid only for associations
             self.associated_model_config.list.fields.map { |f| { :column => "#{self.associated_model_config.abstract_model.model.table_name}.#{f.name}", :type => f.type } }
           else
-            [self.searchable].flatten.map do |f| 
+            [self.searchable].flatten.map do |f|
               field_name = f.is_a?(Hash) ? f.values.first : f
               abstract_model = f.is_a?(Hash) ? AbstractModel.new(f.keys.first) : (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
               property = abstract_model.properties.find{ |p| p[:name] == field_name }
@@ -89,7 +89,7 @@ module RailsAdmin
             end
           end
         end
-        
+
         register_instance_option(:formatted_value) do
           unless (output = value).nil?
             output
@@ -150,7 +150,7 @@ module RailsAdmin
         register_instance_option(:serial?) do
           properties && properties[:serial?]
         end
-        
+
         register_instance_option(:view_helper) do
           self.class.instance_variable_get("@view_helper")
         end
@@ -216,17 +216,17 @@ module RailsAdmin
         def value
           bindings[:object].safe_send(name)
         end
-                
+
         # Reader for field's name
         def dom_name
           @dom_name ||= "#{bindings[:form].object_name}#{(index = bindings[:form].options[:index]) && "[#{index}]"}[#{method_name}]"
         end
-        
+
         # Reader for field's id
         def dom_id
           @dom_id ||= [
-            bindings[:form].object_name, 
-            bindings[:form].options[:index], 
+            bindings[:form].object_name,
+            bindings[:form].options[:index],
             method_name
           ].reject(&:blank?).join('_')
         end

@@ -62,7 +62,7 @@ module RailsAdmin
       end
       html+"\n"
     end
-    
+
     def action_button link, text, icon=nil, options={}
       options.reverse_merge! :class => "button"
       link_to link, options do
@@ -70,7 +70,7 @@ module RailsAdmin
         [image, text].compact.join("\n").html_safe
       end.html_safe
     end
-    
+
     # the icon shown beside every entry in the list view
     def action_icon link, icon, text
       icon_path = "/stylesheets/rails_admin/theme/activo/images/icons/24/%s.png"
@@ -82,7 +82,7 @@ module RailsAdmin
           :onmouseover => (icon_change % "#{icon}-hover")
       end.html_safe
     end
-    
+
     # Used for the icons in the admins very top right.
     def header_icon(image_name, title)
       image_tag "/stylesheets/rails_admin/theme/activo/images/session/#{image_name}.png", :alt => title, :title => title
@@ -144,7 +144,7 @@ module RailsAdmin
       options[:remote] = true unless options.has_key?(:remote)
       options[:page_param] ||= :page
       options[:url] ||= {}
-      
+
       pages = {
         :all => (1..page_count).to_a,
         :left => [],
@@ -182,7 +182,7 @@ module RailsAdmin
       end
 
       b = []
-      
+
       [pages[:left], pages[:center], pages[:right]].each do |p|
         p.each do |page_number|
 
@@ -216,7 +216,7 @@ module RailsAdmin
         t('home.name')
       end
     end
-    
+
     # Creative whitespace:
     ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
@@ -230,7 +230,7 @@ module RailsAdmin
       :list          => ViewType.new(:dashboard, :model,  :list),
       :dashboard     => ViewType.new
     }
-    
+
     def breadcrumbs_for view, abstract_model_or_object
       # create an array of all the names of the views we want breadcrumb links to
       views = []
@@ -270,7 +270,7 @@ module RailsAdmin
         abstract_model, object = abstract_model_and_object( abstract_model_or_object )
 
         vt = VIEW_TYPES[view]
-        
+
         # TODO: write tests and enable authorization checking:
         # if vt.authorization.nil? || authorized?(vt.authorization, abstract_model, object)
           css_classes = []
@@ -284,7 +284,7 @@ module RailsAdmin
         # end
 
       end
-    
+
 
   end
 end

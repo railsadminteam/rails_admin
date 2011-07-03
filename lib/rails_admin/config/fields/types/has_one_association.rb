@@ -25,7 +25,7 @@ module RailsAdmin
           def selected_id
             (object = value).nil? ? nil : object.id
           end
-          
+
           def method_name
             super.singularize + '_id'
           end

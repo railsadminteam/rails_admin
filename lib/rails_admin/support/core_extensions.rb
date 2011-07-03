@@ -1,9 +1,9 @@
 class Hash
-  
+
   def symbolize
     Hash.symbolize_hash(self)
   end
-  
+
   def self.symbolize_hash(obj)
     case obj
     when Array
