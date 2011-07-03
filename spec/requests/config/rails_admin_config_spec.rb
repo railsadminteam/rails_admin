@@ -15,9 +15,9 @@ describe "RailsAdmin Config DSL" do
       # Make query in team's edit view to make sure loading
       # the related division model config will not mess the navigation
       visit rails_admin_new_path(:model_name => "team")
-      excluded_models.each do |model|
-        should have_selector("#nav") do |navigation|
-          navigation.should_not have_selector("li a", :text => model.to_s)
+      within("#nav") do
+        excluded_models.each do |model|
+          should have_no_selector("li a", :text => model.to_s)
         end
       end
     end

@@ -4,77 +4,39 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
   subject { page }
 
-  describe "number of visible tabs" do
-    after(:each) do
-      RailsAdmin.config do |config|
-        config.navigation.max_visible_tabs 5
-      end
-    end
-
-    it "should be editable" do
-      RailsAdmin.config do |config|
-        config.navigation.max_visible_tabs 2
-      end
-      visit rails_admin_dashboard_path
-      should have_selector("#nav > li") do |elements|
-        elements.should have_at_most(4).items
-      end
-    end
-  end
-  
   describe "order of items" do
-    after(:each) do
-      RailsAdmin.config do |config|
-        config.navigation.max_visible_tabs 5
-        config.model Team do
-          weight 0
-        end
-        config.model Comment do
-          parent :root
-        end
-        config.model Cms::BasicPage do
-          dropdown nil
-          weight 0
-        end
-      end
-    end
 
     it "should be alphabetical by default" do
-      RailsAdmin.config do |config|
-        config.navigation.max_visible_tabs 20
-      end
       visit rails_admin_dashboard_path
-      should have_selector("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
+      ["Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
     
     it "should be ordered by weight and alphabetical order" do
       RailsAdmin.config do |config|
-        config.navigation.max_visible_tabs 20
         config.model Team do
           weight -1
         end
       end
       visit rails_admin_dashboard_path
-      should have_selector("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Teams", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"]
+      ["Teams", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
     
-    it "should nest menu items with parent and not take max_visible_tabs into account" do
+    it "should nest menu items with parent" do
       RailsAdmin.config do |config|
-        config.navigation.max_visible_tabs 3
         config.model Comment do
           parent Cms::BasicPage
         end
       end
       visit rails_admin_dashboard_path
-      should have_selector("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
+      ["Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
-      should have_selector("#nav>li.more>ul>li>a") do |as|
-        as.map(&:content).should == ["Cms/Basic Pages", "Comments"]
+      ["Cms/Basic Pages", "Comments"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]/a").should have_content(content)
       end
     end
 
@@ -88,11 +50,11 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit rails_admin_dashboard_path
-      should have_selector("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"]
+      ["CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
-      should have_selector("#nav>li.more>ul>li>a") do |as|
-        as.map(&:content).should == ["Cms/Basic Pages", "Comments"]
+      ["Cms/Basic Pages", "Comments"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]/a").should have_content(content)
       end
     end
     
@@ -107,8 +69,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit rails_admin_dashboard_path
-      should have_selector("#nav>li>a") do |as|
-        as.map(&:content)[1..-1].should == ["Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"]
+      ["Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"].each_with_index do |content, i|
+        find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
   end
@@ -117,8 +79,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
     it "should be visible and sane by default" do
       visit rails_admin_dashboard_path
-      should have_selector("#nav") do |navigation|
-        navigation.should have_selector("li a", :text => "Fan")
+      within("#nav") do
+        should have_selector("li a", :text => "Fan")
       end
     end
 
@@ -127,8 +89,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
         label "Fan test 1"
       end
       visit rails_admin_dashboard_path
-      should have_selector("#nav") do |navigation|
-        navigation.should have_selector("li a", :text => "Fan test 1")
+      within("#nav") do
+        should have_selector("li a", :text => "Fan test 1")
       end
     end
 
@@ -137,8 +99,8 @@ describe "RailsAdmin Config DSL Navigation Section" do
         hide
       end
       visit rails_admin_dashboard_path
-      should have_selector("#nav") do |navigation|
-        navigation.should_not have_selector("li a", :text => "Fan")
+      within("#nav") do
+        should have_no_selector("li a", :text => "Fan")
       end
     end
   end
