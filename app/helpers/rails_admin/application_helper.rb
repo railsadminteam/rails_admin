@@ -192,9 +192,9 @@ module RailsAdmin
           when current_page
             b << Builder::XmlMarkup.new.span(page_number, :class => "current")
           when page_count
-            b << link_to(page_number, options[:url].merge(options[:page_param] => page_number), :class => "end", :remote => options[:remote])
+            b << link_to(page_number, "?" + options[:url].merge(options[:page_param] => page_number).to_query, :class => "end", :remote => options[:remote])
           else
-            b << link_to(page_number, options[:url].merge(options[:page_param] => page_number), :remote => options[:remote])
+            b << link_to(page_number, "?" + options[:url].merge(options[:page_param] => page_number).to_query, :remote => options[:remote])
           end
         end
       end
