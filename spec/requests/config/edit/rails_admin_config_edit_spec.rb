@@ -70,9 +70,9 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
           end
         end
-        get rails_admin_new_path(:model_name => "team")
+        visit rails_admin_new_path(:model_name => "team")
       
-        response.should have_tag('div.help', :content => "help paragraph to display")    
+        should have_selector('div.help', :text => "help paragraph to display")
       end
     
       it "should not show help if not present" do
@@ -83,9 +83,9 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
           end
         end
-        get rails_admin_new_path(:model_name => "team")
+        visit rails_admin_new_path(:model_name => "team")
       
-        response.should_not have_tag('div.help')    
+        should_not have_selector('div.help')
       end
       
       it "should be able to display multiple help if there are multiple sections" do
@@ -93,23 +93,23 @@ describe "RailsAdmin Config DSL Edit Section" do
           edit do
             group :default do
               field :name
-              help 'help for default'           
+              help 'help for default'
             end
             group :other_section do
               label "Other Section"
               field :division_id
-              help 'help for other section'                         
+              help 'help for other section'
             end
           end
         end
-        get rails_admin_new_path(:model_name => "team")
-        response.should have_tag("div.help", :content => 'help for default')
-        response.should have_tag("div.help", :content => 'help for other section')        
-        response.should have_tag("div.help", :count => 2)
+        visit rails_admin_new_path(:model_name => "team")
+        should have_selector("div.help", :text => 'help for default')
+        should have_selector("div.help", :text => 'help for other section')
+        should have_selector("div.help", :count => 2)
       end  
       
     end
-    
+
     it "should have accessor for its fields" do
       RailsAdmin.config Team do
         edit do
