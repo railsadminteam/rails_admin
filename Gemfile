@@ -44,6 +44,10 @@ group :development, :test do
   platform :mri_19 do
     gem 'ruby-debug19'
   end
+
+  platform :rbx do
+    gem 'nokogiri', '1.4.7' # Nokogiri 1.5.0 is incompatible with Rubinius 1.2.3
+  end
 end
 
 gemspec
