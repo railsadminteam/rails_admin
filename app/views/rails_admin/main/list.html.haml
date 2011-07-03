@@ -1,11 +1,11 @@
 :ruby
   query = params[:query]
-  params = request.params.except(:action, :controller, :model_name, :utf8, :bulk_export)
+  params = request.params.except(:authenticity_token, :action, :controller, :model_name, :utf8, :bulk_export)
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
   properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
   # columns paginate
-  @filterable_fields = @model_config.list.fields.select(&:queryable?)
+  @filterable_fields = @model_config.list.fields.select(&:filterable?)
   @style, @other, properties = get_column_set(properties)
   
   head_javascript "rails_admin/application.js"

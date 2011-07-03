@@ -10,7 +10,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option(:help) do
-            required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
+            (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional") + '. ')
           end
         end
       end

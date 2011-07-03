@@ -72,10 +72,87 @@ describe "RailsAdmin Config DSL List Section" do
     it "should show all by default" do
       visit rails_admin_list_path(:model_name => "fan")
       should have_selector(".grid th") do |elements|
-        elements[2].should have_content("ID")
-        elements[3].should have_content("CREATED AT")
-        elements[4].should have_content("UPDATED AT")
-        elements[5].should have_content("NAME")
+        elements[1].should have_content("ID")
+        elements[2].should have_content("CREATED AT")
+        elements[3].should have_content("UPDATED AT")
+        elements[4].should have_content("HIS NAME")
+      end
+    end
+    
+    it "should hide some fields on demand with a block" do
+      RailsAdmin.config Fan do
+        list do
+          exclude_fields_if do
+            type == :datetime
+          end
+        end
+      end
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
+        elements[1].should have_content("ID")
+        elements[2].should have_content("HIS NAME")
+      end
+    end
+    
+    it "should hide some fields on demand with fields list" do
+      RailsAdmin.config Fan do
+        list do
+          exclude_fields :created_at, :updated_at
+        end
+      end
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
+        elements[1].should have_content("ID")
+        elements[2].should have_content("HIS NAME")
+      end
+    end
+    
+    it "should add some fields on demand with a block" do
+      RailsAdmin.config Fan do
+        list do
+          include_fields_if do
+            type != :datetime
+          end
+        end
+      end
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
+        elements[1].should have_content("ID")
+        elements[2].should have_content("HIS NAME")
+      end
+    end
+
+    it "should show some fields on demand with fields list, respect ordering and configure them" do
+      RailsAdmin.config Fan do
+        list do
+          fields :name, :id do
+            label do
+              "MODIFIED #{label}"
+            end
+          end
+        end
+      end
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
+        elements[1].should have_content("MODIFIED HIS NAME")
+        elements[2].should have_content("MODIFIED ID")
+      end
+    end
+    
+    it "should show all fields if asked" do
+      RailsAdmin.config Fan do
+        list do
+          include_all_fields
+          field :id
+          field :name
+        end
+      end
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid th") do |elements|
+        elements[1].should have_content("ID")
+        elements[2].should have_content("CREATED AT")
+        elements[3].should have_content("UPDATED AT")
+        elements[4].should have_content("NAME")
       end
     end
 

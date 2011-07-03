@@ -5,6 +5,8 @@ require 'rails_admin/abstract_object'
 module RailsAdmin
   module Adapters
     module ActiveRecord
+      DISABLED_COLUMN_TYPES = [:tsvector]
+
       def self.extended(abstract_model)
         
         # ActiveRecord does not handle has_one relationships the way it does for has_many, 
@@ -142,7 +144,8 @@ module RailsAdmin
       end
 
       def properties
-        model.columns.map do |property|
+        columns = model.columns.reject {|c| DISABLED_COLUMN_TYPES.include?(c.type.to_sym) }
+        columns.map do |property|
           {
             :name => property.name.to_sym,
             :pretty_name => property.name.to_s.tr('_', ' ').capitalize,

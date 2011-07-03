@@ -14,7 +14,7 @@
                 <%= form.label field.method_name, field.label %>
                 <%= form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes %>
                 <% if authorized? :new, config.abstract_model %>
-                  <%= link_to "Add new #{config.abstract_model.to_param}", rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord" %>
+                  <%= link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord" %>
                 <% end %>
                 <% if field.has_errors? %>
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>

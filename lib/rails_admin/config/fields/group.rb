@@ -9,7 +9,7 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
 
         attr_reader :name
-
+        
         def initialize(parent, name)
           super(parent)
           @name = name.to_s.tr(' ', '_').downcase.to_sym
@@ -49,8 +49,13 @@ module RailsAdmin
         end
 
         # Configurable group label which by default is group's name humanized.
-        register_instance_option(:label) do
+        register_instance_option :label do
           name.to_s.humanize
+        end
+
+        # Configurable help text
+        register_instance_option :help do
+          nil
         end
       end
     end

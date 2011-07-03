@@ -5,7 +5,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   subject { page }
   
   describe "field groupings" do
-
+    
     it "should be hideable" do
       RailsAdmin.config Team do
         edit do
@@ -59,7 +59,57 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       should have_selector("legend", :text => "Renamed group")
     end
-
+    
+    describe "help" do
+    
+      it "should show help section if present" do
+        RailsAdmin.config Team do
+          edit do
+            group :default do
+              help "help paragraph to display"
+            end
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
+      
+        response.should have_tag('div.help', :content => "help paragraph to display")    
+      end
+    
+      it "should not show help if not present" do
+        RailsAdmin.config Team do
+          edit do
+            group :default do
+              label 'no help'
+            end
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
+      
+        response.should_not have_tag('div.help')    
+      end
+      
+      it "should be able to display multiple help if there are multiple sections" do
+        RailsAdmin.config Team do
+          edit do
+            group :default do
+              field :name
+              help 'help for default'           
+            end
+            group :other_section do
+              label "Other Section"
+              field :division_id
+              help 'help for other section'                         
+            end
+          end
+        end
+        get rails_admin_new_path(:model_name => "team")
+        response.should have_tag("div.help", :content => 'help for default')
+        response.should have_tag("div.help", :content => 'help for other section')        
+        response.should have_tag("div.help", :count => 2)
+      end  
+      
+    end
+    
     it "should have accessor for its fields" do
       RailsAdmin.config Team do
         edit do
