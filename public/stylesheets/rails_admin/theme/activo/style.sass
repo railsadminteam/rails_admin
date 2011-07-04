@@ -346,6 +346,24 @@ hr
     // elemento seleccionado
     &.active a
       color: $grey
+    // inception...!
+    ul  
+      background: #fff
+      border: 2px solid #fff
+      box-shadow: 0 0px 10px rgba(0,0,0,0.6)
+      display: none
+      left: -164px
+      position: absolute
+      top: -2px
+      width: 160px
+      li
+        background-position: 10px 50%
+        &:hover
+          background-color: #ddd
+        &:last-child
+          border-bottom: none
+    &:hover ul
+      display: block
 
 
 // BREADCRUMB
