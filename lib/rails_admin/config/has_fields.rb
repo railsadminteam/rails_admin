@@ -19,8 +19,7 @@ module RailsAdmin
         # If field has not been yet defined add some default properties
         unless field.defined
           field.defined = true
-          field.order = @fields.select {|f| f.defined }.length
-          # field.hide
+          field.order = @fields.select(&:defined).length
         end
         # If a block has been given evaluate it and sort fields after that
         if block
@@ -30,20 +29,63 @@ module RailsAdmin
         field
       end
 
+      # include fields by name and apply an optionnal block to each (through a call to fields),
+      # or include fields by conditions if no field names
+      def include_fields(*field_names, &block)
+        if field_names.empty?
+          @fields.select {|f| f.instance_eval &block }.each do |f|
+            unless f.defined
+              f.defined = true
+              f.order = @fields.select(&:defined).length
+            end
+          end
+        else
+          fields(*field_names, &block)
+        end
+      end
+
+      # exclude fields by name or by condition (block)
+      def exclude_fields(*field_names, &block)
+        block ||= lambda { |f| field_names.include?(f.name) }
+        @fields.each {|f| f.defined = true } if @fields.select(&:defined).empty?
+        @fields.select {|f| f.instance_eval &block }.each {|f| f.defined = false }
+      end
+
+      # API candy
+      alias :exclude_fields_if :exclude_fields
+      alias :include_fields_if :include_fields
+
+      # does pretty much what it says in the can
+      def include_all_fields
+        include_fields_if() { true }
+      end
+
       # Returns all field configurations for the model configuration instance. If no fields
       # have been defined returns all fields. Defined fields are sorted to match their
       # order property. If order was not specified it will match the order in which fields
       # were defined.
       #
       # If a block is passed it will be evaluated in the context of each field
-      def fields(&block)
-        defined = @fields.select {|f| f.defined }
-        defined.sort! {|a, b| a.order <=> b.order }
-        defined = @fields if defined.empty?
-        if block
-          defined.each {|f| f.instance_eval &block }
+      def fields(*field_names,&block)
+        if field_names.empty?
+          defined = @fields.select {|f| f.defined }
+          defined.sort! {|a, b| a.order <=> b.order }
+          defined = @fields if defined.empty?
+          if block
+            defined.each {|f| f.instance_eval &block }
+          end
+          defined
+        else
+          defined = field_names.map{|field_name| @fields.find {|f| f.name == field_name } }
+          defined.map do |f|
+            unless f.defined
+              f.defined = true
+              f.order = @fields.select(&:defined).length
+            end
+            f.instance_eval(&block) if block
+            f
+          end
         end
-        defined
       end
 
       # Defines configuration for fields by their type.

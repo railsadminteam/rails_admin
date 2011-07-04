@@ -6,26 +6,22 @@ module RailsAdmin
       module Types
         class Enum < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types::register(self)
-          
+
           register_instance_option(:partial) do
             :form_enumeration
           end
-          
-          register_instance_option(:help) do
-            text = required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")
-          end
-          
+
           register_instance_option(:html_attributes) do
             {
               :class => "#{css_class} #{has_errors? ? "errorField" : nil} enum",
               :value => value
             }
           end
-          
+
           register_instance_option(:enum_method) do
             @enum_method ||= (bindings[:object].respond_to?("#{name}_enum") ? "#{name}_enum" : name)
           end
-          
+
           register_instance_option(:enum) do
             bindings[:object].send(self.enum_method)
           end

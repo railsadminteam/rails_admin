@@ -14,7 +14,7 @@ describe "rails_admin:uninstall Rake task" do
     @rails_root = Rails.configuration.root
     Rails.configuration.root = Pathname.new(destination_root)
   end
-  
+
   after(:each) do
     Rails.configuration.root = @rails_root
   end

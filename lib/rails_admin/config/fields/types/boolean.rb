@@ -26,7 +26,7 @@ module RailsAdmin
           register_instance_option(:html_attributes) do
             {
               :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
-              :checked => value ? true : false,
+              :checked => (value == "1") ? true : false,
               :style => "width:#{column_width}px",
             }
           end

@@ -10,8 +10,8 @@ Rails.application.routes.draw do
         match "/:model_name/:id", :to => :for_object, :as => "object"
       end
     end
-    
-    # Routes for rails_admin controller    
+
+    # Routes for rails_admin controller
     controller "main" do
       match "/", :to => :index, :as => "dashboard"
       get "/:model_name", :to => :list, :as => "list"

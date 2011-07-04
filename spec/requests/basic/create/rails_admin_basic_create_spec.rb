@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe "RailsAdmin Basic Create" do
+  subject { page }
 
   describe "create" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      visit rails_admin_new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -13,10 +14,6 @@ describe "RailsAdmin Basic Create" do
       click_button "Save"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
-    end
-
-    it "should be successful" do
-      response.should be_successful
     end
 
     it "should create an object with correct attributes" do
@@ -29,7 +26,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create and edit" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      visit rails_admin_new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -38,10 +35,6 @@ describe "RailsAdmin Basic Create" do
       click_button "Save and edit"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
-    end
-
-    it "should be successful" do
-      response.should be_successful
     end
 
     it "should create an object with correct attributes" do
@@ -54,7 +47,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create and add another" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      visit rails_admin_new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -63,10 +56,6 @@ describe "RailsAdmin Basic Create" do
       click_button "Save and add another"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
-    end
-
-    it "should be successful" do
-      response.should be_successful
     end
 
     it "should create an object with correct attributes" do
@@ -81,7 +70,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @draft = FactoryGirl.create :draft
 
-      get rails_admin_new_path(:model_name => "player")
+      visit rails_admin_new_path(:model_name => "player")
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => 42
@@ -103,7 +92,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @divisions = 3.times.map { FactoryGirl.create :division }
 
-      get rails_admin_new_path(:model_name => "league")
+      visit rails_admin_new_path(:model_name => "league")
 
       fill_in "league[name]", :with => "National League"
       select @divisions[0].name, :from => "league_division_ids"
@@ -128,7 +117,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
 
-      get rails_admin_new_path(:model_name => "fan")
+      visit rails_admin_new_path(:model_name => "fan")
 
       fill_in "fan[name]", :with => "John Doe"
       select @teams[0].name, :from => "fan_team_ids"
@@ -153,7 +142,7 @@ describe "RailsAdmin Basic Create" do
       @team = FactoryGirl.create :team
       @player = FactoryGirl.create :player, :team => @team
 
-      get rails_admin_new_path(:model_name => "player")
+      visit rails_admin_new_path(:model_name => "player")
 
       fill_in "player[name]", :with => @player.name
       fill_in "player[number]", :with => @player.number.to_s
@@ -163,30 +152,30 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should show an error message" do
-      response.body.should contain("There is already a player with that number on this team")
+      should have_content("There is already a player with that number on this team")
     end
   end
 
   describe "create with invalid object" do
     before(:each) do
-      visit(rails_admin_create_path(:model_name => "player"), :post, :params => {:player => {}})
+      page.driver.post(rails_admin_create_path(:model_name => "player", :id => 1), :params => {:player => {}})
     end
 
     it "should show an error message" do
-      response.body.should contain("Player failed to be created")
-      response.body.should have_tag "form", :action => "/admin/players"
+      should have_content("Player failed to be created")
+      should have_selector "form", :action => "/admin/players"
     end
   end
-  
+
   describe "create with object with errors on base" do
     before(:each) do
-      get rails_admin_new_path(:model_name => "player")
+      visit rails_admin_new_path(:model_name => "player")
       fill_in "player[name]", :with => "Jackie Robinson on steroids"
       click_button "Save and add another"
     end
 
     it "should show error base error message in flash" do
-      response.body.should contain("Player failed to be created. Player is cheating")
+      should have_content("Player failed to be created. Player is cheating")
     end
   end
 end

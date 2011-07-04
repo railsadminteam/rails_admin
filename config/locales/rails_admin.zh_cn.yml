@@ -29,6 +29,7 @@ zh_cn:
       search: "搜索"
       select: "%{name}编辑"
       show_all: "查看全部"
+      add_filter: "Add filter"
     new:
       basic_info: "基本信息"
       required: "必须"
@@ -48,8 +49,10 @@ zh_cn:
     edit:
       add_new_associated_model_name: "添加新的%{name}"
     delete:
-      flash_confirmation: "%{name}被成功删除"
+      all_of_the_following_related_items_will_be_deleted: "? All of the following related items will be deleted:"
+      are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete the %{model_name}"
       confirmation: "是的，我确定"
+      delete_confirmation: "Delete confirmation"
     export:
       confirmation: "Export to %{name}"
       select: "选择需要导出的字段"
@@ -81,6 +84,16 @@ zh_cn:
       deleted: "已删除"
       export: "导出"
       exported: "已导出"
+    breadcrumbs:
+      delete: "delete"
+      history: "history"
+      edit: "edit"
+      export: "export"
+      bulk_destroy: "delete"
+      new: "new"
+      model_history: "history"
+      list: "list"
+      dashboard: "dashboard"
   datetime:
     distance_in_words:
       x_days: "%{count}天"
