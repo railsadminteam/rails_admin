@@ -319,7 +319,7 @@ module RailsAdmin
       if query.present?
         @queryable_fields = @model_config.list.fields.select(&:queryable?).map(&:searchable_columns).flatten
         @queryable_fields.each do |field_infos|
-          statement, *value = build_statement(field_infos[:column], field_infos[:type], query, 'default')
+          statement, *value = build_statement(field_infos[:column], field_infos[:type], query, RailsAdmin::Config.default_search_operator)
           if statement && value
             query_statements << statement
             values << value

@@ -79,6 +79,36 @@ describe RailsAdmin do
       end
     end
   end
+
+  describe ".config" do
+    context ".default_search_operator" do
+      around(:each) do |example|
+        old_search_operator = RailsAdmin::Config.default_search_operator
+        example.run
+        RailsAdmin::Config.default_search_operator = old_search_operator
+      end
+
+      it "sets the default_search_operator" do
+        RailsAdmin.config do |config|
+          config.default_search_operator = 'starts_with'
+        end
+
+        RailsAdmin::Config.default_search_operator.should == 'starts_with'
+      end
+
+      it "errors on unrecognized search operator" do
+        expect do
+          RailsAdmin.config do |config|
+            config.default_search_operator = 'random'
+          end
+        end.to raise_error(ArgumentError, "Search operator 'random' not supported")
+      end
+
+      it "defaults to 'default'" do
+        RailsAdmin::Config.default_search_operator.should == 'default'
+      end
+    end
+  end
 end
 
 module ExampleModule

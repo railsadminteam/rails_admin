@@ -23,6 +23,16 @@ module RailsAdmin
     @@included_models = []
     mattr_accessor :included_models
 
+    @@default_search_operator = 'default'
+    def self.default_search_operator=(operator)
+      if %w{ default like starts_with ends_with is = }.include? operator
+        @@default_search_operator = operator
+      else
+        raise ArgumentError, "Search operator '#{operator}' not supported"
+      end
+    end
+    mattr_reader :default_search_operator
+
     # Configuration option to specify which method names will be searched for
     # to be used as a label for object records. This defaults to [:name, :title]
     mattr_accessor :label_methods
