@@ -230,11 +230,27 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
 
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
+
       @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
 
+      destroyed = []
+      not_destroyed = []
       @destroyed_objects.each do |object|
+        if object.destroyed?
+          destroyed.push(object)
+        else
+          not_destroyed.push(object)
+        end
         message = "Destroyed #{@model_config.with(:object => object).object_label}"
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
+      end
+
+      unless destroyed.empty?
+        flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.label)
+      end
+
+      unless not_destroyed.empty?
+        flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
       end
 
       redirect_to rails_admin_list_path, :notice => t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
