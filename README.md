@@ -47,10 +47,6 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 
 API Update Note
 ---------------
-`ActiveRecord::Base.rails_admin` is the new recommendation for configuring
-models. The old API is not deprecated as the new one is just a proxy for
-`RailsAdmin::Config.model`.
-
 `navigation.max_visible_tabs` is not configurable anymore, as the new Activo
 theme implements the main navigation as a vertical list.
 
@@ -123,31 +119,10 @@ RailsAdmin provides its out of the box administrative interface by inspecting yo
 models and following some Rails conventions. For a more tailored experience, it also provides a
 configuration DSL which allows you to customize many aspects of the interface.
 
-The configuration code should be placed within model classes, for example:
-
-    app/models/team.rb
-
-    class Team < ActiveRecord::Base
-      rails_admin do
-        label "List of teams"
-      end
-    end
-
-Configuration code that is not specific to any model, such as options listed in
-the following General section and later in Mass Assignment Operations, should
-be placed in an initializer file, for example:
+The configuration code should be placed in an initializer file, for example:
 
     config/initializers/rails_admin.rb
 
-    RailsAdmin.config do |config|
-      config.models do
-        list do
-          fields_of_type :datetime do
-            date_format :compact
-          end
-        end
-      end
-    end
 
 ### General
 
@@ -192,8 +167,8 @@ sure that new models are not automatically added to RailsAdmin, e.g. because of 
 
 If you need to customize the label of the model, use:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         label "List of teams"
       end
     end
@@ -219,13 +194,15 @@ related models and for part of the audit information stored in the history
 records--so keep in mind that this configuration option has widespread
 effects.
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         object_label_method do
           :custom_label_method
         end
       end
+    end
 
+    def Team<ActiveRecord::Base
       def custom_label_method
         "Team #{self.name}"
       end
@@ -251,16 +228,16 @@ as false:
 
 By passing the value as an argument:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         visible false
       end
     end
 
 Or by passing a block that will be lazy evaluated each time the option is read:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         visible { false }
       end
     end
@@ -275,16 +252,17 @@ you want to get the Team model's visibility, you use
 
 **Create a dropdown menu in navigation**
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+This will desactivate config.navigation.max_visible_tabs.
+
+    RailsAdmin.config do |config|
+      ..
+      config.model Team do
         parent League
       end
-    end
-    ...
-    class Division < ActiveRecord::Base
-      rails_admin do
+      config.model Division do
         parent League
       end
+      ..
     end
 
 Obtained navigation:
@@ -302,10 +280,12 @@ This can be easily achieved with the 'dropdown' attribute of the parent model.
 
 Added to previous example:
 
-    class League < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      ...
+      config.model League do
         dropdown 'League related'
       end
+      ...
     end
 
 Obtained navigation:
@@ -328,8 +308,8 @@ menu subset. (but parent will always be first inside his submenu).
 
 Example:
 
-    class League < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model League do
         dropdown 'League related'
         weight -1
       end
@@ -365,8 +345,8 @@ You can configure the default number of rows rendered per page:
 
 You can also configure it per model:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           items_per_page 100
         end
@@ -392,8 +372,8 @@ You can change default behavior with use two options: `sort_by` and `sort_revers
 
 **Default sorting - Configure per model**
 
-    class Player < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Player do
         list do
           sort_by :name
           sort_reverse false
@@ -411,8 +391,8 @@ Belongs_to associations :
   you can also specify a column on the targetted table (see example) (3)
 
 
-    class Player < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Player do
         list do
           field :created_at do # (1)
             sortable false
@@ -432,8 +412,8 @@ Belongs_to associations :
 
 Default sort column is :id for ActiveRecord version
 To change it:
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         sort_by :nam
       end
     end
@@ -441,8 +421,8 @@ To change it:
 By default, dates and serial ids are reversed when first-sorted ('desc' instead of 'asc' in SQL).
 If you want to reverse (or cancel it) the default sort order (first column click or the default sort column):
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :id do
             sort_reverse? false   # will sort id increasing ('asc') first ones first (default is last ones first)
@@ -467,8 +447,8 @@ Belongs_to associations :
   will be searched on their label if label is not virtual (:name, :title, etc.)
   you can also specify columns on the targetted table (see example) (4)
 
-    class Player < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Player do
         list do
           field :created_at do # (1)
             searchable false
@@ -506,8 +486,8 @@ By default all fields are visible, but they are not presented in any particular
 order. If you specifically declare fields, only defined fields will be visible
 and they will be presented in the order defined:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name
           field :created_at
@@ -521,8 +501,8 @@ If you need to hide fields based on some logic on runtime (for instance
 authorization to view field) you can pass a block for the `visible` option
 (including its `hide` and `show` accessors):
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name
           field :created_at
@@ -543,8 +523,8 @@ authorization scheme for which you can find a guide at the end of this file.
 
 The header of a list view column can be changed with the familiar label method:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name do
             label "Title"
@@ -564,8 +544,8 @@ As in the previous example this would show only columns for fields "name" and
 
 The field's output can be modified:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name do
             formatted_value do
@@ -584,8 +564,8 @@ current record instance in key :object and the view instance in key :view.
 Via :object we can access other columns' values and via :view we can access our
 application's view helpers:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name do
             formatted_value do
@@ -604,8 +584,8 @@ but that could be written more verbosely as `bindings[:object].name`.
 Fields of different date types (date, datetime, time, timestamp) have two extra
 options to set the time formatting:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name
           field :created_at do
@@ -630,8 +610,8 @@ and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/
 By default each column has a CSS class set according to field's data type. You
 can customize this by:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name
           field :created_at do
@@ -650,8 +630,8 @@ By default columns' widths are calculated from certain pre-defined,
 data-type-specific pixel values. If you want to ensure a minimum width for a
 column, you can:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         list do
           field :name do
             column_width 200
@@ -684,8 +664,8 @@ form builder then provide an override for the edit view or independingly for the
 create and update views. The argument is a symbol or string that is sent to the view
 to process the form. This is handy for integrating things like the nested form builder (https://github.com/ryanb/nested_form) if you need to override a field's edit template.
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           form_builder :nested_form_for
           field :name
@@ -695,8 +675,8 @@ to process the form. This is handy for integrating things like the nested form b
 
 or independently
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         create do
           form_builder :create_form_for
           field :name
@@ -724,8 +704,8 @@ create and update views just replace `edit` with `create` or `update`.
 
 Field groups can be hidden:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           group :default do
             hide
@@ -743,8 +723,8 @@ option which was mentioned in the beginning of the navigation section.
 
 Field groups can be renamed:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           group :default do
             label "Team information"
@@ -759,8 +739,8 @@ This would render "Team information" instead of "Basic info" as the groups label
 
 Field groups can have a set of instructions which is displayed under the label:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           group :default do
             label "Team information"
@@ -780,8 +760,8 @@ contain field configurations, but in edit views those configurations can
 also be nested within group configurations. Below examples result an
 equal configuration:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           group :default do
             label "Default group"
@@ -794,8 +774,8 @@ equal configuration:
       end
     end
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           group :default do
             label "Default group"
@@ -831,8 +811,8 @@ hide and show accessors as the list view has.
 The edit view's fields are rendered using partials. Each field type has its own
 partial per default, but that can be overridden:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :name do
             partial "my_awesome_partial"
@@ -846,8 +826,8 @@ The partial should be placed in your applications template folder, such as
 
 One can also completely override the rendering logic:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :name do
             render do
@@ -871,8 +851,8 @@ field method provides second parameter which is field type as a symbol. For
 instance, if we have a column that's a text column in the database, but we'd
 like to have it as a string type we could accomplish that like this:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :description, :string do
              # configuration here
@@ -884,8 +864,8 @@ like to have it as a string type we could accomplish that like this:
 If no configuration needs to take place the configuration block could have been
 left out:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :description, :string
         end
@@ -930,8 +910,8 @@ If you have a reusable field you can define a custom class extending
 
 Then you can use your custom class in a field:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :name, :my_awesome_type do
              # configuration here
@@ -951,8 +931,8 @@ examples if you want to use that mechanism.
 Every field is accompanied by a hint/text help based on model's validations.
 Everything can be overridden with `help`:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :name
           field :email do
@@ -970,8 +950,10 @@ Everything can be overridden with `help`:
       # handling delete in your model, if needed. Replace all image occurences with your asset name.
       attr_accessor :delete_image
       before_save { self.image = nil if self.delete_image == '1' }
+    end
 
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :image do
             thumb_method :thumb # for images. Will default to full size image, which might break the layout
@@ -988,13 +970,17 @@ You can use `enum_method` to indicate the name of the enumeration method in your
 You can use `enum` to override any `enum_method` and give back a `FormOptionsHelper#options_for_select` collection.
 
     class Team < ActiveRecord::Base
+      ...
       def color_enum
         [['blue', 'red'], 'red']
         # should return any collection accepted by `FormOptionsHelper#options_for_select`
         # See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select
       end
+      ...
+    end
 
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :color
           # defaults to
@@ -1009,8 +995,8 @@ You can use `enum` to override any `enum_method` and give back a `FormOptionsHel
 
 If you don't have any enumeration method in your model, this will work:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         edit do
           field :color, :enum do
             enum do
@@ -1025,8 +1011,8 @@ If you don't have any enumeration method in your model, this will work:
 
 CKEditor can be enabled on fields of type text:
 
-    class MyModel < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model MyModel do
         edit do
           field :description, :text do
             ckeditor true
@@ -1040,8 +1026,8 @@ CKEditor can be enabled on fields of type text:
 Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
 RailsAdmin will handle ordering in and out of the form.
 
-    class Player < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Player do
         edit do
           field :fans do
             orderable true
@@ -1071,14 +1057,14 @@ You can exclude specific fields with exclude_fields & exclude_fields_if:
 
 Example:
 
-    class League < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model League do
         list do
           exclude_fields_if do
             type == :datetime
           end
 
-          exclude_fields :id, :name
+          exclude_fields :id, :name     
         end
       end
     end
@@ -1089,13 +1075,13 @@ But you can then use include_all_fields to add all default fields:
 
 Example:
 
-    class League < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model League do
         list do
           field :name do
             # snipped specific configuration for name attribute
           end
-
+          
           include_all_fields # all other default fields will be added after, conveniently
           exclude_fields :created_at # but you still can remove fields
         end
@@ -1108,15 +1094,15 @@ It is also possible to add fields by group and configure them by batches:
 
 Example:
 
-    class League < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model League do
         list do
           # all selected fields will be added, but you can't configure them. 
           # If you need to select them by type, see *fields_of_type*
           include_fields_if do
             name =~ /displayed/
           end
-
+          
           include_fields :name, :title                # simply adding fields by their names (order will be maintained)
           fields :created_at, :updated_at do          # adding and configuring
             label do
@@ -1172,8 +1158,8 @@ configuration is only effective for create, list and update views.
 
 Naturally this also works for a single model configuration:
 
-    class Team < ActiveRecord::Base
-      rails_admin do
+    RailsAdmin.config do |config|
+      config.model Team do
         fields do
           label do
             label.upcase
