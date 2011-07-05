@@ -252,7 +252,7 @@ you want to get the Team model's visibility, you use
 
 **Create a dropdown menu in navigation**
 
-This will desactivate config.navigation.max_visible_tabs.
+This will deactivate config.navigation.max_visible_tabs.
 
     RailsAdmin.config do |config|
       ..
@@ -472,7 +472,7 @@ Belongs_to associations :
     end
 
 Searchable definitions will be used for searches and filters.
-You can independently desactivate querying (search) or filtering for each field with:
+You can independently deactivate querying (search) or filtering for each field with:
 
     field :team do
       searchable [:name, :color]
