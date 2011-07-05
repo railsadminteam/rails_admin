@@ -121,11 +121,11 @@
                 %td.action.select
                   - if can_bulk_action
                     = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
-                - other_left = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1))
+                - other_left = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i - 1))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
                   %td{:class => "#{property.css_class}"}= ([:text, :string].include?(property.type) && property.truncated?) ? property.formatted_value.truncate(40) : property.formatted_value
-                - other_right = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i + 1))
+                - other_right = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i + 1))
                 %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.last
                   - if show_url = url_for(object) rescue nil
@@ -147,7 +147,7 @@
         .columns.wat-cf
           .column.right
             - if can_export
-              = action_button rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), t("admin.list.export_action"), nil, :method => :post
+              = action_button rails_admin_export_path(params.except("page")), t("admin.list.export_action"), nil, :method => :post
               = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
             
             = action_button rails_admin_history_model_path, t("admin.history.name")
