@@ -233,16 +233,12 @@ module RailsAdmin
 
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
 
-      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
+      processed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
 
-      destroyed = []
-      not_destroyed = []
-      @destroyed_objects.each do |object|
-        if object.destroyed?
-          destroyed.push(object)
-        else
-          not_destroyed.push(object)
-        end
+      destroyed = processed_objects.select(&:destroyed?)
+      not_destroyed = processed_objects - destroyed
+
+      destroyed.each do |object|
         message = "Destroyed #{@model_config.with(:object => object).object_label}"
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
