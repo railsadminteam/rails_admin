@@ -73,7 +73,7 @@ en:
         col_sep: "Column separator"
         col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
     flash:
-      successful: "%{name} was successfully %{action}"
+      successful: "%{name} successfully %{action}"
       error: "%{name} failed to be %{action}"
       noaction: "No actions were taken"
     actions:
