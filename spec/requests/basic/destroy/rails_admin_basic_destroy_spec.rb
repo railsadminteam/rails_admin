@@ -17,6 +17,19 @@ describe "RailsAdmin Basic Destroy" do
     end
   end
 
+  describe "destroy with errors" do
+    before(:each) do
+      Player.any_instance.stub(:destroy).and_return false
+      @player = FactoryGirl.create :player
+      visit rails_admin_delete_path(:model_name => "player", :id => @player.id)
+      click_button "Yes, I'm sure"
+    end
+
+    it "should destroy an object" do
+      @player.reload.should be
+    end
+  end
+
   describe "destroy" do
     before(:each) do
       @player = FactoryGirl.create :player

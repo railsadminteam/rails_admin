@@ -1,9 +1,9 @@
 - if flash && (flash[:error] || flash[:notice])
   .flash
-    - if flash && flash[:error]
+    - if flash[:error].present?
       .message.error
         %p= flash[:error]
 
-    - if flash && flash[:notice]
+    - if flash[:notice].present?
       .message.notice
         %p= flash[:notice]

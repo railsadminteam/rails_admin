@@ -86,11 +86,14 @@
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       = form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
         = hidden_field_tag :bulk_action
+        - can_export = authorized?(:export, @abstract_model)
+        - can_bulk_action = can_export || authorized?(:delete, @abstract_model)
         %table.table.grid
           %thead
             %tr
               %th.first
-                %input.checkbox.toggle{:type => "checkbox"}
+                - if can_bulk_action
+                  %input.checkbox.toggle{:type => "checkbox"}
               %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
               - properties.each do |property|
                 - property_name = property.name
@@ -115,7 +118,9 @@
 
               %tr{:class => row_class, :"data-link" => (edit_path if can_edit)}
 
-                %td.action.select= check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
+                %td.action.select
+                  - if can_bulk_action
+                    = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
                 - other_left = rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param).reject{|key, value| key == "set"}.merge(:set => params[:set].to_i - 1))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
@@ -141,7 +146,7 @@
         
         .columns.wat-cf
           .column.right
-            - if authorized? :export, @abstract_model
+            - if can_export
               = action_button rails_admin_export_path(params.reject{|key, value| key.to_sym == :page}), t("admin.list.export_action"), nil, :method => :post
               = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
             
