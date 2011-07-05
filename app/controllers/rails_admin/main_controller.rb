@@ -1,6 +1,8 @@
 module RailsAdmin
 
   class MainController < RailsAdmin::ApplicationController
+    include ActionView::Helpers::TextHelper
+
     layout "rails_admin/main"
 
     before_filter :get_model, :except => [:index]
@@ -246,14 +248,14 @@ module RailsAdmin
       end
 
       unless destroyed.empty?
-        flash[:notice] = t("admin.delete.flash_confirmation", :name => @model_config.label)
+        flash[:notice] = t("admin.flash.successful", :name => pluralize(destroyed.count(), @model_config.label), :action => t("admin.actions.deleted"))
       end
 
       unless not_destroyed.empty?
-        flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
+        flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count(), @model_config.label), :action => t("admin.actions.deleted"))
       end
 
-      redirect_to rails_admin_list_path, :notice => t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
+      redirect_to rails_admin_list_path
     end
 
     def handle_error(e)
