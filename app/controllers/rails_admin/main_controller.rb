@@ -1,6 +1,8 @@
 module RailsAdmin
 
   class MainController < RailsAdmin::ApplicationController
+    include ActionView::Helpers::TextHelper
+
     layout "rails_admin/main"
 
     before_filter :get_model, :except => [:index]
@@ -230,14 +232,26 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
 
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
-      @destroyed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
 
-      @destroyed_objects.each do |object|
+      processed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
+
+      destroyed = processed_objects.select(&:destroyed?)
+      not_destroyed = processed_objects - destroyed
+
+      destroyed.each do |object|
         message = "Destroyed #{@model_config.with(:object => object).object_label}"
         AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
       end
 
-      redirect_to rails_admin_list_path, :notice => t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
+      unless destroyed.empty?
+        flash[:notice] = t("admin.flash.successful", :name => pluralize(destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
+      end
+
+      unless not_destroyed.empty?
+        flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
+      end
+
+      redirect_to rails_admin_list_path
     end
 
     def handle_error(e)

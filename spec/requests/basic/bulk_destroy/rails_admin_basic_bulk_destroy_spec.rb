@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "RailsAdmin Basic Bulk Destroy" do
+  include ActionView::Helpers::TextHelper
 
   subject { page }
 
@@ -32,6 +33,11 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin::History.all.each do |history|
         @delete_ids.should include(history.item)
       end
+    end
+
+    it "displays a flash notice stating the number of records destroyed" do
+      name = pluralize(@delete_ids.count, @players.first.class.to_s)
+      page.should have_selector('div.flash div.notice p', :text => I18n.t("admin.flash.successful", :name => name, :action => I18n.t("admin.actions.deleted")))
     end
   end
 
