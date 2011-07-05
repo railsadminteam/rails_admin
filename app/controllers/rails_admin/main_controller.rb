@@ -244,11 +244,11 @@ module RailsAdmin
       end
 
       unless destroyed.empty?
-        flash[:notice] = t("admin.flash.successful", :name => pluralize(destroyed.count(), @model_config.label), :action => t("admin.actions.deleted"))
+        flash[:notice] = t("admin.flash.successful", :name => pluralize(destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
       end
 
       unless not_destroyed.empty?
-        flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count(), @model_config.label), :action => t("admin.actions.deleted"))
+        flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
       end
 
       redirect_to rails_admin_list_path
