@@ -9,7 +9,7 @@ module RailsAdmin
         class PaperclipFile < RailsAdmin::Config::Fields::Types::FileUpload
           RailsAdmin::Config::Fields::Types.register(self)
 
-          register_instance_option(:partial) do
+          register_instance_option(:edit_partial) do
             :form_paperclip_file
           end
 

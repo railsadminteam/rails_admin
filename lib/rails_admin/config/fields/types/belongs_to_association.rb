@@ -33,12 +33,8 @@ module RailsAdmin
             associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? [associated_model_config.object_label_method, {self.abstract_model.model.name => self.name}] : true
           end
 
-          register_instance_option(:partial) do
+          register_instance_option(:edit_partial) do
             :form_filtering_select
-          end
-
-          register_instance_option(:render) do
-            bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
           end
 
           def associated_model_config

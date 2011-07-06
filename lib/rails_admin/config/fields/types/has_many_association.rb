@@ -13,7 +13,7 @@ module RailsAdmin
             ""
           end
 
-          register_instance_option(:partial) do
+          register_instance_option(:edit_partial) do
             "form_filtering_multiselect"
           end
 
