@@ -354,7 +354,7 @@ module RailsAdmin
             @filterable_fields[field_name.intern].each do |field_infos|
               unless filter_dump[:disabled]
                 statement, *value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
-                unless statement.nil? || value.nil?
+                if statement
                   field_statements << statement
                   values << value
                 end
@@ -375,6 +375,22 @@ module RailsAdmin
     end
 
     def build_statement(column, type, value, operator)
+      if operator == '_discard' || value == '_discard'
+        return
+      elsif operator == '_blank' || value == '_blank'
+        return ["(#{column} IS NULL OR #{column} = '')"]
+      elsif operator == '_present' || value == '_present'
+        return ["(#{column} IS NOT NULL AND #{column} != '')"]
+      elsif operator == '_null' || value == '_null'
+        return ["(#{column} IS NULL)"]
+      elsif operator == '_not_null' || value == '_not_null'
+        return ["(#{column} IS NOT NULL)"]
+      elsif operator == '_empty' || value == '_empty'
+        return ["(#{column} = '')"]
+      elsif operator == '_not_empty' || value == '_not_empty'
+        return ["(#{column} != '')"]
+      end
+      
       case type
       when :boolean
          ["(#{column} #{operator == 'default' ? '=' : operator} ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
