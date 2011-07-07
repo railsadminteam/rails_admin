@@ -6,7 +6,7 @@ Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channe
 
 1. Take a look at the [list of open issues against the current milestone](https://github.com/sferik/rails_admin/issues?milestone=7&state=open).
 2. Find an issue you'd like to work on that isn't already assigned.
-3. Let `sferik` know which issue you will be working on in the IRC channel. Please also mention your GitHub login if it's different from your IRC handle. For example:
+3. Let **[@sferik](https://github.com/sferik)** know which issue you will be working on in the IRC channel. Please also mention your GitHub login if it's different from your IRC handle. For example:
 
         sferik: I will be working on issue #101. My GitHub login is billybob.
     Then, I will add you as a contributor to the project and assign you to that issue. You are now responsible for making sure that issue is resolved, either by fixing it yourself or finding someone else to fix it.
