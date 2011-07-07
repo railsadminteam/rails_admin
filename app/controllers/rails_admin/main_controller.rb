@@ -6,7 +6,7 @@ module RailsAdmin
     layout "rails_admin/main"
 
     before_filter :get_model, :except => [:index]
-    before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
+    before_filter :get_object, :only => [:details, :edit, :update, :delete, :destroy]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
@@ -125,6 +125,10 @@ module RailsAdmin
       else
         handle_save_error
       end
+    end
+
+    def details
+      @page_name = t("admin.details.page_name", :name => @model_config.label.downcase)
     end
 
     def edit

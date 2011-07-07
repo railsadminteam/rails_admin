@@ -13,6 +13,10 @@ module RailsAdmin
             :form_paperclip_file
           end
 
+          register_instance_option(:details_partial) do
+            :details_paperclip_file
+          end
+
           register_instance_option(:delete_method) do
             "delete_#{name}" if bindings[:object].respond_to?("delete_#{name}")
           end

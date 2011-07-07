@@ -128,6 +128,10 @@ module RailsAdmin
           properties && properties[:length]
         end
 
+        register_instance_option(:details_partial) do
+          :details_base
+        end
+
         register_instance_option(:edit_partial) do
           :form_field
         end

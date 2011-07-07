@@ -18,6 +18,10 @@ module RailsAdmin
             :form_polymorphic_association
           end
 
+          register_instance_option(:details_partial) do
+            :details_polymorphic_association
+          end
+
           # Accessor whether association is visible or not. By default
           # association checks that any of the child models are included in
           # configuration.

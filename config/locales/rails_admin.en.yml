@@ -19,6 +19,9 @@ en:
       name: "History"
       page_name: "History for %{name}"
       no_activity: "No Activity"
+    details:
+      page_name: "Details for %{name}"
+      no_file_found: "No file found"
     credentials:
       log_out: "Log out"
     list:
@@ -88,6 +91,7 @@ en:
     breadcrumbs:
       delete: "delete"
       history: "history"
+      details: "details"
       edit: "edit"
       export: "export"
       bulk_destroy: "delete"

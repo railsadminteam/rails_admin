@@ -1,0 +1,26 @@
+- head_style "rails_admin/details.css"
+
+#block-tables.block
+  = breadcrumbs_for :details, @object
+
+  .content
+    .control
+      = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name")
+
+      - if authorized? :edit, @abstract_model, @object
+        = action_button rails_admin_edit_path(@abstract_model, @object), t("admin.list.edit_action")
+      - if authorized? :delete, @abstract_model, @object
+        = action_button rails_admin_delete_path(@abstract_model, @object), t("admin.list.delete_action"), :cross
+
+    %h2.title= @page_name
+    .inner
+      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
+
+      - @model_config.details.with(:object => @object).visible_groups.each do |fieldset|
+        - if (fields = fieldset.visible_fields).length > 0
+          .fieldset
+            %h4= fieldset.label
+            = content_tag :div, fieldset.help, :class => "help" if fieldset.help
+            - fields.map { |field| field.with(:object => @object, :view => self) }.each do |field|
+              %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
+                = field.render
