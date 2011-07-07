@@ -401,10 +401,17 @@ Belongs_to associations :
             sortable :last_name # imagine there is a :last_name column and that :name is virtual
           end
           field :team_id do # (3)
+            # Will order by players playing with the best teams, 
+            # rather than the team name (by default), 
+            # or the team id (dull but default if object_label is not a column name)
+            
             sortable :win_percentage
-            # Will order by players playing with the best teams,
-            # rather than the team name (by default),
-            # or the team id (dull but default if label is not a column name)
+            
+            # if you need to specify the join association name: 
+            # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
+            sortable {:teams => :win_percentage} 
+            # or
+            sortable "teams.win_percentage"
           end
         end
       end
@@ -414,7 +421,7 @@ Default sort column is :id for ActiveRecord version
 To change it:
     RailsAdmin.config do |config|
       config.model Team do
-        sort_by :nam
+        sort_by :name
       end
     end
 
@@ -444,8 +451,8 @@ You can change the column that the field will actually search on (2)
 You can specify a list of column that will be searched over (3)
 Belongs_to associations :
   will be searched on their foreign_key (:team_id)
-  will be searched on their label if label is not virtual (:name, :title, etc.)
-  you can also specify columns on the targetted table (see example) (4)
+  or on their label if label is not virtual (:name, :title, etc.)
+  you can also specify columns on the targetted table or the source table (see example) (4)
 
     RailsAdmin.config do |config|
       config.model Player do
@@ -464,8 +471,14 @@ Belongs_to associations :
 
           field :team_id do # (4)
             searchable [:name, :id]
-            # eq. to [{Team => :name}, {Team => :id}]
-            # or even [:name, {Player => :team_id}]
+            # eq. to [Team => :name, Team => :id] 
+            # or even [:name, Player => :team_id] will search on teams.name and players.team_id
+          
+            # if you need to specify the join association name: 
+            # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
+            searchable [:teams => :name, :teams => :id]
+            # or
+            searchable ["teams.name", "teams.id"]
           end
         end
       end

@@ -127,7 +127,7 @@ describe "RailsAdmin Basic List" do
           field :id
           field :name
           field :team_id do
-            searchable({ Player => :team_id })
+            searchable Player => :team_id
           end
         end
       end
@@ -145,7 +145,41 @@ describe "RailsAdmin Basic List" do
           field :id
           field :name
           field :team_id do
-            searchable({ Team => :name })
+            searchable Team => :name
+          end
+        end
+      end
+      visit rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      should have_content(@players[0].name)
+      should have_content(@players[1].name)
+      should have_no_content(@players[2].name)
+      should have_no_content(@players[3].name)
+    end
+    
+    it "should allow to search a belongs_to attribute over the target table with a table name specified as a hash" do
+      RailsAdmin.config Player do
+        list do
+          field :id
+          field :name
+          field :team_id do
+            searchable :teams => :name
+          end
+        end
+      end
+      visit rails_admin_list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      should have_content(@players[0].name)
+      should have_content(@players[1].name)
+      should have_no_content(@players[2].name)
+      should have_no_content(@players[3].name)
+    end
+    
+    it "should allow to search a belongs_to attribute over the target table with a table name specified as a string" do
+      RailsAdmin.config Player do
+        list do
+          field :id
+          field :name
+          field :team_id do
+            searchable 'teams.name'
           end
         end
       end
@@ -194,7 +228,7 @@ describe "RailsAdmin Basic List" do
           field :id
           field :name
           field :team_id do
-            searchable [:name, {Player => :team_id}]
+            searchable [:name, Player => :team_id]
           end
         end
       end

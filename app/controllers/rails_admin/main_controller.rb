@@ -288,6 +288,10 @@ module RailsAdmin
         "#{@abstract_model.model.table_name}.#{params[:sort]}"
       elsif field.sortable == false # use default sort, asked field is not sortable
         "#{@abstract_model.model.table_name}.#{@model_config.list.sort_by.to_s}"
+      elsif field.sortable.is_a?(String) && field.sortable.include?('.') # just provide sortable, don't do anything smart
+        field.sortable
+      elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+        "#{field.sortable.keys.first}.#{field.sortable.values.first}"
       elsif field.association? # use column on target table
         "#{field.associated_model_config.abstract_model.model.table_name}.#{field.sortable}"
       else # use described column in the field conf.
