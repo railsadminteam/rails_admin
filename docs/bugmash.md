@@ -16,7 +16,7 @@ Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channe
 7. Submit a pull request and ping one of the maintainers in the IRC channel. For example:
 
         sferik: I have finished working on issue #101. Please review the code in my iss101 branch.
-    We'll let you know in the pull request if any changes need to be made before the code can be pulled.
+    We'll let you know if any changes need to be made before the code can be pulled.
 8. Make any changes that may be necessary after your code is reviewed by a maintainer.
 9. `GOTO 1`
 
