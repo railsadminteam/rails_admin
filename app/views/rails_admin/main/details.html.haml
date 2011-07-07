@@ -7,6 +7,8 @@
     .control
       = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name")
 
+      - if show_url = url_for(@object) rescue nil
+        = action_button show_url, t("admin.details.show_in_app")
       - if authorized? :edit, @abstract_model, @object
         = action_button rails_admin_edit_path(@abstract_model, @object), t("admin.list.edit_action")
       - if authorized? :delete, @abstract_model, @object

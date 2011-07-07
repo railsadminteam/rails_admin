@@ -20,6 +20,7 @@ en:
       page_name: "History for %{name}"
       no_activity: "No Activity"
     details:
+      show_in_app: "Show in app"
       page_name: "Details for %{name}"
       no_file_found: "No file found"
     credentials:
