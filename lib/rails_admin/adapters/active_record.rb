@@ -52,7 +52,7 @@ module RailsAdmin
 
       def count(options = {}, scope = nil)
         scope ||= model
-        scope.count(options.reject{|key, value| [:sort, :sort_reverse].include?(key)})
+        scope.count(options.except(:sort, :sort_reverse))
       end
 
       def first(options = {}, scope = nil)

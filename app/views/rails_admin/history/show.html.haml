@@ -32,7 +32,7 @@
               - sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil
             
               %th{:class => "#{column[:css_class]}#{" selected" if selected}"}
-                - sort_location = rails_admin_history_model_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).reject{|key, value| key.to_sym == :sort_reverse}.merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}))
+                - sort_location = rails_admin_history_model_path(params.except("sort_reverse").merge(:model_name => @abstract_model.to_param, :sort => property_name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}))
                 = link_to(column[:link_text], sort_location, :class => sort_direction)
                 
         %tbody

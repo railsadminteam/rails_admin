@@ -17,7 +17,7 @@ es:
       page_name: "Histórico de %{name}"
       no_activity: "No hubo actividad"
     credentials:
-      log_out: "Cerrar sessión"
+      log_out: "Cerrar sesión"
     list:
       edit_action: "Editar"
       delete_action: "Eliminar"
@@ -29,7 +29,7 @@ es:
       search: "BUSCAR"
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
-      add_filter: "Add filter"
+      add_filter: "Agregar filtro"
     new:
       basic_info: "Información Básica"
       required: "Obligatorio"
@@ -47,10 +47,10 @@ es:
       save_and_edit: "Guardar y editar"
       cancel: "Cancelar"
     delete:
-      all_of_the_following_related_items_will_be_deleted: "? All of the following related items will be deleted:"
-      are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete the %{model_name}"
+      all_of_the_following_related_items_will_be_deleted: "? Todos los elementos siguientes serán borrados:"
+      are_you_sure_you_want_to_delete_the_object: "Estás seguro que quieres borrar %{model_name}"
       confirmation: "Sí, estoy seguro"
-      delete_confirmation: "Delete confirmation"
+      delete_confirmation: "Confirmación de Borrado"
     export:
       confirmation: "Exportar a %{name}"
       select: "Selecciona los campos a exportar"
@@ -83,12 +83,12 @@ es:
       export: "exportar"
       exported: "exportado"      
     breadcrumbs:
-      delete: "delete"
-      history: "history"
-      edit: "edit"
-      export: "export"
-      bulk_destroy: "delete"
-      new: "new"
-      model_history: "history"
-      list: "list"
-      dashboard: "dashboard"
+      delete: "borrar"
+      history: "historial"
+      edit: "editar"
+      export: "exportar"
+      bulk_destroy: "borrar"
+      new: "nuevo"
+      model_history: "historial"
+      list: "lista"
+      dashboard: "panel general"

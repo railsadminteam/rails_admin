@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe "RailsAdmin Basic Bulk Destroy" do
-
   subject { page }
 
   describe "successful bulk delete of records" do
@@ -32,6 +31,11 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin::History.all.each do |history|
         @delete_ids.should include(history.item)
       end
+    end
+
+    it "displays a flash notice stating the number of records destroyed" do
+      # 2 Players because @delete_ids.count == 2:
+      page.should have_selector(".flash .notice", :text => "2 Players successfully deleted")
     end
   end
 
