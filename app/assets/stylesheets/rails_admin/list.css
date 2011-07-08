@@ -1,0 +1,107 @@
+.grid {
+  width: 100%;
+  border-collapse:collapse;
+}
+
+.grid thead th {
+  padding: 9px 0 9px 5px;
+}
+
+.grid thead th a {
+  background-repeat: no-repeat;
+  background-position: right;
+  /* so as to not strech when selected: */
+  padding: 0 20px 0 0;
+}
+
+.grid thead th.selected a {
+  /* to accomodate the sort arrow: */
+  padding: 0 20px 0 0;
+  font-weight:bold;
+}
+
+.grid thead th a.ascending {
+  background-image: url(../../images/rails_admin/bullet_arrow_up.png);
+}
+
+.grid thead th a.descending {
+  background-image: url(../../images/rails_admin/bullet_arrow_down.png);
+}
+
+.grid tr.link:hover {
+  background-color: #B9DAFC;
+  cursor: pointer;
+}
+
+.grid .checker {
+  padding: 0px 5px;
+}
+
+.grid tbody .boolean {
+  margin-bottom:-5px;
+}
+
+.grid tbody .date,
+.grid tbody .datetime,
+.grid tbody .time,
+.grid tbody .timestamp {
+  white-space: nowrap;
+}
+
+.grid tbody .other a {
+  padding-left:2px;
+  padding-right:2px;
+  text-decoration:none;
+  border:1px solid #B9B9B9;
+  background:#FFF;
+  color:#494949;
+}
+
+.grid tbody .other a:hover {
+  border:1px solid #494949;
+}
+
+.grid tbody td.last {
+  white-space: nowrap;
+}
+
+.grid thead th.first {
+  padding-left: 5px;
+}
+
+.grid tbody td {
+  padding: 7px 5px;
+}
+
+.grid tbody td.boolean, .grid thead th.boolean {
+  text-align: center;
+}
+.grid tbody td.boolean {
+  padding: 0 20px 0 0;
+}
+
+.filter {
+  display:block;
+  float:left;
+  margin-top:10px;
+}
+
+.filter>* {
+  display:block;
+  float:left;
+}
+
+.filter input, .filter select {
+  padding:0px;
+  margin-left:8px;
+}
+
+.filter label {
+  color:black;
+  width: 100px;
+  margin-left:10px;
+}
+
+.filter .delete {
+  color:red;
+}

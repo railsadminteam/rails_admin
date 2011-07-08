@@ -1,0 +1,35 @@
+/* Styles for the site admin summary: */
+.grid .start {
+  padding-left: 8px;
+}
+
+.count .number {
+  float: left;
+}
+
+.scale {
+  margin:0 auto;
+  display:block;
+  width:300px;
+  height:13px;
+}
+
+.scale .bar {
+  display: block;
+  height: 100%;
+}
+
+.show{
+  font-weight:bold;
+}
+
+/* Styles for the history table: */
+
+table#history .start {
+  padding-right: 20px;
+}
+
+table#history td.start {
+  font-weight: bold;
+  padding-right: 20px;
+}

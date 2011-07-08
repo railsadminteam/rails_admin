@@ -1,0 +1,67 @@
+/* Code is poetry */
+
+#container #header {
+  background-image: none;
+}
+
+#header h1.title {
+  float: left;
+  padding: 15px 5px;
+  text-shadow: 1px 1px 1px #000;
+  font-family: Tahoma, "Arial Black", Arial"MS Trebuchet", sans-serif;
+  font-weight: bold;
+}
+
+.red {
+  color: #C00;
+}
+
+ul#nav li.active {
+  background-color: #bcbcbc;
+}
+
+ul#nav li:hover {
+  background-color: #a7a7a7;
+}
+
+#sidebar ul#nav li.active a {
+  font-weight: bold;
+  color: inherit;
+}
+
+/* Fix for uniform.js checkbox css: */
+div.checker input.checkbox {
+  margin: 0;
+}
+
+/* Buttons on the list pages bottom right can be aligned hard right: */
+.form .columns .column {
+  width: inherit;
+}
+
+.filter input.text_field {
+  width: 150px;
+  height: 20px;
+}
+
+/* Override activo styles to make the search box smaller */
+.control .search {
+  width: 200px;
+}
+
+.control .search_box {
+  width: 166px;
+}
+
+.control .search_submit {
+  left: 173px;
+}
+
+/* Make the select box in the list page's controls area smaller */
+.selector.small {
+  width: 132px;
+}
+
+.selector.small span {
+  width: 100px;
+}

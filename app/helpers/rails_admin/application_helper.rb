@@ -13,7 +13,9 @@ module RailsAdmin
       else
         html = ""
         if paths = @head_javascript_paths
-          html << javascript_include_tag(paths.uniq)
+          paths.uniq.each do |path|
+            html << javascript_include_tag(path)
+          end
         end
         if script = @head_javascript
           html << javascript_tag(script.join("\n"))
@@ -30,7 +32,9 @@ module RailsAdmin
       else
         html = ""
         if paths = @head_stylesheet_paths
-          html << stylesheet_link_tag(paths.uniq)
+          paths.uniq.each do |path|
+            html << stylesheet_link_tag(path)
+          end
         end
         if style = @head_style
           html << content_tag(:style, style.join("\n"), :type => "text/css")

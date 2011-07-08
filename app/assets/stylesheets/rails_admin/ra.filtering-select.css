@@ -1,0 +1,60 @@
+.ra-filtering-select-input {
+  border-right: 0 none transparent !important;
+}
+
+.ra-filtering-select-button .ui-icon {
+  margin-left: -8px;
+}
+
+
+
+/* FIXME: replace these styles with something competent: */
+
+.ra-filtering-select-input  {
+    font-family:Verdana, Geneva, sans-serif;
+  font-size:12px;
+  padding:5px;
+  border-left:1px solid #e2e3ea;
+  border-top:1px solid #abadb3;
+  border-bottom:1px solid #e3e9ef;
+  border-right:1px solid #dbdfe6;
+}
+
+.ra-filtering-select-button {
+  height: 27px;
+  width: 24px;
+  padding: 5px 3px;
+  position: relative;
+  top: 9px;
+  border: 1px solid #e1e1e1;
+  border-top-style: solid;
+  border-top-color: #ccc;
+}
+
+ul.ui-autocomplete.ui-menu.ui-widget-content.ui-corner-all {
+  width: 250px;
+  list-style-type: none;
+}
+
+ul.ui-autocomplete.ui-menu.ui-widget-content.ui-corner-all li {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+ul.ui-autocomplete.ui-menu.ui-widget-content.ui-corner-all li a {
+  cursor: pointer;
+  width: 100%;
+  display: list-item;
+  margin: 0px;
+  padding: 5px 5px 5px 9px;
+  border-radius: 0px;
+  left: -2px;
+  position: relative;
+}
+
+ul.ui-autocomplete.ui-menu.ui-widget-content.ui-corner-all li a:hover {
+  cursor: pointer;
+  background-color: #B9DAFC;
+}
