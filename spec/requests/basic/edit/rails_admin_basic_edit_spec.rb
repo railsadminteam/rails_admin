@@ -7,7 +7,7 @@ describe "RailsAdmin Basic Edit" do
   describe "edit" do
     before(:each) do
       @player = FactoryGirl.create :player
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show \"Update model\"" do
@@ -30,7 +30,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @player = FactoryGirl.create :player
       @draft = FactoryGirl.create :draft
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show associated objects" do
@@ -42,7 +42,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
       @player = FactoryGirl.create :player
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show associated objects" do
@@ -54,7 +54,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
       @fan = FactoryGirl.create :fan, :teams => [@teams[0]]
-      visit rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
+      visit edit_path(:model_name => "fan", :id => @fan.id)
     end
 
     it "should show associated objects" do
@@ -68,7 +68,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "edit with missing object" do
     before(:each) do
-      visit rails_admin_edit_path(:model_name => "player", :id => 1)
+      visit edit_path(:model_name => "player", :id => 1)
     end
 
     it "should raise NotFound" do
@@ -80,7 +80,7 @@ describe "RailsAdmin Basic Edit" do
     before(:each) do
       @player = FactoryGirl.create :player
       @teams = 3.times.map { FactoryGirl.create :team, :name => "" }
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
     end
   end
 end

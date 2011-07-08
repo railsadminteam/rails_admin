@@ -19,9 +19,9 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      visit rails_admin_list_path(:model_name => "league")
+      visit list_path(:model_name => "league")
       should have_selector(".grid tbody tr", :count => 1)
-      visit rails_admin_list_path(:model_name => "player")
+      visit list_path(:model_name => "player")
       should have_selector(".grid tbody tr", :count => 1)
     end
 
@@ -31,9 +31,9 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      visit rails_admin_list_path(:model_name => "league")
+      visit list_path(:model_name => "league")
       should have_selector(".grid tbody tr", :count => 1)
-      visit rails_admin_list_path(:model_name => "player")
+      visit list_path(:model_name => "player")
       should have_selector(".grid tbody tr", :count => 2)
     end
 
@@ -48,9 +48,9 @@ describe "RailsAdmin Config DSL List Section" do
           items_per_page 1
         end
       end
-      visit rails_admin_list_path(:model_name => "league")
+      visit list_path(:model_name => "league")
       should have_selector(".grid tbody tr", :count => 1)
-      visit rails_admin_list_path(:model_name => "player")
+      visit list_path(:model_name => "player")
       should have_selector(".grid tbody tr", :count => 2)
     end
   end
@@ -58,7 +58,7 @@ describe "RailsAdmin Config DSL List Section" do
   describe "items' fields" do
 
     it "should show all by default" do
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "CREATED AT")
       should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT")
@@ -73,7 +73,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
     end
@@ -84,7 +84,7 @@ describe "RailsAdmin Config DSL List Section" do
           exclude_fields :created_at, :updated_at
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
     end
@@ -97,7 +97,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
     end
@@ -112,7 +112,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "MODIFIED HIS NAME")
       should have_selector(".grid th:nth-child(4)", :text => "MODIFIED ID")
     end
@@ -125,7 +125,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "CREATED AT")
       should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT")
@@ -141,7 +141,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :created_at
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "UPDATED AT")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
       should have_selector(".grid th:nth-child(5)", :text => "ID")
@@ -155,7 +155,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
       should have_no_selector(".grid th:nth-child(5)", :text => "CREATED AT")
@@ -168,7 +168,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "HIS NAME")
     end
 
@@ -181,7 +181,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "IDENTIFIER")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
     end
@@ -194,7 +194,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "CREATED AT (DATETIME)")
       should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT (DATETIME)")
@@ -209,7 +209,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "CREATED AT (DATETIME)")
       should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT (DATETIME)")
@@ -217,7 +217,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be sortable by default" do
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3) a")
       should have_selector(".grid th:nth-child(4) a")
       should have_selector(".grid th:nth-child(5) a")
@@ -233,7 +233,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :name
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_no_selector(".grid th:nth-child(3) a")
       should have_selector(".grid th:nth-child(4) a")
     end
@@ -250,7 +250,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :updated_at
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3) a")
       should have_selector(".grid th:nth-child(4) a")
       should have_no_selector(".grid th:nth-child(5) a")
@@ -269,7 +269,7 @@ describe "RailsAdmin Config DSL List Section" do
           field :updated_at
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3) a")
       should have_selector(".grid th:nth-child(4) a")
       should have_no_selector(".grid th:nth-child(5) a")
@@ -284,7 +284,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
       should have_no_selector(".grid th:nth-child(5)", :text => "CREATED AT")
@@ -299,7 +299,7 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
       end
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3)", :text => "ID")
       should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
       should have_no_selector(".grid th:nth-child(5)", :text => "CREATED AT")
@@ -316,7 +316,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(3).customClass")
       should have_selector(".grid th:nth-child(4).string")
       should have_selector(".grid td:nth-child(3).customClass")
@@ -332,7 +332,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(4).customClass")
       should have_selector(".grid th:nth-child(5).customClass")
       should have_selector(".grid th:nth-child(6).string")
@@ -350,7 +350,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid th:nth-child(4).customClass")
       should have_selector(".grid th:nth-child(5).customClass")
       should have_selector(".grid th:nth-child(6).string")
@@ -371,7 +371,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector("style", :text => /\.grid thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/)
     end
 
@@ -389,7 +389,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid tbody tr:nth-child(1) td:nth-child(4)", :text => @fans[1].name.upcase)
       should have_selector(".grid tbody tr:nth-child(2) td:nth-child(4)", :text => @fans[0].name.upcase)
     end
@@ -406,7 +406,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid tbody tr:nth-child(1) td:nth-child(5)", :text => /\d{2} \w{3} \d{1,2}:\d{1,2}/)
     end
 
@@ -422,7 +422,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       should have_selector(".grid tbody tr:nth-child(1) td:nth-child(5)", :text => /\d{4}-\d{2}-\d{2}/)
     end
 
@@ -436,7 +436,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       @team = FactoryGirl.create :team
       @players = 2.times.map { FactoryGirl.create :player, :team => @team }
-      visit rails_admin_list_path(:model_name => "team")
+      visit list_path(:model_name => "team")
       should have_selector(".grid tbody tr:nth-child(1) td:nth-child(5)", :text => @players.collect(&:name).join(", "))
     end
   end
@@ -473,7 +473,7 @@ describe "RailsAdmin Config DSL List Section" do
             end
           end
         end
-        visit rails_admin_list_path(:model_name => "player")
+        visit list_path(:model_name => "player")
         player_names_by_date.reverse.each_with_index do |name, i|
           should have_selector(".grid tbody tr:nth-child(#{i + 1})", :text => name)
         end
@@ -486,7 +486,7 @@ describe "RailsAdmin Config DSL List Section" do
             sort_reverse true
           end
         end
-        visit rails_admin_list_path(:model_name => "player")
+        visit list_path(:model_name => "player")
         player_names_by_date.reverse.each_with_index do |name, i|
           should have_selector(".grid tbody tr:nth-child(#{i + 1})", :text => name)
         end
@@ -509,12 +509,12 @@ describe "RailsAdmin Config DSL List Section" do
           end
         end
 
-        visit rails_admin_list_path(:model_name => "league")
+        visit list_path(:model_name => "league")
         league_names_by_date.reverse.each_with_index do |name, i|
           should have_selector(".grid tbody tr:nth-child(#{i + 1})", :text => name)
         end
 
-        visit rails_admin_list_path(:model_name => "player")
+        visit list_path(:model_name => "player")
         @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
           should have_selector(".grid tbody tr:nth-child(#{i + 1})", :text => name)
         end
@@ -527,7 +527,7 @@ describe "RailsAdmin Config DSL List Section" do
           sort_by :created_at
         end
       end
-      visit rails_admin_list_path(:model_name => "player")
+      visit list_path(:model_name => "player")
       player_names_by_date.reverse.each_with_index do |name, i|
         should have_selector(".grid tbody tr:nth-child(#{i + 1})", :text => name)
       end
@@ -540,7 +540,7 @@ describe "RailsAdmin Config DSL List Section" do
           sort_reverse false
         end
       end
-      visit rails_admin_list_path(:model_name => "player")
+      visit list_path(:model_name => "player")
       player_names_by_date.each_with_index do |name, i|
         should have_selector(".grid tbody tr:nth-child(#{i + 1})", :text => name)
       end

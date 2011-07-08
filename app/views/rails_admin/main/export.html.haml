@@ -11,7 +11,7 @@
     %h2.title= t('admin.export.select') # @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      = form_tag rails_admin_export_path(params.merge(:all => true)), :method => 'post' do
+      = form_tag export_path(params.merge(:all => true)), :method => 'post' do
         %input{:name => "send_data", :type => "hidden", :value => "true"}/
         %fieldset
           %legend= t('admin.export.fields_from', :name => @abstract_model.pretty_name)

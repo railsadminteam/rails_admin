@@ -8,7 +8,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin::History.destroy_all
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      page.driver.post(rails_admin_bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
+      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
 
       click_button "Yes, I'm sure"
     end
@@ -44,7 +44,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin::History.destroy_all
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      page.driver.post(rails_admin_bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
+      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
       click_button "Cancel"
     end
 

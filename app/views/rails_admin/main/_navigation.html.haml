@@ -6,16 +6,16 @@
 
 %ul#nav.navigation
   %li{:class => ("active" if @page_type == "dashboard")}
-    = link_to(t("admin.dashboard.name"), rails_admin_dashboard_path)
+    = link_to(t("admin.dashboard.name"), dashboard_path)
   - root_models.each do |model|
     - children = [model] + models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
     - tab_titles = children.map { |child| child.abstract_model.pretty_name.downcase }
     %li{:class => "#{"active" if tab_titles.include? @page_type} #{"more" unless children.empty?}"}
       - if children.size == 1
-        = link_to(model.label.pluralize, rails_admin_list_path(:model_name => model.abstract_model.to_param))
+        = link_to(model.label.pluralize, list_path(:model_name => model.abstract_model.to_param))
       - else
         %a{:href => "#"}= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label.pluralize
         %ul
           - children.each_with_index do |child, index|
             %li{:class => ("active" if @page_type == tab_titles[index])}
-              = link_to(child.label.pluralize, rails_admin_list_path(:model_name => child.abstract_model.to_param))
+              = link_to(child.label.pluralize, list_path(:model_name => child.abstract_model.to_param))

@@ -283,7 +283,7 @@ module RailsAdmin
 
           content_tag(:li, :class => css_classes) do
             path_method = vt.path_method || view
-            link_to I18n.t("admin.breadcrumbs.#{view}").capitalize, self.send("rails_admin_#{path_method}_path")
+            link_to I18n.t("admin.breadcrumbs.#{view}").capitalize, self.send("#{path_method}_path")
           end
         # end
 

@@ -184,7 +184,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
       end
 
-      redirect_to rails_admin_list_path(:model_name => @abstract_model.to_param)
+      redirect_to list_path(:model_name => @abstract_model.to_param)
     end
 
     def export
@@ -209,12 +209,12 @@ module RailsAdmin
     end
 
     def bulk_action
-      redirect_to rails_admin_list_path, :notice => t("admin.flash.noaction") and return if params[:bulk_ids].blank?
+      redirect_to list_path, :notice => t("admin.flash.noaction") and return if params[:bulk_ids].blank?
 
       case params[:bulk_action]
       when "delete" then bulk_delete
       when "export" then export
-      else redirect_to(rails_admin_list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.noaction"))
+      else redirect_to(list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.noaction"))
       end
     end
 
@@ -251,7 +251,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
       end
 
-      redirect_to rails_admin_list_path
+      redirect_to list_path
     end
 
     def handle_error(e)
@@ -451,11 +451,11 @@ module RailsAdmin
     def redirect_to_on_success
       notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{params[:action]}d"))
       if params[:_add_another]
-        redirect_to rails_admin_new_path, :notice => notice
+        redirect_to new_path, :notice => notice
       elsif params[:_add_edit]
-        redirect_to rails_admin_edit_path(:id => @object.id), :notice => notice
+        redirect_to edit_path(:id => @object.id), :notice => notice
       else
-        redirect_to rails_admin_list_path, :notice => notice
+        redirect_to list_path, :notice => notice
       end
     end
 
@@ -472,7 +472,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      redirect_to rails_admin_list_path, :notice => t("admin.flash.noaction") if params[:_continue]
+      redirect_to list_path, :notice => t("admin.flash.noaction") if params[:_continue]
     end
 
     def list_entries(other = {})

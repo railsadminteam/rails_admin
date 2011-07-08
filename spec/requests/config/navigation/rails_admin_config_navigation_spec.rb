@@ -7,7 +7,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
   describe "order of items" do
 
     it "should be alphabetical by default" do
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       ["Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
@@ -19,7 +19,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           weight -1
         end
       end
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       ["Teams", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
@@ -31,7 +31,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           parent Cms::BasicPage
         end
       end
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       ["Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
@@ -49,7 +49,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           dropdown "CMS related"
         end
       end
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       ["CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
@@ -68,7 +68,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
           weight 1
         end
       end
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       ["Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
@@ -78,7 +78,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
   describe "label for a model" do
 
     it "should be visible and sane by default" do
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       within("#nav") do
         should have_selector("li a", :text => "Fan")
       end
@@ -88,7 +88,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config Fan do
         label "Fan test 1"
       end
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       within("#nav") do
         should have_selector("li a", :text => "Fan test 1")
       end
@@ -98,7 +98,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       RailsAdmin.config Fan do
         hide
       end
-      visit rails_admin_dashboard_path
+      visit dashboard_path
       within("#nav") do
         should have_no_selector("li a", :text => "Fan")
       end

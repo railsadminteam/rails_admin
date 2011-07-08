@@ -7,7 +7,7 @@ describe "RailsAdmin Basic Delete" do
   describe "delete" do
     before(:each) do
       @player = FactoryGirl.create :player
-      visit rails_admin_delete_path(:model_name => "player", :id => @player.id)
+      visit delete_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show \"Delete model\"" do
@@ -17,7 +17,7 @@ describe "RailsAdmin Basic Delete" do
 
   describe "delete with missing object" do
     before(:each) do
-      visit rails_admin_delete_path(:model_name => "player", :id => 1)
+      visit delete_path(:model_name => "player", :id => 1)
     end
 
     it "should raise NotFound" do
@@ -29,7 +29,7 @@ describe "RailsAdmin Basic Delete" do
     it "should respond successfully" do
       @division = FactoryGirl.create :division
       @team = FactoryGirl.create :team, :name => "", :division => @division
-      visit rails_admin_delete_path(:model_name => "division", :id => @division.id)
+      visit delete_path(:model_name => "division", :id => @division.id)
     end
   end
 end

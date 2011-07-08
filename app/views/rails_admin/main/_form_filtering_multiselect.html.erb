@@ -30,7 +30,7 @@
                         createQuery: function(query) {
                           return { query: query }
                         },
-                        source: "<%= rails_admin_list_path(config.abstract_model.to_param, :compact => true) %>",
+                        source: "<%= list_path(config.abstract_model.to_param, :compact => true) %>",
                       <% end %>
                         sortable: <%= field.orderable ? 'true' : 'false' %>,
                       regional: {

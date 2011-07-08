@@ -17,7 +17,7 @@
 
       %div{:style=>"padding-left:20px"}= render :partial => "delete_notice", :object => @object
 
-      = form_for(@object, :url => rails_admin_destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
+      = form_for(@object, :url => destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
 
         %br
         %br

@@ -32,7 +32,7 @@
               - sort_direction = selected ? (sort_reverse ? "ascending" : "descending") : nil
             
               %th{:class => "#{column[:css_class]}#{" selected" if selected}"}
-                - sort_location = rails_admin_history_model_path(params.except("sort_reverse").merge(:model_name => @abstract_model.to_param, :sort => property_name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}))
+                - sort_location = history_model_path(params.except("sort_reverse").merge(:model_name => @abstract_model.to_param, :sort => property_name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}))
                 = link_to(column[:link_text], sort_location, :class => sort_direction)
                 
         %tbody
@@ -46,7 +46,7 @@
               - if @general
                 %td.int
                   - unless object.message.match("Destroy")
-                    = link_to object.item, rails_admin_history_object_path(:id => object.item), :class => "historyLink"
+                    = link_to object.item, history_object_path(:id => object.item), :class => "historyLink"
                   - else
                     = object.item
               %td.smallString
@@ -56,7 +56,7 @@
           - if @page_count.to_i > 1
             = paginate(@current_page, @page_count, :url => params.except("page", "all"), :remote => false).html_safe
           - if @page_count.to_i == 2
-            = link_to(t("admin.list.show_all"), rails_admin_history_model_path(params.except("page").merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")))
+            = link_to(t("admin.list.show_all"), history_model_path(params.except("page").merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")))
 
       = form_tag("", :method => "get", :class => "search") do
         .columns.wat-cf

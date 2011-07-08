@@ -6,7 +6,7 @@ describe "RailsAdmin Basic New" do
 
   describe "GET /admin/player/new" do
     before(:each) do
-      visit rails_admin_new_path(:model_name => "player")
+      visit new_path(:model_name => "player")
     end
 
     it "should show \"Create model\"" do
@@ -35,7 +35,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/player/new with has-one association" do
     before(:each) do
       FactoryGirl.create :draft
-      visit rails_admin_new_path(:model_name => "player")
+      visit new_path(:model_name => "player")
     end
 
     it "should show associated objects" do
@@ -46,7 +46,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/player/new with has-many association" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
-      visit rails_admin_new_path(:model_name => "player")
+      visit new_path(:model_name => "player")
     end
 
     it "should show associated objects" do
@@ -59,7 +59,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
-      visit rails_admin_new_path(:model_name => "fan")
+      visit new_path(:model_name => "fan")
     end
 
     it "should show associated objects" do
@@ -72,7 +72,7 @@ describe "RailsAdmin Basic New" do
   describe "GET /admin/player/new with missing label" do
     before(:each) do
       FactoryGirl.create :team, :name => ""
-      visit rails_admin_new_path(:model_name => "player")
+      visit new_path(:model_name => "player")
     end
   end
 end

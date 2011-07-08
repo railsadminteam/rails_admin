@@ -7,7 +7,7 @@ describe "RailsAdmin Basic Update" do
   describe "update with errors" do
     before(:each) do
       @player = FactoryGirl.create :player
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
     end
 
     it "should return to edit page" do
@@ -22,7 +22,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = FactoryGirl.create :player
 
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -45,7 +45,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = FactoryGirl.create :player
 
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -69,7 +69,7 @@ describe "RailsAdmin Basic Update" do
       @player = FactoryGirl.create :player
       @draft = FactoryGirl.create :draft
 
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -97,7 +97,7 @@ describe "RailsAdmin Basic Update" do
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { FactoryGirl.create :division }
 
-      visit rails_admin_edit_path(:model_name => "league", :id => @league.id)
+      visit edit_path(:model_name => "league", :id => @league.id)
 
       fill_in "league[name]", :with => "National League"
       select @divisions[0].name, :from => "league_division_ids"
@@ -127,7 +127,7 @@ describe "RailsAdmin Basic Update" do
 
     describe "removing has-many associations" do
       before(:each) do
-        visit rails_admin_edit_path(:model_name => "league", :id => @league.id)
+        visit edit_path(:model_name => "league", :id => @league.id)
 
         unselect @divisions[0].name, :from => "league_division_ids"
         click_button "Save"
@@ -151,7 +151,7 @@ describe "RailsAdmin Basic Update" do
       @teams = 3.times.map { FactoryGirl.create :team }
       @fan = FactoryGirl.create :fan, :teams => [@teams[0]]
 
-      visit rails_admin_edit_path(:model_name => "fan", :id => @fan.id)
+      visit edit_path(:model_name => "fan", :id => @fan.id)
 
       select @teams[1].name, :from => "fan_team_ids"
       click_button "Save"
@@ -171,7 +171,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with missing object" do
     before(:each) do
-      page.driver.put(rails_admin_update_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
+      page.driver.put(update_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
     end
 
     it "should raise NotFound" do
@@ -183,7 +183,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = FactoryGirl.create :player
 
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
 
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "a"
@@ -202,7 +202,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @user = FactoryGirl.create :user
 
-      visit rails_admin_edit_path(:model_name => "user", :id => @user.id)
+      visit edit_path(:model_name => "user", :id => @user.id)
 
       fill_in "user[roles]", :with => "[\"admin\", \"user\"]"
       click_button "Save"

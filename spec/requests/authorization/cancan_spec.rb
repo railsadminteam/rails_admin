@@ -34,13 +34,13 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin should raise CanCan::AccessDenied" do
         lambda {
-          visit rails_admin_dashboard_path
+          visit dashboard_path
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player should raise CanCan::AccessDenied" do
         lambda {
-          visit rails_admin_list_path(:model_name => "player")
+          visit list_path(:model_name => "player")
         }.should raise_error(CanCan::AccessDenied)
       end
 
@@ -52,7 +52,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin should show Player but not League" do
-        visit rails_admin_dashboard_path
+        visit dashboard_path
         should be_successful
         body.should have_content("Player")
         body.should have_no_content("League")
@@ -65,7 +65,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
           FactoryGirl.create(:player, :retired => true),
         ]
 
-        visit rails_admin_list_path(:model_name => "player", :set => 1)
+        visit list_path(:model_name => "player", :set => 1)
 
         should be_successful
         body.should have_content(@players[0].name)
@@ -79,13 +79,13 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/team should raise CanCan::AccessDenied" do
         lambda {
-          visit rails_admin_list_path(:model_name => "team")
+          visit list_path(:model_name => "team")
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player/new should raise CanCan::AccessDenied" do
         lambda {
-          visit rails_admin_new_path(:model_name => "player")
+          visit new_path(:model_name => "player")
         }.should raise_error(CanCan::AccessDenied)
       end
 
@@ -97,7 +97,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       end
 
       it "GET /admin/player/new should render and create record upon submission" do
-        visit rails_admin_new_path(:model_name => "player")
+        visit new_path(:model_name => "player")
         body.should have_no_content("edit")
         fill_in "player[name]", :with => "Jackie Robinson"
         fill_in "player[number]", :with => "42"
@@ -114,7 +114,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/1/edit should raise access denied" do
         @player = FactoryGirl.create :player
         lambda {
-          visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+          visit edit_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
@@ -127,7 +127,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/player/1/edit should render and update record upon submission" do
         @player = FactoryGirl.create :player
-        visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+        visit edit_path(:model_name => "player", :id => @player.id)
         body.should have_no_content("Delete")
         fill_in "player[name]", :with => "Jackie Robinson"
         click_button "Save"
@@ -139,14 +139,14 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/1/edit with retired player should raise access denied" do
         @player = FactoryGirl.create :player, :retired => true
         lambda {
-          visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+          visit edit_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
       it "GET /admin/player/1/delete should raise access denied" do
         @player = FactoryGirl.create :player
         lambda {
-          visit rails_admin_delete_path(:model_name => "player", :id => @player.id)
+          visit delete_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
@@ -160,7 +160,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/1/delete should render and destroy record upon submission" do
         @player = FactoryGirl.create :player
         player_id = @player.id
-        visit rails_admin_delete_path(:model_name => "player", :id => player_id)
+        visit delete_path(:model_name => "player", :id => player_id)
 
         click_button "Yes, I'm sure"
         should be_successful
@@ -170,7 +170,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
       it "GET /admin/player/1/delete with retired player should raise access denied" do
         @player = FactoryGirl.create :player, :retired => true
         lambda {
-          visit rails_admin_delete_path(:model_name => "player", :id => @player.id)
+          visit delete_path(:model_name => "player", :id => @player.id)
         }.should raise_error(CanCan::AccessDenied)
       end
 
@@ -179,7 +179,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
         retired_player = FactoryGirl.create :player, :retired => true
 
         @delete_ids = [active_player, retired_player].map(&:id)
-        visit rails_admin_bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
+        visit bulk_delete_path(:model_name => "player", :bulk_ids => @delete_ids)
 
         body.should have_content(active_player.name)
         body.should have_no_content(retired_player.name)

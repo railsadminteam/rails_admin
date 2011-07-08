@@ -47,7 +47,8 @@ RSpec.configure do |config|
   config.include RSpec::Matchers
   config.include DatabaseHelpers
   config.include GeneratorHelpers
-
+  config.include RailsAdmin::Engine.routes.url_helpers
+  
   config.include Warden::Test::Helpers
 
   config.before(:each) do

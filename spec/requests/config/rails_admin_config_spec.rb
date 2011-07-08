@@ -14,7 +14,7 @@ describe "RailsAdmin Config DSL" do
     it "should be hidden from navigation" do
       # Make query in team's edit view to make sure loading
       # the related division model config will not mess the navigation
-      visit rails_admin_new_path(:model_name => "team")
+      visit new_path(:model_name => "team")
       within("#nav") do
         excluded_models.each do |model|
           should have_no_selector("li a", :text => model.to_s)
@@ -23,17 +23,17 @@ describe "RailsAdmin Config DSL" do
     end
 
     it "should raise NotFound for the list view" do
-      visit rails_admin_list_path(:model_name => "fan")
+      visit list_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
     end
 
     it "should raise NotFound for the create view" do
-      visit rails_admin_new_path(:model_name => "fan")
+      visit new_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
     end
 
     it "should be hidden from other models relations in the edit view" do
-      visit rails_admin_new_path(:model_name => "team")
+      visit new_path(:model_name => "team")
       should_not have_selector("#team_division_id")
       should_not have_selector("input#team_fans")
     end

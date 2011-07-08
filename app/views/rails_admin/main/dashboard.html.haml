@@ -22,7 +22,7 @@
         %tbody
           - @abstract_models.each do |abstract_model|
             - if authorized? :list, abstract_model
-              - list_path = rails_admin_list_path(:model_name => abstract_model.to_param)
+              - list_path = list_path(:model_name => abstract_model.to_param)
               - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
               
               %tr{:class => row_class, :"data-link" => list_path}
@@ -40,9 +40,9 @@
                     %div{:class => "bar #{get_indicator(percent)}", :style => "width:#{percent}%;"}
                 %td.last
                   - if authorized? :new, abstract_model
-                    - new_path = rails_admin_new_path(:model_name => abstract_model.to_param)
+                    - new_path = new_path(:model_name => abstract_model.to_param)
                     = action_icon(new_path, :add, t("admin.dashboard.add_new"))
-                  - history_path = rails_admin_history_model_path(:model_name => abstract_model.to_param)
+                  - history_path = history_model_path(:model_name => abstract_model.to_param)
                   = action_icon(history_path, :calendar, t("admin.history.name"))
 
 #block-tables.block
@@ -56,13 +56,13 @@
         $j(document).ready(function($) {
           var cache = {};
            $("#timeline").timeline({
-             url: "#{ rails_admin_history_slider_path }",
+             url: "#{ history_slider_path }",
              monthChanged: function(month, year) {
                if (cache[year] && cache[year][month]) {
                  $("#listingHistory").html(cache[year][month]);
                } else {
                  $j("#listingHistory").load(
-                   "#{ rails_admin_history_list_path }",
+                   "#{ history_list_path }",
                    { month: month, year: year },
                    function(response, status, xhr) {
                      if (!cache[year]) { cache[year] = {}; }
