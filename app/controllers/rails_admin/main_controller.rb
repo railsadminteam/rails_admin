@@ -333,14 +333,16 @@ module RailsAdmin
       values = []
       conditions = [""]
 
-
       if query.present?
-        @queryable_fields = @model_config.list.fields.select(&:queryable?).map(&:searchable_columns).flatten
-        @queryable_fields.each do |field_infos|
-          statement, *value = build_statement(field_infos[:column], field_infos[:type], query, RailsAdmin::Config.default_search_operator)
-          if statement && value
-            query_statements << statement
-            values << value
+        queryable_fields = @model_config.list.fields.select(&:queryable?)
+        queryable_fields.each do |field|
+          searchable_columns = field.searchable_columns.flatten
+          searchable_columns.each do |field_infos|
+            statement, *value = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
+            if statement && value
+              query_statements << statement
+              values << value
+            end
           end
         end
       end
@@ -351,7 +353,7 @@ module RailsAdmin
       end
 
       if filters.present?
-        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name] = field.searchable_columns; memo }
+        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.intern] = field.searchable_columns; memo }
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
             field_statements = []
@@ -397,9 +399,9 @@ module RailsAdmin
       
       case type
       when :boolean
-         ["(#{column} #{operator == 'default' ? '=' : operator} ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
+         ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
       when :integer, :belongs_to_association
-         ["(#{column} #{operator == 'default' ? '=' : operator} ?)", value.to_i] if value.to_i.to_s == value
+         ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
       when :string, :text
         value = case operator
         when 'default', 'like'

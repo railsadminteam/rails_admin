@@ -79,4 +79,56 @@ describe "RailsAdmin Config DSL" do
     end
   end
 
+  describe "search operator" do
+    let(:abstract_model) { RailsAdmin::AbstractModel.new('player') }
+    let(:model_config) { RailsAdmin.config(abstract_model) }
+    let(:queryable_fields) { model_config.list.fields.select(&:queryable?) }
+
+    context "when no search operator is specified for the field" do
+      it "uses 'default' search operator" do
+        queryable_fields.should have_at_least(1).field
+        queryable_fields.first.search_operator.should == RailsAdmin::Config.default_search_operator
+      end
+
+      it "uses config.default_search_operator if set" do
+        RailsAdmin.config do |config|
+          config.default_search_operator = 'starts_with'
+        end
+        queryable_fields.should have_at_least(1).field
+        queryable_fields.first.search_operator.should == RailsAdmin::Config.default_search_operator
+      end
+    end
+
+    context "when search operator is specified for the field" do
+      it "uses specified search operator" do
+        RailsAdmin.config Player do
+          list do
+            fields do
+              search_operator "starts_with"
+            end
+          end
+        end
+        queryable_fields.should have_at_least(1).field
+        queryable_fields.first.search_operator.should == "starts_with"
+      end
+
+      it "uses specified search operator even if config.default_search_operator set" do
+        RailsAdmin.config do |config|
+          config.default_search_operator = 'starts_with'
+
+          config.model Player do
+            list do
+              fields do
+                search_operator "ends_with"
+              end
+            end
+          end
+        end
+        queryable_fields.should have_at_least(1).field
+        queryable_fields.first.search_operator.should == "ends_with"
+      end
+    end
+  end
+
+
 end
