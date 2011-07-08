@@ -19,7 +19,7 @@ module RailsAdmin
             self.send(association.name).try(:id)
           end
           abstract_model.model.send(:define_method, "#{association.name}_id=") do |id|
-            association.klass.update_all({ association.primary_key_name => nil }, { association.primary_key_name => self.id }) if self.id
+            association.klass.update_all({ association.foreign_key => nil }, { association.foreign_key => self.id }) if self.id
             self.send(association.name.to_s + '=', associated = (id.blank? ? nil : association.klass.find_by_id(id)))
           end
         end
@@ -220,7 +220,7 @@ module RailsAdmin
         when :belongs_to
           [association.options[:foreign_key] || "#{association.name}_id".to_sym]
         when :has_one, :has_many, :has_and_belongs_to_many
-          [association.primary_key_name.to_sym]
+          [association.foreign_key.to_sym]
         else
           raise "Unknown association type: #{association.macro.inspect}"
         end
