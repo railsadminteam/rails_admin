@@ -6,7 +6,7 @@ module RailsAdmin
     layout "rails_admin/main"
 
     before_filter :get_model, :except => [:index]
-    before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
+    before_filter :get_object, :only => [:edit, :update, :delete, :destroy, :send_event]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
@@ -266,6 +266,23 @@ module RailsAdmin
       end
     end
 
+    def send_event
+      @authorization_adapter.
+        authorize(:send_event, @abstract_model, @object) if @authorization_adapter
+
+      begin
+        @object.send("#{params[:event_name]}!")
+
+        AbstractHistory.
+          create_history_item("Sent Event #{@model_config.with(:object => @object).object_label} (#{params[:event_name]})", @object, @abstract_model, _current_user)
+
+        redirect_to_on_success
+      rescue Exception => e
+        flash[:error] = e.message
+        redirect_to :rails_admin_edit
+      end
+    end
+
     private
 
     def get_bulk_objects(ids)
@@ -394,7 +411,7 @@ module RailsAdmin
       elsif operator == '_not_empty' || value == '_not_empty'
         return ["(#{column} != '')"]
       end
-      
+
       case type
       when :boolean
          ["(#{column} #{operator == 'default' ? '=' : operator} ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)

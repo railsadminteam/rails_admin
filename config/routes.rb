@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       delete "/:model_name/:id", :to => :destroy, :as => "destroy"
       post "/:model_name/bulk_action", :to => :bulk_action, :as => "bulk_action"
       post "/:model_name/bulk_destroy", :to => :bulk_destroy, :as => "bulk_destroy"
+      get '/:model_name/:id/event/:event_name', :to => :send_event, :as => "send_event"
     end
   end
 end

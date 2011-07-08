@@ -5,14 +5,20 @@
 
 #block-tables.block
   = breadcrumbs_for :edit, @object
-  
+
   .content
     .control
       = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name")
-      
+
       - if authorized? :delete, @abstract_model, @object
         = action_button rails_admin_delete_path(@abstract_model, @object), t("admin.list.delete_action"), :cross
-        
+
+    - model_events ||= ( @abstract_model.model.respond_to?(:state_machine) && @abstract_model.model.state_machine.events )
+    - if model_events.count > 0
+      .control
+        - model_events.collect { |a| a.name }.each do |event_name|
+          = action_button rails_admin_send_event_path(:event_name => event_name, :model_name => @abstract_model.to_param, :id => params[:id]), I18n.t("state_machine.#{@abstract_model.model.name.underscore}.#{ event_name }")
+
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
