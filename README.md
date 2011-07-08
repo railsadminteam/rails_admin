@@ -1,3 +1,46 @@
+EXP. RAILS 3.1 BRANCH
+
+TEST FAILS WITH RUBY 1.9.2 (can't load paths in tests ???????? )
+
+
+WITH RUBY 1.8.7, I GOT 26 failures :
+
+
+    Finished in 161.16 seconds
+    244 examples, 26 failures
+
+    Failed examples:
+
+    rspec ./spec/lib/abstract_object_spec.rb:96 # AbstractObject update a record with protected attributes and has_one association should update a record and associations
+    rspec ./spec/lib/install_spec.rb:41 # Rake tasks rails_admin:install when devise is installed creates rails_admin assets
+    rspec ./spec/requests/basic/create/rails_admin_namespaced_model_create_spec.rb:14 # RailsAdmin Namespaced Model Create should be successful
+    rspec ./spec/requests/basic/create/rails_admin_namespaced_model_create_spec.rb:18 # RailsAdmin Namespaced Model Create should create object with correct attributes
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:87 # RailsAdmin Basic List GET /admin/player should allow to filter on one attribute
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:95 # RailsAdmin Basic List GET /admin/player should allow to combine filters on two different attributes
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:103 # RailsAdmin Basic List GET /admin/player should allow to filter on belongs_to relationships
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:124 # RailsAdmin Basic List GET /admin/player should allow to search a belongs_to attribute over the base table
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:142 # RailsAdmin Basic List GET /admin/player should allow to search a belongs_to attribute over the target table
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:159 # RailsAdmin Basic List GET /admin/player should allow to search a belongs_to attribute over the target table with a table name specified as a hash
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:176 # RailsAdmin Basic List GET /admin/player should allow to search a belongs_to attribute over the target table with a table name specified as a string
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:193 # RailsAdmin Basic List GET /admin/player should allow to search a belongs_to attribute over the label method by default
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:208 # RailsAdmin Basic List GET /admin/player should allow to search a belongs_to attribute over the target table when an attribute is specified
+    rspec ./spec/requests/basic/list/rails_admin_basic_list_spec.rb:225 # RailsAdmin Basic List GET /admin/player should allow to search over more than one attribute
+    rspec ./spec/requests/basic/new/rails_admin_namespaced_model_new_spec.rb:24 # RailsAdmin Namespaced Model New GET /admin/cms_basic_page/new should have correct input field names
+    rspec ./spec/requests/basic/update/rails_admin_basic_update_spec.rb:124 # RailsAdmin Basic Update update with has-many association should log a history message about the update
+    rspec ./spec/requests/config/edit/rails_admin_config_edit_spec.rb:343 # RailsAdmin Config DSL Edit Section items' fields should have option to customize the help text
+    rspec ./spec/requests/config/edit/rails_admin_config_edit_spec.rb:557 # RailsAdmin Config DSL Edit Section fields which are nullable and have AR validations should be required
+    rspec ./spec/requests/config/navigation/rails_admin_config_navigation_spec.rb:9 # RailsAdmin Config DSL Navigation Section order of items should be alphabetical by default
+    rspec ./spec/requests/config/navigation/rails_admin_config_navigation_spec.rb:16 # RailsAdmin Config DSL Navigation Section order of items should be ordered by weight and alphabetical order
+    rspec ./spec/requests/config/navigation/rails_admin_config_navigation_spec.rb:28 # RailsAdmin Config DSL Navigation Section order of items should nest menu items with parent
+    rspec ./spec/requests/config/navigation/rails_admin_config_navigation_spec.rb:43 # RailsAdmin Config DSL Navigation Section order of items should override parent label with dropdown
+    rspec ./spec/requests/config/navigation/rails_admin_config_navigation_spec.rb:61 # RailsAdmin Config DSL Navigation Section order of items should order dropdown item according to parent weight
+    rspec ./spec/requests/rails_admin_spec.rb:32 # RailsAdmin html head should load stylesheets
+    rspec ./spec/requests/rails_admin_spec.rb:36 # RailsAdmin html head should load javascript files
+    rspec ./spec/requests/relation_spec.rb:22 # table relations column with nullable fk and a numericality model validation should be required
+
+
+
+
 RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
