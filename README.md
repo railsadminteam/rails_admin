@@ -469,12 +469,12 @@ Belongs_to associations :
 
           field :team_id do # (4)
             searchable [:name, :id]
-            # eq. to [Team => :name, Team => :id] 
-            # or even [:name, Player => :team_id] will search on teams.name and players.team_id
+            # eq. to [{Team => :name}, {Team => :id}] 
+            # or even [:name, {Player => :team_id}] will search on teams.name and players.team_id
           
             # if you need to specify the join association name: 
             # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
-            searchable [:teams => :name, :teams => :id]
+            searchable [{:teams => :name}, {:teams => :id}]
             # or
             searchable ["teams.name", "teams.id"]
           end
