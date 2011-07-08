@@ -27,7 +27,7 @@
 
               %tr{:class => row_class, :"data-link" => list_path}
                 %td.start
-                  %span.show= RailsAdmin.config(abstract_model).label
+                  %span.show= link_to RailsAdmin.config(abstract_model).label, list_path
                 %td
                   - if (last_used = @most_recent_changes[abstract_model.pretty_name])
                     = time_ago_in_words last_used
