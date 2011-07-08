@@ -353,7 +353,7 @@ module RailsAdmin
       end
 
       if filters.present?
-        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name] = field.searchable_columns; memo }
+        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.intern] = field.searchable_columns; memo }
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
             field_statements = []
@@ -399,9 +399,9 @@ module RailsAdmin
       
       case type
       when :boolean
-         ["(#{column} #{operator == 'default' ? '=' : operator} ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
+         ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
       when :integer, :belongs_to_association
-         ["(#{column} #{operator == 'default' ? '=' : operator} ?)", value.to_i] if value.to_i.to_s == value
+         ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
       when :string, :text
         value = case operator
         when 'default', 'like'
