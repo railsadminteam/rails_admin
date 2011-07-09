@@ -12,7 +12,7 @@ Join us in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channe
     Then, I will add you as a contributor to the project and assign you to that issue. You are now responsible for making sure that issue is resolved, either by fixing it yourself or finding someone else to fix it.
 4. Fork RailsAdmin on GitHub.
 5. In your fork, create a topic branch for the issue you're working on.
-6. Fix the issue. If you're adding new functionality, please include specs!
+6. Fix the issue. Please include specs if you're adding new functionality!
 7. Submit a pull request and ping one of the maintainers in the IRC channel. For example:
 
         sferik: I have finished working on issue #101. Please review the code in my iss101 branch.
