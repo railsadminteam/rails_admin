@@ -1,8 +1,0 @@
-              <div class="field <%= field.dom_id %>">
-                <%= form.label field.method_name, field.label %>
-                <%= form.send field.view_helper, field.name, field.html_attributes %>
-                <% if field.has_errors? %>
-                <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
-                <% end %>
-                <p class="help"><%= field.help %></p>
-              </div>
