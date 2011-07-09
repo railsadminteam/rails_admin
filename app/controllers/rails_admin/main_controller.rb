@@ -396,7 +396,7 @@ module RailsAdmin
       elsif operator == '_not_empty' || value == '_not_empty'
         return ["(#{column} != '')"]
       end
-      
+
       case type
       when :boolean
          ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)

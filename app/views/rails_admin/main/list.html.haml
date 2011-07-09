@@ -7,12 +7,12 @@
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   @style, @other, properties = get_column_set(properties)
-  
+
   head_javascript "rails_admin/application.js"
   head_javascript "rails_admin/activo/application.js"
   head_javascript "rails_admin/ra.filter-box.js"
   head_style "rails_admin/list"
-    
+
   if params[:filters]
     @ordered_filters = params[:filters].inject({}) { |memo, filter|
       field_name = filter.first
@@ -22,14 +22,14 @@
       memo
     }.to_a.sort_by(&:first)
   end
-  
+
   @ordered_filter_string = @ordered_filters.map do |duplet|
     filter_index = duplet[0]
     filter_for_field = duplet[1]
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
     field = @filterable_fields.find{ |field| field.name == filter_name.intern }
-  
+
     field_options = case field.type
     when :enum
       options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
@@ -44,19 +44,19 @@
     \.grid thead #{".#{key}"}{
     width: #{value[:width]}px;
     }
-      
+
 :javascript
   $j(document).ready(function($) {
     $(this).one("ajax:success", function(e, data, status, xhr) {
       $("#content").html(data);
     });
-    
+
     #{@ordered_filter_string}
   });
 
 #block-tables.block
   = breadcrumbs_for :list, @abstract_model
-  
+
   .content
     .control
       %span(style="margin: 3px 6px")
@@ -69,13 +69,13 @@
             - else
               - ''
             %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
-    
+
       - if authorized? :new, @abstract_model
         = action_button rails_admin_new_path, t("admin.list.add_new"), :add
 
       - if authorized? :delete, @abstract_model
         = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
-      
+
       = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
         %span.search
           %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
@@ -143,13 +143,13 @@
         .left(style="white-space: nowrap; padding-top:0.5em;")
           = @record_count
           = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
-        
+
         .columns.wat-cf
           .column.right
             - if can_export
               = action_button rails_admin_export_path(params.except("page")), t("admin.list.export_action"), nil, :method => :post
               = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
-            
+
             = action_button rails_admin_history_model_path, t("admin.history.name")
       .wat-cf
 

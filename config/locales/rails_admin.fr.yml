@@ -59,7 +59,7 @@ fr:
       display: "Afficher %{name} : %{type}"
       options_for: "Options pour %{name}"
       empty_value_for_associated_objects: "<vide>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Encoder en..."

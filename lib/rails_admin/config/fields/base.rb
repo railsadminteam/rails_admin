@@ -89,7 +89,7 @@ module RailsAdmin
           when :all # valid only for associations
             self.associated_model_config.list.fields.map { |f| { :column => "#{self.associated_model_config.abstract_model.model.table_name}.#{f.name}", :type => f.type } }
           else
-            [self.searchable].flatten.map do |f| 
+            [self.searchable].flatten.map do |f|
               if f.is_a?(String) && f.include?('.')                            #  "table_name.attribute"
                 @table_name, column_name = f.split '.'
                 f = column_name.to_sym
@@ -103,7 +103,7 @@ module RailsAdmin
               else                                                           #  :attribute
                 (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
               end
-              
+
               property = abstract_model.properties.find{ |p| p[:name] == field_name }
               raise ":#{field_name} attribute not found/not accessible on table :#{abstract_model.model.table_name}. \nPlease check '#{self.abstract_model.pretty_name}' configuration for :#{self.name} attribute." unless property
               { :column => "#{@table_name || abstract_model.model.table_name}.#{property[:name]}", :type => property[:type] }

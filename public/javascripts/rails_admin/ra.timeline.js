@@ -48,11 +48,11 @@
     _bindEvents: function() {
       var currentMonthIndex = 0,
           widget = this;
-      
+
       $(window).resize(function() {
         widget.redraw();
       });
-      
+
       this.handle.draggable({
         axis: "x",
         containment: this.element,
@@ -137,18 +137,18 @@
 
         date.setMonth(date.getMonth() - 1);
       }
-      
+
       // FIXME should really be keeping the handle in the same place
       // proportionally, but this keeps it from looking too broken:
       this._moveHandleToRight();
     },
-    
+
     refresh: function() {
       this.redraw();
-      
+
       var widget = this;
       var date = this._getCurrentDate();
-      
+
       $.ajax({
         url: this.options.url,
         data: {

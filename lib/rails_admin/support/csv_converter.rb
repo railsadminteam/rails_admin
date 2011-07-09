@@ -5,7 +5,7 @@ module RailsAdmin
 
   CSVClass = RUBY_VERSION < '1.9' ? ::FasterCSV : ::CSV
   NON_ASCII_ENCODINGS = /(UTF\-16)|(UTF\-32)|(ISO\-2022\-JP)|(Big5\-HKSCS)|(UTF\-7)/
-  
+
   class CSVConverter
 
     def initialize(objects = [], schema = {})

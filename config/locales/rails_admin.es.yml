@@ -59,7 +59,7 @@ es:
       display: "Mostrar %{name}: %{type}"
       options_for: "Opciones de %{name}"
       empty_value_for_associated_objects: "<vacio>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' esta disponible
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Codificado a"
@@ -81,7 +81,7 @@ es:
       delete: "borrar"
       deleted: "borrado"
       export: "exportar"
-      exported: "exportado"      
+      exported: "exportado"
     breadcrumbs:
       delete: "borrar"
       history: "historial"

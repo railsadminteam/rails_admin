@@ -155,7 +155,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
     end
-    
+
     it "should allow to search a belongs_to attribute over the target table with a table name specified as a hash" do
       RailsAdmin.config Player do
         list do
@@ -172,7 +172,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
     end
-    
+
     it "should allow to search a belongs_to attribute over the target table with a table name specified as a string" do
       RailsAdmin.config Player do
         list do

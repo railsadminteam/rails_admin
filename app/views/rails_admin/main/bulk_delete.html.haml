@@ -2,7 +2,7 @@
 
 #block-tables.block
   = breadcrumbs_for :bulk_destroy, @abstract_model
-  
+
   .content
     %h2.title Delete confirmation
     .inner
@@ -20,4 +20,3 @@
 
           %button.button{:type => "submit", :name => "_continue"}
             =t("admin.new.cancel")
-

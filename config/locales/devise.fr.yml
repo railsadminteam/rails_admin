@@ -2,7 +2,7 @@
 # I18n French translation for Devise (http://github.com/plataformatec/devise)
 # I18n traduction française pour Devise
 #
-# Mise à jour par Yabo-concept http://www.yabo-concept.ch  pour refléter les dernières clés utilisées par devise 
+# Mise à jour par Yabo-concept http://www.yabo-concept.ch  pour refléter les dernières clés utilisées par devise
 # dans la branche "translated-views"
 # basé sur https://github.com/davidw/devise/blob/translated-views/config/locales/en.yml
 # 15.3.2011
@@ -14,7 +14,7 @@ fr:
     messages:
       not_found: "n'a pas été trouvé(e)"
       already_confirmed: "a déjà été confirmé(e)"
-      not_locked: "n'était pas verrouillé(e)"    
+      not_locked: "n'était pas verrouillé(e)"
       not_saved:
         one: "1 erreur a empéché ce %{resource} d'être sauvegardé:"
         other: "%{count} erreurs ont empéché ce %{resource} d'être sauvegardé:"
@@ -33,7 +33,7 @@ fr:
       invalid: "Courriel ou mot de passe incorrect."
       invalid_token: "Jeton d'authentification incorrect."
       timeout: "Votre session est expirée, veuillez vous reconnecter pour continuer."
-      inactive: "Votre compte n'est pas encore activé."  
+      inactive: "Votre compte n'est pas encore activé."
     sessions:
       signed_in: "Connecté."
       signed_out: "Déconnecté."
@@ -44,7 +44,7 @@ fr:
       change_my_password: "Changer mon mot de passe"
       send_reset_password_instructions: "Envoyez moi les instructions de réinitialisation du mot de passe"
       send_instructions: 'Vous allez recevoir contenant les instructions de réinitialisation de mot de passe dans quelques minutes'
-      updated: 'Votre mot de passe a été édité avec succès, vous êtes maintenant connectés'  
+      updated: 'Votre mot de passe a été édité avec succès, vous êtes maintenant connectés'
     confirmations:
       resend_instructions: 'Ré-envoyer les instructions de confirmation'
       send_instructions: 'Vous allez recevoir contenant les instructions nécessaires à la confirmation de votre compte dans quelques minutes'

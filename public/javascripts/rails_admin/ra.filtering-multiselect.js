@@ -123,15 +123,15 @@
       if(this.options.sortable) {
         /* Move selection up */
         this.up.click(function(e){
-          widget._move('up', $(':selected', widget.selection));    
+          widget._move('up', $(':selected', widget.selection));
         });
-      
+
         /* Move selection down */
         this.down.click(function(e){
           widget._move('down', $(':selected', widget.selection));
         });
       }
-	
+
       /* Typing to the filter */
       this.filter.keyup(function(e){
 

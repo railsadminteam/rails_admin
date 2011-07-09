@@ -6,7 +6,7 @@
 
 #block-tables.block
   = breadcrumbs_for :dashboard, nil
-  
+
   .content
     %h2.title= @page_name
     .inner
@@ -24,7 +24,7 @@
             - if authorized? :list, abstract_model
               - list_path = rails_admin_list_path(:model_name => abstract_model.to_param)
               - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
-              
+
               %tr{:class => row_class, :"data-link" => list_path}
                 %td.start
                   %span.show= RailsAdmin.config(abstract_model).label
