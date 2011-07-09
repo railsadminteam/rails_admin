@@ -228,7 +228,7 @@ describe "RailsAdmin Basic List" do
           field :id
           field :name
           field :team_id do
-            searchable [:name, Player => :team_id]
+            searchable [:name, {Player => :team_id}]
           end
         end
       end
