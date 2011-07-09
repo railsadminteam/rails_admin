@@ -353,11 +353,11 @@ module RailsAdmin
       end
 
       if filters.present?
-        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.intern] = field.searchable_columns; memo }
+        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.to_sym] = field.searchable_columns; memo }
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
             field_statements = []
-            @filterable_fields[field_name.intern].each do |field_infos|
+            @filterable_fields[field_name.to_sym].each do |field_infos|
               unless filter_dump[:disabled]
                 statement, *value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
                 if statement
