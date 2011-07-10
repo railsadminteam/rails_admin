@@ -101,7 +101,7 @@ To use the CKEditor with Upload function, you can try [Rails-CKEditor](https://g
     $ config.filebrowserImageBrowseUrl = '/ckeditor/pictures';
     $ config.filebrowserImageUploadUrl = '/ckeditor/pictures';
 
-You can configure more options of CKEditor "config.js" file following the [Api Documentation] http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html).
+You can configure more options of CKEditor "config.js" file following the [Api Documentation](http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html) .
 
 Usage
 -----
