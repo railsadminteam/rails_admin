@@ -11,12 +11,9 @@
     collection = field.associated_collection(@authorization_adapter).sort_by {|a| selected_ids.index(a[1]) || selected_ids.size }
   end
 
-.field{:class => field.dom_id}
-  = form.label field.method_name, field.label
+= field_wrapper_for(form, field) do
   %input{:name => field.dom_name, :type => "hidden", :value => ""}
   = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes
-
-  = messages_and_help_for field
 
 - head_style 'rails_admin/ra.filtering-multiselect.css'
 - head_javascript "rails_admin/ra.filtering-multiselect.js"

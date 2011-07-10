@@ -13,12 +13,9 @@
   selected = field.bindings[:object].send(field.association[:name])
   column_type_dom_id = field.dom_id.sub(field.method_name, type_column)
 
-.field{:class => field.dom_id}
-  = form.label field.method_name, field.label
+= field_wrapper_for(form, field) do
   = form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :class => (field.has_errors? && "errorField"), :id => column_type_dom_id                        
   = form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :class => (field.has_errors? && "errorField"), :style => "margin-left:10px;"
-
-  = messages_and_help_for field
 
 - head_style 'rails_admin/ra.filtering-select.css'
 - head_javascript "rails_admin/ra.filtering-select.js"

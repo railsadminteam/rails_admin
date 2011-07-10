@@ -8,14 +8,11 @@
     collection = field.associated_collection(@authorization_adapter)
   end
 
-.field{:class => field.dom_id}
-  = form.label field.method_name, field.label
+= field_wrapper_for(form, field) do
   = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes
 
   - if authorized? :new, config.abstract_model
     = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
-
-  = messages_and_help_for field
 
 - head_style 'rails_admin/ra.filtering-select.css'
 - head_javascript "rails_admin/ra.filtering-select.js"

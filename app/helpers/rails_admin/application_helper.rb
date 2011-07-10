@@ -225,6 +225,16 @@ module RailsAdmin
       tags << content_tag(:p, field.help, :class => "help")
       tags.join("\n").html_safe
     end
+    
+    def field_wrapper_for form, field, opts={}
+      opts = opts.reverse_merge(:label => true, :messages_and_help => true)
+      
+      content_tag(:div, :class => "field #{field.dom_id}") do
+        concat form.label(field.method_name, field.label) if opts[:label]
+        yield
+        concat messages_and_help_for(field) if opts[:messages_and_help]
+      end.html_safe
+    end
 
     # Creative whitespace:
     ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
