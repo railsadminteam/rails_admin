@@ -23,7 +23,7 @@
 
   - head_style 'rails_admin/ra.filtering-select.css'
   - head_javascript "rails_admin/ra.filtering-select.js"
-  :script
+  :javascript
     $j(document).ready(function($) {
       var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
       $("#<%= column_type_dom_id %>").bind("change", function(e){

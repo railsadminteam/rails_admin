@@ -223,7 +223,7 @@ module RailsAdmin
         tags << content_tag(:span, "#{field.label} #{field.errors.first}", :class => "errorMessage")
       end
       tags << content_tag(:p, field.help, :class => "help")
-      tags.join("\n")
+      tags.join("\n").html_safe
     end
 
     # Creative whitespace:
