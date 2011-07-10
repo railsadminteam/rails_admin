@@ -86,7 +86,7 @@ module RailsAdmin
       # If user chooses utf8, he will open it in utf8 and BOM will disappear at reading.
       # But that way "English" users who don't bother and chooses to let utf8 by default won't get BOM added
       # and will not see it if Excel opens the file with a different encoding.
-      csv_string = "\xEF\xBB\xBF#{csv_string}" if options[:encoding_to] == 'UTF-8'
+      csv_string = "\xEF\xBB\xBF#{csv_string.force_encoding('UTF-8')}" if options[:encoding_to] == 'UTF-8'
       csv_string = ((@iconv ? @iconv.iconv(csv_string) : csv_string) rescue str) if @encoding_to =~ NON_ASCII_ENCODINGS # global conversion for non ASCII encodings
       [!options[:skip_header], @encoding_to, csv_string]
     end
