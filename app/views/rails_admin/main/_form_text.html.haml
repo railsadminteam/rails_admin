@@ -4,15 +4,15 @@
 
   = messages_and_help_for field
 
-  - if field.ckeditor
-    - head_javascript "ckeditor/ckeditor.js"
-    - head_javascript do
-      - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
-        alert("Install CKEditor using rake admin:ckeditor_download");
-      $j(document).ready(function($){
-      CKEDITOR.replace('#{field.dom_id}',
-      {
-      customConfig : '#{field.ckeditor_config_js}'
-      }
-      );
-      });
+- if field.ckeditor
+  - head_javascript "ckeditor/ckeditor.js"
+  - head_javascript do
+    - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
+      alert("Install CKEditor using rake admin:ckeditor_download");
+    $j(document).ready(function($){
+    CKEDITOR.replace('#{field.dom_id}',
+    {
+    customConfig : '#{field.ckeditor_config_js}'
+    }
+    );
+    });

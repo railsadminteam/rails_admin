@@ -4,11 +4,11 @@
 
   = messages_and_help_for field
 
-  - head_style "rails_admin/jquery.ui.timepicker.css"
-  - head_javascript "rails_admin/jquery.ui.timepicker.js"
-  - head_javascript "rails_admin/ra.datetimepicker.js"
-  - head_javascript do
-    :plain
-      $j(document).ready(function($){
-        $("##{field.dom_id}").datetimepicker(#{field.js_plugin_options.html_safe});
-      });
+- head_style "rails_admin/jquery.ui.timepicker.css"
+- head_javascript "rails_admin/jquery.ui.timepicker.js"
+- head_javascript "rails_admin/ra.datetimepicker.js"
+- head_javascript do
+  :plain
+    $j(document).ready(function($){
+      $("##{field.dom_id}").datetimepicker(#{field.js_plugin_options.html_safe});
+    });

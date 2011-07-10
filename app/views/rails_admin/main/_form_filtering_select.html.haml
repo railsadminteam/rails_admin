@@ -17,16 +17,16 @@
 
   = messages_and_help_for field
 
-  - head_style 'rails_admin/ra.filtering-select.css'
-  - head_javascript "rails_admin/ra.filtering-select.js"
-  - head_javascript do
-    $j(document).ready(function($){
-    $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
-    $("##{"#{field.dom_id}"}").filteringSelect({
-    - if xhr
-      createQuery: function(query) {
-      return { query: query }
-      },
-      source: "#{rails_admin_list_path(config.abstract_model.to_param, :compact => true)}"
-    });
-    });
+- head_style 'rails_admin/ra.filtering-select.css'
+- head_javascript "rails_admin/ra.filtering-select.js"
+- head_javascript do
+  $j(document).ready(function($){
+  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+  $("##{"#{field.dom_id}"}").filteringSelect({
+  - if xhr
+    createQuery: function(query) {
+    return { query: query }
+    },
+    source: "#{rails_admin_list_path(config.abstract_model.to_param, :compact => true)}"
+  });
+  });
