@@ -94,6 +94,14 @@ non-Windows system, you can try to use the automatic downloader:
 
     $ rake rails_admin:ckeditor_download
 
+To use the CKEditor with Upload function, you can try [Rails-CKEditor](https://github.com/galetahub/rails-ckeditor)
+and after installed put the follow lines in "public/javascripts/ckeditor/config.js"
+
+    $ config.filebrowserBrowseUrl = '/ckeditor/attachments';
+    $ config.filebrowserUploadUrl = '/ckeditor/attachments';
+    $ config.filebrowserImageBrowseUrl = '/ckeditor/pictures';
+    $ config.filebrowserImageUploadUrl = '/ckeditor/pictures';
+
 Usage
 -----
 Start the server:
