@@ -1,11 +1,11 @@
-%div{:class => "field #{field.dom_id}"}
+.field{:class => field.dom_id}
   = form.label field.method_name, field.label
   .input
     - if field.bindings[:object].send(field.name)
       .row
         - if field.bindings[:object].send(field.name).mime_type.include? 'image'
           = image_tag(field.bindings[:object].send(field.name).thumb("450x100").url)
-          %br/
+          %br
         - else
           = link_to field.bindings[:object].send(field.name).url, field.bindings[:object].send(field.name).url
     .row

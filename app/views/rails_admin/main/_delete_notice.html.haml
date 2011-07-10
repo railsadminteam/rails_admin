@@ -1,10 +1,12 @@
 - object = delete_notice
 - #Factor out to controller
 - model_config = RailsAdmin.config(@abstract_model)
+
 %ul.items
   %li
-    = @abstract_model.pretty_name
-    \: #{link_to(model_config.with(:object => object).object_label, rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id))}
+    = "#{@abstract_model.pretty_name}: "
+    = link_to rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id) do
+      = model_config.with(:object => object).object_label
     %ul
       - @abstract_model.has_many_associations.each do |association|
         - object.send(association[:name]).reject{|child| child.nil?}.each do |child|
