@@ -15,8 +15,8 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show required fields as \"Required\"" do
-      should have_selector("div", :text => /Name\n\s*Required/)
-      should have_selector("div", :text => /Number\n\s*Required/)
+      should have_selector("div", :text => /Name\s*Required/)
+      should have_selector("div", :text => /Number\s*Required/)
     end
 
     it "should show non-required fields as \"Optional\"" do
