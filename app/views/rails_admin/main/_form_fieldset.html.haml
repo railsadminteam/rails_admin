@@ -1,6 +1,9 @@
 - if (fields = fieldset.fields.map{ |f| f.with(:form => form, :object => object, :view => self) }.select(&:visible)).length > 0
   %fieldset
     %legend= fieldset.label
-    = content_tag :div, fieldset.help, :class => "help" if fieldset.help
+
+    - if fieldset.help
+      .help= fieldset.help
+
     - fields.each do |field|
       = field.render

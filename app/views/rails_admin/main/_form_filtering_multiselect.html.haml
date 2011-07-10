@@ -1,20 +1,26 @@
-- config = field.associated_model_config
-- selected = field.bindings[:object].send(field.association[:name])
-- selected_ids = selected.map(&:id)
-- xhr = field.associated_collection_count > 100
-- if xhr
-  - collection = selected.map do |o|
-    - [o.send(config.object_label_method), o.id]
-- else
-  - collection = field.associated_collection(@authorization_adapter).sort_by {|a| selected_ids.index(a[1]) || selected_ids.size }
+:ruby
+  config = field.associated_model_config
+  selected = field.bindings[:object].send(field.association[:name])
+  selected_ids = selected.map(&:id)
+  xhr = field.associated_collection_count > 100
+  if xhr
+    collection = selected.map do |o|
+      [o.send(config.object_label_method), o.id]
+    end
+  else
+    collection = field.associated_collection(@authorization_adapter).sort_by {|a| selected_ids.index(a[1]) || selected_ids.size }
+  end
 
-%div{:class => "field #{field.dom_id}"}
+.field{:class => field.dom_id}
   = form.label field.method_name, field.label
-  %input{:name => field.dom_name, :type => "hidden", :value => ""}/
+  %input{:name => field.dom_name, :type => "hidden", :value => ""}
   = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes
+
   - if field.has_errors?
     %span.errorMessage= "#{field.label} #{field.errors.first}"
+
   %p.help= field.help
+
   - head_style 'rails_admin/ra.filtering-multiselect.css'
   - head_javascript "rails_admin/ra.filtering-multiselect.js"
   - head_javascript do
