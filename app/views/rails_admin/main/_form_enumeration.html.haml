@@ -2,7 +2,4 @@
   = form.label field.method_name, field.label
   = form.select field.method_name, field.enum, {:include_blank => true}, field.html_attributes.merge({ :class => "enum" })
 
-  - if field.has_errors?
-    %span.errorMessage= "#{field.label } #{field.errors.first}"
-
-  %p.help= field.help
+  = messages_and_help_for field

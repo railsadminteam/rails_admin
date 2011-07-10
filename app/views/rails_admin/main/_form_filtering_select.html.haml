@@ -15,10 +15,7 @@
   - if authorized? :new, config.abstract_model
     = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
 
-  - if field.has_errors?
-    %span.errorMessage= "#{field.label } #{field.errors.first}"
-
-  %p.help= field.help
+  = messages_and_help_for field
 
   - head_style 'rails_admin/ra.filtering-select.css'
   - head_javascript "rails_admin/ra.filtering-select.js"

@@ -5,10 +5,7 @@
   .colorSelector{:id => "#{field.dom_id}Helper"}
     %div-# This div gets coloured.
 
-  - if field.has_errors?
-    %span.errorMessage= "#{field.label } #{field.errors.first}"
-
-  %p.help= field.help
+  = messages_and_help_for field
 
   - head_style "rails_admin/jquery.colorpicker.css"
   - head_javascript "rails_admin/jquery.colorpicker.js"

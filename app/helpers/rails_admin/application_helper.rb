@@ -216,6 +216,15 @@ module RailsAdmin
         t('home.name')
       end
     end
+    
+    def messages_and_help_for field
+      tags = []
+      if field.has_errors?
+        tags << content_tag(:span, "#{field.label} #{field.errors.first}", :class => "errorMessage")
+      end
+      tags << content_tag(:p, field.help, :class => "help")
+      tags.join("\n")
+    end
 
     # Creative whitespace:
     ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
