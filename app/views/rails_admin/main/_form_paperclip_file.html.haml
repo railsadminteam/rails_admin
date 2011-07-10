@@ -1,21 +1,21 @@
 - object = field.bindings[:object]
 - file = object.send(field.method_name)
 - if file_present = file.file?
-- file_is_image = file.content_type =~ /image/
-- url = object.send(field.method_name).url
-- thumb_url = object.send(field.method_name).url(field.thumb_method) if file_is_image && field.thumb_method
-- end
+  - file_is_image = file.content_type =~ /image/
+  - url = object.send(field.method_name).url
+  - thumb_url = object.send(field.method_name).url(field.thumb_method) if file_is_image && field.thumb_method
+
 %div{:class => "field #{field.dom_id}"}
   = form.label field.method_name, field.label
   .input
-    .toggle{:style => 'display:none;' if file_present && field.delete_method && object.send(field.delete_method) == '1'}
-      - if file_is_image
-        = link_to image_tag(thumb_url || url), url
-        %br/
-      - else
-        = link_to nil, url
-        %br/
-      - end if file_present
+    .toggle{:style => ('display:none;' if file_present && field.delete_method && object.send(field.delete_method) == '1')}
+      - if file_present
+        - if file_is_image
+          = link_to image_tag(thumb_url || url), url
+          %br/
+        - else
+          = link_to nil, url
+          %br/
       = form.file_field(field.method_name, field.html_attributes)
     - if file_present && field.delete_method
       = form.check_box(field.delete_method, :onclick => %{             |
