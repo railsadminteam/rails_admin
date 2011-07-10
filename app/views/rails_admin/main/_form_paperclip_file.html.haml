@@ -1,22 +1,23 @@
-- object = field.bindings[:object]
-- file = object.send(field.method_name)
-- if file_present = file.file?
-  - file_is_image = file.content_type =~ /image/
-  - url = object.send(field.method_name).url
-  - thumb_url = object.send(field.method_name).url(field.thumb_method) if file_is_image && field.thumb_method
+:ruby
+  object = field.bindings[:object]
+  file = object.send(field.method_name)
+  if file_present = file.file?
+    file_is_image = file.content_type =~ /image/
+    url = object.send(field.method_name).url
+    thumb_url = object.send(field.method_name).url(field.thumb_method) if file_is_image && field.thumb_method
+  end
 
-%div{:class => "field #{field.dom_id}"}
+.field{:class => field.dom_id}
   = form.label field.method_name, field.label
   .input
     .toggle{:style => ('display:none;' if file_present && field.delete_method && object.send(field.delete_method) == '1')}
       - if file_present
         - if file_is_image
-          = link_to image_tag(thumb_url || url), url
-          %br/
-        - else
-          = link_to nil, url
-          %br/
+          = link_to file_is_image && image_tag(thumb_url || url), url
+          %br
+
       = form.file_field(field.method_name, field.html_attributes)
+
     - if file_present && field.delete_method
       = form.check_box(field.delete_method, :onclick => %{             |
         if(this.checked) {                                             |
@@ -32,7 +33,10 @@
           var parent = jQuery(this).parents(".#{field.dom_id}")[0];    |
           jQuery(parent).find(".toggle").show();                       |
         }}, :class => "ra-button")                                     |
-      = form.label(field.delete_method, "#{I18n.t('admin.actions.delete')}")
+
+      = form.label(field.delete_method, I18n.t('admin.actions.delete'))
+
   - if field.has_errors?
     %span.errorMessage= "#{field.label} #{field.errors.first}"
+
   %p.help= field.help
