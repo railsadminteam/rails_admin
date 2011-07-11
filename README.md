@@ -815,11 +815,20 @@ partial per default, but that can be overridden:
       config.model Team do
         edit do
           field :name do
-            partial "my_awesome_partial"
+            edit_partial "my_awesome_partial"
           end
         end
       end
     end
+
+There is a partial method for each action:
+
+* show
+* edit
+* create
+* update
+
+By default, `create` and `update` will render `edit`'s partial.
 
 The partial should be placed in your applications template folder, such as
 `app/views/rails_admin/main/_my_awesome_partial.html.erb`.

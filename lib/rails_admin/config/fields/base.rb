@@ -132,6 +132,11 @@ module RailsAdmin
           :show_base
         end
 
+        register_instance_option(:partial) do
+          ActiveSupport::Deprecation.warn("The partial configuration option is deprecated, please use edit_partial.", caller)
+          edit_partial
+        end
+
         register_instance_option(:edit_partial) do
           :form_field
         end
