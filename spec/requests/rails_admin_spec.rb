@@ -7,7 +7,9 @@ describe "RailsAdmin" do
   describe "authentication" do
     it "should be disableable" do
       logout
-      RailsAdmin.authenticate_with {}
+      RailsAdmin.config do |config|
+        config.authenticate_with {}
+      end
       visit rails_admin_dashboard_path
     end
   end

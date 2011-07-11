@@ -67,7 +67,7 @@ module RailsAdmin
     # Fetch the history items for a model.  Returns an array containing
     # the page count and an AR query result containing the history
     # items.
-    def self.history_for_model(model, query, sort, sort_reverse, all, page, per_page = RailsAdmin::Config::Sections::List.default_items_per_page || 20)
+    def self.history_for_model(model, query, sort, sort_reverse, all, page, per_page = RailsAdmin::Config.default_items_per_page || 20)
       page ||= "1"
       history = History.where :table => model.pretty_name
 

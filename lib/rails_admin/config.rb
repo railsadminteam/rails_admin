@@ -45,6 +45,38 @@ module RailsAdmin
     end
 
     class << self
+      # Configuration option to specify which models you want to exclude.
+      attr_accessor :excluded_models
+
+      # Configuration option to specify a whitelist of models you want to RailsAdmin to work with.
+      # The excluded_models list applies against the whitelist as well and further reduces the models
+      # RailsAdmin will use.
+      # If included_models is left empty ([]), then RailsAdmin will automatically use all the models
+      # in your application (less any excluded_models you may have specified).
+      attr_accessor :included_models
+
+      # Fields to be hidden in edit (create and update) views
+      attr_accessor :default_hidden_fields_for_edit
+
+      # Fields to be hidden in export views
+      attr_accessor :default_hidden_fields_for_export
+
+      # Default items per page value used if a model level option has not
+      # been configured
+      attr_accessor :default_items_per_page
+
+      attr_reader :default_search_operator
+
+      # Configuration option to specify which method names will be searched for
+      # to be used as a label for object records. This defaults to [:name, :title]
+      attr_accessor :label_methods
+
+      # Stores model configuration objects in a hash identified by model's class
+      # name.
+      #
+      # @see RailsAdmin::Config.model
+      attr_reader :registry
+
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
       #
@@ -143,22 +175,6 @@ module RailsAdmin
         @current_user || DEFAULT_CURRENT_USER
       end
 
-      # Configuration option to specify which models you want to exclude.
-      attr_accessor :excluded_models
-
-      # Configuration option to specify a whitelist of models you want to RailsAdmin to work with.
-      # The excluded_models list applies against the whitelist as well and further reduces the models
-      # RailsAdmin will use.
-      # If included_models is left empty ([]), then RailsAdmin will automatically use all the models
-      # in your application (less any excluded_models you may have specified).
-      attr_accessor :included_models
-
-      # Default items per page value used if a model level option has not
-      # been configured
-      attr_accessor :default_items_per_page
-
-      attr_reader :default_search_operator
-
       def default_search_operator=(operator)
         if %w{ default like starts_with ends_with is = }.include? operator
           @default_search_operator = operator
@@ -167,29 +183,20 @@ module RailsAdmin
         end
       end
 
-      # Configuration option to specify which method names will be searched for
-      # to be used as a label for object records. This defaults to [:name, :title]
-      attr_accessor :label_methods
-
-      # Stores model configuration objects in a hash identified by model's class
-      # name.
-      #
-      # @see RailsAdmin::Config.model
-      attr_reader :registry
-
       # Shortcut to access the list section's class configuration
       # within a config DSL block
       #
       # @see RailsAdmin::Config::Sections::List
       def list
+        ActiveSupport::Deprecation.warn("RailsAdmin::Config.list is deprecated", caller)
         RailsAdmin::Config::Sections::List
       end
 
       # Loads a model configuration instance from the registry or registers
       # a new one if one is yet to be added.
       #
-      # First argument can be an instance of requested model, it's class object,
-      # it's class name as a string or symbol or a RailsAdmin::AbstractModel
+      # First argument can be an instance of requested model, its class object,
+      # its class name as a string or symbol or a RailsAdmin::AbstractModel
       # instance.
       #
       # If a block is given it is evaluated in the context of configuration instance.
@@ -229,6 +236,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Sections::Navigation
       def navigation
+        ActiveSupport::Deprecation.warn("RailsAdmin::Config.navigation is deprecated", caller)
         RailsAdmin::Config::Sections::Navigation
       end
 
@@ -239,6 +247,8 @@ module RailsAdmin
         @authenticate = nil
         @authorize = nil
         @current_user = nil
+        @default_hidden_fields_for_edit = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields_for_export = []
         @default_items_per_page = 20
         @default_search_operator = 'default'
         @excluded_models = []

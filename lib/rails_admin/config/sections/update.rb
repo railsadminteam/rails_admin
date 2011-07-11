@@ -13,10 +13,17 @@ module RailsAdmin
         include RailsAdmin::Config::HasFields
         include RailsAdmin::Config::HasGroups
 
-        # Default items per page value used if a model level option has not
-        # been configured
-        cattr_accessor :default_hidden_fields
-        @@default_hidden_fields = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        def self.default_hidden_fields
+          ActiveSupport::Deprecation.warn("'#{self.name}.default_hidden_fields' is deprecated, use 'RailsAdmin::Config.default_hidden_fields_for_edit' instead", caller)
+          RailsAdmin::Config.default_hidden_fields_for_edit
+        end
+
+        def self.default_hidden_fields=(value)
+          ActiveSupport::Deprecation.warn("'#{self.name}.default_hidden_fields=' is deprecated, use 'RailsAdmin.config{|c| c.default_hidden_fields_for_edit = #{value}}' instead", caller)
+          RailsAdmin.config do |config|
+            config.default_hidden_fields_for_edit = value
+          end
+        end
 
         def initialize(parent)
           super(parent)
@@ -38,7 +45,7 @@ module RailsAdmin
             if f.association? && f.association[:options][:as]
               f.hide
             end
-            if f.serial? || @@default_hidden_fields.include?(f.name)
+            if f.serial? || RailsAdmin::Config.default_hidden_fields_for_edit.include?(f.name)
               f.hide
             end
           end
