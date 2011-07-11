@@ -270,7 +270,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with 20 pages, page 8" do
     before(:each) do
-      items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
+      items_per_page = RailsAdmin.config.default_items_per_page
       (items_per_page * 20).times { FactoryGirl.create(:player) }
       visit rails_admin_list_path(:model_name => "player", :page => 8)
     end
@@ -282,7 +282,7 @@ describe "RailsAdmin Basic List" do
 
   describe "list with 20 pages, page 20" do
     before(:each) do
-      items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
+      items_per_page = RailsAdmin.config.default_items_per_page
       @players = (items_per_page * 20).times.map { FactoryGirl.create(:player) }
       visit rails_admin_list_path(:model_name => "player", :page => 20)
     end

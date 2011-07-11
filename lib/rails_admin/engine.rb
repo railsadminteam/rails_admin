@@ -8,5 +8,12 @@ module RailsAdmin
         app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
       end
     end
+
+    config.to_prepare do
+      if @reset_rails_admin
+        RailsAdmin.reset
+      end
+      @reset_rails_admin = true
+    end
   end
 end

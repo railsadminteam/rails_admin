@@ -21,14 +21,21 @@ module RailsAdmin
           end
         end
 
-        # Default items per page value used if a model level option has not
-        # been configured
-        cattr_accessor :default_items_per_page
-        @@default_items_per_page = 20
+        def self.default_items_per_page
+          ActiveSupport::Deprecation.warn("'#{self.name}.default_items_per_page' is deprecated, use 'RailsAdmin::Config.default_items_per_page' instead", caller)
+          RailsAdmin::Config.default_items_per_page
+        end
+
+        def self.default_items_per_page=(value)
+          ActiveSupport::Deprecation.warn("'#{self.name}.default_items_per_page=' is deprecated, use 'RailsAdmin.config{|c| c.default_items_per_page = #{value}}' instead", caller)
+          RailsAdmin.config do |config|
+            config.default_items_per_page = value
+          end
+        end
 
         # Number of items listed per page
         register_instance_option(:items_per_page) do
-          RailsAdmin::Config::Sections::List.default_items_per_page
+          RailsAdmin::Config.default_items_per_page
         end
 
         register_instance_option(:sort_by) do
