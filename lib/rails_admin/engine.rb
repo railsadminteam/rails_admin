@@ -9,11 +9,14 @@ module RailsAdmin
       end
     end
 
-    config.to_prepare do
-      if @reset_rails_admin
+    ActionDispatch::Callbacks.before do
+      RailsAdmin.setup
+    end
+
+    if Rails.env == "development"
+      ActionDispatch::Callbacks.after do
         RailsAdmin.reset
       end
-      @reset_rails_admin = true
     end
   end
 end
