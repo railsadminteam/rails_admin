@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe "RailsAdmin Config DSL Details Section" do
+describe "RailsAdmin Config DSL Show Section" do
   let(:team) { Factory.create :team }
 
   def do_request
-    visit rails_admin_details_path(:model_name => "team", :id => team.id)
+    visit rails_admin_show_path(:model_name => "team", :id => team.id)
   end
 
   describe "field groupings" do
     it "should be hideable" do
       RailsAdmin.config Team do
-        details do
+        show do
           group :default do
             hide
           end
@@ -36,7 +36,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should hide association groupings by the name of the association" do
       RailsAdmin.config Team do
-        details do
+        show do
           group :players do
             hide
           end
@@ -50,7 +50,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be renameable" do
       RailsAdmin.config Team do
-        details do
+        show do
           group :default do
             label "Renamed group"
           end
@@ -64,7 +64,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should have accessor for its fields" do
       RailsAdmin.config Team do
-        details do
+        show do
           group :default do
             field :name
             field :logo_url
@@ -88,7 +88,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should have accessor for its fields by type" do
       RailsAdmin.config Team do
-        details do
+        show do
           group :default do
             field :name
             field :logo_url
@@ -136,7 +136,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should only show the defined fields and appear in order defined" do
       RailsAdmin.config Team do
-        details do
+        show do
           field :manager
           field :division_id
           field :name
@@ -153,7 +153,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should delegates the label option to the ActiveModel API" do
       RailsAdmin.config Team do
-        details do
+        show do
           field :manager
           field :fans
         end
@@ -167,7 +167,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be renameable" do
       RailsAdmin.config Team do
-        details do
+        show do
           field :manager do
             label "Renamed field"
           end
@@ -185,7 +185,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be renameable by type" do
       RailsAdmin.config Team do
-        details do
+        show do
           fields_of_type :string do
             label { "#{label} (STRING)" }
           end
@@ -211,7 +211,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be globally renameable by type" do
       RailsAdmin::Config.models do
-        details do
+        show do
           fields_of_type :string do
             label { "#{label} (STRING)" }
           end
@@ -238,7 +238,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be hideable" do
       RailsAdmin.config Team do
-        details do
+        show do
           field :manager do
             hide
           end
@@ -255,7 +255,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be hideable by type" do
       RailsAdmin.config Team do
-        details do
+        show do
           fields_of_type :string do
             hide
           end
@@ -282,7 +282,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "should be globally hideable by type" do
       RailsAdmin::Config.models do
-        details do
+        show do
           fields_of_type :string do
             hide
           end
@@ -314,7 +314,7 @@ describe "RailsAdmin Config DSL Details Section" do
 
     it "when file is available, should show the image file" do
       RailsAdmin.config User do
-        details do
+        show do
           field :avatar
         end
       end
@@ -322,19 +322,19 @@ describe "RailsAdmin Config DSL Details Section" do
       @user.avatar_file_name = "1.jpg"
       @user.save!
 
-      visit rails_admin_details_path(:model_name => "user", :id => @user.id)
+      visit rails_admin_show_path(:model_name => "user", :id => @user.id)
 
       page.should have_selector("div.user_avatar div.value img[src='#{@user.avatar.url}']")
     end
 
     it "when file is not available, should show 'No File Found'" do
       RailsAdmin.config User do
-        details do
+        show do
           field :avatar
         end
       end
 
-      visit rails_admin_details_path(:model_name => "user", :id => @user.id)
+      visit rails_admin_show_path(:model_name => "user", :id => @user.id)
 
       page.should have_selector("div.value", :text => "No file found")
     end

@@ -13,8 +13,8 @@ module RailsAdmin
             :form_paperclip_file
           end
 
-          register_instance_option(:details_partial) do
-            :details_paperclip_file
+          register_instance_option(:show_partial) do
+            :show_paperclip_file
           end
 
           register_instance_option(:delete_method) do

@@ -8,8 +8,8 @@ require 'rails_admin/config/fields/group'
 module RailsAdmin
   module Config
     module Sections
-      # Configuration of the details view for a new object
-      class Details < RailsAdmin::Config::Base
+      # Configuration of the show view for a new object
+      class Show < RailsAdmin::Config::Base
         include RailsAdmin::Config::HasFields
         include RailsAdmin::Config::HasGroups
 

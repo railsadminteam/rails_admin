@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe "RailsAdmin Basic Details" do
+describe "RailsAdmin Basic Show" do
 
-  describe "details" do
+  describe "show" do
     before(:each) do
       @player = Factory.create :player
-      get rails_admin_details_path(:model_name => "player", :id => @player.id)
+      get rails_admin_show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -40,7 +40,7 @@ describe "RailsAdmin Basic Details" do
       @player = Factory.create :player
       @team   = Factory.create :team
       @player.update_attribute(:team, @team)
-      get rails_admin_details_path(:model_name => "player", :id => @player.id)
+      get rails_admin_show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -56,7 +56,7 @@ describe "RailsAdmin Basic Details" do
     before(:each) do
       @player = Factory.create :player
       @draft  = Factory.create :draft, :player => @player
-      get rails_admin_details_path(:model_name => "player", :id => @player.id)
+      get rails_admin_show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -68,14 +68,14 @@ describe "RailsAdmin Basic Details" do
     end
   end
 
-  describe "details with has-and-belongs-to-many association" do
+  describe "show with has-and-belongs-to-many association" do
     before(:each) do
       @player = Factory.create :player
       @comment1 = Factory.create :comment, :commentable => @player
       @comment2 = Factory.create :comment, :commentable => @player
       @comment3 = Factory.create :comment, :commentable => Factory.create(:player)
 
-      get rails_admin_details_path(:model_name => "player", :id => @player.id)
+      get rails_admin_show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should respond successfully" do
@@ -91,7 +91,7 @@ describe "RailsAdmin Basic Details" do
 
   describe "show with missing object" do
     before(:each) do
-      get rails_admin_details_path(:model_name => "player", :id => 1)
+      get rails_admin_show_path(:model_name => "player", :id => 1)
     end
 
     it "should raise NotFound" do
@@ -103,7 +103,7 @@ describe "RailsAdmin Basic Details" do
     before(:each) do
       @player = Factory.create :player
       @comment = Factory.create :comment, :commentable => @player
-      get rails_admin_details_path(:model_name => "comment", :id => @comment.id)
+      get rails_admin_show_path(:model_name => "comment", :id => @comment.id)
     end
 
     it "should respond successfully" do

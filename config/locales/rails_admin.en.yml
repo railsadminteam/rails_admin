@@ -19,7 +19,7 @@ en:
       name: "History"
       page_name: "History for %{name}"
       no_activity: "No Activity"
-    details:
+    show:
       show_in_app: "Show in app"
       page_name: "Details for %{name}"
       no_file_found: "No file found"
@@ -92,7 +92,7 @@ en:
     breadcrumbs:
       delete: "delete"
       history: "history"
-      details: "details"
+      show: "show"
       edit: "edit"
       export: "export"
       bulk_destroy: "delete"

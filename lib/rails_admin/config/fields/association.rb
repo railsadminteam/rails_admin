@@ -84,8 +84,8 @@ module RailsAdmin
           bindings[:object].send(association[:name])
         end
 
-        register_instance_option(:details_partial) do
-          :details_association
+        register_instance_option(:show_partial) do
+          :show_association
         end
       end
     end

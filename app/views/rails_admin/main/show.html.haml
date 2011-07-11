@@ -1,14 +1,14 @@
-- head_style "rails_admin/details.css"
+- head_style "rails_admin/show.css"
 
 #block-tables.block
-  = breadcrumbs_for :details, @object
+  = breadcrumbs_for :show, @object
 
   .content
     .control
       = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name")
 
       - if show_url = url_for(@object) rescue nil
-        = action_button show_url, t("admin.details.show_in_app")
+        = action_button show_url, t("admin.show.show_in_app")
       - if authorized? :edit, @abstract_model, @object
         = action_button rails_admin_edit_path(@abstract_model, @object), t("admin.list.edit_action")
       - if authorized? :delete, @abstract_model, @object
@@ -18,7 +18,7 @@
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
 
-      - @model_config.details.with(:object => @object).visible_groups.each do |fieldset|
+      - @model_config.show.with(:object => @object).visible_groups.each do |fieldset|
         - if (fields = fieldset.visible_fields).length > 0
           .fieldset
             %h4= fieldset.label

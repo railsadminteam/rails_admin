@@ -1,10 +1,10 @@
-require 'rails_admin/config/sections/details'
+require 'rails_admin/config/sections/show'
 
 module RailsAdmin
   module Config
     module Sections
       # Configuration of the edit view for an existing object
-      class Update < RailsAdmin::Config::Sections::Details
+      class Update < RailsAdmin::Config::Sections::Show
 
         def initialize(parent)
           super(parent)
