@@ -66,7 +66,7 @@ module RailsAdmin
         if DEPRECATED_CONFIG_OPTIONS.keys.include? option_name
           scope.send(:define_method, option_name) do |*args, &block|
             ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{DEPRECATED_CONFIG_OPTIONS[option_name]}.")
-            send(DEPRECATED_CONFIG_OPTIONS[option_name])
+            send(DEPRECATED_CONFIG_OPTIONS[option_name], *args, &block)
           end
         else
           # Define getter/setter by the option name
