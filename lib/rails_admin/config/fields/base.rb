@@ -133,8 +133,7 @@ module RailsAdmin
         end
 
         register_instance_option(:partial) do
-          ActiveSupport::Deprecation.warn("The partial configuration option is deprecated, please use edit_partial.", caller)
-          edit_partial
+          # TODO remove me, I've been deprecated on 2011-07-12
         end
 
         register_instance_option(:edit_partial) do
