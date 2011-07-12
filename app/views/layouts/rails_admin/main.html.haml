@@ -2,7 +2,7 @@
   - content_for :title do
     #{@abstract_model.pretty_name} | #{@plugin_name}
 = render(:partial => 'layouts/rails_admin/head')
-%body
+%body.rails_admin
   #container
     = render(:partial => 'layouts/rails_admin/header')
     #wrapper.wat-cf
