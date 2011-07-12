@@ -67,6 +67,11 @@ are no longer functional and have been deprecated. For now on use model level
 configuration of visibility or for more granular control integrate an
 authorization framework as outlined later in this document.
 
+The field configuration method `partial` has been deprecated in favor of
+action-specific methods (`show_partial`, `edit_partial`, `create_partial` and
+`update_partial`). See the section titled **Fields - Rendering** above for more
+details.
+
 Screenshots
 -----------
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
@@ -837,11 +842,20 @@ partial per default, but that can be overridden:
       config.model Team do
         edit do
           field :name do
-            partial "my_awesome_partial"
+            edit_partial "my_awesome_partial"
           end
         end
       end
     end
+
+There is a partial method for each action:
+
+* show
+* edit
+* create
+* update
+
+By default, `create` and `update` will render `edit`'s partial.
 
 The partial should be placed in your applications template folder, such as
 `app/views/rails_admin/main/_my_awesome_partial.html.erb`.

@@ -1,0 +1,5 @@
+- subject_type = field.bindings[:object].send(field.association[:options][:foreign_type])
+- subject = field.associated_collection(subject_type).first
+
+%div.label= field.label
+%div.value= link_to "#{subject_type} ##{subject[1]}", rails_admin_show_path(:model_name => subject_type.downcase, :id => subject[1])
