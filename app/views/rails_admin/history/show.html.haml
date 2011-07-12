@@ -45,7 +45,7 @@
                 = object.username
               - if @general
                 %td.int
-                  - unless object.message.match("Destroy")
+                  - if !object.message.match("Destroy") && object.item.present?
                     = link_to object.item, rails_admin_history_object_path(:id => object.item), :class => "historyLink"
                   - else
                     = object.item
