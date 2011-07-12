@@ -67,6 +67,11 @@ are no longer functional and have been deprecated. For now on use model level
 configuration of visibility or for more granular control integrate an
 authorization framework as outlined later in this document.
 
+The field configuration method `partial` has been deprecated in favor of
+action-specific methods (`show_partial`, `edit_partial`, `create_partial` and
+`update_partial`). See the section titled **Fields - Rendering** above for more
+details.
+
 Screenshots
 -----------
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
