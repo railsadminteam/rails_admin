@@ -114,9 +114,10 @@
             - @objects.each do |object|
               - can_edit  = authorized?(:edit, @abstract_model, object)
               - edit_path = rails_admin_edit_path(:model_name => @abstract_model.to_param, :id => object.id) if can_edit
+              - show_path = rails_admin_show_path(:model_name => @abstract_model.to_param, :id => object.id)
               - row_class = "#{cycle("odd", "even")}#{" link" if can_edit}"
 
-              %tr{:class => row_class, :"data-link" => (edit_path if can_edit)}
+              %tr{:class => row_class, :"data-link" => show_path}
 
                 %td.action.select
                   - if can_bulk_action
