@@ -14,8 +14,12 @@ module RailsAdmin
             super(parent, name, properties, association)
           end
 
-          register_instance_option(:partial) do
+          register_instance_option(:edit_partial) do
             :form_polymorphic_association
+          end
+
+          register_instance_option(:show_partial) do
+            :show_polymorphic_association
           end
 
           # Accessor whether association is visible or not. By default

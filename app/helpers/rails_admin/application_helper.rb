@@ -241,7 +241,8 @@ module RailsAdmin
     VIEW_TYPES = {
       :delete        => ViewType.new(:edit,      :object, :delete),
       :history       => ViewType.new(:edit,      :object, nil,            :history_object),
-      :edit          => ViewType.new(:list,      :object, :edit),
+      :show          => ViewType.new(:list,      :object, nil),
+      :edit          => ViewType.new(:show,      :object, :edit),
       :export        => ViewType.new(:list,      :model,  :export),
       :bulk_destroy  => ViewType.new(:list,      :model,  :delete),
       :new           => ViewType.new(:list,      :model,  :new),

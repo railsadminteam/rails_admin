@@ -1,0 +1,9 @@
+- display_name = field.association[:pretty_name]
+- model_name   = field.association[:name]
+- associations = [field.bindings[:object].send(model_name)].flatten.compact
+
+%div.label= field.label
+%div.value
+  %ul
+    - associations.each do |association|
+      %li= link_to "#{display_name.singularize} ##{association.id}", rails_admin_show_path(:model_name => display_name.downcase, :id => association.id)

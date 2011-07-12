@@ -4,6 +4,7 @@ require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/navigation'
 require 'rails_admin/config/sections/update'
 require 'rails_admin/config/sections/export'
+require 'rails_admin/config/sections/show'
 
 module RailsAdmin
   module Config
