@@ -9,7 +9,7 @@
     $j(document).ready(function($){
     CKEDITOR.replace('#{field.dom_id}',
     {
-    customConfig : '#{field.ckeditor_config_js}'
+    customConfig : '#{field.ckeditor_config_js.html_safe}'
     }
     );
     });
