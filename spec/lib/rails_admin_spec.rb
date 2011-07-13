@@ -35,7 +35,7 @@ describe RailsAdmin do
       end
 
       it "initializes the authorization adapter" do
-        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin)
+        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin::Config)
         RailsAdmin.config do |config|
           config.authorize_with(:example)
         end
@@ -44,7 +44,7 @@ describe RailsAdmin do
 
       it "passes through any additional arguments to the initializer" do
         options = { :option => true }
-        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin, options)
+        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin::Config, options)
         RailsAdmin.config do |config|
           config.authorize_with(:example, options)
         end

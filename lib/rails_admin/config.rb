@@ -132,7 +132,7 @@ module RailsAdmin
         extension = args.shift
         if(extension)
           @authorize = Proc.new {
-            @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([RailsAdmin] + args).compact)
+            @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
           }
         else
           @authorize = block if block
