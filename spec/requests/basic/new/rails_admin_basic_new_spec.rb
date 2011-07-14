@@ -75,4 +75,12 @@ describe "RailsAdmin Basic New" do
       visit rails_admin_new_path(:model_name => "player")
     end
   end
+
+  describe "GET /admin/player/new with parameters for pre-population" do
+    it "should populate form field when corresponding parameters are passed in" do
+      visit rails_admin_new_path(:model_name => 'player', :player => {:name => 'Sam'})
+      page.should have_css('input[value=Sam]')
+    end
+  end
+
 end
