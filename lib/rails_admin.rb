@@ -8,152 +8,76 @@ require 'rails_admin/support/csv_converter'
 require 'rails_admin/support/core_extensions'
 
 module RailsAdmin
-  class AuthenticationNotConfigured < StandardError; end
+  # Copy of initializer blocks for initialization
+  #
+  # @see RailsAdmin.setup
+  @initializers = []
 
-  # RailsAdmin is setup to try and authenticate with warden
-  # If warden is found, then it will try to authenticate
+  # Whether or not the initializers have been run
   #
-  # This is valid for custom warden setups, and also devise
-  # If you're using the admin setup for devise, you should set RailsAdmin to use the admin
-  #
-  # By default, this will raise in any of the following environments
-  #   * production
-  #   * beta
-  #   * uat
-  #   * staging
-  #
-  # @see RailsAdmin.authenticate_with
-  # @see RailsAdmin.authorize_with
-  DEFAULT_AUTHENTICATION = Proc.new do
-    warden = request.env['warden']
-    if warden
-      warden.authenticate!
-    else
-      if %w(production beta uat staging).include?(Rails.env)
-        raise AuthenticationNotConfigured, "See RailsAdmin.authenticate_with or setup Devise / Warden"
-      end
-    end
+  # @see RailsAdmin.reset
+  # @see RailsAdmin.setup
+  @initialized = false
+
+  def self.authenticate_with(&block)
+    ActiveSupport::Deprecation.warn("'#{self.name}.authenticate_with { }' is deprecated, use 'RailsAdmin.config{|c| c.authenticate_with }' instead", caller)
+    self.config {|c| c.authenticate_with(&block) }
   end
 
-  DEFAULT_AUTHORIZE = Proc.new {}
-
-  DEFAULT_CURRENT_USER = Proc.new do
-    warden = request.env["warden"]
-    if warden
-      warden.user
-    elsif respond_to?(:current_user)
-      current_user
-    else
-      raise "See RailsAdmin.current_user_method or setup Devise / Warden"
-    end
-  end
-
-  # Setup authentication to be run as a before filter
-  # This is run inside the controller instance so you can setup any authentication you need to
-  #
-  # By default, the authentication will run via warden if available
-  # and will run the default.
-  #
-  # If you use devise, this will authenticate the same as _authenticate_user!_
-  #
-  # @example Devise admin
-  #   RailsAdmin.authenticate_with do
-  #     authenticate_admin!
-  #   end
-  #
-  # @example Custom Warden
-  #   RailsAdmin.authenticate_with do
-  #     warden.authenticate! :scope => :paranoid
-  #   end
-  #
-  # @see RailsAdmin::DEFAULT_AUTHENTICATION
-  def self.authenticate_with(&blk)
-    @authenticate = blk if blk
-    @authenticate || DEFAULT_AUTHENTICATION
-  end
-
-  # Setup authorization to be run as a before filter
-  # This is run inside the controller instance so you can setup any authorization you need to.
-  #
-  # By default, there is no authorization.
-  #
-  # @example Custom
-  #   RailsAdmin.authorize_with do
-  #     redirect_to root_path unless warden.user.is_admin?
-  #   end
-  #
-  # To use an authorization adapter, pass the name of the adapter. For example,
-  # to use with CanCan[https://github.com/ryanb/cancan], pass it like this.
-  #
-  # @example CanCan
-  #   RailsAdmin.authorize_with :cancan
-  #
-  # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
-  #
-  # @see RailsAdmin::DEFAULT_AUTHORIZE
   def self.authorize_with(*args, &block)
-    extension = args.shift
-
-    if(extension)
-      @authorize = Proc.new {
-        @authorization_adapter = AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
-      }
-    else
-      @authorize = block if block
-    end
-
-    @authorize || DEFAULT_AUTHORIZE
+    ActiveSupport::Deprecation.warn("'#{self.name}.authorize_with { }' is deprecated, use 'RailsAdmin.config{|c| c.authorize_with }' instead", caller)
+    self.config {|c| c.authorize_with(*args, &block) }
   end
 
-  # Setup a different method to determine the current user or admin logged in.
-  # This is run inside the controller instance and made available as a helper.
-  #
-  # By default, _request.env["warden"].user_ or _current_user_ will be used.
-  #
-  # @example Custom
-  #   RailsAdmin.current_user_method do
-  #     current_admin
-  #   end
-  #
-  # @see RailsAdmin::DEFAULT_CURRENT_USER
   def self.current_user_method(&block)
-    @current_user = block if block
-    @current_user || DEFAULT_CURRENT_USER
+    ActiveSupport::Deprecation.warn("'#{self.name}.current_user_method { }' is deprecated, use 'RailsAdmin.config{|c| c.current_user_method }' instead", caller)
+    self.config {|c| c.current_user_method(&block) }
   end
 
-  # Setup configuration using an extension-provided ConfigurationAdapter
-  #
-  # @example Custom configuration for role-based setup.
-  #   RailsAdmin.configure_with(:custom) do |config|
-  #     config.models = ['User', 'Comment']
-  #     config.roles  = {
-  #       'Admin' => :all,
-  #       'User'  => ['User']
-  #     }
-  #   end
-  #
-  #   RailsAdmin.config do
-  #     # standard config still applies...
-  #   end
-  def self.configure_with(extension)
-    configuration = CONFIGURATION_ADAPTERS[extension].new
-    yield(configuration) if block_given?
+  def self.configure_with(extension, &block)
+    ActiveSupport::Deprecation.warn("'#{self.name}.configure_with { }' is deprecated, use 'RailsAdmin.config{|c| c.configure_with }' instead", caller)
+    self.config {|c| c.configure_with(extension, &block) }
   end
 
   # Setup RailsAdmin
   #
-  # If a model class is provided as the first argument model specific
-  # configuration is loaded and returned.
+  # Given the first argument is a model class, a model class name
+  # or an abstract model object proxies to model configuration method.
   #
-  # Otherwise yields self for general configuration to be used in
-  # an initializer.
+  # If only a block is passed it is stored to initializer stack to be evaluated
+  # on first request in production mode and on each request in development. If
+  # initialization has already occured (in other words RailsAdmin.setup has
+  # been called) the block will be added to stack and evaluated at once.
   #
-  # @see RailsAdmin::Config.load
+  # Otherwise returns RailsAdmin::Config class.
+  #
+  # @see RailsAdmin::Config
   def self.config(entity = nil, &block)
-    if not entity
-      yield RailsAdmin::Config
-    else
+    if entity
       RailsAdmin::Config.model(entity, &block)
+    elsif block_given?
+      @initializers << block
+      block.call(RailsAdmin::Config) if @initialized
+    else
+      RailsAdmin::Config
     end
+  end
+
+  # Reset RailsAdmin configuration to defaults
+  def self.reset
+    RailsAdmin::Config.reset
+    @initialized = false
+  end
+
+  # Apply all initializers stored on application startup
+  def self.setup
+    @initializers.each {|block| block.call(RailsAdmin::Config) } unless @initialized
+    @initialized = true
+  end
+
+  # Reset RailsAdmin including initializers
+  def self.test_reset!
+    self.reset
+    @initializers.clear
   end
 end
