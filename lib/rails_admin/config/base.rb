@@ -35,6 +35,11 @@ module RailsAdmin
         self.class.register_instance_option(option_name, scope, &default)
       end
 
+      def register_action_aware_instance_option(option_name)
+        scope = class << self; self; end;
+        self.class.register_action_aware_instance_option(option_name, scope)
+      end
+
       def register_deprecated_instance_option(option_name, replacement_option_name)
         scope = class << self; self; end;
         self.class.register_deprecated_instance_option(option_name, replacement_option_name, scope)
@@ -89,6 +94,13 @@ module RailsAdmin
             end
             value
           end
+        end
+      end
+
+      def self.register_action_aware_instance_option(option_name, scope = self)
+        scope.send(:define_method, option_name) do |*args, &block|
+          action = self.parent.class.to_s.demodulize.downcase
+          send("#{action}_#{option_name}", *args, &block)
         end
       end
 

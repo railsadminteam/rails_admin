@@ -145,11 +145,11 @@ module RailsAdmin
           properties && properties[:length]
         end
 
+        register_action_aware_instance_option(:partial)
+
         register_instance_option(:show_partial) do
           :show_base
         end
-
-        register_deprecated_instance_option(:partial, :edit_partial) # deprecated on 2011-07-12
 
         register_instance_option(:edit_partial) do
           :form_field
