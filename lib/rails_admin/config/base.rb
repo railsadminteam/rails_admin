@@ -2,11 +2,6 @@ require 'rails_admin/config/proxy'
 
 module RailsAdmin
   module Config
-    DEPRECATED_CONFIG_OPTIONS = {
-      # deprecated option => replacement option
-      'partial' => 'edit_partial' # deprecated on 2011-07-12
-    }.freeze
-
     # A base class for all configurables.
     #
     # Each configurable has a parent object. This parent object must provide
@@ -40,6 +35,11 @@ module RailsAdmin
         self.class.register_instance_option(option_name, scope, &default)
       end
 
+      def register_deprecated_instance_option(option_name, replacement_option_name)
+        scope = class << self; self; end;
+        self.class.register_deprecated_instance_option(option_name, replacement_option_name, scope)
+      end
+
       def with(bindings = {})
         RailsAdmin::Config::Proxy.new(self, bindings)
       end
@@ -63,39 +63,39 @@ module RailsAdmin
           end
         end
 
-        if DEPRECATED_CONFIG_OPTIONS.keys.include? option_name
-          scope.send(:define_method, option_name) do |*args, &block|
-            ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{DEPRECATED_CONFIG_OPTIONS[option_name]}.")
-            send(DEPRECATED_CONFIG_OPTIONS[option_name], *args, &block)
-          end
-        else
-          # Define getter/setter by the option name
-          scope.send(:define_method, option_name) do |*args, &block|
-            if !args[0].nil? || block
-              # Invocation with args --> This is the declaration of the option, i.e. setter
-              instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
-            else
-              # Invocation without args nor block --> It's the use of the option, i.e. getter
-              value = instance_variable_get("@#{option_name}")
-              case value
-                when Proc
-                  # Track recursive invocation with an instance variable. This prevents run-away recursion
-                  # and allows configurations such as
-                  # label { "#{label}".upcase }
-                  # This will use the default definition when called recursively.
-                  if instance_variable_get("@#{option_name}_recurring")
-                    value = instance_eval &default
-                  else
-                    instance_variable_set("@#{option_name}_recurring", true)
-                    value = instance_eval &value
-                    instance_variable_set("@#{option_name}_recurring", false)
-                  end
-                when nil
+        # Define getter/setter by the option name
+        scope.send(:define_method, option_name) do |*args, &block|
+          if !args[0].nil? || block
+            # Invocation with args --> This is the declaration of the option, i.e. setter
+            instance_variable_set("@#{option_name}", args[0].nil? ? block : args[0])
+          else
+            # Invocation without args nor block --> It's the use of the option, i.e. getter
+            value = instance_variable_get("@#{option_name}")
+            case value
+              when Proc
+                # Track recursive invocation with an instance variable. This prevents run-away recursion
+                # and allows configurations such as
+                # label { "#{label}".upcase }
+                # This will use the default definition when called recursively.
+                if instance_variable_get("@#{option_name}_recurring")
                   value = instance_eval &default
-              end
-              value
+                else
+                  instance_variable_set("@#{option_name}_recurring", true)
+                  value = instance_eval &value
+                  instance_variable_set("@#{option_name}_recurring", false)
+                end
+              when nil
+                value = instance_eval &default
             end
+            value
           end
+        end
+      end
+
+      def self.register_deprecated_instance_option(option_name, replacement_option_name, scope = self)
+        scope.send(:define_method, option_name) do |*args, &block|
+          ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{replacement_option_name}.")
+          send(replacement_option_name, *args, &block)
         end
       end
 
