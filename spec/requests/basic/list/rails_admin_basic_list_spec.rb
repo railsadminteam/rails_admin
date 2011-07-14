@@ -365,4 +365,17 @@ describe "RailsAdmin Basic List" do
     end
   end
 
+  describe "list for objects with overridden to_param" do
+    before(:each) do
+      @ball = FactoryGirl.create :ball
+      visit rails_admin_list_path(:model_name => "ball")
+    end
+
+    it "shows the show and delete links with valid url" do
+      should have_selector("td a[href='/admin/balls/#{@ball.id}'] img[alt='Show']")
+      should have_selector("td a[href='/admin/balls/#{@ball.id}/delete'] img[alt='Delete']")
+    end
+
+  end
+
 end

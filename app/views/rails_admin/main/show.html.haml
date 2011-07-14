@@ -10,9 +10,9 @@
       - if show_url = url_for(@object) rescue nil
         = action_button show_url, t("admin.show.show_in_app")
       - if authorized? :edit, @abstract_model, @object
-        = action_button rails_admin_edit_path(@abstract_model, @object), t("admin.list.edit_action")
+        = action_button rails_admin_edit_path(@abstract_model, @object.id), t("admin.list.edit_action")
       - if authorized? :delete, @abstract_model, @object
-        = action_button rails_admin_delete_path(@abstract_model, @object), t("admin.list.delete_action"), :cross
+        = action_button rails_admin_delete_path(@abstract_model, @object.id), t("admin.list.delete_action"), :cross
 
     %h2.title= @page_name
     .inner
