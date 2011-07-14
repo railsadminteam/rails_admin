@@ -394,6 +394,63 @@ describe "RailsAdmin Config DSL List Section" do
       should have_selector(".grid tbody tr:nth-child(2) td:nth-child(4)", :text => @fans[0].name.upcase)
     end
 
+    it "should have option to customize a field as visible" do
+      RailsAdmin.config Fan do
+        list do
+          field :id
+          field :name do
+            visible do
+              true
+            end
+          end
+          field :created_at
+          field :updated_at
+        end
+      end
+      @fans = 2.times.map { FactoryGirl.create :fan }
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid tbody tr:nth-child(1) td:nth-child(4)", :text => @fans[1].name)
+      should have_selector(".grid tbody tr:nth-child(2) td:nth-child(4)", :text => @fans[0].name)
+    end
+    
+    it "should have option to customize a field as not visible" do
+      RailsAdmin.config Fan do
+        list do
+          field :id
+          field :name do
+            visible do
+              false
+            end
+          end
+          field :created_at
+          field :updated_at
+        end
+      end
+      @fans = 2.times.map { FactoryGirl.create :fan }
+      visit rails_admin_list_path(:model_name => "fan")
+      should_not have_selector(".grid tbody tr:nth-child(1) td:nth-child(4)", :text => @fans[1].name)
+      should_not have_selector(".grid tbody tr:nth-child(2) td:nth-child(4)", :text => @fans[0].name)
+    end
+       
+    it "should have bindings[:view] available in visible block" do
+      RailsAdmin.config Fan do
+        list do
+          field :id
+          field :name do
+            visible do
+              bindings.has_key?(:view)
+            end
+          end
+          field :created_at
+          field :updated_at
+        end
+      end
+      @fans = 2.times.map { FactoryGirl.create :fan }
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid tbody tr:nth-child(1) td:nth-child(4)", :text => @fans[1].name)
+      should have_selector(".grid tbody tr:nth-child(2) td:nth-child(4)", :text => @fans[0].name)      
+    end
+            
     it "should have a simple option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
@@ -410,6 +467,22 @@ describe "RailsAdmin Config DSL List Section" do
       should have_selector(".grid tbody tr:nth-child(1) td:nth-child(5)", :text => /\d{2} \w{3} \d{1,2}:\d{1,2}/)
     end
 
+    it "should have a simple option to customize output formatting of date fields" do
+      RailsAdmin.config Fan do
+        list do
+          field :id
+          field :name
+          field :created_at do
+            date_format :short
+          end
+          field :updated_at
+        end
+      end
+      @fans = 2.times.map { FactoryGirl.create :fan }
+      visit rails_admin_list_path(:model_name => "fan")
+      should have_selector(".grid tbody tr:nth-child(1) td:nth-child(5)", :text => /\d{2} \w{3} \d{1,2}:\d{1,2}/)
+    end
+    
     it "should have option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do

@@ -97,9 +97,10 @@ module RailsAdmin
         selected
       end
 
-      # Get all fields defined as visible.
-      def visible_fields
-        fields.select {|f| f.visible? }
+      # Get all fields defined as visible. 
+      # Pass in optional bindings for visible blocks.
+      def visible_fields(bindings = {})
+        fields.select {|f| f.with(bindings).visible? }
       end
     end
   end
