@@ -56,4 +56,8 @@ FactoryGirl.define do
       EOF
     end
   end
+
+  factory :ball do
+    color(%W(red blue green yellow purple brown black white).sample)
+  end
 end
