@@ -9,12 +9,12 @@ module RailsAdmin
         class PaperclipFile < RailsAdmin::Config::Fields::Types::FileUpload
           RailsAdmin::Config::Fields::Types.register(self)
 
-          register_instance_option(:edit_partial) do
-            :form_paperclip_file
-          end
-
-          register_instance_option(:show_partial) do
-            :show_paperclip_file
+          register_instance_option(:partial) do
+            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
+              :form_paperclip_file
+            else
+              :show_paperclip_file
+            end
           end
 
           register_instance_option(:delete_method) do

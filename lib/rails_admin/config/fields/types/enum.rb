@@ -7,8 +7,12 @@ module RailsAdmin
         class Enum < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:edit_partial) do
-            :form_enumeration
+          register_instance_option(:partial) do
+            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
+              :form_enumeration
+            else
+              :show_base
+            end
           end
 
           register_instance_option(:html_attributes) do

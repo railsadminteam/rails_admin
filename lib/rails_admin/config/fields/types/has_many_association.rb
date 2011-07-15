@@ -13,8 +13,12 @@ module RailsAdmin
             ""
           end
 
-          register_instance_option(:edit_partial) do
-            "form_filtering_multiselect"
+          register_instance_option(:partial) do
+            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
+              :form_filtering_multiselect
+            else
+              :show_association
+            end
           end
 
           register_instance_option(:html_attributes) do

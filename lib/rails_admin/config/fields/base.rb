@@ -145,27 +145,22 @@ module RailsAdmin
           properties && properties[:length]
         end
 
-        register_action_aware_instance_option(:partial)
-
-        register_instance_option(:show_partial) do
-          :show_base
+        register_instance_option(:partial) do
+          if parent.kind_of?(RailsAdmin::Config::Sections::Update)
+            :form_field
+          else
+            :show_base
+          end
         end
 
-        register_instance_option(:edit_partial) do
-          :form_field
-        end
-
-        register_instance_option(:create_partial) do
-          edit_partial
-        end
-
-        register_instance_option(:update_partial) do
-          edit_partial
-        end
+        register_deprecated_instance_option(:show_partial, :partial) # deprecated on 2011-07-15
+        register_deprecated_instance_option(:edit_partial, :partial) # deprecated on 2011-07-15
+        register_deprecated_instance_option(:create_partial, :partial) # deprecated on 2011-07-15
+        register_deprecated_instance_option(:update_partial, :partial) # deprecated on 2011-07-15
 
         register_instance_option(:render) do
           action = self.parent.class.to_s.demodulize.downcase
-          bindings[:view].render :partial => send("#{action}_partial").to_s, :locals => {:field => self, :form => bindings[:form] }
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
         end
 
         # Accessor for whether this is field is mandatory.  This is

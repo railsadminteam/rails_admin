@@ -154,8 +154,12 @@ module RailsAdmin
             }
           end
 
-          register_instance_option(:edit_partial) do
-            "form_datetime"
+          register_instance_option(:partial) do
+            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
+              :form_datetime
+            else
+              :show_base
+            end
           end
 
           register_instance_option(:strftime_format) do
