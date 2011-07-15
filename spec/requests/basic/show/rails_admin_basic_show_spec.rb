@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "RailsAdmin Basic Show" do
+  subject { page }
 
   describe "show" do
     before(:each) do
@@ -9,20 +10,20 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should have History, Edit, Delete, Cancel buttons" do
-      page.should have_selector("a.button", :text => "History")
-      page.should have_selector("a.button", :text => "Edit")
-      page.should have_selector("a.button", :text => "Delete")
+      should have_selector("a.button", :text => "History")
+      should have_selector("a.button", :text => "Edit")
+      should have_selector("a.button", :text => "Delete")
     end
 
     it "should show 'Details'" do
-      page.should have_content("Details")
+      should have_content("Details")
     end
 
     it "should show attributes" do
-      page.should have_content("Name")
-      page.should have_content(@player.name)
-      page.should have_content("Number")
-      page.should have_content(@player.number)
+      should have_content("Name")
+      should have_content(@player.name)
+      should have_content("Number")
+      should have_content(@player.number)
     end
   end
 
@@ -35,7 +36,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      page.should have_selector("div.value", :text => "Team ##{@team.id}")
+      should have_selector("div.value", :text => "Team ##{@team.id}")
     end
   end
 
@@ -47,7 +48,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      page.should have_selector("div.value", :text => "Draft ##{@draft.id}")
+      should have_selector("div.value", :text => "Draft ##{@draft.id}")
     end
   end
 
@@ -62,9 +63,9 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      page.should have_selector("div.value", :text => "Comment ##{@comment1.id}")
-      page.should have_selector("div.value", :text => "Comment ##{@comment2.id}")
-      page.should_not have_selector("div.value", :text => "Comment ##{@comment3.id}")
+      should have_selector("div.value", :text => "Comment ##{@comment1.id}")
+      should have_selector("div.value", :text => "Comment ##{@comment2.id}")
+      should_not have_selector("div.value", :text => "Comment ##{@comment3.id}")
     end
   end
 
@@ -76,7 +77,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated object" do
-      page.should have_selector("div.value", :text => "Player ##{@player.id}")
+      should have_selector("div.value", :text => "Player ##{@player.id}")
     end
   end
 end
