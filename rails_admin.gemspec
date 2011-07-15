@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'builder', '~> 2.1.0'
   gem.add_runtime_dependency 'fastercsv'
   gem.add_runtime_dependency 'haml', '~> 3.1.0'
-  gem.add_runtime_dependency 'rails', '~> 3.0.7'
+  gem.add_runtime_dependency 'rails', '~> 3.0.9'
 
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kääpä"]
   gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data}
