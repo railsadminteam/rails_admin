@@ -22,17 +22,12 @@ describe "RailsAdmin Config DSL Show Section" do
 
       should_not have_selector("h4", :text => "Basic info")
 
-      should_not have_selector("div.team_division_id")
-      should_not have_selector("div.team_name")
-      should_not have_selector("div.team_logo_url")
-      should_not have_selector("div.team_manager")
-      should_not have_selector("div.team_ballpark")
-      should_not have_selector("div.team_mascot")
-      should_not have_selector("div.team_founded")
-      should_not have_selector("div.team_wins")
-      should_not have_selector("div.team_losses")
-      should_not have_selector("div.team_win_percentage")
-      should_not have_selector("div.team_revenue")
+      %w[team_division_id team_name team_logo_url team_manager
+        team_ballpark team_mascot team_founded team_wins
+        team_losses team_win_percentage team_revenue
+      ].each do |field|
+        should_not have_selector("div.#{field}")
+      end
     end
 
     it "should hide association groupings by the name of the association" do
@@ -120,19 +115,12 @@ describe "RailsAdmin Config DSL Show Section" do
     it "should show all by default" do
       do_request
 
-      should have_selector("div.team_division_id")
-      should have_selector("div.team_name")
-      should have_selector("div.team_logo_url")
-      should have_selector("div.team_manager")
-      should have_selector("div.team_ballpark")
-      should have_selector("div.team_mascot")
-      should have_selector("div.team_founded")
-      should have_selector("div.team_wins")
-      should have_selector("div.team_losses")
-      should have_selector("div.team_win_percentage")
-      should have_selector("div.team_revenue")
-      should have_selector("div.team_players")
-      should have_selector("div.team_fans")
+      %w[team_division_id team_name team_logo_url team_manager
+        team_ballpark team_mascot team_founded team_wins
+        team_losses team_win_percentage team_revenue team_players team_fans
+      ].each do |field|
+        should have_selector("div.#{field}")
+      end
     end
 
     it "should only show the defined fields and appear in order defined" do
@@ -195,19 +183,12 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector("div.label", :text => "Division")
-      should have_selector("div.label", :text => "Name (STRING)")
-      should have_selector("div.label", :text => "Logo url (STRING)")
-      should have_selector("div.label", :text => "Manager (STRING)")
-      should have_selector("div.label", :text => "Ballpark (STRING)")
-      should have_selector("div.label", :text => "Mascot (STRING)")
-      should have_selector("div.label", :text => "Founded")
-      should have_selector("div.label", :text => "Wins")
-      should have_selector("div.label", :text => "Losses")
-      should have_selector("div.label", :text => "Win percentage")
-      should have_selector("div.label", :text => "Revenue")
-      should have_selector("div.label", :text => "Players")
-      should have_selector("div.label", :text => "Fans")
+      ["Division", "Name (STRING)", "Logo url (STRING)", "Manager (STRING)",
+        "Ballpark (STRING)", "Mascot (STRING)", "Founded", "Wins", "Losses",
+        "Win percentage", "Revenue", "Players", "Fans"
+      ].each do |text|
+        should have_selector("div.label", :text => text)
+      end
     end
 
     it "should be globally renameable by type" do
@@ -221,20 +202,12 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector("div.label", :text => "Division")
-      should have_selector("div.label", :text => "Name (STRING)")
-      should have_selector("div.label", :text => "Logo url (STRING)")
-      should have_selector("div.label", :text => "Manager (STRING)")
-      should have_selector("div.label", :text => "Ballpark (STRING)")
-      should have_selector("div.label", :text => "Mascot (STRING)")
-      should have_selector("div.label", :text => "Founded")
-      should have_selector("div.label", :text => "Wins")
-      should have_selector("div.label", :text => "Losses")
-      should have_selector("div.label", :text => "Win percentage")
-      should have_selector("div.label", :text => "Revenue")
-      should have_selector("div.label", :text => "Players")
-      should have_selector("div.label", :text => "Fans")
-
+      ["Division", "Name (STRING)", "Logo url (STRING)", "Manager (STRING)",
+        "Ballpark (STRING)", "Mascot (STRING)", "Founded", "Wins", "Losses",
+        "Win percentage", "Revenue", "Players", "Fans"
+      ].each do |text|
+        should have_selector("div.label", :text => text)
+      end
     end
 
     it "should be hideable" do
@@ -265,20 +238,13 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector("div.label", :text => "Division")
-      should_not have_selector("div.label", :text => "Name")
-      should_not have_selector("div.label", :text => "Logo url")
-      should_not have_selector("div.label", :text => "Manager")
-      should_not have_selector("div.label", :text => "Ballpark")
-      should_not have_selector("div.label", :text => "Mascot")
-      should have_selector("div.label", :text => "Founded")
-      should have_selector("div.label", :text => "Wins")
-      should have_selector("div.label", :text => "Losses")
-      should have_selector("div.label", :text => "Win percentage")
-      should have_selector("div.label", :text => "Revenue")
-      should have_selector("div.label", :text => "Players")
-      should have_selector("div.label", :text => "Fans")
+      %w[Name Logo\ url Manager Ballpark Mascot].each do |text|
+        should_not have_selector("div.label", :text => text)
+      end
 
+      %w[Division Founded Wins Losses Win\ percentage Revenue Players Fans].each do |text|
+        should have_selector("div.label", :text => text)
+      end
     end
 
     it "should be globally hideable by type" do
@@ -292,19 +258,13 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector("div.label", :text => "Division")
-      should_not have_selector("div.label", :text => "Name")
-      should_not have_selector("div.label", :text => "Logo url")
-      should_not have_selector("div.label", :text => "Manager")
-      should_not have_selector("div.label", :text => "Ballpark")
-      should_not have_selector("div.label", :text => "Mascot")
-      should have_selector("div.label", :text => "Founded")
-      should have_selector("div.label", :text => "Wins")
-      should have_selector("div.label", :text => "Losses")
-      should have_selector("div.label", :text => "Win percentage")
-      should have_selector("div.label", :text => "Revenue")
-      should have_selector("div.label", :text => "Players")
-      should have_selector("div.label", :text => "Fans")
+      %w[Name Logo\ url Manager Ballpark Mascot].each do |text|
+        should_not have_selector("div.label", :text => text)
+      end
+
+      %w[Division Founded Wins Losses Win\ percentage Revenue Players Fans].each do |text|
+        should have_selector("div.label", :text => text)
+      end
     end
   end
 
