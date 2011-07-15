@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'builder', '~> 2.1.0'
   gem.add_runtime_dependency 'fastercsv'
-  gem.add_runtime_dependency 'haml', '~> 3.1.0'
+  gem.add_runtime_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
   gem.add_runtime_dependency 'rails', '~> 3.0.9'
 
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kääpä"]
