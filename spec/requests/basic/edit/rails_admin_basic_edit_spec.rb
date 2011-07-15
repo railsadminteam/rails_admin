@@ -83,4 +83,16 @@ describe "RailsAdmin Basic Edit" do
       visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
     end
   end
+
+  describe "edit object with overridden to_param" do
+    before(:each) do
+      @ball = FactoryGirl.create :ball
+      visit rails_admin_edit_path(:model_name => "ball", :id => @ball.id)
+    end
+
+    it "should display a link to the delete page" do
+      should have_selector "a[href='/admin/balls/#{@ball.id}/delete']"
+    end
+
+  end
 end
