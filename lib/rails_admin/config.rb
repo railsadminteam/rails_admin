@@ -71,6 +71,11 @@ module RailsAdmin
       # to be used as a label for object records. This defaults to [:name, :title]
       attr_accessor :label_methods
 
+      # TODO: document these options properly
+      # Allow to insert additional navigation links into the navigation sidebar
+      attr_accessor :nav_before_model
+      attr_accessor :nav_after_model
+
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #
