@@ -22,10 +22,10 @@
 - head_javascript do
   :plain
     $j(document).ready(function($) {
-      var urls = <%= field.polymorphic_type_urls.to_json.html_safe %>;
-      $("#<%= column_type_dom_id %>").bind("change", function(e){
+      var urls = #{field.polymorphic_type_urls.to_json.html_safe };
+      $("##{column_type_dom_id }").bind("change", function(e){
         if ("" == $(this).val()) {
-          $("#<%= field.dom_id %>").html('<option value=""></option>');
+          $("##{ field.dom_id }").html('<option value=""></option>');
         } else {
           $.ajax({
             url: urls[$(this).val()],
@@ -38,7 +38,7 @@
               $(data).each(function(i, el) {
                 html += '<option value="' + el.id + '">' + el.label + '</option>';
               });
-              $("#<%= field.dom_id %>").html(html);
+              $("##{ field.dom_id }").html(html);
             }
           });
         }
