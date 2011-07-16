@@ -9,6 +9,6 @@
       #main
         #content= yield
         #footer
-          %p Rails Admin | 2011
+          %p #{RailsAdmin::Config.footer || "Rails Admin | 2011"}
       = render :partial => "layouts/rails_admin/sidebar"
 

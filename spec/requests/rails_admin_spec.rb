@@ -46,6 +46,23 @@ describe "RailsAdmin" do
     end
   end
 
+  describe "html footer" do
+
+    it "should display the Rails Admin default footer" do
+      visit rails_admin_dashboard_path
+      should have_selector('#footer p', :text => 'Rails Admin | 2011')
+    end
+
+    it "should display the custom footer" do
+      RailsAdmin.config do |config|
+        config.footer = 'Acme | 2011'
+      end
+      visit rails_admin_dashboard_path
+      should have_selector('#footer p', :text => 'Acme | 2011')
+    end
+
+  end
+
   describe "polymorphic associations" do
     before :each do
       @team = FactoryGirl.create :team
