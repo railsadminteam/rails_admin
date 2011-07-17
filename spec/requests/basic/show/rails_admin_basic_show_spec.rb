@@ -35,7 +35,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      page.should have_selector("div.value", :text => "Team ##{@team.id}")
+      page.should have_selector("div.value", :text => @team.name)
     end
   end
 
@@ -62,9 +62,9 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      page.should have_selector("div.value", :text => "Comment ##{@comment1.id}")
-      page.should have_selector("div.value", :text => "Comment ##{@comment2.id}")
-      page.should_not have_selector("div.value", :text => "Comment ##{@comment3.id}")
+      page.should have_selector("div.value", :text => "Comment #{@comment1.id}")
+      page.should have_selector("div.value", :text => "Comment #{@comment2.id}")
+      page.should_not have_selector("div.value", :text => "Comment #{@comment3.id}")
     end
   end
 
@@ -76,7 +76,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated object" do
-      page.should have_selector("div.value", :text => "Player ##{@player.id}")
+      page.should have_selector("div.value", :text => @player.name)
     end
   end
 end

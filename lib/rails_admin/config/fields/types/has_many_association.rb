@@ -17,7 +17,7 @@ module RailsAdmin
             if parent.kind_of?(RailsAdmin::Config::Sections::Update)
               :form_filtering_multiselect
             else
-              :show_association
+              :show_has_many_association
             end
           end
 

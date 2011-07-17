@@ -16,6 +16,16 @@ module RailsAdmin
             end
           end
 
+          # Accessor for field's formatted value
+          register_instance_option(:formatted_value) do
+            object = bindings[:object].send(association[:name])
+            unless object.nil?
+              RailsAdmin::Config.model(object).with(:object => object).object_label
+            else
+              nil
+            end
+          end
+
           # Accessor for whether this is field is required.  In this
           # case the field is "virtual" to this table - it actually
           # lives in the table on the "belongs_to" side of this
