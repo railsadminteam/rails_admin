@@ -11,9 +11,10 @@
 /* FIXME: replace these styles with something competent: */
 
 .ra-filtering-select-input  {
-    font-family:Verdana, Geneva, sans-serif;
-  font-size:12px;
-  padding:5px;
+  font-family:Verdana, Geneva, sans-serif;
+  font-size: 12px;
+  height: 26px;
+  padding: 0 0 0 5px;
   border-left:1px solid #e2e3ea;
   border-top:1px solid #abadb3;
   border-bottom:1px solid #e3e9ef;
@@ -21,11 +22,8 @@
 }
 
 .ra-filtering-select-button {
-  height: 27px;
-  width: 24px;
-  padding: 5px 3px;
-  position: relative;
-  top: 9px;
+  vertical-align: top;
+  height: 28px;
   border: 1px solid #e1e1e1;
   border-top-style: solid;
   border-top-color: #ccc;
