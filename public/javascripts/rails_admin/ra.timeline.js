@@ -153,7 +153,7 @@
         url: this.options.url,
         data: {
           from: {
-            month: date.getMonth() + 1,
+            month: date.getMonth() + 1 - this.options.range,
             year: date.getFullYear()
           },
           to: {
