@@ -16,6 +16,10 @@ es:
       name: "Histórico"
       page_name: "Histórico de %{name}"
       no_activity: "No hubo actividad"
+    show:
+      show_in_app: "Mostrar en la aplicación"
+      page_name: "Detalles de %{name}"
+      no_file_found: "Archivo no encontrado"
     credentials:
       log_out: "Cerrar sesión"
     list:
