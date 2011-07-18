@@ -87,6 +87,7 @@ es:
       history: "historial"
       edit: "editar"
       export: "exportar"
+      show: "mostrar"
       bulk_destroy: "borrar"
       new: "nuevo"
       model_history: "historial"
