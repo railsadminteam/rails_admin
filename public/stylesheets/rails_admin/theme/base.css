@@ -383,7 +383,7 @@ button.button[type] {
 }
 
 button.button img, a.button img {
-  margin:0 3px -3px 0 !important;
+  margin:0 3px -4px 0 !important;
   padding:0;
   border:none;
   width:16px;

@@ -38,7 +38,7 @@ describe "RailsAdmin" do
     it "should load javascript files" do
       scripts = %w[ /javascripts/rails_admin/application.js
                 //ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
-                //ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js ]
+                //ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js ]
 
       scripts.each do |script|
         should have_selector(%Q{script[src^="#{script}"]})
