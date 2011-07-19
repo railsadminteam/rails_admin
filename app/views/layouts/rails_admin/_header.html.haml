@@ -4,7 +4,7 @@
 
   #user-navigation
     %ul.wat-cf
-      %li= link_to header_icon(:config, "Dashboard"), rails_admin_dashboard_path
+      %li= link_to header_icon(:config, t('admin.dashboard.name')), rails_admin_dashboard_path
       - if (root_path rescue nil)
         %li= link_to header_icon(:home, t('home.name').capitalize), root_path
       - if (current_user rescue nil)
