@@ -12,10 +12,12 @@ module RailsAdmin
     ActionDispatch::Callbacks.before do
       RailsAdmin.setup
     end
-
-    if Rails.env == "development"
-      ActionDispatch::Callbacks.after do
-        RailsAdmin.reset
+    
+    initializer "rails admin development mode" do |app|
+      unless app.config.cache_classes
+        ActionDispatch::Callbacks.after do
+          RailsAdmin.reset
+        end
       end
     end
   end
