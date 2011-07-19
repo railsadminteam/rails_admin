@@ -84,7 +84,7 @@ module RailsAdmin
       end
 
       def new(params = {})
-        RailsAdmin::AbstractObject.new(model.new)
+        RailsAdmin::AbstractObject.new(model.new(params))
       end
 
       def destroy(ids, scope = nil)
