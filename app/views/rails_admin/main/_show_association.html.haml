@@ -6,4 +6,4 @@
 %div.value
   %ul
     - associations.each do |association|
-      %li= link_to "#{display_name.singularize} ##{association.id}", rails_admin_show_path(:model_name => model_name.downcase, :id => association.id)
+      %li= link_to "#{display_name.singularize} ##{association.id}", rails_admin_show_path(:model_name => model_name.to_s.downcase, :id => association.id)
