@@ -23,7 +23,7 @@ fr:
       add_new: "Nouveau"
       select_action: "Sélectionner"
       export_action: "Exporter la vue actuelle"
-      show_action: "Voir"
+      show_action: "Détail"
       export_selected: "Exporter les entrées cochées"
       delete_selected: "Supprimer les entrées cochées"
       search: "Recherche"
@@ -89,7 +89,7 @@ fr:
       exported: "exporté(e)"
     breadcrumbs:
       delete: "suppression"
-      show: "voir"
+      show: "détail"
       history: "historique"
       edit: "édition"
       export: "export"
