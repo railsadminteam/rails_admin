@@ -30,6 +30,7 @@ en:
       delete_action: "Delete"
       select_action: "Select"
       export_action: "Export current view"
+      show_action: "Show"
       export_selected: "Export selected"
       delete_selected: "Delete selected"
       add_new: "Add new"
