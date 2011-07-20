@@ -32,7 +32,7 @@
 
     field_options = case field.type
     when :enum
-      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
+      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '') 
     else
       ''
     end
