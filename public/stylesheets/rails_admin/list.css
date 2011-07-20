@@ -80,10 +80,18 @@
   padding: 0 20px 0 0;
 }
 
+.content>.content-header {
+  overflow: hidden;
+}
+
+#filters_box {
+  margin-top: 10px;
+}
+
 .filter {
   display:block;
   float:left;
-  margin-top:10px;
+  margin-bottom:10px;
 }
 
 .filter>* {
@@ -98,10 +106,15 @@
 
 .filter label {
   color:black;
-  width: 100px;
-  margin-left:10px;
+  width: 140px;
+  margin:7px 7px 0 10px;
+}
+
+.filter .delete-box {
+  
+  margin-top: 3px;
 }
 
 .filter .delete {
-  color:red;
+  padding: 1px 0 1px 1px;
 }
