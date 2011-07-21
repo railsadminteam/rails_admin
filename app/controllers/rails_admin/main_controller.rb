@@ -439,7 +439,7 @@ module RailsAdmin
         end
         ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
-        ["(#{column} #{@like_operator} ?)", value]
+        ["(#{column} = ?)", value]
       end
     end
 
