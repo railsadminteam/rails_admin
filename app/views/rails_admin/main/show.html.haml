@@ -25,4 +25,5 @@
             = content_tag :div, fieldset.help, :class => "help" if fieldset.help
             - fields.map { |field| field.with(:object => @object, :view => self) }.each do |field|
               %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
-                = field.render
+                %div.label= field.label
+                %div.value= field.pretty_value.presence || ' - '

@@ -18,10 +18,6 @@ module RailsAdmin
             :form_polymorphic_association
           end
 
-          register_instance_option(:show_partial) do
-            :show_polymorphic_association
-          end
-
           # Accessor whether association is visible or not. By default
           # association checks that any of the child models are included in
           # configuration.
@@ -67,7 +63,7 @@ module RailsAdmin
 
           # Reader for field's value
           def value
-            bindings[:object].send(name)
+            bindings[:object].send(association[:name])
           end
         end
       end

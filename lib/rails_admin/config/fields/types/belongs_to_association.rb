@@ -45,11 +45,6 @@ module RailsAdmin
             bindings[:object].send(child_key)
           end
 
-          # Reader for field's value
-          def value
-            bindings[:object].send(name)
-          end
-
           def method_name
             name.to_s
           end

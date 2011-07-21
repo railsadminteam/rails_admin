@@ -13,16 +13,25 @@ module RailsAdmin
             :form_paperclip_file
           end
 
-          register_instance_option(:show_partial) do
-            :show_paperclip_file
-          end
-
           register_instance_option(:delete_method) do
             "delete_#{name}" if bindings[:object].respond_to?("delete_#{name}")
           end
 
           register_instance_option(:thumb_method) do
             nil
+          end
+          
+          register_instance_option(:pretty_value) do
+            if (file = bindings[:object].send(method_name)) && file.file?
+              url = file.url
+              if file.content_type =~ /image/
+                v = bindings[:view]
+                thumb_url = (self.thumb_method && file.url(self.thumb_method) || url)
+                (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url) : v.image_tag(thumb_url)
+              else
+                url
+              end
+            end
           end
 
           def value

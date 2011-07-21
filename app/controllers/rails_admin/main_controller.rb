@@ -131,6 +131,7 @@ module RailsAdmin
     end
 
     def show
+      @authorization_adapter.authorize(:show, @abstract_model, @object) if @authorization_adapter
       @page_name = t("admin.show.page_name", :name => @model_config.label.downcase)
     end
 

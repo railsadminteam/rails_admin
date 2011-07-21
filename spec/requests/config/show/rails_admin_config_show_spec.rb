@@ -267,37 +267,4 @@ describe "RailsAdmin Config DSL Show Section" do
       end
     end
   end
-
-  describe "Paperclip Support" do
-    before do
-      @user = Factory.create(:user)
-    end
-
-    it "when file is available, should show the image file" do
-      RailsAdmin.config User do
-        show do
-          field :avatar
-        end
-      end
-
-      @user.avatar_file_name = "1.jpg"
-      @user.save!
-
-      visit rails_admin_show_path(:model_name => "user", :id => @user.id)
-
-      should have_selector("div.user_avatar div.value img[src='#{@user.avatar.url}']")
-    end
-
-    it "when file is not available, should show 'No File Found'" do
-      RailsAdmin.config User do
-        show do
-          field :avatar
-        end
-      end
-
-      visit rails_admin_show_path(:model_name => "user", :id => @user.id)
-
-      should have_selector("div.value", :text => "No file found")
-    end
-  end
 end

@@ -36,7 +36,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      should have_selector("div.value", :text => "Team ##{@team.id}")
+      should have_css("a[href='/admin/teams/#{@team.id}']")
     end
   end
 
@@ -48,7 +48,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      should have_selector("div.value", :text => "Draft ##{@draft.id}")
+      should have_css("a[href='/admin/drafts/#{@draft.id}']")
     end
   end
 
@@ -63,9 +63,9 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated objects" do
-      should have_selector("div.value", :text => "Comment ##{@comment1.id}")
-      should have_selector("div.value", :text => "Comment ##{@comment2.id}")
-      should_not have_selector("div.value", :text => "Comment ##{@comment3.id}")
+      should have_css("a[href='/admin/comments/#{@comment1.id}']")
+      should have_css("a[href='/admin/comments/#{@comment2.id}']")
+      should_not have_css("a[href='/admin/comments/#{@comment3.id}']")
     end
   end
 
@@ -77,7 +77,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should show associated object" do
-      should have_selector("div.value", :text => "Player ##{@player.id}")
+      should have_css("a[href='/admin/players/#{@player.id}']")
     end
   end
 end

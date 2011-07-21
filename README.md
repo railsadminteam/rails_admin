@@ -47,6 +47,10 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 
 API Update Note
 ---------------
+The field configuration method `show_partial` has been removed in favor of 
+field configuration `pretty_value`, which is used more globally and consistently 
+across the whole application. Show partials are no longer in use.
+
 `RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
 `RailsAdmin::Config.default_items_per_page`.
 
@@ -88,7 +92,7 @@ configuration of visibility or for more granular control integrate an
 authorization framework as outlined later in this document.
 
 The field configuration method `partial` has been deprecated in favor of
-action-specific methods (`show_partial`, `edit_partial`, `create_partial` and
+action-specific methods (`edit_partial`, `create_partial` and
 `update_partial`). See the section titled **Fields - Rendering** above for more
 details.
 
@@ -612,8 +616,12 @@ The field's output can be modified:
       rails_admin do
         list do
           field :name do
-            formatted_value do
+            formatted_value do # used in form views
               value.to_s.upcase
+            end
+            
+            pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
+              value.titleize
             end
           end
           field :created_at
