@@ -47,9 +47,13 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 
 API Update Note
 ---------------
+The model configuration `dropdown` has been deprecated in favor of navigation_label. 
+API unchanged.
+
 The field configuration method `show_partial` has been removed in favor of 
 field configuration `pretty_value`, which is used more globally and consistently 
-across the whole application. Show partials are no longer in use.
+across the whole application. Show partials are no longer in use, method doesn't 
+exist anymore.
 
 `RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
 `RailsAdmin::Config.default_items_per_page`.
@@ -309,7 +313,7 @@ accessors will be appended with ? whereas the writers will not be. That is, if
 you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
 
-**Create a dropdown menu in navigation**
+**Create a navigation_label in navigation**
 
     class Team < ActiveRecord::Base
       rails_admin do
@@ -333,14 +337,14 @@ Obtained navigation:
       Team
     ...
 
-You probably want to change the name of the dropdown.
-This can be easily achieved with the 'dropdown' attribute of the parent model.
+You probably want to change the name of the navigation_label.
+This can be easily achieved with the 'navigation_label' method of the parent model.
 
 Added to previous example:
 
     class League < ActiveRecord::Base
       rails_admin do
-        dropdown 'League related'
+        navigation_label 'League related'
       end
     end
 
@@ -359,19 +363,19 @@ Obtained navigation:
 By default, they are ordered by alphabetical order. If you need to override this, specify
 a weight attribute. Default is 0. Lower values will bubble items to the top, higher values
 will move them to the bottom. Items with same weight will still be ordered by alphabetical order.
-The mechanism is fully compatible with dropdown menus. Items will be ordered within their own
+The mechanism is fully compatible with navigation labels. Items will be ordered within their own
 menu subset. (but parent will always be first inside his submenu).
 
 Example:
 
     class League < ActiveRecord::Base
       rails_admin do
-        dropdown 'League related'
+        navigation_label 'League related'
         weight -1
       end
     end
 
-The 'League related' dropdown menu will move to the topmost position.
+The 'League related' navigation label will move to the topmost position.
 
 
 ### List view ###
