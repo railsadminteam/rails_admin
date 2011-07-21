@@ -7,6 +7,9 @@
 %ul#nav.navigation
   %li{:class => ("active" if @page_type == "dashboard")}
     = link_to(t("admin.dashboard.name"), rails_admin_dashboard_path)
+  - RailsAdmin::Config.nav_before_model.each do |page,link|
+    %li{:class => ("active" if @page_type == page)}
+      %a{:href => "#{link['url']}"}= link['label']
   - root_models.each do |model|
     - children = [model] + models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
     - tab_titles = children.map { |child| child.abstract_model.pretty_name.downcase }
@@ -19,3 +22,7 @@
           - children.each_with_index do |child, index|
             %li{:class => ("active" if @page_type == tab_titles[index])}
               = link_to(child.label.pluralize, rails_admin_list_path(:model_name => child.abstract_model.to_param))
+  - RailsAdmin::Config.nav_after_model.each do |page,link|
+    %li{:class => ("active" if @page_type == page)}
+      %a{:href => "#{link['url']}"}= link['label']
+
