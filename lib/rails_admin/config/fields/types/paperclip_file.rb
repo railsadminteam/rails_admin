@@ -22,15 +22,19 @@ module RailsAdmin
           end
           
           register_instance_option(:pretty_value) do
-            if (file = bindings[:object].send(method_name)) && file.file?
-              url = file.url
-              if file.content_type =~ /image/
-                v = bindings[:view]
-                thumb_url = (self.thumb_method && file.url(self.thumb_method) || url)
-                (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url) : v.image_tag(thumb_url)
-              else
-                url
+            if (file = bindings[:object].send(method_name)) 
+              if file.file?
+                url = file.url
+                if file.content_type =~ /image/
+                  v = bindings[:view]
+                  thumb_url = (self.thumb_method && file.url(self.thumb_method) || url)
+                  (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url) : v.image_tag(thumb_url)
+                else
+                  url
+                end
               end
+            else
+              file.to_s + " [#{I18n.t('admin.show.no_file_found')}]"
             end
           end
 
