@@ -70,7 +70,10 @@ module RailsAdmin
       # Configuration option to specify which method names will be searched for
       # to be used as a label for object records. This defaults to [:name, :title]
       attr_accessor :label_methods
-
+      
+      # hide blank fields in show view if true
+      attr_accessor :compact_show_view
+      
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #
@@ -244,6 +247,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset
+        @compact_show_view = true
         @authenticate = nil
         @authorize = nil
         @current_user = nil

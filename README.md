@@ -201,6 +201,12 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
     RailsAdmin.config do |config|
       config.excluded_models << "ClassName"
     end
+    
+You can display empty fields in show view with:
+
+    RailsAdmin.config do |config|
+      config.compact_show_view = false
+    end
 
 **Whitelist Approach**
 
