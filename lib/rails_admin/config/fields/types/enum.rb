@@ -8,11 +8,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option(:partial) do
-            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-              :form_enumeration
-            else
-              :show_base
-            end
+            :form_enumeration
           end
 
           register_instance_option(:html_attributes) do

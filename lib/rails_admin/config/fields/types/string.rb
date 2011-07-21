@@ -38,11 +38,7 @@ module RailsAdmin
            end
 
           register_instance_option(:partial) do
-            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-              color? ? :form_colorpicker : :form_field
-            else
-              :show_base
-            end
+            color? ? :form_colorpicker : :form_field
           end
         end
       end

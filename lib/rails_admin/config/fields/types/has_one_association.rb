@@ -9,11 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option(:partial) do
-            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-              :form_filtering_select
-            else
-              :show_association
-            end
+            :form_filtering_select
           end
 
           # Accessor for field's formatted value

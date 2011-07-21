@@ -94,14 +94,6 @@ module RailsAdmin
         def value
           bindings[:object].send(association[:name])
         end
-
-        register_instance_option(:partial) do
-          if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-            :form_field
-          else
-            :show_association
-          end
-        end
       end
     end
   end

@@ -15,11 +15,7 @@ module RailsAdmin
           end
 
           register_instance_option(:partial) do
-            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-              :form_polymorphic_association
-            else
-              :show_polymorphic_association
-            end
+            :form_polymorphic_association
           end
 
           # Accessor whether association is visible or not. By default

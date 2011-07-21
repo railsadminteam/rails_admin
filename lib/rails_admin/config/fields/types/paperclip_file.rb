@@ -10,11 +10,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option(:partial) do
-            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-              :form_paperclip_file
-            else
-              :show_paperclip_file
-            end
+            :form_paperclip_file
           end
 
           register_instance_option(:delete_method) do

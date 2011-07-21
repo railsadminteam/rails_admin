@@ -34,11 +34,7 @@ module RailsAdmin
           end
 
           register_instance_option(:partial) do
-            if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-              :form_filtering_select
-            else
-              :show_association
-            end
+            :form_filtering_select
           end
 
           def associated_model_config

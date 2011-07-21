@@ -151,11 +151,7 @@ module RailsAdmin
         end
 
         register_instance_option(:partial) do
-          if parent.kind_of?(RailsAdmin::Config::Sections::Update)
-            :form_field
-          else
-            :show_base
-          end
+          :form_field
         end
 
         register_deprecated_instance_option(:show_partial, :partial) # deprecated on 2011-07-15
@@ -164,7 +160,6 @@ module RailsAdmin
         register_deprecated_instance_option(:update_partial, :partial) # deprecated on 2011-07-15
 
         register_instance_option(:render) do
-          action = self.parent.class.to_s.demodulize.downcase
           bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
         end
 
