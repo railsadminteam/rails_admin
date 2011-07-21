@@ -118,6 +118,11 @@ module RailsAdmin
             "".html_safe
           end
         end
+        
+        # output for pretty printing (show, list, etc)
+        register_instance_option(:pretty_value) do
+          formatted_value
+        end
 
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do

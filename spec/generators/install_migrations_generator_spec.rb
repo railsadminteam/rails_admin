@@ -9,14 +9,12 @@ describe 'RailsAdmin::InstallMigrationsGenerator' do
 
     before(:each) do
       prepare_destination
-      assert_no_migration 'db/migrate/create_histories_table.rb'
-      assert_no_migration 'db/migrate/rename_histories_to_rails_admin_histories.rb'
+      assert_no_migration 'db/migrate/create_rails_admin_histories_table.rb'
       run_generator
     end
 
     it "creates migrations" do
-      assert_migration 'db/migrate/create_histories_table.rb'
-      assert_migration 'db/migrate/rename_histories_to_rails_admin_histories.rb'
+      assert_migration 'db/migrate/create_rails_admin_histories_table.rb'
     end
 
   end

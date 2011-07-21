@@ -65,7 +65,7 @@
 
       $('#filters_box').append(
         '<div class="filter new" style="clear:both;">' +
-          '<div class="ui-state-default ui-corner-all"><span alt="delete" class="delete ui-icon ui-icon-trash" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]" style="cursor:pointer" title="delete"></span></div>' +
+          '<div class="delete-box ui-state-default ui-corner-all"><span alt="delete" class="delete ui-icon ui-icon-trash" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]" style="cursor:pointer" title="delete"></span></div>' +
           '<label>' + field_label + '</label>' +
           control +
         '</div>'
@@ -81,7 +81,7 @@
     $("#filter_select").bind('change', function() {
       var option = $(this).find('option:selected')
       $(this).val(''); // reset select
-
+      //this.selectedIndex = 0;
       $.filters.append(
         option.data('field-label'),
         option.data('field-name'),
@@ -91,6 +91,9 @@
         option.data('field-options'),
         Date.now()
       );
+      if($.uniform) { // needed to refresh the selected option
+        $.uniform.update();
+      }
     });
 
     $('#filters_box .delete').live('click', function() {

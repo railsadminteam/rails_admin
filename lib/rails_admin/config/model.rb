@@ -61,8 +61,10 @@ module RailsAdmin
       register_instance_option(:parent) do
         :root
       end
+      
+      register_deprecated_instance_option(:dropdown, :navigation_label) # same API, deprecated 2011-07-21
 
-      register_instance_option(:dropdown) do
+      register_instance_option(:navigation_label) do
         false
       end
 

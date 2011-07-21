@@ -1,6 +1,0 @@
-%div.label= field.label
-%div.value
-  - if (url = field.value).present?
-    %img{:src => url, :alt => url}
-  - else
-    = t('admin.show.no_file_found')

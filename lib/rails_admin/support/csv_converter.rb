@@ -91,7 +91,6 @@ module RailsAdmin
       [!options[:skip_header], @encoding_to, csv_string]
     end
 
-
     private
 
     def output(str)

@@ -7,7 +7,9 @@ describe "RailsAdmin" do
   describe "authentication" do
     it "should be disableable" do
       logout
-      RailsAdmin.authenticate_with {}
+      RailsAdmin.config do |config|
+        config.authenticate_with {}
+      end
       visit rails_admin_dashboard_path
     end
   end
@@ -36,7 +38,7 @@ describe "RailsAdmin" do
     it "should load javascript files" do
       scripts = %w[ /javascripts/rails_admin/application.js
                 //ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
-                //ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js ]
+                //ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js ]
 
       scripts.each do |script|
         should have_selector(%Q{script[src^="#{script}"]})
@@ -73,33 +75,19 @@ describe "RailsAdmin" do
 
   describe "model whitelist:" do
 
-    before do
-      RailsAdmin::AbstractModel.instance_variable_get("@models").clear
-      RailsAdmin::Config.excluded_models = []
-      RailsAdmin::Config.included_models = []
-      RailsAdmin::Config.reset
-    end
-
-    after :all do
-      RailsAdmin::AbstractModel.instance_variable_get("@models").clear
-      RailsAdmin::Config.excluded_models = []
-      RailsAdmin::Config.included_models = []
-      RailsAdmin::Config.reset
-    end
-
     it 'should only use included models' do
-      RailsAdmin::Config.included_models = [Team, League]
+      RailsAdmin.config.included_models = [Team, League]
       RailsAdmin::AbstractModel.all.map(&:model).should == [League, Team] #it gets sorted
     end
 
     it 'should not restrict models if included_models is left empty' do
-      RailsAdmin::Config.included_models = []
+      RailsAdmin.config.included_models = []
       RailsAdmin::AbstractModel.all.map(&:model).should include(Team, League)
     end
 
     it 'should further remove excluded models (whitelist - blacklist)' do
-      RailsAdmin::Config.excluded_models = [Team]
-      RailsAdmin::Config.included_models = [Team, League]
+      RailsAdmin.config.excluded_models = [Team]
+      RailsAdmin.config.included_models = [Team, League]
       RailsAdmin::AbstractModel.all.map(&:model).should == [League]
     end
 
@@ -108,7 +96,7 @@ describe "RailsAdmin" do
     end
 
     it 'excluded? returns true for any model not on the list' do
-      RailsAdmin::Config.included_models = [Team, League]
+      RailsAdmin.config.included_models = [Team, League]
 
       team_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Team'))
       fan_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Fan'))

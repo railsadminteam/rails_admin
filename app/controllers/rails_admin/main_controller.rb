@@ -87,6 +87,9 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
+      if object_params = params[@abstract_model.model.name.underscore.to_sym]
+        @object.attributes = @object.attributes.merge(object_params)
+      end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
@@ -128,6 +131,7 @@ module RailsAdmin
     end
 
     def show
+      @authorization_adapter.authorize(:show, @abstract_model, @object) if @authorization_adapter
       @page_name = t("admin.show.page_name", :name => @model_config.label.downcase)
     end
 
@@ -436,7 +440,7 @@ module RailsAdmin
         end
         ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
-        ["(#{column} #{@like_operator} ?)", value]
+        ["(#{column} = ?)", value]
       end
     end
 

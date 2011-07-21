@@ -8,7 +8,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
     it "should be alphabetical by default" do
       visit rails_admin_dashboard_path
-      ["Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+      ["Balls", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
@@ -20,7 +20,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit rails_admin_dashboard_path
-      ["Teams", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"].each_with_index do |content, i|
+      ["Teams", "Balls", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
@@ -32,7 +32,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit rails_admin_dashboard_path
-      ["Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+      ["Balls", "Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
       ["Cms/Basic Pages", "Comments"].each_with_index do |content, i|
@@ -40,17 +40,17 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
-    it "should override parent label with dropdown" do
+    it "should override parent label with navigation_label" do
       RailsAdmin.config do |config|
         config.model Comment do
           parent Cms::BasicPage
         end
         config.model Cms::BasicPage do
-          dropdown "CMS related"
+          navigation_label "CMS related"
         end
       end
       visit rails_admin_dashboard_path
-      ["CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+      ["Balls", "CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
       ["Cms/Basic Pages", "Comments"].each_with_index do |content, i|
@@ -58,18 +58,18 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
-    it "should order dropdown item according to parent weight" do
+    it "should order navigation_label item according to parent weight" do
       RailsAdmin.config do |config|
         config.model Comment do
           parent Cms::BasicPage
         end
         config.model Cms::BasicPage do
-          dropdown "CMS related"
+          navigation_label "CMS related"
           weight 1
         end
       end
       visit rails_admin_dashboard_path
-      ["Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"].each_with_index do |content, i|
+      ["Balls", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users", "CMS related"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end

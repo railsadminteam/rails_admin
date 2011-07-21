@@ -8,5 +8,17 @@ module RailsAdmin
         app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
       end
     end
+
+    ActionDispatch::Callbacks.before do
+      RailsAdmin.setup
+    end
+    
+    initializer "rails admin development mode" do |app|
+      unless app.config.cache_classes
+        ActionDispatch::Callbacks.after do
+          RailsAdmin.reset
+        end
+      end
+    end
   end
 end

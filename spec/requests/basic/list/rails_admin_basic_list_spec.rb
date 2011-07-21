@@ -270,7 +270,7 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player with 20 pages, page 8" do
     before(:each) do
-      items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
+      items_per_page = RailsAdmin.config.default_items_per_page
       (items_per_page * 20).times { FactoryGirl.create(:player) }
       visit rails_admin_list_path(:model_name => "player", :page => 8)
     end
@@ -282,7 +282,7 @@ describe "RailsAdmin Basic List" do
 
   describe "list with 20 pages, page 20" do
     before(:each) do
-      items_per_page = RailsAdmin::Config::Sections::List.default_items_per_page
+      items_per_page = RailsAdmin.config.default_items_per_page
       @players = (items_per_page * 20).times.map { FactoryGirl.create(:player) }
       visit rails_admin_list_path(:model_name => "player", :page => 20)
     end
@@ -363,6 +363,19 @@ describe "RailsAdmin Basic List" do
       visit rails_admin_list_path(:model_name => "player", :query => player.name[1..-1])
       should have_no_content(player.name)
     end
+  end
+
+  describe "list for objects with overridden to_param" do
+    before(:each) do
+      @ball = FactoryGirl.create :ball
+      visit rails_admin_list_path(:model_name => "ball")
+    end
+
+    it "shows the show and delete links with valid url" do
+      should have_selector("td a[href='/admin/balls/#{@ball.id}'] img[alt='Show']")
+      should have_selector("td a[href='/admin/balls/#{@ball.id}/delete'] img[alt='Delete']")
+    end
+
   end
 
 end

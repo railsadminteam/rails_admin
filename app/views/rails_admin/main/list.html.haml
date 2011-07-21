@@ -32,7 +32,7 @@
 
     field_options = case field.type
     when :enum
-      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
+      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '') 
     else
       ''
     end
@@ -58,30 +58,31 @@
   = breadcrumbs_for :list, @abstract_model
 
   .content
-    .control
-      %span(style="margin: 3px 6px")
-        %select#filter_select.small-uniform
-          %option{:value => ""}= t('admin.list.add_filter')+"..."
-          - @filterable_fields.each do |field|
-            - field_options = case field.type
-            - when :enum
-              - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
-            - else
-              - ''
-            %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
+    .content-header
+      .control
+        %span(style="margin: 3px 6px")
+          %select#filter_select.small-uniform
+            %option{:value => ""}= t('admin.list.add_filter')+"..."
+            - @filterable_fields.each do |field|
+              - field_options = case field.type
+              - when :enum
+                - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
+              - else
+                - ''
+              %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
 
-      - if authorized? :new, @abstract_model
-        = action_button rails_admin_new_path, t("admin.list.add_new"), :add
+        - if authorized? :new, @abstract_model
+          = action_button rails_admin_new_path, t("admin.list.add_new"), :add
 
-      - if authorized? :delete, @abstract_model
-        = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
+        - if authorized? :delete, @abstract_model
+          = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
 
-      = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
-        %span.search
-          %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
-          %input.search_submit{:type => "submit", :value => ""}
-        #filters_box
-    %h2.title= @page_name
+        = form_tag(rails_admin_list_post_path(params.merge(:model_name => @abstract_model.to_param).except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
+          %span.search
+            %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
+            %input.search_submit{:type => "submit", :value => ""}
+          #filters_box
+      %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       = form_tag rails_admin_bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
@@ -125,15 +126,15 @@
                 - other_left = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i - 1))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
-                  %td{:class => "#{property.css_class}"}= ([:text, :string].include?(property.type) && property.truncated?) ? property.formatted_value.truncate(40) : property.formatted_value
+                  %td{:class => "#{property.css_class}"}= ([:text, :string].include?(property.type) && property.truncated?) ? property.pretty_value.truncate(40) : property.pretty_value
                 - other_right = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i + 1))
                 %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.last
-                  = action_icon(rails_admin_show_path(@abstract_model, object), :show, "Show")
+                  = action_icon(rails_admin_show_path(@abstract_model, object.id), :show, t("admin.list.show_action"))
                   - if can_edit
                     = action_icon(edit_path, :edit, t("admin.list.edit_action"))
                   - if authorized? :delete, @abstract_model, object
-                    = action_icon(rails_admin_delete_path(@abstract_model, object), :cross, t("admin.list.delete_action"))
+                    = action_icon(rails_admin_delete_path(@abstract_model, object.id), :cross, t("admin.list.delete_action"))
 
         .pagination
           - if @page_count.to_i > 1
