@@ -4,6 +4,7 @@ module RailsAdmin
   module Config
     DEPRECATED_CONFIG_OPTIONS = {
       # deprecated option => replacement option
+      'dropdown' => 'navigation_label', # deprecated on 2011-07-21
       'partial' => 'edit_partial' # deprecated on 2011-07-12
     }.freeze
 

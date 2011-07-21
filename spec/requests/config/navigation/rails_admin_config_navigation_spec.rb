@@ -40,13 +40,13 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
-    it "should override parent label with dropdown" do
+    it "should override parent label with navigation_label" do
       RailsAdmin.config do |config|
         config.model Comment do
           parent Cms::BasicPage
         end
         config.model Cms::BasicPage do
-          dropdown "CMS related"
+          navigation_label "CMS related"
         end
       end
       visit rails_admin_dashboard_path
@@ -58,13 +58,13 @@ describe "RailsAdmin Config DSL Navigation Section" do
       end
     end
 
-    it "should order dropdown item according to parent weight" do
+    it "should order navigation_label item according to parent weight" do
       RailsAdmin.config do |config|
         config.model Comment do
           parent Cms::BasicPage
         end
         config.model Cms::BasicPage do
-          dropdown "CMS related"
+          navigation_label "CMS related"
           weight 1
         end
       end
