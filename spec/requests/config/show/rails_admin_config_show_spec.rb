@@ -5,6 +5,11 @@ describe "RailsAdmin Config DSL Show Section" do
   let(:team) { Factory.create :team }
 
   def do_request
+    # tests were done with compact_show_view being false
+    RailsAdmin.config do |c|
+      c.compact_show_view = false
+    end
+    
     visit rails_admin_show_path(:model_name => "team", :id => team.id)
   end
 
