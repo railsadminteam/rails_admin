@@ -41,7 +41,7 @@
     _build: function() {
       var i;
 
-      this.wrapper = $('<div class="input">');
+      this.wrapper = $('<div class="input ra-multiselect">');
 
       this.wrapper.insertAfter(this.element);
 
