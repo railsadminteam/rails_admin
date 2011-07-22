@@ -8,7 +8,7 @@
 
   .content
     .control
-      = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name")
+      = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name"), :'calendar-hover'
 
       - if authorized? :delete, @abstract_model, @object
         = action_button rails_admin_delete_path(@abstract_model, @object.id), t("admin.list.delete_action"), :cross

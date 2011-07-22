@@ -6,12 +6,12 @@
 
   .content
     .control
-      = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name")
+      = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name"), :'calendar-hover'
 
       - if show_url = url_for(@object) rescue nil
-        = action_button show_url, t("admin.show.show_in_app")
+        = action_button show_url, t("admin.show.show_in_app"), :show
       - if authorized? :edit, @abstract_model, @object
-        = action_button rails_admin_edit_path(@abstract_model, @object.id), t("admin.list.edit_action")
+        = action_button rails_admin_edit_path(@abstract_model, @object.id), t("admin.list.edit_action"), :edit
       - if authorized? :delete, @abstract_model, @object
         = action_button rails_admin_delete_path(@abstract_model, @object.id), t("admin.list.delete_action"), :cross
 

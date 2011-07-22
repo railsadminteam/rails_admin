@@ -144,16 +144,16 @@
             = paginate(@current_page, @page_count, :url => params).html_safe
           - if @record_count.to_i <= 100 && @page_count.to_i > 1
             = link_to(t("admin.list.show_all"), rails_admin_list_path(params.merge(:model_name => @abstract_model.to_param, :all => true, :class => "showall")), :method => :get, :remote => true)
-        .left(style="white-space: nowrap; padding-top:0.5em;")
+        .left(style="white-space: nowrap; padding-top:0.7em;")
           = @record_count
           = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
 
         .columns.wat-cf
           .column.right
             - if can_export
-              = action_button rails_admin_export_path(params.except("page")), t("admin.list.export_action"), nil, :method => :post
-              = action_button '#', t("admin.list.export_selected"), nil, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
+              = action_button rails_admin_export_path(params.except("page")), t("admin.list.export_action"), :pdf, :method => :post
+              = action_button '#', t("admin.list.export_selected"), :pdf, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
             - if can_see_history
-              = action_button rails_admin_history_model_path, t("admin.history.name")
+              = action_button rails_admin_history_model_path, t("admin.history.name"), :'calendar-hover'
       .wat-cf
 
