@@ -1,6 +1,3 @@
--# FIXME: models with children doesn't look pretty.
--# Also perhaps there's a better place for the following setup code - a before_filter perhaps?
-
 - models = RailsAdmin::Config.visible_models.select { |model| authorized?(:list, model.abstract_model) }
 - root_models = models.select { |model| model.parent == :root }
 

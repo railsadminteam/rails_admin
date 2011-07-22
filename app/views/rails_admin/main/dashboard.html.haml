@@ -52,25 +52,26 @@
       #timeline
       #listingHistory
         = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
-      :javascript
-        $j(document).ready(function($) {
-          var cache = {};
-           $("#timeline").timeline({
-             url: "#{ rails_admin_history_slider_path }",
-             monthChanged: function(month, year) {
-               if (cache[year] && cache[year][month]) {
-                 $("#listingHistory").html(cache[year][month]);
-               } else {
-                 $j("#listingHistory").load(
-                   "#{ rails_admin_history_list_path }",
-                   { month: month, year: year },
-                   function(response, status, xhr) {
-                     if (!cache[year]) { cache[year] = {}; }
-                     cache[year][month] = response;
-                   }
-                 );
-               }
-             },
-             monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
-           });
-        });
+      - head_javascript do
+        :plain
+          $j(document).ready(function($) {
+            var cache = {}; 
+            $("#timeline").timeline({
+              url: "#{ rails_admin_history_slider_path }",
+              monthChanged: function(month, year) {
+                if (cache[year] && cache[year][month]) {
+                  $("#listingHistory").html(cache[year][month]);
+                } else {
+                  $j("#listingHistory").load(
+                    "#{ rails_admin_history_list_path }",
+                    { month: month, year: year },
+                    function(response, status, xhr) {
+                      if (!cache[year]) { cache[year] = {}; }
+                      cache[year][month] = response;
+                    }
+                  );
+                }
+              },
+              monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
+            });
+          });
