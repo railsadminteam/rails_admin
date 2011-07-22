@@ -12,7 +12,7 @@ $j(document).ready(function($){
   $("table.table tr.link").live('click', function(e) {
     // trs and tds are things that we want to link to the edit page
     // if the click's target is a button for instance, we don't want to move the user.
-    if ($(e.target).is('tr') || $(e.target).is('td')) {
+    if ($(e.target).is('tr') || $(e.target).is('td') || $(e.target).is('div.bar')) {
       window.location.href = $(this).attr("data-link");
     };
   });
