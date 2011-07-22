@@ -137,8 +137,8 @@ module RailsAdmin
     #    Provides the base url to use in the page navigation links.
     #    Defaults to ''
     def paginate(current_page, page_count, options = {})
-      options[:left_cut_label] ||= '&hellip;'
-      options[:right_cut_label] ||= '&hellip;'
+      options[:left_cut_label] ||= '<span>&hellip;</span>'
+      options[:right_cut_label] ||= '<span>&hellip;</span>'
       options[:outer_window] ||= 2
       options[:inner_window] ||= 7
       options[:remote] = true unless options.has_key?(:remote)
