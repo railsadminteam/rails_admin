@@ -4,6 +4,7 @@ module RailsAdmin
     before_filter :get_object, :except => [:list, :slider, :for_model]
 
     def list
+      @authorization_adapter.authorize(:see_history) if @authorization_adapter
       if params[:month].nil? or params[:year].nil?
         not_found
       else
@@ -15,6 +16,7 @@ module RailsAdmin
     end
 
     def slider
+      @authorization_adapter.authorize(:see_history) if @authorization_adapter
       if params[:from].blank? or params[:to].blank?
         not_found
       else
@@ -23,6 +25,7 @@ module RailsAdmin
     end
 
     def for_model
+      @authorization_adapter.authorize(:see_history) if @authorization_adapter
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.history.page_name", :name => @model_config.label)
       @general = true
@@ -34,6 +37,7 @@ module RailsAdmin
     end
 
     def for_object
+      @authorization_adapter.authorize(:see_history) if @authorization_adapter
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.history.page_name", :name => @model_config.with(:object => @object).object_label)
       @general = false

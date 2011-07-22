@@ -44,34 +44,34 @@
                     = action_icon(new_path, :add, t("admin.dashboard.add_new"))
                   - history_path = rails_admin_history_model_path(:model_name => abstract_model.to_param)
                   = action_icon(history_path, :calendar, t("admin.history.name"))
-
-#block-tables.block
-  .content
-    %h2.title= t("admin.history.name")
-    .inner
-      #timeline
-      #listingHistory
-        = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
-      - head_javascript do
-        :plain
-          $j(document).ready(function($) {
-            var cache = {}; 
-            $("#timeline").timeline({
-              url: "#{ rails_admin_history_slider_path }",
-              monthChanged: function(month, year) {
-                if (cache[year] && cache[year][month]) {
-                  $("#listingHistory").html(cache[year][month]);
-                } else {
-                  $j("#listingHistory").load(
-                    "#{ rails_admin_history_list_path }",
-                    { month: month, year: year },
-                    function(response, status, xhr) {
-                      if (!cache[year]) { cache[year] = {}; }
-                      cache[year][month] = response;
-                    }
-                  );
-                }
-              },
-              monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
+- if authorized? :see_history
+  #block-tables.block
+    .content
+      %h2.title= t("admin.history.name")
+      .inner
+        #timeline
+        #listingHistory
+          = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
+        - head_javascript do
+          :plain
+            $j(document).ready(function($) {
+              var cache = {}; 
+              $("#timeline").timeline({
+                url: "#{ rails_admin_history_slider_path }",
+                monthChanged: function(month, year) {
+                  if (cache[year] && cache[year][month]) {
+                    $("#listingHistory").html(cache[year][month]);
+                  } else {
+                    $j("#listingHistory").load(
+                      "#{ rails_admin_history_list_path }",
+                      { month: month, year: year },
+                      function(response, status, xhr) {
+                        if (!cache[year]) { cache[year] = {}; }
+                        cache[year][month] = response;
+                      }
+                    );
+                  }
+                },
+                monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
+              });
             });
-          });
