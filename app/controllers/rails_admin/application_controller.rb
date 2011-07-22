@@ -20,7 +20,8 @@ module RailsAdmin
 
     def to_model_name(param)
       parts = param.split("~")
-      parts.map{|x| x == parts.last ? x.singularize.camelize : x.camelize}.join("::")
+      parts[-1] = parts.last.singularize
+      parts.map(&:camelize).join("::")
     end
 
     def get_object
