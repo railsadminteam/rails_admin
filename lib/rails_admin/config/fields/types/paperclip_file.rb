@@ -28,7 +28,7 @@ module RailsAdmin
                 if file.content_type =~ /image/
                   v = bindings[:view]
                   thumb_url = (self.thumb_method && file.url(self.thumb_method) || url)
-                  (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url) : v.image_tag(thumb_url)
+                  (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url, :target => 'blank') : v.image_tag(thumb_url)
                 else
                   url
                 end
