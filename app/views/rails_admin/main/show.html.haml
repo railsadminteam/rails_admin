@@ -18,14 +18,14 @@
     %h2.title= @page_name
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-
-      - @model_config.show.with(:object => @object).visible_groups.each do |fieldset|
-        - if (fields = fieldset.visible_fields).length > 0
-          .fieldset
-            %h4= fieldset.label
-            = content_tag :div, fieldset.help, :class => "help" if fieldset.help
-            - fields.map { |field| field.with(:object => @object, :view => self) }.each do |field|
-              %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
-                - if (value = field.pretty_value.presence) || !RailsAdmin::config.compact_show_view
-                  %div.label= field.label
-                  %div.value= value || ' - '
+      - @model_config.show.with(:object => @object, :view => self).visible_groups.each do |fieldset|
+        - unless (fields = fieldset.visible_fields.map{|f| f.with(:object => @object, :view => self)}).empty?
+          - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
+            .fieldset
+              %h4= fieldset.label
+              = content_tag :div, fieldset.help, :class => "help" if fieldset.help
+              - fields.each_with_index do |field, index|
+                %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
+                  - if (value = values[index]) || !RailsAdmin::config.compact_show_view
+                    %div.label= field.label
+                    %div.value= value || ' - '
