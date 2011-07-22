@@ -14,10 +14,10 @@ module RailsAdmin
         def association
           @properties
         end
-        
+
         register_instance_option(:pretty_value) do
           v = bindings[:view]
-          [value].flatten.select(&:present?).map do |associated| 
+          [value].flatten.select(&:present?).map do |associated|
             amc = polymorphic? ? RailsAdmin::Config.model(associated) : associated_model_config # perf optimization for non-polymorphic associations
             am = amc.abstract_model
             wording = associated.send(amc.object_label_method)

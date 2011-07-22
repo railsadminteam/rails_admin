@@ -37,7 +37,7 @@ module RailsAdmin
             }
            end
 
-          register_instance_option(:edit_partial) do
+          register_instance_option(:partial) do
             color? ? :form_colorpicker : :form_field
           end
         end
