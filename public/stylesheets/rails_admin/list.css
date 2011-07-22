@@ -41,6 +41,9 @@
   margin-bottom:-5px;
 }
 
+.grid tbody .select {
+  width:34px;
+}
 .grid tbody .date,
 .grid tbody .datetime,
 .grid tbody .time,
@@ -71,6 +74,13 @@
 
 .grid tbody td {
   padding: 7px 5px;
+}
+.grid tbody td {
+  height: 34px;
+}
+
+.grid thead tr {
+  height: 37px;
 }
 
 .grid tbody td.boolean, .grid thead th.boolean {
