@@ -5,7 +5,7 @@ source 'http://rubygems.org'
 # and rake tasks are available in development mode:
 group :development, :test do
   gem 'rails', '~> 3.0.0'
-  
+
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
     case ENV['CI_DB_ADAPTER']
@@ -33,8 +33,6 @@ group :development, :test do
   end
 
   gem 'cancan' if ENV['AUTHORIZATION_ADAPTER'] == 'cancan'
-  gem 'factory_girl', '2.0.0.beta2'
-  gem 'generator_spec'
 
   platform :mri_18 do
     gem 'ruby-debug'
