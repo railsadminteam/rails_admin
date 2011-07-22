@@ -14,7 +14,7 @@ module RailsAdmin
             super(parent, name, properties, association)
           end
 
-          register_instance_option(:edit_partial) do
+          register_instance_option(:partial) do
             :form_polymorphic_association
           end
 

@@ -9,7 +9,7 @@ module RailsAdmin
         class PaperclipFile < RailsAdmin::Config::Fields::Types::FileUpload
           RailsAdmin::Config::Fields::Types.register(self)
 
-          register_instance_option(:edit_partial) do
+          register_instance_option(:partial) do
             :form_paperclip_file
           end
 
@@ -20,9 +20,9 @@ module RailsAdmin
           register_instance_option(:thumb_method) do
             nil
           end
-          
+
           register_instance_option(:pretty_value) do
-            if (file = bindings[:object].send(method_name)) 
+            if (file = bindings[:object].send(method_name))
               if file.file?
                 url = file.url
                 if file.content_type =~ /image/
