@@ -20,7 +20,10 @@ To use it with Rails Admin, add this to an initializer.
 
 ```ruby
 # in config/initializers/rails_admin.rb
-RailsAdmin.authorize_with :cancan
+
+RailsAdmin.config do |config|
+  config.authorize_with :cancan
+end
 ```
 
 At this point, all authorization will fail and no one will be able to access the admin pages. To grant access, add this to `Ability#initialize`.
@@ -63,6 +66,10 @@ class ApplicationController < ActionController::Base
   end
 end
 ```
+
+### CanCan::AuthorizationNotPerformed exception
+
+remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead. 
 
 # Running Specs
 
