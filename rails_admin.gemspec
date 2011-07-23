@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'dummy_data', '~> 0.9'
   gem.add_development_dependency 'maruku', '~> 0.6'
   gem.add_development_dependency 'paperclip', '~> 2.3'
+  gem.add_development_dependency 'carrierwave', '~> 0.5.6'
   gem.add_development_dependency 'rspec-rails', '~> 2.6'
   gem.add_development_dependency 'simplecov', '~> 0.4'
   gem.add_development_dependency 'yard', '~> 0.7'
