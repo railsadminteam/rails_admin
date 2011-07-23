@@ -4,5 +4,6 @@
 
 ### Authorization
 
+* [[Customized authorization]]
 * [[CanCan]]
 * [[Declarative Authorization]]
