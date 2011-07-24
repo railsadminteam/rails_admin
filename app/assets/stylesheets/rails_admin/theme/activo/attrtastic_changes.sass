@@ -1,0 +1,62 @@
+/*
+ *  Stylesheet for attrtastic
+ *
+ *  David Marquês Francisco
+ *  (dfrancisc[at]gmail.com)
+ *
+ */
+
+.attrtastic
+  .attributes > ol
+    // evitar a numeração da listagem
+    list-style: none
+
+    > li.attribute
+      // espaçamento entre linhas
+      margin-bottom: 10px
+      line-height: 18px
+      margin-right: -6px // FIXME
+
+      .label
+        // label do atributo
+        color: #666666
+        // para ficar por cima do campo
+        width: 100%
+        display: block
+        font-size: 14px
+
+      .value
+        // valor do atributo
+        background-color: #f6f6f6
+        padding: 2px
+        padding-left: 4px
+        display: block
+        min-height: 18px
+        font-size: 13px
+
+  hr
+    // barra para subdividir grupos
+    height: 1px
+    border-bottom: solid #e8e8e8 1px
+    margin-bottom: 15px
+    background-color: #fff
+
+
+  /* COLUNAS */
+
+  .attributes > ol
+    // uma só coluna
+    float: left
+    width: 100%
+
+  .column_left
+    // duas colunas - esquerda
+    float: left
+    width: 47%
+    margin-left: 0px
+
+  .column_right
+    // duas colunas - direita
+    float: right
+    width: 48%
+    margin-right: 0px

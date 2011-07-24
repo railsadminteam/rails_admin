@@ -1,0 +1,9 @@
+/** Stylesheet for the tooltips (jquery.tipsy) */
+
+.tipsy { padding: 5px; font-size: 12px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat;  background-image: url(../images/tipsy.gif); }
+  .tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+  .tipsy-inner { -moz-border-radius:3px; -webkit-border-radius:3px; -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.6); }
+  .tipsy-north { background-position: top center; }
+  .tipsy-south { background-position: bottom center; }
+  .tipsy-east { background-position: right center; }
+  .tipsy-west { background-position: left center; }

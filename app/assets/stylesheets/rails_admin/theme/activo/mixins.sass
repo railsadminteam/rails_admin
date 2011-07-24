@@ -1,0 +1,28 @@
+/*
+ *  Cross-browser mixins
+ *
+ *  David Marquês Francisco
+ *  (dfrancisc[at]gmail.com)
+ *
+ */
+
+// exemplo: text-shadow(#333, 1px, 1px, 1)
+@mixin text-shadow($color, $x, $y, $blur)
+  text-shadow: $color $x $y #{$blur}px
+  //:-ms-filter "progid:DXImageTransform.Microsoft.Shadow(Color=#{$color},Direction=135,Strength=#{$blur})"
+
+// exemplo: box-shadow(5px 5px 5px #000)
+@mixin box-shadow($value)
+  -webkit-box-shadow: $value
+  -moz-box-shadow: $value
+  box-shadow: $value
+
+@mixin rounded-corners($radius)
+  -moz-border-radius: $radius
+  -webkit-border-radius: $radius
+  border-radius: $radius
+
+@mixin rounded-corner($vert, $side, $radius)
+  -moz-border-radius-#{$vert}#{$side}: $radius
+  -webkit-border-#{$vert}-#{$side}-radius: $radius
+  border-#{$vert}-#{$side}-radius: $radius

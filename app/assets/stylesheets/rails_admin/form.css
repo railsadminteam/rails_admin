@@ -79,11 +79,11 @@ form label.inline {
 }
 
 .field .date, .field .datetime, .field .hasDatepicker {
-  background: url("../../images/rails_admin/calendar.png") no-repeat right;
+  background: url("/assets/rails_admin/calendar.png") no-repeat right;
 }
 
 .field .time, .field .timestamp, .field .hasTimepicker {
-  background: url("../../images/rails_admin/clock.png") no-repeat right;
+  background: url("/assets/rails_admin/clock.png") no-repeat right;
 }
 
 .field .integer {

@@ -70,14 +70,14 @@ module RailsAdmin
     def action_button link, text, icon=nil, options={}
       options.reverse_merge! :class => "button"
       link_to link, options do
-        image = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/#{icon}.png" if icon
+        image = image_tag "/assets/rails_admin/theme/activo/images/icons/#{icon}.png" if icon
         [image, text].compact.join("\n").html_safe
       end.html_safe
     end
 
     # the icon shown beside every entry in the list view
     def action_icon link, icon, text
-      icon_path = "/stylesheets/rails_admin/theme/activo/images/icons/24/%s.png"
+      icon_path = "/assets/rails_admin/theme/activo/images/icons/24/%s.png"
       icon_change = "this.src='#{icon_path}'"
       link_to link do
         image_tag (icon_path % icon),
@@ -89,7 +89,7 @@ module RailsAdmin
 
     # Used for the icons in the admins very top right.
     def header_icon(image_name, title)
-      image_tag "/stylesheets/rails_admin/theme/activo/images/session/#{image_name}.png", :alt => title, :title => title
+      image_tag "/assets/rails_admin/theme/activo/images/session/#{image_name}.png", :alt => title, :title => title
     end
 
     # Used for the history entries in the sidebar
