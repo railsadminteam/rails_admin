@@ -7,12 +7,6 @@
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   @style, @other, properties = get_column_set(properties)
-  
-  head_javascript "rails_admin/application.js"
-  head_javascript "rails_admin/activo/application.js"
-  head_javascript "rails_admin/ra.filter-box.js"
-  head_style "rails_admin/list"
-    
   if params[:filters]
     @ordered_filters = params[:filters].inject({}) { |memo, filter|
       field_name = filter.first

@@ -5,9 +5,6 @@
                 <span class="errorMessage"><%= "#{field.label} #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
-                <% head_style "rails_admin/jquery.ui.timepicker.css" %>
-                <% head_javascript "rails_admin/jquery.ui.timepicker.js" %>
-                <% head_javascript "rails_admin/ra.datetimepicker.js" %>
                 <% head_javascript do %>
                   $j(document).ready(function($){
                     $("#<%= field.dom_id %>").datetimepicker(<%= field.js_plugin_options.html_safe %>);
