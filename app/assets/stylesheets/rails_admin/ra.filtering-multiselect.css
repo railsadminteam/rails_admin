@@ -9,7 +9,7 @@
 }
 
 .ra-multiselect-search {
-  background: url(../../images/rails_admin/magnifier.png) no-repeat;
+  background: url(/assets/rails_admin/magnifier.png) no-repeat;
   padding-left: 19px;
   padding-top: 5px;
   font-size: 11px;
@@ -72,46 +72,46 @@
 
 .ra-multiselect .ui-icon-circle-triangle-e {
   background-position: -16px -32px !important;
-  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
+  background-image: url(/assets/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-e:hover {
   background-position: -16px -48px !important;
-  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
+  background-image: url(/assets/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w {
   background-position: 0px -32px !important;
-  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
+  background-image: url(/assets/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-w:hover {
   background-position: 0px -48px !important;
-  background-image: url(../../images/rails_admin/multiselect/icon_sprite.png);
+  background-image: url(/assets/rails_admin/multiselect/icon_sprite.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-n {
   background-position: 0px 0px !important;
   margin-left: 1px;
-  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-n-light.png);
+  background-image: url(/assets/rails_admin/multiselect/ui-icon-circle-triangle-n-light.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-n:hover {
   background-position: 0px 0px !important;
   margin-left: 1px;
-  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-n-dark.png);
+  background-image: url(/assets/rails_admin/multiselect/ui-icon-circle-triangle-n-dark.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-s {
   background-position: 0px 0px !important;
   margin-left: 1px;
-  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-s-light.png);
+  background-image: url(/assets/rails_admin/multiselect/ui-icon-circle-triangle-s-light.png);
 }
 
 .ra-multiselect .ui-icon-circle-triangle-s:hover {
   background-position: 0px 0px !important;
   margin-left: 1px;
-  background-image: url(../../images/rails_admin/multiselect/ui-icon-circle-triangle-s-dark.png);
+  background-image: url(/assets/rails_admin/multiselect/ui-icon-circle-triangle-s-dark.png);
 }
 
 

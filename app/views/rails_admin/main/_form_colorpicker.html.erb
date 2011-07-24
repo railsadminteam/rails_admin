@@ -6,8 +6,6 @@
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
-	            <% head_style "rails_admin/jquery.colorpicker.css" %>
-	            <% head_javascript "rails_admin/jquery.colorpicker.js" %>
                 <% head_javascript do %>
                   $j(document).ready(function($){
                     var input = $('#<%= field.dom_id %>').hide();

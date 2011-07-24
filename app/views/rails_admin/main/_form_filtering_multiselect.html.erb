@@ -21,8 +21,6 @@
                   <span class="errorMessage"><%= "#{field.label} #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
-                <% head_style 'rails_admin/ra.filtering-multiselect.css' %>
-                <% head_javascript "rails_admin/ra.filtering-multiselect.js" %>
                 <% head_javascript do %>
                   $j(document).ready(function($){
                     $("#<%= field.dom_id %>").filteringMultiselect({

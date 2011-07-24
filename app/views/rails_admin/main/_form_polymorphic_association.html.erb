@@ -22,8 +22,6 @@
                 <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
                 <% end %>
                 <p class="help"><%= field.help %></p>
-                <% head_style 'rails_admin/ra.filtering-select.css' %>
-                <% head_javascript "rails_admin/ra.filtering-select.js" %>
 
                 <%= javascript_tag do %>
                   $j(document).ready(function($) {
