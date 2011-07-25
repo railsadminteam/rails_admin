@@ -92,7 +92,7 @@
           },
           text: false
         })
-        
+
         .removeClass("ui-corner-all")
         .addClass("ra-filtering-select-button ui-corner-right")
         .click(function() {
@@ -110,10 +110,10 @@
 
     _getResultSet: function(request, data, xhr) {
 	    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-			
-      return $.map(data, function(el, i) {	
+
+      return $.map(data, function(el, i) {
 				// match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
-        if ((el.id || el.value) && (xhr || matcher.test(el.label))) { 
+        if ((el.id || el.value) && (xhr || matcher.test(el.label))) {
           return {
             label: el.label.replace(
               new RegExp(

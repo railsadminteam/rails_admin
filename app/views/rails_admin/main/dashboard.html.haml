@@ -1,6 +1,6 @@
 #block-tables.block
   = breadcrumbs_for :dashboard, nil
-  
+
   .content
     %h2.title= @page_name
     .inner
@@ -18,10 +18,10 @@
             - if authorized? :list, abstract_model
               - list_path = list_path(:model_name => abstract_model.to_param)
               - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
-              
+
               %tr{:class => row_class, :"data-link" => list_path}
                 %td.start
-                  %span.show= RailsAdmin.config(abstract_model).label
+                  %span.show= link_to RailsAdmin.config(abstract_model).label, list_path
                 %td
                   - if (last_used = @most_recent_changes[abstract_model.pretty_name])
                     = time_ago_in_words last_used
@@ -38,33 +38,34 @@
                     = action_icon(new_path, :add, t("admin.dashboard.add_new"))
                   - history_path = history_model_path(:model_name => abstract_model.to_param)
                   = action_icon(history_path, :calendar, t("admin.history.name"))
-
-#block-tables.block
-  .content
-    %h2.title= t("admin.history.name")
-    .inner
-      #timeline
-      #listingHistory
-        = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
-      :javascript
-        $j(document).ready(function($) {
-          var cache = {};
-           $("#timeline").timeline({
-             url: "#{ history_slider_path }",
-             monthChanged: function(month, year) {
-               if (cache[year] && cache[year][month]) {
-                 $("#listingHistory").html(cache[year][month]);
-               } else {
-                 $j("#listingHistory").load(
-                   "#{ history_list_path }",
-                   { month: month, year: year },
-                   function(response, status, xhr) {
-                     if (!cache[year]) { cache[year] = {}; }
-                     cache[year][month] = response;
-                   }
-                 );
-               }
-             },
-             monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
-           });
-        });
+- if authorized? :see_history
+  #block-tables.block
+    .content
+      %h2.title= t("admin.history.name")
+      .inner
+        #timeline
+        #listingHistory
+          = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
+        - head_javascript do
+          :plain
+            $j(document).ready(function($) {
+              var cache = {}; 
+              $("#timeline").timeline({
+                url: "#{ rails_admin_history_slider_path }",
+                monthChanged: function(month, year) {
+                  if (cache[year] && cache[year][month]) {
+                    $("#listingHistory").html(cache[year][month]);
+                  } else {
+                    $j("#listingHistory").load(
+                      "#{ history_list_path }",
+                      { month: month, year: year },
+                      function(response, status, xhr) {
+                        if (!cache[year]) { cache[year] = {}; }
+                        cache[year][month] = response;
+                      }
+                    );
+                  }
+                },
+                monthNames: #{ActiveSupport::JSON.encode(month_names).html_safe}
+              });
+            });

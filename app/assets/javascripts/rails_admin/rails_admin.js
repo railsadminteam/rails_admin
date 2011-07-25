@@ -5,7 +5,7 @@
 // the compiled file.
 //
 //= require ./jquery-1.5.1.js
-//= require ./jquery-ui-1.8.13.js
+//= require ./jquery-ui-1.8.14.js
 //= require ./jquery.ui.timepicker.js
 //= require_tree ./activo
 //= require ./ra.datetimepicker.js

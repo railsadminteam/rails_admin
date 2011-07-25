@@ -19,7 +19,7 @@ module RailsAdmin
         # instance if it is available.
         def authorize(action, abstract_model = nil, model_object = nil)
           action = translate_action(action)
-          @controller.current_ability.authorize!(action, model_object || abstract_model.model) if action
+          @controller.current_ability.authorize!(action, model_object || abstract_model && abstract_model.model) if action
         end
 
         # This method is called primarily from the view to determine whether the given user
@@ -28,7 +28,7 @@ module RailsAdmin
         # return a boolean whereas +authorize+ will raise an exception when not authorized.
         def authorized?(action, abstract_model = nil, model_object = nil)
           action = translate_action(action)
-          @controller.current_ability.can?(action, model_object || abstract_model.model) if action
+          @controller.current_ability.can?(action, model_object || abstract_model && abstract_model.model) if action
         end
 
         # This is called when needing to scope a database query. It is called within the list
@@ -44,7 +44,7 @@ module RailsAdmin
         # is authorized to create.
         def attributes_for(action, abstract_model)
           action = translate_action(action)
-          @controller.current_ability.attributes_for(action, abstract_model.model)
+          @controller.current_ability.attributes_for(action, abstract_model && abstract_model.model)
         end
 
         private

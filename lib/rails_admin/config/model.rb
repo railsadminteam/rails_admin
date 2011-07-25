@@ -61,8 +61,10 @@ module RailsAdmin
       register_instance_option(:parent) do
         :root
       end
+      
+      register_deprecated_instance_option(:dropdown, :navigation_label) # same API, deprecated 2011-07-21
 
-      register_instance_option(:dropdown) do
+      register_instance_option(:navigation_label) do
         false
       end
 
@@ -70,7 +72,7 @@ module RailsAdmin
       # store the configurations.
       def method_missing(m, *args, &block)
         responded_to = false
-        [:create, :list, :navigation, :update].each do |s|
+        [:create, :list, :show, :navigation, :update].each do |s|
           section = send(s)
           if section.respond_to?(m)
             responded_to = true

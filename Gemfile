@@ -32,12 +32,10 @@ group :development, :test do
   end
 
   gem 'cancan' if ENV['AUTHORIZATION_ADAPTER'] == 'cancan'
-  gem 'factory_girl', '2.0.0.beta2'
-  gem 'generator_spec'
 
   platform :mri_18 do
     gem 'ruby-debug'
-    gem 'linecache', '0.43' # tmp lock, 0.45 is buggy
+    gem 'linecache'
   end
 
   platform :mri_19 do

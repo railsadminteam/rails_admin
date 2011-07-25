@@ -15,8 +15,12 @@ fi:
       ago: "sitten"
     history:
       name: "Historia"
-      page_name: "Historia kohteelle %{name}"
+      page_name: "Kohteen %{name} historia"
       no_activity: "Ei tapahtumia"
+    show:
+      show_in_app: "Näytä sovelluksessa"
+      page_name: "Kohteen %{name} tiedot"
+      no_file_found: "Tiedostoa ei löytynyt"
     credentials:
       log_out: "Kirjaudu ulos"
     list:
@@ -25,6 +29,7 @@ fi:
       select_action: "Valitse"
       delete_selected: "Poista valitut"
       export_action: "Vie nykyinen näkymä"
+      show_action: "Näytä"
       export_selected: "Vie valitut"
       add_new: "Lisää uusi"
       search: "Haku"
@@ -60,7 +65,7 @@ fi:
       display: "Sisällytä %{name}: %{type}"
       options_for: "Valinnat %{name} muodolle"
       empty_value_for_associated_objects: "<tyhjä>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Koodaus"
@@ -84,12 +89,13 @@ fi:
       export: "vie"
       exported: "viety"
     breadcrumbs:
-      delete: "delete"
-      history: "history"
-      edit: "edit"
-      export: "export"
-      bulk_destroy: "delete"
-      new: "new"
-      model_history: "history"
-      list: "list"
-      dashboard: "dashboard"
+      delete: "poista"
+      history: "historia"
+      show: "näytä"
+      edit: "muokkaa"
+      export: "vie"
+      bulk_destroy: "poista"
+      new: "luo uusi"
+      model_history: "historia"
+      list: "listaa"
+      dashboard: "hallintapaneeli"

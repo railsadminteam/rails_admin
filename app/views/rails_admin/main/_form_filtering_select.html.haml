@@ -1,0 +1,29 @@
+:ruby
+  config = field.associated_model_config
+  selected_id = field.selected_id
+  xhr = field.associated_collection_count > 100
+  if xhr
+    collection = [[field.formatted_value, selected_id]]
+  else
+    collection = field.associated_collection(@authorization_adapter)
+  end
+
+= field_wrapper_for(form, field) do
+  = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes
+
+  - if authorized? :new, config.abstract_model
+    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
+
+- head_style 'rails_admin/ra.filtering-select.css'
+- head_javascript "rails_admin/ra.filtering-select.js"
+- head_javascript do
+  $j(document).ready(function($){
+  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+  $("##{"#{field.dom_id}"}").filteringSelect({
+  - if xhr
+    createQuery: function(query) {
+    return { query: query }
+    },
+    source: "#{rails_admin_list_path(config.abstract_model.to_param, :compact => true)}"
+  });
+  });

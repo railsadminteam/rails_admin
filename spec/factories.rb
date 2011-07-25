@@ -9,22 +9,22 @@ FactoryGirl.define do
 
   factory :draft do
     date 1.week.ago
-    round rand(100000)
-    pick rand(100000)
-    overall rand(100000)
+    sequence(:round)
+    sequence(:pick)
+    sequence(:overall)
     sequence(:college) {|n| "College #{n}"}
     association :team
     association :player
   end
 
   factory :team do
-    division_id rand(99999)
+    sequence(:division_id)
     sequence(:name) { |n| "Team #{n}" }
     sequence(:manager) { |n| "Manager #{n}" }
-    founded 1869 + rand(130)
-    wins(wins = rand(163))
-    losses 162 - wins
-    win_percentage("%.3f" % (wins.to_f / 162).to_f)
+    sequence(:founded)
+    sequence(:wins)
+    sequence(:losses)
+    sequence(:win_percentage)
   end
 
   factory :league do
@@ -55,5 +55,9 @@ FactoryGirl.define do
         proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
       EOF
     end
+  end
+
+  factory :ball do
+    color(%W(red blue green yellow purple brown black white).sample)
   end
 end

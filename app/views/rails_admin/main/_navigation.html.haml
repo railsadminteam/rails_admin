@@ -1,6 +1,3 @@
--# FIXME: models with children doesn't look pretty.
--# Also perhaps there's a better place for the following setup code - a before_filter perhaps?
-
 - models = RailsAdmin::Config.visible_models.select { |model| authorized?(:list, model.abstract_model) }
 - root_models = models.select { |model| model.parent == :root }
 
@@ -14,7 +11,7 @@
       - if children.size == 1
         = link_to(model.label.pluralize, list_path(:model_name => model.abstract_model.to_param))
       - else
-        %a{:href => "#"}= model.dropdown ? t(model.dropdown, :default => model.dropdown) : model.label.pluralize
+        %a{:href => "#"}= model.navigation_label ? t(model.navigation_label, :default => model.navigation_label) : model.label.pluralize
         %ul
           - children.each_with_index do |child, index|
             %li{:class => ("active" if @page_type == tab_titles[index])}

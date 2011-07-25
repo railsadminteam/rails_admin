@@ -155,7 +155,7 @@ module RailsAdmin
           end
 
           register_instance_option(:partial) do
-            "form_datetime"
+            :form_datetime
           end
 
           register_instance_option(:strftime_format) do

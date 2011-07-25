@@ -2,7 +2,7 @@
 # Translated from the English locale by Luuk Hendriks (DRiKE on github), used the date and datetime
 # from https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/nl.yml
 # credits for those sections to Ariejan de Vroom and Floris Huetink
- 
+
 nl:
   home:
     name: "home"
@@ -110,7 +110,7 @@ nl:
         other: "meer dan %{count} jaar"
       almost_x_years:
         one: "bijna \xC3\xA9\xC3\xA9n jaar"
-        other: "bijna %{count} jaar" 
+        other: "bijna %{count} jaar"
   date:
     formats:
       default: "%d/%m/%Y"

@@ -4,7 +4,12 @@
     = t("admin.new.save")
   %span.extra_buttons
     - if authorized? :new, @abstract_model
-      %button.button{:type => "submit", :name => "_add_another"}= t("admin.new.save_and_add_another")
-    %button.button{:type => "submit", :name => "_add_edit"}= t("admin.new.save_and_edit")
-    %button.button{:type => "submit", :name => "_continue"} Cancel
-  
+      %button.button{:type => "submit", :name => "_add_another"}
+        = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/add.png", :alt => t("admin.new.save_and_add_another")
+        = t("admin.new.save_and_add_another")
+    %button.button{:type => "submit", :name => "_add_edit"}
+      = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/edit.png", :alt => t("admin.new.save_and_edit")
+      = t("admin.new.save_and_edit")
+    %button.button{:type => "submit", :name => "_continue"}
+      = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
+      = t("admin.new.cancel")

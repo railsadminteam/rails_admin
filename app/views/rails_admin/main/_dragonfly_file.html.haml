@@ -1,0 +1,11 @@
+= field_wrapper_for(form, field) do
+  .input
+    - if field.bindings[:object].send(field.name)
+      .row
+        - if field.bindings[:object].send(field.name).mime_type.include? 'image'
+          = image_tag(field.bindings[:object].send(field.name).thumb("450x100").url)
+          %br
+        - else
+          = link_to field.bindings[:object].send(field.name).url, field.bindings[:object].send(field.name).url
+    .row
+      = form.file_field(field.name, field.html_attributes)

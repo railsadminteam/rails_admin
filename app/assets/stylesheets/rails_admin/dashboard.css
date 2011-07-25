@@ -19,8 +19,12 @@
   height: 100%;
 }
 
-.show{
+.show {
   font-weight:bold;
+}
+
+.show a {
+  text-decoration:none;
 }
 
 /* Styles for the history table: */

@@ -37,21 +37,12 @@ module RailsAdmin
             :form_filtering_select
           end
 
-          register_instance_option(:render) do
-            bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
-          end
-
           def associated_model_config
             @associated_model_config ||= RailsAdmin.config(association[:parent_model])
           end
 
           def selected_id
             bindings[:object].send(child_key)
-          end
-
-          # Reader for field's value
-          def value
-            bindings[:object].send(name)
           end
 
           def method_name

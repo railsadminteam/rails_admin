@@ -1,0 +1,9 @@
+- if (fields = fieldset.fields.map{ |f| f.with(:form => form, :object => object, :view => self) }.select(&:visible)).length > 0
+  %fieldset
+    %legend= fieldset.label
+
+    - if fieldset.help
+      .help= fieldset.help
+
+    - fields.each do |field|
+      = field.render

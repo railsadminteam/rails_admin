@@ -14,8 +14,8 @@ describe "RailsAdmin Basic New" do
     end
 
     it "should show required fields as \"Required\"" do
-      should have_selector("div", :text => /Name\n\s*Required/)
-      should have_selector("div", :text => /Number\n\s*Required/)
+      should have_selector("div", :text => /Name\s*Required/)
+      should have_selector("div", :text => /Number\s*Required/)
     end
 
     it "should show non-required fields as \"Optional\"" do
@@ -75,4 +75,12 @@ describe "RailsAdmin Basic New" do
       visit new_path(:model_name => "player")
     end
   end
+
+  describe "GET /admin/player/new with parameters for pre-population" do
+    it "should populate form field when corresponding parameters are passed in" do
+      visit rails_admin_new_path(:model_name => 'player', :player => {:name => 'Sam'})
+      page.should have_css('input[value=Sam]')
+    end
+  end
+
 end

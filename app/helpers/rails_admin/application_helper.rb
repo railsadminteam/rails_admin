@@ -141,8 +141,8 @@ module RailsAdmin
     #    Provides the base url to use in the page navigation links.
     #    Defaults to ''
     def paginate(current_page, page_count, options = {})
-      options[:left_cut_label] ||= '&hellip;'
-      options[:right_cut_label] ||= '&hellip;'
+      options[:left_cut_label] ||= '<span>&hellip;</span>'
+      options[:right_cut_label] ||= '<span>&hellip;</span>'
       options[:outer_window] ||= 2
       options[:inner_window] ||= 7
       options[:remote] = true unless options.has_key?(:remote)
@@ -220,13 +220,33 @@ module RailsAdmin
         t('home.name')
       end
     end
+    
+    def messages_and_help_for field
+      tags = []
+      if field.has_errors?
+        tags << content_tag(:span, "#{field.label} #{field.errors.first}", :class => "errorMessage")
+      end
+      tags << content_tag(:p, field.help, :class => "help")
+      tags.join("\n").html_safe
+    end
+    
+    def field_wrapper_for form, field, opts={}
+      opts = opts.reverse_merge(:label => true, :messages_and_help => true)
+      
+      content_tag(:div, :class => "field #{field.dom_id}") do
+        concat form.label(field.method_name, field.label) if opts[:label]
+        yield
+        concat messages_and_help_for(field) if opts[:messages_and_help]
+      end.html_safe
+    end
 
     # Creative whitespace:
     ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
       :delete        => ViewType.new(:edit,      :object, :delete),
       :history       => ViewType.new(:edit,      :object, nil,            :history_object),
-      :edit          => ViewType.new(:list,      :object, :edit),
+      :show          => ViewType.new(:list,      :object, nil),
+      :edit          => ViewType.new(:show,      :object, :edit),
       :export        => ViewType.new(:list,      :model,  :export),
       :bulk_destroy  => ViewType.new(:list,      :model,  :delete),
       :new           => ViewType.new(:list,      :model,  :new),

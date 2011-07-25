@@ -361,33 +361,24 @@ a.button:link, a.button:visited, a.button:hover, a.button:active, button.button 
   background-color: #eee;
   border:1px solid #bfbfbf;
   font-size: 1em;
-  line-height: 1.3em;
+  line-height: 26px;
   font-weight:bold;
   cursor:pointer;
-  padding:5px 10px 6px 7px;
   text-decoration: none;
+  padding: 0 10px;
+  height: 26px;
 }
 
 button.button {
-  width:auto;
-  overflow:visible;
-  padding:4px 10px 3px 7px; /* IE6 */
-}
-button.button[type] {
-  padding:5px 10px 5px 7px; /* Firefox */
-  line-height:17px; /* Safari */
+  height: 28px;
 }
 
-*:first-child+html button.button[type] {
-  padding:4px 10px 3px 7px; /* IE7 */
-}
-
-button.button img, a.button img {
-  margin:0 3px -3px 0 !important;
-  padding:0;
-  border:none;
-  width:16px;
-  height:16px;
+.button img {
+  vertical-align: middle;
+  margin: 0 0 2px -3px;
+  border: none;
+  width: 16px;
+  height: 16px;
 }
 
 button.button:hover, a.button:hover {

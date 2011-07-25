@@ -16,17 +16,21 @@
   color: #C00;
 }
 
-ul#nav li.active {
-  background-color: #bcbcbc;
-}
-
-ul#nav li:hover {
-  background-color: #a7a7a7;
-}
-
-#sidebar ul#nav li.active a {
+/* Sidebar hacks, mostly applies specificly to Activo2 */
+ul#nav li.active>a  {
   font-weight: bold;
+}
+
+#sidebar ul#nav ul {
+  padding-left:10px;
+}
+
+#sidebar ul#nav li a {
   color: inherit;
+}
+
+#sidebar ul#nav ul li {
+  border-bottom: none;
 }
 
 /* Fix for uniform.js checkbox css: */

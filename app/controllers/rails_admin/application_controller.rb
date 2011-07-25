@@ -20,7 +20,8 @@ module RailsAdmin
 
     def to_model_name(param)
       parts = param.split("~")
-      parts.map{|x| x == parts.last ? x.singularize.camelize : x.camelize}.join("::")
+      parts[-1] = parts.last.singularize
+      parts.map(&:camelize).join("::")
     end
 
     def get_object
@@ -31,15 +32,15 @@ module RailsAdmin
     private
 
     def _authenticate!
-      instance_eval &RailsAdmin.authenticate_with
+      instance_eval &RailsAdmin::Config.authenticate_with
     end
 
     def _authorize!
-      instance_eval &RailsAdmin.authorize_with
+      instance_eval &RailsAdmin::Config.authorize_with
     end
 
     def _current_user
-      instance_eval &RailsAdmin.current_user_method
+      instance_eval &RailsAdmin::Config.current_user_method
     end
 
     def set_plugin_name

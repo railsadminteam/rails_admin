@@ -6,7 +6,7 @@ module RailsAdmin
     layout "rails_admin/main"
 
     before_filter :get_model, :except => [:index]
-    before_filter :get_object, :only => [:edit, :update, :delete, :destroy]
+    before_filter :get_object, :only => [:show, :edit, :update, :delete, :destroy]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
@@ -87,6 +87,9 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
+      if object_params = params[@abstract_model.model.name.underscore.to_sym]
+        @object.attributes = @object.attributes.merge(object_params)
+      end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
@@ -127,9 +130,14 @@ module RailsAdmin
       end
     end
 
+    def show
+      @authorization_adapter.authorize(:show, @abstract_model, @object) if @authorization_adapter
+      @page_name = t("admin.show.page_name", :name => @model_config.label.downcase)
+      @page_type = @abstract_model.pretty_name.downcase
+    end
+
     def edit
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
-
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
     end
@@ -353,11 +361,11 @@ module RailsAdmin
       end
 
       if filters.present?
-        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.intern] = field.searchable_columns; memo }
+        @filterable_fields = @model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.to_sym] = field.searchable_columns; memo }
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
             field_statements = []
-            @filterable_fields[field_name.intern].each do |field_infos|
+            @filterable_fields[field_name.to_sym].each do |field_infos|
               unless filter_dump[:disabled]
                 statement, *value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
                 if statement
@@ -396,7 +404,7 @@ module RailsAdmin
       elsif operator == '_not_empty' || value == '_not_empty'
         return ["(#{column} != '')"]
       end
-      
+
       case type
       when :boolean
          ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
@@ -432,7 +440,7 @@ module RailsAdmin
         end
         ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
-        ["(#{column} #{@like_operator} ?)", value]
+        ["(#{column} = ?)", value]
       end
     end
 

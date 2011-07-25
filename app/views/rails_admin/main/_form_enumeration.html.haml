@@ -1,0 +1,2 @@
+= field_wrapper_for(form, field) do
+  = form.select field.method_name, field.enum, {:include_blank => true}, field.html_attributes.merge({ :class => "enum" })

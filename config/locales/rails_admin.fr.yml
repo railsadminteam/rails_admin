@@ -23,12 +23,13 @@ fr:
       add_new: "Nouveau"
       select_action: "Sélectionner"
       export_action: "Exporter la vue actuelle"
+      show_action: "Détail"
       export_selected: "Exporter les entrées cochées"
       delete_selected: "Supprimer les entrées cochées"
       search: "Recherche"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tout"
-      add_filter: "Add filter"
+      add_filter: "Ajouter un filtre"
     new:
       basic_info: "INFO DE BASE"
       required: "Obligatoire"
@@ -46,6 +47,10 @@ fr:
       save_and_edit: "Enregistrer et re-modifier"
       cancel: "Annuler"
       add_new: "Ajouter un(e) %{name}"
+    show:
+      show_in_app: "Voir dans l'application"
+      page_name: "Détails pour %{name}"
+      no_file_found: "Pas de fichier trouvé"
     delete:
       all_of_the_following_related_items_will_be_deleted: " ? Tous les éléments suivants seront supprimés : "
       are_you_sure_you_want_to_delete_the_object: "Êtes-vous sûr de vouloir supprimer les éléments suivants : %{model_name}"
@@ -59,7 +64,7 @@ fr:
       display: "Afficher %{name} : %{type}"
       options_for: "Options pour %{name}"
       empty_value_for_associated_objects: "<vide>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Encoder en..."
@@ -83,12 +88,13 @@ fr:
       export: "export"
       exported: "exporté(e)"
     breadcrumbs:
-      delete: "delete"
-      history: "history"
-      edit: "edit"
+      delete: "suppression"
+      show: "détail"
+      history: "historique"
+      edit: "édition"
       export: "export"
-      bulk_destroy: "delete"
-      new: "new"
-      model_history: "history"
-      list: "list"
-      dashboard: "dashboard"
+      bulk_destroy: "suppression"
+      new: "nouveau"
+      model_history: "historique"
+      list: "liste"
+      dashboard: "tableau de bord"

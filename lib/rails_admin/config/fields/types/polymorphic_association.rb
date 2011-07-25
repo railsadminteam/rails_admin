@@ -63,7 +63,7 @@ module RailsAdmin
 
           # Reader for field's value
           def value
-            bindings[:object].send(name)
+            bindings[:object].send(association[:name])
           end
         end
       end

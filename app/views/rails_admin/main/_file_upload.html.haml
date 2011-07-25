@@ -1,0 +1,2 @@
+= field_wrapper_for(form, field, :messages_and_help => false) do
+  = form.file_field field.method_name, :class => [field.css_class, (field.has_errors? && "errorField")]

@@ -15,8 +15,8 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show required fields as \"Required\"" do
-      should have_selector("div", :text => /Name\n\s*Required/)
-      should have_selector("div", :text => /Number\n\s*Required/)
+      should have_selector("div", :text => /Name\s*Required/)
+      should have_selector("div", :text => /Number\s*Required/)
     end
 
     it "should show non-required fields as \"Optional\"" do
@@ -82,5 +82,17 @@ describe "RailsAdmin Basic Edit" do
       @teams = 3.times.map { FactoryGirl.create :team, :name => "" }
       visit edit_path(:model_name => "player", :id => @player.id)
     end
+  end
+
+  describe "edit object with overridden to_param" do
+    before(:each) do
+      @ball = FactoryGirl.create :ball
+      visit rails_admin_edit_path(:model_name => "ball", :id => @ball.id)
+    end
+
+    it "should display a link to the delete page" do
+      should have_selector "a[href='/admin/balls/#{@ball.id}/delete']"
+    end
+
   end
 end

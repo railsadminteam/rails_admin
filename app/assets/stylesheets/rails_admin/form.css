@@ -39,9 +39,13 @@ form label.inline {
 
 
 .field {
-  padding: 15px 0 0 0;
+  padding:15px 0 0 0;
 }
 
+.field .input {
+  clear:right;
+  float:left;
+}
 
 .field .date,
 .field .datetime,
@@ -64,6 +68,7 @@ form label.inline {
   border-bottom:1px solid #e3e9ef;
   border-right:1px solid #dbdfe6;
 }
+
 
 .field .decimal {
   width:170px;

@@ -60,7 +60,7 @@ nb:
       display: "Vis %{name}: %{type}"
       options_for: "Valg for %{name}"
       empty_value_for_associated_objects: "<blank>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Tegnkoding"

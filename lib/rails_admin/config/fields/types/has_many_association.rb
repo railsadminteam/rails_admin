@@ -14,7 +14,7 @@ module RailsAdmin
           end
 
           register_instance_option(:partial) do
-            "form_filtering_multiselect"
+            :form_filtering_multiselect
           end
 
           register_instance_option(:html_attributes) do

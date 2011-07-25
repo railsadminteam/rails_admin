@@ -61,7 +61,7 @@ ru:
       display: "Показать %{name}: %{type}"
       options_for: "Настройки для %{name}"
       empty_value_for_associated_objects: "<пусто>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Декодировать как"

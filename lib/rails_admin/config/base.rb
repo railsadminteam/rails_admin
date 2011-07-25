@@ -35,6 +35,11 @@ module RailsAdmin
         self.class.register_instance_option(option_name, scope, &default)
       end
 
+      def register_deprecated_instance_option(option_name, replacement_option_name)
+        scope = class << self; self; end;
+        self.class.register_deprecated_instance_option(option_name, replacement_option_name, scope)
+      end
+
       def with(bindings = {})
         RailsAdmin::Config::Proxy.new(self, bindings)
       end
@@ -84,6 +89,13 @@ module RailsAdmin
             end
             value
           end
+        end
+      end
+
+      def self.register_deprecated_instance_option(option_name, replacement_option_name, scope = self)
+        scope.send(:define_method, option_name) do |*args, &block|
+          ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{replacement_option_name}.")
+          send(replacement_option_name, *args, &block)
         end
       end
 

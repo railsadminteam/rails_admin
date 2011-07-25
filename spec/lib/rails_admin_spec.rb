@@ -27,10 +27,6 @@ describe RailsAdmin do
   end
 
   describe ".authorize_with" do
-    after do
-      RailsAdmin.authorize_with(nil) { @authorization_adapter = nil }
-    end
-
     context "given a key for a extension with authorization" do
       before do
         RailsAdmin.add_extension(:example, ExampleModule, {
@@ -39,19 +35,20 @@ describe RailsAdmin do
       end
 
       it "initializes the authorization adapter" do
-        options = nil
-        proc    = RailsAdmin.authorize_with(:example, options)
-
-        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin)
-        proc.call
+        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin::Config)
+        RailsAdmin.config do |config|
+          config.authorize_with(:example)
+        end
+        RailsAdmin.config.authorize_with.call
       end
 
       it "passes through any additional arguments to the initializer" do
         options = { :option => true }
-        proc    = RailsAdmin.authorize_with(:example, options)
-
-        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin, options)
-        proc.call
+        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin::Config, options)
+        RailsAdmin.config do |config|
+          config.authorize_with(:example, options)
+        end
+        RailsAdmin.config.authorize_with.call
       end
     end
   end
@@ -66,14 +63,17 @@ describe RailsAdmin do
 
       it "initializes configuration adapter" do
         ExampleModule::ConfigurationAdapter.should_receive(:new)
-        RailsAdmin.configure_with(:example)
+        RailsAdmin.config do |config|
+          config.configure_with(:example)
+        end
       end
 
       it "yields the (optionally) provided block, passing the initialized adapter" do
         configurator = nil
-
-        RailsAdmin.configure_with(:example) do |config|
-          configurator = config
+        RailsAdmin.config do |config|
+          config.configure_with(:example) do |configuration_adapter|
+            configurator = configuration_adapter
+          end
         end
         configurator.should be_a(ExampleModule::ConfigurationAdapter)
       end
@@ -82,17 +82,10 @@ describe RailsAdmin do
 
   describe ".config" do
     context ".default_search_operator" do
-      around(:each) do |example|
-        old_search_operator = RailsAdmin::Config.default_search_operator
-        example.run
-        RailsAdmin::Config.default_search_operator = old_search_operator
-      end
-
       it "sets the default_search_operator" do
         RailsAdmin.config do |config|
           config.default_search_operator = 'starts_with'
         end
-
         RailsAdmin::Config.default_search_operator.should == 'starts_with'
       end
 

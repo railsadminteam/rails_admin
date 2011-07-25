@@ -1,0 +1,29 @@
+= field_wrapper_for(form, field) do
+  = form.send field.view_helper, field.name, field.html_attributes
+
+  .colorSelector{:id => "#{field.dom_id}Helper"}
+    %div
+
+- head_style "rails_admin/jquery.colorpicker.css"
+- head_javascript "rails_admin/jquery.colorpicker.js"
+- head_javascript do
+  :plain
+    $j(document).ready(function($){
+      var input = $('#<%= field.dom_id %>').hide();
+      $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + input.val());
+      $('#<%= field.dom_id %>Helper').ColorPicker({
+        color: input.val(),
+        onShow: function (el) {
+          $(el).fadeIn(500);
+      	return false;
+        },
+        onHide: function (el) {
+      	$(el).fadeOut(500);
+          return false;
+        },
+        onChange: function (hsb, hex, rgb) {
+          input.val(hex);
+          $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + hex);
+        }
+      });
+    });

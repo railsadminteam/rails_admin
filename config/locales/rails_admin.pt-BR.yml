@@ -62,7 +62,7 @@ pt-BR:
       display: "Mostrar %{name}: %{type}"
       options_for: "Opções para %{name}"
       empty_value_for_associated_objects: "<empty>"
-      csv: 
+      csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Codificar para"

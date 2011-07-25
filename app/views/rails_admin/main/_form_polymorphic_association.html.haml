@@ -1,0 +1,46 @@
+:ruby
+  type_collection = field.polymorphic_type_collection
+  type_column = field.association[:options][:foreign_type]
+  
+  if params[form.object_name]
+    selected_type = params[form.object_name][type_column]
+    collection = field.associated_collection(selected_type)
+  else
+    selected_type = field.bindings[:object].send(type_column)
+    collection = field.associated_collection(selected_type)
+  end
+  
+  selected = field.bindings[:object].send(field.association[:name])
+  column_type_dom_id = field.dom_id.sub(field.method_name, type_column)
+
+= field_wrapper_for(form, field) do
+  = form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :class => (field.has_errors? && "errorField"), :id => column_type_dom_id                        
+  = form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :class => (field.has_errors? && "errorField"), :style => "margin-left:10px;"
+
+- head_style 'rails_admin/ra.filtering-select.css'
+- head_javascript "rails_admin/ra.filtering-select.js"
+- head_javascript do
+  :plain
+    $j(document).ready(function($) {
+      var urls = #{field.polymorphic_type_urls.to_json.html_safe };
+      $("##{column_type_dom_id }").bind("change", function(e){
+        if ("" == $(this).val()) {
+          $("##{ field.dom_id }").html('<option value=""></option>');
+        } else {
+          $.ajax({
+            url: urls[$(this).val()],
+            data: { compact: true, all: true },
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader("Accept", "application/json");
+            },
+            success: function(data, status, xhr) {
+              var html = '<option></option>';
+              $(data).each(function(i, el) {
+                html += '<option value="' + el.id + '">' + el.label + '</option>';
+              });
+              $("##{ field.dom_id }").html(html);
+            }
+          });
+        }
+      });
+    });
