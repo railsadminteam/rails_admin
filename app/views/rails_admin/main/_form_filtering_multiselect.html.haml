@@ -15,10 +15,15 @@
   %input{:name => field.dom_name, :type => "hidden", :value => ""}
   = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes
 
+
+  - if authorized? :new, config.abstract_model
+    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
+
 - head_style 'rails_admin/ra.filtering-multiselect.css'
 - head_javascript "rails_admin/ra.filtering-multiselect.js"
 - head_javascript do
   $j(document).ready(function($){
+  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
   $("##{field.dom_id}").filteringMultiselect({
   - if xhr
     createQuery: function(query) {
