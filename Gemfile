@@ -36,7 +36,7 @@ group :development, :test do
 
   platform :mri_18 do
     gem 'ruby-debug'
-    gem 'linecache', '0.43' # tmp lock, 0.45 is buggy
+    gem 'linecache'
   end
 
   platform :mri_19 do
