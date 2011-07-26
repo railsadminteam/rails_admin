@@ -905,7 +905,6 @@ partial per default, but that can be overridden:
 
 There is a partial method for each action:
 
-* show
 * edit
 * create
 * update
@@ -966,7 +965,21 @@ In `app/views/rails_admin/main/_yes_no.html.erb`
       <p class="help"><%= field.help %></p>
     </div>
 
-In this *dirt* example above, all objects can be manipulated by the developer.
+In this *dirty* example above, all objects can be manipulated by the developer.
+
+You can flag a field as read only, and if necessary fine-tune the output with pretty_value: 
+
+    RailsAdmin.config do |config|
+      edit do
+        field :published do
+          read_only true
+          pretty_value do
+            bindings[:object].published? ? 'Yes, it's live!' : 'No, in the loop...'
+          end
+        end
+      end
+    end
+
 
 **Fields - overriding field type**
 
