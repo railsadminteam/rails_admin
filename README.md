@@ -1221,7 +1221,7 @@ Example:
 
 ** Fields - include some fields **
 
-It is also possible to add fields by group and configure them by batches:
+It is also possible to add fields by group and configure them by group:
 
 Example:
 
@@ -1239,6 +1239,19 @@ Example:
             label do
               "#{label} (timestamp)"
             end
+          end
+        end
+      end
+    end
+
+Note that some fields are hidden by default (associations) and that you can display them to the list view by
+manually setting them to visible:
+
+    class League < ActiveRecord::Base
+      rails_admin do
+        list do
+          field :teams do
+            visible true
           end
         end
       end
