@@ -91,7 +91,7 @@
         - can_export      = authorized? :export,      @abstract_model
         - can_delete      = authorized? :delete,      @abstract_model
         - can_see_history = authorized? :see_history, @abstract_model
-        - can_bulk_action = can_export || can_delete_global
+        - can_bulk_action = can_export || can_delete
         %table.table.grid
           %thead
             %tr
@@ -125,8 +125,8 @@
               - row_class = "#{cycle("odd", "even")}#{" link" if can_edit}"
 
               %tr{:class => row_class, :"data-link" => (can_show ? show_path : nil)}
-                - if can_bulk_action
-                  %td.action.select
+                %td.action.select
+                  - if can_bulk_action
                     = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
                 - other_left = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i - 1))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
