@@ -1,1 +1,0 @@
-These files are used by the stylesheet 'jquery-ui.css'

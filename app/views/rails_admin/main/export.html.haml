@@ -1,7 +1,5 @@
 - params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
 - visible_fields = @model_config.export.visible_fields
-- head_javascript "rails_admin/application.js"
-- head_style "rails_admin/form.css"
 
 #block-tables.block
   = breadcrumbs_for :export, @abstract_model
