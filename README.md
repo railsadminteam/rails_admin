@@ -952,7 +952,7 @@ In `app/views/rails_admin/main/_yes_no.html.erb`
 
     <div class="field <%= field.dom_id %>">
       <%= form.label field.method_name, field.label %>
-      <%= form.send :radio_button, field.name, "S" %>
+      <%= form.send :radio_button, field.name, "Y" %>
 
       <%= %Q(Yes #{image_tag "yes.png", :alt => "Yes"} &nbsp &nbsp &nbsp).html_safe %>
 
@@ -1009,20 +1009,20 @@ RailsAdmin ships with the following field types:
 * date
 * datetime
 * decimal
-* file_upload *does not initialize automatically*
-* paperclip_file *initializes automatically if Paperclip is present*
+* file_upload *(does not initialize automatically)*
+* paperclip_file *(initializes automatically if Paperclip is present)*
 * float
 * has_and_belongs_to_many_association
 * has_many_association
 * has_one_association
 * integer
-* password *initializes if string type column's name is password*
+* password *(initializes if string type column's name is password)*
 * string
 * enum
 * text
 * time
 * timestamp
-* virtual *useful for displaying data that is calculated a runtime (for example a method call on model instance)*
+* virtual *(useful for displaying data that is calculated a runtime [for example a method call on model instance])*
 
 **Fields - Creating a custom field type**
 
