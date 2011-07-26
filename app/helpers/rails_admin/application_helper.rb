@@ -229,7 +229,7 @@ module RailsAdmin
     def field_wrapper_for form, field, opts={}
       opts = opts.reverse_merge(:label => true, :messages_and_help => true)
       
-      content_tag(:div, :class => "field #{field.dom_id}") do
+      content_tag(:div, :class => "field #{field.dom_id}", :id => field.dom_id + '_field') do
         concat form.label(field.method_name, field.label) if opts[:label]
         yield
         concat messages_and_help_for(field) if opts[:messages_and_help]

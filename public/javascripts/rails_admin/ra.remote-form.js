@@ -21,6 +21,29 @@
 
     _create: function() {
       var widget = this;
+      var edit_url = $(this.element).siblings('select').data('edit-url');
+      if(typeof(edit_url) != 'undefined' && edit_url.length) {
+        $('#' + this.element.parent().attr('id') + ' .input.ra-multiselect option').live('dblclick', function(e){
+          e.preventDefault();
+          var dialog = widget._getDialog();
+          $.ajax({
+            url: edit_url.replace('__ID__', this.value),
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader("Accept", "text/javascript");
+            },
+            success: function(data, status, xhr) {
+              dialog.html(data);
+              widget._bindFormEvents();
+            },
+            error: function(xhr, status, error) {
+              dialog.html(xhr.responseText);
+            },
+            dataType: 'text'
+          });
+        });
+      }
+      
+      
       $(widget.element).bind("click", function(e){
         e.preventDefault();
         var dialog = widget._getDialog();
@@ -40,6 +63,8 @@
         });
       });
     },
+    
+    
 
     _bindFormEvents: function() {
       var dialog = this._getDialog(),
@@ -47,7 +72,10 @@
           widget = this,
           saveButtonText = dialog.find(":submit[name=_save]").text(),
           cancelButtonText = dialog.find(":submit[name=_continue]").text();
-
+      
+      // Hide delete/history buttons, not supported yet.
+      dialog.find('div.control').hide();
+      
       dialog.dialog("option", "title", $("h2.title", dialog).remove().text());
 
       form.attr("data-remote", true);
@@ -85,19 +113,25 @@
         var select = widget.element.siblings('select');
         var input = widget.element.siblings('.ra-filtering-select-input');
         var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
-
-        if(widget.element.siblings('button').length){ // add select input
+        
+        if(widget.element.siblings('button').length){ // select input (add)
           if(input.length > 0) {
             input[0].value = json.label;
           }
           if(select.length > 0) {
             select.html(option);
             select[0].value = json.id;
-          }          
+          }
         }
-        else{ //add multi-select input
-          widget.element.siblings('.ra-multiselect').children('.ra-multiselect-right').children('select').prepend(option);
-          widget.element.parent().children('.hasManyAssociation').prepend(option);
+        else{ // multi-select input
+          var multiselect = widget.element.siblings('.input.ra-multiselect');
+          if (select.find('option[value=' + json.id + ']').length) { // replace (changing name may be needed)
+            select.find('option[value=' + json.id + ']').text(json.label);
+            multiselect.find('option[value= ' + json.id + ']').text(json.label);
+          } else { // add
+            select.prepend(option);
+            multiselect.find('select.ra-multiselect-selection').prepend(option);
+          }
         }
         dialog.dialog("close");
       });

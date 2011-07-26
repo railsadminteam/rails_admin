@@ -1155,6 +1155,7 @@ RailsAdmin will handle ordering in and out of the form.
 
 You'll need to handle ordering in your model with a position column for example.
 
+You can edit related objects in filtering-multiselect by double-clicking on any visible item in the widget.
 
 ### Configuring fields ###
 

@@ -18,7 +18,6 @@
 - head_javascript "rails_admin/ra.filtering-select.js"
 - head_javascript do
   $j(document).ready(function($){
-  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
   $("##{"#{field.dom_id}"}").filteringSelect({
   - if xhr
     createQuery: function(query) {
@@ -26,4 +25,9 @@
     },
     source: "#{rails_admin_list_path(config.abstract_model.to_param, :compact => true)}"
   });
+  if($("div.createAssociatedRecordDialog").length == 0) {
+  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+  } else { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
+  $(".#{"#{field.dom_id}"} .createAssociatedRecord").hide();
+  }
   });
