@@ -17,10 +17,8 @@
 
 
   - if authorized? :new, config.abstract_model
-    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, rails_admin_new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
+    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
 
-- head_style 'rails_admin/ra.filtering-multiselect.css'
-- head_javascript "rails_admin/ra.filtering-multiselect.js"
 - head_javascript do
   $j(document).ready(function($){
   $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
@@ -29,7 +27,7 @@
     createQuery: function(query) {
     return { query: query }
     },
-    source: "#{rails_admin_list_path(config.abstract_model.to_param, :compact => true)}",
+    source: "#{list_path(config.abstract_model.to_param, :compact => true)}",
   sortable: #{field.orderable ? 'true' : 'false'},
   regional: {
   chooseAll: "#{t("admin.new.chose_all")}",

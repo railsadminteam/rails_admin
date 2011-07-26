@@ -62,12 +62,12 @@ form.formtastic {
         width: 100%;
         max-width: 100%; }
       form.formtastic fieldset > ol > li.datepicker input {
-        background: url("images/icons/calendar.png") no-repeat right; }
+        background: url("/assets/rails_admin/theme/activo/images/icons/calendar.png") no-repeat right; }
       form.formtastic fieldset > ol > li.string input:focus, form.formtastic fieldset > ol > li.password input:focus, form.formtastic fieldset > ol > li.numeric input:focus, form.formtastic fieldset > ol > li.text textarea:focus {
         border: 1px solid #a2a294; }
       form.formtastic fieldset > ol > li.datepicker input:focus {
         border: 1px solid #a2a294;
-        background: url("images/icons/calendar-hover.png") no-repeat right; }
+        background: url("/assets/rails_admin/theme/activo/images/icons/calendar-hover.png") no-repeat right; }
       form.formtastic fieldset > ol > li.string input[disabled='disabled'], form.formtastic fieldset > ol > li.password input[disabled='disabled'], form.formtastic fieldset > ol > li.numeric input[disabled='disabled'], form.formtastic fieldset > ol > li.text textarea[disabled='disabled'], form.formtastic fieldset > ol > li.datepicker input[disabled='disabled'] {
         background-color: #f6f6f6;
         border: 1px solid #f6f6f6;
@@ -189,7 +189,7 @@ form.formtastic {
  */
 body {
   color: #111111;
-  background: #c4c4c4 url("images/bgd.png");
+  background: #c4c4c4 url("/assets/rails_admin/theme/activo/images/bgd.png");
   font-family: helvetica, arial, sans-serif; }
 
 h1, h2, h3 {
@@ -208,7 +208,7 @@ hr {
   color: #dddddd; }
 
 #header {
-  background-image: url("images/logo.png");
+  background-image: url("/assets/rails_admin/theme/activo/images/logo.png");
   background-repeat: no-repeat;
   background-position: 20px 20px;
   height: 80px;
@@ -283,7 +283,7 @@ hr {
       color: #a4a4a4; }
 
 .secondary-navigation {
-  background: #e0e0e0 url("images/boxbar-background.png") top;
+  background: #e0e0e0 url("/assets/rails_admin/theme/activo/images/boxbar-background.png") top;
   border-bottom-width: 0px;
   -moz-border-radius-topleft: 6px;
   -webkit-border-top-left-radius: 6px;
@@ -321,7 +321,7 @@ hr {
 
 .secondary-inner-nav {
   background-color: #f0eff0;
-  background-image: url("images/boxbar-background.png");
+  background-image: url("/assets/rails_admin/theme/activo/images/boxbar-background.png");
   font-size: 13px;
   border-bottom-color: white;
   border-bottom-width: 10px;
@@ -400,7 +400,7 @@ hr {
   #sidebar ul li {
     background-position: 0 11px;
     background-repeat: no-repeat;
-    background-image: url("images/arrow.png");
+    background-image: url("/assets/rails_admin/theme/activo/images/arrow.png");
     border-bottom: 1px dashed #777777;
     list-style-type: none; }
     #sidebar ul li a {
@@ -429,7 +429,7 @@ hr {
       padding-top: 10px;
       padding-left: 17px;
       margin-right: 15px;
-      background: url("images/breadcrumb.png") no-repeat 0px 12px;
+      background: url("/assets/rails_admin/theme/activo/images/breadcrumb.png") no-repeat 0px 12px;
       float: left; }
       .breadcrumb ul li a {
         text-decoration: none;
@@ -455,7 +455,7 @@ hr {
   min-width: 15px;
   text-align: center;
   background: #dddddd;
-  background-image: url("images/button-background.png");
+  background-image: url("/assets/rails_admin/theme/activo/images/button-background.png");
   color: #111111; }
 .pagination a:hover {
   border: 1px solid #818171;
@@ -468,7 +468,7 @@ hr {
   border: 1px solid #261f1f; }
 
 .pagination a:active {
-  background-image: url("images/button-background-active.png");
+  background-image: url("/assets/rails_admin/theme/activo/images/button-background-active.png");
   outline: none; }
 
 .table th {
@@ -552,7 +552,7 @@ hr {
 
 .search_submit {
   border: 0px;
-  background: transparent url("images/search-button.png") no-repeat center left;
+  background: transparent url("/assets/rails_admin/theme/activo/images/search-button.png") no-repeat center left;
   position: absolute;
   left: 273px;
   height: 25px;
@@ -566,7 +566,7 @@ hr {
   border-bottom-right-radius: 13px; }
 
 #wrapper .ra-multiselect-search {
-  background: transparent url("images/search-button.png") no-repeat scroll 166px center;
+  background: transparent url("/assets/rails_admin/theme/activo/images/search-button.png") no-repeat scroll 166px center;
   border: 1px solid #c1c1c1;
   -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
@@ -603,15 +603,15 @@ hr {
     margin: 8px; }
 .flash .error, .flash .error-list {
   border: 1px solid #993624;
-  background: #cc4831 url("images/messages/error.png") no-repeat 10px center; }
+  background: #cc4831 url("/assets/rails_admin/theme/activo/images/messages/error.png") no-repeat 10px center; }
 .flash .warning {
   border: 1px solid #bb9004;
-  background: #f9c006 url("images/messages/warning.png") no-repeat 10px center; }
+  background: #f9c006 url("/assets/rails_admin/theme/activo/images/messages/warning.png") no-repeat 10px center; }
 .flash .notice {
   color: #28485e;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
   border: 1px solid #8a9daa;
-  background: #b8d1e2 url("images/messages/notice.png") no-repeat 10px center; }
+  background: #b8d1e2 url("/assets/rails_admin/theme/activo/images/messages/notice.png") no-repeat 10px center; }
 .flash .error-list {
   text-align: left; }
   .flash .error-list h2 {
@@ -656,7 +656,7 @@ ul.list li {
       border-top-right-radius: 6px; }
 
 a.button, button.button {
-  background: #edeeed url("images/button-background.png") top;
+  background: #edeeed url("/assets/rails_admin/theme/activo/images/button-background.png") top;
   border: 1px solid #c3c4ba;
   font-family: helvetica, arial, sans-serif;
   font-weight: normal;
@@ -668,11 +668,11 @@ a.button, button.button {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
   a.button:link, a.button:visited, a.button:hover, a.button:active, button.button:link, button.button:visited, button.button:hover, button.button:active {
     font-weight: normal;
-    background: #edeeed url("images/button-background.png") top; }
+    background: #edeeed url("/assets/rails_admin/theme/activo/images/button-background.png") top; }
 
 a.button:active, button.button:active {
   /* quando se clica no botão */
-  background: #eaeaea url("images/button-background-active.png") top;
+  background: #eaeaea url("/assets/rails_admin/theme/activo/images/button-background-active.png") top;
   outline: none;
   margin-top: 1px;
   margin-bottom: -1px; }
