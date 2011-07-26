@@ -7,3 +7,7 @@
 * [[Customized authorization]]
 * [[CanCan]]
 * [[Declarative Authorization]]
+
+### Routing
+
+* [[Routing Problems]]
