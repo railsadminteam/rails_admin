@@ -8,7 +8,7 @@
  *= require ./theme/formtastic.css
  *= require ./theme/jquery.tipsy.css
  *= require ./theme/uniform.default.css
- *= require_tree ./theme/activo
+ *= require ./theme/activo/style.css
  *= require ./base.css
  *= require ./dashboard.css
  *= require ./list.css
