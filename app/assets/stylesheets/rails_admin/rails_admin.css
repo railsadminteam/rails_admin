@@ -4,15 +4,16 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *
  *= require ./theme/base.css
- *= require ./theme/jquery-ui.css
+ *= require ./theme/jquery-ui-1.8.14.css
  *= require ./theme/formtastic.css
  *= require ./theme/jquery.tipsy.css
  *= require ./theme/uniform.default.css
- *= require_tree ./theme/activo
+ *= require ./theme/activo/style.css
  *= require ./base.css
  *= require ./dashboard.css
  *= require ./list.css
  *= require ./form.css
+ *= require ./show.css
  *= require ./jquery.colorpicker.css
  *= require ./jquery.ui.timepicker.css
  *= require ./ra.filtering-multiselect.css
