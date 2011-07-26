@@ -8,6 +8,6 @@
     - fields.each do |field|
       - if field.read_only
         = field_wrapper_for(form, field) do
-          = field.pretty_value
+          = field.pretty_value.presence || ' - '
       - else
         = field.render
