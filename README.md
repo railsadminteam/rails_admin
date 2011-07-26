@@ -935,6 +935,39 @@ bindings[:object] available, which is the database record being edited.
 Bindings concept was introduced earlier in this document and the
 functionality is the same.
 
+Other example of completely override rendering logic is:
+
+    RailsAdmin.config do |config|
+      edit do
+        field :published do
+          label "Published question?"
+          render do
+            bindings[:view].render :partial => "yes_no", :locals => {:field => self, :form => bindings[:form], :fieldset => bindings[:fieldset]}
+          end
+        end
+      end
+    end
+
+In `app/views/rails_admin/main/_yes_no.html.erb`
+
+    <div class="field <%= field.dom_id %>">
+      <%= form.label field.method_name, field.label %>
+      <%= form.send :radio_button, field.name, "Y" %>
+
+      <%= %Q(Yes #{image_tag "yes.png", :alt => "Yes"} &nbsp &nbsp &nbsp).html_safe %>
+
+      <%= form.send :radio_button, field.name, "N" %>
+
+      <%= %Q(No #{image_tag "no.png", :alt => "No"}).html_safe %>
+
+      <% if field.has_errors? %>
+        <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+      <% end %>
+      <p class="help"><%= field.help %></p>
+    </div>
+
+In this *dirt* example above, all objects can be manipulated by the developer.
+
 **Fields - overriding field type**
 
 If you'd like to override the type of the field that gets instantiated, the
@@ -976,21 +1009,20 @@ RailsAdmin ships with the following field types:
 * date
 * datetime
 * decimal
-* file_upload _does not initialize automatically_
-* paperclip_file _initializes automatically if Paperclip is present_
+* file_upload *(does not initialize automatically)*
+* paperclip_file *(initializes automatically if Paperclip is present)*
 * float
 * has_and_belongs_to_many_association
 * has_many_association
 * has_one_association
 * integer
-* password _initializes if string type column's name is password_
+* password *(initializes if string type column's name is password)*
 * string
 * enum
 * text
 * time
 * timestamp
-* virtual _useful for displaying data that is calculated a runtime
-(for example a method call on model instance)_
+* virtual *(useful for displaying data that is calculated a runtime [for example a method call on model instance])*
 
 **Fields - Creating a custom field type**
 
