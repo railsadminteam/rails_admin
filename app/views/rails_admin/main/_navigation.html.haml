@@ -12,7 +12,7 @@
         = link_to(model.label.pluralize, rails_admin_list_path(:model_name => model.abstract_model.to_param))
       - else
         %a{:href => "#"}= model.navigation_label ? t(model.navigation_label, :default => model.navigation_label) : model.label.pluralize
-        %ul
+        %ul{:style => ("#{'display:none;' unless tab_titles.include? @page_type}")}
           - children.each_with_index do |child, index|
             %li{:class => ("active" if @page_type == tab_titles[index])}
               = link_to(child.label.pluralize, rails_admin_list_path(:model_name => child.abstract_model.to_param))

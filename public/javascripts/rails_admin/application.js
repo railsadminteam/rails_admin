@@ -4,7 +4,6 @@ if (typeof($j) === "undefined" && typeof(jQuery) !== "undefined") {
 
 $j(document).ready(function($){
   // accordeon
-  $("#nav .more:not(.active) ul").hide();
   $("#nav .more a").live('click', function() {
     $(this).siblings('ul').toggle('slide');
   });
