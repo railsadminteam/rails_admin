@@ -679,6 +679,36 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-datepicker .ui-state-default { background: transparent; border-color: #FFF; }
 .ui-datepicker .ui-state-active { background: #5F83B9; border-color: #5F83B9; color: #FFF; font-weight: bold; text-shadow: 0 1px 1px #234386; }
 
+/* make present day stand out */
+.ui-datepicker td.ui-datepicker-today {
+    background:#ccc;
+    -webkit-box-shadow:inset 0 1px 1px #333;
+    -moz-box-shadow:inset 0 1px 1px #333;
+    box-shadow:0 1px 1px #333 inset;
+}
+.ui-datepicker td.ui-datepicker-today .ui-state-highlight{
+    background:transparent;
+    border:none;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    box-shadow:none;
+}
+
+.ui-datepicker td.ui-datepicker-current-day {
+    background:#5F83B9;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    box-shadow:none;
+}
+
+.ui-datepicker td.ui-datepicker-current-day .ui-state-active{
+    background:transparent;
+    border:none;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    box-shadow:none;
+}
+
 /* with multiple calendars */
 .ui-datepicker.ui-datepicker-multi { width:auto; }
 .ui-datepicker-multi .ui-datepicker-group { float:left; }
