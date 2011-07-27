@@ -42,6 +42,7 @@ module RailsAdmin
           end
 
           def associated_model_config
+            return [] if association[:parent_model].nil?
             association[:parent_model].map{|type| RailsAdmin.config(type) }.select{|config| !config.excluded? }
           end
 
