@@ -8,7 +8,7 @@
     .control
       = action_button rails_admin_history_object_path(:id => params[:id]), t("admin.history.name"), :'calendar-hover'
 
-      - if show_url = url_for(@object) rescue nil
+      - if (show_url = url_for(@object) rescue nil) and (ActionController::Routing::Routes.recognize_path(show_url, :method => :get) rescue nil)
         = action_button show_url, t("admin.show.show_in_app"), :show
       - if authorized? :edit, @abstract_model, @object
         = action_button rails_admin_edit_path(@abstract_model, @object.id), t("admin.list.edit_action"), :edit
