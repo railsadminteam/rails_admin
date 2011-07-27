@@ -34,7 +34,7 @@
           - associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
           - fields = RailsAdmin.config(associated_model).export.visible_fields.select{ |f| !f.association? }
           %fieldset
-            %legend= t('admin.export.fields_from_associated', :name => @abstract_model.model.human_attribute_name(field.name))
+            %legend= t('admin.export.fields_from_associated', :name => field.label)
             - fields.each do |associated_model_field|
               - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
               .field

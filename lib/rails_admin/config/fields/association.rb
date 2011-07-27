@@ -40,6 +40,11 @@ module RailsAdmin
         register_instance_option(:visible?) do
           !associated_model_config.excluded?
         end
+        
+        # use the association name as a key, not the association key anymore!
+        register_instance_option(:label) do
+          abstract_model.model.human_attribute_name association[:name]
+        end
 
         # Reader for a collection of association's child models in an array of
         # [label, id] arrays.

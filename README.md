@@ -868,6 +868,12 @@ equal configuration:
         end
       end
     end
+    
+**Important note on label - I18n**
+
+Use association name as translation key for label for association fields.
+If you have :user_id field with a user association, use :user as the attribute 
+
 
 In fact the first examples `group :default` configuration is unnecessary
 as the default group has already initialized all fields and belongs to
