@@ -2,6 +2,9 @@
   = form.send field.view_helper, field.method_name, field.html_attributes
 
 - if field.ckeditor
+  -# needed for modal windows
+  :javascript
+    var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
   - head_javascript "ckeditor/ckeditor.js"
   - head_javascript do
     - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
