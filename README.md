@@ -47,12 +47,12 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 
 API Update Note
 ---------------
-The model configuration `dropdown` has been deprecated in favor of navigation_label. 
+The model configuration `dropdown` has been deprecated in favor of navigation_label.
 API unchanged.
 
-The field configuration method `show_partial` has been removed in favor of 
-field configuration `pretty_value`, which is used more globally and consistently 
-across the whole application. Show partials are no longer in use, method doesn't 
+The field configuration method `show_partial` has been removed in favor of
+field configuration `pretty_value`, which is used more globally and consistently
+across the whole application. Show partials are no longer in use, method doesn't
 exist anymore.
 
 `RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
@@ -201,7 +201,7 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
     RailsAdmin.config do |config|
       config.excluded_models << "ClassName"
     end
-    
+
 You can display empty fields in show view with:
 
     RailsAdmin.config do |config|
@@ -629,7 +629,7 @@ The field's output can be modified:
             formatted_value do # used in form views
               value.to_s.upcase
             end
-            
+
             pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
               value.titleize
             end
@@ -1381,7 +1381,7 @@ unless overrides exist.
 
 For asset files, the following applies: When running in development mode, the rails_admin engine will inject a middleware
 to serve static assets (javascript files, images, stylesheets) from the gem's location. This generally isn't a good
-setup for high-traffic production environments. Depending on your web server configuration is may also just plain fail.
+setup for high-traffic production environments. Depending on your web server configuration, it may also just plain fail.
 You may need to serve the asset files from the local application tree (public/...). You can choose to have the assets
 served from the gem in development mode but from the local application tree in production mode. In that case, you
 need to copy the assets during deployment (e.g. via a capistrano hook).
