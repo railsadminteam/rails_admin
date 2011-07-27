@@ -5,8 +5,9 @@
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
 
-    - %w[base jquery-ui formtastic jquery.tipsy.css uniform.default.css].each do |file|
+    - %w[base formtastic jquery.tipsy.css uniform.default.css].each do |file|
       = stylesheet_link_tag "rails_admin/theme/#{file}"
+    = stylesheet_link_tag 'rails_admin/aristo/jquery-ui-1.8.7.custom.css'
 
     = stylesheet_link_tag "rails_admin/theme/activo/style"
     = stylesheet_link_tag "rails_admin/base"
