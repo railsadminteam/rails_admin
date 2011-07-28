@@ -43,8 +43,8 @@ module RailsAdmin
 
         def copy_assets_files
           print "Now copying assets files - javascripts, stylesheets and images! "
-          origin = File.join(gem_path, 'public')
-          destination = Rails.root.join('public')
+          origin = File.join(gem_path, 'app/assets')
+          destination = Rails.root.join('app/assets')
           puts copy_files(%w( stylesheets images javascripts ), origin, destination)
         end
 
