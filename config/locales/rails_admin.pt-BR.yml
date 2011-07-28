@@ -22,6 +22,7 @@ pt-BR:
     credentials:
       log_out: "Desconectar"
     list:
+      show_action: "Ver"
       edit_action: "Alterar"
       delete_action: "Excluir"
       export_action: "Exportar tela corrente"
