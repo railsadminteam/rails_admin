@@ -7,12 +7,13 @@
   - root_models.each do |model|
     - children = [model] + models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
     - tab_titles = children.map { |child| child.abstract_model.pretty_name.downcase }
-    %li{:class => "#{"active" if tab_titles.include? @page_type} #{"more" unless children.empty?}"}
+    - active = tab_titles.include? @page_type
+    %li{:class => "#{"active" if active} #{"more" unless children.empty?}"}
       - if children.size == 1
         = link_to(model.label.pluralize, list_path(:model_name => model.abstract_model.to_param))
       - else
         %a{:href => "#"}= model.navigation_label ? t(model.navigation_label, :default => model.navigation_label) : model.label.pluralize
-        %ul
+        %ul{:style => ("#{'display:none;' unless active}")}
           - children.each_with_index do |child, index|
             %li{:class => ("active" if @page_type == tab_titles[index])}
               = link_to(child.label.pluralize, list_path(:model_name => child.abstract_model.to_param))

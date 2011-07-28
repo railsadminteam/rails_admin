@@ -140,6 +140,10 @@ module RailsAdmin
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
+      respond_to do |format|
+        format.html
+        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+      end
     end
 
     def update
@@ -180,6 +184,10 @@ module RailsAdmin
 
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
+      respond_to do |format|
+        format.html
+        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+      end
     end
 
     def destroy

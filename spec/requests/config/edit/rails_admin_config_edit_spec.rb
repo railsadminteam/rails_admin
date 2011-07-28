@@ -31,7 +31,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_no_selector("input#team_win_percentage")
       should have_no_selector("input#team_revenue")
     end
-
+    
     it "should hide association groupings by the name of the association" do
       RailsAdmin.config Team do
         edit do
@@ -275,7 +275,22 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Players")
       should have_selector("label", :text => "Fans")
     end
-
+    
+    it "should be flaggable as read only and be configurable with formatted_value" do
+      RailsAdmin.config Team do
+        edit do
+          field :name do
+            read_only true
+            formatted_value do
+              "I'm outputed in the form"
+            end
+          end
+        end
+      end
+      visit rails_admin_new_path(:model_name => "team")
+      should have_content("I'm outputed in the form")
+    end
+    
     it "should be hideable" do
       RailsAdmin.config Team do
         edit do

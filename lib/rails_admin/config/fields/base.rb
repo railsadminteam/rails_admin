@@ -49,7 +49,11 @@ module RailsAdmin
         register_instance_option(:column_width) do
           self.class.instance_variable_get("@column_width")
         end
-
+        
+        register_instance_option(:read_only) do
+          false
+        end
+        
         register_instance_option(:truncated?) do
           true
         end

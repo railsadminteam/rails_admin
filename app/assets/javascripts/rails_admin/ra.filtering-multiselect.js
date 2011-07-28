@@ -34,8 +34,8 @@
     _create: function() {
       this._cache = {};
       this._build();
-      this._bindEvents();
       this._buildCache();
+      this._bindEvents();
     },
 
     _build: function() {
@@ -98,7 +98,7 @@
 
     _bindEvents: function() {
       var widget = this;
-
+            
       /* Add all to selection */
       this.addAll.click(function(e){
         widget._select($('option', widget.collection));

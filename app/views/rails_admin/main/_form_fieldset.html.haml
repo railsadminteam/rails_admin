@@ -6,4 +6,8 @@
       .help= fieldset.help
 
     - fields.each do |field|
-      = field.render
+      - if field.read_only
+        = field_wrapper_for(form, field) do
+          = field.pretty_value.presence || ' - '
+      - else
+        = field.render

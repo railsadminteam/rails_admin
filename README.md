@@ -90,12 +90,12 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 
 API Update Note
 ---------------
-The model configuration `dropdown` has been deprecated in favor of navigation_label. 
+The model configuration `dropdown` has been deprecated in favor of navigation_label.
 API unchanged.
 
-The field configuration method `show_partial` has been removed in favor of 
-field configuration `pretty_value`, which is used more globally and consistently 
-across the whole application. Show partials are no longer in use, method doesn't 
+The field configuration method `show_partial` has been removed in favor of
+field configuration `pretty_value`, which is used more globally and consistently
+across the whole application. Show partials are no longer in use, method doesn't
 exist anymore.
 
 `RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
@@ -242,7 +242,7 @@ You can exclude models from RailsAdmin by appending those models to `excluded_mo
     RailsAdmin.config do |config|
       config.excluded_models << "ClassName"
     end
-    
+
 You can display empty fields in show view with:
 
     RailsAdmin.config do |config|
@@ -670,7 +670,7 @@ The field's output can be modified:
             formatted_value do # used in form views
               value.to_s.upcase
             end
-            
+
             pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
               value.titleize
             end
@@ -909,6 +909,12 @@ equal configuration:
         end
       end
     end
+    
+**Important note on label - I18n**
+
+Use association name as translation key for label for association fields.
+If you have :user_id field with a user association, use :user as the attribute 
+
 
 In fact the first examples `group :default` configuration is unnecessary
 as the default group has already initialized all fields and belongs to
@@ -946,7 +952,6 @@ partial per default, but that can be overridden:
 
 There is a partial method for each action:
 
-* show
 * edit
 * create
 * update
@@ -975,6 +980,53 @@ have access to the current template's scope with bindings[:view]. There's also
 bindings[:object] available, which is the database record being edited.
 Bindings concept was introduced earlier in this document and the
 functionality is the same.
+
+Other example of completely override rendering logic is:
+
+    RailsAdmin.config do |config|
+      edit do
+        field :published do
+          label "Published question?"
+          render do
+            bindings[:view].render :partial => "yes_no", :locals => {:field => self, :form => bindings[:form], :fieldset => bindings[:fieldset]}
+          end
+        end
+      end
+    end
+
+In `app/views/rails_admin/main/_yes_no.html.erb`
+
+    <div class="field <%= field.dom_id %>">
+      <%= form.label field.method_name, field.label %>
+      <%= form.send :radio_button, field.name, "Y" %>
+
+      <%= %Q(Yes #{image_tag "yes.png", :alt => "Yes"} &nbsp &nbsp &nbsp).html_safe %>
+
+      <%= form.send :radio_button, field.name, "N" %>
+
+      <%= %Q(No #{image_tag "no.png", :alt => "No"}).html_safe %>
+
+      <% if field.has_errors? %>
+        <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
+      <% end %>
+      <p class="help"><%= field.help %></p>
+    </div>
+
+In this *dirty* example above, all objects can be manipulated by the developer.
+
+You can flag a field as read only, and if necessary fine-tune the output with pretty_value: 
+
+    RailsAdmin.config do |config|
+      edit do
+        field :published do
+          read_only true
+          pretty_value do
+            bindings[:object].published? ? 'Yes, it's live!' : 'No, in the loop...'
+          end
+        end
+      end
+    end
+
 
 **Fields - overriding field type**
 
@@ -1017,21 +1069,20 @@ RailsAdmin ships with the following field types:
 * date
 * datetime
 * decimal
-* file_upload _does not initialize automatically_
-* paperclip_file _initializes automatically if Paperclip is present_
+* file_upload *(does not initialize automatically)*
+* paperclip_file *(initializes automatically if Paperclip is present)*
 * float
 * has_and_belongs_to_many_association
 * has_many_association
 * has_one_association
 * integer
-* password _initializes if string type column's name is password_
+* password *(initializes if string type column's name is password)*
 * string
 * enum
 * text
 * time
 * timestamp
-* virtual _useful for displaying data that is calculated a runtime
-(for example a method call on model instance)_
+* virtual *(useful for displaying data that is calculated a runtime [for example a method call on model instance])*
 
 **Fields - Creating a custom field type**
 
@@ -1164,6 +1215,7 @@ RailsAdmin will handle ordering in and out of the form.
 
 You'll need to handle ordering in your model with a position column for example.
 
+You can edit related objects in filtering-multiselect by double-clicking on any visible item in the widget.
 
 ### Configuring fields ###
 
@@ -1216,7 +1268,7 @@ Example:
 
 ** Fields - include some fields **
 
-It is also possible to add fields by group and configure them by batches:
+It is also possible to add fields by group and configure them by group:
 
 Example:
 
@@ -1234,6 +1286,19 @@ Example:
             label do
               "#{label} (timestamp)"
             end
+          end
+        end
+      end
+    end
+
+Note that some fields are hidden by default (associations) and that you can display them to the list view by
+manually setting them to visible:
+
+    class League < ActiveRecord::Base
+      rails_admin do
+        list do
+          field :teams do
+            visible true
           end
         end
       end
@@ -1357,7 +1422,7 @@ unless overrides exist.
 
 For asset files, the following applies: When running in development mode, the rails_admin engine will inject a middleware
 to serve static assets (javascript files, images, stylesheets) from the gem's location. This generally isn't a good
-setup for high-traffic production environments. Depending on your web server configuration is may also just plain fail.
+setup for high-traffic production environments. Depending on your web server configuration, it may also just plain fail.
 You may need to serve the asset files from the local application tree (public/...). You can choose to have the assets
 served from the gem in development mode but from the local application tree in production mode. In that case, you
 need to copy the assets during deployment (e.g. via a capistrano hook).

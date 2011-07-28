@@ -27,6 +27,7 @@ es:
       delete_action: "Eliminar"
       select_action: "Seleccionar"
       export_action: "Exportar vista actual"
+      show_action: "Mostrar"
       export_selected: "Exportar seleccionado"
       delete_selected: "Borrar seleccionado"
       add_new: "Agregar"
