@@ -54,6 +54,10 @@ module RailsAdmin
         abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
       end
 
+      register_instance_option(:label_plural) do
+        abstract_model.model.model_name.human(:count => 2, :default => abstract_model.model.model_name.titleize)
+      end
+
       register_instance_option(:weight) do
         0
       end
