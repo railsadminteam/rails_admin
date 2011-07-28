@@ -4,7 +4,7 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *
  *= require ./theme/base.css
- *= require ./theme/jquery-ui-1.8.14.css
+ *= require ./theme/aristo/jquery-ui-1.8.7.custom.css
  *= require ./theme/formtastic.css
  *= require ./theme/jquery.tipsy.css
  *= require ./theme/uniform.default.css
