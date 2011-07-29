@@ -86,11 +86,11 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
     it "should be editable" do
       RailsAdmin.config Fan do
-        label "Fan test 1"
+        label_plural "Fan tests"
       end
       visit rails_admin_dashboard_path
       within("#nav") do
-        should have_selector("li a", :text => "Fan test 1")
+        should have_selector("li a", :text => "Fan tests")
       end
     end
 

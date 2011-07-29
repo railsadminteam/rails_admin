@@ -55,7 +55,7 @@ module RailsAdmin
       end
 
       register_instance_option(:label_plural) do
-        abstract_model.model.model_name.human(:count => 2, :default => abstract_model.model.model_name.titleize)
+        abstract_model.model.model_name.human(:count => 2, :default => abstract_model.model.model_name.pluralize.titleize)
       end
 
       register_instance_option(:weight) do
@@ -65,7 +65,7 @@ module RailsAdmin
       register_instance_option(:parent) do
         :root
       end
-      
+
       register_deprecated_instance_option(:dropdown, :navigation_label) # same API, deprecated 2011-07-21
 
       register_instance_option(:navigation_label) do
