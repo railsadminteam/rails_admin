@@ -38,12 +38,12 @@ module RailsAdmin
         # association checks whether the child model is excluded in
         # configuration or not.
         register_instance_option(:visible?) do
-          !self.associated_model_config.excluded?
+          @visible ||= !self.associated_model_config.excluded?
         end
         
         # use the association name as a key, not the association key anymore!
         register_instance_option(:label) do
-          abstract_model.model.human_attribute_name association[:name]
+          @label ||= abstract_model.model.human_attribute_name association[:name]
         end
 
         # Reader for a collection of association's child models in an array of
@@ -67,7 +67,7 @@ module RailsAdmin
 
         # Reader for the association's child model object's label method
         def associated_label_method
-          associated_model_config.object_label_method
+          @associated_label_method ||= associated_model_config.object_label_method
         end
 
         # Reader for the association's child key

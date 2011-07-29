@@ -75,7 +75,7 @@ module RailsAdmin
         end
 
         register_instance_option(:search_operator) do
-          RailsAdmin::Config.default_search_operator
+          @search_operator ||= RailsAdmin::Config.default_search_operator
         end
 
         # serials and dates are reversed in list, which is more natural (last modified items first).
@@ -132,7 +132,7 @@ module RailsAdmin
 
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do
-          (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional") + '. ')
+          @help ||= (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
         end
 
         register_instance_option(:html_attributes) do
@@ -146,14 +146,14 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:label) do
-          abstract_model.model.human_attribute_name name
+          @label ||= abstract_model.model.human_attribute_name name
         end
 
         # Accessor for field's maximum length.
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:length) do
-          properties && properties[:length]
+          @length ||= properties && properties[:length]
         end
 
         register_instance_option(:partial) do
@@ -176,9 +176,11 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:required?) do
-          validators = abstract_model.model.validators_on(@name)
-          required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
-          properties && !properties[:nullable?] || required_by_validator
+          @required ||= begin
+            validators = abstract_model.model.validators_on(@name)
+            required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
+            properties && !properties[:nullable?] || required_by_validator
+          end
         end
 
         # Accessor for whether this is a serial field (aka. primary key, identifier).
@@ -189,7 +191,7 @@ module RailsAdmin
         end
 
         register_instance_option(:view_helper) do
-          self.class.instance_variable_get("@view_helper")
+          @view_helper ||= self.class.instance_variable_get("@view_helper")
         end
 
         # Is this an association

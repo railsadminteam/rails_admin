@@ -21,21 +21,22 @@ module RailsAdmin
           # we need to check for validation on field and association
           register_instance_option(:required?) do
             # todo unify errors for the form (see redmine)
-            key_properties = abstract_model.properties.find{|p| p[:name] == method_name}
-            key_validators = abstract_model.model.validators_on(method_name)
-            validators = abstract_model.model.validators_on(name)
-            key_required_by_validator = key_validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
-            required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
-            key_properties && !key_properties[:nullable?] || key_required_by_validator || required_by_validator
+            @required ||= begin
+              key_properties = abstract_model.properties.find{|p| p[:name] == method_name}
+              key_validators = abstract_model.model.validators_on(method_name)
+              validators = abstract_model.model.validators_on(name)
+              key_required_by_validator = key_validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
+              required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
+              key_properties && !key_properties[:nullable?] || key_required_by_validator || required_by_validator
+            end
           end
           
-          
           register_instance_option(:sortable) do
-            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {self.abstract_model.model.name => self.method_name}
+            @sortable ||= associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {self.abstract_model.model.name => self.method_name}
           end
 
           register_instance_option(:searchable) do
-            associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? [associated_model_config.object_label_method, {self.abstract_model.model.name => self.method_name}] : {self.abstract_model.model.name => self.method_name}
+            @searchable ||= associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? [associated_model_config.object_label_method, {self.abstract_model.model.name => self.method_name}] : {self.abstract_model.model.name => self.method_name}
           end
 
           register_instance_option(:partial) do
@@ -43,7 +44,7 @@ module RailsAdmin
           end
 
           def associated_model_config
-            @associated_model_config ||= RailsAdmin.config(association[:parent_model])
+            @config ||= RailsAdmin.config(association[:parent_model])
           end
 
           def selected_id
@@ -51,7 +52,7 @@ module RailsAdmin
           end
 
           def method_name
-            association[:child_key] 
+            association[:child_key]
           end
         end
       end

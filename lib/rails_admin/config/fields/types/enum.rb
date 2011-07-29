@@ -19,11 +19,11 @@ module RailsAdmin
           end
 
           register_instance_option(:enum_method) do
-            @enum_method ||= (bindings[:object].respond_to?("#{name}_enum") ? "#{name}_enum" : name)
+            @enum_method ||= bindings[:object].respond_to?("#{name}_enum") ? "#{name}_enum" : name
           end
 
           register_instance_option(:enum) do
-            @enum ||= bindings[:object].send(self.enum_method)
+            bindings[:object].send(self.enum_method)
           end
           
           register_instance_option(:pretty_value) do
