@@ -53,9 +53,9 @@ Instead of:
     
     field :user_id
 
-You will use:
+You must use:
 
-      :user
+    field :user
 
 `field :user_id` now references the column (automatically hidden), which type is `Integer`, not the `BelongToAssociation`.
 
