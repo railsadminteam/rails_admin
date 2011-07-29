@@ -33,21 +33,33 @@ Help
 ----
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
-Please don't use the issue tracker, which is for issues only.
+Please don't use the issue tracker, which is for *issues* only.
 
 Check if the build is green here: http://ci.railsadmin.org/job/RailsAdmin/
 
-If you have good reasons to think you found a *rails_admin* bug, submit a ticket providing link to gists with:
-
-1. used rails_admin commit (in your Gemfile.lock)
-2. obtained stacktrace
-3. your initializers/rails_admin.rb
-4. models declarations that matter
-5. and anything else you find relevant
+If you have good reasons to think you found a *rails_admin* bug, submit a ticket (read the very end of this readme first)
 
 API Update Note
 ---------------
-The model configuration `dropdown` has been deprecated in favor of navigation_label.
+
+Important notice about `BelongsToAssociation`: 
+In the DSL, they now must be referenced by the association name, not the child_key.
+Considering:
+    
+    # `user_id: integer` (DB)
+    belongs_to :user # (ActiveRecord)
+
+Instead of:
+    
+    field :user_id
+
+You will use:
+
+      :user
+
+`field :user_id` now references the column (automatically hidden), which type is `Integer`, not the `BelongToAssociation`.
+
+The model configuration `dropdown` has been deprecated in favor of `navigation_label`.
 API unchanged.
 
 The field configuration method `show_partial` has been removed in favor of

@@ -38,7 +38,7 @@ module RailsAdmin
         # association checks whether the child model is excluded in
         # configuration or not.
         register_instance_option(:visible?) do
-          !associated_model_config.excluded?
+          !self.associated_model_config.excluded?
         end
         
         # use the association name as a key, not the association key anymore!
@@ -72,11 +72,6 @@ module RailsAdmin
 
         # Reader for the association's child key
         def child_key
-          association[:child_key].first
-        end
-
-        # Reader for the association's child key array
-        def child_keys
           association[:child_key]
         end
 
@@ -92,7 +87,7 @@ module RailsAdmin
 
         # Reader whether this is a polymorphic association
         def polymorphic?
-          association[:options][:polymorphic]
+          association[:polymorphic]
         end
 
         # Reader for the association's value unformatted

@@ -10,10 +10,6 @@ module RailsAdmin
 
           @column_width = 250
 
-          def initialize(parent, name, properties, association)
-            super(parent, name, properties, association)
-          end
-
           register_instance_option(:partial) do
             :form_polymorphic_association
           end
@@ -42,7 +38,7 @@ module RailsAdmin
           end
 
           def associated_model_config
-            association[:parent_model].map{|type| RailsAdmin.config(type) }.select{|config| !config.excluded? }
+            @associated_model_config ||= association[:parent_model].map{|type| RailsAdmin.config(type) }.select{|config| !config.excluded? }
           end
 
           def polymorphic_type_collection

@@ -19,7 +19,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       # Should not have the group header
       should have_no_selector("legend", :text => "Hidden Group")
       # Should not have any of the group's fields either
-      should have_no_selector("select#team_division_id")
+      should have_no_selector("select#team_division")
       should have_no_selector("input#team_name")
       should have_no_selector("input#team_logo_url")
       should have_no_selector("input#team_manager")
@@ -94,7 +94,7 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
             group :other_section do
               label "Other Section"
-              field :division_id
+              field :division
               help 'help for other section'
             end
           end
@@ -115,7 +115,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
           group :belongs_to_associations do
             label "Belong's to associations"
-            field :division_id
+            field :division
           end
         end
       end
@@ -177,7 +177,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       RailsAdmin.config Team do
         edit do
           field :manager
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -190,7 +190,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     it "should only show the defined fields if some fields are defined" do
       RailsAdmin.config Team do
         edit do
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -218,7 +218,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :manager do
             label "Renamed field"
           end
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -297,7 +297,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :manager do
             hide
           end
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -361,7 +361,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :manager do
             help "#{help} Additional help text for manager field."
           end
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -377,7 +377,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :manager do
             optional true
           end
-          field :division_id do
+          field :division do
             optional true
           end
           field :name do

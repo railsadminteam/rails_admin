@@ -6,7 +6,7 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector]
-
+      @@polymorphic_parents = nil
       def self.extended(abstract_model)
 
         # ActiveRecord does not handle has_one relationships the way it does for has_many,
@@ -14,6 +14,8 @@ module RailsAdmin
         # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
         # Support is hackish at best. Atomicity is respected for creation, but not while updating.
         # It means a failed validation at update on the parent object could still modify target belongs_to foreign ids.
+        # 
+        # 
         abstract_model.model.reflect_on_all_associations.select{|assoc| assoc.macro.to_s == 'has_one'}.each do |association|
           abstract_model.model.send(:define_method, "#{association.name}_id") do
             self.send(association.name).try(:id)
@@ -26,15 +28,15 @@ module RailsAdmin
       end
 
       def self.polymorphic_parents(name)
-        unless @polymorphic_parents
-          @polymorphic_parents = {}
-          RailsAdmin::AbstractModel.all.each do |abstract_model|
-            abstract_model.polymorphic_associations.each do |association|
-              (@polymorphic_parents[association[:options][:as].to_sym] ||= []) << abstract_model
+        
+        @@polymorphic_parents ||= {}.tap do |hash|
+          RailsAdmin::AbstractModel.all_models.each do |klass|
+            klass.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
+              (hash[reflection.options[:as]] ||= []) << klass
             end
           end
         end
-        @polymorphic_parents[name.to_sym]
+        @@polymorphic_parents[name.to_sym]
       end
 
       def get(id)
@@ -132,6 +134,9 @@ module RailsAdmin
             :parent_key => association_parent_key_lookup(association),
             :child_model => association_child_model_lookup(association),
             :child_key => association_child_key_lookup(association),
+            :foreign_type => association_foreign_type_lookup(association),
+            :as => association_as_lookup(association),
+            :polymorphic => association_polymorphic_lookup(association),
             :options => association.options,
           }
         end
@@ -174,7 +179,7 @@ module RailsAdmin
         case association.macro
         when :belongs_to
           if association.options[:polymorphic]
-            RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name)
+            RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name) || []
           else
             association.klass
           end
@@ -183,6 +188,18 @@ module RailsAdmin
         else
           raise "Unknown association type: #{association.macro.inspect}"
         end
+      end
+      
+      def association_foreign_type_lookup(association)
+        association.options[:foreign_type].try :to_sym
+      end
+
+      def association_as_lookup(association)
+        association.options[:as]
+      end
+
+      def association_polymorphic_lookup(association)
+        association.options[:polymorphic]
       end
 
       def association_parent_key_lookup(association)
@@ -203,9 +220,9 @@ module RailsAdmin
       def association_child_key_lookup(association)
         case association.macro
         when :belongs_to
-          [association.options[:foreign_key] || "#{association.name}_id".to_sym]
+          association.options[:foreign_key] || "#{association.name}_id".to_sym
         when :has_one, :has_many, :has_and_belongs_to_many
-          [association.primary_key_name.to_sym]
+          association.primary_key_name.to_sym
         else
           raise "Unknown association type: #{association.macro.inspect}"
         end

@@ -15,21 +15,27 @@
         %input{:name => "send_data", :type => "hidden", :value => "true"}/
         %fieldset
           %legend= t('admin.export.fields_from', :name => @abstract_model.pretty_name)
-          - visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.each do |field|
+          - visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.each do |field|
             - list = field.type != :virtual ? 'only' : 'methods'
-            .field
-              %label{:for => "schema_#{list}_#{field.name}"}
-                = @abstract_model.model.human_attribute_name(field.name)
-              = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
-              %p.help= t('admin.export.display', :name => field.name, :type => field.type)
-            - if field.association? && field.association[:options][:polymorphic]
+            - if field.association? && field.association[:polymorphic]
               .field
-                - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name]
+                %label{:for => "schema_#{list}_#{field.method_name}"}
+                  = @abstract_model.model.human_attribute_name(field.method_name)
+                = check_box_tag "schema[#{list}][]", field.method_name, true, { :id => "schema_#{list}_#{field.method_name}" }
+                %p.help= t('admin.export.display', :name => field.method_name, :type => field.type)
+              .field
+                - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]
                 %label{:for => "schema_#{list}_#{polymorphic_type_column_name}"}
                   = @abstract_model.model.human_attribute_name(polymorphic_type_column_name)
                 = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }
                 %p.help= t('admin.export.display', :name => polymorphic_type_column_name, :type => field.type)
-        - visible_fields.select{ |f| f.association? && !f.association[:options][:polymorphic] }.each do |field|
+            - else
+              .field
+                %label{:for => "schema_#{list}_#{field.name}"}
+                  = @abstract_model.model.human_attribute_name(field.name)
+                = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
+                %p.help= t('admin.export.display', :name => field.name, :type => field.type)
+        - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
           - association = field.association
           - associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
           - fields = RailsAdmin.config(associated_model).export.visible_fields.select{ |f| !f.association? }

@@ -53,7 +53,7 @@ describe "RailsAdmin" do
     end
 
     it "should work like belongs to associations in the list view" do
-      visit rails_admin_list_path(:model_name => "comment")
+      visit rails_admin_list_path(:model_name => "comment", :set => "1")
 
       should have_content(@team.name)
     end

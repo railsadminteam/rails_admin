@@ -34,7 +34,7 @@ describe "RailsAdmin Config DSL" do
 
     it "should be hidden from other models relations in the edit view" do
       visit rails_admin_new_path(:model_name => "team")
-      should_not have_selector("#team_division_id")
+      should_not have_selector("#team_division")
       should_not have_selector("input#team_fans")
     end
 

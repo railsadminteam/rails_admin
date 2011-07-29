@@ -53,8 +53,8 @@ RSpec.configure do |config|
   config.before(:each) do
     RailsAdmin.setup
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
-    RailsAdmin::AbstractModel.instance_variable_get("@models").clear
-
+    RailsAdmin::AbstractModel.all_models = nil
+    RailsAdmin::AbstractModel.all_abstract_models = nil
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
     RailsAdmin::AbstractModel.new("Fan").destroy_all!

@@ -330,6 +330,10 @@ module RailsAdmin
 
       #  LATER
       #   find a way for complex request (OR/AND)?
+      #   _type should be a dropdown with possible values
+      #   belongs_to should be filtering boxes
+      #   empty (default state) boxes should not filter anything anytime
+      #   so that we can create custom engines through the DSL (list.filter = [list of columns])
       #   multiple words queries
       #   find a way to force a column nonetheless?
 
@@ -530,7 +534,7 @@ module RailsAdmin
 
     def check_for_injections(schema)
       check_injections_for(@model_config, (schema[:only] || []) + (schema[:methods] || []))
-      allowed_associations = @model_config.export.visible_fields.select{ |f| f.association? && !f.association[:options][:polymorphic] }.map(&:association)
+      allowed_associations = @model_config.export.visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.map(&:association)
       (schema[:include] || []).each do |association_name, schema|
         association = allowed_associations.find { |aa| aa[:name] == association_name }
         raise("Security Exception: #{association[:name]} association not available for #{@model_config.abstract_model.pretty_name}") unless association
@@ -540,9 +544,9 @@ module RailsAdmin
     end
 
     def check_injections_for(model_config, methods_name)
-      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map do |field|
-        if field.association? && field.association[:options][:polymorphic]
-          [field.name, model_config.abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name]]
+      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.map do |field|
+        if field.association? && field.association[:polymorphic]
+          [field.method_name, model_config.abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]]
         else
           field.name
         end

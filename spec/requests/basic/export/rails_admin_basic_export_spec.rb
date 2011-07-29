@@ -59,8 +59,8 @@ describe "RailsAdmin Export" do
       visit rails_admin_export_path(:model_name => 'comment')
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
-      should have_content "Id,Commentable,Commentable type,Content,Created at,Updated at"
-      should have_content "#{@player.comments.first.id},#{@player.id},#{@player.class}"
+      should have_content "Id,Content,Created at,Updated at,Commentable,Commentable type"
+      should have_content "#{@player.id},#{@player.class}"
     end
   end
 
