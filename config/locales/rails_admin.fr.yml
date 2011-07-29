@@ -31,7 +31,7 @@ fr:
       show_all: "Afficher tout"
       add_filter: "Ajouter un filtre"
     new:
-      basic_info: "INFO DE BASE"
+      basic_info: "Informations de base"
       required: "Obligatoire"
       optional: "Facultatif"
       one_char: "caractère"
