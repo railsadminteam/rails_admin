@@ -52,6 +52,7 @@ nb:
     delete:
       flash_confirmation: "%{name} er nå slettet"
       confirmation: "Ja, jeg er sikker"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Eksportér til %{name}"
       select: "Velg felter for eksport"

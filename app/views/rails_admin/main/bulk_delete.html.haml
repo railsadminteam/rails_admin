@@ -7,7 +7,7 @@
     %h2.title Delete confirmation
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      %p Are you sure you want to delete the following object along with all of the following related items will be deleted:
+      %p= I18n.t('admin.delete.bulk_delete')
       %div{:style=>"padding-left:20px"}
         = render :partial => "delete_notice", :collection => @bulk_objects
       = form_tag rails_admin_bulk_destroy_path(:model_name => @abstract_model.to_param, :bulk_ids => @bulk_objects.map(&:id)) do
@@ -19,4 +19,5 @@
             = t("admin.delete.confirmation")
 
           %button.button{:type => "submit", :name => "_continue"}
+            = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
             =t("admin.new.cancel")

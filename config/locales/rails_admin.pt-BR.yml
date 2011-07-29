@@ -59,6 +59,7 @@ pt-BR:
       are_you_sure_you_want_to_delete_the_object: "Você tem certeza que deseja deletar o %{model_name}"
       confirmation: "Sim, com certeza."
       delete_confirmation: "Confirmação de exclusão"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Exportar para %{name}"
       select: "Selecione os campos para exportar"

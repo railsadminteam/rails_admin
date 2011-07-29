@@ -59,6 +59,7 @@ de:
       are_you_sure_you_want_to_delete_the_object: "Wollen Sie %{model_name} wirklich löschen"
       confirmation: "Ja, ich bin sicher"
       delete_confirmation: "Löschen bestätigen"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Exportiere nach %{name}"
       select: "Wählen Sie zu exportierende Spalten aus"
