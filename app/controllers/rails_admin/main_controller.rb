@@ -332,7 +332,6 @@ module RailsAdmin
       #   find a way for complex request (OR/AND)?
       #   _type should be a dropdown with possible values
       #   belongs_to should be filtering boxes
-      #   empty (default state) boxes should not filter anything anytime
       #   so that we can create custom engines through the DSL (list.filter = [list of columns])
       #   multiple words queries
       #   find a way to force a column nonetheless?
@@ -401,9 +400,12 @@ module RailsAdmin
     end
 
     def build_statement(column, type, value, operator)
-      if operator == '_discard' || value == '_discard'
-        return
-      elsif operator == '_blank' || value == '_blank'
+      
+      # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
+      return if operator == '_discard' || value == '_discard'
+      
+      # filtering data with unary operator, not type dependent
+      if operator == '_blank' || value == '_blank'
         return ["(#{column} IS NULL OR #{column} = '')"]
       elsif operator == '_present' || value == '_present'
         return ["(#{column} IS NOT NULL AND #{column} != '')"]
@@ -416,7 +418,11 @@ module RailsAdmin
       elsif operator == '_not_empty' || value == '_not_empty'
         return ["(#{column} != '')"]
       end
-
+      
+      # starting from here, we need a value. If there is none, we shouldn't filter anything (empty filter)
+      return unless value.presence
+      
+      # now we go type specific
       case type
       when :boolean
          ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
