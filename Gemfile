@@ -26,7 +26,7 @@ group :development, :test do
     when 'mysql'
       gem 'mysql', '~> 2.8'
     when 'mysql2'
-      gem 'mysql', '~> 0.3'
+      gem 'mysql2', '~> 0.3'
     when 'postgresql'
       gem 'pg', '~> 0.10'
     else
