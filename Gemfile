@@ -9,7 +9,7 @@ group :development, :test do
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
     case ENV['CI_DB_ADAPTER']
-    when 'mysql'
+    when 'mysql', 'mysql2'
       gem 'activerecord-jdbcmysql-adapter', '~> 1.1', :platform => :jruby
       gem 'jdbc-mysql', '~> 5.1', :platform => :jruby
     when 'postgresql'
@@ -25,6 +25,8 @@ group :development, :test do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
       gem 'mysql', '~> 2.8'
+    when 'mysql2'
+      gem 'mysql', '~> 0.3'
     when 'postgresql'
       gem 'pg', '~> 0.10'
     else
