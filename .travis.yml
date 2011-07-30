@@ -1,4 +1,4 @@
-before_script: "bundle install && cd spec/dummy_app && bundle install && cd ../.. && bundle exec rake rails_admin:prepare_ci_env db:create db:migrate"
+before_script: "cd spec/dummy_app && bundle install && bundle exec rake rails_admin:prepare_ci_env db:create db:migrate"
 rvm:
   - 1.8.7
   - 1.9.2
