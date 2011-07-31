@@ -34,6 +34,12 @@ group :development, :test do
 
   gem 'cancan' if ENV['AUTHORIZATION_ADAPTER'] == 'cancan'
 
+  platform :rbx do
+    gem 'nokogiri', '1.4.7' # Nokogiri 1.5.0 is incompatible with Rubinius 1.2.3
+  end
+end
+
+group :development do
   platform :mri_18 do
     gem 'ruby-debug'
     gem 'linecache'
@@ -41,10 +47,6 @@ group :development, :test do
 
   platform :mri_19 do
     gem 'ruby-debug19'
-  end
-
-  platform :rbx do
-    gem 'nokogiri', '1.4.7' # Nokogiri 1.5.0 is incompatible with Rubinius 1.2.3
   end
 end
 
