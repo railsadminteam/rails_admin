@@ -2,6 +2,8 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+[![Build Status](http://travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
+
 See the demo here: http://demo.railsadmin.org/
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
