@@ -39,7 +39,7 @@ group :development, :test do
   end
 end
 
-group :development do
+group :debug do
   platform :mri_18 do
     gem 'ruby-debug'
     gem 'linecache'
