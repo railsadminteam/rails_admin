@@ -50,7 +50,7 @@ module RailsAdmin
       end
 
       register_instance_option(:label) do
-        @label ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
+        @label ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
       end
 
       register_instance_option(:label_plural) do
