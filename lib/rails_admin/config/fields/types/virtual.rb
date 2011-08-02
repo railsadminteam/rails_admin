@@ -11,11 +11,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          # Accessor for field's label.
-          register_instance_option(:label) do
-            name.to_s.humanize
-          end
-
           # Accessor for field's maximum length.
           register_instance_option(:length) do
             100
