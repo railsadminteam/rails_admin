@@ -1,0 +1,13 @@
+= label_tag "#{field.abstract_model.to_param}_#{field.name}", field.label
+.input
+  - if field.bindings[:object].send("#{field.name}_url")
+    .row
+      = link_to field.bindings[:object].send("#{field.name}_url")
+      %br
+      = form.check_box "remove_#{field.name}"
+      = form.label "remove_#{field.name}", "Remove existing #{field.label.downcase}", :class => "inline"
+  .row
+    = form.file_field field.name, :class => "fileUploadField #{field.has_errors? ? "errorField" : nil}"
+    - if field.has_errors?
+      %span.errorMessage(style="margin-left:3px") #{field.label } #{field.errors.first}
+    = form.hidden_field "#{field.name}_cache"
