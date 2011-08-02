@@ -571,25 +571,25 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     it "should be required" do
       # draft.notes is nullable and has no validation
-      field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
+      field = RailsAdmin::config("Draft").edit.fields.find { |f| f.name == :notes }
       field.properties[:nullable?].should be true
       field.required?.should be false
 
       # draft.date is nullable in the schema but has an AR
       # validates_presence_of validation that makes it required
-      field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :date}
+      field = RailsAdmin::config("Draft").edit.fields.find { |f| f.name == :date }
       field.properties[:nullable?].should be true
       field.required?.should be true
 
       # draft.round is nullable in the schema but has an AR
       # validates_numericality_of validation that makes it required
-      field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :round}
+      field = RailsAdmin::config("Draft").edit.fields.find { |f| f.name == :round }
       field.properties[:nullable?].should be true
       field.required?.should be true
 
       # team.revenue is nullable in the schema but has an AR
       # validates_numericality_of validation that allows nil
-      field = RailsAdmin::config("Team").edit.fields.find{|f| f.name == :revenue}
+      field = RailsAdmin::config("Team").edit.fields.find { |f| f.name == :revenue }
       field.properties[:nullable?].should be true
       field.required?.should be false
     end
@@ -598,8 +598,8 @@ describe "RailsAdmin Config DSL Edit Section" do
   describe "CKEditor Support" do
 
     it "should start with CKEditor disabled" do
-       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       field.ckeditor.should be false
+      field = RailsAdmin::config("Draft").edit.fields.find { |f| f.name == :notes }
+      field.ckeditor.should be false
     end
 
     it "should add Javascript to enable CKEditor" do
@@ -625,6 +625,18 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit rails_admin_new_path(:model_name => "user")
       should have_selector("input#user_avatar")
+    end
+  end
+
+  describe 'Carrierwave Support' do
+    it 'should show a file upload field' do
+      RailsAdmin.config User do
+        edit do
+          field :cw_avatar_image
+        end
+      end
+      visit rails_admin_new_path(:model_name => 'user')
+      should have_selector('#user_cw_avatar_image.fileUploadField')
     end
   end
 
@@ -759,7 +771,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       # don't spill over into other views
       expect {
         RailsAdmin::Config.model(Team).list.form_builder
-      }.to raise_error(NoMethodError,/undefined method/)
+      }.to raise_error(NoMethodError, /undefined method/)
     end
 
     it "should be used in the new and edit views" do
