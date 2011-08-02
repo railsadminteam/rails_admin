@@ -27,7 +27,7 @@
     filter_for_field = duplet[1]
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
-    field = @filterable_fields.find{ |field| field.name == filter_name.intern }
+    field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
 
     field_options = case field.type
     when :enum
