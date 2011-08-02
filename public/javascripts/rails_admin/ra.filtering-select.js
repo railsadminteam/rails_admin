@@ -78,7 +78,7 @@
       input.data("autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
           .data("item.autocomplete", item)
-          .append("<a>" + item.label + "</a>")
+          .append("<a>" + item.label || item.id + "</a>")
           .appendTo(ul);
       };
 
@@ -115,13 +115,13 @@
 				// match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
         if ((el.id || el.value) && (xhr || matcher.test(el.label))) {
           return {
-            label: el.label.replace(
+            label: el.label ? el.label.replace(
               new RegExp(
                 "(?![^&;]+;)(?!<[^<>]*)(" +
                 $.ui.autocomplete.escapeRegex(request.term) +
                 ")(?![^<>]*>)(?![^&;]+;)", "gi"
-             ), "<strong>$1</strong>"),
-            value: el.label,
+             ), "<strong>$1</strong>") : el.id,
+            value: el.label || el.id,
             id: el.id || el.value
           };
         }
