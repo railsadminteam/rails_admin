@@ -79,7 +79,7 @@ module RailsAdmin
         def inverse_of
           association[:inverse_of]
         end
-
+        
         # Reader for validation errors of the bound object
         def errors
           bindings[:object].errors[child_key]

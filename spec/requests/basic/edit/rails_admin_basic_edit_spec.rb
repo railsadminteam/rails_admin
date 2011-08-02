@@ -39,7 +39,17 @@ describe "RailsAdmin Basic Edit" do
       should have_selector("a", :href => 'admin/players/new?associations[team]=' + @team.id.to_s)
     end
   end
-
+  
+  describe "readonly associations" do
+    
+    it 'should not be editable' do
+      @league = FactoryGirl.create :league
+      visit rails_admin_edit_path(:model_name => "league", :id => @league.id)
+      should_not have_selector('select#league_team_ids')
+      should have_selector('select#league_division_ids') # decoy, fails if naming scheme changes
+    end
+  end
+  
   describe "edit with has-one association" do
     before(:each) do
       @player = FactoryGirl.create :player

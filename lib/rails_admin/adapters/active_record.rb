@@ -137,7 +137,8 @@ module RailsAdmin
             :foreign_type => association_foreign_type_lookup(association),
             :as => association_as_lookup(association),
             :polymorphic => association_polymorphic_lookup(association),
-            :inverse_of => association_inverse_of_lookup(association)
+            :inverse_of => association_inverse_of_lookup(association),
+            :read_only => association_read_only_lookup(association)
           }
         end
       end
@@ -208,6 +209,10 @@ module RailsAdmin
       
       def association_inverse_of_lookup(association)
         association.options[:inverse_of].try :to_sym
+      end
+      
+      def association_read_only_lookup(association)
+        association.options[:readonly]
       end
 
       def association_child_model_lookup(association)

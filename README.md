@@ -1207,6 +1207,8 @@ You can edit related objects in filtering-multiselect by double-clicking on any 
 If you set the :inverse_of option on your relations, RailsAdmin will automatically populate the inverse relationship
 in the modal creation window. (link next to belongs\_to and has\_many widgets)
 
+:readonly options are automatically inferred on associations fields and won't be editable in forms.
+
 ### Configuring fields ###
 
 * exclude_fields field_list

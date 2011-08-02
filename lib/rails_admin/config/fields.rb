@@ -10,7 +10,11 @@ module RailsAdmin
         # If it's an association
         if properties.has_key?(:parent_model)
           association = parent.abstract_model.associations.find {|a| a[:name].to_s == properties[:name].to_s}
-          fields << RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
+          field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
+          
+          field.read_only(true) if association[:read_only]
+          fields << field
+          
         # If it's a column
         elsif !properties.has_key?(:parent_model)
           fields << (field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties))
