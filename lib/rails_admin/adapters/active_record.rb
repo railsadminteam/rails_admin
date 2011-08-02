@@ -127,7 +127,7 @@ module RailsAdmin
       def associations
         model.reflect_on_all_associations.map do |association|
           {
-            :name => association.name,
+            :name => association.name.to_sym,
             :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
             :type => association.macro,
             :parent_model => association_parent_model_lookup(association),
@@ -195,7 +195,7 @@ module RailsAdmin
       end
 
       def association_as_lookup(association)
-        association.options[:as]
+        association.options[:as].try :to_sym
       end
 
       def association_polymorphic_lookup(association)
@@ -220,7 +220,7 @@ module RailsAdmin
       def association_child_key_lookup(association)
         case association.macro
         when :belongs_to
-          association.options[:foreign_key] || "#{association.name}_id".to_sym
+          association.options[:foreign_key].try(:to_sym) || "#{association.name}_id".to_sym
         when :has_one, :has_many, :has_and_belongs_to_many
           association.primary_key_name.to_sym
         else
