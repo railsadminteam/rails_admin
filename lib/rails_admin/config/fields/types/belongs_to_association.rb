@@ -10,12 +10,7 @@ module RailsAdmin
 
           # Accessor for field's formatted value
           register_instance_option(:formatted_value) do
-            object = bindings[:object].send(association[:name])
-            unless object.nil?
-              RailsAdmin::Config.model(object).with(:object => object).object_label
-            else
-              nil
-            end
+            (o = value) && o.send(associated_model_config.object_label_method)
           end
           
           # we need to check for validation on field and association

@@ -87,7 +87,7 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
-      if object_params = params[@abstract_model.model.name.underscore.to_sym]
+      if object_params = params[@abstract_model.to_param]
         @object.attributes = @object.attributes.merge(object_params)
       end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase

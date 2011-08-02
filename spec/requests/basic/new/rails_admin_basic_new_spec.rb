@@ -78,8 +78,20 @@ describe "RailsAdmin Basic New" do
 
   describe "GET /admin/player/new with parameters for pre-population" do
     it "should populate form field when corresponding parameters are passed in" do
-      visit rails_admin_new_path(:model_name => 'player', :player => {:name => 'Sam'})
+      visit rails_admin_new_path(:model_name => 'players', :players => {:name => 'Sam'})
       page.should have_css('input[value=Sam]')
+    end
+    
+    it "should prepropulate belongs to relationships" do
+      @team = FactoryGirl.create :team, :name => "belongs_to association prepopulated"
+      visit rails_admin_new_path(:model_name => 'players', :associations => { :team => @team.id } )
+      page.should have_css("select#player_team_id option[selected='selected'][value='#{@team.id}']")
+    end
+    
+    it "should prepropulate has_many relationships" do
+      @player = FactoryGirl.create :player, :name => "has_many association prepopulated"
+      visit rails_admin_new_path(:model_name => 'teams', :associations => { :players => @player.id } )
+      page.should have_css("select#team_player_ids option[selected='selected'][value='#{@player.id}']")
     end
   end
 

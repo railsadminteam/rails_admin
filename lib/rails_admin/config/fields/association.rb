@@ -74,6 +74,11 @@ module RailsAdmin
         def child_key
           association[:child_key]
         end
+        
+        # Reader for the inverse relationship
+        def inverse_of
+          association[:inverse_of]
+        end
 
         # Reader for validation errors of the bound object
         def errors
@@ -82,7 +87,7 @@ module RailsAdmin
 
         # Reader whether the bound object has validation errors
         def has_errors?
-          !(bindings[:object].errors[child_key].nil? || bindings[:object].errors[child_key].empty?)
+          errors.present?
         end
 
         # Reader whether this is a polymorphic association
