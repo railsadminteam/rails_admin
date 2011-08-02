@@ -219,7 +219,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @ball = FactoryGirl.create :ball
 
-      visit rails_admin_edit_path(:model_name => "ball", :id => @ball.id)
+      visit edit_path(:model_name => "ball", :id => @ball.id)
 
       fill_in "ball[color]", :with => "gray"
       click_button "Save and edit"
