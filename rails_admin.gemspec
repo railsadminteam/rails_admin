@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# coding: utf-8
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
