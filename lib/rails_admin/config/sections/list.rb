@@ -32,6 +32,10 @@ module RailsAdmin
             config.default_items_per_page = value
           end
         end
+        
+        register_instance_option :filters do
+          []
+        end
 
         # Number of items listed per page
         register_instance_option(:items_per_page) do

@@ -244,6 +244,17 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
     end
+    
+    it "should display base filters when no filters are present in the params" do
+      RailsAdmin.config Player do
+        list do
+          filters [:name, :team]
+        end
+      end
+      
+      visit rails_admin_list_path(:model_name => "player")
+      should have_content("$.filters.append('Name', 'name', 'string', '', '', '', 1);$.filters.append('Team', 'team', 'belongs_to_association', '', '', '', 2);")
+    end
   end
 
   describe "GET /admin/player with 2 objects" do

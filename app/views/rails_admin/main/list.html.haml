@@ -12,16 +12,15 @@
   head_javascript "rails_admin/activo/application.js"
   head_javascript "rails_admin/ra.filter-box.js"
   head_style "rails_admin/list"
-
-  if params[:filters]
-    @ordered_filters = params[:filters].inject({}) { |memo, filter|
-      field_name = filter.first
-      filter.last.each do |index, filter_hash|
-        memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
-      end
-      memo
-    }.to_a.sort_by(&:first)
-  end
+  
+  @index = 0
+  @ordered_filters = (params[:filters] || @model_config.list.filters).inject({}) { |memo, filter|
+    field_name = filter.is_a?(Array) ? filter.first : filter
+  (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "value" => '' } }) .each do |index, filter_hash|
+      memo[index] = { field_name => filter_hash } unless filter_hash['disabled']
+    end
+    memo
+  }.to_a.sort_by(&:first)
 
   @ordered_filter_string = @ordered_filters.map do |duplet|
     filter_index = duplet[0]

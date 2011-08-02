@@ -572,6 +572,17 @@ You can independently deactivate querying (search) or filtering for each field w
       filterable? false
     end
 
+Empty filters can be displayed in the list view:
+
+    class Team < ActiveRecord::Base
+      rails_admin do
+        list do
+          filters [:name, :division]
+        end
+      end
+    end
+
+
 **Fields - Visibility and ordering**
 
 By default all fields are visible, but they are not presented in any particular
