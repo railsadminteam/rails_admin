@@ -10,8 +10,8 @@
   else
     collection = field.associated_collection(@authorization_adapter).sort_by {|a| selected_ids.index(a[1]) || selected_ids.size }
   end
-  edit_url = authorized?(:edit, config.abstract_model) ? rails_admin_edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
-  
+  edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
+
 = field_wrapper_for(form, field) do
   %input{:name => field.dom_name, :type => "hidden", :value => ""}
   = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url})
@@ -37,7 +37,7 @@
   up: "#{t("admin.new.up")}",
   down: "#{t("admin.new.down")}"
   }
-  
+
   });
   if($("div.createAssociatedRecordDialog").length == 0) {
   $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
