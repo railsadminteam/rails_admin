@@ -8,7 +8,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
 
     it "should be alphabetical by default" do
       visit rails_admin_dashboard_path
-      ["Balls", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+      ["Balls", "Basic pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
@@ -20,7 +20,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit rails_admin_dashboard_path
-      ["Teams", "Balls", "Cms/Basic Pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"].each_with_index do |content, i|
+      ["Teams", "Balls", "Basic pages", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
     end
@@ -32,10 +32,10 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit rails_admin_dashboard_path
-      ["Balls", "Cms/Basic Pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
+      ["Balls", "Basic pages", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
-      ["Cms/Basic Pages", "Comments"].each_with_index do |content, i|
+      ["Basic pages", "Comments"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]/a").should have_content(content)
       end
     end
@@ -53,7 +53,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
       ["Balls", "CMS related", "Divisions", "Drafts", "Fans", "Leagues", "Players", "Teams", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 2}]/a").should have_content(content)
       end
-      ["Cms/Basic Pages", "Comments"].each_with_index do |content, i|
+      ["Basic pages", "Comments"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]/a").should have_content(content)
       end
     end
