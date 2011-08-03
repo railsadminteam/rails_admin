@@ -6,7 +6,7 @@ describe "RailsAdmin Basic Show" do
   describe "show" do
     before(:each) do
       @player = Factory.create :player
-      visit rails_admin_show_path(:model_name => "player", :id => @player.id)
+      visit show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should have History, Edit, Delete, Cancel buttons" do
@@ -32,7 +32,7 @@ describe "RailsAdmin Basic Show" do
       @player = Factory.create :player
       @team   = Factory.create :team
       @player.update_attribute(:team, @team)
-      visit rails_admin_show_path(:model_name => "player", :id => @player.id)
+      visit show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show associated objects" do
@@ -44,7 +44,7 @@ describe "RailsAdmin Basic Show" do
     before(:each) do
       @player = Factory.create :player
       @draft  = Factory.create :draft, :player => @player
-      visit rails_admin_show_path(:model_name => "player", :id => @player.id)
+      visit show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show associated objects" do
@@ -59,7 +59,7 @@ describe "RailsAdmin Basic Show" do
       @comment2 = Factory.create :comment, :commentable => @player
       @comment3 = Factory.create :comment, :commentable => Factory.create(:player)
 
-      visit rails_admin_show_path(:model_name => "player", :id => @player.id)
+      visit show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should show associated objects" do
@@ -73,7 +73,7 @@ describe "RailsAdmin Basic Show" do
     before(:each) do
       @player = Factory.create :player
       @comment = Factory.create :comment, :commentable => @player
-      visit rails_admin_show_path(:model_name => "comment", :id => @comment.id)
+      visit show_path(:model_name => "comment", :id => @comment.id)
     end
 
     it "should show associated object" do

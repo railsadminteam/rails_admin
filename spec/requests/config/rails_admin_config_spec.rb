@@ -83,7 +83,7 @@ describe "RailsAdmin Config DSL" do
     
     it 'should hide empty fields in show view by default' do
       @player = FactoryGirl.create :player
-      visit rails_admin_show_path(:model_name => "league", :id => @player.id)
+      visit show_path(:model_name => "league", :id => @player.id)
       should_not have_css("div.player_born_on")
     end
     
@@ -94,7 +94,7 @@ describe "RailsAdmin Config DSL" do
       end
 
       @player = FactoryGirl.create :player
-      visit rails_admin_show_path(:model_name => "player", :id => @player.id)
+      visit show_path(:model_name => "player", :id => @player.id)
       should have_css("div.player_born_on")
     end
   end

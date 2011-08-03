@@ -287,7 +287,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit rails_admin_new_path(:model_name => "team")
+      visit new_path(:model_name => "team")
       should have_content("I'm outputed in the form")
     end
     

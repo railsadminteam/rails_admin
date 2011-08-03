@@ -3,6 +3,7 @@
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
   gem.add_development_dependency 'capybara', '~> 1.0'
+  gem.add_development_dependency 'launchy', '~> 2.0.5'
   gem.add_development_dependency 'devise', '~> 1.1'
   gem.add_development_dependency 'dummy_data', '~> 0.9'
   gem.add_development_dependency 'factory_girl', '~> 2.0'

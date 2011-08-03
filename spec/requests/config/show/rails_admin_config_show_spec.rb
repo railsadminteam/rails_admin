@@ -10,7 +10,7 @@ describe "RailsAdmin Config DSL Show Section" do
       c.compact_show_view = false
     end
     
-    visit rails_admin_show_path(:model_name => "team", :id => team.id)
+    visit show_path(:model_name => "team", :id => team.id)
   end
 
   describe "field groupings" do
