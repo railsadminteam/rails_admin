@@ -7,6 +7,8 @@ group :development, :test do
   gem 'rails', '~> 3.1.0.rc5'
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
+    # activerecord-jdbc-adapter does not yet have a rails 3.1 compatible release
+    gem 'activerecord-jdbc-adapter', :git => 'https://github.com/nicksieger/activerecord-jdbc-adapter.git'
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
       gem 'activerecord-jdbcmysql-adapter', '~> 1.1', :platform => :jruby
