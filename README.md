@@ -4,7 +4,14 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
 
-See the demo here: http://demo.railsadmin.org/
+Important notice (2011-08-03)
+-----------------------------
+
+The master branch has been fast-forwared to rails-3.1 branch. PLease test it, report any regression you may find.
+A Rails-3.0 branch has been created for legacy purpose, *update your Gemfile* for your app in production!
+Please consider upgrading your app to the latest Rails-3.1 RC as soon as possible to retain compatibility
+with latest RailsAdmin improvements.
+
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
@@ -24,6 +31,8 @@ It currently offers the following features:
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
+See the demo here: http://demo.railsadmin.org/
+
 Supported ORMs:
 
 * ActiveRecord
@@ -36,8 +45,6 @@ Help
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 Please don't use the issue tracker, which is for *issues* only.
-
-Check if the build is green here: http://ci.railsadmin.org/job/RailsAdmin/
 
 If you have good reasons to think you found a *rails_admin* bug, submit a ticket (read the very end of this readme first)
 
