@@ -45,6 +45,8 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
+
 See the demo here: http://demo.railsadmin.org/
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
@@ -76,21 +78,33 @@ Help
 ----
 If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
 or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
-Please don't use the issue tracker, which is for issues only.
+Please don't use the issue tracker, which is for *issues* only.
 
 Check if the build is green here: http://ci.railsadmin.org/job/RailsAdmin/
 
-If you have good reasons to think you found a *rails_admin* bug, submit a ticket providing link to gists with:
-
-1. used rails_admin commit (in your Gemfile.lock)
-2. obtained stacktrace
-3. your initializers/rails_admin.rb
-4. models declarations that matter
-5. and anything else you find relevant
+If you have good reasons to think you found a *rails_admin* bug, submit a ticket (read the very end of this readme first)
 
 API Update Note
 ---------------
-The model configuration `dropdown` has been deprecated in favor of navigation_label.
+
+Important notice about `BelongsToAssociation`: 
+In the DSL, they now must be referenced by the association name, not the child_key.
+Considering:
+    
+    # `user_id: integer` (DB)
+    belongs_to :user # (ActiveRecord)
+
+Instead of:
+    
+    field :user_id
+
+You must use:
+
+    field :user
+
+`field :user_id` now references the column (automatically hidden), which type is `Integer`, not the `BelongToAssociation`.
+
+The model configuration `dropdown` has been deprecated in favor of `navigation_label`.
 API unchanged.
 
 The field configuration method `show_partial` has been removed in favor of
@@ -598,6 +612,17 @@ You can independently deactivate querying (search) or filtering for each field w
       queryable? true # default
       filterable? false
     end
+
+Empty filters can be displayed in the list view:
+
+    class Team < ActiveRecord::Base
+      rails_admin do
+        list do
+          filters [:name, :division]
+        end
+      end
+    end
+
 
 **Fields - Visibility and ordering**
 
@@ -1200,7 +1225,8 @@ CKEditor can be enabled on fields of type text:
 
 **Fields - Ordered has_many/has_and_belongs_to_many/has_many :through associations**
 
-Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
+Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), 
+allowing selected options to be moved up/down.
 RailsAdmin will handle ordering in and out of the form.
 
     class Player < ActiveRecord::Base
@@ -1215,7 +1241,14 @@ RailsAdmin will handle ordering in and out of the form.
 
 You'll need to handle ordering in your model with a position column for example.
 
+** Associations - trivia **
+
 You can edit related objects in filtering-multiselect by double-clicking on any visible item in the widget.
+
+If you set the :inverse_of option on your relations, RailsAdmin will automatically populate the inverse relationship
+in the modal creation window. (link next to belongs\_to and has\_many widgets)
+
+:readonly options are automatically inferred on associations fields and won't be editable in forms.
 
 ### Configuring fields ###
 

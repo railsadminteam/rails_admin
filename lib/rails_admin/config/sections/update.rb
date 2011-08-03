@@ -12,7 +12,7 @@ module RailsAdmin
             # Hide owning ends of polymorphic associations in edit views as
             # they'd need special handling in RailsAdmin::AbstractObject that
             # has not been implemented
-            if f.association? && f.association[:options][:as]
+            if f.association? && f.association[:as]
               f.hide
             end
           end

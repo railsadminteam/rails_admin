@@ -25,8 +25,7 @@ module RailsAdmin
       end
 
       def excluded?
-        return @excluded unless @excluded.nil?
-        @excluded = !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
+        @excluded ||= !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
       end
 
       # Configure create and update views as a bulk operation with given block
@@ -47,11 +46,15 @@ module RailsAdmin
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
       register_instance_option(:object_label_method) do
-        @object_label_method ||= Config.label_methods.find { |method| abstract_model.model.new.respond_to? method } || :rails_admin_default_object_label_method
+        @object_label_method ||= Config.label_methods.find { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
       end
 
       register_instance_option(:label) do
-        abstract_model.model.model_name.human(:default => abstract_model.model.model_name.titleize)
+        @label ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
+      end
+
+      register_instance_option(:label_plural) do
+        @label_plural ||= abstract_model.model.model_name.human(:count => 2, :default => label.pluralize)
       end
 
       register_instance_option(:weight) do
@@ -61,7 +64,7 @@ module RailsAdmin
       register_instance_option(:parent) do
         :root
       end
-      
+
       register_deprecated_instance_option(:dropdown, :navigation_label) # same API, deprecated 2011-07-21
 
       register_instance_option(:navigation_label) do

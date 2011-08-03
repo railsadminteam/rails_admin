@@ -3,12 +3,20 @@ require 'rails_admin/generic_support'
 
 module RailsAdmin
   class AbstractModel
-
-    @models = []
-
+    cattr_accessor :all_models, :all_abstract_models
+    @@all_models = nil
+    @@all_abstract_models = nil
     # Returns all models for a given Rails app
+    
+    
+    # self.all_abstract_models
     def self.all
-      if @models.empty?
+      @@all_abstract_models ||= all_models.map{ |model| new(model) }
+    end
+    
+    def self.all_models
+      unless @@all_models
+        @@all_models = []
         if RailsAdmin::Config.included_models.any?
           # Whitelist approach, use only models explicitly listed
           possible_models = RailsAdmin::Config.included_models.map(&:to_s)
@@ -27,10 +35,10 @@ module RailsAdmin
 
         add_models(possible_models, excluded_models)
 
-        @models.sort!{|x, y| x.model.to_s <=> y.model.to_s}
+        @@all_models.sort!{|x, y| x.to_s <=> y.to_s}
       end
 
-      @models
+      @@all_models
     end
 
     def self.add_models(possible_models=[], excluded_models=[])
@@ -42,7 +50,7 @@ module RailsAdmin
 
     def self.add_model(model_name)
       model = lookup(model_name,false)
-      @models << new(model) if model
+      @@all_models << model if model
     end
 
     # Given a string +model_name+, finds the corresponding model class

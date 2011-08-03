@@ -87,7 +87,7 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
-      if object_params = params[@abstract_model.model.name.underscore.to_sym]
+      if object_params = params[@abstract_model.to_param]
         @object.attributes = @object.attributes.merge(object_params)
       end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
@@ -330,6 +330,9 @@ module RailsAdmin
 
       #  LATER
       #   find a way for complex request (OR/AND)?
+      #   _type should be a dropdown with possible values
+      #   belongs_to should be filtering boxes
+      #   so that we can create custom engines through the DSL (list.filter = [list of columns])
       #   multiple words queries
       #   find a way to force a column nonetheless?
 
@@ -397,9 +400,12 @@ module RailsAdmin
     end
 
     def build_statement(column, type, value, operator)
-      if operator == '_discard' || value == '_discard'
-        return
-      elsif operator == '_blank' || value == '_blank'
+      
+      # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
+      return if operator == '_discard' || value == '_discard'
+      
+      # filtering data with unary operator, not type dependent
+      if operator == '_blank' || value == '_blank'
         return ["(#{column} IS NULL OR #{column} = '')"]
       elsif operator == '_present' || value == '_present'
         return ["(#{column} IS NOT NULL AND #{column} != '')"]
@@ -412,7 +418,11 @@ module RailsAdmin
       elsif operator == '_not_empty' || value == '_not_empty'
         return ["(#{column} != '')"]
       end
-
+      
+      # starting from here, we need a value. If there is none, we shouldn't filter anything (empty filter)
+      return unless value.presence
+      
+      # now we go type specific
       case type
       when :boolean
          ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
@@ -530,7 +540,7 @@ module RailsAdmin
 
     def check_for_injections(schema)
       check_injections_for(@model_config, (schema[:only] || []) + (schema[:methods] || []))
-      allowed_associations = @model_config.export.visible_fields.select{ |f| f.association? && !f.association[:options][:polymorphic] }.map(&:association)
+      allowed_associations = @model_config.export.visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.map(&:association)
       (schema[:include] || []).each do |association_name, schema|
         association = allowed_associations.find { |aa| aa[:name] == association_name }
         raise("Security Exception: #{association[:name]} association not available for #{@model_config.abstract_model.pretty_name}") unless association
@@ -540,9 +550,9 @@ module RailsAdmin
     end
 
     def check_injections_for(model_config, methods_name)
-      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:options][:polymorphic] }.map do |field|
-        if field.association? && field.association[:options][:polymorphic]
-          [field.name, model_config.abstract_model.properties.find {|p| field.association[:options][:foreign_type] == p[:name].to_s }[:name]]
+      available_fields = model_config.export.visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.map do |field|
+        if field.association? && field.association[:polymorphic]
+          [field.method_name, model_config.abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]]
         else
           field.name
         end

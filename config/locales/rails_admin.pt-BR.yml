@@ -19,6 +19,10 @@ pt-BR:
       name: "Histórico"
       page_name: "Histórico de %{name}"
       no_activity: "Sem Atividade"
+    show:
+      show_in_app: "Mostrar na aplicação"
+      page_name: "Detalhes %{name}"
+      no_file_found: "Nenhum arquivo encontrado"
     credentials:
       log_out: "Desconectar"
     list:
@@ -27,14 +31,15 @@ pt-BR:
       export_action: "Exportar tela corrente"
       export_selected: "Exportar selecionados"
       add_new: "Adicionar"
-      search: "BUSCAR"
+      search: "Buscar"
       select: "Selecione %{name} para alterar"
       show_all: "Exibir todos"
       select_action: "Selecionar"
       delete_selected: "Excluir selecionados"
       add_filter: "Adicionar filtro"
+      show_action: "Visualizar"
     new:
-      basic_info: "INFORMAÇÕES BÁSICAS"
+      basic_info: "Informações Básicas"
       required: "Obrigatório"
       optional: "Opcional"
       one_char: "caracter"
@@ -50,10 +55,11 @@ pt-BR:
       save_and_edit: "Gravar e alterar"
       cancel: "Cancelar"
     delete:
-      all_of_the_following_related_items_will_be_deleted: "? All of the following related items will be deleted:"
-      are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete the %{model_name}"
+      all_of_the_following_related_items_will_be_deleted: "? Todos os items relacionados a seguir serão deletados:"
+      are_you_sure_you_want_to_delete_the_object: "Você tem certeza que deseja deletar o %{model_name}"
       confirmation: "Sim, com certeza."
-      delete_confirmation: "Delete confirmation"
+      delete_confirmation: "Confirmação de exclusão"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Exportar para %{name}"
       select: "Selecione os campos para exportar"
@@ -66,7 +72,7 @@ pt-BR:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Codificar para"
-        encoding_to_help: "Escolha o tipo de codificação. Leave empty to let current input encoding untouched: (%{name})"
+        encoding_to_help: "Escolha o tipo de codificação. Deixe vazio para deixar o encoding padrão do input: (%{name})"
         skip_header: "Sem cabeçalho"
         skip_header_help: "Não exportar um cabeçalho (campos sem descrição)"
         default_col_sep: ","
@@ -88,6 +94,7 @@ pt-BR:
     breadcrumbs:
       delete: "deletar"
       history: "história"
+      show: "visualizar"
       edit: "editar"
       export: "exportar"
       bulk_destroy: "deletar"

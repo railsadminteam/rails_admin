@@ -27,7 +27,7 @@ describe "RailsAdmin Config DSL Show Section" do
 
       should_not have_selector("h4", :text => "Basic info")
 
-      %w[team_division_id team_name team_logo_url team_manager
+      %w[team_division team_name team_logo_url team_manager
         team_ballpark team_mascot team_founded team_wins
         team_losses team_win_percentage team_revenue
       ].each do |field|
@@ -72,7 +72,7 @@ describe "RailsAdmin Config DSL Show Section" do
           end
           group :belongs_to_associations do
             label "Belong's to associations"
-            field :division_id
+            field :division
           end
         end
       end
@@ -84,7 +84,7 @@ describe "RailsAdmin Config DSL Show Section" do
 
       should have_selector(".team_name")
       should have_selector(".team_logo_url")
-      should have_selector(".team_division_id")
+      should have_selector(".team_division")
     end
 
     it "should have accessor for its fields by type" do
@@ -95,7 +95,7 @@ describe "RailsAdmin Config DSL Show Section" do
             field :logo_url
           end
           group :other do
-            field :division_id
+            field :division
             field :manager
             field :ballpark
             fields_of_type :string do
@@ -120,7 +120,7 @@ describe "RailsAdmin Config DSL Show Section" do
     it "should show all by default" do
       do_request
 
-      %w[team_division_id team_name team_logo_url team_manager
+      %w[team_division team_name team_logo_url team_manager
         team_ballpark team_mascot team_founded team_wins
         team_losses team_win_percentage team_revenue team_players team_fans
       ].each do |field|
@@ -132,7 +132,7 @@ describe "RailsAdmin Config DSL Show Section" do
       RailsAdmin.config Team do
         show do
           field :manager
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -140,7 +140,7 @@ describe "RailsAdmin Config DSL Show Section" do
       do_request
 
       should have_selector(".team_manager")
-      should have_selector(".team_division_id")
+      should have_selector(".team_division")
       should have_selector(".team_name")
     end
 
@@ -165,7 +165,7 @@ describe "RailsAdmin Config DSL Show Section" do
           field :manager do
             label "Renamed field"
           end
-          field :division_id
+          field :division
           field :name
         end
       end
@@ -221,14 +221,14 @@ describe "RailsAdmin Config DSL Show Section" do
           field :manager do
             hide
           end
-          field :division_id
+          field :division
           field :name
         end
       end
 
       do_request
 
-      should have_selector(".team_division_id")
+      should have_selector(".team_division")
       should have_selector(".team_name")
     end
 

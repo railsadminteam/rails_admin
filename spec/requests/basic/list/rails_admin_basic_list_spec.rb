@@ -43,7 +43,7 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/player with sort" do
     before(:each) do
       @players = 2.times.map { FactoryGirl.create :player }
-      visit list_path(:model_name => "player", :sort => "name", :set => 1)
+      visit list_path(:model_name => "player", :sort => "name")
     end
 
     it "should be sorted correctly" do
@@ -55,7 +55,7 @@ describe "RailsAdmin Basic List" do
 
     before(:each) do
       @players = 2.times.map { FactoryGirl.create :player }
-      visit list_path(:model_name => "player", :sort => "name", :sort_reverse => "true", :set => 1)
+      visit list_path(:model_name => "player", :sort => "name", :sort_reverse => "true")
     end
 
     it "should be sorted correctly" do
@@ -77,7 +77,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to query on any attribute" do
-      visit list_path(:model_name => "player", :query => @players[0].name, :set => 1)
+      visit list_path(:model_name => "player", :query => @players[0].name)
       should have_content(@players[0].name)
       (1..3).each do |i|
         should have_no_content(@players[i].name)
@@ -85,7 +85,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to filter on one attribute" do
-      visit list_path(:model_name => "player", :filters => {:injured => {"1" => {:value => "true"}}}, :set => 1)
+      visit list_path(:model_name => "player", :filters => {:injured => {"1" => {:value => "true"}}})
       should have_content(@players[0].name)
       should have_no_content(@players[1].name)
       should have_content(@players[2].name)
@@ -93,7 +93,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to combine filters on two different attributes" do
-      visit list_path(:model_name => "player", :filters => {:retired => {"1" => {:value => "true"}}, :injured => {"1" => {:value => "true"}}}, :set => 1)
+      visit list_path(:model_name => "player", :filters => {:retired => {"1" => {:value => "true"}}, :injured => {"1" => {:value => "true"}}})
       should have_content(@players[0].name)
       (1..3).each do |i|
         should have_no_content(@players[i].name)
@@ -101,7 +101,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to filter on belongs_to relationships" do
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => { :value => @teams[0].name }}}, :set => 1)
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => { :value => @teams[0].name }}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -126,12 +126,12 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id do
+          field :team do
             searchable Player => :team_id
           end
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.id}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.id}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -144,12 +144,12 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id do
+          field :team do
             searchable Team => :name
           end
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -161,12 +161,12 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id do
+          field :team do
             searchable :teams => :name
           end
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -178,12 +178,12 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id do
+          field :team do
             searchable 'teams.name'
           end
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -195,10 +195,10 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id
+          field :team
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -210,12 +210,12 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id do
+          field :team do
             searchable :name
           end
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -227,22 +227,33 @@ describe "RailsAdmin Basic List" do
         list do
           field :id
           field :name
-          field :team_id do
+          field :team do
             searchable [:name, {Player => :team_id}]
           end
         end
       end
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.first.id}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.first.id}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
       # same with a different id
-      visit list_path(:model_name => "player", :filters => {:team_id => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.last.id}}})
+      visit list_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.last.id}}})
       should have_no_content(@players[0].name)
       should have_no_content(@players[1].name)
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
+    end
+    
+    it "should display base filters when no filters are present in the params" do
+      RailsAdmin.config Player do
+        list do
+          filters [:name, :team]
+        end
+      end
+      
+      visit list_path(:model_name => "player")
+      should have_content("$.filters.append('Name', 'name', 'string', '', '', '', 1);$.filters.append('Team', 'team', 'belongs_to_association', '', '', '', 2);")
     end
   end
 

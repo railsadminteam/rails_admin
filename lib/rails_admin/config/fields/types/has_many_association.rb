@@ -34,7 +34,7 @@ module RailsAdmin
           end
 
           def method_name
-            "#{super.singularize}_ids" # name_ids
+            "#{super.to_s.singularize}_ids" # name_ids
           end
         end
       end

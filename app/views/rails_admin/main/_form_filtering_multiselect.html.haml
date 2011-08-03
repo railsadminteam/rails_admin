@@ -1,8 +1,17 @@
 :ruby
+  related_id = params[:associations] && params[:associations][field.name.to_s]
   config = field.associated_model_config
-  selected = field.bindings[:object].send(field.association[:name])
+  
+  if @object.new_record? && related_id.present? && related_id != 'new'
+    selected = [field.associated_model_config.abstract_model.get(related_id)]
+  else
+    selected = @object.send(field.name)
+  end
   selected_ids = selected.map(&:id)
+  
   xhr = field.associated_collection_count > 100
+  
+  
   if xhr
     collection = selected.map do |o|
       [o.send(config.object_label_method), o.id]
@@ -15,11 +24,12 @@
 = field_wrapper_for(form, field) do
   %input{:name => field.dom_name, :type => "hidden", :value => ""}
   = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url})
-
-
   - if authorized? :new, config.abstract_model
-    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(:model_name => config.abstract_model.to_param), :class => "createAssociatedRecord"
-
+    - path_hash = { :model_name => config.abstract_model.to_param }
+    - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
+    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(path_hash), :class => "createAssociatedRecord"
+- head_style 'rails_admin/ra.filtering-multiselect.css'
+- head_javascript "rails_admin/ra.filtering-multiselect.js"
 - head_javascript do
   $j(document).ready(function($){
   $("##{field.dom_id}").filteringMultiselect({
@@ -27,7 +37,7 @@
     createQuery: function(query) {
     return { query: query }
     },
-    source: "#{list_path(config.abstract_model.to_param, :compact => true)}",
+    source: "#{list_path(config.abstract_model.to_param, :compact => true).html_safe}",
   sortable: #{field.orderable ? 'true' : 'false'},
   regional: {
   chooseAll: "#{t("admin.new.chose_all")}",

@@ -63,6 +63,7 @@ ro:
       are_you_sure_you_want_to_delete_the_object: "Ești sigur că vrei să ștergi %{model_name}"
       confirmation: "Da, sunt sigur"
       delete_confirmation: "Confirmarea ștergerii"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Exportă la %{name}"
       select: "Selectează câmpurile pentru export"

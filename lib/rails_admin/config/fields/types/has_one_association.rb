@@ -14,12 +14,7 @@ module RailsAdmin
 
           # Accessor for field's formatted value
           register_instance_option(:formatted_value) do
-            object = bindings[:object].send(association[:name])
-            unless object.nil?
-              RailsAdmin::Config.model(object).with(:object => object).object_label
-            else
-              nil
-            end
+            (o = value) && o.send(associated_model_config.object_label_method)
           end
 
           # Accessor for whether this is field is required.  In this
@@ -33,11 +28,11 @@ module RailsAdmin
           end
 
           def selected_id
-            (object = value).nil? ? nil : object.id
+            value.try :id
           end
 
           def method_name
-            super.singularize + '_id'
+            super.to_s.singularize + '_id'
           end
         end
       end

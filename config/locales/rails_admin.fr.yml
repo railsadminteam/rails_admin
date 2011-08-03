@@ -31,7 +31,7 @@ fr:
       show_all: "Afficher tout"
       add_filter: "Ajouter un filtre"
     new:
-      basic_info: "INFO DE BASE"
+      basic_info: "Informations de base"
       required: "Obligatoire"
       optional: "Facultatif"
       one_char: "caractère"
@@ -52,10 +52,11 @@ fr:
       page_name: "Détails pour %{name}"
       no_file_found: "Pas de fichier trouvé"
     delete:
-      all_of_the_following_related_items_will_be_deleted: " ? Tous les éléments suivants seront supprimés : "
-      are_you_sure_you_want_to_delete_the_object: "Êtes-vous sûr de vouloir supprimer les éléments suivants : %{model_name}"
+      all_of_the_following_related_items_will_be_deleted: " ? Les objets suivants peuvent être affectés (supprimés ou orphelins) : "
+      are_you_sure_you_want_to_delete_the_object: "Êtes-vous sûr de vouloir supprimer cet(te) %{model_name}"
       confirmation: "Oui, je suis sûr(e)"
       delete_confirmation: "Confirmation de suppression"
+      bulk_delete: "Les objets suivants seront supprimés, ce qui pourrait supprimer ou rendre orpheline les dépendances affichées :"
     export:
       confirmation: "Exporter en %{name}"
       select: "Sélectionner les champs à exporter"

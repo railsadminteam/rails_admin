@@ -69,3 +69,14 @@ div.checker input.checkbox {
 .selector.small span {
   width: 100px;
 }
+
+ul.items {
+  list-style-type: none;
+}
+
+ul.items>li>ul {
+  list-style-type: none;
+  padding:5px 0 5px 10px;
+  line-height:16px;
+}
+  
