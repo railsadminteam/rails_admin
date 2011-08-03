@@ -155,7 +155,7 @@ module RailsAdmin
       @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      @old_object = @object.clone
+      @old_object = @object.dup
 
       @model_config.update.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
 
