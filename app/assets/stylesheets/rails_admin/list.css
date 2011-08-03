@@ -109,11 +109,6 @@
   float:left;
 }
 
-.filter input, .filter select {
-  padding:0px;
-  margin-left:8px;
-}
-
 .filter select {
   margin-top:3px;
   margin-right:4px;
