@@ -21,7 +21,6 @@ module RailsAdmin
             self.send(association.name).try(:id)
           end
           abstract_model.model.send(:define_method, "#{association.name}_id=") do |id|
-            association.klass.update_all({ association.foreign_key => nil }, { association.foreign_key => self.id }) if self.id
             self.send(association.name.to_s + '=', associated = (id.blank? ? nil : association.klass.find_by_id(id)))
           end
         end
