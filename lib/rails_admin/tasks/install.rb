@@ -17,7 +17,6 @@ module RailsAdmin
           end
 
           copy_locales_files
-          copy_assets_files
 
           puts "Also you need a new migration. We'll generate it for you now."
           `rails g rails_admin:install_migrations`
@@ -39,13 +38,6 @@ module RailsAdmin
           Dir.glob(locales_path).each do |file|
             copier.copy_file file, File.join(app_path, File.basename(file))
           end
-        end
-
-        def copy_assets_files
-          print "Now copying assets files - javascripts, stylesheets and images! "
-          origin = File.join(gem_path, 'public')
-          destination = Rails.root.join('public')
-          puts copy_files(%w( stylesheets images javascripts ), origin, destination)
         end
 
         def copy_view_files
