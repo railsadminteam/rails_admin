@@ -419,16 +419,16 @@ module RailsAdmin
         return ["(#{column} != '')"]
       end
       
-      # starting from here, we need a value. If there is none, we shouldn't filter anything (empty filter)
-      return unless value.presence
-      
       # now we go type specific
       case type
       when :boolean
-         ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
+        return if value.blank?
+        ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
       when :integer, :belongs_to_association
-         ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
+        return if value.blank?
+        ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
       when :string, :text
+        return if value.blank?
         value = case operator
         when 'default', 'like'
           "%#{value}%"
@@ -452,12 +452,15 @@ module RailsAdmin
         when 'last_week'
           [1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
         when 'less_than'
+          return if value.blank?
           [value.to_i.days.ago, DateTime.now]
         when 'more_than'
+          return if value.blank?
           [2000.years.ago, value.to_i.days.ago]
         end
         ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
+        return if value.blank?  
         ["(#{column} = ?)", value]
       end
     end
