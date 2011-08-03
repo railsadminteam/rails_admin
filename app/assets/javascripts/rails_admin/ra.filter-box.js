@@ -95,11 +95,12 @@
 
   $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
     var selected_option = $(this).find('option:selected');
+  
     if($(selected_option).data('additional-fieldset')) {
-      $(this).parent().siblings('.additional-fieldset').val('');
-      $(this).parent().siblings('.additional-fieldset').show();
+      $(this).siblings('.additional-fieldset').val('');
+      $(this).siblings('.additional-fieldset').show();
     } else {
-      $(this).parent().siblings('.additional-fieldset').hide();
+      $(this).siblings('.additional-fieldset').hide();
     }
   });
 })( jQuery );

@@ -95,7 +95,7 @@
 }
 
 #filters_box {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .filter {
@@ -114,9 +114,14 @@
   margin-left:8px;
 }
 
+.filter select {
+  margin-top:3px;
+  margin-right:4px;
+}
+
 .filter label {
   color:black;
-  width: 140px;
+  width: 120px;
   margin:7px 7px 0 10px;
 }
 
