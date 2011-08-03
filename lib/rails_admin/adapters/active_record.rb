@@ -246,7 +246,7 @@ module RailsAdmin
         when :belongs_to
           association.options[:foreign_key].try(:to_sym) || "#{association.name}_id".to_sym
         when :has_one, :has_many, :has_and_belongs_to_many
-          association.primary_key_name.to_sym
+          association.foreign_key.to_sym
         else
           raise "Unknown association type: #{association.macro.inspect}"
         end

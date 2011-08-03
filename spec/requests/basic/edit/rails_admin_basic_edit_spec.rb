@@ -29,13 +29,13 @@ describe "RailsAdmin Basic Edit" do
   describe "association with inverse_of option" do
     it "should add a related id to the belongs_to create team link" do
       @player = FactoryGirl.create :player
-      visit rails_admin_edit_path(:model_name => "player", :id => @player.id)
+      visit edit_path(:model_name => "player", :id => @player.id)
       should have_selector("a", :href => 'admin/teams/new?associations[players]=' + @player.id.to_s)
     end
     
     it "should add a related id to the has_many create team link" do
       @team = FactoryGirl.create :team
-      visit rails_admin_edit_path(:model_name => "team", :id => @team.id)
+      visit edit_path(:model_name => "team", :id => @team.id)
       should have_selector("a", :href => 'admin/players/new?associations[team]=' + @team.id.to_s)
     end
   end
@@ -44,7 +44,7 @@ describe "RailsAdmin Basic Edit" do
     
     it 'should not be editable' do
       @league = FactoryGirl.create :league
-      visit rails_admin_edit_path(:model_name => "league", :id => @league.id)
+      visit edit_path(:model_name => "league", :id => @league.id)
       should_not have_selector('select#league_team_ids')
       should have_selector('select#league_division_ids') # decoy, fails if naming scheme changes
     end

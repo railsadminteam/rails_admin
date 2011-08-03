@@ -4,9 +4,6 @@
 - sort = params[:sort]
 - sort_reverse = params[:sort_reverse]
 
-- head_javascript "rails_admin/application.js"
-- head_style "rails_admin/list"
-
 #block-tables.block
   - if @object
     = breadcrumbs_for :history, @object
