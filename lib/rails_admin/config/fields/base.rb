@@ -178,7 +178,7 @@ module RailsAdmin
         register_instance_option(:required?) do
           @required ||= begin
             validators = abstract_model.model.validators_on(@name)
-            required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && v.options[:allow_nil]==false)} && true || false
+            required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && !v.options[:allow_nil])} && true || false
             properties && !properties[:nullable?] || required_by_validator
           end
         end
