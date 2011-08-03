@@ -29,20 +29,14 @@ describe "RailsAdmin" do
   describe "html head" do
     before { visit dashboard_path }
 
-    # Note: the [href^="/sty... syntax matches the start of a value. The reason
+    # Note: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
-    it "should load stylesheets" do
-      should have_selector('link[href^="/stylesheets/rails_admin/ra.timeline.css"]')
+    it "should load stylesheets in header" do
+      should have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]')
     end
 
-    it "should load javascript files" do
-      scripts = %w[ /javascripts/rails_admin/application.js
-                //ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
-                //ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js ]
-
-      scripts.each do |script|
-        should have_selector(%Q{script[src^="#{script}"]})
-      end
+    it "should load javascript files in body" do
+      should have_selector('body script[src^="/assets/rails_admin/rails_admin.js"]')
     end
   end
 
