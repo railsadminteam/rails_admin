@@ -14,7 +14,7 @@
     end
 
     def attributes=(attributes)
-      object.send :attributes=, attributes, false
+      object.assign_attributes(attributes, :without_protection => true)
     end
 
     def method_missing(name, *args, &block)
