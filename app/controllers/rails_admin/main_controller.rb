@@ -26,7 +26,8 @@ module RailsAdmin
       @count = {}
       @max = 0
       @abstract_models.each do |t|
-        current_count = t.count
+        scope = @authorization_adapter && @authorization_adapter.query(:list, t)
+        current_count = t.count({}, scope)
         @max = current_count > @max ? current_count : @max
         @count[t.pretty_name] = current_count
         @most_recent_changes[t.pretty_name] = t.model.order("updated_at desc").first.try(:updated_at) rescue nil
