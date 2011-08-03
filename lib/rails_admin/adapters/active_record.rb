@@ -207,7 +207,9 @@ module RailsAdmin
       end
       
       def association_foreign_type_lookup(association)
-        association.options[:foreign_type].try :to_sym
+        if association.options[:polymorphic]
+          association.options[:foreign_type].try(:to_sym) || :"#{association.name}_type"
+        end
       end
 
       def association_as_lookup(association)
