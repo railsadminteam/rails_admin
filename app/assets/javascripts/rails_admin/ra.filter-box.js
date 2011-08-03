@@ -70,45 +70,36 @@
           control +
         '</div>'
       );
-
-      // this ensures that each select is only 'uniformed' once:
-      $("#filters_box .new select").uniform();
-      $("#filters_box .new").removeClass("new");
     }
   }
 
-  $(document).ready(function() {
-    $("#filter_select").bind('change', function() {
-      var option = $(this).find('option:selected')
-      $(this).val(''); // reset select
-      //this.selectedIndex = 0;
-      $.filters.append(
-        option.data('field-label'),
-        option.data('field-name'),
-        option.data('field-type'),
-        option.data('field-value'),
-        option.data('field-operator'),
-        option.data('field-options'),
-        Date.now()
-      );
-      if($.uniform) { // needed to refresh the selected option
-        $.uniform.update();
-      }
-    });
+  $("#filter_select").live('change', function() {
+    var option = $(this).find('option:selected')
+    $(this).val(''); // reset select
+    //this.selectedIndex = 0;
+    $.filters.append(
+      option.data('field-label'),
+      option.data('field-name'),
+      option.data('field-type'),
+      option.data('field-value'),
+      option.data('field-operator'),
+      option.data('field-options'),
+      Date.now()
+    );
+  });
 
-    $('#filters_box .delete').live('click', function() {
-      $(this).parents('.filter').hide();
-      $(this).append('<input type="hidden" name="' + $(this).data('disabler-name') + '" value="true" />')
-    });
+  $('#filters_box .delete').live('click', function() {
+    $(this).parents('.filter').hide();
+    $(this).append('<input type="hidden" name="' + $(this).data('disabler-name') + '" value="true" />')
+  });
 
-    $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
-      var selected_option = $(this).find('option:selected');
-      if($(selected_option).data('additional-fieldset')) {
-        $(this).parent().siblings('.additional-fieldset').val('');
-        $(this).parent().siblings('.additional-fieldset').show();
-      } else {
-        $(this).parent().siblings('.additional-fieldset').hide();
-      }
-    });
+  $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
+    var selected_option = $(this).find('option:selected');
+    if($(selected_option).data('additional-fieldset')) {
+      $(this).parent().siblings('.additional-fieldset').val('');
+      $(this).parent().siblings('.additional-fieldset').show();
+    } else {
+      $(this).parent().siblings('.additional-fieldset').hide();
+    }
   });
 })( jQuery );
