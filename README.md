@@ -157,12 +157,7 @@ to override the default with a Member model run:
 
     $ rake rails_admin:install model_name=member
 
-To use the CKEditor with Upload function, you can try [Rails-CKEditor](https://github.com/galetahub/ckeditor) and after installed (following the [Rails-CKEditor](https://github.com/galetahub/rails-ckeditor) instructions) put the follow lines in "public/javascripts/ckeditor/config.js" to activate the Upload function:
-
-    $ config.filebrowserBrowseUrl = '/ckeditor/attachments';
-    $ config.filebrowserUploadUrl = '/ckeditor/attachments';
-    $ config.filebrowserImageBrowseUrl = '/ckeditor/pictures';
-    $ config.filebrowserImageUploadUrl = '/ckeditor/pictures';
+To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.com/galetahub/ckeditor) to your Gemfile (`gem 'ckeditor'`) and follow [Rails-CKEditor](https://github.com/galetahub/ckeditor) installation instructions.
 
 You can configure more options of CKEditor "config.js" file following the [Api Documentation](http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html) .
 
