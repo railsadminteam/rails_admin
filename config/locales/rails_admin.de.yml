@@ -7,14 +7,14 @@ de:
   admin:
     dashboard:
       pagename: "Administration"
-      name: "Dashboard"
+      name: "Übersicht"
       model_name: "Modell Name"
       last_used: "Zuletzt verwendet"
       records: "Einträge"
       modify: "Ändern"
-      add_new: "Neu hinzufügen"
+      add_new: "Hinzufügen"
       show: "Anzeigen"
-      ago: "vor"
+      ago: "her"
     history:
       name: "Verlauf"
       page_name: "Verlauf von %{name}"
@@ -26,6 +26,7 @@ de:
     credentials:
       log_out: "abmelden"
     list:
+      show_action: "Anzeigen"
       edit_action: "Bearbeiten"
       delete_action: "Löschen"
       select_action: "Auswählen"
@@ -34,7 +35,7 @@ de:
       delete_selected: "Auswahl löschen"
       add_new: "Neu hinzufügen"
       search: "Suchen"
-      select: "Auswählen %{name} zum Bearbeiten"
+      select: "%{name} zum bearbeiten auswählen"
       show_all: "Alle anzeigen"
       show_action: "Anzeigen"
       add_filter: "Filter hinzufügen"
@@ -95,10 +96,10 @@ de:
       delete: "löschen"
       history: "historie"
       show: "anzeigen"
-      edit: "editieren"
+      edit: "bearbeiten"
       export: "exportieren"
       bulk_destroy: "löschen"
       new: "neu"
       model_history: "Historie"
-      list: "auflisten"
-      dashboard: "Dashboard"
+      list: "Liste"
+      dashboard: "Übersicht"
