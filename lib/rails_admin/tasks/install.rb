@@ -16,8 +16,8 @@ module RailsAdmin
             puts "Please put gem 'devise' into your Gemfile"
           end
 
-          copy_locales_files
-
+          create_route
+          
           puts "Also you need a new migration. We'll generate it for you now."
           `rails g rails_admin:install_migrations`
 
@@ -45,6 +45,11 @@ module RailsAdmin
           origin = File.join(gem_path, 'app/views')
           destination = Rails.root.join('app/views')
           puts copy_files(%w( layouts . ), origin, destination)
+        end
+        
+        def create_route
+          print "Now creating rails_admin route\n"
+          `rails g rails_admin:install_route`
         end
 
         private

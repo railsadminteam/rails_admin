@@ -19,20 +19,16 @@ describe "Rake tasks" do
     Rails.configuration.root = @rails_root
   end
 
-  describe "rails_admin:install" do
-    context "when devise is installed" do
-      before do
-        create_devise_initializer
-        create_routes_with_devise
-        assert_no_file destination_root + "/config/locales/devise.en.yml"
-        assert_no_file destination_root + "/config/locales/rails_admin.en.yml"
-        silence_stream(STDOUT) { RailsAdmin::Tasks::Install.run }
-      end
+  describe "rails_admin:copy_locales" do
+    before do
+      assert_no_file destination_root + "/config/locales/devise.en.yml"
+      assert_no_file destination_root + "/config/locales/rails_admin.en.yml"
+      silence_stream(STDOUT) { RailsAdmin::Tasks::Install.copy_locales_files }
+    end
 
-      it "creates locales files" do
-        assert_file destination_root + "/config/locales/devise.en.yml"
-        assert_file destination_root + "/config/locales/rails_admin.en.yml"
-      end
+    it "creates locales files" do
+      assert_file destination_root + "/config/locales/devise.en.yml"
+      assert_file destination_root + "/config/locales/rails_admin.en.yml"
     end
   end
 

@@ -145,16 +145,17 @@ And then run:
 This task will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
 recommended to protect your data from anonymous users.
+It will also modify your `config/routes.rb`, adding:
+  
+    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+    
+You are free to change `/admin` to any location you want.
 
 If you plan to use Devise, but want to use a custom model for authentication
 (default is User) you can provide that as an argument for the installer. For example
 to override the default with a Member model run:
 
     $ rake rails_admin:install model_name=member
-
-Mount rails_admin engine in your config/routes.rb file
-
-    mount RailsAdmin::Engine => "/admin"
 
 To use the CKEditor with Upload function, you can try [Rails-CKEditor](https://github.com/galetahub/rails-ckeditor) and after installed (following the [Rails-CKEditor](https://github.com/galetahub/rails-ckeditor) instructions) put the follow lines in "public/javascripts/ckeditor/config.js" to activate the Upload function:
 
