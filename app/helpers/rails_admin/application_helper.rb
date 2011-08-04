@@ -43,30 +43,6 @@ module RailsAdmin
       end
     end
 
-    # A Helper to load from a CDN but with fallbacks in case the primary source is unavailable
-    # The best of both worlds - fast clevery cached service from google when available and the
-    # ability to work offline too.
-    #
-    # @example Loading jquery from google
-    #   javascript_fallback "http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js",
-    #     "/javascripts/jquery-1.4.3.min.js",
-    #     "typeof jQuery == 'undefined'"
-    # @param [String] primary a string to be passed to javascript_include_tag that represents the primary source e.g. A script on googles CDN.
-    # @param [String] fallback a path to the secondary javascript file that is (hopefully) more resilliant than the primary.
-    # @param [String] test a test written in javascript that evaluates to true if it is necessary to load the fallback javascript.
-    # @reurns [String] the resulting html to be inserted into your page.
-    def javascript_fallback(primary, fallback, test)
-      html = javascript_include_tag( primary )
-      html << "\n" << content_tag(:script, :type => "text/javascript") do
-        %Q{
-          if (#{test}) {
-            document.write(unescape("%3Cscript src='#{fallback}' type='text/javascript'%3E%3C/script%3E"));
-          }
-        }.gsub(/^ {8}/, '').html_safe
-      end
-      html+"\n"
-    end
-
     def action_button link, text, icon=nil, options={}
       options.reverse_merge! :class => "button"
       link_to link, options do
