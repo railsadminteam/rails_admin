@@ -4,6 +4,7 @@ rvm:
   - 1.8.7
   - 1.9.2
   - rbx
+  - rbx-2.0
   - ree
 env:
   - "CI_DB_ADAPTER=sqlite3 CI_DB_USERNAME= CI_DB_PASSWORD="
