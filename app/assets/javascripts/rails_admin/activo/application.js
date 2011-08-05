@@ -7,14 +7,5 @@
         $(this).tipsy();
       }
     });
-
-    // Scroll effect for anchors (http://flesler.blogspot.com/2007/10/jqueryscrollto.html)
-    $('a').click(function() {
-       if ($(this).attr('class') == 'anchor') {
-         $.scrollTo(this.hash, 500);
-         $(this.hash).find('span.message').text(this.href);
-         return false;
-       }
-    });
   });
 })(jQuery)
