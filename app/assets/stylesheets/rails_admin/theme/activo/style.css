@@ -413,29 +413,6 @@ hr {
   -webkit-border-bottom-right-radius: 13px;
   border-bottom-right-radius: 13px; }
 
-#wrapper .ra-multiselect-search {
-  background: transparent url("/assets/rails_admin/theme/activo/images/search-button.png") no-repeat scroll 166px center;
-  border: 1px solid #c1c1c1;
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-  -moz-border-radius: 13px;
-  -webkit-border-radius: 13px;
-  border-radius: 13px;
-  float: left;
-  font-family: "MuseoSans500", helvetica, arial, sans-serif;
-  font-size: 13px;
-  height: 25px;
-  margin: 0 25px 15px 0;
-  outline: none;
-  padding: 0 25px 0 10px;
-  width: 155px; }
-
-#wrapper .ra-multiselect-collection, .ra-multiselect-selection {
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); }
-
 .flash .message {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
