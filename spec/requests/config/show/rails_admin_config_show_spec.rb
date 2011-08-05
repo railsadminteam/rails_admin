@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "RailsAdmin Config DSL Show Section" do
   subject { page }
-  let(:team) { Factory.create :team }
+  let(:team) { FactoryGirl.create :team }
 
   def do_request
     # tests were done with compact_show_view being false

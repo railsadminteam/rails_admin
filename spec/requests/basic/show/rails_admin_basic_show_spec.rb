@@ -5,7 +5,7 @@ describe "RailsAdmin Basic Show" do
 
   describe "show" do
     before(:each) do
-      @player = Factory.create :player
+      @player = FactoryGirl.create :player
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
@@ -29,8 +29,8 @@ describe "RailsAdmin Basic Show" do
 
   describe "show with belongs_to association" do
     before(:each) do
-      @player = Factory.create :player
-      @team   = Factory.create :team
+      @player = FactoryGirl.create :player
+      @team   = FactoryGirl.create :team
       @player.update_attribute(:team, @team)
       visit show_path(:model_name => "player", :id => @player.id)
     end
@@ -42,8 +42,8 @@ describe "RailsAdmin Basic Show" do
 
   describe "show with has-one association" do
     before(:each) do
-      @player = Factory.create :player
-      @draft  = Factory.create :draft, :player => @player
+      @player = FactoryGirl.create :player
+      @draft  = FactoryGirl.create :draft, :player => @player
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
@@ -54,10 +54,10 @@ describe "RailsAdmin Basic Show" do
 
   describe "show with has-and-belongs-to-many association" do
     before(:each) do
-      @player = Factory.create :player
-      @comment1 = Factory.create :comment, :commentable => @player
-      @comment2 = Factory.create :comment, :commentable => @player
-      @comment3 = Factory.create :comment, :commentable => Factory.create(:player)
+      @player = FactoryGirl.create :player
+      @comment1 = FactoryGirl.create :comment, :commentable => @player
+      @comment2 = FactoryGirl.create :comment, :commentable => @player
+      @comment3 = FactoryGirl.create :comment, :commentable => FactoryGirl.create(:player)
 
       visit show_path(:model_name => "player", :id => @player.id)
     end
@@ -71,8 +71,8 @@ describe "RailsAdmin Basic Show" do
 
   describe "show for polymorphic objects" do
     before(:each) do
-      @player = Factory.create :player
-      @comment = Factory.create :comment, :commentable => @player
+      @player = FactoryGirl.create :player
+      @comment = FactoryGirl.create :comment, :commentable => @player
       visit show_path(:model_name => "comment", :id => @comment.id)
     end
 
