@@ -18,7 +18,7 @@ module RailsAdmin
           end
         end
         if script = @head_javascript
-          html << javascript_tag(script.join("\n"))
+          html << javascript_tag(script.uniq.join("\n"))
         end
         return html.html_safe
       end
@@ -37,7 +37,7 @@ module RailsAdmin
           end
         end
         if style = @head_style
-          html << content_tag(:style, style.join("\n"), :type => "text/css")
+          html << content_tag(:style, style.uniq.join("\n"), :type => "text/css")
         end
         return html.html_safe
       end
