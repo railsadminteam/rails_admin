@@ -22,7 +22,7 @@ module RailsAdmin
           end
           
           register_instance_option(:pretty_value) do
-            bindings[:view].truncate(formatted_value.to_s, :length => 60)
+            formatted_value
           end
 
           register_instance_option(:html_attributes) do
