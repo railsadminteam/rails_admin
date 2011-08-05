@@ -20,6 +20,10 @@ module RailsAdmin
           register_instance_option(:ckeditor_config_js) do
             "/javascripts/ckeditor/config.js"
           end
+          
+          register_instance_option(:pretty_value) do
+            bindings[:view].truncate(formatted_value.to_s, :length => 60)
+          end
 
           register_instance_option(:html_attributes) do
             {

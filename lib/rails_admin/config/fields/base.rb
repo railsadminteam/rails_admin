@@ -55,7 +55,7 @@ module RailsAdmin
         end
         
         register_instance_option(:truncated?) do
-          true
+          ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
         end
 
         register_instance_option(:sortable) do

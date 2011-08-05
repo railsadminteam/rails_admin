@@ -51,6 +51,8 @@ If you have good reasons to think you found a *rails_admin* bug, submit a ticket
 API Update Note
 ---------------
 
+:truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
+
 Important notice about `BelongsToAssociation`: 
 In the DSL, they now must be referenced by the association name, not the child_key.
 Considering:
