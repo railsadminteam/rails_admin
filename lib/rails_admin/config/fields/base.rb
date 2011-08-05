@@ -234,18 +234,6 @@ module RailsAdmin
           optional(state)
         end
 
-        # Legacy support
-        def to_hash
-          {
-            :name => name,
-            :pretty_name => label,
-            :type => type,
-            :length => length,
-            :nullable? => required?,
-            :serial? => serial?
-          }
-        end
-
         # Reader for field's type
         def type
           @type ||= self.class.name.to_s.demodulize.underscore.to_sym

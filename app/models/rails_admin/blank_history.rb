@@ -11,6 +11,5 @@ module RailsAdmin
     def to_hash(*a)
       {"history" => {"record_count" => @record_count, "month" => @month, "year" => @year}}
     end
-
   end
 end
