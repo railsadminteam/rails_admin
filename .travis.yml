@@ -7,8 +7,8 @@ rvm:
   - rbx-2.0
   - ree
 env:
-  - "CI_DB_ADAPTER=sqlite3 CI_DB_USERNAME= CI_DB_PASSWORD="
-  - "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres CI_DB_PASSWORD="
-  - "CI_DB_ADAPTER=mysql CI_DB_USERNAME= CI_DB_PASSWORD="
+  - "CI_DB_ADAPTER=sqlite3"
+  - "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+  - "CI_DB_ADAPTER=mysql"
 notifications:
   irc: "irc.freenode.org#railsadmin"

@@ -9,8 +9,8 @@ namespace :rails_admin do
       "test" => {
         "adapter" => adapter,
         "database" => database,
-        "username" => ENV["CI_DB_USERNAME"] || "rails_admin",
-        "password" => ENV["CI_DB_PASSWORD"] || "rails_admin",
+        "username" => ENV["CI_DB_USERNAME"],
+        "password" => ENV["CI_DB_PASSWORD"],
         "host" => ENV["CI_DB_HOST"] || "localhost",
         "encoding" => ENV["CI_DB_ENCODING"] || "utf8",
         "pool" => (ENV["CI_DB_POOL"] || 5).to_int,
