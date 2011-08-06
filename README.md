@@ -53,15 +53,15 @@ API Update Note
 
 :truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
 
-Important notice about `BelongsToAssociation`: 
+Important notice about `BelongsToAssociation`:
 In the DSL, they now must be referenced by the association name, not the child_key.
 Considering:
-    
+
     # `user_id: integer` (DB)
     belongs_to :user # (ActiveRecord)
 
 Instead of:
-    
+
     field :user_id
 
 You must use:
@@ -148,9 +148,9 @@ This task will install RailsAdmin and [Devise](https://github.com/plataformatec/
 don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
 recommended to protect your data from anonymous users.
 It will also modify your `config/routes.rb`, adding:
-  
+
     mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-    
+
 You are free to change `/admin` to any location you want.
 
 If you plan to use Devise, but want to use a custom model for authentication
@@ -896,11 +896,11 @@ equal configuration:
         end
       end
     end
-    
+
 **Important note on label - I18n**
 
 Use association name as translation key for label for association fields.
-If you have :user_id field with a user association, use :user as the attribute 
+If you have :user_id field with a user association, use :user as the attribute
 
 
 In fact the first examples `group :default` configuration is unnecessary
@@ -1001,7 +1001,7 @@ In `app/views/rails_admin/main/_yes_no.html.erb`
 
 In this *dirty* example above, all objects can be manipulated by the developer.
 
-You can flag a field as read only, and if necessary fine-tune the output with pretty_value: 
+You can flag a field as read only, and if necessary fine-tune the output with pretty_value:
 
     RailsAdmin.config do |config|
       edit do
@@ -1187,7 +1187,7 @@ CKEditor can be enabled on fields of type text:
 
 **Fields - Ordered has_many/has_and_belongs_to_many/has_many :through associations**
 
-Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), 
+Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations),
 allowing selected options to be moved up/down.
 RailsAdmin will handle ordering in and out of the form.
 
@@ -1466,6 +1466,17 @@ Submitting a Pull Request
 7. Run `bundle exec rake spec`. If your changes are not 100% covered, go back to step 6.
 8. Commit and push your changes.
 9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. (If you want to create your own version for some reason, please do so in a separate commit.)
+
+Supported Rubies
+----------------
+This library aims to support and is [tested
+against](http://travis-ci.org/sferik/rails_admin) the following Ruby
+implementations:
+
+* Ruby 1.8.7
+* Ruby 1.9.2
+* [Rubinius](http://rubini.us)
+* [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/)
 
 Contact
 -------
