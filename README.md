@@ -11,6 +11,9 @@ The master branch has been fast-forwared to rails-3.1 branch. Please test it, re
 A Rails-3.0 branch has been created for legacy purpose, *update your Gemfile* for your app in production!
 Please consider upgrading your app to the latest Rails-3.1 RC as soon as possible to retain compatibility
 with latest RailsAdmin improvements.
+Don't forget to activate the new asset pipeline in application.rb if you are updating from a Rails 3.0 application: 
+
+    config.assets.enabled = true
 
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
