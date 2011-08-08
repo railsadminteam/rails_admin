@@ -228,6 +228,12 @@ You can display empty fields in show view with:
       config.compact_show_view = false
     end
 
+You can customize the width of the list view with:
+
+    RailsAdmin.config do |config|
+      config.total_columns_width = 1000
+    end
+
 **Whitelist Approach**
 
 By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to

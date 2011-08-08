@@ -43,7 +43,7 @@ module RailsAdmin
 
         # if properties that were gathered so far have the width
         # over 697 make a set for them
-        if partial_total + width >= 697
+        if partial_total + width >= RailsAdmin::Config.total_columns_width
           set << {:p => temp, :size => partial_total}
           partial_total = 0
           temp = []
