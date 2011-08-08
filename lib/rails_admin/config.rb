@@ -74,6 +74,9 @@ module RailsAdmin
       # hide blank fields in show view if true
       attr_accessor :compact_show_view
       
+      # Set the max width of columns in list view before a new set is created
+      attr_accessor :total_columns_width
+      
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #
@@ -257,6 +260,7 @@ module RailsAdmin
         @default_search_operator = 'default'
         @excluded_models = []
         @included_models = []
+        @total_columns_width = 697
         @label_methods = [:name, :title]
         @registry = {}
       end
