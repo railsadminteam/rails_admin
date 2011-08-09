@@ -11,14 +11,14 @@ group :development, :test do
     gem 'activerecord-jdbc-adapter', :git => 'https://github.com/nicksieger/activerecord-jdbc-adapter.git'
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
-      gem 'activerecord-jdbcmysql-adapter', '~> 1.1', :platform => :jruby
-      gem 'jdbc-mysql', '~> 5.1', :platform => :jruby
+      gem 'activerecord-jdbcmysql-adapter', '~> 1.1'
+      gem 'jdbc-mysql', '~> 5.1'
     when 'postgresql'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1', :platform => :jruby
-      gem 'jdbc-postgres', '~> 9.0', :platform => :jruby
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.1'
+      gem 'jdbc-postgres', '~> 9.0'
     else
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.1', :platform => :jruby
-      gem 'jdbc-sqlite3', '~> 3.6', :platform => :jruby
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.1'
+      gem 'jdbc-sqlite3', '~> 3.6'
     end
   end
 
