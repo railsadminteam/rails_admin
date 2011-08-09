@@ -4,7 +4,6 @@ source 'http://rubygems.org'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'rails', '~> 3.1.0.rc5'
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
     # activerecord-jdbc-adapter does not yet have a rails 3.1 compatible release
@@ -49,6 +48,10 @@ group :debug do
   platform :mri_19 do
     gem 'ruby-debug19'
   end
+end
+
+platforms :ruby_18 do
+  gem 'fastercsv', '~> 1.5.4'
 end
 
 gemspec

@@ -11,10 +11,9 @@ The master branch has been fast-forwared to rails-3.1 branch. Please test it, re
 A Rails-3.0 branch has been created for legacy purpose, *update your Gemfile* for your app in production!
 Please consider upgrading your app to the latest Rails-3.1 RC as soon as possible to retain compatibility
 with latest RailsAdmin improvements.
-Don't forget to activate the new asset pipeline in application.rb if you are updating from a Rails 3.0 application: 
+Don't forget to activate the new asset pipeline in application.rb if you are updating from a Rails 3.0 application:
 
     config.assets.enabled = true
-
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
@@ -136,6 +135,7 @@ Installation
 ------------
 In your `Gemfile`, add the following dependencies:
 
+    gem 'fastercsv' # Only required on Ruby 1.8 and below
     gem 'devise' # Devise must be required before RailsAdmin
     gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 
