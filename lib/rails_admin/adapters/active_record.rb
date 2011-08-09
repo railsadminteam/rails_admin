@@ -48,7 +48,7 @@ module RailsAdmin
 
       def get_bulk(ids, scope = nil)
         scope ||= model
-        scope.find.where(model.primary_key => ids)
+        scope.where(model.primary_key => ids)
       end
 
       def count(options = {}, scope = nil)
