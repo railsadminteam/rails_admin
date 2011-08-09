@@ -50,7 +50,7 @@ group :debug do
   end
 end
 
-platforms :ruby_18 do
+platforms :jruby, :mingw_18, :ruby_18 do
   gem 'fastercsv', '~> 1.5.4'
 end
 
