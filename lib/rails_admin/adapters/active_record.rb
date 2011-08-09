@@ -39,7 +39,7 @@ module RailsAdmin
       end
 
       def get(id)
-        if object = model.find_by_id(id)
+        if object = model.where(model.primary_key => id).first
           RailsAdmin::AbstractObject.new object
         else
           nil
@@ -48,7 +48,7 @@ module RailsAdmin
 
       def get_bulk(ids, scope = nil)
         scope ||= model
-        scope.find_all_by_id(ids)
+        scope.where(model.primary_key => ids)
       end
 
       def count(options = {}, scope = nil)
@@ -90,7 +90,7 @@ module RailsAdmin
 
       def destroy(ids, scope = nil)
         scope ||= model
-        scope.destroy_all(:id => ids)
+        scope.destroy_all(model.primary_key => ids)
       end
 
       def destroy_all!
@@ -169,7 +169,7 @@ module RailsAdmin
       private
 
       def merge_order(options)
-        @sort ||= options.delete(:sort) || "id"
+        @sort ||= options.delete(:sort) || model.primary_key
         @sort = (@sort.to_s.include?('.') ? @sort : "#{model.table_name}.#{@sort}")
         @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
         options.merge(:order => "#{@sort} #{@sort_order}")
