@@ -7,7 +7,6 @@
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   @style, @other, properties = get_column_set(properties)
-  
   @index = 0
   @ordered_filters = (params[:filters] || @model_config.list.filters).inject({}) { |memo, filter|
     field_name = filter.is_a?(Array) ? filter.first : filter
@@ -26,7 +25,7 @@
 
     field_options = case field.type
     when :enum
-      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '') 
+      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
     else
       ''
     end
@@ -118,7 +117,7 @@
               - delete_path = delete_path(:model_name => @abstract_model.to_param, :id => object.id) if can_delete
               - row_class = "#{cycle("odd", "even")}#{" link" if can_edit}"
 
-              %tr{:class => row_class, :"data-link" => (can_show ? show_path : nil)}
+              %tr{:class => row_class, :"data-link" => can_show ? show_path : (can_edit ? edit_path : nil)}
                 %td.action.select
                   - if can_bulk_action
                     = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
