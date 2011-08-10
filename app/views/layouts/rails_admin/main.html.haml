@@ -1,8 +1,8 @@
 - if @abstract_model && @plugin_name
   - content_for :title do
     #{@abstract_model.pretty_name} | #{@plugin_name}
-!!! Strict
-%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+!!!
+%html
   %head
     %title= yield :title || "#{@page_name} | #{@plugin_name}"
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
@@ -12,15 +12,15 @@
 
     = head_style
     = csrf_meta_tag
-    %body.rails_admin
-      #container
-        = render(:partial => 'layouts/rails_admin/header')
-        #wrapper.wat-cf
-          #main
-            #content= yield
-            #footer
-              %p Rails Admin | 2011
-          = render :partial => "layouts/rails_admin/sidebar"
-      = javascript_include_tag "rails_admin/rails_admin.js"
-      = head_javascript
+  %body.rails_admin
+    #container
+      = render(:partial => 'layouts/rails_admin/header')
+      #wrapper.wat-cf
+        #main
+          #content= yield
+          #footer
+            %p Rails Admin | 2011
+        = render :partial => "layouts/rails_admin/sidebar"
+    = javascript_include_tag "rails_admin/rails_admin.js"
+    = head_javascript
 
