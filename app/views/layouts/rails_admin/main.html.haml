@@ -1,14 +1,27 @@
-- if @abstract_model && @plugin_name
-  - content_for :title do
-    #{@abstract_model.pretty_name} | #{@plugin_name}
-= render(:partial => 'layouts/rails_admin/head')
-%body.rails_admin
-  #container
-    = render(:partial => 'layouts/rails_admin/header')
-    #wrapper.wat-cf
-      #main
-        #content= yield
-        #footer
-          %p Rails Admin | 2011
-      = render :partial => "layouts/rails_admin/sidebar"
-  = render(:partial => 'layouts/rails_admin/footer')
+!!! Strict
+%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %title= "#{@page_name} | #{@plugin_name}"
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
+
+    - %w[base formtastic jquery.tipsy.css uniform.default.css].each do |file|
+      = stylesheet_link_tag "rails_admin/theme/#{file}"
+    = stylesheet_link_tag 'rails_admin/aristo/jquery-ui-1.8.7.custom.css'
+
+    = stylesheet_link_tag "rails_admin/theme/activo/style"
+    = stylesheet_link_tag "rails_admin/base"
+
+    = head_style
+    = csrf_meta_tag
+
+  %body.rails_admin
+    #container
+      = render(:partial => 'layouts/rails_admin/header')
+      #wrapper.wat-cf
+        #main
+          #content= yield
+          #footer
+            %p Rails Admin | 2011
+        = render :partial => "layouts/rails_admin/sidebar"
+    = render(:partial => 'layouts/rails_admin/footer')
