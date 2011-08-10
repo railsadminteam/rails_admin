@@ -10,11 +10,10 @@ module RailsAdmin
     end
     
     initializer "rails admin development mode" do |app|
-      if !app.config.cache_classes && RailsAdmin.config.reload_between_requests
-        ActionDispatch::Callbacks.after do
-          RailsAdmin.reset
-        end
+      ActionDispatch::Callbacks.after do
+        RailsAdmin.reset if !app.config.cache_classes && RailsAdmin.config.reload_between_requests
       end
     end
   end
 end
+  
