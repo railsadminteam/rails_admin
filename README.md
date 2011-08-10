@@ -11,9 +11,14 @@ The master branch has been fast-forwared to rails-3.1 branch. Please test it, re
 A Rails-3.0 branch has been created for legacy purpose, *update your Gemfile* for your app in production!
 Please consider upgrading your app to the latest Rails-3.1 RC as soon as possible to retain compatibility
 with latest RailsAdmin improvements.
-Don't forget to activate the new asset pipeline in application.rb if you are updating from a Rails 3.0 application:
+If you are updating from a Rails 3.0 application, you will no longer need to update your assets, they will be served from the engine (through Sprockets). You can delete all rails_admin related assets in your public directory.
+Activate the new asset pipeline in application.rb:
 
     config.assets.enabled = true
+
+and to add this to your config/routes:
+
+    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
@@ -1409,34 +1414,6 @@ with [CanCan](https://github.com/ryanb/cancan), pass it like this.
     end
 
 See the [wiki](https://github.com/sferik/rails_admin/wiki) for more on authorization.
-
-Static Assets & Locales
------------------------
-
-When running `rake rails_admin:install` the locale files (`config/locales/...`) and the static asset files
-(javascript files, images, stylesheets) are copied to your local application tree.
-
-Should you update the gem to a new version that perhaps includes updated locale or asset files, then you won't automatically
-be able to take advantage of these. In fact, you may choose for this reason, to not commit locale files and asset
-files to your local repository and instead have them loaded from the gem.
-
-You can choose to commit locale files to your local application tree, if you want to modify them from what the gem
-supplies; then you also need to manage updates by hand. Locale files will be automatically loaded from the gem
-unless overrides exist.
-
-For asset files, the following applies: When running in development mode, the rails_admin engine will inject a middleware
-to serve static assets (javascript files, images, stylesheets) from the gem's location. This generally isn't a good
-setup for high-traffic production environments. Depending on your web server configuration, it may also just plain fail.
-You may need to serve the asset files from the local application tree (public/...). You can choose to have the assets
-served from the gem in development mode but from the local application tree in production mode. In that case, you
-need to copy the assets during deployment (e.g. via a capistrano hook).
-
-Two rake tasks have been provided to copy locale and asset files to the local application tree:
-
-    rake rails_admin:copy_locales
-    rake rails_admin:copy_assets
-
-These tasks run automatically during installation, but are provided separately, e.g. for updates or deployments.
 
 Contributing
 ------------
