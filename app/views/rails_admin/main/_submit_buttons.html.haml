@@ -1,15 +1,15 @@
 .group.navform.wat-cf
   %button.button{:type => "submit", :name => "_save"}
-    = image_tag "/assets/rails_admin/theme/activo/images/icons/tick.png", :alt => t("admin.new.save")
+    = image_tag(image_path("rails_admin/theme/activo/images/icons/tick.png"), :alt => t("admin.new.save"))
     = t("admin.new.save")
   %span.extra_buttons
     - if authorized? :new, @abstract_model
       %button.button{:type => "submit", :name => "_add_another"}
-        = image_tag "/assets/rails_admin/theme/activo/images/icons/add.png", :alt => t("admin.new.save_and_add_another")
+        = image_tag(image_path("rails_admin/theme/activo/images/icons/add.png"), :alt => t("admin.new.save_and_add_another"))
         = t("admin.new.save_and_add_another")
     %button.button{:type => "submit", :name => "_add_edit"}
-      = image_tag "/assets/rails_admin/theme/activo/images/icons/edit.png", :alt => t("admin.new.save_and_edit")
+      = image_tag(image_path("rails_admin/theme/activo/images/icons/edit.png"), :alt => t("admin.new.save_and_edit"))
       = t("admin.new.save_and_edit")
     %button.button{:type => "submit", :name => "_continue"}
-      = image_tag "/assets/rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
+      = image_tag(image_path("rails_admin/theme/activo/images/icons/delete.png"), :alt => t("admin.new.cancel"))
       = t("admin.new.cancel")
