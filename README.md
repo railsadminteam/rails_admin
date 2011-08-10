@@ -233,6 +233,12 @@ You can customize the width of the list view with:
     RailsAdmin.config do |config|
       config.total_columns_width = 1000
     end
+    
+If you don't want to reload RailsAdmin config at each requests in development mode (it can get _very_ slow):
+
+    RailsAdmin.config do |config|
+      config.reload_between_requests = false
+    end
 
 **Whitelist Approach**
 

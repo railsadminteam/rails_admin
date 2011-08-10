@@ -45,6 +45,10 @@ module RailsAdmin
     end
 
     class << self
+      
+      # in development mode, setting this to true will make rails_admin reload the whole configuration at each request
+      attr_accessor :reload_between_requests
+      
       # Configuration option to specify which models you want to exclude.
       attr_accessor :excluded_models
 
@@ -250,6 +254,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset
+        @reload_between_requests = true
         @compact_show_view = true
         @authenticate = nil
         @authorize = nil
