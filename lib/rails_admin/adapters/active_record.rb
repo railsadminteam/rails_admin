@@ -39,7 +39,7 @@ module RailsAdmin
       end
 
       def get(id)
-        if object = model.find_by_id(id)
+        if object = model.unscoped.find_by_id(id)
           RailsAdmin::AbstractObject.new object
         else
           nil
@@ -47,22 +47,22 @@ module RailsAdmin
       end
 
       def get_bulk(ids, scope = nil)
-        scope ||= model
+        scope ||= model.unscoped
         scope.find_all_by_id(ids)
       end
 
       def count(options = {}, scope = nil)
-        scope ||= model
+        scope ||= model.unscoped
         scope.count(options.except(:sort, :sort_reverse))
       end
 
       def first(options = {}, scope = nil)
-        scope ||= model
+        scope ||= model.unscoped
         scope.first(merge_order(options))
       end
 
       def all(options = {}, scope = nil)
-        scope ||= model
+        scope ||= model.unscoped
         scope.all(merge_order(options))
       end
 
