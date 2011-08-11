@@ -21,9 +21,9 @@
         %br
         .group.navform.wat-cf
           %button.button{:type => "submit"}
-            %img{:alt => "Remove", :src => "/assets/rails_admin/theme/activo/images/icons/cross.png"}
+            = image_tag "rails_admin/theme/activo/images/icons/cross.png", :alt => t("admin.delete.confirmation")
             = t("admin.delete.confirmation")
 
           %button.button{:type => "submit", :name => "_continue"}
-            = image_tag "/stylesheets/rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
+            = image_tag "rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
             = t("admin.new.cancel")
