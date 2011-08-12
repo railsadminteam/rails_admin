@@ -13,7 +13,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec-rails', '~> 2.6'
   gem.add_development_dependency 'simplecov', '~> 0.4'
   gem.add_development_dependency 'yard', '~> 0.7'
-  gem.add_development_dependency 'ZenTest', '~> 4.5'
   gem.add_runtime_dependency 'builder', '~> 3.0.0'
   gem.add_runtime_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
   gem.add_runtime_dependency 'rails', '~> 3.1.0.rc1'
