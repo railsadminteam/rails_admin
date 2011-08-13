@@ -2,24 +2,6 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
-
-Important notice (2011-08-03)
------------------------------
-
-The master branch has been fast-forwared to rails-3.1 branch. Please test it, report any regression you may find.
-A Rails-3.0 branch has been created for legacy purpose, *update your Gemfile* for your app in production!
-Please consider upgrading your app to the latest Rails-3.1 RC as soon as possible to retain compatibility
-with latest RailsAdmin improvements.
-If you are updating from a Rails 3.0 application, you will no longer need to update your assets, they will be served from the engine (through Sprockets). You can delete all rails_admin related assets in your public directory.
-Activate the new asset pipeline in application.rb:
-
-    config.assets.enabled = true
-
-and to add this to your config/routes:
-
-    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
 by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober](https://github.com/sferik),
@@ -44,19 +26,26 @@ Supported ORMs:
 
 * ActiveRecord
 
-_[Information](https://github.com/sferik/rails_admin/issues/105) about support for other ORMs._
-We plan to support Mongoid soon.
+<a name="notices">Notices</a>
+--------
+The master branch currently targets Rails 3.1.
 
-Help
-----
-If you have a question, you can ask the [official RailsAdmin mailing list](http://groups.google.com/group/rails_admin)
-or ping sferik on IRC in [#railsadmin on irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
-Please don't use the issue tracker, which is for *issues* only.
+If you are updating from a Rails 3.0 application, you will no longer need to
+update your assets, they will be served from the engine (through Sprockets).
+You can delete all RailsAdmin related assets in your public directory.
+Make sure to activate the asset pipeline in `application.rb`:
 
-If you have good reasons to think you found a *rails_admin* bug, submit a ticket (read the very end of this readme first)
+    config.assets.enabled = true
 
-API Update Note
----------------
+and to add this to your config/routes:
+
+    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+
+You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0
+branch in your `Gemfile`, however, this branch is no longer being actively
+maintained by the RailsAdmin Core Team.
+
+    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git', :branch => 'rails-3.0'
 
 :truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
 
@@ -130,13 +119,23 @@ action-specific methods (`edit_partial`, `create_partial` and
 `update_partial`). See the section titled **Fields - Rendering** above for more
 details.
 
-Screenshots
+<a name="support">Support</a>
+-------
+If you have a question, you can ask the [official RailsAdmin mailing
+list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
+[#railsadmin on
+irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
+
+If you think you found a bug in RailsAdmin, you can [submit an
+issue](https://github.com/sferik/rails_admin#issues).
+
+<a name="screenshots">Screenshots</a>
 -----------
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
 ![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
 
-Installation
+<a name="installation">Installation</a>
 ------------
 In your `Gemfile`, add the following dependencies:
 
@@ -171,7 +170,7 @@ To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.co
 
 You can configure more options of CKEditor "config.js" file following the [Api Documentation](http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html) .
 
-Usage
+<a name="usage">Usage</a>
 -----
 Start the server:
 
@@ -180,7 +179,7 @@ Start the server:
 You should now be able to administer your site at
 [http://localhost:3000/admin](http://localhost:3000/admin).
 
-Configuration
+<a name="configuration">Configuration</a>
 -------------
 RailsAdmin provides its out of the box administrative interface by inspecting your application's
 models and following some Rails conventions. For a more tailored experience, it also provides a
@@ -238,7 +237,7 @@ You can customize the width of the list view with:
     RailsAdmin.config do |config|
       config.total_columns_width = 1000
     end
-    
+
 If you don't want to reload RailsAdmin config at each requests in development mode (it can get _very_ slow):
 
     RailsAdmin.config do |config|
@@ -1400,9 +1399,8 @@ Or even scope it like this:
       end
     end
 
-Authorization
+<a name="authorization">Authorization</a>
 -------------
-
 Authorization can be added using the `authorize_with` method. If you pass a block
 it will be triggered through a before filter on every action in Rails Admin.
 
@@ -1421,7 +1419,7 @@ with [CanCan](https://github.com/ryanb/cancan), pass it like this.
 
 See the [wiki](https://github.com/sferik/rails_admin/wiki) for more on authorization.
 
-Contributing
+<a name="contributing">Contributing</a>
 ------------
 In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
 
@@ -1438,7 +1436,7 @@ Here are some ways *you* can contribute:
 * by resolving [issues](https://github.com/sferik/rails_admin/issues)
 * by reviewing patches
 
-Submitting an Issue
+<a name="issues">Submitting an Issue</a>
 -------------------
 We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
@@ -1447,7 +1445,7 @@ bug report, please include a [Gist](https://gist.github.com/) that includes a st
 details that may be necessary to reproduce the bug, including your gem version, Ruby version, and
 operating system. Ideally, a bug report should include a pull request with failing specs.
 
-Submitting a Pull Request
+<a name="pulls">Submitting a Pull Request</a>
 -------------------------
 1. Fork the project.
 2. Create a topic branch.
@@ -1459,7 +1457,7 @@ Submitting a Pull Request
 8. Commit and push your changes.
 9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. (If you want to create your own version for some reason, please do so in a separate commit.)
 
-Supported Rubies
+<a name="rubies">Supported Rubies</a>
 ----------------
 This library aims to support and is [tested
 against](http://travis-ci.org/sferik/rails_admin) the following Ruby
@@ -1469,7 +1467,3 @@ implementations:
 * Ruby 1.9.2
 * [Rubinius](http://rubini.us)
 * [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/)
-
-Contact
--------
-If you have questions about contributing to RailsAdmin, please contact [Erik Michaels-Ober](https://github.com/sferik) and [Bogdan Gaza](https://github.com/hurrycane).
