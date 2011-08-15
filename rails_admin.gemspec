@@ -1,7 +1,10 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
+  gem.add_dependency 'builder', '~> 3.0.0'
+  gem.add_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
+  gem.add_dependency 'rails', '~> 3.1.0.rc1'
   gem.add_development_dependency 'capybara', '~> 1.0'
   gem.add_development_dependency 'launchy', '~> 2.0.5'
   gem.add_development_dependency 'devise', '~> 1.1'
@@ -13,11 +16,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec-rails', '~> 2.6'
   gem.add_development_dependency 'simplecov', '~> 0.4'
   gem.add_development_dependency 'yard', '~> 0.7'
-  gem.add_runtime_dependency 'builder', '~> 3.0.0'
-  gem.add_runtime_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
-  gem.add_runtime_dependency 'rails', '~> 3.1.0.rc1'
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kääpä"]
-  gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data}
+  gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
   gem.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
   gem.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
   gem.homepage = 'https://github.com/sferik/rails_admin'
