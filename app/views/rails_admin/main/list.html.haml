@@ -100,9 +100,9 @@
                   - if property.sortable
                     - sort_location = list_path(params.merge(:model_name => @abstract_model.to_param, :sort => property_name).except("sort_reverse").merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {:sort_reverse => "false"}))
                     - sort_direction = selected ? (sort_reverse == 'true' ? "ascending" : "descending") : nil
-                    = link_to(property_pretty_name.upcase, sort_location, :class => sort_direction, :remote => true)
+                    = link_to(property_pretty_name, sort_location, :class => sort_direction, :remote => true)
                   - else
-                    = property_pretty_name.upcase
+                    = property_pretty_name
               %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
 
               %th.last
