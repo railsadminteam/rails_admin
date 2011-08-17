@@ -74,7 +74,7 @@ module RailsAdmin
     # the icon shown beside every entry in the list view
     def action_icon link, icon, text
       icon_path = "/stylesheets/rails_admin/theme/activo/images/icons/24/%s.png"
-      icon_change = "this.src='#{icon_path}'"
+      icon_change = "this.src='#{image_path(icon_path)}'"
       link_to link do
         image_tag (icon_path % icon),
           :alt => text, :title => text,
