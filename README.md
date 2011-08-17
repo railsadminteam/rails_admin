@@ -29,22 +29,22 @@ Supported ORMs:
 <a name="notices">Notices</a>
 --------
 
-Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be 
+Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
 considered as expermimental (development) until further notice. Unfortunately, implementation
 of this feature is thougher than imagined. Any help is welcome, as usual.
 Please remove any rails_admin configuration from your ActiveRecord model and put it inside an
 initializer (as shown in this documentation now). Use:
 
     RailsAdmin.config do |config|
-      
+
       ...
-    
+
       config.model MyActiveRecordModel do
         # MyActiveRecordModel configuration
       end
-      
+
       ...
-      
+
     end
 
 Instead of:
@@ -1155,8 +1155,8 @@ Everything can be overridden with `help`:
       attr_accessor :delete_image
       before_save { self.image = nil if self.delete_image == '1' }
     end
-    
-    
+
+
     RailsAdmin.config do |config|
       config.model Team do
         edit do
@@ -1167,10 +1167,7 @@ Everything can be overridden with `help`:
         end
       end
     end
-      
-      
-      
-      
+
 **Fields - Enum**
 
 Fields of datatype string, integer, text can be rendered with select boxes. Auto-detected if object responds to `#{method_name}_enum`.
@@ -1184,7 +1181,7 @@ You can use `enum` to override any `enum_method` and give back a `FormOptionsHel
         # See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select
       end
     end
-    
+
     RailsAdmin.config do |config|
       config.model Team do
         edit do
