@@ -1,4 +1,5 @@
 # encoding: utf-8
+require File.expand_path('../lib/rails_admin/version', __FILE__)
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
@@ -24,8 +25,5 @@ Gem::Specification.new do |gem|
   gem.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
   gem.summary = %q{Admin for Rails}
   gem.test_files = Dir['spec/**/*']
-  # FIXME: this should reference RailsAdmin::VERSION but because of
-  # http://jira.codehaus.org/browse/JRUBY-5319 we can't use "require"
-  # in our gemspec
-  gem.version = '0.0.1'
+  gem.version = RailsAdmin::VERSION
 end
