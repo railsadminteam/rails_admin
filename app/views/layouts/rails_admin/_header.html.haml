@@ -9,4 +9,4 @@
         %li= link_to header_icon(:home, t('home.name').capitalize), (root_path rescue '/')
       - if (current_user rescue nil)
         %li= link_to header_icon(:account, current_user.email), (edit_path(:user, current_user) rescue '#')
-        %li= link_to header_icon(:logout, t("admin.credentials.log_out")), '/users/sign_out'
+        %li= link_to header_icon(:logout, t("admin.credentials.log_out")), '/users/sign_out', :method => (Devise.sign_out_via rescue :delete)
