@@ -16,4 +16,3 @@ namespace :rails_admin do
     RailsAdmin::Tasks::Install.copy_view_files
   end
 end
-

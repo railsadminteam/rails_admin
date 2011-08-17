@@ -6,4 +6,3 @@ namespace :rails_admin do
     RailsAdmin::Tasks::Uninstall.run
   end
 end
-

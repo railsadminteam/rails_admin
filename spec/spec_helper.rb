@@ -13,7 +13,6 @@ end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
-require 'rails/test_help'
 require 'generator_spec/test_case'
 require 'generators/rails_admin/install_migrations_generator'
 require File.dirname(__FILE__) + '/../lib/rails_admin/tasks/install'
