@@ -9,7 +9,7 @@ describe "RailsAdmin Config DSL Show Section" do
     RailsAdmin.config do |c|
       c.compact_show_view = false
     end
-    
+
     visit show_path(:model_name => "team", :id => team.id)
   end
 

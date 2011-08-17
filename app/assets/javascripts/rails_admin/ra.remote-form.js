@@ -42,8 +42,8 @@
           });
         });
       }
-      
-      
+
+
       $(widget.element).bind("click", function(e){
         e.preventDefault();
         var dialog = widget._getDialog();
@@ -63,8 +63,8 @@
         });
       });
     },
-    
-    
+
+
 
     _bindFormEvents: function() {
       var dialog = this._getDialog(),
@@ -72,10 +72,10 @@
           widget = this,
           saveButtonText = dialog.find(":submit[name=_save]").text(),
           cancelButtonText = dialog.find(":submit[name=_continue]").text();
-      
+
       // Hide delete/history buttons, not supported yet.
       dialog.find('div.control').hide();
-      
+
       dialog.dialog("option", "title", $("h2.title", dialog).remove().text());
 
       form.attr("data-remote", true);
@@ -113,7 +113,7 @@
         var select = widget.element.siblings('select');
         var input = widget.element.siblings('.ra-filtering-select-input');
         var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
-        
+
         if(widget.element.siblings('button').length){ // select input (add)
           if(input.length > 0) {
             input[0].value = json.label;

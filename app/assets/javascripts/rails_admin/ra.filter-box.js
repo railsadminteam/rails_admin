@@ -95,7 +95,7 @@
 
   $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
     var selected_option = $(this).find('option:selected');
-  
+
     if($(selected_option).data('additional-fieldset')) {
       $(this).siblings('.additional-fieldset').val('');
       $(this).siblings('.additional-fieldset').show();

@@ -7,13 +7,12 @@ module RailsAdmin
     @@all_models = nil
     @@all_abstract_models = nil
     # Returns all models for a given Rails app
-    
-    
+
     # self.all_abstract_models
     def self.all
       @@all_abstract_models ||= all_models.map{ |model| new(model) }
     end
-    
+
     def self.all_models
       unless @@all_models
         @@all_models = []
@@ -23,14 +22,14 @@ module RailsAdmin
         else
           # orig regexp -- found 'class' even if it's within a comment or a quote
           filenames = Dir.glob(Rails.application.paths["app/models"].collect { |path| File.join(Rails.root, path, "**/*.rb") })
-        
+
           class_names = []
           filenames.each do |filename|
             class_names += File.read(filename).scan(/class ([\w\d_\-:]+)/).flatten
           end
           possible_models = class_names
         end
-        
+
         excluded_models = RailsAdmin::Config.excluded_models.map(&:to_s)
         excluded_models << ['History']
 

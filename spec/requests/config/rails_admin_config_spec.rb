@@ -78,16 +78,16 @@ describe "RailsAdmin Config DSL" do
       RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end
   end
-  
+
   describe "compact_show_view" do
-    
+
     it 'should hide empty fields in show view by default' do
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "league", :id => @player.id)
       should_not have_css("div.player_born_on")
     end
-    
-    
+
+
     it 'should be disactivable' do
       RailsAdmin.config do |c|
         c.compact_show_view = false

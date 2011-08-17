@@ -2,11 +2,11 @@
     $.fn.tipsy = function(options) {
 
         options = $.extend({}, $.fn.tipsy.defaults, options);
-        
+
         return this.each(function() {
-            
+
             var opts = $.fn.tipsy.elementOptions(this, options);
-            
+
             $(this).hover(function() {
 
                 $.data(this, 'cancel.tipsy', true);
@@ -72,11 +72,11 @@
                 }, 100);
 
             });
-            
+
         });
-        
+
     };
-    
+
     // Overwrite this method to provide options on a per-element basis.
     // For example, you could store the gravity in a 'tipsy-gravity' attribute:
     // return $.extend({}, options, {gravity: $(ele).attr('tipsy-gravity') || 'n' });
@@ -84,7 +84,7 @@
     $.fn.tipsy.elementOptions = function(ele, options) {
         return $.metadata ? $.extend({}, options, $(ele).metadata()) : options;
     };
-    
+
     $.fn.tipsy.defaults = {
         fade: false,
         fallback: '',
@@ -92,13 +92,13 @@
         html: false,
         title: 'title'
     };
-    
+
     $.fn.tipsy.autoNS = function() {
         return $(this).offset().top > ($(document).scrollTop() + $(window).height() / 2) ? 's' : 'n';
     };
-    
+
     $.fn.tipsy.autoWE = function() {
         return $(this).offset().left > ($(document).scrollLeft() + $(window).width() / 2) ? 'e' : 'w';
     };
-    
+
 })(jQuery);

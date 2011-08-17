@@ -98,7 +98,7 @@
 
     _bindEvents: function() {
       var widget = this;
-            
+
       /* Add all to selection */
       this.addAll.click(function(e){
         widget._select($('option', widget.collection));

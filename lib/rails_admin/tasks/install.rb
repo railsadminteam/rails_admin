@@ -17,7 +17,7 @@ module RailsAdmin
           end
 
           create_route
-          
+
           puts "Also you need a new migration. We'll generate it for you now."
           `rails g rails_admin:install_migrations`
 
@@ -46,7 +46,7 @@ module RailsAdmin
           destination = Rails.root.join('app/views')
           puts copy_files(%w( layouts . ), origin, destination)
         end
-        
+
         def create_route
           print "Now creating rails_admin route\n"
           `rails g rails_admin:install_route`

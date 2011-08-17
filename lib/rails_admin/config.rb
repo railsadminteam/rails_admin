@@ -45,10 +45,10 @@ module RailsAdmin
     end
 
     class << self
-      
+
       # in development mode, setting this to true will make rails_admin reload the whole configuration at each request
       attr_accessor :reload_between_requests
-      
+
       # Configuration option to specify which models you want to exclude.
       attr_accessor :excluded_models
 
@@ -74,13 +74,13 @@ module RailsAdmin
       # Configuration option to specify which method names will be searched for
       # to be used as a label for object records. This defaults to [:name, :title]
       attr_accessor :label_methods
-      
+
       # hide blank fields in show view if true
       attr_accessor :compact_show_view
-      
+
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
-      
+
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #

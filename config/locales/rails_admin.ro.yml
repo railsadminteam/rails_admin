@@ -59,7 +59,7 @@ ro:
       save_and_edit: "Salvează și continuă"
       cancel: "Anulează"
     delete:
-      all_of_the_following_related_items_will_be_deleted: "? Toate obiectele următoare asociate vor fi șterse:"  
+      all_of_the_following_related_items_will_be_deleted: "? Toate obiectele următoare asociate vor fi șterse:"
       are_you_sure_you_want_to_delete_the_object: "Ești sigur că vrei să ștergi %{model_name}"
       confirmation: "Da, sunt sigur"
       delete_confirmation: "Confirmarea ștergerii"

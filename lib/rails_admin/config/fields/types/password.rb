@@ -30,7 +30,7 @@ module RailsAdmin
           def value
             ""
           end
-          
+
           register_instance_option(:pretty_value) do
             '*****'
           end

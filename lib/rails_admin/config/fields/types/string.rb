@@ -26,7 +26,7 @@ module RailsAdmin
 
             text
           end
-          
+
           register_instance_option(:pretty_value) do
             # TODO truncate should be done only in list view, not show view
             bindings[:view].truncate(formatted_value.to_s, :length => 60)

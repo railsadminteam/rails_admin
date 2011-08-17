@@ -11,10 +11,10 @@ module RailsAdmin
         if properties.has_key?(:parent_model)
           association = parent.abstract_model.associations.find {|a| a[:name].to_s == properties[:name].to_s}
           field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
-          
+
           field.read_only(true) if association[:read_only]
           fields << field
-          
+
         # If it's a column
         elsif !properties.has_key?(:parent_model)
           fields << (field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties))
@@ -27,7 +27,7 @@ module RailsAdmin
             field.hide
             field.filterable(false) # filtering is handled on the association itself
           end
-          
+
         end
       end
 
@@ -60,7 +60,7 @@ module RailsAdmin
         fields = []
         return fields unless parent.abstract_model.model_store_exists?
         # Load fields for all properties (columns)
-        
+
         parent.abstract_model.properties.each do |properties|
           # Unless a previous factory has already loaded current field as well
           unless fields.find {|f| f.name == properties[:name] }

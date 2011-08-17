@@ -12,7 +12,7 @@ module RailsAdmin
           register_instance_option(:formatted_value) do
             (o = value) && o.send(associated_model_config.object_label_method)
           end
-          
+
           # we need to check for validation on field and association
           register_instance_option(:required?) do
             # todo unify errors for the form (see redmine)
@@ -25,7 +25,7 @@ module RailsAdmin
               key_properties && !key_properties[:nullable?] || key_required_by_validator || required_by_validator
             end
           end
-          
+
           register_instance_option(:sortable) do
             @sortable ||= associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {self.abstract_model.model.name => self.method_name}
           end

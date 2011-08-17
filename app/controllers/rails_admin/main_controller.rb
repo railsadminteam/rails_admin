@@ -401,10 +401,10 @@ module RailsAdmin
     end
 
     def build_statement(column, type, value, operator)
-      
+
       # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
       return if operator == '_discard' || value == '_discard'
-      
+
       # filtering data with unary operator, not type dependent
       if operator == '_blank' || value == '_blank'
         return ["(#{column} IS NULL OR #{column} = '')"]
@@ -419,7 +419,7 @@ module RailsAdmin
       elsif operator == '_not_empty' || value == '_not_empty'
         return ["(#{column} != '')"]
       end
-      
+
       # now we go type specific
       case type
       when :boolean
@@ -461,7 +461,7 @@ module RailsAdmin
         end
         ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
-        return if value.blank?  
+        return if value.blank?
         ["(#{column} = ?)", value]
       end
     end

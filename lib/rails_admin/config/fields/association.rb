@@ -40,7 +40,7 @@ module RailsAdmin
         register_instance_option(:visible?) do
           @visible ||= !self.associated_model_config.excluded?
         end
-        
+
         # use the association name as a key, not the association key anymore!
         register_instance_option(:label) do
           @label ||= abstract_model.model.human_attribute_name association[:name]
@@ -74,12 +74,12 @@ module RailsAdmin
         def child_key
           association[:child_key]
         end
-        
+
         # Reader for the inverse relationship
         def inverse_of
           association[:inverse_of]
         end
-        
+
         # Reader for validation errors of the bound object
         def errors
           bindings[:object].errors[child_key]

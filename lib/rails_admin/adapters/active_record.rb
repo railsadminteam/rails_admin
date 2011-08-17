@@ -14,8 +14,8 @@ module RailsAdmin
         # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
         # Support is hackish at best. Atomicity is respected for creation, but not while updating.
         # It means a failed validation at update on the parent object could still modify target belongs_to foreign ids.
-        # 
-        # 
+        #
+        #
         abstract_model.model.reflect_on_all_associations.select{|assoc| assoc.macro.to_s == 'has_one'}.each do |association|
           abstract_model.model.send(:define_method, "#{association.name}_id") do
             self.send(association.name).try(:id)
@@ -27,7 +27,7 @@ module RailsAdmin
       end
 
       def self.polymorphic_parents(name)
-        
+
         @@polymorphic_parents ||= {}.tap do |hash|
           RailsAdmin::AbstractModel.all_models.each do |klass|
             klass.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
@@ -174,11 +174,11 @@ module RailsAdmin
         @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
         options.merge(:order => "#{@sort} #{@sort_order}")
       end
-      
+
       def association_options(association)
         if association.options[:polymorphic]
-          { 
-            :polymorphic => true, 
+          {
+            :polymorphic => true,
             :foreign_type => association.options[:foreign_type] || "#{association.name}_type"
           }
         elsif association.options[:as]
@@ -204,7 +204,7 @@ module RailsAdmin
           raise "Unknown association type: #{association.macro.inspect}"
         end
       end
-      
+
       def association_foreign_type_lookup(association)
         if association.options[:polymorphic]
           association.options[:foreign_type].try(:to_sym) || :"#{association.name}_type"
@@ -222,11 +222,11 @@ module RailsAdmin
       def association_parent_key_lookup(association)
         [:id]
       end
-      
+
       def association_inverse_of_lookup(association)
         association.options[:inverse_of].try :to_sym
       end
-      
+
       def association_read_only_lookup(association)
         association.options[:readonly]
       end

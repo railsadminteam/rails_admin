@@ -10,17 +10,17 @@ describe RailsAdmin::History do
       @results.count.should == 5
     end
   end
-  
+
   describe "creating a new history entry" do
     it "saves up to 255 chars without modification" do
       history = RailsAdmin::History.create(:message => "#"*255).reload
-      
+
       history.message.should == "#"*255
     end
-    
+
     it "messages longer than 255 chars are truncated" do
       history = RailsAdmin::History.create(:message => "#"*280).reload
-      
+
       history.message.should == ("#"*(255-3))+"..."
     end
   end

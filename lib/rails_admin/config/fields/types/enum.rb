@@ -25,7 +25,7 @@ module RailsAdmin
           register_instance_option(:enum) do
             bindings[:object].send(self.enum_method)
           end
-          
+
           register_instance_option(:pretty_value) do
             if enum.is_a?(Hash)
               enum.reject{|k,v| v.to_s != value.to_s}.keys.first.to_s.presence || value.to_s

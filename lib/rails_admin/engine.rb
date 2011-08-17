@@ -8,7 +8,7 @@ module RailsAdmin
     ActionDispatch::Callbacks.before do
       RailsAdmin.setup
     end
-    
+
     initializer "rails admin development mode" do |app|
       ActionDispatch::Callbacks.after do
         RailsAdmin.reset if !app.config.cache_classes && RailsAdmin.config.reload_between_requests
@@ -16,4 +16,3 @@ module RailsAdmin
     end
   end
 end
-  

@@ -7,9 +7,9 @@ module RailsAdmin
     scope :most_recent, lambda {|model|
       where("#{retrieve_connection.quote_column_name(:table)} = ?", model.pretty_name).order("updated_at DESC")
     }
-    
+
     before_save :truncate_message
-    
+
     def truncate_message
       if message.present? && message.size > 255
         self.message = message.truncate(255)
