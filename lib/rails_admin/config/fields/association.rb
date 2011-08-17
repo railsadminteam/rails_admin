@@ -80,9 +80,9 @@ module RailsAdmin
           association[:inverse_of]
         end
         
-        # Reader for validation errors of the bound object
+        # Reader for the bound object's validation errors relating to this association
         def errors
-          bindings[:object].errors[child_key]
+          bindings[:object].errors[name]
         end
 
         # Reader whether the bound object has validation errors
