@@ -5,11 +5,10 @@ Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
   gem.add_dependency 'builder', '~> 3.0.0'
   gem.add_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
-  gem.add_dependency 'rails', '~> 3.1.0.rc1'
+  gem.add_dependency 'rails', '~> 3.1.0.rc6'
   gem.add_development_dependency 'capybara', '~> 1.0'
-  gem.add_development_dependency 'launchy', '~> 2.0.5'
-  gem.add_development_dependency 'devise', '~> 1.1'
-  gem.add_development_dependency 'dummy_data', '~> 0.9'
+  gem.add_development_dependency 'launchy', '~> 2.0'
+  gem.add_development_dependency 'devise', '~> 1.4'
   gem.add_development_dependency 'factory_girl', '~> 2.0'
   gem.add_development_dependency 'generator_spec', '~> 0.8'
   gem.add_development_dependency 'paperclip', '~> 2.3'
