@@ -59,10 +59,10 @@ describe "RailsAdmin Config DSL List Section" do
 
     it "should show all by default" do
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "CREATED AT")
-      should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT")
-      should have_selector(".grid th:nth-child(6)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "Created at")
+      should have_selector(".grid th:nth-child(5)", :text => "Updated at")
+      should have_selector(".grid th:nth-child(6)", :text => "His Name")
     end
 
     it "should hide some fields on demand with a block" do
@@ -74,8 +74,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
     end
 
     it "should hide some fields on demand with fields list" do
@@ -85,8 +85,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
     end
 
     it "should add some fields on demand with a block" do
@@ -98,8 +98,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
     end
 
     it "should show some fields on demand with fields list, respect ordering and configure them" do
@@ -107,14 +107,14 @@ describe "RailsAdmin Config DSL List Section" do
         list do
           fields :name, :id do
             label do
-              "MODIFIED #{label}"
+              "Modified #{label}"
             end
           end
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "MODIFIED HIS NAME")
-      should have_selector(".grid th:nth-child(4)", :text => "MODIFIED ID")
+      should have_selector(".grid th:nth-child(3)", :text => "Modified His Name")
+      should have_selector(".grid th:nth-child(4)", :text => "Modified Id")
     end
 
     it "should show all fields if asked" do
@@ -126,10 +126,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "CREATED AT")
-      should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT")
-      should have_selector(".grid th:nth-child(6)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "Created at")
+      should have_selector(".grid th:nth-child(5)", :text => "Updated at")
+      should have_selector(".grid th:nth-child(6)", :text => "His Name")
     end
 
     it "should appear in order defined" do
@@ -142,10 +142,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "UPDATED AT")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
-      should have_selector(".grid th:nth-child(5)", :text => "ID")
-      should have_selector(".grid th:nth-child(6)", :text => "CREATED AT")
+      should have_selector(".grid th:nth-child(3)", :text => "Updated at")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
+      should have_selector(".grid th:nth-child(5)", :text => "Id")
+      should have_selector(".grid th:nth-child(6)", :text => "Created at")
     end
 
     it "should only list the defined fields if some fields are defined" do
@@ -156,10 +156,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
-      should have_no_selector(".grid th:nth-child(5)", :text => "CREATED AT")
-      should have_no_selector(".grid th:nth-child(6)", :text => "UPDATED AT")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
+      should have_no_selector(".grid th:nth-child(5)", :text => "Created at")
+      should have_no_selector(".grid th:nth-child(6)", :text => "Updated at")
     end
 
     it "should delegate the label option to the ActiveModel API" do
@@ -169,51 +169,51 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "His Name")
     end
 
     it "should be renameable" do
       RailsAdmin.config Fan do
         list do
           field :id do
-            label "IDENTIFIER"
+            label "Identifier"
           end
           field :name
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "IDENTIFIER")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Identifier")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
     end
 
     it "should be renameable by type" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
-            label { "#{label} (DATETIME)" }
+            label { "#{label} (datetime)" }
           end
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "CREATED AT (DATETIME)")
-      should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT (DATETIME)")
-      should have_selector(".grid th:nth-child(6)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "Created at (datetime)")
+      should have_selector(".grid th:nth-child(5)", :text => "Updated at (datetime)")
+      should have_selector(".grid th:nth-child(6)", :text => "His Name")
     end
 
     it "should be globally renameable by type" do
       RailsAdmin::Config.models do
         list do
           fields_of_type :datetime do
-            label { "#{label} (DATETIME)" }
+            label { "#{label} (datetime)" }
           end
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "CREATED AT (DATETIME)")
-      should have_selector(".grid th:nth-child(5)", :text => "UPDATED AT (DATETIME)")
-      should have_selector(".grid th:nth-child(6)", :text => "HIS NAME")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "Created at (datetime)")
+      should have_selector(".grid th:nth-child(5)", :text => "Updated at (datetime)")
+      should have_selector(".grid th:nth-child(6)", :text => "His Name")
     end
 
     it "should be sortable by default" do
@@ -285,10 +285,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
-      should have_no_selector(".grid th:nth-child(5)", :text => "CREATED AT")
-      should have_no_selector(".grid th:nth-child(6)", :text => "UPDATED AT")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
+      should have_no_selector(".grid th:nth-child(5)", :text => "Created at")
+      should have_no_selector(".grid th:nth-child(6)", :text => "Updated at")
     end
 
     it "should have option to hide fields by type globally" do
@@ -300,10 +300,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector(".grid th:nth-child(3)", :text => "ID")
-      should have_selector(".grid th:nth-child(4)", :text => "HIS NAME")
-      should have_no_selector(".grid th:nth-child(5)", :text => "CREATED AT")
-      should have_no_selector(".grid th:nth-child(6)", :text => "UPDATED AT")
+      should have_selector(".grid th:nth-child(3)", :text => "Id")
+      should have_selector(".grid th:nth-child(4)", :text => "His Name")
+      should have_no_selector(".grid th:nth-child(5)", :text => "Created at")
+      should have_no_selector(".grid th:nth-child(6)", :text => "Updated at")
     end
 
     it "should have option to customize css class name" do
