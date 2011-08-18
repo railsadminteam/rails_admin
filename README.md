@@ -33,7 +33,7 @@ Supported ORMs:
 
 Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
 considered as expermimental (development) until further notice. Unfortunately, implementation
-of this feature is thougher than imagined. Any help is welcome, as usual.
+of this feature is tougher than imagined. Any help is welcome, as usual.
 Please remove any rails_admin configuration from your ActiveRecord model and put it inside an
 initializer (as shown in this documentation now). Use:
 
