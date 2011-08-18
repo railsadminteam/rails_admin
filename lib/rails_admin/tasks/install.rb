@@ -76,7 +76,7 @@ module RailsAdmin
           if File.exists?(devise_path)
             parse_route_files
           else
-            puts "Looks like you don't have devise install! We'll install it for you!"
+            puts "Looks like you don't have devise installed! We'll install it for you!"
             `rails g devise:install`
             set_devise
           end
