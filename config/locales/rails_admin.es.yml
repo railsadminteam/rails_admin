@@ -56,7 +56,7 @@ es:
       are_you_sure_you_want_to_delete_the_object: "Estás seguro que quieres borrar %{model_name}"
       confirmation: "Sí, estoy seguro"
       delete_confirmation: "Confirmación de Borrado"
-      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+      bulk_delete: "Los siguientes elementos serán borrados, puede eliminar o dejar algunos elementos huerfanos de sus dependencias relacionadas:"
     export:
       confirmation: "Exportar a %{name}"
       select: "Selecciona los campos a exportar"
@@ -81,7 +81,7 @@ es:
       noaction: "No se realizó ninguna acción"
     actions:
       create: "crear"
-      created: "creado"
+      created: "guardar"
       update: "actualizar"
       updated: "actualizado"
       delete: "borrar"
