@@ -185,6 +185,13 @@ module RailsAdmin
         @current_user || DEFAULT_CURRENT_USER
       end
 
+      # Setup a different method to determine the current admin logged in (by default is current_user).
+      # This is run inside the controller instance and made available as a helper.
+      attr_writer :current_rails_admin_method
+      def current_rails_admin_method
+        @current_rails_admin_method ||= :current_user
+      end
+
       def default_search_operator=(operator)
         if %w{ default like starts_with ends_with is = }.include? operator
           @default_search_operator = operator
