@@ -21,10 +21,6 @@ module RailsAdmin
             "/javascripts/ckeditor/config.js"
           end
 
-          register_instance_option(:pretty_value) do
-            formatted_value
-          end
-
           register_instance_option(:html_attributes) do
             {
               :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
