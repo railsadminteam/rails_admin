@@ -8,11 +8,13 @@
       = model_config.with(:object => object).object_label
     %ul
       - @abstract_model.has_many_associations.each do |association|
-        - object.send(association[:name]).reject{|child| child.nil?}.each do |child|
+        - object.send(association[:name]).each do |child|
           %li
-            #{association[:pretty_name]}: #{link_to(RailsAdmin.config(child).with(:object => child).object_label, show_path(:model_name => association[:name].to_s.singularize.to_sym, :id => child.id))}
+            - child_config = RailsAdmin.config(child)
+            #{association[:pretty_name]}: #{link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))}
       - @abstract_model.has_one_associations.each do |association|
         - child = object.send(association[:name])
         - next if child.nil?
         %li
-          #{association[:pretty_name]}: #{link_to(RailsAdmin.config(child).with(:object => child).object_label, show_path(:model_name => association[:name], :id => child.id))}
+          - child_config = RailsAdmin.config(child)
+          #{association[:pretty_name]}: #{link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))}
