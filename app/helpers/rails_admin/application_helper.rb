@@ -186,17 +186,6 @@ module RailsAdmin
       @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
     end
 
-    # returns a link to "/" unless there's a problem, which will
-    # probably be caused by root_path not being configured.  see
-    # https://github.com/sferik/rails_admin/issues/345 .
-    def home_link
-      begin
-        link_to(t('home.name'), '/')
-      rescue ActionView::Template::Error
-        t('home.name')
-      end
-    end
-
     def messages_and_help_for field
       tags = []
       if field.has_errors?
@@ -282,7 +271,6 @@ module RailsAdmin
             link_to I18n.t("admin.breadcrumbs.#{view}").capitalize, self.send("#{path_method}_path")
           end
          end
-
       end
 
 
