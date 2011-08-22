@@ -57,7 +57,7 @@ module RailsAdmin
       icon_change = "this.src='#{icon_path}'"
       link_to link do
         image_tag image_path(icon_path % icon),
-          :alt => text, :title => text,
+          :alt => text, :title => text, :class => 'tipsy',
           :onmouseout  => "this.src='#{image_path(icon_path % icon)}'",
           :onmouseover => "this.src='#{image_path(icon_path % (icon.to_s + '-hover'))}'"
       end.html_safe
