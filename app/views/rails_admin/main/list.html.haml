@@ -48,6 +48,13 @@
       #{@ordered_filter_string}
     });
 
+- can_create      = authorized? :new,         @abstract_model
+- can_export      = authorized? :export,      @abstract_model
+- can_delete      = authorized? :delete,      @abstract_model
+- can_see_history = authorized? :see_history, @abstract_model
+- can_bulk_action = can_export || can_delete
+
+
 #block-tables.block
   = breadcrumbs_for :list, @abstract_model
 
@@ -65,10 +72,10 @@
                 - ''
               %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
 
-        - if authorized? :new, @abstract_model
+        - if can_create
           = action_button new_path, t("admin.list.add_new"), :add
 
-        - if authorized? :delete, @abstract_model
+        - if can_delete
           = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
 
         = form_tag(list_post_path(params.merge(:model_name => @abstract_model.to_param).except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
@@ -81,10 +88,6 @@
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
         = hidden_field_tag :bulk_action
-        - can_export      = authorized? :export,      @abstract_model
-        - can_delete      = authorized? :delete,      @abstract_model
-        - can_see_history = authorized? :see_history, @abstract_model
-        - can_bulk_action = can_export || can_delete
         %table.table.grid
           %thead
             %tr
