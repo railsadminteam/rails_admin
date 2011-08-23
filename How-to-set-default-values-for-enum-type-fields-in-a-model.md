@@ -1,8 +1,9 @@
-Pre-requisite: Enums are well-documented in the readme file so please read up on that first
+Pre-requisite: Enums are well-documented in the readme file so please read up on that first.
 
 This recipe uses the baseball teams example app under the dummy_app directory:
 
 Consider the following model for Teams:
+
 ```ruby
 class Team < ActiveRecord::Base
   ....
@@ -12,6 +13,7 @@ class Team < ActiveRecord::Base
    ...
 end
 ```
+
 Rails Admin initializes the drop-down for enums to include a blank row, please see the following file:
 
 ```ruby
@@ -35,5 +37,6 @@ class Team < ActiveRecord::Base
    ...
 end
 ```
+
 The "after_initialize" hook (or callback) triggers after a model record is instantiated.  It will set the color value to 'red' for a new record and will leave it to its current value for an existing record (in the edit view).
 
