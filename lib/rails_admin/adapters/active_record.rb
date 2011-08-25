@@ -47,23 +47,19 @@ module RailsAdmin
       end
 
       def get_bulk(ids, scope = nil)
-        scope ||= model.unscoped
-        scope.find_all_by_id(ids)
+        (scope || model).find_all_by_id(ids)
       end
 
       def count(options = {}, scope = nil)
-        scope ||= model.unscoped
-        scope.count(options.except(:sort, :sort_reverse))
+        (scope || model).count(options.except(:sort, :sort_reverse))
       end
 
       def first(options = {}, scope = nil)
-        scope ||= model.unscoped
-        scope.first(merge_order(options))
+        (scope || model).reorder(extract_ordering!(options)).first(options)
       end
-
+      
       def all(options = {}, scope = nil)
-        scope ||= model.unscoped
-        scope.all(merge_order(options))
+        (scope || model).reorder(extract_ordering!(options)).all(options)
       end
 
       def paginated(options = {}, scope = nil)
@@ -168,11 +164,11 @@ module RailsAdmin
 
       private
 
-      def merge_order(options)
+      def extract_ordering!(options)
         @sort ||= options.delete(:sort) || "id"
         @sort = (@sort.to_s.include?('.') ? @sort : "#{model.table_name}.#{@sort}")
         @sort_order ||= options.delete(:sort_reverse) ? "asc" : "desc"
-        options.merge(:order => "#{@sort} #{@sort_order}")
+        "#{@sort} #{@sort_order}"
       end
 
       def association_options(association)
