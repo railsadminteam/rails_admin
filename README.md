@@ -29,6 +29,8 @@ Supported ORMs:
 
 ## <a name="notices">Notices</a>
 
+default scope are now fully *active* in list views (ordering is overriden, obvisously). This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If this is a problem for you, either refactor your scoping rules in cancan, or activate your default scope depending on current user.
+
 Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
 considered as expermimental (development) until further notice. Unfortunately, implementation
 of this feature is tougher than imagined. Any help is welcome, as usual.
