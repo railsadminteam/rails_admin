@@ -692,7 +692,7 @@ The field's output can be modified:
             pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
               value.titleize
             end
-            
+
             export_value do
               value.camelize # used in exports, where no html/data is allowed
             end
@@ -1454,6 +1454,7 @@ Here are some ways *you* can contribute:
 * by refactoring code
 * by resolving [issues](https://github.com/sferik/rails_admin/issues)
 * by reviewing patches
+* [financially](http://pledgie.com/campaigns/15917)
 
 ## <a name="issues">Submitting an Issue</a>
 We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues) to track bugs and
