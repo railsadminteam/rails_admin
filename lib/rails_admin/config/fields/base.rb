@@ -118,17 +118,19 @@ module RailsAdmin
         end
 
         register_instance_option(:formatted_value) do
-          unless (output = value).nil?
-            output
-          else
-            "".html_safe
-          end
+          value.to_s
         end
 
-        # output for pretty printing (show, list, etc)
+        # output for pretty printing (show, list)
         register_instance_option(:pretty_value) do
           formatted_value
         end
+        
+        # output for printing in export view (developers beware: no bindings[:view] and no data!)
+        register_instance_option(:export_value) do
+          pretty_value
+        end
+
 
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do

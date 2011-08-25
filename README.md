@@ -692,6 +692,10 @@ The field's output can be modified:
             pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
               value.titleize
             end
+            
+            export_value do
+              value.camelize # used in exports, where no html/data is allowed
+            end
           end
           field :created_at
         end

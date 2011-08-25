@@ -11,10 +11,11 @@ module RailsAdmin
     def initialize(objects = [], schema = {})
       return self if (@objects = objects).blank?
 
-      @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
       @model = objects.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = RailsAdmin.config(@abstract_model)
+      @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
+      @fields = @model_config.export.fields.select{|f| @methods.include? f.name }
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       @associations = {}
 
@@ -23,13 +24,15 @@ module RailsAdmin
         model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
         abstract_model = RailsAdmin::AbstractModel.new(model)
         model_config = RailsAdmin.config(abstract_model)
-
+        methods = [(values[:only] || []) + (values[:methods] || [])].flatten.compact
+        fields = model_config.export.fields.select{|f| methods.include? f.name }
+      
         @associations[key] = {
           :association => association,
           :model => model,
           :abstract_model => abstract_model,
           :model_config => model_config,
-          :methods => [(values[:only] || []) + (values[:methods] || [])].flatten.compact
+          :fields => fields
         }
       end
     end
@@ -55,27 +58,26 @@ module RailsAdmin
         @encoding_to = @encoding_from
       end
 
-
       csv_string = CSVClass.generate(options[:generator] ? options[:generator].symbolize_keys.delete_if {|key, value| value.blank? } : {}) do |csv|
         unless options[:skip_header]
-          csv << @methods.map do |method|
-            output(::I18n.t('admin.export.csv.header_for_root_methods', :name => @model.human_attribute_name(method), :model => @abstract_model.pretty_name))
+          csv << @fields.map do |field|
+            output(::I18n.t('admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
           end +
           @associations.map do |association_name, option_hash|
-            option_hash[:methods].map do |method|
-              output(::I18n.t('admin.export.csv.header_for_association_methods', :name => option_hash[:model].human_attribute_name(method), :association => @model.human_attribute_name(association_name)))
+            option_hash[:fields].map do |field|
+              output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => @model_config.export.fields.find{|f| f.name == association_name }.label))
             end
           end.flatten
         end
 
         @objects.each do |object|
-          csv << @methods.map do |method|
-            output(object.send(method))
+          csv << @fields.map do |field|
+            output(field.with(:object => object).export_value)
           end +
           @associations.map do |association_name, option_hash|
             associated_objects = [object.send(association_name)].flatten.compact
-            option_hash[:methods].map do |method|
-              output(associated_objects.map{ |obj| obj.send(method).presence || @empty }.join(','))
+            option_hash[:fields].map do |field|
+              output(associated_objects.map{ |object| field.with(:object => object).export_value.presence || @empty }.join(','))
             end
           end.flatten
         end

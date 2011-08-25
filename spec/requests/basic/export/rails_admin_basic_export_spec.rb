@@ -27,7 +27,18 @@ describe "RailsAdmin Export" do
 
   describe "POST /admin/players/export (prompt)" do
 
-    it "should allow to export to CSV with associations and default schema, containing properly translated header" do
+    it "should allow to export to CSV with associations and default schema, containing properly translated header and follow configuration" do
+      RailsAdmin.config do |c|
+        c.model Player do
+          include_all_fields
+          field :name do
+            export_value do
+              "#{value} exported"
+            end
+          end
+        end
+      end
+
       visit export_path(:model_name => 'player')
       should have_content 'Select fields to export'
       select "<comma> ','", :from => "csv_options_generator_col_sep"
@@ -36,7 +47,7 @@ describe "RailsAdmin Export" do
       should have_content "Id [Team],Created at [Team],Updated at [Team],Name [Team],Logo url [Team],Team Manager [Team],Ballpark [Team],Mascot [Team],Founded [Team],Wins [Team],Losses [Team],Win percentage [Team],Revenue [Team],Color [Team]"
       should have_content "Id [Draft],Created at [Draft],Updated at [Draft],Date [Draft],Round [Draft],Pick [Draft],Overall [Draft],College [Draft],Notes [Draft]"
       should have_content "Id [Comments],Content [Comments],Created at [Comments],Updated at [Comments]"
-      should have_content @player.name
+      should have_content @player.name + " exported"
       should have_content @player.team.name
       should have_content @player.draft.college
       should have_content @player.comments.first.content.split("\n").first.strip # can't match for more than one line
@@ -59,7 +70,7 @@ describe "RailsAdmin Export" do
       visit export_path(:model_name => 'comment')
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
-      should have_content "Id,Content,Created at,Updated at,Commentable,Commentable type"
+      should have_content "Id,Commentable,Commentable type,Content,Created at,Updated at"
       should have_content "#{@player.id},#{@player.class}"
     end
   end

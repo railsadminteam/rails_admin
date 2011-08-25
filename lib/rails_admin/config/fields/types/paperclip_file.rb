@@ -20,6 +20,10 @@ module RailsAdmin
           register_instance_option(:thumb_method) do
             nil
           end
+          
+          register_instance_option(:export_value) do
+            value.to_s
+          end
 
           register_instance_option(:pretty_value) do
             if (file = bindings[:object].send(method_name))

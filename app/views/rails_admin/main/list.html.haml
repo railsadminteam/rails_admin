@@ -129,8 +129,7 @@
                 - other_left = list_path(params.merge(:set => (params[:set].to_i - 1)))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{ |property| property.bind(:object, object) }.each do |property|
-                  - value = property.pretty_value
-                  %td{:class => "#{property.css_class}", :alt => value, :title => value}= value
+                  %td{:class => "#{property.css_class}", :title => property.value}= property.pretty_value
                 - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
                 %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.last
