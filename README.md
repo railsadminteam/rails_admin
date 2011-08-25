@@ -29,7 +29,7 @@ Supported ORMs:
 
 ## <a name="notices">Notices</a>
 
-default scope are now fully *active* in list views (ordering is overriden, obvisously). This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If this is a problem for you, either refactor your scoping rules in cancan, or activate your default scope depending on current user.
+Default scopes are now fully *active* in list views (ordering is overriden, obvisously) as they used to a while ago. This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If you don't want some default scopes in RailsAdmin, either move your scoping rules to cancan, or activate your default scope conditionnaly on user/url prefix.
 
 Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
 considered as expermimental (development) until further notice. Unfortunately, implementation
