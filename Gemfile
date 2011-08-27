@@ -33,6 +33,7 @@ group :development, :test do
   end
 
   gem 'cancan' if ENV['AUTHORIZATION_ADAPTER'] == 'cancan'
+  gem 'silent-postgres'
 end
 
 group :debug do
