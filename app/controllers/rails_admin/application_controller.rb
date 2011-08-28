@@ -9,6 +9,7 @@ module RailsAdmin
     before_filter :set_plugin_name
 
     helper_method :_current_user
+    helper_method :current_rails_admin
 
     def get_model
       model_name = to_model_name(params[:model_name])
@@ -41,6 +42,10 @@ module RailsAdmin
 
     def _current_user
       instance_eval &RailsAdmin::Config.current_user_method
+    end
+
+    def current_rails_admin
+      send RailsAdmin::Config.current_rails_admin_method
     end
 
     def set_plugin_name
