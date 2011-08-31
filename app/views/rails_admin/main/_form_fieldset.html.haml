@@ -1,4 +1,4 @@
-- if (fields = fieldset.fields.map{ |f| f.with(:form => form, :object => object, :view => self) }.select(&:visible)).length > 0
+- if (fields = fieldset.fields.map{ |f| f.with(:form => form, :object => object, :view => self) }.select(&:visible?)).length > 0
   %fieldset
     %legend= fieldset.label
 

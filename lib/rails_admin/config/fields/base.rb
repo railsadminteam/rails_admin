@@ -33,7 +33,7 @@ module RailsAdmin
             extend RailsAdmin::Config::Fields::Groupable
           end
         end
-
+        
         register_instance_option(:css_class) do
           self.class.instance_variable_get("@css_class")
         end
@@ -51,7 +51,11 @@ module RailsAdmin
         end
 
         register_instance_option(:read_only) do
-          false
+          role = bindings[:view].controller.send(:_attr_accessible_role)
+          klass = bindings[:object].class
+          whitelist = klass.accessible_attributes(role).map(&:to_s)
+          blacklist = klass.protected_attributes(role).map(&:to_s)
+          self.method_name.to_s.in?(blacklist) || (whitelist.any? ? !self.method_name.to_s.in?(whitelist) : false)
         end
 
         register_instance_option(:truncated?) do

@@ -15,7 +15,7 @@
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       - @model_config.show.with(:object => @object, :view => self).visible_groups.each do |fieldset|
-        - unless (fields = fieldset.visible_fields.map{|f| f.with(:object => @object, :view => self)}).empty?
+        - unless (fields = fieldset.with(:object => @object, :view => self).visible_fields).empty?
           - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
             .fieldset
               %h4= fieldset.label

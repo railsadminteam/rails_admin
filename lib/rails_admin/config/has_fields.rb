@@ -105,7 +105,7 @@ module RailsAdmin
 
       # Get all fields defined as visible.
       def visible_fields
-        fields.select {|f| f.visible? }
+        fields.select {|f| f.with(bindings).visible? }.map{|f| f.with(bindings)}
       end
     end
   end

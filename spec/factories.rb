@@ -45,6 +45,10 @@ FactoryGirl.define do
     sequence(:password) { |n| "password" }
   end
 
+  factory :field_test do
+  end
+
+
   factory :comment do
     sequence(:content) do |n| <<-EOF
         Lorém --#{n}-- ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

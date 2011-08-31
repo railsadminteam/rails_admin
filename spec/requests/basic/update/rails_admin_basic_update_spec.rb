@@ -27,7 +27,6 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      check "player[suspended]"
       click_button "Save"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -37,7 +36,6 @@ describe "RailsAdmin Basic Update" do
       @player.name.should eql("Jackie Robinson")
       @player.number.should eql(42)
       @player.position.should eql("Second baseman")
-      @player.should be_suspended
     end
   end
 
@@ -50,7 +48,6 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      check "player[suspended]"
       click_button "Save and edit"
 
       @player.reload
@@ -60,7 +57,6 @@ describe "RailsAdmin Basic Update" do
       @player.name.should eql("Jackie Robinson")
       @player.number.should eql(42)
       @player.position.should eql("Second baseman")
-      @player.should be_suspended
     end
   end
 
@@ -204,9 +200,9 @@ describe "RailsAdmin Basic Update" do
 
       visit edit_path(:model_name => "user", :id => @user.id)
 
-      fill_in "user[roles]", :with => "[\"admin\", \"user\"]"
+      fill_in "user[roles]", :with => %{['admin', 'user']}
       click_button "Save"
-
+      
       @user.reload
     end
 

@@ -72,6 +72,8 @@ RSpec.configure do |config|
     RailsAdmin::AbstractModel.new("Player").destroy_all!
     RailsAdmin::AbstractModel.new("Team").destroy_all!
     RailsAdmin::AbstractModel.new("User").destroy_all!
+    RailsAdmin::AbstractModel.new("FieldTest").destroy_all!
+    
     RailsAdmin::History.destroy_all
 
     user = RailsAdmin::AbstractModel.new("User").create(

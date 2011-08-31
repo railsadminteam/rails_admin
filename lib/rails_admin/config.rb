@@ -30,6 +30,8 @@ module RailsAdmin
         end
       end
     end
+    
+    DEFAULT_ATTR_ACCESSIBLE_ROLE = Proc.new { :default }
 
     DEFAULT_AUTHORIZE = Proc.new {}
 
@@ -113,6 +115,12 @@ module RailsAdmin
       def authenticate_with(&blk)
         @authenticate = blk if blk
         @authenticate || DEFAULT_AUTHENTICATION
+      end
+      
+      
+      def attr_accessible_role(&blk)
+        @attr_accessible_role = blk if blk
+        @attr_accessible_role || DEFAULT_ATTR_ACCESSIBLE_ROLE
       end
 
       # Setup authorization to be run as a before filter

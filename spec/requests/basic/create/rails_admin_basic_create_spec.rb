@@ -10,7 +10,6 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      check "player[suspended]"
       click_button "Save"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -20,7 +19,6 @@ describe "RailsAdmin Basic Create" do
       @player.name.should eql("Jackie Robinson")
       @player.number.should eql(42)
       @player.position.should eql("Second baseman")
-      @player.should be_suspended
     end
   end
 
@@ -31,7 +29,6 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      check "player[suspended]"
       click_button "Save and edit"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -41,7 +38,6 @@ describe "RailsAdmin Basic Create" do
       @player.name.should eql("Jackie Robinson")
       @player.number.should eql(42)
       @player.position.should eql("Second baseman")
-      @player.should be_suspended
     end
   end
 
@@ -52,7 +48,6 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      check "player[suspended]"
       click_button "Save and add another"
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -62,7 +57,6 @@ describe "RailsAdmin Basic Create" do
       @player.name.should eql("Jackie Robinson")
       @player.number.should eql(42)
       @player.position.should eql("Second baseman")
-      @player.should be_suspended
     end
   end
 

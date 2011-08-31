@@ -89,7 +89,7 @@ module RailsAdmin
         @authorization_adapter.authorize(:new, @abstract_model, @object)
       end
       if object_params = params[@abstract_model.to_param]
-        @object.attributes = @object.attributes.merge(object_params)
+        @object.set_attributes(@object.attributes.merge(object_params), _attr_accessible_role)
       end
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
@@ -109,7 +109,7 @@ module RailsAdmin
         end
         @authorization_adapter.authorize(:create, @abstract_model, @object)
       end
-      @object.attributes = @attributes
+      @object.set_attributes(@attributes, _attr_accessible_role)
       @page_name = t("admin.actions.create").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
@@ -158,9 +158,9 @@ module RailsAdmin
 
       @old_object = @object.dup
 
-      @model_config.update.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
+      @model_config.update.fields.map {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
 
-      @object.attributes = @attributes
+      @object.set_attributes(@attributes, _attr_accessible_role)
 
       if @object.save
         AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
@@ -293,7 +293,7 @@ module RailsAdmin
     end
 
     def get_sort_hash
-      params[:sort] = params[:sort_reverse] = nil unless @model_config.list.visible_fields.map {|f| f.name.to_s}.include? params[:sort]
+      params[:sort] = params[:sort_reverse] = nil unless @model_config.list.with(:view => self, :object => @abstract_model.model.new).visible_fields.map {|f| f.name.to_s}.include? params[:sort]
 
       params[:sort] ||= @model_config.list.sort_by.to_s
       params[:sort_reverse] ||= 'false'

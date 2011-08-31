@@ -3,7 +3,7 @@
   params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export)
   sort = params[:sort]
   sort_reverse = params[:sort_reverse]
-  properties = @model_config.list.visible_fields.map{|property| property.with(:view => self)}
+  properties = @model_config.list.with(:view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   @style, @other, properties = get_column_set(properties)

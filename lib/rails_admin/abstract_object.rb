@@ -13,8 +13,8 @@
       self.object = object
     end
 
-    def attributes=(attributes)
-      object.assign_attributes(attributes, :without_protection => true)
+    def set_attributes(attributes, role = nil)
+      object.assign_attributes(attributes, :as => role)
     end
 
     def method_missing(name, *args, &block)

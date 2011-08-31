@@ -29,6 +29,8 @@ Supported ORMs:
 
 ## <a name="notices">Notices</a>
 
+`:attr_accessible` is now taken into account: restricted fields are not editable anymore, and mass-assignement security isn't bypassed anymore. Be careful if you whitelist attributes, you'll need to whitelist association 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
+
 Default scopes are now fully *active* in list views (ordering is overriden, obvisously) as they used to a while ago. This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If you don't want some default scopes in RailsAdmin, either move your scoping rules to cancan, or activate your default scope conditionnaly on user/url prefix.
 
 Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
@@ -1421,6 +1423,37 @@ Or even scope it like this:
     end
 
 ## <a name="authorization">Authorization</a>
+
+`:attr_accessible` and `:attr_blacklisted` are taken into account: restricted fields are not editable (read_only). 
+If you whitelist attributes, don't forget to whitelist accessible associations' 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
+:attr_accessible specifies a list of accessible methods for mass-assignment in your ActiveModel models. By default, RailsAdmin uses role :default (default in ActiveModel).
+If the role you specify isn't used in your whitelist declarations, you'll free access to all attributes.
+Keep in mind that `'key' != :key`
+You can change role with a block evaluated in the context of the controller (you'll have access to view and _current_user) : 
+
+    RailsAdmin.config do |config|
+      config.attr_accessible_role do
+        _current_user.roles.first
+      end
+    end
+    
+If you don't want read_only fields to be visible in your forms:
+
+    RailsAdmin.config do |c|
+      c.reload_between_requests = false # strongly advised, since mass-assignement slows things down a lot.
+      c.models do
+        edit do
+          fields do
+            visible do 
+              visible && !read_only
+            end
+          end
+        end
+      end
+    end
+
+
+
 Authorization can be added using the `authorize_with` method. If you pass a block
 it will be triggered through a before filter on every action in Rails Admin.
 

@@ -12,6 +12,6 @@
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       = send(@model_config.update.form_builder, @object, :url => update_path(@abstract_model, @object.id), :html => { :method => "put", :multipart => true, :class => "form" }) do |form|
-        - @model_config.edit.with(:object => @object).visible_groups.each do |fieldset|
+        - @model_config.edit.with(:form => form, :object => @object, :view => self).visible_groups.each do |fieldset|
           = render :partial => 'form_fieldset', :locals => { :fieldset => fieldset, :form => form, :object => @object }
         = render :partial => 'submit_buttons'

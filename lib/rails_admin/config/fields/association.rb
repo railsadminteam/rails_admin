@@ -40,7 +40,7 @@ module RailsAdmin
         register_instance_option(:visible?) do
           @visible ||= !self.associated_model_config.excluded?
         end
-
+        
         # use the association name as a key, not the association key anymore!
         register_instance_option(:label) do
           @label ||= abstract_model.model.human_attribute_name association[:name]
