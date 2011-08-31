@@ -1,10 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.1.0.rc6'
+gem 'rails', '~> 3.1.0'
 gem 'rails_admin', :path => '../../'
-gem 'devise', '~> 1.4.2'
+gem 'devise', '~> 1.4'
 gem 'mlb', '~> 0.5.5'
 gem 'paperclip', '~> 2.3.16'
+
+platforms :jruby, :mingw_18, :ruby_18 do
+  gem 'fastercsv', '~> 1.5.4'
+end
 
 group :development, :test do
   platforms :jruby do

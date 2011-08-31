@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
   gem.add_dependency 'builder', '~> 3.0.0'
   gem.add_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
-  gem.add_dependency 'rails', '~> 3.1.0.rc6'
+  gem.add_dependency 'rails', '~> 3.1.0'
   gem.add_development_dependency 'capybara', '~> 1.0'
   gem.add_development_dependency 'launchy', '~> 2.0'
   gem.add_development_dependency 'devise', '~> 1.4'
