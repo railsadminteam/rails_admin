@@ -1,7 +1,7 @@
 # RailsAdmin
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
+[![Build Status](https://travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
 
 RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
@@ -1424,19 +1424,19 @@ Or even scope it like this:
 
 ## <a name="authorization">Authorization</a>
 
-`:attr_accessible` and `:attr_blacklisted` are taken into account: restricted fields are not editable (read_only). 
+`:attr_accessible` and `:attr_blacklisted` are taken into account: restricted fields are not editable (read_only).
 If you whitelist attributes, don't forget to whitelist accessible associations' 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
 :attr_accessible specifies a list of accessible methods for mass-assignment in your ActiveModel models. By default, RailsAdmin uses role :default (default in ActiveModel).
 If the role you specify isn't used in your whitelist declarations, you'll free access to all attributes.
 Keep in mind that `'key' != :key`
-You can change role with a block evaluated in the context of the controller (you'll have access to view and _current_user) : 
+You can change role with a block evaluated in the context of the controller (you'll have access to view and _current_user) :
 
     RailsAdmin.config do |config|
       config.attr_accessible_role do
         _current_user.roles.first
       end
     end
-    
+
 If you don't want read_only fields to be visible in your forms:
 
     RailsAdmin.config do |c|
@@ -1444,7 +1444,7 @@ If you don't want read_only fields to be visible in your forms:
       c.models do
         edit do
           fields do
-            visible do 
+            visible do
               visible && !read_only
             end
           end
