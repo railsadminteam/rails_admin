@@ -1,7 +1,7 @@
 class CreateRailsAdminHistoriesTable < ActiveRecord::Migration
    def self.up
      create_table :rails_admin_histories do |t|
-       t.string :message # title, name, or object_id
+       t.text :message # title, name, or object_id
        t.string :username
        t.integer :item
        t.string :table
