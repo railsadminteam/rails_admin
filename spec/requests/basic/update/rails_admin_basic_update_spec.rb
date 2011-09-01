@@ -91,7 +91,7 @@ describe "RailsAdmin Basic Update" do
   describe "update with has-many association", :given => ["a league exists", "three teams exist"] do
     before(:each) do
       @league = FactoryGirl.create :league
-      @divisions = 3.times.map { FactoryGirl.create :division }
+      @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
 
       visit edit_path(:model_name => "league", :id => @league.id)
 

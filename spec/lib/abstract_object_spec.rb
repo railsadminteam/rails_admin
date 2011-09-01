@@ -62,7 +62,7 @@ describe "AbstractObject" do
       let(:object) { RailsAdmin::AbstractObject.new league }
       let(:name) { "Awesome League" }
       let(:teams) { [Factory(:team)] }
-      let(:divisions) { [Factory(:division), Factory(:division)] }
+      let(:divisions) { [Division.create!(:name => 'div 1', :league => League.create!(:name => 'north')), Division.create!(:name => 'div 2', :league => League.create!(:name => 'south'))] }
 
       before do
         object.set_attributes({ :name  => name, :division_ids => divisions.map(&:id) })

@@ -27,7 +27,7 @@ describe "RailsAdmin Basic Delete" do
 
   describe "delete with missing label" do
     it "should respond successfully" do
-      @division = FactoryGirl.create :division
+      @division = Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}"))
       @team = FactoryGirl.create :team, :name => "", :division => @division
       visit delete_path(:model_name => "division", :id => @division.id)
     end

@@ -84,7 +84,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with has-many association" do
     before(:each) do
-      @divisions = 3.times.map { FactoryGirl.create :division }
+      @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
 
       visit new_path(:model_name => "league")
 
