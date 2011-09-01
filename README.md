@@ -196,6 +196,14 @@ to override the default with a Member model run:
 
     $ rake rails_admin:install model_name=member
 
+Then update the current_user method in your config file:
+
+    RailsAdmin.config do |config|
+      config.current_user_method do
+        current_member
+      end
+    end
+
 To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.com/galetahub/ckeditor) to your Gemfile (`gem 'ckeditor'`) and follow [Rails-CKEditor](https://github.com/galetahub/ckeditor) installation instructions.
 
 You can configure more options of CKEditor "config.js" file following the [Api Documentation](http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html) .
