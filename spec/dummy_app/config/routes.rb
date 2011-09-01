@@ -5,5 +5,4 @@ DummyApp::Application.routes.draw do
 
   # https://github.com/sferik/rails_admin/issues/362
   match ':controller(/:action(/:id(.:format)))'
-
 end

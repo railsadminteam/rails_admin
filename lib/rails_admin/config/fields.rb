@@ -27,7 +27,6 @@ module RailsAdmin
             field.hide
             field.filterable(false) # filtering is handled on the association itself
           end
-
         end
       end
 

@@ -113,9 +113,6 @@ exist anymore.
 `RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
 `RailsAdmin::Config.default_items_per_page`.
 
-`RailsAdmin::Config::Sections::Export.default_hidden_fields` has been moved to
-`RailsAdmin::Config.default_hidden_fields_for_export`.
-
 `RailsAdmin::Config::Sections::Update.default_hidden_fields` has been moved to
 `RailsAdmin::Config.default_hidden_fields`, it now affects show, create and
 update views.
@@ -173,7 +170,6 @@ issue](https://github.com/sferik/rails_admin#issues).
 In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
-    gem 'devise' # Devise must be required before RailsAdmin
     gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 
 Run:
@@ -182,30 +178,16 @@ Run:
 
 And then run:
 
-    $ rake rails_admin:install
+    $ rails g rails_admin:install
 
-This task will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
+This generator will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
 recommended to protect your data from anonymous users.
-It will also modify your `config/routes.rb`, adding:
+It will modify your `config/routes.rb`, adding:
 
     mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
-You are free to change `/admin` to any location you want.
-
-If you plan to use Devise, but want to use a custom model for authentication
-(default is User) you can provide that as an argument for the installer. For example
-to override the default with a Member model run:
-
-    $ rake rails_admin:install model_name=member
-
-Then update the current_user method in your config file:
-
-    RailsAdmin.config do |config|
-      config.current_user_method do
-        current_member
-      end
-    end
+And add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
 
 To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.com/galetahub/ckeditor) to your Gemfile (`gem 'ckeditor'`) and follow [Rails-CKEditor](https://github.com/galetahub/ckeditor) installation instructions.
 
@@ -526,7 +508,7 @@ Belongs_to associations :
           field :name do # (2)
             sortable :last_name # imagine there is a :last_name column and that :name is virtual
           end
-          field :team_id do # (3)
+          field :team do # (3)
             # Will order by players playing with the best teams,
             # rather than the team name (by default),
             # or the team id (dull but default if object_label is not a column name)
@@ -595,7 +577,7 @@ Belongs_to associations :
             searchable [:first_name, :last_name]
           end
 
-          field :team_id do # (4)
+          field :team do # (4)
             searchable [:name, :id]
             # eq. to [Team => :name, Team => :id]
             # or even [:name, Player => :team_id] will search on teams.name and players.team_id
@@ -1435,16 +1417,16 @@ Or even scope it like this:
 
 ## <a name="authorization">Authorization</a>
 
-`:attr_accessible` and `:attr_blacklisted` are taken into account: restricted fields are not editable (read_only).
+`:attr_accessible` and `:attr_protected` are taken into account: restricted fields are not editable (read_only).
 If you whitelist attributes, don't forget to whitelist accessible associations' 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
-:attr_accessible specifies a list of accessible methods for mass-assignment in your ActiveModel models. By default, RailsAdmin uses role :default (default in ActiveModel).
+`:attr_accessible` specifies a list of accessible methods for mass-assignment in your ActiveModel models. By default, RailsAdmin uses role `:default` (default in ActiveModel).
 If the role you specify isn't used in your whitelist declarations, you'll free access to all attributes.
 Keep in mind that `'key' != :key`
-You can change role with a block evaluated in the context of the controller (you'll have access to view and _current_user) :
+You can change role with a block evaluated in the context of the controller (you'll have access to the view and your current_user) :
 
     RailsAdmin.config do |config|
       config.attr_accessible_role do
-        _current_user.roles.first
+        current_user.roles.first
       end
     end
 

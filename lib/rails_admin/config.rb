@@ -64,9 +64,6 @@ module RailsAdmin
       # Fields to be hidden in show, create and update views
       attr_accessor :default_hidden_fields
 
-      # Fields to be hidden in export views
-      attr_accessor :default_hidden_fields_for_export
-
       # Default items per page value used if a model level option has not
       # been configured
       attr_accessor :default_items_per_page
@@ -262,13 +259,12 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset
-        @reload_between_requests = true
+        @reload_between_requests = false
         @compact_show_view = true
         @authenticate = nil
         @authorize = nil
         @current_user = nil
         @default_hidden_fields = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
-        @default_hidden_fields_for_export = []
         @default_items_per_page = 20
         @default_search_operator = 'default'
         @excluded_models = []
