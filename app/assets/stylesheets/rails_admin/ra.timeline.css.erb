@@ -18,12 +18,12 @@
 
 .ra-timeline .previous {
   left: 0px;
-  background-image: url("<%= image_path('rails_admin/timeline/arrow_left.png') %>");
+  background-image: url(<%= asset_path('rails_admin/timeline/arrow_left.png') %>);
 }
 
 .ra-timeline .next {
   right: 0px;
-  background-image: url("<%= image_path('rails_admin/timeline/arrow_right.png') %>");
+  background-image: url(<%= asset_path('rails_admin/timeline/arrow_right.png') %>);
 }
 
 .ra-timeline .handle {
@@ -31,7 +31,7 @@
   height: 99px;
   position: absolute;
   top: -13px;
-  background-image: url("<%= image_path('rails_admin/timeline/handler.png') %>");
+  background-image: url(<%= asset_path('rails_admin/timeline/handler.png') %>);
 }
 
 .ra-timeline ul {
