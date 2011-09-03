@@ -1,39 +1,18 @@
-@charset "UTF-8";
 /*  Activo's main stylesheet (alpha version!)
  *
- *  David Marquês Francisco
+ *  David Francisco
  *  (dfrancisc[at]gmail.com)
  *
  */
 /*  Cross-browser mixins
  *
- *  David Marquês Francisco
+ *  David Francisco
  *  (dfrancisc[at]gmail.com)
  *
  */
-/*    Components included in this stylesheet that
- *    don't exist in other web-app-theme themes
- *    ------------------------------------------------
+/*
+ * See http://activo.dmfranc.com/ for more.
  *
- *    #full-main (ocupa os 100% de width para
- *      páginas que não têm barra lateral)
- *    .flash .error-list
- *    #sidebar .warning
- *    .breadcrumb
- *    .searchform
- *    a.global_button (não está a ser utilizado
- *      mas pode ser útil. São botões que ficam
- *      na barra de separadores)
- *    .block-norounded (blocos sem as pontas
- *      arredondadas)
- *    .secondary-inner-nav (navegação sem as
- *      pontas arredondadas para blocos
- *      interiores)
- *    div.tooltip (reimplementa o aspecto das
- *      tooltips que mostram o 'title' das
- *      imagens)
- *    .highlighted-title-info (informação
- *      adicional para títulos)
  */
 body {
   color: #111111;
@@ -496,7 +475,7 @@ a.button, button.button {
     background: #edeeed url(<%= asset_path('rails_admin/theme/activo/images/button-background.png') %>) top; }
 
 a.button:active, button.button:active {
-  /* quando se clica no botão */
+  /* When you click the button */
   background: #eaeaea url(<%= asset_path('rails_admin/theme/activo/images/button-background-active.png') %>) top;
   outline: none;
   margin-top: 1px;
