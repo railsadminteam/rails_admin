@@ -208,10 +208,10 @@ module RailsAdmin
     # Creative whitespace:
     ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
-      :delete        => ViewType.new(:edit,      :object, :delete),
-      :history       => ViewType.new(:edit,      :object, nil,            :history_object),
-      :show          => ViewType.new(:list,      :object, nil),
+      :delete        => ViewType.new(:show,      :object, :delete),
+      :history       => ViewType.new(:show,      :object, nil,            :history_object),
       :edit          => ViewType.new(:show,      :object, :edit),
+      :show          => ViewType.new(:list,      :object, nil),
       :export        => ViewType.new(:list,      :model,  :export),
       :bulk_destroy  => ViewType.new(:list,      :model,  :delete),
       :new           => ViewType.new(:list,      :model,  :new),
