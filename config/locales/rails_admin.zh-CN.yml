@@ -12,6 +12,7 @@ zh-CN:
       add_new: "添加"
       show: "查看"
       ago: "以前"
+      navigation: "导航"
     history:
       name: "历史"
       page_name: "%{name}的历史"
