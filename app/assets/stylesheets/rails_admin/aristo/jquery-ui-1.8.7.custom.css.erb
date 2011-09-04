@@ -141,14 +141,14 @@
 ----------------------------------*/
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_222222_256x240.png') %>"); }
-.ui-widget-content .ui-icon {background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_222222_256x240.png') %>"); }
-.ui-widget-header .ui-icon {background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_222222_256x240.png') %>"); }
-.ui-state-default .ui-icon { background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>"); }
-.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>"); }
-.ui-state-active .ui-icon {background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>"); }
-.ui-state-highlight .ui-icon {background-image: url("<%= image_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>"); }
-.ui-state-error .ui-icon, .ui-state-error-text .ui-icon { background: url("<%= image_path('rails_admin/aristo/images/icon_sprite.png') %>") -16px 0 no-repeat !important; }
+.ui-icon { width: 16px; height: 16px; background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_222222_256x240.png') %>); }
+.ui-widget-content .ui-icon {background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_222222_256x240.png') %>); }
+.ui-widget-header .ui-icon {background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_222222_256x240.png') %>); }
+.ui-state-default .ui-icon { background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>); }
+.ui-state-active .ui-icon {background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>); }
+.ui-state-highlight .ui-icon {background-image: url(<%= asset_path('rails_admin/aristo/images/ui-icons_454545_256x240.png') %>); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon { background: url(<%= asset_path('rails_admin/aristo/images/icon_sprite.png') %>) -16px 0 no-repeat !important; }
 .ui-state-highlight .ui-icon, .ui-state-error .ui-icon { margin-top: -1px; }
 
 /* positioning */
@@ -273,7 +273,7 @@
 .ui-icon-video { background-position: -224px -128px; }
 .ui-icon-script { background-position: -240px -128px; }
 .ui-icon-alert { background-position: 0 -144px; }
-.ui-icon-info { background: url("<%= image_path('rails_admin/aristo/images/icon_sprite.png') %>") 0 0 no-repeat !important; }
+.ui-icon-info { background: url(<%= asset_path('rails_admin/aristo/images/icon_sprite.png') %>) 0 0 no-repeat !important; }
 .ui-icon-notice { background-position: -32px -144px; }
 .ui-icon-help { background-position: -48px -144px; }
 .ui-icon-check { background-position: -64px -144px; }
@@ -487,7 +487,7 @@ button.ui-button-icons-only { width: 3.7em; }
 .ui-button.ui-state-focus {
 	outline: none;
 	color: #1c4257; border-color: #7096ab;
-	background: url("<%= 'rails_admin/aristo/images/bg_fallback.png' %>") 0 -50px repeat-x;
+	background: url(<%= asset_path 'rails_admin/aristo/images/bg_fallback.png' %>) 0 -50px repeat-x;
 	background: -webkit-gradient(
 		linear,
 		left bottom,
@@ -575,7 +575,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-dialog .ui-dialog-titlebar { padding: 0.7em 1em 0.6em 1em; position: relative; border: none; border-bottom: 1px solid #979797; -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;  }
 .ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; font-size: 14px; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .8em; top: 55%; width: 16px; margin: -10px 0 0 0; padding: 0; height: 16px; }
-.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; background: url("<%= image_path('rails_admin/aristo/images/icon_sprite.png') %>") 0 -16px no-repeat; }
+.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; background: url(<%= asset_path('rails_admin/aristo/images/icon_sprite.png') %>) 0 -16px no-repeat; }
 .ui-dialog .ui-dialog-titlebar-close:hover span { background-position: -16px -16px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; border: 0; }
 .ui-dialog .ui-dialog-content { position: relative; border: 0; padding: .5em 1em; background: none; overflow: auto; zoom: 1; }
@@ -595,7 +595,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  */
 .ui-slider { position: relative; text-align: left; background: #d7d7d7; z-index: 1; }
 .ui-slider { -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.5) inset; -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.5) inset; box-shadow: 0 1px 2px rgba(0,0,0,0.5) inset; }
-.ui-slider .ui-slider-handle { background: url("<%= image_path('rails_admin/aristo/images/slider_handles.png') %>") 0px -23px no-repeat; position: absolute; z-index: 2; width: 23px; height: 23px; cursor: default; border: none; outline: none; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
+.ui-slider .ui-slider-handle { background: url(<%= asset_path('rails_admin/aristo/images/slider_handles.png') %>) 0px -23px no-repeat; position: absolute; z-index: 2; width: 23px; height: 23px; cursor: default; border: none; outline: none; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
 .ui-slider  .ui-state-hover, .ui-slider  .ui-state-active { background-position: 0 0; }
 .ui-slider .ui-slider-range { background: #a3cae0; position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; background-position: 0 0; }
 .ui-slider .ui-slider-range { -moz-box-shadow: 0 1px 2px rgba(17,35,45,0.6) inset; -webkit-box-shadow: 0 1px 2px rgba(17,35,45,0.6) inset; box-shadow: 0 1px 2px rgba(17,35,45,0.6) inset; }
@@ -663,7 +663,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-datepicker .ui-datepicker-next span { background-position: -16px -32px !important; }
 .ui-datepicker .ui-datepicker-prev-hover span { background-position: 0px -48px !important; }
 .ui-datepicker .ui-datepicker-next-hover span { background-position: -16px -48px !important; }
-.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url("<%= 'rails_admin/aristo/images/icon_sprite.png' %>") no-repeat; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(<%= asset_path 'rails_admin/aristo/images/icon_sprite.png' %>) no-repeat; }
 .ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; font-size: 12px; text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
 .ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
 .ui-datepicker select.ui-datepicker-month-year {width: 100%;}
@@ -754,8 +754,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  *
  * http://docs.jquery.com/UI/Progressbar#theming
  */
-.ui-progressbar { height: 12px; text-align: left; background: #FFF url("<%= 'rails_admin/aristo/images/progress_bar.gif' %>") 0 -14px repeat-x; }
-.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; background: url("<%= 'rails_admin/aristo/images/progress_bar.gif' %>") 0 0 repeat-x; }
+.ui-progressbar { height: 12px; text-align: left; background: #FFF url(<%= asset_path 'rails_admin/aristo/images/progress_bar.gif' %>) 0 -14px repeat-x; }
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; background: url(<%= asset_path 'rails_admin/aristo/images/progress_bar.gif' %>) 0 0 repeat-x; }
 
 /* Extra Input Field Styling */
 .ui-form textarea, .ui-form input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]) {

@@ -90,11 +90,11 @@ form .field>label, form .field>.field_with_errors>label {
 }
 
 .field .date, .field .datetime, .field .hasDatepicker {
-  background: url("<%= image_path('rails_admin/calendar.png') %>") no-repeat right;
+  background: url(<%= asset_path('rails_admin/calendar.png') %>) no-repeat right;
 }
 
 .field .time, .field .timestamp, .field .hasTimepicker {
-  background: url("<%= image_path('rails_admin/clock.png') %>") no-repeat right;
+  background: url(<%= asset_path('rails_admin/clock.png') %>) no-repeat right;
 }
 
 .field .integer {
