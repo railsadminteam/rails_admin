@@ -71,7 +71,7 @@ module RailsAdmin
       max_sets = sets.size-2
       total = current_set.between?(1, max_sets) ?  704 : total
       column_offset = total-sets[current_set][:size]
-      per_property = column_offset/properties.size
+      per_property = properties.size != 0 ? column_offset / properties.size : 0
       offset = column_offset - per_property * properties.size
 
       properties.each do |property|
