@@ -1,8 +1,7 @@
 #block-tables.block
   = breadcrumbs_for :bulk_destroy, @abstract_model
-
-  .content I18n.t('admin.delete.delete_confirmation')
-    %h2.title I18n.t('admin.delete.bulk_delete')
+  .content
+    %h2.title= I18n.t('admin.delete.delete_confirmation')
     .inner
       = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
       %p= I18n.t('admin.delete.bulk_delete')
