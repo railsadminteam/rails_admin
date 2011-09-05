@@ -4,6 +4,6 @@
   #user-navigation
     %ul.wat-cf
       %li= link_to header_icon(:config, t('admin.dashboard.name')), dashboard_path
-      %li= link_to header_icon(:home, t('home.name').capitalize), (root_path rescue '/')
+      %li= link_to header_icon(:home, t('home.name').capitalize), (main_app.root_path rescue '/')
       %li= link_to header_icon(:account, _current_user.email), (edit_path(:user, _current_user) rescue '#') if authorized?(:edit, nil, _current_user)
-      %li= link_to header_icon(:logout, t("admin.credentials.log_out")), (destroy_user_session_path rescue '/users/sign_out'), :method => (Devise.sign_out_via rescue :delete)
+      %li= link_to header_icon(:logout, t("admin.credentials.log_out")), (main_app.destroy_user_session_path rescue 'users/sign_out'), :method => (Devise.sign_out_via rescue :delete)
