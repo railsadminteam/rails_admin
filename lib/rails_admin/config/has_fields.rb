@@ -13,7 +13,7 @@ module RailsAdmin
         # Specify field as virtual if type is not specifically set and field was not
         # found in default stack
         if field.nil? && type.nil?
-          field = (@fields << RailsAdmin::Config::Fields::Types.load(:virtual).new(self, name, {})).last
+          field = (@fields << RailsAdmin::Config::Fields::Types.load(:string).new(self, name, {})).last
 
         # Register a custom field type if one is provided and it is different from
         # one found in default stack

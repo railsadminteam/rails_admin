@@ -725,9 +725,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     it "should show input with class color" do
       RailsAdmin.config Team do
         edit do
-          field :color do
-            color true
-          end
+          field :color, :color
         end
       end
       visit new_path(:model_name => "team")

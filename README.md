@@ -32,6 +32,9 @@ Supported ORMs:
 
 ## <a name="notices">Notices</a>
 
+`Virtual` Class is no more. :( 
+Just use `String` instead, or another type. There is a `virtual?` method on `Fields::Base`, that can be used to detect whereas field has properties.
+
 `:attr_accessible` is now taken into account: restricted fields are not editable anymore, and mass-assignement security isn't bypassed anymore. Be careful if you whitelist attributes, you'll need to whitelist association 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
 
 Default scopes are now fully *active* in list views (ordering is overriden, obvisously) as they used to a while ago. This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If you don't want some default scopes in RailsAdmin, either move your scoping rules to cancan, or activate your default scope conditionnaly on user/url prefix.
@@ -1099,7 +1102,6 @@ RailsAdmin ships with the following field types:
 * text
 * time
 * timestamp
-* virtual *(useful for displaying data that is calculated a runtime [for example a method call on model instance])*
 
 **Fields - Creating a custom field type**
 

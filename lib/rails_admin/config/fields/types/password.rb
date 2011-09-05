@@ -1,12 +1,12 @@
 require 'rails_admin/config/fields'
 require 'rails_admin/config/sections/list'
-require 'rails_admin/config/fields/types/virtual'
+require 'rails_admin/config/fields/types/string'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Password < RailsAdmin::Config::Fields::Types::Virtual
+        class Password < RailsAdmin::Config::Fields::Types::String
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
