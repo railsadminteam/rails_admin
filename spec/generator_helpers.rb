@@ -1,24 +1,30 @@
 module GeneratorHelpers
 
-  ['devise', 'rails_admin'].each do |name|
-    define_method("create_#{name}_initializer".to_sym) { FileUtils.touch File.join(destination_root, 'config', 'initializers', "#{name}.rb") }
-  end
-
-  def create_rails_folder_structure
-    config_path = File.join(destination_root, 'config')
-    FileUtils.mkdir config_path
-    FileUtils.mkdir File.join(config_path, 'initializers')
-    FileUtils.mkdir File.join(config_path, 'locales')
-  end
-
-  def create_routes_with_devise
+  def create_routes_file(devise_user = 'user', rails_admin_path = 'admin')
     File.open(File.join(destination_root, 'config', 'routes.rb'), 'w') do |f|
-      f.puts "DummyApp::Application.routes.draw do
-        devise_for :users
-        root :to => 'rails_admin::Main#index'
-      end
-"
+      f.puts "DummyApp::Application.routes.draw do"
+      f.puts "  devise_for :#{devise_user}s" if devise_user
+      f.puts "  mount RailsAdmin::Engine => '/#{rails_admin_path}', :as => 'rails_admin'" if rails_admin_path
+      f.puts "  root :to => '/'"
+      f.puts "end"
     end
   end
-
+  
+  def create_config_file(devise_user = 'user')
+    File.open(File.join(destination_root, 'config', 'initializers', 'rails_admin.rb'), 'w') do |f|
+      f.puts %{
+        RailsAdmin.config do |config|
+          config.current_user_method { current_#{devise_user} }
+        end
+      }
+    end
+  end
+  
+  def has_route?(route)
+    File.open(File.join(destination_root, 'config', 'routes.rb')).read.index(route)
+  end
+  
+  def has_config?(config)
+    File.open(File.join(destination_root, 'config', 'initializers', 'rails_admin.rb')).read.index(config)
+  end
 end

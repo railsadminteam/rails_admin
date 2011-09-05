@@ -19,9 +19,6 @@ module RailsAdmin
           FileUtils.rm(target) if File.exists? target
         end
 
-        puts "Uninstalling gem"
-        `gem uninstall rails_admin`
-
         gem_file = Rails.root.join('Gemfile')
         if File.exists?(gem_file)
           puts "Removing rails_admin from Gemfile"
@@ -30,7 +27,7 @@ module RailsAdmin
           File.open(gem_file, "w") { |f| lines.each{|line| f.puts(line)} }
         end
 
-        puts "Done."
+        puts "Done. Sorry to see you go!\nYou can run 'rake db:migrate' to get rid of rails_admin table.\nDevise was left untouched.\nBye!"
       end
     end
   end
