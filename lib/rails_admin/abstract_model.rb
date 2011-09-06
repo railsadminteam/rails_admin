@@ -50,7 +50,7 @@ module RailsAdmin
 
     # Given a string +model_name+, finds the corresponding model class
     def self.lookup(model_name)
-      (model = model_name.constantize rescue nil) && model.is_a?(Class) && (superclasses(model).include?(ActiveRecord::Base) ? model : nil)
+      (model = model_name.constantize rescue nil) && model.is_a?(Class) && (superclasses(model).include?(ActiveRecord::Base) ? model : nil) || nil
     end
 
     def initialize(model)
