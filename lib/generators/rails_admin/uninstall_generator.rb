@@ -12,7 +12,7 @@ module RailsAdmin
 
     def uninstall
       display "Why you leaving so soon? :("
-      migration_template 'drop.rb', 'db/migrate/drop_rails_admin_histories.rb'
+      migration_template 'drop.rb', 'db/migrate/drop_rails_admin_histories_table.rb'
       remove_file 'config/initializers/rails_admin.rb'
       remove_file 'config/initializers/rails_admin.rb.example'
       gsub_file "config/routes.rb", /mount RailsAdmin::Engine => \'\/.+\', :as => \'rails_admin\'/, ''
