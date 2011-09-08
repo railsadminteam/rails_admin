@@ -22,7 +22,7 @@ describe 'RailsAdmin::UninstallGenerator' do
     
     
   it "creates migrations for droping histories table" do      
-    assert_migration 'db/migrate/drop_rails_admin_histories.rb'
+    assert_migration 'db/migrate/drop_rails_admin_histories_table.rb'
   end
 
   it "removes config file" do      
