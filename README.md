@@ -469,7 +469,7 @@ You can also configure it per model:
 
 By default, rows sorted by the field `id` in reverse order
 
-You can change default behavior with use two options: `sort_by` and `sort_reverse?`
+You can change default behavior with use two options: `sort_by` and `sort_reverse`
 
 **Default sorting - Configure globally**
 
