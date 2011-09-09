@@ -17,16 +17,6 @@ module RailsAdmin
             (o = value) && o.send(associated_model_config.object_label_method)
           end
 
-          # Accessor for whether this is field is required.  In this
-          # case the field is "virtual" to this table - it actually
-          # lives in the table on the "belongs_to" side of this
-          # relation.
-          #
-          # @see RailsAdmin::AbstractModel.properties
-          register_instance_option(:required?) do
-            false
-          end
-
           def selected_id
             value.try :id
           end

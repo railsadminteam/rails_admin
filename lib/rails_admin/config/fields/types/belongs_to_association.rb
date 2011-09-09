@@ -15,14 +15,8 @@ module RailsAdmin
 
           # we need to check for validation on field and association
           register_instance_option(:required?) do
-            # todo unify errors for the form (see redmine)
-            @required ||= begin
-              key_properties = abstract_model.properties.find{|p| p[:name] == method_name}
-              key_validators = abstract_model.model.validators_on(method_name)
-              validators = abstract_model.model.validators_on(name)
-              key_required_by_validator = key_validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && !v.options[:allow_nil])} && true || false
-              required_by_validator = validators.find{|v| (v.class == ActiveModel::Validations::PresenceValidator) || (v.class == ActiveModel::Validations::NumericalityValidator && !v.options[:allow_nil])} && true || false
-              key_properties && !key_properties[:nullable?] || key_required_by_validator || required_by_validator
+            @required ||= !!(abstract_model.model.validators_on(name) + abstract_model.model.validators_on(method_name)).find do |v|
+              v.is_a?(ActiveModel::Validations::PresenceValidator) || !v.options[:allow_nil]
             end
           end
 
