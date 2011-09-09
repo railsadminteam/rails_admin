@@ -1,5 +1,5 @@
-class Cms::BasicPage < ActiveRecord::Base
-
-  validates :title, :content, :presence => true
-
+module Cms
+  class BasicPage < ActiveRecord::Base
+    validates :title, :content, :presence => true
+  end
 end
