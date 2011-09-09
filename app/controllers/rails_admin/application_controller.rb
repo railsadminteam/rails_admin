@@ -4,6 +4,7 @@ module RailsAdmin
   class ApplicationController < ::ApplicationController
     newrelic_ignore if defined?(NewRelic)
 
+    before_filter :init_config
     before_filter :_authenticate!
     before_filter :_authorize!
     before_filter :set_plugin_name
@@ -30,6 +31,19 @@ module RailsAdmin
     end
 
     private
+
+    def init_config
+      if RailsAdmin.config.reload_between_requests
+        RailsAdmin.reset
+        RailsAdmin.module_eval{@initializers = []}
+        RailsAdmin.module_eval{@initialized = false}
+        RailsAdmin::AbstractModel.all_models = nil
+        RailsAdmin::AbstractModel.all_abstract_models = nil
+        load "#{Rails.root}/config/initializers/rails_admin.rb"
+      end
+
+      RailsAdmin.setup
+    end
 
     def _authenticate!
       instance_eval &RailsAdmin::Config.authenticate_with
