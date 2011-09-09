@@ -23,13 +23,18 @@ module RailsAdmin
           end
         end.flatten
         excluded_models = (RailsAdmin::Config.excluded_models.map(&:to_s) + ['RailsAdmin::History'])
-        (possible_models - excluded_models).uniq.sort{|x, y| x.to_s <=> y.to_s}.map{|model| lookup model }.compact
+        (possible_models - excluded_models).uniq.sort{|x, y| x.to_s <=> y.to_s}.map{|model| lookup(model) }.compact
       )
     end
 
     # Given a string +model_name+, finds the corresponding model class
     def self.lookup(model_name)
-      (model = model_name.constantize rescue nil) && model.is_a?(Class) && (superclasses(model).include?(ActiveRecord::Base) ? model : nil) || nil
+      begin
+        (model = model_name.constantize rescue nil) && model.is_a?(Class) && (superclasses(model).include?(ActiveRecord::Base) ? model : nil) || nil
+      rescue LoadError
+        Rails.logger.error "Error while loading '#{model_name}': #{$!}"
+        nil
+      end
     end
 
     def initialize(model)
