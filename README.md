@@ -256,6 +256,13 @@ If you don't want to reload RailsAdmin config at each requests in development mo
       config.reload_between_requests = false
     end
 
+If you want to use Google Analytics to track page views in your RailsAdmin
+installation:
+
+  RailsAdmin.config do |config|
+    config.google_analytics_id = 'UA-12345678-1' # Replace with your own code
+  end
+
 **Whitelist Approach**
 
 By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to

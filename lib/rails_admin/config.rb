@@ -80,6 +80,9 @@ module RailsAdmin
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
 
+      # Google analytics tracking code
+      attr_accessor :google_analytics_id
+
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #
