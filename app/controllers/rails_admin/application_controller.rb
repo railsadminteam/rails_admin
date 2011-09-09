@@ -48,7 +48,8 @@ module RailsAdmin
     end
     
     def set_plugin_name
-      @plugin_name = "RailsAdmin"
+      @plugin_name_array = [instance_eval(&RailsAdmin.config.main_app_name)].flatten
+      @plugin_name = @plugin_name_array.join(' ')
     end
 
     def not_found

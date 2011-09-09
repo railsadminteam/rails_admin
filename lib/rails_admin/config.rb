@@ -45,9 +45,12 @@ module RailsAdmin
         raise "See RailsAdmin::Config.current_user_method or setup Devise / Warden"
       end
     end
+  
 
     class << self
-
+      # Application title, can be an array of two elements
+      attr_accessor :main_app_name
+      
       # in development mode, setting this to true will make rails_admin reload the whole configuration at each request
       attr_accessor :reload_between_requests
 
@@ -119,7 +122,7 @@ module RailsAdmin
         @attr_accessible_role = blk if blk
         @attr_accessible_role || DEFAULT_ATTR_ACCESSIBLE_ROLE
       end
-
+      
       # Setup authorization to be run as a before filter
       # This is run inside the controller instance so you can setup any authorization you need to.
       #
@@ -271,6 +274,7 @@ module RailsAdmin
         @included_models = []
         @total_columns_width = 697
         @label_methods = [:name, :title]
+        @main_app_name = Proc.new { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
       end
 

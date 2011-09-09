@@ -1,10 +1,7 @@
-- if @abstract_model && @plugin_name
-  - content_for :title do
-    #{@abstract_model.pretty_name} | #{@plugin_name}
 !!! 5
 %html
   %head
-    %title= yield :title || "#{@page_name} | #{@plugin_name}"
+    %title= "#{@abstract_model.try(:pretty_name) || @page_name} | #{@plugin_name}"
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
     

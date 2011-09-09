@@ -1,4 +1,4 @@
 %h1.title
   = link_to dashboard_path do
-    %span.red Rails
-    %span.white Admin
+    %span.red= (@plugin_name_array[0] || 'Rails')
+    %span.white= (@plugin_name_array[1] || 'Admin')
