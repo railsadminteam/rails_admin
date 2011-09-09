@@ -60,10 +60,11 @@ describe "RailsAdmin" do
       should have_selector("select#comment_commentable_id")
     end
 
-    it "should be hidden in the owning end" do
+    it "should be visible in the owning end" do
       visit edit_path(:model_name => "team", :id => @team.id)
 
-      should have_no_selector("legend", :text => "Comments")
+      should have_selector("legend", :text => "Comments")
+      should have_selector("select#team_comment_ids")
     end
   end
 

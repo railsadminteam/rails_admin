@@ -93,7 +93,7 @@ RailsAdmin.config do |config|
   #   # Here goes your cross-section field configuration for ModelName.
   #   object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
   #   label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-  #   label_plural 'My models'      # Same plural
+  #   label_plural 'My models'      # Same, plural
   #   weight -1                     # Navigation priority. Bigger is higher.
   #   parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
   #   navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
@@ -129,15 +129,13 @@ RailsAdmin.config do |config|
 
 # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible.
 # There can be different reasons for that:
-#  - belongs_to _id and _type columns are hidden in favor of their associations
+#  - belongs_to _id and _type (polymorphic) columns are hidden in favor of their associations
 #  - associations are hidden if they have no matchable model found (model not included or non-existant)
 #  - they are part of a bigger plan in a plugin (Devise/Paperclip) and hidden by contract
 # Some fields may be hidden depending on the section, if they aren't deemed suitable for display or edition on that section
-#  - non-editable associations (polymorphic associations on the has_many/has_one side*) or columns (:id, :created_at, ..) in edit sections
-#  - has_many/has_one associations in list section*
+#  - non-editable columns (:id, :created_at, ..) in edit sections
+#  - has_many/has_one associations in list section (hidden by default for performance reasons)
 # Fields may also be marked as read_only (and thus not editable) if they are not mass-assignable by current_user
-
-# *may be supported in the future
 
   # config.model <%= abstract_model.model.model_name %> do
   #   # Found associations: 
