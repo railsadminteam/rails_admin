@@ -2,7 +2,7 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-[![Build Status](https://travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
+[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
 
 [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png?skin_name=chrome)](http://www.pledgie.com/campaigns/15917)
 
@@ -32,7 +32,7 @@ Supported ORMs:
 
 ## <a name="notices">Notices</a>
 
-`Virtual` Class is no more. :( 
+`Virtual` Class is no more. :(
 Just use `String` instead, or another type. There is a `virtual?` method on `Fields::Base`, that can be used to detect whereas field has properties.
 
 `:attr_accessible` is now taken into account: restricted fields are not editable anymore, and mass-assignement security isn't bypassed anymore. Be careful if you whitelist attributes, you'll need to whitelist association 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
@@ -469,7 +469,7 @@ You can also configure it per model:
 
 By default, rows sorted by the field `id` in reverse order
 
-You can change default behavior with use two options: `sort_by` and `sort_reverse?`
+You can change default behavior with use two options: `sort_by` and `sort_reverse`
 
 **Default sorting - Configure globally**
 

@@ -16,10 +16,15 @@ nb:
       add_new: "Legge til ny"
       show: "Vise"
       ago: "siden"
+      navigation: "Navigasjon"
     history:
       name: "Historikk"
       page_name: "Historikk for %{name}"
       no_activity: "Ingen aktivitet"
+    show:
+      show_in_app: "Vis i app"
+      page_name: "Detaljer for %{name}"
+      no_file_found: "Fil ikke funnet"
     credentials:
       log_out: "Logg ut"
     list:
@@ -33,6 +38,7 @@ nb:
       search: "Søk"
       select: "Velg %{name} for redigering"
       show_all: "Vis alle"
+      add_filter: "Legg til filter"
     new:
       basic_info: "Grunnleggende info"
       required: "Påkrevd"
@@ -50,8 +56,10 @@ nb:
       save_and_edit: "Lagre og fortsett redigering"
       cancel: "Avbryt"
     delete:
-      flash_confirmation: "%{name} er nå slettet"
+      all_of_the_following_related_items_will_be_deleted: "? De følgende assosierte oppføringene kan bli slettet eller forlatt:"
+      are_you_sure_you_want_to_delete_the_object: "Er du sikker på at du vil slette denne %{model_name}"
       confirmation: "Ja, jeg er sikker"
+      delete_confirmation: "Bekreft sletting"
       bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Eksportér til %{name}"
@@ -84,3 +92,14 @@ nb:
       deleted: "slettet"
       export: "eksportere"
       exported: "eksportert"
+    breadcrumbs:
+      delete: "slette"
+      history: "historikk"
+      show: "vise"
+      edit: "redigere"
+      export: "eksportere"
+      bulk_destroy: "slette"
+      new: "ny"
+      model_history: "historikk"
+      list: "liste"
+      dashboard: "dashboard"
