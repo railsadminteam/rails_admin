@@ -14,10 +14,15 @@ ru:
       add_new: "Добавить"
       show: "Показать"
       ago: "назад"
+      navigation: "Навигация"
     history:
       name: "История"
       page_name: "История для %{name}"
       no_activity: "Без изменений"
+    show:
+      show_in_app: "Показать в приложении"
+      page_name: "Подробно о \"%{name}\""
+      no_file_found: "Файл не найден"
     credentials:
       log_out: "Выйти"
     list:
