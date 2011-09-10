@@ -9,6 +9,7 @@ module RailsAdmin
     before_filter :get_object, :only => [:show, :edit, :update, :delete, :destroy]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
+    before_filter :set_google_analytics
 
     def index
       @authorization_adapter.authorize(:index) if @authorization_adapter
@@ -539,6 +540,10 @@ module RailsAdmin
         end
       end
       associations
+    end
+    
+    def set_google_analytics
+      @google_analytics_id = RailsAdmin::Config.google_analytics_id
     end
   end
 end
