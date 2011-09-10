@@ -26,6 +26,7 @@ ru:
       select_action: "Выбрать"
       delete_selected: "Удалить выбранные"
       export_action: "Экспортировать данное представление"
+      show_action: "Показать"
       export_selected: "Эспортировать выделенное"
       add_new: "Добавить"
       search: "ПОИСК"
@@ -88,6 +89,7 @@ ru:
     breadcrumbs:
       delete: "удаление"
       history: "история"
+      show: "просмотр"
       edit: "редактирование"
       export: "экспорт"
       bulk_destroy: "удаление"
