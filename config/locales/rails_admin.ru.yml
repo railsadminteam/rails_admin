@@ -14,10 +14,15 @@ ru:
       add_new: "Добавить"
       show: "Показать"
       ago: "назад"
+      navigation: "Навигация"
     history:
       name: "История"
       page_name: "История для %{name}"
       no_activity: "Без изменений"
+    show:
+      show_in_app: "Показать в приложении"
+      page_name: "Подробно о \"%{name}\""
+      no_file_found: "Файл не найден"
     credentials:
       log_out: "Выйти"
     list:
@@ -26,6 +31,7 @@ ru:
       select_action: "Выбрать"
       delete_selected: "Удалить выбранные"
       export_action: "Экспортировать данное представление"
+      show_action: "Показать"
       export_selected: "Эспортировать выделенное"
       add_new: "Добавить"
       search: "ПОИСК"
@@ -88,6 +94,7 @@ ru:
     breadcrumbs:
       delete: "удаление"
       history: "история"
+      show: "просмотр"
       edit: "редактирование"
       export: "экспорт"
       bulk_destroy: "удаление"
