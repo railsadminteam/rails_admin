@@ -27,11 +27,10 @@ module RailsAdmin
       end
 
       def self.polymorphic_parents(name)
-
         @@polymorphic_parents ||= {}.tap do |hash|
           RailsAdmin::AbstractModel.all_models.each do |klass|
             klass.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
-              (hash[reflection.options[:as]] ||= []) << klass
+              (hash[reflection.options[:as].to_sym] ||= []) << klass
             end
           end
         end
