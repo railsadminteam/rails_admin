@@ -32,6 +32,10 @@ Supported ORMs:
 
 ## <a name="notices">Notices</a>
 
+`ActiveRecord#rails_admin` is no more :(
+Please move all remaining code from your models to rails_admin initializer, it won't be evaluated.
+Incidentally, `reload_between_requests` is also no longer in use.
+
 `Virtual` Class is no more. :(
 Just use `String` instead, or another type. There is a `virtual?` method on `Fields::Base`, that can be used to detect whereas field has properties.
 
@@ -248,12 +252,6 @@ You can customize the width of the list view with:
 
     RailsAdmin.config do |config|
       config.total_columns_width = 1000
-    end
-
-If you don't want to reload RailsAdmin config at each requests in development mode (it can get _very_ slow):
-
-    RailsAdmin.config do |config|
-      config.reload_between_requests = false
     end
 
 **Whitelist Approach**

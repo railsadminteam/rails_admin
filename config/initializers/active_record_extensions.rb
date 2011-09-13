@@ -1,7 +1,7 @@
 if defined?(::ActiveRecord)
   class ActiveRecord::Base
     def self.rails_admin(&block)
-      RailsAdmin::Config.model(self, &block)
+      ActiveSupport::Deprecation.warn("'#{self.name}.rails_admin { }' is deprecated, content is not evaluated anymore, use initializer instead", caller)
     end
 
     def rails_admin_default_object_label_method

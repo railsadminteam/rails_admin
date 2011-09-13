@@ -50,9 +50,6 @@ module RailsAdmin
     class << self
       # Application title, can be an array of two elements
       attr_accessor :main_app_name
-      
-      # in development mode, setting this to true will make rails_admin reload the whole configuration at each request
-      attr_accessor :reload_between_requests
 
       # Configuration option to specify which models you want to exclude.
       attr_accessor :excluded_models
@@ -200,7 +197,11 @@ module RailsAdmin
           raise ArgumentError, "Search operator '#{operator}' not supported"
         end
       end
-
+      
+      def reload_between_requests=(thingy)
+        ActiveSupport::Deprecation.warn("'#{self.name}.reload_between_requests=' is not in use any longer, please remove it from initialization files", caller)
+      end
+      
       # Shortcut to access the list section's class configuration
       # within a config DSL block
       #
@@ -262,7 +263,6 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset
-        @reload_between_requests = false
         @compact_show_view = true
         @authenticate = nil
         @authorize = nil

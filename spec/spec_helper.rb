@@ -60,7 +60,6 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.before(:each) do
-    RailsAdmin.setup
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
     RailsAdmin::AbstractModel.all_models = nil
     RailsAdmin::AbstractModel.all_abstract_models = nil
@@ -83,7 +82,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    RailsAdmin.test_reset!
+    RailsAdmin.reset
     Warden.test_reset!
   end
 end
