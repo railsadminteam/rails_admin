@@ -4,7 +4,8 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require ./jquery-1.5.1.js
+//= require ./jquery-1.6.2.js
+//= require ./jquery_ujs.js
 //= require ./jquery-ui-1.8.14.js
 //= require ./jquery.ui.timepicker.js
 //= require_tree ./activo
@@ -12,7 +13,6 @@
 //= require ./ra.filter-box.js
 //= require ./ra.filtering-multiselect.js
 //= require ./ra.filtering-select.js
-//= require ./rails.js
 //= require ./ra.remote-form.js
 //= require ./ra.timeline.js
 //= require ./jquery.colorpicker.js

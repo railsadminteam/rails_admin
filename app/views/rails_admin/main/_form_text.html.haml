@@ -8,7 +8,7 @@
   - head_javascript "/javascripts/ckeditor/ckeditor.js"
   - head_javascript do
     - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
-      alert("Install CKEditor using rake admin:ckeditor_download");
+      alert("Install CKEditor first");
     $j(document).ready(function($){
     CKEDITOR.replace('#{field.dom_id}',
     {

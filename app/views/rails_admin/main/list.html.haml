@@ -41,8 +41,8 @@
 - head_javascript do
   :plain
     $j(document).ready(function($) {
-      $(this).one("ajax:success", function(e, data, status, xhr) {
-        $("#content").html(data);
+      $('a, form').one('ajax:complete', function(xhr, data, status) {
+        $("#content").html(data.responseText);
       });
 
       #{@ordered_filter_string}

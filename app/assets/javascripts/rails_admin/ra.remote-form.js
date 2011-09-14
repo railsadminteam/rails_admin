@@ -86,9 +86,9 @@
 
       if (saveButtonText) {
         buttons[saveButtonText] = function() {
-          // We need to manually update CKeditor mapped textarea before ajax submit
           if(typeof CKEDITOR != 'undefined') {
             for ( instance in CKEDITOR.instances )
+              CKEDITOR.instances[instance].updateElement();
               CKEDITOR.instances[instance].destroy();
           }
           dialog.find("form").submit();
@@ -107,9 +107,10 @@
       if (0 == $("form > .navform :submit", dialog).length) {
         $("form > .navform", dialog).remove();
       }
-
-      form.bind("ajax:success", function(e, data, status, xhr) {
-        var json = $.parseJSON(data);
+      
+      
+      $('form').live("ajax:complete", function(xhr, data, status) {
+        var json = $.parseJSON(data.responseText);
         var select = widget.element.siblings('select');
         var input = widget.element.siblings('.ra-filtering-select-input');
         var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
@@ -136,7 +137,7 @@
         dialog.dialog("close");
       });
 
-      form.bind("ajax:error", function(e, xhr, status, error) {
+      $('form').live("ajax:error", function(e, xhr, status, error) {
         dialog.html(xhr.responseText);
         widget._bindFormEvents();
       });
