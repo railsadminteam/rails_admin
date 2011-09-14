@@ -1,17 +1,17 @@
 :ruby
   related_id = params[:associations] && params[:associations][field.name.to_s]
   config = field.associated_model_config
-  
+
   if @object.new_record? && related_id.present? && related_id != 'new'
     selected = [field.associated_model_config.abstract_model.get(related_id)]
   else
     selected = @object.send(field.name)
   end
   selected_ids = selected.map(&:id)
-  
+
   xhr = field.associated_collection_count > 100
-  
-  
+
+
   if xhr
     collection = selected.map do |o|
       [o.send(config.object_label_method), o.id]

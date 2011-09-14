@@ -60,7 +60,7 @@ module RailsAdmin
       end
       superclasses
     end
-    
+
     def self.lchomp(base, arg) # yeah.. delete was probably safe, but never know.
       base.to_s.reverse.chomp(arg.to_s.reverse).reverse
     end

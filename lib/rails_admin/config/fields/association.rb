@@ -34,13 +34,18 @@ module RailsAdmin
           false
         end
 
+        register_instance_option(:with_arguments) do
+          debugger
+          :with_arguments
+        end
+
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.
         register_instance_option(:visible?) do
           @visible ||= !self.associated_model_config.excluded?
         end
-        
+
         # use the association name as a key, not the association key anymore!
         register_instance_option(:label) do
           @label ||= abstract_model.model.human_attribute_name association[:name]
@@ -50,7 +55,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection(authorization_adapter)
           scope = authorization_adapter && authorization_adapter.query(:list, associated_model_config.abstract_model)
-          associated_model_config.abstract_model.all({}, scope).map do |object|
+          associated_model_config.abstract_model.all(with_arguments, scope).map do |object|
             [object.send(associated_model_config.object_label_method), object.id]
           end
         end
