@@ -284,11 +284,11 @@ input.checkbox {
   font-weight: bold;
 }
 
-.form div.fieldWithErrors label.label {
+.form div.field_with_errors label.label {
   display: inline;
 }
 
-.form .fieldWithErrors .error {
+.form .field_with_errors .error {
   color: red;
 }
 
