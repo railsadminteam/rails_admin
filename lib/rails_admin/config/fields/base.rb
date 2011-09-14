@@ -207,7 +207,7 @@ module RailsAdmin
 
         # Reader whether the bound object has validation errors
         def has_errors?
-          !(bindings[:object].errors[name].nil? || bindings[:object].errors[name].empty?)
+          errors.present?
         end
 
         # Reader whether field is optional.

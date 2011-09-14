@@ -1149,7 +1149,7 @@ Everything can be overridden with `help`:
 
       # handling delete in your model, if needed. Replace all image occurences with your asset name.
       attr_accessor :delete_image
-      before_save { self.image = nil if self.delete_image == '1' }
+      before_validation { self.image = nil if self.delete_image == '1' }
     end
 
 
