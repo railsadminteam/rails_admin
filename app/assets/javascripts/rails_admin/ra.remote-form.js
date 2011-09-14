@@ -89,7 +89,7 @@
           // We need to manually update CKeditor mapped textarea before ajax submit
           if(typeof CKEDITOR != 'undefined') {
             for ( instance in CKEDITOR.instances )
-              CKEDITOR.instances[instance].updateElement();
+              CKEDITOR.instances[instance].destroy();
           }
           dialog.find("form").submit();
         };
