@@ -18,7 +18,7 @@ module RailsAdmin
         possible_models = RailsAdmin::Config.included_models.map(&:to_s).presence || ([Rails.application] + Rails::Application::Railties.engines).map do |app|
           (app.paths['app/models'] + app.config.autoload_paths).map do |path|
             Dir.glob(app.root.join(path, "**/*.rb")).map do |filename|
-              lchomp(filename, "#{app.root.join(path)}/").chomp('.rb').classify  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+              lchomp(filename, "#{app.root.join(path)}/").chomp('.rb').camelize  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
             end
           end
         end.flatten
