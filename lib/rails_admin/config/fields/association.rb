@@ -26,17 +26,16 @@ module RailsAdmin
           end.to_sentence.html_safe
         end
 
+        register_instance_option(:retrieve_with_arguments) do
+          {}
+        end
+
         register_instance_option(:sortable) do
           false
         end
 
         register_instance_option(:searchable) do
           false
-        end
-
-        register_instance_option(:with_arguments) do
-          debugger
-          :with_arguments
         end
 
         # Accessor whether association is visible or not. By default
@@ -55,7 +54,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection(authorization_adapter)
           scope = authorization_adapter && authorization_adapter.query(:list, associated_model_config.abstract_model)
-          associated_model_config.abstract_model.all(with_arguments, scope).map do |object|
+          associated_model_config.abstract_model.all(retrieve_with_arguments, scope).map do |object|
             [object.send(associated_model_config.object_label_method), object.id]
           end
         end
