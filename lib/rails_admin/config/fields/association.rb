@@ -26,6 +26,8 @@ module RailsAdmin
           end.to_sentence.html_safe
         end
 
+        # Holds query arguments like :conditions, :order, :limit and
+        # pass into associated_collection reader
         register_instance_option(:retrieve_with_arguments) do
           {}
         end
