@@ -26,6 +26,12 @@ module RailsAdmin
           end.to_sentence.html_safe
         end
 
+        # Holds query arguments like :conditions, :order, :limit and
+        # pass into associated_collection reader
+        register_instance_option(:retrieve_with_arguments) do
+          {}
+        end
+
         register_instance_option(:sortable) do
           false
         end
@@ -40,7 +46,7 @@ module RailsAdmin
         register_instance_option(:visible?) do
           @visible ||= !self.associated_model_config.excluded?
         end
-        
+
         # use the association name as a key, not the association key anymore!
         register_instance_option(:label) do
           @label ||= abstract_model.model.human_attribute_name association[:name]
@@ -50,7 +56,7 @@ module RailsAdmin
         # [label, id] arrays.
         def associated_collection(authorization_adapter)
           scope = authorization_adapter && authorization_adapter.query(:list, associated_model_config.abstract_model)
-          associated_model_config.abstract_model.all({}, scope).map do |object|
+          associated_model_config.abstract_model.all(retrieve_with_arguments, scope).map do |object|
             [object.send(associated_model_config.object_label_method), object.id]
           end
         end
