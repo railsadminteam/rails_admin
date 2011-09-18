@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'paperclip', '~> 2.3'
   gem.add_development_dependency 'rspec-rails', '~> 2.6'
   gem.add_development_dependency 'simplecov', '~> 0.4'
-  gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kääpä"]
+  gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa"]
   gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
   gem.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
   gem.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
