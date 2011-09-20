@@ -39,7 +39,7 @@ end
 group :debug do
   platform :mri_18 do
     gem 'ruby-debug'
-    gem 'linecache'
+    gem 'linecache', '<= 0.45'
   end
 
   platform :mri_19 do
