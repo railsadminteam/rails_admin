@@ -8,7 +8,6 @@
 //= require ./jquery_ujs.js
 //= require ./jquery-ui-1.8.14.js
 //= require ./jquery.ui.timepicker.js
-//= require_tree ./activo
 //= require ./ra.datetimepicker.js
 //= require ./ra.filter-box.js
 //= require ./ra.filtering-multiselect.js
@@ -16,4 +15,11 @@
 //= require ./ra.remote-form.js
 //= require ./ra.timeline.js
 //= require ./jquery.colorpicker.js
+//= require ./bootstrap/bootstrap-alerts
+//= require ./bootstrap/bootstrap-dropdown
+//= require ./bootstrap/bootstrap-modal
+//= require ./bootstrap/bootstrap-twipsy
+//= require ./bootstrap/bootstrap-popover
+//= require ./bootstrap/bootstrap-scrollspy
+//= require ./bootstrap/bootstrap-tabs
 //= require ./application.js
