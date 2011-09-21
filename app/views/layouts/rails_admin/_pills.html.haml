@@ -1,0 +1,13 @@
+= breadcrumbs_for params[:action].to_sym, @abstract_model, @object
+- if ['show', 'edit', 'delete', 'for_object'].include?(params[:action])
+  %ul.pills
+    - if authorized? :show, @abstract_model, @object
+      %li{:class => ('active' if current_page?(:action => 'show', :controller => 'main'))}= link_to t("admin.list.show_action"), show_path(@abstract_model, @object.id)
+    - if authorized? :edit, @abstract_model, @object
+      %li{:class => ('active' if current_page?(:action => 'edit', :controller => 'main'))}= link_to t("admin.list.edit_action"), edit_path(@abstract_model, @object.id)
+    - if authorized? :delete, @abstract_model, @object
+      %li{:class => ('active' if current_page?(:action => 'delete', :controller => 'main'))}= link_to t("admin.list.delete_action"), delete_path(@abstract_model, @object.id)
+    - if authorized? :see_history, @abstract_model, @object
+      %li{:class => ('active' if current_page?(:action => 'for_object', :controller => 'history'))}= link_to t("admin.history.name"), history_object_path(:id => params[:id])
+    - if show_url = (main_app.url_for(@object) rescue nil)
+      %li=link_to(t("admin.show.show_in_app"), show_url)

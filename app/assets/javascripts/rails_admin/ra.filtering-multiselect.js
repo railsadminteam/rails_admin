@@ -41,13 +41,13 @@
     _build: function() {
       var i;
 
-      this.wrapper = $('<div class="input ra-multiselect">');
+      this.wrapper = $('<div class="ra-multiselect">');
 
       this.wrapper.insertAfter(this.element);
 
       this.header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
 
-      this.filter = $('<input type="text" class="ra-multiselect-search"/>');
+      this.filter = $('<input type="search" class="ra-multiselect-search"/>');
 
       this.header.append(this.filter)
                  .append('<div class="help"><strong>' + this.options.regional.chosen + '</strong><br />' + this.options.regional.selectChoice + '</div><div class="ui-icon ui-icon-circle-triangle-e"></div>');

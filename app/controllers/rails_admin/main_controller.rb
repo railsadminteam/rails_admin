@@ -196,7 +196,7 @@ module RailsAdmin
 
       if @object.destroy
         AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
-        flash[:notice] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
+        flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
       else
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
       end
@@ -225,12 +225,12 @@ module RailsAdmin
     end
 
     def bulk_action
-      redirect_to list_path, :notice => t("admin.flash.noaction") and return if params[:bulk_ids].blank?
+      redirect_to list_path, :flash => { :info => t("admin.flash.noaction") } and return if params[:bulk_ids].blank?
 
       case params[:bulk_action]
       when "delete" then bulk_delete
       when "export" then export
-      else redirect_to(list_path(:model_name => @abstract_model.to_param), :notice => t("admin.flash.noaction"))
+      else redirect_to(list_path(:model_name => @abstract_model.to_param), :flash => { :info => t("admin.flash.noaction") })
       end
     end
 
@@ -260,7 +260,7 @@ module RailsAdmin
       end
 
       unless destroyed.empty?
-        flash[:notice] = t("admin.flash.successful", :name => pluralize(destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
+        flash[:success] = t("admin.flash.successful", :name => pluralize(destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
       end
 
       unless not_destroyed.empty?
@@ -268,18 +268,6 @@ module RailsAdmin
       end
 
       redirect_to list_path
-    end
-
-    def handle_error(e)
-      if RailsAdmin::AuthenticationNotConfigured === e
-        Rails.logger.error e.message
-        Rails.logger.error e.backtrace.join("\n")
-
-        @error = e
-        render 'authentication_not_setup', :status => 401
-      else
-        super
-      end
     end
 
     private
@@ -480,11 +468,11 @@ module RailsAdmin
     def redirect_to_on_success
       notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{params[:action]}d"))
       if params[:_add_another]
-        redirect_to new_path, :notice => notice
+        redirect_to new_path, :flash => { :success => notice }
       elsif params[:_add_edit]
-        redirect_to edit_path(:id => @object.id), :notice => notice
+        redirect_to edit_path(:id => @object.id), :flash => { :success => notice }
       else
-        redirect_to list_path, :notice => notice
+        redirect_to list_path, :flash => { :success => notice }
       end
     end
 
@@ -501,7 +489,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      redirect_to list_path, :notice => t("admin.flash.noaction") if params[:_continue]
+      redirect_to list_path, :flash => { :success => t("admin.flash.noaction") } if params[:_continue]
     end
 
     def list_entries(other = {})

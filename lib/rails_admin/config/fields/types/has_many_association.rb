@@ -17,13 +17,6 @@ module RailsAdmin
             :form_filtering_multiselect
           end
 
-          register_instance_option(:html_attributes) do
-            {
-              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
-              :multiple => "multiple",
-            }
-          end
-
           # orderable associated objects
           register_instance_option(:orderable) do
             false

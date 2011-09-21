@@ -15,3 +15,6 @@ $j("table.table input.checkbox.toggle").live('click', function() {
     }
   });
 });
+
+
+$j(".alert-message").alert();

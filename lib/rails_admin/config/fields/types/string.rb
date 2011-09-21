@@ -12,11 +12,10 @@ module RailsAdmin
           
           register_instance_option(:html_attributes) do
             {
-              :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+              :class => css_class,
               :maxlength => length,
               :size => [50, length.to_i].min,
-              :style => "width:#{column_width}px",
-              :value => value,
+              :value => value
             }
            end
           

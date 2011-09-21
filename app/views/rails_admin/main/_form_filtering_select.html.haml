@@ -20,12 +20,11 @@
     collection = field.associated_collection(@authorization_adapter)
   end
 
-= field_wrapper_for(form, field) do
-  = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes
-  - if authorized? :new, config.abstract_model
-    - path_hash = { :model_name => config.abstract_model.to_param }
-    - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
-    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(path_hash), :class => "createAssociatedRecord"
+= form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes
+- if authorized? :new, config.abstract_model
+  - path_hash = { :model_name => config.abstract_model.to_param }
+  - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
+  = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(path_hash), :class => "createAssociatedRecord", :style => 'margin-left:10px'
 - head_javascript do
   $j(document).ready(function($){
   $("##{"#{field.dom_id}"}").filteringSelect({
@@ -35,9 +34,9 @@
     },
     source: "#{list_path(config.abstract_model.to_param, :compact => true)}"
   });
-  if($("div.createAssociatedRecordDialog").length == 0) {
-  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+  if($(".createAssociatedRecordDialog").length == 0) {
+  $("##{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
   } else { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-  $(".#{"#{field.dom_id}"} .createAssociatedRecord").hide();
+  $("##{field.dom_id}_field .createAssociatedRecord").hide();
   }
   });

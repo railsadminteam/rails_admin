@@ -143,7 +143,7 @@ module RailsAdmin
 
         register_instance_option(:html_attributes) do
           {
-            :class => "#{css_class} #{has_errors? ? "errorField" : nil}",
+            :class => css_class,
             :value => value
           }.merge(column_width.present? ? { :style => "width:#{column_width}px" } : {})
         end
@@ -207,6 +207,7 @@ module RailsAdmin
 
         # Reader whether the bound object has validation errors
         def has_errors?
+          # TODO DEPRECATE, USELESS
           errors.present?
         end
 

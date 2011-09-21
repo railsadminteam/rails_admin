@@ -1,2 +1,1 @@
-= field_wrapper_for(form, field) do
-  = form.send field.view_helper, field.name, field.html_attributes
+= form.send field.view_helper, field.method_name, field.html_attributes

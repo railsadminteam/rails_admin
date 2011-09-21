@@ -65,7 +65,7 @@
 
       $('#filters_box').append(
         '<div class="filter new" style="clear:both;">' +
-          '<div class="delete-box ui-state-default ui-corner-all"><span alt="delete" class="delete ui-icon ui-icon-trash" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]" style="cursor:pointer" title="delete"></span></div>' +
+          '<span alt="delete" class="btn small" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]" style="cursor:pointer" title="delete">x</span>' +
           '<label>' + field_label + '</label>' +
           control +
         '</div>'

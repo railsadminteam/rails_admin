@@ -1,20 +1,12 @@
-#block-tables.block
-  = breadcrumbs_for :bulk_destroy, @abstract_model
-  .content
-    %h2.title= I18n.t('admin.delete.delete_confirmation')
-    .inner
-      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      %p= I18n.t('admin.delete.bulk_delete')
-      %div{:style=>"padding-left:20px"}
-        = render :partial => "delete_notice", :collection => @bulk_objects
-      = form_tag bulk_destroy_path(:model_name => @abstract_model.to_param, :bulk_ids => @bulk_objects.map(&:id)) do
-        %br
-        %br
-        .group.navform.wat-cf
-          %button.button{:type => "submit"}
-            = image_tag "rails_admin/theme/activo/images/icons/cross.png", :alt => t("admin.delete.confirmation")
-            = t("admin.delete.confirmation")
+%p= I18n.t('admin.delete.bulk_delete')
+%div{:style=>"padding-left:20px"}
+  = render :partial => "delete_notice", :collection => @bulk_objects
+= form_tag bulk_destroy_path(:model_name => @abstract_model.to_param, :bulk_ids => @bulk_objects.map(&:id)) do
+  %br
+  %br
+  .actions
+    %button.btn.primary{:type => "submit"}
+      = t("admin.delete.confirmation")
 
-          %button.button{:type => "submit", :name => "_continue"}
-            = image_tag "rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
-            =t("admin.new.cancel")
+    %button.btn{:type => "submit", :name => "_continue"}
+      = t("admin.new.cancel")

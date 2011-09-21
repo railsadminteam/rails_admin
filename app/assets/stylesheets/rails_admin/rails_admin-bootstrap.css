@@ -1,0 +1,22 @@
+/* We want input size to be used, unfixate input width */
+input {
+  width:inherit;
+}
+
+/* ui-autocomplete has z-index 1 and is shown over filtering select button (.add-on) */
+.input-prepend .add-on, .input-append .add-on {
+  z-index:0;
+}
+
+/* small visual glitches fixes for date-picker */
+.ui-datepicker {
+  border-width:0px;
+}
+.ui-datepicker table {
+  margin:0px;
+}
+
+/* sidebar hack */
+.sidebar {
+  height:0;
+}

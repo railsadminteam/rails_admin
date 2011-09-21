@@ -57,101 +57,88 @@
 - delete_label  = t("admin.list.delete_action")
 - edit_label    = t("admin.list.edit_action")
 
-#block-tables.block
-  = breadcrumbs_for :list, @abstract_model
+%select#filter_select.small-uniform
+  %option{:value => ""}= t('admin.list.add_filter') + "..."
+  - @filterable_fields.each do |field|
+    - field_options = case field.type
+    - when :enum
+      - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
+    - else
+      - ''
+    %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
 
-  .content
-    .content-header
-      .control
-        %span(style="margin: 3px 6px")
-          %select#filter_select.small-uniform
-            %option{:value => ""}= t('admin.list.add_filter') + "..."
-            - @filterable_fields.each do |field|
-              - field_options = case field.type
-              - when :enum
-                - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
-              - else
-                - ''
-              %option{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
+- if can_create
+  = action_button new_path, t("admin.list.add_new"), :add
 
-        - if can_create
-          = action_button new_path, t("admin.list.add_new"), :add
+- if can_delete
+  = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
 
-        - if can_delete
-          = action_button '#', t("admin.list.delete_selected"), :cross, :onclick => "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;"
+= form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
+  %span.search
+    %input#search.search_box{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.list.search")}"}
+    %button.btn.primary.search_submit{:type => "submit", :value => ""}refresh
+#filters_box
 
-        = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
-          %span.search
-            %input#search.search_box{:name => "query", :type => "text", :value => query, :placeholder => "#{t("admin.list.search")}"}
-            %input.search_submit{:type => "submit", :value => ""}
-          #filters_box
-      %h2.title= @page_name
-    .inner
-      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
-        = hidden_field_tag :bulk_action
-        %table.table.grid
-          %thead
-            %tr
-              %th.first
-                - if can_bulk_action
-                  %input.checkbox.toggle{:type => "checkbox"}
-              %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
-              - properties.each do |property|
-                - property_name = property.name
-                - property_pretty_name = property.label
-                - selected = sort == property_name.to_s
-                %th{:class => "#{property.css_class} #{selected ? "selected" : nil}"}
-                  - if property.sortable
-                    - sort_location = list_path params.merge(:sort => property_name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
-                    - sort_direction = selected ? (sort_reverse == 'true' ? "ascending" : "descending") : nil
-                    = link_to(property_pretty_name, sort_location, :class => sort_direction, :remote => true)
-                  - else
-                    = property_pretty_name
-              %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
+= form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
+  = hidden_field_tag :bulk_action
+  %table.zebra-striped
+    %thead
+      %tr
+        %th.first
+          - if can_bulk_action
+            %input.checkbox.toggle{:type => "checkbox"}
+        %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
+        - properties.each do |property|
+          - property_name = property.name
+          - property_pretty_name = property.label
+          - selected = sort == property_name.to_s
+          %th{:class => "#{property.css_class} #{selected ? "selected" : nil}"}
+            - if property.sortable
+              - sort_location = list_path params.merge(:sort => property_name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
+              - sort_direction = selected ? (sort_reverse == 'true' ? "ascending" : "descending") : nil
+              = link_to(property_pretty_name, sort_location, :class => sort_direction, :remote => true)
+            - else
+              = property_pretty_name
+        %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
 
-              %th.last
+        %th.last
 
-          %tbody
-            - @objects.each do |object|
-              - can_show   = authorized? :show,   @abstract_model, object
-              - can_edit   = authorized? :edit,   @abstract_model, object
-              - can_delete = authorized? :delete, @abstract_model, object
-              - edit_path   = edit_path(  :model_name => @abstract_model.to_param, :id => object.id) if can_edit
-              - show_path   = show_path(  :model_name => @abstract_model.to_param, :id => object.id) if can_show
-              - delete_path = delete_path(:model_name => @abstract_model.to_param, :id => object.id) if can_delete
-              - row_class = cycle("odd", "even") + ((can_show || can_edit) ? ' link' : '')
+    %tbody
+      - @objects.each do |object|
+        - can_show   = authorized? :show,   @abstract_model, object
+        - can_edit   = authorized? :edit,   @abstract_model, object
+        - can_delete = authorized? :delete, @abstract_model, object
+        - edit_path   = edit_path(  :model_name => @abstract_model.to_param, :id => object.id) if can_edit
+        - show_path   = show_path(  :model_name => @abstract_model.to_param, :id => object.id) if can_show
+        - delete_path = delete_path(:model_name => @abstract_model.to_param, :id => object.id) if can_delete
+        - row_class = cycle("odd", "even") + ((can_show || can_edit) ? ' link' : '')
 
-              %tr{:class => row_class, :"data-link" => can_show && show_path || can_edit && edit_path || ''}
-                %td.action.select
-                  - if can_bulk_action
-                    = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
-                - other_left = list_path(params.merge(:set => (params[:set].to_i - 1)))
-                %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
-                - properties.map{ |property| property.bind(:object, object) }.each do |property|
-                  - value = property.pretty_value
-                  %td{:class => "#{property.css_class}", :title => strip_tags(value)}= value
-                - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
-                %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
-                %td.last
-                  = action_icon(show_path,   :show,  show_label)   if can_show
-                  = action_icon(edit_path,   :edit,  edit_label)   if can_edit
-                  = action_icon(delete_path, :cross, delete_label) if can_delete
-        .pagination
-          - if @page_count.to_i > 1
-            = paginate(@current_page, @page_count, :url => params).html_safe
-          - if @record_count.to_i <= 100 && @page_count.to_i > 1
-            = link_to(t("admin.list.show_all"), list_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
-        .left(style="white-space: nowrap; padding-top:0.7em;")
-          = @record_count
-          = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
+        %tr{:class => row_class, :"data-link" => can_show && show_path || can_edit && edit_path || ''}
+          %td.action.select
+            - if can_bulk_action
+              = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
+          - other_left = list_path(params.merge(:set => (params[:set].to_i - 1)))
+          %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
+          - properties.map{ |property| property.bind(:object, object) }.each do |property|
+            - value = property.pretty_value
+            %td{:class => "#{property.css_class}", :title => strip_tags(value)}= value
+          - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
+          %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
+          %td.last
+            = action_icon(show_path,   :show,  show_label)   if can_show
+            = action_icon(edit_path,   :edit,  edit_label)   if can_edit
+            = action_icon(delete_path, :cross, delete_label) if can_delete
+  .pagination
+    - if @page_count.to_i > 1
+      %ul= paginate(@current_page, @page_count, :url => params).html_safe
+    - if @record_count.to_i <= 100 && @page_count.to_i > 1
+      = link_to(t("admin.list.show_all"), list_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
+  .left(style="white-space: nowrap; padding-top:0.7em;")
+    = @record_count
+    = @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase)
 
-        .columns.wat-cf
-          .column.right
-            - if can_export
-              = action_button export_path(params.except("page")), t("admin.list.export_action"), :pdf, :method => :post
-              = action_button '#', t("admin.list.export_selected"), :pdf, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
-            - if can_see_history
-              = action_button history_model_path, t("admin.history.name"), :'calendar-hover'
-      .wat-cf
-      
+- if can_export
+  = action_button export_path(params.except("page")), t("admin.list.export_action"), :pdf, :method => :post
+  = action_button '#', t("admin.list.export_selected"), :pdf, :onclick => "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;"
+- if can_see_history
+  = action_button history_model_path, t("admin.history.name"), :'calendar-hover'

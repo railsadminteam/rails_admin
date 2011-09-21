@@ -1,23 +1,51 @@
 !!! 5
 %html
   %head
+  
     %title= "#{@abstract_model.try(:pretty_name) || @page_name} | #{@plugin_name}"
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
     
     = stylesheet_link_tag "rails_admin/rails_admin.css"
-
     = head_style
     = csrf_meta_tag
-  %body.rails_admin
-    #container
-      = render(:partial => 'layouts/rails_admin/header')
-      #wrapper.wat-cf
-        #main
-          #content= yield
-          #footer
-            %p Rails Admin | 2011
-        = render :partial => "layouts/rails_admin/sidebar"
+  
+  %body.rails_admin{:style => "padding-top: 60px;"}
+    
+    .topbar-wrapper{:style => "z-index: 5;"}
+      .topbar{:'data-dropdown' => 'dropdown'}
+        .topbar-inner
+          .container
+            %h3= render :partial => 'rails_admin/main/title'
+            %ul.nav.secondary-nav
+              %li= link_to header_icon(:config, t('admin.dashboard.name')), dashboard_path
+              - if main_app_root_path = (main_app.root_path rescue false)
+                %li= link_to header_icon(:home, t('home.name').capitalize), main_app_root_path
+              - if _current_user
+                - if authorized?(:edit, _current_user.class, _current_user)
+                  %li= link_to _current_user.email, edit_path(_current_user.class.name.underscore.pluralize, _current_user)
+                - if defined?(Devise)
+                  %li= link_to content_tag('span', t('admin.credentials.log_out'), :class => 'label important'), main_app.url_for(:action => 'destroy', :controller => 'devise/sessions'), :method => Devise.sign_out_via
+                  %li= image_tag "#{(request.ssl? ? "https://secure" : "http://www") + ".gravatar.com/avatar"}/#{Digest::MD5.hexdigest _current_user.email}?s=30", :style => 'padding-top:5px'
+
+    .container-fluid
+    
+      .sidebar
+        .well
+          %h3= t "admin.dashboard.navigation"
+          = render(:partial => 'rails_admin/main/navigation')
+      .content
+        .page-header
+          %h1= @page_name
+        - flash && flash.each do |key, value|
+          .alert-message.fade.in{:class => key}
+            %a.close{:href => '#'}×
+            %p=value
+        = render(:partial => 'layouts/rails_admin/pills')
+        = yield
+        
+        %footer
+          %p © RailsAdmin 2011
+    
     = javascript_include_tag "rails_admin/rails_admin.js"
     = head_javascript
-

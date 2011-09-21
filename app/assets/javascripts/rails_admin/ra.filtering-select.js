@@ -35,9 +35,8 @@
           return { label: $(this).text(), value: this.value };
         }).toArray();
       }
-
+      var input_append = $("<div class='input-append'></div>")
       var input = this.input = $("<input>")
-        .insertAfter(select)
         .val(value)
         .addClass("ra-filtering-select-input")
         .attr('style', select.attr('style'))
@@ -73,7 +72,6 @@
             }
           }
         })
-        .addClass("ui-widget ui-widget-content ui-corner-left");
 
       input.data("autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
@@ -82,10 +80,8 @@
           .appendTo(ul);
       };
 
-      this.button = $("<button type='button'>&nbsp;</button>")
-        .attr("tabIndex", -1)
+      var button = this.button = $("<label class='add-on'>&nbsp;</label>")
         .attr("title", "Show All Items")
-        .insertAfter(input)
         .button({
           icons: {
             primary: "ui-icon-triangle-1-s"
@@ -93,8 +89,6 @@
           text: false
         })
 
-        .removeClass("ui-corner-all")
-        .addClass("ra-filtering-select-button ui-corner-right")
         .click(function() {
           // close if already visible
           if (input.autocomplete("widget").is(":visible")) {
@@ -106,6 +100,10 @@
           input.autocomplete("search", "");
           input.focus();
         });
+      
+      input_append.append(input).append(button).insertAfter(select);
+      
+        
     },
 
     _getResultSet: function(request, data, xhr) {

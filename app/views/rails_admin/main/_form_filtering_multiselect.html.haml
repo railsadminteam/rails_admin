@@ -22,13 +22,12 @@
   end
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
 
-= field_wrapper_for(form, field) do
-  %input{:name => field.dom_name, :type => "hidden", :value => ""}
-  = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url})
-  - if authorized? :new, config.abstract_model
-    - path_hash = { :model_name => config.abstract_model.to_param }
-    - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
-    = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(path_hash), :class => "createAssociatedRecord"
+%input{:name => field.dom_name, :type => "hidden", :value => ""}
+= form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url})
+- if authorized? :new, config.abstract_model
+  - path_hash = { :model_name => config.abstract_model.to_param }
+  - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
+  = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(path_hash), :class => "createAssociatedRecord"
 - head_javascript do
   $j(document).ready(function($){
   $("##{field.dom_id}").filteringMultiselect({
@@ -48,9 +47,9 @@
   }
 
   });
-  if($("div.createAssociatedRecordDialog").length == 0) {
-  $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+  if($(".createAssociatedRecordDialog").length == 0) {
+  $("#{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
   } else { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-  $(".#{"#{field.dom_id}"} .createAssociatedRecord").hide();
+  $("#{field.dom_id}_field .createAssociatedRecord").hide();
   }
   });

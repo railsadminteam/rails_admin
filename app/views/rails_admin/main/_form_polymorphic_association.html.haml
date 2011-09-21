@@ -12,9 +12,8 @@
   selected = field.bindings[:object].send(field.association[:name])
   column_type_dom_id = field.dom_id.sub(field.method_name.to_s, type_column)
 
-= field_wrapper_for(form, field) do
-  = form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :class => (field.has_errors? && "errorField"), :id => column_type_dom_id                        
-  = form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :class => (field.has_errors? && "errorField"), :style => "margin-left:10px;"
+= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id                        
+= form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :style => "margin-left:10px;"
 
 - head_javascript do
   :plain

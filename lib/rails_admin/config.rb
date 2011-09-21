@@ -5,7 +5,6 @@ require 'active_support/core_ext/class/attribute_accessors'
 
 module RailsAdmin
   module Config
-    class AuthenticationNotConfigured < StandardError; end
     # RailsAdmin is setup to try and authenticate with warden
     # If warden is found, then it will try to authenticate
     #
@@ -21,14 +20,7 @@ module RailsAdmin
     # @see RailsAdmin::Config.authenticate_with
     # @see RailsAdmin::Config.authorize_with
     DEFAULT_AUTHENTICATION = Proc.new do
-      warden = request.env['warden']
-      if warden
-        warden.authenticate!
-      else
-        if %w(production beta uat staging).include?(Rails.env)
-          raise AuthenticationNotConfigured, "See RailsAdmin::Config.authenticate_with or setup Devise / Warden"
-        end
-      end
+      request.env['warden'].try(:authenticate!)
     end
     
     DEFAULT_ATTR_ACCESSIBLE_ROLE = Proc.new { :default }
@@ -36,14 +28,7 @@ module RailsAdmin
     DEFAULT_AUTHORIZE = Proc.new {}
 
     DEFAULT_CURRENT_USER = Proc.new do
-      warden = request.env["warden"]
-      if warden
-        warden.user
-      elsif respond_to?(:current_user)
-        current_user
-      else
-        raise "See RailsAdmin::Config.current_user_method or setup Devise / Warden"
-      end
+      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user || raise("See RailsAdmin::Config.current_user_method or setup Devise / Warden")
     end
   
 

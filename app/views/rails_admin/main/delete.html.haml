@@ -1,29 +1,16 @@
-#block-tables.block
-  = breadcrumbs_for :delete, @object
+%p
+  = t("admin.delete.are_you_sure_you_want_to_delete_the_object", :model_name => @abstract_model.pretty_name.downcase)
+  &ldquo;
+  %strong>= @model_config.with(:object => @object).object_label
+  \&rdquo;
+  %span>
+  = t("admin.delete.all_of_the_following_related_items_will_be_deleted")
 
-  .content
-    %h2.title= t("admin.delete.delete_confirmation")
-    .inner
-      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      %p
-        = t("admin.delete.are_you_sure_you_want_to_delete_the_object", :model_name => @abstract_model.pretty_name.downcase)
-        &ldquo;
-        %strong>= @model_config.with(:object => @object).object_label
-        \&rdquo;
-        %span>
-        = t("admin.delete.all_of_the_following_related_items_will_be_deleted")
+%div{:style=>"padding-left:20px"}= render :partial => "delete_notice", :object => @object
 
-      %div{:style=>"padding-left:20px"}= render :partial => "delete_notice", :object => @object
-
-      = form_for(@object, :url => destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
-
-        %br
-        %br
-        .group.navform.wat-cf
-          %button.button{:type => "submit"}
-            = image_tag "rails_admin/theme/activo/images/icons/cross.png", :alt => t("admin.delete.confirmation")
-            = t("admin.delete.confirmation")
-
-          %button.button{:type => "submit", :name => "_continue"}
-            = image_tag "rails_admin/theme/activo/images/icons/delete.png", :alt => t("admin.new.cancel")
-            = t("admin.new.cancel")
+= form_for(@object, :url => destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
+  .actions
+    %button.btn.primary{:type => "submit"}
+      = t("admin.delete.confirmation")
+    %button.btn{:type => "submit", :name => "_continue"}
+      = t("admin.new.cancel")

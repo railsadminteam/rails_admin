@@ -1,15 +1,12 @@
-:ruby
-  file = @object.send(field.method_name)
+- file = @object.send(field.method_name)
 
-= field_wrapper_for(form, field) do
-  .input
-    .toggle{:style => ('display:none;' if file.file? && field.delete_method && @object.send(field.delete_method) == '1')}
-      = field.pretty_value
-      = form.file_field(field.method_name, field.html_attributes)
-    - if field.optional? && field.errors.blank? && file.file? && field.delete_method
-      .delete
-        = form.check_box(field.delete_method)
-        = form.label(field.delete_method, I18n.t('admin.actions.delete').capitalize + " [#{file.instance.send(file.name.to_s + '_file_name') rescue field.method_name}]")
+.toggle{:style => ('display:none;' if file.file? && field.delete_method && @object.send(field.delete_method) == '1')}
+  = field.pretty_value
+  = form.file_field(field.method_name, field.html_attributes)
+- if field.optional? && field.errors.blank? && file.file? && field.delete_method
+  .delete
+    = form.check_box(field.delete_method)
+    = form.label(field.delete_method, I18n.t('admin.actions.delete').capitalize + " [#{file.instance.send(file.name.to_s + '_file_name') rescue field.method_name}]")
 
 - head_javascript do
   :plain

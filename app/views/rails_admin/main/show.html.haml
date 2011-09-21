@@ -1,27 +1,11 @@
-#block-tables.block
-  = breadcrumbs_for :show, @object
-
-  .content
-    .control
-      = action_button history_object_path(:id => params[:id]), t("admin.history.name"), :'calendar-hover'
-      - if show_url = (main_app.url_for(@object) rescue nil)
-        = action_button show_url, t("admin.show.show_in_app"), :show
-      - if authorized? :edit, @abstract_model, @object
-        = action_button edit_path(@abstract_model, @object.id), t("admin.list.edit_action"), :edit
-      - if authorized? :delete, @abstract_model, @object
-        = action_button delete_path(@abstract_model, @object.id), t("admin.list.delete_action"), :cross
-
-    %h2.title= @page_name
-    .inner
-      = render(:partial => 'layouts/rails_admin/flash', :locals => {:flash => flash})
-      - @model_config.show.with(:object => @object, :view => self).visible_groups.each do |fieldset|
-        - unless (fields = fieldset.with(:object => @object, :view => self).visible_fields).empty?
-          - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
-            .fieldset
-              %h4= fieldset.label
-              = content_tag :div, fieldset.help, :class => "help" if fieldset.help
-              - fields.each_with_index do |field, index|
-                - if (value = values[index]) || !RailsAdmin::config.compact_show_view
-                  %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
-                    %div.label= field.label
-                    %div.value= value || ' - '
+- @model_config.show.with(:object => @object, :view => self).visible_groups.each do |fieldset|
+  - unless (fields = fieldset.with(:object => @object, :view => self).visible_fields).empty?
+    - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
+      .fieldset
+        %h4= fieldset.label
+        = content_tag :div, fieldset.help, :class => "help" if fieldset.help
+        - fields.each_with_index do |field, index|
+          - if (value = values[index]) || !RailsAdmin::config.compact_show_view
+            %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
+              %div.label= field.label
+              %div.value= value || ' - '

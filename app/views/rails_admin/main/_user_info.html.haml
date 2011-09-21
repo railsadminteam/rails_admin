@@ -1,4 +1,0 @@
-.user_info
-  = _current_user.email
-  - gravatar = (request.ssl? ? "https://secure" : "http://www")+".gravatar.com/avatar"
-  = image_tag "#{gravatar}/#{Digest::MD5.hexdigest _current_user.email}?s=30", :alt => ""

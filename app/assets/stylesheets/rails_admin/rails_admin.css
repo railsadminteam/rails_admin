@@ -4,10 +4,10 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require ./aristo/jquery-ui-1.8.7.custom.css
  *= require ./bootstrap/bootstrap.css
+ *= require ./rails_admin-bootstrap.css
  *= require ./jquery.colorpicker.css
  *= require ./jquery.ui.timepicker.css
  *= require ./ra.filtering-multiselect.css
- *= require ./ra.filtering-select.css
  *= require ./ra.timeline.css
  *= require_self
 */
