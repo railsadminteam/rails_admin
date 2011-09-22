@@ -36,6 +36,12 @@ module RailsAdmin
           def method_name
             "#{super.to_s.singularize}_ids" # name_ids
           end
+
+          # Reader for validation errors of the bound object
+          def errors
+            bindings[:object].errors[name]
+          end
+
         end
       end
     end
