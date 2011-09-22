@@ -43,26 +43,6 @@ module RailsAdmin
       end
     end
 
-    def action_button link, text, icon=nil, options={}
-      options.reverse_merge! :class => "button"
-      link_to text, link, options
-    end
-
-    # the icon shown beside every entry in the list view
-    def action_icon link, icon, text
-      link_to text, link
-    end
-
-    # Used for the icons in the admins very top right.
-    def header_icon(image_name, title)
-      title
-    end
-
-    # Used for the history entries in the sidebar
-    def history_link user, text
-      content_tag :p, "<b>#{user}</b> #{text}".html_safe
-    end
-
     def history_output(t)
       return unless t
       if not t.message.downcase.rindex("changed").nil?

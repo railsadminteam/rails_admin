@@ -2,8 +2,9 @@ if (typeof($j) === "undefined" && typeof(jQuery) !== "undefined") {
   var $j = jQuery.noConflict();
 }
 
-// On the list page, the checkbox in th table's header toggles all the checkboxes underneath it.
-$j("table.table input.checkbox.toggle").live('click', function() {
+// LIST PAGE
+
+$j("#list input.checkbox.toggle").live('click', function() {
   var checked_status = $j(this).is(":checked");
   $j("td.action.select input.checkbox[name='bulk_ids[]']").each(function() {
     $j(this).attr('checked', checked_status);
@@ -16,5 +17,19 @@ $j("table.table input.checkbox.toggle").live('click', function() {
   });
 });
 
+$j('#list a, #list form').live('ajax:complete', function(xhr, data, status) {
+  $j("#list").html(data.responseText);
+});
+
+$j('#list table th.header').live('click', function() {
+  $j.ajax({
+    url: $j(this).data('link'),
+    success: function(data){
+      $j("#list").html(data);
+    }
+  });
+});
+
+// PLUGINS
 
 $j(".alert-message").alert();

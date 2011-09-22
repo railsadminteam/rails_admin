@@ -45,8 +45,7 @@ module RailsAdmin
       @schema ||= { :only => @model_config.list.visible_fields.map {|f| f.name } }
 
       respond_to do |format|
-        format.html
-        format.js { render :layout => 'rails_admin/plain.html.erb' }
+        format.html { render :layout => request.xhr? ? 'rails_admin/plain.html.erb' : :default }
         format.json do
           output = if params[:compact]
             @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }

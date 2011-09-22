@@ -10,7 +10,7 @@
 
 = form_for(@object, :url => destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
   .actions
-    %button.btn.primary{:type => "submit"}
+    %button.btn.danger{:type => "submit"}
       = t("admin.delete.confirmation")
     %button.btn{:type => "submit", :name => "_continue"}
       = t("admin.new.cancel")

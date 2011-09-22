@@ -27,10 +27,10 @@
               %div{:class => "bar #{get_indicator(percent)}", :style => "width:#{percent}%;"}
           %td.last
             - if authorized? :new, abstract_model
-              - new_path = new_path(:model_name => abstract_model.to_param)
-              = action_icon(new_path, :add, t("admin.dashboard.add_new"))
-            - history_path = history_model_path(:model_name => abstract_model.to_param)
-            = action_icon(history_path, :calendar, t("admin.history.name"))
+              = link_to t("admin.dashboard.add_new"), new_path(:model_name => abstract_model.to_param)
+            - if authorized? :see_history, abstract_model
+              - history_path = history_model_path(:model_name => abstract_model.to_param)
+              = link_to t("admin.history.name"), history_path
 - if authorized? :see_history
   #block-tables.block
     .content
