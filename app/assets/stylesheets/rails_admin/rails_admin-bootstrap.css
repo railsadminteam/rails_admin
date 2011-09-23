@@ -1,5 +1,5 @@
 /* We want input size to be used, unfixate input width */
-input {
+input, textarea {
   width:inherit;
 }
 
@@ -12,7 +12,10 @@ input {
 .ui-datepicker {
   border-width:0px;
 }
-.ui-datepicker table {
+.ui-timepicker-table table th.periods {
+  padding:0;
+}
+.ui-datepicker table{
   margin:0px;
 }
 

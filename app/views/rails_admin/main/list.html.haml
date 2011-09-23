@@ -80,11 +80,13 @@
           
   = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
     .row.clearfix
+      .span12
+        #filters_box
+    .row.clearfix
       .span3
         %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.list.search")}"}
       .span3
         %button.btn.primary.search_submit{:type => "submit", :value => ""}Refresh
-  #filters_box
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
@@ -103,7 +105,7 @@
               - sort_location = list_path params.merge(:sort => property_name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
               - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
             - cell = property_pretty_name
-            %th{:class => "#{property.sortable && "header" || nil} #{property.sortable && sort_direction || nil} #{property.css_class}", :'data-link' => (property.sortable && sort_location)}= cell
+            %th{:class => "#{property.sortable && "header" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class}", :'data-link' => (property.sortable && sort_location)}= cell
           %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
           %th.last
 

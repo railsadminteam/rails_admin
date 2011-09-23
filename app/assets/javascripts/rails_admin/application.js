@@ -33,3 +33,4 @@ $j('#list table th.header').live('click', function() {
 // PLUGINS
 
 $j(".alert-message").alert();
+$j("[rel=twipsy]").twipsy();
