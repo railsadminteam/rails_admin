@@ -128,8 +128,8 @@
             %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
             %td.last
               = link_to show_label, show_path  if can_show
-              = link_to edit_path, edit_label  if can_edit
-              = link_to delete_path, delete_label  if can_delete
+              = link_to edit_label, edit_path  if can_edit
+              = link_to delete_label, delete_path  if can_delete
     - if @page_count.to_i > 1 && !params[:all]
       .pagination
         %ul
