@@ -23,7 +23,7 @@
       var widget = this;
       var edit_url = $(this.element).siblings('select').data('edit-url');
       if(typeof(edit_url) != 'undefined' && edit_url.length) {
-        $('#' + this.element.parent().attr('id') + ' .input.ra-multiselect option').live('dblclick', function(e){
+        $('#' + this.element.parent().parent().attr('id') + ' .ra-multiselect option').live('dblclick', function(e){
           e.preventDefault();
           var dialog = widget._getDialog();
           $.ajax({
@@ -74,7 +74,7 @@
           cancelButtonText = dialog.find(":submit[name=_continue]").text();
 
       // Hide delete/history buttons, not supported yet.
-      dialog.find('div.control').hide();
+      dialog.find('.actions').hide();
 
       dialog.dialog("option", "title", $("h2.title", dialog).remove().text());
 
@@ -111,11 +111,12 @@
       
       $('form').live("ajax:complete", function(xhr, data, status) {
         var json = $.parseJSON(data.responseText);
-        var select = widget.element.siblings('select');
-        var input = widget.element.siblings('.ra-filtering-select-input');
         var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
+        var select = widget.element.siblings('select');
+        
+        if(widget.element.siblings('.input-append').length){ // select input (add)
+          var input = widget.element.siblings('.input-append').children('.ra-filtering-select-input');
 
-        if(widget.element.siblings('button').length){ // select input (add)
           if(input.length > 0) {
             input[0].value = json.label;
           }
@@ -125,7 +126,9 @@
           }
         }
         else{ // multi-select input
-          var multiselect = widget.element.siblings('.input.ra-multiselect');
+          var input = widget.element.siblings('.ra-filtering-select-input');
+
+          var multiselect = widget.element.siblings('.ra-multiselect');
           if (select.find('option[value=' + json.id + ']').length) { // replace (changing name may be needed)
             select.find('option[value=' + json.id + ']').text(json.label);
             multiselect.find('option[value= ' + json.id + ']').text(json.label);

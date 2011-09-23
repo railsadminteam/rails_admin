@@ -23,7 +23,7 @@
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
 
 %input{:name => field.dom_name, :type => "hidden", :value => ""}
-= form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url})
+= form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url, :multiple => true})
 - if authorized? :new, config.abstract_model
   - path_hash = { :model_name => config.abstract_model.to_param }
   - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
@@ -48,8 +48,8 @@
 
   });
   if($(".createAssociatedRecordDialog").length == 0) {
-  $("#{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
+  $("##{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
   } else { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-  $("#{field.dom_id}_field .createAssociatedRecord").hide();
+  $("##{field.dom_id}_field .createAssociatedRecord").hide();
   }
   });
