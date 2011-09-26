@@ -1,3 +1,15 @@
+# This fork
+
+This is the Twitter Boostrap UI version of RailsAdmin.
+Have a look [at the demo](http://rails-admin-tb.herokuapp.com/), login with  `username@example.com` / `password`
+Alpha for the moment, will be stable very soon. Compatibility with master is not guaranteed, though expected.
+
+To install:
+
+    gem 'rails_admin', :git => 'git://github.com/bbenezech/rails_admin.git', :branch => 'bootstrap'
+
+Have fun and feedback!
+
 # RailsAdmin
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
@@ -23,8 +35,6 @@ It currently offers the following features:
 * Export data to CSV/JSON/XML
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
-
-See the demo here: http://demo.railsadmin.org/
 
 Supported ORMs:
 
@@ -83,12 +93,6 @@ Make sure to activate the asset pipeline in `application.rb`:
 and to add this to your config/routes:
 
     mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-
-You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0
-branch in your `Gemfile`, however, this branch is no longer being actively
-maintained by the RailsAdmin Core Team.
-
-    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git', :branch => 'rails-3.0'
 
 :truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
 
@@ -166,18 +170,19 @@ list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
 irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 
 If you think you found a bug in RailsAdmin, you can [submit an
-issue](https://github.com/sferik/rails_admin#issues).
+issue](https://github.com/bbenezech/rails_admin#issues).
 
 ## <a name="screenshots">Screenshots</a>
-![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
-![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
-![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
+![Dashboard view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
+![List view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/list.png "List view")
+![Edit view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/edit.png "Edit view")
+![Export view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/export.png "Edit view")
 
 ## <a name="installation">Installation</a>
 In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
-    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
+    gem 'rails_admin', :git => 'git://github.com/bbenezech/rails_admin.git', :branch => 'bootstrap'
 
 Run:
 
@@ -1452,12 +1457,12 @@ Here are some ways *you* can contribute:
 * by writing specifications
 * by writing code (**no patch is too small**: fix typos, add comments, clean up inconsistent whitespace)
 * by refactoring code
-* by resolving [issues](https://github.com/sferik/rails_admin/issues)
+* by resolving [issues](https://github.com/bbenezech/rails_admin/issues)
 * by reviewing patches
 * [financially](http://pledgie.com/campaigns/15917)
 
 ## <a name="issues">Submitting an Issue</a>
-We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues) to track bugs and
+We use the [GitHub issue tracker](https://github.com/bbenezech/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
 been submitted. You can indicate support for an existing issue by voting it up. When submitting a
 bug report, please include a [Gist](https://gist.github.com/) that includes a stack trace and any
