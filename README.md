@@ -173,10 +173,10 @@ If you think you found a bug in RailsAdmin, you can [submit an
 issue](https://github.com/bbenezech/rails_admin#issues).
 
 ## <a name="screenshots">Screenshots</a>
-![Dashboard view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
-![List view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/list.png "List view")
-![Edit view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/edit.png "Edit view")
-![Export view](https://github.com/bbenezech/rails_admin/raw/master/screenshots/export.png "Edit view")
+![Dashboard view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/dashboard.png "Dashboard view")
+![List view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/list.png "List view")
+![Edit view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/edit.png "Edit view")
+![Export view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/export.png "Edit view")
 
 ## <a name="installation">Installation</a>
 In your `Gemfile`, add the following dependencies:
