@@ -26,6 +26,9 @@ It currently offers the following features:
 
 See the demo here: http://demo.railsadmin.org/
 
+For the Twitter boostrap branch, see here: http://rails-admin-tb.herokuapp.com/
+More information there: https://github.com/bbenezech/rails_admin/tree/bootstrap
+
 Supported ORMs:
 
 * ActiveRecord
