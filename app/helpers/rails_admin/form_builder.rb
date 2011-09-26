@@ -1,6 +1,7 @@
+ActionView::Base.field_error_proc = lambda { |html_tag, instance| html_tag }
+
 module RailsAdmin
   class FormBuilder < ActionView::Helpers::FormBuilder
-    
     def render(action)
       @template.instance_variable_get(:@model_config).send(action).with(:form => self, :object => @object, :view => @template).visible_groups.map do |fieldset|
         fieldset_for(fieldset)

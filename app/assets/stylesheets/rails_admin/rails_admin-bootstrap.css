@@ -19,7 +19,12 @@ input, textarea {
   margin:0px;
 }
 
-/* sidebar hack */
+/* sidebar hack (content is slipping beneath height of sidebar) */
 .sidebar {
   height:0;
+}
+
+/* filtering select integration */
+.input-append { 
+  display:inline-block;
 }

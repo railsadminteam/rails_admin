@@ -27,7 +27,7 @@
   = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, new_path(path_hash), :class => "createAssociatedRecord", :style => 'margin-left:10px'
 - head_javascript do
   $j(document).ready(function($){
-  $("##{"#{field.dom_id}"}").filteringSelect({
+  $("##{field.dom_id}").filteringSelect({
   - if xhr
     createQuery: function(query) {
     return { query: query }

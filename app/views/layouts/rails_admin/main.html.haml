@@ -1,51 +1,36 @@
 !!! 5
 %html
   %head
-  
     %title= "#{@abstract_model.try(:pretty_name) || @page_name} | #{@plugin_name}"
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
-    
+    = csrf_meta_tag
     = stylesheet_link_tag "rails_admin/rails_admin.css"
     = head_style
-    = csrf_meta_tag
-  
+    = javascript_include_tag "rails_admin/rails_admin.js"
+    = head_javascript
   %body.rails_admin{:style => "padding-top: 60px;"}
-    
     .topbar-wrapper{:style => "z-index: 5;"}
       .topbar{:'data-dropdown' => 'dropdown'}
         .topbar-inner
           .container
-            %h3= render :partial => 'rails_admin/main/title'
-            %ul.nav.secondary-nav
-              %li= link_to t('admin.dashboard.name'), dashboard_path
-              - if main_app_root_path = (main_app.root_path rescue false)
-                %li= link_to t('home.name').capitalize, main_app_root_path
-              - if _current_user
-                - if authorized?(:edit, _current_user.class, _current_user)
-                  %li= link_to _current_user.email, edit_path(_current_user.class.name.underscore.pluralize, _current_user)
-                - if defined?(Devise)
-                  %li= link_to content_tag('span', t('admin.credentials.log_out'), :class => 'label important'), main_app.url_for(:action => 'destroy', :controller => 'devise/sessions'), :method => Devise.sign_out_via
-                  %li= image_tag "#{(request.ssl? ? "https://secure" : "http://www") + ".gravatar.com/avatar"}/#{Digest::MD5.hexdigest _current_user.email}?s=30", :style => 'padding-top:5px'
-
+            %h3= render :partial => 'layouts/rails_admin/title'
+            %ul.nav.secondary-nav= render :partial => 'layouts/rails_admin/secondary_navigation'
     .container-fluid
-    
       .sidebar
         .well
           %h3= t "admin.dashboard.navigation"
-          = render(:partial => 'rails_admin/main/navigation')
+          = render :partial => 'layouts/rails_admin/navigation'
       .content
         .page-header
           %h1= @page_name
-        - flash && flash.each do |key, value|
-          .alert-message.fade.in{:class => key}
-            %a.close{:href => '#'}×
-            %p=value
-        = render(:partial => 'layouts/rails_admin/pills')
+        = render :partial => 'layouts/rails_admin/flash'
+        = render :partial => 'layouts/rails_admin/breadcrumb'
+        - if @abstract_model
+          - if @object && !@object.new_record?
+            %ul.tabs= render :partial => 'layouts/rails_admin/pills'
+          - else
+            %ul.tabs= render :partial => 'layouts/rails_admin/tabs'
         = yield
-        
         %footer
           %p © RailsAdmin 2011
-    
-    = javascript_include_tag "rails_admin/rails_admin.js"
-    = head_javascript

@@ -44,40 +44,16 @@
       #{@ordered_filter_string}
     });
 
-- can_create      = authorized? :new,         @abstract_model
-- can_export      = authorized? :export,      @abstract_model
-- can_delete      = authorized? :delete,      @abstract_model
+- @can_export      = authorized? :export,      @abstract_model
+- @can_delete      = authorized? :delete,      @abstract_model
+- @can_bulk_action = can_bulk_action = (@can_export || @can_delete)
+
 - can_see_history = authorized? :see_history, @abstract_model
-- can_bulk_action = can_export || can_delete
 - show_label    = t("admin.list.show_action")
 - delete_label  = t("admin.list.delete_action")
 - edit_label    = t("admin.list.edit_action")
 
 #list
-
-  %ul.tabs
-    %li.active= link_to @record_count.to_s + ' ' + @model_config.abstract_model.model.model_name.human(:count => @record_count, :default => @record_count != 1 ? @model_config.label.downcase.pluralize : @model_config.label.downcase) + ' found', 'javascript:'
-    %li= link_to t("admin.list.add_new"), new_path if can_create
-    %li= link_to t("admin.history.name"), history_model_path if can_see_history
-    %li= link_to t("admin.list.export_action"), export_path(params.except("page")) if can_export
-    - if can_bulk_action
-      %li.dropdown{:'data-dropdown' => "dropdown"}
-        %a.dropdown-toggle Selected...
-        %ul.dropdown-menu
-          %li= link_to_function t("admin.list.export_selected"), "$j('#bulk_action').val('export'); $j('#bulk_form').submit(); return false;" if can_export
-          %li= link_to_function t("admin.list.delete_selected"), "$j('#bulk_action').val('delete'); $j('#bulk_form').submit(); return false;" if can_delete
-    %li.dropdown{:'data-dropdown' => "dropdown"}
-      %a.dropdown-toggle= t('admin.list.add_filter') + "..."
-      %ul.dropdown-menu#filters
-        - @filterable_fields.each do |field|
-          - field_options = case field.type
-          - when :enum
-            - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
-          - else
-            - ''
-          %li
-            %a{"data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
-          
   = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
     .row.clearfix
       .span12
