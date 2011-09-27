@@ -30,6 +30,11 @@ $j('#list table th.header').live('click', function() {
   });
 });
 
+$j('table#history th.header').live('click', function() {
+  window.location = $j(this).data('link');
+});
+
+
 // PLUGINS
 
 $j(".alert-message").alert();
