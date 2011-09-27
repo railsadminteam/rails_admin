@@ -73,7 +73,7 @@
     }
   }
 
-$("#filter_select").live('change', function() {
+  $("#filter_select").live('change', function() {
     var option = $(this).find('option:selected')
     if ($(this).val() != '') {
       $(this).val(''); // reset select
