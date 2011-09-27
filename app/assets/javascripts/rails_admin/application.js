@@ -35,7 +35,7 @@ $j('table#history th.header').live('click', function() {
 });
 
 
-// PLUGINS
-
-$j(".alert-message").alert();
-$j("[rel=twipsy]").twipsy();
+$j(document).ready(function() {
+  $j(".alert-message").alert();
+  $j("[rel=twipsy]").twipsy();
+});
