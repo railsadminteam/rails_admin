@@ -73,18 +73,20 @@
     }
   }
 
-  $("#filter_select").live('change', function() {
+$("#filter_select").live('change', function() {
     var option = $(this).find('option:selected')
-    $(this).val(''); // reset select
-    $.filters.append(
-      option.data('field-label'),
-      option.data('field-name'),
-      option.data('field-type'),
-      option.data('field-value'),
-      option.data('field-operator'),
-      option.data('field-options'),
-      $.now()
-    );
+    if ($(this).val() != '') {
+      $(this).val(''); // reset select
+      $.filters.append(
+        option.data('field-label'),
+        option.data('field-name'),
+        option.data('field-type'),
+        option.data('field-value'),
+        option.data('field-operator'),
+        option.data('field-options'),
+        $.now()
+      );
+    }
   });
 
   $('#filters_box .delete').live('click', function() {
