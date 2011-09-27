@@ -18,7 +18,8 @@ module RailsAdmin
           end
 
           register_instance_option(:thumb_method) do
-            nil
+            @styles ||= bindings[:object].send(name).styles.map(&:first)
+            @thumb_method ||= @styles.find{|s| [:thumb, 'thumb', :thumbnail, 'thumbnail']} || @styles.find{|s| [:small, 'small', :admin, 'admin'].include?(s)} || @styles.first || :original
           end
           
           register_instance_option(:export_value) do

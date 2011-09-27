@@ -24,13 +24,14 @@
       .content
         .page-header
           %h1= @page_name
-        = render :partial => 'layouts/rails_admin/flash'
+        = render :partial => 'layouts/rails_admin/flash', :locals => { :flash => flash }
         = render :partial => 'layouts/rails_admin/breadcrumb'
         - if @abstract_model
           - if @object && !@object.new_record?
             %ul.tabs= render :partial => 'layouts/rails_admin/pills'
           - else
             %ul.tabs= render :partial => 'layouts/rails_admin/tabs'
+        %span.row
         = yield
         %footer
           %p © RailsAdmin 2011

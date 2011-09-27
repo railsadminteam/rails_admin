@@ -15,4 +15,7 @@ class User < ActiveRecord::Base
   def attr_accessible_role
     :custom_role
   end
+  
+  attr_accessor :delete_avatar
+  before_validation { self.avatar = nil if self.delete_avatar == '1' }
 end

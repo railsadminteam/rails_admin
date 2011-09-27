@@ -2,10 +2,13 @@
   - unless (fields = fieldset.with(:object => @object, :view => self).visible_fields).empty?
     - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
       .fieldset
-        %h4= fieldset.label
-        = content_tag :div, fieldset.help, :class => "help" if fieldset.help
-        - fields.each_with_index do |field, index|
-          - if (value = values[index]) || !RailsAdmin::config.compact_show_view
-            %div.field{:class => "#{field.abstract_model.to_param.singularize}_#{field.name}"}
-              %div.label= field.label
-              %div.value= value || ' - '
+        %h4
+          = fieldset.label
+          - if fieldset.help
+            %small= fieldset.help
+        %dl
+          - fields.each_with_index do |field, index|
+            - if (value = values[index]) || !RailsAdmin::config.compact_show_view
+              %dt.label= field.label
+              %dd
+                %pre.prettyprint= value || ' - '

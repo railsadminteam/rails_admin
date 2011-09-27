@@ -30,7 +30,12 @@ $j('#list table th.header').live('click', function() {
   });
 });
 
-// PLUGINS
+$j('table#history th.header').live('click', function() {
+  window.location = $j(this).data('link');
+});
 
-$j(".alert-message").alert();
-$j("[rel=twipsy]").twipsy();
+
+$j(document).ready(function() {
+  $j(".alert-message").alert();
+  $j("[rel=twipsy]").twipsy();
+});
