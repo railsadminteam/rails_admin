@@ -24,25 +24,6 @@ module RailsAdmin
       end
     end
 
-    def head_style(path = nil, &block)
-      if block
-        (@head_style ||= []) << capture(&block)
-      elsif path
-        (@head_stylesheet_paths ||= []) << path
-      else
-        html = ""
-        if paths = @head_stylesheet_paths
-          paths.uniq.each do |path|
-            html << stylesheet_link_tag(path)
-          end
-        end
-        if style = @head_style
-          html << content_tag(:style, style.uniq.join("\n"), :type => "text/css")
-        end
-        return html.html_safe
-      end
-    end
-
     def history_output(t)
       return unless t
       if not t.message.downcase.rindex("changed").nil?

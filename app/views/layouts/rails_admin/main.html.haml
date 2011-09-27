@@ -6,7 +6,6 @@
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
     = csrf_meta_tag
     = stylesheet_link_tag "rails_admin/rails_admin.css"
-    = head_style
     = javascript_include_tag "rails_admin/rails_admin.js"
     = head_javascript
   %body.rails_admin{:style => "padding-top: 60px;"}
@@ -14,7 +13,9 @@
       .topbar{:'data-dropdown' => 'dropdown'}
         .topbar-inner
           .container
-            %h3= render :partial => 'layouts/rails_admin/title'
+            %h3= link_to dashboard_path do
+			  %span.first= (@plugin_name_array[0] || 'Rails')
+			  %span.second= (@plugin_name_array[1] || 'Admin')
             %ul.nav.secondary-nav= render :partial => 'layouts/rails_admin/secondary_navigation'
     .container-fluid
       .sidebar
@@ -24,8 +25,11 @@
       .content
         .page-header
           %h1= @page_name
-        = render :partial => 'layouts/rails_admin/flash', :locals => { :flash => flash }
-        = render :partial => 'layouts/rails_admin/breadcrumb'
+        - flash && flash.each do |key, value|
+		  .alert-message.fade.in{:class => key}
+		    %a.close{:href => '#'}×
+		    %p= value
+        = breadcrumbs_for params[:action].to_sym, @abstract_model, @object
         - if @abstract_model
           - if @object && !@object.new_record?
             %ul.tabs= render :partial => 'layouts/rails_admin/pills'

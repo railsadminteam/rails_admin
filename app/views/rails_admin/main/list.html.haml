@@ -32,14 +32,14 @@
     "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
   end.join if @ordered_filters
 
-- head_style do
+%style
   - @style.each do |key, value|
     \.grid thead #{".#{key}"}{
     width: #{value[:width]}px;
     }
 
 - head_javascript do
-  :plain      
+  :plain
     $j(document).ready(function($) {
       #{@ordered_filter_string}
     });
