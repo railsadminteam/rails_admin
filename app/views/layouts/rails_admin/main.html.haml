@@ -13,9 +13,10 @@
       .topbar{:'data-dropdown' => 'dropdown'}
         .topbar-inner
           .container
-            %h3= link_to dashboard_path do
-			  %span.first= (@plugin_name_array[0] || 'Rails')
-			  %span.second= (@plugin_name_array[1] || 'Admin')
+            %h3 
+              = link_to dashboard_path do
+                %span.first= (@plugin_name_array[0] || 'Rails')
+                %span.second= (@plugin_name_array[1] || 'Admin')
             %ul.nav.secondary-nav= render :partial => 'layouts/rails_admin/secondary_navigation'
     .container-fluid
       .sidebar
@@ -26,15 +27,15 @@
         .page-header
           %h1= @page_name
         - flash && flash.each do |key, value|
-		  .alert-message.fade.in{:class => key}
-		    %a.close{:href => '#'}×
-		    %p= value
+          .alert-message.fade.in{:class => key}
+            %a.close{:href => '#'}×
+            %p= value
         = breadcrumbs_for params[:action].to_sym, @abstract_model, @object
         - if @abstract_model
           - if @object && !@object.new_record?
-            %ul.tabs= render :partial => 'layouts/rails_admin/pills'
+            %ul.tabs= render :partial => 'layouts/rails_admin/objects_tabs'
           - else
-            %ul.tabs= render :partial => 'layouts/rails_admin/tabs'
+            %ul.tabs= render :partial => 'layouts/rails_admin/models_tabs'
         %span.row
         = yield
         %footer
