@@ -2,7 +2,10 @@
   - unless (fields = fieldset.with(:object => @object, :view => self).visible_fields).empty?
     - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
       .fieldset
-        %h4= fieldset.label
+        %h4
+          = fieldset.label
+          - if fieldset.help
+            %small= fieldset.help
         %dl
           - fields.each_with_index do |field, index|
             - if (value = values[index]) || !RailsAdmin::config.compact_show_view

@@ -132,13 +132,13 @@ module RailsAdmin
 
     def show
       @authorization_adapter.authorize(:show, @abstract_model, @object) if @authorization_adapter
-      @page_name = t("admin.show.page_name", :name => @model_config.label.downcase)
+      @page_name = t("admin.show.page_name", :name => "#{@model_config.label.downcase} '#{@object.send(@model_config.object_label_method)}'")
       @page_type = @abstract_model.pretty_name.downcase
     end
 
     def edit
       @authorization_adapter.authorize(:edit, @abstract_model, @object) if @authorization_adapter
-      @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
+      @page_name = "#{t("admin.actions.update").capitalize} #{@model_config.label.downcase} '#{@object.send(@model_config.object_label_method)}'"
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html
@@ -152,7 +152,7 @@ module RailsAdmin
       @cached_assocations_hash = associations_hash
       @modified_assoc = []
 
-      @page_name = t("admin.actions.update").capitalize + " " + @model_config.label.downcase
+      @page_name = "#{t("admin.actions.update").capitalize} #{@model_config.label.downcase} '#{@object.send(@model_config.object_label_method)}'"
       @page_type = @abstract_model.pretty_name.downcase
 
       @old_object = @object.dup
@@ -181,8 +181,7 @@ module RailsAdmin
 
     def delete
       @authorization_adapter.authorize(:delete, @abstract_model, @object) if @authorization_adapter
-
-      @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
+      @page_name = "#{t("admin.actions.delete").capitalize} #{@model_config.label.downcase} '#{@object.send(@model_config.object_label_method)}'"
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html
@@ -210,13 +209,13 @@ module RailsAdmin
       # maybe
       #   n-levels (backend: possible with xml&json, frontend: not possible, injections check: quite easy)
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
-
+      
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
         request.format = format
         @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
         list
       else
-        @page_name = t("admin.actions.export").capitalize + " " + @model_config.label.downcase
+        @page_name = t("admin.actions.export").capitalize + " " + @model_config.label_plural.downcase
         @page_type = @abstract_model.pretty_name.downcase
 
         render :action => 'export'
