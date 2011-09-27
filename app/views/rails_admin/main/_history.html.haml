@@ -3,10 +3,10 @@
 %table.zebra-striped
   %thead
     %tr
-      %th.start User
+      %th User
       %th Changes
   %tbody
     - history.each do |t|
-      %tr{:class => cycle('even', 'odd')}
-        %td.start= t.try :username
+      %tr
+        %td= t.try :username
         %td= history_output(t)

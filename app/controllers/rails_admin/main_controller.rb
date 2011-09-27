@@ -488,7 +488,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      redirect_to list_path, :flash => { :success => t("admin.flash.noaction") } if params[:_continue]
+      redirect_to list_path, :flash => { :warning => t("admin.flash.noaction") } if params[:_continue]
     end
 
     def list_entries(other = {})
