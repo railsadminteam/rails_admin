@@ -5,7 +5,7 @@
 //= require_tree .
 //= require_self
 
-$ = jQuery.noConflict() // local use only
+$ = jQuery.noConflict()
 
 $("#list input.checkbox.toggle").live "click", ->
   checked_status = $j(this).is(":checked")
