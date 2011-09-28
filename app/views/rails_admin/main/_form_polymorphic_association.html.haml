@@ -15,9 +15,9 @@
 = form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id                        
 = form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :style => "margin-left:10px;"
 
-- head_javascript do
+= javascript_tag do
   :plain
-    $j(document).ready(function($) {
+    jQuery(function($) {
       var urls = #{field.polymorphic_type_urls.to_json.html_safe };
       $("##{column_type_dom_id }").bind("change", function(e){
         if ("" == $(this).val()) {

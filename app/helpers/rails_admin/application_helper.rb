@@ -5,25 +5,6 @@ module RailsAdmin
 
     include RailsAdmin::I18nSupport
 
-    def head_javascript(path = nil, &block)
-      if block
-        (@head_javascript ||= []) << capture(&block)
-      elsif path
-        (@head_javascript_paths ||= []) << path
-      else
-        html = ""
-        if paths = @head_javascript_paths
-          paths.uniq.each do |path|
-            html << javascript_include_tag(path)
-          end
-        end
-        if script = @head_javascript
-          html << javascript_tag(script.uniq.join("\n"))
-        end
-        return html.html_safe
-      end
-    end
-
     def history_output(t)
       return unless t
       if not t.message.downcase.rindex("changed").nil?

@@ -85,9 +85,9 @@
       $(this).data('field-value'),
       $(this).data('field-operator'),
       $(this).data('field-options'),
-      Date.now()
+      $.now()
     );
-    $j("[rel=twipsy]").twipsy();
+    $("[rel=twipsy]").twipsy();
   });
 
   $('#filters_box .delete').live('click', function() {

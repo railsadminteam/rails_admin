@@ -3,9 +3,9 @@
 .colorSelector{:id => "#{field.dom_id}Helper"}
   %div
 
-- head_javascript do
+= javascript_tag do
   :plain
-    $j(document).ready(function($){
+    jQuery(function($) {
       var input = $('#<%= field.dom_id %>').hide();
       $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + input.val());
       $('#<%= field.dom_id %>Helper').ColorPicker({

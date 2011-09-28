@@ -4,11 +4,11 @@
   -# needed for modal windows
   :javascript
     var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
-  - head_javascript "/javascripts/ckeditor/ckeditor.js"
-  - head_javascript do
+  = javascript_tag "/javascripts/ckeditor/ckeditor.js"
+  = javascript_tag do
     - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
       alert("Install CKEditor first");
-    $j(document).ready(function($){
+    jQuery(function($) {
     CKEDITOR.replace('#{field.dom_id}',
     {
     customConfig : '#{field.ckeditor_config_js.html_safe}'

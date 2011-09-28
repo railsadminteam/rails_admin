@@ -39,9 +39,9 @@
         #timeline
         #listingHistory
           = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
-        - head_javascript do
+        = javascript_tag do
           :plain
-            $j(document).ready(function($) {
+            jQuery(function($) {
               var cache = {};
               $("#timeline").timeline({
                 url: "#{ history_slider_path }",

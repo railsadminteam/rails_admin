@@ -1,3 +1,14 @@
+@import "twitter/bootstrap/reset";
+@import "twitter/bootstrap/variables";
+@import "twitter/bootstrap/mixins";
+@import "twitter/bootstrap/scaffolding";
+@import "twitter/bootstrap/type";
+@import "twitter/bootstrap/forms";
+@import "twitter/bootstrap/tables";
+@import "twitter/bootstrap/patterns";
+
+/* Keep it clean, people */
+
 /* We want input size to be used, unfixate input width */
 input, textarea {
   width:inherit;
@@ -5,18 +16,7 @@ input, textarea {
 
 /* ui-autocomplete has z-index 1 and is shown over filtering select button (.add-on) */
 .input-prepend .add-on, .input-append .add-on {
-  z-index:0;
-}
-
-/* small visual glitches fixes for date-picker */
-.ui-datepicker {
-  border-width:0px;
-}
-.ui-timepicker-table table th.periods {
-  padding:0;
-}
-.ui-datepicker table{
-  margin:0px;
+  z-index:1;
 }
 
 /* sidebar hack (content is slipping beneath height of sidebar) */

@@ -63,39 +63,27 @@
 .ui-widget-content a { color: #4F4F4F; }
 .ui-widget-header { border: 1px solid #B6B6B6; color: #4F4F4F; font-weight: bold; }
 .ui-widget-header {
-	background: url(images/bg_fallback.png) 0 0 repeat-x;
-	background: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(1, rgb(237,237,237)),
-		color-stop(0, rgb(196,196,196))
-	);
-	background: -moz-linear-gradient(
-		center top,
-		rgb(237,237,237),
-		rgb(196,196,196)
-	);
+	background: #ededed url(<%= asset_path('rails_admin/aristo/images/bg_fallback.png') %>) 0 0 repeat-x; /* Old browsers */
+		background: -moz-linear-gradient(top, #ededed 0%, #c4c4c4 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ededed), color-stop(100%,#c4c4c4)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* IE10+ */
+		background: linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* W3C */
 }
 .ui-widget-header a { color: #4F4F4F; }
 
 /* Interaction states
 ----------------------------------*/
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #B6B6B6; font-weight: normal; color: #4F4F4F; }
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-	background: url(images/bg_fallback.png) 0 0 repeat-x;
-	background: -webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(1, rgb(237,237,237)),
-    color-stop(0, rgb(196,196,196))
-	);
-	background: -moz-linear-gradient(
-		center top,
-		rgb(237,237,237),
-		rgb(196,196,196)
-	);
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { 
+	background: #ededed url(<%= asset_path('rails_admin/aristo/images/bg_fallback.png') %>) 0 0 repeat-x; /* Old browsers */
+		background: -moz-linear-gradient(top, #ededed 0%, #c4c4c4 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ededed), color-stop(100%,#c4c4c4)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* IE10+ */
+		background: linear-gradient(top, #ededed 0%,#c4c4c4 100%); /* W3C */
 	-webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
 	-moz-box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
 	box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
@@ -103,22 +91,16 @@
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #4F4F4F; text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #9D9D9D; font-weight: normal; color: #313131; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #313131; text-decoration: none; }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { 
 	outline: none;
 	color: #1c4257; border: 1px solid #7096ab;
-	background: url(images/bg_fallback.png) 0 -50px repeat-x;
-	background: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(1, rgb(185,224,245)),
-		color-stop(0, rgb(146,189,214))
-	);
-	background: -moz-linear-gradient(
-		center top,
-		rgb(185,224,245),
-		rgb(146,189,214)
-	);
+	background: #ededed url(<%= asset_path('rails_admin/aristo/images/bg_fallback.png') %>) 0 -50px repeat-x; /* Old browsers */
+		background: -moz-linear-gradient(top, #b9e0f5 0%, #92bdd6 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9e0f5), color-stop(100%,#92bdd6)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* IE10+ */
+		background: linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* W3C */
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
@@ -355,7 +337,7 @@
  * http://docs.jquery.com/UI/Resizable#theming
  */
 .ui-resizable { position: relative;}
-.ui-resizable-handle { position: absolute;font-size: 0.1px;z-index: 99999; display: block;}
+.ui-resizable-handle { position: absolute; font-size: 0.1px; z-index: 999; display: block;}
 .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
 .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }
 .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }
@@ -404,10 +386,13 @@
  */
 .ui-autocomplete {
 	position: absolute; cursor: default; z-index: 3;
-	-moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
-	-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
-}
+		-moz-border-radius: 0; 
+		-webkit-border-radius: 0;
+		border-radius: 0;
+			-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+			-webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+			box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}	
 
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
@@ -454,7 +439,9 @@
 	color: #FFFFFF;
 	text-shadow: 0px 1px 1px #234386;
 	border-color: #466086;
-	-moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
+		-moz-border-radius: 0; 
+		-webkit-border-radius: 0;
+		border-radius: 0;
 }
 /*
  * jQuery UI Button 1.8.7
@@ -468,8 +455,8 @@
 .ui-button { display: inline-block; position: relative; padding: 0; margin-right: .1em; text-decoration: none !important; cursor: pointer; text-align: center; zoom: 1; overflow: visible; -webkit-user-select: none; -moz-user-select: none; user-select: none; } /* the overflow property removes extra width in IE */
 .ui-button-icon-only { width: 2.2em; } /* to make room for the icon, a width needs to be set here */
 button.ui-button-icon-only { width: 2.4em; } /* button elements seem to need a little more width */
-.ui-button-icons-only { width: 3.4em; }
-button.ui-button-icons-only { width: 3.7em; }
+.ui-button-icons-only { width: 3.4em; } 
+button.ui-button-icons-only { width: 3.7em; } 
 
 /* button animation properties */
 .ui-button {
@@ -479,32 +466,27 @@ button.ui-button-icons-only { width: 3.7em; }
 }
 
 /*states*/
-.ui-button.ui-state-hover {
-	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset;
+.ui-button.ui-state-hover { 
+	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset; 
 	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset;
 }
 .ui-button.ui-state-focus {
 	outline: none;
-	color: #1c4257; border-color: #7096ab;
-	background: url(<%= asset_path 'rails_admin/aristo/images/bg_fallback.png' %>) 0 -50px repeat-x;
-	background: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(1, rgb(185,224,245)),
-		color-stop(0, rgb(146,189,214))
-	);
-	background: -moz-linear-gradient(
-		center top,
-		rgb(185,224,245),
-		rgb(146,189,214)
-	);
-	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset;
+	color: #1c4257;
+	border-color: #7096ab;
+	background: #ededed url(<%= asset_path('rails_admin/aristo/images/bg_fallback.png') %>) 0 -50px repeat-x; /* Old browsers */
+		background: -moz-linear-gradient(top, #b9e0f5 0%, #92bdd6 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9e0f5), color-stop(100%,#92bdd6)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* IE10+ */
+		background: linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* W3C */
+	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset; 
 	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255,255,255,0.8) inset;
 }
-
+ 
 /*button text element */
 .ui-button .ui-button-text { display: block; line-height: 1.4; font-size: 14px; font-weight: bold; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6); }
 .ui-button-text-only .ui-button-text { padding: .4em 1em; }
@@ -514,8 +496,8 @@ button.ui-button-icons-only { width: 3.7em; }
 .ui-button-text-icons .ui-button-text { padding-left: 2.1em; padding-right: 2.1em; }
 /* no icon support for input elements, provide padding by default */
 input.ui-button { font-size: 14px; font-weight: bold; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6); padding: 0 1em !important; height: 33px; }
-/*remove submit button internal padding in Firefox*/
-input.ui-button::-moz-focus-inner {
+/*remove submit button internal padding in Firefox*/ 
+input.ui-button::-moz-focus-inner { 
     border: 0;
     padding: 0;
 }
@@ -539,18 +521,13 @@ input.ui-button::-moz-focus-inner {
 .ui-buttonset .ui-button { margin-left: 0; margin-right: -.3em; }
 .ui-buttonset .ui-button.ui-state-active { color: #1c4257; border-color: #7096ab; }
 .ui-buttonset .ui-button.ui-state-active {
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(1, rgb(185,224,245)),
-		color-stop(0, rgb(146,189,214))
-	);
-	background-image: -moz-linear-gradient(
-		center top,
-		rgb(185,224,245),
-		rgb(146,189,214)
-	);
+	background: #ededed url(<%= asset_path('rails_admin/aristo/images/bg_fallback.png') %>) 0 -50px repeat-x; /* Old browsers */
+		background: -moz-linear-gradient(top, #b9e0f5 0%, #92bdd6 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9e0f5), color-stop(100%,#92bdd6)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* Opera11.10+ */
+		background: -ms-linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* IE10+ */
+		background: linear-gradient(top, #b9e0f5 0%,#92bdd6 100%); /* W3C */
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
@@ -573,7 +550,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 	-moz-box-shadow: 0 2px 12px rgba(0,0,0,0.6);
 }
 .ui-dialog .ui-dialog-titlebar { padding: 0.7em 1em 0.6em 1em; position: relative; border: none; border-bottom: 1px solid #979797; -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;  }
-.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; font-size: 14px; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; font-size: 14px; text-shadow: 0 1px 0 rgba(255,255,255,0.5); } 
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .8em; top: 55%; width: 16px; margin: -10px 0 0 0; padding: 0; height: 16px; }
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; background: url(<%= asset_path('rails_admin/aristo/images/icon_sprite.png') %>) 0 -16px no-repeat; }
 .ui-dialog .ui-dialog-titlebar-close:hover span { background-position: -16px -16px; }
@@ -622,7 +599,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  */
 .ui-tabs { position: relative; zoom: 1; border: 0; background: transparent; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 .ui-tabs .ui-tabs-nav { margin: 0; padding: 0; background: transparent; border-width: 0 0 1px 0; }
-.ui-tabs .ui-tabs-nav {
+.ui-tabs .ui-tabs-nav { 
 	-moz-border-radius: 0;
 	-webkit-border-radius: 0;
 	border-radius: 0;
@@ -663,11 +640,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-datepicker .ui-datepicker-next span { background-position: -16px -32px !important; }
 .ui-datepicker .ui-datepicker-prev-hover span { background-position: 0px -48px !important; }
 .ui-datepicker .ui-datepicker-next-hover span { background-position: -16px -48px !important; }
-.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(<%= asset_path 'rails_admin/aristo/images/icon_sprite.png' %>) no-repeat; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background: url(<%= asset_path('rails_admin/aristo/images/icon_sprite.png') %>) no-repeat; }
 .ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; font-size: 12px; text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
 .ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
 .ui-datepicker select.ui-datepicker-month-year {width: 100%;}
-.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-month, 
 .ui-datepicker select.ui-datepicker-year { width: 49%;}
 .ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
 .ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
@@ -676,38 +653,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
 .ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
 .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
-.ui-datepicker .ui-state-default { background: transparent; border-color: #FFF; }
-.ui-datepicker .ui-state-active { background: #5F83B9; border-color: #5F83B9; color: #FFF; font-weight: bold; text-shadow: 0 1px 1px #234386; }
-
-/* make present day stand out */
-.ui-datepicker td.ui-datepicker-today {
-    background:#ccc;
-    -webkit-box-shadow:inset 0 1px 1px #333;
-    -moz-box-shadow:inset 0 1px 1px #333;
-    box-shadow:0 1px 1px #333 inset;
-}
-.ui-datepicker td.ui-datepicker-today .ui-state-highlight{
-    background:transparent;
-    border:none;
-    -webkit-box-shadow:none;
-    -moz-box-shadow:none;
-    box-shadow:none;
-}
-
-.ui-datepicker td.ui-datepicker-current-day {
-    background:#5F83B9;
-    -webkit-box-shadow:none;
-    -moz-box-shadow:none;
-    box-shadow:none;
-}
-
-.ui-datepicker td.ui-datepicker-current-day .ui-state-active{
-    background:transparent;
-    border:none;
-    -webkit-box-shadow:none;
-    -moz-box-shadow:none;
-    box-shadow:none;
-}
+.ui-datepicker-calendar .ui-state-default { background: transparent; border-color: #FFF; }
+.ui-datepicker-calendar .ui-state-active { background: #5F83B9; border-color: #5F83B9; color: #FFF; font-weight: bold; text-shadow: 0 1px 1px #234386; }
 
 /* with multiple calendars */
 .ui-datepicker.ui-datepicker-multi { width:auto; }
@@ -754,8 +701,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  *
  * http://docs.jquery.com/UI/Progressbar#theming
  */
-.ui-progressbar { height: 12px; text-align: left; background: #FFF url(<%= asset_path 'rails_admin/aristo/images/progress_bar.gif' %>) 0 -14px repeat-x; }
-.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; background: url(<%= asset_path 'rails_admin/aristo/images/progress_bar.gif' %>) 0 0 repeat-x; }
+.ui-progressbar { height: 12px; text-align: left; background: #FFF url(<%= asset_path('rails_admin/aristo/images/progress_bar.png') %>) 0 -14px repeat-x; }
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; background: url(<%= asset_path('rails_admin/aristo/images/progress_bar.png') %>) 0 0 repeat-x; }
 
 /* Extra Input Field Styling */
 .ui-form textarea, .ui-form input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]) {

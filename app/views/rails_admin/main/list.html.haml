@@ -38,9 +38,9 @@
     width: #{value[:width]}px;
     }
 
-- head_javascript do
+= javascript_tag do
   :plain
-    $j(document).ready(function($) {
+    jQuery(function($) {
       #{@ordered_filter_string}
     });
 

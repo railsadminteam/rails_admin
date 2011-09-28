@@ -45,7 +45,7 @@ module RailsAdmin
       @schema ||= { :only => @model_config.list.visible_fields.map {|f| f.name } }
 
       respond_to do |format|
-        format.html { render :layout => request.xhr? ? 'rails_admin/plain.html.erb' : :default }
+        format.html { render :layout => !request.xhr? }
         format.json do
           output = if params[:compact]
             @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }
@@ -94,7 +94,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html
-        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+        format.js   { render :layout => false }
       end
     end
 
@@ -142,7 +142,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html
-        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+        format.js   { render :layout => false }
       end
     end
 
@@ -185,7 +185,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       respond_to do |format|
         format.html
-        format.js   { render :layout => 'rails_admin/plain.html.erb' }
+        format.js   { render :layout => false }
       end
     end
 
@@ -482,7 +482,7 @@ module RailsAdmin
 
       respond_to do |format|
         format.html { render whereto, :status => :not_acceptable }
-        format.js   { render whereto, :layout => 'rails_admin/plain.html.erb', :status => :not_acceptable  }
+        format.js   { render whereto, :layout => false, :status => :not_acceptable  }
       end
     end
 
