@@ -35,7 +35,7 @@
           var additional_control = '<input class="additional-fieldset span2 " style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'enum':
-          field_options = $j('<div/>').html(field_options).text(); // entities decode
+          field_options = $('<div/>').html(field_options).text(); // entities decode
           var control = '<select name="' + value_name + '" class="span3 ">' +
             '<option value="_discard">...</option>' +
             field_options +

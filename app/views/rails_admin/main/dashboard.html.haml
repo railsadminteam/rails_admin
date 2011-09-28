@@ -49,7 +49,7 @@
                   if (cache[year] && cache[year][month]) {
                     $("#listingHistory").html(cache[year][month]);
                   } else {
-                    $j("#listingHistory").load(
+                    $("#listingHistory").load(
                       "#{ history_list_path }",
                       { month: month, year: year },
                       function(response, status, xhr) {

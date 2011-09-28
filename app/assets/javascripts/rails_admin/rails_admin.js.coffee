@@ -8,7 +8,7 @@
 $ = jQuery.noConflict()
 
 $("#list input.checkbox.toggle").live "click", ->
-  checked_status = $j(this).is(":checked")
+  checked_status = $(this).is(":checked")
   $("td.action.select input.checkbox[name='bulk_ids[]']").each ->
     $(this).attr "checked", checked_status
     if checked_status
@@ -26,7 +26,7 @@ $("#list table th.header").live "click", ->
       $("#list").html data
 
 $("table#history th.header").live "click", ->
-  window.location = $j(this).data("link")
+  window.location = $(this).data("link")
 
 $(document).ready ->
   $(".alert-message").alert()
