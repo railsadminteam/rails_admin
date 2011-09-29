@@ -12,8 +12,8 @@
       - if children.size == 1
         = link_to(model.label_plural, list_path(:model_name => model.abstract_model.to_param))
       - else
-        %a{:href => "#"}= model.navigation_label ? t(model.navigation_label, :default => model.navigation_label) : model.label_plural
-        %ul{:style => ("#{'display:none;' unless active}")}
+        = model.navigation_label ? t(model.navigation_label, :default => model.navigation_label) : model.label_plural
+        %ul
           - children.each_with_index do |child, index|
             %li{:class => ("active" if @page_type == tab_titles[index])}
               = link_to(child.label_plural, list_path(:model_name => child.abstract_model.to_param))
