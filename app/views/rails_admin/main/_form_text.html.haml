@@ -2,12 +2,10 @@
 
 - if field.ckeditor
   -# needed for modal windows
-  :javascript
-    var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
-  = javascript_tag "/javascripts/ckeditor/ckeditor.js"
   = javascript_tag do
-    - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
-      alert("Install CKEditor first");
+    var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
+  = javascript_include_tag "/javascripts/ckeditor/ckeditor.js"
+  = javascript_tag do
     jQuery(function($) {
     CKEDITOR.replace('#{field.dom_id}',
     {
