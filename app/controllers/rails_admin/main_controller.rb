@@ -3,7 +3,7 @@ module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     include ActionView::Helpers::TextHelper
 
-    layout "rails_admin/main"
+    layout "rails_admin/application"
 
     before_filter :get_model, :except => [:index]
     before_filter :get_object, :only => [:show, :edit, :update, :delete, :destroy]
