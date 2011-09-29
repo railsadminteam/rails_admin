@@ -1,8 +1,9 @@
 - file = @object.send(field.method_name)
 
 .toggle{:style => ('display:none;' if file.file? && field.delete_method && @object.send(field.delete_method) == '1')}
-  = field.pretty_value
-  %span.row
+  - if value = field.pretty_value
+    = value
+    %span.row
   = form.file_field(field.method_name, field.html_attributes)
 - if field.optional? && field.errors.blank? && file.file? && field.delete_method
   %span.label.notice{:style => 'cursor:pointer;', :onclick => "jQuery(this).siblings('[type=checkbox]').click(); jQuery(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('important notice'); "}
