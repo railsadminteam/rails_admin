@@ -9,7 +9,7 @@
     .span3
       %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.list.search")}"}
     .span3
-      %button.btn.primary{:type => "submit", :'data-disable-with' => "Refeshing..."}Refresh
+      %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.list.search")}= t("admin.list.search")
 %table#history.zebra-striped
   %thead
     %tr

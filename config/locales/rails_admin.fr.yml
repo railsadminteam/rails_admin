@@ -1,6 +1,6 @@
 fr:
   home:
-    name: "/"
+    name: "Home"
   admin:
     dashboard:
       pagename: "Administration"
@@ -9,7 +9,7 @@ fr:
       last_used: "Utilisé"
       records: "Enregistrements"
       modify: "Modifier"
-      add_new: "Nouv."
+      add_new: "Nouveau"
       show: "Voir"
       ago: ""
     history:
@@ -22,11 +22,14 @@ fr:
       delete_action: "Supprimer"
       add_new: "Nouveau"
       select_action: "Sélectionner"
-      export_action: "Exporter la vue actuelle"
+      export_action: "Exporter"
+      export_current_action: "Exporter la vue actuelle"
       show_action: "Détail"
-      export_selected: "Exporter les entrées cochées"
-      delete_selected: "Supprimer les entrées cochées"
+      selected: "Sélection"
+      export_selected: "Exporter"
+      delete_selected: "Supprimer"
       search: "Recherche"
+      refresh: "Rafraîchir"
       select: "Sélectionner un(e) %{name} pour modification"
       show_all: "Afficher tout"
       add_filter: "Ajouter un filtre"
@@ -65,6 +68,7 @@ fr:
       display: "Afficher %{name} : %{type}"
       options_for: "Options pour %{name}"
       empty_value_for_associated_objects: "<vide>"
+      click_to_reverse_selection: 'Cliquer pour inverser la sélection'
       csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
