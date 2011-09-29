@@ -59,7 +59,7 @@
       .span3
         %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.list.search")}"}
       .span3
-        %button.btn.primary.search_submit{:type => "submit", :value => ""}Refresh
+        %button.btn.primary{:type => "submit", :'data-disable-with' => "Refeshing..."}Refresh
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action

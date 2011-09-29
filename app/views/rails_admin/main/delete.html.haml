@@ -10,7 +10,5 @@
 
 = form_for(@object, :url => destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
   .actions
-    %button.btn.danger{:type => "submit"}
-      = t("admin.delete.confirmation")
-    %button.btn{:type => "submit", :name => "_continue"}
-      = t("admin.new.cancel")
+    %button.btn.danger{:type => "submit", :'data-disable-with' => t("admin.delete.confirmation")}= t("admin.delete.confirmation")
+    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.new.cancel")}= t("admin.new.cancel")

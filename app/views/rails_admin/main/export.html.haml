@@ -8,7 +8,7 @@
     %fieldset
       %legend Choose fields to export
       .span5.clearfix
-        %label= t('admin.export.fields_from', :name => @abstract_model.pretty_name)
+        %label{:rel => 'twipsy', :'data-original-title' => 'Click to reverse selection', :onclick => 'jQuery(this).siblings(".input").find("input").click()'}= t('admin.export.fields_from', :name => @abstract_model.pretty_name)
         .input
           %ul.inputs-list
             - visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.each do |field|
@@ -17,21 +17,21 @@
                 - if field.association? && field.association[:polymorphic]
                   %label{:for => "schema_#{list}_#{field.method_name}"}
                     = check_box_tag "schema[#{list}][]", field.method_name, true, { :id => "schema_#{list}_#{field.method_name}" }
-                    %span= t('admin.export.display', :name => @abstract_model.model.human_attribute_name(field.method_name), :type => field.type)
+                    %strong= @abstract_model.model.human_attribute_name(field.method_name)
                   - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]
                   %label{:for => "schema_#{list}_#{polymorphic_type_column_name}"}
                     = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }
-                    %span= t('admin.export.display', :name => @abstract_model.model.human_attribute_name(polymorphic_type_column_name), :type => field.type)
+                    %strong= @abstract_model.model.human_attribute_name(field.polymorphic_type_column_name)
                 - else
                   %label{:for => "schema_#{list}_#{field.name}"}
                     = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
-                    %span= t('admin.export.display', :name => @abstract_model.model.human_attribute_name(field.name), :type => field.type)
+                    %strong= @abstract_model.model.human_attribute_name(field.name)
       - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
         .span5.clearfix
           - association = field.association
           - associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
           - fields = RailsAdmin.config(associated_model).export.with(:view => self, :object => associated_model.new).visible_fields.select{ |f| !f.association? }
-          %label= t('admin.export.fields_from_associated', :name => field.label)
+          %label{:rel => 'twipsy', :'data-original-title' => 'Click to reverse selection', :onclick => 'jQuery(this).siblings(".input").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label)
           .input
             %ul.inputs-list
               - fields.each do |associated_model_field|
@@ -39,7 +39,7 @@
                 %li
                   %label{:for => "schema_include_#{association[:name]}_#{list}_#{associated_model_field.name}"}
                     = check_box_tag "schema[include][#{association[:name]}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{association[:name]}_#{list}_#{associated_model_field.name}" }
-                    %span= t('admin.export.display', :name => associated_model.human_attribute_name(associated_model_field.name), :type => associated_model_field.type)
+                    %strong= associated_model.human_attribute_name(associated_model_field.name)
   .row
     %fieldset
       %legend= t('admin.export.options_for', :name => 'csv')
@@ -60,7 +60,11 @@
         %span.help-inline= t('admin.export.csv.col_sep_help', :value => t('admin.export.csv.default_col_sep'))
 
   .actions
-    %button.btn.primary{:type => "submit", :name => 'csv'}= t("admin.export.confirmation", :name => 'csv')
-    %button.btn.info{:type => "submit", :name => 'json'}= t("admin.export.confirmation", :name => 'json')
-    %button.btn.info{:type => "submit", :name => 'xml'}= t("admin.export.confirmation", :name => 'xml')
-    %button.btn{:type => "submit", :name => "_continue"}= t("admin.new.cancel")
+    %button.btn.primary{:type => "submit", :name => 'csv', :'data-disable-with' => t("admin.export.confirmation", :name => 'csv')}
+      = t("admin.export.confirmation", :name => 'csv')
+    %button.btn.info{:type => "submit", :name => 'json', :'data-disable-with' => t("admin.export.confirmation", :name => 'json')}
+      = t("admin.export.confirmation", :name => 'json')
+    %button.btn.info{:type => "submit", :name => 'xml', :'data-disable-with' => t("admin.export.confirmation", :name => 'xml')}
+      = t("admin.export.confirmation", :name => 'xml')
+    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.new.cancel")}
+      = t("admin.new.cancel")

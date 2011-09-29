@@ -5,8 +5,5 @@
   %br
   %br
   .actions
-    %button.btn.danger{:type => "submit"}
-      = t("admin.delete.confirmation")
-
-    %button.btn{:type => "submit", :name => "_continue"}
-      = t("admin.new.cancel")
+    %button.btn.danger{:type => "submit", :'data-disable-with' => t("admin.delete.confirmation")}= t("admin.delete.confirmation")
+    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.new.cancel")}= t("admin.new.cancel")
