@@ -47,10 +47,10 @@
 
 #list
   %style
-  - @style.each do |key, value|
-    \.grid thead #{".#{key}"}{
-    width: #{value[:width]}px;
-    }
+    - @style.each do |key, value|
+      \.grid thead #{".#{key}"}{
+      width: #{value[:width]}px;
+      }
   = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
     .row
       .span12
