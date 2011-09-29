@@ -17,13 +17,13 @@ $("#list input.checkbox.toggle").live "click", ->
       $(this).parent().removeClass "checked"
 
 $("#list a, #list form").live "ajax:complete", (xhr, data, status) ->
-  $("#list").html data.responseText
+  $("#list").replaceWith data.responseText
 
 $("#list table th.header").live "click", ->
   $.ajax 
     url: $(this).data("link")
     success: (data) ->
-      $("#list").html data
+      $("#list").replaceWith data
 
 $("table#history th.header").live "click", ->
   window.location = $(this).data("link")

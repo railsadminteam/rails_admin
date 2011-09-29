@@ -32,11 +32,6 @@
     "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
   end.join if @ordered_filters
 
-%style
-  - @style.each do |key, value|
-    \.grid thead #{".#{key}"}{
-    width: #{value[:width]}px;
-    }
 
 = javascript_tag do
   :plain
@@ -44,16 +39,18 @@
       #{@ordered_filter_string}
     });
 
-- @can_export      = authorized? :export,      @abstract_model
-- @can_delete      = authorized? :delete,      @abstract_model
-- @can_bulk_action = can_bulk_action = (@can_export || @can_delete)
-
+- can_bulk_action = (authorized?(:export, @abstract_model) || authorized?(:delete, @abstract_model))
 - can_see_history = authorized? :see_history, @abstract_model
 - show_label    = t("admin.list.show_action")
 - delete_label  = t("admin.list.delete_action")
 - edit_label    = t("admin.list.edit_action")
 
 #list
+  %style
+  - @style.each do |key, value|
+    \.grid thead #{".#{key}"}{
+    width: #{value[:width]}px;
+    }
   = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
     .row
       .span12
@@ -99,9 +96,9 @@
             - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
             %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
             %td.last
-              = link_to show_label, show_path(  :model_name => @abstract_model.to_param, :id => object.id) if authorized? :show,   @abstract_model, object
-              = link_to edit_label, edit_path(:model_name => params[:model_name], :id => object.id) if authorized? :edit,   @abstract_model, object
-              = link_to delete_label, delete_path(:model_name => @abstract_model.to_param, :id => object.id) if authorized? :delete, @abstract_model, object
+              = link_to show_label,   show_path(:model_name =>    params[:model_name], :id => object) if authorized? :show,   @abstract_model, object
+              = link_to edit_label,   edit_path(:model_name =>    params[:model_name], :id => object) if authorized? :edit,   @abstract_model, object
+              = link_to delete_label, delete_path(:model_name =>  params[:model_name], :id => object) if authorized? :delete, @abstract_model, object
     - if @page_count.to_i > 1
       .pagination
         %ul
