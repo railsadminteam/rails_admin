@@ -49,5 +49,3 @@ group :development, :test do
     end
   end
 end
-
-#gem 'less-rails-bootstrap', :require => false

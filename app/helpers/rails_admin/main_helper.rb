@@ -3,10 +3,11 @@ require 'builder'
 module RailsAdmin
   module MainHelper
     def get_indicator(percent)
-      percent = 0 if percent.nil?
-      return "low" if percent.between?(0, 33)
-      return "medium" if percent.between?(34, 67)
-      return "high" if percent.between?(68, 100)
+      return "" if percent < 0          # none
+      return "notice" if percent < 34   # < 1/100 of max
+      return "success" if percent < 67  # < 1/10 of max
+      return "warning" if percent < 84  # < 1/3 of max
+      return "important"                # > 1/3 of max
     end
 
     def get_column_set(properties)

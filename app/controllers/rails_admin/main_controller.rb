@@ -303,13 +303,15 @@ module RailsAdmin
       reversed_sort = (field ? field.sort_reverse? : @model_config.list.sort_reverse?)
       {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
     end
-
+    
+    
+    # TODO MOVE TO ActiveRecord
     def get_conditions_hash(query, filters)
 
       # TODO for filtering engine
       #   use a hidden field to store serialized params and send them through post (pagination, export links, show all link, sort links)
       #   Tricky cases where:
-      #     query can't be made on any of the avalaible attributes (will it happen a lot Error messages?)
+      #     query can't be made on any of the available attributes (will it happen a lot Error messages?)
       #     filter can't apply to the targetted attribute (should be sanitized front)
       #   extend engine to :
       #      belongs_to autocomplete id (optionnal)
@@ -323,7 +325,6 @@ module RailsAdmin
       #   find a way to force a column nonetheless?
 
       # TODO else
-      #   searchable & filtering engine
       #   has_one ?
       #   polymorphic ?
 
@@ -384,7 +385,7 @@ module RailsAdmin
       conditions += values.flatten
       conditions != [""] ? { :conditions => conditions } : {}
     end
-
+    
     def build_statement(column, type, value, operator)
 
       # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
