@@ -23,12 +23,12 @@ describe "RailsAdmin Basic List" do
     end
 
     it "shows the edit and delete links" do
-      should have_selector("td a img[alt='Edit']")
-      should have_selector("td a img[alt='Delete']")
+      should have_selector("td a.edit")
+      should have_selector("td a.delete']")
     end
 
     it "has the search box with some prompt text" do
-      should have_selector("input#search[placeholder='Search']")
+      should have_selector("input[placeholder='Search']")
     end
 
     # https://github.com/sferik/rails_admin/issues/362
@@ -383,8 +383,8 @@ describe "RailsAdmin Basic List" do
     end
 
     it "shows the show and delete links with valid url" do
-      should have_selector("td a[href='/admin/balls/#{@ball.id}'] img[alt='Show']")
-      should have_selector("td a[href='/admin/balls/#{@ball.id}/delete'] img[alt='Delete']")
+      should have_selector("td a.show[href='/admin/balls/#{@ball.id}']")
+      should have_selector("td a.delete[href='/admin/balls/#{@ball.id}/delete']")
     end
 
   end

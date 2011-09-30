@@ -19,9 +19,9 @@ describe "RailsAdmin Basic New" do
     end
 
     it "should show non-required fields as \"Optional\"" do
-      should have_selector(".player_position .help", :text => "Optional")
-      should have_selector(".player_born_on .help", :text => "Optional")
-      should have_selector(".player_notes .help", :text => "Optional")
+      should have_selector("#player_position_field .help-block", :text => "Optional")
+      should have_selector("#player_born_on_field .help-block", :text => "Optional")
+      should have_selector("#player_notes_field .help-block", :text => "Optional")
     end
 
     # https://github.com/sferik/rails_admin/issues/362

@@ -35,7 +35,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
 
     it "displays a flash notice stating the number of records destroyed" do
       # 2 Players because @delete_ids.count == 2:
-      page.should have_selector(".flash .notice", :text => "2 Players successfully deleted")
+      page.should have_selector(".alert-message", :text => "2 Players successfully deleted")
     end
   end
 

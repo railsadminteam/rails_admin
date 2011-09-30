@@ -27,11 +27,11 @@ describe "RailsAdmin Config DSL Show Section" do
 
       should_not have_selector("h4", :text => "Basic info")
 
-      %w[team_division team_name team_logo_url team_manager
-        team_ballpark team_mascot team_founded team_wins
-        team_losses team_win_percentage team_revenue
+      %w[division name logo_url manager
+        ballpark mascot founded wins
+        losses win_percentage revenue
       ].each do |field|
-        should_not have_selector("div.#{field}")
+        should_not have_selector(".#{field}_field")
       end
     end
 
@@ -82,9 +82,9 @@ describe "RailsAdmin Config DSL Show Section" do
       should have_selector("h4", :text => "Basic info")
       should have_selector("h4", :text => "Belong's to associations")
 
-      should have_selector(".team_name")
-      should have_selector(".team_logo_url")
-      should have_selector(".team_division")
+      should have_selector(".name_field")
+      should have_selector(".logo_url_field")
+      should have_selector(".division_field")
     end
 
     it "should have accessor for its fields by type" do
@@ -107,11 +107,11 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector("div.label", :text => "Name")
-      should have_selector("div.label", :text => "Logo url")
-      should have_selector("div.label", :text => "Division")
-      should have_selector("div.label", :text => "Manager (STRING)")
-      should have_selector("div.label", :text => "Ballpark (STRING)")
+      should have_selector(".label", :text => "Name")
+      should have_selector(".label", :text => "Logo url")
+      should have_selector(".label", :text => "Division")
+      should have_selector(".label", :text => "Manager (STRING)")
+      should have_selector(".label", :text => "Ballpark (STRING)")
     end
   end
 
@@ -120,11 +120,11 @@ describe "RailsAdmin Config DSL Show Section" do
     it "should show all by default" do
       do_request
 
-      %w[team_division team_name team_logo_url team_manager
-        team_ballpark team_mascot team_founded team_wins
-        team_losses team_win_percentage team_revenue team_players team_fans
+      %w[division name logo_url manager
+        ballpark mascot founded wins
+        losses win_percentage revenue players fans
       ].each do |field|
-        should have_selector("div.#{field}")
+        should have_selector(".#{field}_field")
       end
     end
 
@@ -139,9 +139,9 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector(".team_manager")
-      should have_selector(".team_division")
-      should have_selector(".team_name")
+      should have_selector(".manager_field")
+      should have_selector(".division_field")
+      should have_selector(".name_field")
     end
 
 
@@ -155,8 +155,8 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector("div.label", :text => "Team Manager")
-      should have_selector("div.label", :text => "Some Fans")
+      should have_selector(".label", :text => "Team Manager")
+      should have_selector(".label", :text => "Some Fans")
     end
 
     it "should be renameable" do
@@ -171,10 +171,10 @@ describe "RailsAdmin Config DSL Show Section" do
       end
 
       do_request
-
-      should have_selector("div.label", :text => "Renamed field")
-      should have_selector("div.label", :text => "Division")
-      should have_selector("div.label", :text => "Name")
+      
+      should have_selector(".label", :text => "Renamed field")
+      should have_selector(".label", :text => "Division")
+      should have_selector(".label", :text => "Name")
     end
 
     it "should be renameable by type" do
@@ -192,7 +192,7 @@ describe "RailsAdmin Config DSL Show Section" do
         "Ballpark (STRING)", "Mascot (STRING)", "Founded", "Wins", "Losses",
         "Win percentage", "Revenue", "Players", "Fans"
       ].each do |text|
-        should have_selector("div.label", :text => text)
+        should have_selector(".label", :text => text)
       end
     end
 
@@ -211,7 +211,7 @@ describe "RailsAdmin Config DSL Show Section" do
         "Ballpark (STRING)", "Mascot (STRING)", "Founded", "Wins", "Losses",
         "Win percentage", "Revenue", "Players", "Fans"
       ].each do |text|
-        should have_selector("div.label", :text => text)
+        should have_selector(".label", :text => text)
       end
     end
 
@@ -228,8 +228,8 @@ describe "RailsAdmin Config DSL Show Section" do
 
       do_request
 
-      should have_selector(".team_division")
-      should have_selector(".team_name")
+      should have_selector(".division_field")
+      should have_selector(".name_field")
     end
 
     it "should be hideable by type" do
@@ -244,11 +244,11 @@ describe "RailsAdmin Config DSL Show Section" do
       do_request
 
       %w[Name Logo\ url Manager Ballpark Mascot].each do |text|
-        should_not have_selector("div.label", :text => text)
+        should_not have_selector(".label", :text => text)
       end
 
       %w[Division Founded Wins Losses Win\ percentage Revenue Players Fans].each do |text|
-        should have_selector("div.label", :text => text)
+        should have_selector(".label", :text => text)
       end
     end
 
@@ -264,11 +264,11 @@ describe "RailsAdmin Config DSL Show Section" do
       do_request
 
       %w[Name Logo\ url Manager Ballpark Mascot].each do |text|
-        should_not have_selector("div.label", :text => text)
+        should_not have_selector(".label", :text => text)
       end
 
       %w[Division Founded Wins Losses Win\ percentage Revenue Players Fans].each do |text|
-        should have_selector("div.label", :text => text)
+        should have_selector(".label", :text => text)
       end
     end
   end

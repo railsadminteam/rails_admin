@@ -101,7 +101,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should have_selector('div.help', :text => "help paragraph to display")
+        should have_selector('.help-block', :text => "help paragraph to display")
       end
 
       it "should not show help if not present" do
@@ -113,7 +113,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should_not have_selector('div.help')
+        should_not have_selector('.help-block')
       end
 
       it "should be able to display multiple help if there are multiple sections" do
@@ -131,9 +131,9 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should have_selector("div.help", :text => 'help for default')
-        should have_selector("div.help", :text => 'help for other section')
-        should have_selector("div.help", :count => 2)
+        should have_selector(".help-block", :text => 'help for default')
+        should have_selector(".help-block", :text => 'help for other section')
+        should have_selector(".help-block", :count => 2)
       end
     end
 
@@ -397,9 +397,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find(".team_manager p.help").should have_content("Required. 100 characters or fewer. Additional help text for manager field.")
-      find(".team_division_id p.help").should have_content("Required")
-      find(".team_name p.help").should have_content("Optional. 50 characters or fewer.")
+      find("#team_manager_field .help-box").should have_content("Required. 100 characters or fewer. Additional help text for manager field.")
+      find("#team_division_id_field .help-box").should have_content("Required")
+      find("#team_name_field .help-box").should have_content("Optional. 50 characters or fewer.")
     end
 
     it "should have option to override required status" do
@@ -417,9 +417,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find(".team_manager p.help").should have_content("Optional. 100 characters or fewer.")
-      find(".team_division_id p.help").should have_content("Optional")
-      find(".team_name p.help").should have_content("Required. 50 characters or fewer.")
+      find("#team_manager_field .help-box").should have_content("Optional. 100 characters or fewer.")
+      find("#team_division_id_field .help-box").should have_content("Optional")
+      find("#team_name_field .help-box").should have_content("Required. 50 characters or fewer.")
     end
   end
 
