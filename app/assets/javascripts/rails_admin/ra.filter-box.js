@@ -29,8 +29,8 @@
             '<option data-additional-fieldset="true" ' + (field_operator == "less_than" ? 'selected="selected"' : '') + ' value="less_than">Less than ... days ago</option>' +
             '<option data-additional-fieldset="true" ' + (field_operator == "more_than" ? 'selected="selected"' : '') + ' value="more_than">More than ... days ago</option>' +
             '<option disabled="disabled">---------</option>' +
-            '<option data-additional-fieldset="false"' + (field_operator == "_present"  ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
-            '<option data-additional-fieldset="false"' + (field_operator == "_blank"    ? 'selected="selected"' : '') + ' value="_blank" >Is blank</option>' +
+            '<option data-additional-fieldset="false"' + (field_operator == "_not_null"  ? 'selected="selected"' : '') + ' value="_not_null">Is present</option>' +
+            '<option data-additional-fieldset="false"' + (field_operator == "_null"    ? 'selected="selected"' : '') + ' value="_null" >Is blank</option>' +
           '</select>'
           var additional_control = '<input class="additional-fieldset span2 " style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
@@ -77,6 +77,7 @@
     }
   }
 
+<<<<<<< HEAD
   $("#filters a").live('click', function() {
     $.filters.append(
       $(this).data('field-label'),
@@ -88,6 +89,22 @@
       $.now()
     );
     $("[rel=twipsy]").twipsy();
+=======
+  $("#filter_select").live('change', function() {
+    var option = $(this).find('option:selected')
+    if ($(this).val() != '') {
+      $(this).val(''); // reset select
+      $.filters.append(
+        option.data('field-label'),
+        option.data('field-name'),
+        option.data('field-type'),
+        option.data('field-value'),
+        option.data('field-operator'),
+        option.data('field-options'),
+        $.now()
+      );
+    }
+>>>>>>> origin/master
   });
 
   $('#filters_box .delete').live('click', function() {

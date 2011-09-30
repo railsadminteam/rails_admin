@@ -32,6 +32,14 @@ It currently offers the following features:
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
+<<<<<<< HEAD
+=======
+See the demo here: http://demo.railsadmin.org/
+
+For the Twitter boostrap branch, see here: http://rails-admin-tb.herokuapp.com/
+More information there: https://github.com/bbenezech/rails_admin/tree/bootstrap
+
+>>>>>>> origin/master
 Supported ORMs:
 
 * ActiveRecord
