@@ -77,7 +77,6 @@
     }
   }
 
-<<<<<<< HEAD
   $("#filters a").live('click', function() {
     $.filters.append(
       $(this).data('field-label'),
@@ -89,22 +88,6 @@
       $.now()
     );
     $("[rel=twipsy]").twipsy();
-=======
-  $("#filter_select").live('change', function() {
-    var option = $(this).find('option:selected')
-    if ($(this).val() != '') {
-      $(this).val(''); // reset select
-      $.filters.append(
-        option.data('field-label'),
-        option.data('field-name'),
-        option.data('field-type'),
-        option.data('field-value'),
-        option.data('field-operator'),
-        option.data('field-options'),
-        $.now()
-      );
-    }
->>>>>>> origin/master
   });
 
   $('#filters_box .delete').live('click', function() {
