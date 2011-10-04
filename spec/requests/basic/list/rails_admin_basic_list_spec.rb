@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'spec_helper'
 
 describe "RailsAdmin Basic List" do
@@ -22,9 +24,10 @@ describe "RailsAdmin Basic List" do
       should have_content("Updated at")
     end
 
-    it "shows the edit and delete links" do
-      should have_selector("td a.edit")
-      should have_selector("td a.delete']")
+    it "shows the show, edit and delete links" do
+      should have_selector("td a", :text => 'Show')
+      should have_selector("td a", :text => 'Edit')
+      should have_selector("td a", :text => 'Delete')
     end
 
     it "has the search box with some prompt text" do
@@ -287,7 +290,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly" do
-      should have_selector("div", :class => ".pagination", :text => /1 2 [^0-9]*5 6 7 8 9 10 11[^0-9]*19 20/)
+      find('.pagination').should have_content('12…567891011…1920')
     end
   end
 
@@ -299,7 +302,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly and contain the right item" do
-      should have_selector("div", :class => ".pagination", :text => /1 2[^0-9]*12 13 14 15 16 17 18 19 20/)
+      find('.pagination').should have_content('12…121314151617181920')
     end
   end
 
@@ -379,12 +382,14 @@ describe "RailsAdmin Basic List" do
   describe "list for objects with overridden to_param" do
     before(:each) do
       @ball = FactoryGirl.create :ball
+      
       visit list_path(:model_name => "ball")
     end
 
-    it "shows the show and delete links with valid url" do
-      should have_selector("td a.show[href='/admin/balls/#{@ball.id}']")
-      should have_selector("td a.delete[href='/admin/balls/#{@ball.id}/delete']")
+    it "shows the show, edit and delete links with valid url" do
+      should have_selector("td a[href='/admin/ball/#{@ball.id}']")
+      should have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
+      should have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
     end
 
   end

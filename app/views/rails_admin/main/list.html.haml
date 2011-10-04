@@ -91,13 +91,13 @@
             - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
             %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
             %td.last
-              = link_to show_label, show_path(:model_name => params[:model_name], :id => object.id), :class => 'show' if authorized? :show, @abstract_model, object
-              = link_to edit_label, edit_path(:model_name => params[:model_name], :id => object.id), :class => 'edit' if authorized? :edit, @abstract_model, object
-              = link_to delete_label, delete_path(:model_name => params[:model_name], :id => object.id), :class => 'delete' if authorized? :delete, @abstract_model, object
+              = link_to show_label, show_path(:model_name => params[:model_name], :id => object.id) if authorized? :show, @abstract_model, object
+              = link_to edit_label, edit_path(:model_name => params[:model_name], :id => object.id) if authorized? :edit, @abstract_model, object
+              = link_to delete_label, delete_path(:model_name => params[:model_name], :id => object.id) if authorized? :delete, @abstract_model, object
     - if @page_count.to_i > 1
       .pagination
         %ul
           - if @record_count.to_i <= 100 && @page_count.to_i > 1
             %li= link_to(t("admin.list.show_all"), list_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
           = paginate(@current_page, @page_count, :url => params).html_safe
-      .record-count= "#{@record_count} #{@model_config.label_plural.downcase}" 
+    .record-count= "#{@record_count} #{@model_config.label_plural.downcase}" 

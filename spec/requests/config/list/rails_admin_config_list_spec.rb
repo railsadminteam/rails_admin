@@ -218,10 +218,10 @@ describe "RailsAdmin Config DSL List Section" do
 
     it "should be sortable by default" do
       visit list_path(:model_name => "fan")
-      should have_selector("th:nth-child(3) a")
-      should have_selector("th:nth-child(4) a")
-      should have_selector("th:nth-child(5) a")
-      should have_selector("th:nth-child(6) a")
+      should have_selector("th:nth-child(3).header")
+      should have_selector("th:nth-child(4).header")
+      should have_selector("th:nth-child(5).header")
+      should have_selector("th:nth-child(6).header")
     end
 
     it "should have option to disable sortability" do
@@ -234,8 +234,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_no_selector("th:nth-child(3) a")
-      should have_selector("th:nth-child(4) a")
+      should have_no_selector("th:nth-child(3).header")
+      should have_selector("th:nth-child(4).header")
     end
 
     it "should have option to disable sortability by type" do
@@ -251,10 +251,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector("th:nth-child(3) a")
-      should have_selector("th:nth-child(4) a")
-      should have_no_selector("th:nth-child(5) a")
-      should have_no_selector("th:nth-child(6) a")
+      should have_selector("th:nth-child(3).header")
+      should have_selector("th:nth-child(4).header")
+      should have_no_selector("th:nth-child(5).header")
+      should have_no_selector("th:nth-child(6).header")
     end
 
     it "should have option to disable sortability by type globally" do
@@ -270,10 +270,10 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit list_path(:model_name => "fan")
-      should have_selector("th:nth-child(3) a")
-      should have_selector("th:nth-child(4) a")
-      should have_no_selector("th:nth-child(5) a")
-      should have_no_selector("th:nth-child(6) a")
+      should have_selector("th:nth-child(3).header")
+      should have_selector("th:nth-child(4).header")
+      should have_no_selector("th:nth-child(5).header")
+      should have_no_selector("th:nth-child(6).header")
     end
 
     it "should have option to hide fields by type" do
@@ -372,7 +372,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
       visit list_path(:model_name => "fan")
-      should have_selector("style", :text => /\thead \.id[^{]*\{[^a-z]*width:[^\d]*2\d{2}px;[^{]*\}/)
+      find('style').should have_content('.grid thead')
     end
 
     it "should have option to customize output formatting" do

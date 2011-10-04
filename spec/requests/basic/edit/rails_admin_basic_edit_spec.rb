@@ -20,9 +20,9 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show non-required fields as \"Optional\"" do
-      should have_selector("#player_position_field .help-block", :text => "Optional")
-      should have_selector("#player_born_on .help-block", :text => "Optional")
-      should have_selector("#player_notes .help-block", :text => "Optional")
+      find("#player_position_field .help-block").should have_content("Optional")
+      find("#player_born_on_field .help-block").should have_content("Optional")
+      find("#player_notes_field .help-block").should have_content("Optional")
     end
   end
 
@@ -115,7 +115,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should display a link to the delete page" do
-      should have_selector "a[href='/admin/balls/#{@ball.id}/delete']"
+      should have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
     end
 
   end
