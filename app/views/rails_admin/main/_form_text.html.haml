@@ -3,8 +3,8 @@
 - if field.ckeditor
   -# needed for modal windows
   = javascript_tag do
-    var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
-  = javascript_include_tag "/javascripts/ckeditor/ckeditor.js"
+    var CKEDITOR_BASEPATH = 'javascripts/ckeditor/';
+  = javascript_include_tag "javascripts/ckeditor/ckeditor.js"
   = javascript_tag do
     jQuery(function($) {
     CKEDITOR.replace('#{field.dom_id}',
