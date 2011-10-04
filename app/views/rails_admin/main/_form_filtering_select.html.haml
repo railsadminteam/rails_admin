@@ -33,7 +33,7 @@
     createQuery: function(query) {
     return { query: query }
     },
-    source: "#{list_path(config.abstract_model.to_param, :compact => true)}"
+    source: "#{list_path(config.abstract_model.to_param, :compact => true).html_safe}"
   });
   if($("div.createAssociatedRecordDialog").length == 0) {
   $(".#{"#{field.dom_id}"} .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
