@@ -95,7 +95,7 @@ describe "RailsAdmin Config DSL" do
 
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "player", :id => @player.id)
-      should have_css("#player_born_on")
+      should have_css(".born_on_field")
     end
   end
 

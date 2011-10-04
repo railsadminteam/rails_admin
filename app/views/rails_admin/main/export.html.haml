@@ -21,7 +21,7 @@
                   - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]
                   %label{:for => "schema_#{list}_#{polymorphic_type_column_name}"}
                     = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }
-                    %strong= @abstract_model.model.human_attribute_name(field.polymorphic_type_column_name)
+                    %strong= @abstract_model.model.human_attribute_name(polymorphic_type_column_name)
                 - else
                   %label{:for => "schema_#{list}_#{field.name}"}
                     = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }

@@ -36,7 +36,7 @@ describe "RailsAdmin" do
     end
 
     it "should load javascript files in body" do
-      should have_selector('body script[src^="/assets/rails_admin/rails_admin.js"]')
+      should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]')
     end
   end
 

@@ -9,10 +9,10 @@ describe "RailsAdmin Basic Show" do
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should have History, Edit, Delete, Cancel buttons" do
-      should have_selector("a.button", :text => "History")
-      should have_selector("a.button", :text => "Edit")
-      should have_selector("a.button", :text => "Delete")
+    it "should have History, Edit, Delete" do
+      should have_selector("a", :text => "History")
+      should have_selector("a", :text => "Edit")
+      should have_selector("a", :text => "Delete")
     end
 
     it "should show 'Details'" do
