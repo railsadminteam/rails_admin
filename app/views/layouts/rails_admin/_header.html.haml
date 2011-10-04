@@ -8,6 +8,6 @@
         %li= link_to header_icon(:home, t('home.name').capitalize), main_app_root_path
       - if _current_user
         - if authorized?(:edit, _current_user.class, _current_user)
-          %li= link_to header_icon(:account, _current_user.try(:email)), edit_path(_current_user.class.name.underscore.pluralize, _current_user)
+          %li= link_to header_icon(:account, _current_user.respond_to?(:email)), edit_path(_current_user.class.name.underscore.pluralize, _current_user)
         - if defined?(Devise)
           %li= link_to header_icon(:logout, t('admin.credentials.log_out')), main_app.url_for(:action => 'destroy', :controller => 'devise/sessions'), :method => Devise.sign_out_via
