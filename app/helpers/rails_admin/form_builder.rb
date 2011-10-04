@@ -12,7 +12,7 @@ module RailsAdmin
     def fieldset_for(fieldset)
       if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => @object, :view => @template) }.select(&:visible?)).length > 0
         @template.content_tag :fieldset do
-          @template.content_tag(:legend, fieldset.label + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : '')) +
+          @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : '')) +
           fields.map{ |field| field_wrapper_for(field) }.join.html_safe
         end
       end

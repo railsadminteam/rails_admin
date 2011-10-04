@@ -21,7 +21,7 @@
               = t "admin.dashboard.ago"
           %td
             - percent = (Math.log(@count[abstract_model.pretty_name]) * 100.0) / Math.log(@max)
-            .label{:class => get_indicator(percent), :style => "width:#{[5, percent].max.to_i}%;"}= @count[abstract_model.pretty_name]
+            .label.animate-width-to{:class => get_indicator(percent), :'data-animate-length' => ([2.0, percent].max.to_i * 100)/3, :'data-animate-width-to' => "#{[2.0, percent].max.to_i}%", :style => "width:2%"}= @count[abstract_model.pretty_name]
           %td
             - if authorized? :new, abstract_model
               = link_to t("admin.dashboard.add_new"), new_path(:model_name => abstract_model.to_param)

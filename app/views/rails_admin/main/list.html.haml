@@ -32,7 +32,6 @@
     "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
   end.join if @ordered_filters
 
-
 = javascript_tag do
   :plain
     jQuery(function($) {
@@ -40,7 +39,6 @@
     });
 
 - can_bulk_action = (authorized?(:export, @abstract_model) || authorized?(:delete, @abstract_model))
-- can_see_history = authorized? :see_history, @abstract_model
 - show_label    = t("admin.list.show_action")
 - delete_label  = t("admin.list.delete_action")
 - edit_label    = t("admin.list.edit_action")
@@ -51,7 +49,7 @@
       \.grid thead #{".#{key}"}{
       width: #{value[:width]}px;
       }
-  = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true, :class => "form", :style => "display:inline") do
+  = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true) do
     .row
       .span12
         #filters_box
@@ -60,7 +58,7 @@
         %input{:name => "query", :type => "search", :value => query, :placeholder => t("admin.list.search")}
       .span3
         %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.list.refresh")}= t("admin.list.refresh")
-      %span{:style => 'float:right'}=link_to t("admin.list.export_current_action"), export_path(params.except('page')), :class => 'btn danger'
+      %span{:style => 'float:right'}=link_to t("admin.list.export_current_action"), export_path(params.except('page')), :class => 'btn info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
@@ -72,14 +70,11 @@
               %input.checkbox.toggle{:type => "checkbox"}
           %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
           - properties.each do |property|
-            - property_name = property.name
-            - property_pretty_name = property.label
-            - selected = sort == property_name.to_s
+            - selected = (sort == property.name.to_s)
             - if property.sortable
-              - sort_location = list_path params.except('page').merge(:sort => property_name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
+              - sort_location = list_path params.except('page').merge(:sort => property.name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
               - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
-            - cell = property_pretty_name
-            %th{:class => "#{property.sortable && "header" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class}", :'data-link' => (property.sortable && sort_location)}= cell
+            %th{:class => "#{property.sortable && "header" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class}", :'data-link' => (property.sortable && sort_location)}= property.label
           %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
           %th.last
       %tbody
@@ -96,9 +91,9 @@
             - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
             %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
             %td.last
-              = link_to show_label,   show_path(:model_name =>    params[:model_name], :id => object.id), :class => 'show' if authorized? :show,   @abstract_model, object
-              = link_to edit_label,   edit_path(:model_name =>    params[:model_name], :id => object.id), :class => 'edit' if authorized? :edit,   @abstract_model, object
-              = link_to delete_label, delete_path(:model_name =>  params[:model_name], :id => object.id), :class => 'delete' if authorized? :delete, @abstract_model, object
+              = link_to show_label, show_path(:model_name => params[:model_name], :id => object.id), :class => 'show' if authorized? :show, @abstract_model, object
+              = link_to edit_label, edit_path(:model_name => params[:model_name], :id => object.id), :class => 'edit' if authorized? :edit, @abstract_model, object
+              = link_to delete_label, delete_path(:model_name => params[:model_name], :id => object.id), :class => 'delete' if authorized? :delete, @abstract_model, object
     - if @page_count.to_i > 1
       .pagination
         %ul
