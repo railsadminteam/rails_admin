@@ -14,10 +14,10 @@
   %thead
     %tr
       - columns = []
-      - columns << { :property_name => "created_at", :css_class => "dateTime",    :link_text => "DATE/TIME" }
-      - columns << { :property_name => "username",   :css_class => "smallString", :link_text => "USER"      }
-      - columns << { :property_name => "item",       :css_class => "int",         :link_text => "ITEM"      } if @general
-      - columns << { :property_name => "message",    :css_class => "smallString", :link_text => "ACTION"    }
+      - columns << { :property_name => "created_at", :css_class => "created_at",:link_text => "DATE/TIME" }
+      - columns << { :property_name => "username",   :css_class => "username",  :link_text => "USER"      }
+      - columns << { :property_name => "item",       :css_class => "item",      :link_text => "ITEM"      } if @general
+      - columns << { :property_name => "message",    :css_class => "message",   :link_text => "ACTION"    }
 
       - columns.each do |column|
         - property_name = column[:property_name]

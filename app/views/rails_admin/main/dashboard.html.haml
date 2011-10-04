@@ -1,11 +1,10 @@
 %table.zebra-striped
   %thead
     %tr
-      %th.start
-        = t "admin.dashboard.model_name"
-      %th= t "admin.dashboard.last_used"
-      %th{:style => 'width:60%'}= t "admin.dashboard.records"
-      %th
+      %th.model-name= t "admin.dashboard.model_name"
+      %th.last-used= t "admin.dashboard.last_used"
+      %th.records= t "admin.dashboard.records"
+      %th.controls
   %tbody
     - @abstract_models.each do |abstract_model|
       - if authorized? :list, abstract_model

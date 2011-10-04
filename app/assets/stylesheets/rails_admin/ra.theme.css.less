@@ -30,9 +30,46 @@ input, textarea {
 }
 
 /* Table cell behaviour */
-table.zebra-striped td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width:100px;
+table.zebra-striped {
+  td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width:150px;
+  }
+  th.other {
+    width:13px;
+  }
+  th.first {
+    width:18px;
+  }
+  th.last {
+    width:60px;
+  }
+  /* Dashboard */
+  th.model-name {
+    width:100px;
+  }
+  th.last-used {
+    width:100px;
+  }
+  th.records {
+  }
+  th.controls {
+    width:100px;
+  }
+  /* Dashboard history */
+  th.user {
+    width:100px;
+  }
+  /* History */
+  th.created_at {
+    width:160px;
+  }
+  th.username {
+    width:140px;
+  }
+  th.item {
+    width:60px;
+  }
 }
