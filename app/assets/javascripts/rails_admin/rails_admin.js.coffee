@@ -34,4 +34,5 @@ $(document).ready ->
   $("[rel=twipsy]").twipsy()
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
-    $(this).animate(width: $(this).data("animate-width-to"), length, 'easeOutQuad')
+    width = $(this).data("animate-width-to")
+    $(this).animate(width: width, length, 'easeOutQuad')
