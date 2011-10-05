@@ -19,7 +19,8 @@
               = time_ago_in_words last_used
               = t "admin.dashboard.ago"
           %td
-            - percent = (@max < 2.0 ? 0.0 : ((Math.log(@count[abstract_model.pretty_name]) * 100.0) / Math.log(@max)))
+            - count = @count[abstract_model.pretty_name]
+            - percent = count > 0 ? (@max < 2.0 ? count : ((Math.log(count) * 100.0) / Math.log(@max))) : -1
             .label.animate-width-to{:class => get_indicator(percent), :'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent].max.to_i}%", :style => "width:2%"}= @count[abstract_model.pretty_name]
           %td
             - if authorized? :new, abstract_model
