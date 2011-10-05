@@ -1,11 +1,11 @@
-@import "twitter/bootstrap/reset";
-@import "twitter/bootstrap/variables";
-@import "twitter/bootstrap/mixins";
-@import "twitter/bootstrap/scaffolding";
-@import "twitter/bootstrap/type";
-@import "twitter/bootstrap/forms";
-@import "twitter/bootstrap/tables";
-@import "twitter/bootstrap/patterns";
+@import "bootstrap/reset";
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+@import "bootstrap/scaffolding";
+@import "bootstrap/type";
+@import "bootstrap/forms";
+@import "bootstrap/tables";
+@import "bootstrap/patterns";
 
 /* Keep it clean, people */
 
@@ -23,6 +23,14 @@ input, textarea {
 .sidebar {
   height:0;
 }
+
+.container-fluid > .content {
+    margin-left: 240px;
+    float:none;
+    max-width:none;
+    min-width:none;
+}
+
 
 /* filtering select integration */
 .input-append { 

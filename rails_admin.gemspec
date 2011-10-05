@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
   gem.add_dependency 'rails', '~> 3.1.0'
   gem.add_dependency 'coffee-rails'
-  gem.add_dependency 'less-rails-bootstrap'
+  gem.add_dependency 'bootstrap-sass'
   gem.add_dependency 'jquery-rails'
   gem.add_development_dependency 'capybara', '~> 1.0'
   gem.add_development_dependency 'launchy', '~> 2.0'

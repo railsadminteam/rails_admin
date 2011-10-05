@@ -15,18 +15,18 @@
   }
   .previous {
     left: 0px;
-    background-image: url(<%= asset_path('rails_admin/timeline/arrow_left.png') %>);
+    background-image: image-url("rails_admin/timeline/arrow_left.png");
   }
   .next {
     right: 0px;
-    background-image: url(<%= asset_path('rails_admin/timeline/arrow_right.png') %>);
+    background-image: image-url("rails_admin/timeline/arrow_right.png");
   }
   .handle {
     width: 54px;
     height: 99px;
     position: absolute;
     top: -13px;
-    background-image: url(<%= asset_path('rails_admin/timeline/handler.png') %>);
+    background-image: image-url("rails_admin/timeline/handler.png");
   }
   ul {
     list-style-type: none;

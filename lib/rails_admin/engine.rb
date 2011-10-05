@@ -1,6 +1,6 @@
 require 'rails'
 require 'jquery-rails'
-require 'less-rails-bootstrap'
+require 'bootstrap-sass'
 require 'rails_admin'
 
 module RailsAdmin
