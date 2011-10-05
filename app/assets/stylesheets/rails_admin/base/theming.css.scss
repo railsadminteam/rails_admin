@@ -1,13 +1,7 @@
-@import "bootstrap/reset";
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
-@import "bootstrap/scaffolding";
-@import "bootstrap/type";
-@import "bootstrap/forms";
-@import "bootstrap/tables";
-@import "bootstrap/patterns";
-
-/* Keep it clean, people */
+/* 
+  RailsAdmin main CSS 
+  Keep it clean, people 
+*/
 
 /* We want input size to be used, unfixate input width */
 input, textarea {
@@ -19,11 +13,12 @@ input, textarea {
   z-index:1;
 }
 
-/* sidebar hack (content is slipping beneath height of sidebar) */
+/* sidebar hack (content is slipping beneath height of sidebar. There is a ticket, shouldn't stay long) */
 .sidebar {
   height:0;
 }
 
+/* Remove when TB-sass is updated >1.3.0 (regression) */
 .container-fluid > .content {
     margin-left: 240px;
     float:none;
@@ -31,20 +26,22 @@ input, textarea {
     min-width:none;
 }
 
-
-/* filtering select integration */
+/* filtering select integration, shouldn't be needed soon with new inline forms (TB 1.4.0?) */
 .input-append { 
   display:inline-block;
 }
 
-/* Table cell behaviour */
+/* Table cells behaviour TODO: homogeinize classes a bit */
 table.zebra-striped {
+  /* All */
   td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width:150px;
   }
+  
+  /* List */
   th.other {
     width:13px;
   }
@@ -54,6 +51,7 @@ table.zebra-striped {
   th.last {
     width:60px;
   }
+  
   /* Dashboard */
   th.model-name {
     width:100px;
@@ -66,10 +64,12 @@ table.zebra-striped {
   th.controls {
     width:100px;
   }
-  /* Dashboard history */
+  
+  /* Dashboard => history */
   th.user {
     width:100px;
   }
+  
   /* History */
   th.created_at {
     width:160px;

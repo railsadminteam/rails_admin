@@ -1,0 +1,11 @@
+Dear themers,
+
+Please:
+ - copy 'themes/default' content to 'themes/my_theme_name'
+ - update 'theme' in 'import.css.scss.erb' to 'my_theme_name'
+ - do your magic
+ - send us a pull request
+
+Thanks,
+
+Not the zombies.

@@ -1,9 +1,4 @@
 /*
- *= require "./aristo/jquery-ui-1.8.7.custom"
- *= require "./jquery.ui.timepicker"
- *= require "./ra.calendar-additions"
- *= require "./jquery.colorpicker"
- *= require "./ra.filtering-multiselect"
- *= require "./ra.timeline"
- *= require "./ra.theme"
+ *= require rails_admin/imports.css.scss
 */
+/* Nothing else here (imports create weird pbs in a self required scss file) */ 
