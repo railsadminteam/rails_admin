@@ -1,15 +1,3 @@
-# This fork
-
-This is the Twitter Boostrap UI version of RailsAdmin.
-Have a look [at the demo](http://rails-admin-tb.herokuapp.com/), login with  `username@example.com` / `password`
-Alpha for the moment, will be stable very soon. Compatibility with master is not guaranteed, though expected.
-
-To install:
-
-    gem 'rails_admin', :git => 'git://github.com/bbenezech/rails_admin.git', :branch => 'bootstrap'
-
-Have fun and feedback!
-
 # RailsAdmin
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
@@ -32,14 +20,12 @@ It currently offers the following features:
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
-<<<<<<< HEAD
-=======
-See the demo here: http://demo.railsadmin.org/
+See the demo here: http://rails-admin-tb.herokuapp.com/
 
-For the Twitter boostrap branch, see here: http://rails-admin-tb.herokuapp.com/
-More information there: https://github.com/bbenezech/rails_admin/tree/bootstrap
+The older Activo UI is still available on a (non-maintained) activo branch
 
->>>>>>> origin/master
+https://github.com/sferik/rails_admin/tree/activo
+
 Supported ORMs:
 
 * ActiveRecord
@@ -51,19 +37,154 @@ list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
 irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 
 If you think you found a bug in RailsAdmin, you can [submit an
-issue](https://github.com/bbenezech/rails_admin#issues).
+issue](https://github.com/sferik/rails_admin#issues).
+
+## <a name="notices">Notices</a>
+
+The new UI is there. A few refactorings included as well. Feedback welcome here: #722
+Transition should be smooth for those who didn't customize RA internals too much. For the others, you can stick on to activo branch for the moment.
+
+We're moving toward a form_builder, all form partials should be considered deprecated at some point (don't override them in your app). You can't define form_builders anymore in your apps, feel free to add to methods to it through monkey-patching if you need.
+
+`ActiveRecord#rails_admin` is no more :(
+Please move all remaining code from your models to rails_admin initializer, it won't be evaluated.
+Incidentally, `reload_between_requests` is also no longer in use.
+
+`Virtual` Class is no more. :(
+Just use `String` instead, or another type. There is a `virtual?` method on `Fields::Base`, that can be used to detect whereas field has properties.
+
+`:attr_accessible` is now taken into account: restricted fields are not editable anymore, and mass-assignement security isn't bypassed anymore. Be careful if you whitelist attributes, you'll need to whitelist association 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
+
+Default scopes are now fully *active* in list views (ordering is overriden, obvisously) as they used to a while ago. This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If you don't want some default scopes in RailsAdmin, either move your scoping rules to cancan, or activate your default scope conditionnaly on user/url prefix.
+
+Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
+considered as expermimental (development) until further notice. Unfortunately, implementation
+of this feature is tougher than imagined. Any help is welcome, as usual.
+Please remove any rails_admin configuration from your ActiveRecord model and put it inside an
+initializer (as shown in this documentation now). Use:
+
+    RailsAdmin.config do |config|
+
+      ...
+
+      config.model MyActiveRecordModel do
+        # MyActiveRecordModel configuration
+      end
+
+      ...
+
+    end
+
+Instead of:
+
+    class MyActiveRecordModel < ActiveRecord::Base
+      rails_admin do
+        # MyActiveRecordModel configuration
+      end
+    end
+
+Please refer to issue http://github.com/sferik/rails_admin/issues/289
+
+The master branch currently targets Rails 3.1.
+
+If you are updating from a Rails 3.0 application, you will no longer need to
+update your assets, they will be served from the engine (through Sprockets).
+You can delete all RailsAdmin related assets in your public directory.
+Make sure to activate the asset pipeline in `application.rb`:
+
+    config.assets.enabled = true
+
+and to add this to your config/routes:
+
+    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+
+You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0
+branch in your `Gemfile`, however, this branch is no longer being actively
+maintained by the RailsAdmin Core Team.
+
+    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git', :branch => 'rails-3.0'
+
+:truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
+
+Important notice about `BelongsToAssociation`:
+In the DSL, they now must be referenced by the association name, not the child_key.
+Considering:
+
+    # `user_id: integer` (DB)
+    belongs_to :user # (ActiveRecord)
+
+Instead of:
+
+    field :user_id
+
+You must use:
+
+    field :user
+
+`field :user_id` now references the column (automatically hidden), which type is `Integer`, not the `BelongToAssociation`.
+
+The model configuration `dropdown` has been deprecated in favor of `navigation_label`.
+API unchanged.
+
+The field configuration method `show_partial` has been removed in favor of
+field configuration `pretty_value`, which is used more globally and consistently
+across the whole application. Show partials are no longer in use, method doesn't
+exist anymore.
+
+`RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
+`RailsAdmin::Config.default_items_per_page`.
+
+`RailsAdmin::Config::Sections::Update.default_hidden_fields` has been moved to
+`RailsAdmin::Config.default_hidden_fields`, it now affects show, create and
+update views.
+
+`RailsAdmin.authenticate_with`, `RailsAdmin.authorize_with`,
+`RailsAdmin.current_user_method` and `RailsAdmin.configure_with` have been moved under
+`RailsAdmin::Config` and are to be used inside the initializer configuration block eg.
+`RailsAdmin.config {|config| config.authorize_with :cancan }`.
+
+`ActiveRecord::Base.rails_admin` is the new recommendation for configuring
+models as that way configuration can be reloaded per request in development
+mode. The old API is not deprecated as the new one is just a proxy for
+`RailsAdmin::Config.model`.
+
+`navigation.max_visible_tabs` is not configurable anymore, as the new Activo
+theme implements the main navigation as a vertical list.
+
+`object_label` is not directly configurable anymore, as it lead to performance issues when used with a list of records.
+Please use object_label_method instead.
+
+The ability to set model labels for each section (list, navigation, update, ...) has been removed,
+as it was deemed unnecessarily granular and was not fully honored in all displays.
+That also means that the methods `label_for_navigation`, etc. are no longer functional. They print a warning at the moment.
+See details in the examples below for the currently supported way to label models.
+This change was motivated by the conversation following a [bug report](https://github.com/sferik/rails_admin/issues/319/#issue/319/comment/875868)
+about label display errors.
+
+The ability to set model visibility for each section has been removed due to
+same reasons as section specific label configuration (see above paragraph).
+This also means that methods such as `hide_from_navigation` and `show_in_list`
+are no longer functional and have been deprecated. For now on use model level
+configuration of visibility or for more granular control integrate an
+authorization framework as outlined later in this document.
+
+The field configuration method `partial` has been deprecated in favor of
+action-specific methods (`edit_partial`, `create_partial` and
+`update_partial`). See the section titled **Fields - Rendering** above for more
+details.
+
 
 ## <a name="screenshots">Screenshots</a>
-![Dashboard view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/dashboard.png "Dashboard view")
-![List view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/list.png "List view")
-![Edit view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/edit.png "Edit view")
-![Export view](https://github.com/bbenezech/rails_admin/raw/bootstrap/screenshots/export.png "Edit view")
+![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
+![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
+![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
+![Export view](https://github.com/sferik/rails_admin/raw/master/screenshots/export.png "Edit view")
 
 ## <a name="installation">Installation</a>
 In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
-    gem 'rails_admin', :git => 'git://github.com/bbenezech/rails_admin.git', :branch => 'bootstrap'
+    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
 
 Run:
 
@@ -1338,12 +1459,12 @@ Here are some ways *you* can contribute:
 * by writing specifications
 * by writing code (**no patch is too small**: fix typos, add comments, clean up inconsistent whitespace)
 * by refactoring code
-* by resolving [issues](https://github.com/bbenezech/rails_admin/issues)
+* by resolving [issues](https://github.com/sferik/rails_admin/issues)
 * by reviewing patches
 * [financially](http://pledgie.com/campaigns/15917)
 
 ## <a name="issues">Submitting an Issue</a>
-We use the [GitHub issue tracker](https://github.com/bbenezech/rails_admin/issues) to track bugs and
+We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
 been submitted. You can indicate support for an existing issue by voting it up. When submitting a
 bug report, please include a [Gist](https://gist.github.com/) that includes a stack trace and any

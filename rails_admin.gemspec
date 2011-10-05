@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
   gem.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
   gem.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
-  gem.homepage = 'https://github.com/bbenezech/rails_admin'
+  gem.homepage = 'https://github.com/sferik/rails_admin'
   gem.name = 'rails_admin'
   gem.require_paths = ['lib']
   gem.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
