@@ -121,24 +121,22 @@ module RailsAdmin
     # Creative whitespace:
     ViewType   =          Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
-      :delete        => ViewType.new(:show,      :object, :delete),
-      :history       => ViewType.new(:show,      :object, nil,            :history_object),
-      :edit          => ViewType.new(:show,      :object, :edit),
-      :show          => ViewType.new(:index,      :object, nil),
-      :export        => ViewType.new(:index,      :model,  :export),
-      :bulk_delete  => ViewType.new(:index,      :model,  :delete),
-      :new           => ViewType.new(:index,      :model,  :new),
-      :model_history => ViewType.new(:index,      :model,  nil,            :history_model),
+      :delete         => ViewType.new(:show,      :object, :delete),
+      :history        => ViewType.new(:show,      :object, nil,            :history_object),
+      :edit           => ViewType.new(:show,      :object, :edit),
+      :show           => ViewType.new(:index,     :object, nil),
+      :export         => ViewType.new(:index,     :model,  :export),
+      :bulk_delete    => ViewType.new(:index,     :model,  :delete),
+      :new            => ViewType.new(:index,     :model,  :new),
+      :model_history  => ViewType.new(:index,     :model,  nil,            :history_model),
       :index          => ViewType.new(:dashboard, :model,  :index),
-      :dashboard     => ViewType.new
+      :dashboard       => ViewType.new
     }
 
     def breadcrumbs_for action, abstract_model, object
       begin
       view = case action
         
-      when :index
-        :dashboard
       when :for_object
         :history
       when :for_model
