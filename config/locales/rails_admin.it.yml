@@ -25,7 +25,7 @@ it:
       no_file_found: "Nessun file trovato"
     credentials:
       log_out: "Scollegati"
-    list:
+    index:
       edit_action: "Modifica"
       delete_action: "Elimina"
       select_action: "Seleziona"
@@ -100,5 +100,5 @@ it:
       bulk_destroy: "elimina"
       new: "nuovo"
       model_history: "cronologia"
-      list: "elenco"
+      index: "elenco"
       dashboard: "riepilogo"

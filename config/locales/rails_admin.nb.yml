@@ -27,7 +27,7 @@ nb:
       no_file_found: "Fil ikke funnet"
     credentials:
       log_out: "Logg ut"
-    list:
+    index:
       edit_action: "Rediger"
       delete_action: "Slett"
       select_action: "Velg"
@@ -101,5 +101,5 @@ nb:
       bulk_destroy: "slette"
       new: "ny"
       model_history: "historikk"
-      list: "liste"
+      index: "liste"
       dashboard: "dashboard"

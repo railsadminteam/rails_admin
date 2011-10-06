@@ -7,9 +7,9 @@
 = form_tag("", :method => "get", :class => "search") do
   .row.clearfix
     .span3
-      %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.list.search")}"}
+      %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.index.search")}"}
     .span3
-      %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.list.search")}= t("admin.list.search")
+      %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.index.search")}= t("admin.index.search")
 %table#history.zebra-striped
   %thead
     %tr
@@ -38,6 +38,6 @@
   .pagination
     %ul
       - if @record_count.to_i <= 100 && @page_count.to_i > 1
-        %li= link_to(t("admin.list.show_all"), history_model_path(params.merge(:all => true)), :class => "showall", :method => :get)
+        %li= link_to(t("admin.index.show_all"), history_model_path(params.merge(:all => true)), :class => "showall", :method => :get)
       = paginate(@current_page, @page_count, :remote => false, :url => params.except(:page)).html_safe
 

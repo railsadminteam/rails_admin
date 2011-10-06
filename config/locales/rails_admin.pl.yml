@@ -26,7 +26,7 @@ pl:
       no_file_found: "Nie znaleziono pliku"
     credentials:
       log_out: "Wyloguj się"
-    list:
+    index:
       edit_action: "Edytuj"
       delete_action: "Usuń"
       select_action: "Select"
@@ -101,6 +101,6 @@ pl:
       bulk_destroy: "usuń"
       new: "nowy"
       model_history: "historia"
-      list: "lista"
+      index: "lista"
       dashboard: "tablica"
       

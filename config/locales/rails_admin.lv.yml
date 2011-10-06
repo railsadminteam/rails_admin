@@ -18,7 +18,7 @@ lv:
       no_activity: "Nav Aktivitātes"
     credentials:
       log_out: "Iziet"
-    list:
+    index:
       edit_action: "Labot"
       delete_action: "Dzēst"
       select_action: "Izvēlies"
@@ -91,5 +91,5 @@ lv:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

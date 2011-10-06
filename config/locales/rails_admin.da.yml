@@ -18,7 +18,7 @@ da:
       no_activity: "Ingen aktivitet"
     credentials:
       log_out: "Log ud"
-    list:
+    index:
       edit_action: "Rediger"
       delete_action: "Slet"
       select_action: "Select"
@@ -90,5 +90,5 @@ da:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

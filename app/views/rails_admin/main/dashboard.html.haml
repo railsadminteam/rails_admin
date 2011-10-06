@@ -7,13 +7,13 @@
       %th.controls
   %tbody
     - @abstract_models.each do |abstract_model|
-      - if authorized? :list, abstract_model
-        - list_path = list_path(:model_name => abstract_model.to_param)
-        - row_class = "#{cycle("odd", "even")}#{" link" if list_path}"
+      - if authorized? :index, abstract_model
+        - index_path = index_path(:model_name => abstract_model.to_param)
+        - row_class = "#{cycle("odd", "even")}#{" link" if index_path}"
 
-        %tr{:class => row_class, :"data-link" => list_path}
+        %tr{:class => row_class, :"data-link" => index_path}
           %td
-            %span.show= link_to RailsAdmin.config(abstract_model).label, list_path
+            %span.show= link_to RailsAdmin.config(abstract_model).label, index_path
           %td
             - if (last_used = @most_recent_changes[abstract_model.pretty_name])
               = time_ago_in_words last_used

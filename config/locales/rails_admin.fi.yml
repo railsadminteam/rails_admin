@@ -23,7 +23,7 @@ fi:
       no_file_found: "Tiedostoa ei löytynyt"
     credentials:
       log_out: "Kirjaudu ulos"
-    list:
+    index:
       edit_action: "Muokkaa"
       delete_action: "Poista"
       select_action: "Valitse"
@@ -98,5 +98,5 @@ fi:
       bulk_destroy: "poista"
       new: "luo uusi"
       model_history: "historia"
-      list: "listaa"
+      index: "listaa"
       dashboard: "hallintapaneeli"

@@ -23,7 +23,7 @@ zh-CN:
       no_file_found: "没有找到文件"
     credentials:
       log_out: "登出"
-    list:
+    index:
       edit_action: "编辑"
       delete_action: "删除"
       select_action: "选择"
@@ -100,7 +100,7 @@ zh-CN:
       bulk_destroy: "删除"
       new: "新建"
       model_history: "历史"
-      list: "列表"
+      index: "列表"
       dashboard: "首页"
   datetime:
     distance_in_words:

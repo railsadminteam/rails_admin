@@ -17,7 +17,7 @@ fr:
       page_name: "Historique de %{name}"
     credentials:
       log_out: "Déconnectez-vous"
-    list:
+    index:
       edit_action: "Éditer"
       delete_action: "Supprimer"
       add_new: "Nouveau"
@@ -101,5 +101,5 @@ fr:
       bulk_destroy: "suppression"
       new: "nouveau"
       model_history: "historique"
-      list: "liste"
+      index: "liste"
       dashboard: "tableau de bord"

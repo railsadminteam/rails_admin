@@ -21,7 +21,7 @@ tr:
       no_activity: "Aktivite yok"
     credentials:
       log_out: "Çıkış yap"
-    list:
+    index:
       edit_action: "Düzenle"
       delete_action: "Sil"
       select_action: "Select"
@@ -94,5 +94,5 @@ tr:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

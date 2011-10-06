@@ -21,7 +21,7 @@ sv:
       no_activity: "Ingen aktivitet"
     credentials:
       log_out: "Logga ut"
-    list:
+    index:
       edit_action: "Redigera"
       delete_action: "Ta bort"
       select_action: "Marker"
@@ -94,5 +94,5 @@ sv:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

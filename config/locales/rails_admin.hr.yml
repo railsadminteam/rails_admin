@@ -21,7 +21,7 @@ hr:
       no_activity: "Nema aktivnosti"
     credentials:
       log_out: "Odjava"
-    list:
+    index:
       edit_action: "Uredi"
       delete_action: "Obriši"
       select_action: "Izaberi"
@@ -72,5 +72,5 @@ hr:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

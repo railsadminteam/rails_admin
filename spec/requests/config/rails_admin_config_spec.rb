@@ -23,7 +23,7 @@ describe "RailsAdmin Config DSL" do
     end
 
     it "should raise NotFound for the list view" do
-      visit list_path(:model_name => "fan")
+      visit index_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
     end
 

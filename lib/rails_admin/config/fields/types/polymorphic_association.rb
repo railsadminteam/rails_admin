@@ -53,7 +53,7 @@ module RailsAdmin
             end
 
             Hash[*types.collect { |v|
-                  [v[0], bindings[:view].list_path(v[1])]
+                  [v[0], bindings[:view].index_path(v[1])]
                 }.flatten]
           end
 

@@ -26,7 +26,7 @@ en:
       no_file_found: "No file found"
     credentials:
       log_out: "Log out"
-    list:
+    index:
       edit_action: "Edit"
       delete_action: "Delete"
       selected: "Selected"
@@ -105,5 +105,5 @@ en:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

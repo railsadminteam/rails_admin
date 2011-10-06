@@ -20,7 +20,7 @@ bg:
       no_activity: "Липса на активност"
     credentials:
       log_out: "Изход"
-    list:
+    index:
       edit_action: "Редактирай"
       delete_action: "Изтрий"
       select_action: "Избери"
@@ -95,5 +95,5 @@ bg:
       bulk_destroy: "заличи"
       new: "нов"
       model_history: "история"
-      list: "списък"
+      index: "списък"
       dashboard: "табло"

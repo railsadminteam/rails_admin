@@ -21,7 +21,7 @@ mn:
       no_activity: "No Activity"
     credentials:
       log_out: "Гарах"
-    list:
+    index:
       edit_action: "Засах"
       delete_action: "Устгах"
       select_action: "Сонгох"
@@ -94,5 +94,5 @@ mn:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

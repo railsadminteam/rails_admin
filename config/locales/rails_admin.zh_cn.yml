@@ -18,7 +18,7 @@ zh_cn:
       no_activity: "非激活"
     credentials:
       log_out: "登出"
-    list:
+    index:
       edit_action: "编辑"
       delete_action: "删除"
       select_action: "选择"
@@ -93,7 +93,7 @@ zh_cn:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"
   datetime:
     distance_in_words:

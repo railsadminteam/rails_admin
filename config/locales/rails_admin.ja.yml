@@ -26,7 +26,7 @@ ja:
       no_file_found: "ファイルが見つかりません"
     credentials:
       log_out: "ログアウト"
-    list:
+    index:
       edit_action: "編集"
       delete_action: "削除"
       select_action: "選択"
@@ -101,5 +101,5 @@ ja:
       bulk_destroy: "削除"
       new: "追加"
       model_history: "履歴"
-      list: "一覧"
+      index: "一覧"
       dashboard: "管理画面トップ"

@@ -22,7 +22,7 @@ es:
       no_file_found: "Archivo no encontrado"
     credentials:
       log_out: "Cerrar sesión"
-    list:
+    index:
       edit_action: "Editar"
       delete_action: "Eliminar"
       select_action: "Seleccionar"
@@ -97,5 +97,5 @@ es:
       bulk_destroy: "borrar"
       new: "nuevo"
       model_history: "historial"
-      list: "lista"
+      index: "lista"
       dashboard: "panel general"

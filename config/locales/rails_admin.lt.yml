@@ -20,7 +20,7 @@ lt:
       no_activity: "Be pasikeitimų"
     credentials:
       log_out: "Atsijungti"
-    list:
+    index:
       edit_action: "Tvarkyti"
       delete_action: "Pašalinti"
       select_action: "Pasirinkti"
@@ -93,5 +93,5 @@ lt:
       bulk_destroy: "ištrinti visus"
       new: "naujas"
       model_history: "istorija"
-      list: "sąrašas"
+      index: "sąrašas"
       dashboard: "nustatymai"

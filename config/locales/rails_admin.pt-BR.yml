@@ -25,7 +25,7 @@ pt-BR:
       no_file_found: "Nenhum arquivo encontrado"
     credentials:
       log_out: "Desconectar"
-    list:
+    index:
       edit_action: "Alterar"
       delete_action: "Excluir"
       export_action: "Exportar tela corrente"
@@ -100,5 +100,5 @@ pt-BR:
       bulk_destroy: "deletar"
       new: "novo"
       model_history: "história"
-      list: "listar"
+      index: "listar"
       dashboard: "administração"

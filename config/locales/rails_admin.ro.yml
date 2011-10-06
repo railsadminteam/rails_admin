@@ -29,7 +29,7 @@ ro:
       no_file_found: "Niciun fișier găsit"
     credentials:
       log_out: "Dezautentificare"
-    list:
+    index:
       show_action: "Arată"
       edit_action: "Modifică"
       delete_action: "Șterge"
@@ -104,5 +104,5 @@ ro:
       bulk_destroy: "șterge"
       new: "nou"
       model_history: "istoric"
-      list: "listează"
+      index: "listează"
       dashboard: "tablou"

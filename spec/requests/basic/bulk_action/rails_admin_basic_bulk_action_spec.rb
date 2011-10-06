@@ -17,7 +17,7 @@ describe "RailsAdmin Basic Bulk Action" do
 
   describe "bulk_export" do
     it 'should show form for export' do
-      visit list_path(:model_name => "player")
+      visit index_path(:model_name => "player")
       click_link "Export current view"
       @players.each { |player| should have_content("Select fields to export") }
     end

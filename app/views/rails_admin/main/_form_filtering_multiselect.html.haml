@@ -35,7 +35,7 @@
     createQuery: function(query) {
     return { query: query }
     },
-    source: "#{list_path(config.abstract_model.to_param, :compact => true).html_safe}",
+    source: "#{index_path(config.abstract_model.to_param, :compact => true).html_safe}",
   sortable: #{field.orderable ? 'true' : 'false'},
   regional: {
   chooseAll: "#{t("admin.new.chose_all")}",

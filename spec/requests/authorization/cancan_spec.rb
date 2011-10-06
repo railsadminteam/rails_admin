@@ -40,7 +40,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/player should raise CanCan::AccessDenied" do
         lambda {
-          visit list_path(:model_name => "player")
+          visit index_path(:model_name => "player")
         }.should raise_error(CanCan::AccessDenied)
       end
 
@@ -65,7 +65,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
           FactoryGirl.create(:player, :retired => true),
         ]
 
-        visit list_path(:model_name => "player", :set => 1)
+        visit index_path(:model_name => "player", :set => 1)
 
         should be_successful
         body.should have_content(@players[0].name)
@@ -79,7 +79,7 @@ if ENV["AUTHORIZATION_ADAPTER"] == "cancan"
 
       it "GET /admin/team should raise CanCan::AccessDenied" do
         lambda {
-          visit list_path(:model_name => "team")
+          visit index_path(:model_name => "team")
         }.should raise_error(CanCan::AccessDenied)
       end
 

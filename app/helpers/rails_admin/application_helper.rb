@@ -124,12 +124,12 @@ module RailsAdmin
       :delete        => ViewType.new(:show,      :object, :delete),
       :history       => ViewType.new(:show,      :object, nil,            :history_object),
       :edit          => ViewType.new(:show,      :object, :edit),
-      :show          => ViewType.new(:list,      :object, nil),
-      :export        => ViewType.new(:list,      :model,  :export),
-      :bulk_delete  => ViewType.new(:list,      :model,  :delete),
-      :new           => ViewType.new(:list,      :model,  :new),
-      :model_history => ViewType.new(:list,      :model,  nil,            :history_model),
-      :list          => ViewType.new(:dashboard, :model,  :list),
+      :show          => ViewType.new(:index,      :object, nil),
+      :export        => ViewType.new(:index,      :model,  :export),
+      :bulk_delete  => ViewType.new(:index,      :model,  :delete),
+      :new           => ViewType.new(:index,      :model,  :new),
+      :model_history => ViewType.new(:index,      :model,  nil,            :history_model),
+      :index          => ViewType.new(:dashboard, :model,  :index),
       :dashboard     => ViewType.new
     }
 
@@ -187,7 +187,7 @@ module RailsAdmin
             wording = case view
               when :show
                 object.send(config.object_label_method)
-              when :list
+              when :index
                 config.label_plural
               else
                 I18n.t("admin.breadcrumbs.#{view}").capitalize

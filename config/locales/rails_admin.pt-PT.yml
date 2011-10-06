@@ -25,7 +25,7 @@ pt-PT:
       no_file_found: "Ficheiro não encontrado"
     credentials:
       log_out: "Terminar sessão"
-    list:
+    index:
       edit_action: "Editar"
       delete_action: "Remover"
       select_action: "Select"
@@ -100,5 +100,5 @@ pt-PT:
       bulk_destroy: "deletar"
       new: "novo"
       model_history: "história"
-      list: "listar"
+      index: "listar"
       dashboard: "administração"

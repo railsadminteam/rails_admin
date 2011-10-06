@@ -25,7 +25,7 @@ de:
       no_file_found: "Keine Datei gefunden"
     credentials:
       log_out: "abmelden"
-    list:
+    index:
       show_action: "Anzeigen"
       edit_action: "Bearbeiten"
       delete_action: "Löschen"
@@ -101,5 +101,5 @@ de:
       bulk_destroy: "löschen"
       new: "neu"
       model_history: "Historie"
-      list: "Liste"
+      index: "Liste"
       dashboard: "Übersicht"

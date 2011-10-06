@@ -18,7 +18,7 @@ uk:
       no_activity: "Пусто"
     credentials:
       log_out: "Вийти"
-    list:
+    index:
       edit_action: "Редагувати"
       delete_action: "Видалити"
       add_new: "Створити"
@@ -91,5 +91,5 @@ uk:
       bulk_destroy: "delete"
       new: "new"
       model_history: "history"
-      list: "list"
+      index: "list"
       dashboard: "dashboard"

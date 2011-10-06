@@ -5,13 +5,13 @@ module RailsAdmin
 
     layout "rails_admin/application"
 
-    before_filter :get_model, :except => [:index]
+    before_filter :get_model, :except => [:dashboard]
     before_filter :get_object, :only => [:show, :edit, :update, :delete, :destroy]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
-    def index
-      @authorization_adapter.authorize(:index) if @authorization_adapter
+    def dashboard
+      @authorization_adapter.authorize(:dashboard) if @authorization_adapter
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
@@ -26,7 +26,7 @@ module RailsAdmin
       @count = {}
       @max = 0
       @abstract_models.each do |t|
-        scope = @authorization_adapter && @authorization_adapter.query(:list, t)
+        scope = @authorization_adapter && @authorization_adapter.query(:index, t)
         current_count = t.count({}, scope)
         @max = current_count > @max ? current_count : @max
         @count[t.pretty_name] = current_count
@@ -35,11 +35,11 @@ module RailsAdmin
       render :dashboard
     end
 
-    def list
-      @authorization_adapter.authorize(:list, @abstract_model) if @authorization_adapter
+    def index
+      @authorization_adapter.authorize(:index, @abstract_model) if @authorization_adapter
 
       @page_type = @abstract_model.pretty_name.downcase
-      @page_name = t("admin.list.select", :name => @model_config.label.downcase)
+      @page_name = t("admin.index.select", :name => @model_config.label.downcase)
 
       @objects, @current_page, @page_count, @record_count = list_entries
       @schema ||= { :only => @model_config.list.visible_fields.map {|f| f.name } }
@@ -199,7 +199,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
       end
 
-      redirect_to list_path(:model_name => @abstract_model.to_param)
+      redirect_to index_path(:model_name => @abstract_model.to_param)
     end
 
     def export
@@ -213,7 +213,7 @@ module RailsAdmin
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
         request.format = format
         @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
-        list
+        index
       else
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label_plural.downcase
         @page_type = @abstract_model.pretty_name.downcase
@@ -223,12 +223,11 @@ module RailsAdmin
     end
 
     def bulk_action
-      redirect_to list_path, :flash => { :info => t("admin.flash.noaction") } and return if params[:bulk_ids].blank?
-
+      redirect_to index_path, :flash => { :info => t("admin.flash.noaction") } and return if params[:bulk_ids].blank?
       case params[:bulk_action]
       when "delete" then bulk_delete
       when "export" then export
-      else redirect_to(list_path(:model_name => @abstract_model.to_param), :flash => { :info => t("admin.flash.noaction") })
+      else redirect_to(index_path(:model_name => @abstract_model.to_param), :flash => { :info => t("admin.flash.noaction") })
       end
     end
 
@@ -265,7 +264,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
       end
 
-      redirect_to list_path
+      redirect_to index_path
     end
 
     private
@@ -471,7 +470,7 @@ module RailsAdmin
       elsif params[:_add_edit]
         redirect_to edit_path(:id => @object.id), :flash => { :success => notice }
       else
-        redirect_to list_path, :flash => { :success => notice }
+        redirect_to index_path, :flash => { :success => notice }
       end
     end
 
@@ -488,7 +487,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      redirect_to list_path, :flash => { :warning => t("admin.flash.noaction") } if params[:_continue]
+      redirect_to index_path, :flash => { :warning => t("admin.flash.noaction") } if params[:_continue]
     end
 
     def list_entries(other = {})
@@ -497,7 +496,7 @@ module RailsAdmin
       associations = @model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = get_sort_hash.merge(get_conditions_hash(params[:query], params[:filters])).merge(other).merge(associations.empty? ? {} : { :include => associations })
 
-      scope = @authorization_adapter && @authorization_adapter.query(:list, @abstract_model)
+      scope = @authorization_adapter && @authorization_adapter.query(:index, @abstract_model)
       current_page = (params[:page] || 1).to_i
 
       if params[:all]

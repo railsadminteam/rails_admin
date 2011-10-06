@@ -39,9 +39,9 @@
     });
 
 - can_bulk_action = (authorized?(:export, @abstract_model) || authorized?(:delete, @abstract_model))
-- show_label    = t("admin.list.show_action")
-- delete_label  = t("admin.list.delete_action")
-- edit_label    = t("admin.list.edit_action")
+- show_label    = t("admin.index.show_action")
+- delete_label  = t("admin.index.delete_action")
+- edit_label    = t("admin.index.edit_action")
 
 #list
   %style
@@ -49,16 +49,16 @@
       \.grid thead #{".#{key}"}{
       width: #{value[:width]}px;
       }
-  = form_tag(list_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true) do
+  = form_tag(index_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true) do
     .row
       .span12
         #filters_box
     .row.clearfix
       .span3
-        %input{:name => "query", :type => "search", :value => query, :placeholder => t("admin.list.search")}
+        %input{:name => "query", :type => "search", :value => query, :placeholder => t("admin.index.search")}
       .span3
-        %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.list.refresh")}= t("admin.list.refresh")
-      %span{:style => 'float:right'}=link_to t("admin.list.export_current_action"), export_path(params.except('page')), :class => 'btn info'
+        %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.index.refresh")}= t("admin.index.refresh")
+      %span{:style => 'float:right'}=link_to t("admin.index.export_current_action"), export_path(params.except('page')), :class => 'btn info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
@@ -72,7 +72,7 @@
           - properties.each do |property|
             - selected = (sort == property.name.to_s)
             - if property.sortable
-              - sort_location = list_path params.except('page').merge(:sort => property.name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
+              - sort_location = index_path params.except('page').merge(:sort => property.name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
               - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
             %th{:class => "#{property.sortable && "header" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class}", :'data-link' => (property.sortable && sort_location)}= property.label
           %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
@@ -83,12 +83,12 @@
             %td.action.select
               - if can_bulk_action
                 = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
-            - other_left = list_path(params.merge(:set => (params[:set].to_i - 1)))
+            - other_left = index_path(params.merge(:set => (params[:set].to_i - 1)))
             %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
               %td{:class => "#{property.css_class}", :title => strip_tags(value)}= value
-            - other_right = list_path(params.merge(:set => (params[:set].to_i + 1)))
+            - other_right = index_path(params.merge(:set => (params[:set].to_i + 1)))
             %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
             %td.last
               = link_to show_label, show_path(:model_name => params[:model_name], :id => object.id) if authorized? :show, @abstract_model, object
@@ -98,6 +98,6 @@
       .pagination
         %ul
           - if @record_count.to_i <= 100 && @page_count.to_i > 1
-            %li= link_to(t("admin.list.show_all"), list_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
+            %li= link_to(t("admin.index.show_all"), index_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
           = paginate(@current_page, @page_count, :url => params).html_safe
     .record-count= "#{@record_count} #{@model_config.label_plural.downcase}" 
