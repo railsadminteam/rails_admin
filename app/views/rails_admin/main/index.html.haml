@@ -49,7 +49,7 @@
       \.grid thead #{".#{key}"}{
       width: #{value[:width]}px;
       }
-  = form_tag(index_post_path(params.except(*%w[page filters query])), :method => :post, :remote => true) do
+  = form_tag(index_path(params.except(*%w[page filters query])), :method => :post, :remote => true) do
     .row
       .span12
         #filters_box

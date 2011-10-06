@@ -1,6 +1,4 @@
 RailsAdmin::Engine.routes.draw do
-
-  # Prefix route urls with "admin" and route names with "rails_admin_"
   scope "history", :as => "history" do
     controller "history" do
       match "/list", :to => :list, :as => "list"
@@ -10,21 +8,23 @@ RailsAdmin::Engine.routes.draw do
     end
   end
 
-  # Routes for rails_admin controller
   controller "main" do
-    match "/", :to => :dashboard, :as => "dashboard"
-    get "/:model_name", :to => :index, :as => "index"
-    post "/:model_name/index", :to => :index, :as => "index_post"
-    match "/:model_name/export", :to => :export, :as => "export"
-    get "/:model_name/new", :to => :new, :as => "new"
-    post "/:model_name", :to => :create, :as => "create"
-    get "/:model_name/:id", :to => :show, :as => "show"
-    get "/:model_name/:id/edit", :to => :edit, :as => "edit"
-    put "/:model_name/:id", :to => :update, :as => "update"
-    get "/:model_name/:id/delete", :to => :delete, :as => "delete"
-    delete "/:model_name/:id", :to => :destroy, :as => "destroy"
-    post "/:model_name/bulk_action", :to => :bulk_action, :as => "bulk_action"
-    post "/:model_name/bulk_destroy", :to => :bulk_destroy, :as => "bulk_destroy"
+    match   "/", :to => :dashboard, :as => "dashboard"
+    scope ":model_name" do
+      match "/",             :to => :index,        :as => "index", :via => [:get, :post]
+      match "/export",       :to => :export,       :as => "export"
+      get   "/new",          :to => :new,          :as => "new"
+      post  "/new",          :to => :create,       :as => "create"
+      post  "/bulk_action",  :to => :bulk_action,  :as => "bulk_action"
+      post  "/bulk_destroy", :to => :bulk_destroy, :as => "bulk_destroy"
+      scope ":id" do
+        get     "/",       :to => :show,    :as => "show"
+        get     "/edit",   :to => :edit,    :as => "edit"
+        put     "/edit",   :to => :update,  :as => "update"
+        get     "/delete", :to => :delete,  :as => "delete"
+        delete  "/delete", :to => :destroy, :as => "destroy"
+      end
+    end
   end
 end
 

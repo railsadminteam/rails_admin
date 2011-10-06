@@ -207,7 +207,7 @@ module RailsAdmin
       #   limitation: need to display at least one real attribute ('only') so that the full object doesn't get displayed, a way to fix this? maybe force :only => [""]
       #   use send_file instead of send_data to leverage the x-sendfile header set by rails 3 (generate and let the front server handle the rest)
       # maybe
-      #   n-levels (backend: possible with xml&json, frontend: not possible, injections check: quite easy)
+      #   n-levels (backend: possible with xml&json, frontend: not possible?)
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
       
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
