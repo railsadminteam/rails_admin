@@ -95,11 +95,11 @@ fr:
     breadcrumbs:
       delete: "suppression"
       show: "détail"
-      history: "historique"
+      for_object: "historique"
       edit: "édition"
       export: "export"
       bulk_destroy: "suppression"
       new: "nouveau"
-      model_history: "historique"
+      for_model: "historique"
       index: "liste"
       dashboard: "tableau de bord"

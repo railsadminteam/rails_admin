@@ -87,12 +87,12 @@ zh_cn:
       exported: "已导出"
     breadcrumbs:
       delete: "delete"
-      history: "history"
+      for_object: "history"
       edit: "edit"
       export: "export"
       bulk_destroy: "delete"
       new: "new"
-      model_history: "history"
+      for_model: "history"
       index: "list"
       dashboard: "dashboard"
   datetime:
