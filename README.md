@@ -12,7 +12,7 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 [Yehuda Katz](https://github.com/wycats),
 [Luke van der Hoeven](https://github.com/plukevdh), and [Rein Henrichs](https://github.com/reinh).
 
-It currently offers the following features:
+## Features
 
 * Display database tables
 * Create new data
@@ -30,7 +30,7 @@ The older Activo UI is still available on a (non-maintained) activo branch
 
 https://github.com/sferik/rails_admin/tree/activo
 
-Supported ORMs:
+### Supported ORMs:
 
 * ActiveRecord
 
@@ -89,6 +89,8 @@ Instead of:
 
 Please refer to issue http://github.com/sferik/rails_admin/issues/289
 
+### Asset pipeline and CKEditor
+
 The master branch currently targets Rails 3.1.
 
 If you are updating from a Rails 3.0 application, you will no longer need to
@@ -101,12 +103,27 @@ Make sure to activate the asset pipeline in `application.rb`:
 and to add this to your config/routes:
 
     mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+    
+NB If you need to use CKEditor for rich text editing, please note that 
+Sprockets 2.0.1 and Sprockets 2.0.2 are unable to serve assets from 
+`public/javascripts` (You'll get a `Sprockets::FileOutsidePaths` error).  To continue to 
+use CKEditor, add
+
+    gem 'sprockets', '= 2.0.0.'
+    
+to your Gemfile for now 
+([this patch](https://github.com/rails/rails/commit/fd8f0b297822ba36002084faa36bd0320d3be4a7) 
+will fix things longer-term). 
+ 
+### Rails 3.0 support
 
 You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0
 branch in your `Gemfile`, however, this branch is no longer being actively
 maintained by the RailsAdmin Core Team.
 
     gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git', :branch => 'rails-3.0'
+
+### Other deprecations
 
 :truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
 
