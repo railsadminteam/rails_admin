@@ -24,7 +24,11 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
-See the demo here: http://rails-admin-tb.herokuapp.com/
+See the demo here:  
+http://rails-admin-tb.herokuapp.com  
+username: `username@example.com`  
+password: `password`
+
 
 The older Activo UI is still available on a (non-maintained) activo branch
 
