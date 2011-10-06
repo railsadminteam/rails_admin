@@ -11,7 +11,7 @@
     .topbar-wrapper{:style => "z-index: 5;"}
       .topbar{:'data-dropdown' => 'dropdown'}
         .topbar-inner
-          .container
+          .container-fluid
             %h3 
               = link_to dashboard_path do
                 %span.first= (@plugin_name_array[0] || 'Rails')
