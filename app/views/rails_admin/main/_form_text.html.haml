@@ -5,7 +5,7 @@
   -# needed for modal windows
   :javascript
     var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
-  - head_javascript "javascripts/ckeditor/ckeditor.js"
+  - head_javascript "/javascripts/ckeditor/ckeditor.js"
   - head_javascript do
     - if !File.exists?(File.join(Rails.root, 'public/javascripts/ckeditor/ckeditor.js'))
       alert("Install CKEditor first");
