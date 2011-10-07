@@ -1,0 +1,1 @@
+/* Meant to be overriden in user's app/assets/javascripts/rails_admin/custom directory. no content here */

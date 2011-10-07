@@ -47,9 +47,9 @@
   }
 
   });
-  if($(".createAssociatedRecordDialog").length == 0) {
+  if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
+  $("##{field.dom_id}_field .createAssociatedRecord").remove();
+  } else {
   $("##{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
-  } else { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-  $("##{field.dom_id}_field .createAssociatedRecord").hide();
   }
   });

@@ -25,18 +25,22 @@
       if(typeof(edit_url) != 'undefined' && edit_url.length) {
         $('#' + this.element.parent().parent().attr('id') + ' .ra-multiselect option').live('dblclick', function(e){
           e.preventDefault();
-          var dialog = widget._getDialog();
+          if($("#modal").length) {
+            return false; // Only one modal at a time
+          }
+
+          var dialog = widget._getModal();
           $.ajax({
             url: edit_url.replace('__ID__', this.value),
             beforeSend: function(xhr) {
               xhr.setRequestHeader("Accept", "text/javascript");
             },
             success: function(data, status, xhr) {
-              dialog.html(data);
+              dialog.find('.modal-body').html(data);
               widget._bindFormEvents();
             },
             error: function(xhr, status, error) {
-              dialog.html(xhr.responseText);
+              dialog.find('.modal-body').html(xhr.responseText);
             },
             dataType: 'text'
           });
@@ -46,68 +50,50 @@
 
       $(widget.element).bind("click", function(e){
         e.preventDefault();
-        var dialog = widget._getDialog();
+        if($("#modal").length) {
+          return false; // Only one modal at a time
+        }
+
+        var dialog = widget._getModal();
         $.ajax({
           url: $(this).attr("href"),
           beforeSend: function(xhr) {
             xhr.setRequestHeader("Accept", "text/javascript");
           },
           success: function(data, status, xhr) {
-            dialog.html(data);
+            dialog.find('.modal-body').html(data);
             widget._bindFormEvents();
           },
           error: function(xhr, status, error) {
-            dialog.html(xhr.responseText);
+            dialog.find('.modal-body').html(xhr.responseText);
           },
           dataType: 'text'
         });
       });
     },
-
-
-
+    
     _bindFormEvents: function() {
-      var dialog = this._getDialog(),
+      var dialog = this._getModal(),
           form = dialog.find("form"),
           widget = this,
           saveButtonText = dialog.find(":submit[name=_save]").text(),
           cancelButtonText = dialog.find(":submit[name=_continue]").text();
-
-      // Hide delete/history buttons, not supported yet.
-      dialog.find('.actions').hide();
-
-      dialog.dialog("option", "title", $("h2.title", dialog).remove().text());
-
-      form.attr("data-remote", true);
-      dialog.find(":submit").remove();
-      dialog.find(".ra-block-content").removeClass("ra-block-content");
-
-      var buttons = {};
-
-      if (saveButtonText) {
-        buttons[saveButtonText] = function() {
-          if(typeof CKEDITOR != 'undefined') {
-            for ( instance in CKEDITOR.instances )
-              CKEDITOR.instances[instance].updateElement();
-              CKEDITOR.instances[instance].destroy();
-          }
-          dialog.find("form").submit();
-        };
-      }
-
-      if (cancelButtonText) {
-        buttons[cancelButtonText] = function() {
-          dialog.dialog("close");
-        };
-      }
-
-      dialog.dialog("option", "buttons", buttons);
-
-      /* Remove original button container if it's now empty */
-      if (0 == $("form > .navform :submit", dialog).length) {
-        $("form > .navform", dialog).remove();
-      }
+          
+      dialog.find('.actions').remove();
       
+      form.attr("data-remote", true);
+      
+      widget.dialog.find('.modal-header-title').text(form.data('title'));
+      
+      widget.dialog.find('.cancel-action').click(function(){
+        widget.dialog.modal('hide');
+        return false;
+      }).text(cancelButtonText);
+      
+      widget.dialog.find('.save-action').click(function(){
+        dialog.find("form").submit();
+        return false;
+      }).text(saveButtonText);
       
       $('form').live("ajax:complete", function(xhr, data, status) {
         var json = $.parseJSON(data.responseText);
@@ -137,30 +123,43 @@
             multiselect.find('select.ra-multiselect-selection').prepend(option);
           }
         }
-        dialog.dialog("close");
+        dialog.modal("hide");
+        
       });
 
       $('form').live("ajax:error", function(e, xhr, status, error) {
-        dialog.html(xhr.responseText);
+        dialog.find('.modal-body').html(xhr.responseText);
         widget._bindFormEvents();
       });
     },
-
-    _getDialog: function() {
-      if (!this.dialog) {
-        var widget = this;
-        this.dialog = $('<div class="' + this.options.dialogClass + '"></div>').dialog({
-          autoShow: false,
-          close: function(e, ui) {
-            $(this).dialog("destroy");
-            $(this).remove();
+    
+    _getModal: function() {
+      var widget = this;
+      if (!widget.dialog) {
+        widget.dialog = $('\
+          <div id="modal" class="modal">\
+            <div class="modal-header">\
+              <a href="#" class="close">&times;</a>\
+              <h3 class="modal-header-title">...</h3>\
+            </div>\
+            <div class="modal-body">\
+              ...\
+            </div>\
+            <div class="modal-footer">\
+              <a href="#" class="btn secondary cancel-action">...</a>\
+              <a href="#" class="btn primary save-action">...</a>\
+            </div>\
+          </div>')
+          .modal({
+            keyboard: true,
+            backdrop: true,
+            show:true
+          })
+          .bind('hidden', function(){
+            widget.dialog.remove();   // We don't want to reuse closed modals
             widget.dialog = null;
-          },
-          modal: true,
-          width: this.options.width,
-          height: this.options.height
-        });
-      }
+          });
+        }
       return this.dialog;
     }
   });

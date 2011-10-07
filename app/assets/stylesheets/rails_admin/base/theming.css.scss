@@ -31,6 +31,16 @@ input, textarea {
   display:inline-block;
 }
 
+/* Modals dimensionning */
+.modal {
+  width:700px;
+  margin:-285px 0 0 -350px;
+  .modal-body {
+    max-height:450px;
+    overflow-y:auto;
+  }
+}
+
 /* Table cells behaviour TODO: homogeinize classes a bit */
 table.zebra-striped {
   /* All */

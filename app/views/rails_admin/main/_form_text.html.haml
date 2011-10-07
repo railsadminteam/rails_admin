@@ -7,9 +7,7 @@
   = javascript_include_tag "/javascripts/ckeditor/ckeditor.js"
   = javascript_tag do
     jQuery(function($) {
-    CKEDITOR.replace('#{field.dom_id}',
-    {
-    customConfig : '#{field.ckeditor_config_js.html_safe}'
+    if(!$("#modal").length){
+    CKEDITOR.replace('#{field.dom_id}', { customConfig : '#{field.ckeditor_config_js.html_safe}' });
     }
-    );
-    }); 
+    });

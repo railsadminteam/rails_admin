@@ -34,9 +34,9 @@
     },
     source: "#{index_path(config.abstract_model.to_param, :compact => true).html_safe}"
   });
-  if($(".createAssociatedRecordDialog").length == 0) {
-  $("##{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
-  } else { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
+  if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
   $("##{field.dom_id}_field .createAssociatedRecord").hide();
+  } else {
+  $("##{field.dom_id}_field .createAssociatedRecord").remoteForm({ dialogClass: "createAssociatedRecordDialog" });
   }
   });

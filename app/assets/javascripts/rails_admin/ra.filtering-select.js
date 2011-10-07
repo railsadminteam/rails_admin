@@ -79,16 +79,9 @@
           .append("<a>" + item.label || item.id + "</a>")
           .appendTo(ul);
       };
-
-      var button = this.button = $("<label class='add-on'>&nbsp;</label>")
-        .attr("title", "Show All Items")
-        .button({
-          icons: {
-            primary: "ui-icon-triangle-1-s"
-          },
-          text: false
-        })
-
+      
+      // replace with dropdown button once ready in twitter-bootstrap
+      var button = this.button = $('<label class="add-on ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="Show All Items" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text">&nbsp;</span></label>')
         .click(function() {
           // close if already visible
           if (input.autocomplete("widget").is(":visible")) {

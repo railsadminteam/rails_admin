@@ -1,10 +1,3 @@
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require bootstrap
-//= require_tree .
-//= require_self
-
 $ = jQuery.noConflict()
 
 $("#list input.checkbox.toggle").live "click", ->
@@ -27,7 +20,6 @@ $("#list table th.header").live "click", ->
 
 $("table#history th.header").live "click", ->
   window.location = $(this).data("link")
-
 
 $(document).ready ->
   $(".alert-message").alert()
