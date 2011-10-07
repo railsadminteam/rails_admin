@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
   gem.add_dependency 'builder', '~> 3.0.0'
   gem.add_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
-  gem.add_dependency 'rails', '~> 3.1.0'
+  gem.add_dependency 'rails', '~> 3.1.1'
   gem.add_dependency 'coffee-rails'
   gem.add_dependency 'bootstrap-sass'
   gem.add_dependency 'jquery-rails'
