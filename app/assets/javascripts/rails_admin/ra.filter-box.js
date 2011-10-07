@@ -35,15 +35,22 @@
           var additional_control = '<input class="additional-fieldset span2 " style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'enum':
-          field_options = $('<div/>').html(field_options).text(); // entities decode
-          var control = '<select name="' + value_name + '" class="span3 ">' +
-            '<option value="_discard">...</option>' +
-            field_options +
-            '<option disabled="disabled">---------</option>' +
-            '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
-            '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank"  >Is blank</option>' +
-          '</select>';
-          break;
+          var field_options = $('<div/>').html(field_options).text(); // entities decode
+          var show_multiple = false;
+          try { show_multiple = (eval(field_value) instanceof Array) } catch(err) { show_multiple = false }
+          var control = '<span class="switch-select">' + 
+            '<select style="display:' + (show_multiple ? 'none' : 'block') + '" ' + (show_multiple ? '' : 'name="' + value_name + '"') + ' data-name="' + value_name + '" class="span3 select-single">' +
+              '<option value="_discard">...</option>' +
+              '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
+              '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">Is blank</option>' +
+              '<option disabled="disabled">---------</option>' +
+              field_options +
+            '</select>' + 
+            '<select multiple="multiple" style="display:' + (show_multiple ? 'block' : 'none') + '" ' + (show_multiple ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="span3 select-multiple">' +
+              field_options +
+            '</select>' +
+          '</span>';
+        break;
         case 'string':
         case 'text':
         case 'belongs_to_association':
@@ -63,8 +70,8 @@
           break;
       }
 
-      $('#filters_box').append(
-        '<div class="row filter clearfix">' +
+      
+      var content = '<div class="row filter clearfix">' +
           '<span class="span3">' +
             '<span data-original-title="Click to remove this filter" rel="twipsy" class="btn info delete" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]">' + field_label + '</span>' +
           '</span>' +
@@ -73,7 +80,7 @@
           '</span>'+ 
           (additional_control ? '<span class="span2">' + additional_control + '</span>' : '') +
         '</div>'
-      );
+      $('#filters_box').append(content);
     }
   }
 
@@ -91,17 +98,23 @@
   });
 
   $('#filters_box .delete').live('click', function() {
-    $(this).parents('.filter').hide();
+    $(this).parents('.filter').hide('slow');
     $(this).append('<input type="hidden" name="' + $(this).data('disabler-name') + '" value="true" />')
+  });
+
+  $('#filters_box .switch-select').live('dblclick', function() {
+    var selected_select = $(this).children('select:visible');
+    var not_selected_select = $(this).children('select:hidden');
+    not_selected_select.attr('name', not_selected_select.data('name')).show('slow');
+    selected_select.attr('name', null).hide('slow');
   });
 
   $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
     var selected_option = $(this).find('option:selected');
     if($(selected_option).data('additional-fieldset')) {
-      $(this).parent().siblings().children('.additional-fieldset').val('');
-      $(this).parent().siblings().children('.additional-fieldset').show();
+      $(this).parent().siblings().children('.additional-fieldset').show('slow');
     } else {
-      $(this).parent().siblings().children('.additional-fieldset').hide();
+      $(this).parent().siblings().children('.additional-fieldset').hide('slow');
     }
   });
 })( jQuery );

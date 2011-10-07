@@ -343,7 +343,7 @@ module RailsAdmin
         queryable_fields.each do |field|
           searchable_columns = field.searchable_columns.flatten
           searchable_columns.each do |field_infos|
-            statement, *value = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
+            statement, value = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
             if statement && value
               query_statements << statement
               values << value
@@ -364,10 +364,10 @@ module RailsAdmin
             field_statements = []
             @filterable_fields[field_name.to_sym].each do |field_infos|
               unless filter_dump[:disabled]
-                statement, *value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
+                statement, value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
                 if statement
                   field_statements << statement
-                  values << value
+                  values << value if value
                 end
               end
             end
@@ -380,8 +380,8 @@ module RailsAdmin
        conditions[0] += " AND " unless conditions == [""]
        conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
       end
-
-      conditions += values.flatten
+      
+      conditions += values
       conditions != [""] ? { :conditions => conditions } : {}
     end
     
@@ -447,7 +447,7 @@ module RailsAdmin
         ["(#{column} BETWEEN ? AND ?)", *values]
       when :enum
         return if value.blank?
-        ["(#{column} = ?)", value]
+        ["(#{column} IN (?))", [value].flatten]
       end
     end
 
