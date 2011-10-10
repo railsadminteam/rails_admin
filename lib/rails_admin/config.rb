@@ -28,7 +28,7 @@ module RailsAdmin
     DEFAULT_AUTHORIZE = Proc.new {}
 
     DEFAULT_CURRENT_USER = Proc.new do
-      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user || raise("See RailsAdmin::Config.current_user_method or setup Devise / Warden")
+      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
     end
   
 
