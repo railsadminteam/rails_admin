@@ -1,7 +1,7 @@
 :ruby
   type_collection = field.polymorphic_type_collection
   type_column = field.association[:foreign_type].to_s
-  
+
   if params[form.object_name]
     selected_type = params[form.object_name][type_column]
     collection = field.associated_collection(selected_type)
@@ -12,7 +12,7 @@
   selected = field.bindings[:object].send(field.association[:name])
   column_type_dom_id = field.dom_id.sub(field.method_name.to_s, type_column)
 
-= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id                        
+= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id
 = form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :style => "margin-left:10px;"
 
 = javascript_tag do

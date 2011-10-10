@@ -4,19 +4,19 @@ require 'generator_helpers'
 describe 'RailsAdmin::InstallGenerator' do
   include GeneratorSpec::TestCase
   include GeneratorHelpers
-  
+
   tests RailsAdmin::InstallGenerator
   destination ::File.expand_path("../tmp/dummy_app", __FILE__)
-  
+
   before :all do
     @rails_root = Rails.configuration.root
     Rails.configuration.root = Pathname.new(destination_root)
   end
-  
+
   after :all do
     Rails.configuration.root = @rails_root
   end
-  
+
   context "when ran on a new app without Devise and RailsAdmin installed" do
     before :all do
       prepare_destination
@@ -33,7 +33,7 @@ describe 'RailsAdmin::InstallGenerator' do
     it "creates a migration for rails_admin" do
       assert_migration 'db/migrate/create_rails_admin_histories_table.rb'
     end
-        
+
     it "invokes devise setup" do
       assert @output.match /generate  devise/ # we don't want to test devise route and migration generation
     end
@@ -45,12 +45,12 @@ describe 'RailsAdmin::InstallGenerator' do
     it "generates a route for rails_admin" do
       assert has_route?("mount RailsAdmin::Engine => '/rails_admin_root', :as => 'rails_admin'")
     end
-    
+
     it "adds a current_user_method with given Devise user name" do
       assert has_config?("current_admin")
     end
   end
-  
+
   context "when upgrading an app with Devise and RailsAdmin already installed" do
     before :all do
       prepare_destination
@@ -68,15 +68,15 @@ describe 'RailsAdmin::InstallGenerator' do
       assert has_route?("mount RailsAdmin::Engine => '/new_admin_route', :as => 'rails_admin'")
       assert !has_route?("mount RailsAdmin::Engine => '/old_admin_route', :as => 'rails_admin'")
     end
-    
+
     it "invokes devise setup" do
       assert @output.match /generate  devise/
     end
-    
+
     it "should create a new example config file" do
       assert ::File.exists?(::File.expand_path("config/initializers/rails_admin.rb.example", Pathname.new(destination_root)))
     end
-    
+
     it "should update the config file with new user method" do
       assert has_config?('current_new_user')
       assert !has_config?('current_old_user')

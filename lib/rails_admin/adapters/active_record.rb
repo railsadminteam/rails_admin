@@ -56,7 +56,7 @@ module RailsAdmin
       def first(options = {}, scope = nil)
         (scope || model).reorder(extract_ordering!(options)).first(options)
       end
-      
+
       def all(options = {}, scope = nil)
         (scope || model).reorder(extract_ordering!(options)).all(options)
       end

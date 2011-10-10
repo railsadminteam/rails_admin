@@ -144,7 +144,7 @@ module RailsAdmin
       end
       content_tag(:ul, :class => "breadcrumb") do
         breadcrumbs.join('<span class="divider">/</span>').html_safe
-      end      
+      end
     end
 
     private

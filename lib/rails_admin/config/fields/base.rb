@@ -33,7 +33,7 @@ module RailsAdmin
             extend RailsAdmin::Config::Fields::Groupable
           end
         end
-        
+
         register_instance_option(:css_class) do
           self.class.instance_variable_get("@css_class")
         end
@@ -129,7 +129,7 @@ module RailsAdmin
         register_instance_option(:pretty_value) do
           formatted_value
         end
-        
+
         # output for printing in export view (developers beware: no bindings[:view] and no data!)
         register_instance_option(:export_value) do
           pretty_value

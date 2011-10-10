@@ -1,5 +1,5 @@
 .ra-multiselect {
-  
+
   .ra-multiselect-header {
     margin-bottom: 5px;
     clear: right;
@@ -28,10 +28,10 @@
       margin: 0 25px 15px 0;
       outline: none;
       padding: 0 25px 0 10px;
-      width: 155px; 
+      width: 155px;
     }
   }
-  
+
 
   .ra-multiselect-column {
     width: 190px;
@@ -59,9 +59,9 @@
     border-right: 1px solid #dbdfe6;
     -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); 
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  
+
   a {
     font-weight: bold;
     font-size: 11px;
@@ -113,6 +113,6 @@
       margin-left: 1px;
       background-image: image-url('rails_admin/multiselect/ui-icon-circle-triangle-s-dark.png');
     }
-  }  
-} 
+  }
+}
 

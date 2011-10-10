@@ -3,7 +3,7 @@ fr:
     messages:
       not_found: "n'a pas été trouvé(e)"
       already_confirmed: "a déjà été validé(e)"
-      not_locked: "n'était pas verrouillé(e)"    
+      not_locked: "n'était pas verrouillé(e)"
       not_saved:
         one: "1 erreur a empêché ce(tte) %{resource} d'être sauvegardé(e) :"
         other: "%{count} erreurs ont empêché ce(tte) %{resource} d'être sauvegardé(e) :"
@@ -34,7 +34,7 @@ fr:
       change_my_password: "Changer mon mot de passe"
       send_reset_password_instructions: "Envoyez-moi les instructions de réinitialisation"
       send_instructions: 'Vous allez recevoir les instructions de réinitialisation du mot de passe dans quelques instants'
-      updated: 'Votre mot de passe a été édité avec succès, vous êtes maintenant connecté'  
+      updated: 'Votre mot de passe a été édité avec succès, vous êtes maintenant connecté'
     confirmations:
       resend_instructions: 'Ré-envoyer les instructions de confirmation'
       send_instructions: 'Vous allez recevoir les instructions nécessaires à la confirmation de votre compte dans quelques minutes'

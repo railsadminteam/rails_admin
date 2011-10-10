@@ -13,7 +13,7 @@ describe "RailsAdmin" do
       visit dashboard_path
     end
   end
-  
+
   # A common mistake for translators is to forget to change the YAML file's
   # root key from en to their own locale (as people tend to use the English
   # file as template for a new translation).

@@ -24,9 +24,9 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
-See the demo here:  
-http://rails-admin-tb.herokuapp.com  
-username: `username@example.com`  
+See the demo here:
+http://rails-admin-tb.herokuapp.com
+username: `username@example.com`
 password: `password`
 
 
@@ -107,18 +107,18 @@ Make sure to activate the asset pipeline in `application.rb`:
 and to add this to your config/routes:
 
     mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-    
-NB If you need to use CKEditor for rich text editing, please note that 
-Sprockets 2.0.1 and Sprockets 2.0.2 are unable to serve assets from 
-`public/javascripts` (You'll get a `Sprockets::FileOutsidePaths` error).  To continue to 
+
+NB If you need to use CKEditor for rich text editing, please note that
+Sprockets 2.0.1 and Sprockets 2.0.2 are unable to serve assets from
+`public/javascripts` (You'll get a `Sprockets::FileOutsidePaths` error).  To continue to
 use CKEditor, add
 
     gem 'sprockets', '= 2.0.0.'
-    
-to your Gemfile for now 
-([this patch](https://github.com/rails/rails/commit/fd8f0b297822ba36002084faa36bd0320d3be4a7) 
-will fix things longer-term). 
- 
+
+to your Gemfile for now
+([this patch](https://github.com/rails/rails/commit/fd8f0b297822ba36002084faa36bd0320d3be4a7)
+will fix things longer-term).
+
 ### Rails 3.0 support
 
 You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0

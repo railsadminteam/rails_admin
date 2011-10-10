@@ -2,7 +2,7 @@
 - visible_fields = @model_config.export.with(:view => self, :object => @abstract_model.model.new).visible_fields
 
 = form_tag export_path(params.merge(:all => true)), :method => 'post', :class => 'form-stacked' do
-  
+
   %input{:name => "send_data", :type => "hidden", :value => "true"}/
   .row
     %fieldset

@@ -382,7 +382,7 @@ describe "RailsAdmin Basic List" do
   describe "list for objects with overridden to_param" do
     before(:each) do
       @ball = FactoryGirl.create :ball
-      
+
       visit index_path(:model_name => "ball")
     end
 
