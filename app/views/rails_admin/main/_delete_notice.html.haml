@@ -1,20 +1,19 @@
 - object = delete_notice
 - model_config = RailsAdmin.config(@abstract_model)
 
-%ul.items
-  %li
-    = "#{@abstract_model.pretty_name}: "
-    = link_to show_path(:model_name => @abstract_model.to_param, :id => object.id) do
-      = model_config.with(:object => object).object_label
-    %ul
-      - @abstract_model.has_many_associations.each do |association|
-        - object.send(association[:name]).each do |child|
-          %li
-            - child_config = RailsAdmin.config(child)
-            #{association[:pretty_name]}: #{link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))}
-      - @abstract_model.has_one_associations.each do |association|
-        - child = object.send(association[:name])
-        - next if child.nil?
+%li{:style => 'display:block; margin-bottom:10px'}
+  %span.label= @abstract_model.pretty_name
+  = link_to model_config.with(:object => object).object_label, show_path(:model_name => @abstract_model.to_param, :id => object.id)
+  %ul
+    - @abstract_model.has_many_associations.each do |association|
+      - object.send(association[:name]).each do |child|
         %li
           - child_config = RailsAdmin.config(child)
-          #{association[:pretty_name]}: #{link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))}
+          = association[:pretty_name]
+          = link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))
+    - @abstract_model.has_one_associations.each do |association|
+      - if child = object.send(association[:name])
+        %li
+          - child_config = RailsAdmin.config(child)
+          = association[:pretty_name]
+          = link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))

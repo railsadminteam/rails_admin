@@ -1,4 +1,4 @@
-%p
+%h4
   = t("admin.delete.are_you_sure_you_want_to_delete_the_object", :model_name => @abstract_model.pretty_name.downcase)
   &ldquo;
   %strong>= @model_config.with(:object => @object).object_label
@@ -6,8 +6,7 @@
   %span>
   = t("admin.delete.all_of_the_following_related_items_will_be_deleted")
 
-%div{:style=>"padding-left:20px"}= render :partial => "delete_notice", :object => @object
-
+%ul= render :partial => "delete_notice", :object => @object
 = form_for(@object, :url => destroy_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
   .actions
     %button.btn.danger{:type => "submit", :'data-disable-with' => t("admin.delete.confirmation")}= t("admin.delete.confirmation")
