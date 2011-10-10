@@ -53,7 +53,6 @@ module RailsAdmin
       options[:right_cut_label] ||= '<span>&hellip;</span>'
       options[:outer_window] ||= 2
       options[:inner_window] ||= 7
-      options[:remote] = true unless options.has_key?(:remote)
       options[:page_param] ||= :page
       options[:url] ||= {}
 
