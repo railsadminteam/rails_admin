@@ -9,3 +9,7 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
+# Authorization without devise
+...and maybe even without user...
+[https://gist.github.com/1278355]([https://gist.github.com/1278355])
