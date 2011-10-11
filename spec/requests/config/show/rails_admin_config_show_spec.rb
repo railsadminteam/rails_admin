@@ -171,7 +171,7 @@ describe "RailsAdmin Config DSL Show Section" do
       end
 
       do_request
-      
+
       should have_selector(".label", :text => "Renamed field")
       should have_selector(".label", :text => "Division")
       should have_selector(".label", :text => "Name")

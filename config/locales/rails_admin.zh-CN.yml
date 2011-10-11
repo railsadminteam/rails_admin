@@ -30,7 +30,7 @@ zh-CN:
       export_action: "导出当前页面"
       show_action: "显示"
       export_selected: "导出选择记录"
-      delete_selected: "删除已选择的"      
+      delete_selected: "删除已选择的"
       add_new: "添加"
       search: "搜索"
       select: "%{name}编辑"

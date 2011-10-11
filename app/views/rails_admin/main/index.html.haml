@@ -100,4 +100,4 @@
           - if @record_count.to_i <= 100 && @page_count.to_i > 1
             %li= link_to(t("admin.index.show_all"), index_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
           = paginate(@current_page, @page_count, :url => params).html_safe
-    .record-count= "#{@record_count} #{@model_config.label_plural.downcase}" 
+    .record-count= "#{@record_count} #{@model_config.label_plural.downcase}"

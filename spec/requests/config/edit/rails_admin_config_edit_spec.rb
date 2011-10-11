@@ -3,10 +3,10 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL Edit Section" do
 
   subject { page }
-  
+
   describe "attr_accessible" do
-    
-    
+
+
     it "should be configurable in the controller scope" do
 
       RailsAdmin.config do |config|
@@ -14,7 +14,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         config.attr_accessible_role do
           _current_user.attr_accessible_role # sould be :custom_role
         end
-        
+
         config.model FieldTest do
           edit do
             field :string_field

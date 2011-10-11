@@ -9,7 +9,7 @@
 %li{:class => (params[:action] == 'for_model' && 'active')}= link_to t("admin.history.name"), history_model_path(:model_name => params[:model_name]) if can_see_history
 %li{:class => (params[:action] == 'export' && 'active')}= link_to t("admin.breadcrumbs.export").capitalize, export_path(params[:model_name]) if can_export
 
-- if params[:action] == 'index' 
+- if params[:action] == 'index'
   - if (can_delete || can_export)
     %li.dropdown{:style => 'float:right', :'data-dropdown' => "dropdown"}
       %a.dropdown-toggle= t('admin.index.selected') + "..."

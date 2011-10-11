@@ -202,7 +202,7 @@ describe "RailsAdmin Basic Update" do
 
       fill_in "user[roles]", :with => %{['admin', 'user']}
       click_button "Save"
-      
+
       @user.reload
     end
 

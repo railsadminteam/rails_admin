@@ -1,6 +1,6 @@
-/* 
-  RailsAdmin main CSS 
-  Keep it clean, people 
+/*
+  RailsAdmin main CSS
+  Keep it clean, people
 */
 
 /* We want input size to be used, unfixate input width */
@@ -27,7 +27,7 @@ input, textarea {
 }
 
 /* filtering select integration, shouldn't be needed soon with new inline forms (TB 1.4.0?) */
-.input-append { 
+.input-append {
   display:inline-block;
 }
 
@@ -50,7 +50,7 @@ table.zebra-striped {
     text-overflow: ellipsis;
     max-width:150px;
   }
-  
+
   /* List */
   th.other {
     width:13px;
@@ -61,7 +61,7 @@ table.zebra-striped {
   th.last {
     width:60px;
   }
-  
+
   /* Dashboard */
   th.model-name {
     width:100px;
@@ -74,12 +74,12 @@ table.zebra-striped {
   th.controls {
     width:100px;
   }
-  
+
   /* Dashboard => history */
   th.user {
     width:100px;
   }
-  
+
   /* History */
   th.created_at {
     width:160px;

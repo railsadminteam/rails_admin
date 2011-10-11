@@ -25,19 +25,19 @@ describe RailsAdmin do
       end
     end
   end
-  
+
   describe ".attr_accessible_role" do
     it "sould be :default by default" do
       RailsAdmin.config.attr_accessible_role.call.should == :default
     end
-    
+
     it "sould be configurable with user role for example" do
       RailsAdmin.config do |config|
         config.attr_accessible_role do
           :admin
         end
       end
-      
+
       RailsAdmin.config.attr_accessible_role.call.should == :admin
     end
   end

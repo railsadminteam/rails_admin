@@ -209,7 +209,7 @@ module RailsAdmin
       # maybe
       #   n-levels (backend: possible with xml&json, frontend: not possible?)
       @authorization_adapter.authorize(:export, @abstract_model) if @authorization_adapter
-      
+
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
         request.format = format
         @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
@@ -302,8 +302,8 @@ module RailsAdmin
       reversed_sort = (field ? field.sort_reverse? : @model_config.list.sort_reverse?)
       {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
     end
-    
-    
+
+
     # TODO MOVE TO ActiveRecord
     def get_conditions_hash(query, filters)
 
@@ -380,11 +380,11 @@ module RailsAdmin
        conditions[0] += " AND " unless conditions == [""]
        conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
       end
-      
+
       conditions += values
       conditions != [""] ? { :conditions => conditions } : {}
     end
-    
+
     def build_statement(column, type, value, operator)
 
       # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)

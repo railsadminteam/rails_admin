@@ -9,7 +9,7 @@ module GeneratorHelpers
       f.puts "end"
     end
   end
-  
+
   def create_config_file(devise_user = 'user')
     File.open(File.join(destination_root, 'config', 'initializers', 'rails_admin.rb'), 'w') do |f|
       f.puts %{
@@ -19,11 +19,11 @@ module GeneratorHelpers
       }
     end
   end
-  
+
   def has_route?(route)
     File.open(File.join(destination_root, 'config', 'routes.rb')).read.index(route)
   end
-  
+
   def has_config?(config)
     File.open(File.join(destination_root, 'config', 'initializers', 'rails_admin.rb')).read.index(config)
   end

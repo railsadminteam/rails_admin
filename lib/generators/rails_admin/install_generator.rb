@@ -11,7 +11,7 @@ module RailsAdmin
     include Rails::Generators::Migration
     include Generators::Utils::InstanceMethods
     extend Generators::Utils::ClassMethods
-    
+
     argument :_model_name, :type => :string, :required => false, :desc => "Devise user model name"
     argument :_namespace, :type => :string, :required => false, :desc => "RailsAdmin url namespace"
     desc "RailsAdmin installation generator"
@@ -19,7 +19,7 @@ module RailsAdmin
     def install
       routes = File.open(Rails.root.join("config/routes.rb")).try :read
       initializer = (File.open(Rails.root.join("config/initializers/rails_admin.rb")) rescue nil).try :read
-      
+
       display "Hello, RailsAdmin installer will help you sets things up!", :blue
       display "I need to work with Devise, let's look at a few things first:"
       display "Checking for a current installation of devise..."
@@ -35,7 +35,7 @@ module RailsAdmin
       else
         display "Looks like you've already installed it, good!"
       end
-      
+
       unless routes.index("devise_for")
         model_name = ask_for("What would you like the user model to be called?", "user", _model_name)
         display "Now setting up devise with user model name '#{model_name}':"
@@ -46,7 +46,7 @@ module RailsAdmin
         display("We found '#{guess}' (should be one of 'user', 'admin', etc.)")
         model_name = ask_for("Correct Devise model name if needed.", guess, _model_name)
         unless guess == model_name
-          display "Now setting up devise with user model name '#{model_name}':"          
+          display "Now setting up devise with user model name '#{model_name}':"
           generate "devise", model_name
         else
           display "Ok, Devise looks already set up with user model name '#{model_name}':"
@@ -58,7 +58,7 @@ module RailsAdmin
         template "initializer.erb", "config/initializers/rails_admin.rb"
       else
         display "You already have a config file. You're updating, heh? I'm generating a new 'rails_admin.rb.example' that you can review."
-        template "initializer.erb", "config/initializers/rails_admin.rb.example"        
+        template "initializer.erb", "config/initializers/rails_admin.rb.example"
         config_tag = initializer.match(/RailsAdmin\.config.+\|(.+)\|/)[1] rescue nil
         if config_tag
           if initializer.index(::Regexp.new("#{config_tag}\.current_user_method.?\{.+?\}"))

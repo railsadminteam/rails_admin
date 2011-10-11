@@ -1,10 +1,10 @@
 :ruby
   config = field.associated_model_config
   related_id = params[:associations] && params[:associations][field.name.to_s]
-  
-  
+
+
   xhr = field.associated_collection_count > 100
-  
+
   if @object.new_record? && related_id.present? && related_id != 'new'
     selected = field.associated_model_config.abstract_model.get(related_id)
     selected_id = selected.id
@@ -13,7 +13,7 @@
     selected_id = field.selected_id
     selected_name = field.formatted_value
   end
-  
+
   if xhr
     collection = [[selected_name, selected_id]]
   else

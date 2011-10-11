@@ -42,18 +42,18 @@ module RailsAdmin
     def _current_user
       instance_eval &RailsAdmin::Config.current_user_method
     end
-    
+
     def _attr_accessible_role
       instance_eval &RailsAdmin::Config.attr_accessible_role
     end
-    
+
     def set_plugin_name
       @plugin_name_array = [instance_eval(&RailsAdmin.config.main_app_name)].flatten
       @plugin_name = @plugin_name_array.join(' ')
     end
 
     def not_found
-      render :file => Rails.root.join('public', '404.html'), :layout => false, :status => 404
+      render :file => Rails.root.join('public', '404.html'), :layout => false, :status => :not_found
     end
 
     def rails_admin_controller?

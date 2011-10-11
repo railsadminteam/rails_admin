@@ -5,14 +5,14 @@ module RailsAdmin
         def display(output, color = :green)
           say("           -  #{output}", color)
         end
-    
+
         def ask_for(wording, default_value = nil, override_if_present_value = nil)
-          override_if_present_value.present? ? 
-            display("Using [#{override_if_present_value}] for question '#{wording}'") && override_if_present_value : 
+          override_if_present_value.present? ?
+            display("Using [#{override_if_present_value}] for question '#{wording}'") && override_if_present_value :
             ask("           ?  #{wording} Press <enter> for [#{default_value}] >", :yellow).presence || default_value
         end
       end
-      
+
       module ClassMethods
         def next_migration_number(dirname)
           if ActiveRecord::Base.timestamped_migrations
