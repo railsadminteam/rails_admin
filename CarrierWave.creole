@@ -1,0 +1,70 @@
+In your rails admin config, before 
+{{{
+RailsAdmin.config do |config|
+   .....
+end
+}}}
+
+Insert this code:
+
+{{{
+if defined?(::CarrierWave)
+  module RailsAdmin::Config::Fields::Types
+    class CarrierWaveFile < RailsAdmin::Config::Fields::Types::FileUpload
+      RailsAdmin::Config::Fields::Types::register(self)
+      register_instance_option(:partial) do
+        :form_carrier_wave_file
+      end
+    end
+
+    class CarrierWaveImage < CarrierWaveFile
+      RailsAdmin::Config::Fields::Types::register(self)
+      register_instance_option(:partial) do
+        :form_carrier_wave_image
+      end
+    end
+
+    register(:carrier_wave_file, CarrierWaveFile)
+    register(:carrier_wave_image, CarrierWaveImage)
+  end
+
+  RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
+    model = parent.abstract_model.model
+    if model.kind_of?(CarrierWave::Mount) && model.uploaders.include?(properties[:name])
+      type = properties[:name] =~ /image|picture|thumb|cover/ ? :carrier_wave_image : :carrier_wave_file
+      fields << RailsAdmin::Config::Fields::Types.load(type).new(parent, properties[:name], properties)
+      true
+    else
+      false
+    end
+  end
+
+end
+}}}
+
+Next, create two new templates for the newly declared types.
+
+**/app/views/rails_admin/main/_form_carrier_wave_file.html.haml**
+{{{
+- if field.bindings[:object].send("#{field.name}_url")
+  = link_to field.bindings[:object].send("#{field.name}"), field.bindings[:object].send("#{field.name}_url"), target: '_blank'
+  %br
+  = form.check_box "remove_#{field.name}"
+  = "Remove existing #{field.label.downcase}"
+%br
+  = form.file_field field.name, :class => "#{field.css_class} #{field.has_errors? ? "errorField" : nil}"
+}}}
+
+**/app/views/rails_admin/main/_form_carrier_wave_image.html.haml**
+{{{
+- if field.bindings[:object].send("#{field.name}_url")
+  = link_to field.bindings[:object].send("#{field.name}_url"), target: '_blank' do
+    = image_tag field.bindings[:object].send("#{field.name}_url"), :width => "40px"
+  %br
+  = form.check_box "remove_#{field.name}"
+  = "Remove existing #{field.label.downcase}"
+%br
+  = form.file_field field.name, :class => "#{field.css_class} #{field.has_errors? ? "errorField" : nil}"
+}}}
+
+That's all ;)
