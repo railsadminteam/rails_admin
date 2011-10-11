@@ -85,12 +85,12 @@
       
       widget.dialog.find('.modal-header-title').text(form.data('title'));
       
-      widget.dialog.find('.cancel-action').click(function(){
+      widget.dialog.find('.cancel-action').unbind().click(function(){
         widget.dialog.modal('hide');
         return false;
       }).text(cancelButtonText);
       
-      widget.dialog.find('.save-action').click(function(){
+      widget.dialog.find('.save-action').unbind().click(function(){
         dialog.find("form").submit();
         return false;
       }).text(saveButtonText);
