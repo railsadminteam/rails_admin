@@ -1,5 +1,6 @@
 require 'rails'
 require 'jquery-rails'
+require 'sass-rails' # Waiting for https://github.com/thomas-mcdonald/bootstrap-sass/pull/4
 require 'bootstrap-sass'
 require 'rails_admin'
 
