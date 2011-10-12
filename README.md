@@ -119,6 +119,15 @@ to your Gemfile for now
 ([this patch](https://github.com/rails/rails/commit/fd8f0b297822ba36002084faa36bd0320d3be4a7)
 will fix things longer-term).
 
+Please note that `initializer/rails_admin.rb` is very likely to require access to your DB.
+Thus if don't need access to your application at asset compilation time, 
+
+    config.assets.initialize_on_precompile = false
+
+will reduce your compilation time.
+Note that this will be needed (setting it to false) on **Heroku** if you set `compile = false` and don't versionate `public/assets`.
+More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
+
 ### Rails 3.0 support
 
 You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0
