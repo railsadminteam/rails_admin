@@ -1,7 +1,5 @@
 [[Bugmash]]
 
-[Build status](http://ci.railsadmin.org/job/RailsAdmin/)
-
 ### Authorization
 
 * [[Customized authorization]]
