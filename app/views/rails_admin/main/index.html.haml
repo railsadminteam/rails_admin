@@ -32,11 +32,10 @@
     "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
   end.join if @ordered_filters
 
-= javascript_tag do
-  :plain
-    jQuery(function($) {
-      #{@ordered_filter_string}
-    });
+%script
+  jQuery(function($) {
+  = @ordered_filter_string
+  });
 
 - can_bulk_action = (authorized?(:export, @abstract_model) || authorized?(:delete, @abstract_model))
 - show_label    = t("admin.index.show_action")
@@ -46,9 +45,7 @@
 #list
   %style
     - @style.each do |key, value|
-      \.grid thead #{".#{key}"}{
-      width: #{value[:width]}px;
-      }
+      \.grid thead #{key} { width: #{value[:width] }px; }
   = form_tag(index_path(params.except(*%w[page filters query])), :method => :post, :remote => true) do
     .row
       .span12

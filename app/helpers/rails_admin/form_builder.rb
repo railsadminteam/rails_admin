@@ -1,4 +1,4 @@
-ActionView::Base.field_error_proc = lambda { |html_tag, instance| html_tag }
+ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| "<span class=\"field_with_errors\">#{html_tag}</span>" }
 
 module RailsAdmin
   class FormBuilder < ActionView::Helpers::FormBuilder
