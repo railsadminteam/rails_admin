@@ -343,10 +343,11 @@ module RailsAdmin
         queryable_fields.each do |field|
           searchable_columns = field.searchable_columns.flatten
           searchable_columns.each do |field_infos|
-            statement, value = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
-            if statement && value
+            statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
+            if statement
               query_statements << statement
-              values << value
+              values << value1 if value1
+              values << value2 if value2
             end
           end
         end
@@ -364,10 +365,11 @@ module RailsAdmin
             field_statements = []
             @filterable_fields[field_name.to_sym].each do |field_infos|
               unless filter_dump[:disabled]
-                statement, value = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
+                statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
                 if statement
                   field_statements << statement
-                  values << value if value
+                  values << value1 if value1
+                  values << value2 if value2
                 end
               end
             end
@@ -380,7 +382,7 @@ module RailsAdmin
        conditions[0] += " AND " unless conditions == [""]
        conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
       end
-
+      
       conditions += values
       conditions != [""] ? { :conditions => conditions } : {}
     end
