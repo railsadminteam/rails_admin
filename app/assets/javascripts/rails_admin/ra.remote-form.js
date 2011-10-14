@@ -83,53 +83,53 @@
       
       form.attr("data-remote", true);
       
-      widget.dialog.find('.modal-header-title').text(form.data('title'));
+      dialog.find('.modal-header-title').text(form.data('title'));
       
-      widget.dialog.find('.cancel-action').unbind().click(function(){
-        widget.dialog.modal('hide');
+      dialog.find('.cancel-action').unbind().click(function(){
+        dialog.modal('hide');
         return false;
       }).text(cancelButtonText);
       
-      widget.dialog.find('.save-action').unbind().click(function(){
-        dialog.find("form").submit();
+      dialog.find('.save-action').unbind().click(function(){
+        form.submit();
         return false;
       }).text(saveButtonText);
       
-      $('form').live("ajax:complete", function(xhr, data, status) {
-        var json = $.parseJSON(data.responseText);
-        var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
-        var select = widget.element.siblings('select');
-        
-        if(widget.element.siblings('.input-append').length){ // select input (add)
-          var input = widget.element.siblings('.input-append').children('.ra-filtering-select-input');
+      form.bind("ajax:complete", function(xhr, data, status) {
+        if (status == 'error') {
+          dialog.find('.modal-body').html(data.responseText);
+          widget._bindFormEvents();
 
-          if(input.length > 0) {
-            input[0].value = json.label;
+        } else {
+
+          var json = $.parseJSON(data.responseText);
+          var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
+          var select = widget.element.siblings('select');
+          
+          if(widget.element.siblings('.input-append').length) { // select input (add)
+            
+            var input = widget.element.siblings('.input-append').children('.ra-filtering-select-input');
+            if(input.length > 0) {
+              input[0].value = json.label;
+            }
+            if(select.length > 0) {
+              select.html(option);
+              select[0].value = json.id;
+            }
+          } else { // multi-select input
+            
+            var input = widget.element.siblings('.ra-filtering-select-input');
+            var multiselect = widget.element.siblings('.ra-multiselect');
+            if (select.find('option[value=' + json.id + ']').length) { // replace (changing name may be needed)
+              select.find('option[value=' + json.id + ']').text(json.label);
+              multiselect.find('option[value= ' + json.id + ']').text(json.label);
+            } else { // add
+              select.prepend(option);
+              multiselect.find('select.ra-multiselect-selection').prepend(option);
+            }
           }
-          if(select.length > 0) {
-            select.html(option);
-            select[0].value = json.id;
-          }
+          dialog.modal("hide");
         }
-        else{ // multi-select input
-          var input = widget.element.siblings('.ra-filtering-select-input');
-
-          var multiselect = widget.element.siblings('.ra-multiselect');
-          if (select.find('option[value=' + json.id + ']').length) { // replace (changing name may be needed)
-            select.find('option[value=' + json.id + ']').text(json.label);
-            multiselect.find('option[value= ' + json.id + ']').text(json.label);
-          } else { // add
-            select.prepend(option);
-            multiselect.find('select.ra-multiselect-selection').prepend(option);
-          }
-        }
-        dialog.modal("hide");
-        
-      });
-
-      $('form').live("ajax:error", function(e, xhr, status, error) {
-        dialog.find('.modal-body').html(xhr.responseText);
-        widget._bindFormEvents();
       });
     },
     
