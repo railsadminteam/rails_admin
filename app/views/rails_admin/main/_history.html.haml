@@ -3,8 +3,8 @@
 %table.zebra-striped
   %thead
     %tr
-      %th.user User
-      %th.changes Changes
+      %th.user t("admin.history.user")
+      %th.changes= t("admin.history.changes")
   %tbody
     - history.each do |t|
       %tr
