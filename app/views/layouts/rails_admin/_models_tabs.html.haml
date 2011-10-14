@@ -23,7 +23,7 @@
         - @filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
-            - CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
+            - h options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
           - else
             - ''
           %li
