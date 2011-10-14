@@ -3,7 +3,7 @@
   var filters;
 
   $.filters = filters = {
-    append: function(field_label, field_name, field_type, field_value, field_operator, field_options, index) {
+    append: function(field_label, field_name, field_type, field_value, field_operator, field_options, multiple_values, index) {
       var value_name = 'filters[' +  field_name + '][' + index + '][value]';
       var operator_name = 'filters[' +  field_name + '][' + index + '][operator]';
       switch(field_type) {
@@ -36,17 +36,15 @@
           break;
         case 'enum':
           var field_options = $('<div/>').html(field_options).text(); // entities decode
-          var show_multiple = false;
-          try { show_multiple = (eval(field_value) instanceof Array) } catch(err) { show_multiple = false }
           var control = '<span class="switch-select">' + 
-            '<select style="display:' + (show_multiple ? 'none' : 'block') + '" ' + (show_multiple ? '' : 'name="' + value_name + '"') + ' data-name="' + value_name + '" class="span3 select-single">' +
+            '<select style="display:' + (multiple_values ? 'none' : 'block') + '" ' + (multiple_values ? '' : 'name="' + value_name + '"') + ' data-name="' + value_name + '" class="span3 select-single">' +
               '<option value="_discard">...</option>' +
               '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
               '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">Is blank</option>' +
               '<option disabled="disabled">---------</option>' +
               field_options +
             '</select>' + 
-            '<select multiple="multiple" style="display:' + (show_multiple ? 'block' : 'none') + '" ' + (show_multiple ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="span3 select-multiple">' +
+            '<select multiple="multiple" style="display:' + (multiple_values ? 'block' : 'none') + '" ' + (multiple_values ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="span3 select-multiple">' +
               field_options +
             '</select>' +
           '</span>';
@@ -92,6 +90,7 @@
       $(this).data('field-value'),
       $(this).data('field-operator'),
       $(this).data('field-options'),
+      $(this).data('field-multiple_values'),
       $.now()
     );
     $("[rel=twipsy]").twipsy();

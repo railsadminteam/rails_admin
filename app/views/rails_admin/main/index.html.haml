@@ -22,14 +22,13 @@
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
-
     field_options = case field.type
     when :enum
-      CGI.escapeHTML options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
+      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
     else
       ''
     end
-    "$.filters.append('#{field.label}', '#{field.name}', '#{field.type}', '#{filter_hash['value']}', '#{filter_hash['operator']}', '#{field_options}', #{filter_index});"
+    "$.filters.append('#{escape_javascript field.label.to_s}', '#{escape_javascript field.name.to_s}', '#{escape_javascript field.type.to_s}', '#{escape_javascript  filter_hash['value'].to_s}', '#{escape_javascript filter_hash['operator'].to_s}', '#{escape_javascript field_options.to_s}', #{filter_hash['value'].is_a?(Array)}, '#{escape_javascript filter_index.to_s}');"
   end.join if @ordered_filters
 
 %script
