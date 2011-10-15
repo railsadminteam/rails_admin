@@ -3,20 +3,20 @@ require File.expand_path('../lib/rails_admin/version', __FILE__)
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
-  gem.add_dependency 'builder', '~> 3.0.0'
-  gem.add_dependency 'haml', ['>= 3.1.0', '< 3.3.0']
-  gem.add_dependency 'rails', '~> 3.1.1'
-  gem.add_dependency 'coffee-rails'
-  gem.add_dependency 'bootstrap-sass'
-  gem.add_dependency 'jquery-rails'
-  gem.add_development_dependency 'capybara', '~> 1.0'
-  gem.add_development_dependency 'launchy', '~> 2.0'
-  gem.add_development_dependency 'devise', '~> 1.4'
-  gem.add_development_dependency 'factory_girl', '~> 2.0'
-  gem.add_development_dependency 'generator_spec', '~> 0.8'
-  gem.add_development_dependency 'paperclip', '~> 2.3'
-  gem.add_development_dependency 'rspec-rails', '~> 2.6'
-  gem.add_development_dependency 'simplecov', '~> 0.4'
+  gem.add_dependency 'builder', '~> 3.0'
+  gem.add_dependency 'haml', '~> 3.1'
+  gem.add_dependency 'rails', '~> 3.1'
+  gem.add_dependency 'coffee-rails', '~> 3.1'
+  gem.add_dependency 'bootstrap-sass', ['~> 1.3', '>= 1.3.1']
+  gem.add_dependency 'jquery-rails', '~> 1.0'
+  gem.add_development_dependency 'capybara'
+  gem.add_development_dependency 'launchy'
+  gem.add_development_dependency 'devise'
+  gem.add_development_dependency 'factory_girl'
+  gem.add_development_dependency 'generator_spec'
+  gem.add_development_dependency 'paperclip'
+  gem.add_development_dependency 'rspec-rails'
+  gem.add_development_dependency 'simplecov'
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
   gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
   gem.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']

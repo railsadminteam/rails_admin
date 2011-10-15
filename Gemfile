@@ -48,7 +48,7 @@ group :debug do
 end
 
 platforms :jruby, :mingw_18, :ruby_18 do
-  gem 'fastercsv', '~> 1.5.4'
+  gem 'fastercsv', '~> 1.5'
 end
 
 gemspec
