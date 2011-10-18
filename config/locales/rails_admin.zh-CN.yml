@@ -5,7 +5,7 @@ zh-CN:
     pagination:
       previous: "&laquo; Prev"
       next: "Next &raquo;"
-      truncate: "..."
+      truncate: "…"
   admin:
     dashboard:
       pagename: "网站管理"

@@ -12,7 +12,7 @@ ro:
     pagination:
       previous: "&laquo; Prev"
       next: "Next &raquo;"
-      truncate: "..."
+      truncate: "…"
   admin:
     dashboard:
       pagename: "Administrare"

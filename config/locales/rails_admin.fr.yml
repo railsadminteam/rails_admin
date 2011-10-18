@@ -5,7 +5,7 @@ fr:
     pagination:
       previous: "&laquo; Préc."
       next: "Suivant &raquo;"
-      truncate: "..."
+      truncate: "…"
   admin:
     dashboard:
       pagename: "Administration"
