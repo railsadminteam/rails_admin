@@ -1,6 +1,11 @@
 uk:
   home:
     name: "Домівка"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Адміністрація"

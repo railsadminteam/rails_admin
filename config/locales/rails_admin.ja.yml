@@ -4,6 +4,11 @@
 ja:
   home:
     name: "ホーム"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "サイト管理"

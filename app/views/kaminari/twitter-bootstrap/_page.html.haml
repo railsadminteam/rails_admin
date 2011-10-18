@@ -1,0 +1,4 @@
+- if page.current?
+  %li.active= link_to page, url, :remote => remote
+- else
+  %li= link_to page, url, :remote => remote

@@ -1,6 +1,11 @@
 zh-CN:
   home:
     name: "主页"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "网站管理"

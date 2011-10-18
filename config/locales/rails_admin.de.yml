@@ -4,6 +4,11 @@
 de:
   home:
     name: "Home"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Administration"

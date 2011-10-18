@@ -13,6 +13,7 @@ module RailsAdmin
     def get_model
       model_name = to_model_name(params[:model_name])
       @abstract_model = RailsAdmin::AbstractModel.new(model_name)
+      not_found unless @abstract_model
       @model_config = RailsAdmin.config(@abstract_model)
       not_found if @model_config.excluded?
       @properties = @abstract_model.properties

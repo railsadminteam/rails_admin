@@ -1,6 +1,11 @@
 es:
   home:
     name: "inicio"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Administración del sitio"

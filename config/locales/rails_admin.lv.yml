@@ -1,6 +1,11 @@
 lv:
   home:
     name: "sākums"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Saita administrēšana"

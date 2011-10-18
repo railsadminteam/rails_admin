@@ -34,10 +34,8 @@
         - if @general
           %td= object.item
         %td= object.message
-- if @general && @page_count.to_i > 1
-  .pagination
-    %ul
-      - if @record_count.to_i <= 100 && @page_count.to_i > 1
-        %li= link_to(t("admin.index.show_all"), history_model_path(params.merge(:all => true)), :class => "showall", :method => :get)
-      = paginate(@current_page, @page_count, :remote => false, :url => params.except(:page)).html_safe
+
+- unless params[:all]
+  = paginate(@history, :theme => 'twitter-bootstrap')
+  = link_to(t("admin.index.show_all"), history_model_path(params.merge(:all => true)), :class => "show-all btn") unless (tc = @history.total_count) <= @history.size || tc > 100
 

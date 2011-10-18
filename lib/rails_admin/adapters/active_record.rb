@@ -58,21 +58,13 @@ module RailsAdmin
       end
 
       def all(options = {}, scope = nil)
-        (scope || model).reorder(extract_ordering!(options)).all(options)
+        (scope || model).reorder(extract_ordering!(options)).includes(options[:include]).where(options[:conditions])
       end
 
       def paginated(options = {}, scope = nil)
         page = options.delete(:page) || 1
         per_page = options.delete(:per_page) || RailsAdmin::Config::Sections::List.default_items_per_page
-
-        page_count = (count(options, scope).to_f / per_page).ceil
-
-        options.merge!({
-          :limit => per_page,
-          :offset => (page - 1) * per_page
-        })
-
-        [page_count, all(options, scope)]
+        self.all(options, (scope || model).page(page).per(per_page))
       end
 
       def create(params = {})

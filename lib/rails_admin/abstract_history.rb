@@ -80,10 +80,9 @@ module RailsAdmin
       end
 
       if all
-        [1, history]
+        history
       else
-        page_count = (history.count.to_f / per_page).ceil
-        [page_count, history.limit(per_page).offset((page.to_i - 1) * per_page)]
+        history.page(page).per(per_page)
       end
     end
 

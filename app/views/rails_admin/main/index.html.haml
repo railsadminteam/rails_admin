@@ -90,10 +90,10 @@
               = link_to show_label, show_path(:model_name => params[:model_name], :id => object.id) if authorized? :show, @abstract_model, object
               = link_to edit_label, edit_path(:model_name => params[:model_name], :id => object.id) if authorized? :edit, @abstract_model, object
               = link_to delete_label, delete_path(:model_name => params[:model_name], :id => object.id) if authorized? :delete, @abstract_model, object
-    - if @page_count.to_i > 1
-      .pagination
-        %ul
-          - if @record_count.to_i <= 100 && @page_count.to_i > 1
-            %li= link_to(t("admin.index.show_all"), index_path(params.merge(:all => true)), :class => "showall", :method => :get, :remote => true)
-          = paginate(@current_page, @page_count, :url => params).html_safe
-    .record-count= "#{@record_count} #{@model_config.label_plural.downcase}"
+    - unless params[:all]
+      - total_count = @objects.total_count
+      = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)
+      = link_to(t("admin.index.show_all"), index_path(params.merge(:all => true)), :class => "show-all btn clearfix", :remote => true) unless total_count > 100 || total_count <= @objects.size
+      .clearfix.total-count= "#{total_count} #{@model_config.label_plural.downcase}"
+    - else
+      .clearfix.total-count= "#{@objects.size} #{@model_config.label_plural.downcase}"

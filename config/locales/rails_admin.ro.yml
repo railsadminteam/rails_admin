@@ -8,6 +8,11 @@
 ro:
   home:
     name: "acasă"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Administrare"

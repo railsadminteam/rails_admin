@@ -41,7 +41,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.index.select", :name => @model_config.label.downcase)
 
-      @objects, @current_page, @page_count, @record_count = list_entries
+      @objects = list_entries
       @schema ||= { :only => @model_config.list.visible_fields.map {|f| f.name } }
 
       respond_to do |format|
@@ -236,7 +236,7 @@ module RailsAdmin
       @page_name = t("admin.actions.delete").capitalize + " " + @model_config.label.downcase
       @page_type = @abstract_model.pretty_name.downcase
 
-      @bulk_objects, @current_page, @page_count, @record_count = list_entries
+      @bulk_objects = list_entries
 
       render :action => 'bulk_delete'
     end
@@ -493,29 +493,20 @@ module RailsAdmin
     end
 
     def list_entries(other = {})
-      return [get_bulk_objects(params[:bulk_ids]), 1, 1, "unknown"] if params[:bulk_ids].present?
+      return get_bulk_objects(params[:bulk_ids]) if params[:bulk_ids].present?
 
       associations = @model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = get_sort_hash.merge(get_conditions_hash(params[:query], params[:filters])).merge(other).merge(associations.empty? ? {} : { :include => associations })
 
       scope = @authorization_adapter && @authorization_adapter.query(:index, @abstract_model)
-      current_page = (params[:page] || 1).to_i
 
       if params[:all]
         objects = @abstract_model.all(options, scope)
-        page_count = 1
-        record_count = objects.count
       else
-        options.merge!(:page => current_page, :per_page => @model_config.list.items_per_page)
-        page_count, objects = @abstract_model.paginated(options, scope)
-        options.delete(:page)
-        options.delete(:per_page)
-        options.delete(:offset)
-        options.delete(:limit)
-        record_count = @abstract_model.count(options, scope)
+        options.merge!(:page => (params[:page] || 1).to_i, :per_page => @model_config.list.items_per_page)
+        objects = @abstract_model.paginated(options, scope)
       end
-
-      [objects, current_page, page_count, record_count]
+      objects
     end
 
     def associations_hash

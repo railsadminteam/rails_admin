@@ -2,6 +2,11 @@
 fi:
   home:
     name: "koti"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Ylläpito"

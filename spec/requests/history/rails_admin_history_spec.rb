@@ -67,15 +67,15 @@ describe "RailsAdmin History" do
 
     it "should fetch one page of history" do
       histories = RailsAdmin::AbstractHistory.history_for_model @model, nil, false, false, false, nil, 20
-      histories[0].should == 2
-      histories[1].all.count.should == 20
+      histories.total_count.should == 30
+      histories.count.should == 20
     end
 
     it "should respect RailsAdmin::Config.default_items_per_page" do
       RailsAdmin.config.default_items_per_page = 15
       histories = RailsAdmin::AbstractHistory.history_for_model @model, nil, false, false, false, nil
-      histories[0].should == 2
-      histories[1].all.count.should == 15
+      histories.total_count.should == 30
+      histories.count.should == 15
     end
 
     context "GET admin/history/@model" do

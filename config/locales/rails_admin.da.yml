@@ -1,6 +1,11 @@
 da:
   home:
     name: "hjem"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Administration"

@@ -29,9 +29,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.history.page_name", :name => @model_config.label.downcase)
       @general = true
-      @current_page = params[:page].try(:to_i) || 1
-
-      @page_count, @history = AbstractHistory.history_for_model @abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]
+      @history = AbstractHistory.history_for_model @abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]
 
       render "show", :layout => request.xhr? ? false : 'rails_admin/application'
     end

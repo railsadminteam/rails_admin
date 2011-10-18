@@ -4,6 +4,11 @@
 hr:
   home:
     name: "naslovna"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Administracija stranice"

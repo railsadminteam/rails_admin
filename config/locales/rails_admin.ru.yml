@@ -3,6 +3,11 @@
 ru:
   home:
     name: "Главная"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Управление сайтом"

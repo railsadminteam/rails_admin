@@ -290,7 +290,9 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly" do
-      find('.pagination').should have_content('12…567891011…1920')
+      find('.pagination ul li:first').should have_content("« Prev")
+      find('.pagination ul li:last').should have_content("Next »")
+      find('.pagination ul li.active').should have_content("8")
     end
   end
 
@@ -302,7 +304,9 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly and contain the right item" do
-      find('.pagination').should have_content('12…121314151617181920')
+      find('.pagination ul li:first').should have_content("« Prev")
+      find('.pagination ul li:last').should have_content("Next »")
+      find('.pagination ul li.active').should have_content("20")
     end
   end
 

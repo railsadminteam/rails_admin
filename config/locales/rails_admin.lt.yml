@@ -3,6 +3,11 @@
 lt:
   home:
     name: "Pradžia"
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "..."
   admin:
     dashboard:
       pagename: "Nustatymai"
