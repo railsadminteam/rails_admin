@@ -22,15 +22,15 @@ module RailsAdmin
     DEFAULT_AUTHENTICATION = Proc.new do
       request.env['warden'].try(:authenticate!)
     end
-
+    
     DEFAULT_ATTR_ACCESSIBLE_ROLE = Proc.new { :default }
 
     DEFAULT_AUTHORIZE = Proc.new {}
 
     DEFAULT_CURRENT_USER = Proc.new do
-      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
+      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user || raise("See RailsAdmin::Config.current_user_method or setup Devise / Warden")
     end
-
+  
 
     class << self
       # Application title, can be an array of two elements
@@ -64,6 +64,9 @@ module RailsAdmin
 
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
+      
+      # Set the logout path
+      attr_accessor :destroy_user_path
 
       # Stores model configuration objects in a hash identified by model's class
       # name.
@@ -98,13 +101,12 @@ module RailsAdmin
         @authenticate = blk if blk
         @authenticate || DEFAULT_AUTHENTICATION
       end
-
-
+      
       def attr_accessible_role(&blk)
         @attr_accessible_role = blk if blk
         @attr_accessible_role || DEFAULT_ATTR_ACCESSIBLE_ROLE
       end
-
+      
       # Setup authorization to be run as a before filter
       # This is run inside the controller instance so you can setup any authorization you need to.
       #
@@ -182,11 +184,11 @@ module RailsAdmin
           raise ArgumentError, "Search operator '#{operator}' not supported"
         end
       end
-
+      
       def reload_between_requests=(thingy)
         ActiveSupport::Deprecation.warn("'#{self.name}.reload_between_requests=' is not in use any longer, please remove it from initialization files", caller)
       end
-
+      
       # Shortcut to access the list section's class configuration
       # within a config DSL block
       #
