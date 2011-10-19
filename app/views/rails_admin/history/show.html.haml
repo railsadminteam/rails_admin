@@ -35,7 +35,7 @@
           %td= object.item
         %td= object.message
 
-- unless params[:all]
+- unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, :theme => 'twitter-bootstrap')
   = link_to(t("admin.index.show_all"), history_model_path(params.merge(:all => true)), :class => "show-all btn") unless (tc = @history.total_count) <= @history.size || tc > 100
 
