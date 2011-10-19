@@ -12,8 +12,11 @@
 RailsAdmin.config do |config|
 
   config.current_user_method { current_<%= @model_name %> } # auto-generated
-
-  config.main_app_name { ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin'] } # auto-generated
+  
+  # Set the admin name here (optional second array element will appear in a beautiful RailsAdmin red ©)
+  config.main_app_name = ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin']
+  # or for a dynamic name:
+  # config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.titleize, controller.params['action'].titleize] }
 
   #  ==> Authentication (before_filter)
   # This is run inside the controller instance so you can setup any authentication you need to.

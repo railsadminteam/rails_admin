@@ -3,6 +3,15 @@
   Keep it clean, people
 */
 
+/* Application name */
+.topbar h3 {
+  font-weight:bold;
+  small {
+    color:red;
+    
+  }
+}
+
 /* We want input size to be used, unfixate input width */
 input, textarea {
   width:auto;

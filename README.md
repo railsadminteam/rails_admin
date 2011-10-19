@@ -270,6 +270,16 @@ The configuration code should be placed in an initializer file, for example:
 
 ### General
 
+Set the application name:
+
+    RailsAdmin.config do |config|
+      config.main_app_name = ["Cool app", "BackOffice"]
+    end
+    # or somethig more dynamic
+    RailsAdmin.config do |config|
+      config.main_app_name = Proc.new { |controller| [ "Cool app", "BackOffice - #{controller.params[:action].try(:titleize)}" ] }
+    end
+
 You can customize authentication by providing a custom block for `RailsAdmin.authenticate_with`.
 To disable authentication, pass an empty block:
 

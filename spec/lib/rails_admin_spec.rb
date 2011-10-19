@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-describe RailsAdmin do
+describe "RailsAdmin" do
+
   describe ".add_extension" do
     it "registers the extension with RailsAdmin" do
       RailsAdmin.add_extension(:example, ExampleModule)
@@ -39,6 +40,20 @@ describe RailsAdmin do
       end
 
       RailsAdmin.config.attr_accessible_role.call.should == :admin
+    end
+  end
+
+  describe ".main_app_name" do
+    
+    it "as a default meaningful dynamic value" do
+      RailsAdmin.config.main_app_name.call.should == ['Dummy App', 'Admin']
+    end
+    
+    it "can be configured" do
+      RailsAdmin.config do |config|
+        config.main_app_name = ['static','value']
+      end
+      RailsAdmin.config.main_app_name.should == ['static','value']
     end
   end
 
