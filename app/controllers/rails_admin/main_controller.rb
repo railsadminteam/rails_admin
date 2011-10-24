@@ -346,8 +346,8 @@ module RailsAdmin
             statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
             if statement
               query_statements << statement
-              values << value1 if value1
-              values << value2 if value2
+              values << value1 unless value1.nil?
+              values << value2 unless value2  .nil?
             end
           end
         end
@@ -368,8 +368,8 @@ module RailsAdmin
                 statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
                 if statement
                   field_statements << statement
-                  values << value1 if value1
-                  values << value2 if value2
+                  values << value1 unless value1.nil?
+                  values << value2 unless value2.nil?
                 end
               end
             end
@@ -410,8 +410,8 @@ module RailsAdmin
       # now we go type specific
       case type
       when :boolean
-        return if value.blank?
-        ["(#{column} = ?)", ['true', 't', '1'].include?(value)] if ['true', 'false', 't', 'f', '1', '0'].include?(value)
+        return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
+        return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
       when :integer, :belongs_to_association
         return if value.blank?
         ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
