@@ -347,7 +347,7 @@ module RailsAdmin
             if statement
               query_statements << statement
               values << value1 unless value1.nil?
-              values << value2 unless value2  .nil?
+              values << value2 unless value2.nil?
             end
           end
         end
