@@ -24,10 +24,6 @@ module RailsAdmin
 
     private
 
-    def infinity
-      1.0 / 0
-    end
-
     def calculate_width(properties)
       # local variables
       total = 0
