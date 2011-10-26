@@ -70,3 +70,10 @@ end
 ### CanCan::AuthorizationNotPerformed exception
 
 remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead. 
+
+### Role tree
+
+Use :manage if you need user to have access to all actions on a model. 
+
+RailsAdmin use 2 customs verbs: :history & :show_in_app
+They get overridden by :manage in Cancan.
