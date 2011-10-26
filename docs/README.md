@@ -1,14 +1,14 @@
-[[Bugmash]]
 
-### Authorization
+## Authorization
 
-* [[Customized authorization]]
 * [[CanCan]]
+* [[Customized authorization]]
 * [[Declarative Authorization]]
 
-### Routing
+## Routing
 
 * [[Routing Problems]]
 
-### Recipes
+## Recipes
+
 * [[How to set default values for enum type fields in a model]]
