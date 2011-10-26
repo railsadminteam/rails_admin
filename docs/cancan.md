@@ -70,12 +70,3 @@ end
 ### CanCan::AuthorizationNotPerformed exception
 
 remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead. 
-
-# Running Specs
-
-If you are developing for Rails Admin, you can run the CanCan specs by setting the `AUTHORIZATION_ADAPTER=cancan` env variable. Like this.
-
-```bash
-AUTHORIZATION_ADAPTER=cancan bundle
-AUTHORIZATION_ADAPTER=cancan rake
-```
