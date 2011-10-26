@@ -13,7 +13,7 @@
           %ul.inputs-list
             - visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.each do |field|
               %li
-                - list = field.type != :virtual ? 'only' : 'methods'
+                - list = field.virtual? ? 'methods' : 'only'
                 - if field.association? && field.association[:polymorphic]
                   %label{:for => "schema_#{list}_#{field.method_name}"}
                     = check_box_tag "schema[#{list}][]", field.method_name, true, { :id => "schema_#{list}_#{field.method_name}" }

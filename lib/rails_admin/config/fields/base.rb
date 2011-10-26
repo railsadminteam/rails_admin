@@ -45,6 +45,10 @@ module RailsAdmin
             css_class
           end
         end
+        
+        def virtual?
+          properties.blank?
+        end
 
         register_instance_option(:column_width) do
           self.class.instance_variable_get("@column_width")
@@ -61,13 +65,13 @@ module RailsAdmin
         register_instance_option(:truncated?) do
           ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
         end
-
+        
         register_instance_option(:sortable) do
-          true
+          !virtual?
         end
 
         register_instance_option(:searchable) do
-          true
+          !virtual?
         end
 
         register_instance_option(:queryable?) do
@@ -263,6 +267,8 @@ module RailsAdmin
         def method_name
           name
         end
+        
+        
       end
     end
   end

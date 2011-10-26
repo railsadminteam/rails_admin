@@ -98,6 +98,32 @@ describe "RailsAdmin Config DSL" do
       should have_css(".born_on_field")
     end
   end
+  
+  describe "searchable and sortable" do
+    it 'should be false if column is virtual, true otherwise' do
+      RailsAdmin.config League do
+        field :virtual_column
+        field :name
+      end
+      @league = FactoryGirl.create :league
+      RailsAdmin.config('League').export.fields.find{ |f| f.name == :virtual_column }.sortable.should == false
+      RailsAdmin.config('League').export.fields.find{ |f| f.name == :virtual_column }.searchable.should == false
+      RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.sortable.should == true
+      RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.searchable.should == true
+    end
+  end
+  
+  describe "virtual?" do
+    it 'should be true if column has no properties, false otherwise' do
+      RailsAdmin.config League do
+        field :virtual_column
+        field :name
+      end
+      @league = FactoryGirl.create :league
+      RailsAdmin.config('League').export.fields.find{ |f| f.name == :virtual_column }.virtual?.should == true
+      RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.virtual?.should == false
+    end
+  end
 
   describe "search operator" do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('player') }
