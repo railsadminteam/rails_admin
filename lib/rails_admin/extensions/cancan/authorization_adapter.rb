@@ -52,8 +52,8 @@ module RailsAdmin
         # Change the action into something that fits better with CanCan's conventions
         def translate_action(action)
           case action
-            when :list then :index # TODO Remove some day when no-one will care
-            when :delete, :bulk_delete, :bulk_destroy then :destroy
+            when :list, :bulk_action then :index
+            when :delete, :bulk_destroy, :bulk_delete then :destroy
             else action
           end
         end

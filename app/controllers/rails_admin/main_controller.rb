@@ -11,7 +11,6 @@ module RailsAdmin
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
     def dashboard
-      @authorization_adapter.authorize(:dashboard) if @authorization_adapter
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
@@ -245,7 +244,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
 
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
-
+      
       processed_objects = @abstract_model.destroy(params[:bulk_ids], scope)
 
       destroyed = processed_objects.select(&:destroyed?)
@@ -272,7 +271,6 @@ module RailsAdmin
     def get_bulk_objects(ids)
       scope = @authorization_adapter && @authorization_adapter.query(params[:action].to_sym, @abstract_model)
       objects = @abstract_model.get_bulk(ids, scope)
-
       not_found unless objects
       objects
     end
