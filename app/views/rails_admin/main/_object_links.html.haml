@@ -10,5 +10,5 @@
 - if authorized? :history, @abstract_model, object
   - link = history_object_path(model_name, object.id)
   %li.history_object_link{:class => ('active' if add_active_class && current_page?(link))}= link_to t("admin.history.name"), link
-- if link = (main_app.url_for(object.id) rescue nil)
+- if authorized?(:show_in_app, @abstract_model, object) && (link = (main_app.url_for(object.id) rescue nil))
   %li.show_in_app_object_link=link_to(t("admin.show.show_in_app"), link)
