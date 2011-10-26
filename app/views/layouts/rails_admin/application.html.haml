@@ -32,7 +32,7 @@
         = breadcrumbs_for params[:action].to_sym, @abstract_model, @object
         - if @abstract_model
           - if @object && !@object.new_record?
-            %ul.tabs= render :partial => 'layouts/rails_admin/objects_tabs'
+            %ul.tabs= render :partial => 'rails_admin/main/object_links', :locals => { :add_active_class => true, :model_name => params[:model_name], :object => @object }
           - else
             %ul.tabs= render :partial => 'layouts/rails_admin/models_tabs'
         %span.row

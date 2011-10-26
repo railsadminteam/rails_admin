@@ -2,7 +2,7 @@
 - can_delete = authorized? :delete, @abstract_model
 - can_export = authorized? :export, @abstract_model
 - can_create = authorized? :new, @abstract_model
-- can_see_history = authorized? :see_history, @abstract_model
+- can_see_history = authorized? :history, @abstract_model
 
 %li{:class => (params[:action] == 'index' && 'active')}= link_to @model_config.label_plural, index_path(:model_name => params[:model_name]) if can_list
 %li{:class => (params[:action] == 'new' && 'active')}= link_to t("admin.index.add_new"), new_path(:model_name => params[:model_name]) if can_create

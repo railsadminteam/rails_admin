@@ -25,10 +25,10 @@
           %td
             - if authorized? :new, abstract_model
               = link_to t("admin.dashboard.add_new"), new_path(:model_name => abstract_model.to_param)
-            - if authorized? :see_history, abstract_model
+            - if authorized? :history, abstract_model
               - history_path = history_model_path(:model_name => abstract_model.to_param)
               = link_to t("admin.history.name"), history_path
-- if authorized? :see_history
+- if authorized? :history
   #block-tables.block
     .content
       %h2.title= t("admin.history.name")

@@ -4,10 +4,12 @@ class Ability
   include CanCan::Ability
   def initialize(user)
     can :access, :rails_admin if user.roles.include? :admin
+    can :manage, Player if user.roles.include? :manage_player
     can :read, Player, :retired => false if user.roles.include? :read_player
     can :create, Player, :suspended => true if user.roles.include? :create_player
     can :update, Player, :retired => false if user.roles.include? :update_player
     can :destroy, Player, :retired => false if user.roles.include? :destroy_player
+    can :history, Player, :retired => false if user.roles.include? :history_player
   end
 end
 
@@ -54,21 +56,21 @@ describe "RailsAdmin CanCan Authorization" do
         FactoryGirl.create(:player, :retired => false),
         FactoryGirl.create(:player, :retired => true),
       ]
-      
 
-      visit index_path(:model_name => "player", :set => 0)
+      visit index_path(:model_name => "player")
 
       should have_content(@players[0].name)
       should_not have_content(@players[1].name)
       should_not have_content("Add new")
-      should have_css('.show_link')
-      should_not have_css('.edit_link')
-      should_not have_css('.delete_link')
+      should have_css('.show_object_link')
+      should_not have_css('.edit_object_link')
+      should_not have_css('.delete_object_link')
+      should_not have_css('.history_object_link')
     end
 
     it "GET /admin/team should raise CanCan::AccessDenied" do
       visit index_path(:model_name => "team")
-      should have_content 'CanCan::AccessDenied'
+      should have_content('CanCan::AccessDenied')
     end
 
     it "GET /admin/player/new should raise CanCan::AccessDenied" do
@@ -124,6 +126,7 @@ describe "RailsAdmin CanCan Authorization" do
       should_not have_content("Save and add another")
       should_not have_content("Add new")
       should_not have_content("Delete")
+      should_not have_content("History")
       fill_in "player[name]", :with => "Jackie Robinson"
       click_button "Save"
       @player.reload
@@ -142,6 +145,48 @@ describe "RailsAdmin CanCan Authorization" do
       should have_content('CanCan::AccessDenied')
     end
 
+  end
+  
+  describe "with history role" do
+    it 'shows links to history action' do
+    
+      @user.update_attribute(:roles, [:admin, :read_player, :history_player])
+      @player = FactoryGirl.create :player
+      
+      visit index_path(:model_name => "player")
+        should have_css('.show_object_link')
+        should_not have_css('.edit_object_link')
+        should_not have_css('.delete_object_link')
+        should have_css('.history_object_link')
+      
+      visit show_path(:model_name => 'player', :id => @player.id)
+        should have_content("Show")
+        should_not have_content("Edit")
+        should_not have_content("Delete")
+        should have_content("History")
+      
+    end
+  end
+  
+  describe "with all roles" do
+    it 'shows links to all actions' do
+    
+      @user.update_attribute(:roles, [:admin, :manage_player])
+      @player = FactoryGirl.create :player
+      
+      visit index_path(:model_name => "player")
+        should have_css('.show_object_link')
+        should have_css('.edit_object_link')
+        should have_css('.delete_object_link')
+        should have_css('.history_object_link')
+      
+      visit show_path(:model_name => 'player', :id => @player.id)
+        should have_content("Show")
+        should have_content("Edit")
+        should have_content("Delete")
+        should have_content("History")
+      
+    end
   end
 
   describe "with destroy and read player role" do

@@ -49,6 +49,8 @@ input, textarea {
   }
 }
 
+
+
 /* Table cells behaviour TODO: homogeinize classes a bit */
 table.zebra-striped {
   /* All */
@@ -67,7 +69,20 @@ table.zebra-striped {
     width:18px;
   }
   th.last {
-    width:60px;
+    width:65px;
+  }
+  td.last {
+    .object_links {
+      margin:0px;
+      li {
+        display:block;
+        margin-left:5px;
+        float:left;
+      }
+      li:first-child {
+        margin-left:0px;
+      }
+    }
   }
 
   /* Dashboard */
