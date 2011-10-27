@@ -1,6 +1,6 @@
 require 'rails'
 require 'jquery-rails'
-require 'sass-rails' # Waiting for https://github.com/thomas-mcdonald/bootstrap-sass/pull/4
+require 'remotipart'
 require 'bootstrap-sass'
 require 'kaminari'
 require 'rails_admin'
