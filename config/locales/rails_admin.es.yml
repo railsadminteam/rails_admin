@@ -3,8 +3,8 @@ es:
     name: "inicio"
   views:
     pagination:
-      previous: "&laquo; Prev"
-      next: "Next &raquo;"
+      previous: "&laquo; Anterior"
+      next: "Siguiente &raquo;"
       truncate: "…"
   admin:
     dashboard:
