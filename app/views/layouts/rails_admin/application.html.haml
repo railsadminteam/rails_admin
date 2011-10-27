@@ -34,7 +34,7 @@
           - if @object && !@object.new_record?
             %ul.tabs= render :partial => 'rails_admin/main/object_links', :locals => { :add_active_class => true, :model_name => params[:model_name], :object => @object }
           - else
-            %ul.tabs= render :partial => 'layouts/rails_admin/models_tabs'
+            %ul.tabs= render :partial => 'rails_admin/main/models_links', :locals => { :abstract_model => @abstract_model }
         %span.row
         = yield
         %footer

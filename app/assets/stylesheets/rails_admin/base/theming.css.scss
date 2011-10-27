@@ -53,57 +53,29 @@ input, textarea {
 
 /* Table cells behaviour TODO: homogeinize classes a bit */
 table.zebra-striped {
-  /* All */
+  /* text-overflow when cell content > 150px */
   td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width:150px;
   }
-
-  /* List */
-  th.other {
-    width:13px;
-  }
-  th.first {
-    width:13px;
-  }
-  th.last {
-    width:160px;
-    min-width:160px;
-  }
-  td.last {
-    .object_links {
-      margin:0px;
-      li {
-        display:block;
-        margin-left:5px;
-        float:left;
-      }
-      li:first-child {
-        margin-left:0px;
-      }
+  
+  .inline {
+    margin:0px;
+    li {
+      display:inline-block;
     }
   }
 
-  /* Dashboard */
-  th.model-name {
-    width:100px;
-  }
-  th.last-used {
-    width:100px;
-  }
-  th.records {
-  }
-  th.controls {
-    width:100px;
+  /* Shrink to content width */
+  .shrink {
+    width:1px;
+    white-space:nowrap;
   }
 
-  /* Dashboard => history */
-  th.user {
-    width:100px;
-  }
 
+  /* Can't apply width:1px on sortable headers => don't play nice with sorting arrows on firefox. same for white-space:nowrap.. */
   /* History */
   th.created_at {
     width:160px;

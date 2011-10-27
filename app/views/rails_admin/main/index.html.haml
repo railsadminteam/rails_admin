@@ -62,22 +62,22 @@
     %table.zebra-striped
       %thead
         %tr
-          %th.first
+          %th.first.shrink
             - if can_bulk_action
               %input.checkbox.toggle{:type => "checkbox"}
-          %th.other.left{ :style => "#{'display: none' if @other.include?("left")}" }...
+          %th.other.left.shrink{ :style => "#{'display: none' if @other.include?("left")}" }...
           - properties.each do |property|
             - selected = (sort == property.name.to_s)
             - if property.sortable
               - sort_location = index_path params.except('page').merge(:sort => property.name, :sort_reverse => (selected && sort_reverse != 'true') ? 'true' : 'false')
               - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
             %th{:class => "#{property.sortable && "header" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class}", :'data-link' => (property.sortable && sort_location)}= property.label
-          %th.other.right{ :style => "#{'display: none' if @other.include?("right")}" }...
-          %th.last
+          %th.other.right.shrink{ :style => "#{'display: none' if @other.include?("right")}" }...
+          %th.last.shrink
       %tbody
         - @objects.each do |object|
           %tr
-            %td.action.select
+            %td.select.action
               - if can_bulk_action
                 = check_box_tag "bulk_ids[]", object.id, false, :id => "bulk_ids_#{object.id}", :class => "checkbox"
             - other_left = index_path(params.merge(:set => (params[:set].to_i - 1)))
@@ -88,7 +88,7 @@
             - other_right = index_path(params.merge(:set => (params[:set].to_i + 1)))
             %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
             %td.last
-              %ul.object_links= render :partial => 'rails_admin/main/object_links', :locals => { :add_active_class => false, :model_name => params[:model_name], :object => object }
+              %ul.object_links.inline= render :partial => 'rails_admin/main/object_links', :locals => { :add_active_class => false, :model_name => params[:model_name], :object => object }
     - unless params[:all]
       - total_count = @objects.total_count
       = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)
