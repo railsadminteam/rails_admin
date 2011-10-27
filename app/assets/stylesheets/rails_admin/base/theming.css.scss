@@ -66,10 +66,11 @@ table.zebra-striped {
     width:13px;
   }
   th.first {
-    width:18px;
+    width:13px;
   }
   th.last {
-    width:65px;
+    width:160px;
+    min-width:160px;
   }
   td.last {
     .object_links {
