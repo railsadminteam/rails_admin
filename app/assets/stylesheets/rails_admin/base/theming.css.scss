@@ -61,12 +61,16 @@ table.zebra-striped {
     max-width:150px;
   }
   
-  .inline {
-    margin:0px;
-    li {
-      display:inline-block;
+  td.links {
+    max-width:auto;
+    .inline {
+      margin:0px;
+      li {
+        display:inline-block;
+      }
     }
   }
+  
 
   /* Shrink to content width */
   .shrink {
