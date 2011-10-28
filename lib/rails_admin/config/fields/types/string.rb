@@ -20,7 +20,13 @@ module RailsAdmin
 
           register_instance_option(:help) do
             text = (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
-            text += "#{length} #{length == 1 ? I18n.translate("admin.new.one_char") : I18n.translate("admin.new.many_chars")}." if length.present?
+            if valid_length.present? && valid_length[:is].present?
+              text += "#{I18n.translate("admin.new.char_length_of").capitalize} #{valid_length[:is]}."
+            else
+              max_length = [length, valid_length[:maximum] || nil].compact.min
+              min_length = [0, valid_length[:minimum] || nil].compact.max
+              text += "#{I18n.translate("admin.new.char_length_of").capitalize} #{min_length}-#{max_length}."
+            end
             text
           end
 

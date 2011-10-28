@@ -53,6 +53,7 @@ en:
       optional: "Optional"
       one_char: "character"
       many_chars: "characters or fewer"
+      char_length_of: "length of"
       chosen: "Chosen %{name}"
       select_choice: "Select your choice(s) and click"
       chose_all: "Choose all"
