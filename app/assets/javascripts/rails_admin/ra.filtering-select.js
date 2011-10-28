@@ -35,8 +35,8 @@
           return { label: $(this).text(), value: this.value };
         }).toArray();
       }
-      var input_append = $("<div class='input-append'></div>")
-      var input = this.input = $("<input>")
+      var filtering_select = $('<div class="input-append filtering-select" style="float:left"></div>')
+      var input = this.input = $('<input type="search">')
         .val(value)
         .addClass("ra-filtering-select-input")
         .attr('style', select.attr('style'))
@@ -51,6 +51,7 @@
             self._trigger("selected", event, {
               item: option
             });
+            $(self.element.parents('.input')[0]).find('.update').removeClass('disabled');
           },
           change: function(event, ui) {
             if (!ui.item) {
@@ -62,17 +63,21 @@
                   return false;
                 }
               });
-              if (!valid) {
+              if (!valid || $(this).val() == '') {
                 // remove invalid value, as it didn't match anything
-                $(this).val("");
-                select.val("");
+                $(this).val(null);
+                select.html($('<option value="" selected="selected"></option>'));
                 input.data("autocomplete").term = "";
+                $(self.element.parents('.input')[0]).find('.update').addClass('disabled');
                 return false;
               }
+              
             }
           }
         })
-
+      if(select.attr('placeholder')) 
+        input.attr('placeholder', select.attr('placeholder'))
+        
       input.data("autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
           .data("item.autocomplete", item)
@@ -94,7 +99,7 @@
           input.focus();
         });
       
-      input_append.append(input).append(button).insertAfter(select);
+      filtering_select.append(input).append(button).insertAfter(select);
       
         
     },

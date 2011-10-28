@@ -49,7 +49,9 @@ input, textarea {
   }
 }
 
-
+.help-block {
+  clear:left;
+}
 
 /* Table cells behaviour TODO: homogeinize classes a bit */
 table.zebra-striped {

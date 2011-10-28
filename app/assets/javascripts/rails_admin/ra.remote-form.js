@@ -12,79 +12,64 @@
  */
 (function($) {
   $.widget("ra.remoteForm", {
-    dialog: null,
-    options: {
-      dialogClass: "",
-      height: 600,
-      width: 720
-    },
 
     _create: function() {
-      var widget = this;
-      var edit_url = $(this.element).siblings('select').data('edit-url');
+      var widget = this
+      var dom_widget = widget.element;
+      
+      var edit_url = dom_widget.find('select').data('edit-url');
       if(typeof(edit_url) != 'undefined' && edit_url.length) {
-        $('#' + this.element.parent().parent().attr('id') + ' .ra-multiselect option').live('dblclick', function(e){
-          e.preventDefault();
-          if($("#modal").length) {
-            return false; // Only one modal at a time
-          }
-
-          var dialog = widget._getModal();
-          $.ajax({
-            url: edit_url.replace('__ID__', this.value),
-            beforeSend: function(xhr) {
-              xhr.setRequestHeader("Accept", "text/javascript");
-            },
-            success: function(data, status, xhr) {
-              dialog.find('.modal-body').html(data);
-              widget._bindFormEvents();
-            },
-            error: function(xhr, status, error) {
-              dialog.find('.modal-body').html(xhr.responseText);
-            },
-            dataType: 'text'
-          });
+        dom_widget.find('.ra-multiselect option').live('dblclick', function(e){
+          widget._bindModalOpening(e, edit_url.replace('__ID__', this.value))
         });
       }
 
-
-      $(widget.element).bind("click", function(e){
-        e.preventDefault();
-        if($("#modal").length) {
-          return false; // Only one modal at a time
+      dom_widget.find('.create').unbind().bind("click", function(e){
+        widget._bindModalOpening(e, $(this).data('link'))
+      });
+      
+      dom_widget.find('.update').unbind().bind("click", function(e){
+        if(value = dom_widget.find('select').val()) {
+          widget._bindModalOpening(e, $(this).data('link').replace('__ID__', value))
+        } else {
+          e.preventDefault();
         }
+      });
+    },
+    
+    _bindModalOpening: function(e, url) {
+      e.preventDefault();
+      widget = this;
+      if($("#modal").length)
+        return false;
 
-        var dialog = widget._getModal();
-        $.ajax({
-          url: $(this).attr("href"),
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader("Accept", "text/javascript");
-          },
-          success: function(data, status, xhr) {
-            dialog.find('.modal-body').html(data);
-            widget._bindFormEvents();
-          },
-          error: function(xhr, status, error) {
-            dialog.find('.modal-body').html(xhr.responseText);
-          },
-          dataType: 'text'
-        });
+      var dialog = this._getModal();
+      $.ajax({
+        url: url,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("Accept", "text/javascript");
+        },
+        success: function(data, status, xhr) {
+          dialog.find('.modal-body').html(data);
+          widget._bindFormEvents();
+        },
+        error: function(xhr, status, error) {
+          dialog.find('.modal-body').html(xhr.responseText);
+        },
+        dataType: 'text'
       });
     },
     
     _bindFormEvents: function() {
-      var dialog = this._getModal(),
+      var widget = this,
+          dialog = this._getModal(),
           form = dialog.find("form"),
-          widget = this,
           saveButtonText = dialog.find(":submit[name=_save]").text(),
           cancelButtonText = dialog.find(":submit[name=_continue]").text();
-          
       dialog.find('.actions').remove();
       
       form.attr("data-remote", true);
-      
-      dialog.find('.modal-header-title').text(form.data('title'));
-      
+      dialog.find('.modal-header-title').text(form.data('title'));      
       dialog.find('.cancel-action').unbind().click(function(){
         dialog.modal('hide');
         return false;
@@ -104,23 +89,17 @@
 
           var json = $.parseJSON(data.responseText);
           var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
-          var select = widget.element.siblings('select');
+          var select = widget.element.find('select').filter(":hidden");
           
-          if(widget.element.siblings('.input-append').length) { // select input (add)
-            
-            var input = widget.element.siblings('.input-append').children('.ra-filtering-select-input');
-            if(input.length > 0) {
-              input[0].value = json.label;
-            }
-            if(select.length > 0) {
-              select.html(option);
-              select[0].value = json.id;
-            }
+          if(widget.element.find('.filtering-select').length) { // select input
+            var input = widget.element.find('.filtering-select').children('.ra-filtering-select-input');
+            input.val(json.label);
+            if (!select.find('option[value=' + json.id + ']').length) // replace
+              select.html(option).val(json.id);
           } else { // multi-select input
-            
-            var input = widget.element.siblings('.ra-filtering-select-input');
-            var multiselect = widget.element.siblings('.ra-multiselect');
-            if (select.find('option[value=' + json.id + ']').length) { // replace (changing name may be needed)
+            var input = widget.element.find('.ra-filtering-select-input');
+            var multiselect = widget.element.find('.ra-multiselect');
+            if (select.find('option[value=' + json.id + ']').length) { // replace
               select.find('option[value=' + json.id + ']').text(json.label);
               multiselect.find('option[value= ' + json.id + ']').text(json.label);
             } else { // add
@@ -153,7 +132,7 @@
           .modal({
             keyboard: true,
             backdrop: true,
-            show:true
+            show: true
           })
           .bind('hidden', function(){
             widget.dialog.remove();   // We don't want to reuse closed modals

@@ -47,10 +47,9 @@
 
       this.header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
 
-      this.filter = $('<input type="search" class="ra-multiselect-search"/>');
+      this.filter = $('<input type="search" placeholder="' + this.options.regional.search + '" class="ra-multiselect-search"/>');
 
-      this.header.append(this.filter)
-                 .append('<div class="help"><strong>' + this.options.regional.chosen + '</strong><br />' + this.options.regional.selectChoice + '</div><div class="ui-icon ui-icon-circle-triangle-e"></div>');
+      this.header.append(this.filter);
 
       this.wrapper.append(this.header);
 
@@ -70,25 +69,25 @@
 
       this.collection.addClass("ra-multiselect-collection");
 
-      this.addAll = $('<a class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
+      this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
 
       this.columns.left.append(this.collection)
                           .append(this.addAll);
 
-      this.add = $('<a class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
+      this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
 
-      this.remove = $('<a class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
+      this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
 
       this.columns.center.append(this.add).append(this.remove)
       if (this.options.sortable) {
-        this.up = $('<a class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + this.options.regional.up + '</a>');
-        this.down = $('<a class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + this.options.regional.down + '</a>');
+        this.up = $('<a href="#" class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + this.options.regional.up + '</a>');
+        this.down = $('<a href="#" class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + this.options.regional.down + '</a>');
         this.columns.center.append(this.up).append(this.down);
       }
 
       this.selection = $('<select class="ra-multiselect-selection" multiple="multiple"></select>');
 
-      this.removeAll = $('<a class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
+      this.removeAll = $('<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
 
       this.columns.right.append(this.selection)
                            .append(this.removeAll);
@@ -102,21 +101,25 @@
       /* Add all to selection */
       this.addAll.click(function(e){
         widget._select($('option', widget.collection));
+        e.preventDefault();
       });
 
       /* Add to selection */
       this.add.click(function(e){
         widget._select($(':selected', widget.collection));
+        e.preventDefault();
       });
 
       /* Remove all from selection */
       this.removeAll.click(function(e){
         widget._deSelect($('option', widget.selection));
+        e.preventDefault();
       });
 
       /* Remove from selection */
       this.remove.click(function(e){
         widget._deSelect($(':selected', widget.selection));
+        e.preventDefault();
       });
 
       var timeout = null;
@@ -124,17 +127,18 @@
         /* Move selection up */
         this.up.click(function(e){
           widget._move('up', $(':selected', widget.selection));
+          e.preventDefault();
         });
 
         /* Move selection down */
         this.down.click(function(e){
           widget._move('down', $(':selected', widget.selection));
+          e.preventDefault();
         });
       }
 
       /* Typing to the filter */
-      this.filter.keyup(function(e){
-
+      this.filter.bind('keyup click', function(e){
         if (timeout) { clearTimeout(timeout); }
 
         var search = function() {

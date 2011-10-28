@@ -12,27 +12,12 @@
       top: 10px;
       left: 3px;
     }
-    .ra-multiselect-search {
-      background: transparent image-url("rails_admin/magnifier.png") no-repeat scroll 166px center;
-      border: 1px solid #c1c1c1;
-      -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-      -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-      -moz-border-radius: 13px;
-      -webkit-border-radius: 13px;
-      border-radius: 13px;
-      float: left;
-      font-family: helvetica, arial, sans-serif;
-      font-size: 13px;
-      height: 25px;
-      margin: 0 25px 15px 0;
-      outline: none;
-      padding: 0 25px 0 10px;
-      width: 155px;
-    }
   }
-
-
+  
+  .ra-multiselect-search {
+    width: 180px;
+  }
+  
   .ra-multiselect-column {
     width: 190px;
     float: left;
@@ -49,27 +34,9 @@
   .ra-multiselect-collection, .ra-multiselect-selection {
     height: 130px;
     margin-bottom: 5px;
-    padding: 5px;
-    font-family: Verdana, Geneva, sans-serif;
-    font-size: 12px;
     width: 100%;
-    border-left: 1px solid #e2e3ea;
-    border-top: 1px solid #abadb3;
-    border-bottom: 1px solid #e3e9ef;
-    border-right: 1px solid #dbdfe6;
-    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
-  a {
-    font-weight: bold;
-    font-size: 11px;
-    cursor:pointer;
-    &:hover {
-      text-decoration:none;
-    }
-  }
   span.ui-icon {
     margin-right: 4px;
   }
