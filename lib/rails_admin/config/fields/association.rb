@@ -46,18 +46,25 @@ module RailsAdmin
           @label ||= abstract_model.model.human_attribute_name association[:name]
         end
 
+        register_instance_option(:scope) do
+          nil
+        end
+        
         # Reader for a collection of association's child models in an array of
         # [label, id] arrays.
         def associated_collection(authorization_adapter)
-          scope = authorization_adapter && authorization_adapter.query(:index, associated_model_config.abstract_model)
-          associated_model_config.abstract_model.all({}, scope).map do |object|
+          query_scope = authorization_adapter && authorization_adapter.query(:index, associated_model_config.abstract_model)
+          query_scope = scope.call(query_scope) if scope.present?
+          associated_model_config.abstract_model.all({}, query_scope).map do |object|
             [object.send(associated_model_config.object_label_method), object.id]
           end
         end
 
         # Reader how many records the associated model has
         def associated_collection_count
-          associated_model_config.abstract_model.count
+          query_scope = associated_model_config.abstract_model.model
+          query_scope = scope.call(query_scope) if scope.present?
+          associated_model_config.abstract_model.count({}, query_scope)
         end
 
         # Reader for the association's child model's configuration
