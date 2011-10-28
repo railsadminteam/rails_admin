@@ -96,10 +96,12 @@
             input.val(json.label);
             if (!select.find('option[value=' + json.id + ']').length) // replace
               select.html(option).val(json.id);
+          
           } else { // multi-select input
+          
             var input = widget.element.find('.ra-filtering-select-input');
             var multiselect = widget.element.find('.ra-multiselect');
-            if (select.find('option[value=' + json.id + ']').length) { // replace
+            if (multiselect.find('option[value=' + json.id + ']').length) { // replace
               select.find('option[value=' + json.id + ']').text(json.label);
               multiselect.find('option[value= ' + json.id + ']').text(json.label);
             } else { // add
