@@ -67,29 +67,24 @@ table.zebra-striped {
       margin:0px;
       li {
         display:inline-block;
+        a {
+          border-right: 1px solid #DDD;
+          padding-right: 5px;
+        }
+        &:last-child {
+          a {
+            border-right: none;
+          }
+        }
       }
     }
   }
-
 
   /* Shrink to content width */
   .shrink {
     width:1px;
     white-space:nowrap;
   }
-td.links {
-  li {
-    a {
-      border-right: 1px solid #DDD;
-      padding-right: 5px;
-    }
-    &:last-child {
-      a {
-        border-right: none;
-      }
-    }
-  }
-}
 
   /* Can't apply width:1px on sortable headers => don't play nice with sorting arrows on firefox. same for white-space:nowrap.. */
   /* History */
