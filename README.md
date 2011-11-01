@@ -417,13 +417,15 @@ you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
 
 **Create a navigation_label in navigation**
+    
+    # Given there are the following models: League, Team and Division
 
     RailsAdmin.config do |config|
       config.model Team do
         parent League
       end
 
-      config.model Team do
+      config.model Division do
         parent League
       end
     end
