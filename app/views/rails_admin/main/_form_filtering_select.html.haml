@@ -17,7 +17,7 @@
   if xhr
     collection = [[selected_name, selected_id]]
   else
-    collection = field.associated_collection(@authorization_adapter)
+    collection = field.associated_collection
   end
   
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''

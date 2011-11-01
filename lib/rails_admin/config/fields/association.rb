@@ -48,16 +48,17 @@ module RailsAdmin
 
         # Reader for a collection of association's child models in an array of
         # [label, id] arrays.
-        def associated_collection(authorization_adapter)
-          scope = authorization_adapter && authorization_adapter.query(:index, associated_model_config.abstract_model)
+        register_instance_option :associated_collection do
+          scope = bindings[:view].instance_variable_get("@authorization_adapter").try(:query, :index, associated_model_config.abstract_model)
           associated_model_config.abstract_model.all({}, scope).map do |object|
             [object.send(associated_model_config.object_label_method), object.id]
           end
         end
 
         # Reader how many records the associated model has
-        def associated_collection_count
-          associated_model_config.abstract_model.count
+        register_instance_option :associated_collection_count do
+          scope = bindings[:view].instance_variable_get("@authorization_adapter").try(:query, :index, associated_model_config.abstract_model)
+          associated_model_config.abstract_model.count({}, scope)
         end
 
         # Reader for the association's child model's configuration

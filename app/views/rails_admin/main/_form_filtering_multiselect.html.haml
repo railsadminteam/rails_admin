@@ -18,7 +18,7 @@
     end
   else
     i = 0
-    collection = field.associated_collection(@authorization_adapter).sort_by {|a| [selected_ids.index(a[1]) || selected_ids.size, i+=1] }
+    collection = field.associated_collection.sort_by {|a| [selected_ids.index(a[1]) || selected_ids.size, i+=1] }
   end
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
 
