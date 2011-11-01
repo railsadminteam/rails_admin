@@ -20,6 +20,8 @@ hr:
       add_new: "Dodaj novi"
       show: "Prikaz"
       ago: "ago"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Povijest"
       page_name: "Povijest za %{name}"

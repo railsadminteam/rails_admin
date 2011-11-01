@@ -24,6 +24,8 @@ ro:
       add_new: "Adaugă"
       show: "Arată"
       ago: "în urmă"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Istoric"
       page_name: "Istoricul pentru %{name}"

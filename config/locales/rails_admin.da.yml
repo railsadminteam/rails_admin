@@ -17,6 +17,8 @@ da:
       add_new: "Tilføj ny"
       show: "Vis"
       ago: "siden"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Historik"
       page_name: "Historik for %{name}"

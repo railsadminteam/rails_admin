@@ -17,6 +17,8 @@ lv:
       add_new: "Pievienot jaunu"
       show: "Parādīt"
       ago: "pirms"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Vēsture"
       page_name: "%{name} vēsture"

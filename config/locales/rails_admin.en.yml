@@ -21,6 +21,8 @@ en:
       show: "Show"
       ago: "ago"
       navigation: "Navigation"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "History"
       page_name: "History for %{name}"

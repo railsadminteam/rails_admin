@@ -20,6 +20,8 @@ sv:
       add_new: "Lägg till ny"
       show: "Visa"
       ago: "sedan"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Historik"
       page_name: "Historik för %{name}"

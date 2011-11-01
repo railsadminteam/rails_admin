@@ -19,6 +19,8 @@ lt:
       add_new: "Pridėti"
       show: "Rodyti"
       ago: "prieš"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Archyvai"
       page_name: "%{name} pakeitimų istorija"

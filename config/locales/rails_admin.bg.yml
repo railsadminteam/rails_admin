@@ -19,6 +19,8 @@ bg:
       add_new: "Добави нов"
       show: "Покажи"
       ago: ""
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "История"
       page_name: "История за %{name}"

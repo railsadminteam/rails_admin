@@ -17,6 +17,8 @@ fr:
       add_new: "Nouveau"
       show: "Voir"
       ago: ""
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Historique"
       page_name: "Historique de %{name}"

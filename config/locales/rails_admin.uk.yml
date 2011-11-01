@@ -17,6 +17,8 @@ uk:
       add_new: "Створити"
       show: "Детально"
       ago: "тому"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Історія"
       page_name: "Історія для %{name}"
