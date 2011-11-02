@@ -1247,6 +1247,36 @@ CKEditor can be enabled on fields of type text:
       end
     end
 
+**Fields - Scoped has_many/has_and_belongs_to_many/has_many :through associations**
+
+By default, associations are mapped against the entire collection. When the count is less than 100, the collection will be
+preloaded into form select widgets if present. Otherwise a search term must be entered, and an XHR is made to limit the 
+results to manageable size.
+
+If, for application reasons, only a subset of the associated model's collection is appropriate for association with the source
+model, it can be scoped. For example, if a team `has_many :candidates, :class_name => 'Player'` and we wish to restrict them
+based on the type of team:
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        edit do
+          field :candidates do
+            scope do
+              Proc.new {|scope|
+                team = bindings[:object]
+                if team.sex.present?
+                  scope.where({sex: team.sex})
+                else
+                  scope
+                end
+              }
+            end
+          end
+        end
+      end
+    end
+
+
 **Fields - Ordered has_many/has_and_belongs_to_many/has_many :through associations**
 
 Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations),
