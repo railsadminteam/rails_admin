@@ -64,16 +64,9 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @draft = FactoryGirl.create :draft
 
-      visit new_path(:model_name => "player")
+      page.driver.post create_path(:model_name => "player", :player => {:name => "Jackie Robinson", :number => 42, :position => 'Second baseman', :draft_id => @draft.id})
 
-      fill_in "player[name]", :with => "Jackie Robinson"
-      fill_in "player[number]", :with => 42
-      fill_in "player[position]", :with => "Second baseman"
-      select "Draft ##{@draft.id}"
-
-      click_button "Save"
-
-      @player = RailsAdmin::AbstractModel.new("Player").first
+      @player = RailsAdmin::AbstractModel.new("Player").all.last # first is created by FactoryGirl
     end
 
     it "should create an object with correct associations" do
@@ -85,23 +78,13 @@ describe "RailsAdmin Basic Create" do
   describe "create with has-many association" do
     before(:each) do
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
-
-      visit new_path(:model_name => "league")
-
-      fill_in "league[name]", :with => "National League"
-      select @divisions[0].name, :from => "league_division_ids"
-
-      click_button "Save"
-
-      @league = RailsAdmin::AbstractModel.new("League").first
+      page.driver.post create_path(:model_name => "league", :league => {:name => "National League", :division_ids =>[@divisions[0].id]})
+      @league = RailsAdmin::AbstractModel.new("League").all.last
     end
 
     it "should create an object with correct associations" do
       @divisions[0].reload
       @league.divisions.should include(@divisions[0])
-    end
-
-    it "should not create an object with incorrect associations" do
       @league.divisions.should_not include(@divisions[1])
       @league.divisions.should_not include(@divisions[2])
     end
@@ -110,22 +93,13 @@ describe "RailsAdmin Basic Create" do
   describe "create with has-and-belongs-to-many association" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
-
-      visit new_path(:model_name => "fan")
-
-      fill_in "fan[name]", :with => "John Doe"
-      select @teams[0].name, :from => "fan_team_ids"
-      click_button "Save"
-
+      page.driver.post create_path(:model_name => "fan", :fan => {:name => "John Doe", :team_ids => [@teams[0].id] })
       @fan = RailsAdmin::AbstractModel.new("Fan").first
     end
 
     it "should create an object with correct associations" do
       @teams[0].reload
       @fan.teams.should include(@teams[0])
-    end
-
-    it "should not create an object with incorrect associations" do
       @fan.teams.should_not include(@teams[1])
       @fan.teams.should_not include(@teams[2])
     end
@@ -136,13 +110,7 @@ describe "RailsAdmin Basic Create" do
       @team = FactoryGirl.create :team
       @player = FactoryGirl.create :player, :team => @team
 
-      visit new_path(:model_name => "player")
-
-      fill_in "player[name]", :with => @player.name
-      fill_in "player[number]", :with => @player.number.to_s
-      fill_in "player[position]", :with => @player.position
-      select "#{@team.name}", :from => "player[team_id]"
-      click_button "Save"
+      page.driver.post create_path(:model_name => "player", :player => {:name => @player.name, :number => @player.number.to_s, :position => @player.position, :team_id => @team.id})
     end
 
     it "should show an error message" do

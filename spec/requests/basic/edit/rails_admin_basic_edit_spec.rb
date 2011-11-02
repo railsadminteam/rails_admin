@@ -50,30 +50,6 @@ describe "RailsAdmin Basic Edit" do
     end
   end
 
-  describe "edit with has-one association" do
-    before(:each) do
-      @player = FactoryGirl.create :player
-      @draft = FactoryGirl.create :draft
-      visit edit_path(:model_name => "player", :id => @player.id)
-    end
-
-    it "should show associated objects" do
-      should have_selector("option", :text => /Draft #\d+/)
-    end
-  end
-
-  describe "edit with has-many association" do
-    before(:each) do
-      @teams = 3.times.map { FactoryGirl.create :team }
-      @player = FactoryGirl.create :player
-      visit edit_path(:model_name => "player", :id => @player.id)
-    end
-
-    it "should show associated objects" do
-      @teams.each { |team| should have_selector("option", :text => /#{team.name}/) }
-    end
-  end
-
   describe "edit with has-and-belongs-to-many association" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }

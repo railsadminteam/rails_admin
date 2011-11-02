@@ -45,22 +45,14 @@ module RailsAdmin
         register_instance_option(:label) do
           @label ||= abstract_model.model.human_attribute_name association[:name]
         end
-
-        # Reader for a collection of association's child models in an array of
-        # [label, id] arrays.
-        def associated_collection
-          scope = bindings[:view].instance_variable_get("@authorization_adapter").try(:query, :index, associated_model_config.abstract_model)
-          associated_model_config.abstract_model.all({}, scope).map do |object|
-            [object.send(associated_model_config.object_label_method), object.id]
-          end
+        
+        # scope for possible associable records
+        register_instance_option :associated_collection_scope do
+          Proc.new { |scope|
+            scope.limit(30)
+          }
         end
-
-        # Reader how many records the associated model has
-        def associated_collection_count
-          scope = bindings[:view].instance_variable_get("@authorization_adapter").try(:query, :index, associated_model_config.abstract_model)
-          associated_model_config.abstract_model.count({}, scope)
-        end
-
+        
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association[:child_model])
