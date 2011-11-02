@@ -1,4 +1,4 @@
-$ = jQuery.noConflict()
+$ = jQuery
 
 $("#list input.checkbox.toggle").live "click", ->
   checked_status = $(this).is(":checked")
