@@ -14,8 +14,7 @@ module RailsAdmin
             {
               :class => css_class,
               :maxlength => length,
-              :size => [50, length.to_i].min,
-              :value => value
+              :size => [50, length.to_i].min
             }
            end
 

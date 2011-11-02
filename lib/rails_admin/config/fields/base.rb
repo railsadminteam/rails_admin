@@ -147,9 +147,8 @@ module RailsAdmin
 
         register_instance_option(:html_attributes) do
           {
-            :class => css_class,
-            :value => value
-          }.merge(column_width.present? ? { :style => "width:#{column_width}px" } : {})
+            :class => css_class
+          }
         end
 
         # Accessor for field's label.
