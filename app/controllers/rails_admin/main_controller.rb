@@ -52,7 +52,7 @@ module RailsAdmin
             @objects.to_json(@schema)
           end
           if params[:send_data]
-            send_data output, :filename => "#{params[:model_name]} #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}.json"
+            send_data output, :filename => "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.json"
           else
             render :json => output
           end
@@ -60,7 +60,7 @@ module RailsAdmin
         format.xml do
           output = @objects.to_xml(@schema)
           if params[:send_data]
-            send_data output, :filename => "#{params[:model_name]} #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}.xml"
+            send_data output, :filename => "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.xml"
           else
             render :xml => output
           end
@@ -70,7 +70,7 @@ module RailsAdmin
           if params[:send_data]
             send_data output,
               :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
-              :disposition => "attachment; filename=#{params[:model_name]} #{DateTime.now.strftime("%Y-%m-%d %H:%M:%S")}.csv"
+              :disposition => "attachment; filename=#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.csv"
           else
             render :text => output
           end
