@@ -22,6 +22,8 @@ nl:
       add_new: "Nieuw toevoegen"
       show: "Tonen"
       ago: "geleden"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Geschiedenis"
       page_name: "Geschiedenis van %{name}"

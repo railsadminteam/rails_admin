@@ -20,6 +20,8 @@ ru:
       show: "Показать"
       ago: "назад"
       navigation: "Навигация"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "История"
       page_name: "История для %{name}"

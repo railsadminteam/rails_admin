@@ -20,6 +20,8 @@ tr:
       add_new: "Yeni ekle"
       show: "Göster"
       ago: "önce"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Geçmiş"
       page_name: "%{name} geçmişi"

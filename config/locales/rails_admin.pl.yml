@@ -21,6 +21,8 @@ pl:
       show: "pokaż"
       ago: "temu"
       navigation: "Menu"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Historia"
       page_name: "Historia zmian modelu %{name}"

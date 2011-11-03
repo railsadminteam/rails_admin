@@ -20,6 +20,8 @@ it:
       add_new: "Aggiungi nuovo"
       show: "Mostra"
       ago: "fa"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Cronologia"
       page_name: "Cronologia per %{name}"

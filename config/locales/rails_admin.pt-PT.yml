@@ -20,6 +20,8 @@ pt-PT:
       add_new: "Adicionar"
       show: "Exibir"
       ago: "atrás"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Histórico"
       page_name: "Histórico de %{name}"

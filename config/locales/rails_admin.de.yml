@@ -20,6 +20,8 @@ de:
       add_new: "Hinzufügen"
       show: "Anzeigen"
       ago: "her"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Verlauf"
       page_name: "Verlauf von %{name}"

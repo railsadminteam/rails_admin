@@ -18,6 +18,8 @@ zh-CN:
       show: "查看"
       ago: "以前"
       navigation: "导航"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "历史"
       page_name: "%{name}的历史"

@@ -18,6 +18,8 @@ fi:
       add_new: "Lisää uusi"
       show: "Näytä"
       ago: "sitten"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Historia"
       page_name: "Kohteen %{name} historia"

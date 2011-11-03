@@ -20,6 +20,8 @@ mn:
       add_new: "Шинээр нэмэх"
       show: "Харах"
       ago: "ago"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Түүх"
       page_name: "%{name}-н түүх"

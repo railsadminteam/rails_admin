@@ -22,6 +22,8 @@ nb:
       show: "Vise"
       ago: "siden"
       navigation: "Navigasjon"
+    footer:
+      copyright: "RailsAdmin 2011"
     history:
       name: "Historikk"
       page_name: "Historikk for %{name}"
