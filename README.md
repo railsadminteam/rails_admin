@@ -1114,12 +1114,13 @@ RailsAdmin ships with the following field types:
 * date
 * datetime
 * decimal
-* file_upload *(does not initialize automatically)*
+* file_upload *virtual, subclassed by paperclip, DragonFly & CarrierWave*
 * paperclip_file *(initializes automatically if Paperclip is present)*
 * float
-* has_and_belongs_to_many_association
-* has_many_association
-* has_one_association
+* has\_and\_belongs\_to\_many\_association
+* has\_many\_association
+* has\_one\_association
+* belongs\_to association
 * integer
 * password *(initializes if string type column's name is password)*
 * string
