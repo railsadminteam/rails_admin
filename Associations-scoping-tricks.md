@@ -1,20 +1,29 @@
 ### Restricting associable records
 
-For all associations type, (except polymorphic ones at the moment) you can visually scope associable records with: 
+You may have business rules where you want to limit the members of a collection that are available for association with a particular record. For example, a Player might be a member of a League. When selecting Players for a Team, we wouldn't want to see all the Players we know about, just the ones in the same League as the Team.
+
+For associations types (other than polymorphics at the moment) you can scope associable records with: 
 
 ```ruby
-associated_collection_scope do
-  # bindings[:object] & bindings[:controller] are available, but not in scope's block!
-  user = bindings[:object]
-  Proc.new { |scope|
-    user ? scope.where(user_id => user.id) : scope
-  }
+config.model Team do
+  field :players do
+    associated_collection_scope do
+      # bindings[:object] & bindings[:controller] are available, but not in scope's block!
+      team = bindings[:object]
+      Proc.new { |scope|
+        # scoping all Players currently, let's limit them to the team's league
+        # Be sure to limit if there are a lot of Players
+        scope = scope.where(league_id: team.league_id) if team.present?
+        scope = scope.limit(30)
+      }
+    end
+  end
 end
 ```
 
-**bindings[:object] can be null for new parent records!**
+**bindings[:object] can be null for new parent records!** Also note that the scope takes in to account the saved version of the record, not considering any unsaved changes you may have made in the edit form. If you change the team's league, you'll still see the players from the old league until you save.
 
-Of course if the user knows the id of some other record, he can associate them as well! You'll need `authorization` or association conditions to prevent that.
+Validating associations is up to your models, and you'll certainly want to set the up properly. This functionality is basically a filter--that allows you to scope in on the records you're likely to want. It does not enforce what gets mapped in your database. If the Team knows the id of a Player in another League, he can associate it. Use `authorization` or association conditions, and a validation, to prevent that.
 
 ### Scoping the relation itself with conditions
 
