@@ -335,7 +335,7 @@ module RailsAdmin
     def list_entries(scope = nil)
       if params[:associated_collection].present?
         action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
-        association = @model_config.send(action).fields.find{|f| f.name.to_s == params[:associated_collection] }
+        association = @model_config.send(action).fields.find{|f| f.name.to_s == params[:associated_collection] }.with(:controller => self, :object => @abstract_model.get(params[:object_id]))
         model_config = association.associated_model_config
         scope = model_config.abstract_model.scoped.merge(scope)
         scope = scope.instance_eval(&association.associated_collection_scope) if association.associated_collection_scope
