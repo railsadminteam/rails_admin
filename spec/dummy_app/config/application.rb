@@ -41,5 +41,7 @@ module DummyApp
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    
+    config.autoload_paths += Dir["#{config.root}/app/models/**/"]
   end
 end

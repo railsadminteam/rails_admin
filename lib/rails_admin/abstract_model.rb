@@ -16,9 +16,11 @@ module RailsAdmin
     def self.all_models
       @@all_models ||= (
         possible_models = RailsAdmin::Config.included_models.map(&:to_s).presence || ([Rails.application] + Rails::Application::Railties.engines).map do |app|
-          (app.paths['app/models'] + app.config.autoload_paths).map do |path|
-            Dir.glob(app.root.join(path, "**/*.rb")).map do |filename|
-              lchomp(filename, "#{app.root.join(path)}/").chomp('.rb').camelize  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+          (app.paths['app/models'] + app.config.autoload_paths).map do |load_path|
+            Dir.glob(app.root.join(load_path)).map do |load_dir|
+              Dir.glob(load_dir + "/**/*.rb").map do |filename|
+                lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+              end
             end
           end
         end.flatten
