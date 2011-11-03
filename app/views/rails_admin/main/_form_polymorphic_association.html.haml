@@ -1,14 +1,8 @@
 :ruby
   type_collection = field.polymorphic_type_collection
   type_column = field.association[:foreign_type].to_s
-
-  if params[form.object_name]
-    selected_type = params[form.object_name][type_column]
-    collection = field.associated_collection(selected_type)
-  else
-    selected_type = field.bindings[:object].send(type_column)
-    collection = field.associated_collection(selected_type)
-  end
+  selected_type = field.bindings[:object].send(type_column)
+  collection = field.associated_collection(selected_type)
   selected = field.bindings[:object].send(field.association[:name])
   column_type_dom_id = field.dom_id.sub(field.method_name.to_s, type_column)
 

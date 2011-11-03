@@ -32,40 +32,16 @@ describe "RailsAdmin Basic New" do
     end
   end
 
-  describe "GET /admin/player/new with has-one association" do
+  describe "GET /admin/player/new with has-one/belongs_to/has_many association" do
     before(:each) do
       FactoryGirl.create :draft
       visit new_path(:model_name => "player")
     end
 
-    it "should show associated objects" do
-      should have_selector("option", :text => /Draft #\d+/)
-    end
-  end
-
-  describe "GET /admin/player/new with has-many association" do
-    before(:each) do
-      @teams = 3.times.map { FactoryGirl.create :team }
-      visit new_path(:model_name => "player")
-    end
-
-    it "should show associated objects" do
-      @teams.each do |team|
-        should have_selector("option", :text => /#{team.name}/)
-      end
-    end
-  end
-
-  describe "GET /admin/team/:id/fans/new with has-and-belongs-to-many association" do
-    before(:each) do
-      @teams = 3.times.map { FactoryGirl.create :team }
-      visit new_path(:model_name => "fan")
-    end
-
-    it "should show associated objects" do
-      @teams.each do |team|
-        should have_selector("option", :text => /#{team.name}/)
-      end
+    it "should show selects" do
+      should have_selector("select#player_draft_id")
+      should have_selector("select#player_team_id")
+      should have_selector("select#player_comment_ids")
     end
   end
 

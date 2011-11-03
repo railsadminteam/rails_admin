@@ -64,15 +64,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = FactoryGirl.create :player
       @draft = FactoryGirl.create :draft
-
-      visit edit_path(:model_name => "player", :id => @player.id)
-
-      fill_in "player[name]", :with => "Jackie Robinson"
-      fill_in "player[number]", :with => "42"
-      fill_in "player[position]", :with => "Second baseman"
-      select "Draft ##{@draft.id}"
-      click_button "Save"
-
+      page.driver.put update_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => 42, :position => "Second baseman"})
       @player.reload
     end
 
@@ -88,80 +80,26 @@ describe "RailsAdmin Basic Update" do
     end
   end
 
-  describe "update with has-many association", :given => ["a league exists", "three teams exist"] do
-    before(:each) do
+  describe "update with has-many association" do
+    it "should be fillable and emptyable" do
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
-
-      visit edit_path(:model_name => "league", :id => @league.id)
-
-      fill_in "league[name]", :with => "National League"
-      select @divisions[0].name, :from => "league_division_ids"
-      click_button "Save"
+    
+      page.driver.put update_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
 
       @league.reload
-      @histories = RailsAdmin::History.where(:item => @league.id)
-    end
-
-    it "should update an object with correct attributes" do
       @league.name.should eql("National League")
-    end
-
-    it "should update an object with correct associations" do
       @divisions[0].reload
       @league.divisions.should include(@divisions[0])
-    end
-
-    it "should not update an object with incorrect associations" do
       @league.divisions.should_not include(@divisions[1])
       @league.divisions.should_not include(@divisions[2])
-    end
+      RailsAdmin::History.where(:item => @league.id).collect(&:message).should include("Added Divisions ##{@divisions[0].id} associations, Changed name")
 
-    it "should log a history message about the update" do
-      @histories.collect(&:message).should include("Added Divisions ##{@divisions[0].id} associations, Changed name")
-    end
-
-    describe "removing has-many associations" do
-      before(:each) do
-        visit edit_path(:model_name => "league", :id => @league.id)
-
-        unselect @divisions[0].name, :from => "league_division_ids"
-        click_button "Save"
-
-        @league.reload
-        @histories.reload
-      end
-
-      it "should have empty associations" do
-        @league.divisions.should be_empty
-      end
-
-      it "should log a message to history about removing associations" do
-        @histories.collect(&:message).should include("Removed Divisions ##{@divisions[0].id} associations")
-      end
-    end
-  end
-
-  describe "update with has-and-belongs-to-many association" do
-    before(:each) do
-      @teams = 3.times.map { FactoryGirl.create :team }
-      @fan = FactoryGirl.create :fan, :teams => [@teams[0]]
-
-      visit edit_path(:model_name => "fan", :id => @fan.id)
-
-      select @teams[1].name, :from => "fan_team_ids"
-      click_button "Save"
-
-      @fan.reload
-    end
-
-    it "should update an object with correct associations" do
-      @fan.teams.should include(@teams[0])
-      @fan.teams.should include(@teams[1])
-    end
-
-    it "should not update an object with incorrect associations" do
-      @fan.teams.should_not include(@teams[2])
+      page.driver.put update_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
+      
+      @league.reload
+      @league.divisions.should be_empty
+      RailsAdmin::History.where(:item => @league.id).collect(&:message).should include("Removed Divisions ##{@divisions[0].id} associations")
     end
   end
 
