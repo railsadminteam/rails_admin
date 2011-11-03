@@ -41,7 +41,7 @@ Player Load (1.2ms)  SELECT "players".* FROM "players" WHERE "players"."team_id"
 
 Note that position changes at each request, you can use lambdas.
 You can use `:after_add` hook to reject records you don't want (sanity check).
-More on ActiveRecord's API page.
+More on ActiveRecord's API pages.
 
 RailsAdmin doesn't know about :conditions in your association, so you'll need to use `authorization` or `associated_collection_scope` to scope visible records (in the select box)
 
