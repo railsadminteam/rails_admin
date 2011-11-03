@@ -51,6 +51,12 @@ module RailsAdmin
           # bindings[:object] & bindings[:controller] available
           nil
         end
+
+        # preload entire associated collection (per associated_collection_scope) on load
+        # Be sure to set limit in associated_collection_scope if set is large
+        register_instance_option :associated_collection_cache_all do
+          false
+        end
         
         # Reader for the association's child model's configuration
         def associated_model_config

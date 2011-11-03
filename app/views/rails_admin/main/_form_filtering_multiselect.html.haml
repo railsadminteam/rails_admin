@@ -3,7 +3,7 @@
   config = field.associated_model_config
 
   if @object.new_record? && related_id.present? && related_id != 'new'
-    selected = [field.associated_model_config.abstract_model.get(related_id)]
+    selected = [config.abstract_model.get(related_id)]
   else
     selected = @object.send(field.name)
   end
@@ -12,7 +12,7 @@
   collection = selected.map do |o|
     [o.send(config.object_label_method), o.id]
   end
-  
+
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
 
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
@@ -23,16 +23,16 @@
   - path_hash = { :model_name => config.abstract_model.to_param }
   - path_hash.merge!({ :associations => { field.inverse_of => (@object.id || 'new') } }) if field.inverse_of
   = link_to t('admin.actions.create').capitalize + ' ' + config.abstract_model.pretty_name.downcase, '#', :data => { :link => new_path(path_hash) }, :class => "create btn", :style => 'margin-left:10px'
-= javascript_tag do
-  :plain
-    jQuery(function($) {
-      $("##{field.dom_id}").filteringMultiselect({
-        createQuery: function(query) {
-          return { query: query }
-        },
-        source: "#{index_path(@abstract_model.to_param, :object_id => @object.id, :compact => true, :associated_collection => field.name, :current_action => current_action).html_safe}",
-        sortable: #{field.orderable ? 'true' : 'false'},
-        regional: {
+:javascript
+  jQuery(function($) {
+    $("##{field.dom_id}").filteringMultiselect({
+      createQuery: function(query) {
+        return { query: query }
+      },
+      source: "#{index_path(@abstract_model.to_param, :object_id => @object.id, :compact => true, :associated_collection => field.name, :current_action => current_action).html_safe}",
+      sortable: #{field.orderable ? 'true' : 'false'},
+      cacheAll: #{field.associated_collection_cache_all ? 'true' : 'false'},
+      regional: {
         chooseAll: "#{t("admin.new.chose_all")}",
         chosen: "#{t("admin.new.chosen", :name => config.label_plural)}",
         clearAll:  "#{t("admin.new.clear_all")}",
@@ -41,10 +41,10 @@
         down: "#{t("admin.new.down")}"
       }
 
-      });
-      if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-        $("##{field.dom_id}_field .btn").remove();
-      } else {
-        $("##{field.dom_id}_field").remoteForm();
-      }
     });
+    if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
+      $("##{field.dom_id}_field .btn").remove();
+    } else {
+      $("##{field.dom_id}_field").remoteForm();
+    }
+  });
