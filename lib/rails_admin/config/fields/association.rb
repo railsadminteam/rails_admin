@@ -48,9 +48,8 @@ module RailsAdmin
         
         # scope for possible associable records
         register_instance_option :associated_collection_scope do
-          Proc.new { |scope|
-            scope.limit(30)
-          }
+          # bindings[:object] & bindings[:controller] available
+          nil
         end
         
         # Reader for the association's child model's configuration
