@@ -62,14 +62,14 @@ module RailsAdmin
         config_tag = initializer.match(/RailsAdmin\.config.+\|(.+)\|/)[1] rescue nil
         if config_tag
           if initializer.index(::Regexp.new("#{config_tag}\.current_user_method.?\{.+?\}"))
-            display("current_user_method found and updated with 'current_#{model_name}'", :green)
+            display "current_user_method found and updated with 'current_#{model_name}'", :green
             gsub_file Rails.root.join("config/initializers/rails_admin.rb"), ::Regexp.new("#{config_tag}\.current_user_method.?\{.+?\}"), "#{config_tag}.current_user_method { current_#{model_name} }"
           else
-            display("current_user_method not found. Added one with 'current_#{model_name}'!", :yellow)
+            display "current_user_method not found. Added one with 'current_#{model_name}'!", :yellow
             insert_into_file Rails.root.join("config/initializers/rails_admin.rb"), "\n\n  #{config_tag}.current_user_method { current_#{model_name} } #auto-generated", :after => /^RailsAdmin\.config.+$/
           end
         else
-          display("Couldn't parse your config file: current_user_method couldn't be updated", :red)
+          display "Couldn't parse your config file: current_user_method couldn't be updated", :red
         end
       end
       display "Adding a migration..."

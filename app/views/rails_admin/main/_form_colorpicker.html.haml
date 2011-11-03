@@ -1,26 +1,26 @@
-= form.send field.view_helper, field.method_name, field.html_attributes
+= form.send field.view_helper, field.method_name, field.html_attributes.reverse_merge({:style => "background-color: #{field.color}"})
 
-.colorSelector{:id => "#{field.dom_id}Helper"}
-  %div
+= javascript_include_tag asset_path 'rails_admin/jquery.colorpicker.js'
+= stylesheet_link_tag asset_path 'rails_admin/jquery.colorpicker.css'
 
 = javascript_tag do
   :plain
     jQuery(function($) {
-      var input = $('#<%= field.dom_id %>').hide();
-      $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + input.val());
-      $('#<%= field.dom_id %>Helper').ColorPicker({
+      var input = $('##{ field.dom_id }')
+      input.css('backgroundColor', '#' + input.val());
+      input.ColorPicker({
         color: input.val(),
         onShow: function (el) {
           $(el).fadeIn(500);
-      	return false;
+        	return false;
         },
         onHide: function (el) {
-      	$(el).fadeOut(500);
+        	$(el).fadeOut(500);
           return false;
         },
         onChange: function (hsb, hex, rgb) {
           input.val(hex);
-          $('#<%= field.dom_id %>Helper div').css('backgroundColor', '#' + hex);
+          input.css('backgroundColor', '#' + hex);
         }
       });
     });

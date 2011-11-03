@@ -23,6 +23,7 @@
 	background: image-url('rails_admin/colorpicker/custom_background.png');
 	font-family: Arial, Helvetica, sans-serif;
 	display: none;
+	z-index:11000; /* bootstrap + 1 */
 }
 .colorpicker_color {
 	width: 150px;
