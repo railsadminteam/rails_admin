@@ -48,7 +48,8 @@ module RailsAdmin
         format.html { render :layout => !request.xhr? }
         format.json do
           output = if params[:compact]
-            @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }
+            model_config = RailsAdmin.config(@objects.first.class) unless @objects.blank?
+            @objects.map{ |o| { :id => o.id, :label => o.send(model_config.object_label_method) } }
           else
             @objects.to_json(@schema)
           end
