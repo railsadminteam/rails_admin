@@ -13,6 +13,7 @@
   $.widget("ra.filteringMultiselect", {
     _cache: {},
     options: {
+      cacheAll: false,
       createQuery: function(query) {
         return { query: query };
       },
@@ -36,6 +37,9 @@
       this._build();
       this._buildCache();
       this._bindEvents();
+      if (this.options.cacheAll) {
+        this._queryFilter('');
+      }
     },
 
     _build: function() {
@@ -140,22 +144,24 @@
       /* Typing to the filter */
       this.filter.bind('keyup click', function(e){
         if (timeout) { clearTimeout(timeout); }
+        timeout = setTimeout(function() {
+            widget._queryFilter(widget.filter.val());
+          }, widget.options.searchDelay
+        );
+      });
+    },
 
-        var search = function() {
+    _queryFilter: function(val) {
+      var widget = this;
+      widget._query(val, function(matches) {
+        var i, html = "";
+        for (i in matches) {
+          if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
+            html += '<option value="' + matches[i].id + '">' + matches[i].label + '</option>';
+          }
+        }
 
-          widget._query(widget.filter.val(), function(matches) {
-            var i, html = "";
-            for (i in matches) {
-              if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
-                html += '<option value="' + matches[i].id + '">' + matches[i].label + '</option>';
-              }
-            }
-
-            widget.collection.html(html);
-          });
-        };
-
-        timeout = setTimeout(search, widget.options.searchDelay);
+        widget.collection.html(html);
       });
     },
 
@@ -185,7 +191,7 @@
 
       var i, matches = [];
 
-      if (query === "") {
+      if (!this.options.cacheAll && query === "") {
 
         if (!this.options.source) {
 
