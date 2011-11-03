@@ -268,6 +268,12 @@ The configuration code should be placed in an initializer file, for example:
       end
     end
 
+The configuration will be executed at startup time, once. (dev & production)
+Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB status compatibility.
+If you have in an edge case where you need RailsAdmin up&running, you can force it anyway:
+
+    rake mytask SKIP_RAILS_ADMIN_INITIALIZER=false
+
 ### General
 
 Set the application name:

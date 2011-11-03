@@ -4,6 +4,7 @@ ENV["RAILS_ENV"] = "test"
 require 'simplecov'
 SimpleCov.start 'rails'
 
+ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
 require 'generator_spec/test_case'
@@ -27,7 +28,7 @@ include DatabaseHelpers
 puts 'Setting up database...'
 drop_all_tables
 migrate_database
-
+ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'false'
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each{|f| require f}
 
