@@ -10,7 +10,7 @@ For all associations type, (except polymorphic ones at the moment) you can visua
       }
     end
 
-  Not that bindings[:object] can be null for new parent records!
+!! bindings[:object] can be null for new parent records !!
 
 Of course if the user knows the id of some other record, he can associate them as well! You'll need `authorization` or `association's conditions` to prevent that.
 
