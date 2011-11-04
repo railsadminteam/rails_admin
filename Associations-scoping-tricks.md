@@ -1,4 +1,4 @@
-### Restricting associable records
+### Scoping, ordering and limiting associable records in filtering selects/multiselects
 
 You may have business rules where you want to limit the members of a collection that are available for association with a particular record. For example, a Player might be a member of a League. When selecting Players for a Team, we wouldn't want to see all the Players we know about, just the ones in the same League as the Team.
 
@@ -12,9 +12,9 @@ config.model Team do
       team = bindings[:object]
       Proc.new { |scope|
         # scoping all Players currently, let's limit them to the team's league
-        # Be sure to limit if there are a lot of Players
+        # Be sure to limit if there are a lot of Players and order them by position
         scope = scope.where(league_id: team.league_id) if team.present?
-        scope = scope.limit(30)
+        scope = scope.limit(30).order('players.position DESC')
       }
     end
   end
