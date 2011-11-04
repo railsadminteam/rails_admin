@@ -1,13 +1,7 @@
 module RailsAdmin
   class HistoryController < RailsAdmin::ApplicationController
-    before_filter :get_model, :except => [:list]
-    before_filter :get_object, :except => [:list, :for_model]
-
-    def list
-      @authorization_adapter.authorize(:history) if @authorization_adapter
-      @history = History.all.limit(100)
-      render :template => 'rails_admin/main/history', :layout => false
-    end
+    before_filter :get_model
+    before_filter :get_object, :except => :for_model
 
     def for_model
       @authorization_adapter.authorize(:history) if @authorization_adapter
