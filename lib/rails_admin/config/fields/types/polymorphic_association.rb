@@ -28,6 +28,16 @@ module RailsAdmin
           register_instance_option(:searchable) do
             false
           end
+          
+          # TODO not supported yet
+          register_instance_option :associated_collection_cache_all do
+            false
+          end
+          
+          # TODO not supported yet
+          register_instance_option :associated_collection_scope do
+            nil
+          end
 
           def associated_collection(type)
             return [] if type.nil?

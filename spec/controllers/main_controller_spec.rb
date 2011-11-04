@@ -62,7 +62,10 @@ describe RailsAdmin::MainController do
     
     
     it "limits associated collection records number to 30 if cache_all is false and doesn't otherwise" do
-
+      @players = 40.times.map do
+        FactoryGirl.create :player
+      end
+      
       RailsAdmin.config Team do
         field :players do
           associated_collection_cache_all false
