@@ -334,7 +334,7 @@ module RailsAdmin
 
     def list_entries(scope = nil)
       scope = @abstract_model.scoped.merge(scope)
-      if params[:associated_collection].present? # need to add source's model scope on collection
+      if params[:associated_collection].present? # need to add source's model associated_collection_scope on collection
         source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
         source_model_config = RailsAdmin.config(source_abstract_model)
         source_object = source_abstract_model.get(params[:source_object_id])
