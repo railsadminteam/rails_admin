@@ -1,6 +1,5 @@
 require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
-require 'rails_admin/abstract_history'
 require 'rails_admin/config'
 require 'rails_admin/extension'
 require 'rails_admin/extensions/cancan'

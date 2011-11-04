@@ -2,7 +2,6 @@ RailsAdmin::Engine.routes.draw do
   scope "history", :as => "history" do
     controller "history" do
       match "/list", :to => :list, :as => "list"
-      match "/slider", :to => :slider, :as => "slider"
       match "/:model_name", :to => :for_model, :as => "model"
       match "/:model_name/:id", :to => :for_object, :as => "object"
     end

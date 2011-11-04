@@ -1,50 +1,64 @@
-module RailsAdmin
-  class History < ActiveRecord::Base
-    set_table_name :rails_admin_histories
+class RailsAdmin::History < ActiveRecord::Base
+  set_table_name :rails_admin_histories
 
-    IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
-
-    scope :most_recent, lambda {|model|
-      where("#{retrieve_connection.quote_column_name(:table)} = ?", model.pretty_name).order("updated_at DESC")
-    }
-
-    before_save :truncate_message
-
-    def truncate_message
-      if message.present? && message.size > 255
-        self.message = message.truncate(255)
-      end
+  IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+  
+  def self.create_update_history(model, object, associations_before, associations_after, modified_associations, old_object, user)
+    messages = []
+    changed_property_list = []
+    properties = model.properties.reject{|p| IGNORED_ATTRS.include?(p[:name])}
+    
+    properties.each do |p|
+      property_name = p[:name].to_param
+      changed_property_list << property_name if old_object.safe_send(property_name) != object.safe_send(property_name)
     end
-
-    def self.get_history_for_dates(mstart, mstop, ystart, ystop)
-      if mstart > mstop && mstart < 12
-        results = History.find_by_sql(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month",
-                                      ((mstart + 1)..12).to_a, ystart])
-        results_two = History.find_by_sql(["select count(*) as number, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month",
-                                          (1..mstop).to_a, ystop])
-
-        results.concat(results_two)
-      else
-        results = History.find_by_sql(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month",
-                                      ((mstart == 12 ? 1 : mstart + 1)..mstop).to_a, ystop])
-      end
-
-      results.each do |result|
-        result.record_count = result.record_count.to_i
-      end
-
-      add_blank_results(results, mstart, ystart)
+    
+    model.associations.each do |t| 
+      assoc = changed_property_list.index(t[:child_key].to_param)
+      changed_property_list[assoc] = "associated #{t[:pretty_name]}" if assoc
     end
-
-    def self.add_blank_results(results, mstart, ystart)
-      # fill in an array with BlankHistory
-      blanks = Array.new(5) { |i| BlankHistory.new(((mstart+i) % 12)+1, ystart + ((mstart+i)/12)) }
-      # replace BlankHistory array entries with the real History entries that were provided
-      blanks.each_index do |i|
-        if results[0] && results[0].year == blanks[i].year && results[0].month == blanks[i].month
-          blanks[i] = results.delete_at 0
-        end
-      end
+    
+    associations_after.each do |key, current|
+      removed_ids = (associations_before[key] - current).map{|m| '#' + m.to_s}
+      added_ids = (current - associations_before[key]).map{|m| '#' + m.to_s}
+      messages << "Removed #{key.to_s.capitalize} #{removed_ids.join(', ')} associations" if removed_ids.any?
+      messages << "Added #{key.to_s.capitalize} #{added_ids.join(', ')} associations" if added_ids.any?
     end
+    
+    modified_associations.uniq.each { |t| changed_property_list << "associated #{t}" }
+    
+    messages << "Changed #{changed_property_list.join(", ")}" unless changed_property_list.empty?
+    create_history_item(messages, object, model, user) unless messages.empty?
+  end
+
+  def self.create_history_item(message, object, abstract_model, user)
+    create(
+       :message => [message].flatten.join(', '),
+       :item => object.id,
+       :table => abstract_model.pretty_name,
+       :username => user.try(:email)
+     )
+  end
+
+  def self.history_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+    history = where(:table => model.pretty_name)
+    history = history.where("message LIKE ? OR username LIKE ?", "%#{query}%", "%#{query}%") if query
+    if sort
+      history = history.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
+    else
+      history = history.order('created_at DESC')
+    end
+    all ? history : history.page(page.presence || "1").per(per_page)
+  end
+
+  def self.history_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+    history = where(:table => model.pretty_name, :item => object.id)
+    history = history.where("message LIKE ? OR username LIKE ?", "%#{query}%", "%#{query}%") if query
+    if sort
+      history = history.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
+    else
+      history = history.order('created_at DESC')
+    end
+    all ? history : history.page(page.presence || "1").per(per_page)
   end
 end

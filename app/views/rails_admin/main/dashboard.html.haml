@@ -27,31 +27,5 @@
 - if authorized? :history
   #block-tables.block
     .content
-      %h2.title= t("admin.history.name")
-      .inner
-        #timeline
-        #listingHistory
-          = render(:partial => 'history', :locals => {:month => Time.now.month, :year => Time.now.year, :history => @history})
-        = javascript_tag do
-          :plain
-            jQuery(function($) {
-              var cache = {};
-              $("#timeline").timeline({
-                url: "#{ history_slider_path }",
-                monthChanged: function(month, year) {
-                  if (cache[year] && cache[year][month]) {
-                    $("#listingHistory").html(cache[year][month]);
-                  } else {
-                    $("#listingHistory").load(
-                      "#{ history_list_path }",
-                      { month: month, year: year },
-                      function(response, status, xhr) {
-                        if (!cache[year]) { cache[year] = {}; }
-                        cache[year][month] = response;
-                      }
-                    );
-                  }
-                },
-                months: #{ActiveSupport::JSON.encode(month_names).html_safe}
-              });
-            });
+      %h2= t("admin.history.name")
+      = render :partial => 'rails_admin/history/dashboard'

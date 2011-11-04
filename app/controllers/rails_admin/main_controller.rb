@@ -14,10 +14,7 @@ module RailsAdmin
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
-      @history = AbstractHistory.history_latest_summaries
-      @month = DateTime.now.month
-      @year = DateTime.now.year
-      @history= AbstractHistory.history_for_month(@month, @year)
+      @history= History.all
 
       @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
 
@@ -113,7 +110,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save
-        AbstractHistory.create_history_item("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
+        History.create_history_item("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         respond_to do |format|
           format.html do
             redirect_to_on_success
@@ -160,7 +157,7 @@ module RailsAdmin
       @object.set_attributes(@attributes, _attr_accessible_role)
 
       if @object.save
-        AbstractHistory.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
+        History.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
         respond_to do |format|
           format.html do
             redirect_to_on_success
@@ -191,7 +188,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
       if @object.destroy
-        AbstractHistory.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
+        History.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
       else
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
@@ -252,7 +249,7 @@ module RailsAdmin
 
       destroyed.each do |object|
         message = "Destroyed #{@model_config.with(:object => object).object_label}"
-        AbstractHistory.create_history_item(message, object, @abstract_model, _current_user)
+        History.create_history_item(message, object, @abstract_model, _current_user)
       end
 
       unless destroyed.empty?

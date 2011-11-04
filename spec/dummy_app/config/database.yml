@@ -1,5 +1,5 @@
 # SQLite version 3.x
-#   gem install sqlite3
+#   gem i sqlite3
 development:
   adapter: sqlite3
   database: db/development.sqlite3
