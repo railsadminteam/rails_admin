@@ -3,8 +3,8 @@ require 'spec_helper'
 describe RailsAdmin::MainController do
   describe "list_entries for associated_collection" do
     before do
-      @team = FactoryGirl.create :team
-      controller.params = { :associated_collection => "players", :compact => true, :current_action => "update", :object_id => @team.id, :model_name => "teams" }
+      @team = FactoryGirl.create :team      
+      controller.params = { :associated_collection => "players", :compact => true, :current_action => "update", :source_abstract_model => 'teams', :source_object_id => @team.id, :model_name => "players" }
       controller.get_model # set @model_config for Team
     end
     

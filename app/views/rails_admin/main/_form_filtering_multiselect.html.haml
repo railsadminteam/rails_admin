@@ -29,7 +29,7 @@
       createQuery: function(query) {
         return { query: query }
       },
-      source: "#{index_path(@abstract_model.to_param, :object_id => @object.id, :compact => true, :associated_collection => field.name, :current_action => current_action).html_safe}",
+      source: "#{index_path(field.associated_model_config.abstract_model, :source_object_id => @object.id, :source_abstract_model => @abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}",
       sortable: #{field.orderable ? 'true' : 'false'},
       cacheAll: #{field.associated_collection_cache_all ? 'true' : 'false'},
       regional: {

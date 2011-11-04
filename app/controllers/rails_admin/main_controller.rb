@@ -48,8 +48,7 @@ module RailsAdmin
         format.html { render :layout => !request.xhr? }
         format.json do
           output = if params[:compact]
-            model_config = RailsAdmin.config(@objects.first.class) unless @objects.blank?
-            @objects.map{ |o| { :id => o.id, :label => o.send(model_config.object_label_method) } }
+            @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }
           else
             @objects.to_json(@schema)
           end
@@ -279,7 +278,7 @@ module RailsAdmin
       column = if field.nil? || field.sortable == true # use params[:sort] on the base table
         "#{abstract_model.model.table_name}.#{params[:sort]}"
       elsif field.sortable == false # use default sort, asked field is not sortable
-        "#{abstract_model.model.table_name}.#{model_config.list.sort_by.to_s}"
+        "#{abstract_model.model.table_name}.#{model_config.list.sort_by}"
       elsif field.sortable.is_a?(String) && field.sortable.include?('.') # just provide sortable, don't do anything smart
         field.sortable
       elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
@@ -334,16 +333,16 @@ module RailsAdmin
     end
 
     def list_entries(scope = nil)
-      if params[:associated_collection].present?
+      scope = @abstract_model.scoped.merge(scope)
+      if params[:associated_collection].present? # need to add source's model scope on collection
+        source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
+        source_model_config = RailsAdmin.config(source_abstract_model)
+        source_object = source_abstract_model.get(params[:source_object_id])
         action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
-        association = @model_config.send(action).fields.find{|f| f.name.to_s == params[:associated_collection] }.with(:controller => self, :object => @abstract_model.get(params[:object_id]))
-        model_config = association.associated_model_config
-        scope = model_config.abstract_model.scoped.merge(scope)
+        association = source_model_config.send(action).fields.find{|f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
         scope = scope.instance_eval(&association.associated_collection_scope) if association.associated_collection_scope
-        get_collection(association.associated_model_config, scope)
-      else  
-        get_collection(@model_config, @abstract_model.scoped.merge(scope))
       end
+      get_collection(@model_config, scope)
     end
     
     def get_collection(model_config, scope)
