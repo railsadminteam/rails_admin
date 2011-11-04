@@ -21,6 +21,8 @@ config.model Team do
 end
 ```
 
+Use `associated_collection_cache_all true` for filtering multiselects if you want all associated records preloaded in the multiselect.
+
 **bindings[:object] can be null for new parent records!** Also note that the scope takes in to account the saved version of the record, not considering any unsaved changes you may have made in the edit form. If you change the team's league, you'll still see the players from the old league until you save.
 
 Validating associations is up to your models, and you'll certainly want to set the up properly. This functionality is basically a filter--that allows you to scope in on the records you're likely to want. It does not enforce what gets mapped in your database. If the Team knows the id of a Player in another League, he can associate it. Use `authorization` or association conditions, and a validation, to prevent that.
