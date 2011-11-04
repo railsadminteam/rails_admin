@@ -60,10 +60,8 @@ describe RailsAdmin::MainController do
       controller.list_entries.length.should == @team.revenue
     end
     
+    
     it "limits associated collection records number to 30 if cache_all is false and doesn't otherwise" do
-      @players = 40.times.map do
-        FactoryGirl.create :player
-      end
 
       RailsAdmin.config Team do
         field :players do
@@ -78,6 +76,8 @@ describe RailsAdmin::MainController do
         end
       end
       controller.list_entries.length.should == @players.size
+      
     end
+    
   end
 end

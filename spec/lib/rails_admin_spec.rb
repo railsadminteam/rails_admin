@@ -1,7 +1,19 @@
 require 'spec_helper'
 
 describe "RailsAdmin" do
-
+  describe ".associated_collection_cache_all" do
+    it "should default to true if associated collection count < 100" do
+      RailsAdmin.config(Team).edit.fields.find{|f| f.name == :players}.associated_collection_cache_all.should == true
+    end
+    
+    it "should default to false if associated collection count >= 100" do
+      @players = 100.times.map do
+        FactoryGirl.create :player
+      end
+      RailsAdmin.config(Team).edit.fields.find{|f| f.name == :players}.associated_collection_cache_all.should == false
+    end
+  end
+  
   describe ".add_extension" do
     it "registers the extension with RailsAdmin" do
       RailsAdmin.add_extension(:example, ExampleModule)
