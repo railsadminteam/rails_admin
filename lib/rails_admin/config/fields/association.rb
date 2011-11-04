@@ -49,13 +49,16 @@ module RailsAdmin
         # scope for possible associable records
         register_instance_option :associated_collection_scope do
           # bindings[:object] & bindings[:controller] available
-          nil
+          associated_collection_scope_limit = (self.associated_collection_cache_all ? nil : 30)
+          Proc.new do |scope|
+            scope.limit(associated_collection_scope_limit)
+          end
         end
 
         # preload entire associated collection (per associated_collection_scope) on load
         # Be sure to set limit in associated_collection_scope if set is large
         register_instance_option :associated_collection_cache_all do
-          false
+          @associated_collection_cache_all ||= (associated_model_config.abstract_model.count < 100)
         end
         
         # Reader for the association's child model's configuration
