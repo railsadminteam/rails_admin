@@ -3,17 +3,17 @@
 
 pt-BR:
   home:
-    name: "Início"
+    name: "início"
   views:
     pagination:
-      previous: "&laquo; Anterior"
-      next: "Próximo &raquo;"
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
       truncate: "…"
   admin:
     dashboard:
       pagename: "Administração do site"
       name: "Painel"
-      model_name: "Nome do Model"
+      model_name: "Nome do model"
       last_used: "Última utilização"
       records: "Registros"
       modify: "Modificar"
@@ -29,9 +29,9 @@ pt-BR:
       page_name: "Detalhes %{name}"
       no_file_found: "Nenhum arquivo encontrado"
     credentials:
-      log_out: "Sair"
+      log_out: "Desconectar"
     index:
-      edit_action: "Editar"
+      edit_action: "Alterar"
       delete_action: "Excluir"
       export_action: "Exportar tela corrente"
       export_selected: "Exportar selecionados"
@@ -55,16 +55,16 @@ pt-BR:
       clear_all: "Limpar todos"
       up: "Subir"
       down: "Descer"
-      save: "Salvar"
-      save_and_add_another: "Salvar e adicionar outro"
-      save_and_edit: "Salvar e editar"
+      save: "Gravar"
+      save_and_add_another: "Gravar e adicionar outro"
+      save_and_edit: "Gravar e alterar"
       cancel: "Cancelar"
     delete:
-      all_of_the_following_related_items_will_be_deleted: "? Os itens relacionados a seguir serão deletados:"
+      all_of_the_following_related_items_will_be_deleted: "? Todos os items relacionados a seguir serão deletados:"
       are_you_sure_you_want_to_delete_the_object: "Você tem certeza que deseja deletar o %{model_name}"
-      confirmation: "Sim, tenho certeza."
+      confirmation: "Sim, com certeza."
       delete_confirmation: "Confirmação de exclusão"
-      bulk_delete: "Os seguintes objetos serão deletados - o que pode causar a exclusão ou fazer com que objetos relacionados sejam perdidos:"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
     export:
       confirmation: "Exportar para %{name}"
       select: "Selecione os campos para exportar"
@@ -82,7 +82,7 @@ pt-BR:
         skip_header_help: "Não exportar um cabeçalho (campos sem descrição)"
         default_col_sep: ","
         col_sep: "Separador de coluna"
-        col_sep_help: "Deixe em branco para valor padrão ('%{value}')" # value is default_col_sep
+        col_sep_help: "Deixe em brando para padrão ('%{value}')" # value is default_col_sep
     flash:
       successful: "%{name} foi %{action} com sucesso!"
       error: "%{name} falhou em %{action}"
@@ -97,7 +97,7 @@ pt-BR:
       export: "exportar"
       exported: "exportado"
     breadcrumbs:
-      delete: "excluir"
+      delete: "deletar"
       for_object: "história"
       show: "visualizar"
       edit: "editar"
