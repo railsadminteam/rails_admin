@@ -138,7 +138,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       it "should use the db column size for the maximum length" do
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 0-50.")
+        find("#team_name_field .help-block").should have_content("Length up to 50.")
       end
 
       it "should use the :is setting from the validation" do
@@ -164,7 +164,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           validates_length_of :name, :maximum => 5
         end
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 0-5.")
+        find("#team_name_field .help-block").should have_content("Length up to 5.")
         Team._validators[:name].pop
       end
 
@@ -173,16 +173,25 @@ describe "RailsAdmin Config DSL Edit Section" do
           validates_length_of :name, :maximum => 51
         end
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 0-50.")
+        find("#team_name_field .help-block").should have_content("Length up to 50.")
+        Team._validators[:name].pop
+      end
+
+      it "should use the :minimum and :maximum from the validation" do
+        class Team
+          validates_length_of :name, :minimum => 6, :maximum => 8
+        end
+        visit new_path(:model_name => "team")
+        find("#team_name_field .help-block").should have_content("Length of 6-8.")
         Team._validators[:name].pop
       end
 
       it "should use the range from the validation" do
         class Team
-          validates_length_of :name, :in => 6..8
+          validates_length_of :name, :in => 7..9
         end
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 6-8.")
+        find("#team_name_field .help-block").should have_content("Length of 7-9.")
         Team._validators[:name].pop
       end
 
@@ -448,9 +457,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find("#team_manager_field .help-block").should have_content("Required. Length of 0-100. Additional help text for manager field.")
+      find("#team_manager_field .help-block").should have_content("Required. Length up to 100. Additional help text for manager field.")
       find("#team_division_id_field .help-block").should have_content("Required")
-      find("#team_name_field .help-block").should have_content("Optional. Length of 0-50.")
+      find("#team_name_field .help-block").should have_content("Optional. Length up to 50.")
     end
 
     it "should have option to override required status" do
@@ -468,9 +477,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find("#team_manager_field .help-block").should have_content("Optional. Length of 0-100.")
+      find("#team_manager_field .help-block").should have_content("Optional. Length up to 100.")
       find("#team_division_id_field .help-block").should have_content("Optional")
-      find("#team_name_field .help-block").should have_content("Required. Length of 0-50.")
+      find("#team_name_field .help-block").should have_content("Required. Length up to 50.")
     end
   end
 
