@@ -9,13 +9,19 @@
   end
   selected_ids = selected.map(&:id)
 
-  collection = selected.map do |o|
-    [o.send(config.object_label_method), o.id]
-  end
-
+  
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
 
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
+  
+  xhr = !field.associated_collection_cache_all
+  
+  collection = if xhr
+    selected.map { |o| [o.send(config.object_label_method), o.id] }
+  else
+    i = 0
+    controller.get_collection(config, field.associated_collection_scope).map { |o| [o.send(config.object_label_method), o.id] }.sort_by {|a| [selected_ids.index(a[1]) || selected_ids.size, i+=1] }
+  end
 
 %input{:name => field.dom_name, :type => "hidden", :value => ""}
 = form.select field.method_name, collection, { :selected => selected_ids, :object => @object }, field.html_attributes.merge({:'data-edit-url' => edit_url, :multiple => true})
@@ -26,10 +32,11 @@
 :javascript
   jQuery(function($) {
     $("##{field.dom_id}").filteringMultiselect({
+      xhr: #{xhr},
       createQuery: function(query) {
         return { query: query }
       },
-      source: "#{index_path(field.associated_model_config.abstract_model, :source_object_id => @object.id, :source_abstract_model => @abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}",
+      remote_source: "#{index_path(field.associated_model_config.abstract_model, :source_object_id => @object.id, :source_abstract_model => @abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}",
       sortable: #{field.orderable ? 'true' : 'false'},
       cacheAll: #{field.associated_collection_cache_all ? 'true' : 'false'},
       regional: {

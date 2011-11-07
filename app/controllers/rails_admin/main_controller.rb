@@ -15,9 +15,8 @@ module RailsAdmin
       @page_type = "dashboard"
 
       @history= History.all
-
       @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
-
+      
       @most_recent_changes = {}
       @count = {}
       @max = 0
@@ -330,21 +329,24 @@ module RailsAdmin
     end
 
     def list_entries(scope = nil)
-      scope = @abstract_model.scoped.merge(scope)
       if params[:associated_collection].present? # need to add source's model associated_collection_scope on collection
         source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
         source_model_config = RailsAdmin.config(source_abstract_model)
         source_object = source_abstract_model.get(params[:source_object_id])
         action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
         association = source_model_config.send(action).fields.find{|f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
-        scope = scope.instance_eval(&association.associated_collection_scope) if association.associated_collection_scope
+        get_collection(@model_config, association.associated_collection_scope)
+      else
+        get_collection(@model_config)
       end
-      get_collection(@model_config, scope)
     end
     
-    def get_collection(model_config, scope)
-      associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
+    def get_collection(model_config, additional_scope = nil)
+      scope = model_config.abstract_model.scoped
       scope = scope.merge(@authorization_adapter && @authorization_adapter.query(:index, model_config.abstract_model))
+      scope = scope.instance_eval(&additional_scope) if additional_scope
+      
+      associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       
       options = {}
       options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) unless params[:compact] || params[:all]
@@ -352,6 +354,7 @@ module RailsAdmin
       options = options.merge(get_sort_hash(model_config)) unless params[:associated_collection]
       options = options.merge(model_config.abstract_model.get_conditions_hash(params[:query], params[:filters], model_config))
       options = options.merge(:bulk_ids => params[:bulk_ids]) if params[:bulk_ids]
+      
       objects = model_config.abstract_model.all(options, scope)
     end
     

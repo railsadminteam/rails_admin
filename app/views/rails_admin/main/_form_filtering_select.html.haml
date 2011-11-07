@@ -10,12 +10,14 @@
     selected_id = field.selected_id
     selected_name = field.formatted_value
   end
-
-  collection = [[selected_name, selected_id]]
   
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
   
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
+  
+  xhr = !field.associated_collection_cache_all
+  
+  collection = xhr ? [[selected_name, selected_id]] : controller.get_collection(config, field.associated_collection_scope).map { |o| [o.send(config.object_label_method), o.id] }
 
 = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes.reverse_merge({:placeholder => t('admin.index.search')})
 
@@ -31,10 +33,11 @@
   :plain
     jQuery(function($) {
       $("##{field.dom_id}").filteringSelect({
+        xhr: #{xhr},
         createQuery: function(query) {
           return { query: query }
         },
-        source: "#{index_path(field.associated_model_config.abstract_model.to_param, :source_object_id => @object.id, :source_abstract_model => @abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}"
+        remote_source: "#{index_path(field.associated_model_config.abstract_model.to_param, :source_object_id => @object.id, :source_abstract_model => @abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}"
       });
       if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
         $("##{field.dom_id}_field .btn").hide();

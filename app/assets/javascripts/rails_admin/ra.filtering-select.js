@@ -21,7 +21,9 @@
       },
       minLength: 0,
       searchDelay: 200,
-      source: null
+      remote_source: null,
+      source: null,
+      xhr: false
     },
 
     _create: function() {
@@ -30,7 +32,9 @@
         selected = select.children(":selected"),
         value = selected.val() ? selected.text() : "";
 
-      if (!this.options.source) {
+      if (this.options.xhr) {
+        this.options.source = this.options.remote_source;
+      } else {
         this.options.source = select.children("option").map(function() {
           return { label: $(this).text(), value: this.value };
         }).toArray();

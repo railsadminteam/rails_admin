@@ -13,7 +13,6 @@
   $.widget("ra.filteringMultiselect", {
     _cache: {},
     options: {
-      cacheAll: false,
       createQuery: function(query) {
         return { query: query };
       },
@@ -29,7 +28,8 @@
         selectChoice: "Select your choice(s) and click"
       },
       searchDelay: 400,
-      source: null
+      remote_source: null,
+      xhr: false
     },
 
     _create: function() {
@@ -37,9 +37,6 @@
       this._build();
       this._buildCache();
       this._bindEvents();
-      if (this.options.cacheAll) {
-        this._queryFilter('');
-      }
     },
 
     _build: function() {
@@ -191,10 +188,9 @@
 
       var i, matches = [];
 
-      if (!this.options.cacheAll && query === "") {
+      if (query === "") {
 
-        if (!this.options.source) {
-
+        if (!this.options.xhr) {
           for (i in this._cache) {
             if (this._cache.hasOwnProperty(i)) {
               matches.push({id: i, label: this._cache[i]});
@@ -206,13 +202,13 @@
 
       } else {
 
-        if (this.options.source) {
+        if (this.options.xhr) {
 
           $.ajax({
             beforeSend: function(xhr) {
               xhr.setRequestHeader("Accept", "application/json");
             },
-            url: this.options.source,
+            url: this.options.remote_source,
             data: this.options.createQuery(query),
             success: success
           });

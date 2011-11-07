@@ -28,11 +28,6 @@ module RailsAdmin
             @searchable ||= associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? [associated_model_config.object_label_method, {self.abstract_model.model.name => self.method_name}] : {self.abstract_model.model.name => self.method_name}
           end
           
-          # not supported yet
-          register_instance_option :associated_collection_cache_all do
-            false
-          end
-
           register_instance_option(:partial) do
             :form_filtering_select
           end
