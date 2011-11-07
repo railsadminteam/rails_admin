@@ -1,7 +1,7 @@
 namespace :rails_admin do
   desc "Prepare Continuous Integration environment"
   task :prepare_ci_env do
-
+    ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'false'
     adapter = ENV["CI_DB_ADAPTER"] || "sqlite3"
     database = ENV["CI_DB_DATABASE"] || ("sqlite3" == adapter ? "db/development.sqlite3" : "ci_rails_admin")
 
