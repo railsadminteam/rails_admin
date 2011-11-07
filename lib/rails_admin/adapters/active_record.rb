@@ -77,8 +77,9 @@ module RailsAdmin
       end
 
       def destroy(ids, scope = nil)
-        scope ||= model
-        scope.destroy_all(model.primary_key => ids)
+        self.all({:bulk_ids => ids}, (scope || self.scoped)).map do |object|
+          object.destroy
+        end
       end
 
       def destroy_all!
