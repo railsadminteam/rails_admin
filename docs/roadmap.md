@@ -25,16 +25,16 @@
 
 ## Views
 ### Form
-#### `has\_many`, `has\_one`
+#### `has_many`, `has_one`
 - make possible to use nested forms instead of widget/modal
 - offer the possibility to fetch only non-associated records if sticking to widget (make it configurable).
 - drop hackish ActiveRecord support for has_many style `has\_one` or improve it to current quality standards
 
-#### `has\_many :through`, `habtm`
+#### `has_many :through`, `habtm`
 - re-add prepopulation for widget keeping concistancy with xhr
 - find a solution for mobile devices (currently not intuitive)
 
-#### `belongs\_to`
+#### `belongs_to`
 - re-add prepolation keeping concistancy with xhr
 
 #### images
