@@ -1,3 +1,5 @@
+require 'dragonfly/rails/images'
+
 RailsAdmin.config do |c|
   c.excluded_models << RelTest
   

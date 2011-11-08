@@ -348,7 +348,7 @@ module RailsAdmin
       associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       
       options = {}
-      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) unless params[:compact] || params[:all]
+      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if params[:action] == 'index'
       options = options.merge(:include => associations) unless associations.blank?
       options = options.merge(get_sort_hash(model_config)) unless params[:associated_collection]
       options = options.merge(model_config.abstract_model.get_conditions_hash(params[:query], params[:filters], model_config))

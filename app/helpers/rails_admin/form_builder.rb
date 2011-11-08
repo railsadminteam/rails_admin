@@ -2,14 +2,14 @@ ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| "<span class
 
 module RailsAdmin
   class FormBuilder < ActionView::Helpers::FormBuilder
-    def render(action)
+    def render action
       @template.instance_variable_get(:@model_config).send(action).with(:form => self, :object => @object, :view => @template).visible_groups.map do |fieldset|
-        fieldset_for(fieldset)
+        fieldset_for fieldset
       end.join.html_safe +
       @template.render(:partial => 'submit_buttons')
     end
 
-    def fieldset_for(fieldset)
+    def fieldset_for fieldset
       if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => @object, :view => @template) }.select(&:visible?)).length > 0
         @template.content_tag :fieldset do
           @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : '')) +
@@ -43,7 +43,7 @@ module RailsAdmin
 
     def field_for field
       if field.read_only
-        field.pretty_value.html_safe
+        field.pretty_value.to_s.html_safe
       else
         field.render.html_safe
       end

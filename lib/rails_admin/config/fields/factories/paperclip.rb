@@ -16,7 +16,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
             fields.last.hide
           end
         end
-        fields << RailsAdmin::Config::Fields::Types::PaperclipFile.new(parent, attachment_name, properties)
+        fields << RailsAdmin::Config::Fields::Types::Paperclip.new(parent, attachment_name, properties)
         true
       end
     end

@@ -183,7 +183,8 @@ module RailsAdmin
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:required?) do
           @required ||= !!abstract_model.model.validators_on(name).find do |v|
-            v.is_a?(ActiveModel::Validations::PresenceValidator) || !v.options[:allow_nil]
+            v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
+            v.is_a?(ActiveModel::Validations::NumericalityValidator) && !v.options[:allow_nil]
           end
         end
 
@@ -266,8 +267,6 @@ module RailsAdmin
         def method_name
           name
         end
-        
-        
       end
     end
   end

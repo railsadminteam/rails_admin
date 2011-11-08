@@ -1121,7 +1121,7 @@ RailsAdmin ships with the following field types:
 * datetime
 * decimal
 * file_upload *(does not initialize automatically)*
-* paperclip_file *(initializes automatically if Paperclip is present)*
+* paperclip *(initializes automatically if Paperclip is present)*
 * float
 * has_and_belongs_to_many_association
 * has_many_association

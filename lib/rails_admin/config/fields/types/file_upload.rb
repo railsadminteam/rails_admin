@@ -4,10 +4,49 @@ module RailsAdmin
   module Config
     module Fields
       module Types
-        class FileUpload < RailsAdmin::Config::Fields::Types::String
+        class FileUpload < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types::register(self)
           
+          register_instance_option(:partial) do
+            :form_file_upload
+          end
           
+          register_instance_option(:thumb_method) do
+            nil
+          end
+          
+          register_instance_option(:delete_method) do
+            nil
+          end
+
+          register_instance_option(:cache_method) do
+            nil
+          end
+          
+          register_instance_option(:export_value) do
+            resource_url.to_s
+          end
+
+          register_instance_option(:pretty_value) do
+            if value.presence && (errors.blank? || cache_method)
+              v = bindings[:view]
+              url = resource_url
+              if image?
+                thumb_url = resource_url(thumb_method)
+                (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url, :target => 'blank') : v.image_tag(thumb_url)
+              else
+                v.link_to(nil, url, :target => 'blank')
+              end
+            end
+          end
+          
+          def image?
+            (url = resource_url) && url.split('.').last =~ /jpg|jpeg|png|gif/i
+          end
+
+          def resource_url
+            raise 'not implemented'
+          end
         end
       end
     end

@@ -5,6 +5,9 @@ gem 'devise', '~> 1.4'
 gem 'rails_admin', :path => '../../'
 gem 'mlb', '~> 0.5'
 gem 'paperclip', '~> 2.4'
+gem 'mini_magick'
+gem 'carrierwave'
+gem 'dragonfly'
 
 # Gems used only for assets and not required
 # in production environments by default.
