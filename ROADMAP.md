@@ -8,10 +8,9 @@
 
 ## html/CSS/JS
 - Needs testing: Android, IE7.
-- Fix CSS bug in IE (bootstrap-sass related, may fix with bootstrap 1.4 or bootstrap-less)
-- Fix all JS bugs on IE7+ (IE8+ seems to be fine)
+- Fix CSS bug in IE (bootstrap-sass related)
+- Fix all JS bugs on IE7+ . Found visual bug in multiselect
 - Move all JS code to coffee
-- Move all CSS code to less, or default to scss (depending on rails-less/rails-sass feature sets and bootstrap-sass support)
 - support should target IE7+ with focus on future-proofing, through well-tested libraries (Bootstrap, JQuery)
 
 ## Tests
