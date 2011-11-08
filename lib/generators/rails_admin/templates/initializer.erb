@@ -1,11 +1,3 @@
-#         ooooooooo.              o8o  oooo                 .o.             .o8                     o8o
-#         `888   `Y88.            `"'  `888                .888.           "888                     `"'
-#          888   .d88'  .oooo.   oooo   888   .oooo.o     .8"888.      .oooo888  ooo. .oo.  .oo.   oooo  ooo. .oo.
-#          888ooo88P'  `P  )88b  `888   888  d88(  "8    .8' `888.    d88' `888  `888P"Y88bP"Y88b  `888  `888P"Y88b
-#          888`88b.     .oP"888   888   888  `"Y88b.    .88ooo8888.   888   888   888   888   888   888   888   888
-#          888  `88b.  d8(  888   888   888  o.  )88b  .8'     `888.  888   888   888   888   888   888   888   888
-#         o888o  o888o `Y888""8o o888o o888o 8""888P' o88o     o8888o `Y8bod88P" o888o o888o o888o o888o o888o o888o
-
 # RailsAdmin config file. Generated on <%= DateTime.now.to_s(:long) %>
 # See github.com/sferik/rails_admin for more informations
 
@@ -47,8 +39,9 @@ RailsAdmin.config do |config|
 
   # Use a specific role for ActiveModel's :attr_acessible :attr_protected
   # Default is :default
-  # current_user is accessible in the block if you want to make it user specific.
   # config.attr_accessible_role { :default }
+  # _current_user is accessible in the block if you need to make it user specific:
+  # config.attr_accessible_role { _current_user.role.to_sym }
 
   #  ==> Global show view settings
   # Display empty fields in show views
@@ -56,7 +49,7 @@ RailsAdmin.config do |config|
 
   #  ==> Global list view settings
   # Number of default rows per-page:
-  # config.default_items_per_page = 50
+  # config.default_items_per_page = 20
 
   #  ==> Included models
   # Add all excluded models here:
@@ -122,31 +115,29 @@ RailsAdmin.config do |config|
   #     # Here goes the fields configuration for the update view, overriding edit section settings
   #   end
   # end
-
-# fields configuration is described in the Readme, if you have other question, ask us on the mailing-list!
-
-#  ==> Your models configuration, to help you get started!
+  
+  # Your model's configuration, to help you get started:
+  
+  # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible.
+  # There can be different reasons for that:
+  #  - belongs_to _id and _type (polymorphic) columns are hidden in favor of their associations
+  #  - associations are hidden if they have no matchable model found (model not included or non-existant)
+  #  - they are part of a bigger plan in a plugin (Devise/Paperclip) and hidden by contract
+  # Some fields may be hidden depending on the section, if they aren't deemed suitable for display or edition on that section
+  #  - non-editable columns (:id, :created_at, ..) in edit sections
+  #  - has_many/has_one associations in list section (hidden by default for performance reasons)
+  # Fields may also be marked as read_only (and thus not editable) if they are not mass-assignable by current_user
+  
 <% RailsAdmin::AbstractModel.all.map do |abstract_model| -%>
-
-# All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible.
-# There can be different reasons for that:
-#  - belongs_to _id and _type (polymorphic) columns are hidden in favor of their associations
-#  - associations are hidden if they have no matchable model found (model not included or non-existant)
-#  - they are part of a bigger plan in a plugin (Devise/Paperclip) and hidden by contract
-# Some fields may be hidden depending on the section, if they aren't deemed suitable for display or edition on that section
-#  - non-editable columns (:id, :created_at, ..) in edit sections
-#  - has_many/has_one associations in list section (hidden by default for performance reasons)
-# Fields may also be marked as read_only (and thus not editable) if they are not mass-assignable by current_user
-
   # config.model <%= abstract_model.model.model_name %> do
   #   # Found associations:
-<% RailsAdmin.config(abstract_model).export.fields.select{|f| f.association?}.each do |field| -%>
-  #   field <%= field.name.inspect %>, <%= field.type.inspect %><%= "        # Hidden" unless field.visible? %>
-<% end -%>
+<%= RailsAdmin.config(abstract_model).export.fields.select{|f| f.association?}.map do |field| 
+%{  #     field #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
+end.join("\n") -%>
   #   # Found columns:
-<% RailsAdmin.config(abstract_model).export.fields.select{|f| !f.association?}.each do |field| -%>
-  #   field <%= field.name.inspect %>, <%= field.type.inspect %><%= "        # Hidden" unless field.visible? %>
-<% end -%>
+<%= RailsAdmin.config(abstract_model).export.fields.select{|f| !f.association?}.map do |field| 
+%{  #     field #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
+end.join("\n") -%>
   #   # Sections:
   #   list do; end
   #   export do; end
@@ -154,8 +145,6 @@ RailsAdmin.config do |config|
   #   edit do; end
   #   create do; end
   #   update do; end
-  #  end
-<% end %>
+  # end
+<%- end -%>
 end
-
-# You made it this far? You're looking for something that doesn't exist! Add it to RailsAdmin and send us a Pull Request!
