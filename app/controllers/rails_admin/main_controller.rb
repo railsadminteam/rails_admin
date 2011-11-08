@@ -186,7 +186,7 @@ module RailsAdmin
     def destroy
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
 
-      if @object.destroy
+      if @abstract_model.destroy(@object)
         History.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
       else
@@ -240,9 +240,8 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
       destroy_scope = @authorization_adapter && @authorization_adapter.query(:destroy, @abstract_model)
       @objects = list_entries(destroy_scope)
-      
       processed_objects = @abstract_model.destroy(@objects)
-
+      
       destroyed = processed_objects.select(&:destroyed?)
       not_destroyed = processed_objects - destroyed
 

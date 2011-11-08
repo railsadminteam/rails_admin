@@ -60,7 +60,7 @@ module RailsAdmin
         scope = scope.where(model.primary_key => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(options[:conditions]) if options[:conditions]
         scope = scope.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
-        scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]        
+        scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
         scope
       end
 
@@ -76,10 +76,8 @@ module RailsAdmin
         RailsAdmin::AbstractObject.new(model.new(params))
       end
 
-      def destroy(ids, scope = nil)
-        self.all({:bulk_ids => ids}, (scope || self.scoped)).map do |object|
-          object.destroy
-        end
+      def destroy(objects)
+        [objects].flatten.map &:destroy
       end
 
       def destroy_all!
