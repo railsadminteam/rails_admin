@@ -10,7 +10,7 @@ If you have a `:country` column in your Article model, RailsAdmin will check if 
 If it does, then you're done.
 
 The result call will be sent to `FormOptionsHelper#options_for_select` to fill the select box.
-See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select
+See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select for possible output (hash, array)
 
 Do not select any value, or add any blank field.
 
