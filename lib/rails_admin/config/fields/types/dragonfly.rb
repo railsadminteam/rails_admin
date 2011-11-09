@@ -13,7 +13,7 @@ module RailsAdmin
             bindings[:object].errors["#{name}_uid"] + bindings[:object].errors["#{name}_name"]
           end
           
-          def image?
+          register_instance_option(:image?) do
             false unless value
             if respond_to?("#{name}_name")
               super(field.send("#{name}_name"))

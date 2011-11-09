@@ -40,8 +40,8 @@ module RailsAdmin
             end
           end
           
-          def image?
-            (url = resource_url) && url.split('.').last =~ /jpg|jpeg|png|gif/i
+          register_instance_option :image? do
+            (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
           end
 
           def resource_url
