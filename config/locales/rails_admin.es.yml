@@ -40,6 +40,8 @@ es:
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
       add_filter: "Agregar filtro"
+      refresh: "Recargar"
+      export_current_action: "Exportar accion actual"
     new:
       basic_info: "Información Básica"
       required: "Obligatorio"
