@@ -1,0 +1,26 @@
+File upload is a 'virtual' field type not meant to be used directly, but through vendor implementations (Paperclip/Dragonfly/Carrierwave)
+
+Those implementation share common characteristics.
+
+If defaults don't fit, fine-tune with: 
+
+```ruby
+field :asset do
+  # set a method available to your asset (defaults to :thumb, :thumbnail or '100x100>' for Dragonfly)
+  thumb_method :large
+  
+  # for delete checkbox in forms
+  delete_method :asset_delete
+  
+  # in case of a validation failure, to retain asset in the form (not available for Paperclip)
+  cache_method :asset_cache
+  
+  required do
+    # validation logic
+  end
+
+  image do
+    # if image is true thumbnails are shown (with thumbnail method). Otherwise just a link to the resource
+  end
+end
+```
