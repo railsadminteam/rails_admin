@@ -1,6 +1,8 @@
 [[Roadmap]]
 
 ## Field types
+
+* [[File Upload]]
 * [[Paperclip]]
 * [[Dragonfly]]
 * [[Carrierwave]]
