@@ -1,11 +1,18 @@
-As long as rails_admin routes are loaded after your routes, If you have a route that can match /admin for example /:user, you have to add a constrain in that route.
-
-I resolve the problem by this way.
+Your routes.rb should look like this one:
 
 ```ruby
-resources :profiles, :path => '', :constraints => lambda { |req| !(req.path =~ /\A\/admin(\/.*)?\z/) } do
-  ...
+DummyApp::Application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+  devise_for :users
+  root :to => "home#index"
+  
+  resources :articles
+  resources :pages
+  match ':controller(/:action(/:id(.:format)))'
 end
 ```
 
-Any other way of doing it, is welcome.
+Note 3 things: 
+* `mount RailsAdmin::Engine => '/admin'` will catch all `/admin` urls, including `/administrator`, which would then blow up in RailsAdmin!
+* if you choose to put a catch-up root route before `mount RailsAdmin::Engine`, make sure it doesn't catch '/admin/'
+* a root url is necessary for Devise, and will be used in RailsAdmin (home button)
