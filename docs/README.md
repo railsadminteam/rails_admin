@@ -16,6 +16,7 @@
 ## Routing
 
 * [[Routing Problems]]
+* [[Using RailsAdmin routes]]
 
 ## Recipes
 
