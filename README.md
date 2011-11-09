@@ -1330,6 +1330,7 @@ against](http://travis-ci.org/sferik/rails_admin) the following Ruby
 implementations:
 
 * Ruby 1.8.7
-* Ruby 1.9.2
-* [Rubinius](http://rubini.us)
 * [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/)
+* Ruby 1.9.2
+* Ruby 1.9.3
+* [Rubinius](http://rubini.us)
