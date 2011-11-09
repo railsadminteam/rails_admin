@@ -26,8 +26,6 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 
 See the demo here:
 http://rails-admin-tb.herokuapp.com
-username: `username@example.com`
-password: `password`
 
 ### Supported ORMs:
 
