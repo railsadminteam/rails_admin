@@ -2,7 +2,9 @@ If a `asset_uid` column is found, it will be hidden (along with the optional `as
 
 Due to the 'fire and forget' nature of Dragonfly and the obfuscated uid, RailsAdmin cannot always infere if asset is an image or not (show thumbnails or links?). 
 
-It will try to read `asset_name` to see the extension for a smart guess. If absent, it will try to generate a thumbnail.
+It will try to read `asset_name` to see the extension for a smart guess. If absent, it will suppose it is an image.
+
+See the #image option in [[File Upload]] if you need to override this behavior.
 
 ```ruby
 class Article < ActiveRecord::Base
