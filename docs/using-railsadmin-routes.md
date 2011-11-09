@@ -10,6 +10,8 @@ rails_admin.edit_path('module~class_names', Module::ClassName.first.id)
 rails_admin.delete_path('module~class_names', Module::ClassName.first.id)
 ```
 
+Note that underscored pluralized model names are used, and that name-spaced models must use a '~' between modules and class names.
+
 ### Link to your application from RailsAdmin (usually a config block)
 
 ```ruby
