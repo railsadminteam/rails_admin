@@ -1,10 +1,10 @@
 Automatically detected.
 
-One thing you may need is to add a delete method in your model.
-`Paperclip` does not include it, you'll need to add it manually.
-`RailsAdmin` will detect it and add a checkbox.
+Considering a `has_attached_file :asset` declaration, all :asset_file_name, :asset_content_type.. columns will be hidden. A file upload field named :asset will be added.
 
-`article.rb`
+One thing you may need is a delete method in your model.
+Paperclip does not include it, you'll need to add it manually.
+RailsAdmin will detect it and add a checkbox.
 
 ```ruby
 class Article < ActiveRecord::Base
@@ -14,3 +14,5 @@ class Article < ActiveRecord::Base
   before_validation { self.asset.clear if self.delete_asset == '1' }
 end
 ```
+
+If you use a `:attr_accessible` strategy, don't forget to add `delete_asset` to the whitelist.
