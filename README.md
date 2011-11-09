@@ -26,13 +26,6 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 
 See the demo here:
 http://rails-admin-tb.herokuapp.com
-username: `username@example.com`
-password: `password`
-
-
-The older Activo UI is still available on a (non-maintained) activo branch
-
-https://github.com/sferik/rails_admin/tree/activo
 
 ### Supported ORMs:
 
@@ -44,169 +37,12 @@ list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
 [#railsadmin on
 irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
 
+Check this README and the wiki first.
+
 If you think you found a bug in RailsAdmin, you can [submit an
-issue](https://github.com/sferik/rails_admin#issues).
-
-## <a name="notices">Notices</a>
-
-The new UI is there. A few refactorings included as well. Feedback welcome here: #722
-Transition should be smooth for those who didn't customize RA internals too much. For the others, you can stick on to activo branch for the moment.
-
-We're moving toward a form_builder, all form partials should be considered deprecated at some point (don't override them in your app). You can't define form_builders anymore in your apps, feel free to add to methods to it through monkey-patching if you need.
-
-`ActiveRecord#rails_admin` is no more :(
-Please move all remaining code from your models to rails_admin initializer, it won't be evaluated.
-Incidentally, `reload_between_requests` is also no longer in use.
-
-`Virtual` Class is no more. :(
-Just use `String` instead, or another type. There is a `virtual?` method on `Fields::Base`, that can be used to detect whereas field has properties.
-
-`:attr_accessible` is now taken into account: restricted fields are not editable anymore, and mass-assignement security isn't bypassed anymore. Be careful if you whitelist attributes, you'll need to whitelist association 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
-
-Default scopes are now fully *active* in list views (ordering is overriden, obvisously) as they used to a while ago. This is not configurable (that would bring consistency issues with cancan scoping which brings default scope). If you don't want some default scopes in RailsAdmin, either move your scoping rules to cancan, or activate your default scope conditionnaly on user/url prefix.
-
-Configuration with ActiveRecord::Base#rails_admin is not recommended anymore and should be
-considered as expermimental (development) until further notice. Unfortunately, implementation
-of this feature is tougher than imagined. Any help is welcome, as usual.
-Please remove any rails_admin configuration from your ActiveRecord model and put it inside an
-initializer (as shown in this documentation now). Use:
-
-    RailsAdmin.config do |config|
-
-      ...
-
-      config.model MyActiveRecordModel do
-        # MyActiveRecordModel configuration
-      end
-
-      ...
-
-    end
-
-Instead of:
-
-    class MyActiveRecordModel < ActiveRecord::Base
-      rails_admin do
-        # MyActiveRecordModel configuration
-      end
-    end
-
-Please refer to issue http://github.com/sferik/rails_admin/issues/289
-
-### Asset pipeline and CKEditor
-
-The master branch currently targets Rails 3.1.
-
-If you are updating from a Rails 3.0 application, you will no longer need to
-update your assets, they will be served from the engine (through Sprockets).
-You can delete all RailsAdmin related assets in your public directory.
-Make sure to activate the asset pipeline in `application.rb`:
-
-    config.assets.enabled = true
-
-and to add this to your config/routes:
-
-    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-
-NB If you need to use CKEditor for rich text editing, please note that
-Sprockets 2.0.1 and Sprockets 2.0.2 are unable to serve assets from
-`public/javascripts` (You'll get a `Sprockets::FileOutsidePaths` error).  To continue to
-use CKEditor, add
-
-    gem 'sprockets', '= 2.0.0.'
-
-to your Gemfile for now
-([this patch](https://github.com/rails/rails/commit/fd8f0b297822ba36002084faa36bd0320d3be4a7)
-will fix things longer-term).
-
-Please note that `initializer/rails_admin.rb` is very likely to require access to your DB.
-Thus if don't need access to your application at asset compilation time, 
-
-    config.assets.initialize_on_precompile = false
-
-will reduce your compilation time.
-Note that this will be needed (setting it to false) on **Heroku** if you set `compile = false` and don't versionate `public/assets`.
-More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
-
-### Rails 3.0 support
-
-You may continue to use RailsAdmin with Rails 3.0 by specifying the rails-3.0
-branch in your `Gemfile`, however, this branch is no longer being actively
-maintained by the RailsAdmin Core Team.
-
-    gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git', :branch => 'rails-3.0'
-
-### Other deprecations
-
-:truncated? has been removed, use pretty_value instead to fine-tune the output of your field in show and list views.
-
-Important notice about `BelongsToAssociation`:
-In the DSL, they now must be referenced by the association name, not the child_key.
-Considering:
-
-    # `user_id: integer` (DB)
-    belongs_to :user # (ActiveRecord)
-
-Instead of:
-
-    field :user_id
-
-You must use:
-
-    field :user
-
-`field :user_id` now references the column (automatically hidden), which type is `Integer`, not the `BelongToAssociation`.
-
-The model configuration `dropdown` has been deprecated in favor of `navigation_label`.
-API unchanged.
-
-The field configuration method `show_partial` has been removed in favor of
-field configuration `pretty_value`, which is used more globally and consistently
-across the whole application. Show partials are no longer in use, method doesn't
-exist anymore.
-
-`RailsAdmin::Config::Sections::List.default_items_per_page` has been moved to
-`RailsAdmin::Config.default_items_per_page`.
-
-`RailsAdmin::Config::Sections::Update.default_hidden_fields` has been moved to
-`RailsAdmin::Config.default_hidden_fields`, it now affects show, create and
-update views.
-
-`RailsAdmin.authenticate_with`, `RailsAdmin.authorize_with`,
-`RailsAdmin.current_user_method` and `RailsAdmin.configure_with` have been moved under
-`RailsAdmin::Config` and are to be used inside the initializer configuration block eg.
-`RailsAdmin.config {|config| config.authorize_with :cancan }`.
-
-`ActiveRecord::Base.rails_admin` is the new recommendation for configuring
-models as that way configuration can be reloaded per request in development
-mode. The old API is not deprecated as the new one is just a proxy for
-`RailsAdmin::Config.model`.
-
-`navigation.max_visible_tabs` is not configurable anymore, as the new Activo
-theme implements the main navigation as a vertical list.
-
-`object_label` is not directly configurable anymore, as it lead to performance issues when used with a list of records.
-Please use object_label_method instead.
-
-The ability to set model labels for each section (list, navigation, update, ...) has been removed,
-as it was deemed unnecessarily granular and was not fully honored in all displays.
-That also means that the methods `label_for_navigation`, etc. are no longer functional. They print a warning at the moment.
-See details in the examples below for the currently supported way to label models.
-This change was motivated by the conversation following a [bug report](https://github.com/sferik/rails_admin/issues/319/#issue/319/comment/875868)
-about label display errors.
-
-The ability to set model visibility for each section has been removed due to
-same reasons as section specific label configuration (see above paragraph).
-This also means that methods such as `hide_from_navigation` and `show_in_list`
-are no longer functional and have been deprecated. For now on use model level
-configuration of visibility or for more granular control integrate an
-authorization framework as outlined later in this document.
-
-The field configuration method `partial` has been deprecated in favor of
-action-specific methods (`edit_partial`, `create_partial` and
-`update_partial`). See the section titled **Fields - Rendering** above for more
-details.
-
+issue](https://github.com/sferik/rails_admin#issues)
+No feature requests or questions please (the mailing list is active).
+See at the bottom of this README for contributing.
 
 ## <a name="screenshots">Screenshots</a>
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
@@ -241,6 +77,33 @@ To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.co
 
 You can configure more options of CKEditor "config.js" file following the [Api Documentation](http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html) .
 
+### Asset pipeline
+
+The master branch currently targets Rails 3.1. Older branch with 3.0 compatibility is present, but is no longer maintained.
+
+If you are updating from a Rails 3.0 application, you will no longer need to
+update your assets, they will be served from the engine (through Sprockets).
+You can delete all RailsAdmin related assets in your public directory.
+RailsAdmin needs the asset pipeline. Activate it in `application.rb`:
+
+    config.assets.enabled = true
+
+Please note that `initializer/rails_admin.rb` is very likely to require access to your DB.
+Thus if don't need access to your application at asset compilation time, 
+
+    config.assets.initialize_on_precompile = false
+
+will reduce your compilation time and is recommended.
+Note that this is needed on **Heroku** if you set `compile = false` and don't versionate `public/assets`.
+More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
+
+If you still have issue with the asset pipeline:
+
+* ake sure you are using latest Rails 3.1 and Sprockets release
+* copy all asset related configuration from application.rb and environment/*.rb files from a fresh (`rails new dummy`) rails app
+* remove old assets with `bundle exec rake assets:clean` when in development
+* read thoroughly the [Rails Guide](http://guides.rubyonrails.org/asset_pipeline.html)
+
 ## <a name="usage">Usage</a>
 Start the server:
 
@@ -254,25 +117,15 @@ RailsAdmin provides its out of the box administrative interface by inspecting yo
 models and following some Rails conventions. For a more tailored experience, it also provides a
 configuration DSL which allows you to customize many aspects of the interface.
 
-The configuration code should be placed in an initializer file, for example:
+A customized configuration guide is generated at installation in `config/initializers/rails_admin.rb`
 
-    config/initializers/rails_admin.rb
-
-    RailsAdmin.config do |config|
-      config.models do
-        list do
-          fields_of_type :datetime do
-            date_format :compact
-          end
-        end
-      end
-    end
+Read it (!)
 
 The configuration will be executed at startup time, once. (dev & production)
-Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB status compatibility.
-If you have in an edge case where you need RailsAdmin up&running, you can force it anyway:
+Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
+You can force it (true or false):
 
-    rake mytask SKIP_RAILS_ADMIN_INITIALIZER=false
+    SKIP_RAILS_ADMIN_INITIALIZER=false rake mytask
 
 ### General
 
@@ -1120,8 +973,7 @@ RailsAdmin ships with the following field types:
 * date
 * datetime
 * decimal
-* file_upload *(does not initialize automatically)*
-* paperclip *(initializes automatically if Paperclip is present)*
+* paperclip/dragonfly/carrierwave *(see Wiki for configuration)*
 * float
 * has_and_belongs_to_many_association
 * has_many_association
@@ -1129,7 +981,7 @@ RailsAdmin ships with the following field types:
 * integer
 * password *(initializes if string type column's name is password)*
 * string
-* enum
+* enum *(see Wiki for configuration)*
 * text
 * time
 * timestamp
@@ -1170,70 +1022,6 @@ Everything can be overridden with `help`:
           field :name
           field :email do
             help 'Required - popular webmail addresses not allowed'
-          end
-        end
-      end
-    end
-
-**Fields - Paperclip**
-
-    class Team < ActiveRecord::Base
-      has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
-
-      # handling delete in your model, if needed. Replace all image occurences with your asset name.
-      attr_accessor :delete_image
-      before_validation { self.image = nil if self.delete_image == '1' }
-    end
-
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :image do
-            thumb_method :thumb # for images. Will default to full size image, which might break the layout
-            delete_method :delete_image # actually not needed in this case: default is "delete_#{field_name}" if the object responds to it
-          end
-        end
-      end
-    end
-
-**Fields - Enum**
-
-Fields of datatype string, integer, text can be rendered with select boxes. Auto-detected if object responds to `#{method_name}_enum`.
-You can use `enum_method` to indicate the name of the enumeration method in your model.
-You can use `enum` to override any `enum_method` and give back a `FormOptionsHelper#options_for_select` collection.
-
-    class Team < ActiveRecord::Base
-      def color_enum
-        [['blue', 'red'], 'red']
-        # should return any collection accepted by `FormOptionsHelper#options_for_select`
-        # See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select
-      end
-    end
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :color
-          # defaults to
-          # field :color, :enum do
-          #   enum_method do
-          #     :color_enum
-          #   end
-          # end
-        end
-      end
-    end
-
-If you don't have any enumeration method in your model, this will work:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :color, :enum do
-            enum do
-              ['green', 'white']
-            end
           end
         end
       end
@@ -1540,6 +1328,7 @@ against](http://travis-ci.org/sferik/rails_admin) the following Ruby
 implementations:
 
 * Ruby 1.8.7
-* Ruby 1.9.2
-* [Rubinius](http://rubini.us)
 * [Ruby Enterprise Edition](http://www.rubyenterpriseedition.com/)
+* Ruby 1.9.2
+* Ruby 1.9.3
+* [Rubinius](http://rubini.us)
