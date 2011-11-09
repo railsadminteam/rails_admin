@@ -259,10 +259,9 @@ module RailsAdmin
       redirect_to index_path
     end    
     
-    def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = nil)
+    def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params)
       scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
       scope = model_config.abstract_model.scoped.merge(scope)
-      additional_scope ||= get_association_scope_from_params
       scope = scope.instance_eval(&additional_scope) if additional_scope
       get_collection(model_config, scope)
     end
