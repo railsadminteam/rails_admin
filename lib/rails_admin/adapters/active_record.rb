@@ -153,9 +153,7 @@ module RailsAdmin
         model.table_exists?
       end
       
-      def get_conditions_hash(query, filters, model_config)
-        return {} if query.blank? && filters.blank?
-
+      def get_conditions_hash(model_config, query, filters)
         @like_operator =  "ILIKE" if ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
         @like_operator ||= "LIKE"
 

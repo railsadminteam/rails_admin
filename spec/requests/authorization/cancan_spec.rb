@@ -4,12 +4,18 @@ class Ability
   include CanCan::Ability
   def initialize(user)
     can :access, :rails_admin if user.roles.include? :admin
-    can :manage, Player if user.roles.include? :manage_player
-    can :read, Player, :retired => false if user.roles.include? :read_player
-    can :create, Player, :suspended => true if user.roles.include? :create_player
-    can :update, Player, :retired => false if user.roles.include? :update_player
-    can :destroy, Player, :retired => false if user.roles.include? :destroy_player
-    can :history, Player, :retired => false if user.roles.include? :history_player
+    unless user.roles.include? :test_exception
+      can :manage, Player if user.roles.include? :manage_player
+      can :read, Player, :retired => false if user.roles.include? :read_player
+      can :create, Player, :suspended => true if user.roles.include? :create_player
+      can :update, Player, :retired => false if user.roles.include? :update_player
+      can :destroy, Player, :retired => false if user.roles.include? :destroy_player
+      can :history, Player, :retired => false if user.roles.include? :history_player
+    else
+      can :access, :rails_admin
+      can :manage, :all
+      cannot [:update, :destroy], Player, :retired => true
+    end
   end
 end
 
@@ -209,7 +215,7 @@ describe "RailsAdmin CanCan Authorization" do
       should have_content('CanCan::AccessDenied')
     end
 
-    it "GET /admin/player/bulk_delete should render and destroy records which are authorized to" do
+    it "GET /admin/player/bulk_delete should render records which are authorized to" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
       
@@ -217,13 +223,40 @@ describe "RailsAdmin CanCan Authorization" do
       
       should have_content(active_player.name)
       should_not have_content(retired_player.name)
+    end
+
+    it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
+      active_player = FactoryGirl.create :player, :retired => false
+      retired_player = FactoryGirl.create :player, :retired => true
       
-      
-      click_button "Yes, I'm sure"
-      
+      page.driver.post(bulk_destroy_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
       Player.exists?(active_player.id).should be_false
       Player.exists?(retired_player.id).should be_true
     end
-
+  end
+  
+  describe "with exception role" do
+    it "GET /admin/player/bulk_delete should render records which are authorized to" do
+      @user.update_attribute(:roles, [:admin, :test_exception])
+      active_player = FactoryGirl.create :player, :retired => false
+      retired_player = FactoryGirl.create :player, :retired => true
+      
+      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      
+      puts page.body
+      
+      should have_content(active_player.name)
+      should_not have_content(retired_player.name)
+    end
+    
+    it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
+      @user.update_attribute(:roles, [:admin, :test_exception])
+      active_player = FactoryGirl.create :player, :retired => false
+      retired_player = FactoryGirl.create :player, :retired => true
+      
+      page.driver.post(bulk_destroy_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      Player.exists?(active_player.id).should be_false
+      Player.exists?(retired_player.id).should be_true
+    end
   end
 end
