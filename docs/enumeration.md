@@ -4,7 +4,7 @@ Other advantage, a filter with a select box will be added too.
 
 As usual with RailsAdmin, there are two ways to do this. 
 
-## Using the smart default approach
+### Using the smart default approach
 
 If you have a `:country` column in your Article model, RailsAdmin will check if Article#country_enum exists.
 If it does, then you're done.
@@ -24,7 +24,7 @@ def Article
 end
 ```
 
-## Using the configuration approach
+### Using the configuration approach
 
 ```ruby
 field :color, :enum do
