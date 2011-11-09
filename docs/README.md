@@ -3,9 +3,10 @@
 ## Field types
 
 * [[File Upload]]
-* [[Paperclip]]
-* [[Dragonfly]]
-* [[Carrierwave]]
+* => [[Paperclip]]
+* => [[Dragonfly]]
+* => [[Carrierwave]]
+* [[Enumeration]]
 
 ## Authorization
 
