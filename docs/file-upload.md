@@ -10,10 +10,10 @@ field :asset do
   thumb_method :large
   
   # for delete checkbox in forms
-  delete_method :asset_delete
+  delete_method :asset_delete     # don't forget to whitelist if you use :attr_accessible
   
   # in case of a validation failure, to retain asset in the form (not available for Paperclip)
-  cache_method :asset_cache
+  cache_method :asset_cache       # don't forget to whitelist if you use :attr_accessible
   
   required do
     # validation logic
