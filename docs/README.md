@@ -1,5 +1,10 @@
 [[Roadmap]]
 
+## Field types
+* [[Paperclip]]
+* [[Dragonfly]]
+* [[Carrierwave]]
+
 ## Authorization
 
 * [[CanCan]]
