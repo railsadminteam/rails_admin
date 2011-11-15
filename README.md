@@ -658,41 +658,6 @@ options are defined for a single field, `strftime_format` has precedence over
 [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats)
 and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
 
-**Fields - Column CSS class**
-
-By default each column has a CSS class set according to field's data type. You
-can customize this by:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name
-          field :created_at do
-            css_class "customClass"
-          end
-        end
-      end
-    end
-
-This would render the "created at" field's header and body columns with a CSS class named
-"customClass".
-
-**Fields - Column width**
-
-By default columns' widths are calculated from certain pre-defined,
-data-type-specific pixel values. If you want to ensure a minimum width for a
-column, you can:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name do
-            column_width 200
-          end
-          field :created_at
-        end
-      end
-    end
 
 ### Create and update views
 

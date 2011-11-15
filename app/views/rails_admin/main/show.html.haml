@@ -9,6 +9,6 @@
         %dl
           - fields.each_with_index do |field, index|
             - if (value = values[index]) || !RailsAdmin::config.compact_show_view
-              %dt.label{:class => "#{field.name}_field"}= field.label
+              %dt.label{:class => "#{field.type_css_class} #{field.css_class}"}= field.label
               %dd
                 %pre.prettyprint= value || ' - '

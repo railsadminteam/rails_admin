@@ -23,7 +23,6 @@ module RailsAdmin
 
           register_instance_option(:html_attributes) do
             {
-              :class => css_class,
               :cols => "48",
               :rows => "3"
             }

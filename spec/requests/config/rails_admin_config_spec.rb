@@ -78,6 +78,22 @@ describe "RailsAdmin Config DSL" do
       RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end
   end
+  
+  describe "css_class" do
+    it "should have a default and be user customizable" do
+      RailsAdmin.config Team do
+        list do
+          field :division do
+            css_class "custom"
+          end
+          field :name
+        end
+      end
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :division}.css_class.should == "custom" # custom
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :division}.type_css_class.should == "belongs_to_association_type" # type css class, non-customizable
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.css_class.should == "name_field" # default
+    end
+  end
 
   describe "compact_show_view" do
 

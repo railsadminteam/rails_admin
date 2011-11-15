@@ -8,8 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_width = 250
-
           register_instance_option(:partial) do
             :form_polymorphic_association
           end

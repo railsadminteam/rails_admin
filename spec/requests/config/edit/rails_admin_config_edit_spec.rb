@@ -34,6 +34,13 @@ describe "RailsAdmin Config DSL Edit Section" do
       @field_test.restricted_field.should == "I'm allowed to do that as :custom_role only"
     end
   end
+  
+  describe "css hooks" do
+    it "should be present" do
+      visit new_path(:model_name => "team")
+      should have_selector("#team_division_id_field.field.belongs_to_association_type.division_field")
+    end
+  end
 
   describe "field groupings" do
 
@@ -681,7 +688,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      should have_selector("select.enum")
+      should have_selector(".enum_type select")
       should have_content("green")
       Team.send(:remove_method, :color_enum) # Reset
     end
@@ -700,7 +707,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      should have_selector("select.enum")
+      should have_selector(".enum_type select")
       should have_content("green")
       Team.send(:remove_method, :color_list) # Reset
     end
@@ -722,7 +729,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      should have_selector("select.enum")
+      should have_selector(".enum_type select")
       should have_no_content("green")
       should have_content("yellow")
       Team.send(:remove_method, :color_list) # Reset
@@ -738,7 +745,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      should have_selector("input.color")
+      should have_selector(".color_type input")
     end
   end
 end

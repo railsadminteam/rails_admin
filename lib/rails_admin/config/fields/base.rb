@@ -14,8 +14,7 @@ module RailsAdmin
         attr_accessor :defined, :order
 
         def self.inherited(klass)
-            klass.instance_variable_set("@css_class", klass.name.to_s.demodulize.camelcase(:lower))
-            klass.instance_variable_set("@view_helper", :text_field)
+          klass.instance_variable_set("@view_helper", :text_field)
         end
 
         include RailsAdmin::Config::Hideable
@@ -35,15 +34,11 @@ module RailsAdmin
         end
 
         register_instance_option(:css_class) do
-          self.class.instance_variable_get("@css_class")
+          "#{self.name}_field"
         end
-
-        def column_css_class(*args, &block)
-          if !args[0].nil? || block
-            @css_class = args[0].nil? ? block : args[0]
-          else
-            css_class
-          end
+        
+        def type_css_class
+          "#{type}_type"
         end
         
         def virtual?
@@ -51,7 +46,7 @@ module RailsAdmin
         end
 
         register_instance_option(:column_width) do
-          self.class.instance_variable_get("@column_width")
+          nil
         end
 
         register_instance_option(:read_only) do
@@ -146,9 +141,7 @@ module RailsAdmin
         end
 
         register_instance_option(:html_attributes) do
-          {
-            :class => css_class
-          }
+          {}
         end
 
         # Accessor for field's label.

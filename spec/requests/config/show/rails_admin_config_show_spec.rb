@@ -13,6 +13,13 @@ describe "RailsAdmin Config DSL Show Section" do
     visit show_path(:model_name => "team", :id => team.id)
   end
 
+  describe "css hooks" do
+    it "should be present" do
+      do_request
+      should have_selector("dt.name_field.string_type")
+    end
+  end
+
   describe "field groupings" do
     it "should be hideable" do
       RailsAdmin.config Team do

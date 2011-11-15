@@ -19,7 +19,7 @@ module RailsAdmin
     end
 
     def field_wrapper_for field
-      @template.content_tag(:div, :class => "clearfix field #{'error' if field.errors.present?}", :id => field.dom_id + '_field') do
+      @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => field.dom_id + '_field') do
         label(field.method_name, field.label) +
         input_for(field)
       end

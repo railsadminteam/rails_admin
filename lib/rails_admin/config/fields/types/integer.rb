@@ -10,10 +10,6 @@ module RailsAdmin
           
           @view_helper = :number_field
 
-          register_instance_option(:css_class) do
-            serial? ? "id" : "integer"
-          end
-
           register_instance_option(:sort_reverse?) do
             serial?
           end
