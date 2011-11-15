@@ -37,12 +37,6 @@
 #### `belongs_to`
 - re-add prepolation keeping concistancy with xhr
 
-#### images
-- move 90% of paperclip non-specific code to parent (upload)
-- implement DragonFly on top of it
-- implement CarrierWave on top of it
-- improve base widget
-
 #### Groups
 - better defaults (one group for each relation is dumb and group legend is repeated uselessly in field legend)
 
