@@ -14,6 +14,10 @@
 * [[Customized authorization]]
 * [[Declarative Authorization]]
 
+## Styling
+
+* [[css hooks]]
+
 ## Routing
 
 * [[Routing Problems]]
