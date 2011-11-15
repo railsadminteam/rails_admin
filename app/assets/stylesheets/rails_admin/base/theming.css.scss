@@ -21,24 +21,6 @@ input, textarea {
   z-index:1;
 }
 
-/* sidebar hack (content is slipping beneath height of sidebar. There is a ticket, shouldn't stay long) */
-.sidebar {
-  height:0;
-}
-
-/* Remove when TB-sass is updated >1.3.0 (regression) */
-.container-fluid > .content {
-    margin-left: 240px;
-    float:none;
-    max-width:none;
-    min-width:none;
-}
-
-/* filtering select integration, shouldn't be needed soon with new inline forms (TB 1.4.0?) */
-.input-append {
-  display:inline-block;
-}
-
 /* Modals dimensionning */
 .modal {
   width:700px;
@@ -53,7 +35,7 @@ input, textarea {
   clear:left;
 }
 
-/* Table cells behaviour TODO: homogeinize classes a bit */
+/* Table cells behaviour */
 table.zebra-striped {
   /* text-overflow when cell content > 150px */
   td {
