@@ -17,10 +17,13 @@ es:
       add_new: "Agregar"
       show: "Mostrar"
       ago: "atrás"
+      navigation: "Navegacion"
     history:
       name: "Histórico"
       page_name: "Histórico de %{name}"
       no_activity: "No hubo actividad"
+      changes: "Cambios"
+      user: "Usuario"
     show:
       show_in_app: "Mostrar en la aplicación"
       page_name: "Detalles de %{name}"
@@ -40,6 +43,9 @@ es:
       select: "Seleccione %{name} para editar"
       show_all: "Mostrar todos"
       add_filter: "Agregar filtro"
+      refresh: "Recargar"
+      export_current_action: "Exportar accion actual"
+      selected: "Seleccionado/s"
     new:
       basic_info: "Información Básica"
       required: "Obligatorio"
@@ -86,7 +92,7 @@ es:
       noaction: "No se realizó ninguna acción"
     actions:
       create: "crear"
-      created: "guardar"
+      created: "guardado/a"
       update: "actualizar"
       updated: "actualizado"
       delete: "borrar"
