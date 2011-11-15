@@ -26,5 +26,5 @@
 ## Recipes
 
 * [[Associations scoping]]
-* [[How to set default values for enum type fields in a model]]
+* [[How to set default values]]
 
