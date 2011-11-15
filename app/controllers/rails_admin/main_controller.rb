@@ -36,7 +36,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       @page_name = t("admin.index.select", :name => @model_config.label.downcase)
 
-      @objects = list_entries
+      @objects ||= list_entries
 
       @schema ||= { :only => @model_config.list.visible_fields.map { |f| f.name } }
 
@@ -207,6 +207,7 @@ module RailsAdmin
       if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
         request.format = format
         @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
+        @objects = list_entries(@model_config, :export)
         index
       else
         @page_name = t("admin.actions.export").capitalize + " " + @model_config.label_plural.downcase
@@ -338,7 +339,7 @@ module RailsAdmin
     def get_collection(model_config, scope)
       associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = {}
-      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if params[:action] == 'index'
+      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) unless params[:associated_collection] || params[:all]
       options = options.merge(:include => associations) unless associations.blank?
       options = options.merge(get_sort_hash(model_config)) unless params[:associated_collection]
       options = options.merge(model_config.abstract_model.get_conditions_hash(model_config, params[:query], params[:filters])) if params[:query] || params[:filters]
