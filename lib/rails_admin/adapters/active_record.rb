@@ -189,7 +189,7 @@ module RailsAdmin
               field_statements = []
               @filterable_fields[field_name.to_sym].each do |field_infos|
                 unless filter_dump[:disabled]
-                  statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:value], (filter_dump[:operator] || 'default'))
+                  statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
                   if statement
                     field_statements << statement
                     values << value1 unless value1.nil?

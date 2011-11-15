@@ -4,8 +4,8 @@
 
   $.filters = filters = {
     append: function(field_label, field_name, field_type, field_value, field_operator, field_options, multiple_values, index) {
-      var value_name = 'filters[' +  field_name + '][' + index + '][value]';
-      var operator_name = 'filters[' +  field_name + '][' + index + '][operator]';
+      var value_name = 'f[' +  field_name + '][' + index + '][v]';
+      var operator_name = 'f[' +  field_name + '][' + index + '][o]';
       switch(field_type) {
         case 'boolean':
           var control = '<select class="span3 " name="' + value_name + '">' +
@@ -71,7 +71,7 @@
       
       var content = '<div class="row filter clearfix">' +
           '<span class="span3">' +
-            '<span data-original-title="Click to remove this filter" rel="twipsy" class="btn info delete" data-disabler-name="filters[' +  field_name + '][' + index + '][disabled]">' + field_label + '</span>' +
+            '<span data-original-title="Click to remove this filter" rel="twipsy" class="btn info delete" data-disabler-name="f[' +  field_name + '][' + index + '][disabled]">' + field_label + '</span>' +
           '</span>' +
           '<span class="span3">'+
             control +
@@ -91,7 +91,7 @@
       $(this).data('field-operator'),
       $(this).data('field-options'),
       $(this).data('field-multiple_values'),
-      $.now()
+      $.now().toString().slice(7,11)
     );
     $("[rel=twipsy]").twipsy();
   });

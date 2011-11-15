@@ -12,19 +12,21 @@ $("#list input.checkbox.toggle").live "click", ->
 $("#list a, #list form").live "ajax:complete", (xhr, data, status) ->
   $("#list").replaceWith data.responseText
 
-$("#list table th.header").live "click", ->
-  $.ajax
-    url: $(this).data("link")
-    success: (data) ->
-      $("#list").replaceWith data
-
 $("table#history th.header").live "click", ->
   window.location = $(this).data("link")
 
 $(document).ready ->
+  $('.pjax').pjax('[data-pjax-container]')
+  $('.pjax-form').live 'submit', (event) ->
+    event.preventDefault()
+    $.pjax
+      container: '[data-pjax-container]'
+      url: this.action + (if (this.action.indexOf('?') != -1) then '&' else '?') + $(this).serialize()
   $(".alert-message").alert()
   $("[rel=twipsy]").twipsy()
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
+
+

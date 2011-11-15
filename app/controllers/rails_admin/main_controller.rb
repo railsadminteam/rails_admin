@@ -342,7 +342,7 @@ module RailsAdmin
       options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) unless params[:associated_collection] || params[:all]
       options = options.merge(:include => associations) unless associations.blank?
       options = options.merge(get_sort_hash(model_config)) unless params[:associated_collection]
-      options = options.merge(model_config.abstract_model.get_conditions_hash(model_config, params[:query], params[:filters])) if params[:query] || params[:filters]
+      options = options.merge(model_config.abstract_model.get_conditions_hash(model_config, params[:query], params[:f])) if params[:query] || params[:f]
       options = options.merge(:bulk_ids => params[:bulk_ids]) if params[:bulk_ids]
       
       objects = model_config.abstract_model.all(options, scope)

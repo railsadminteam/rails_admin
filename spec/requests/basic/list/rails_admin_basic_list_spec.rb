@@ -88,7 +88,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to filter on one attribute" do
-      visit index_path(:model_name => "player", :filters => {:injured => {"1" => {:value => "true"}}})
+      visit index_path(:model_name => "player", :f => {:injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)
       should have_no_content(@players[1].name)
       should have_content(@players[2].name)
@@ -96,7 +96,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to combine filters on two different attributes" do
-      visit index_path(:model_name => "player", :filters => {:retired => {"1" => {:value => "true"}}, :injured => {"1" => {:value => "true"}}})
+      visit index_path(:model_name => "player", :f => {:retired => {"1" => {:v => "true"}}, :injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)
       (1..3).each do |i|
         should have_no_content(@players[i].name)
@@ -104,7 +104,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should allow to filter on belongs_to relationships" do
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => { :value => @teams[0].name }}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => { :v => @teams[0].name }}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -134,7 +134,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.id}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -152,7 +152,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -169,7 +169,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -186,7 +186,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -201,7 +201,7 @@ describe "RailsAdmin Basic List" do
           field :team
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -218,7 +218,7 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
@@ -235,13 +235,13 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.first.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.first.id}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
       # same with a different id
-      visit index_path(:model_name => "player", :filters => {:team => {"1" => {:value => @teams.first.name}, "2" => {:value => @teams.last.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.last.id}}})
       should have_no_content(@players[0].name)
       should have_no_content(@players[1].name)
       should have_no_content(@players[2].name)
