@@ -260,11 +260,11 @@ module RailsAdmin
       redirect_to index_path
     end    
     
-    def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params)
+    def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all]))
       scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
       scope = model_config.abstract_model.scoped.merge(scope)
       scope = scope.instance_eval(&additional_scope) if additional_scope
-      get_collection(model_config, scope)
+      get_collection(model_config, scope, pagination)
     end
     
     private
@@ -336,13 +336,13 @@ module RailsAdmin
       redirect_to index_path, :flash => { :warning => t("admin.flash.noaction") } if params[:_continue]
     end
     
-    def get_collection(model_config, scope)
+    def get_collection(model_config, scope, pagination)
       associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = {}
-      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) unless params[:associated_collection] || params[:all]
+      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if pagination
       options = options.merge(:include => associations) unless associations.blank?
       options = options.merge(get_sort_hash(model_config)) unless params[:associated_collection]
-      options = options.merge(model_config.abstract_model.get_conditions_hash(model_config, params[:query], params[:f])) if params[:query] || params[:f]
+      options = options.merge(model_config.abstract_model.get_conditions_hash(model_config, params[:query], params[:f])) if (params[:query].present? || params[:f].present?)
       options = options.merge(:bulk_ids => params[:bulk_ids]) if params[:bulk_ids]
       
       objects = model_config.abstract_model.all(options, scope)

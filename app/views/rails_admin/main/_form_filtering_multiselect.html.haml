@@ -20,7 +20,7 @@
     selected.map { |o| [o.send(config.object_label_method), o.id] }
   else
     i = 0
-    controller.list_entries(config, :index, field.associated_collection_scope).map { |o| [o.send(config.object_label_method), o.id] }.sort_by {|a| [selected_ids.index(a[1]) || selected_ids.size, i+=1] }
+    controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(config.object_label_method), o.id] }.sort_by {|a| [selected_ids.index(a[1]) || selected_ids.size, i+=1] }
   end
 
 %input{:name => field.dom_name, :type => "hidden", :value => ""}
