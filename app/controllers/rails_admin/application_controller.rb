@@ -1,7 +1,7 @@
 require 'rails_admin/abstract_model'
 
 module RailsAdmin
-  class ApplicationController < ::ApplicationController
+  class ApplicationController < ActionController::Base
     newrelic_ignore if defined?(NewRelic)
 
     before_filter :_authenticate!
