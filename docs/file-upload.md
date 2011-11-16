@@ -20,7 +20,7 @@ field :asset do
   end
 
   image do
-    # if image is true thumbnails are shown (with thumbnail method). Otherwise just a link to the resource
+    # if image is true thumbnails are shown (using :thumb_method). Otherwise just a link to the resource
   end
 end
 ```
