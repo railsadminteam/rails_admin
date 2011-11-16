@@ -59,4 +59,8 @@ FactoryGirl.define do
   factory :ball do
     color(%W(red blue green yellow purple brown black white).sample)
   end
+
+  factory :hardball do
+    color('blue')
+  end
 end
