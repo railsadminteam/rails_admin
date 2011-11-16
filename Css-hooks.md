@@ -1,13 +1,14 @@
 **Fields - Column CSS class**
 
 By default each column has a CSS class set according to field's data type. 
-`'column_type_name'_field`
+`<field_type>_field`
 
 In addition, each column has a CSS class based on its name
-`'column_name'_field`
+`<field_name>_field`
 
-Second can customized with:
+Field name CSS class can customized with:
 
+```ruby
     RailsAdmin.config do |config|
       config.model Team do
         list do
@@ -17,6 +18,7 @@ Second can customized with:
         end
       end
     end
+```
 
 This classes will be shown on list, show and edit views. They are part of the API and should not change.
 In list views, both header th and td data will receive both classes.
@@ -25,6 +27,7 @@ In list views, both header th and td data will receive both classes.
 
 If you want to set a fixed width for a column in the list view:
 
+```ruby
     RailsAdmin.config do |config|
       config.model Team do
         list do
@@ -34,5 +37,6 @@ If you want to set a fixed width for a column in the list view:
         end
       end
     end
+```
 
-It will use field's css_class to set a width for header and data columns.
+It will use field's name CSS class to set a width for header and data columns.
