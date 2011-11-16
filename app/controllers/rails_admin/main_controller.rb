@@ -38,8 +38,6 @@ module RailsAdmin
 
       @objects ||= list_entries
 
-      @schema ||= { :only => @model_config.list.visible_fields.map { |f| f.name } }
-
       respond_to do |format|
         format.html { render :layout => !request.xhr? }
         format.json do
