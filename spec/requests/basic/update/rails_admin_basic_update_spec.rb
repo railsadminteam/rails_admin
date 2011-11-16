@@ -166,4 +166,21 @@ describe "RailsAdmin Basic Update" do
     end
   end
 
+  describe "update of STI subclass on superclass view" do
+    before(:each) do
+      @hardball = FactoryGirl.create :hardball
+
+      visit edit_path(:model_name => "ball", :id => @hardball.id)
+
+      fill_in "ball[color]", :with => "cyan"
+      click_button "Save and edit"
+
+      @hardball.reload
+    end
+
+    it "should update an object with correct attributes" do
+      @hardball.color.should eql("cyan")
+    end
+  end
+
 end
