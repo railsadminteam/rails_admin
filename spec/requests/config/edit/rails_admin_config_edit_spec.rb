@@ -147,9 +147,10 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit new_path(:model_name => "team")
         find("#team_name_field .help-block").should have_content("Length up to 50.")
       end
+      
+# FIXME validates_length_of are leaking in FactoryGirl WTF?
 
       it "should use the :is setting from the validation" do
-# FIXME this test and the :maximum => 49 are leaking in FactoryGirl WTF?
  #        class Team
  #          validates_length_of :name, :is => 3
  #        end
@@ -160,10 +161,10 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       it "should use the :minimum setting from the validation" do
         class Team
-          validates_length_of :name, :minimum => 4
+          validates_length_of :name, :minimum => 1
         end
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 4-50.")
+        find("#team_name_field .help-block").should have_content("Length of 1-50.")
         Team._validators[:name] = []
       end
 
@@ -187,19 +188,19 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       it "should use the :minimum and :maximum from the validation" do
         class Team
-          validates_length_of :name, :minimum => 6, :maximum => 8
+          validates_length_of :name, :minimum => 1, :maximum => 49
         end
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 6-8.")
+        find("#team_name_field .help-block").should have_content("Length of 1-49.")
         Team._validators[:name] = []
       end
 
       it "should use the range from the validation" do
         class Team
-          validates_length_of :name, :in => 7..9
+          validates_length_of :name, :in => 1..49
         end
         visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 7-9.")
+        find("#team_name_field .help-block").should have_content("Length of 1-49.")
         Team._validators[:name] = []
       end
 
