@@ -71,7 +71,7 @@
       
       var content = '<div class="row filter clearfix">' +
           '<span class="span3">' +
-            '<span data-original-title="Click to remove this filter" rel="twipsy" class="btn info delete" data-disabler-name="f[' +  field_name + '][' + index + '][disabled]">' + field_label + '</span>' +
+            '<span class="btn info delete">' + field_label + '</span>' +
           '</span>' +
           '<span class="span3">'+
             control +
@@ -93,12 +93,12 @@
       $(this).data('field-multiple_values'),
       $.now().toString().slice(7,11)
     );
-    $("[rel=twipsy]").twipsy();
   });
 
   $('#filters_box .delete').live('click', function() {
-    $(this).parents('.filter').hide('slow');
-    $(this).append('<input type="hidden" name="' + $(this).data('disabler-name') + '" value="true" />')
+    form = $(this).parents('form');
+    $(this).parents('.filter').remove();
+    form.submit();
   });
 
   $('#filters_box .switch-select').live('dblclick', function() {

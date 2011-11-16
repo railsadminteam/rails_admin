@@ -7,8 +7,6 @@
   sort = params[:sort]
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
   
-  
-  
   properties = @model_config.list.with(:view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)

@@ -179,7 +179,7 @@ module RailsAdmin
 
         unless query_statements.empty?
           conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += "(#{query_statements.join(" OR ")})"  # any column field will do
+          conditions[0] += "(#{query_statements.join(" OR ")})"
         end
 
         if filters.present?
@@ -188,13 +188,11 @@ module RailsAdmin
             filters_dump.each do |filter_index, filter_dump|
               field_statements = []
               @filterable_fields[field_name.to_sym].each do |field_infos|
-                unless filter_dump[:disabled]
-                  statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-                  if statement
-                    field_statements << statement
-                    values << value1 unless value1.nil?
-                    values << value2 unless value2.nil?
-                  end
+                statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+                if statement
+                  field_statements << statement
+                  values << value1 unless value1.nil?
+                  values << value2 unless value2.nil?
                 end
               end
               filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
