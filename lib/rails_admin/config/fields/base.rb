@@ -151,11 +151,18 @@ module RailsAdmin
           @label ||= abstract_model.model.human_attribute_name name
         end
 
-        # Accessor for field's maximum length.
+        # Accessor for field's maximum length per database.
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:length) do
           @length ||= properties && properties[:length]
+        end
+
+        # Accessor for field's length restrictions per validations
+        #
+        register_instance_option(:valid_length) do
+          @valid_length ||= abstract_model.model.validators_on(name).find{|v|
+            v.is_a?(ActiveModel::Validations::LengthValidator)}.try{|v| v.options} || {}
         end
 
         register_instance_option(:partial) do
