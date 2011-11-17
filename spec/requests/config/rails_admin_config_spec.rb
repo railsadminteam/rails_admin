@@ -3,6 +3,35 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL" do
 
   subject { page }
+  
+  describe "configure" do
+    it "should configure without changing the section default list" do
+      RailsAdmin.config Team do
+        edit do
+          configure :name do
+            label "Renamed"
+          end
+        end
+      end
+      fields = RailsAdmin.config(Team).edit.fields
+      fields.find{|f| f.name == :name }.label.should == "Renamed"
+      fields.count.should >= 19 # not 1
+    end
+    
+    it "should not change the section list if set" do
+      RailsAdmin.config Team do
+        edit do
+          field :manager
+          configure :name do
+            label "Renamed"
+          end
+        end
+      end
+      fields = RailsAdmin.config(Team).edit.fields
+      fields.first.name.should == :manager
+      fields.count.should == 1 # not 19
+    end
+  end
 
   describe "excluded models" do
     excluded_models = [Division, Draft, Fan]

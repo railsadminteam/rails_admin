@@ -3,7 +3,7 @@ module RailsAdmin
     # Provides accessors and autoregistering of model's fields.
     module HasFields
       # Defines a configuration for a field.
-      def field(name, type = nil, &block)
+      def field(name, type = nil, add_to_section = true, &block)
         field = @fields.find {|f| name == f.name }
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
@@ -22,17 +22,24 @@ module RailsAdmin
           properties = parent.abstract_model.properties.find {|p| name == p[:name] }
           field = (@fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
+        
         # If field has not been yet defined add some default properties
-        unless field.defined
+        if add_to_section && !field.defined
           field.defined = true
           field.order = @fields.select(&:defined).length
         end
+        
         # If a block has been given evaluate it and sort fields after that
         if block
           field.instance_eval &block
           @fields.sort! {|a, b| a.order <=> b.order }
         end
         field
+      end
+      
+      # configure a field without adding it.
+      def configure(name, type = nil, &block)
+        field(name, type, false, &block)
       end
 
       # include fields by name and apply an optionnal block to each (through a call to fields),
@@ -61,7 +68,6 @@ module RailsAdmin
       alias :exclude_fields_if :exclude_fields
       alias :include_fields_if :include_fields
 
-      # does pretty much what it says in the can
       def include_all_fields
         include_fields_if() { true }
       end
