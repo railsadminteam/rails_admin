@@ -50,7 +50,7 @@ module RailsAdmin
 
         # Configurable group label which by default is group's name humanized.
         register_instance_option :label do
-          name.to_s.humanize
+          @label ||= (parent.fields.find{|f|f.name == self.name}.try(:label) || name.to_s.humanize)
         end
 
         # Configurable help text
