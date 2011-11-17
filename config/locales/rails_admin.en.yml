@@ -52,7 +52,6 @@ en:
       required: "Required"
       optional: "Optional"
       one_char: "character"
-      #many_chars: "characters or fewer"
       char_length_up_to: "length up to"
       char_length_of: "length of"
       chosen: "Chosen %{name}"
