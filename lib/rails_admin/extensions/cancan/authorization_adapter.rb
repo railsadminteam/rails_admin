@@ -6,8 +6,9 @@ module RailsAdmin
       # responds to each of the public methods here.
       class AuthorizationAdapter
         # See the +authorize_with+ config method for where the initialization happens.
-        def initialize(controller)
+        def initialize(controller, ability = ::Ability)
           @controller = controller
+          @controller.instance_variable_set '@ability', ability
           @controller.extend ControllerExtension
           @controller.current_ability.authorize! :access, :rails_admin
         end
@@ -62,7 +63,7 @@ module RailsAdmin
           def current_ability
             # use _current_user instead of default current_user so it works with
             # whatever current user method is defined with RailsAdmin
-            @current_ability ||= ::Ability.new(_current_user)
+            @current_ability ||= @ability.new(_current_user)
           end
         end
       end
