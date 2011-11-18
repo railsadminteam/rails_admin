@@ -1,16 +1,18 @@
 ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| "<span class=\"field_with_errors\">#{html_tag}</span>".html_safe }
 
 module RailsAdmin
-  class FormBuilder < ActionView::Helpers::FormBuilder
-    def render action
-      @template.instance_variable_get(:@model_config).send(action).with(:form => self, :object => @object, :view => @template).visible_groups.map do |fieldset|
+  class FormBuilder < ::ActionView::Helpers::FormBuilder
+    include ::NestedForm::BuilderMixin
+    
+    def render action, model_config = @template.instance_variable_get(:@model_config), nested = false
+      model_config.send(action).with(:form => self, :object => self.object, :view => @template).visible_groups.map do |fieldset|
         fieldset_for fieldset
       end.join.html_safe +
-      @template.render(:partial => 'submit_buttons')
+      (nested ? '' : @template.render(:partial => 'submit_buttons'))
     end
 
     def fieldset_for fieldset
-      if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => @object, :view => @template) }.select(&:visible?)).length > 0
+      if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => self.object, :view => @template) }.select(&:visible?)).length > 0
         @template.content_tag :fieldset do
           @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : '')) +
           fields.map{ |field| field_wrapper_for(field) }.join.html_safe

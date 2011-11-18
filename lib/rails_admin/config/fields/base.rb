@@ -258,7 +258,7 @@ module RailsAdmin
         # Reader for field's id
         def dom_id
           @dom_id ||= [
-            bindings[:form].object_name,
+            bindings[:form].object_name.sub('][', '_').sub(']', '').sub('[', '_'),
             bindings[:form].options[:index],
             method_name
           ].reject(&:blank?).join('_')

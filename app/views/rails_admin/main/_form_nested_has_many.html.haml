@@ -1,0 +1,10 @@
+- label = field.associated_model_config.abstract_model.pretty_name.downcase
+- field.value.each do |value|
+  = form.fields_for field.name, value do |nested_form|
+    = nested_form.render(:update, field.associated_model_config, true)
+    - if field.with(:object => nested_form.object).nested_form.try { |nf| nf[:allow_destroy] }
+      = nested_form.link_to_remove "Remove this #{label}"
+= form.fields_for field.name do |nested_form|
+  = nested_form.render(:create, field.associated_model_config, true)
+  = nested_form.link_to_remove "Remove this #{label}"
+= form.link_to_add "Add a #{label}", field.name

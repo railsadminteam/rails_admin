@@ -14,7 +14,7 @@ module RailsAdmin
           end
 
           register_instance_option(:partial) do
-            :form_filtering_multiselect
+            nested_form ? :form_nested_has_many : :form_filtering_multiselect
           end
 
           # orderable associated objects

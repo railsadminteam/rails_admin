@@ -90,6 +90,11 @@ module RailsAdmin
         def polymorphic?
           association[:polymorphic]
         end
+        
+        # Reader for nested attributes
+        def nested_form
+          @nesting = bindings[:object].class.nested_attributes_options.try { |o| o[self.name] }
+        end
 
         # Reader for the association's value unformatted
         def value
