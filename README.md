@@ -2,6 +2,8 @@ RailsAdmin
 ==========
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+The Rails 3.0 branch requires Rails version 3.0.11.
+
 [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
 
 See the demo here: http://demo.railsadmin.org/
