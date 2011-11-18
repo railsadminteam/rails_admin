@@ -19,6 +19,14 @@ class Ability
   end
 end
 
+class AdminAbility
+  include CanCan::Ability
+  def initialize(user)
+    can :access, :rails_admin if user.roles.include? :admin
+    can :manage, :all
+  end
+end
+
 describe "RailsAdmin CanCan Authorization" do
 
   subject { page }
@@ -93,10 +101,10 @@ describe "RailsAdmin CanCan Authorization" do
 
     it "GET /admin/player/new should render and create record upon submission" do
       visit new_path(:model_name => "player")
-      
+
       should_not have_content("Save and edit")
       should_not have_content("Delete")
-      
+
       should have_content("Save and add another")
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
@@ -127,7 +135,7 @@ describe "RailsAdmin CanCan Authorization" do
     it "GET /admin/player/1/edit should render and update record upon submission" do
       @player = FactoryGirl.create :player
       visit edit_path(:model_name => "player", :id => @player.id)
-      
+
       should have_content("Save and edit")
       should_not have_content("Save and add another")
       should_not have_content("Add new")
@@ -152,46 +160,46 @@ describe "RailsAdmin CanCan Authorization" do
     end
 
   end
-  
+
   describe "with history role" do
     it 'shows links to history action' do
-    
+
       @user.update_attribute(:roles, [:admin, :read_player, :history_player])
       @player = FactoryGirl.create :player
-      
+
       visit index_path(:model_name => "player")
         should have_css('.show_object_link')
         should_not have_css('.edit_object_link')
         should_not have_css('.delete_object_link')
         should have_css('.history_object_link')
-      
+
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")
         should_not have_content("Edit")
         should_not have_content("Delete")
         should have_content("History")
-      
+
     end
   end
-  
+
   describe "with all roles" do
     it 'shows links to all actions' do
-    
+
       @user.update_attribute(:roles, [:admin, :manage_player])
       @player = FactoryGirl.create :player
-      
+
       visit index_path(:model_name => "player")
         should have_css('.show_object_link')
         should have_css('.edit_object_link')
         should have_css('.delete_object_link')
         should have_css('.history_object_link')
-      
+
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")
         should have_content("Edit")
         should have_content("Delete")
         should have_content("History")
-      
+
     end
   end
 
@@ -218,9 +226,9 @@ describe "RailsAdmin CanCan Authorization" do
     it "GET /admin/player/bulk_delete should render records which are authorized to" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
-      
+
       page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
-      
+
       should have_content(active_player.name)
       should_not have_content(retired_player.name)
     end
@@ -228,33 +236,82 @@ describe "RailsAdmin CanCan Authorization" do
     it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
-      
+
       page.driver.post(bulk_destroy_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
       Player.exists?(active_player.id).should be_false
       Player.exists?(retired_player.id).should be_true
     end
   end
-  
+
   describe "with exception role" do
     it "GET /admin/player/bulk_delete should render records which are authorized to" do
       @user.update_attribute(:roles, [:admin, :test_exception])
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
-      
+
       page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
-            
+
       should have_content(active_player.name)
       should_not have_content(retired_player.name)
     end
-    
+
     it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
       @user.update_attribute(:roles, [:admin, :test_exception])
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
-      
+
       page.driver.post(bulk_destroy_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
       Player.exists?(active_player.id).should be_false
       Player.exists?(retired_player.id).should be_true
     end
   end
+
+  describe "with a custom admin ability" do
+    before(:each) do
+      RailsAdmin.config{|c| c.authorize_with :cancan, AdminAbility }
+      @user = FactoryGirl.create :user
+      login_as @user
+    end
+
+    describe "with admin role only" do
+      before(:each) do
+        @user.update_attribute(:roles, [:admin])
+      end
+
+      it "GET /admin/team should render successfully" do
+        visit index_path(:model_name => "team")
+        page.status_code.should == 200
+      end
+
+      it "GET /admin/player/new should render successfully" do
+        visit new_path(:model_name => "player")
+        page.status_code.should == 200
+      end
+
+      it "GET /admin/player/1/edit should render successfully" do
+        @player = FactoryGirl.create :player
+        visit edit_path(:model_name => "player", :id => @player.id)
+        page.status_code.should == 200
+      end
+
+      it "GET /admin/player/1/edit with retired player should render successfully" do
+        @player = FactoryGirl.create :player, :retired => true
+        visit edit_path(:model_name => "player", :id => @player.id)
+        page.status_code.should == 200
+      end
+
+      it "GET /admin/player/1/delete should render successfully" do
+        @player = FactoryGirl.create :player
+        visit delete_path(:model_name => "player", :id => @player.id)
+        page.status_code.should == 200
+      end
+
+      it "GET /admin/player/1/delete with retired player should render successfully" do
+        @player = FactoryGirl.create :player, :retired => true
+        visit delete_path(:model_name => "player", :id => @player.id)
+        page.status_code.should == 200
+      end
+    end
+  end
+
 end
