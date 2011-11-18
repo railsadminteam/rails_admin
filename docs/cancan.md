@@ -57,7 +57,7 @@ How you define the user roles is completely up to you. See the [[CanCan Document
 
 ### Use different Ability classes for front-end and admin
 
-If you use Cancan in your project, there are chances that abilities for RailsAdmin will conflict with your project ones. In that case, you will want to define a specific Ability class for admin section (e.g. AdminAbility).
+If you use Cancan in your project, there are chances that abilities for RailsAdmin will conflict with your project ones. In that case, you will want to define a specific Ability class for admin section (e.g. ```AdminAbility```).
 
 You just have to add your admin ability class as a second parameter to `authorize_with`:
 
@@ -69,7 +69,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-With AdminAbility:
+With ```AdminAbility```:
 
 ```ruby
 # in models/admin_ability.rb
