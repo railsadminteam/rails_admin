@@ -9,15 +9,15 @@ In addition, each column has a CSS class based on its name
 Field name CSS class can customized with:
 
 ```ruby
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :created_at do
-            css_class "customClass"
-          end
-        end
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :created_at do
+        css_class "customClass"
       end
     end
+  end
+end
 ```
 
 This classes will be shown on list, show and edit views. They are part of the API and should not change.
@@ -28,15 +28,15 @@ In list views, both header th and td data will receive both classes.
 If you want to set a fixed width for a column in the list view:
 
 ```ruby
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name do
-            column_width 200
-          end
-        end
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name do
+        column_width 200
       end
     end
+  end
+end
 ```
 
 Use this to configure lists table width:
