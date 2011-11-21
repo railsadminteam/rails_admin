@@ -48,7 +48,7 @@ See at the bottom of this README for contributing.
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
 ![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
-![Export view](https://github.com/sferik/rails_admin/raw/master/screenshots/export.png "Edit view")
+![Export view](https://github.com/sferik/rails_admin/raw/master/screenshots/export.png "Export view")
 
 ## <a name="installation">Installation</a>
 In your `Gemfile`, add the following dependencies:
@@ -89,7 +89,7 @@ RailsAdmin needs the asset pipeline. Activate it in `application.rb`:
     config.assets.enabled = true
 
 Please note that `initializer/rails_admin.rb` is very likely to require access to your DB.
-Thus if don't need access to your application at asset compilation time, 
+Thus if don't need access to your application at asset compilation time,
 
     config.assets.initialize_on_precompile = false
 
@@ -276,7 +276,7 @@ you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
 
 **Create a navigation_label in navigation**
-    
+
     # Given there are the following models: League, Team and Division
 
     RailsAdmin.config do |config|
