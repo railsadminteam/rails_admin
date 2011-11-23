@@ -2,27 +2,22 @@
 
 = javascript_include_tag asset_path 'rails_admin/jquery.colorpicker.js'
 = stylesheet_link_tag asset_path 'rails_admin/jquery.colorpicker.css'
-
-= javascript_tag do
+= form.javascript_for(field) do
   :plain
-    jQuery(function($) {
-      if(!$("##{form.dom_id(field)}").parents(".fields_blueprint").length) {
-        var input = $('##{ form.dom_id(field) }')
-        input.css('backgroundColor', '#' + input.val());
-        input.ColorPicker({
-          color: input.val(),
-          onShow: function (el) {
-            $(el).fadeIn(500);
-          	return false;
-          },
-          onHide: function (el) {
-          	$(el).fadeOut(500);
-            return false;
-          },
-          onChange: function (hsb, hex, rgb) {
-            input.val(hex);
-            input.css('backgroundColor', '#' + hex);
-          }
-        });
+    var input = $('#{ form.js_namespace(field) } input')
+    input.css('backgroundColor', '#' + input.val());
+    input.ColorPicker({
+      color: input.val(),
+      onShow: function (el) {
+        $(el).fadeIn(500);
+      	return false;
+      },
+      onHide: function (el) {
+      	$(el).fadeOut(500);
+        return false;
+      },
+      onChange: function (hsb, hex, rgb) {
+        input.val(hex);
+        input.css('backgroundColor', '#' + hex);
       }
     });

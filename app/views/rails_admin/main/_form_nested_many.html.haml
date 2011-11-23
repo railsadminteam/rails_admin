@@ -1,5 +1,5 @@
 - label = field.associated_model_config.abstract_model.pretty_name.downcase
 = form.fields_for field.name do |nested_form|
-  = nested_form.render(:create, field.associated_model_config, true)
+  = nested_form.generate({:action => :create, :model_config => field.associated_model_config, :nested => true})
   = nested_form.link_to_remove "Remove this #{label}"
 = form.link_to_add "Add a #{label}", field.name

@@ -1,9 +1,4 @@
 = form.send field.view_helper, field.method_name, field.html_attributes
-
-= javascript_tag do
+= form.javascript_for(field) do
   :plain
-    jQuery(function($) {
-      if(!$("##{form.dom_id(field)}").parents(".fields_blueprint").length) {
-        $("##{form.dom_id(field)}").datetimepicker(#{field.js_plugin_options.html_safe});
-      }
-    });
+    $("#{form.js_namespace(field)} input").datetimepicker(#{field.js_plugin_options.html_safe});

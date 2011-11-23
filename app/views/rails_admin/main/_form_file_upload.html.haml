@@ -11,12 +11,8 @@
   = form.check_box(field.delete_method, :style => 'display:none;' )
 - if field.cache_method
   = form.hidden_field(field.cache_method)
-= javascript_tag do
+= form.javascript_for(field) do
   :plain
-    jQuery(function($) {
-      if(!$("##{form.dom_id(field)}").parents(".fields_blueprint").length) {
-        $("##{form.dom_name(field)} .delete input[type='checkbox']").live('click', function() {
-          $(this).parents('.input').first().children('.toggle').toggle('slow');
-        });
-      }
-    })
+    $("#{form.js_namespace(field)} .delete input[type='checkbox']").live('click', function() {
+      $(this).parents('.input').first().children('.toggle').toggle('slow');
+    });
