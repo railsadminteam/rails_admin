@@ -27,6 +27,10 @@ module RailsAdmin
             text
           end
 
+          register_instance_option(:pretty_value) do
+            bindings[:view].truncate(formatted_value.to_s, :length => 60)
+          end
+
           register_instance_option(:html_attributes) do
             {
               :class => "#{css_class} #{has_errors? ? "errorField" : nil} #{color? ? 'color' : nil}",
