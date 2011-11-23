@@ -12,7 +12,7 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 [Yehuda Katz](https://github.com/wycats),
 [Luke van der Hoeven](https://github.com/plukevdh), and [Rein Henrichs](https://github.com/reinh).
 
-## Features
+## <a name="features"></a>Features
 
 * Display database tables
 * Create new data
@@ -31,7 +31,7 @@ http://rails-admin-tb.herokuapp.com
 
 * ActiveRecord
 
-## <a name="support">Support</a>
+## <a name="support"></a>Support
 If you have a question, you can ask the [official RailsAdmin mailing
 list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
 [#railsadmin on
@@ -44,13 +44,13 @@ issue](https://github.com/sferik/rails_admin#issues)
 No feature requests or questions please (the mailing list is active).
 See at the bottom of this README for contributing.
 
-## <a name="screenshots">Screenshots</a>
+## <a name="screenshots"></a>Screenshots
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "Dashboard view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "List view")
 ![Edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/edit.png "Edit view")
 ![Export view](https://github.com/sferik/rails_admin/raw/master/screenshots/export.png "Export view")
 
-## <a name="installation">Installation</a>
+## <a name="installation"></a>Installation
 In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
@@ -104,7 +104,7 @@ If you still have issue with the asset pipeline:
 * remove old assets with `bundle exec rake assets:clean` when in development
 * read thoroughly the [Rails Guide](http://guides.rubyonrails.org/asset_pipeline.html)
 
-## <a name="usage">Usage</a>
+## <a name="usage"></a>Usage
 Start the server:
 
     $ rails server
@@ -112,7 +112,7 @@ Start the server:
 You should now be able to administer your site at
 [http://localhost:3000/admin](http://localhost:3000/admin).
 
-## <a name="configuration">Configuration</a>
+## <a name="configuration"></a>Configuration
 RailsAdmin provides its out of the box administrative interface by inspecting your application's
 models and following some Rails conventions. For a more tailored experience, it also provides a
 configuration DSL which allows you to customize many aspects of the interface.
@@ -524,7 +524,6 @@ Empty filters can be displayed in the list view:
       end
     end
 
-
 **Fields - Visibility and ordering**
 
 By default all fields are visible, but they are not presented in any particular
@@ -657,7 +656,6 @@ options are defined for a single field, `strftime_format` has precedence over
 `date_format` option. For more information about localizing Rails see
 [Rails Internationalization API](http://edgeguides.rubyonrails.org/i18n.html#adding-date-time-formats)
 and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
-
 
 ### Create and update views
 
@@ -1201,7 +1199,7 @@ Or even scope it like this:
       end
     end
 
-## <a name="authorization">Authorization</a>
+## <a name="authorization"></a>Authorization
 
 `:attr_accessible` and `:attr_protected` are taken into account: restricted fields are not editable (read_only).
 If you whitelist attributes, don't forget to whitelist accessible associations' 'id' methods as well : `division_id`, `player_ids`, `commentable_type`, `commentable_id`, etc.
@@ -1231,8 +1229,6 @@ If you don't want read_only fields to be visible in your forms:
       end
     end
 
-
-
 Authorization can be added using the `authorize_with` method. If you pass a block
 it will be triggered through a before filter on every action in Rails Admin.
 
@@ -1251,7 +1247,7 @@ with [CanCan](https://github.com/ryanb/cancan), pass it like this.
 
 See the [wiki](https://github.com/sferik/rails_admin/wiki) for more on authorization.
 
-## <a name="contributing">Contributing</a>
+## <a name="contributing"></a>Contributing
 In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
 
 Here are some ways *you* can contribute:
@@ -1268,7 +1264,7 @@ Here are some ways *you* can contribute:
 * by reviewing patches
 * [financially](http://pledgie.com/campaigns/15917)
 
-## <a name="issues">Submitting an Issue</a>
+## <a name="issues"></a>Submitting an Issue
 We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues) to track bugs and
 features. Before submitting a bug report or feature request, check to make sure it hasn't already
 been submitted. You can indicate support for an existing issue by voting it up. When submitting a
@@ -1276,7 +1272,7 @@ bug report, please include a [Gist](https://gist.github.com/) that includes a st
 details that may be necessary to reproduce the bug, including your gem version, Ruby version, and
 operating system. Ideally, a bug report should include a pull request with failing specs.
 
-## <a name="pulls">Submitting a Pull Request</a>
+## <a name="pulls"></a>Submitting a Pull Request
 1. Fork the project.
 2. Create a topic branch.
 3. Implement your feature or bug fix.  *NOTE* - there's a small test app located in the spec/dummy_app directory that you can use to experiment with rails_admin.
@@ -1287,7 +1283,7 @@ operating system. Ideally, a bug report should include a pull request with faili
 8. Commit and push your changes.
 9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. (If you want to create your own version for some reason, please do so in a separate commit.)
 
-## <a name="rubies">Supported Rubies</a>
+## <a name="versions"></a>Supported Ruby Versions
 This library aims to support and is [tested
 against](http://travis-ci.org/sferik/rails_admin) the following Ruby
 implementations:
