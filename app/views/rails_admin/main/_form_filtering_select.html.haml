@@ -33,16 +33,18 @@
 = javascript_tag do
   :plain
     jQuery(function($) {
-      $("##{field.dom_id}").filteringSelect({
-        xhr: #{xhr},
-        createQuery: function(query) {
-          return { query: query }
-        },
-        remote_source: "#{index_path(config.abstract_model.to_param, :source_object_id => form.object.id, :source_abstract_model => source_abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}"
-      });
-      if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-        $("##{field.dom_id}_field .btn").hide();
-      } else {
-        $("##{field.dom_id}_field").remoteForm();
+      if(!$("##{form.dom_id(field)}").parents(".fields_blueprint").length) {
+        $("##{form.dom_id(field)}").filteringSelect({
+          xhr: #{xhr},
+          createQuery: function(query) {
+            return { query: query }
+          },
+          remote_source: "#{index_path(config.abstract_model.to_param, :source_object_id => form.object.id, :source_abstract_model => source_abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}"
+        });
+        if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
+          $("##{form.dom_id(field)}_field .btn").hide();
+        } else {
+          $("##{form.dom_id(field)}_field").remoteForm();
+        }
       }
     });

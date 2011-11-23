@@ -3,5 +3,7 @@
 = javascript_tag do
   :plain
     jQuery(function($) {
-      $("##{field.dom_id}").datetimepicker(#{field.js_plugin_options.html_safe});
+      if(!$("##{form.dom_id(field)}").parents(".fields_blueprint").length) {
+        $("##{form.dom_id(field)}").datetimepicker(#{field.js_plugin_options.html_safe});
+      }
     });

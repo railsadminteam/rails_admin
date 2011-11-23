@@ -49,14 +49,6 @@ module RailsAdmin
           nil
         end
 
-        register_instance_option(:read_only) do
-          role = bindings[:view].controller.send(:_attr_accessible_role)
-          klass = bindings[:object].class
-          whitelist = klass.accessible_attributes(role).map(&:to_s)
-          blacklist = klass.protected_attributes(role).map(&:to_s)
-          self.method_name.to_s.in?(blacklist) || (whitelist.any? ? !self.method_name.to_s.in?(whitelist) : false)
-        end
-
         register_instance_option(:truncated?) do
           ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
         end
@@ -169,15 +161,6 @@ module RailsAdmin
           :form_field
         end
 
-        register_deprecated_instance_option(:show_partial, :partial) # deprecated on 2011-07-15
-        register_deprecated_instance_option(:edit_partial, :partial) # deprecated on 2011-07-15
-        register_deprecated_instance_option(:create_partial, :partial) # deprecated on 2011-07-15
-        register_deprecated_instance_option(:update_partial, :partial) # deprecated on 2011-07-15
-
-        register_instance_option(:render) do
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
-        end
-
         # Accessor for whether this is field is mandatory.
         #
         # @see RailsAdmin::AbstractModel.properties
@@ -198,6 +181,23 @@ module RailsAdmin
         register_instance_option(:view_helper) do
           @view_helper ||= self.class.instance_variable_get("@view_helper")
         end
+        
+        register_instance_option :read_only do
+          not editable
+        end
+        
+        def editable
+          return false if @properties && @properties[:read_only]
+          role = bindings[:view].controller.send(:_attr_accessible_role)
+          klass = bindings[:object].class
+          whitelist = klass.accessible_attributes(role).map(&:to_s)
+          blacklist = klass.protected_attributes(role).map(&:to_s)
+          !self.method_name.to_s.in?(blacklist) && (whitelist.any? ? self.method_name.to_s.in?(whitelist) : true)
+        end
+        
+        def render
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
+        end
 
         # Is this an association
         def association?
@@ -207,12 +207,6 @@ module RailsAdmin
         # Reader for validation errors of the bound object
         def errors
           bindings[:object].errors[name]
-        end
-
-        # Reader whether the bound object has validation errors
-        def has_errors?
-          # TODO DEPRECATE, USELESS
-          errors.present?
         end
 
         # Reader whether field is optional.
@@ -248,20 +242,6 @@ module RailsAdmin
         # Reader for field's value
         def value
           bindings[:object].safe_send(name)
-        end
-
-        # Reader for field's name
-        def dom_name
-          @dom_name ||= "#{bindings[:form].object_name}#{(index = bindings[:form].options[:index]) && "[#{index}]"}[#{method_name}]"
-        end
-
-        # Reader for field's id
-        def dom_id
-          @dom_id ||= [
-            bindings[:form].object_name.sub('][', '_').sub(']', '').sub('[', '_'),
-            bindings[:form].options[:index],
-            method_name
-          ].reject(&:blank?).join('_')
         end
 
         def method_name

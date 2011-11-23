@@ -12,7 +12,6 @@ class Team < ActiveRecord::Base
 
   belongs_to :division
   has_many :players, :inverse_of => :team
-  accepts_nested_attributes_for :players
   has_and_belongs_to_many :fans
   has_many :comments, :as => :commentable
 

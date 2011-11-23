@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rails', '~> 3.1'
   gem.add_dependency 'remotipart', '~> 1.0'
   gem.add_dependency 'rack-pjax'
-  gem.add_dependency 'bbenezech-nested_form'
+  gem.add_dependency 'bbenezech-nested_form', '~> 0.0.2'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'carrierwave'
   gem.add_development_dependency 'devise'

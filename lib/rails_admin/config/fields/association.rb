@@ -93,7 +93,7 @@ module RailsAdmin
         
         # Reader for nested attributes
         def nested_form
-          @nesting = bindings[:object].class.nested_attributes_options.try { |o| o[self.name] }
+          association[:nested_form]
         end
 
         # Reader for the association's value unformatted

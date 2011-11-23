@@ -5,14 +5,14 @@ module RailsAdmin
     include ::NestedForm::BuilderMixin
     
     def render action, model_config = @template.instance_variable_get(:@model_config), nested = false
-      model_config.send(action).with(:form => self, :object => self.object, :view => @template).visible_groups.map do |fieldset|
+      model_config.send(action).with(:form => self, :object => @object, :view => @template).visible_groups.map do |fieldset|
         fieldset_for fieldset
       end.join.html_safe +
       (nested ? '' : @template.render(:partial => 'submit_buttons'))
     end
 
     def fieldset_for fieldset
-      if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => self.object, :view => @template) }.select(&:visible?)).length > 0
+      if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => @object, :view => @template) }.select(&:visible?)).length > 0
         @template.content_tag :fieldset do
           @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : '')) +
           fields.map{ |field| field_wrapper_for(field) }.join.html_safe
@@ -21,7 +21,7 @@ module RailsAdmin
     end
 
     def field_wrapper_for field
-      @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => field.dom_id + '_field') do
+      @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => dom_id(field) + '_field') do
         label(field.method_name, field.label) +
         input_for(field)
       end
@@ -47,8 +47,20 @@ module RailsAdmin
       if field.read_only
         field.pretty_value.to_s.html_safe
       else
-        field.render.html_safe
+        field.render
       end
+    end
+    
+    def dom_id field
+      (@dom_id ||= {})[field.name] ||= [
+        @object_name.sub('][', '_').sub(']', '').sub('[', '_'),
+        options[:index],
+        field.method_name
+      ].reject(&:blank?).join('_')
+    end
+    
+    def dom_name field
+      (@dom_name ||= {})[field.name] ||= "#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Types::HasManyAssociation) ? '[]' : ''}"
     end
   end
 end

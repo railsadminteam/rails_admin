@@ -865,7 +865,7 @@ Other example of completely override rendering logic is:
 
 In `app/views/rails_admin/main/_yes_no.html.erb`
 
-    <div class="field <%= field.dom_id %>">
+    <div class="field <%= form.dom_id(field) %>">
       <%= form.label field.method_name, field.label %>
       <%= form.send :radio_button, field.name, "Y" %>
 

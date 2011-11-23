@@ -26,7 +26,7 @@
       this.element.hide();
 
       if (this.options.showTime) {
-        this.timepicker = $('<input type="text" value="' + this.options.timepicker.value + '" />');
+        this.timepicker = $('<input class="TIMEPICKER" type="text" value="' + this.options.timepicker.value + '" />');
 
         this.timepicker.css("width", "60px");
 

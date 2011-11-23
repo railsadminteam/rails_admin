@@ -6,21 +6,23 @@
 = javascript_tag do
   :plain
     jQuery(function($) {
-      var input = $('##{ field.dom_id }')
-      input.css('backgroundColor', '#' + input.val());
-      input.ColorPicker({
-        color: input.val(),
-        onShow: function (el) {
-          $(el).fadeIn(500);
-        	return false;
-        },
-        onHide: function (el) {
-        	$(el).fadeOut(500);
-          return false;
-        },
-        onChange: function (hsb, hex, rgb) {
-          input.val(hex);
-          input.css('backgroundColor', '#' + hex);
-        }
-      });
+      if(!$("##{form.dom_id(field)}").parents(".fields_blueprint").length) {
+        var input = $('##{ form.dom_id(field) }')
+        input.css('backgroundColor', '#' + input.val());
+        input.ColorPicker({
+          color: input.val(),
+          onShow: function (el) {
+            $(el).fadeIn(500);
+          	return false;
+          },
+          onHide: function (el) {
+          	$(el).fadeOut(500);
+            return false;
+          },
+          onChange: function (hsb, hex, rgb) {
+            input.val(hex);
+            input.css('backgroundColor', '#' + hex);
+          }
+        });
+      }
     });
