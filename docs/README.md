@@ -30,3 +30,6 @@
 * [[Associations scoping]]
 * [[How to set default values]]
 
+## Plugins
+
+* [Coordinates with Google Maps](https://github.com/jasonl/rails_admin_map_field)
