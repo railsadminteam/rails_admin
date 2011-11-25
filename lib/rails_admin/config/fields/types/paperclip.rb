@@ -24,6 +24,14 @@ module RailsAdmin
             end
           end
           
+          register_instance_option(:sortable) do
+            "#{name}_file_name"
+          end
+          
+          register_instance_option(:searchable) do
+            "#{name}_file_name"
+          end
+          
           def resource_url(thumb = false)
             value.try(:url, (thumb || :original))
           end

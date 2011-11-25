@@ -20,6 +20,14 @@ module RailsAdmin
           register_instance_option(:cache_method) do
             "#{name}_cache"
           end
+          
+          register_instance_option(:sortable) do
+            name
+          end
+          
+          register_instance_option(:searchable) do
+            name
+          end
 
           def resource_url(thumb = false)
             return nil unless (uploader = bindings[:object].send(name)).present?

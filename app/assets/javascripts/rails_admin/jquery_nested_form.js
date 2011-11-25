@@ -6,19 +6,11 @@ jQuery(function($) {
 
   NestedFormEvents.prototype = {
     addFields: function(e) {
-      // Setup
       var link    = e.currentTarget;
       var assoc   = $(link).attr('data-association');            // Name of child
       var content = $('#' + assoc + '_fields_blueprint').html(); // Fields template
-
-      // Make the context correct by replacing new_<parents> with the generated ID
-      // of each of the parent objects
       var context = ($(link).closest('.fields').find('input:first').attr('name') || '').replace(new RegExp('\[[a-z]+\]$'), '');
 
-      // context will be something like this for a brand new form:
-      // project[tasks_attributes][new_1255929127459][assignments_attributes][new_1255929128105]
-      // or for an edit form:
-      // project[tasks_attributes][0][assignments_attributes][1]
       if (context) {
         var parentNames = context.match(/[a-z_]+_attributes/g) || [];
         var parentIds   = context.match(/(new_)?[0-9]+/g) || [];
@@ -48,19 +40,15 @@ jQuery(function($) {
       return false;
     },
     insertFields: function(content, assoc, link) {
-      return $(content).insertBefore(link);
+      return $(content).insertBefore(link).hide().show('slow');
     },
     removeFields: function(e) {
       var link = e.currentTarget;
+      $(link).toggleClass('important').toggleClass('notice');
       var hiddenField = $(link).prev('input[type=hidden]');
-      hiddenField.val('1');
-      // if (hiddenField) {
-      //   $(link).v
-      //   hiddenField.value = '1';
-      // }
-      var field = $(link).closest('.fields');
-      field.hide();
-      $(link).closest("form").trigger({ type: 'nested:fieldRemoved', field: field });
+      hiddenField.val(hiddenField.val() === '1' ? '0' : '1');
+      var field = $(link).closest('.fields').find('fieldset');
+      field.toggle();
       return false;
     }
   };

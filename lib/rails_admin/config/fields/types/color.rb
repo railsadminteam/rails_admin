@@ -8,7 +8,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
           
           register_instance_option :pretty_value do
-            bindings[:view].content_tag :strong, value.to_s, :style => "color: #{color}"
+            bindings[:view].content_tag :strong, (value.presence || ' - '), :style => "color: #{color}"
           end
 
           register_instance_option :partial do

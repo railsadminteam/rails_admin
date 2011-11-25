@@ -11,9 +11,22 @@
   }
 }
 
+blockquote hr {
+  margin-left: -15px;
+}
+
+a.label {
+  color:white;
+  text-decoration:none;
+}
+
 /* We want input size to be used, unfixate input width */
 input, textarea {
   width:auto;
+}
+
+input[type=file] {
+  display:block;
 }
 
 /* ui-autocomplete has z-index 1 and is shown over filtering select button (.add-on) */
