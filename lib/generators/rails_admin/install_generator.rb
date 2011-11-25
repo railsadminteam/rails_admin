@@ -25,7 +25,8 @@ module RailsAdmin
       display "Checking for a current installation of devise..."
       unless defined?(Devise)
         display "Adding devise gem to your Gemfile:"
-        append_file "Gemfile", "\ngem 'devise'\n", :verbose => false
+        append_file "Gemfile", "\n"
+        gem 'devise'
       else
         display "Found it!"
       end
