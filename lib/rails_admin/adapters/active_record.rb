@@ -267,6 +267,9 @@ module RailsAdmin
           when 'more_than'
             return if value.blank?
             [2000.years.ago, value.to_i.days.ago]
+          when 'mmddyyyy'
+            return if (value.blank? || value.match(/([0-9]{8})/).nil?)
+            [Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').beginning_of_day, Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').end_of_day]
           end
           ["(#{column} BETWEEN ? AND ?)", *values]
         when :enum
