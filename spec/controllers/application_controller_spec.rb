@@ -5,6 +5,15 @@ describe RailsAdmin::ApplicationController do
     it "handles classes nested in modules of the same name" do
       controller.to_model_name("conversations~conversations").should eq("Conversations::Conversation")
     end
+    
+    it "should convert with singularity" do
+      controller.to_model_name_with_singularize("conversations~conversations").should eq("Conversations::Conversation")
+    end
+    
+    it "should convert without singularity" do
+      controller.to_model_name_without_singularize("conversations~conversations").should eq("Conversations::Conversations")
+    end
+    
   end
   
   describe "helper method _get_plugin_name" do
