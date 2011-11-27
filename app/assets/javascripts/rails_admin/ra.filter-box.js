@@ -33,7 +33,7 @@
             '<option data-additional-fieldset="false"' + (field_operator == "_not_null"  ? 'selected="selected"' : '') + ' value="_not_null">Is present</option>' +
             '<option data-additional-fieldset="false"' + (field_operator == "_null"    ? 'selected="selected"' : '') + ' value="_null" >Is blank</option>' +
           '</select>'
-          var additional_control = '<input class="additional-fieldset span2 " style="display:' + (field_operator == "less_than" || field_operator == "more_than" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          var additional_control = '<input class="additional-fieldset span2 " style="display:' + (field_operator == "less_than" || field_operator == "more_than" || field_operator == "mmddyyyy" ? 'block' : 'none') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'enum':
           var field_options = $('<div/>').html(field_options).text(); // entities decode
