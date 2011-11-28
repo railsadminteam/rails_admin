@@ -1,4 +1,3 @@
-- label = field.associated_model_config.abstract_model.pretty_name.downcase
 - form.object.send("build_#{field.name}") unless form.object.send(field.name)
 = form.fields_for field.name do |nested_form|
   %blockquote

@@ -18,7 +18,7 @@ module RailsAdmin
           end
           
           def editable
-            not(nested_form || abstract_model.model.instance_methods.include?("#{self.name}_id=")) && super
+            (nested_form || abstract_model.model.new.respond_to?("#{self.name}_id=")) && super
           end
           
           def selected_id
