@@ -20,7 +20,7 @@ module RailsAdmin
 
     def to_model_name(param)
       model_name = to_model_name_with_singularize(param)
-      presented_model_name?(model_name)?  model_name : to_model_name_without_singularize(param)
+      presented_model_name?(model_name) ? model_name : to_model_name_without_singularize(param)
     end
 
     def to_model_name_without_singularize(param)
