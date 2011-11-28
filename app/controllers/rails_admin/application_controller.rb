@@ -19,11 +19,25 @@ module RailsAdmin
     end
 
     def to_model_name(param)
+      model_name = to_model_name_with_singularize(param)
+      presented_model_name?(model_name)? ? model_name : to_model_name_without_singularize(param)
+    end
+    
+    def to_model_name_without_singularize(param)
+      parts = param.split("~")
+      parts.map(&:camelize).join("::")
+    end
+    
+    def to_model_name_with_singularize(param)
       parts = param.split("~")
       parts[-1] = parts.last.singularize
       parts.map(&:camelize).join("::")
     end
-
+    
+    def presented_model_name?(model_name)
+      !RailsAdmin::AbstractModel.lookup(model_name).nil?
+    end
+    
     def get_object
       @object = @abstract_model.get(params[:id])
       not_found unless @object
