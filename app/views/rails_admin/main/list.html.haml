@@ -130,7 +130,7 @@
                 - other_left = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i - 1))
                 %td.other.left{ :style => "#{'display: none' if @other.include?("left")}" }= link_to "...", other_left, :remote => true
                 - properties.map{|property| property.bind(:object, object)}.each do |property|
-                  %td{:class => "#{property.css_class}"}= ([:text, :string].include?(property.type) && property.truncated?) ? property.pretty_value.truncate(40) : property.pretty_value
+                  %td{:class => "#{property.css_class}"}= property.pretty_value
                 - other_right = rails_admin_list_path(params.except("set").merge(:model_name => @abstract_model.to_param, :set => params[:set].to_i + 1))
                 %td.other.right{ :style => "#{'display: none' if @other.include?("right")}" }= link_to "...", other_right, :remote => true
                 %td.last
