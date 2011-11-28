@@ -6,7 +6,7 @@
   sort_reverse = params[:sort_reverse]
   sort = params[:sort]
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
-  
+
   properties = @model_config.list.with(:view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
@@ -19,7 +19,7 @@
     field_name = filter.is_a?(Array) ? filter.first : filter
   (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "value" => '' } }) .each do |index, filter_hash|
       unless filter_hash['disabled']
-        memo[index] = { field_name => filter_hash } 
+        memo[index] = { field_name => filter_hash }
       else
         params[:f].delete(field_name)
       end
@@ -78,7 +78,7 @@
             - if can_bulk_action
               %input.checkbox.toggle{:type => "checkbox"}
           - if other_left
-            %th.other.left.shrink= "..." 
+            %th.other.left.shrink= "..."
           - properties.each do |property|
             - selected = (sort == property.name.to_s)
             - if property.sortable

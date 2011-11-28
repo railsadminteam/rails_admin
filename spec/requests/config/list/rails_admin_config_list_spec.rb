@@ -123,7 +123,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      
+
       find("th:nth-child(2)").should have_content("Modified His Name")
       find("th:nth-child(3)").should have_content("Modified Id")
     end
@@ -137,7 +137,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      
+
       find("th:nth-child(2)").should have_content("Id")
       find("th:nth-child(3)").should have_content("Created at")
       find("th:nth-child(4)").should have_content("Updated at")
@@ -154,7 +154,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      
+
       find("th:nth-child(2)").should have_content("Updated at")
       find("th:nth-child(3)").should have_content("His Name")
       find("th:nth-child(4)").should have_content("Id")

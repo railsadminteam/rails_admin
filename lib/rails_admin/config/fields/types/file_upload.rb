@@ -6,15 +6,15 @@ module RailsAdmin
       module Types
         class FileUpload < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types::register(self)
-          
+
           register_instance_option(:partial) do
             :form_file_upload
           end
-          
+
           register_instance_option(:thumb_method) do
             nil
           end
-          
+
           register_instance_option(:delete_method) do
             nil
           end
@@ -22,7 +22,7 @@ module RailsAdmin
           register_instance_option(:cache_method) do
             nil
           end
-          
+
           register_instance_option(:export_value) do
             resource_url.to_s
           end
@@ -39,7 +39,7 @@ module RailsAdmin
               end
             end
           end
-          
+
           register_instance_option :image? do
             (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
           end

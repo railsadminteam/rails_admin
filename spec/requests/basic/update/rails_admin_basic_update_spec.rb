@@ -84,7 +84,7 @@ describe "RailsAdmin Basic Update" do
     it "should be fillable and emptyable" do
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
-    
+
       page.driver.put update_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
 
       @league.reload
@@ -96,7 +96,7 @@ describe "RailsAdmin Basic Update" do
       RailsAdmin::History.where(:item => @league.id).collect(&:message).should include("Added Divisions ##{@divisions[0].id} associations, Changed name")
 
       page.driver.put update_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
-      
+
       @league.reload
       @league.divisions.should be_empty
       RailsAdmin::History.where(:item => @league.id).collect(&:message).should include("Removed Divisions ##{@divisions[0].id} associations")

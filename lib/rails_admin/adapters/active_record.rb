@@ -36,7 +36,7 @@ module RailsAdmin
         end
         @@polymorphic_parents[name.to_sym]
       end
-            
+
       def get(id)
         if object = model.where(model.primary_key => id).first
           RailsAdmin::AbstractObject.new object
@@ -67,7 +67,7 @@ module RailsAdmin
       def scoped
         model.scoped
       end
-            
+
       def create(params = {})
         model.create(params)
       end
@@ -152,7 +152,7 @@ module RailsAdmin
       def model_store_exists?
         model.table_exists?
       end
-      
+
       def get_conditions_hash(model_config, query, filters)
         @like_operator =  "ILIKE" if ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
         @like_operator ||= "LIKE"
@@ -204,7 +204,7 @@ module RailsAdmin
          conditions[0] += " AND " unless conditions == [""]
          conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
         end
-      
+
         conditions += values
         conditions != [""] ? { :conditions => conditions } : {}
       end
@@ -276,7 +276,7 @@ module RailsAdmin
           return if value.blank?
           ["(#{column} IN (?))", [value].flatten]
         end
-      end      
+      end
 
       def association_options(association)
         if association.options[:polymorphic]

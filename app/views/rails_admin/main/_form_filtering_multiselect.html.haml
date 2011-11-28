@@ -9,13 +9,13 @@
   end
   selected_ids = selected.map(&:id)
 
-  
+
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
 
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
-  
+
   xhr = !field.associated_collection_cache_all
-  
+
   collection = if xhr
     selected.map { |o| [o.send(config.object_label_method), o.id] }
   else

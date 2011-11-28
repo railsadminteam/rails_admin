@@ -36,11 +36,11 @@ module RailsAdmin
         register_instance_option(:css_class) do
           "#{self.name}_field"
         end
-        
+
         def type_css_class
           "#{type}_type"
         end
-        
+
         def virtual?
           properties.blank?
         end
@@ -60,7 +60,7 @@ module RailsAdmin
         register_instance_option(:truncated?) do
           ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
         end
-        
+
         register_instance_option(:sortable) do
           !virtual?
         end

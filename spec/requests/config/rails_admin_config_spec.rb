@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL" do
 
   subject { page }
-  
+
   describe "configure" do
     it "should configure without changing the section default list" do
       RailsAdmin.config Team do
@@ -17,7 +17,7 @@ describe "RailsAdmin Config DSL" do
       fields.find{|f| f.name == :name }.label.should == "Renamed"
       fields.count.should >= 19 # not 1
     end
-    
+
     it "should not change the section list if set" do
       RailsAdmin.config Team do
         edit do
@@ -107,7 +107,7 @@ describe "RailsAdmin Config DSL" do
       RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end
   end
-  
+
   describe "css_class" do
     it "should have a default and be user customizable" do
       RailsAdmin.config Team do
@@ -143,7 +143,7 @@ describe "RailsAdmin Config DSL" do
       should have_css(".born_on_field")
     end
   end
-  
+
   describe "searchable and sortable" do
     it 'should be false if column is virtual, true otherwise' do
       RailsAdmin.config League do
@@ -157,7 +157,7 @@ describe "RailsAdmin Config DSL" do
       RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.searchable.should == true
     end
   end
-  
+
   describe "virtual?" do
     it 'should be true if column has no properties, false otherwise' do
       RailsAdmin.config League do

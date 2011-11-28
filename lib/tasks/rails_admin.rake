@@ -9,7 +9,7 @@ namespace :rails_admin do
   task :install do
     system 'rails g rails_admin:install'
   end
-  
+
   desc "Uninstall rails_admin"
   task :uninstall do
     system 'rails g rails_admin:uninstall'

@@ -34,7 +34,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       @field_test.restricted_field.should == "I'm allowed to do that as :custom_role only"
     end
   end
-  
+
   describe "css hooks" do
     it "should be present" do
       visit new_path(:model_name => "team")
@@ -147,7 +147,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit new_path(:model_name => "team")
         find("#team_name_field .help-block").should have_content("Length up to 50.")
       end
-      
+
 # FIXME validates_length_of are leaking in FactoryGirl WTF?
 
       it "should use the :is setting from the validation" do

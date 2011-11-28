@@ -9,12 +9,12 @@ module RailsAdmin
       return "warning" if percent < 84  # < 1/3 of max
       return "important"                # > 1/3 of max
     end
-    
+
     def get_column_sets(properties)
       sets = []
       property_index = 0
       set_index = 0
-      
+
       while (property_index < properties.length)
         current_set_width = 0
         begin

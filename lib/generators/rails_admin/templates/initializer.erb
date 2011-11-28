@@ -2,13 +2,13 @@
 # See github.com/sferik/rails_admin for more informations
 
 RailsAdmin.config do |config|
-  
+
   # If your default_local is different from :en, uncomment the following 2 lines and set your default locale here:
   # require 'i18n'
   # I18n.default_locale = :de
-  
+
   config.current_user_method { current_<%= @model_name %> } # auto-generated
-  
+
   # Set the admin name here (optional second array element will appear in a beautiful RailsAdmin red ©)
   config.main_app_name = ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin']
   # or for a dynamic name:
@@ -119,9 +119,9 @@ RailsAdmin.config do |config|
   #     # Here goes the fields configuration for the update view, overriding edit section settings
   #   end
   # end
-  
+
   # Your model's configuration, to help you get started:
-  
+
   # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible.
   # There can be different reasons for that:
   #  - belongs_to _id and _type (polymorphic) columns are hidden in favor of their associations
@@ -131,15 +131,15 @@ RailsAdmin.config do |config|
   #  - non-editable columns (:id, :created_at, ..) in edit sections
   #  - has_many/has_one associations in list section (hidden by default for performance reasons)
   # Fields may also be marked as read_only (and thus not editable) if they are not mass-assignable by current_user
-  
+
 <% RailsAdmin::AbstractModel.all.map do |abstract_model| -%>
   # config.model <%= abstract_model.model.model_name %> do
   #   # Found associations:
-<%= RailsAdmin.config(abstract_model).export.fields.select{|f| f.association?}.map do |field| 
+<%= RailsAdmin.config(abstract_model).export.fields.select{|f| f.association?}.map do |field|
 %{  #     field #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
 end.join("\n") -%>
   #   # Found columns:
-<%= RailsAdmin.config(abstract_model).export.fields.select{|f| !f.association?}.map do |field| 
+<%= RailsAdmin.config(abstract_model).export.fields.select{|f| !f.association?}.map do |field|
 %{  #     field #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
 end.join("\n") -%>
   #   # Sections:

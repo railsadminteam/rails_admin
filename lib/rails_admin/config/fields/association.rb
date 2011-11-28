@@ -45,7 +45,7 @@ module RailsAdmin
         register_instance_option(:label) do
           @label ||= abstract_model.model.human_attribute_name association[:name]
         end
-        
+
         # scope for possible associable records
         register_instance_option :associated_collection_scope do
           # bindings[:object] & bindings[:controller] available
@@ -60,7 +60,7 @@ module RailsAdmin
         register_instance_option :associated_collection_cache_all do
           @associated_collection_cache_all ||= (associated_model_config.abstract_model.count < 100)
         end
-        
+
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association[:child_model])

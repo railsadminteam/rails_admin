@@ -22,13 +22,13 @@ module RailsAdmin
           properties = parent.abstract_model.properties.find {|p| name == p[:name] }
           field = (@fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
-        
+
         # If field has not been yet defined add some default properties
         if add_to_section && !field.defined
           field.defined = true
           field.order = @fields.select(&:defined).length
         end
-        
+
         # If a block has been given evaluate it and sort fields after that
         if block
           field.instance_eval &block
@@ -36,7 +36,7 @@ module RailsAdmin
         end
         field
       end
-      
+
       # configure a field without adding it.
       def configure(name, type = nil, &block)
         field(name, type, false, &block)

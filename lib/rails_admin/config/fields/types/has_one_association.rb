@@ -11,7 +11,7 @@ module RailsAdmin
           register_instance_option(:partial) do
             :form_filtering_select
           end
-          
+
           # Accessor for field's formatted value
           register_instance_option(:formatted_value) do
             (o = value) && o.send(associated_model_config.object_label_method)

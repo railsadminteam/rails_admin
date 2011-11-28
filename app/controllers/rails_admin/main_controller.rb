@@ -16,7 +16,7 @@ module RailsAdmin
 
       @history= History.all
       @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
-      
+
       @most_recent_changes = {}
       @count = {}
       @max = 0
@@ -230,7 +230,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
       @objects = list_entries(@model_config, :destroy)
       not_found and return if @objects.empty?
-      
+
       render :action => 'bulk_delete'
     end
 
@@ -238,7 +238,7 @@ module RailsAdmin
       @authorization_adapter.authorize(:bulk_destroy, @abstract_model) if @authorization_adapter
       @objects = list_entries(@model_config, :destroy)
       processed_objects = @abstract_model.destroy(@objects)
-      
+
       destroyed = processed_objects.select(&:destroyed?)
       not_destroyed = processed_objects - destroyed
 
@@ -256,17 +256,17 @@ module RailsAdmin
       end
 
       redirect_to index_path
-    end    
-    
+    end
+
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all]))
       scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
       scope = model_config.abstract_model.scoped.merge(scope)
       scope = scope.instance_eval(&additional_scope) if additional_scope
       get_collection(model_config, scope, pagination)
     end
-    
+
     private
-    
+
     def get_sort_hash(model_config)
       abstract_model = model_config.abstract_model
       params[:sort] = params[:sort_reverse] = nil unless model_config.list.with(:view => self, :object => abstract_model.model.new).visible_fields.map {|f| f.name.to_s}.include? params[:sort]
@@ -294,7 +294,7 @@ module RailsAdmin
       {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
     end
 
-    
+
     def get_attributes
       @attributes = params[@abstract_model.to_param.singularize.gsub('~','_')] || {}
       @attributes.each do |key, value|
@@ -306,7 +306,7 @@ module RailsAdmin
         @attributes[key] = nil if value.blank?
       end
     end
-    
+
     def redirect_to_on_success
       notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{params[:action]}d"))
       if params[:_add_another]
@@ -329,11 +329,11 @@ module RailsAdmin
         format.js   { render whereto, :layout => false, :status => :not_acceptable  }
       end
     end
-    
+
     def check_for_cancel
       redirect_to index_path, :flash => { :warning => t("admin.flash.noaction") } if params[:_continue]
     end
-    
+
     def get_collection(model_config, scope, pagination)
       associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = {}
@@ -342,10 +342,10 @@ module RailsAdmin
       options = options.merge(get_sort_hash(model_config)) unless params[:associated_collection]
       options = options.merge(model_config.abstract_model.get_conditions_hash(model_config, params[:query], params[:f])) if (params[:query].present? || params[:f].present?)
       options = options.merge(:bulk_ids => params[:bulk_ids]) if params[:bulk_ids]
-      
+
       objects = model_config.abstract_model.all(options, scope)
     end
-    
+
     def get_association_scope_from_params
       return nil unless params[:associated_collection].present?
       source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
@@ -355,7 +355,7 @@ module RailsAdmin
       association = source_model_config.send(action).fields.find{|f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
       association.associated_collection_scope
     end
-    
+
     def associations_hash
       associations = {}
       @abstract_model.associations.each do |association|

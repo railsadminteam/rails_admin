@@ -10,13 +10,13 @@
     selected_id = field.selected_id
     selected_name = field.formatted_value
   end
-  
+
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
-  
+
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''
-  
+
   xhr = !field.associated_collection_cache_all
-  
+
   collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(config.object_label_method), o.id] }
 
 = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes.reverse_merge({:placeholder => t('admin.index.search')})
