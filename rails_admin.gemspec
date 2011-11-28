@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'builder', '~> 3.0'
   gem.add_dependency 'coffee-rails', '~> 3.1'
   gem.add_dependency 'haml', '~> 3.1'
-  gem.add_dependency 'jquery-rails', '~> 1.0.17'
+  gem.add_dependency 'jquery-rails', '~> 1.0.19'
   gem.add_dependency 'kaminari', '~> 0.12.4'
   gem.add_dependency 'rails', '~> 3.1'
   gem.add_dependency 'remotipart', '~> 1.0'

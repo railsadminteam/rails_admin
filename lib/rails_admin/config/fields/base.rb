@@ -91,22 +91,23 @@ module RailsAdmin
           else
             [self.searchable].flatten.map do |f|
               if f.is_a?(String) && f.include?('.')                            #  table_name.column
-                @table_name, @column = f.split '.'
+                table_name, column = f.split '.'
+                type = nil
               elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
                 am = AbstractModel.new(f.keys.first.to_s.classify)
-                @table_name = am && am.model.table_name || f.keys.first
-                @column = f.values.first
+                table_name = am && am.model.table_name || f.keys.first
+                column = f.values.first
                 property = am && am.properties.find{ |p| p[:name] == f.values.first.to_sym }
-                @type = property && property[:type]
+                type = property && property[:type]
               else                                                             #  <attribute|column>
                 am = (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
-                @table_name = am.model.table_name
-                @column = f
+                table_name = am.model.table_name
+                column = f
                 property = am.properties.find{ |p| p[:name] == f.to_sym }
-                @type = property && property[:type]
+                type = property && property[:type]
               end
 
-              { :column => "#{@table_name}.#{@column}", :type => (@type || :string) }
+              { :column => "#{table_name}.#{column}", :type => (type || :string) }
             end
           end
         end

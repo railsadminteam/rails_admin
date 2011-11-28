@@ -262,6 +262,7 @@ module RailsAdmin
       scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
       scope = model_config.abstract_model.scoped.merge(scope)
       scope = scope.instance_eval(&additional_scope) if additional_scope
+      
       get_collection(model_config, scope, pagination)
     end
     
