@@ -11,7 +11,7 @@ class Team < ActiveRecord::Base
   # for a nested form: 
    
     accepts_nested_attributes_for :fans, :allow_destroy => true
-    attr_accessible :fans_attributes, :allow_destroy => true
+    attr_accessible :fans_attributes
 
 end
 
