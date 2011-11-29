@@ -1,4 +1,3 @@
-
 RailsAdmin provides its out of the box administrative interface by inspecting your application's
 models and following some Rails conventions. For a more tailored experience, it also provides a
 configuration DSL which allows you to customize many aspects of the interface.
@@ -11,44 +10,54 @@ The configuration will be executed at startup time, once. (dev & production)
 Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
 You can force it (true or false):
 
-    SKIP_RAILS_ADMIN_INITIALIZER=false rake mytask
+`SKIP_RAILS_ADMIN_INITIALIZER=false rake mytask`
 
 ### General
 
 Set the application name:
 
-    RailsAdmin.config do |config|
-      config.main_app_name = ["Cool app", "BackOffice"]
-    end
-    # or somethig more dynamic
-    RailsAdmin.config do |config|
-      config.main_app_name = Proc.new { |controller| [ "Cool app", "BackOffice - #{controller.params[:action].try(:titleize)}" ] }
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.main_app_name = ["Cool app", "BackOffice"]
+end
+# or somethig more dynamic
+RailsAdmin.config do |config|
+  config.main_app_name = Proc.new { |controller| [ "Cool app", "BackOffice - #{controller.params[:action].try(:titleize)}" ] }
+end
+```
 
 You can customize authentication by providing a custom block for `RailsAdmin.authenticate_with`.
 To disable authentication, pass an empty block:
 
-    RailsAdmin.config do |config|
-      config.authenticate_with {}
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.authenticate_with {}
+end
+```
 
 You can exclude models from RailsAdmin by appending those models to `excluded_models`:
 
-    RailsAdmin.config do |config|
-      config.excluded_models << "ClassName"
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.excluded_models << "ClassName"
+end
+```
 
 You can display empty fields in show view with:
 
-    RailsAdmin.config do |config|
-      config.compact_show_view = false
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.compact_show_view = false
+end
+```
 
 You can customize the width of the list view with:
 
-    RailsAdmin.config do |config|
-      config.total_columns_width = 1000
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.total_columns_width = 1000
+end
+```
 
 **Whitelist Approach**
 
@@ -57,17 +66,20 @@ be accessible through RailsAdmin. The `excluded_models` configuration above perm
 
 If you prefer a whitelist approach, then you can use the `included_models` configuration option instead:
 
-    RailsAdmin.config do |config|
-      config.included_models = ["Class1", "Class2", "Class3"]
-    end
-
+```ruby
+RailsAdmin.config do |config|
+  config.included_models = ["Class1", "Class2", "Class3"]
+end
+```
 Only the models explicitly listed will be put under RailsAdmin access, and the auto-discovery of models is skipped.
 
 The blacklist is effective on top of that, still, so that if you also have:
 
-    RailsAdmin.config do |config|
-      config.excluded_models = ["Class1"]
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.excluded_models = ["Class1"]
+end
+```
 
 then only `Class2` and `Class3` would be made available to RailsAdmin.
 
@@ -80,11 +92,13 @@ sure that new models are not automatically added to RailsAdmin, e.g. because of 
 
 If you need to customize the label of the model, use:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        label "List of teams"
-      end
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    label "List of teams"
+  end
+end
+```
 
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
 Dashboard page, list pages, etc.
@@ -98,7 +112,9 @@ By default it tries to call "name" or "title" methods on the record in question.
 then the label will be constructed from the model's classname appended with its
 database identifier. You can add label methods (or replace the default [:name, :title]) with:
 
-    RailsAdmin.config {|c| c.label_methods << :description}
+```ruby
+RailsAdmin.config {|c| c.label_methods << :description}
+```
 
 This `object_label_method` value is used in a number of places in RailsAdmin--for instance for the
 output of belongs to associations in the listing views of related models, for
@@ -107,17 +123,19 @@ related models and for part of the audit information stored in the history
 records--so keep in mind that this configuration option has widespread
 effects.
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        object_label_method do
-          :custom_label_method
-        end
-      end
-
-      def custom_label_method
-        "Team #{self.name}"
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    object_label_method do
+      :custom_label_method
     end
+  end
+
+  def custom_label_method
+    "Team #{self.name}"
+  end
+end
+```
 
 *Difference between `label` and `object_label`*
 
@@ -139,19 +157,23 @@ as false:
 
 By passing the value as an argument:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        visible false
-      end
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    visible false
+  end
+end
+```
 
 Or by passing a block that will be lazy evaluated each time the option is read:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        visible { false }
-      end
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    visible { false }
+  end
+end
+```
 
 These two examples also work as a generic example of how most of the
 configuration options function within RailsAdmin. You can pass a value as an
@@ -163,17 +185,19 @@ you want to get the Team model's visibility, you use
 
 **Create a navigation_label in navigation**
 
-    # Given there are the following models: League, Team and Division
+```ruby
+# Given there are the following models: League, Team and Division
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        parent League
-      end
+RailsAdmin.config do |config|
+  config.model Team do
+    parent League
+  end
 
-      config.model Division do
-        parent League
-      end
-    end
+  config.model Division do
+    parent League
+  end
+end
+```
 
 Obtained navigation:
 
@@ -190,11 +214,13 @@ This can be easily achieved with the 'navigation_label' method of the parent mod
 
 Added to previous example:
 
-    RailsAdmin.config do |config|
-      config.model League do
-        navigation_label 'League related'
-      end
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    navigation_label 'League related'
+  end
+end
+```
 
 Obtained navigation:
 
@@ -216,50 +242,42 @@ menu subset. (but parent will always be first inside his submenu).
 
 Example:
 
-    RailsAdmin.config do |config|
-      config.model League do
-        navigation_label 'League related'
-        weight -1
-      end
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    navigation_label 'League related'
+    weight -1
+  end
+end
+```
 
 The 'League related' navigation label will move to the topmost position.
 
-
 ### List view ###
-
-* Number of items per page
-* Number of items per page per model
-* Default sorting
-  * Configure globally
-  * Configure per model
-* Fields
-  * Visibility and ordering
-  * Label
-  * Output formatting
-  * Sortability
-  * Column CSS class
-  * Column width
 
 **Number of items per page**
 
 You can configure the default number of rows rendered per page:
 
-    RailsAdmin.config do |config|
-      config.default_items_per_page = 50
-    end
+```ruby
+RailsAdmin.config do |config|
+  config.default_items_per_page = 50
+end
+```
 
 **Number of items per page per model**
 
 You can also configure it per model:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          items_per_page 100
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      items_per_page 100
     end
+  end
+end
+```
 
 **Default sorting**
 
@@ -269,25 +287,29 @@ You can change default behavior with use two options: `sort_by` and `sort_revers
 
 **Default sorting - Configure globally**
 
-    RailsAdmin.config do |config|
-      config.models do
-        list do
-          sort_by :updated_at
-          sort_reverse true # already default for serials ids and dates
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.models do
+    list do
+      sort_by :updated_at
+      sort_reverse true # already default for serials ids and dates
     end
+  end
+end
+```
 
 **Default sorting - Configure per model**
 
-    RailsAdmin.config do |config|
-      config.model Player do
-        list do
-          sort_by :name
-          sort_reverse false
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.model Player do
+    list do
+      sort_by :name
+      sort_reverse false
     end
+  end
+end
+```
 
 **Fields - Sortability**
 
@@ -298,58 +320,65 @@ Belongs_to associations :
   otherwise on the foreign_key (:team_id)
   you can also specify a column on the targetted table (see example) (3)
 
-    RailsAdmin.config do |config|
-      config.model Player do
-        list do
-          field :created_at do # (1)
-            sortable false
-          end
-          field :name do # (2)
-            sortable :last_name # imagine there is a :last_name column and that :name is virtual
-          end
-          field :team do # (3)
-            # Will order by players playing with the best teams,
-            # rather than the team name (by default),
-            # or the team id (dull but default if object_label is not a column name)
-
-            sortable :win_percentage
-
-            # if you need to specify the join association name:
-            # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
-            sortable {:teams => :win_percentage}
-            # or
-            sortable "teams.win_percentage"
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Player do
+    list do
+      field :created_at do # (1)
+        sortable false
       end
+      field :name do # (2)
+       sortable :last_name # imagine there is a :last_name column and that :name is virtual
+      end
+      field :team do # (3)
+        # Will order by players playing with the best teams,
+        # rather than the team name (by default),
+        # or the team id (dull but default if object_label is not a column name)
+
+        sortable :win_percentage
+
+        # if you need to specify the join association name:
+        # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
+        sortable {:teams => :win_percentage}
+        # or
+        sortable "teams.win_percentage"
+       end
     end
+  end
+end
+```
 
 Default sort column is :id for ActiveRecord version
 To change it:
-    RailsAdmin.config do |config|
-      config.model Team do
-        sort_by :name
-      end
-    end
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    sort_by :name
+  end
+end
+```
 
 By default, dates and serial ids are reversed when first-sorted ('desc' instead of 'asc' in SQL).
 If you want to reverse (or cancel it) the default sort order (first column click or the default sort column):
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :id do
-            sort_reverse? false   # will sort id increasing ('asc') first ones first (default is last ones first)
-          end
-          field :created_at do
-            sort_reverse? false   # will sort dates increasing ('asc') first ones first (default is last ones first)
-          end
-          field :name do
-            sort_reverse? true    # will sort name decreasing ('dec') z->a (default is a->z)
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :id do
+        sort_reverse? false   # will sort id increasing ('asc') first ones first (default is last ones first)
+      end
+      field :created_at do
+        sort_reverse? false   # will sort dates increasing ('asc') first ones first (default is last ones first)
+      end
+      field :name do
+        sort_reverse? true    # will sort name decreasing ('dec') z->a (default is a->z)
       end
     end
+  end
+end
+```
 
 **Fields - Searchability**
 
@@ -361,44 +390,47 @@ Belongs_to associations :
   or on their label if label is not virtual (:name, :title, etc.)
   you can also specify columns on the targetted table or the source table (see example) (4)
 
-    RailsAdmin.config do |config|
-      config.model Player do
-        list do
-          field :created_at do # (1)
-            searchable false
-          end
+```ruby
+RailsAdmin.config do |config|
+  config.model Player do
+    list do
+      field :created_at do # (1)
+        searchable false
+      end
 
-          field :name do (2)
-            searchable :last_name
-          end
-          # OR
-          field :name do (3)
-            searchable [:first_name, :last_name]
-          end
+      field :name do (2)
+        searchable :last_name
+      end
+      # OR
+      field :name do (3)
+        searchable [:first_name, :last_name]
+      end
 
-          field :team do # (4)
-            searchable [:name, :id]
-            # eq. to [Team => :name, Team => :id]
-            # or even [:name, Player => :team_id] will search on teams.name and players.team_id
-
-            # if you need to specify the join association name:
-            # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
-            searchable [{:teams => :name}, {:teams => :id}]
-            # or
-            searchable ["teams.name", "teams.id"]
-          end
-        end
+      field :team do # (4)
+        searchable [:name, :id]
+        # eq. to [Team => :name, Team => :id]
+        # or even [:name, Player => :team_id] will search on teams.name and players.team_id
+        # if you need to specify the join association name:
+        # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html => table_aliasing)
+        searchable [{:teams => :name}, {:teams => :id}]
+        # or
+        searchable ["teams.name", "teams.id"]
       end
     end
+  end
+end
+```
 
 Searchable definitions will be used for searches and filters.
 You can independently deactivate querying (search) or filtering for each field with:
 
-    field :team do
-      searchable [:name, :color]
-      queryable true # default
-      filterable false
-    end
+```ruby
+field :team do
+  searchable [:name, :color]
+  queryable true # default
+  filterable false
+end
+```
 
 Empty filters can be displayed in the list view:
 
@@ -544,19 +576,6 @@ options are defined for a single field, `strftime_format` has precedence over
 and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale).
 
 ### Create and update views
-
-* Form rendering
-* Field groupings
-  * Visibility
-  * Labels
-  * Syntax
-* Fields
-  * Rendering
-  * Overriding field type
-  * Available field types
-  * Creating a custom field type
-  * Creating a custom field factory
-  * Overriding field help texts
 
 **Form rendering**
 
@@ -811,28 +830,6 @@ left out:
 A word of warning, if you make field declarations for the same field a number
 of times with a type defining second argument in place, the type definition
 will ditch the old field configuration and load a new field instance in place.
-
-**Fields - Available field types**
-
-RailsAdmin ships with the following field types:
-
-* belongs_to_association
-* boolean
-* date
-* datetime
-* decimal
-* paperclip/dragonfly/carrierwave *(see Wiki for configuration)*
-* float
-* has_and_belongs_to_many_association
-* has_many_association
-* has_one_association
-* integer
-* password *(initializes if string type column's name is password)*
-* string
-* enum *(see Wiki for configuration)*
-* text
-* time
-* timestamp
 
 **Fields - Creating a custom field type**
 
