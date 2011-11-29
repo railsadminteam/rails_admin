@@ -62,6 +62,6 @@ RailsAdmin.config |config| do
 end
 ```
 
-Note: has_many :through associations are not considered any differently from vanilla has_many association. In particular, no special help is provided to edit join table attributes; you can edit indifferently the join-table or the target table.
+Note: `has_many :through` associations are not considered any differently from vanilla `has_many` association. In particular, no special help is provided to edit join table attributes; you can edit indifferently the join-table or the target table.
 
 [[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
