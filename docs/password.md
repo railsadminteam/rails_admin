@@ -1,0 +1,1 @@
+Initializes automatically when field =~ password
