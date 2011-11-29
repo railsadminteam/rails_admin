@@ -12,7 +12,6 @@ class Team < ActiveRecord::Base
    
     accepts_nested_attributes_for :fans, :allow_destroy => true
     attr_accessible :fans_attributes
-
 end
 
 # for info
