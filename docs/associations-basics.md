@@ -2,7 +2,7 @@
 
 For `has_many/has_and_belongs_to_many/has_many :through`
 
-Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
+Orderable can be enabled on filtering multiselect fields, allowing selected options to be moved up/down.
 
 RailsAdmin will handle ordering in and out of the form.
 
