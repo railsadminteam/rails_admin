@@ -57,5 +57,6 @@ See status of https://github.com/thomas-mcdonald/bootstrap-sass/issues/14
 ***
 
 **Kaminari vs Will_paginate** errors
+
 They are not really compatible at the moment. If you find a fix, please provide.
 See: https://github.com/gregbell/active_admin/issues/330
