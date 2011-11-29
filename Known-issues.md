@@ -1,10 +1,15 @@
-### Locale is being forced to :en whereas `config.i18n.default_locale = :de`
+### Locale is being forced to `:en` whereas config.i18n.default_locale = `:de`
 
 Reason: RailsAdmin DSL needs access to locale before default_locale being set by application.rb
 
 See: https://github.com/sferik/rails_admin/issues/746
 
 Workaround: add `I18n.default_locale = :de` inside RailsAdmin's initializer (before model configs)
+
+
+### `to_xs` failure when exporting records to xml with ruby != 1.9.x
+
+Check Rails bug status here: https://github.com/rails/rails/pull/2076
 
 
 ### Asset pipeline
