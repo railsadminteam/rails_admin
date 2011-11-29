@@ -12,7 +12,7 @@
 
 ## Associations types
 
-* [[belongs_to association]]
+* [[belongs_to association|Belongs-to-association]]
   * [[polymorphic belongs_to association]]
 * [[has_one association]]
 * [[has_many association]]
