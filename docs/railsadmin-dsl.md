@@ -865,9 +865,15 @@ end
 
 ** Fields - exclude some fields **
 
-By default *all* fields found on your model will be added to list/edit/export views,
-with a few exceptions for polymorphic columns and such.
-You can exclude specific fields with exclude_fields & exclude_fields_if:
+By default *all* fields found on your model will be added to list/edit/export views,  if no field is found for the section and model.
+
+But after you specify your *first* field with `field(field_name, field_type = found_column_type, &conf_block)` or `include_field` or `fields`, this behaviour will be canceled.
+
+*Only* the specified fields will be added.
+If you don't want that very behavior, use `configure` instead of `field` (same signature).
+That way, that field won't be added to the section, just configured.
+
+Once in `add specified fields` mode, you can exclude some specific fields with exclude_fields & exclude_fields_if:
 
 Example:
 
@@ -885,8 +891,8 @@ RailsAdmin.config do |config|
 end
 ```
 
-But after you specify your *first* field, this behaviour will be canceled.
-*Only* the specified fields will be added.
+Be careful, if you exclude fields before anything is added, this will instead add all other fields, which might not be what you expect (especially since fields ordering will be frozen). See https://github.com/sferik/rails_admin/issues/859 for an example.
+
 But you can then use include_all_fields to add all default fields:
 
 Example:
