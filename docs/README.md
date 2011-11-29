@@ -5,13 +5,12 @@
 
 ### Configuration
 
-[[RailsAdmin DSL]]
+* [[RailsAdmin DSL]]
 
 
 ### Field types
 
-[[Fields basics]]
-
+* [[Fields basics]]
 * [[File Upload]]
   * [[Paperclip]]
   * [[Dragonfly]]
@@ -29,8 +28,7 @@
 
 ### Associations types
 
-[[Associations basics]]
-
+* [[Associations basics]]
 * [[belongs_to association|Belongs-to-association]]
   * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
 * [[has_one association|Has-one-association]]
