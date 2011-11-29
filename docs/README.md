@@ -2,6 +2,11 @@
 
 [[Troubleshot, check me first!|Known issues]]
 
+
+## Configuration
+
+[[RailsAdmin DSL]]
+
 ## Field types
 
 [[Fields basics]]
