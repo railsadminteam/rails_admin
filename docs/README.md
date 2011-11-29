@@ -10,6 +10,15 @@
   * [[Carrierwave]]
 * [[Enumeration]]
 
+## Associations types
+
+* [[belongs_to association]]
+  * [[polymorphic belongs_to association]]
+* [[has_one association]]
+* [[has_many association]]
+  * [[has_and_belongs_to_many association]]
+  * [[has_many :through association]]
+
 ## Authorization
 
 * [[CanCan]]
