@@ -11,7 +11,7 @@ class Grid < ActiveRecord::Base
   def block_ids=(ids)
     unless (ids = ids.map(&:to_i).select{|i|i>0}) == (current_ids = block_grid_associations.map(&:block_id))
       (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
-      self.blocks = ids.map_with_index do |id, index|
+      self.blocks = ids.each_with_index.map do |id, index|
         if current_ids.include?(id)
           (block_association = block_grid_associations.select{|b|b.block_id == id}.first).position = (index+1)
           block_association
