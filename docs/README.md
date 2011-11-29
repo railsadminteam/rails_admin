@@ -33,6 +33,7 @@
 
 ## Authorization
 
+* [[Mass-assignments protection]]
 * [[CanCan]]
 * [[Customized authorization]]
 * [[Declarative Authorization]]
