@@ -34,3 +34,5 @@ It will also hide the inverse relation on nested forms. As a good practice, you 
 ### Readonly
 
 :readonly options are automatically inferred on associations fields and won't be editable in forms.
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
