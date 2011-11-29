@@ -13,3 +13,5 @@ class Article < ActiveRecord::Base
   attr_accessible :asset, :remove_asset, :retained_asset
 end
 ```
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/dragonfly.rb]]
