@@ -17,6 +17,7 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
 You'll need to handle ordering in your model with a position column for example. See [[here|Has-many-%3Athrough-association]] for a comprehensive ActiveRecord example with a `has_many :through` association.
 
 ### Multiselect
