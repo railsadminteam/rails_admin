@@ -25,19 +25,12 @@ Empty milestone's tickets in Github.
 
 ### Docs
 - document all field types and all relations types with their specificities against Field::Base
-- remove deprecations
 
 ### `has_many`, `has_one`
-- make possible to use nested forms instead of widget/modal
 - offer the possibility to fetch only non-associated records if sticking to widget (make it configurable).
-- drop hackish ActiveRecord support for has_many style `has\_one` or improve it to current quality standards
 
 ### `has_many :through`, `habtm`
-- re-add prepopulation for widget keeping concistancy with xhr
 - find a solution for mobile devices (currently not intuitive)
-
-### `belongs_to`
-- re-add prepolation keeping concistancy with xhr
 
 ### Groups
 - better defaults (one group for each relation is dumb and group legend is repeated uselessly in field legend)
