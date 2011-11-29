@@ -4,6 +4,8 @@
 
 ## Field types
 
+[[Fields basics]]
+
 * [[File Upload]]
   * [[Paperclip]]
   * [[Dragonfly]]
@@ -17,8 +19,6 @@
   * [[password]]
 * [[text]]
 * [[timestamp/date/datetime/time]]
-
-[[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/base.rb]]
 
 ## Associations types
 
