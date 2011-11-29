@@ -44,12 +44,6 @@ issue](https://github.com/sferik/rails_admin#issues)
 No feature requests or questions please (the mailing list is active).
 See at the bottom of this README for contributing.
 
-## <a name="screenshots"></a>Screenshots
-![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "dashboard view")
-![Delete view](https://github.com/sferik/rails_admin/raw/master/screenshots/delete.png "delete view")
-![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "list view")
-![Nested view](https://github.com/sferik/rails_admin/raw/master/screenshots/nested.png "nested view")
-![Polymophic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
 
 ## <a name="installation"></a>Installation
 In your `Gemfile`, add the following dependencies:
@@ -132,3 +126,10 @@ implementations:
 * Ruby 1.9.2
 * Ruby 1.9.3
 * [Rubinius](http://rubini.us)
+
+## <a name="screenshots"></a>Screenshots
+![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "dashboard view")
+![Delete view](https://github.com/sferik/rails_admin/raw/master/screenshots/delete.png "delete view")
+![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "list view")
+![Nested view](https://github.com/sferik/rails_admin/raw/master/screenshots/nested.png "nested view")
+![Polymophic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
