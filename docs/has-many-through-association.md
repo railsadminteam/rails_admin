@@ -21,6 +21,16 @@ class Grid < ActiveRecord::Base
       end.map(&:block)
     end
   end
+
+  # for a multiselect widget: (natural choice for n-n associations)
+
+    attr_accessible :block_ids
+
+  # for a nested form: 
+   
+    accepts_nested_attributes_for :blocks, :allow_destroy => true
+    attr_accessible :blocks_attributes
+
 end
 
 # for info
