@@ -11,3 +11,5 @@ end
 ```
 
 Field will be detected, and a file upload field will be added to your model's form.
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/carrierwave.rb]]
