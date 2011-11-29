@@ -78,7 +78,6 @@ Check this README and the wiki first.
 If you think you found a bug in RailsAdmin, you can [submit an
 issue](https://github.com/sferik/rails_admin#issues)
 No feature requests or questions please (the mailing list is active).
-See at the bottom of this README for contributing.
 
 ## <a name="contributing"></a>Contributing
 In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
