@@ -7,7 +7,6 @@ class Player < ActiveRecord::Base
   # for nested fields: (natural choice for a belongs_to association)
 
     attr_accessible :draft_attributes
-   
     accepts_nested_attributes_for :draft, :allow_destroy => true
 
   # or if you want a dropdown select: 
