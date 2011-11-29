@@ -72,10 +72,6 @@ RailsAdmin.config do |config|
   #   list do
   #     # Configuration here will affect all included models in list sections (same for show, export, edit, update, create)
   #
-  #     fields :name, :other_name do
-  #       # Configuration here will affect all fields named [:name, :other_name], in the list section, for all included models
-  #     end
-  #
   #     fields_of_type :date do
   #       # Configuration here will affect all date fields, in the list section, for all included models. See README for a comprehensive type list.
   #     end
@@ -136,11 +132,11 @@ RailsAdmin.config do |config|
   # config.model <%= abstract_model.model.model_name %> do
   #   # Found associations:
 <%= RailsAdmin.config(abstract_model).export.fields.select{|f| f.association?}.map do |field|
-%{  #     field #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
+%{  #     configure #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
 end.join("\n") -%>
   #   # Found columns:
 <%= RailsAdmin.config(abstract_model).export.fields.select{|f| !f.association?}.map do |field|
-%{  #     field #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
+%{  #     configure #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
 end.join("\n") -%>
   #   # Sections:
   #   list do; end
