@@ -18,6 +18,8 @@
 * [[text]]
 * [[timestamp/date/datetime/time]]
 
+[[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/base.rb]]
+
 ## Associations types
 
 * [[belongs_to association|Belongs-to-association]]
