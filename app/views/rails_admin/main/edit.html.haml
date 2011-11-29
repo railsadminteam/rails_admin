@@ -1,2 +1,2 @@
-= form_for @object, :url => update_path(@abstract_model, @object.id), :as => ActiveModel::Naming.param_key(@abstract_model.model), :html => { :method => "put", :multipart => true, :data => { :title => @page_name } }, :builder => RailsAdmin::FormBuilder do |form|
-  = form.render :update
+= rails_admin_form_for @object, :url => update_path(@abstract_model, @object.id), :as => ActiveModel::Naming.param_key(@abstract_model.model), :html => { :method => "put", :multipart => true, :data => { :title => @page_name } } do |form|
+  = form.generate :action => :update

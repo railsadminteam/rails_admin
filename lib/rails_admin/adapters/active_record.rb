@@ -7,24 +7,6 @@ module RailsAdmin
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector]
       @@polymorphic_parents = nil
-      def self.extended(abstract_model)
-
-        # ActiveRecord does not handle has_one relationships the way it does for has_many,
-        # and does not create any association_id and association_id= methods.
-        # Added here for backward compatibility after a refactoring, but it does belong to ActiveRecord IMO.
-        # Support is hackish at best. Atomicity is respected for creation, but not while updating.
-        # It means a failed validation at update on the parent object could still modify target belongs_to foreign ids.
-        #
-        #
-        abstract_model.model.reflect_on_all_associations.select{|assoc| assoc.macro.to_s == 'has_one'}.each do |association|
-          abstract_model.model.send(:define_method, "#{association.name}_id") do
-            self.send(association.name).try(:id)
-          end
-          abstract_model.model.send(:define_method, "#{association.name}_id=") do |id|
-            self.send(association.name.to_s + '=', associated = (id.blank? ? nil : association.klass.find_by_id(id)))
-          end
-        end
-      end
 
       def self.polymorphic_parents(name)
         @@polymorphic_parents ||= {}.tap do |hash|
@@ -124,7 +106,8 @@ module RailsAdmin
             :as => association_as_lookup(association),
             :polymorphic => association_polymorphic_lookup(association),
             :inverse_of => association_inverse_of_lookup(association),
-            :read_only => association_read_only_lookup(association)
+            :read_only => association_read_only_lookup(association),
+            :nested_form => association_nested_attributes_options_lookup(association)
           }
         end
       end
@@ -312,6 +295,10 @@ module RailsAdmin
         if association.options[:polymorphic]
           association.options[:foreign_type].try(:to_sym) || :"#{association.name}_type"
         end
+      end
+      
+      def association_nested_attributes_options_lookup(association)
+        model.nested_attributes_options.try { |o| o[association.name.to_sym] }
       end
 
       def association_as_lookup(association)

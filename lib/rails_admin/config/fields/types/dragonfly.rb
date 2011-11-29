@@ -15,8 +15,8 @@ module RailsAdmin
 
           register_instance_option(:image?) do
             false unless value
-            if respond_to?("#{name}_name")
-              super(field.send("#{name}_name"))
+            if abstract_model.model.new.respond_to?("#{name}_name")
+              super(bindings[:object].send("#{name}_name"))
             else
               true # Dragonfly really is image oriented
             end
@@ -39,7 +39,15 @@ module RailsAdmin
           register_instance_option(:thumb_method) do
             "100x100>"
           end
-
+          
+          register_instance_option(:sortable) do
+            "#{name}_name" if abstract_model.model.new.respond_to?("#{name}_name")
+          end
+          
+          register_instance_option(:searchable) do
+            "#{name}_name" if abstract_model.model.new.respond_to?("#{name}_name")
+          end
+          
           def resource_url(thumb = false)
             return nil unless (v = value)
             thumb ? v.thumb(thumb).try(:url) : v.url

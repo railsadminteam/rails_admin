@@ -1,2 +1,2 @@
-= form_for @object, :url => create_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :multipart => true, :data => { :title => @page_name } }, :builder => RailsAdmin::FormBuilder do |form|
-  = form.render :create
+= rails_admin_form_for @object, :url => create_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => { :multipart => true, :data => { :title => @page_name } } do |form|
+  = form.generate :action => :create

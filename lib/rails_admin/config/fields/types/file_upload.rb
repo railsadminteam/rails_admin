@@ -26,9 +26,17 @@ module RailsAdmin
           register_instance_option(:export_value) do
             resource_url.to_s
           end
+          
+          register_instance_option(:searchable) do
+            false
+          end
+          
+          register_instance_option(:sortable) do
+            false
+          end
 
           register_instance_option(:pretty_value) do
-            if value.presence && (errors.blank? || cache_method)
+            if value.presence
               v = bindings[:view]
               url = resource_url
               if image?
@@ -37,13 +45,16 @@ module RailsAdmin
               else
                 v.link_to(nil, url, :target => 'blank')
               end
+            else
+              ' - '
             end
           end
 
           register_instance_option :image? do
             (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
           end
-
+          
+          # virtual class
           def resource_url
             raise 'not implemented'
           end

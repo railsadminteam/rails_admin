@@ -9,7 +9,15 @@ class Player < ActiveRecord::Base
 
   belongs_to :team, :inverse_of => :players
   has_one :draft, :dependent => :destroy
+  
   has_many :comments, :as => :commentable
-
   attr_protected :suspended
+  
+  def draft_id
+    self.draft.try :id
+  end
+  
+  def draft_id=(id)
+    self.draft = Draft.find_by_id(id)
+  end
 end

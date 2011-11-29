@@ -23,7 +23,15 @@ module RailsAdmin
               v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil]
             end
           end
-
+          
+          register_instance_option(:sortable) do
+            "#{name}_file_name"
+          end
+          
+          register_instance_option(:searchable) do
+            "#{name}_file_name"
+          end
+          
           def resource_url(thumb = false)
             value.try(:url, (thumb || :original))
           end

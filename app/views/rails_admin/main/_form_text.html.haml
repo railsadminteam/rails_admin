@@ -1,13 +1,9 @@
 = form.send field.view_helper, field.method_name, field.html_attributes
 
 - if field.ckeditor
-  -# needed for modal windows
   = javascript_tag do
     var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
   = javascript_include_tag "/javascripts/ckeditor/ckeditor.js"
-  = javascript_tag do
-    jQuery(function($) {
-    if(!$("#modal").length){
-    CKEDITOR.replace('#{field.dom_id}', { customConfig : '#{field.ckeditor_config_js.html_safe}' });
-    }
-    });
+  = form.javascript_for(field, :modal => false) do
+    :plain
+      CKEDITOR.replace('#{form.js_namespace(field)} textarea', { customConfig : '#{field.ckeditor_config_js.html_safe}' });

@@ -6,6 +6,6 @@ class Draft < ActiveRecord::Base
   validates_numericality_of(:pick, :only_integer => true)
   validates_numericality_of(:overall, :only_integer => true)
 
-  belongs_to(:team)
-  belongs_to(:player)
+  belongs_to :team
+  belongs_to :player
 end

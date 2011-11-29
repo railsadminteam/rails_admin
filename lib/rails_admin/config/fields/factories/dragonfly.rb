@@ -10,6 +10,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
       if props = parent.abstract_model.properties.find {|p| "#{attachment_name}_#{it}" == p[:name].to_s }
         RailsAdmin::Config::Fields.default_factory.call(parent, props, fields)
         fields.last.hide
+        fields.last.filterable(false)
       end
     end
     fields << RailsAdmin::Config::Fields::Types::Dragonfly.new(parent, attachment_name, properties)

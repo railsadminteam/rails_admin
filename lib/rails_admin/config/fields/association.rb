@@ -90,6 +90,11 @@ module RailsAdmin
         def polymorphic?
           association[:polymorphic]
         end
+        
+        # Reader for nested attributes
+        def nested_form
+          association[:nested_form]
+        end
 
         # Reader for the association's value unformatted
         def value

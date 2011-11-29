@@ -36,11 +36,11 @@ module RailsAdmin
         register_instance_option(:css_class) do
           "#{self.name}_field"
         end
-
+        
         def type_css_class
           "#{type}_type"
         end
-
+        
         def virtual?
           properties.blank?
         end
@@ -49,18 +49,10 @@ module RailsAdmin
           nil
         end
 
-        register_instance_option(:read_only) do
-          role = bindings[:view].controller.send(:_attr_accessible_role)
-          klass = bindings[:object].class
-          whitelist = klass.accessible_attributes(role).map(&:to_s)
-          blacklist = klass.protected_attributes(role).map(&:to_s)
-          self.method_name.to_s.in?(blacklist) || (whitelist.any? ? !self.method_name.to_s.in?(whitelist) : false)
-        end
-
         register_instance_option(:truncated?) do
           ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
         end
-
+        
         register_instance_option(:sortable) do
           !virtual?
         end
@@ -94,28 +86,28 @@ module RailsAdmin
           when false
             []
           when :all # valid only for associations
-            self.associated_model_config.list.fields.map { |f| { :column => "#{self.associated_model_config.abstract_model.model.table_name}.#{f.name}", :type => f.type } }
+            table_name = self.associated_model_config.abstract_model.model.table_name
+            self.associated_model_config.list.fields.map { |f| { :column => "#{table_name}.#{f.name}", :type => f.type } }
           else
             [self.searchable].flatten.map do |f|
-              if f.is_a?(String) && f.include?('.')                            #  "table_name.attribute"
-                @table_name, column_name = f.split '.'
-                f = column_name.to_sym
+              if f.is_a?(String) && f.include?('.')                            #  table_name.column
+                table_name, column = f.split '.'
+                type = nil
+              elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
+                am = AbstractModel.new(f.keys.first.to_s.classify)
+                table_name = am && am.model.table_name || f.keys.first
+                column = f.values.first
+                property = am && am.properties.find{ |p| p[:name] == f.values.first.to_sym }
+                type = property && property[:type]
+              else                                                             #  <attribute|column>
+                am = (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
+                table_name = am.model.table_name
+                column = f
+                property = am.properties.find{ |p| p[:name] == f.to_sym }
+                type = property && property[:type]
               end
 
-              field_name = f.is_a?(Hash) ? f.values.first : f
-
-              abstract_model = if f.is_a?(Hash) && (f.keys.first.is_a?(Class) || f.keys.first.is_a?(String)) #  { Model => :attribute } || { "Model" => :attribute }
-                AbstractModel.new(f.keys.first)
-              elsif f.is_a?(Hash)                                            #  { :table_name => :attribute }
-                @table_name = f.keys.first.to_s
-                (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
-              else                                                           #  :attribute
-                (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
-              end
-
-              property = abstract_model.properties.find{ |p| p[:name] == field_name }
-              raise ":#{field_name} attribute not found/not accessible on table :#{abstract_model.model.table_name}. \nPlease check '#{self.abstract_model.pretty_name}' configuration for :#{self.name} attribute." unless property
-              { :column => "#{@table_name || abstract_model.model.table_name}.#{property[:name]}", :type => property[:type] }
+              { :column => "#{table_name}.#{column}", :type => (type || :string) }
             end
           end
         end
@@ -126,7 +118,7 @@ module RailsAdmin
 
         # output for pretty printing (show, list)
         register_instance_option(:pretty_value) do
-          formatted_value
+          formatted_value.presence || ' - '
         end
 
         # output for printing in export view (developers beware: no bindings[:view] and no data!)
@@ -169,15 +161,6 @@ module RailsAdmin
           :form_field
         end
 
-        register_deprecated_instance_option(:show_partial, :partial) # deprecated on 2011-07-15
-        register_deprecated_instance_option(:edit_partial, :partial) # deprecated on 2011-07-15
-        register_deprecated_instance_option(:create_partial, :partial) # deprecated on 2011-07-15
-        register_deprecated_instance_option(:update_partial, :partial) # deprecated on 2011-07-15
-
-        register_instance_option(:render) do
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
-        end
-
         # Accessor for whether this is field is mandatory.
         #
         # @see RailsAdmin::AbstractModel.properties
@@ -198,6 +181,23 @@ module RailsAdmin
         register_instance_option(:view_helper) do
           @view_helper ||= self.class.instance_variable_get("@view_helper")
         end
+        
+        register_instance_option :read_only do
+          not editable
+        end
+        
+        def editable
+          return false if @properties && @properties[:read_only]
+          role = bindings[:view].controller.send(:_attr_accessible_role)
+          klass = bindings[:object].class
+          whitelist = klass.accessible_attributes(role).map(&:to_s)
+          blacklist = klass.protected_attributes(role).map(&:to_s)
+          !self.method_name.to_s.in?(blacklist) && (whitelist.any? ? self.method_name.to_s.in?(whitelist) : true)
+        end
+        
+        def render
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
+        end
 
         # Is this an association
         def association?
@@ -207,12 +207,6 @@ module RailsAdmin
         # Reader for validation errors of the bound object
         def errors
           bindings[:object].errors[name]
-        end
-
-        # Reader whether the bound object has validation errors
-        def has_errors?
-          # TODO DEPRECATE, USELESS
-          errors.present?
         end
 
         # Reader whether field is optional.
@@ -249,19 +243,14 @@ module RailsAdmin
         def value
           bindings[:object].safe_send(name)
         end
-
-        # Reader for field's name
-        def dom_name
-          @dom_name ||= "#{bindings[:form].object_name}#{(index = bindings[:form].options[:index]) && "[#{index}]"}[#{method_name}]"
+        
+        # Reader for nested attributes
+        def nested_form
+          false
         end
-
-        # Reader for field's id
-        def dom_id
-          @dom_id ||= [
-            bindings[:form].object_name,
-            bindings[:form].options[:index],
-            method_name
-          ].reject(&:blank?).join('_')
+        
+        def inverse_of
+          nil
         end
 
         def method_name
