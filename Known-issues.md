@@ -42,8 +42,9 @@ If you still have issue with the asset pipeline:
 
 * make sure you are using latest Rails 3.1 and Sprockets release
 * Some css/js assets are not meant to be compiled alone:
- * make sure you don't have any catch-all *.css in `config.assets.precompile`. Some scss assets are not meant to be compiled alone.
- * make sure you don't have any catch-all `require_tree .` in application.(css|js). * copy all asset related configuration from application.rb and environment/*.rb files from a fresh (`rails new dummy`) rails app
+ * make sure you don't have any catch-all *.(css|js) in `config.assets.precompile`
+ * make sure you don't have any catch-all `require_tree .` in application.(css|js)
+* copy all asset related configuration from application.rb and environment/*.rb files from a fresh (`rails new dummy`) rails app
 * remove old assets with `bundle exec rake assets:clean` when in development
 * read thoroughly the [Rails Guide](http://guides.rubyonrails.org/asset_pipeline.html)
 
