@@ -53,6 +53,7 @@ RailsAdmin.config |config| do
     end
 
     configure :blocks do
+      orderable(true) # only for multiselect widget currently. Will add the possibility to order blocks
       # configuration here
     end
   end
