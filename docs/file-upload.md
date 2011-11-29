@@ -25,4 +25,4 @@ field :asset do
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/fileupload.rb]]
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/file_upload.rb]]
