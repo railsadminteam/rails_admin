@@ -32,7 +32,6 @@ class Grid < ActiveRecord::Base
         end.map(&:block)
       end
     end
-
 end
 
 # for info
