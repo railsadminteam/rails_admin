@@ -34,9 +34,10 @@
 ## Authorization
 
 * [[Mass-assignments protection]]
-* [[CanCan]]
-* [[Customized authorization]]
-* [[Declarative Authorization]]
+* [[Authorization setup]]
+  * [[CanCan]]
+  * [[Customized authorization]]
+  * [[Declarative Authorization]]
 
 ## Styling
 
