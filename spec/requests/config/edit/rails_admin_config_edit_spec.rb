@@ -675,6 +675,28 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
     end
   end
+  
+  describe 'nested form' do 
+
+    it 'should work' do
+      RailsAdmin::Config.excluded_models = [RelTest]
+      visit new_path(:model_name => "field_test")
+      fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
+      click_button "Save"
+      @record = RailsAdmin::AbstractModel.new("FieldTest").first
+      @record.comment.content.should == 'nested comment content'
+      @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
+      visit edit_path(:model_name => "field_test", :id => @record.id)
+      fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
+      page.find('#field_test_comment_attributes__destroy').set('true')
+      page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
+      click_button "Save"
+      @record.reload
+      @record.comment.should == nil
+      @record.nested_field_tests.length.should == 1
+      @record.nested_field_tests[0].title.should == 'nested field test title 1 edited'
+    end
+  end
 
   describe "fields which are nullable and have AR validations" do
 

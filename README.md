@@ -203,7 +203,7 @@ If you need to customize the label of the model, use:
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
 Dashboard page, list pages, etc.
 
-**The object_label_method method**
+**The object\_label\_method method**
 
 The model configuration has another option `object_label_method` which configures
 the title display of a single database record, i.e. an instance of a model.
@@ -933,16 +933,16 @@ will ditch the old field configuration and load a new field instance in place.
 
 RailsAdmin ships with the following field types:
 
-* belongs_to_association
 * boolean
 * date
 * datetime
 * decimal
 * paperclip/dragonfly/carrierwave *(see Wiki for configuration)*
 * float
-* has_and_belongs_to_many_association
-* has_many_association
-* has_one_association
+* belongs\_to\_association *(see Wiki for configuration)*
+* has\_and\_belongs\_to\_many\_association *(see Wiki for configuration)*
+* has\_many\_association *(see Wiki for configuration)*
+* has\_one\_association *(see Wiki for configuration)*
 * integer
 * password *(initializes if string type column's name is password)*
 * string
@@ -1041,7 +1041,7 @@ in the modal creation window. (link next to belongs\_to and has\_many widgets)
 * include_fields_if cond
 * include_all_fields
 * fields field_list,  configuration_block
-
+* configure
 
 ** Fields - exclude some fields **
 
