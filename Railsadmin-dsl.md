@@ -434,13 +434,15 @@ end
 
 Empty filters can be displayed in the list view:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          filters [:name, :division]
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      filters [:name, :division]
     end
+  end
+end
+```
 
 **Fields - Visibility and ordering**
 
@@ -448,14 +450,16 @@ By default all fields are visible, but they are not presented in any particular
 order. If you specifically declare fields, only defined fields will be visible
 and they will be presented in the order defined:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name
-          field :created_at
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name
+      field :created_at
     end
+  end
+end
+```
 
 This would show only "name" and "created at" columns in the list view.
 
@@ -463,19 +467,21 @@ If you need to hide fields based on some logic on runtime (for instance
 authorization to view field) you can pass a block for the `visible` option
 (including its `hide` and `show` accessors):
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name
-          field :created_at
-          field :revenue do
-            visible do
-              current_user.roles.include?(:accounting) # metacode
-            end
-          end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name
+      field :created_at
+      field :revenue do
+        visible do
+          current_user.roles.include?(:accounting) # metacode
         end
       end
     end
+  end
+end
+```
 
 Note that above example's authorization conditional is not runnable code, just
 an imaginary example. You need to provide RailsAdmin with your own
@@ -485,18 +491,20 @@ authorization scheme for which you can find a guide at the end of this file.
 
 The header of a list view column can be changed with the familiar label method:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name do
-            label "Title"
-          end
-          field :created_at do
-            label "Created on"
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name do
+        label "Title"
+      end
+      field :created_at do
+        label "Created on"
       end
     end
+  end
+end
+```
 
 As in the previous example this would show only columns for fields "name" and
 "created at" and their headers would have been renamed to "Title" and
@@ -506,26 +514,28 @@ As in the previous example this would show only columns for fields "name" and
 
 The field's output can be modified:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name do
-            formatted_value do # used in form views
-              value.to_s.upcase
-            end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name do
+        formatted_value do # used in form views
+          value.to_s.upcase
+        end
 
-            pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
-              value.titleize
-            end
+        pretty_value do # used in list view columns and show views, defaults to formatted_value for non-association fields
+          value.titleize
+        end
 
-            export_value do
-              value.camelize # used in exports, where no html/data is allowed
-            end
-          end
-          field :created_at
+        export_value do
+          value.camelize # used in exports, where no html/data is allowed
         end
       end
+      field :created_at
     end
+  end
+end
+```
 
 This would render all the teams' names uppercased.
 
@@ -534,18 +544,20 @@ current record instance in key :object and the view instance in key :view.
 Via :object we can access other columns' values and via :view we can access our
 application's view helpers:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name do
-            formatted_value do
-              bindings[:view].tag(:img, { :src => bindings[:object].logo_url }) << value
-            end
-          end
-          field :created_at
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name do
+        formatted_value do
+          bindings[:view].tag(:img, { :src => bindings[:object].logo_url }) << value
         end
       end
+      field :created_at
     end
+  end
+end
+```
 
 This would output the name column prepended with team's logo using the `tag`
 view helper. This example uses `value` method to access the name field's value,
@@ -554,19 +566,21 @@ but that could be written more verbosely as `bindings[:object].name`.
 Fields of different date types (date, datetime, time, timestamp) have two extra
 options to set the time formatting:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        list do
-          field :name
-          field :created_at do
-            date_format :short
-          end
-          field :updated_at do
-            strftime_format "%Y-%m-%d"
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      field :name
+      field :created_at do
+        date_format :short
+      end
+      field :updated_at do
+        strftime_format "%Y-%m-%d"
       end
     end
+  end
+end
+```
 
 This would render all the teams' "created at" dates in the short format of your
 application's locale and "updated at" dates in format YYYY-MM-DD. If both
@@ -598,15 +612,17 @@ create and update views just replace `edit` with `create` or `update`.
 
 Field groups can be hidden:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          group :default do
-            hide
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      group :default do
+        hide
       end
     end
+  end
+end
+```
 
 This would hide the "Basic info" group which is accessed by the symbol :default.
 Associations' groups can be accessed by the name of the association, such as
@@ -617,15 +633,17 @@ option which was mentioned in the beginning of the navigation section.
 
 Field groups can be renamed:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          group :default do
-            label "Team information"
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      group :default do
+        label "Team information"
       end
     end
+  end
+end
+```
 
 This would render "Team information" instead of "Basic info" as the groups label.
 
@@ -633,16 +651,18 @@ This would render "Team information" instead of "Basic info" as the groups label
 
 Field groups can have a set of instructions which is displayed under the label:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          group :default do
-            label "Team information"
-            help "Please fill all informations related to your team..."
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      group :default do
+        label "Team information"
+        help "Please fill all informations related to your team..."
       end
     end
+  end
+end
+```
 
 This content is mostly useful when the admin doign the data entry is not familiar with the system or as a way to display inline documentation.
 
@@ -654,38 +674,39 @@ contain field configurations, but in edit views those configurations can
 also be nested within group configurations. Below examples result an
 equal configuration:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          group :default do
-            label "Default group"
-          end
-          field :name do
-            label "Title"
-            group :default
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      group :default do
+        label "Default group"
+      end
+      field :name do
+        label "Title"
+        group :default
       end
     end
+  end
+end
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          group :default do
-            label "Default group"
-            field :name do
-              label "Title"
-            end
-          end
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      group :default do
+        label "Default group"
+        field :name do
+          label "Title"
         end
       end
     end
+  end
+end
+```
 
 **Important note on label - I18n**
 
 Use association name as translation key for label for association fields.
 If you have :user_id field with a user association, use :user as the attribute
-
 
 In fact the first examples `group :default` configuration is unnecessary
 as the default group has already initialized all fields and belongs to
@@ -711,93 +732,51 @@ hide and show accessors as the list view has.
 The edit view's fields are rendered using partials. Each field type has its own
 partial per default, but that can be overridden:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :name do
-            edit_partial "my_awesome_partial"
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :name do
+        partial "my_awesome_partial"
       end
     end
-
-There is a partial method for each action:
-
-* edit
-* create
-* update
-
-By default, `create` and `update` will render `edit`'s partial.
+  end
+end
+```
 
 The partial should be placed in your applications template folder, such as
 `app/views/rails_admin/main/_my_awesome_partial.html.erb`.
 
 One can also completely override the rendering logic:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :name do
-            render do
-              bindings[:view].render :partial => partial.to_s, :locals => {:field => self}
-            end
-          end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :name do
+        render do
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form]}
         end
       end
     end
-
-That example is just the default rendering method, but it shows you that you
-have access to the current template's scope with bindings[:view]. There's also
-bindings[:object] available, which is the database record being edited.
-Bindings concept was introduced earlier in this document and the
-functionality is the same.
-
-Other example of completely override rendering logic is:
-
-    RailsAdmin.config do |config|
-      edit do
-        field :published do
-          label "Published question?"
-          render do
-            bindings[:view].render :partial => "yes_no", :locals => {:field => self, :form => bindings[:form], :fieldset => bindings[:fieldset]}
-          end
-        end
-      end
-    end
-
-In `app/views/rails_admin/main/_yes_no.html.erb`
-
-    <div class="field <%= field.dom_id %>">
-      <%= form.label field.method_name, field.label %>
-      <%= form.send :radio_button, field.name, "Y" %>
-
-      <%= %Q(Yes #{image_tag "yes.png", :alt => "Yes"} &nbsp &nbsp &nbsp).html_safe %>
-
-      <%= form.send :radio_button, field.name, "N" %>
-
-      <%= %Q(No #{image_tag "no.png", :alt => "No"}).html_safe %>
-
-      <% if field.errors.present? %>
-        <span class="errorMessage"><%= "#{field.label } #{field.errors.first}" %></span>
-      <% end %>
-      <p class="help"><%= field.help %></p>
-    </div>
-
-In this *dirty* example above, all objects can be manipulated by the developer.
+  end
+end
+```
 
 You can flag a field as read only, and if necessary fine-tune the output with pretty_value:
 
-    RailsAdmin.config do |config|
-      edit do
-        field :published do
-          read_only true
-          pretty_value do
-            bindings[:object].published? ? 'Yes, it's live!' : 'No, in the loop...'
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  edit do
+    field :published do
+      read_only true
+      pretty_value do
+        bindings[:object].published? ? 'Yes, it's live!' : 'No, in the loop...'
       end
     end
-
+  end
+end
+```
 
 **Fields - overriding field type**
 
@@ -806,26 +785,30 @@ field method provides second parameter which is field type as a symbol. For
 instance, if we have a column that's a text column in the database, but we'd
 like to have it as a string type we could accomplish that like this:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :description, :string do
-             # configuration here
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :description, :string do
+         # configuration here
       end
     end
+  end
+end
+```
 
 If no configuration needs to take place the configuration block could have been
 left out:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :description, :string
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :description, :string
     end
+  end
+end
+```
 
 A word of warning, if you make field declarations for the same field a number
 of times with a type defining second argument in place, the type definition
@@ -836,19 +819,23 @@ will ditch the old field configuration and load a new field instance in place.
 If you have a reusable field you can define a custom class extending
 `RailsAdmin::Config::Fields::Base` and register it for RailsAdmin:
 
-    RailsAdmin::Config::Fields::Types::register(:my_awesome_type, MyAwesomeFieldClass)
+```ruby
+RailsAdmin::Config::Fields::Types::register(:my_awesome_type, MyAwesomeFieldClass)
+```
 
 Then you can use your custom class in a field:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :name, :my_awesome_type do
-             # configuration here
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :name, :my_awesome_type do
+        # configuration here
       end
     end
+  end
+end
+```
 
 **Fields - Creating a custom field factory**
 
@@ -861,27 +848,20 @@ examples if you want to use that mechanism.
 Every field is accompanied by a hint/text help based on model's validations.
 Everything can be overridden with `help`:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :name
-          field :email do
-            help 'Required - popular webmail addresses not allowed'
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :name
+      field :email do
+        help 'Required - popular webmail addresses not allowed'
       end
     end
-
+  end
+end
+```
 
 ### Configuring fields ###
-
-* exclude_fields field_list
-* exclude_fields_if cond
-* include_fields field_list
-* include_fields_if cond
-* include_all_fields
-* fields field_list,  configuration_block
-
 
 ** Fields - exclude some fields **
 
@@ -891,17 +871,19 @@ You can exclude specific fields with exclude_fields & exclude_fields_if:
 
 Example:
 
-    RailsAdmin.config do |config|
-      config.model League do
-        list do
-          exclude_fields_if do
-            type == :datetime
-          end
-
-          exclude_fields :id, :name
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    list do
+      exclude_fields_if do
+        type == :datetime
       end
+
+      exclude_fields :id, :name
     end
+  end
+end
+```
 
 But after you specify your *first* field, this behaviour will be canceled.
 *Only* the specified fields will be added.
@@ -909,18 +891,19 @@ But you can then use include_all_fields to add all default fields:
 
 Example:
 
-    RailsAdmin.config do |config|
-      config.model League do
-        list do
-          field :name do
-            # snipped specific configuration for name attribute
-          end
-
-          include_all_fields # all other default fields will be added after, conveniently
-          exclude_fields :created_at # but you still can remove fields
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    list do
+      field :name do
+        # snipped specific configuration for name attribute
       end
+      include_all_fields # all other default fields will be added after, conveniently
+      exclude_fields :created_at # but you still can remove fields
     end
+  end
+end
+```
 
 ** Fields - include some fields **
 
