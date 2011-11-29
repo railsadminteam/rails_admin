@@ -12,7 +12,6 @@ class Team < ActiveRecord::Base
   # for a multiselect widget:
 
     attr_accessible :player_ids
-
 end
 
 # for info
