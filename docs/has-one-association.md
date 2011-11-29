@@ -4,7 +4,7 @@ Synopsys:
 class Player < ActiveRecord::Base
   has_one :draft, :dependent => :destroy, :inverse_of => :player
 
-  # for nested fields: (natural choice for a belongs_to association)
+  # for nested fields: (natural choice for a has_one association)
 
     attr_accessible :draft_attributes
     accepts_nested_attributes_for :draft, :allow_destroy => true
