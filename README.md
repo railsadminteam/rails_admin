@@ -28,7 +28,7 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 
 ## <a name="demo"></a> Demo
 
-See it [the live demo here](http://rails-admin-tb.herokuapp.com)
+See [the live demo here](http://rails-admin-tb.herokuapp.com)
 
 [Dummy App](https://github.com/bbenezech/dummy_app) hosted on heroku®
 
