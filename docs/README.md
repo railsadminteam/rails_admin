@@ -3,11 +3,12 @@
 [[Troubleshot, check me first!|Known issues]]
 
 
-## Configuration
+### Configuration
 
 [[RailsAdmin DSL]]
 
-## Field types
+
+### Field types
 
 [[Fields basics]]
 
@@ -25,7 +26,8 @@
 * [[Text]]
 * [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
 
-## Associations types
+
+### Associations types
 
 [[Associations basics]]
 
@@ -36,7 +38,8 @@
   * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
   * [[has_many :through association|Has-many-:through-association]]
 
-## Authorization
+
+### Authorization
 
 * [[Mass-assignments protection]]
 * [[Authorization setup]]
@@ -44,20 +47,24 @@
   * [[Customized authorization]]
   * [[Declarative Authorization]]
 
-## Styling
+
+### Styling
 
 * [[Css hooks]]
 
-## Routing
+
+### Routing
 
 * [[Routing Problems]]
 * [[Using RailsAdmin routes]]
 
-## Recipes
+
+### Recipes
 
 * [[Associations scoping]]
 * [[How to set default values]]
 
-## Plugins
+
+### Plugins
 
 * [Coordinates with Google Maps](https://github.com/jasonl/rails_admin_map_field)
