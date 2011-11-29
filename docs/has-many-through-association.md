@@ -11,11 +11,6 @@ class Grid < ActiveRecord::Base
 
     attr_accessible :block_ids
 
-  # for a nested form: 
-   
-    accepts_nested_attributes_for :blocks, :allow_destroy => true
-    attr_accessible :blocks_attributes
-
   # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
   
     def block_ids=(ids)
@@ -31,6 +26,11 @@ class Grid < ActiveRecord::Base
         end.map(&:block)
       end
     end
+
+  # for a nested form: (no reordering)
+   
+    accepts_nested_attributes_for :blocks, :allow_destroy => true
+    attr_accessible :blocks_attributes
 end
 
 # for info
