@@ -1,12 +1,12 @@
 # RailsAdmin
 
-RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
-
 [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
 
 [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png?skin_name=chrome)](http://www.pledgie.com/campaigns/15917)
 
-RailsAdmin started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
+RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
+
+It started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
 and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
 by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober](https://github.com/sferik),
 [Yehuda Katz](https://github.com/wycats),
@@ -23,30 +23,14 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 * Export data to CSV/JSON/XML
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
+* Supported ORMs
+ * ActiveRecord
 
-### Demo
+## <a name="demo"></a> Demo
 
 See it [the live demo here](http://rails-admin-tb.herokuapp.com)
 
 [Dummy App](https://github.com/bbenezech/dummy_app) hosted on heroku®
-
-### Supported ORMs:
-
-* ActiveRecord
-
-## <a name="support"></a>Support
-If you have a question, you can ask the [official RailsAdmin mailing
-list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
-[#railsadmin on
-irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
-
-Check this README and the wiki first.
-
-If you think you found a bug in RailsAdmin, you can [submit an
-issue](https://github.com/sferik/rails_admin#issues)
-No feature requests or questions please (the mailing list is active).
-See at the bottom of this README for contributing.
-
 
 ## <a name="installation"></a>Installation
 In your `Gemfile`, add the following dependencies:
@@ -82,6 +66,19 @@ You should now be able to administer your site at
 ## <a name="configuration"></a>Configuration
 
 All configuration documentation has moved to the wiki: https://github.com/sferik/rails_admin/wiki
+
+## <a name="support"></a>Support
+If you have a question, you can ask the [official RailsAdmin mailing
+list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
+[#railsadmin on
+irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
+
+Check this README and the wiki first.
+
+If you think you found a bug in RailsAdmin, you can [submit an
+issue](https://github.com/sferik/rails_admin#issues)
+No feature requests or questions please (the mailing list is active).
+See at the bottom of this README for contributing.
 
 ## <a name="contributing"></a>Contributing
 In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html), **everyone** is encouraged to help improve this project.
