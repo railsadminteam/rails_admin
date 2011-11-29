@@ -4,7 +4,13 @@ Synopsys:
 class Player < ActiveRecord::Base
   has_one :draft, :dependent => :destroy, :inverse_of => :player
 
-  # if you want a dropdown select: 
+  # for nested fields: (natural choice for a belongs_to association)
+
+    attr_accessible :draft_attributes
+   
+    accepts_nested_attributes_for :draft, :allow_destroy => true
+
+  # or if you want a dropdown select: 
 
     attr_accessible :draft_id
 
@@ -17,11 +23,6 @@ class Player < ActiveRecord::Base
       self.draft = Draft.find_by_id(id)
     end
 
-  # or for nested fields: 
-
-    attr_accessible :draft_attributes
-   
-    accepts_nested_attributes_for :draft, :allow_destroy => true
 end
 
 # for info
