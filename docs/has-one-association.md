@@ -18,11 +18,9 @@ class Player < ActiveRecord::Base
     def draft_id
       self.draft.try :id
     end
-  
     def draft_id=(id)
       self.draft = Draft.find_by_id(id)
     end
-
 end
 
 # for info
