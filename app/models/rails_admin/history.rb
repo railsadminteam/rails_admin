@@ -3,6 +3,10 @@ class RailsAdmin::History < ActiveRecord::Base
 
   IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 
+  def self.latest
+    self.limit(100)
+  end
+
   def self.create_update_history(model, object, associations_before, associations_after, modified_associations, old_object, user)
     messages = []
     changed_property_list = []

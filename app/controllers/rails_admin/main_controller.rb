@@ -14,7 +14,7 @@ module RailsAdmin
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
-      @history= History.all
+      @history = History.latest
       @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
 
       @most_recent_changes = {}
