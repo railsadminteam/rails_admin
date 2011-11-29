@@ -11,14 +11,14 @@
   * [[Dragonfly]]
   * [[Carrierwave]]
 * [[Enumeration]]
-* [[boolean]]
-* [[decimal]]
-* [[integer]]
-* [[float]]
-* [[string]]
-  * [[password]]
-* [[text]]
-* [[timestamp/date/datetime/time]]
+* [[Boolean]]
+* [[Decimal]]
+* [[Integer]]
+* [[Float]]
+* [[String]]
+  * [[Password]]
+* [[Text]]
+* [[Timestamp - Date  - Datetime - Time|Timestamp-date-datetime-time]]
 
 ## Associations types
 
