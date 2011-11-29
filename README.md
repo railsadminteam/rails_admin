@@ -47,7 +47,6 @@ See at the bottom of this README for contributing.
 ## <a name="screenshots"></a>Screenshots
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "dashboard view")
 ![Delete view](https://github.com/sferik/rails_admin/raw/master/screenshots/delete.png "delete view")
-![Export view](https://github.com/sferik/rails_admin/raw/master/screenshots/export.png "export view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "list view")
 ![Nested view](https://github.com/sferik/rails_admin/raw/master/screenshots/nested.png "nested view")
 ![Polymophic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
