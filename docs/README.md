@@ -9,10 +9,18 @@
   * [[Dragonfly]]
   * [[Carrierwave]]
 * [[Enumeration]]
+* [[boolean]]
+* [[decimal]]
+* [[integer]]
+* [[float]]
+* [[string]]
+  * [[password]]
+* [[text]]
+* [[timestamp/date/datetime/time]]
 
 ## Associations types
 
-[[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
+### [[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
 
 * [[belongs_to association|Belongs-to-association]]
   * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
