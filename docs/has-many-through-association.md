@@ -1,0 +1,53 @@
+Synopsys:
+
+```ruby
+
+class Grid < ActiveRecord::Base
+    
+  has_many :block_grid_associations, :dependent => :delete_all, :autosave => true, :include => :block
+  has_many :blocks, :through => :block_grid_associations
+  
+  # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
+  def block_ids=(ids)
+    unless (ids = ids.map(&:to_i).select{|i|i>0}) == (current_ids = block_grid_associations.map(&:block_id))
+      (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
+      self.blocks = ids.map_with_index do |id, index|
+        if current_ids.include?(id)
+          (block_association = block_grid_associations.select{|b|b.block_id == id}.first).position = (index+1)
+          block_association
+        else
+          block_grid_associations.build({:block_id => id, :position => (index+1)})
+        end
+      end.map(&:block)
+    end
+  end
+end
+
+# for info
+
+class Block < ActiveRecord::Base
+  has_many :block_grid_associations, :dependent => :delete_all
+  has_many :grids, :through => :block_grid_associations
+end
+
+class BlockGridAssociation < ActiveRecord::Base
+  belongs_to :block
+  belongs_to :grid
+  default_scope order(:position) # if you need ordered blocks
+end
+
+RailsAdmin.config |config| do
+  config.model Grid do
+    configure :block_grid_associations do
+      visible(false)
+    end
+
+    configure :blocks do
+      # configuration here
+    end
+  end
+end
+```
+Note: has_many :through associations are not considered any differently from vanilla has_many association. In particular, no special help is provided to edit join table attributes; you can edit indifferently the join-table or the target table.
+
+[[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
