@@ -66,7 +66,7 @@ describe "RailsAdmin Export" do
       
       # spec fails on non 1.9 mri rubies because of this https://github.com/rails/rails/pull/2076
       # waiting for fix (rails-3.1.4?)
-      should have_content @player.team.name if RUBY_VERSION =~ "1.9"
+      should have_content @player.team.name if RUBY_VERSION =~ /1\.9/
     end
 
     it "should export polymorphic fields the easy way for now" do
