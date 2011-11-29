@@ -911,43 +911,43 @@ It is also possible to add fields by group and configure them by group:
 
 Example:
 
-    RailsAdmin.config do |config|
-      config.model League do
-        list do
-          # all selected fields will be added, but you can't configure them.
-          # If you need to select them by type, see *fields_of_type*
-          include_fields_if do
-            name =~ /displayed/
-          end
-
-          include_fields :name, :title                # simply adding fields by their names (order will be maintained)
-          fields :created_at, :updated_at do          # adding and configuring
-            label do
-              "#{label} (timestamp)"
-            end
-          end
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    list do
+      # all selected fields will be added, but you can't configure them.
+      # If you need to select them by type, see *fields_of_type*
+      include_fields_if do
+        name =~ /displayed/
+      end
+ 
+      include_fields :name, :title                # simply adding fields by their names (order will be maintained)
+      fields :created_at, :updated_at do          # adding and configuring
+        label do
+          "#{label} (timestamp)"
         end
       end
     end
+  end
+end
+```
 
 Note that some fields are hidden by default (associations) and that you can display them to the list view by
 manually setting them to visible:
 
-    RailsAdmin.config do |config|
-      config.model League do
-        list do
-          field :teams do
-            visible true
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    list do
+      field :teams do
+        visible true
       end
     end
+  end
+end
+```
 
 ### Mass Assignment Operations ###
-
-* Mass assign for every model configuration
-* Mass assign for every section (create, list, navigation and update)
-* Mass assign by field type
 
 **Mass assign for every model configuration**
 
@@ -955,17 +955,19 @@ Mass assignment operations are used to pass in configuration blocks for
 multiple targets at once. For instance, the code below configures every models'
 every field with an uppercased label in the list view.
 
-    RailsAdmin.config do |config|
-      config.models do
-        list do
-          fields do
-            label do
-              label.upcase # in this context label refers to default label method
-            end
-          end
+```ruby
+RailsAdmin.config do |config|
+  config.models do
+    list do
+      fields do
+        label do
+          label.upcase # in this context label refers to default label method
         end
       end
     end
+  end
+end
+```
 
 **Mass assign for every section (create, list, navigation and update)**
 
@@ -973,30 +975,34 @@ If one would like to assign that same behavior for all the different views in
 RailsAdmin (create, list, navigation and update) one could pass the label
 definition one level higher:
 
-    RailsAdmin.config do |config|
-      config.models do
-        fields do
-          label do
-            label.upcase
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.models do
+    fields do
+      label do
+        label.upcase
       end
     end
+  end
+end
+```
 
 As the navigation section does not define the `fields` method this
 configuration is only effective for create, list and update views.
 
 Naturally this also works for a single model configuration:
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        fields do
-          label do
-            label.upcase
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    fields do
+      label do
+        label.upcase
       end
     end
+  end
+end
+```
 
 **Mass assign by field type**
 
@@ -1004,22 +1010,26 @@ One can also assign configurations for all fields by type. For instance
 modifying the date presentation of all datetime fields in all sections can be
 accomplished like this:
 
-    RailsAdmin.config do |config|
-      config.models do
-        fields_of_type :datetime do
-          strftime_format "%Y-%m-%d"
-        end
-      end
+```ruby
+RailsAdmin.config do |config|
+  config.models do
+    fields_of_type :datetime do
+      strftime_format "%Y-%m-%d"
     end
+  end
+end
+```
 
 Or even scope it like this:
 
-    RailsAdmin.config do |config|
-      config.models do
-        list do
-          fields_of_type :datetime do
-            date_format :compact
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.models do
+    list do
+      fields_of_type :datetime do
+        date_format :compact
       end
     end
+  end
+end
+```
