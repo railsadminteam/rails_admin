@@ -18,7 +18,7 @@
 * [[String]]
   * [[Password]]
 * [[Text]]
-* [[Timestamp - Date  - Datetime - Time|Timestamp-date-datetime-time]]
+* [[Timestamp - Date  - Datetime - Time]]
 
 ## Associations types
 
