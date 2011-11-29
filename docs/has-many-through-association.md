@@ -16,7 +16,6 @@ class Grid < ActiveRecord::Base
     accepts_nested_attributes_for :blocks, :allow_destroy => true
     attr_accessible :blocks_attributes
 
-
   # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
   
     def block_ids=(ids)
