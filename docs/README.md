@@ -14,7 +14,7 @@
 
 * [[belongs_to association|Belongs-to-association]]
   * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
-* [[has_one association]]
+* [[has_one association|Has-one-association]]
 * [[has_many association]]
   * [[has_and_belongs_to_many association]]
   * [[has_many :through association]]
