@@ -17,7 +17,7 @@
 * [[has_one association|Has-one-association]]
 * [[has_many association|Has-many-association]]
   * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
-  * [[has_many :through association]]
+  * [[has_many :through association|Has-many-:through-association]]
 
 ## Authorization
 
