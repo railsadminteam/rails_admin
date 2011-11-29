@@ -26,7 +26,9 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 
 ### Demo
 
-See it [[here|http://rails-admin-tb.herokuapp.com]] (https://github.com/bbenezech/dummy_app hosted on heroku)
+See it [the live demo here](http://rails-admin-tb.herokuapp.com)
+
+[Dummy App](https://github.com/bbenezech/dummy_app) hosted on heroku®
 
 ### Supported ORMs:
 
