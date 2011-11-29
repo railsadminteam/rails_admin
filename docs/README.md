@@ -39,7 +39,7 @@
 
 ## Styling
 
-* [[css hooks]]
+* [[Css hooks]]
 
 ## Routing
 
