@@ -1,6 +1,6 @@
 ### Ordered associations
 
-For has\_many/has\_and\_belongs\_to\_many/has\_many :through
+For `has\_many/has\_and\_belongs\_to\_many/has\_many :through`
 
 Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
 
@@ -24,8 +24,12 @@ You'll need to handle ordering in your model with a position column for example.
 
 You can edit related objects in filtering-multiselect by double-clicking on any visible item in the widget.
 
-If you set the :inverse_of option on your relations, RailsAdmin will automatically populate the inverse relationship
-in the modal creation window. (link next to belongs\_to and has\_many widgets)
+### Avoiding edit recursions on inverse associations
+
+If you set the `:inverse_of` option on your relations, RailsAdmin will automatically populate the inverse relationship
+in the modal creation window. (link next to :belongs\_to and :has\_many multiselect widgets)
+
+It will also hide the inverse relation on nested forms. As a good practice, you should always set `:inverse_of` options. It will help ActiveRecord performances and RailsAdmin will take advantage of its definition.
 
 ### Readonly
 
