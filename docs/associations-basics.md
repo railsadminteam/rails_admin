@@ -1,6 +1,6 @@
 ### Ordered associations
 
-For `has\_many/has\_and\_belongs\_to\_many/has\_many :through`
+For `has_many/has_and_belongs_to_many/has_many :through`
 
 Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
 
