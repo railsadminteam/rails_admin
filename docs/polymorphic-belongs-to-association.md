@@ -16,8 +16,9 @@ RailsAdmin.config |config| do
   config.model Comment do
     configure :commentable do
       # configuration here
-      # https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/polymorphic_association.rb
     end
   end
 end
 ```
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/polymorphic_association.rb]]
