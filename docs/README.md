@@ -1,6 +1,6 @@
 [[Roadmap]]
 
-[[Known issues]]
+[[Troubleshot, check me first!|Known issues]]
 
 ## Field types
 
