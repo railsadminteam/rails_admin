@@ -3,7 +3,15 @@ Synopsys:
 ```ruby
 class Player < ActiveRecord::Base
   belongs_to :team, :inverse_of => :players
-  attr_accessible :team_id
+
+  # if you want a dropdown select: (natural choice for a belongs_to association)
+
+    attr_accessible :team_id
+
+  # or for nested fields: 
+
+    attr_accessible :team_attributes
+    accepts_nested_attributes_for :team, :allow_destroy => true
 end
 
 # for info
