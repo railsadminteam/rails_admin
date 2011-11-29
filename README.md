@@ -24,8 +24,9 @@ by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober]
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
 * User action history
 
-See the demo here:
-http://rails-admin-tb.herokuapp.com
+### Demo
+
+See it [[here|http://rails-admin-tb.herokuapp.com]] (https://github.com/bbenezech/dummy_app hosted on heroku)
 
 ### Supported ORMs:
 
