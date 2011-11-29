@@ -30,4 +30,4 @@ other roles from doing anything.
 
 # Authorization Adapter
 
-If you would like better support for Declarative Authorization in Rails Admin, consider making an authorization adapter for it. See the [[CanCan Adapter|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/authorization_adapters/cancan_adapter.rb]] for an example. Fork the project, add the adapter, and send a pull request.
+If you would like better support for Declarative Authorization in Rails Admin, consider making an authorization adapter for it. See the [[CanCan Adapter|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/extensions/cancan/authorization_adapter.rb]] for an example. Fork the project, add the adapter, and send a pull request.
