@@ -12,7 +12,6 @@ Empty milestone's tickets in Github.
 
 ### html/CSS/JS
 - Needs testing: Android, IE7.
-- Fix CSS bug in IE (bootstrap-sass related)
 - Fix all JS bugs on IE7+ . Found visual bug in multiselect
 - Move all JS code to coffee
 - support should target IE7+ with focus on future-proofing, through well-tested libraries (Bootstrap, JQuery)
