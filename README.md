@@ -510,8 +510,8 @@ You can independently deactivate querying (search) or filtering for each field w
 
     field :team do
       searchable [:name, :color]
-      queryable? true # default
-      filterable? false
+      queryable true # default
+      filterable false
     end
 
 Empty filters can be displayed in the list view:
