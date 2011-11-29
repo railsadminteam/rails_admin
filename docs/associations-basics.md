@@ -2,21 +2,22 @@
 
 For has\_many/has\_and\_belongs\_to\_many/has\_many :through
 
-Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations),
-allowing selected options to be moved up/down.
+Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations), allowing selected options to be moved up/down.
+
 RailsAdmin will handle ordering in and out of the form.
 
-    RailsAdmin.config do |config|
-      config.model Player do
-        edit do
-          field :fans do
-            orderable true
-          end
-        end
+```ruby
+RailsAdmin.config do |config|
+  config.model Player do
+    edit do
+      field :fans do
+        orderable true
       end
     end
-
-You'll need to handle ordering in your model with a position column for example.
+  end
+end
+```
+You'll need to handle ordering in your model with a position column for example. See [[here|Has-many-%3Athrough-association]] for a comprehensive ActiveRecord example with a `has_many :through` association.
 
 ### Multiselect
 
