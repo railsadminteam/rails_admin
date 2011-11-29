@@ -73,10 +73,6 @@ It will modify your `config/routes.rb`, adding:
 
 And add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
 
-To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.com/galetahub/ckeditor) to your Gemfile (`gem 'ckeditor'`) and follow [Rails-CKEditor](https://github.com/galetahub/ckeditor) installation instructions.
-
-You can configure more options of CKEditor "config.js" file following the [Api Documentation](http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html) .
-
 ### Asset pipeline
 
 The master branch currently targets Rails 3.1. Older branch with 3.0 compatibility is present, but is no longer maintained.
@@ -671,7 +667,6 @@ and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/
   * Creating a custom field type
   * Creating a custom field factory
   * Overriding field help texts
-  * CKEditor integration
 
 **Form rendering**
 
@@ -990,46 +985,6 @@ Everything can be overridden with `help`:
       end
     end
 
-**Fields - CKEditor integration**
-
-CKEditor can be enabled on fields of type text:
-
-    RailsAdmin.config do |config|
-      config.model Team do
-        edit do
-          field :description, :text do
-            ckeditor true
-          end
-        end
-      end
-    end
-
-**Fields - Ordered has_many/has_and_belongs_to_many/has_many :through associations**
-
-Orderable can be enabled on filtering multiselect fields (has_many, has_many :through & has_and_belongs_to_many associations),
-allowing selected options to be moved up/down.
-RailsAdmin will handle ordering in and out of the form.
-
-    RailsAdmin.config do |config|
-      config.model Player do
-        edit do
-          field :fans do
-            orderable true
-          end
-        end
-      end
-    end
-
-You'll need to handle ordering in your model with a position column for example.
-
-** Associations - trivia **
-
-You can edit related objects in filtering-multiselect by double-clicking on any visible item in the widget.
-
-If you set the :inverse_of option on your relations, RailsAdmin will automatically populate the inverse relationship
-in the modal creation window. (link next to belongs\_to and has\_many widgets)
-
-:readonly options are automatically inferred on associations fields and won't be editable in forms.
 
 ### Configuring fields ###
 
