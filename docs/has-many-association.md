@@ -1,0 +1,33 @@
+Synopsys:
+
+```ruby
+class Team < ActiveRecord::Base
+  has_many :players, :dependent => :destroy, :inverse_of => :team
+
+  # for a nested form: (natural choice for 1-n associations)
+   
+    accepts_nested_attributes_for :players, :allow_destroy => true
+    attr_accessible :players_attributes, :allow_destroy => true
+
+  # for a multiselect widget:
+
+    attr_accessible :player_ids
+
+end
+
+# for info
+class Player < ActiveRecord::Base
+  belongs_to :team, :inverse_of => :players
+end
+
+
+RailsAdmin.config |config| do
+  config.model Team do
+    configure :players do
+      # configuration here
+    end
+  end
+end
+```
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
