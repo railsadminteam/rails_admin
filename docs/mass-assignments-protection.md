@@ -14,7 +14,7 @@ RailsAdmin.config do |config|
     _current_user.roles.first
   end
 end
-````
+```
 
 If you don't want read_only fields to be visible in your forms:
 
