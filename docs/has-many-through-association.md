@@ -7,21 +7,6 @@ class Grid < ActiveRecord::Base
   has_many :block_grid_associations, :dependent => :delete_all, :autosave => true, :include => :block
   has_many :blocks, :through => :block_grid_associations
   
-  # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
-  def block_ids=(ids)
-    unless (ids = ids.map(&:to_i).select{|i|i>0}) == (current_ids = block_grid_associations.map(&:block_id))
-      (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
-      self.blocks = ids.each_with_index.map do |id, index|
-        if current_ids.include?(id)
-          (block_association = block_grid_associations.select{|b|b.block_id == id}.first).position = (index+1)
-          block_association
-        else
-          block_grid_associations.build({:block_id => id, :position => (index+1)})
-        end
-      end.map(&:block)
-    end
-  end
-
   # for a multiselect widget: (natural choice for n-n associations)
 
     attr_accessible :block_ids
@@ -30,6 +15,23 @@ class Grid < ActiveRecord::Base
    
     accepts_nested_attributes_for :blocks, :allow_destroy => true
     attr_accessible :blocks_attributes
+
+
+  # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
+  
+    def block_ids=(ids)
+      unless (ids = ids.map(&:to_i).select{|i|i>0}) == (current_ids = block_grid_associations.map(&:block_id))
+        (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
+        self.blocks = ids.each_with_index.map do |id, index|
+          if current_ids.include?(id)
+            (block_association = block_grid_associations.select{|b|b.block_id == id}.first).position = (index+1)
+            block_association
+          else
+            block_grid_associations.build({:block_id => id, :position => (index+1)})
+          end
+        end.map(&:block)
+      end
+    end
 
 end
 
