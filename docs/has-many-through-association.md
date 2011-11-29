@@ -10,9 +10,7 @@ class Grid < ActiveRecord::Base
   # for a multiselect widget: (natural choice for n-n associations)
 
     attr_accessible :block_ids
-
-  # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
-  
+    # if you need ordered blocks inside each grid (assuming a position column in block_grid_associations table)
     def block_ids=(ids)
       unless (ids = ids.map(&:to_i).select{|i|i>0}) == (current_ids = block_grid_associations.map(&:block_id))
         (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
