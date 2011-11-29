@@ -893,7 +893,7 @@ end
 
 Be careful, if you exclude fields before anything is added, this will instead add all other fields, which might not be what you expect (especially since fields ordering will be frozen). See https://github.com/sferik/rails_admin/issues/859 for an example.
 
-But you can then use include_all_fields to add all default fields:
+You can use include_all_fields to add all default fields:
 
 Example:
 
