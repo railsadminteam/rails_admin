@@ -333,7 +333,7 @@ RailsAdmin.config do |config|
       field :team do # (3)
         # Will order by players playing with the best teams,
         # rather than the team name (by default),
-        # or the team id (dull but default if object_label is not a column name)
+        # or the team id (dull but default if object_label_method is not a column name)
 
         sortable :win_percentage
 
