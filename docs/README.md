@@ -12,13 +12,14 @@
 
 ## Associations types
 
-* [[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
-  * [[belongs_to association|Belongs-to-association]]
-    * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
-  * [[has_one association|Has-one-association]]
-  * [[has_many association|Has-many-association]]
-    * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
-    * [[has_many :through association|Has-many-:through-association]]
+[[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
+
+* [[belongs_to association|Belongs-to-association]]
+  * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
+* [[has_one association|Has-one-association]]
+* [[has_many association|Has-many-association]]
+  * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
+  * [[has_many :through association|Has-many-:through-association]]
 
 ## Authorization
 
