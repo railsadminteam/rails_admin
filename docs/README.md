@@ -31,8 +31,6 @@
   * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
   * [[has_many :through association|Has-many-:through-association]]
 
-[[See parent class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
-
 ## Authorization
 
 * [[CanCan]]
