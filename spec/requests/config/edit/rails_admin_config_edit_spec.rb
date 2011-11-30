@@ -72,10 +72,12 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_no_selector("input#team_revenue")
     end
 
-    it "should hide association groupings by the name of the association" do
+    it "should hide association groupings" do
       RailsAdmin.config Team do
         edit do
           group :players do
+            label "Players"
+            field :players
             hide
           end
         end

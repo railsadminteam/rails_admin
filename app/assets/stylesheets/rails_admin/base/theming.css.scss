@@ -11,8 +11,27 @@
   }
 }
 
-blockquote hr {
-  margin-left: -15px;
+/* remove blockquote padding + border recursively */
+form blockquote fieldset { margin-left:-10px; }
+form blockquote blockquote fieldset { margin-left:-20px; }
+form blockquote blockquote blockquote fieldset { margin-left:-30px; }
+
+form {
+  blockquote {
+    padding-top:5px;
+    padding-left:5px;
+    border-left-width:5px;
+    margin-bottom:0px;
+  
+    .remove_nested_fields {
+      margin-top:4px;
+    }
+    hr {
+      margin-left: -5px;
+      margin-top: 10px;
+      margin-bottom: 3px;
+    }
+  }
 }
 
 a.label {
