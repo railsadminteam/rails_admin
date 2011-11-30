@@ -39,7 +39,7 @@ module RailsAdmin
             if value.presence
               v = bindings[:view]
               url = resource_url
-              if image?
+              if self.image
                 thumb_url = resource_url(thumb_method)
                 (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url, :target => 'blank') : v.image_tag(thumb_url)
               else
