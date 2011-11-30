@@ -191,7 +191,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
       end
 
-      redirect_to index_path(:model_name => @abstract_model.to_param)
+      redirect_to back_or_index
     end
 
     def export
@@ -216,11 +216,11 @@ module RailsAdmin
     end
 
     def bulk_action
-      redirect_to index_path, :flash => { :info => t("admin.flash.noaction") } and return if params[:bulk_ids].blank?
+      redirect_to :back, :flash => { :info => t("admin.flash.noaction") } and return if params[:bulk_ids].blank?
       case params[:bulk_action]
       when "delete" then bulk_delete
       when "export" then export
-      else redirect_to(index_path(:model_name => @abstract_model.to_param), :flash => { :info => t("admin.flash.noaction") })
+      else raise "#{params[:bulk_action]} not implemented"
       end
     end
 
@@ -255,7 +255,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count, @model_config.label), :action => t("admin.actions.deleted"))
       end
 
-      redirect_to index_path
+      redirect_to back_or_index
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all]))
@@ -267,6 +267,10 @@ module RailsAdmin
     end
 
     private
+    
+    def back_or_index
+      params[:return_to].presence && params[:return_to].include?(request.host) && (params[:return_to] != request.fullpath) ? params[:return_to] : index_path
+    end
 
     def get_sort_hash(model_config)
       abstract_model = model_config.abstract_model
@@ -311,11 +315,11 @@ module RailsAdmin
     def redirect_to_on_success
       notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{params[:action]}d"))
       if params[:_add_another]
-        redirect_to new_path, :flash => { :success => notice }
+        redirect_to new_path(:return_to => params[:return_to]), :flash => { :success => notice }
       elsif params[:_add_edit]
-        redirect_to edit_path(:id => @object.id), :flash => { :success => notice }
+        redirect_to edit_path(:id => @object.id, :return_to => params[:return_to]), :flash => { :success => notice }
       else
-        redirect_to index_path, :flash => { :success => notice }
+        redirect_to back_or_index, :flash => { :success => notice }
       end
     end
 
@@ -332,7 +336,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      redirect_to index_path, :flash => { :warning => t("admin.flash.noaction") } if params[:_continue]
+      redirect_to back_or_index, :flash => { :info => t("admin.flash.noaction") } if params[:_continue]
     end
 
     def get_collection(model_config, scope, pagination)

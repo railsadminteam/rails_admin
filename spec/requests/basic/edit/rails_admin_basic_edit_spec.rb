@@ -95,4 +95,15 @@ describe "RailsAdmin Basic Edit" do
     end
 
   end
+  
+  describe "clicking cancel when editing an object" do
+    
+    it "should send back to previous URL" do
+      @ball = FactoryGirl.create :ball
+      visit '/admin/balls?sort=color'
+      click_link 'Edit'
+      click_button 'Cancel'
+      page.current_url.should == 'http://www.example.com/admin/balls?sort=color'
+    end
+  end
 end

@@ -2,5 +2,6 @@
 %ul= render :partial => "delete_notice", :collection => @objects
 = form_tag bulk_destroy_path(:model_name => @abstract_model.to_param, :bulk_ids => @objects.map(&:id)) do
   .actions
+    %input{:type => :hidden, :name => 'return_to', :value => (params[:return_to].presence || request.referer)}
     %button.btn.danger{:type => "submit", :'data-disable-with' => t("admin.delete.confirmation")}= t("admin.delete.confirmation")
     %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.new.cancel")}= t("admin.new.cancel")
