@@ -316,6 +316,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "team")
       should have_selector("label", :text => "Manager de l'équipe")
       should have_selector("label", :text => "Quelques fans")
+      I18n.locale = :en
     end
 
     it "should be renameable" do
