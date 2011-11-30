@@ -6,3 +6,11 @@ en:
       team:
         manager: Team Manager
         fans: Some Fans
+fr:
+  activerecord:
+    attributes:
+      fan:
+        name: Son nom
+      team:
+        manager: Manager de l'équipe
+        fans: Quelques fans

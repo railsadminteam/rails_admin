@@ -50,11 +50,11 @@ module RailsAdmin
       end
 
       register_instance_option(:label) do
-        @label ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
+        (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
       end
 
       register_instance_option(:label_plural) do
-        @label_plural ||= abstract_model.model.model_name.human(:count => 2, :default => label.pluralize)
+        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => 2, :default => label.pluralize)
       end
 
       register_instance_option(:weight) do

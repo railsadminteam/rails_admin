@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'spec_helper'
 
 describe "RailsAdmin Config DSL Edit Section" do
@@ -300,7 +302,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(".field", :count => 2)
     end
 
-    it "should delegates the label option to the ActiveModel API" do
+    it "should delegates the label option to the ActiveModel API and memoize I18n awarly" do
       RailsAdmin.config Team do
         edit do
           field :manager
@@ -310,6 +312,10 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "team")
       should have_selector("label", :text => "Team Manager")
       should have_selector("label", :text => "Some Fans")
+      I18n.locale = :fr
+      visit new_path(:model_name => "team")
+      should have_selector("label", :text => "Manager de l'équipe")
+      should have_selector("label", :text => "Quelques fans")
     end
 
     it "should be renameable" do

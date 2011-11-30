@@ -125,7 +125,7 @@ module RailsAdmin
 
         # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do
-          @help ||= (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
+          (@help ||= {})[::I18n.locale] ||= (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
         end
 
         register_instance_option(:html_attributes) do
@@ -136,7 +136,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:label) do
-          @label ||= abstract_model.model.human_attribute_name name
+          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
         end
 
         # Accessor for field's maximum length per database.
