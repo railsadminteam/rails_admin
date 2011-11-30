@@ -30,12 +30,12 @@ You can edit related objects by double-clicking on any visible item in the widge
 
 See [[associations scoping]] for more informations on how to limit and filter proposed associated records.
 
-### Avoiding edit recursions on inverse associations
+### Avoiding edit association spagetti issues
 
 If you set the `:inverse_of` option on your relations, RailsAdmin will automatically populate the inverse relationship
 in the modal creation window. (link next to :belongs\_to and :has\_many multiselect widgets)
 
-It will also hide the inverse relation on nested forms. As a good practice, you should always set `:inverse_of` options. It will help ActiveRecord performances and RailsAdmin will take advantage of its definition.
+It will also hide the inverse relation on nested forms. As a good practice, you should always set `:inverse_of` options to all your associations, even if these are useless to ActiveRecord. RailsAdmin will take advantage of them.
 
 ### Readonly
 
