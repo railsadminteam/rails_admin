@@ -11,10 +11,15 @@ module RailsAdmin
 
     def get_model
       model_name = to_model_name(params[:model_name])
-      @abstract_model = RailsAdmin::AbstractModel.new(model_name)
-      not_found unless @abstract_model
+      @abstract_model = RailsAdmin::AbstractModel.new(model_name) rescue begin
+        not_found
+        return false
+      end
       @model_config = RailsAdmin.config(@abstract_model)
-      not_found if @model_config.excluded?
+      if @model_config.excluded?
+        not_found
+        return false
+      end
       @properties = @abstract_model.properties
     end
 
@@ -40,7 +45,11 @@ module RailsAdmin
 
     def get_object
       @object = @abstract_model.get(params[:id])
-      not_found unless @object
+      unless @object
+        not_found
+        return false
+      end
+      @object
     end
 
 

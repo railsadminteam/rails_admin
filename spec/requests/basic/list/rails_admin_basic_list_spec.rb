@@ -11,6 +11,13 @@ describe "RailsAdmin Basic List" do
       visit dashboard_path
     end
   end
+  
+  describe "GET /admin/typo" do
+    it "should raise NotFound" do
+      visit '/admin/whatever'
+      page.driver.status_code.should eql(404)
+    end
+  end
 
   describe "GET /admin/player as list" do
     before(:each) do

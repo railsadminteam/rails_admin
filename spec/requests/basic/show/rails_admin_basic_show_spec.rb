@@ -26,6 +26,14 @@ describe "RailsAdmin Basic Show" do
       should have_content(@player.number)
     end
   end
+  
+  describe "GET /admin/players/123this-id-doesnt-exist" do
+    it "should raise NotFound" do
+      visit '/admin/players/123this-id-doesnt-exist'
+      page.driver.status_code.should eql(404)
+    end
+  end
+
 
   describe "show with belongs_to association" do
     before(:each) do
