@@ -86,7 +86,7 @@ module RailsAdmin
     def dom_id field
       (@dom_id ||= {})[field.name] ||= 
         [
-          @object_name.sub('][', '_').sub(']', '').sub('[', '_'),
+          @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, ""),
           options[:index],
           field.method_name
         ].reject(&:blank?).join('_')
