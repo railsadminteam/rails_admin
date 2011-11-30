@@ -48,10 +48,6 @@ module RailsAdmin
         register_instance_option(:column_width) do
           nil
         end
-
-        register_instance_option(:truncated?) do
-          ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
-        end
         
         register_instance_option(:sortable) do
           !virtual?

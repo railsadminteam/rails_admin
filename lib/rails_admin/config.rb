@@ -1,6 +1,5 @@
 require 'rails_admin/config/model'
 require 'rails_admin/config/sections/list'
-require 'rails_admin/config/sections/navigation'
 require 'active_support/core_ext/class/attribute_accessors'
 
 module RailsAdmin
@@ -183,19 +182,6 @@ module RailsAdmin
         end
       end
 
-      def reload_between_requests=(thingy)
-        ActiveSupport::Deprecation.warn("'#{self.name}.reload_between_requests=' is not in use any longer, please remove it from initialization files", caller)
-      end
-
-      # Shortcut to access the list section's class configuration
-      # within a config DSL block
-      #
-      # @see RailsAdmin::Config::Sections::List
-      def list
-        ActiveSupport::Deprecation.warn("RailsAdmin::Config.list is deprecated", caller)
-        RailsAdmin::Config::Sections::List
-      end
-
       # Loads a model configuration instance from the registry or registers
       # a new one if one is yet to be added.
       #
@@ -233,15 +219,6 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def models(&block)
         RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
-      end
-
-      # Shortcut to access the navigation section's class configuration
-      # within a config DSL block
-      #
-      # @see RailsAdmin::Config::Sections::Navigation
-      def navigation
-        ActiveSupport::Deprecation.warn("RailsAdmin::Config.navigation is deprecated", caller)
-        RailsAdmin::Config::Sections::Navigation
       end
 
       # Reset all configurations to defaults.

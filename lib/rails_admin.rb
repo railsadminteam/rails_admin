@@ -7,26 +7,6 @@ require 'rails_admin/support/csv_converter'
 require 'rails_admin/support/core_extensions'
 
 module RailsAdmin
-  def self.authenticate_with(&block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.authenticate_with { }' is deprecated, use 'RailsAdmin.config{|c| c.authenticate_with }' instead", caller)
-    self.config {|c| c.authenticate_with(&block) }
-  end
-
-  def self.authorize_with(*args, &block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.authorize_with { }' is deprecated, use 'RailsAdmin.config{|c| c.authorize_with }' instead", caller)
-    self.config {|c| c.authorize_with(*args, &block) }
-  end
-
-  def self.current_user_method(&block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.current_user_method { }' is deprecated, use 'RailsAdmin.config{|c| c.current_user_method }' instead", caller)
-    self.config {|c| c.current_user_method(&block) }
-  end
-
-  def self.configure_with(extension, &block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.configure_with { }' is deprecated, use 'RailsAdmin.config{|c| c.configure_with }' instead", caller)
-    self.config {|c| c.configure_with(extension, &block) }
-  end
-
   # Setup RailsAdmin
   #
   # Given the first argument is a model class, a model class name
