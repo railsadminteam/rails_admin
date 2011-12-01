@@ -4,7 +4,9 @@ RailsAdmin always adds a blank entry in drop-downs, so if you are adding a new r
 class Team < ActiveRecord::Base
   ....
   after_initialize do
-    self.color ||= 'red' # be VERY careful with ||= and False values
+    if new_record?
+      self.color ||= 'red' # be VERY careful with ||= and False values
+    end
   end
 
   def color_enum
