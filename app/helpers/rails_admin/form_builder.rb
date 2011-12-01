@@ -57,7 +57,7 @@ module RailsAdmin
     end
 
     def help_for field
-      field.help.present? ? @template.content_tag(:span, field.help, :class => 'help-block') : ''
+      field.help.present? ? @template.content_tag(:span, field.help.to_s.html_safe, :class => 'help-block') : ''
     end
 
     def field_for field
