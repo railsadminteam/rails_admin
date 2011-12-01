@@ -12,24 +12,53 @@
 }
 
 /* remove blockquote padding + border recursively */
-form blockquote fieldset { margin-left:-10px; }
-form blockquote blockquote fieldset { margin-left:-20px; }
-form blockquote blockquote blockquote fieldset { margin-left:-30px; }
+form blockquote {
+}
+
+form label.nester {
+  font-weight: bold;
+  width: auto;
+}
+
+
+
+form {
+  label { width:130px; }
+  legend { padding-left: 150px; }
+  .input { margin-left: 150px; }
+  
+  blockquote {
+    label { width:120px; }
+    legend { padding-left: 140px; }
+    .input { margin-left: 140px; }
+    blockquote {
+      label { width:110px; }
+      legend { padding-left: 130px; }
+      .input { margin-left: 130px; }
+      blockquote {
+        label { width:100px; }
+        legend { padding-left: 120px; }
+        .input { margin-left: 120px; }
+      }
+    }
+  }
+}
 
 form {
   blockquote {
-    padding-top:5px;
-    padding-left:5px;
     border-left-width:5px;
+    margin-right:5px;
+    padding-left:5px;
+    padding-top:5px;
     margin-bottom:0px;
-  
-    .remove_nested_fields {
-      margin-top:4px;
-    }
+    
     hr {
       margin-left: -5px;
       margin-top: 10px;
       margin-bottom: 3px;
+    }
+    .remove_nested_fields {
+      margin-top:4px;
     }
   }
 }
