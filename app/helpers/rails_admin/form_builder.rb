@@ -53,11 +53,11 @@ module RailsAdmin
     end
 
     def errors_for field
-      field.errors.present? ? @template.content_tag(:span, "#{field.label} #{field.errors.first}", :class => 'help-inline') : ''
+      field.errors.present? ? @template.content_tag(:span, "#{field.label} #{field.errors.first}", :class => 'help-inline') : ''.html_safe
     end
 
     def help_for field
-      field.help.present? ? @template.content_tag(:span, field.help, :class => 'help-block').html_safe : ''
+      field.help.present? ? @template.content_tag(:span, field.help, :class => 'help-block') : ''.html_safe
     end
 
     def field_for field
