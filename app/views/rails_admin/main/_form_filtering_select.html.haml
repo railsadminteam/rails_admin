@@ -32,7 +32,7 @@
 
 = form.javascript_for(field) do
   :plain
-    $("#{form.js_namespace(field)} select").filteringSelect({
+    $("#{form.jquery_namespace(field)} select").filteringSelect({
       xhr: #{xhr},
       createQuery: function(query) {
         return { query: query }
@@ -40,7 +40,7 @@
       remote_source: "#{index_path(config.abstract_model.to_param, :source_object_id => form.object.id, :source_abstract_model => source_abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true).html_safe}"
     });
     if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-      $("#{form.js_namespace(field)} .btn").hide();
+      $("#{form.jquery_namespace(field)} .btn").hide();
     } else {
-      $("#{form.js_namespace(field)}").remoteForm();
+      $("#{form.jquery_namespace(field)}").remoteForm();
     }

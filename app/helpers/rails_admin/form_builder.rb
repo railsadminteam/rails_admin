@@ -72,7 +72,7 @@ module RailsAdmin
       %{
         <script type="text/javascript">
           jQuery(function($) {
-            if(!$("#{js_namespace(field)}").parents(".fields_blueprint").length) {
+            if(!$("#{jquery_namespace(field)}").parents(".fields_blueprint").length) {
               if(#{options[:modal] == false ? '!$("#modal").length' : 'true'}) {
                 #{@template.capture(&block)}
               }
@@ -82,7 +82,7 @@ module RailsAdmin
       }.html_safe
     end
     
-    def js_namespace field
+    def jquery_namespace field
       "#{(@template.controller.params[:modal] ? '#modal ' : '')}##{dom_id(field)}_field"
     end
     

@@ -12,6 +12,6 @@
   = form.hidden_field(field.cache_method)
 = form.javascript_for(field) do
   :plain
-    $("#{form.js_namespace(field)} .delete input[type='checkbox']").live('click', function() {
+    $("#{form.jquery_namespace(field)} .delete input[type='checkbox']").live('click', function() {
       $(this).parents('.input').first().children('.toggle').toggle('slow');
     });

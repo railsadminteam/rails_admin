@@ -4,7 +4,7 @@
 = stylesheet_link_tag asset_path 'rails_admin/jquery.colorpicker.css'
 = form.javascript_for(field) do
   :plain
-    var input = $('#{ form.js_namespace(field) } input')
+    var input = $('#{ form.jquery_namespace(field) } input')
     input.css('backgroundColor', '#' + input.val());
     input.ColorPicker({
       color: input.val(),

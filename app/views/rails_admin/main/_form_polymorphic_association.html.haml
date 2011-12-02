@@ -12,7 +12,7 @@
 = form.javascript_for(field) do
   :plain
     var urls = #{field.polymorphic_type_urls.to_json.html_safe };
-    $("#{form.js_namespace(field)} ##{column_type_dom_id}").bind("change", function(e){
+    $("#{form.jquery_namespace(field)} ##{column_type_dom_id}").bind("change", function(e){
       if ("" == $(this).val()) {
         $("##{ form.dom_id(field) }").html('<option value=""></option>');
       } else {
@@ -27,7 +27,7 @@
             $(data).each(function(i, el) {
               html += '<option value="' + el.id + '">' + el.label + '</option>';
             });
-            $("#{form.js_namespace(field)} ##{ form.dom_id(field) }").html(html);
+            $("#{form.jquery_namespace(field)} ##{ form.dom_id(field) }").html(html);
           }
         });
       }
