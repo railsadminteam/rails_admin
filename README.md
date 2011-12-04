@@ -37,7 +37,7 @@ Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy
 [ci]: http://travis-ci.org/sferik/rails_admin
 
 ## <a name="dependencies"></a>Dependency Status
-[![Dependency Status](https://gemnasium.com/sferik/rails_admin.png)][gemnasium]
+[![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium]
 
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
 
