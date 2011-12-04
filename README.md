@@ -31,10 +31,10 @@ Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy
 [demo]: http://rails-admin-tb.herokuapp.com/
 [dummy_app]: https://github.com/bbenezech/dummy_app
 
-## <a name="ci"></a>Build Status
-[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)][ci]
+## <a name="build"></a>Build Status
+[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis]
 
-[ci]: http://travis-ci.org/sferik/rails_admin
+[travis]: http://travis-ci.org/sferik/rails_admin
 
 ## <a name="dependencies"></a>Dependency Status
 [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium]
@@ -125,7 +125,7 @@ operating system. Ideally, a bug report should include a pull request with faili
 9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. (If you want to create your own version for some reason, please do so in a separate commit.)
 
 ## <a name="versions"></a>Supported Ruby Versions
-This library aims to support and is [tested against][ci] the following Ruby
+This library aims to support and is [tested against][travis] the following Ruby
 implementations:
 
 * Ruby 1.8.7
