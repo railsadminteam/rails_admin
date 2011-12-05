@@ -3,7 +3,7 @@ require File.expand_path('../lib/rails_admin/version', __FILE__)
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
-  gem.add_dependency 'bootstrap-sass', '~> 1.4'
+  gem.add_dependency 'bootstrap-sass', '~> 1.4.1'
   gem.add_dependency 'builder', '~> 3.0'
   gem.add_dependency 'coffee-rails', '~> 3.1'
   gem.add_dependency 'haml', '~> 3.1'
