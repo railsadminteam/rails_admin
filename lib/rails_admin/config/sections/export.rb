@@ -1,17 +1,10 @@
-require 'rails_admin/config/base'
-require 'rails_admin/config/hideable'
+require 'rails_admin/config/sections/base'
 
 module RailsAdmin
   module Config
     module Sections
       # Configuration of the navigation view
-      class Export < RailsAdmin::Config::Base
-        include RailsAdmin::Config::HasFields
-
-        def initialize(parent)
-          super(parent)
-          @fields = RailsAdmin::Config::Fields.factory(self)
-        end
+      class Export < RailsAdmin::Config::Sections::Base
       end
     end
   end

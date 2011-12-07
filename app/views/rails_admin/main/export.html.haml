@@ -17,15 +17,15 @@
                 - if field.association? && field.association[:polymorphic]
                   %label{:for => "schema_#{list}_#{field.method_name}"}
                     = check_box_tag "schema[#{list}][]", field.method_name, true, { :id => "schema_#{list}_#{field.method_name}" }
-                    %strong= @abstract_model.model.human_attribute_name(field.method_name)
+                    %strong= field.label + " [id]"
                   - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]
                   %label{:for => "schema_#{list}_#{polymorphic_type_column_name}"}
                     = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }
-                    %strong= @abstract_model.model.human_attribute_name(polymorphic_type_column_name)
+                    %strong= field.label + " [type]"
                 - else
                   %label{:for => "schema_#{list}_#{field.name}"}
                     = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
-                    %strong= @abstract_model.model.human_attribute_name(field.name)
+                    %strong= field.label
       - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
         .span5.clearfix{:style => 'float:left;'}
           - association = field.association

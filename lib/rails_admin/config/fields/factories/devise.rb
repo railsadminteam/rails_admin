@@ -1,7 +1,6 @@
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/password'
-require 'rails_admin/config/sections/update'
 
 # Register a custom field factory for devise model
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
