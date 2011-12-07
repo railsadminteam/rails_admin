@@ -145,6 +145,52 @@ describe "RailsAdmin" do
       end
     end
   end
+  
+  
+  describe "DSL inheritance" do
+    it 'should be battle tested' do
+      RailsAdmin.config do |config|
+        config.model Fan do
+          field :name do
+            label do
+              @label ||= "modified base #{label}"
+            end
+          end
+          list do 
+            field :name do
+              label do
+                @label ||= "modified list #{label}"
+              end
+            end
+          end
+          edit do 
+            field :name do
+              label do
+                @label ||= "modified edit #{label}"
+              end
+            end
+          end
+          create do 
+            field :name do
+              label do
+                @label ||= "modified create #{label}"
+              end
+            end
+          end
+        end
+        
+      end
+      RailsAdmin.config(Fan).visible_fields.count.should == 1
+      RailsAdmin.config(Fan).visible_fields.first.label.should == 'modified base His Name'
+      RailsAdmin.config(Fan).list.visible_fields.first.label.should == 'modified list His Name'
+      RailsAdmin.config(Fan).export.visible_fields.first.label.should == 'modified base His Name'
+      RailsAdmin.config(Fan).edit.visible_fields.first.label.should == 'modified edit His Name'
+      RailsAdmin.config(Fan).create.visible_fields.first.label.should == 'modified create His Name'
+      RailsAdmin.config(Fan).update.visible_fields.first.label.should == 'modified edit His Name'
+    end
+
+  end
+    
 end
 
 module ExampleModule

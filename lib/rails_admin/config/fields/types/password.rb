@@ -1,5 +1,3 @@
-require 'rails_admin/config/fields'
-require 'rails_admin/config/sections/list'
 require 'rails_admin/config/fields/types/string'
 
 module RailsAdmin
@@ -17,12 +15,7 @@ module RailsAdmin
             @column_names
           end
 
-          def initialize(parent, name, properties)
-            super(parent, name, properties)
-            hide if parent.kind_of?(RailsAdmin::Config::Sections::List)
-          end
-
-          register_instance_option(:formatted_value) do
+          register_instance_option :formatted_value do
             "".html_safe
           end
 
@@ -30,8 +23,12 @@ module RailsAdmin
           def value
             ""
           end
+          
+          register_instance_option :visible do
+            self.section.is_a?(RailsAdmin::Config::Sections::Edit)
+          end
 
-          register_instance_option(:pretty_value) do
+          register_instance_option :pretty_value do
             '*****'
           end
         end

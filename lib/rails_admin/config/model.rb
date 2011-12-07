@@ -1,5 +1,10 @@
 require 'rails_admin/config'
 require 'rails_admin/config/base'
+require 'rails_admin/config/hideable'
+require 'rails_admin/config/has_groups'
+require 'rails_admin/config/fields/group'
+require 'rails_admin/config/fields'
+require 'rails_admin/config/has_fields'
 require 'rails_admin/config/sections'
 
 module RailsAdmin
@@ -8,7 +13,10 @@ module RailsAdmin
     class Model < RailsAdmin::Config::Base
       include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
-
+      
+      attr_reader :abstract_model
+      attr_accessor :groups
+      
       def initialize(entity)
         @abstract_model = begin
           if entity.kind_of?(RailsAdmin::AbstractModel)
@@ -19,6 +27,8 @@ module RailsAdmin
             RailsAdmin::AbstractModel.new(entity.class)
           end
         end
+        
+        @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default).tap {|g| g.label{I18n.translate("admin.new.basic_info")} } ]
         @bindings = {}
         @parent = nil
         @root = self
@@ -26,15 +36,6 @@ module RailsAdmin
 
       def excluded?
         @excluded ||= !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
-      end
-
-      # Configure create and update views as a bulk operation with given block
-      # or get update view's configuration if no block is given
-      def edit(&block)
-        return send(:update) unless block_given?
-        [:create, :update].each do |s|
-          send(s, &block)
-        end
       end
 
       def object_label
@@ -69,18 +70,10 @@ module RailsAdmin
         false
       end
 
-      # Act as a proxy for the section configurations that actually
+      # Act as a proxy for the base section configuration that actually
       # store the configurations.
       def method_missing(m, *args, &block)
-        responded_to = false
-        [:create, :list, :show, :update, :export].each do |s|
-          section = send(s)
-          if section.respond_to?(m)
-            responded_to = true
-            section.send(m, *args, &block)
-          end
-        end
-        raise NoMethodError.new("#{self} has no method #{m}") unless responded_to
+        self.send(:base).send(m, *args, &block)
       end
     end
   end
