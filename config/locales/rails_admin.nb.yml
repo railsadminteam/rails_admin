@@ -65,7 +65,7 @@ nb:
       are_you_sure_you_want_to_delete_the_object: "Er du sikker på at du vil slette denne %{model_name}"
       confirmation: "Ja, jeg er sikker"
       delete_confirmation: "Bekreft sletting"
-      bulk_delete: "De følgende objektene bli slettet, som også kan påvirke assosiserte objekter:"
+      bulk_delete: "De følgende objektene bli slettet, som også kan påvirke assosierte objekter:"
     export:
       confirmation: "Eksportér til %{name}"
       select: "Velg felter for eksport"
