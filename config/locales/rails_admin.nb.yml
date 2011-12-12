@@ -65,7 +65,7 @@ nb:
       are_you_sure_you_want_to_delete_the_object: "Er du sikker på at du vil slette denne %{model_name}"
       confirmation: "Ja, jeg er sikker"
       delete_confirmation: "Bekreft sletting"
-      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+      bulk_delete: "De følgende objektene bli slettet, som også kan påvirke assosierte objekter:"
     export:
       confirmation: "Eksportér til %{name}"
       select: "Velg felter for eksport"
@@ -74,6 +74,7 @@ nb:
       display: "Vis %{name}: %{type}"
       options_for: "Valg for %{name}"
       empty_value_for_associated_objects: "<blank>"
+      click_to_reverse_selection: 'Klikk for å inkludere/ekskludere utvalget'
       csv:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
