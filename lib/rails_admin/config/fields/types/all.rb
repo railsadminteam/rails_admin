@@ -20,6 +20,3 @@ require 'rails_admin/config/fields/types/text'
 require 'rails_admin/config/fields/types/time'
 require 'rails_admin/config/fields/types/timestamp'
 require 'rails_admin/config/fields/types/color'
-
-# Activate the spatial (WKT format) database type if PostGIS is enabled, e.g., if using the RGeo gem
-require 'rails_admin/config/fields/types/spatial' #if ActiveRecord::Base.connection.adapter_name == 'PostGIS'
