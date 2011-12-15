@@ -2,7 +2,7 @@
 
 ```ruby
 rails_admin.new_path('module~class_names')
-rails_admin.list_path('module~class_names')
+rails_admin.index_path('module~class_names')
 rails_admin.export_path('module~class_names')
 
 rails_admin.show_path('module~class_names', Module::ClassName.first.id)
