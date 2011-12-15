@@ -32,7 +32,6 @@ module RailsAdmin
         # If a block has been given evaluate it and sort fields after that
         if block
           field.instance_eval &block
-          _fields.sort! {|a, b| a.order <=> b.order }
         end
         field
       end
@@ -105,11 +104,10 @@ module RailsAdmin
       
       # Accessor for all fields
       def all_fields
-        fs = _fields(true)
-        (fs.select{|f| f.defined}.presence || fs)
+        (ro_fields = _fields(true)).select(&:defined).presence || ro_fields
       end
       
-      # Get all fields defined as visible.
+      # Get all fields defined as visible, in the correct order.
       def visible_fields
         all_fields.map {|f| f.with(bindings) }.select(&:visible).sort{|a, b| a.order <=> b.order }
       end
@@ -117,18 +115,19 @@ module RailsAdmin
       protected
       
       # Raw fields. 
-      # Recursively returns parent section's raw fields (ultimatly: Model @fields)
+      # Recursively returns parent section's raw fields
       # Duping it if accessed for modification.
       def _fields(readonly = false)
         return @_fields if @_fields
-        return @fields_readonly if readonly && @fields_readonly
+        return @_ro_fields if readonly && @_ro_fields
         
-        if self.class == RailsAdmin::Config::Sections::Base # recursion tail
-          @fields_readonly = @_fields = RailsAdmin::Config::Fields.factory(self).map{|f| f.group :default; f }
-        else
-          @fields_readonly ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).map{|f| f.section = self; f}.freeze
+        unless self.class == RailsAdmin::Config::Sections::Base 
+          # parent is RailsAdmin::Config::Model, recursion is on Section's classes
+          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).map{|f| f.section = self; f}.freeze
+        else # recursion tail
+          @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self).map{|f| f.group :default; f }
         end
-        readonly ? @fields_readonly : (@_fields ||= @fields_readonly.map(&:clone))
+        readonly ? @_ro_fields : (@_fields ||= @_ro_fields.map(&:clone))
       end
     end
   end

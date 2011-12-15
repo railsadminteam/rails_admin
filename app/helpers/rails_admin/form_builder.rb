@@ -10,7 +10,7 @@ module RailsAdmin
         :model_config => @template.instance_variable_get(:@model_config),
         :nested_in => false
       })
-      groups = options[:model_config].send(options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups
+      groups = options[:model_config].send(options[:nested_in] ? :nested : options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups
       groups.map do |fieldset|
         fieldset_for fieldset, options[:nested_in]
       end.join.html_safe +
