@@ -147,8 +147,8 @@ describe "RailsAdmin" do
   end
   
   
-  describe "DSL inheritance" do
-    it 'should be battle tested' do
+  describe "DSL field inheritance" do
+    it 'should be tested' do
       RailsAdmin.config do |config|
         config.model Fan do
           field :name do
@@ -188,9 +188,54 @@ describe "RailsAdmin" do
       RailsAdmin.config(Fan).create.visible_fields.first.label.should == 'modified create His Name'
       RailsAdmin.config(Fan).update.visible_fields.first.label.should == 'modified edit His Name'
     end
-
   end
-    
+  
+  describe "DSL group inheritance" do
+    it 'should be tested' do
+      RailsAdmin.config do |config|
+        config.model Team do
+          list do
+            group "a" do
+              field :founded
+            end
+            
+            group "b" do
+              field :name
+              field :wins
+            end
+          end
+          
+          edit do
+            group "a" do
+              field :name
+            end
+            
+            group "c" do
+              field :founded
+              field :wins
+            end
+          end
+          
+          update do
+            group "d" do
+              field :wins
+            end
+            
+            group "e" do
+              field :losses
+            end
+          end
+        end
+      end
+      
+      RailsAdmin.config(Team).list.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:founded], [:name, :wins]]
+      RailsAdmin.config(Team).edit.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
+      RailsAdmin.config(Team).create.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
+      RailsAdmin.config(Team).update.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded], [:wins], [:losses]]
+      RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:id, :created_at, :updated_at, :name, :logo_url, :manager, :ballpark, :mascot, :founded, :wins, :losses, :win_percentage, :revenue, :color, :division, :players, :fans, :comments]]
+      RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:id, :created_at, :updated_at, :name, :logo_url, :manager, :ballpark, :mascot, :founded, :wins, :losses, :win_percentage, :revenue, :color, :division, :players, :fans, :comments]]
+    end
+  end
 end
 
 module ExampleModule
