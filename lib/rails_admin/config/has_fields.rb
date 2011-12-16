@@ -104,12 +104,13 @@ module RailsAdmin
       
       # Accessor for all fields
       def all_fields
-        (ro_fields = _fields(true)).select(&:defined).presence || ro_fields
+        ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).map{|f| f.section = self; f }
       end
       
       # Get all fields defined as visible, in the correct order.
       def visible_fields
-        all_fields.map {|f| f.with(bindings) }.select(&:visible).sort{|a, b| a.order <=> b.order }
+        i = 0
+        all_fields.map {|f| f.with(bindings) }.select(&:visible).sort_by{|f| [f.order, i += 1] } # stable sort, damn
       end
       
       protected
@@ -123,7 +124,7 @@ module RailsAdmin
         
         unless self.class == RailsAdmin::Config::Sections::Base 
           # parent is RailsAdmin::Config::Model, recursion is on Section's classes
-          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).map{|f| f.section = self; f}.freeze
+          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
         else # recursion tail
           @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self).map{|f| f.group :default; f }
         end
