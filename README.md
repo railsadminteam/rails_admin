@@ -1,14 +1,22 @@
-# RailsAdmin
-
-[![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png?skin_name=chrome)](http://www.pledgie.com/campaigns/15917)
-
+# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png?skin_name=chrome)][pledgie]
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-It started as a port of [MerbAdmin](https://github.com/sferik/merb-admin) to Rails 3
-and was implemented as a [Ruby Summer of Code project](http://www.rubysoc.org/projects)
-by [Bogdan Gaza](https://github.com/hurrycane) with mentors [Erik Michaels-Ober](https://github.com/sferik),
-[Yehuda Katz](https://github.com/wycats),
-[Luke van der Hoeven](https://github.com/plukevdh), and [Rein Henrichs](https://github.com/reinh).
+[travis]: http://travis-ci.org/sferik/rails_admin
+[gemnasium]: https://gemnasium.com/sferik/rails_admin
+[pledgie]: http://www.pledgie.com/campaigns/15917
+
+It started as a port of [MerbAdmin][merb-admin] to Rails 3 and was implemented
+as a [Ruby Summer of Code project][rubysoc] by [Bogdan Gaza][hurrycane] with
+mentors [Erik Michaels-Ober][sferik], [Yehuda Katz][wycats], [Luke van der
+Hoeven][plukevdh], and [Rein Henrichs][reinh].
+
+[merb-admin]: https://github.com/sferik/merb-admin
+[rubysoc]: http://www.rubysoc.org/projects
+[hurrycane]: https://github.com/hurrycane
+[sferik]: https://github.com/sferik
+[wycats]: https://github.com/wycats
+[plukevdh]: https://github.com/plukevdh
+[reinh]: https://github.com/reinh
 
 ## <a name="features"></a>Features
 
@@ -30,16 +38,6 @@ Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy
 
 [demo]: http://rails-admin-tb.herokuapp.com/
 [dummy_app]: https://github.com/bbenezech/dummy_app
-
-## <a name="build"></a>Build Status
-[![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis]
-
-[travis]: http://travis-ci.org/sferik/rails_admin
-
-## <a name="dependencies"></a>Dependency Status
-[![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium]
-
-[gemnasium]: https://gemnasium.com/sferik/rails_admin
 
 ## <a name="installation"></a>Installation
 In your `Gemfile`, add the following dependencies:
