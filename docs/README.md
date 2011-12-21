@@ -20,6 +20,7 @@
 * [[Decimal]]
 * [[Integer]]
 * [[Float]]
+* [[Hidden]]
 * [[String]]
   * [[Password]]
 * [[Text]]
