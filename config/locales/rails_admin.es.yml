@@ -51,6 +51,8 @@ es:
       required: "Obligatorio"
       optional: "Opcional"
       one_char: "carácter"
+      char_length_up_to: "longitud de hasta"
+      char_length_of: "longitud"
       many_chars: "caracteres o menos"
       chosen: "Seleccionado %{name}"
       select_choice: "Seleccione su(s) elección(es) y haga clic"
