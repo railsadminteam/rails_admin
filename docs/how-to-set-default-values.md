@@ -24,16 +24,17 @@ Adding <code>current_user</code> as a default value adds an extra challenge.  Th
 
 In RailsAdmin, you can assign a default value of <code>current_user</code> like this:
 
-    config.model Post do 
-      edit do 
-        field :user_id do 
-          def value 
-            bindings[:view]._current_user.id 
-          end 
-        end 
-      end 
-    end 
-
+```ruby
+config.model Post do 
+  edit do 
+    field :user_id, :hidden do
+      default_value do
+        bindings[:view]._current_user.id
+      end
+    end
+  end 
+end
+```
 This was taken from these discussion threads:
 
 * http://groups.google.com/group/rails_admin/msg/fe588202e4401dc4
