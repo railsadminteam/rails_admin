@@ -29,14 +29,15 @@
 
 ### Sections
 
-* [[Base]]
-  * [[List]]
-  * [[Show]]
-  * [[Export]]
-  * [[Edit]]
-    * [[Create]]
-    * [[Update]]
-    * [[Nested]]
+[[Base]]
+
+* [[List]]
+* [[Show]]
+* [[Export]]
+* [[Edit]]
+  * [[Create]]
+  * [[Update]]
+  * [[Nested]]
 
 
 ### Associations types
