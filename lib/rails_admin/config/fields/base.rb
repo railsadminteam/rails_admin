@@ -131,6 +131,10 @@ module RailsAdmin
         register_instance_option(:html_attributes) do
           {}
         end
+        
+        register_instance_option :default_value do
+          nil
+        end
 
         # Accessor for field's label.
         #
@@ -181,7 +185,7 @@ module RailsAdmin
         register_instance_option :read_only do
           not editable
         end
-        
+                
         def editable
           return false if @properties && @properties[:read_only]
           role = bindings[:view].controller.send(:_attr_accessible_role)
@@ -251,6 +255,10 @@ module RailsAdmin
 
         def method_name
           name
+        end
+        
+        def _html_attributes
+          html_attributes.merge(!default_value.nil? ? { :value => default_value } : {})
         end
       end
     end

@@ -39,6 +39,26 @@ describe "RailsAdmin" do
       should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]')
     end
   end
+  
+  describe 'hidden fields with default values' do
+    
+    it "should show up with default value, hidden" do
+      RailsAdmin.config Player do
+        include_all_fields
+        edit do
+          field :name, :hidden do
+            default_value do
+              bindings[:view]._current_user.email
+            end
+          end
+        end
+      end
+      
+      visit new_path(:model_name => "player")
+      should have_selector("#player_name[type=hidden][value='username@example.com']")
+      should_not have_selector("#player_name[type=hidden][value='toto@example.com']")
+    end
+  end
 
   describe "polymorphic associations" do
     before :each do
