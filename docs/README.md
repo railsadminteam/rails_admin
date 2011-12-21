@@ -27,6 +27,17 @@
 * [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
 
 
+### Associations types
+
+* [[Associations basics]]
+* [[belongs_to association|Belongs-to-association]]
+  * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
+* [[has_one association|Has-one-association]]
+* [[has_many association|Has-many-association]]
+  * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
+  * [[has_many :through association|Has-many-:through-association]]
+
+
 ### Sections
 
 [[Base]]
@@ -38,17 +49,6 @@
   * [[Create]]
   * [[Update]]
   * [[Nested]]
-
-
-### Associations types
-
-* [[Associations basics]]
-* [[belongs_to association|Belongs-to-association]]
-  * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
-* [[has_one association|Has-one-association]]
-* [[has_many association|Has-many-association]]
-  * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
-  * [[has_many :through association|Has-many-:through-association]]
 
 
 ### Authorization
