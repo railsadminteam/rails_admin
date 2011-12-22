@@ -2,7 +2,7 @@
 
 You may have business rules where you want to limit the members of a collection that are available for association with a particular record. For example, a Player might be a member of a League. When selecting Players for a Team, we wouldn't want to see all the Players we know about, just the ones in the same League as the Team.
 
-For associations types (other than polymorphics at the moment) you can scope associable records with: 
+For all associations types (other than polymorphics at the moment) you can scope associable records with: 
 
 ```ruby
 config.model Team do
