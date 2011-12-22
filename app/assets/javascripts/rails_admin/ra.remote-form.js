@@ -109,6 +109,7 @@
               multiselect.find('select.ra-multiselect-selection').prepend(option);
             }
           }
+          widget._trigger("success");
           dialog.modal("hide");
         }
       });
