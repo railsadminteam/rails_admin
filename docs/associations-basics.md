@@ -30,7 +30,7 @@ You can edit related objects by double-clicking on any visible item in the widge
 
 See [[associations scoping]] for more informations on how to limit and filter proposed associated records.
 
-### Avoiding edit association spagetti issues
+### Avoiding edit association spaghetti issues
 
 If you set the `:inverse_of` option on your relations, RailsAdmin will automatically populate the inverse relationship
 in the modal creation window. (link next to :belongs\_to and :has\_many multiselect widgets)
