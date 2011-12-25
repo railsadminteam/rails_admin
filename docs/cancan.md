@@ -98,7 +98,9 @@ end
 
 ### CanCan::AuthorizationNotPerformed exception
 
-remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead. 
+Remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead.
+
+Or use the `:unless` option to test against `rails_admin_controller?`.
 
 ### RailsAdmin verbs
 
