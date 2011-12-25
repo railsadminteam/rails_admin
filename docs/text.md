@@ -16,4 +16,6 @@ RailsAdmin.config do |config|
 end
 ```
 
+Note that CKeditor won't appear in AJAX-loaded modals, due to CKeditor limitations with AJAX loading/unloading (basically it's crap).
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/text.rb]]
