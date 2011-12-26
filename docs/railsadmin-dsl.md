@@ -348,17 +348,6 @@ RailsAdmin.config do |config|
 end
 ```
 
-Default sort column is :id for ActiveRecord version
-To change it:
-
-```ruby
-RailsAdmin.config do |config|
-  config.model Team do
-    sort_by :name
-  end
-end
-```
-
 By default, dates and serial ids are reversed when first-sorted ('desc' instead of 'asc' in SQL).
 If you want to reverse (or cancel it) the default sort order (first column click or the default sort column):
 
