@@ -69,7 +69,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Authorization**
+**Authorization (before_filter)**
 
 Use cancan https://github.com/ryanb/cancan for authorization:
 
