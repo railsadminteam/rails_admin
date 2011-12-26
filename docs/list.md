@@ -1,6 +1,48 @@
 Section used for the index view.
 
 It inherits its configuration from the `base` section.
+ 
+**Number of items per page**
+
+You can configure the default number of rows rendered per page:
+
+```ruby
+RailsAdmin.config do |config|
+  config.default_items_per_page = 50
+end
+```
+
+**Number of items per page per model**
+
+You can also configure it per model:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      items_per_page 100
+    end
+  end
+end
+```
+
+**Default sorting**
+
+By default, rows are sorted by the field `id` in reverse order
+
+You can change default behavior with use two options: `sort_by` and `sort_reverse`
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Player do
+    list do
+      sort_by :name
+      sort_reverse false
+    end
+  end
+end
+```
+
 
 **Filters**
 
@@ -62,18 +104,19 @@ RailsAdmin.config do |config|
   config.model Team do
     list do
       field :id do
-        sort_reverse? false   # will sort id increasing ('asc') first ones first (default is last ones first)
+        sort_reverse false   # will sort id increasing ('asc') first ones first (default is last ones first)
       end
       field :created_at do
-        sort_reverse? false   # will sort dates increasing ('asc') first ones first (default is last ones first)
+        sort_reverse false   # will sort dates increasing ('asc') first ones first (default is last ones first)
       end
       field :name do
-        sort_reverse? true    # will sort name decreasing ('dec') z->a (default is a->z)
+        sort_reverse true    # will sort name decreasing ('dec') z->a (default is a->z)
       end
     end
   end
 end
 ```
+
 
 **Fields searching**
 
@@ -126,48 +169,5 @@ field :team do
   filterable false
 end
 ```
-
-**Number of items per page**
-
-You can configure the default number of rows rendered per page:
-
-```ruby
-RailsAdmin.config do |config|
-  config.default_items_per_page = 50
-end
-```
-
-**Number of items per page per model**
-
-You can also configure it per model:
-
-```ruby
-RailsAdmin.config do |config|
-  config.model Team do
-    list do
-      items_per_page 100
-    end
-  end
-end
-```
-
-**Default sorting**
-
-By default, rows sorted by the field `id` in reverse order
-
-You can change default behavior with use two options: `sort_by` and `sort_reverse`
-
-```ruby
-RailsAdmin.config do |config|
-  config.model Player do
-    list do
-      sort_by :name
-      sort_reverse false
-    end
-  end
-end
-```
-
-
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
