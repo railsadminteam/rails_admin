@@ -18,6 +18,11 @@ RailsAdmin uses a sass release of bootstrap for CSS, and bootstrap/jquery-ui for
 
 None has been released so far, but when it's been done, you can set `ENV['RAILS_ADMIN_THEME']` to the name of that theme inside your `application.rb`
 
+! Note that initializers such as RailsAdmin's aren't read when !
+```ruby
+config.assets.initialize_on_precompile
+```
+
 ### Resources:
 
 * [[Boostrap|http://twitter.github.com/bootstrap/]]
