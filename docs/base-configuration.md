@@ -34,7 +34,7 @@ The current_user is usually inferred from your Devise settings and added to your
 If needed, it can be customized as such:
 
 ```ruby
-config.current_user_method { current_<%= @model_name %> }
+config.current_user_method { current_admin }
 ```
 
  **Authentication (before_filter)**
