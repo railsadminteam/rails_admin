@@ -14,6 +14,10 @@ module RailsAdmin
           def self.column_names
             @column_names
           end
+          
+          def parse_input(params)
+            params[name] = params[name].presence
+          end
 
           register_instance_option :formatted_value do
             "".html_safe

@@ -307,8 +307,6 @@ module RailsAdmin
         if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
           @attributes[key] = YAML::load(value)
         end
-        # Delete fields that are blank
-        @attributes[key] = nil if value.blank?
       end
     end
 

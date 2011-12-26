@@ -18,7 +18,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           def parse_input(params)
-            params[name] = self.class.normalize(params[name], localized_time_format) if params[name]
+            params[name] = self.class.normalize(params[name], localized_time_format) if params[name].present?
           end
 
           # Parse normalized date (time) strings using UTC
