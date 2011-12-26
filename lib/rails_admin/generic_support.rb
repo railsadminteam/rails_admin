@@ -6,6 +6,10 @@ module RailsAdmin
         parts = model.to_s.split("::")
         parts.map{|x| x == parts.last ? x.underscore.pluralize : x.underscore}.join("~")
       end
+      
+      def param_key
+        model.to_s.split("::").map(&:underscore).join("_")
+      end
 
       def pretty_name
         model.model_name.human

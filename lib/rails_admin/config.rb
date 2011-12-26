@@ -210,6 +210,16 @@ module RailsAdmin
         config.instance_eval(&block) if block
         config
       end
+      
+      def default_hidden_fields=(fields)
+        if fields.is_a?(Array)
+          @default_hidden_fields = {}
+          @default_hidden_fields[:edit] = fields
+          @default_hidden_fields[:show] = fields
+        else
+          @default_hidden_fields = fields
+        end
+      end
 
       # Returns all model configurations
       #
@@ -229,7 +239,9 @@ module RailsAdmin
         @authenticate = nil
         @authorize = nil
         @current_user = nil
-        @default_hidden_fields = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields = {}
+        @default_hidden_fields[:edit] = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:show] = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
         @default_items_per_page = 20
         @default_search_operator = 'default'
         @excluded_models = []

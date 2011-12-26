@@ -5,7 +5,7 @@ module RailsAdmin
       # Visibility defaults to true.
       def self.included(klass)
         klass.register_instance_option(:visible?) do
-          !root.excluded?
+          !root.try :excluded?
         end
       end
 

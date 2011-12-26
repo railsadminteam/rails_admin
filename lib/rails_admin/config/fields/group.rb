@@ -9,9 +9,11 @@ module RailsAdmin
         include RailsAdmin::Config::Hideable
 
         attr_reader :name
+        attr_accessor :section
 
         def initialize(parent, name)
           super(parent)
+          @section = parent
           @name = name.to_s.tr(' ', '_').downcase.to_sym
         end
 
@@ -20,7 +22,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Fields.field
         def field(name, type = nil, &block)
-          field = parent.field(name, type, &block)
+          field = section.field(name, type, &block)
           # Directly manipulate the variable instead of using the accessor
           # as group probably is not yet registered to the parent object.
           field.instance_variable_set("@group", self)
@@ -29,14 +31,14 @@ module RailsAdmin
 
         # Reader for fields attached to this group
         def fields
-          parent.fields.select {|f| self == f.group }
+          section.fields.select {|f| self == f.group }
         end
 
         # Defines configuration for fields by their type
         #
         # @see RailsAdmin::Config::Fields.fields_of_type
         def fields_of_type(type, &block)
-          selected = fields.select {|f| type == f.type }
+          selected = section.fields.select {|f| type == f.type }
           if block
             selected.each {|f| f.instance_eval &block }
           end
@@ -45,7 +47,7 @@ module RailsAdmin
 
         # Reader for fields that are marked as visible
         def visible_fields
-          fields.select {|f| f.with(bindings).visible? }.map{|f| f.with(bindings)}
+          section.visible_fields.select {|f| self == f.group }.map{|f| f.with(bindings)}
         end
 
         # Configurable group label which by default is group's name humanized.

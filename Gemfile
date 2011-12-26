@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
+  gem 'foo', :path => './spec/dummy_app/foo'
+  
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
     # activerecord-jdbc-adapter does not yet have a rails 3.1 compatible release

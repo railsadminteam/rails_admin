@@ -617,6 +617,16 @@ describe "RailsAdmin Config DSL Edit Section" do
         @record.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
       end
 
+      it "should interpret time value as UTC when timezone is specified" do
+        Time.zone = 'Eastern Time (US & Canada)' # -05:00
+
+        visit new_path(:model_name => "field_test")
+        fill_in "field_test[time_field]", :with => @time.strftime("%H:%M")
+        click_button "Save"
+        @record = RailsAdmin::AbstractModel.new("FieldTest").first
+        @record.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
+      end
+
       it "should have a customization option" do
         RailsAdmin.config FieldTest do
           edit do
