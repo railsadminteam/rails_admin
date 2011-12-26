@@ -232,8 +232,8 @@ describe "RailsAdmin" do
       RailsAdmin.config(Team).edit.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
       RailsAdmin.config(Team).create.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
       RailsAdmin.config(Team).update.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded], [:wins], [:losses]]
-      RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:id, :created_at, :updated_at, :name, :logo_url, :manager, :ballpark, :mascot, :founded, :wins, :losses, :win_percentage, :revenue, :color, :division, :players, :fans, :comments]]
-      RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:id, :created_at, :updated_at, :name, :logo_url, :manager, :ballpark, :mascot, :founded, :wins, :losses, :win_percentage, :revenue, :color, :division, :players, :fans, :comments]]
+      RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count.should == 18
+      RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count.should == 18
     end
   end
 end
