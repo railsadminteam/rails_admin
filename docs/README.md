@@ -6,7 +6,7 @@
 ### Configuration
 
 * [[Base RailsAdmin configuration|Base configuration]]
-* [[Navigation, Models choice|Navigation]]
+* [[Model configuration, navigation|Navigation]]
 * [[Model configuration]]
 * [[Fields configuration|Railsadmin-DSL]]
 
