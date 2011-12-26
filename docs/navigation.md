@@ -51,3 +51,105 @@ end
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
 Dashboard page, list pages, etc.
 
+**Hiding a model**
+
+You can hide a model from the top navigation by marking its `visible` option
+as false:
+
+By passing the value as an argument:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    visible false
+  end
+end
+```
+
+Or by passing a block that will be lazy evaluated each time the option is read:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    visible { false }
+  end
+end
+```
+
+These two examples also work as a generic example of how most of the
+configuration options function within RailsAdmin. You can pass a value as an
+argument `option_name value`, or you can pass in a block which will be
+evaluated each time the option is read. Notable is that boolean options' reader
+accessors will be appended with ? whereas the writers will not be. That is, if
+you want to get the Team model's visibility, you use
+`RailsAdmin.config(Team).visible?`.
+
+**Create a navigation_label in navigation**
+
+```ruby
+# Given there are the following models: League, Team and Division
+
+RailsAdmin.config do |config|
+  config.model Team do
+    parent League
+  end
+
+  config.model Division do
+    parent League
+  end
+end
+```
+
+Obtained navigation:
+
+    Dashboard
+    ...
+    League # (non-clickable)
+      League
+      Division
+      Team
+    ...
+
+You probably want to change the name of the navigation_label.
+This can be easily achieved with the 'navigation_label' method of the parent model.
+
+Added to previous example:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    navigation_label 'League related'
+  end
+end
+```
+
+Obtained navigation:
+
+    Dashboard
+    ...
+    League related  # (non-clickable)
+      League
+      Division
+      Team
+    ...
+
+**Change models order in navigation**
+
+By default, they are ordered by alphabetical order. If you need to override this, specify
+a weight attribute. Default is 0. Lower values will bubble items to the top, higher values
+will move them to the bottom. Items with same weight will still be ordered by alphabetical order.
+The mechanism is fully compatible with navigation labels. Items will be ordered within their own
+menu subset. (but parent will always be first inside his submenu).
+
+Example:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model League do
+    navigation_label 'League related'
+    weight -1
+  end
+end
+```
+
+The 'League related' navigation label will move to the topmost position.
