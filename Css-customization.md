@@ -3,6 +3,7 @@ RailsAdmin uses a sass release of bootstrap for CSS, and bootstrap/jquery-ui for
 ### For application level theming, you can modify:
 
 `app/assets/stylesheet/rails_admin/custom/mixins.css.scss`
+
 `app/assets/stylesheet/rails_admin/custom/theming.css.scss`
 `app/assets/stylesheet/rails_admin/custom/variables.css.scss`
 
