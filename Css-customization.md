@@ -1,4 +1,4 @@
-RailsAdmin uses bootstrap for CSS, and bootstrap/jquery-ui for JS.
+RailsAdmin uses a sass release of bootstrap for CSS, and bootstrap/jquery-ui for JS.
 
 * For application level theming, you can modify:
 
@@ -19,3 +19,9 @@ RailsAdmin uses bootstrap for CSS, and bootstrap/jquery-ui for JS.
 `app/assets/stylesheet/rails_admin/theme/__THEME_NAME__/variables.css.scss`
 
 `app/assets/javascripts/rails_admin/theme/__THEME_NAME__/ui.js`
+
+Resources:
+
+[[Boostrap|http://twitter.github.com/bootstrap/]]
+
+[[Bootstrap Sass|https://github.com/thomas-mcdonald/bootstrap-sass]]
