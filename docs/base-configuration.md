@@ -11,9 +11,7 @@ You can force it (true or false):
 ```ruby
 RailsAdmin.config do |config|
   config.main_app_name = ["Cool app", "BackOffice"]
-end
-# or somethig more dynamic
-RailsAdmin.config do |config|
+  # or somethig more dynamic
   config.main_app_name = Proc.new { |controller| [ "Cool app", "BackOffice - #{controller.params[:action].try(:titleize)}" ] }
 end
 ```
