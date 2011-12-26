@@ -36,10 +36,14 @@ Once done with the choice of model, you can customize the way they appear in the
 
 **Setting the model's label**
 
+RailsAdmin will use ActiveModel I18n API by default, so this shouldn't be needed. Still, you can configure label, and its plural, if needed:
+
 ```ruby
-config.model Team do
-  label "List of teams"
+config.model Box do
+  label "Beautiful box" 
+  label_plural "Beautiful boxen"
 end
+
 ```
 
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
@@ -140,4 +144,8 @@ The 'League related' navigation label will move to the topmost position.
 
 **Method for instances label**
 
-object_label_method
+```ruby
+config.model Team do
+  object_label_method :custom_name_method
+end
+```
