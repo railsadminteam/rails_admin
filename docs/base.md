@@ -1,7 +1,7 @@
 Base section.
 
-All sections inherits from this one.
-It's the section used 
+All other sections inherits from it.
+It's the section used in configuration when no section is specified (you can also explicitly use the `base` section name).
 
 Example:
 
