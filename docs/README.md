@@ -5,9 +5,9 @@
 
 ### Configuration
 
-* [[Fields DSL]]
 * [[Base configuration]]
 * [[Navigation]]
+* [[Fields DSL|Railsadmin-DSL]]
 
 
 ### Field types
