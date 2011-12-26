@@ -6,26 +6,9 @@ A customized configuration guide is generated at installation in `config/initial
 
 Read it (!)
 
-### Model Class and Instance Labels ###
-
-**Setting the model's label**
-
-If you need to customize the label of the model, use:
-
-```ruby
-RailsAdmin.config do |config|
-  config.model Team do
-    label "List of teams"
-  end
-end
-```
-
-This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
-Dashboard page, list pages, etc.
-
 **The object_label_method method**
 
-The model configuration has another option `object_label_method` which configures
+The model configuration option `object_label_method` configures
 the title display of a single database record, i.e. an instance of a model.
 
 By default it tries to call "name" or "title" methods on the record in question. If the object responds to neither,
