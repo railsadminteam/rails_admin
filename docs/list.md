@@ -32,21 +32,6 @@ By default, rows sorted by the field `id` in reverse order
 
 You can change default behavior with use two options: `sort_by` and `sort_reverse`
 
-**Default sorting - Configure globally**
-
-```ruby
-RailsAdmin.config do |config|
-  config.models do
-    list do
-      sort_by :updated_at
-      sort_reverse true # already default for serials ids and dates
-    end
-  end
-end
-```
-
-**Default sorting - Configure per model**
-
 ```ruby
 RailsAdmin.config do |config|
   config.model Player do
