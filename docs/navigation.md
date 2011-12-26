@@ -144,6 +144,8 @@ The 'League related' navigation label will move to the topmost position.
 
 **Method for instances label**
 
+Set the method name for instances' label. Will default to the first `Config.label_methods` (see base configuration) that instances respond to. You can set it explicitly:
+
 ```ruby
 config.model Team do
   object_label_method :custom_name_method
