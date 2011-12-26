@@ -2,6 +2,20 @@ Section used for the index view.
 
 It inherits its configuration from the `base` section.
 
+**Filters**
+
+Default visible filters. Must be a list of fields name.
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      filters [:name, :manager]
+    end
+  end
+end
+```
+
 **Number of items per page**
 
 You can configure the default number of rows rendered per page:
