@@ -1,11 +1,3 @@
-RailsAdmin provides its out of the box administrative interface by inspecting your application's
-models and following some Rails conventions. For a more tailored experience, it also provides a
-configuration DSL which allows you to customize many aspects of the interface.
-
-A customized configuration guide is generated at installation in `config/initializers/rails_admin.rb`
-
-Read it (!)
-
 **The object_label_method method**
 
 The model configuration option `object_label_method` configures
