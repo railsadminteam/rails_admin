@@ -1,3 +1,9 @@
+RailsAdmin provides its out of the box administrative interface by inspecting your application's
+models and following some Rails conventions. For a more tailored experience, it also provides a
+configuration DSL which allows you to customize many aspects of the interface.
+
+A customized configuration guide is generated at installation in `config/initializers/rails_admin.rb`
+
 The configuration in `app/initializer/rails_admin.rb` is executed at startup time, once.
 
 Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
