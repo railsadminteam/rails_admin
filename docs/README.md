@@ -64,8 +64,8 @@
 
 ### Styling
 
-* [[Css hooks]]
-
+* [[List view table styling]]
+* [[CSS Customization]]
 
 ### Routing
 
