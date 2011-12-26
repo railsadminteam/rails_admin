@@ -6,14 +6,6 @@ A customized configuration guide is generated at installation in `config/initial
 
 Read it (!)
 
-You can display empty fields in show view with:
-
-```ruby
-RailsAdmin.config do |config|
-  config.compact_show_view = false
-end
-```
-
 You can customize the width of the list view with:
 
 ```ruby
