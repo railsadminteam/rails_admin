@@ -4,11 +4,11 @@ configuration DSL which allows you to customize many aspects of the interface.
 
 A customized configuration guide is generated at installation in `config/initializers/rails_admin.rb`
 
-The configuration in `app/initializer/rails_admin.rb` is executed at startup time, once.
+This initiaizer in `app/initializer/rails_admin.rb` is executed at startup time, once.
 
 Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
 
-You can force it (true or false):
+You can force it if needed:
 
 `SKIP_RAILS_ADMIN_INITIALIZER=false rake mytask`
 
