@@ -1,4 +1,4 @@
-The configuration in `app/initializer/rails_admin.rb` is executed at startup time, once. (dev & production)
+The configuration in `app/initializer/rails_admin.rb` is executed at startup time, once.
 
 Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
 
