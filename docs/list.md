@@ -17,7 +17,7 @@ end
 ```
 
 
-**Fields - Sortability**
+**Fields sorting**
 
 You can make a column non-sortable by setting the sortable option to false (1)
 You can change the column that the field will actually sort on (2)
@@ -75,7 +75,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Fields - Searchability**
+**Fields searching**
 
 You can make a column non-searchable by setting the searchable option to false (1)
 You can change the column that the field will actually search on (2)
