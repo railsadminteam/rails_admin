@@ -1,5 +1,5 @@
 <% 
-  theme = :default
+  theme = ENV['RAILS_ADMIN_THEME'] || :default
   require_asset 'jquery'
   require_asset 'jquery_ujs'
   require_asset 'rails_admin/jquery_nested_form'

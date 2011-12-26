@@ -1,16 +1,6 @@
 <%
-  theme = :default
+  theme = ENV['RAILS_ADMIN_THEME'] || :default
 %>
-
-/*
-TODO :
-  - optionize the theme variable nicely
-  - add plugin hooks: plugins.each{|p| @import rails_admin/plugins/p/*[variables|mixins|theming]}
-  - wiki pages for theming help
-  - update readme for users
-  - ask @sferik to RT a call for themers
-*/
-
 
 /***  Variables  ***/
 
