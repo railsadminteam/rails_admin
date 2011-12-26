@@ -1,11 +1,11 @@
+## Navigation
+
 You can include/exclude models totally. They won't appear in RailsAdmin at all.
 
 **Blacklist Approach**
 
 ```ruby
-RailsAdmin.config do |config|
-  config.excluded_models << "ClassName"
-end
+config.excluded_models << "ClassName"
 ```
 
 **Whitelist Approach**
@@ -16,18 +16,14 @@ be accessible through RailsAdmin. The `excluded_models` configuration above perm
 If you prefer a whitelist approach, then you can use the `included_models` configuration option instead:
 
 ```ruby
-RailsAdmin.config do |config|
-  config.included_models = ["Class1", "Class2", "Class3"]
-end
+config.included_models = ["Class1", "Class2", "Class3"]
 ```
 Only the models explicitly listed will be put under RailsAdmin access, and the auto-discovery of models is skipped.
 
 The blacklist is effective on top of that, still, so that if you also have:
 
 ```ruby
-RailsAdmin.config do |config|
-  config.excluded_models = ["Class1"]
-end
+config.excluded_models = ["Class1"]
 ```
 
 then only `Class2` and `Class3` would be made available to RailsAdmin.
@@ -41,10 +37,8 @@ Once done with the choice of model, you can customize the way they appear in the
 **Setting the model's label**
 
 ```ruby
-RailsAdmin.config do |config|
-  config.model Team do
-    label "List of teams"
-  end
+config.model Team do
+  label "List of teams"
 end
 ```
 
@@ -59,20 +53,16 @@ as false:
 By passing the value as an argument:
 
 ```ruby
-RailsAdmin.config do |config|
-  config.model Team do
-    visible false
-  end
+config.model Team do
+  visible false
 end
 ```
 
 Or by passing a block that will be lazy evaluated each time the option is read:
 
 ```ruby
-RailsAdmin.config do |config|
-  config.model Team do
-    visible { false }
-  end
+config.model Team do
+  visible { false }
 end
 ```
 
@@ -89,14 +79,12 @@ you want to get the Team model's visibility, you use
 ```ruby
 # Given there are the following models: League, Team and Division
 
-RailsAdmin.config do |config|
-  config.model Team do
-    parent League
-  end
+config.model Team do
+  parent League
+end
 
-  config.model Division do
-    parent League
-  end
+config.model Division do
+  parent League
 end
 ```
 
@@ -116,10 +104,8 @@ This can be easily achieved with the 'navigation_label' method of the parent mod
 Added to previous example:
 
 ```ruby
-RailsAdmin.config do |config|
-  config.model League do
-    navigation_label 'League related'
-  end
+config.model League do
+  navigation_label 'League related'
 end
 ```
 
@@ -144,12 +130,14 @@ menu subset. (but parent will always be first inside his submenu).
 Example:
 
 ```ruby
-RailsAdmin.config do |config|
-  config.model League do
-    navigation_label 'League related'
-    weight -1
-  end
+config.model League do
+  navigation_label 'League related'
+  weight -1
 end
 ```
 
 The 'League related' navigation label will move to the topmost position.
+
+**Method for instances label**
+
+object_label_method
