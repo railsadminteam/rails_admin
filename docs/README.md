@@ -5,9 +5,10 @@
 
 ### Configuration
 
-* [[Base configuration]]
+* [[Base RailsAdmin configuration]]
 * [[Navigation, Models choice|Navigation]]
-* [[Fields DSL|Railsadmin-DSL]]
+* [[Model configuration]]
+* [[Fields configuration|Railsadmin-DSL]]
 
 
 ### Field types
