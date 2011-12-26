@@ -18,13 +18,83 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Authentication**
+**Locale**
 
-You can customize authentication by providing a custom block for `RailsAdmin.authenticate_with`.
+If your default_local is different from :en, uncomment the following 2 lines and set your default locale at the beginning of the file:
+
+```ruby
+require 'i18n'
+I18n.default_locale = :de
+```
+
+**current_user method**
+
+The current_user is usually inferred from your Devise settings and added to your initilizer file automatically.
+
+If needed, it can be customized as such:
+
+```ruby
+config.current_user_method { current_<%= @model_name %> }
+```
+
+ **Authentication (before_filter)**
+
+This is run inside the controller instance so you can setup any authentication you need to.
+
+By default, the authentication will run via warden if available, and will run on the default user scope.
+
+If you use devise, this will authenticate the same as `authenticate_user!`
+
+Example Devise admin:
+
+```ruby
+config.authenticate_with do
+  authenticate_admin!
+end
+```
+
+Example Custom Warden:
+
+``ruby
+config.authenticate_with do
+  warden.authenticate! :scope => :paranoid
+end
+```
+
 To disable authentication, pass an empty block:
 
 ```ruby
 RailsAdmin.config do |config|
   config.authenticate_with {}
 end
+```
+
+**Authorization**
+
+Use cancan https://github.com/ryanb/cancan for authorization:
+
+```ruby
+config.authorize_with :cancan
+```
+
+Or use simple custom authorization rule:
+
+```ruby
+config.authorize_with do
+  redirect_to root_path unless warden.user.is_admin?
+end
+```
+
+**ActiveModel's :attr_acessible :attr_protected**
+
+Default is :default
+
+```ruby
+config.attr_accessible_role { :default }
+```
+
+_current_user is accessible in the block if you need to make it user specific:
+
+```ruby
+config.attr_accessible_role { _current_user.role.to_sym }
 ```
