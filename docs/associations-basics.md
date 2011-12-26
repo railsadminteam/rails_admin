@@ -41,6 +41,16 @@ It will also hide the inverse relation on nested forms. As a good practice, you 
 
 :readonly options are automatically inferred on associations fields and won't be editable in forms.
 
-### Implementation
+### Nested form
+
+If you have accepts_nested_attributes set up in your model but don't want the association to be a nested form in your model:
+
+```ruby
+config.model Team do
+  field :players do
+    nested_form false
+  end
+end
+```
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
