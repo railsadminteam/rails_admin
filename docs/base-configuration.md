@@ -87,7 +87,7 @@ end
 
 **ActiveModel's :attr_acessible :attr_protected**
 
-Default is :default
+Default is :default (default for ActiveModel)
 
 ```ruby
 config.attr_accessible_role { :default }
