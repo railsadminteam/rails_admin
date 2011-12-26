@@ -7,7 +7,6 @@
 
 * [[Base RailsAdmin configuration|Base configuration]]
 * [[Model configuration, navigation|Navigation]]
-* [[Model configuration]]
 * [[Fields configuration|Railsadmin-DSL]]
 
 
