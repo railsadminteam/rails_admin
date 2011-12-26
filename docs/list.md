@@ -1,7 +1,15 @@
 Section used for the index view.
 
 It inherits its configuration from the `base` section.
- 
+
+**Width of the list table**
+
+```ruby
+RailsAdmin.config do |config|
+  config.total_columns_width = 1000
+end
+```
+
 **Number of items per page**
 
 You can configure the default number of rows rendered per page:
