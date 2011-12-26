@@ -12,8 +12,6 @@
 
 ### Field types
 
-[[Fields basics]]
-
 * [[File Upload]]
   * [[Paperclip]]
   * [[Dragonfly]]
