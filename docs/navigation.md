@@ -34,3 +34,20 @@ then only `Class2` and `Class3` would be made available to RailsAdmin.
 
 The whitelist approach may be useful if RailsAdmin is used only for a part of the application and you want to make
 sure that new models are not automatically added to RailsAdmin, e.g. because of security concerns.
+
+
+Once done with the choice of model, you can customize the way they appear in the navigation.
+
+**Setting the model's label**
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    label "List of teams"
+  end
+end
+```
+
+This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
+Dashboard page, list pages, etc.
+
