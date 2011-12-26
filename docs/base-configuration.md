@@ -55,7 +55,7 @@ end
 
 Example Custom Warden:
 
-``ruby
+```ruby
 config.authenticate_with do
   warden.authenticate! :scope => :paranoid
 end
