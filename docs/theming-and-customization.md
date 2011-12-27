@@ -59,7 +59,7 @@ touch ui.js
 ```
 
 ```
-rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript
+rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript --skip-test-unit
 ```
 
 See the `Existing themes` section for an example.
