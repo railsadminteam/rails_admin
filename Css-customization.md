@@ -29,14 +29,16 @@ config.assets.initialize_on_precompile = false
 
 ### Create a theme
 
+Replace `__THEME_NAME__` with the real name of your theme in the following snippet and paste it in your shell:
+
 ```bash
-rails plugin new rails_admin_example_theme
-cd rails_admin_example_theme/
-mkdir -p vendor/assets/stylesheets/rails_admin/themes/example_theme/
-mkdir -p vendor/assets/javascripts/rails_admin/themes/example_theme/
-cd vendor/assets/stylesheets/rails_admin/themes/example_theme/
+rails plugin new rails_admin___THEME_NAME__
+cd rails_admin___THEME_NAME__/
+mkdir -p vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/
+mkdir -p vendor/assets/javascripts/rails_admin/themes/__THEME_NAME__/
+cd vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/
 touch mixins.css.scss theming.css.scss variables.css.scss
-cd ../../../../javascripts/rails_admin/themes/example_theme/
+cd ../../../../javascripts/rails_admin/themes/__THEME_NAME__/
 touch ui.js
 ```
 
