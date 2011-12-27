@@ -67,4 +67,4 @@ See the `Existing themes` section for an example.
 ### Existing themes:
 
 * [[Example theme|https://github.com/bbenezech/rails_admin_example_theme]]: technical stub you can use for bootstrapping.
-* Designer of feel like one ? Add your own !
+* Designer of feel like one? Add your own.
