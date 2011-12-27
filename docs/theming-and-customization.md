@@ -9,16 +9,17 @@ app/assets/stylesheets/rails_admin/custom/variables.css.scss
 app/assets/javascripts/rails_admin/custom/ui.js
 ```
 
-### For reusable and sharable themes, add these files to your plugin:
+### To create a distributable theme
 
 ```
-vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/mixins.css.scss
-vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/theming.css.scss
-vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/variables.css.scss
-vendor/assets/javascripts/rails_admin/themes/__THEME_NAME__/ui.js
+rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript --skip-test-unit
 ```
 
-All 4 files must be present (even if empty).
+Then add `gem 'rails_admin_<__THEME_NAME__>', :path => '../../../rails_admin_<__THEME_NAME__>'` to your `Gemfile` for live testing. It must appear before RailsAdmin.
+
+Once done, upload it on Github with a valid gemspec to share your work.
+
+See the `Existing themes` section for an example.
 
 ### CSS
 
@@ -42,27 +43,6 @@ Inside `config/application.rb`
 ```ruby
 ENV['RAILS_ADMIN_THEME'] = '__THEME_NAME__'
 ```
-
-### Create a theme
-
-Replace `__THEME_NAME__` with the real name of your theme in the following snippet and paste it in your shell:
-
-```bash
-rails plugin new rails_admin___THEME_NAME__
-cd rails_admin___THEME_NAME__/
-mkdir -p vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/
-mkdir -p vendor/assets/javascripts/rails_admin/themes/__THEME_NAME__/
-cd vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/
-touch mixins.css.scss theming.css.scss variables.css.scss
-cd ../../../../javascripts/rails_admin/themes/__THEME_NAME__/
-touch ui.js
-```
-
-```
-rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript --skip-test-unit
-```
-
-See the `Existing themes` section for an example.
 
 ### Resources:
 
