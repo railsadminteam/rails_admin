@@ -15,11 +15,20 @@ app/assets/javascripts/rails_admin/custom/ui.js
 rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript --skip-test-unit
 ```
 
-Then add `gem 'rails_admin_<__THEME_NAME__>', :path => '../../../rails_admin_<__THEME_NAME__>'` to your `Gemfile` for live testing. It must appear before RailsAdmin.
+Then add to your application `Gemfile` (before RailsAdmin):
+```ruby
+gem 'rails_admin_<__THEME_NAME__>', :path => '../../../rails_admin_<__THEME_NAME__>'
+```
+Inside `config/application.rb`, just after `Bundler.require`:
+```ruby
+ENV['RAILS_ADMIN_THEME'] = '<__THEME_NAME__>'
+```
 
-Once done, upload it on Github with a valid gemspec to share your work.
+This will allow for convenient live development testing.
 
-See the `Existing themes` section for an example.
+Please follow the convention: `rails_admin_` prefix for all RailsAdmin related gems.
+
+Once done, upload it on Github with a valid gemspec (change your name, email and project descriptions) to share your work.
 
 ### CSS
 
@@ -44,7 +53,7 @@ In your `Gemfile`, before RailsAdmin:
 gem 'rails_admin_example_theme', :git => 'git://github.com/bbenezech/rails_admin_example_theme.git'
 ```
 
-Inside `config/application.rb`, after `Bundler.require`:
+Inside `config/application.rb`, just after `Bundler.require`:
 ```ruby
 ENV['RAILS_ADMIN_THEME'] = 'example_theme'
 ```
