@@ -29,7 +29,7 @@ This will allow for convenient live development testing.
 
 Please follow the convention: `rails_admin_` prefix for all RailsAdmin related gems.
 
-Once done, upload it on Github with a valid gemspec (change your name, email and project descriptions) to share your work.
+Once done, upload it on Github with a valid gemspec (change authors, email and project descriptions) to share your work.
 
 ### CSS
 
