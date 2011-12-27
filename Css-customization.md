@@ -20,7 +20,7 @@ None has been released so far, but when it's been done, you can set `ENV['RAILS_
 
 ! Note that initializers such as RailsAdmin's aren't read when !
 ```ruby
-config.assets.initialize_on_precompile
+config.assets.initialize_on_precompile = false
 ```
 
 ### Create a theme
