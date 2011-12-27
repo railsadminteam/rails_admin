@@ -66,5 +66,5 @@ ENV['RAILS_ADMIN_THEME'] = 'example_theme'
 
 ### Existing themes:
 
-* [[Example theme|https://github.com/bbenezech/rails_admin_example_theme]]: technical stub you can use for bootstrapping.
+* [[Example theme|https://github.com/bbenezech/rails_admin_example_theme]]: technical stub you can use for bootstrapping. Everything should look painfully greenish.
 * Designer of feel like one? Add your own.
