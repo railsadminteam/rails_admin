@@ -39,9 +39,14 @@ Use anything you want that the asset pipeline supports: regular JS, includes, Co
 
 ### Use a theme
 
-Inside `config/application.rb`
+In your `Gemfile`, before RailsAdmin:
 ```ruby
-ENV['RAILS_ADMIN_THEME'] = '__THEME_NAME__'
+gem 'rails_admin_example_theme', :git => 'git://github.com/bbenezech/rails_admin_example_theme.git'
+```
+
+Inside `config/application.rb`, after `Bundler.require`:
+```ruby
+ENV['RAILS_ADMIN_THEME'] = 'example_theme'
 ```
 
 ### Resources:
