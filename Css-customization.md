@@ -12,10 +12,10 @@ app/assets/javascripts/rails_admin/custom/ui.js
 ### For theme creation (you wish to share it with the community), create these files in your gem (or add it to RA with a pull request):
 
 ```
-vendor/assets/stylesheets/rails_admin/theme/__THEME_NAME__/mixins.css.scss
-vendor/assets/stylesheets/rails_admin/theme/__THEME_NAME__/theming.css.scss
-vendor/assets/stylesheets/rails_admin/theme/__THEME_NAME__/variables.css.scss
-vendor/assets/javascripts/rails_admin/theme/__THEME_NAME__/ui.js
+vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/mixins.css.scss
+vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/theming.css.scss
+vendor/assets/stylesheets/rails_admin/themes/__THEME_NAME__/variables.css.scss
+vendor/assets/javascripts/rails_admin/themes/__THEME_NAME__/ui.js
 ```
 
 ### Use a theme
@@ -32,11 +32,11 @@ config.assets.initialize_on_precompile = false
 ```bash
 rails plugin new rails_admin_example_theme
 cd rails_admin_example_theme/
-mkdir -p vendor/assets/stylesheets/rails_admin/theme/example_theme/
-mkdir -p vendor/assets/javascripts/rails_admin/theme/example_theme/
-cd vendor/assets/stylesheets/rails_admin/theme/example_theme/
+mkdir -p vendor/assets/stylesheets/rails_admin/themes/example_theme/
+mkdir -p vendor/assets/javascripts/rails_admin/themes/example_theme/
+cd vendor/assets/stylesheets/rails_admin/themes/example_theme/
 touch mixins.css.scss theming.css.scss variables.css.scss
-cd ../../../../javascripts/rails_admin/theme/example_theme/
+cd ../../../../javascripts/rails_admin/themes/example_theme/
 touch ui.js
 ```
 
