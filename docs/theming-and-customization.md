@@ -12,12 +12,12 @@ app/assets/javascripts/rails_admin/custom/ui.js
 ### To create a distributable theme
 
 ```
-rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript --skip-test-unit
+rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle -T -O
 ```
 
 Then add to your application `Gemfile` (before RailsAdmin):
 ```ruby
-gem 'rails_admin_<__THEME_NAME__>', :path => '../../../rails_admin_<__THEME_NAME__>'
+gem 'rails_admin_<__THEME_NAME__>', :path => '../rails_admin_<__THEME_NAME__>'
 ```
 
 Inside `config/application.rb`, just after `Bundler.require`:
