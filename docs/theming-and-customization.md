@@ -20,7 +20,7 @@ Then add to your application `Gemfile` (before RailsAdmin):
 gem 'rails_admin_<__THEME_NAME__>', :path => '../rails_admin_<__THEME_NAME__>'
 ```
 
-Inside `config/application.rb`, just after `Bundler.require`:
+Inside your rails_admin application `config/application.rb`, just after `Bundler.require`:
 ```ruby
 ENV['RAILS_ADMIN_THEME'] = '<__THEME_NAME__>'
 ```
