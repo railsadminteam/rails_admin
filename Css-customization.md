@@ -26,13 +26,11 @@ Put all the real theming in `theming.css.scss`. It can be regular CSS, LESS or [
 
 Note that if you choose to use SCSS, you can:
 
-* modify all the mixins provided by rails_admin and bootstrap in `mixins.css.scss` and add others for you to use.
-* modify all the variables provided by rails_admin and bootstrap in `variables.css.scss` and add others for you to use.
-
-In `theming.css.scss`:
-
-* use all defined mixins and variables.
-* include any other .scss file with `@import rails_admin/themes/__THEME_NAME__/my_scss_file` and organize your files the way you want.
+* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.css.scss`.
+* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.css.scss`.
+* In `theming.css.scss`:
+  * use all defined mixins and variables.
+  * include any other .scss file with `@import rails_admin/themes/__THEME_NAME__/my_scss_file` and organize your the rest of your theme the way you want.
 
 ### JS
 
