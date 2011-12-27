@@ -20,7 +20,7 @@ vendor/assets/javascripts/rails_admin/themes/__THEME_NAME__/ui.js
 
 ### Use a theme
 
-None has been released so far, but when it's been done, you can set `ENV['RAILS_ADMIN_THEME']` to the name of that theme inside your `application.rb`
+None has been released so far, but when it's been done, you can set `ENV['__THEME_NAME__']` to the name of that theme inside your `application.rb`
 
 ! Note that initializers such as RailsAdmin's aren't read when !
 ```ruby
