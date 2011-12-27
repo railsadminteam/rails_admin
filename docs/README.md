@@ -65,7 +65,7 @@
 ### Styling
 
 * [[List view table styling]]
-* [[CSS Customization]]
+* [[Theming and customization]]
 
 ### Routing
 
