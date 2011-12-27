@@ -28,9 +28,9 @@ config.assets.initialize_on_precompile = false
 ```bash
 rails plugin new rails_admin_example_theme
 cd rails_admin_example_theme/
-mkdir -p app/assets/stylesheets/rails_admin/theme/example_theme/
-mkdir -p app/assets/javascripts/rails_admin/theme/example_theme/
-cd app/assets/stylesheets/rails_admin/theme/example_theme/
+mkdir -p vendor/assets/stylesheets/rails_admin/theme/example_theme/
+mkdir -p vendor/assets/javascripts/rails_admin/theme/example_theme/
+cd vendor/assets/stylesheets/rails_admin/theme/example_theme/
 touch mixins.css.scss theming.css.scss variables.css.scss
 cd ../../../../javascripts/rails_admin/theme/example_theme/
 touch ui.js
