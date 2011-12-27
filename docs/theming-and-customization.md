@@ -58,7 +58,10 @@ cd ../../../../javascripts/rails_admin/themes/__THEME_NAME__/
 touch ui.js
 ```
 
-TODO: refactor to a generator.
+```
+rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle --skip-active-record --skip-javascript
+```
+
 See the `Existing themes` section for an example.
 
 ### Resources:
