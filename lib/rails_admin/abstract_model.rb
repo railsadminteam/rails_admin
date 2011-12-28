@@ -1,5 +1,6 @@
 require 'active_support/core_ext/string/inflections'
 require 'rails_admin/generic_support'
+require 'rails_admin/errors'
 
 module RailsAdmin
   class AbstractModel
