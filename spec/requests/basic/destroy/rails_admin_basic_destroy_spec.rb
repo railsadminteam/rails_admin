@@ -15,6 +15,11 @@ describe "RailsAdmin Basic Destroy" do
     it "should destroy an object" do
       @player.should be_nil
     end
+
+    it 'should be on index page' do
+      current_path = URI.parse(current_url).path
+      current_path.should eql('/admin/players')
+    end
   end
 
   describe "destroy with errors" do
