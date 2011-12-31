@@ -90,7 +90,7 @@ ru:
     actions:
       create: "создать"
       created: "создан"
-      update: "обновить"
+      update: "изменить"
       updated: "обновлен"
       delete: "удалить"
       deleted: "удален"
