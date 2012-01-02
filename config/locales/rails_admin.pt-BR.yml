@@ -87,6 +87,8 @@ pt-BR:
       successful: "%{name} foi %{action} com sucesso!"
       error: "%{name} falhou em %{action}"
       noaction: "Não ocorreram ações."
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "criar"
       created: "criado"

@@ -87,6 +87,8 @@ zh-CN:
       successful: "%{name} %{action}成功"
       error: "%{name} %{action}失败"
       noaction: "没作任何动作"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "创建"
       created: "已创建"

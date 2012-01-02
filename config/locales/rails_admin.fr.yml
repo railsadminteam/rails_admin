@@ -89,6 +89,8 @@ fr:
       successful: "%{name} a été  %{action} avec succès"
       error: "%{name} n'a pas pu être %{action}"
       noaction: "Aucune action !"
+      model_not_found: "Le model '%{model}' n'a pas été trouvé"
+      object_not_found: "%{model} avec id '%{id}' n'a pas été trouvé"
     actions:
       create: "création"
       created: "créé(e)"

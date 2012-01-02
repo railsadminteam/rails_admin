@@ -82,6 +82,8 @@ mn:
       successful: "%{name} was successfully %{action}"
       error: "%{name} failed to be %{action}"
       noaction: "No actions were taken"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "үүсгэх"
       created: "үүссэн"

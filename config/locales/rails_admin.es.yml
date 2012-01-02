@@ -92,6 +92,8 @@ es:
       successful: "%{name} fue %{action} correctamente"
       error: "%{name} no se pudo %{action} correctamente"
       noaction: "No se realizó ninguna acción"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "crear"
       created: "guardado/a"

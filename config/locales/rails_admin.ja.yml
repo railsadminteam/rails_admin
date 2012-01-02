@@ -88,6 +88,8 @@ ja:
       successful: "%{name}の%{action}に成功しました"
       error: "%{name}の%{action}に失敗しました"
       noaction: "操作を取り消しました"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "追加"
       created: "追加"

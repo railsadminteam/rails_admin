@@ -54,11 +54,13 @@ describe "RailsAdmin Config DSL" do
     it "should raise NotFound for the list view" do
       visit index_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
+      find('.alert-message.error').should have_content("Model 'Fan' could not be found")
     end
 
     it "should raise NotFound for the create view" do
       visit new_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
+      find('.alert-message.error').should have_content("Model 'Fan' could not be found")
     end
 
     it "should be hidden from other models relations in the edit view" do

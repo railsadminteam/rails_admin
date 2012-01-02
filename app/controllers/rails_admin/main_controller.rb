@@ -27,10 +27,11 @@ module RailsAdmin
         @count[t.pretty_name] = current_count
         @most_recent_changes[t.pretty_name] = t.model.order("updated_at desc").first.try(:updated_at) rescue nil
       end
-      render :dashboard
+      render :dashboard, :status => (flash[:error].present? ? :not_found : 200)
     end
 
     def index
+      
       @authorization_adapter.authorize(:index, @abstract_model) if @authorization_adapter
 
       @page_type = @abstract_model.pretty_name.downcase
@@ -39,7 +40,8 @@ module RailsAdmin
       @objects ||= list_entries
 
       respond_to do |format|
-        format.html { render :layout => !request.xhr? }
+        format.html {           
+          render :index, :layout => !request.xhr?, :status => (flash[:error].present? ? :not_found : 200) }
         format.json do
           output = if params[:compact]
             @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }

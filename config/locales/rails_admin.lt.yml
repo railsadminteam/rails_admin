@@ -81,6 +81,8 @@ lt:
       successful: "%{name} buvo sėkmingai %{action}"
       error: "Nepavyko %{action} %{name}"
       noaction: "Pakeitimai nebuvo įvykdyti"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "sukurti"
       created: "sukurtas"

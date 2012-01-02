@@ -91,6 +91,8 @@ ro:
       successful: "%{name} a fost %{action}"
       error: "%{name} NU a fost %{action}"
       noaction: "Nu a fost exercitată nicio acțiune"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "creare"
       created: "creat(ă)"
