@@ -9,6 +9,10 @@ module RailsAdmin
 
     helper_method :_current_user, :_attr_accessible_role, :_get_plugin_name
 
+    rescue_from RailsAdmin::ObjectNotFound do
+      not_found
+    end
+
     def get_model
       model_name = to_model_name(params[:model_name])
       @abstract_model = RailsAdmin::AbstractModel.new(model_name) rescue begin
@@ -44,14 +48,13 @@ module RailsAdmin
     end
 
     def get_object
-      @object = @abstract_model.get(params[:id])
-      unless @object
-        not_found
-        return false
-      end
-      @object
+      @object = @abstract_model.get!(params[:id])
     end
 
+    protected
+    def not_found
+      render :file => Rails.root.join('public', '404.html'), :layout => false, :status => :not_found
+    end
 
     private
     def _get_plugin_name
@@ -72,10 +75,6 @@ module RailsAdmin
 
     def _attr_accessible_role
       instance_eval &RailsAdmin::Config.attr_accessible_role
-    end
-
-    def not_found
-      render :file => Rails.root.join('public', '404.html'), :layout => false, :status => :not_found
     end
 
     def rails_admin_controller?

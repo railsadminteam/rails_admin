@@ -27,6 +27,12 @@ module RailsAdmin
         end
       end
 
+      def get!(id)
+        object = get(id)
+        raise RailsAdmin::ObjectNotFound if object.nil?
+        object
+      end
+
       def count(options = {}, scope = nil)
         all(options.merge({:limit => false, :page => false}), scope).count
       end

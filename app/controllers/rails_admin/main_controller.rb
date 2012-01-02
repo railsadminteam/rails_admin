@@ -191,7 +191,7 @@ module RailsAdmin
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
       end
 
-      redirect_to back_or_index
+      redirect_to index_path
     end
 
     def export
