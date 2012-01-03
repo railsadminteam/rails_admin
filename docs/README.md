@@ -28,9 +28,11 @@
 * [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
 
 
-### Associations types
+### Associations
 
-[[Associations basics]]
+* [[Associations basics]]
+* [[Associations scoping]]
+* [[Associations validation]]
 
 * [[belongs_to association|Belongs-to-association]]
   * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
@@ -75,7 +77,6 @@
 
 ### Recipes
 
-* [[Associations scoping]]
 * [[How to set default values]]
 
 
