@@ -59,6 +59,31 @@ describe "RailsAdmin" do
       should_not have_selector("#player_name[type=hidden][value='toto@example.com']")
     end
   end
+  
+  describe '_current_user should be accessible from the list view' do # https://github.com/sferik/rails_admin/issues/549
+    
+    it 'should work' do
+      RailsAdmin.config Player do
+        list do
+          field :name do
+            visible do
+              bindings[:view]._current_user.email == 'username@example.com'
+            end
+          end
+          
+          field :team do
+            visible do
+              bindings[:view]._current_user.email == 'foo@example.com'
+            end
+          end
+        end
+      end
+      
+      visit index_path(:model_name => "player")
+      should have_selector(".header.name_field")
+      should_not have_selector(".header.team_field")
+    end
+  end
 
   describe "polymorphic associations" do
     before :each do
