@@ -13,7 +13,8 @@ $("#list a, #list form").live "ajax:complete", (xhr, data, status) ->
   $("#list").replaceWith data.responseText
 
 $("table#history th.header").live "click", ->
-  window.location = $(this).data("link")
+  if $(this).data("link")
+    window.location = $(this).data("link")
 
 $(document).ready ->
   $('.pjax').pjax('[data-pjax-container]')
