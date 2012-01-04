@@ -6,4 +6,5 @@
     %li= link_to _current_user.email, edit_path(_current_user.class.name.underscore.pluralize, _current_user)
   - if defined?(Devise) && (devise_scope = request.env["warden"].config[:default_scope] rescue false) && (logout_path = main_app.send("destroy_#{devise_scope}_session_path") rescue false)
     %li= link_to content_tag('span', t('admin.credentials.log_out'), :class => 'label important'), logout_path, :method => Devise.sign_out_via
-  %li= image_tag "#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", :style => 'padding-top:5px'
+  - if _current_user.respond_to?(:email)
+    %li= image_tag "#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", :style => 'padding-top:5px'
