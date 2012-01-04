@@ -68,7 +68,7 @@
   * [[Declarative Authorization (possible)|Declarative Authorization]]
   * [[Manually|Customized authorization]]
 * [[Mass-assignments protection]]
-* Auditing
+* Auditing (change historic)
   * [[History (internal)|History]]
   * [[PaperTrail (recommended)|PaperTrail]]
   * None. (Default)
