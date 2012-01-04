@@ -13,6 +13,16 @@ describe "RailsAdmin History" do
     end
   end
 
+context "when a range does not start in December" do
+  context "and the start month is greater than stop month" do
+      it "does not produce SQL with invalid count column name" do
+         RailsAdmin::History.should_receive(:find_by_sql).with(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", [9, 10, 11, 12], 2011]).and_return([])
+         RailsAdmin::History.should_receive(:find_by_sql).with(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", [1], 2012]).and_return([])
+         RailsAdmin::History.get_history_for_dates(8, 1, 2011, 2012)
+      end
+    end
+  end
+
   describe "when range starts in December" do
     it "does not produce SQL with empty IN () range" do
       RailsAdmin::History.should_receive(:find_by_sql).with(["select count(*) as record_count, year, month from rails_admin_histories where month IN (?) and year = ? group by year, month", [1, 2, 3, 4], 2011]).and_return([])
