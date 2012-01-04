@@ -60,8 +60,9 @@
 ### User integration
 
 * [[Authentification]]
-  * [[Devise (installed by default)|https://github.com/plataformatec/devise]]
+  * [[With Devise (installed by default)|https://github.com/plataformatec/devise]]
   * [[Manually|https://gist.github.com/1278355]]
+  * [[None|no authentification]]
 * [[Authorization setup]]
   * [[CanCan (recommended)|CanCan]]
   * [[Declarative Authorization (possible)|Declarative Authorization]]
@@ -70,6 +71,7 @@
 * Auditing
   * [[History (internal)|History]]
   * [[PaperTrail (recommended)|PaperTrail]]
+  * None. (Default)
 
 ### Styling
 
