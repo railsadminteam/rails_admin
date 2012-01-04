@@ -2,8 +2,9 @@ module RailsAdmin
   module Extensions
     module History
       class AuditingAdapter
-        def initialize(controller)
+        def initialize(controller, user_class = User)
           @controller = controller
+          @user_class = user_class
         end
         
         def latest

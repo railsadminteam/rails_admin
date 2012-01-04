@@ -18,6 +18,26 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 [plukevdh]: https://github.com/plukevdh
 [reinh]: https://github.com/reinh
 
+## <a name="announcements"></a>Announcements
+
+* History
+
+If you wish to continue using the old history feature, please add this to your initializer:
+
+```ruby
+config.audit_with :history, User
+```
+
+Alternatively, [PaperTrail](https://github.com/airblade/paper_trail) is now officially compatible. Install it, add `has_paper_trail` to the models you wish to track, and add this instead to your initializer:
+
+```ruby
+config.audit_with :paper\_trail, User
+```
+
+Change `User` with the class you use with Devise.
+
+By default, there won't be any history shown.
+
 ## <a name="features"></a>Features
 
 * Display database tables
@@ -28,7 +48,8 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 * Search and filtering
 * Export data to CSV/JSON/XML
 * Authentication (via [Devise](https://github.com/plataformatec/devise))
-* User action history
+* Authorization (via [Cancan](https://github.com/ryanb/cancan))
+* User action history (internally or via [PaperTrail](https://github.com/airblade/paper_trail))
 * Supported ORMs
   * ActiveRecord
 
@@ -58,9 +79,15 @@ don't already have it installed. [Devise](https://github.com/plataformatec/devis
 recommended to protect your data from anonymous users.
 It will modify your `config/routes.rb`, adding:
 
-    mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+```ruby
+mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Feel free to change '/admin' to any namespace you need.
+```
 
-And add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
+It will add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
+
+Optionaly, you may want to set up [Cancan](https://github.com/ryanb/cancan), [PaperTrail](https://github.com/airblade/paper_trail), [CKeditor](https://github.com/galetahub/ckeditor)
+
+More on that in the [Wiki](https://github.com/sferik/rails_admin/wiki)
 
 ## <a name="usage"></a>Usage
 Start the server:
