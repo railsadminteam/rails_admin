@@ -1,4 +1,6 @@
-Used to be a default, not anymore.
+History is RailsAdmin's historic change observer.
+
+It used to be activated by default, not anymore.
 
 Activate it with:
 
