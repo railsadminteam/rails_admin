@@ -5,6 +5,7 @@ module RailsAdmin
         def initialize(controller, user_class = User)
           @controller = controller
           @user_class = user_class
+          require 'rails_admin/extensions/history/history'
         end
         
         def latest

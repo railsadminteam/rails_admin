@@ -1,10 +1,12 @@
 require 'spec_helper'
+require 'rails_admin/extensions/history/history'
 
 describe "RailsAdmin History" do
   
   
   describe "model history fetch" do
     before :each do
+      RailsAdmin::History.delete_all
       @model = RailsAdmin::AbstractModel.new("Player")
       player = FactoryGirl.create :player
       30.times do |i|
