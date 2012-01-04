@@ -35,7 +35,7 @@ describe "RailsAdmin CanCan Authorization" do
   subject { page }
 
   before(:each) do
-    RailsAdmin.config{|c| c.authorize_with :cancan }
+    RailsAdmin.config{|c| c.authorize_with(:cancan); c.audit_with(:history, User) }
     @user = FactoryGirl.create :user
     login_as @user
   end
@@ -244,6 +244,7 @@ describe "RailsAdmin CanCan Authorization" do
       visit delete_path(:model_name => "player", :id => player_id)
 
       click_button "Yes, I'm sure"
+      
       Player.exists?(player_id).should be_false
     end
 

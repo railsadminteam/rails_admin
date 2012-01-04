@@ -7,7 +7,7 @@
 - if @model_config
   %li{:class => (params[:action] == 'index' && 'active')}= link_to @model_config.label_plural, index_path(:model_name => model_name) if can_list
 %li{:class => (params[:action] == 'new' && 'active')}= link_to t("admin.index.add_new"), new_path(:model_name => model_name) if can_create
-%li{:class => (params[:action] == 'for_model' && 'active')}= link_to t("admin.history.name"), history_model_path(:model_name => model_name) if can_see_history
+%li{:class => (params[:action] == 'for_model' && 'active')}= link_to t("admin.history.name"), history_model_path(:model_name => model_name) if @auditing_adapter && can_see_history
 %li{:class => (params[:action] == 'export' && 'active')}= link_to t("admin.breadcrumbs.export").capitalize, export_path(model_name) if can_export
 
 - if params[:action] == 'index'

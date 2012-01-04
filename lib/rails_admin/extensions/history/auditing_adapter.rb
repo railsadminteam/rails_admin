@@ -12,7 +12,7 @@ module RailsAdmin
         end
         
         def delete_object(message, object, model, user)
-          ::RailsAdmin::History.create_history_item(message, object, abstract_model, user)
+          ::RailsAdmin::History.create_history_item(message, object, model, user)
         end
         
         def update_object(model, object, associations_before, associations_after, modified_associations, old_object, user)

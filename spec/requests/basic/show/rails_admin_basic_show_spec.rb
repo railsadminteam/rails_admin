@@ -5,12 +5,13 @@ describe "RailsAdmin Basic Show" do
 
   describe "show" do
     before(:each) do
+      
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
     it "should have History, Edit, Delete" do
-      should have_selector("a", :text => "History")
+      should_not have_selector("a", :text => "History")
       should have_selector("a", :text => "Edit")
       should have_selector("a", :text => "Delete")
     end
