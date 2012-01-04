@@ -64,10 +64,12 @@
   * [[Manually|https://gist.github.com/1278355]]
 * [[Authorization setup]]
   * [[CanCan (recommended)|CanCan]]
-  * [[Declarative Authorization (possible)]]
+  * [[Declarative Authorization (possible)|Declarative Authorization]]
   * [[Manually|Customized authorization]]
 * [[Mass-assignments protection]]
-
+* Auditing
+  * [[History (internal)|History]]
+  * [[PaperTrail (recommended)|PaperTrail]]
 
 ### Styling
 
