@@ -29,6 +29,15 @@ describe "RailsAdmin" do
       end
     end
 
+    context "given an extension with an auditing adapter" do
+      it "registers the adapter" do
+        RailsAdmin.add_extension(:example, ExampleModule, {
+          :auditing => true
+        })
+        RailsAdmin::AUDITING_ADAPTERS[:example].should == ExampleModule::AuditingAdapter
+      end
+    end
+
     context "given an extension with a configuration adapter" do
       it "registers the adapter" do
         RailsAdmin.add_extension(:example, ExampleModule, {
@@ -95,6 +104,34 @@ describe "RailsAdmin" do
       end
     end
   end
+  
+  describe ".audit_with" do
+    context "given a key for a extension with auditing" do
+      before do
+        RailsAdmin.add_extension(:example, ExampleModule, {
+          :auditing => true
+        })
+      end
+
+      it "initializes the auditing adapter" do
+        ExampleModule::AuditingAdapter.should_receive(:new).with(RailsAdmin::Config)
+        RailsAdmin.config do |config|
+          config.audit_with(:example)
+        end
+        RailsAdmin.config.audit_with.call
+      end
+
+      it "passes through any additional arguments to the initializer" do
+        options = { :option => true }
+        ExampleModule::AuditingAdapter.should_receive(:new).with(RailsAdmin::Config, options)
+        RailsAdmin.config do |config|
+          config.audit_with(:example, options)
+        end
+        RailsAdmin.config.audit_with.call
+      end
+    end
+  end
+
 
   describe ".configure_with" do
     context "given a key for a extension with configuration" do
@@ -241,4 +278,5 @@ end
 module ExampleModule
   class AuthorizationAdapter ; end
   class ConfigurationAdapter ; end
+  class AuditingAdapter ; end
 end

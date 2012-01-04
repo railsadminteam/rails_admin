@@ -28,6 +28,10 @@ describe "RailsAdmin History" do
 
     context "GET admin/history/@model" do
       before :each do
+        RailsAdmin.config do |c|
+          c.audit_with :history
+        end
+
         visit history_model_path(@model)
       end
 

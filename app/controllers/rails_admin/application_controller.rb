@@ -12,6 +12,7 @@ module RailsAdmin
 
     before_filter :_authenticate!
     before_filter :_authorize!
+    before_filter :_audit!
 
     helper_method :_current_user, :_attr_accessible_role, :_get_plugin_name
 
@@ -62,6 +63,10 @@ module RailsAdmin
 
     def _authorize!
       instance_eval &RailsAdmin::Config.authorize_with
+    end
+    
+    def _audit!
+      instance_eval &RailsAdmin::Config.audit_with
     end
 
     def _current_user
