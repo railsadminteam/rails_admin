@@ -3,7 +3,7 @@ RailsAdmin::Engine.routes.draw do
     match   "/", :to => :dashboard, :as => "dashboard"
     scope ":model_name" do
       match "/",             :to => :index,         :as => "index", :via => [:get, :post]
-      match "/export",       :to => :export,        :as => "export"
+      match "/export",       :to => :export,        :as => "export", :via => [:get, :post]
       get   "/history",      :to => :history_index, :as => "history_index"
       get   "/new",          :to => :new,           :as => "new"
       post  "/new",          :to => :create,        :as => "create"
