@@ -31,7 +31,7 @@ config.audit_with :history, User
 Alternatively, [PaperTrail](https://github.com/airblade/paper_trail) is now officially compatible. Install it, add `has_paper_trail` to the models you wish to track, and add this instead to your initializer:
 
 ```ruby
-config.audit_with :paper\_trail, User
+config.audit_with :paper_trail, User
 ```
 
 Change `User` with the class you use with Devise.
