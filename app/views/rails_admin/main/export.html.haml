@@ -8,7 +8,6 @@
     %fieldset
       %legend= t('admin.export.select')
       .span5.clearfix
-        %label{:rel => 'twipsy', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".input").find("input").click()'}= t('admin.export.fields_from', :name => @abstract_model.pretty_name)
         .input
           %ul.inputs-list
             - visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.each do |field|
@@ -26,12 +25,13 @@
                   %label{:for => "schema_#{list}_#{field.name}"}
                     = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
                     %strong= field.label
+      %hr
       - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
         .span5.clearfix{:style => 'float:left;'}
           - association = field.association
           - associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
           - fields = RailsAdmin.config(associated_model).export.with(:view => self, :object => associated_model.new).visible_fields.select{ |f| !f.association? }
-          %label{:rel => 'twipsy', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".input").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label)
+          %label{:rel => 'twipsy', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".input").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label.downcase)
           .input
             %ul.inputs-list
               - fields.each do |associated_model_field|
