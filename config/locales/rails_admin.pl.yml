@@ -102,12 +102,12 @@ pl:
     breadcrumbs:
       show: "pokaż"
       delete: "usuń"
-      for_object: "historia"
+      history_show: "historia"
       edit: "edytuj"
       export: "eksportuj"
       bulk_destroy: "usuń"
       new: "nowy"
-      for_model: "historia"
+      history_index: "historia"
       index: "lista"
       dashboard: "tablica"
 

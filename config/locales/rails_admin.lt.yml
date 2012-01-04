@@ -94,11 +94,11 @@ lt:
       exported: "išeksportuotieji"
     breadcrumbs:
       delete: "pašalinti"
-      for_object: "istorija"
+      history_show: "istorija"
       edit: "taisyti"
       export: "eksportuoti"
       bulk_destroy: "ištrinti visus"
       new: "naujas"
-      for_model: "istorija"
+      history_index: "istorija"
       index: "sąrašas"
       dashboard: "nustatymai"

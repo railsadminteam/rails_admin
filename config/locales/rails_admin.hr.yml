@@ -73,11 +73,11 @@ hr:
       deleted: "obrisano"
     breadcrumbs:
       delete: "delete"
-      for_object: "history"
+      history_show: "history"
       edit: "edit"
       export: "export"
       bulk_destroy: "delete"
       new: "new"
-      for_model: "history"
+      history_index: "history"
       index: "list"
       dashboard: "dashboard"

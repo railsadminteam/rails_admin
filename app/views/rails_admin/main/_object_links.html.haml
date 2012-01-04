@@ -14,7 +14,7 @@
     = link_to t("admin.index.delete_action"), link
 
 - if @auditing_adapter && authorized?(:history, @abstract_model, object)
-  - link = history_object_path(model_name, object.id)
+  - link = history_show_path(model_name, object.id)
   %li.history_object_link{:class => ('active' if add_active_class && current_page?(link))}
     = link_to t("admin.history.name"), link
 

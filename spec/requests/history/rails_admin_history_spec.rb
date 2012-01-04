@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'rails_admin/extensions/history/history'
 
 describe "RailsAdmin History" do
-  
-  
   describe "model history fetch" do
     before :each do
       RailsAdmin::History.delete_all
@@ -34,7 +32,7 @@ describe "RailsAdmin History" do
           c.audit_with :history
         end
 
-        visit history_model_path(@model)
+        visit history_index_path(@model)
       end
 
       # https://github.com/sferik/rails_admin/issues/362
@@ -59,7 +57,7 @@ describe "RailsAdmin History" do
         end
 
         it "should render a XHR request successfully" do
-          xhr :get, history_model_path(@model, :page => 2)
+          xhr :get, history_index_path(@model, :page => 2)
         end
       end
     end
