@@ -57,13 +57,16 @@
   * [[Nested]]
 
 
-### Authorization
+### User integration
 
-* [[Mass-assignments protection]]
+* [[Authentification]]
+  * [[Devise (installed by default)|https://github.com/plataformatec/devise]]
+  * [[Manually|https://gist.github.com/1278355]]
 * [[Authorization setup]]
-  * [[CanCan]]
-  * [[Customized authorization]]
-  * [[Declarative Authorization]]
+  * [[CanCan (recommended)|CanCan]]
+  * [[Declarative Authorization (possible)]]
+  * [[Manually|Customized authorization]]
+* [[Mass-assignments protection]]
 
 
 ### Styling
