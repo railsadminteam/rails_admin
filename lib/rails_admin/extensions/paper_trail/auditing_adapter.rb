@@ -2,7 +2,7 @@ module RailsAdmin
   module Extensions
     module PaperTrail
       class VersionProxy
-        def initialize(version, user_class)
+        def initialize(version, user_class = User)
           @version = version
           @user_class = user_class
         end
@@ -29,7 +29,7 @@ module RailsAdmin
       end
       
       class AuditingAdapter
-        def initialize(controller, user_class)
+        def initialize(controller, user_class = User)
           raise "PaperTrail not found" unless defined?(PaperTrail)
           @controller = controller
           @user_class = user_class
