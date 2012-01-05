@@ -139,7 +139,6 @@ describe "RailsAdmin" do
       end
 
       it "initializes the auditing adapter" do
-        # ExampleModule::AuditingAdapter.should_receive(:new).with(RailsAdmin::Config)
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
