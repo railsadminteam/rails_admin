@@ -130,6 +130,21 @@ describe "RailsAdmin" do
         RailsAdmin.config.audit_with.call
       end
     end
+    
+    context "given paper_trail as the extension for auditing" do
+      before do
+        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, {
+          :auditing => true
+        })
+      end
+
+      it "initializes the auditing adapter" do
+        RailsAdmin.config do |config|
+          config.audit_with(:example)
+        end
+        RailsAdmin.config.audit_with.call.should_not raise_exception ArgumentError
+      end
+    end
   end
 
 
