@@ -219,7 +219,7 @@ module RailsAdmin
         config.instance_eval(&block) if block
         config
       end
-      
+            
       def default_hidden_fields=(fields)
         if fields.is_a?(Array)
           @default_hidden_fields = {}
@@ -229,7 +229,12 @@ module RailsAdmin
           @default_hidden_fields = fields
         end
       end
-
+      
+      # Returns action configuration object
+      def actions(&block)
+        (@actions ||= RailsAdmin::Config::Actions.new).instance_eval(&block) if block
+      end
+      
       # Returns all model configurations
       #
       # If a block is given it is evaluated in the context of configuration

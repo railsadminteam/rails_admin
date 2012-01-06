@@ -23,7 +23,7 @@ module RailsAdmin
         # Register accessors for all the sections in this namespace
         constants.each do |name|
           section = "RailsAdmin::Config::Sections::#{name}".constantize
-          name = name.to_s.downcase.to_sym
+          name = name.to_s.underscore.to_sym
           klass.send(:define_method, name) do |&block|
             @sections = {} unless @sections
             @sections[name] = section.new(self) unless @sections[name]
