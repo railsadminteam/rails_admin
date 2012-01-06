@@ -350,7 +350,7 @@ RailsAdmin.config do |config|
   config.model Team do
     edit do
       field :name do
-        render do
+        def render
           bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form]}
         end
       end
