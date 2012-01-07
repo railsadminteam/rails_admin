@@ -22,7 +22,7 @@ end
 ```
 
 Use `associated_collection_cache_all true` if you want all associated records preloaded.
-Defaults to true if there are less than 30 records in the associated collection.
+Defaults to true if there are less than 100 records in the associated collection.
 The scope will default to limit records to 30, unless cache_all is true (no limit).
 
 **bindings[:object] can be null for new parent records!** Also note that the scope takes in to account the saved version of the record, not considering any unsaved changes you may have made in the edit form. If you change the team's league, you'll still see the players from the old league until you save.
