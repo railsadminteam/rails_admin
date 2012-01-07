@@ -8,8 +8,8 @@ nl:
     name: "home"
   views:
     pagination:
-      previous: "&laquo; Prev"
-      next: "Next &raquo;"
+      previous: "&laquo; Vorige"
+      next: "Volgende &raquo;"
       truncate: "…"
   admin:
     dashboard:
@@ -22,19 +22,30 @@ nl:
       add_new: "Nieuw toevoegen"
       show: "Tonen"
       ago: "geleden"
+      navigation: "Navigatie"
     history:
       name: "Geschiedenis"
       page_name: "Geschiedenis van %{name}"
       no_activity: "Geen activiteit"
+    show:
+      show_in_app: "Toon in site"
+      page_name:  "Details voor %{name}"
+      no_file_found: "Geen bestand gevonden"
     credentials:
       log_out: "Uitloggen"
     index:
       edit_action: "Aanpassen"
       delete_action: "Verwijderen"
+      selected: "Geselecteerde"
       select_action: "Selecteren"
+      export_action: "Exporteer"
+      export_current_action: "Exporteer huidig beeld"
+      show_action: "Toon"
+      export_selected: "Exporteer selectie"
       delete_selected: "Verwijder selectie"
       add_new: "Nieuw toevoegen"
       search: "Zoeken"
+      refresh: "Ververs"
       select: "Selecteer %{name} om aan te passen"
       show_all: "Toon allen"
       add_filter: "Add filter"
@@ -43,7 +54,8 @@ nl:
       required: "Vereist"
       optional: "Optioneel"
       one_char: "karakter"
-      many_chars: "of minder karakters"
+      char_length_up_to: "lengte tot"
+      char_length_of: "lengte van"
       chosen: "Chosen %{name}"
       select_choice: "Selecteer keuzes en klik"
       chose_all: "Kies allen"
@@ -60,6 +72,25 @@ nl:
       confirmation: "Ja, ik weet het zeker"
       delete_confirmation: "Delete confirmation"
       bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+    export:
+      confirmation: "Exporteer naar %{name}"
+      select: "Selecteer velden om te exporteren"
+      fields_from: "Velden van %{name}"
+      fields_from_associated: "Velden van geassocieerde %{name}"
+      display: "Toon %{name}: %{type}"
+      options_for: "Opties voor %{name}"
+      empty_value_for_associated_objects: "<leeg>"
+      click_to_reverse_selection: "Klik om selectie om te draaien"
+      csv:
+        header_for_root_methods: "%{name}"
+        header_for_assocation_methods: "%{name} [%{association}]"
+        encoding_to: "Encodeer naar"
+        encoding_to_help: "Kies encodering voor uitvoer. Kies geen encodering om de encodering van de invoer te gebruiken: (%{name})"
+        skip_header: "Geen headers"
+        skip_header_help: "Geen headers in de uitvoer (geen beschrijvingen van de velden)"
+        default_col_sep: ","
+        col_sep: "Kolomscheidingsteken"
+        col_sep_help: "Laat leeg voor standaard ('%{value}')" # value is default_col_sep
     flash:
       successful: "%{name} succesvol %{action}"
       error: "%{name} onsuccesvol %{action}"
@@ -73,6 +104,8 @@ nl:
       updated: "geüpdate"
       delete: "verwijderen"
       deleted: "verwijderd"
+      export: "exporteren"
+      exported: "geëxporteerd"
     breadcrumbs:
       delete: "delete"
       history_show: "history"
@@ -87,37 +120,37 @@ nl:
     distance_in_words:
       half_a_minute: "een halve minuut"
       less_than_x_seconds:
-        one: "minder dan \xC3\xA9\xC3\xA9n seconde"
+        one: "minder dan een seconde"
         other: "minder dan %{count} seconden"
       x_seconds:
         one: "1 seconde"
         other: "%{count} seconden"
       less_than_x_minutes:
-        one: "minder dan \xC3\xA9\xC3\xA9n minuut"
+        one: "minder dan een minuut"
         other: "minder dan %{count} minuten"
       x_minutes:
         one: "1 minuut"
         other: "%{count} minuten"
       about_x_hours:
-        one: "ongeveer \xC3\xA9\xC3\xA9n uur"
+        one: "ongeveer een uur"
         other: "ongeveer %{count} uur"
       x_days:
         one: "1 dag"
         other: "%{count} dagen"
       about_x_months:
-        one: "ongeveer \xC3\xA9\xC3\xA9n maand"
+        one: "ongeveer een maand"
         other: "ongeveer %{count} maanden"
       x_months:
         one: "1 maand"
         other: "%{count} maanden"
       about_x_years:
-        one: "ongeveer \xC3\xA9\xC3\xA9n jaar"
+        one: "ongeveer een jaar"
         other: "ongeveer %{count} jaar"
       over_x_years:
-        one: "meer dan \xC3\xA9\xC3\xA9n jaar"
+        one: "meer dan een jaar"
         other: "meer dan %{count} jaar"
       almost_x_years:
-        one: "bijna \xC3\xA9\xC3\xA9n jaar"
+        one: "bijna een jaar"
         other: "bijna %{count} jaar"
   date:
     formats:
