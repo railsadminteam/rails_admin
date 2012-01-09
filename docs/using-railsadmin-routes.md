@@ -16,4 +16,6 @@ Note that underscored pluralized model names are used, and that name-spaced mode
 
 ```ruby
 main_app.article_path(my_article)
+# from a config block:
+bindings[:view].main_app.article_path(my_article)
 ```
