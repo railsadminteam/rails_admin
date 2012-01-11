@@ -1,3 +1,5 @@
+require 'tempfile'
+
 namespace :rails_admin do
 
   @tmp_file = Tempfile.new('all.rb.tmp')
