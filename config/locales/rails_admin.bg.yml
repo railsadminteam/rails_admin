@@ -82,6 +82,8 @@ bg:
       successful: "Успешно изпълнение на действие: %{action}, за модел: %{name}"
       error: "Неуспешно изпълнение на действие: %{action}, за модел: %{name}"
       noaction: "Не са предприети никакви действия"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "създай"
       created: "създаване"
@@ -93,12 +95,12 @@ bg:
       exported: "изнасяне"
     breadcrumbs:
       delete: "заличи"
-      for_object: "история"
+      history_show: "история"
       show: "покажи"
       edit: "редактирай"
       export: "изнеси"
       bulk_destroy: "заличи"
       new: "нов"
-      for_model: "история"
+      history_index: "история"
       index: "списък"
       dashboard: "табло"

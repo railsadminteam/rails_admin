@@ -7,45 +7,19 @@ RailsAdmin.config do |config|
   # require 'i18n'
   # I18n.default_locale = :de
 
-  config.current_user_method { current_<%= @model_name %> } # auto-generated
-
+  config.current_user_method { current_<%= @model_name.underscore %> } # auto-generated
+  
+  # If you want to track changes on your models:
+  # config.audit_with :history, <%= @model_name.classify %>
+  
+  # Or with a PaperTrail: (you need to install it first)
+  # config.audit_with :paper_trail, <%= @model_name.classify %>
+  
   # Set the admin name here (optional second array element will appear in a beautiful RailsAdmin red ©)
   config.main_app_name = ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin']
   # or for a dynamic name:
   # config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.titleize, controller.params['action'].titleize] }
 
-  #  ==> Authentication (before_filter)
-  # This is run inside the controller instance so you can setup any authentication you need to.
-  # By default, the authentication will run via warden if available.
-  # and will run on the default user scope.
-  # If you use devise, this will authenticate the same as authenticate_user!
-  # Example Devise admin
-  # RailsAdmin.config do |config|
-  #   config.authenticate_with do
-  #     authenticate_admin!
-  #   end
-  # end
-  # Example Custom Warden
-  # RailsAdmin.config do |config|
-  #   config.authenticate_with do
-  #     warden.authenticate! :scope => :paranoid
-  #   end
-  # end
-
-  #  ==> Authorization
-  # Use cancan https://github.com/ryanb/cancan for authorization:
-  # config.authorize_with :cancan
-
-  # Or use simple custom authorization rule:
-  # config.authorize_with do
-  #   redirect_to root_path unless warden.user.is_admin?
-  # end
-
-  # Use a specific role for ActiveModel's :attr_acessible :attr_protected
-  # Default is :default
-  # config.attr_accessible_role { :default }
-  # _current_user is accessible in the block if you need to make it user specific:
-  # config.attr_accessible_role { _current_user.role.to_sym }
 
   #  ==> Global show view settings
   # Display empty fields in show views
@@ -80,11 +54,11 @@ RailsAdmin.config do |config|
   #
   #  ==> Model specific configuration
   # Keep in mind that *all* configuration blocks are optional.
-  # RailsAdmin will try his best to provide the best defaults for each section, for each field!
+  # RailsAdmin will try his best to provide the best defaults for each section, for each field.
   # Try to override as few things as possible, in the most generic way. Try to avoid setting labels for models and attributes, use ActiveRecord I18n API instead.
   # Less code is better code!
   # config.model MyModel do
-  #   # Here goes your cross-section field configuration for ModelName.
+  #   # Cross-section field configuration
   #   object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
   #   label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
   #   label_plural 'My models'      # Same, plural
@@ -99,34 +73,11 @@ RailsAdmin.config do |config|
   #     sort_reverse true     # Sort direction (default is true for primary key, last created first)
   #     # Here goes the fields configuration for the list view
   #   end
-  #   show do
-  #     # Here goes the fields configuration for the show view
-  #   end
-  #   export do
-  #     # Here goes the fields configuration for the export view (CSV, yaml, XML)
-  #   end
-  #   edit do
-  #     # Here goes the fields configuration for the edit view (for create and update view)
-  #   end
-  #   create do
-  #     # Here goes the fields configuration for the create view, overriding edit section settings
-  #   end
-  #   update do
-  #     # Here goes the fields configuration for the update view, overriding edit section settings
-  #   end
   # end
 
   # Your model's configuration, to help you get started:
 
-  # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible.
-  # There can be different reasons for that:
-  #  - belongs_to _id and _type (polymorphic) columns are hidden in favor of their associations
-  #  - associations are hidden if they have no matchable model found (model not included or non-existant)
-  #  - they are part of a bigger plan in a plugin (Devise/Paperclip) and hidden by contract
-  # Some fields may be hidden depending on the section, if they aren't deemed suitable for display or edition on that section
-  #  - non-editable columns (:id, :created_at, ..) in edit sections
-  #  - has_many/has_one associations in list section (hidden by default for performance reasons)
-  # Fields may also be marked as read_only (and thus not editable) if they are not mass-assignable by current_user
+  # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible. (visible(true))
 
 <% RailsAdmin::AbstractModel.all.map do |abstract_model| -%>
   # config.model <%= abstract_model.model.model_name %> do

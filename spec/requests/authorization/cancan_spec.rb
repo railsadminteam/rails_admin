@@ -11,9 +11,11 @@ class Ability
       can :update, Player, :retired => false if user.roles.include? :update_player
       can :destroy, Player, :retired => false if user.roles.include? :destroy_player
       can :history, Player, :retired => false if user.roles.include? :history_player
+      can :show_in_app, Player, :retired => false if user.roles.include? :show_in_app_player
     else
       can :access, :rails_admin
       can :manage, :all
+      can :show_in_app, :all
       cannot [:update, :destroy], Player, :retired => true
     end
   end
@@ -23,6 +25,7 @@ class AdminAbility
   include CanCan::Ability
   def initialize(user)
     can :access, :rails_admin if user.roles.include? :admin
+    can :show_in_app, :all
     can :manage, :all
   end
 end
@@ -32,7 +35,7 @@ describe "RailsAdmin CanCan Authorization" do
   subject { page }
 
   before(:each) do
-    RailsAdmin.config{|c| c.authorize_with :cancan }
+    RailsAdmin.config{|c| c.authorize_with(:cancan); c.audit_with(:history, User) }
     @user = FactoryGirl.create :user
     login_as @user
   end
@@ -72,7 +75,7 @@ describe "RailsAdmin CanCan Authorization" do
       ]
 
       visit index_path(:model_name => "player")
-
+      
       should have_content(@players[0].name)
       should_not have_content(@players[1].name)
       should_not have_content("Add new")
@@ -80,6 +83,7 @@ describe "RailsAdmin CanCan Authorization" do
       should_not have_css('.edit_object_link')
       should_not have_css('.delete_object_link')
       should_not have_css('.history_object_link')
+      should_not have_css('.show_in_app_object_link')
     end
 
     it "GET /admin/team should raise CanCan::AccessDenied" do
@@ -141,6 +145,7 @@ describe "RailsAdmin CanCan Authorization" do
       should_not have_content("Add new")
       should_not have_content("Delete")
       should_not have_content("History")
+      should_not have_content("Show in app")
       fill_in "player[name]", :with => "Jackie Robinson"
       click_button "Save"
       @player.reload
@@ -182,6 +187,29 @@ describe "RailsAdmin CanCan Authorization" do
     end
   end
 
+  describe "with show in app role" do
+    it 'shows links to show in app action' do
+
+      @user.update_attribute(:roles, [:admin, :read_player, :show_in_app_player])
+      @player = FactoryGirl.create :player
+
+      visit index_path(:model_name => "player")
+        should have_css('.show_object_link')
+        should_not have_css('.edit_object_link')
+        should_not have_css('.delete_object_link')
+        should_not have_css('.history_object_link')
+        should have_css('.show_in_app_object_link')
+
+      visit show_path(:model_name => 'player', :id => @player.id)
+        should have_content("Show")
+        should_not have_content("Edit")
+        should_not have_content("Delete")
+        should_not have_content("History")
+        should have_content("Show in app")
+
+    end
+  end
+
   describe "with all roles" do
     it 'shows links to all actions' do
 
@@ -193,12 +221,14 @@ describe "RailsAdmin CanCan Authorization" do
         should have_css('.edit_object_link')
         should have_css('.delete_object_link')
         should have_css('.history_object_link')
+        should have_css('.show_in_app_object_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")
         should have_content("Edit")
         should have_content("Delete")
         should have_content("History")
+        should have_content("Show in app")
 
     end
   end
@@ -214,6 +244,7 @@ describe "RailsAdmin CanCan Authorization" do
       visit delete_path(:model_name => "player", :id => player_id)
 
       click_button "Yes, I'm sure"
+      
       Player.exists?(player_id).should be_false
     end
 

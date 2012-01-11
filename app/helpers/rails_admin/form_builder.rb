@@ -10,15 +10,15 @@ module RailsAdmin
         :model_config => @template.instance_variable_get(:@model_config),
         :nested_in => false
       })
-      
-      options[:model_config].send(options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups.map do |fieldset|
+      groups = options[:model_config].send(options[:nested_in] ? :nested : options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups
+      groups.map do |fieldset|
         fieldset_for fieldset, options[:nested_in]
       end.join.html_safe +
       (options[:nested_in] ? '' : @template.render(:partial => 'submit_buttons'))
     end
 
     def fieldset_for fieldset, nested_in
-      if (fields = fieldset.fields.map{ |f| f.with(:form => self, :object => @object, :view => @template) }.select(&:visible?)).length > 0
+      if (fields = fieldset.with(:form => self, :object => @object, :view => @template).visible_fields).length > 0
         @template.content_tag :fieldset do
           @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : ''), :style => "#{fieldset.label == I18n.translate("admin.new.basic_info") ? 'display:none' : ''}") +
           fields.map{ |field| field_wrapper_for(field, nested_in) }.join.html_safe
@@ -27,11 +27,15 @@ module RailsAdmin
     end
 
     def field_wrapper_for field, nested_in
-      # do not show nested field if the target is the origin
-      unless field.inverse_of.presence && field.inverse_of == nested_in
-        @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
-          label(field.method_name, field.label, :class => (field.nested_form ? 'nester input' : '')) +
-          (field.nested_form ? nested_inputs_for(field) : input_for(field))
+      if field.is_a?(RailsAdmin::Config::Fields::Types::Hidden)
+        input_for(field)
+      else
+        # do not show nested field if the target is the origin
+        unless field.inverse_of.presence && field.inverse_of == nested_in
+          @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
+            label(field.method_name, field.label, :class => (field.nested_form ? 'nester input' : '')) +
+            (field.nested_form ? nested_inputs_for(field) : input_for(field))
+          end
         end
       end
     end

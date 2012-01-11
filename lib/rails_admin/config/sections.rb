@@ -1,9 +1,13 @@
 require 'active_support/core_ext/string/inflections'
-require 'rails_admin/config/sections/create'
-require 'rails_admin/config/sections/list'
+require 'rails_admin/config/sections/base'
+require 'rails_admin/config/sections/edit'
 require 'rails_admin/config/sections/update'
+require 'rails_admin/config/sections/create'
+require 'rails_admin/config/sections/nested'
+require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/export'
 require 'rails_admin/config/sections/show'
+
 
 module RailsAdmin
   module Config
@@ -22,9 +26,7 @@ module RailsAdmin
           name = name.to_s.downcase.to_sym
           klass.send(:define_method, name) do |&block|
             @sections = {} unless @sections
-            unless @sections[name]
-              @sections[name] = section.new(self)
-            end
+            @sections[name] = section.new(self) unless @sections[name]
             @sections[name].instance_eval &block if block
             @sections[name]
           end
@@ -33,3 +35,4 @@ module RailsAdmin
     end
   end
 end
+

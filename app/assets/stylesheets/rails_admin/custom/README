@@ -1,3 +1,0 @@
-Files in this folder are meant to be overriden by users to control variables, mixins and final theming of their own RA application. No real content should go in here.
-
-Copy this folder's content to your app/assets/stylesheets/rails_admin/custom directory.

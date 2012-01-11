@@ -179,7 +179,7 @@ var pjax = $.pjax = function( options ) {
 
 
 pjax.defaults = {
-  timeout: 2000,
+  timeout: 4000,
   push: true,
   replace: false,
   // We want the browser to maintain two separate internal caches: one for

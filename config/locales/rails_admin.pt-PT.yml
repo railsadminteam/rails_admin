@@ -87,6 +87,8 @@ pt-PT:
       successful: "Um registo de %{name}, foi %{action} com sucesso"
       error: "Um registo de %{name} falhou ao ser %{action}"
       noaction: "Nenhuma acção foi executada."
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "criar"
       created: "criado"
@@ -98,12 +100,12 @@ pt-PT:
       exported: "exported"
     breadcrumbs:
       delete: "deletar"
-      for_object: "história"
+      history_show: "história"
       show: "mostrar"
       edit: "editar"
       export: "exportar"
       bulk_destroy: "deletar"
       new: "novo"
-      for_model: "história"
+      history_index: "história"
       index: "listar"
       dashboard: "administração"

@@ -87,6 +87,8 @@ zh-CN:
       successful: "%{name} %{action}成功"
       error: "%{name} %{action}失败"
       noaction: "没作任何动作"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "创建"
       created: "已创建"
@@ -98,13 +100,13 @@ zh-CN:
       exported: "已导出"
     breadcrumbs:
       delete: "删除"
-      for_object: "历史"
+      history_show: "历史"
       show: "显示"
       edit: "编辑"
       export: "导出"
       bulk_destroy: "删除"
       new: "新建"
-      for_model: "历史"
+      history_index: "历史"
       index: "列表"
       dashboard: "首页"
   datetime:

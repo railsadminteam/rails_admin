@@ -6,15 +6,15 @@ module RailsAdmin
     layout "rails_admin/application"
 
     before_filter :get_model, :except => [:dashboard]
-    before_filter :get_object, :only => [:show, :edit, :update, :delete, :destroy]
+    before_filter :get_object, :only => [:show, :edit, :update, :delete, :destroy, :history_show]
     before_filter :get_attributes, :only => [:create, :update]
     before_filter :check_for_cancel, :only => [:create, :update, :destroy, :export, :bulk_destroy]
 
-    def dashboard
+    def dashboard 
       @page_name = t("admin.dashboard.pagename")
       @page_type = "dashboard"
 
-      @history = History.latest
+      @history = @auditing_adapter && @auditing_adapter.latest || []
       @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
 
       @most_recent_changes = {}
@@ -27,10 +27,31 @@ module RailsAdmin
         @count[t.pretty_name] = current_count
         @most_recent_changes[t.pretty_name] = t.model.order("updated_at desc").first.try(:updated_at) rescue nil
       end
-      render :dashboard
+      render :dashboard, :status => (flash[:error].present? ? :not_found : 200)
+    end
+    
+    def history_index
+      @authorization_adapter.authorize(:history) if @authorization_adapter
+      @page_type = @abstract_model.pretty_name.downcase
+      @page_name = t("admin.history.page_name", :name => @model_config.label.downcase)
+      @general = true
+      @history = @auditing_adapter && @auditing_adapter.listing_for_model(@abstract_model, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]) || []
+
+      render "history", :layout => request.xhr? ? false : 'rails_admin/application'
+    end
+
+    def history_show
+      @authorization_adapter.authorize(:history) if @authorization_adapter
+      @page_type = @abstract_model.pretty_name.downcase
+      @page_name = t("admin.history.page_name", :name => "#{@model_config.label.downcase} '#{@model_config.with(:object => @object).object_label}'")
+      @general = false
+      @history = @auditing_adapter && @auditing_adapter.listing_for_object(@abstract_model, @object, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]) || []
+
+      render "history", :layout => request.xhr? ? false : 'rails_admin/application'
     end
 
     def index
+      
       @authorization_adapter.authorize(:index, @abstract_model) if @authorization_adapter
 
       @page_type = @abstract_model.pretty_name.downcase
@@ -39,7 +60,8 @@ module RailsAdmin
       @objects ||= list_entries
 
       respond_to do |format|
-        format.html { render :layout => !request.xhr? }
+        format.html {           
+          render :index, :layout => !request.xhr?, :status => (flash[:error].present? ? :not_found : 200) }
         format.json do
           output = if params[:compact]
             @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }
@@ -107,7 +129,7 @@ module RailsAdmin
       @page_type = @abstract_model.pretty_name.downcase
 
       if @object.save
-        History.create_history_item("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
+        @auditing_adapter && @auditing_adapter.create_object("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         respond_to do |format|
           format.html do
             redirect_to_on_success
@@ -154,7 +176,7 @@ module RailsAdmin
       @object.set_attributes(@attributes, _attr_accessible_role)
 
       if @object.save
-        History.create_update_history @abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user
+        @auditing_adapter && @auditing_adapter.update_object(@abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user)
         respond_to do |format|
           format.html do
             redirect_to_on_success
@@ -183,9 +205,8 @@ module RailsAdmin
 
     def destroy
       @authorization_adapter.authorize(:destroy, @abstract_model, @object) if @authorization_adapter
-
+      @auditing_adapter && @auditing_adapter.delete_object("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
       if @abstract_model.destroy(@object)
-        History.create_history_item("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
         flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))
       else
         flash[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.deleted"))
@@ -274,7 +295,7 @@ module RailsAdmin
 
     def get_sort_hash(model_config)
       abstract_model = model_config.abstract_model
-      params[:sort] = params[:sort_reverse] = nil unless model_config.list.with(:view => self, :object => abstract_model.model.new).visible_fields.map {|f| f.name.to_s}.include? params[:sort]
+      params[:sort] = params[:sort_reverse] = nil unless model_config.list.fields.map {|f| f.name.to_s}.include? params[:sort]
 
       params[:sort] ||= model_config.list.sort_by.to_s
       params[:sort_reverse] ||= 'false'
@@ -307,8 +328,6 @@ module RailsAdmin
         if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
           @attributes[key] = YAML::load(value)
         end
-        # Delete fields that are blank
-        @attributes[key] = nil if value.blank?
       end
     end
 

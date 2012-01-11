@@ -5,7 +5,7 @@ require 'rails_admin/abstract_object'
 module RailsAdmin
   module Adapters
     module ActiveRecord
-      DISABLED_COLUMN_TYPES = [:tsvector]
+      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary]
       @@polymorphic_parents = nil
 
       def self.polymorphic_parents(name)
@@ -119,7 +119,7 @@ module RailsAdmin
       end
 
       def properties
-        columns = model.columns.reject {|c| DISABLED_COLUMN_TYPES.include?(c.type.to_sym) }
+        columns = model.columns.reject {|c| c.type.blank? || DISABLED_COLUMN_TYPES.include?(c.type.to_sym) }
         columns.map do |property|
           {
             :name => property.name.to_sym,
@@ -296,7 +296,7 @@ module RailsAdmin
           association.options[:foreign_type].try(:to_sym) || :"#{association.name}_type"
         end
       end
-      
+
       def association_nested_attributes_options_lookup(association)
         model.nested_attributes_options.try { |o| o[association.name.to_sym] }
       end

@@ -1,10 +1,10 @@
 require 'spec_helper'
+require 'rails_admin/extensions/history/history'
 
 describe "RailsAdmin History" do
-  
-  
   describe "model history fetch" do
     before :each do
+      RailsAdmin::History.delete_all
       @model = RailsAdmin::AbstractModel.new("Player")
       player = FactoryGirl.create :player
       30.times do |i|
@@ -28,7 +28,11 @@ describe "RailsAdmin History" do
 
     context "GET admin/history/@model" do
       before :each do
-        visit history_model_path(@model)
+        RailsAdmin.config do |c|
+          c.audit_with :history
+        end
+
+        visit history_index_path(@model)
       end
 
       # https://github.com/sferik/rails_admin/issues/362
@@ -53,7 +57,7 @@ describe "RailsAdmin History" do
         end
 
         it "should render a XHR request successfully" do
-          xhr :get, history_model_path(@model, :page => 2)
+          xhr :get, history_index_path(@model, :page => 2)
         end
       end
     end

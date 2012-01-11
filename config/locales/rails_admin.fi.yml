@@ -85,6 +85,8 @@ fi:
       successful: "%{name} %{action} onnistuneesti"
       error: "Toimenpide epäonnistui eikä %{name} tyyppistä tietuetta %{action}"
       noaction: "Mitään ei tehty"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "luo"
       created: "luotu"
@@ -96,12 +98,12 @@ fi:
       exported: "viety"
     breadcrumbs:
       delete: "poista"
-      for_object: "historia"
+      history_show: "historia"
       show: "näytä"
       edit: "muokkaa"
       export: "vie"
       bulk_destroy: "poista"
       new: "luo uusi"
-      for_model: "historia"
+      history_index: "historia"
       index: "listaa"
       dashboard: "hallintapaneeli"

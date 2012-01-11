@@ -54,11 +54,13 @@ describe "RailsAdmin Config DSL" do
     it "should raise NotFound for the list view" do
       visit index_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
+      find('.alert-message.error').should have_content("Model 'Fan' could not be found")
     end
 
     it "should raise NotFound for the create view" do
       visit new_path(:model_name => "fan")
       page.driver.status_code.should eql(404)
+      find('.alert-message.error').should have_content("Model 'Fan' could not be found")
     end
 
     it "should be hidden from other models relations in the edit view" do
@@ -129,7 +131,7 @@ describe "RailsAdmin Config DSL" do
     it 'should hide empty fields in show view by default' do
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "league", :id => @player.id)
-      should_not have_css("#player_born_on")
+      should_not have_css(".born_on_field")
     end
 
 

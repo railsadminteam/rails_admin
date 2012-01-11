@@ -1,17 +1,17 @@
 require 'active_support/core_ext/string/inflections'
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/has_groups'
 require 'rails_admin/config/fields'
-require 'rails_admin/config/fields/groupable'
 require 'rails_admin/config/fields/association'
+require 'rails_admin/config/fields/groupable'
+
 
 module RailsAdmin
   module Config
     module Fields
       class Base < RailsAdmin::Config::Base
         attr_reader :name, :properties
-        attr_accessor :defined, :order
+        attr_accessor :defined, :order, :section
 
         def self.inherited(klass)
           klass.instance_variable_set("@view_helper", :text_field)
@@ -21,16 +21,14 @@ module RailsAdmin
 
         def initialize(parent, name, properties)
           super(parent)
-
+          
           @defined = false
           @name = name
           @order = 0
           @properties = properties
-
-          # If parent is able to group fields the field should be aware of it
-          if parent.kind_of?(RailsAdmin::Config::HasGroups)
-            extend RailsAdmin::Config::Fields::Groupable
-          end
+          @section = parent
+          
+          extend RailsAdmin::Config::Fields::Groupable
         end
 
         register_instance_option(:css_class) do
@@ -131,6 +129,10 @@ module RailsAdmin
         register_instance_option(:html_attributes) do
           {}
         end
+        
+        register_instance_option :default_value do
+          nil
+        end
 
         # Accessor for field's label.
         #
@@ -180,6 +182,16 @@ module RailsAdmin
         
         register_instance_option :read_only do
           not editable
+        end
+        
+        register_instance_option :visible? do
+          returned = true
+          (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
+            if self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+              returned = false if fields.include?(self.name)
+            end
+          end
+          returned
         end
         
         def editable
@@ -251,6 +263,10 @@ module RailsAdmin
 
         def method_name
           name
+        end
+        
+        def _html_attributes
+          html_attributes.merge(!default_value.nil? ? { :value => default_value } : {})
         end
       end
     end

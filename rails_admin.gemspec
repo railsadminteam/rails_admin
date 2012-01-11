@@ -3,16 +3,16 @@ require File.expand_path('../lib/rails_admin/version', __FILE__)
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
-  gem.add_dependency 'bootstrap-sass', '~> 1.4.1'
+  gem.add_dependency 'bbenezech-nested_form', '~> 0.0'
+  gem.add_dependency 'bootstrap-sass', ['~> 1.4', '>= 1.4.1']
   gem.add_dependency 'builder', '~> 3.0'
   gem.add_dependency 'coffee-rails', '~> 3.1'
   gem.add_dependency 'haml', '~> 3.1'
-  gem.add_dependency 'jquery-rails', '~> 1.0.19'
-  gem.add_dependency 'kaminari', '~> 0.12.4'
+  gem.add_dependency 'jquery-rails', '>= 1.0'
+  gem.add_dependency 'kaminari', '~> 0.12'
+  gem.add_dependency 'rack-pjax', '~> 0.5'
   gem.add_dependency 'rails', '~> 3.1'
   gem.add_dependency 'remotipart', '~> 1.0'
-  gem.add_dependency 'rack-pjax'
-  gem.add_dependency 'bbenezech-nested_form', '~> 0.0.2'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'carrierwave'
   gem.add_development_dependency 'devise'

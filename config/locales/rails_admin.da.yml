@@ -78,6 +78,8 @@ da:
       successful: "%{name} er nu %{action}"
       error: "%{name} er nu ikke %{action} pga. en fejl"
       noaction: "Der er ikke foretaget noget"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "ny"
       created: "tilføjet"
@@ -89,11 +91,11 @@ da:
       exported: "exported"
     breadcrumbs:
       delete: "delete"
-      for_object: "history"
+      history_show: "history"
       edit: "edit"
       export: "export"
       bulk_destroy: "delete"
       new: "new"
-      for_model: "history"
+      history_index: "history"
       index: "list"
       dashboard: "dashboard"

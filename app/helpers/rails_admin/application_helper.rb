@@ -13,12 +13,12 @@ module RailsAdmin
     ViewType   =           Struct.new(:parent,    :type,   :authorization, :path_method)
     VIEW_TYPES = {
       :delete         => ViewType.new(:show,      :object, :delete),
-      :for_object     => ViewType.new(:show,      :object, nil,            :history_object),
+      :history_show     => ViewType.new(:show,      :object, nil,            :history_show),
       :edit           => ViewType.new(:show,      :object, :edit),
       :show           => ViewType.new(:index,     :object, nil),
       :export         => ViewType.new(:index,     :model,  :export),
       :new            => ViewType.new(:index,     :model,  :new),
-      :for_model      => ViewType.new(:index,     :model,  nil,            :history_model),
+      :history_index      => ViewType.new(:index,     :model,  nil,            :history_index),
       :index          => ViewType.new(:dashboard, :model,  :index),
       :dashboard      => ViewType.new
     }

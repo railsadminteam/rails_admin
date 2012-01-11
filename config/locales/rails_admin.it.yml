@@ -87,6 +87,8 @@ it:
       successful: "L' elemento %{name} è stato %{action} con successo"
       error: "L' elemento %{name} non è stato %{action}"
       noaction: "L' azione è stata annullata"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "crea"
       created: "creato"
@@ -98,12 +100,12 @@ it:
       exported: "esportato"
     breadcrumbs:
       delete: "elimina"
-      for_object: "cronologia"
+      history_show: "cronologia"
       show: "mostra"
       edit: "modifica"
       export: "esporta"
       bulk_destroy: "elimina"
       new: "nuovo"
-      for_model: "cronologia"
+      history_index: "cronologia"
       index: "elenco"
       dashboard: "riepilogo"

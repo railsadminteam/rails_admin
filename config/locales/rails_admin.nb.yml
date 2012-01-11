@@ -89,6 +89,8 @@ nb:
       successful: "%{name} er nå %{action}"
       error: "%{name} ble ikke %{action}"
       noaction: "Ingen handlinger ble utført"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "opprette"
       created: "opprettet"
@@ -100,12 +102,12 @@ nb:
       exported: "eksportert"
     breadcrumbs:
       delete: "slette"
-      for_object: "historikk"
+      history_show: "historikk"
       show: "vise"
       edit: "redigere"
       export: "eksportere"
       bulk_destroy: "slette"
       new: "ny"
-      for_model: "historikk"
+      history_index: "historikk"
       index: "liste"
       dashboard: "dashboard"

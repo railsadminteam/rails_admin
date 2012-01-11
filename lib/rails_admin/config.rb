@@ -10,12 +10,6 @@ module RailsAdmin
     # This is valid for custom warden setups, and also devise
     # If you're using the admin setup for devise, you should set RailsAdmin to use the admin
     #
-    # By default, this will raise in any of the following environments
-    #   * production
-    #   * beta
-    #   * uat
-    #   * staging
-    #
     # @see RailsAdmin::Config.authenticate_with
     # @see RailsAdmin::Config.authorize_with
     DEFAULT_AUTHENTICATION = Proc.new do
@@ -25,6 +19,8 @@ module RailsAdmin
     DEFAULT_ATTR_ACCESSIBLE_ROLE = Proc.new { :default }
 
     DEFAULT_AUTHORIZE = Proc.new {}
+    
+    DEFAULT_AUDIT = Proc.new {}
 
     DEFAULT_CURRENT_USER = Proc.new do
       request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
@@ -103,7 +99,20 @@ module RailsAdmin
         @attr_accessible_role = blk if blk
         @attr_accessible_role || DEFAULT_ATTR_ACCESSIBLE_ROLE
       end
-
+      
+      # Setup auditing/history/versioning provider that observe objects lifecycle
+      def audit_with(*args, &block)
+        extension = args.shift
+        if(extension)
+          @audit = Proc.new {
+            @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
+          }
+        else
+          @audit = block if block
+        end
+        @audit || DEFAULT_AUDIT
+      end
+      
       # Setup authorization to be run as a before filter
       # This is run inside the controller instance so you can setup any authorization you need to.
       #
@@ -210,6 +219,16 @@ module RailsAdmin
         config.instance_eval(&block) if block
         config
       end
+      
+      def default_hidden_fields=(fields)
+        if fields.is_a?(Array)
+          @default_hidden_fields = {}
+          @default_hidden_fields[:edit] = fields
+          @default_hidden_fields[:show] = fields
+        else
+          @default_hidden_fields = fields
+        end
+      end
 
       # Returns all model configurations
       #
@@ -228,8 +247,11 @@ module RailsAdmin
         @compact_show_view = true
         @authenticate = nil
         @authorize = nil
+        @audit = nil
         @current_user = nil
-        @default_hidden_fields = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields = {}
+        @default_hidden_fields[:edit] = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:show] = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
         @default_items_per_page = 20
         @default_search_operator = 'default'
         @excluded_models = []

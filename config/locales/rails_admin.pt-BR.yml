@@ -87,6 +87,8 @@ pt-BR:
       successful: "%{name} foi %{action} com sucesso!"
       error: "%{name} falhou em %{action}"
       noaction: "Não ocorreram ações."
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "criar"
       created: "criado"
@@ -98,12 +100,12 @@ pt-BR:
       exported: "exportado"
     breadcrumbs:
       delete: "deletar"
-      for_object: "história"
+      history_show: "história"
       show: "visualizar"
       edit: "editar"
       export: "exportar"
       bulk_destroy: "deletar"
       new: "novo"
-      for_model: "história"
+      history_index: "história"
       index: "listar"
       dashboard: "administração"

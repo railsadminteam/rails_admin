@@ -27,7 +27,7 @@ module RailsAdmin
               :rows => "3"
             }
           end
-
+          
           register_instance_option(:partial) do
             :form_text
           end

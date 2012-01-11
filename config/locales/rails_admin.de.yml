@@ -88,6 +88,8 @@ de:
       successful: "%{name} wurde erfolgreich %{action}"
       error: "%{name} wurde nicht %{action}"
       noaction: "Keine Aktionen durchgeführt"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
     actions:
       create: "erstellen"
       created: "erstellt"
@@ -99,12 +101,12 @@ de:
       exported: "exportiert"
     breadcrumbs:
       delete: "löschen"
-      for_object: "historie"
+      history_show: "historie"
       show: "anzeigen"
       edit: "bearbeiten"
       export: "exportieren"
       bulk_destroy: "löschen"
       new: "neu"
-      for_model: "Historie"
+      history_index: "Historie"
       index: "Liste"
       dashboard: "Übersicht"
