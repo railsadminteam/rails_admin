@@ -11,7 +11,7 @@ tr:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Site Yönetimi"
+      page_name: "Site Yönetimi"
       name: "Pano"
       model_name: "Model adı"
       last_used: "Son kullanım"

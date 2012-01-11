@@ -10,7 +10,7 @@ bg:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Администрация"
+      page_name: "Администрация"
       name: "Табло"
       model_name: "Име на модел"
       last_used: "Последно използван"

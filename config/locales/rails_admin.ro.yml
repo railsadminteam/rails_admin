@@ -15,7 +15,7 @@ ro:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Administrare"
+      page_name: "Administrare"
       name: "Tablou"
       model_name: "Numele modelului"
       last_used: "Folosit ultima dată"

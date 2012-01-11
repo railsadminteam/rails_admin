@@ -10,7 +10,7 @@ ru:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Управление сайтом"
+      page_name: "Управление сайтом"
       name: "Контрольная панель"
       model_name: "Название модели"
       last_used: "Последнее раз использовалось"

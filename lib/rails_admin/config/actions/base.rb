@@ -6,41 +6,61 @@ module RailsAdmin
     module Actions
       class Base < RailsAdmin::Config::Base
         include RailsAdmin::Config::Hideable
+
+        register_instance_option :root_level? do
+          false
+        end
         
-        attr_reader :parent
-        @parent = :root # :root, :model, :object
-        
+        register_instance_option :model_level? do
+          false
+        end
+          
+        register_instance_option :object_level? do
+          false
+        end
+                
         register_instance_option :controller do
-          render :action => template_name
+          Proc.new do
+            render :action => @action.template_name
+          end
         end
         
         register_instance_option :template_name do
-          self.class.key
+          key.to_sym
         end
         
-        register_instance_option :breadcrumb_i18n_key do
-          "admin.breadcrumbs.#{self.class.key}"
+        register_instance_option :authorization_key do
+          key.to_sym
         end
         
-        register_instance_option :title_i18n_key do
-          "admin.titles.#{self.class.key}"
+        register_instance_option :breadcrumb do
+          "admin.#{key}.breadcrumb"
         end
         
-        register_instance_option :menu_i18n_key do
-          "admin.menus.#{self.class.key}"
+        register_instance_option :page_name do
+          "admin.#{key}.page_name"
         end
         
-        # routing related methods should be non-configurable, class-level
-        def self.allowed_http_methods
+        register_instance_option :http_methods do
           [:get]
         end
         
-        def self.route_fragment_name
+        register_instance_option :route_fragment do
+          custom_key.to_s
+        end
+        
+        register_instance_option :action_name do
+          custom_key.to_sym
+        end
+        
+        # user should override only custom_key (action name and route fragment change, allows for duplicate actions)
+        register_instance_option :custom_key do
           key
         end
         
-        def self.controller_method_name
-          key
+        # allows total renaming of an action, changing action name, route fragment, i18n keys, template name, authorization key, etc.
+        register_instance_option :key do
+          self.class.key
         end
         
         def self.key

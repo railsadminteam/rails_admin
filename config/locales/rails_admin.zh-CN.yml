@@ -8,7 +8,7 @@ zh-CN:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "网站管理"
+      page_name: "网站管理"
       name: "首页"
       model_name: "模型名称"
       last_used: "最后使用"

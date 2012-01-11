@@ -64,7 +64,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @draft = FactoryGirl.create :draft
 
-      page.driver.post create_path(:model_name => "player", :player => {:name => "Jackie Robinson", :number => 42, :position => 'Second baseman', :draft_id => @draft.id})
+      page.driver.post new_path(:model_name => "player", :player => {:name => "Jackie Robinson", :number => 42, :position => 'Second baseman', :draft_id => @draft.id})
 
       @player = RailsAdmin::AbstractModel.new("Player").all.last # first is created by FactoryGirl
     end
@@ -78,7 +78,7 @@ describe "RailsAdmin Basic Create" do
   describe "create with has-many association" do
     before(:each) do
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
-      page.driver.post create_path(:model_name => "league", :league => {:name => "National League", :division_ids =>[@divisions[0].id]})
+      page.driver.post new_path(:model_name => "league", :league => {:name => "National League", :division_ids =>[@divisions[0].id]})
       @league = RailsAdmin::AbstractModel.new("League").all.last
     end
 
@@ -93,7 +93,7 @@ describe "RailsAdmin Basic Create" do
   describe "create with has-and-belongs-to-many association" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
-      page.driver.post create_path(:model_name => "fan", :fan => {:name => "John Doe", :team_ids => [@teams[0].id] })
+      page.driver.post new_path(:model_name => "fan", :fan => {:name => "John Doe", :team_ids => [@teams[0].id] })
       @fan = RailsAdmin::AbstractModel.new("Fan").first
     end
 
@@ -110,7 +110,7 @@ describe "RailsAdmin Basic Create" do
       @team = FactoryGirl.create :team
       @player = FactoryGirl.create :player, :team => @team
 
-      page.driver.post create_path(:model_name => "player", :player => {:name => @player.name, :number => @player.number.to_s, :position => @player.position, :team_id => @team.id})
+      page.driver.post new_path(:model_name => "player", :player => {:name => @player.name, :number => @player.number.to_s, :position => @player.position, :team_id => @team.id})
     end
 
     it "should show an error message" do
@@ -120,7 +120,7 @@ describe "RailsAdmin Basic Create" do
 
   describe "create with invalid object" do
     before(:each) do
-      page.driver.post(create_path(:model_name => "player", :id => 1), :params => {:player => {}})
+      page.driver.post(new_path(:model_name => "player", :id => 1), :params => {:player => {}})
     end
 
     it "should show an error message" do

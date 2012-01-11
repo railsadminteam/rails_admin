@@ -8,7 +8,7 @@ da:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Administration"
+      page_name: "Administration"
       name: "Oversigt"
       model_name: "Modelnavn"
       last_used: "Sidst brugt"

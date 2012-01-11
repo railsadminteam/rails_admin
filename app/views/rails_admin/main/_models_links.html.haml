@@ -16,7 +16,7 @@
       %a.dropdown-toggle{:href => '#'}= t('admin.index.selected') + "..."
       %ul.dropdown-menu
         %li= link_to_function t("admin.index.export_selected"), "jQuery('#bulk_action').val('export'); jQuery('#bulk_form').submit()" if can_export
-        %li= link_to_function t("admin.index.delete_selected"), "jQuery('#bulk_action').val('delete'); jQuery('#bulk_form').submit()" if can_delete
+        %li= link_to_function t("admin.index.delete_selected"), "jQuery('#bulk_action').val('bulk_delete'); jQuery('#bulk_form').submit()" if can_delete
   - if @filterable_fields.present?
     %li.dropdown{:style => 'float:right', :'data-dropdown' => "dropdown"}
       %a.dropdown-toggle{:href => '#'}= t('admin.index.add_filter') + "..."

@@ -10,7 +10,7 @@ lt:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Nustatymai"
+      page_name: "Nustatymai"
       name: "Nustatymų pasirinkimai"
       model_name: "Modelio pavadinimas"
       last_used: "Paskutinį kartą naudotas"

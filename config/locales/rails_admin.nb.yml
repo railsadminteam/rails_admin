@@ -12,7 +12,7 @@ nb:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Sideadministrasjon"
+      page_name: "Sideadministrasjon"
       name: "Kontrollpanel"
       model_name: "Modellnavn"
       last_used: "Sist brukt"

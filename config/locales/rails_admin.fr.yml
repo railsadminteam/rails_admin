@@ -8,7 +8,7 @@ fr:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Administration"
+      page_name: "Administration"
       name: "Tableau de bord"
       model_name: "Nom du modèle"
       last_used: "Utilisé"

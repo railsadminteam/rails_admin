@@ -11,7 +11,7 @@ ja:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "サイト管理"
+      page_name: "サイト管理"
       name: "管理画面トップ"
       model_name: "モデル名"
       last_used: "最終アクセス日"

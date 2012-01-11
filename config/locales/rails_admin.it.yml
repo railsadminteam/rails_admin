@@ -11,7 +11,7 @@ it:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Amministrazione sito"
+      page_name: "Amministrazione sito"
       name: "Pagina di riepilogo"
       model_name: "Nome entità"
       last_used: "Ultimo utilizzo"

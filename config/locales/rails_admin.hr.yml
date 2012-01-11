@@ -11,7 +11,7 @@ hr:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Administracija stranice"
+      page_name: "Administracija stranice"
       name: "Upravljačka ploča"
       model_name: "Naziv modela"
       last_used: "Zadni put korišteno"

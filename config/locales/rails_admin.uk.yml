@@ -8,7 +8,7 @@ uk:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Адміністрація"
+      page_name: "Адміністрація"
       name: "Панель керування"
       model_name: "Ім'я моделі"
       last_used: "Останній раз використовувалось"

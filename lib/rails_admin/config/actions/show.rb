@@ -1,11 +1,22 @@
-require 'rails_admin/config/actions/base'
-
 module RailsAdmin
   module Config
     module Actions
       class Show < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)
-        @parent = :object
+        
+        register_instance_option :object_level do
+          true
+        end
+        
+        register_instance_option :route_fragment do
+          ''
+        end
+        
+        register_instance_option :controller do
+          Proc.new do
+            render @action.template_name
+          end
+        end
       end
     end
   end

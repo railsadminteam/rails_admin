@@ -8,7 +8,7 @@ lv:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Saita administrēšana"
+      page_name: "Saita administrēšana"
       name: "Vadības panelis"
       model_name: "Modeļa nosaukums"
       last_used: "Pēdējo reizi izmantots"

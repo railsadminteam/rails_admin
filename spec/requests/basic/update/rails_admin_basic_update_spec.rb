@@ -64,7 +64,7 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = FactoryGirl.create :player
       @draft = FactoryGirl.create :draft
-      page.driver.put update_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => 42, :position => "Second baseman"})
+      page.driver.put edit_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => 42, :position => "Second baseman"})
       @player.reload
     end
 
@@ -89,7 +89,7 @@ describe "RailsAdmin Basic Update" do
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
 
-      page.driver.put update_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
+      page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
 
       @league.reload
       @league.name.should eql("National League")
@@ -100,7 +100,7 @@ describe "RailsAdmin Basic Update" do
       
       RailsAdmin::History.where(:item => @league.id).collect(&:message).should include("Added Divisions ##{@divisions[0].id} associations, Changed name")
 
-      page.driver.put update_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
+      page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
 
       @league.reload
       @league.divisions.should be_empty
@@ -110,7 +110,7 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with missing object" do
     before(:each) do
-      page.driver.put(update_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
+      page.driver.put(edit_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
     end
 
     it "should raise NotFound" do

@@ -232,7 +232,7 @@ module RailsAdmin
       
       # Returns action configuration object
       def actions(&block)
-        (@actions ||= RailsAdmin::Config::Actions.new).instance_eval(&block) if block
+        RailsAdmin::Config::Actions.instance_eval(&block) if block
       end
       
       # Returns all model configurations

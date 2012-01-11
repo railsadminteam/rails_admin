@@ -13,7 +13,7 @@ nl:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Site-administratie"
+      page_name: "Site-administratie"
       name: "Dashboard"
       model_name: "Model"
       last_used: "Laatst gebruikt"

@@ -11,7 +11,7 @@ mn:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Сайтын удирдлага"
+      page_name: "Сайтын удирдлага"
       name: "Хянах хэсэг"
       model_name: "Моделийн нэр"
       last_used: "Сүүлд ашигласан"

@@ -11,7 +11,7 @@ pt-BR:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Administração do site"
+      page_name: "Administração do site"
       name: "Painel"
       model_name: "Nome do model"
       last_used: "Última utilização"

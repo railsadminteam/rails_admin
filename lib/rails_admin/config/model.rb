@@ -6,6 +6,8 @@ require 'rails_admin/config/fields/group'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
 require 'rails_admin/config/sections'
+require 'rails_admin/config/actions'
+
 
 module RailsAdmin
   module Config

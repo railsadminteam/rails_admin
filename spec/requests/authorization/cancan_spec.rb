@@ -268,7 +268,7 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.post(bulk_destroy_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      page.driver.delete(bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
       Player.exists?(active_player.id).should be_false
       Player.exists?(retired_player.id).should be_true
     end
@@ -291,7 +291,7 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.post(bulk_destroy_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      page.driver.delete(bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
       Player.exists?(active_player.id).should be_false
       Player.exists?(retired_player.id).should be_true
     end

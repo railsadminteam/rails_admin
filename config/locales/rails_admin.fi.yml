@@ -9,7 +9,7 @@ fi:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Ylläpito"
+      page_name: "Ylläpito"
       name: "Hallintapaneeli"
       model_name: "Tietuetyyppi"
       last_used: "Muokattu viimeksi"

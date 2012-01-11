@@ -11,7 +11,7 @@ sv:
       truncate: "…"
   admin:
     dashboard:
-      pagename: "Administration"
+      page_name: "Administration"
       name: "Instrumentpanel"
       model_name: "Modellnamn"
       last_used: "Senast använd"

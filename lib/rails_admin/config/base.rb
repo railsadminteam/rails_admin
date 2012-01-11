@@ -17,11 +17,11 @@ module RailsAdmin
     class Base
       attr_reader :abstract_model, :bindings, :parent, :root
 
-      def initialize(parent)
-        @abstract_model = parent.abstract_model
+      def initialize(parent = nil)
+        @abstract_model = parent && parent.abstract_model
         @bindings = {}
         @parent = parent
-        @root = parent.root
+        @root = parent && parent.root
       end
 
       def has_option?(name)
