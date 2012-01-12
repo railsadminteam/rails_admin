@@ -40,7 +40,7 @@ en:
         menu_item: "Edit"
         breadcrumb: "Edit"
         link: "Update this %{model_label}"
-        done: "'%{object_label}' updated"
+        done: "updated"
       delete:
         page_title: "Delete %{model_label} '%{object_label}'"
         menu_item: "Delete"
