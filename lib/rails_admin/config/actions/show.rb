@@ -12,6 +12,10 @@ module RailsAdmin
           ''
         end
         
+        register_instance_option :breadcrumb_parent do
+          :index
+        end
+        
         register_instance_option :controller do
           Proc.new do
             render @action.template_name

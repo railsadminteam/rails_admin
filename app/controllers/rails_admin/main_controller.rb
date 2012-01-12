@@ -26,11 +26,9 @@ module RailsAdmin
     end
     
     def bulk_action
-      if params[:bulk_action].in?(RailsAdmin::Config::Actions.all.select{|a| a.bulkable?}.map(&:route_fragment))
-        self.send(params[:bulk_action])
-      else
-        raise "Could not find action '#{params[:bulk_action]}'"
-      end
+      
+      
+      self.send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all.select(&:bulkable?).map(&:route_fragment))
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all]))

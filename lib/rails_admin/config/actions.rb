@@ -18,7 +18,11 @@ module RailsAdmin
             HistoryIndex.new,
           ]
         end
-      
+        
+        def find custom_key
+          all.find{ |a| a.custom_key == custom_key }
+        end
+        
         def root
           all.select &:root_level
         end

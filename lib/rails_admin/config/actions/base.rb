@@ -54,6 +54,17 @@ module RailsAdmin
           key
         end
         
+        register_instance_option :breadcrumb_parent do
+          case 
+          when root_level?
+            :dashboard
+          when model_level?
+            :index
+          when object_level?
+            :show
+          end
+        end
+        
         def key
           self.class.key
         end

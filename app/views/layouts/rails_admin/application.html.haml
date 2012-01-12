@@ -29,7 +29,7 @@
           .alert-message.fade.in{:class => key}
             %a.close{:href => '#'}×
             %p= value
-        = breadcrumbs_for params[:action].to_sym, @abstract_model, @object
+        = breadcrumb
         - if @abstract_model
           - if @object && !@object.new_record?
             %ul.tabs= render :partial => 'rails_admin/main/object_links', :locals => { :add_active_class => true, :model_name => params[:model_name], :object => @object }

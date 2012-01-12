@@ -8,6 +8,10 @@ module RailsAdmin
           true
         end
         
+        register_instance_option :breadcrumb_parent do
+          nil
+        end
+        
         register_instance_option :controller do
           Proc.new do
             @history = @auditing_adapter && @auditing_adapter.latest || []

@@ -16,6 +16,10 @@ module RailsAdmin
           ''
         end
         
+        register_instance_option :breadcrumb_parent do
+          :dashboard
+        end
+        
         register_instance_option :controller do
           Proc.new do
             @objects ||= list_entries
