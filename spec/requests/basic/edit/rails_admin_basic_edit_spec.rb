@@ -11,7 +11,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show \"Update model\"" do
-      should have_content("Update player")
+      should have_content("Update Player")
     end
 
     it "should show required fields as \"Required\"" do

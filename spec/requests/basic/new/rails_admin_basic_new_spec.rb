@@ -9,8 +9,8 @@ describe "RailsAdmin Basic New" do
       visit new_path(:model_name => "player")
     end
 
-    it "should show \"Create model\"" do
-      should have_content("Create player")
+    it "should show \"New Model\"" do
+      should have_content("New Player")
     end
 
     it "should show required fields as \"Required\"" do

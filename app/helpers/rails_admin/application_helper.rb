@@ -45,18 +45,8 @@ module RailsAdmin
       if authorized?(view, abstract_model, object)
         css_classes = []
         css_classes << "active" if active
-        config = RailsAdmin.config(abstract_model)
         content_tag(:li, :class => css_classes.join(' ')) do
-          path_method = vt.path_method || view
-          wording = case view
-            when :show
-              object.send(config.object_label_method)
-            when :index
-              config.label_plural
-            else
-              I18n.t("admin.breadcrumbs.#{view}").capitalize
-          end
-          link_to wording, self.send("#{path_method}_path")
+          link_to wording_for(:breadcrumb, :action => view), self.send("#{vt.path_method || view}_path")
         end
       end
     end

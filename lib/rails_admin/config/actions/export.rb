@@ -14,7 +14,7 @@ module RailsAdmin
         
         register_instance_option :controller do
           Proc.new do
-            check_for_cancel
+
             if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
               request.format = format
               @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
@@ -23,8 +23,14 @@ module RailsAdmin
             else
               render @action.template_name
             end
+            
           end
         end
+        
+        register_instance_option :bulkable? do
+          true
+        end
+        
       end
     end
   end

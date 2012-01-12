@@ -1,11 +1,22 @@
 module RailsAdmin
   module Config
     module Actions
-      @@actions = []
       
       class << self
         def all
-          @@actions
+          @@actions ||= [
+            Dashboard.new,
+            Index.new,
+            Show.new,
+            New.new,
+            Edit.new,
+            Index.new,
+            Export.new,
+            Delete.new,
+            BulkDelete.new,
+            HistoryShow.new,
+            HistoryIndex.new,
+          ]
         end
       
         def root
@@ -30,7 +41,7 @@ module RailsAdmin
             def #{name}(&block)
               action = #{klass}.new
               action.instance_eval &block if block
-              @@actions << action
+              (@@actions ||= []) << action
               action
             end
           }
@@ -39,6 +50,7 @@ module RailsAdmin
     end
   end
 end
+
 require 'rails_admin/config/actions/base'
 require 'rails_admin/config/actions/dashboard'
 require 'rails_admin/config/actions/index'

@@ -1,4 +1,5 @@
-%li= link_to t('admin.dashboard.name'), dashboard_path
+- RailsAdmin::Config::Actions.root.each do |action|
+  %li= link_to wording_for(:menu_item, :action => :dashboard), { :action => action.action_name }
 - if main_app_root_path = (main_app.root_path rescue false)
   %li= link_to t('home.name').capitalize, main_app_root_path
 - if _current_user

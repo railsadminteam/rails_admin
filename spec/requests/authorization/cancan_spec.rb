@@ -5,6 +5,7 @@ class Ability
   def initialize(user)
     can :access, :rails_admin if user.roles.include? :admin
     unless user.roles.include? :test_exception
+      can :dashboard
       can :manage, Player if user.roles.include? :manage_player
       can :read, Player, :retired => false if user.roles.include? :read_player
       can :create, Player, :suspended => true if user.roles.include? :create_player
@@ -13,6 +14,7 @@ class Ability
       can :history, Player, :retired => false if user.roles.include? :history_player
       can :show_in_app, Player, :retired => false if user.roles.include? :show_in_app_player
     else
+      can :dashboard
       can :access, :rails_admin
       can :manage, :all
       can :show_in_app, :all
@@ -258,7 +260,7 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
 
       should have_content(active_player.name)
       should_not have_content(retired_player.name)
@@ -280,7 +282,7 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
 
       should have_content(active_player.name)
       should_not have_content(retired_player.name)

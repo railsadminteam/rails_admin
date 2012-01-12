@@ -2,8 +2,6 @@
 - root_models = models.select { |model| model.parent == :root }
 
 %ul#nav.navigation
-  %li{:class => ("active" if @page_type == "dashboard")}
-    = link_to(t("admin.dashboard.name"), dashboard_path)
   - root_models.each do |model|
     - children = [model] + models.select { |m| m.parent.to_s == model.abstract_model.model.to_s }
     - tab_titles = children.map { |child| child.abstract_model.pretty_name.downcase }

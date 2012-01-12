@@ -34,8 +34,8 @@ describe "RailsAdmin Basic List" do
       visit index_path(:model_name => "player")
     end
 
-    it "should show \"Select model to edit\", should show filters and should show column headers" do
-      should have_content("Select player to edit")
+    it "should show \"List of Models\", should show filters and should show column headers" do
+      should have_content("List of Players")
       should have_content("Created at")
       should have_content("Updated at")
     end

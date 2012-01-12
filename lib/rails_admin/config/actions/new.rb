@@ -32,7 +32,6 @@ module RailsAdmin
               
             elsif request.post? # CREATE
               
-              check_for_cancel
               @modified_assoc = []
               @object = @abstract_model.new
               @attributes = get_attributes              

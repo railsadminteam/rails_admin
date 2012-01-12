@@ -13,7 +13,6 @@ module RailsAdmin
         end
         
         register_instance_option :controller do
-          
           Proc.new do
             
             if request.get? # EDIT
@@ -24,27 +23,20 @@ module RailsAdmin
               end
             
             elsif request.put? # UPDATE
-              check_for_cancel
+            
               @cached_assocations_hash = associations_hash
               @attributes = get_attributes
               @modified_assoc = []
       
               @old_object = @object.dup
-              @model_config.update.fields.map {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
+              @model_config.update.fields.map { |f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
               @object.set_attributes(@attributes, _attr_accessible_role)
 
               if @object.save
                 @auditing_adapter && @auditing_adapter.update_object(@abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user)
                 respond_to do |format|
-                  format.html do
-                    redirect_to_on_success
-                  end
-                  format.js do
-                    render :json => {
-                      :id => @object.id,
-                      :label => @model_config.with(:object => @object).object_label,
-                    }
-                  end
+                  format.html { redirect_to_on_success }
+                  format.js { render :json => { :id => @object.id, :label => @model_config.with(:object => @object).object_label } }
                 end
               else
                 handle_save_error :edit

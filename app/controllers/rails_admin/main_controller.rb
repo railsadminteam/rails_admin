@@ -3,11 +3,13 @@ module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
             
     include ActionView::Helpers::TextHelper
+    include RailsAdmin::MainHelper
     
     layout "rails_admin/application"
     
     before_filter :get_model, :except => RailsAdmin::Config::Actions.root.map(&:action_name)
     before_filter :get_object, :only => RailsAdmin::Config::Actions.object.map(&:action_name)
+    before_filter :check_for_cancel
     
     RailsAdmin::Config::Actions.all.each do |action|
       class_eval %{
@@ -15,7 +17,7 @@ module RailsAdmin
           @action = RailsAdmin::Config::Actions.all.find{|a| a.action_name == #{action.action_name.inspect}}
           
           @authorization_adapter.try(:authorize, *[@action.authorization_key, @abstract_model, @object].compact)
-          @page_name = t('#{action.page_name}', :model_label => @model_config && @model_config.label, :model_label_plural => @model_config && @model_config.label_plural, :object_label => @object && @object.send(@model_config.object_label_method))
+          @page_name = wording_for(:page_title)
           @page_type = @abstract_model && @abstract_model.pretty_name.downcase || "dashboard"
           
           instance_eval &@action.controller
@@ -85,7 +87,7 @@ module RailsAdmin
     end
     
     def redirect_to_on_success
-      notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{params[:action]}d"))
+      notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]
         redirect_to new_path(:return_to => params[:return_to]), :flash => { :success => notice }
       elsif params[:_add_edit]
@@ -98,7 +100,7 @@ module RailsAdmin
     def handle_save_error whereto = :new
       action = params[:action]
 
-      flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{action}d"))
+      flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
 
       respond_to do |format|
@@ -108,7 +110,9 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      redirect_to back_or_index, :flash => { :info => t("admin.flash.noaction") } if params[:_continue]
+      if params[:_continue]
+        redirect_to(back_or_index, :flash => { :info => t("admin.flash.noaction") })
+      end
     end
 
     def get_collection(model_config, scope, pagination)

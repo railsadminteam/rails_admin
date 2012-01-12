@@ -10,8 +10,68 @@ en:
       next: "Next &raquo;"
       truncate: "…"
   admin:
+    flash:
+      successful: "%{name} successfully %{action}"
+      error: "%{name} failed to be %{action}"
+      noaction: "No actions were taken"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
+    actions:
+      dashboard:
+        page_title: "Site administration"
+        menu_item: "Dashboard"
+        breadcrumb: "Dashboard"
+      index:
+        page_title: "List of %{model_label_plural}"
+        menu_item: "List"
+        breadcrumb: "%{model_label_plural}"
+      show:
+        page_title: "Details for %{model_label} '%{object_label}'"
+        menu_item: "Show"
+        breadcrumb: "%{object_label}"
+      new:
+        page_title: "New %{model_label}"
+        menu_item: "Add new"
+        breadcrumb: "New"
+        link: "Create a new %{model_label}"
+        done: "created"
+      edit:
+        page_title: "Update %{model_label} '%{object_label}'"
+        menu_item: "Edit"
+        breadcrumb: "Edit"
+        link: "Update this %{model_label}"
+        done: "'%{object_label}' updated"
+      delete:
+        page_title: "Delete %{model_label} '%{object_label}'"
+        menu_item: "Delete"
+        breadcrumb: "Delete"
+        link: "Delete '%{object_label}'"
+        done: "deleted"
+      bulk_delete:
+        page_title: "Delete %{model_label_plural}"
+        menu_item: "Multiple delete"
+        breadcrumb: "Multiple delete"
+        bulk_link: "Delete selected %{model_label_plural}"
+      export:
+        page_title: "Export %{model_label}"
+        menu_item: "Export"
+        breadcrumb: "Export"
+        link: "Export found %{model_label_plural}"
+        bulk_link: "Export selected %{model_label_plural}"
+        done: "exported"
+      history_index:
+        page_title: "History for %{model_label_plural}"
+        menu_item: "History"
+        breadcrumb: "History"
+      history_show:
+        page_title: "History for %{model_label} '%{object_label}'"
+        menu_item: "History"
+        breadcrumb: "History"
+    
+    
+    
+    
     dashboard:
-      page_name: "Site administration"
       name: "Dashboard"
       model_name: "Model name"
       last_used: "Last used"
@@ -21,17 +81,10 @@ en:
       show: "Show"
       ago: "ago"
       navigation: "Navigation"
-    history_index:
-      page_name: "History for %{model_label_plural}"
-    history_show:
-      page_name: "History for %{model_label} '%{object_label}'"
     show:
-      page_name: "Details for %{model_label} '%{object_label}'"
       show_in_app: "Show in app"
       no_file_found: "No file found"
     index:
-      page_name: "List of %{model_label_plural}"
-      
       edit_action: "Edit"
       delete_action: "Delete"
       selected: "Selected"
@@ -47,10 +100,6 @@ en:
       show_all: "Show all"
       add_filter: "Add filter"
     new:
-      page_name: "New %{model_label}"
-      action: "create"
-      action_done: "created"
-      
       cancel: "Cancel"
       basic_info: "Basic info"
       required: "Required"
@@ -67,26 +116,13 @@ en:
       save: "Save"
       save_and_add_another: "Save and add another"
       save_and_edit: "Save and edit"
-    edit:
-      page_name: "Update %{model_label} '%{object_label}'"
-      action: "update"
-      action_done: "updated"
     delete:
-      page_name: "Delete %{model_label} '%{object_label}'"
-      action: "delete"
-      action_done: "deleted"
-      
       all_of_the_following_related_items_will_be_deleted: "? The following related items may be deleted or orphaned:"
       are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete this %{model_name}"
       confirmation: "Yes, I'm sure"
       delete_confirmation: "Delete confirmation"
       bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
-    export:
-      page_name: "Export %{model_label}"
-      bulk_action: "Export selected %{model_label_plural}"
-      action: "export"
-      action_done: "exported"
-      
+    export:      
       confirmation: "Export to %{name}"
       select: "Select fields to export"
       fields_from: "Fields from %{name}"
@@ -105,27 +141,8 @@ en:
         default_col_sep: ","
         col_sep: "Column separator"
         col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
-    bulk_delete:
-      page_name: "Delete %{model_label_plural}"
     history:
       name: "History"
       no_activity: "No Activity"
     credentials:
       log_out: "Log out"
-    flash:
-      successful: "%{name} successfully %{action}"
-      error: "%{name} failed to be %{action}"
-      noaction: "No actions were taken"
-      model_not_found: "Model '%{model}' could not be found"
-      object_not_found: "%{model} with id '%{id}' could not be found"
-    breadcrumbs:
-      delete: "delete"
-      history_show: "history"
-      show: "show"
-      edit: "edit"
-      export: "export"
-      bulk_destroy: "delete"
-      new: "new"
-      history_index: "history"
-      index: "list"
-      dashboard: "dashboard"

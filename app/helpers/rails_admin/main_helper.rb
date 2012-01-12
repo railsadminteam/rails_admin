@@ -7,6 +7,20 @@ module RailsAdmin
       form_for(*(args << options), &block) << after_nested_form_callbacks
     end
     
+    def wording_for(label, options = {})
+      options.reverse_merge!({
+        :action => @action.key,
+        :model_config => @model_config,
+        :object => @object
+      })
+      
+      I18n.t("admin.actions.#{options[:action]}.#{label}", 
+        :model_label => options[:model_config].try(:label), 
+        :model_label_plural => options[:model_config].try(:label_plural), 
+        :object_label => options[:model_config] && options[:object].try(options[:model_config].object_label_method)
+      )
+    end
+    
     def get_indicator(percent)
       return "" if percent < 0          # none
       return "notice" if percent < 34   # < 1/100 of max

@@ -25,20 +25,16 @@ module RailsAdmin
           end
         end
         
+        register_instance_option :bulkable? do
+          false
+        end
+        
         register_instance_option :template_name do
           key.to_sym
         end
         
         register_instance_option :authorization_key do
           key.to_sym
-        end
-        
-        register_instance_option :breadcrumb do
-          "admin.#{key}.breadcrumb"
-        end
-        
-        register_instance_option :page_name do
-          "admin.#{key}.page_name"
         end
         
         register_instance_option :http_methods do
@@ -58,8 +54,7 @@ module RailsAdmin
           key
         end
         
-        # allows total renaming of an action, changing action name, route fragment, i18n keys, template name, authorization key, etc.
-        register_instance_option :key do
+        def key
           self.class.key
         end
         

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rails_admin/extensions/history/history'
 
 describe "RailsAdmin Basic Bulk Destroy" do
   subject { page }
@@ -6,9 +7,10 @@ describe "RailsAdmin Basic Bulk Destroy" do
   describe "successful bulk delete of records" do
     before(:each) do
       RailsAdmin::History.destroy_all
+      RailsAdmin.config { |c| c.audit_with :history }
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
+      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @delete_ids))
 
       click_button "Yes, I'm sure"
     end
@@ -44,7 +46,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin::History.destroy_all
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @delete_ids))
+      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @delete_ids))
       click_button "Cancel"
     end
 

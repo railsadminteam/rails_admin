@@ -45,7 +45,7 @@ describe "RailsAdmin Basic Destroy" do
 
   describe "destroy with missing object" do
     before(:each) do
-      page.driver.delete(destroy_path(:model_name => "player", :id => 1))
+      page.driver.delete(delete_path(:model_name => "player", :id => 1))
     end
 
     it "should raise NotFound" do

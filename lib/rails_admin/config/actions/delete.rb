@@ -27,7 +27,6 @@ module RailsAdmin
             
             elsif request.delete? # DESTROY
               
-              check_for_cancel
               @auditing_adapter && @auditing_adapter.delete_object("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
               if @abstract_model.destroy(@object)
                 flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.deleted"))

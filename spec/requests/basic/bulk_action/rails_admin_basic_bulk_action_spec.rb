@@ -10,7 +10,7 @@ describe "RailsAdmin Basic Bulk Action" do
 
   describe "bulk_delete" do
     it 'should show names of to-be-deleted players' do
-      page.driver.post(bulk_action_path(:bulk_action => 'delete', :model_name => "player", :bulk_ids => @players.map(&:id)))
+      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @players.map(&:id)))
       @players.each { |player| should have_content(player.name) }
     end
   end
