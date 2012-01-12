@@ -733,6 +733,19 @@ describe "RailsAdmin Config DSL Edit Section" do
       find('#field_test_nested_field_tests_attributes_0_title_field').should have_content('NestedFieldTest')
     end
     
+    it 'should be desactivable' do
+      RailsAdmin::Config.excluded_models = [RelTest]
+      
+      visit new_path(:model_name => "field_test")
+      should have_selector('.label.add_nested_fields')
+      RailsAdmin.config(FieldTest) do
+        configure :nested_field_tests do
+          nested_form false
+        end
+      end
+      visit new_path(:model_name => "field_test")
+      should have_no_selector('.label.add_nested_fields')
+    end
   end
 
 
