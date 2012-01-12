@@ -1,4 +1,3 @@
-
 zh_tw:
   home:
     name: "首頁"
@@ -63,11 +62,11 @@ zh_tw:
       save_and_edit: "儲存並編輯"
       cancel: "取消"
     delete:
-      all_of_the_following_related_items_will_be_deleted: "? The following related items may be deleted or orphaned:"
+      all_of_the_following_related_items_will_be_deleted: "? 所有被關聯的項目都將被刪除："
       are_you_sure_you_want_to_delete_the_object: "確定要刪除 %{model_name} ?"
       confirmation: "是的我確定！"
-      delete_confirmation: "Delete confirmation"
-      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+      delete_confirmation: "確認刪除"
+      bulk_delete: "下面的目標都將被刪除，並可能會刪除與他們關聯的項目"
     export:
       confirmation: "匯出到 %{name}"
       select: "請選擇要匯出的欄位"
@@ -81,9 +80,9 @@ zh_tw:
         header_for_root_methods: "%{name}" # 'model' is available
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "編碼為"
-        encoding_to_help: "請選擇匯出的編碼格式。 Leave empty to let current input encoding untouched: (%{name})"
-        skip_header: "沒有header"
-        skip_header_help: "不要匯出header (no fields description)"
+        encoding_to_help: "請選擇匯出的編碼格式。 留空將選擇目前的編碼 (%{name})"
+        skip_header: "略過標題"
+        skip_header_help: "不要匯出標題 (無欄位描述)"
         default_col_sep: ","
         col_sep: "分隔符號"
         col_sep_help: "留空將設為預設 ('%{value}')" # value is default_col_sep
