@@ -9,7 +9,7 @@ module RailsAdmin
   
   class ApplicationController < ::ApplicationController
     newrelic_ignore if defined?(NewRelic)
-
+    
     before_filter :_authenticate!
     before_filter :_authorize!
     before_filter :_audit!
@@ -51,8 +51,22 @@ module RailsAdmin
     def presented_model_name?(model_name)
       !RailsAdmin::AbstractModel.lookup(model_name).nil?
     end
+    
+    def _object
+      @object
+    end
+    
+    def _model_config
+      @model_config
+    end
+    
+    def _abstract_model
+      @_abstract_model  
+    end
 
     private
+    
+    
     def _get_plugin_name
       @plugin_name_array ||= [RailsAdmin.config.main_app_name.is_a?(Proc) ? instance_eval(&RailsAdmin.config.main_app_name) : RailsAdmin.config.main_app_name].flatten
     end

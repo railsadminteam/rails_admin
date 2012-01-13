@@ -49,6 +49,22 @@
 - edit_label    = t("admin.index.edit_action")
 - history_label    = t("admin.breadcrumbs.history_show")
 
+= content_for :contextual_tabs do
+  = bulk_menu(self)
+  - if @filterable_fields.present?
+    %li.dropdown{:style => 'float:right', :'data-dropdown' => "dropdown"}
+      %a.dropdown-toggle{:href => '#'}= t('admin.index.add_filter') + "..."
+      %ul.dropdown-menu#filters
+        - @filterable_fields.each do |field|
+          - field_options = case field.type
+          - when :enum
+            - h options_for_select(field.with(:object => abstract_model.model.new).enum).gsub("\n", '')
+          - else
+            - ''
+          %li
+            %a{:href => '#', "data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
+
+
 #list{:'data-pjax-container' => true}
   %script
     jQuery(function($) {
@@ -102,7 +118,7 @@
             - if @other_right_link ||= other_right && index_path(params.merge(:set => (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link, :class => 'pjax'
             %td.last.links
-              %ul.inline= render :partial => 'rails_admin/main/object_links', :locals => { :add_active_class => false, :model_name => params[:model_name], :object => object }
+              %ul.inline= menu_for :object, :object => object, :template => self
     - unless params[:all]
       - total_count = @objects.total_count
       = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)

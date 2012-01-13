@@ -4,6 +4,10 @@ module RailsAdmin
       class HistoryIndex < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)
         
+        register_instance_option :authorization_key do
+          :history
+        end
+        
         register_instance_option :model_level do
           true
         end

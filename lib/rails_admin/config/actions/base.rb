@@ -49,6 +49,10 @@ module RailsAdmin
           custom_key.to_sym
         end
         
+        register_instance_option :i18n_key do
+          key
+        end
+        
         # user should override only custom_key (action name and route fragment change, allows for duplicate actions)
         register_instance_option :custom_key do
           key

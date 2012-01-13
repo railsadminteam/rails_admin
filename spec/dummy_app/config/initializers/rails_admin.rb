@@ -1,6 +1,6 @@
 require 'dragonfly/rails/images'
 
-RailsAdmin.config do |c|  
+RailsAdmin.config do |c|
   c.audit_with :history, User
   c.excluded_models << RelTest
 

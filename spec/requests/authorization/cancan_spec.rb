@@ -84,7 +84,7 @@ describe "RailsAdmin CanCan Authorization" do
       should have_css('.show_object_link')
       should_not have_css('.edit_object_link')
       should_not have_css('.delete_object_link')
-      should_not have_css('.history_object_link')
+      should_not have_css('.history_show_object_link')
       should_not have_css('.show_in_app_object_link')
     end
 
@@ -178,7 +178,7 @@ describe "RailsAdmin CanCan Authorization" do
         should have_css('.show_object_link')
         should_not have_css('.edit_object_link')
         should_not have_css('.delete_object_link')
-        should have_css('.history_object_link')
+        should have_css('.history_show_object_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")
@@ -199,7 +199,7 @@ describe "RailsAdmin CanCan Authorization" do
         should have_css('.show_object_link')
         should_not have_css('.edit_object_link')
         should_not have_css('.delete_object_link')
-        should_not have_css('.history_object_link')
+        should_not have_css('.history_show_object_link')
         should have_css('.show_in_app_object_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
@@ -222,7 +222,7 @@ describe "RailsAdmin CanCan Authorization" do
         should have_css('.show_object_link')
         should have_css('.edit_object_link')
         should have_css('.delete_object_link')
-        should have_css('.history_object_link')
+        should have_css('.history_show_object_link')
         should have_css('.show_in_app_object_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
