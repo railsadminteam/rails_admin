@@ -29,10 +29,6 @@ module RailsAdmin
                                       ((mstart == 12 ? 1 : mstart + 1)..mstop).to_a, ystop])
       end
 
-      results.each do |result|
-        result.record_count = result.record_count.to_i
-      end
-
       add_blank_results(results, mstart, ystart)
     end
 
