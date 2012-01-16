@@ -9,6 +9,7 @@ rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/162114
 ```ruby
 # Gemfile
 
+# if uploaded to github with a valid .gemspec
 gem 'rails_admin_<action_name>', :git => 'https://github.com/....'
 # or in development mode
 gem 'rails_admin_<action_name>', :path => '../rails_admin_<action_name>'
@@ -22,7 +23,7 @@ config.actions do
 end
 ```
 
-## Documentation
+## Development documentation
 
 See the Base class your <ActionName> will inherit from: 
 
