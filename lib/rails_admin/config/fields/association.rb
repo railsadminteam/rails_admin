@@ -100,7 +100,7 @@ module RailsAdmin
         end
         
         # Reader for nested attributes
-        def nested_form
+        register_instance_option :nested_form do
           association[:nested_form]
         end
 
