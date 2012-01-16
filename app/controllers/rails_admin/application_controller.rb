@@ -15,6 +15,8 @@ module RailsAdmin
     before_filter :_audit!
 
     helper_method :_current_user, :_attr_accessible_role, :_get_plugin_name
+    
+    attr_reader :object, :model_config, :abstract_model
 
     def get_model
       @model_name = to_model_name(params[:model_name])
@@ -52,17 +54,6 @@ module RailsAdmin
       !RailsAdmin::AbstractModel.lookup(model_name).nil?
     end
     
-    def _object
-      @object
-    end
-    
-    def _model_config
-      @model_config
-    end
-    
-    def _abstract_model
-      @_abstract_model  
-    end
 
     private
     

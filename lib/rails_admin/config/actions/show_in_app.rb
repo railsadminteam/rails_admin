@@ -9,12 +9,10 @@ module RailsAdmin
         end
         
         register_instance_option :visible? do
-          
-          puts "bindings[:controller] == #{bindings[:controller]}"
-          unless bindings[:controller]
+          unless bindings[:controller] && bindings[:object]
             true
           else
-            bindings[:controller].main_app.url_for(bindings[:controller]._object) rescue false
+            bindings[:controller].main_app.url_for(bindings[:object]) rescue false
           end
         end
         

@@ -407,9 +407,9 @@ describe "RailsAdmin Basic List" do
     end
 
     it "shows the show, edit and delete links with valid url" do
-      should have_selector("td a[href='/admin/ball/#{@ball.id}']")
-      should have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
-      should have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
+      should have_selector("td a[href='/admin/balls/#{@ball.id}']")
+      should have_selector("td a[href='/admin/balls/#{@ball.id}/edit']")
+      should have_selector("td a[href='/admin/balls/#{@ball.id}/delete']")
     end
 
   end

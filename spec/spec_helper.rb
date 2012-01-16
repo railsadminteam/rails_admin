@@ -61,6 +61,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
+    RailsAdmin::Config.audit_with :history
     RailsAdmin::AbstractModel.all_models = nil
     RailsAdmin::AbstractModel.all_abstract_models = nil
     RailsAdmin::AbstractModel.new("Division").destroy_all!

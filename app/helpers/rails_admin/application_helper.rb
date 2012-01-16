@@ -24,7 +24,7 @@ module RailsAdmin
       end
       
       model_config = options[:model_config] || options[:abstract_model] && RailsAdmin.config(options[:abstract_model]) || @model_config
-      object = options[:object] || model_config == @model_config && @object || nil # don't use @object if model_config is not the current model!
+      object = options[:object] || (model_config == @model_config) && @object || nil # don't use @object if model_config is not the current @model_config!
       
       I18n.t("admin.actions.#{action.i18n_key}.#{label}", 
         :model_label => model_config.try(:label), 
@@ -47,16 +47,16 @@ module RailsAdmin
           acc.reverse.join('<span class="divider">/</span>').html_safe
         end
       else
-        breadcrumb RailsAdmin::Config::Actions.find(action.breadcrumb_parent, { :controller => self.controller }), acc # rec
+        breadcrumb RailsAdmin::Config::Actions.find(action.breadcrumb_parent, { :controller => self.controller, :abstract_model => @abstract_model, :object => @object }), acc # rec
       end
     end
     
     # parent => :root, :model, :object
-    def menu_for(parent, options = {}) # perf matters here
+    def menu_for(parent, options = {}) # perf matters here (no action view trickery)
       abstract_model = options[:model_config].try(:abstract_model) || options[:abstract_model] || @abstract_model
-      object = options[:object] || @object
-          
-      actions = RailsAdmin::Config::Actions.send(parent, { :controller => self.controller }).select{ |action| action.http_methods.include?(:get) && authorized?(action.authorization_key, abstract_model, object) }
+      object = options[:object] || (abstract_model == @abstract_model) && @object || nil # don't use @object if abstract_model is not the current @abstract_model!
+
+      actions = RailsAdmin::Config::Actions.send(parent, { :controller => self.controller, :abstract_model => abstract_model, :object => object }).select{ |action| action.http_methods.include?(:get) && authorized?(action.authorization_key, abstract_model, object) }
 
       actions.map do |action|
         %{
@@ -70,7 +70,7 @@ module RailsAdmin
     end
     
     def bulk_menu abstract_model = @abstract_model
-      actions = RailsAdmin::Config::Actions.all({ :controller => self.controller }).select(&:bulkable?).select{ |action| authorized?(action.authorization_key, abstract_model) }
+      actions = RailsAdmin::Config::Actions.all({ :controller => self.controller, :abstract_model => abstract_model }).select(&:bulkable?).select{ |action| authorized?(action.authorization_key, abstract_model) }
       return '' if actions.empty?
       content_tag :li, { :class => 'dropdown', :style => 'float:right', :'data-dropdown' => "dropdown" } do
         content_tag(:a, { :class => 'dropdown-toggle', :href => '#' }) { t('admin.index.selected') + "..." } +

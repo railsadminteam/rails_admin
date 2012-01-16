@@ -50,7 +50,7 @@
 - history_label    = t("admin.breadcrumbs.history_show")
 
 = content_for :contextual_tabs do
-  = bulk_menu(self)
+  = bulk_menu
   - if @filterable_fields.present?
     %li.dropdown{:style => 'float:right', :'data-dropdown' => "dropdown"}
       %a.dropdown-toggle{:href => '#'}= t('admin.index.add_filter') + "..."
@@ -58,7 +58,7 @@
         - @filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
-            - h options_for_select(field.with(:object => abstract_model.model.new).enum).gsub("\n", '')
+            - h options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
           - else
             - ''
           %li

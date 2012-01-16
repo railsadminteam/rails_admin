@@ -91,7 +91,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should display a link to the delete page" do
-      should have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
+      should have_selector "a[href='/admin/balls/#{@ball.id}/delete']"
     end
 
   end

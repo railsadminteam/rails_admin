@@ -11,7 +11,7 @@ describe "RailsAdmin Basic Show" do
     end
 
     it "should have History, Edit, Delete" do
-      should_not have_selector("a", :text => "History")
+      should have_selector("a", :text => "History")
       should have_selector("a", :text => "Edit")
       should have_selector("a", :text => "Delete")
     end

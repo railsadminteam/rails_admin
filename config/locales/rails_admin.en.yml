@@ -30,7 +30,7 @@ en:
         menu_item: "Show"
         breadcrumb: "%{object_label}"
       show_in_app:
-        menu_item: "See in application"
+        menu_item: "Show in app"
       new:
         page_title: "New %{model_label}"
         menu_item: "Add new"
