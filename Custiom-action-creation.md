@@ -4,6 +4,24 @@
 rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/1621146/ --skip-gemfile --skip-bundle -T -O -S -J --full
 ```
 
+## Add it to your project
+
+```ruby
+# Gemfile
+
+gem 'rails_admin_<action_name>', :git => 'https://github.com/....'
+# or in development mode
+gem 'rails_admin_<action_name>', :path => '../rails_admin_<action_name>'
+
+# config/rails_admin.rb
+
+config.actions do
+  dashboard
+  ...
+  <action_name>
+end
+```
+
 ## Documentation
 
 See the Base class your <ActionName> will inherit from: 
