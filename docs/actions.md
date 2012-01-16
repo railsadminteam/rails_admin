@@ -8,4 +8,4 @@ rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/162114
 
 See the Base class your <ActionName> will inherit from: 
 
-`https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb`
+[[https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb]]
