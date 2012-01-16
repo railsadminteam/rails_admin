@@ -15,6 +15,10 @@ describe "RailsAdmin" do
   end
 
   describe ".add_extension" do
+    before do
+      RailsAdmin::EXTENSIONS = []
+    end
+      
     it "registers the extension with RailsAdmin" do
       RailsAdmin.add_extension(:example, ExampleModule)
       RailsAdmin::EXTENSIONS.select { |name| name == :example }.length.should == 1

@@ -508,6 +508,10 @@ describe "RailsAdmin Config DSL Edit Section" do
       @time = ::Time.now.getutc
     end
 
+    after(:each) do
+      Time.zone = 'UTC'
+    end
+    
     describe "a datetime field" do
 
       it "should default to %B %d, %Y %H:%M" do
