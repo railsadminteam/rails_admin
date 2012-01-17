@@ -9,10 +9,27 @@
 * [[Model configuration, navigation|Navigation]]
 * [[Fields configuration|Railsadmin-DSL]]
 
+### Actions
+
+[[Base]]
+* Root level actions
+  * [[Dashboard]]
+* Model level actions
+  * [[Index]]
+  * [[New]]
+  * [[Export]]
+  * [[HistoryIndex]]
+  * [[BulkDelete]]
+* Object level actions
+  * [[Show]]
+  * [[Edit]]
+  * [[Delete]]
+  * [[HistoryShow]]
+  * [[ShowInApp]]
 
 ### Field types
 
-* [[File Upload]]
+* [[FileUpload]]
   * [[Paperclip]]
   * [[Dragonfly]]
   * [[Carrierwave]]
