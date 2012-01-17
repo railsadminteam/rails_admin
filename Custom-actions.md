@@ -1,4 +1,4 @@
-## Create a reusable action <ActionName>
+## Create a reusable action "ActionName"
 
 ```
 rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/1621146/ --skip-gemfile --skip-bundle -T -O -S -J --full
@@ -10,7 +10,7 @@ rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/162114
 # Gemfile
 
 # if uploaded to github with a valid .gemspec
-gem 'rails_admin_<action_name>', :git => 'https://github.com/....'
+gem 'rails_admin_<action_name>', :git => 'git://github.com/<username>/rails_admin_<action_name>.git'
 # or in development mode
 gem 'rails_admin_<action_name>', :path => '../rails_admin_<action_name>'
 ```
