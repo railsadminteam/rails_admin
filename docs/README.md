@@ -11,7 +11,7 @@
 
 ### Actions
 
-[[Base]]
+[[Base|Base Action]]
 
 * Root level actions
   * [[Dashboard|Dashboard Action]]
