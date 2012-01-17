@@ -53,7 +53,7 @@ You can use any image available to the asset pipeline.
 
 ### Use a theme
 
-In your `Gemfile`, before RailsAdmin:
+In your `Gemfile`:
 ```ruby
 gem 'rails_admin_example_theme', :git => 'git://github.com/bbenezech/rails_admin_example_theme.git'
 ```
