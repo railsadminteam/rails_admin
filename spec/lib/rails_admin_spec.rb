@@ -288,8 +288,8 @@ describe "RailsAdmin" do
       RailsAdmin.config(Team).edit.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
       RailsAdmin.config(Team).create.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
       RailsAdmin.config(Team).update.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded], [:wins], [:losses]]
-      RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count.should == 18
-      RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count.should == 18
+      RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count.should == 19
+      RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count.should == 19
     end
   end
 end
