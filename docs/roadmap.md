@@ -14,16 +14,13 @@
 - Needs testing: Android, IE7.
 - Fix all JS bugs on IE7+ . Found visual bug in multiselect
 - Move all JS code to coffee
-- support should target IE7+ with focus on future-proofing, through well-tested libraries (Bootstrap, JQuery)
 
 ### Tests
 - Move all functional testing to better targeted Unit tests
 - Tests views with JS enabled
 - Make some *compact* and *fast* functional testing with cucumber
-- No more 'view testing' for new developments
 
 ### Docs
-- document all field types and all relations types with their specificities against Field::Base
 
 ### `has_many`, `has_one`
 - offer the possibility to fetch only non-associated records if sticking to widget (make it configurable).
