@@ -12,6 +12,7 @@
 ### Actions
 
 [[Base]]
+
 * Root level actions
   * [[Dashboard]]
 * Model level actions
@@ -29,7 +30,7 @@
 
 ### Field types
 
-* [[FileUpload]]
+* [[FileUpload|File Upload]]
   * [[Paperclip]]
   * [[Dragonfly]]
   * [[Carrierwave]]
