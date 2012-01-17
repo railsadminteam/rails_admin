@@ -29,6 +29,7 @@ Custom actions are finally there. Default should stay put. To customize them, pl
 [Wiki: Create a custom action](https://github.com/sferik/rails_admin/wiki/Custom-action)<br>
 [Documented source code: Base Action class](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb)
 
+The rest of the documentation is on his way.
 
 * Translations
 
