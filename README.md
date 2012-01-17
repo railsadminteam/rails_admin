@@ -86,8 +86,11 @@ en:
 ```
 
 Translations are very likely outdated, copy this in your own `config/locales/rails_admin.yml` and update accordingly.
+You still need the rest of the keys (they'll get updated eventually too).
 
 In the future, translations may move to the wiki, to ease with adding of new I18n keys and remove outdated translations that look like they are officially supported. (Devise did this for example)
+
+Thanks a lot to all the translators sharing their work, sorry for the added worked (it was really needed).
 
 * History
 
