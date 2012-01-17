@@ -14,19 +14,19 @@
 [[Base]]
 
 * Root level actions
-  * [[Dashboard]]
+  * [[Dashboard|Dashboard Action]]
 * Model level actions
-  * [[Index]]
-  * [[New]]
-  * [[Export]]
-  * [[HistoryIndex]]
-  * [[BulkDelete]]
+  * [[Index|Index Action]]
+  * [[New|New Action]]
+  * [[Export|Export Action]]
+  * [[HistoryIndex|HistoryIndex Action]]
+  * [[BulkDelete|BulkDelete Action]]
 * Object level actions
-  * [[Show]]
-  * [[Edit]]
-  * [[Delete]]
-  * [[HistoryShow]]
-  * [[ShowInApp]]
+  * [[Show|Show Action]]
+  * [[Edit|Edit Action]]
+  * [[Delete|Delete Action]]
+  * [[HistoryShow|HistoryShow Action]]
+  * [[ShowInApp|ShowInApp Action]]
 
 ### Field types
 
