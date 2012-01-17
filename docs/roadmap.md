@@ -2,7 +2,9 @@
 
 ## Version 0.0.0
 
-Empty milestone's tickets in Github.
+* Empty milestone's tickets in Github. Done
+* Clean the I18n keys (non action related)
+* Finish action documentation
 
 ## Version 0.1.0
 
