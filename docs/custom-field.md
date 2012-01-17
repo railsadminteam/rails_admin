@@ -13,14 +13,6 @@ rails plugin new rails_admin_<field_name> -m https://raw.github.com/gist/1626605
 gem 'rails_admin_<field_name>', :git => 'https://github.com/<username>/rails_admin_<field_name>'
 # or in development mode
 gem 'rails_admin_<field_name>', :path => '../rails_admin_<field_name>'
-
-# config/rails_admin.rb
-
-config.actions do
-  dashboard
-  ...
-  <field_name>
-end
 ```
 
 ## Development documentation
