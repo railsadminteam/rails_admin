@@ -29,6 +29,14 @@ module RailsAdmin
       end
       
       class AuditingAdapter
+        COLUMN_MAPPING = {
+          :table => :item_type,
+          :username => :whodunnit,
+          :item => :item_id,
+          :created_at => :created_at,
+          :message => :event
+        }
+        
         def initialize(controller, user_class = User)
           raise "PaperTrail not found" unless defined?(PaperTrail)
           @controller = controller
@@ -52,15 +60,29 @@ module RailsAdmin
         end
         
         def listing_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-          versions = Version.where :item_type => model.pretty_name
-          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort) if sort
+          if sort.present?
+            sort = COLUMN_MAPPING[sort.to_sym]
+          else
+            sort = :created_at
+            sort_reverse = "true"
+          end
+          versions = Version.where :item_type => model.model.name
+          versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
+          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.page(page.presence || "1").per(per_page)
           versions.map{|version| VersionProxy.new(version, @user_class)}
         end
 
         def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-          versions = Version.where :item_type => model.pretty_name, :item_id => object.id
-          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort) if sort
+          if sort.present?
+            sort = COLUMN_MAPPING[sort.to_sym]
+          else
+            sort = :created_at
+            sort_reverse = "true"
+          end
+          versions = Version.where :item_type => model.model.name, :item_id => object.id
+          versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
+          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.page(page.presence || "1").per(per_page)
           versions.map{|version| VersionProxy.new(version, @user_class)}
         end
