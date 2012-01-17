@@ -31,6 +31,8 @@
 
 ### Field types
 
+[[Base|Base Field]]
+
 * [[FileUpload|File Upload]]
   * [[Paperclip]]
   * [[Dragonfly]]
