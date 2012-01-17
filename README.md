@@ -113,6 +113,7 @@ By default, there won't be any history shown.
 * Create new data
 * Easily update data
 * Safely delete data
+* Custom actions
 * Automatic form validation
 * Search and filtering
 * Export data to CSV/JSON/XML
