@@ -73,10 +73,15 @@
   * [[PaperTrail (recommended)|PaperTrail]]
   * None. (Default)
 
+### Extend RailsAdmin (RailsAdmin API)
+
+* [[Theming and customization]]
+* [[Custom action]]
+* [[Custom field]]
+
 ### Styling
 
 * [[List view table styling]]
-* [[Theming and customization]]
 
 ### Routing
 
