@@ -9,7 +9,7 @@ rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/162114
 ```ruby
 # Gemfile
 
-# if uploaded to github with a valid .gemspec
+# if uploaded to github with a valid .gemspec (remove TODOS and change owner credentials)
 gem 'rails_admin_<action_name>', :git => 'git://github.com/<username>/rails_admin_<action_name>.git'
 # or in development mode
 gem 'rails_admin_<action_name>', :path => '../rails_admin_<action_name>'
