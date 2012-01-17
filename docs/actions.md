@@ -25,5 +25,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-You can copy that block and remove/add any action, or pass a block to customize it.
+You can copy that block and remove/add any action (1), or pass a block to customize it.
 See specific action documentation for details.
+
+(1) do not remove dashboard, index & show, they are needed.
