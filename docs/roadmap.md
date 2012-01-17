@@ -36,7 +36,3 @@
 - replace :inverse_of widget with hidden field filled with source id if target requires source and target is a new record and source is a saved record
 - desactivate :inverse_of widget on target modal if not required and empty
 - identify all such cases and add them here
-
-### History
-- refactor old history in a separate gem
-- add tested compatibility layer for PaperTrail
