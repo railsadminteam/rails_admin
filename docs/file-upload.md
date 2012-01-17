@@ -14,14 +14,6 @@ field :asset do
   
   # in case of a validation failure, to retain asset in the form (not available for Paperclip)
   cache_method :asset_cache       # don't forget to whitelist if you use :attr_accessible
-  
-  required do
-    # validation logic
-  end
-
-  image do
-    # if image is true thumbnails are shown (using :thumb_method). Otherwise just a link to the resource
-  end
 end
 ```
 
