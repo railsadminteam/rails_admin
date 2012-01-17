@@ -8,7 +8,6 @@
 ## Version 0.1.0
 
 ### I18n
-- keys are in a huge mess. Refactor :en and let translators catch-up before release. 
 - add some doc for github online fast-edit solutions (translators != dev)
 
 ### html/CSS/JS
