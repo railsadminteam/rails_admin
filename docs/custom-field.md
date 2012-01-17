@@ -1,4 +1,4 @@
-## Create a reusable field <FieldName>
+## Create a reusable field "FieldName"
 
 ```
 rails plugin new rails_admin_<field_name> -m https://raw.github.com/gist/1626605/ --skip-gemfile --skip-bundle -T -O -S -J --full
@@ -10,7 +10,7 @@ rails plugin new rails_admin_<field_name> -m https://raw.github.com/gist/1626605
 # Gemfile
 
 # if uploaded to github with a valid .gemspec
-gem 'rails_admin_<field_name>', :git => 'https://github.com/<username>/rails_admin_<field_name>'
+gem 'rails_admin_<field_name>', :git => 'git://github.com/<username>/rails_admin_<field_name>.git'
 # or in development mode
 gem 'rails_admin_<field_name>', :path => '../rails_admin_<field_name>'
 ```
