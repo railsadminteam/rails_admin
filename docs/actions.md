@@ -1,8 +1,10 @@
-Before 01/17/2012, actions used to be standard and hard-coded. A community request was that they could be added/removed/customized.
+## Default
 
-This is now fully possible.
+Actions used to be static and hard-coded. A community request was that they could be added/removed/customized.
 
-By default, to keep existing installation safe, all actions are added as they used to be. 
+This is now possible.
+
+By default, to keep existing installation safe, all actions are added as they used to be.
 
 Default is equivalent to:
 
@@ -28,7 +30,62 @@ RailsAdmin.config do |config|
 end
 ```
 
-You can copy that block and remove/add actions (1), or pass a block to customize it.
-See specific action documentation for details.
+## Action visibility
 
-(1) do not remove dashboard, index & show, they are needed, because some redirects may end up there.
+### Authorization
+
+Authorization is done automatically before any link is displayed, any page accessed, etc.
+Check [[Cancan]] for the list of key used by RailsAdmin default actions.
+
+You can change the authorization key with:
+
+```ruby
+config.actions do
+  dashboard do
+    authorization_key :customized
+  end
+  ...
+end
+```
+
+### Visible block
+
+You can use these 3 bindings to decide whereas the action should be visible or not:
+
+* `bindings[:controller]` is current controller instance
+* `bindings[:abstract_model]` is checked abstract model
+* `bindings[:object]` is checked instance object
+
+Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
+
+_(1)_ do not remove dashboard, index & show, they are needed, because some redirects may end up there.
+
+## Action wording for title, menu, bredcrumb and links
+
+Default I18n key is action name underscored. You can change it like so:
+
+```ruby 
+config.actions do
+  dashboard do
+    i18n_key :customized
+  end
+  ...
+end
+```
+
+Then head for your `config/locales/rails_admin.xx.yml` file:
+
+```yaml
+xx:
+  admin:
+    actions:
+      <customized>: 
+        title: "..."
+        menu: "..."
+        breadcrumb: "..."
+        link: "..."
+```
+
+See [[rails_admin.en.yml|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]] to get an idea.
+
+Actions can provide specific option configuration, check their respective wiki page.
