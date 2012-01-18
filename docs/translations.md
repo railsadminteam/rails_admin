@@ -1,5 +1,6 @@
 ## Devise
 
+See [[https://github.com/plataformatec/devise/wiki/I18n]]
 
 ## RailsAdmin
 
