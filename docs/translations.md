@@ -9,4 +9,4 @@ Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_ad
 Available translations:
 
 * [[English: en|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]]
-* [[French: fr|fr-translation]]
+* [[French: fr|https://gist.github.com/1632279]]
