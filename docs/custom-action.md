@@ -20,3 +20,5 @@ gem 'rails_admin_<action_name>', :path => '../rails_admin_<action_name>'
 See the Base class your `ActionName` will inherit from: 
 
 [[https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb]]
+
+It is also possible to inherit from any other action class.
