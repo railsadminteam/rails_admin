@@ -58,6 +58,13 @@ You can use these 3 bindings to decide whereas the action should be visible or n
 
 Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
 
+Important: at some point of the application lifecycle, bindings can be nil:
+
+* when RailsAdmin creates the route
+* when RailsAdmin defines the action in its controller
+
+**Visible then need to return `true`.**
+
 _(1)_ do not remove dashboard, index & show, they are needed, because some redirects may end up there.
 
 ## Action wording for title, menu, bredcrumb and links
