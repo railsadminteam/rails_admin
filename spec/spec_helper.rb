@@ -60,10 +60,11 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.before(:each) do
-    RailsAdmin::Config.excluded_models = [RelTest, FieldTest]
+    RailsAdmin::Config.excluded_models = [RelTest, FieldTest, Category]
     RailsAdmin::Config.audit_with :history
     RailsAdmin::AbstractModel.all_models = nil
     RailsAdmin::AbstractModel.all_abstract_models = nil
+    RailsAdmin::AbstractModel.new("Category").destroy_all!
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
     RailsAdmin::AbstractModel.new("Fan").destroy_all!

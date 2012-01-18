@@ -699,6 +699,29 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
   
+  describe 'bindings' do
+    it 'should be present at creation time' do
+      RailsAdmin.config do |config|
+        config.excluded_models = []
+      end
+      RailsAdmin.config Category do
+        field :parent_category do
+          visible do
+            !bindings[:object].new_record?
+          end
+        end
+      end
+      
+      visit new_path(:model_name => 'categories')
+      should have_no_css('#category_parent_category_id')
+      click_button 'Save'
+      visit edit_path(:model_name => 'categories', :id => Category.first)
+      should have_css('#category_parent_category_id')
+      click_button 'Save'
+      should have_content('Category successfully updated')
+    end
+  end
+  
   describe 'nested form' do 
 
     it 'should work' do
