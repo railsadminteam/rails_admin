@@ -15,15 +15,15 @@
 
 [[Base|Base Action]]
 
-* Root level actions
+* Root actions
   * [[Dashboard|Dashboard Action]]
-* Model level actions
+* Collection actions
   * [[Index|Index Action]]
   * [[New|New Action]]
   * [[Export|Export Action]]
   * [[HistoryIndex|HistoryIndex Action]]
   * [[BulkDelete|BulkDelete Action]]
-* Object level actions
+* Member actions
   * [[Show|Show Action]]
   * [[Edit|Edit Action]]
   * [[Delete|Delete Action]]
