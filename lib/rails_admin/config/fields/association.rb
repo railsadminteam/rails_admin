@@ -106,7 +106,7 @@ module RailsAdmin
 
         # Reader for the association's value unformatted
         def value
-          bindings[:object].send(association[:name])
+          bindings && bindings[:object].send(association[:name])
         end
       end
     end
