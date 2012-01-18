@@ -33,9 +33,9 @@ The rest of the documentation is on his way.
 
 * Translations
 
-The action engine has been totally revamped (for custom actions)
+Translations have been totally revamped (for custom actions)
 
-To reflect these changes, translation keys for actions now look like:
+Translation keys for actions now look like:
 
 ```yaml
 
@@ -46,9 +46,14 @@ en:
         title: "..."
         menu: "..."
         breadcrumb: "..."
+
 ```
 
-Translations are very likely outdated, update your own `config/locales/rails_admin.<locale>.yml` and update according to [En translations](https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml)
+Other keys may have changed too.
+
+Old outdated translations have been removed, you must now fetch them from the wiki.
+
+See [Wiki](https://github.com/sferik/rails_admin/wiki/Translations) for more informations.
 
 Thanks a lot to all the translators sharing their work, sorry for the added worked (it was really needed).
 
