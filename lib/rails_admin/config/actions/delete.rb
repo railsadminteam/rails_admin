@@ -15,6 +15,10 @@ module RailsAdmin
         register_instance_option :http_methods do
           [:get, :delete]
         end
+
+        register_instance_option :authorization_key do
+          :destroy
+        end
         
         register_instance_option :controller do
           Proc.new do
