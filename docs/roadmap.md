@@ -2,7 +2,6 @@
 
 ## Version 0.0.0
 
-* Clean the I18n keys (non action related)
 * Finish action documentation
 
 ## Version 0.1.0
