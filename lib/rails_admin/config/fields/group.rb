@@ -47,7 +47,7 @@ module RailsAdmin
 
         # Reader for fields that are marked as visible
         def visible_fields
-          section.visible_fields.select {|f| self == f.group }.map{|f| f.with(bindings)}
+          section.with(bindings).visible_fields.select {|f| self == f.group }
         end
 
         # Configurable group label which by default is group's name humanized.
