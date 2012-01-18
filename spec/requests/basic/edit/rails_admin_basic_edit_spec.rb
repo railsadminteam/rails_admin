@@ -10,8 +10,8 @@ describe "RailsAdmin Basic Edit" do
       visit edit_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should show \"Update model\"" do
-      should have_content("Update Player")
+    it "should show \"Edit model\"" do
+      should have_content("Edit Player")
     end
 
     it "should show required fields as \"Required\"" do

@@ -47,7 +47,7 @@ describe "RailsAdmin Basic List" do
     end
 
     it "has the search box with some prompt text" do
-      should have_selector("input[placeholder='Search']")
+      should have_selector("input[placeholder='Filter']")
     end
 
     # https://github.com/sferik/rails_admin/issues/362
