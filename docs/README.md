@@ -9,6 +9,7 @@
 * [[Actions]]
 * [[Model configuration, navigation|Navigation]]
 * [[Fields configuration|Railsadmin-DSL]]
+* [[Translations]]
 
 ### Actions
 
