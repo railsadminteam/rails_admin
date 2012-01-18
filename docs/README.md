@@ -5,11 +5,11 @@
 
 ### Configuration
 
-* [[Base RailsAdmin configuration|Base configuration]]
-* [[Actions]]
-* [[Model configuration, navigation|Navigation]]
-* [[Fields configuration|Railsadmin-DSL]]
-* [[Translations]]
+1. [[Base RailsAdmin configuration|Base configuration]]
+2. [[Actions]]
+3. [[Model configuration, navigation|Navigation]]
+4. [[Fields configuration|Railsadmin-DSL]]
+5. [[Translations]]
 
 ### Actions
 
