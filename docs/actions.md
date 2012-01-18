@@ -13,15 +13,15 @@ Default is equivalent to:
 RailsAdmin.config do |config|
   config.actions do
     # root actions
-    dashboard
-    # collection actions
-    index
+    dashboard                     # mandatory
+    # collection actions 
+    index                         # mandatory
     new
     export
     history_index
     bulk_delete
     # member actions
-    show
+    show                           # mandatory
     edit
     delete
     history_show
@@ -64,8 +64,6 @@ Important: at some point of the application lifecycle, bindings can be nil:
 * when RailsAdmin defines the action in its controller
 
 **Visible then need to return `true`.**
-
-_(1)_ do not remove dashboard, index & show, they are needed, because some redirects may end up there.
 
 ## Action wording for title, menu, bredcrumb and links
 
