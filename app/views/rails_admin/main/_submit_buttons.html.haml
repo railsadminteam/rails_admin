@@ -1,13 +1,13 @@
 %input{:type => :hidden, :name => 'return_to', :value => (params[:return_to].presence || request.referer)}
 .actions
-  %button.btn.primary{:type => "submit", :name => "_save", :'data-disable-with' => t("admin.new.save")}
-    = t("admin.new.save")
+  %button.btn.primary{:type => "submit", :name => "_save", :'data-disable-with' => t("admin.form.save")}
+    = t("admin.form.save")
   %span.extra_buttons
     - if authorized? :new, @abstract_model
-      %button.btn{:type => "submit", :name => "_add_another", :'data-disable-with' => t("admin.new.save_and_add_another")}
-        = t("admin.new.save_and_add_another")
+      %button.btn{:type => "submit", :name => "_add_another", :'data-disable-with' => t("admin.form.save_and_add_another")}
+        = t("admin.form.save_and_add_another")
     - if authorized? :edit, @abstract_model
-      %button.btn{:type => "submit", :name => "_add_edit", :'data-disable-with' => t("admin.new.save_and_edit")}
-        = t("admin.new.save_and_edit")
-    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.new.cancel")}
-      = t("admin.new.cancel")
+      %button.btn{:type => "submit", :name => "_add_edit", :'data-disable-with' => t("admin.form.save_and_edit")}
+        = t("admin.form.save_and_edit")
+    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.form.cancel")}
+      = t("admin.form.cancel")

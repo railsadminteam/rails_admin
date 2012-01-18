@@ -42,12 +42,12 @@
       sortable: #{field.orderable ? 'true' : 'false'},
       cacheAll: #{field.associated_collection_cache_all ? 'true' : 'false'},
       regional: {
-        chooseAll: "#{t("admin.new.chose_all")}",
-        chosen: "#{t("admin.new.chosen", :name => config.label_plural)}",
-        clearAll:  "#{t("admin.new.clear_all")}",
-        search: "#{t("admin.index.search")}",
-        up: "#{t("admin.new.up")}",
-        down: "#{t("admin.new.down")}"
+        chooseAll: "#{t("admin.misc.chose_all")}",
+        chosen: "#{t("admin.misc.chosen", :name => config.label_plural)}",
+        clearAll:  "#{t("admin.misc.clear_all")}",
+        search: "#{t("admin.misc.search")}",
+        up: "#{t("admin.misc.up")}",
+        down: "#{t("admin.misc.down")}"
       }
     });
     if($("#modal").length) { // hide link if we already are inside a dialog (endless issues on nested dialogs with JS)

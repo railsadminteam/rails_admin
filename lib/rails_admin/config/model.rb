@@ -30,7 +30,7 @@ module RailsAdmin
           end
         end
         
-        @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default).tap {|g| g.label{I18n.translate("admin.new.basic_info")} } ]
+        @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default).tap {|g| g.label{I18n.translate("admin.form.basic_info")} } ]
         @bindings = {}
         @parent = nil
         @root = self

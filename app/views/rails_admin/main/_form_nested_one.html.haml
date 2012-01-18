@@ -1,6 +1,6 @@
 - form.object.send("build_#{field.name}") unless form.object.send(field.name)
 = form.fields_for field.name do |nested_form|
   %blockquote
-    = nested_form.link_to_remove t("admin.index.delete_action"), :class => 'label notice'
+    = nested_form.link_to_remove t('admin.misc.remove'), :class => 'label notice'
     = nested_form.generate({:action => :create, :model_config => field.associated_model_config, :nested_in => field.name })
     %hr

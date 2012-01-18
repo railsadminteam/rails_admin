@@ -31,52 +31,48 @@ module RailsAdmin
           extend RailsAdmin::Config::Fields::Groupable
         end
 
-        # Field CSS Class. Should appear in all actions where the field is listed (index, forms, show, etc.)
         register_instance_option(:css_class) do
           "#{self.name}_field"
         end
         
-        # Same as above, gives a possibility to style the field type
         def type_css_class
           "#{type}_type"
         end
         
-        # Index view. Nil means adaptive. If value is given, width will be fixed
+        def virtual?
+          properties.blank?
+        end
+
         register_instance_option(:column_width) do
           nil
         end
         
-        # Index view. Can I sort on this field? Column should not be virtual
         register_instance_option(:sortable) do
           !virtual?
         end
-        
-        # Index view. Can I search on this field? Column should not be virtual
+
         register_instance_option(:searchable) do
           !virtual?
         end
-        
-        # Index view. Should search on all fields include this one? 
+
         register_instance_option(:queryable?) do
           !!searchable
         end
-        
-        # Index view. Should we add the possibility to filter on this field? 
+
         register_instance_option(:filterable?) do
           !!searchable
         end
-        
-        # For query and filter. See the ActiveRecord adapter for more
+
         register_instance_option(:search_operator) do
           @search_operator ||= RailsAdmin::Config.default_search_operator
         end
 
-        # Index view. Serials and dates are reversed by default, which is more natural (last modified items first)
+        # serials and dates are reversed in list, which is more natural (last modified items first).
         register_instance_option(:sort_reverse?) do
           false
         end
 
-        # Index view. List of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
+        # list of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
         register_instance_option(:searchable_columns) do
           @searchable_columns ||= case self.searchable
           when true
@@ -109,60 +105,63 @@ module RailsAdmin
             end
           end
         end
-        
-        # Form views. When the value is pulled from parent object, for dates, etc.
+
         register_instance_option(:formatted_value) do
           value.to_s
         end
 
-        # List/Show views. Display value
+        # output for pretty printing (show, list)
         register_instance_option(:pretty_value) do
           formatted_value.presence || ' - '
         end
 
-        # Export view. Display value
+        # output for printing in export view (developers beware: no bindings[:view] and no data!)
         register_instance_option(:export_value) do
           pretty_value
         end
 
 
-        # Form views. Help text displayed below input field.
+        # Accessor for field's help text displayed below input field.
         register_instance_option(:help) do
-          (@help ||= {})[::I18n.locale] ||= (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
+          (@help ||= {})[::I18n.locale] ||= (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
         end
-        
-        # Form views. Sent to Rails FormView helpers
+
         register_instance_option(:html_attributes) do
           {}
         end
         
-        # Form views. If self.value is nil.
         register_instance_option :default_value do
           nil
         end
 
-        # Form views. Label
+        # Accessor for field's label.
+        #
+        # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:label) do
           (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
         end
 
-        # Form views. Length
-         register_instance_option(:length) do
+        # Accessor for field's maximum length per database.
+        #
+        # @see RailsAdmin::AbstractModel.properties
+        register_instance_option(:length) do
           @length ||= properties && properties[:length]
         end
 
-        # Form views. Accessor for field's length restrictions per validations
+        # Accessor for field's length restrictions per validations
+        #
         register_instance_option(:valid_length) do
           @valid_length ||= abstract_model.model.validators_on(name).find{|v|
             v.is_a?(ActiveModel::Validations::LengthValidator)}.try{|v| v.options} || {}
         end
-        
-        # Form views. Called by self.render. Should be found in app/views/rails_admin/main/_form_field.html.haml
+
         register_instance_option(:partial) do
           :form_field
         end
 
-        # Form views. Whether this is field is mandatory
+        # Accessor for whether this is field is mandatory.
+        #
+        # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:required?) do
           @required ||= !!abstract_model.model.validators_on(name).find do |v|
             v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
@@ -171,21 +170,20 @@ module RailsAdmin
         end
 
         # Accessor for whether this is a serial field (aka. primary key, identifier).
+        #
+        # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:serial?) do
           properties && properties[:serial?]
         end
-        
-        # Form views. If you use default _form_field
+
         register_instance_option(:view_helper) do
           @view_helper ||= self.class.instance_variable_get("@view_helper")
         end
         
-        # Form views. If the field is editable
         register_instance_option :read_only do
           not editable
         end
         
-        # All actions. Is the field visible
         register_instance_option :visible? do
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
@@ -194,13 +192,6 @@ module RailsAdmin
             end
           end
           returned
-        end
-        
-        # All the following is off-API
-        
-        
-        def virtual?
-          properties.blank?
         end
         
         def editable

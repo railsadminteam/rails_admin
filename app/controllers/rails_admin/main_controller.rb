@@ -18,7 +18,7 @@ module RailsAdmin
           @action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym, {:controller => self, :abstract_model => @abstract_model, :object => @object})
           
           @authorization_adapter.try(:authorize, *[@action.authorization_key, @abstract_model, @object].compact)
-          @page_name = wording_for(:page_title)
+          @page_name = wording_for(:title)
           @page_type = @abstract_model && @abstract_model.pretty_name.downcase || "dashboard"
           
           instance_eval &@action.controller

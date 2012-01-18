@@ -62,7 +62,7 @@ module RailsAdmin
         %{
           <li class="#{action.key}_#{parent}_link #{'active' if current_action?(action)}">
             <a href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => object.try(:id) })}">
-              #{wording_for(:menu_item, options.merge(:action => action))}
+              #{wording_for(:menu, options.merge(:action => action))}
             </a>
           </li>
         }
@@ -73,7 +73,7 @@ module RailsAdmin
       actions = RailsAdmin::Config::Actions.all({ :controller => self.controller, :abstract_model => abstract_model }).select(&:bulkable?).select{ |action| authorized?(action.authorization_key, abstract_model) }
       return '' if actions.empty?
       content_tag :li, { :class => 'dropdown', :style => 'float:right', :'data-dropdown' => "dropdown" } do
-        content_tag(:a, { :class => 'dropdown-toggle', :href => '#' }) { t('admin.index.selected') + "..." } +
+        content_tag(:a, { :class => 'dropdown-toggle', :href => '#' }) { t('admin.misc.bulk_menu_title') } +
         content_tag(:ul, :class => 'dropdown-menu') do
           actions.map do |action|
             content_tag :li do

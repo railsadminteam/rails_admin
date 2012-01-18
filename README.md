@@ -42,65 +42,13 @@ To reflect these changes, translation keys for actions now look like:
 en:
   admin:
     actions:
-      dashboard:
-        page_title: "Site administration"
-        menu_item: "Dashboard"
-        breadcrumb: "Dashboard"
-      index:
-        page_title: "List of %{model_label_plural}"
-        menu_item: "List"
-        breadcrumb: "%{model_label_plural}"
-      show:
-        page_title: "Details for %{model_label} '%{object_label}'"
-        menu_item: "Show"
-        breadcrumb: "%{object_label}"
-      show_in_app:
-        menu_item: "Show in app"
-      new:
-        page_title: "New %{model_label}"
-        menu_item: "Add new"
-        breadcrumb: "New"
-        link: "Create a new %{model_label}"
-        done: "created"
-      edit:
-        page_title: "Update %{model_label} '%{object_label}'"
-        menu_item: "Edit"
-        breadcrumb: "Edit"
-        link: "Update this %{model_label}"
-        done: "updated"
-      delete:
-        page_title: "Delete %{model_label} '%{object_label}'"
-        menu_item: "Delete"
-        breadcrumb: "Delete"
-        link: "Delete '%{object_label}'"
-        done: "deleted"
-      bulk_delete:
-        page_title: "Delete %{model_label_plural}"
-        menu_item: "Multiple delete"
-        breadcrumb: "Multiple delete"
-        bulk_link: "Delete selected %{model_label_plural}"
-      export:
-        page_title: "Export %{model_label}"
-        menu_item: "Export"
-        breadcrumb: "Export"
-        link: "Export found %{model_label_plural}"
-        bulk_link: "Export selected %{model_label_plural}"
-        done: "exported"
-      history_index:
-        page_title: "History for %{model_label_plural}"
-        menu_item: "History"
-        breadcrumb: "History"
-      history_show:
-        page_title: "History for %{model_label} '%{object_label}'"
-        menu_item: "History"
-        breadcrumb: "History"
-
+      <action_name>:
+        title: "..."
+        menu: "..."
+        breadcrumb: "..."
 ```
 
-Translations are very likely outdated, copy this in your own `config/locales/rails_admin.yml` and update accordingly.
-You still need the rest of the keys (they'll get updated eventually too).
-
-In the future, translations may move to the wiki, to ease with adding of new I18n keys and remove outdated translations that look like they are officially supported. (Devise did this for example)
+Translations are very likely outdated, update your own `config/locales/rails_admin.<locale>.yml` and update according to [En translations](https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml)
 
 Thanks a lot to all the translators sharing their work, sorry for the added worked (it was really needed).
 

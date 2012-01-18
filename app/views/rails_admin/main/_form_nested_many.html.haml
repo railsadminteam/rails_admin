@@ -1,6 +1,6 @@
 = form.fields_for field.name do |nested_form|
   %blockquote
-    = nested_form.link_to_remove t("admin.index.delete_action"), :class => 'label notice'
+    = nested_form.link_to_remove t('admin.misc.remove'), :class => 'label notice'
     = nested_form.generate({:action => :create, :model_config => field.associated_model_config, :nested_in => field.name })
     %hr
-= form.link_to_add t("admin.index.add_new"), field.name, :class => 'label notice'
+= form.link_to_add t('admin.misc.add_new'), field.name, :class => 'label notice'

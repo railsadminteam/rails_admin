@@ -8,17 +8,17 @@
 = form_tag("", :method => "get", :class => "search") do
   .row.clearfix
     .span3
-      %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.index.search")}"}
+      %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.misc.filter")}"}
     .span3
-      %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.index.search")}= t("admin.index.search")
+      %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
 %table#history.zebra-striped
   %thead
     %tr
       - columns = []
-      - columns << { :property_name => "created_at", :css_class => "created_at",:link_text => "DATE/TIME" }
-      - columns << { :property_name => "username",   :css_class => "username",  :link_text => "USER"      }
-      - columns << { :property_name => "item",       :css_class => "item",      :link_text => "ITEM"      } if @general
-      - columns << { :property_name => "message",    :css_class => "message",   :link_text => "ACTION"    }
+      - columns << { :property_name => "created_at", :css_class => "created_at",:link_text => t('admin.table_headers.created_at') }
+      - columns << { :property_name => "username",   :css_class => "username",  :link_text => t('admin.table_headers.username')   }
+      - columns << { :property_name => "item",       :css_class => "item",      :link_text => t('admin.table_headers.item')       } if @general
+      - columns << { :property_name => "message",    :css_class => "message",   :link_text => t('admin.table_headers.message')    }
 
       - columns.each do |column|
         - property_name = column[:property_name]
@@ -38,5 +38,5 @@
 
 - unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, :theme => 'twitter-bootstrap')
-  = link_to(t("admin.index.show_all"), send(path_method, params.merge(:all => true)), :class => "show-all btn") unless (tc = @history.total_count) <= @history.size || tc > 100
+  = link_to(t("admin.misc.show_all"), send(path_method, params.merge(:all => true)), :class => "show-all btn") unless (tc = @history.total_count) <= @history.size || tc > 100
 

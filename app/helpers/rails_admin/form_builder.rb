@@ -20,7 +20,7 @@ module RailsAdmin
     def fieldset_for fieldset, nested_in
       if (fields = fieldset.with(:form => self, :object => @object, :view => @template).visible_fields).length > 0
         @template.content_tag :fieldset do
-          @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : ''), :style => "#{fieldset.label == I18n.translate("admin.new.basic_info") ? 'display:none' : ''}") +
+          @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : ''), :style => "#{fieldset.label == I18n.translate("admin.form.basic_info") ? 'display:none' : ''}") +
           fields.map{ |field| field_wrapper_for(field, nested_in) }.join.html_safe
         end
       end

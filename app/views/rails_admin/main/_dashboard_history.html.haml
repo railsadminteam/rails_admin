@@ -1,8 +1,8 @@
 %table.zebra-striped
   %thead
     %tr
-      %th.shrink.user= t("admin.history.user")
-      %th.changes= t("admin.history.changes")
+      %th.shrink.user= t("admin.table_headers.username")
+      %th.changes= t("admin.table_headers.changes")
   %tbody
     - @history.each do |t|
       %tr

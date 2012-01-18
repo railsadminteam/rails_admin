@@ -1,9 +1,9 @@
 %table.zebra-striped
   %thead
     %tr
-      %th.shrink.model-name= t "admin.dashboard.model_name"
-      %th.shrink.last-used= t "admin.dashboard.last_used"
-      %th.records= t "admin.dashboard.records"
+      %th.shrink.model-name= t "admin.table_headers.model_name"
+      %th.shrink.last-used= t "admin.table_headers.last_used"
+      %th.records= t "admin.table_headers.records"
       %th.shrink.controls
   %tbody
     - @abstract_models.each do |abstract_model|
@@ -17,7 +17,7 @@
           %td
             - if (last_used = @most_recent_changes[abstract_model.pretty_name])
               = time_ago_in_words last_used
-              = t "admin.dashboard.ago"
+              = t "admin.misc.ago"
           %td
             - count = @count[abstract_model.pretty_name]
             - percent = count > 0 ? (@max < 2.0 ? count : ((Math.log(count) * 100.0) / Math.log(@max))) : -1
@@ -27,5 +27,5 @@
 - if @auditing_adapter && authorized?(:history)
   #block-tables.block
     .content
-      %h2= t("admin.history.name")
+      %h2= t("admin.actions.history_index.menu")
       = render :partial => 'rails_admin/main/dashboard_history'
