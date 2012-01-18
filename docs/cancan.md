@@ -104,10 +104,29 @@ Or use the `:unless` option to test against `rails_admin_controller?`.
 
 ### RailsAdmin verbs
 
-RailsAdmin use 2 customs verbs: 
-```
-:history
-:show_in_app
-```
+Each action in RailsAdmin checks for authorization if adapter is present.
+Usually the name of the action gives the name of the verb used.
 
-They get overridden by :manage in Cancan.
+Here are the checks used by default in RailsAdmin:
+
+```ruby
+# Always performed
+can :access, :rails_admin # needed to access RailsAdmin
+
+# Performed checks for `:root` level actions:
+can :dashboard            # dashboard access
+
+# Performed checks for `Model` scoped actions:
+can :index, Model         # included in :read
+can :new, Model           # included in :create
+can :export, Model
+can :history, Model       # for HistoryIndex
+can :destroy, Model       # for BulkDelete
+
+# Performed checks for `object` scoped actions:
+can :show, Model, object            # included in :read
+can :edit, Model, object            # included in :update
+can :destroy, Model, object         # for Delete
+can :history, Model, object         # for HistoryShow
+can :show_in_app, Model, object
+```
