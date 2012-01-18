@@ -10,15 +10,15 @@ Default is equivalent to:
 # config/initilizers/rails_admin.rb
 RailsAdmin.config do |config|
   config.actions do
-    # root level actions
+    # root actions
     dashboard
-    # model scoped actions
+    # collection actions
     index
     new
     export
     history_index
     bulk_delete
-    # object scoped actions
+    # member actions
     show
     edit
     delete
