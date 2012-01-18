@@ -22,7 +22,8 @@ module RailsAdmin
             am = amc.abstract_model
             wording = associated.send(amc.object_label_method)
             can_see = v.authorized?(:show, am, associated)
-            can_see ? v.link_to(wording, v.show_path(:model_name => am.to_param, :id => associated.id)) : wording
+            can_see = can_see && (show_action = RailsAdmin::Config::Actions.find(:show, { :controller => v.controller, :abstract_model => am, :object => associated }))
+            can_see ? v.link_to(wording, v.url_for(:action => show_action.action_name, :model_name => am.to_param, :id => associated.id)) : wording
           end.to_sentence.html_safe
         end
 
