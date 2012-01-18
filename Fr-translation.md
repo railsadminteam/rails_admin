@@ -1,4 +1,3 @@
-```yaml
 fr:
   home:
     name: Home
@@ -128,4 +127,3 @@ fr:
         default_col_sep: ";"
         col_sep: "Séparateur de colonnes"
         col_sep_help: "Laisser vide pour utiliser la valeur par défaut recommandée pour votre système ('%{value}')"
-```
