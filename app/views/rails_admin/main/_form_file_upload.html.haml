@@ -6,7 +6,7 @@
   = form.file_field(field.name, field._html_attributes)
 - if field.optional? && field.errors.blank? && file && field.delete_method
   %a.label.notice{:href => '#', :onclick => "jQuery(this).siblings('[type=checkbox]').click(); jQuery(this).siblings('.toggle').toggle(); jQuery(this).toggleClass('important notice'); return false"}
-    = I18n.t('admin.actions.delete.menu_item').capitalize + " #{field.method_name}"
+    = I18n.t('admin.actions.delete.menu').capitalize + " #{field.method_name}"
   = form.check_box(field.delete_method, :style => 'display:none;' )
 - if field.cache_method
   = form.hidden_field(field.cache_method)
