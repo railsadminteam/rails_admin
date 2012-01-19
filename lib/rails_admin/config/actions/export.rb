@@ -4,7 +4,7 @@ module RailsAdmin
       class Export < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)
         
-        register_instance_option :model_level do
+        register_instance_option :collection do
           true
         end
         

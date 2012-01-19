@@ -1,5 +1,5 @@
-- RailsAdmin::Config::Actions.root(:controller => self.controller).each do |action|
-  %li= link_to wording_for(:menu, :action => action), { :action => action.action_name, :controller => 'rails_admin/main' }
+- actions(:root).each do |action|
+  %li= link_to wording_for(:menu, action), { :action => action.action_name, :controller => 'rails_admin/main' }
 - if main_app_root_path = (main_app.root_path rescue false)
   %li= link_to t('home.name').capitalize, main_app_root_path
 - if _current_user

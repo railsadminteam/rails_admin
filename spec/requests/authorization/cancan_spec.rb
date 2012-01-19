@@ -77,14 +77,15 @@ describe "RailsAdmin CanCan Authorization" do
       ]
 
       visit index_path(:model_name => "player")
+      
       should have_content(@players[0].name)
       should_not have_content(@players[1].name)
       should_not have_content("Add new")
-      should have_css('.show_object_link')
-      should_not have_css('.edit_object_link')
-      should_not have_css('.delete_object_link')
-      should_not have_css('.history_show_object_link')
-      should_not have_css('.show_in_app_object_link')
+      should have_css('.show_member_link')
+      should_not have_css('.edit_member_link')
+      should_not have_css('.delete_member_link')
+      should_not have_css('.history_show_member_link')
+      should_not have_css('.show_in_app_member_link')
     end
 
     it "GET /admin/team should raise CanCan::AccessDenied" do
@@ -174,10 +175,10 @@ describe "RailsAdmin CanCan Authorization" do
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => "player")
-        should have_css('.show_object_link')
-        should_not have_css('.edit_object_link')
-        should_not have_css('.delete_object_link')
-        should have_css('.history_show_object_link')
+        should have_css('.show_member_link')
+        should_not have_css('.edit_member_link')
+        should_not have_css('.delete_member_link')
+        should have_css('.history_show_member_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")
@@ -195,11 +196,11 @@ describe "RailsAdmin CanCan Authorization" do
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => "player")
-        should have_css('.show_object_link')
-        should_not have_css('.edit_object_link')
-        should_not have_css('.delete_object_link')
-        should_not have_css('.history_show_object_link')
-        should have_css('.show_in_app_object_link')
+        should have_css('.show_member_link')
+        should_not have_css('.edit_member_link')
+        should_not have_css('.delete_member_link')
+        should_not have_css('.history_show_member_link')
+        should have_css('.show_in_app_member_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")
@@ -218,11 +219,11 @@ describe "RailsAdmin CanCan Authorization" do
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => "player")
-        should have_css('.show_object_link')
-        should have_css('.edit_object_link')
-        should have_css('.delete_object_link')
-        should have_css('.history_show_object_link')
-        should have_css('.show_in_app_object_link')
+        should have_css('.show_member_link')
+        should have_css('.edit_member_link')
+        should have_css('.delete_member_link')
+        should have_css('.history_show_member_link')
+        should have_css('.show_in_app_member_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
         should have_content("Show")

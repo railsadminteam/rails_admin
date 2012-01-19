@@ -54,9 +54,7 @@ module RailsAdmin
       !RailsAdmin::AbstractModel.lookup(model_name).nil?
     end
     
-
     private
-    
     
     def _get_plugin_name
       @plugin_name_array ||= [RailsAdmin.config.main_app_name.is_a?(Proc) ? instance_eval(&RailsAdmin.config.main_app_name) : RailsAdmin.config.main_app_name].flatten

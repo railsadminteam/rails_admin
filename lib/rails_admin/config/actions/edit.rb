@@ -4,7 +4,7 @@ module RailsAdmin
       class Edit < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)        
         
-        register_instance_option :object_level do
+        register_instance_option :member do
           true
         end
         

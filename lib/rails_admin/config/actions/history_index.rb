@@ -8,7 +8,7 @@ module RailsAdmin
           :history
         end
         
-        register_instance_option :model_level do
+        register_instance_option :collection do
           true
         end
         

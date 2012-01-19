@@ -13,6 +13,17 @@ module RailsAdmin
       @action.custom_key == action.custom_key
     end
     
+    def action(key, abstract_model = nil, object = nil)
+      action = RailsAdmin::Config::Actions.find(key, { :controller => self.controller, :abstract_model => abstract_model, :object => object })
+      action && authorized?(action.authorization_key, (action.collection? || action.member?) && abstract_model || nil, action.member? && object || nil) ? action : nil
+    end
+    
+    def actions(scope = :all, abstract_model = nil, object = nil)
+      RailsAdmin::Config::Actions.all(scope, { :controller => self.controller, :abstract_model => abstract_model, :object => object }).select do |action|
+        authorized?(action.authorization_key, (action.collection? || action.member?) && abstract_model || nil, action.member? && object || nil)
+      end
+    end
+    
     def edit_user_link
       return nil unless authorized?(:edit, _current_user.class, _current_user) && _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
@@ -21,18 +32,10 @@ module RailsAdmin
     end
 
     
-    def wording_for(label, options = {})
-      action = case 
-      when options[:action].nil?
-        @action
-      when options[:action].is_a?(Symbol) || options[:action].is_a?(String)
-        RailsAdmin::Config::Actions.find(options[:action].to_sym, { :controller => self.controller })
-      else
-        options[:action]
-      end
+    def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
       
-      model_config = options[:model_config] || options[:abstract_model] && RailsAdmin.config(options[:abstract_model]) || @model_config
-      object = options[:object] || (model_config == @model_config) && @object || nil # don't use @object if model_config is not the current @model_config!
+      model_config = abstract_model && RailsAdmin.config(abstract_model)
+      action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
       
       I18n.t("admin.actions.#{action.i18n_key}.#{label}", 
         :model_label => model_config.try(:label), 
@@ -42,35 +45,32 @@ module RailsAdmin
     end
     
     def breadcrumb action = @action, acc = []
+      
       acc << content_tag(:li, :class => "#{"active" if current_action?(action)}") do
-        if action.http_methods.include?(:get) && authorized?(action.authorization_key, @abstract_model, @object)
-          link_to wording_for(:breadcrumb, :action => action), { :action => action.action_name, :controller => 'rails_admin/main' }
+        if action.http_methods.include?(:get)
+          link_to wording_for(:breadcrumb, action), { :action => action.action_name, :controller => 'rails_admin/main' }
         else
-          content_tag(:span, wording_for(:breadcrumb, :action => action))
+          content_tag(:span, wording_for(:breadcrumb, action))
         end
       end
 
-      unless action.breadcrumb_parent # rec tail
+      unless action.breadcrumb_parent && (parent = action(action.breadcrumb_parent, @abstract_model, @object)) # rec tail
         content_tag(:ul, :class => "breadcrumb") do
           acc.reverse.join('<span class="divider">/</span>').html_safe
         end
       else
-        breadcrumb RailsAdmin::Config::Actions.find(action.breadcrumb_parent, { :controller => self.controller, :abstract_model => @abstract_model, :object => @object }), acc # rec
+        breadcrumb parent, acc # rec
       end
     end
     
-    # parent => :root, :model, :object
-    def menu_for(parent, options = {}) # perf matters here (no action view trickery)
-      abstract_model = options[:model_config].try(:abstract_model) || options[:abstract_model] || @abstract_model
-      object = options[:object] || (abstract_model == @abstract_model) && @object || nil # don't use @object if abstract_model is not the current @abstract_model!
-
-      actions = RailsAdmin::Config::Actions.send(parent, { :controller => self.controller, :abstract_model => abstract_model, :object => object }).select{ |action| action.http_methods.include?(:get) && authorized?(action.authorization_key, abstract_model, object) }
-
+    # parent => :root, :collection, :member
+    def menu_for(parent, abstract_model = nil, object = nil) # perf matters here (no action view trickery)
+      actions = actions(parent, abstract_model, object).select{ |action| action.http_methods.include?(:get) }
       actions.map do |action|
         %{
           <li class="#{action.key}_#{parent}_link #{'active' if current_action?(action)}">
             <a href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => object.try(:id) })}">
-              #{wording_for(:menu, options.merge(:action => action))}
+              #{wording_for(:menu, action)}
             </a>
           </li>
         }
@@ -78,14 +78,14 @@ module RailsAdmin
     end
     
     def bulk_menu abstract_model = @abstract_model
-      actions = RailsAdmin::Config::Actions.all({ :controller => self.controller, :abstract_model => abstract_model }).select(&:bulkable?).select{ |action| authorized?(action.authorization_key, abstract_model) }
+      actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, { :class => 'dropdown', :style => 'float:right', :'data-dropdown' => "dropdown" } do
         content_tag(:a, { :class => 'dropdown-toggle', :href => '#' }) { t('admin.misc.bulk_menu_title') } +
         content_tag(:ul, :class => 'dropdown-menu') do
           actions.map do |action|
             content_tag :li do
-              link_to_function wording_for(:bulk_link, :action => action), "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit()"
+              link_to_function wording_for(:bulk_link, action), "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit()"
             end
           end.join.html_safe
         end

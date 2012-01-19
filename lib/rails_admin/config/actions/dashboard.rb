@@ -4,7 +4,7 @@ module RailsAdmin
       class Dashboard < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)
         
-        register_instance_option :root_level? do
+        register_instance_option :root? do
           true
         end
         

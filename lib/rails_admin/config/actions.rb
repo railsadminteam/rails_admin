@@ -3,7 +3,8 @@ module RailsAdmin
     module Actions
       
       class << self
-        def all(bindings)
+        
+        def init_actions!
           @@actions ||= [
             Dashboard.new,
             Index.new,
@@ -17,25 +18,37 @@ module RailsAdmin
             HistoryIndex.new,
             ShowInApp.new,
           ]
-          @@actions.map{ |action| action.with(bindings) }.select(&:visible?)
         end
         
-        def find custom_key, bindings
-          all(bindings).find{ |a| a.custom_key == custom_key }
+        def all(scope = nil, bindings = {})
+          if scope.is_a?(Hash)
+            bindings = scope
+            scope = :all
+          end
+          scope ||= :all
+          init_actions!
+          actions = case scope
+          when :all
+            @@actions
+          when :root
+            @@actions.select(&:root?)
+          when :collection
+            @@actions.select(&:collection?)
+          when :bulkable
+            @@actions.select(&:bulkable?)
+          when :member
+            @@actions.select(&:member?)
+          end
+          
+          bindings[:controller] ? actions.map{ |action| action.with(bindings) }.select(&:visible?) : actions
         end
         
-        def root bindings
-          all(bindings).select &:root_level
+        def find custom_key, bindings = {}
+          init_actions!
+          action = @@actions.find{ |a| a.custom_key == custom_key }
+          bindings[:controller] ? action && action.with(bindings).try(:visible?) && action : action
         end
-      
-        def model bindings
-          all(bindings).select &:model_level
-        end
-      
-        def object bindings
-          all(bindings).select &:object_level
-        end
-      
+        
         def register(name, klass = nil)
           if klass == nil && name.kind_of?(Class)
             klass = name

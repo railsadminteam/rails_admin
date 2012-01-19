@@ -8,7 +8,7 @@ module RailsAdmin
           :history
         end
         
-        register_instance_option :object_level do
+        register_instance_option :member do
           true
         end
         

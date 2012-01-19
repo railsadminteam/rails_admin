@@ -31,7 +31,7 @@
             %p= value
         = breadcrumb
         %ul.tabs
-          = menu_for @abstract_model ? (@object.try(:id) ? :object : :model) : :root
+          = menu_for((@abstract_model ? (@object.try(:id) ? :member : :collection) : :root), @abstract_model, @object)
           = content_for :contextual_tabs
         %span.row
         = yield

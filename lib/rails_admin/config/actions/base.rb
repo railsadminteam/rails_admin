@@ -7,18 +7,23 @@ module RailsAdmin
       class Base < RailsAdmin::Config::Base
         include RailsAdmin::Config::Hideable
         
+        # Should the action be visible
+        register_instance_option :visible? do
+          true
+        end
+        
         # Is the action acting on the root level (Example: /admin/contact)
-        register_instance_option :root_level? do
+        register_instance_option :root? do
           false
         end
         
         # Is the action on a model scope (Example: /admin/teams/export)
-        register_instance_option :model_level? do
+        register_instance_option :collection? do
           false
         end
         
         # Is the action on an object scope (Example: /admin/teams/1/edit)
-        register_instance_option :object_level? do
+        register_instance_option :member? do
           false
         end
         
@@ -75,11 +80,11 @@ module RailsAdmin
         # Breadcrumb parent
         register_instance_option :breadcrumb_parent do
           case 
-          when root_level?
+          when root?
             :dashboard
-          when model_level?
+          when collection?
             :index
-          when object_level?
+          when member?
             :show
           end
         end

@@ -80,7 +80,7 @@
       .span3
         %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
       - if export_action
-        %span{:style => 'float:right'}=link_to wording_for(:link, :action => export_action), export_path(params.except('set').except('page')), :class => 'btn info'
+        %span{:style => 'float:right'}=link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
@@ -113,7 +113,7 @@
             - if @other_right_link ||= other_right && index_path(params.merge(:set => (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link, :class => 'pjax'
             %td.last.links
-              %ul.inline= menu_for :object, :object => object, :template => self
+              %ul.inline= menu_for :member, @abstract_model, object
     - unless params[:all]
       - total_count = @objects.total_count
       = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)
