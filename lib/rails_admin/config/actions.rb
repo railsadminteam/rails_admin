@@ -49,6 +49,32 @@ module RailsAdmin
           bindings[:controller] ? action && action.with(bindings).try(:visible?) && action : action
         end
         
+        def collection key, parent_class = :base, &block
+          add_action key, parent_class, :collection, &block
+        end
+        
+        def member key, parent_class = :base, &block
+          add_action key, parent_class, :member, &block
+        end
+        
+        def root key, parent_class = :base, &block
+          add_action key, parent_class, :root, &block
+        end
+        
+        def add_action key, parent_class, parent, &block
+          a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
+          a.instance_eval(%{
+            #{parent} true
+            def key
+              :#{key}
+            end
+          })
+          a.instance_eval(&block)
+          (@@actions ||= []) << a
+        end
+          
+          
+        
         def register(name, klass = nil)
           if klass == nil && name.kind_of?(Class)
             klass = name
