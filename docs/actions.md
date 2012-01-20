@@ -87,7 +87,7 @@ Important: at some point of the application lifecycle, bindings can be nil:
 
 First argument is the key of the action.
 It will be the `i18n_key`, the `url_fragment`, the `action_name`, the `authorization_key`, etc.
-You can override each of these individually. See the respective class and the Base Action class to get the list of these options.
+You can override each of these individually. See the respective class and the [[Base Action class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb]] to get the list of these options.
 
 Second (optional) argument is the key of the parent class. It can be any existing Action class. If none given, it will be `Base`.
 
