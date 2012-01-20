@@ -10,6 +10,7 @@ Available translations:
 
 * [[English: en|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]]
 * [[French: fr|https://gist.github.com/1632279]]
+* [[Spanish (Spain): es|https://gist.github.com/1647597#file_rails_admin.es.yml]]
 * Add your own (create a gist first)
 
 You can use find old included translations there:
