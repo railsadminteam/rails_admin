@@ -3,23 +3,6 @@ module RailsAdmin
     module Actions
       
       class << self
-        
-        def init_actions!
-          @@actions ||= [
-            Dashboard.new,
-            Index.new,
-            Show.new,
-            New.new,
-            Edit.new,
-            Export.new,
-            Delete.new,
-            BulkDelete.new,
-            HistoryShow.new,
-            HistoryIndex.new,
-            ShowInApp.new,
-          ]
-        end
-        
         def all(scope = nil, bindings = {})
           if scope.is_a?(Hash)
             bindings = scope
@@ -46,7 +29,7 @@ module RailsAdmin
         def find custom_key, bindings = {}
           init_actions!
           action = @@actions.find{ |a| a.custom_key == custom_key }
-          bindings[:controller] ? action && action.with(bindings).try(:visible?) && action : action
+          bindings[:controller] ? (action && action.with(bindings).try(:visible?) && action || nil) : action
         end
         
         def collection key, parent_class = :base, &block
@@ -69,11 +52,17 @@ module RailsAdmin
               :#{key}
             end
           })
-          a.instance_eval(&block)
-          (@@actions ||= []) << a
+          a.instance_eval(&block) if block
+          unless a.custom_key.in?((@@actions || []).map(&:custom_key))
+            (@@actions ||= []) << a
+          else
+            raise "Action #{a.custom_key} already exist. Please change its custom key"
+          end
         end
           
-          
+        def reset
+          @@actions = nil
+        end
         
         def register(name, klass = nil)
           if klass == nil && name.kind_of?(Class)
@@ -85,11 +74,33 @@ module RailsAdmin
             def #{name}(&block)
               action = #{klass}.new
               action.instance_eval &block if block
-              (@@actions ||= []) << action
-              action
+              unless action.custom_key.in?((@@actions || []).map(&:custom_key))
+                (@@actions ||= []) << action
+              else
+                raise "Action \#{action.custom_key} already exist. Please change its custom key"
+              end
             end
           }
         end
+        
+        private 
+        
+        def init_actions!
+          @@actions ||= [
+            Dashboard.new,
+            Index.new,
+            Show.new,
+            New.new,
+            Edit.new,
+            Export.new,
+            Delete.new,
+            BulkDelete.new,
+            HistoryShow.new,
+            HistoryIndex.new,
+            ShowInApp.new,
+          ]
+        end
+
       end
     end
   end

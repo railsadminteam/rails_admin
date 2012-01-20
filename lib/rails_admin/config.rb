@@ -266,6 +266,7 @@ module RailsAdmin
         @label_methods = [:name, :title]
         @main_app_name = Proc.new { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
+        RailsAdmin::Config::Actions.reset
       end
 
       # Reset a provided model's configuration.
