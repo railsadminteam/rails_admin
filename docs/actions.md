@@ -21,7 +21,7 @@ RailsAdmin.config do |config|
     history_index
     bulk_delete
     # member actions
-    show                          # mandatory
+    show
     edit
     delete
     history_show
