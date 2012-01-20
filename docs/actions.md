@@ -86,7 +86,7 @@ Important: at some point of the application lifecycle, bindings can be nil:
 * `member` defines member level actions (Show, Edit, etc.)
 
 First argument is the key of the action.
-It will be the I18n_key, the url_fragment, the action_name, the authorization_key, etc.
+It will be the `i18n_key`, the `url_fragment`, the `action_name`, the `authorization_key`, etc.
 You can override each of these individually. See the respective class and the Base Action class to get the list of these options.
 
 Second (optional) argument is the key of the parent class. It can be any existing Action class. If none given, it will be `Base`.
