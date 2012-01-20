@@ -30,6 +30,21 @@ RailsAdmin.config do |config|
 end
 ```
 
+## Use actions
+
+Simply list them and pass an optional block, like so:
+
+```ruby
+config.actions do
+  dashboard do
+    i18n_key :dash
+  end
+  index
+  new
+```
+
+Please note that dashboard and index are mandatory for the moment, but this may change in the future.
+
 ## Action visibility
 
 ### Authorization
@@ -65,7 +80,74 @@ Important: at some point of the application lifecycle, bindings can be nil:
 
 **Visible then need to return `true`.**
 
-## Action wording for title, menu, bredcrumb and links
+## Define actions
+
+* `root` defines root level actions (Dashboard, etc.)
+* `collection` defines collection level actions (Index, New, etc.)
+* `member` defines member level actions (Show, Edit, etc.)
+
+First argument is the key of the action.
+It will be the I18n_key, the url_fragment, the action_name, the authorization_key, etc.
+You can override each of these individually. See the respective class and the Base Action class to get the list of these options.
+
+Second (optional) argument is the key of the parent class. It can be any existing Action class. If none given, it will be `Base`.
+
+Then you can pass the configuration block.
+
+Then add `app/views/rails_admin/main/my_action.html.<erb|haml>` in your application, where you will be able to access:
+
+* @abstract_model            (except for root actions, give the RailsAdmin representation of the model. Use .model to have your ActiveRecord original model)
+* @model_config              (except for root actions, give the RailsAdmin configuration of the model)
+* @objects = list_entries    (for collection actions, list the entries as specified in params, see the :index action and template)
+* @object                    (member actions only, ActiveRecord object)
+
+```ruby
+config.actions do
+  root :my_dashboard, :dashboard          # subclass Dashboard. Accessible at /admin/my_dashboard
+  collection :my_collection_action do     # subclass Base. Accessible at /admin/<model_name>/my_collection_action
+    ...
+  end
+  member :my_member_action do             # subclass Base. Accessible at /admin/<model_name>/<id>/my_member_action
+    i18n_key :edit                        # will have the same menu/title labels as the Edit action.
+  end
+  
+end
+
+```
+
+## Create a reusable action
+
+```ruby
+# somewhere in your lib/ directory:
+
+require 'rails_admin/config/actions'
+require 'rails_admin/config/actions/base'
+
+module RailsAdmin
+  module Config
+    module Actions
+      class MyAction < RailsAdmin::Config::Actions::Base
+         RailsAdmin::Config::Actions.register(self)
+         register_instance_option :my_option do
+           :default_value
+         end
+      end
+    end
+  end
+end
+
+# use it like this:
+
+config.actions do
+  my_action do
+    my_option :another_value
+  end
+end
+```
+
+If you want to share it as a gem, see [[custom action]]
+
+## Action wording for title, menu, breadcrumb and links
 
 Default I18n key is action name underscored. You can change it like so:
 
