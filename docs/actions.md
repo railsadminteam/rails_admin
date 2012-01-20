@@ -44,7 +44,7 @@ config.actions do
 end
 ```
 
-Please note that dashboard and index are mandatory for the moment, but this may change in the future.
+Please note that `dashboard` and `index` are mandatory for the moment, but this may change in the future.
 
 ## Action visibility
 
