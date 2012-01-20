@@ -69,8 +69,8 @@ end
 You can use these 3 bindings to decide whereas the action should be visible or not:
 
 * `bindings[:controller]` is current controller instance
-* `bindings[:abstract_model]` is checked abstract model
-* `bindings[:object]` is checked instance object
+* `bindings[:abstract_model]` is checked abstract model (except root actions)
+* `bindings[:object]` is checked instance object (member actions only)
 
 Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
 
@@ -78,8 +78,6 @@ Important: at some point of the application lifecycle, bindings can be nil:
 
 * when RailsAdmin creates the route
 * when RailsAdmin defines the action in its controller
-
-**Visible then need to return `true`.**
 
 ## Define actions
 
