@@ -46,39 +46,6 @@ end
 
 Please note that `dashboard` and `index` are mandatory for the moment, but this may change in the future.
 
-## Action visibility
-
-### Authorization
-
-Authorization is done automatically before any link is displayed, any page accessed, etc.
-Check [[Cancan]] for the list of key used by RailsAdmin default actions.
-
-You can change the authorization key with:
-
-```ruby
-config.actions do
-  dashboard do
-    authorization_key :customized
-  end
-  ...
-end
-```
-
-### Visible block
-
-You can use these 3 bindings to decide whereas the action should be visible or not:
-
-* `bindings[:controller]` is current controller instance
-* `bindings[:abstract_model]` is checked abstract model (except root actions)
-* `bindings[:object]` is checked instance object (member actions only)
-
-Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
-
-Important: at some point of the application lifecycle, bindings can be nil:
-
-* when RailsAdmin creates the route
-* when RailsAdmin defines the action in its controller
-
 ## Define actions
 
 * `root` defines root level actions (Dashboard, etc.)
@@ -175,3 +142,39 @@ xx:
 See [[rails_admin.en.yml|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]] to get an idea.
 
 Actions can provide specific option configuration, check their respective wiki page.
+
+
+## Action visibility and bindings
+
+### Authorization
+
+Authorization is done automatically before any link is displayed, any page accessed, etc.
+Check [[Cancan]] for the list of key used by RailsAdmin default actions.
+
+You can change the authorization key with:
+
+```ruby
+config.actions do
+  dashboard do
+    authorization_key :customized
+  end
+  ...
+end
+```
+
+### Visible block
+
+You can use these 3 bindings to decide whereas the action should be visible or not:
+
+* `bindings[:controller]` is current controller instance
+* `bindings[:abstract_model]` is checked abstract model (except root actions)
+* `bindings[:object]` is checked instance object (member actions only)
+
+Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
+
+Important: at some point of the application lifecycle, bindings can be nil:
+
+* when RailsAdmin creates the route
+* when RailsAdmin defines the action in its controller
+
+These bindings are available in all options.
