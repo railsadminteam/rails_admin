@@ -95,10 +95,10 @@ Then you can pass the configuration block.
 
 Then add `app/views/rails_admin/main/my_action.html.<erb|haml>` in your application, where you will be able to access:
 
-* @abstract_model            (except for root actions, give the RailsAdmin representation of the model. Use .model to have your ActiveRecord original model)
-* @model_config              (except for root actions, give the RailsAdmin configuration of the model)
-* @objects = list_entries    (for collection actions, list the entries as specified in params, see the :index action and template)
-* @object                    (member actions only, ActiveRecord object)
+* `@abstract_model`            (except for root actions, give the RailsAdmin representation of the model. Use .model to have your ActiveRecord original model)
+* `@model_config`              (except for root actions, give the RailsAdmin configuration of the model)
+* `@objects = list_entries`    (for collection actions, list the entries as specified in params, see the :index action and template)
+* `@object`                    (member actions only, ActiveRecord object)
 
 ```ruby
 config.actions do
