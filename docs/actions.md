@@ -30,7 +30,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-## Use actions
+## Use existing actions and customize them
 
 Simply list them and pass an optional block, like so:
 
