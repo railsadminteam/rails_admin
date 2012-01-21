@@ -108,6 +108,14 @@ describe RailsAdmin::ApplicationHelper do
       @object = Team.new(:name => 'the avengers')
       helper.wording_for(:title).should == "Edit Team 'the avengers'"
     end
+    
+    it "does not try to use the wrong :label_metod" do
+      @abstract_model = RailsAdmin::AbstractModel.new(Draft)
+      @object = Draft.new
+      
+      helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team)).should == "Create a "
+    end
+    
   end
   
   describe "#breadcrumb" do
