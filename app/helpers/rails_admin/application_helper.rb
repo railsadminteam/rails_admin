@@ -35,6 +35,7 @@ module RailsAdmin
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
       
       model_config = abstract_model && RailsAdmin.config(abstract_model)
+      object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
       
       I18n.t("admin.actions.#{action.i18n_key}.#{label}", 

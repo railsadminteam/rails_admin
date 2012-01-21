@@ -113,7 +113,7 @@ describe RailsAdmin::ApplicationHelper do
       @abstract_model = RailsAdmin::AbstractModel.new(Draft)
       @object = Draft.new
       
-      helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team)).should == "Create a "
+      helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team)).should == "Add a new Team"
     end
     
   end
