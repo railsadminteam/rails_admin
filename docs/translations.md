@@ -13,6 +13,6 @@ Available translations:
 * [[Spanish (Spain): es|https://gist.github.com/1647597#file_rails_admin.es.yml]]
 * Add your own (create a gist first)
 
-You can use find old included translations there:
+You can find old translations here:
 
 [[https://github.com/sferik/rails_admin/tree/df631d6d4ed49a5417d8135000611c37f6a3ed9b/config/locales]]
