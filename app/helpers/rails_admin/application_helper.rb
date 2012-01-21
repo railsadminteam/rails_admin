@@ -41,7 +41,7 @@ module RailsAdmin
       I18n.t("admin.actions.#{action.i18n_key}.#{label}", 
         :model_label => model_config.try(:label), 
         :model_label_plural => model_config.try(:label_plural), 
-        :object_label => model_config && object.try(model_config.object_label_method)
+        :object_label => model_config && abstract_model && object && object.is_a?(abstract_model.model) ? object.try(model_config.object_label_method) : nil
       )
     end
     
