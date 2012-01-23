@@ -48,3 +48,16 @@ matrix:
     - rvm: 1.9.3
       env: "CI_DB_ADAPTER=mysql"
       gemfile: Gemfile31
+
+    - gemfile: Gemfile31
+      rvm: ree
+      env: "CI_DB_ADAPTER=mysql"
+
+    - gemfile: Gemfile31
+      rvm: rbx
+      env: "CI_DB_ADAPTER=mysql"
+
+    - gemfile: Gemfile31
+      rvm: 1.9.3
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+
