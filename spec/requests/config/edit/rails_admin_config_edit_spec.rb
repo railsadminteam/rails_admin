@@ -534,7 +534,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         fill_in "field_test[datetime_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
         click_button "Save"
         @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.datetime_field.should eql(::DateTime.parse(@time.to_s))
+        @record.datetime_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
       end
 
       it "should have a customization option" do
@@ -549,7 +549,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         fill_in "field_test[datetime_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
         click_button "Save"
         @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.datetime_field.should eql(::DateTime.parse(@time.to_s))
+        @record.datetime_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
       end
     end
 
@@ -575,7 +575,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         fill_in "field_test[timestamp_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
         click_button "Save"
         @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.timestamp_field.should eql(::DateTime.parse(@time.to_s))
+        @record.timestamp_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
       end
 
       it "should have a customization option" do
@@ -590,7 +590,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         fill_in "field_test[timestamp_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
         click_button "Save"
         @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.timestamp_field.should eql(::DateTime.parse(@time.to_s))
+        @record.timestamp_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
       end
     end
 

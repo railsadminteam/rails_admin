@@ -62,11 +62,11 @@ describe RailsAdmin::ApplicationHelper do
       abstract_model = RailsAdmin::AbstractModel.new(Player)
       object = FactoryGirl.create :player
       helper.actions(:all, abstract_model, object).map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app]
-      helper.actions(:all).map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index]
-      helper.actions.map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index]
+      helper.actions(:all).map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app]
+      helper.actions.map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app]
       helper.actions(:root).map(&:custom_key).should == [:dashboard]
       helper.actions(:collection).map(&:custom_key).should == [:index, :new, :export, :bulk_delete, :history_index]
-      helper.actions(:member).map(&:custom_key).should == [:show, :edit, :delete, :history_show]
+      helper.actions(:member).map(&:custom_key).should == [:show, :edit, :delete, :history_show, :show_in_app]
     end
     
     it 'should only return visible actions, passing bindings correctly' do

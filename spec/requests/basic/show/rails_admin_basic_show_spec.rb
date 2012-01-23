@@ -5,7 +5,6 @@ describe "RailsAdmin Basic Show" do
 
   describe "show" do
     before(:each) do
-      
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "player", :id => @player.id)
     end

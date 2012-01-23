@@ -1,5 +1,5 @@
 class RailsAdmin::History < ActiveRecord::Base
-  set_table_name :rails_admin_histories
+  self.table_name = :rails_admin_histories
 
   IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 

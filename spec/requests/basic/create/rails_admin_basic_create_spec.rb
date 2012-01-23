@@ -6,12 +6,10 @@ describe "RailsAdmin Basic Create" do
   describe "create" do
     before(:each) do
       visit new_path(:model_name => "player")
-
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
       click_button "Save"
-
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
