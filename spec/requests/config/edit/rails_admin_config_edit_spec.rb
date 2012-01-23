@@ -712,10 +712,10 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       
-      visit new_path(:model_name => 'categories')
+      visit new_path(:model_name => 'category')
       should have_no_css('#category_parent_category_id')
       click_button 'Save'
-      visit edit_path(:model_name => 'categories', :id => Category.first)
+      visit edit_path(:model_name => 'category', :id => Category.first)
       should have_css('#category_parent_category_id')
       click_button 'Save'
       should have_content('Category successfully updated')

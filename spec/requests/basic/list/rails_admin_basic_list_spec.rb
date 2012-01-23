@@ -22,7 +22,7 @@ describe "RailsAdmin Basic List" do
   
   describe "GET /admin/balls/545-typo" do
     it "should redirect to balls index and inform the user the id wasn't found" do
-      visit '/admin/balls/545-typo'
+      visit '/admin/ball/545-typo'
       page.driver.status_code.should eql(404)
       find('.alert-message.error').should have_content("Ball with id '545-typo' could not be found")
     end
@@ -407,9 +407,9 @@ describe "RailsAdmin Basic List" do
     end
 
     it "shows the show, edit and delete links with valid url" do
-      should have_selector("td a[href='/admin/balls/#{@ball.id}']")
-      should have_selector("td a[href='/admin/balls/#{@ball.id}/edit']")
-      should have_selector("td a[href='/admin/balls/#{@ball.id}/delete']")
+      should have_selector("td a[href='/admin/ball/#{@ball.id}']")
+      should have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
+      should have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
     end
 
   end

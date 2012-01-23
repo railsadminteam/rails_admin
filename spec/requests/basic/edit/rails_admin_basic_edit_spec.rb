@@ -91,7 +91,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should display a link to the delete page" do
-      should have_selector "a[href='/admin/balls/#{@ball.id}/delete']"
+      should have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
     end
 
   end
@@ -100,10 +100,10 @@ describe "RailsAdmin Basic Edit" do
     
     it "should send back to previous URL" do
       @ball = FactoryGirl.create :ball
-      visit '/admin/balls?sort=color'
+      visit '/admin/ball?sort=color'
       click_link 'Edit'
       click_button 'Cancel'
-      page.current_url.should == 'http://www.example.com/admin/balls?sort=color'
+      page.current_url.should == 'http://www.example.com/admin/ball?sort=color'
     end
   end
 end
