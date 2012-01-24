@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe RailsAdmin::ApplicationHelper do
   
-  subject { page }
-  
   describe '#current_action?' do
     it 'should return true if current_action, false otherwise' do
       @action = RailsAdmin::Config::Actions.find(:index)

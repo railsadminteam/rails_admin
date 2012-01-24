@@ -12,6 +12,26 @@ describe "RailsAdmin Config DSL Show Section" do
 
     visit show_path(:model_name => "team", :id => team.id)
   end
+  
+  describe "compact_show_view" do
+
+    it 'should hide empty fields in show view by default' do
+      @player = FactoryGirl.create :player
+      visit show_path(:model_name => "league", :id => @player.id)
+      should_not have_css(".born_on_field")
+    end
+
+
+    it 'should be disactivable' do
+      RailsAdmin.config do |c|
+        c.compact_show_view = false
+      end
+
+      @player = FactoryGirl.create :player
+      visit show_path(:model_name => "player", :id => @player.id)
+      should have_css(".born_on_field")
+    end
+  end
 
   describe "css hooks" do
     it "should be present" do

@@ -41,7 +41,6 @@ describe "RailsAdmin" do
   end
   
   describe 'hidden fields with default values' do
-    
     it "should show up with default value, hidden" do
       RailsAdmin.config Player do
         include_all_fields
@@ -60,9 +59,9 @@ describe "RailsAdmin" do
     end
   end
   
-  describe '_current_user should be accessible from the list view' do # https://github.com/sferik/rails_admin/issues/549
+  describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
     
-    it 'should work' do
+    it 'should be accessible from the list view' do
       RailsAdmin.config Player do
         list do
           field :name do
@@ -111,36 +110,4 @@ describe "RailsAdmin" do
     end
   end
 
-  describe "model whitelist:" do
-
-    it 'should only use included models' do
-      RailsAdmin.config.included_models = [Team, League]
-      RailsAdmin::AbstractModel.all.map(&:model).should == [League, Team] #it gets sorted
-    end
-
-    it 'should not restrict models if included_models is left empty' do
-      RailsAdmin.config.included_models = []
-      RailsAdmin::AbstractModel.all.map(&:model).should include(Team, League)
-    end
-
-    it 'should further remove excluded models (whitelist - blacklist)' do
-      RailsAdmin.config.excluded_models = [Team]
-      RailsAdmin.config.included_models = [Team, League]
-      RailsAdmin::AbstractModel.all.map(&:model).should == [League]
-    end
-
-    it 'should always exclude history' do
-      RailsAdmin::AbstractModel.all.map(&:model).should_not include(RailsAdmin::History)
-    end
-
-    it 'excluded? returns true for any model not on the list' do
-      RailsAdmin.config.included_models = [Team, League]
-
-      team_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Team'))
-      fan_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Fan'))
-
-      fan_config.should be_excluded
-      team_config.should_not be_excluded
-    end
-  end
 end

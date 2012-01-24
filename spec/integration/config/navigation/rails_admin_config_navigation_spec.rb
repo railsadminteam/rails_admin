@@ -3,6 +3,55 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL Navigation Section" do
 
   subject { page }
+  
+  describe ".excluded_models" do
+    
+    excluded_models = [Division, Draft, Fan]
+
+    before(:each) do
+      RailsAdmin::Config.excluded_models = excluded_models
+    end
+
+    it "should be hidden from navigation" do
+      # Make query in team's edit view to make sure loading
+      # the related division model config will not mess the navigation
+      visit new_path(:model_name => "team")
+      within("#nav") do
+        excluded_models.each do |model|
+          should have_no_selector("li a", :text => model.to_s)
+        end
+      end
+    end
+
+    it "should raise NotFound for the list view" do
+      visit index_path(:model_name => "fan")
+      page.driver.status_code.should eql(404)
+      find('.alert-message.error').should have_content("Model 'Fan' could not be found")
+    end
+
+    it "should raise NotFound for the create view" do
+      visit new_path(:model_name => "fan")
+      page.driver.status_code.should eql(404)
+      find('.alert-message.error').should have_content("Model 'Fan' could not be found")
+    end
+
+    it "should be hidden from other models relations in the edit view" do
+      visit new_path(:model_name => "team")
+      should_not have_selector("#team_division")
+      should_not have_selector("input#team_fans")
+    end
+
+    it "should raise NoMethodError when an unknown method is called" do
+      begin
+        RailsAdmin::Config.model Team do
+          method_that_doesnt_exist
+          fail "calling an unknown method should have failed"
+        end
+      rescue NoMethodError
+        # this is what we want to happen
+      end
+    end
+  end
 
   describe "order of items" do
 
