@@ -46,7 +46,7 @@ module RailsAdmin
           end
 
           def associated_model_config
-            @associated_model_config ||= association[:parent_model].map{|type| RailsAdmin.config(type) }.select{|config| !config.excluded? }
+            @associated_model_config ||= association[:parent_model_proc].call.map{|type| RailsAdmin.config(type) }.select{|config| !config.excluded? }
           end
 
           def polymorphic_type_collection

@@ -64,7 +64,7 @@ module RailsAdmin
 
         # Reader for the association's child model's configuration
         def associated_model_config
-          @associated_model_config ||= RailsAdmin.config(association[:child_model])
+          @associated_model_config ||= RailsAdmin.config(association[:child_model_proc].call)
         end
 
         # Reader for the association's child model object's label method

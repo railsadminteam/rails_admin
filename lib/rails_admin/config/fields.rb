@@ -8,13 +8,13 @@ module RailsAdmin
       mattr_reader :default_factory
       @@default_factory = lambda do |parent, properties, fields|
         # If it's an association
-        if properties.has_key?(:parent_model)
+        if properties.has_key?(:parent_model_proc)
           association = parent.abstract_model.associations.find {|a| a[:name].to_s == properties[:name].to_s}
           field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
           fields << field
 
         # If it's a column
-        elsif !properties.has_key?(:parent_model)
+        else
           fields << (field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties))
           # hide _type columns (handled as associations)
           if parent.abstract_model.belongs_to_associations.find {|a| a[:foreign_type] == properties[:name] }

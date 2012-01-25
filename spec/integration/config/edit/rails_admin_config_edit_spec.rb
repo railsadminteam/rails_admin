@@ -39,6 +39,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       RailsAdmin.config(Team) do
         field :color, :enum do
           default_value 'black'
+          enum do
+            ['black', 'white']
+          end
         end
       end
       visit new_path(:model_name => "team")

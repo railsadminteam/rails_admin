@@ -20,10 +20,10 @@ module RailsAdmin
       @associations = {}
 
       (schema.delete(:include) || {}).each do |key, values|
-        association = @abstract_model.associations.find{ |association| association[:name] == key }
-        model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
-        abstract_model = RailsAdmin::AbstractModel.new(model)
-        model_config = RailsAdmin.config(abstract_model)
+        association = @model_config.export.fields.find{|f| f.name == key && f.association?}
+        model_config = association.associated_model_config
+        abstract_model = model_config.abstract_model
+        model = abstract_model.model
         methods = [(values[:only] || []) + (values[:methods] || [])].flatten.compact
         fields = model_config.export.fields.select{|f| methods.include? f.name }
 
@@ -65,7 +65,7 @@ module RailsAdmin
           end +
           @associations.map do |association_name, option_hash|
             option_hash[:fields].map do |field|
-              output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => @model_config.export.fields.find{|f| f.name == association_name }.label))
+              output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
             end
           end.flatten
         end

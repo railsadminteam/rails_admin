@@ -98,9 +98,9 @@ module RailsAdmin
             :name => association.name.to_sym,
             :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
             :type => association.macro,
-            :parent_model => association_parent_model_lookup(association),
+            :parent_model_proc => Proc.new { association_parent_model_lookup(association) },
             :parent_key => association_parent_key_lookup(association),
-            :child_model => association_child_model_lookup(association),
+            :child_model_proc => Proc.new { association_child_model_lookup(association) },
             :child_key => association_child_key_lookup(association),
             :foreign_type => association_foreign_type_lookup(association),
             :as => association_as_lookup(association),
@@ -134,6 +134,7 @@ module RailsAdmin
 
       def model_store_exists?
         model.table_exists?
+        true
       end
 
       def get_conditions_hash(model_config, query, filters)

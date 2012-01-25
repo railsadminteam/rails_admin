@@ -26,7 +26,7 @@ module RailsAdmin
           end
 
           def associated_model_config
-            @config ||= RailsAdmin.config(association[:parent_model])
+            @config ||= RailsAdmin.config(association[:parent_model_proc].call)
           end
 
           def selected_id

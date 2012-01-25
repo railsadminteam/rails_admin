@@ -28,17 +28,15 @@
       %hr
       - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
         .span5.clearfix{:style => 'float:left;'}
-          - association = field.association
-          - associated_model = association[:type] == :belongs_to ? association[:parent_model] : association[:child_model]
-          - fields = RailsAdmin.config(associated_model).export.with(:view => self, :object => associated_model.new).visible_fields.select{ |f| !f.association? }
+          - fields = field.associated_model_config.export.with(:view => self, :object => (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
           %label{:rel => 'twipsy', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".input").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label.downcase)
           .input
             %ul.inputs-list
               - fields.each do |associated_model_field|
                 - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
                 %li
-                  %label{:for => "schema_include_#{association[:name]}_#{list}_#{associated_model_field.name}"}
-                    = check_box_tag "schema[include][#{association[:name]}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{association[:name]}_#{list}_#{associated_model_field.name}" }
+                  %label{:for => "schema_include_#{field.association[:name]}_#{list}_#{associated_model_field.name}"}
+                    = check_box_tag "schema[include][#{field.association[:name]}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.association[:name]}_#{list}_#{associated_model_field.name}" }
                     %strong= associated_model.human_attribute_name(associated_model_field.name)
   .row
     %fieldset
