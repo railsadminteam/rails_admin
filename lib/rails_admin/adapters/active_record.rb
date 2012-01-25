@@ -134,7 +134,6 @@ module RailsAdmin
 
       def model_store_exists?
         model.table_exists?
-        true
       end
 
       def get_conditions_hash(model_config, query, filters)

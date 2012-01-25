@@ -35,8 +35,8 @@
               - fields.each do |associated_model_field|
                 - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
                 %li
-                  %label{:for => "schema_include_#{field.association[:name]}_#{list}_#{associated_model_field.name}"}
-                    = check_box_tag "schema[include][#{field.association[:name]}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.association[:name]}_#{list}_#{associated_model_field.name}" }
+                  %label{:for => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
+                    = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
                     %strong= associated_model.human_attribute_name(associated_model_field.name)
   .row
     %fieldset
