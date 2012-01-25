@@ -24,20 +24,21 @@ form label.nester {
 
 form {
   label { width:130px; }
-  legend { padding-left: 150px; }
+  legend, p { padding-left: 150px; }
   .input { margin-left: 150px; }
+  p { margin-top: -10px; }
   
   blockquote {
     label { width:120px; }
-    legend { padding-left: 140px; }
+    legend, p { padding-left: 140px; }
     .input { margin-left: 140px; }
     blockquote {
       label { width:110px; }
-      legend { padding-left: 130px; }
+      legend, p { padding-left: 130px; }
       .input { margin-left: 130px; }
       blockquote {
         label { width:100px; }
-        legend { padding-left: 120px; }
+        legend, p { padding-left: 120px; }
         .input { margin-left: 120px; }
       }
     }

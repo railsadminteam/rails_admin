@@ -155,7 +155,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should have_selector('legend small', :text => "help paragraph to display")
+        should have_selector('.fieldset p', :text => "help paragraph to display")
       end
 
       it "should not show help if not present" do
@@ -167,7 +167,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should_not have_selector('legend small')
+        should_not have_selector('.fieldset p')
       end
 
       it "should be able to display multiple help if there are multiple sections" do
@@ -185,9 +185,9 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should have_selector("legend small", :text => 'help for default')
-        should have_selector("legend small", :text => 'help for other section')
-        should have_selector("legend small", :count => 2)
+        should have_selector(".fieldset p", :text => 'help for default')
+        should have_selector(".fieldset p", :text => 'help for other section')
+        should have_selector(".fieldset p", :count => 2)
       end
 
       it "should use the db column size for the maximum length" do

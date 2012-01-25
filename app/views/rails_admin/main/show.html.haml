@@ -4,8 +4,8 @@
       .fieldset
         %h4
           = fieldset.label
-          - if fieldset.help
-            %small= fieldset.help
+        - if fieldset.help
+          %p= fieldset.help
         %dl
           - fields.each_with_index do |field, index|
             - if !values[index].nil? || !RailsAdmin::config.compact_show_view
