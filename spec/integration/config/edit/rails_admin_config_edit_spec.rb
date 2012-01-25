@@ -6,6 +6,46 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   subject { page }
 
+  describe "default_value" do
+    
+    it "should be set for all types of input fields" do
+      RailsAdmin.config do |config|
+        config.excluded_models = []
+        config.model(FieldTest) do
+        
+          field :string_field do
+            default_value 'string_field default_value'
+          end
+          field :text_field do
+            default_value 'string_field text_field'
+          end
+          field :boolean_field do
+            default_value true
+          end
+          field :date_field do
+            default_value Date.today.to_s
+          end
+        end
+      end
+      
+      visit new_path(:model_name => "field_test")
+      find_field('field_test[string_field]').value.should == 'string_field default_value'
+      find_field('field_test[text_field]').value.should == 'string_field text_field'
+      find_field('field_test[date_field]').value.should == Date.today.to_s
+      has_checked_field?('field_test[boolean_field]').should be_true
+    end
+    
+    it "should set default value for selects" do
+      RailsAdmin.config(Team) do
+        field :color, :enum do
+          default_value 'black'
+        end
+      end
+      visit new_path(:model_name => "team")
+      find_field('team[color]').value.should == 'black'
+    end
+  end
+
   describe "attr_accessible" do
 
 

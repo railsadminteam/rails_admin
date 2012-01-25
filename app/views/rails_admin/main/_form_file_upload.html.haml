@@ -3,7 +3,7 @@
 .toggle{:style => ('display:none;' if file && field.delete_method && form.object.send(field.delete_method) == '1')}
   - if value = field.pretty_value
     = value
-  = form.file_field(field.name, field._html_attributes)
+  = form.file_field(field.name, field.html_attributes)
 - if field.optional? && field.errors.blank? && file && field.delete_method
   %a.label.notice{:href => '#', :onclick => "jQuery(this).siblings('[type=checkbox]').click(); jQuery(this).siblings('.toggle').toggle(); jQuery(this).toggleClass('important notice'); return false"}
     = I18n.t('admin.actions.delete.menu').capitalize + " #{field.method_name}"

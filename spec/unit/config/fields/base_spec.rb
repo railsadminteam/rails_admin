@@ -2,6 +2,31 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
   
+  describe "#html_default_value" do
+    it 'should be default_value for new records when value is nil' do
+      RailsAdmin.config Team do
+        list do
+          field :name do
+            default_value 'default value'
+          end
+        end
+      end
+      @team = Team.new
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value.should == 'default value'
+      @team.name = 'set value'
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value.should be_nil
+      @team = FactoryGirl.create :team
+      @team.name = nil
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value.should be_nil
+    end
+  end
+  
+  describe "#default_value" do
+    it 'should be nil by default' do
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.default_value.should be_nil
+    end
+  end
+  
   describe "#css_class" do
     it "should have a default and be user customizable" do
       RailsAdmin.config Team do

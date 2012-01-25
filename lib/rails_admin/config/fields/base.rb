@@ -253,7 +253,7 @@ module RailsAdmin
         end
         
         # Reader for nested attributes
-        def nested_form
+        register_instance_option :nested_form do
           false
         end
         
@@ -265,8 +265,8 @@ module RailsAdmin
           name
         end
         
-        def _html_attributes
-          html_attributes.merge(!default_value.nil? ? { :value => default_value } : {})
+        def html_default_value
+          bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
       end
     end
