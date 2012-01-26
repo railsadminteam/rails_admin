@@ -155,7 +155,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should have_selector('.fieldset p', :text => "help paragraph to display")
+        should have_selector('fieldset p', :text => "help paragraph to display")
       end
 
       it "should not show help if not present" do
