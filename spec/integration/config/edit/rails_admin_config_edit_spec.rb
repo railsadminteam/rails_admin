@@ -167,7 +167,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should_not have_selector('.fieldset p')
+        should_not have_selector('fieldset p')
       end
 
       it "should be able to display multiple help if there are multiple sections" do
@@ -185,9 +185,9 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
         visit new_path(:model_name => "team")
-        should have_selector(".fieldset p", :text => 'help for default')
-        should have_selector(".fieldset p", :text => 'help for other section')
-        should have_selector(".fieldset p", :count => 2)
+        should have_selector("fieldset p", :text => 'help for default')
+        should have_selector("fieldset p", :text => 'help for other section')
+        should have_selector("fieldset p", :count => 2)
       end
 
       it "should use the db column size for the maximum length" do
