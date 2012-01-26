@@ -138,6 +138,8 @@ You should now be able to administer your site at
 All configuration documentation has moved to the wiki: https://github.com/sferik/rails_admin/wiki
 
 ## <a name="support"></a>Support
+Please see [list of know issues](https://github.com/sferik/rails_admin/wiki/Known-issues) first.
+
 If you have a question, you can ask the [official RailsAdmin mailing
 list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
 [#railsadmin on
