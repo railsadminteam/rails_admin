@@ -8,12 +8,6 @@ Workaround: add `I18n.default_locale = :de` inside RailsAdmin's initializer (bef
 
 ***
 
-**`to_xs` failure when exporting records to xml** with ruby != 1.9.x
-
-Check Rails bug status here: https://github.com/rails/rails/pull/2076
-
-***
-
 **Asset pipeline**
 
 The master branch currently targets Rails 3.1. Older branch with 3.0 compatibility is present, but is no longer maintained.
