@@ -12,6 +12,7 @@ Available translations:
 * [[French: fr|https://gist.github.com/1632279]]
 * [[Japanese: ja|https://gist.github.com/1662352#file_rails_admin.ja.yml]]
 * [[Spanish (Spain): es|https://gist.github.com/1647597#file_rails_admin.es.yml]]
+* [[Italian (Italy): it|https://gist.github.com/1700678#file_rails_admin.it.yml]]
 * Add your own (create a gist first)
 
 You can find old translations here:
