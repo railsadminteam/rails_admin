@@ -1,10 +1,11 @@
 require 'active_support/core_ext/string/inflections'
+require 'active_model/mass_assignment_security'
+
 require 'rails_admin/config/base'
 require 'rails_admin/config/hideable'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/association'
 require 'rails_admin/config/fields/groupable'
-
 
 module RailsAdmin
   module Config
@@ -196,11 +197,7 @@ module RailsAdmin
         
         def editable
           return false if @properties && @properties[:read_only]
-          role = bindings[:view].controller.send(:_attr_accessible_role)
-          klass = bindings[:object].class
-          whitelist = klass.accessible_attributes(role).map(&:to_s)
-          blacklist = klass.protected_attributes(role).map(&:to_s)
-          !self.method_name.to_s.in?(blacklist) && (whitelist.any? ? self.method_name.to_s.in?(whitelist) : true)
+          bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(method_name)
         end
         
         def render
