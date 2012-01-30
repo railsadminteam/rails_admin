@@ -197,7 +197,7 @@ module RailsAdmin
         
         def editable
           return false if @properties && @properties[:read_only]
-          bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(method_name)
+          !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
         end
         
         def render
