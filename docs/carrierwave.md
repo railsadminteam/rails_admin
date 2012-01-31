@@ -11,9 +11,9 @@ end
 ```
 
 You also need to specify the field as a 'carrierwave' type:
-````ruby
+```ruby
 field :asset, :carrierwave
-````
+```
 
 Now a file upload field will be added to your model's form.
 
