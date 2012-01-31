@@ -11,21 +11,11 @@ module RailsAdmin
         if properties.has_key?(:parent_model_proc)
           association = parent.abstract_model.associations.find {|a| a[:name].to_s == properties[:name].to_s}
           field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
-          fields << field
-
-        # If it's a column
         else
-          fields << (field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties))
-          # hide _type columns (handled as associations)
-          if parent.abstract_model.belongs_to_associations.find {|a| a[:foreign_type] == properties[:name] }
-            field.hide
-          end
-          # hide _id column
-          if parent.abstract_model.belongs_to_associations.find {|a| a[:child_key] == properties[:name] }
-            field.hide
-            field.filterable(false) # filtering is handled on the association itself
-          end
+          field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties)
         end
+        fields << field
+        field
       end
 
       # Registry of field factories.
@@ -66,7 +56,7 @@ module RailsAdmin
           end
         end
         # Load fields for all associations (relations)
-        parent.abstract_model.associations.each do |association|
+        parent.abstract_model.associations.select{|a| a[:type] != :belongs_to }.each do |association| # :belongs_to are created by factory for belongs_to fields
           # Unless a previous factory has already loaded current field as well
           unless fields.find {|f| f.name == association[:name] }
             # Loop through factories until one returns true
@@ -95,3 +85,4 @@ require 'rails_admin/config/fields/factories/devise'
 require 'rails_admin/config/fields/factories/paperclip'
 require 'rails_admin/config/fields/factories/dragonfly'
 require 'rails_admin/config/fields/factories/carrierwave'
+require 'rails_admin/config/fields/factories/belongs_to_association'

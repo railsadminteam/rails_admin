@@ -27,14 +27,6 @@ module RailsAdmin
           end.to_sentence.html_safe
         end
 
-        register_instance_option(:sortable) do
-          false
-        end
-
-        register_instance_option(:searchable) do
-          false
-        end
-
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.
@@ -82,19 +74,6 @@ module RailsAdmin
           association[:inverse_of]
         end
 
-        # we need to check for validation on method and on association
-        register_instance_option :required? do
-          @required ||= !!(abstract_model.model.validators_on(name) + abstract_model.model.validators_on(method_name)).find do |v|
-            v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
-            v.is_a?(ActiveModel::Validations::NumericalityValidator) && !v.options[:allow_nil]
-          end
-        end
-
-        # Reader for validation errors of the bound object
-        def errors
-          bindings[:object].errors[association[:name]] + bindings[:object].errors[child_key]
-        end
-
         # Reader whether this is a polymorphic association
         def polymorphic?
           association[:polymorphic]
@@ -108,6 +87,10 @@ module RailsAdmin
         # Reader for the association's value unformatted
         def value
           bindings[:object].send(association[:name])
+        end
+        
+        def virtual?
+          true
         end
       end
     end

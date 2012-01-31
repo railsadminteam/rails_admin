@@ -49,15 +49,15 @@ module RailsAdmin
         end
         
         register_instance_option(:sortable) do
-          !virtual?
+          !virtual? || children_fields.first || false
         end
 
         register_instance_option(:searchable) do
-          !virtual?
+          !virtual? || children_fields.first || false
         end
 
         register_instance_option(:queryable?) do
-          !!searchable
+          !virtual?
         end
 
         register_instance_option(:filterable?) do
@@ -164,9 +164,11 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option(:required?) do
-          @required ||= !!abstract_model.model.validators_on(name).find do |v|
-            v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
-            v.is_a?(ActiveModel::Validations::NumericalityValidator) && !v.options[:allow_nil]
+          @required ||= !!([name] + children_fields).uniq.find do |column_name|
+            !!abstract_model.model.validators_on(column_name).find do |v|
+              v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
+              v.is_a?(ActiveModel::Validations::NumericalityValidator) && !v.options[:allow_nil]
+            end
           end
         end
 
@@ -195,6 +197,10 @@ module RailsAdmin
           returned
         end
         
+        register_instance_option :children_fields do
+          []
+        end
+        
         def editable
           return false if @properties && @properties[:read_only]
           !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
@@ -211,7 +217,9 @@ module RailsAdmin
 
         # Reader for validation errors of the bound object
         def errors
-          bindings[:object].errors[name]
+          ([name] + children_fields).uniq.map do |column_name|
+            bindings[:object].errors[column_name]
+          end.uniq.flatten
         end
 
         # Reader whether field is optional.

@@ -27,14 +27,6 @@ module RailsAdmin
             resource_url.to_s
           end
           
-          register_instance_option(:searchable) do
-            false
-          end
-          
-          register_instance_option(:sortable) do
-            false
-          end
-
           register_instance_option(:pretty_value) do
             if value.presence
               v = bindings[:view]
@@ -46,7 +38,7 @@ module RailsAdmin
                 v.link_to(nil, url, :target => 'blank')
               end
             else
-              ' - '
+              nil
             end
           end
 
@@ -57,6 +49,10 @@ module RailsAdmin
           # virtual class
           def resource_url
             raise 'not implemented'
+          end
+          
+          def virtual?
+            true
           end
         end
       end

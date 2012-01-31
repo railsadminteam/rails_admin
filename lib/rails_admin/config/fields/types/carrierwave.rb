@@ -5,7 +5,6 @@ module RailsAdmin
   module Config
     module Fields
       module Types
-        # Field type that supports Paperclip file uploads
         class Carrierwave < RailsAdmin::Config::Fields::Types::FileUpload
           RailsAdmin::Config::Fields::Types.register(self)
 
@@ -19,14 +18,6 @@ module RailsAdmin
 
           register_instance_option(:cache_method) do
             "#{name}_cache"
-          end
-          
-          register_instance_option(:sortable) do
-            name
-          end
-          
-          register_instance_option(:searchable) do
-            name
           end
 
           def resource_url(thumb = false)

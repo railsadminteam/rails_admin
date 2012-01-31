@@ -2,6 +2,46 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
   
+  describe "#children_fields" do
+    
+    it 'should be empty by default' do
+      RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields.should == []
+    end
+    
+    it 'should contain child key for belongs to associations' do
+      RailsAdmin.config(Team).fields.find{ |f| f.name == :division }.children_fields.should == [:division_id]
+    end
+    
+    it 'should contain child keys for polymorphic belongs to associations' do
+      RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields.should == [:commentable_id, :commentable_type]
+    end
+    
+    context 'of a Paperclip installation' do
+      it 'should be a _file_name field' do
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.should == [:paperclip_asset_file_name]
+      end
+
+      it 'should be hidden, not filterable' do
+        f = RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset_file_name }
+        f.hidden?.should be_true
+        f.filterable?.should be_false
+      end
+    end
+    
+    context 'of a Dragonfly installation' do
+      it 'should be a _name field and _uid field' do
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.children_fields.should == [:dragonfly_asset_name, :dragonfly_asset_uid]
+      end
+    end
+
+    context 'of a Carrierwave installation' do
+      it 'should be the parent field itself' do
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.children_fields.should == [:carrierwave_asset]
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.hidden?.should be_false
+      end
+    end    
+  end
+  
   describe "#html_default_value" do
     it 'should be default_value for new records when value is nil' do
       RailsAdmin.config Team do
@@ -55,7 +95,6 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Team).edit.fields.find{|f| f.name == :players}.associated_collection_cache_all.should == false
     end
   end
-
   
   describe '#searchable_columns' do
     describe 'for belongs_to fields' do
@@ -148,6 +187,17 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config('League').export.fields.find{ |f| f.name == :virtual_column }.searchable.should == false
       RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.sortable.should == true
       RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.searchable.should == true
+    end
+    
+    context 'of a virtual field with children fields' do
+      it 'should target the first children field' do
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.searchable.should == :paperclip_asset_file_name
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.sortable.should == :paperclip_asset_file_name
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.searchable.should == :dragonfly_asset_name
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.sortable.should == :dragonfly_asset_name
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.searchable.should == :carrierwave_asset
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.sortable.should == :carrierwave_asset
+      end
     end
   end
 
