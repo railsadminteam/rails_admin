@@ -10,7 +10,7 @@ class Article < ActiveRecord::Base
 end
 ```
 
-You also need to specify the field as a 'carrierwave' type:
+You can specify the field as a 'carrierwave' type if not detected:
 ```ruby
 field :asset, :carrierwave
 ```
