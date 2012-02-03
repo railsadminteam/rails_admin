@@ -7,6 +7,7 @@
     = csrf_meta_tag
     = stylesheet_link_tag "rails_admin/rails_admin.css"
     = javascript_include_tag "rails_admin/rails_admin.js"
+    = content_for :head
   %body.rails_admin{:style => "padding-top: 60px;"}
     .topbar-wrapper{:style => "z-index: 5;"}
       .topbar{:'data-dropdown' => 'dropdown'}
