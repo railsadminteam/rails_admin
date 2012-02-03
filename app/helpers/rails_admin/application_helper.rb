@@ -65,7 +65,7 @@ module RailsAdmin
                     #{node.label_plural}
                   </a>
                   <ul>
-                    #{main_navigation(@nodes_stack, @nodes_stack.select{ |n| n.parent == node })}
+                    #{main_navigation(@nodes_stack, @nodes_stack.select{ |n| n.parent == node.abstract_model.model })}
                   </ul>
                 </li>
               }

@@ -18,7 +18,7 @@ module RailsAdmin
         
         register_instance_option :breadcrumb_parent do
           parent_model = RailsAdmin.config(bindings[:abstract_model]).try(:parent) if bindings[:abstract_model]
-          if am = parent_model.try(:abstract_model)
+          if am = parent_model && RailsAdmin.config(parent_model).try(:abstract_model)
             [:index, am]
           else
             [:dashboard]

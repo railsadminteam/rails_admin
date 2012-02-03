@@ -71,7 +71,7 @@ module RailsAdmin
       # parent node in navigation/breadcrumb
       register_instance_option :parent do
         @parent_model ||= begin
-          (klass = abstract_model.model.superclass).to_s.in?(['Object', 'BasicObject', 'ActiveRecord::Base']) ? nil : RailsAdmin::Config.model(klass)
+          (klass = abstract_model.model.superclass).to_s.in?(['Object', 'BasicObject', 'ActiveRecord::Base']) ? nil : klass
         end
       end
 
