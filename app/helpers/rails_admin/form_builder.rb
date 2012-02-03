@@ -52,7 +52,15 @@ module RailsAdmin
     end
 
     def input_for field
-      @template.content_tag(:div, :class => 'input') do
+      classnames = []
+      classnames << "input"
+      # add css class to hidden inputs (rails_admin doesn't do this)
+      if field.is_a?(RailsAdmin::Config::Fields::Types::Hidden)
+        classnames << "hidden-#{field.css_class}"
+      end
+      classnames = classnames.join(' ').underscore
+
+      @template.content_tag(:div, :class => classnames) do
         field_for(field) +
         errors_for(field) +
         help_for(field)
