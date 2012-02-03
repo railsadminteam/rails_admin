@@ -9,7 +9,11 @@ module RailsAdmin
         
         # Should the action be visible
         register_instance_option :visible? do
-          true
+          authorized?
+        end
+        
+        register_instance_option :authorized? do
+          bindings[:controller] ? bindings[:controller].authorized?(self.authorization_key, bindings[:abstract_model], bindings[:object]) : true
         end
         
         # Is the action acting on the root level (Example: /admin/contact)
@@ -17,12 +21,12 @@ module RailsAdmin
           false
         end
         
-        # Is the action on a model scope (Example: /admin/teams/export)
+        # Is the action on a model scope (Example: /admin/team/export)
         register_instance_option :collection? do
           false
         end
         
-        # Is the action on an object scope (Example: /admin/teams/1/edit)
+        # Is the action on an object scope (Example: /admin/team/1/edit)
         register_instance_option :member? do
           false
         end
@@ -79,16 +83,15 @@ module RailsAdmin
         
         # Breadcrumb parent
         register_instance_option :breadcrumb_parent do
-          case 
+          case
           when root?
-            :dashboard
+            [:dashboard]
           when collection?
-            :index
+            [:index, bindings[:abstract_model]]
           when member?
-            :show
+            [:show, bindings[:abstract_model], bindings[:object]]
           end
         end
-        
         
         # Off API.
         

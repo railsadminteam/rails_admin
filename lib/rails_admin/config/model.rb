@@ -64,12 +64,19 @@ module RailsAdmin
         0
       end
 
-      register_instance_option(:parent) do
-        :root
+      register_instance_option :page_type do
+        abstract_model.pretty_name.downcase
+      end
+
+      # parent node in navigation/breadcrumb
+      register_instance_option :parent do
+        @parent_model ||= begin
+          (klass = abstract_model.model.superclass).to_s.in?(['Object', 'BasicObject', 'ActiveRecord::Base']) ? nil : RailsAdmin::Config.model(klass)
+        end
       end
 
       register_instance_option(:navigation_label) do
-        false
+         @navigation_label ||= (self.parent ? nil : (((parent_module = abstract_model.model.parent) != Object) ? parent_module.to_s : nil))
       end
 
       # Act as a proxy for the base section configuration that actually

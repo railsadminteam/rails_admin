@@ -13,7 +13,7 @@ module RailsAdmin
         end
         
         register_instance_option :breadcrumb_parent do
-          :index
+          [:index, bindings[:abstract_model]]
         end
         
         register_instance_option :controller do

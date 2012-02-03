@@ -18,7 +18,6 @@ module RailsAdmin
             if request.post? # BULK DELETE
               
               @objects = list_entries(@model_config, :destroy)
-              not_found and return if @objects.empty?
 
               render @action.template_name
 

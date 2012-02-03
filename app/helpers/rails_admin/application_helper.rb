@@ -9,19 +9,16 @@ module RailsAdmin
       @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
     end
     
-    def current_action?(action)
-      @action.custom_key == action.custom_key
+    def current_action?(action, abstract_model = @abstract_model, object = @object)
+      @action.custom_key == action.custom_key && abstract_model.try(:to_param) == @abstract_model.try(:to_param) && @object.try(:id) == object.try(:id)
     end
     
     def action(key, abstract_model = nil, object = nil)
-      action = RailsAdmin::Config::Actions.find(key, { :controller => self.controller, :abstract_model => abstract_model, :object => object })
-      action && authorized?(action.authorization_key, (action.collection? || action.member?) && abstract_model || nil, action.member? && object || nil) ? action : nil
+      RailsAdmin::Config::Actions.find(key, { :controller => self.controller, :abstract_model => abstract_model, :object => object })
     end
     
     def actions(scope = :all, abstract_model = nil, object = nil)
-      RailsAdmin::Config::Actions.all(scope, { :controller => self.controller, :abstract_model => abstract_model, :object => object }).select do |action|
-        authorized?(action.authorization_key, (action.collection? || action.member?) && abstract_model || nil, action.member? && object || nil)
-      end
+      RailsAdmin::Config::Actions.all(scope, { :controller => self.controller, :abstract_model => abstract_model, :object => object })
     end
     
     def edit_user_link
@@ -31,9 +28,7 @@ module RailsAdmin
       link_to _current_user.email, url_for(:action => edit_action.action_name, :model_name => abstract_model.to_param, :id => _current_user.id, :controller => 'rails_admin/main')
     end
 
-    
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
-      
       model_config = abstract_model && RailsAdmin.config(abstract_model)
       object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
@@ -45,28 +40,65 @@ module RailsAdmin
       )
     end
     
-    def breadcrumb action = @action, acc = []
+    def main_navigation nodes_stack = nil, current_level_nodes = nil, current_navigation_label = nil
+      @nodes_stack ||= (nodes_stack || RailsAdmin::Config.visible_models.select { |model| authorized?(:index, model.abstract_model) })
       
-      acc << content_tag(:li, :class => "#{"active" if current_action?(action)}") do
-        if action.http_methods.include?(:get)
-          link_to wording_for(:breadcrumb, action), { :action => action.action_name, :controller => 'rails_admin/main' }
-        else
-          content_tag(:span, wording_for(:breadcrumb, action))
-        end
-      end
-
-      unless action.breadcrumb_parent && (parent = action(action.breadcrumb_parent, @abstract_model, @object)) # rec tail
-        content_tag(:ul, :class => "breadcrumb") do
-          acc.reverse.join('<span class="divider">/</span>').html_safe
-        end
+      current_level_nodes ||= @nodes_stack.select{ |n| n.parent.nil? }
+      case current_level_nodes
+      when [] # rec tail
       else
-        breadcrumb parent, acc # rec
+        current_level_nodes.group_by(&:navigation_label).map do |navigation_label, nodes|
+          if navigation_label && navigation_label != current_navigation_label
+            %{
+              <li class='navigation-label'>
+                <span class="label notice">#{navigation_label}</span>
+                <ul>
+                  #{main_navigation(@nodes_stack, current_level_nodes.select{ |n| n.navigation_label == navigation_label }, navigation_label)}
+                </ul>
+              </li>
+            }
+          else
+            nodes.map do |node|
+              %{
+                <li#{' class="active"' if node.page_type == @page_type }>
+                  <a href="#{index_path(:model_name => node.abstract_model.to_param)}">
+                    #{node.label_plural}
+                  </a>
+                  <ul>
+                    #{main_navigation(@nodes_stack, @nodes_stack.select{ |n| n.parent == node })}
+                  </ul>
+                </li>
+              }
+            end.join
+          end
+        end.join.html_safe
+      end
+    end
+
+    def breadcrumb action = @action, acc = []
+      begin
+        (parent_actions ||= []) << action
+      end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent))
+      parent_actions << action(:dashboard) if parent_actions.last.key != :dashboard # in case chain is interrupted
+      
+      content_tag(:ul, :class => "breadcrumb") do
+        parent_actions.map do |a|
+          am = a.send(:eval, 'bindings[:abstract_model]')
+          o = a.send(:eval, 'bindings[:object]')
+          content_tag(:li, :class => "#{"active" if current_action?(a, am, o)}") do
+            if a.http_methods.include?(:get)
+              link_to wording_for(:breadcrumb, a, am, o), { :action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => o.try(:id) }
+            else
+              content_tag(:span, wording_for(:breadcrumb, a, am, o))
+            end
+          end
+        end.reverse.join('<span class="divider">/</span>').html_safe
       end
     end
     
     # parent => :root, :collection, :member
     def menu_for(parent, abstract_model = nil, object = nil) # perf matters here (no action view trickery)
-      actions = actions(parent, abstract_model, object).select{ |action| action.http_methods.include?(:get) }
+      actions = actions(parent, abstract_model, object).select{ |a| a.http_methods.include?(:get) }
       actions.map do |action|
         %{
           <li class="#{action.key}_#{parent}_link #{'active' if current_action?(action)}">

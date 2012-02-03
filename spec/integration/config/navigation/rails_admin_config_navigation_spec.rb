@@ -54,10 +54,9 @@ describe "RailsAdmin Config DSL Navigation Section" do
   end
 
   describe "order of items" do
-
     it "should be alphabetical by default" do
       visit dashboard_path
-      ["Balls", "Bars", "Basic pages", "Comments", "Divisions", "Drafts", "Fans", "Hardballs", "Leagues", "Nested field tests", "Players", "Teams", "Unscoped pages", "Users"].each_with_index do |content, i|
+      ["Balls", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Nested field tests", "Players", "Teams", "Unscoped pages", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 1}]").should have_content(content)
       end
     end
@@ -69,56 +68,7 @@ describe "RailsAdmin Config DSL Navigation Section" do
         end
       end
       visit dashboard_path
-      ["Teams", "Balls", "Bars", "Basic pages", "Comments", "Divisions", "Drafts", "Fans", "Hardballs", "Leagues", "Nested field tests", "Players", "Unscoped pages", "Users"].each_with_index do |content, i|
-        find(:xpath, "//ul[@id='nav']/li[#{i + 1}]").should have_content(content)
-      end
-    end
-
-    it "should nest menu items with parent" do
-      RailsAdmin.config do |config|
-        config.model Comment do
-          parent Cms::BasicPage
-        end
-      end
-      visit dashboard_path
-      ["Balls", "Bars", "Basic pages", "Divisions", "Drafts", "Fans", "Hardballs", "Leagues", "Nested field tests", "Players", "Teams", "Unscoped pages", "Users"].each_with_index do |content, i|
-        find(:xpath, "//ul[@id='nav']/li[#{i + 1}]").should have_content(content)
-      end
-      ["Basic pages", "Comments"].each_with_index do |content, i|
-        find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]").should have_content(content)
-      end
-    end
-
-    it "should override parent label with navigation_label" do
-      RailsAdmin.config do |config|
-        config.model Comment do
-          parent Cms::BasicPage
-        end
-        config.model Cms::BasicPage do
-          navigation_label "CMS related"
-        end
-      end
-      visit dashboard_path
-      ["Balls", "Bars", "CMS related", "Divisions", "Drafts", "Fans", "Hardballs", "Leagues", "Nested field tests", "Players", "Teams", "Unscoped pages", "Users"].each_with_index do |content, i|
-        find(:xpath, "//ul[@id='nav']/li[#{i + 1}]").should have_content(content)
-      end
-      ["Basic pages", "Comments"].each_with_index do |content, i|
-        find(:xpath, "//ul[@id='nav']/li[contains(@class, 'more')]/ul/li[#{i + 1}]").should have_content(content)
-      end
-    end
-
-    it "should order navigation_label item according to parent weight" do
-      RailsAdmin.config do |config|
-        config.model Comment do
-          parent Cms::BasicPage
-        end
-        config.model Cms::BasicPage do
-          navigation_label "CMS related"
-          weight 1
-        end
-      end
-      visit dashboard_path
-      ["Balls", "Bars", "Divisions", "Drafts", "Fans", "Hardballs", "Leagues", "Nested field tests", "Players", "Teams", "Unscoped pages", "Users", "CMS related"].each_with_index do |content, i|
+      ["Teams", "Balls", "Comments", "Divisions", "Drafts", "Fans", "Leagues", "Nested field tests", "Players", "Unscoped pages", "Users"].each_with_index do |content, i|
         find(:xpath, "//ul[@id='nav']/li[#{i + 1}]").should have_content(content)
       end
     end

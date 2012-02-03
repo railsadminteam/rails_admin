@@ -15,9 +15,9 @@ module RailsAdmin
     RailsAdmin::Config::Actions.all.each do |action|
       class_eval %{
         def #{action.action_name}
-          @action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym, {:controller => self, :abstract_model => @abstract_model, :object => @object})
-          
-          @authorization_adapter.try(:authorize, @action.authorization_key, @abstract_model, @object)
+          action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym)
+          @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
+          @action = action.with({:controller => self, :abstract_model => @abstract_model, :object => @object})
           @page_name = wording_for(:title)
           @page_type = @abstract_model && @abstract_model.pretty_name.downcase || "dashboard"
           

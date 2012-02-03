@@ -17,7 +17,12 @@ module RailsAdmin
         end
         
         register_instance_option :breadcrumb_parent do
-          :dashboard
+          parent_model = RailsAdmin.config(bindings[:abstract_model]).try(:parent) if bindings[:abstract_model]
+          if am = parent_model.try(:abstract_model)
+            [:index, am]
+          else
+            [:dashboard]
+          end
         end
         
         register_instance_option :controller do
@@ -26,7 +31,7 @@ module RailsAdmin
 
             respond_to do |format|
               
-              format.html do  
+              format.html do
                 render @action.template_name, :layout => !request.xhr?, :status => (flash[:error].present? ? :not_found : 200)
               end
               

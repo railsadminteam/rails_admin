@@ -141,7 +141,6 @@ describe "RailsAdmin CanCan Authorization" do
     it "GET /admin/player/1/edit should render and update record upon submission" do
       @player = FactoryGirl.create :player
       visit edit_path(:model_name => "player", :id => @player.id)
-
       should have_content("Save and edit")
       should_not have_content("Save and add another")
       should_not have_content("Add new")

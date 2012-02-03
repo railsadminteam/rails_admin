@@ -197,10 +197,11 @@ module RailsAdmin
           returned
         end
         
+        # columns mapped (belongs_to, paperclip, etc.). First one is used for searching/sorting by default
         register_instance_option :children_fields do
           []
         end
-        
+                
         def editable
           return false if @properties && @properties[:read_only]
           !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
