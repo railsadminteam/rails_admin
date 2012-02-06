@@ -49,8 +49,10 @@
 = content_for :contextual_tabs do
   = bulk_menu
   - if @filterable_fields.present?
-    %li.dropdown{:style => 'float:right', :'data-dropdown' => "dropdown"}
-      %a.dropdown-toggle{:href => '#'}= t('admin.misc.add_filter')
+    %li.dropdown{:style => 'float:right'}
+      %a.dropdown-toggle{:href => '#', :'data-toggle' => "dropdown"}
+        = t('admin.misc.add_filter')
+        %b.caret
       %ul.dropdown-menu#filters
         - @filterable_fields.each do |field|
           - field_options = case field.type
@@ -78,13 +80,13 @@
       .span3
         %input{:name => "query", :type => "search", :value => query, :placeholder => t("admin.misc.filter")}
       .span3
-        %button.btn.primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
+        %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
       - if export_action
         %span{:style => 'float:right'}=link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
-    %table.zebra-striped
+    %table.table.table-condensed.table-striped
       %thead
         %tr
           %th.first.shrink

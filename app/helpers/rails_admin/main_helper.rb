@@ -9,7 +9,7 @@ module RailsAdmin
             
     def get_indicator(percent)
       return "" if percent < 0          # none
-      return "notice" if percent < 34   # < 1/100 of max
+      return "info" if percent < 34   # < 1/100 of max
       return "success" if percent < 67  # < 1/10 of max
       return "warning" if percent < 84  # < 1/3 of max
       return "important"                # > 1/3 of max

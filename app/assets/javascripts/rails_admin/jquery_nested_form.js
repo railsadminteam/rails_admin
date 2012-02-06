@@ -44,7 +44,7 @@ jQuery(function($) {
     },
     removeFields: function(e) {
       var link = e.currentTarget;
-      $(link).toggleClass('important').toggleClass('notice');
+      $(link).toggleClass('label-important').toggleClass('label-info');
       var hiddenField = $(link).prev('input[type=hidden]');
       hiddenField.val(hiddenField.val() === '1' ? '0' : '1');
       $(link).siblings('fieldset').toggle();

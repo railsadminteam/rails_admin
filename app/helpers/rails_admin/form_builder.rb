@@ -1,4 +1,4 @@
-ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| "<span class=\"field_with_errors\">#{html_tag}</span>".html_safe }
+ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| html_tag }
 
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
@@ -35,8 +35,8 @@ module RailsAdmin
       else
         # do not show nested field if the target is the origin
         unless field.inverse_of.presence && field.inverse_of == nested_in
-          @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, :class => (field.nested_form ? 'nester input' : '')) +
+          @template.content_tag(:div, :class => "clearfix control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
+            label(field.method_name, field.label, :class => (field.nested_form ? 'nester input control-label' : 'control-label')) +
             (field.nested_form ? nested_inputs_for(field) : input_for(field))
           end
         end
@@ -44,7 +44,7 @@ module RailsAdmin
     end
     
     def nested_inputs_for field
-      @template.content_tag(:div, :class => 'input') do
+      @template.content_tag(:div, :class => 'controls') do
         errors_for(field) +
         help_for(field)
       end + '<div class="row"></div>'.html_safe +
@@ -52,7 +52,7 @@ module RailsAdmin
     end
 
     def input_for field
-      @template.content_tag(:div, :class => 'input') do
+      @template.content_tag(:div, :class => 'controls') do
         field_for(field) +
         errors_for(field) +
         help_for(field)
@@ -64,7 +64,7 @@ module RailsAdmin
     end
 
     def help_for field
-      field.help.present? ? @template.content_tag(:span, field.help, :class => 'help-block') : ''.html_safe
+      field.help.present? ? @template.content_tag(:p, field.help, :class => 'help-block') : ''.html_safe
     end
 
     def field_for field

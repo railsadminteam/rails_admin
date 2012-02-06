@@ -3,102 +3,41 @@
   Keep it clean, people
 */
 
-/* Application name */
-.topbar h3 {
-  small {
-    color:red;
-    font-weight:bold;
-  }
-}
-
-/* remove blockquote padding + border recursively */
-form blockquote {
-}
-
-form label.nester {
-  font-weight: bold;
-  width: auto;
-}
-
-
-
-form {
-  label { width:130px; }
-  legend, p { padding-left: 150px; }
-  .input { margin-left: 150px; }
-  p { margin-top: -10px; }
+body.rails_admin {
   
-  blockquote {
-    label { width:120px; }
-    legend, p { padding-left: 140px; }
-    .input { margin-left: 140px; }
-    blockquote {
-      label { width:110px; }
-      legend, p { padding-left: 130px; }
-      .input { margin-left: 130px; }
-      blockquote {
-        label { width:100px; }
-        legend, p { padding-left: 120px; }
-        .input { margin-left: 120px; }
-      }
+  /* Application name */
+  .navbar .brand {
+    small {
+      color:red;
+      font-weight:bold;
     }
+  }
+  padding-top: 60px;
+  .sidebar-nav {
+    padding: 9px 0;
   }
 }
 
-form {
-  blockquote {
-    border-left-width:5px;
-    margin-right:5px;
-    padding-left:5px;
-    padding-top:5px;
-    margin-bottom:0px;
-    
-    hr {
-      margin-left: -5px;
-      margin-top: 10px;
-      margin-bottom: 3px;
-    }
-    .remove_nested_fields {
-      margin-top:4px;
-    }
+.form-horizontal {
+  /* We want input size to be used, unfixate input width */
+  input, textarea {
+    width:auto;
+  }
+  .help-block {
+    clear:left;
+  }
+  input[type=file] {
+    display:block;
   }
 }
 
-a.label {
-  color:white;
-  text-decoration:none;
-}
-
-/* We want input size to be used, unfixate input width */
-input, textarea {
-  width:auto;
-}
-
-input[type=file] {
-  display:block;
-}
-
-/* ui-autocomplete has z-index 1 and is shown over filtering select button (.add-on) */
-.input-prepend .add-on, .input-append .add-on {
-  z-index:1;
-}
-
-/* Modals dimensionning */
 .modal {
-  width:700px;
-  margin:-285px 0 0 -350px;
-  .modal-body {
-    max-height:450px;
-    overflow-y:auto;
-  }
-}
-
-.help-block {
-  clear:left;
+  width: 750px;
+  margin-left: -375px;
 }
 
 /* Table cells behaviour */
-table.zebra-striped {
+.table {
   /* text-overflow when cell content > 150px */
   td {
     white-space: nowrap;

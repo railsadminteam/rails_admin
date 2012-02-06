@@ -50,8 +50,8 @@ module RailsAdmin
         current_level_nodes.group_by(&:navigation_label).map do |navigation_label, nodes|
           if navigation_label && navigation_label != current_navigation_label
             %{
-              <li class='navigation-label'>
-                <span class="label notice">#{navigation_label}</span>
+              <li class='nav-header'>
+                #{navigation_label}
                 <ul>
                   #{main_navigation(@nodes_stack, current_level_nodes.select{ |n| n.navigation_label == navigation_label }, navigation_label)}
                 </ul>
@@ -113,8 +113,8 @@ module RailsAdmin
     def bulk_menu abstract_model = @abstract_model
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
-      content_tag :li, { :class => 'dropdown', :style => 'float:right', :'data-dropdown' => "dropdown" } do
-        content_tag(:a, { :class => 'dropdown-toggle', :href => '#' }) { t('admin.misc.bulk_menu_title') } +
+      content_tag :li, { :class => 'dropdown', :style => 'float:right' } do
+        content_tag(:a, { :class => 'dropdown-toggle', :'data-toggle' => "dropdown", :href => '#' }) { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
         content_tag(:ul, :class => 'dropdown-menu') do
           actions.map do |action|
             content_tag :li do

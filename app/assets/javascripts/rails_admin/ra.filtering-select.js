@@ -55,7 +55,7 @@
             self._trigger("selected", event, {
               item: option
             });
-            $(self.element.parents('.input')[0]).find('.update').removeClass('disabled');
+            $(self.element.parents('.controls')[0]).find('.update').removeClass('disabled');
           },
           change: function(event, ui) {
             if (!ui.item) {
@@ -72,7 +72,7 @@
                 $(this).val(null);
                 select.html($('<option value="" selected="selected"></option>'));
                 input.data("autocomplete").term = "";
-                $(self.element.parents('.input')[0]).find('.update').addClass('disabled');
+                $(self.element.parents('.controls')[0]).find('.update').addClass('disabled');
                 return false;
               }
               

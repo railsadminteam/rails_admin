@@ -1,4 +1,4 @@
-%table.zebra-striped
+%table.table.table-condensed.table-striped
   %thead
     %tr
       %th.shrink.model-name= t "admin.table_headers.model_name"
@@ -21,7 +21,7 @@
           %td
             - count = @count[abstract_model.pretty_name]
             - percent = count > 0 ? (@max < 2.0 ? count : ((Math.log(count) * 100.0) / Math.log(@max))) : -1
-            .label.animate-width-to{:class => get_indicator(percent), :'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent].max.to_i}%", :style => "width:2%"}= @count[abstract_model.pretty_name]
+            .label.animate-width-to{:class => 'label-'+get_indicator(percent), :'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent - 1].max.to_i}%", :style => "width:2%"}= @count[abstract_model.pretty_name]
           %td.links
             %ul.inline= menu_for :collection, abstract_model
 - if @auditing_adapter && authorized?(:history)

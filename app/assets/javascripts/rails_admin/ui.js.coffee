@@ -23,11 +23,10 @@ $(document).ready ->
     $.pjax
       container: '[data-pjax-container]'
       url: this.action + (if (this.action.indexOf('?') != -1) then '&' else '?') + $(this).serialize()
-  $(".alert-message").alert()
-  $("[rel=twipsy]").twipsy()
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
-
-
+    
+  // bootstrap init
+  $('[rel=tooltip]').tooltip(delay: { show: 500, hide: 100 });
