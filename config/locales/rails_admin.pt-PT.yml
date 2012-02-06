@@ -81,7 +81,7 @@ pt-PT:
         title: "Exportar %{model_label}"
         menu: "Exportar"
         breadcrumb: "Exportar"
-        link: "Exportar encontrou %{model_label_plural}"
+        link: "Exportar %{model_label_plural} encontrados"
         bulk_link: "Exportar %{model_label_plural} selecionados"
         done: "exportados"
       history_index:
