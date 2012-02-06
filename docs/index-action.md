@@ -1,1 +1,13 @@
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/index.rb]]
+
+### Example authorization for cancan:
+
+```ruby
+  can :manage, :all
+  # includes
+  can :read, :all
+  # includes
+  can :read, Model
+  # includes
+  can :index, Model
+```
