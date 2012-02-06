@@ -1,5 +1,3 @@
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/new.rb]]
-
 ### Example authorizations for cancan:
 
 ```ruby
@@ -14,3 +12,5 @@
   # equals
   can :new, Model
 ```
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/new.rb]]
