@@ -40,4 +40,27 @@ This was taken from these discussion threads:
 * http://groups.google.com/group/rails_admin/msg/fe588202e4401dc4
 * http://groups.google.com/group/rails_admin/msg/5338518c540f9151
 
+One thing to be aware of, RailsAdmin hides :user_id when creating the :user belongs_to association. To get around this issue:
+
+```ruby
+config.model Post do 
+  edit do 
+    configure :user do
+      visible false
+    end
+  
+    field :user_id, :hidden do
+      visible true
+      default_value do
+        bindings[:view]._current_user.id
+      end
+    end
+  end 
+end
+```
+
+See the response by bbenezech in this issue for a detailed explanation:
+
+https://github.com/sferik/rails_admin/issues/963
+
 Some refinement may be required to avoid resetting the user of an existing item, if that's not desired.
