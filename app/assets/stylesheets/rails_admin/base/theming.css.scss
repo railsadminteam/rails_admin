@@ -36,9 +36,56 @@ body.rails_admin {
   margin-left: -375px;
 }
 
+.nav.nav-list {
+  .navigation-parent {
+    margin-top: 9px;
+    & > span {
+      font-size: 11px;
+      font-weight: bold;
+      line-height: $baseLineHeight;
+      color: $grayLight;
+      text-transform: uppercase;
+    }
+  }
+  
+  .active > a, .active > a:hover {
+    color: $white;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    background-color: $linkColor;
+  }
+  
+  ul {
+    list-style: none outside none;
+    margin: 0;
+    li a {
+      text-decoration: none;
+      display: block;
+      margin-left: -15px;
+      margin-right: -15px;
+      padding: 3px 15px;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+      &:hover {
+        background-color: $grayLighter;
+      }
+    }
+  }
+} 
+
+.nav.nav-list > li > ul > li {
+  & > a, & > span {
+    padding-left:20px;
+  }
+  
+  & > ul > li {
+    & > a {
+      padding-left:30px;
+    }
+  }
+}
+
+
 /* Table cells behaviour */
 .table {
-  
   .header {
     cursor: pointer;
     &:after {

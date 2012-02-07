@@ -50,8 +50,8 @@ module RailsAdmin
         current_level_nodes.group_by(&:navigation_label).map do |navigation_label, nodes|
           if navigation_label && navigation_label != current_navigation_label
             %{
-              <li class='nav-header'>
-                #{navigation_label}
+              <li class='navigation-parent'>
+                <span>#{navigation_label}</span>
                 <ul>
                   #{main_navigation(@nodes_stack, current_level_nodes.select{ |n| n.navigation_label == navigation_label }, navigation_label)}
                 </ul>
@@ -65,7 +65,7 @@ module RailsAdmin
                     #{node.label_plural}
                   </a>
                   <ul>
-                    #{main_navigation(@nodes_stack, @nodes_stack.select{ |n| n.parent == node.abstract_model.model })}
+                    #{main_navigation(@nodes_stack, @nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model.to_s })}
                   </ul>
                 </li>
               }
