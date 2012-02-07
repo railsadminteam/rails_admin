@@ -40,40 +40,33 @@ module RailsAdmin
       )
     end
     
-    def main_navigation nodes_stack = nil, current_level_nodes = nil, current_navigation_label = nil
-      @nodes_stack ||= (nodes_stack || RailsAdmin::Config.visible_models.select { |model| authorized?(:index, model.abstract_model) })
-      
-      current_level_nodes ||= @nodes_stack.select{ |n| n.parent.nil? }
-      case current_level_nodes
-      when [] # rec tail
-      else
-        current_level_nodes.group_by(&:navigation_label).map do |navigation_label, nodes|
-          if navigation_label && navigation_label != current_navigation_label
-            %{
-              <li class='navigation-parent'>
-                <span>#{navigation_label}</span>
-                <ul>
-                  #{main_navigation(@nodes_stack, current_level_nodes.select{ |n| n.navigation_label == navigation_label }, navigation_label)}
-                </ul>
-              </li>
-            }
-          else
-            nodes.map do |node|
-              %{
-                <li#{' class="active"' if node.page_type == @page_type }>
-                  <a href="#{index_path(:model_name => node.abstract_model.to_param)}">
-                    #{node.label_plural}
-                  </a>
-                  <ul>
-                    #{main_navigation(@nodes_stack, @nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model.to_s })}
-                  </ul>
-                </li>
-              }
-            end.join
-          end
+    
+    def main_navigation
+      nodes_stack = RailsAdmin::Config.visible_models.select { |model| authorized?(:index, model.abstract_model) }
+      nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
+        
+        %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + 
+        nodes.select{|n| n.parent.nil?}.map do |node|
+          %{
+            <li#{' class="active"' if node.page_type == @page_type }>
+              <a href="#{index_path(:model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
+            </li>
+            #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model.to_s}, 1)}
+          }.html_safe
         end.join.html_safe
-      end
+      end.join.html_safe
     end
+    
+    def navigation nodes_stack, nodes, level
+      nodes.map do |node|
+        %{             
+          <li#{' class="active"' if node.page_type == @page_type }>
+            <a class="nav-level-#{level}" href="#{index_path(:model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
+          </li>
+          #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model.to_s}, level + 1)}
+        }.html_safe
+      end.join
+    end  
 
     def breadcrumb action = @action, acc = []
       begin
