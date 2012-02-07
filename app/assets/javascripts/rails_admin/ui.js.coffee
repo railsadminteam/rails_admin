@@ -28,5 +28,5 @@ $(document).ready ->
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
     
-  // bootstrap init
+  # bootstrap init
   $('[rel=tooltip]').tooltip(delay: { show: 500, hide: 100 });
