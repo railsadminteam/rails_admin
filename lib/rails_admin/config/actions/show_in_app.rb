@@ -17,6 +17,11 @@ module RailsAdmin
             redirect_to main_app.url_for(@object)
           end
         end
+        
+        
+        register_instance_option :link_icon do
+          'icon-eye-open'
+        end        
       end
     end
   end

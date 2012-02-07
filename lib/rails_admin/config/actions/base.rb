@@ -7,6 +7,11 @@ module RailsAdmin
       class Base < RailsAdmin::Config::Base
         include RailsAdmin::Config::Hideable
         
+        # http://twitter.github.com/bootstrap/base-css.html#icons
+        register_instance_option :link_icon do
+          'icon-question-sign'
+        end
+        
         # Should the action be visible
         register_instance_option :visible? do
           authorized?

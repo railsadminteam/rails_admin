@@ -34,6 +34,10 @@ module RailsAdmin
         register_instance_option :route_fragment do
           ''
         end
+        
+        register_instance_option :link_icon do
+          'icon-home'
+        end        
       end
     end
   end

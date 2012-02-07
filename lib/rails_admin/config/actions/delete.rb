@@ -41,9 +41,12 @@ module RailsAdmin
               redirect_to back_or_index
               
             end
-            
           end
         end
+      
+        register_instance_option :link_icon do
+          'icon-remove'
+        end        
       end
     end
   end

@@ -28,6 +28,10 @@ module RailsAdmin
         register_instance_option :template_name do
           :history
         end
+        
+        register_instance_option :link_icon do
+          'icon-book'
+        end        
       end
     end
   end

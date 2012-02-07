@@ -11,7 +11,7 @@
       %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.misc.filter")}"}
     .span3
       %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
-%table#history.zebra-striped
+%table#history.table.table-striped.table-condensed
   %thead
     %tr
       - columns = []

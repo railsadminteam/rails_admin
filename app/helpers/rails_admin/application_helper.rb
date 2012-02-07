@@ -90,13 +90,15 @@ module RailsAdmin
     end
     
     # parent => :root, :collection, :member
-    def menu_for(parent, abstract_model = nil, object = nil) # perf matters here (no action view trickery)
+    def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
       actions = actions(parent, abstract_model, object).select{ |a| a.http_methods.include?(:get) }
       actions.map do |action|
+        wording = wording_for(:menu, action)
         %{
-          <li class="#{action.key}_#{parent}_link #{'active' if current_action?(action)}">
+          <li data-original-title="#{wording}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
             <a href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => object.try(:id) })}">
-              #{wording_for(:menu, action)}
+              <i class="#{action.link_icon}"></i>
+              <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
             </a>
           </li>
         }

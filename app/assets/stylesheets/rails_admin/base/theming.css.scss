@@ -54,6 +54,9 @@ body.rails_admin {
   }
 }
 
+.nav.nav-tabs li.icon a {
+  color: $black;
+}
 
 /* Table cells behaviour */
 .table {
@@ -110,18 +113,7 @@ body.rails_admin {
     max-width: none;
     .inline {
       margin:0px;
-      li {
-        display:inline-block;
-        a {
-          border-right: 1px solid #DDD;
-          padding-right: 5px;
-        }
-        &:last-child {
-          a {
-            border-right: none;
-          }
-        }
-      }
+      li { display:inline-block; }
     }
   }
 
