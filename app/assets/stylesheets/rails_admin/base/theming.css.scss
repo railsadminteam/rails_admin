@@ -38,6 +38,48 @@ body.rails_admin {
 
 /* Table cells behaviour */
 .table {
+  
+  .header {
+    cursor: pointer;
+    &:after {
+      content: "";
+      float: right;
+      margin-top: 7px;
+      border-width: 0 4px 4px;
+      border-style: solid;
+      border-color: #000 transparent;
+      visibility: hidden;
+    }
+  }
+  .headerSortUp,
+  .headerSortDown {
+    background-color: rgba(141,192,219,.25);
+    text-shadow: 0 1px 1px rgba(255,255,255,.75);
+  }
+  .header:hover {
+    &:after {
+      visibility:visible;
+    }
+  }
+  .headerSortDown,
+  .headerSortDown:hover {
+    &:after {
+      visibility:visible;
+      @include opacity(60);
+    }
+  }
+  .headerSortUp {
+    &:after {
+      border-bottom: none;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid #000;
+      visibility:visible;
+      @include box-shadow(none);
+      @include opacity(60);
+    }
+  }
+
   /* text-overflow when cell content > 150px */
   td {
     white-space: nowrap;
