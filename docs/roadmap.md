@@ -1,18 +1,15 @@
 # Roadmap
 
-## Version 0.0.0
-
-* Finish action documentation
-
 ## Version 0.1.0
 
-### I18n
-- add some doc for github online fast-edit solutions (translators != dev)
+### filters
+- select for belongs_to < 30 records
+- simplify search conf if > 30 records
+- date select
 
 ### html/CSS/JS
 - Needs testing: Android, IE7.
 - Fix all JS bugs on IE7+ . Found visual bug in multiselect
-- Move all JS code to coffee
 
 ### Tests
 - Move all functional testing to better targeted Unit tests
@@ -26,9 +23,6 @@
 
 ### `has_many :through`, `habtm`
 - find a solution for mobile devices (currently not intuitive)
-
-### Groups
-- better defaults (one group for each relation is dumb and group legend is repeated uselessly in field legend)
 
 ### Modals
 - desactivate add button if target requires source id to validate and source is a new record
