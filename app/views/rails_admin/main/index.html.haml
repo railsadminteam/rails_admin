@@ -38,7 +38,7 @@
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
     field_options = case field.type
     when :enum
-      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['value']).gsub("\n", '')
+      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['v']).gsub("\n", '')
     else
       ''
     end
@@ -73,16 +73,14 @@
       = "#list th.#{property.css_class} { width: #{property.column_width}px; min-width: #{property.column_width}px; }"
       = "#list td.#{property.css_class} { max-width: #{property.column_width}px; }"
   = form_tag(index_path(params.except(*%w[page f query])), :method => :get, :class => "pjax-form") do
-    .row
-      .span12
-        #filters_box
-    .row.clearfix
-      .span3
-        %input{:name => "query", :type => "search", :value => query, :placeholder => t("admin.misc.filter")}
-      .span3
+    .well
+      %span#filters_box
+      %hr.filters_box{:style => "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
+      %p.form-inline
+        %input.input-small{:name => "query", :type => "search", :value => query, :placeholder => t("admin.misc.filter")}
         %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
-      - if export_action
-        %span{:style => 'float:right'}=link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn info'
+        - if export_action
+          %span{:style => 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
