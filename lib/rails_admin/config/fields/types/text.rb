@@ -18,7 +18,7 @@ module RailsAdmin
           # If you want to have a different toolbar configuration for CKEditor
           # create your own custom config.js and override this configuration
           register_instance_option(:ckeditor_config_js) do
-            "/javascripts/ckeditor/config.js"
+            "/assets/ckeditor/config.js"
           end
 
           register_instance_option(:html_attributes) do
