@@ -5,12 +5,10 @@
 - sort_reverse = params[:sort_reverse]
 - path_method = params[:id] ? "history_show_path" : "history_index_path"
 
-= form_tag("", :method => "get", :class => "search") do
-  .row.clearfix
-    .span3
-      %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.misc.filter")}"}
-    .span3
-      %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
+= form_tag("", :method => "get", :class => "search form-inline") do
+  .well
+    %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.misc.filter")}", :class => 'input-small'}
+    %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
 %table#history.table.table-striped.table-condensed
   %thead
     %tr

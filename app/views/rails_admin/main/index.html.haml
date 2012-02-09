@@ -72,15 +72,14 @@
     - properties.select{ |p| p.column_width.present? }.each do |property|
       = "#list th.#{property.css_class} { width: #{property.column_width}px; min-width: #{property.column_width}px; }"
       = "#list td.#{property.css_class} { max-width: #{property.column_width}px; }"
-  = form_tag(index_path(params.except(*%w[page f query])), :method => :get, :class => "pjax-form") do
+  = form_tag(index_path(params.except(*%w[page f query])), :method => :get, :class => "pjax-form form-inline") do
     .well
       %span#filters_box
       %hr.filters_box{:style => "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
-      %p.form-inline
-        %input.input-small{:name => "query", :type => "search", :value => query, :placeholder => t("admin.misc.filter")}
-        %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
-        - if export_action
-          %span{:style => 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
+      %input.input-small{:name => "query", :type => "search", :value => query, :placeholder => t("admin.misc.filter")}
+      %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
+      - if export_action
+        %span{:style => 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action

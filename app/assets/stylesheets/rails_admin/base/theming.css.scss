@@ -5,133 +5,147 @@
 
 body.rails_admin {
   
+  /* room for upper navbar */
+  padding-top: 60px;
+  
   /* Application name */
   .navbar .brand {
     small {
-      color:red;
+      color:$red;
       font-weight:bold;
     }
   }
-  padding-top: 60px;
+  
   .sidebar-nav {
     padding: 9px 0;
   }
-}
-
-.form-horizontal {
-  /* We want input size to be used, unfixate input width */
-  input, textarea {
-    width:auto;
+  
+  /* fat labels in forms */
+  .label.form-label {
+    padding: 7px 7px 8px 7px;
   }
-  .help-block {
-    clear:left;
-  }
-  input[type=file] {
-    display:block;
-  }
-}
-
-.modal {
-  width: 750px;
-  margin-left: -375px;
-}
-
-.nav-list .active > a:hover {
-  color: $white;
-  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
-  background-color: $linkColor;
-}
-
-.nav.nav-list {
-  .nav-level-1 {
-    padding-left:20px;
-  }
-  .nav-level-2 {
-    padding-left:20px;
-  }
-  .nav-level-3 {
-    padding-left:20px;
-  }
-}
-
-.nav.nav-tabs li.icon a {
-  color: $black;
-}
-
-/* Table cells behaviour */
-.table {
-  .header {
-    cursor: pointer;
-    &:after {
-      content: "";
-      float: right;
-      margin-top: 7px;
-      border-width: 0 4px 4px;
-      border-style: solid;
-      border-color: #000 transparent;
-      visibility: hidden;
+  
+  /* new/edit/export forms */
+  .form-horizontal {
+    /* We want input size to be used, unfixate input width */
+    input, textarea {
+      width:auto;
     }
-  }
-  .headerSortUp,
-  .headerSortDown {
-    background-color: rgba(141,192,219,.25);
-    text-shadow: 0 1px 1px rgba(255,255,255,.75);
-  }
-  .header:hover {
-    &:after {
-      visibility:visible;
+    .help-block {
+      clear:left;
     }
-  }
-  .headerSortDown,
-  .headerSortDown:hover {
-    &:after {
-      visibility:visible;
-      @include opacity(60);
-    }
-  }
-  .headerSortUp {
-    &:after {
-      border-bottom: none;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 4px solid #000;
-      visibility:visible;
-      @include box-shadow(none);
-      @include opacity(60);
+    input[type=file] {
+      display:block;
     }
   }
 
-  /* text-overflow when cell content > 150px */
-  td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:150px;
+  .modal {
+    width: 750px;
+    margin-left: -375px;
   }
-
-  td.links {
-    max-width: none;
-    .inline {
-      margin:0px;
-      li { display:inline-block; }
+  
+  /* needed while https://github.com/thomas-mcdonald/bootstrap-sass/commit/6c37fa981b14502748f0935bd385e11ccc965a3f isn't released */
+  .nav-list .active > a:hover {
+    color: $white;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    background-color: $linkColor;
+  }
+  
+  /* nested nav */
+  .nav.nav-list {
+    .nav-level-1 {
+      padding-left:20px;
+    }
+    .nav-level-2 {
+      padding-left:30px;
+    }
+    .nav-level-3 {
+      padding-left:40px;
     }
   }
 
-  /* Shrink to content width */
-  .shrink {
-    width:1px;
-    white-space:nowrap;
+  /* tab links should match icon color */ 
+  .nav.nav-tabs li.icon a {
+    color: $black;
   }
 
-  /* Can't apply width:1px on sortable headers => don't play nice with sorting arrows on firefox. same for white-space:nowrap.. */
-  /* History */
-  th.created_at {
-    width:160px;
-  }
-  th.username {
-    width:140px;
-  }
-  th.item {
-    width:60px;
+  /* Table cells behaviour */
+  .table {
+    
+    /* backport of Bootstrap 1.4 table headers */
+    .header {
+      cursor: pointer;
+      &:after {
+        content: "";
+        float: right;
+        margin-top: 7px;
+        border-width: 0 4px 4px;
+        border-style: solid;
+        border-color: #000 transparent;
+        visibility: hidden;
+      }
+    }
+    .headerSortUp,
+    .headerSortDown {
+      background-color: rgba(141,192,219,.25);
+      text-shadow: 0 1px 1px rgba(255,255,255,.75);
+    }
+    .header:hover {
+      &:after {
+        visibility:visible;
+      }
+    }
+    .headerSortDown,
+    .headerSortDown:hover {
+      &:after {
+        visibility:visible;
+        @include opacity(60);
+      }
+    }
+    .headerSortUp {
+      &:after {
+        border-bottom: none;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #000;
+        visibility:visible;
+        @include box-shadow(none);
+        @include opacity(60);
+      }
+    }
+
+    /* text-overflow when cell content > 150px */
+    td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width:150px;
+    }
+    
+    /* icons */
+    td.links {
+      max-width: none;
+      .inline {
+        margin:0px;
+        li { display:inline-block; }
+      }
+    }
+
+    /* Shrink to content width */
+    .shrink {
+      width:1px;
+      white-space:nowrap;
+    }
+
+    /* History */
+    th.created_at {
+      width:160px;
+    }
+    th.username {
+      width:140px;
+    }
+    th.item {
+      width:60px;
+    }
   }
 }

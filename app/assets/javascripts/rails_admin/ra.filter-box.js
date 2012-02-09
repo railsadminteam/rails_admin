@@ -69,7 +69,7 @@
       }
 
       var content = '<p class="filter form-search">' +
-        '<span class="label label-info" style="padding:7px"><a href="#" class="delete"><i class="icon-trash icon-white"></i></a> ' + field_label + '</span> ' +
+        '<span class="label label-info form-label"><a href="#" class="delete"><i class="icon-trash icon-white"></i></a> ' + field_label + '</span> ' +
         control + " " +
         (additional_control || '') +
       '</div> ';
