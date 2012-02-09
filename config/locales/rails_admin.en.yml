@@ -78,7 +78,7 @@ en:
         breadcrumb: "Multiple delete"
         bulk_link: "Delete selected %{model_label_plural}"
       export:
-        title: "Export %{model_label}"
+        title: "Export %{model_label_plural}"
         menu: "Export"
         breadcrumb: "Export"
         link: "Export found %{model_label_plural}"
