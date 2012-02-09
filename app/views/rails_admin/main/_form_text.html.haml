@@ -2,8 +2,8 @@
 
 - if field.ckeditor
   = javascript_tag do
-    var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
-  = javascript_include_tag "/javascripts/ckeditor/ckeditor.js"
+    var CKEDITOR_BASEPATH = '/assets/ckeditor/';
+  = javascript_include_tag "/assets/ckeditor/ckeditor.js"
   = form.javascript_for(field, :modal => false) do
     :plain
       CKEDITOR.replace('#{form.dom_id(field)}', { customConfig : '#{field.ckeditor_config_js.html_safe}' });
