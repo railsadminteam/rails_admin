@@ -37,6 +37,48 @@ body.rails_admin {
     input[type=file] {
       display:block;
     }
+    .thumbnail {
+      float:left;
+      & + * {
+        clear:left;
+      }
+    }
+    /* nested forms */
+    .tab-content .tab-pane {
+      border-left:5px solid $blue;
+      padding-left:5px;
+      fieldset {
+        margin-left:-10px;
+      }
+    }
+    
+    /* double nesting, guys. Easy. */
+    .tab-content .tab-content .tab-pane {
+      border-color:lighten($blue, 20%);
+      margin-left:10px;
+      fieldset {
+        margin-left:-20px;
+        margin-bottom: -18px;
+      }
+    }
+    
+    /* triple nesting!*/
+    .tab-content .tab-content .tab-content .tab-pane {
+      border-color:lighten($blue, 30%);
+      margin-left:20px;
+      fieldset {
+        margin-left:-30px;
+      }
+    }
+    
+    /* totally awesome! nesting on 4 levels! */
+    .tab-content .tab-content .tab-content .tab-pane {
+      border-color:lighten($blue, 40%);
+      margin-left:30px;
+      fieldset {
+        margin-left:-40px;
+      }
+    }
   }
 
   .modal {
@@ -71,7 +113,12 @@ body.rails_admin {
 
   /* Table cells behaviour */
   .table {
-    
+    .thumbnail {
+      float:left;
+      & + * {
+        clear:left;
+      }
+    }
     /* backport of Bootstrap 1.4 table headers */
     .header {
       cursor: pointer;

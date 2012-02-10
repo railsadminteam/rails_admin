@@ -1,6 +1,16 @@
+.controls
+  %ul.nav.nav-pills{:style => 'margin-bottom:0px'}
+  = form.errors_for(field)
+  = form.help_for(field)
+  
 - form.object.send("build_#{field.name}") unless form.object.send(field.name)
-= form.fields_for field.name do |nested_form|
-  %blockquote
-    = nested_form.link_to_remove t('admin.misc.remove'), :class => 'label label-info'
-    = nested_form.generate({:action => :create, :model_config => field.associated_model_config, :nested_in => field.name })
-    %hr
+.tab-content
+  = form.fields_for field.name do |nested_form|
+    = nested_form.generate({:action => :nested, :model_config => field.associated_model_config, :nested_in => field.name })
+
+= form.javascript_for(field) do
+  :plain
+    $("#{form.jquery_namespace(field)}>.tab-content>.fields").addClass('tab-pane').each(function(){
+      $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+    });
+    $("#{form.jquery_namespace(field)}>.controls>.nav>li>a[data-toggle]:first").tab('show');

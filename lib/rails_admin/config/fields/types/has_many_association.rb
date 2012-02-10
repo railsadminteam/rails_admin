@@ -8,11 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          # Accessor for field's help text displayed below input field.
-          register_instance_option :help do
-            ""
-          end
-
           register_instance_option :partial do
             nested_form ? :form_nested_many : :form_filtering_multiselect
           end

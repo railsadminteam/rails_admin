@@ -1,6 +1,6 @@
 $ = jQuery
 
-$("#list input.checkbox.toggle").live "click", ->
+$("#list input.checkbox.toggle").on "click", ->
   checked_status = $(this).is(":checked")
   $("td.action.select input.checkbox[name='bulk_ids[]']").each ->
     $(this).attr "checked", checked_status
@@ -15,7 +15,7 @@ $("#list a, #list form").live "ajax:complete", (xhr, data, status) ->
 $("table#history th.header").live "click", ->
   if $(this).data("link")
     window.location = $(this).data("link")
-
+  
 $(document).ready ->
   $('.pjax').pjax('[data-pjax-container]')
   $('.pjax-form').live 'submit', (event) ->
@@ -27,5 +27,4 @@ $(document).ready ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
-    
-  $('[rel=tooltip]').tooltip(delay: { show: 500, hide: 100 });
+  $('[rel=tooltip]').tooltip(delay: { show: 200, hide: 500 });

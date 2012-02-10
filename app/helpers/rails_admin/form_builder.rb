@@ -11,6 +11,8 @@ module RailsAdmin
         :nested_in => false
       })
       groups = options[:model_config].send(options[:nested_in] ? :nested : options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups
+      
+      objects_infos +
       groups.map do |fieldset|
         fieldset_for fieldset, options[:nested_in]
       end.join.html_safe +
@@ -36,25 +38,17 @@ module RailsAdmin
         # do not show nested field if the target is the origin
         unless field.inverse_of.presence && field.inverse_of == nested_in
           @template.content_tag(:div, :class => "clearfix control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, :class => (field.nested_form ? 'nester input control-label' : 'control-label')) +
-            (field.nested_form ? nested_inputs_for(field) : input_for(field))
+            label(field.method_name, field.label, :class => 'control-label') +
+            (field.nested_form ? field_for(field) : input_for(field))
           end
         end
       end
     end
     
-    def nested_inputs_for field
-      @template.content_tag(:div, :class => 'controls') do
-        errors_for(field) +
-        help_for(field)
-      end + '<div class="row"></div>'.html_safe +
-      field_for(field)
-    end
-
     def input_for field
       @template.content_tag(:div, :class => 'controls') do
         field_for(field) +
-        errors_for(field) +
+        errors_for(field) + 
         help_for(field)
       end
     end
@@ -73,6 +67,16 @@ module RailsAdmin
       else
         field.render
       end
+    end
+    
+    def objects_infos
+      model_config = RailsAdmin.config(object)
+      model_label = model_config.label
+      object_label = (object.new_record? ? "New #{model_label}" : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
+      
+      %{
+        <span style="display:none" class="objects_infos" data-model-label="#{model_label}" data-object-label="#{object_label}"></span>
+      }.html_safe
     end
     
     def javascript_for(field, options = {}, &block)
