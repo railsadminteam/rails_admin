@@ -2,7 +2,7 @@
   = form.link_to_add '<i class="icon-plus icon-white"></i>'.html_safe, field.name, { :class => 'btn btn-info' }
   = form.errors_for(field)
   = form.help_for(field)
-  %ul.nav.nav-pills{:style => 'margin-top:5px'}
+  %ul.nav.nav-pills{ :style => 'margin-top:5px' }
   
 .tab-content
   = form.fields_for field.name do |nested_form|
@@ -12,7 +12,9 @@
 = form.javascript_for(field) do
   :plain
     $("#{form.jquery_namespace(field)}>.tab-content>.fields").addClass('tab-pane').each(function(){
-      $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+      if(!$("#{form.jquery_namespace(field)}>.controls>.nav").find('li>a[href="#' + this.id + '"]').length) { // check needed because chunk is moved around by nested_form
+        $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+      }
     });
     $("#{form.jquery_namespace(field)}>.controls>.nav>li>a[data-toggle]:first").tab('show');
     if($("#{form.jquery_namespace(field)}>.controls>.nav").children().length == 0) {

@@ -11,6 +11,8 @@
 = form.javascript_for(field) do
   :plain
     $("#{form.jquery_namespace(field)}>.tab-content>.fields").addClass('tab-pane').each(function(){
-      $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+      if(!$("#{form.jquery_namespace(field)}>.controls>.nav").find('li>a[href="#' + this.id + '"]').length) { // check needed because chunk is moved around by nested_form
+        $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+      }
     });
     $("#{form.jquery_namespace(field)}>.controls>.nav>li>a[data-toggle]:first").tab('show');
