@@ -2,9 +2,8 @@ $ = jQuery
 
 $('form').live 'nested:fieldAdded', (content) ->
   field = content.field.addClass('tab-pane');
-  new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.objects_infos').data('object-label') + '</a></li>');
-  parent_group = field.closest(".control-group");
-  parent_group.children('.tab-content').append(field)
+  new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.objects_infos').data('object-label') + '</a></li>')
+  parent_group = field.closest(".control-group")
   nav = parent_group.children('.controls').children('.nav')
   nav.append(new_tab)
   new_tab.children('a').tab('show')
