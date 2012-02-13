@@ -43,6 +43,11 @@ body.rails_admin {
         clear:left;
       }
     }
+    
+    legend {
+      margin-left: 0px; padding-left: 20px; padding-top: 10px; border-bottom-width: 0px; margin-bottom: 0px;
+    }
+    
     /* nested forms */
     .tab-content .tab-pane {
       border-left:5px solid $blue;
