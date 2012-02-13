@@ -2,7 +2,7 @@
   = form.link_to_add '<i class="icon-plus icon-white"></i>'.html_safe, field.name, { :class => 'btn btn-info' }
   = form.errors_for(field)
   = form.help_for(field)
-  %ul.nav.nav-pills{ :style => 'margin-top:5px' }
+  %ul.nav.nav-tabs{ :style => 'margin-top:5px' }
   
 .tab-content
   = form.fields_for field.name do |nested_form|
