@@ -106,8 +106,8 @@ en:
       all_of_the_following_related_items_will_be_deleted: "? The following related items may be deleted or orphaned:"
       are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete this %{model_name}"
       confirmation: "Yes, I'm sure"
-      delete_confirmation: "Delete confirmation"
       bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+      new_model: "%{name} (new)"
     export:      
       confirmation: "Export to %{name}"
       select: "Select fields to export"

@@ -72,7 +72,7 @@ module RailsAdmin
     def objects_infos
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
-      object_label = (object.new_record? ? "New #{model_label}" : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
+      object_label = (object.new_record? ? I18n.t('admin.form.new_model', :name => model_label) : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
       
       %{
         <span style="display:none" class="objects_infos" data-model-label="#{model_label}" data-object-label="#{object_label}"></span>
