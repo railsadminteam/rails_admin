@@ -5,7 +5,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
   subject { page }
 
   describe "successful bulk delete of records" do
-    before(:each) do
+    before do
       RailsAdmin::History.destroy_all
       RailsAdmin.config { |c| c.audit_with :history }
       @players = 3.times.map { FactoryGirl.create(:player) }
@@ -17,32 +17,19 @@ describe "RailsAdmin Basic Bulk Destroy" do
 
     it "should not contain deleted records" do
       RailsAdmin::AbstractModel.new("Player").count.should == 1
-    end
-
-    it "history count should be equal to number of deleted records" do
       RailsAdmin::History.count.should == @delete_ids.count
-    end
-
-    it "history items should be for proper table" do
       RailsAdmin::History.all.each do |history|
         history.table.should == "Player"
       end
-    end
-
-    it "history items should be for proper items" do
       RailsAdmin::History.all.each do |history|
         @delete_ids.should include(history.item)
       end
-    end
-
-    it "displays a flash notice stating the number of records destroyed" do
-      # 2 Players because @delete_ids.count == 2:
-      page.should have_selector(".alert-message", :text => "2 Players successfully deleted")
+      page.should have_selector(".alert-success", :text => "2 Players successfully deleted")
     end
   end
 
   describe "cancelled bulk_deletion" do
-    before(:each) do
+    before do
       RailsAdmin::History.destroy_all
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)

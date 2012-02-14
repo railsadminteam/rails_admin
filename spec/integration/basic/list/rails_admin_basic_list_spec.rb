@@ -16,7 +16,7 @@ describe "RailsAdmin Basic List" do
     it "should redirect to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'
       page.driver.status_code.should eql(404)
-      find('.alert-message.error').should have_content("Model 'Whatever' could not be found")
+      find('.alert-error').should have_content("Model 'Whatever' could not be found")
     end
   end
   
@@ -24,7 +24,7 @@ describe "RailsAdmin Basic List" do
     it "should redirect to balls index and inform the user the id wasn't found" do
       visit '/admin/ball/545-typo'
       page.driver.status_code.should eql(404)
-      find('.alert-message.error').should have_content("Ball with id '545-typo' could not be found")
+      find('.alert-error').should have_content("Ball with id '545-typo' could not be found")
     end
   end
 
