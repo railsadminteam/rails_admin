@@ -69,4 +69,4 @@ You can use a different URL scope for `RailsAdmin` by changing `mount RailsAdmin
 
 **Double insertion of NestedFields**
 
-jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See #924
+jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See [[#924|https://github.com/sferik/rails_admin/issues/924]]
