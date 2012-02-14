@@ -35,7 +35,7 @@ describe RailsAdmin::ApplicationHelper do
       
       helper.action(:dashboard).should == nil
     end
-    
+        
     it 'should return only visible actions, passing all bindings' do
       RailsAdmin.config do |config|
         config.actions do
@@ -198,6 +198,23 @@ describe RailsAdmin::ApplicationHelper do
       result = helper.main_navigation
       result.should match /(nav\-header).*(Navigation).*(Balls)/m
       result.should_not match "Comments"
+    end
+    
+    it "should show children of hidden models" do # https://github.com/sferik/rails_admin/issues/978
+      RailsAdmin.config do |config|
+        config.included_models = [Ball, Hardball]
+        config.model Ball do
+          hide
+        end
+      end
+      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Hardballs)/m
+    end
+    
+    it "should show children of excluded models" do
+      RailsAdmin.config do |config|
+        config.included_models = [Hardball]
+      end
+      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
     
     it 'should "nest" in navigation label' do

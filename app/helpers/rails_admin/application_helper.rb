@@ -46,7 +46,7 @@ module RailsAdmin
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
         
         %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + 
-        nodes.select{|n| n.parent.nil?}.map do |node|
+        nodes.select{|n| n.parent.nil? || !n.parent.in?(nodes_stack.map{|c| c.abstract_model.model }) }.map do |node|
           %{
             <li#{' class="active"' if node.page_type == @page_type }>
               <a href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>

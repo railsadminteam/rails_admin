@@ -42,6 +42,22 @@ describe RailsAdmin::Config::Actions do
       RailsAdmin::Config::Actions.find(:custom_root, {:controller => "controller"}).should be_a(RailsAdmin::Config::Actions::Base)
     end
     
+    it 'should check bindings[:abstract_model] visibility while checking action\'s visibility' do
+      RailsAdmin.config Team do 
+        hide
+      end
+      
+      RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Comment)}).should be_a(RailsAdmin::Config::Actions::Index) #decoy
+      RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Team)}).should be_nil
+    end
+    
+    it 'should check bindings[:abstract_model] presence while checking action\'s visibility' do
+      RailsAdmin.config do |config|
+        config.excluded_models << Team
+      end
+      RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Comment)}).should be_a(RailsAdmin::Config::Actions::Index) #decoy
+      RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Team)}).should be_nil
+    end
   end
   
   describe 'all' do

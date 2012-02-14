@@ -14,7 +14,7 @@ module RailsAdmin
         
         # Should the action be visible
         register_instance_option :visible? do
-          authorized?
+          authorized? && (bindings[:abstract_model] ? RailsAdmin.config(bindings[:abstract_model]).with(bindings).try(:visible?) : true)
         end
         
         register_instance_option :authorized? do
