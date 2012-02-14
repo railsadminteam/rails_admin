@@ -180,6 +180,59 @@ describe RailsAdmin::ApplicationHelper do
     end
   end
   
+  describe "#main_navigation" do
+    it 'should show included models' do
+      RailsAdmin.config do |config|
+        config.included_models = [Ball, Comment]
+      end
+      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Balls).*(Comments)/m
+    end
+    
+    it 'should not show unvisible models' do
+      RailsAdmin.config do |config|
+        config.included_models = [Ball, Comment]
+        config.model Comment do
+          hide
+        end
+      end
+      result = helper.main_navigation
+      result.should match /(nav\-header).*(Navigation).*(Balls)/m
+      result.should_not match "Comments"
+    end
+    
+    it 'should "nest" in navigation label' do
+      RailsAdmin.config do |config|
+        config.included_models = [Comment]
+        config.model Comment do
+          navigation_label 'commentable'
+        end
+      end
+      helper.main_navigation.should match /(nav\-header).*(commentable).*(Comments)/m
+    end
+    
+    it 'should "nest" in parent model' do
+      RailsAdmin.config do |config|
+        config.included_models = [Player, Comment]
+        config.model Comment do
+          parent Player
+        end
+      end
+      helper.main_navigation.should match /(Players).*(nav\-level\-1).*(Comments)/m
+    end
+    
+    it 'should order' do
+      RailsAdmin.config do |config|
+        config.included_models = [Player, Comment]
+      end
+      helper.main_navigation.should match /(Comments).*(Players)/m
+      
+      RailsAdmin.config(Comment) do 
+        weight 1
+      end
+      helper.main_navigation.should match /(Players).*(Comments)/m
+    end
+  end
+  
   describe "#bulk_menu" do
     it 'should include all visible bulkable actions' do
       RailsAdmin.config do |config|
