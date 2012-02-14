@@ -42,7 +42,7 @@ Add this to your `config/environments/production.rb`:
 
 If you still have issue with the asset pipeline:
 
-* make sure you are using latest Rails 3.1 and Sprockets release
+* make sure you didn't commit your assets in public/assets
 * Some css/js assets are not meant to be compiled alone:
  * make sure you don't have any catch-all *.(css|js) in `config.assets.precompile`
  * make sure you don't have any catch-all `require_tree .` in application.(css|js)
@@ -64,3 +64,9 @@ See: https://github.com/gregbell/active_admin/issues/330
 This happens because Rails engine router is greedy. It matches `/admin_users/sign_in` with `RailsAdmin::Engine`'s `_users/sign_in` which one is not authorized to see.
 
 You can use a different URL scope for `RailsAdmin` by changing `mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'` in your `config/routes.rb`. e.g. You could do `mount RailsAdmin::Enging => '/foo_admin', ...`.
+
+***
+
+**Double insertion of NestedFields
+
+jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See #924
