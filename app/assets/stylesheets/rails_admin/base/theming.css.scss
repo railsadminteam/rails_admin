@@ -45,7 +45,9 @@ body.rails_admin {
     }
     
     legend {
-      margin-left: 0px; padding-left: 20px; padding-top: 10px; border-bottom-width: 0px; margin-bottom: 0px;
+      margin-left: 0px; padding-left: 0px; padding-top: 10px; border-bottom-width: 0px; margin-bottom: 0px;
+      text-align:right;
+      width:140px;
     }
     
     /* nested forms */
@@ -54,6 +56,10 @@ body.rails_admin {
       padding-left:5px;
       fieldset {
         margin-left:-10px;
+        .control-group > label, legend {
+          padding-left:10px;
+          width:130px;
+        }
       }
     }
     
@@ -64,6 +70,10 @@ body.rails_admin {
       fieldset {
         margin-left:-20px;
         margin-bottom: -18px;
+        .control-group > label, legend {
+          padding-left:20px;
+          width:120px;
+        }
       }
     }
     
@@ -73,15 +83,23 @@ body.rails_admin {
       margin-left:20px;
       fieldset {
         margin-left:-30px;
+        .control-group > label, legend {
+          padding-left:30px;
+          width:110px;
+        }
       }
     }
     
     /* totally awesome! nesting on 4 levels! */
-    .tab-content .tab-content .tab-content .tab-pane {
+    .tab-content .tab-content .tab-content  .tab-content .tab-pane {
       border-color:lighten($blue, 40%);
       margin-left:30px;
       fieldset {
         margin-left:-40px;
+        .control-group > label, legend {
+          padding-left:40px;
+          width:100px;
+        }
       }
     }
   }
