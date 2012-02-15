@@ -8,7 +8,9 @@
 = form_tag("", :method => "get", :class => "search form-inline") do
   .well
     %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.misc.filter")}", :class => 'input-small'}
-    %button.btn.btn-primary{:type => "submit", :'data-disable-with' => t("admin.misc.refresh")}= t("admin.misc.refresh")
+    %button.btn.btn-primary{:type => "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+      %i.icon-white.icon-refresh
+      = t("admin.misc.refresh")
 %table#history.table.table-striped.table-condensed
   %thead
     %tr
