@@ -333,14 +333,7 @@ module RailsAdmin
       end
 
       def association_child_key_lookup(association)
-        case association.macro
-        when :belongs_to
-          association.options[:foreign_key].try(:to_sym) || "#{association.name}_id".to_sym
-        when :has_one, :has_many, :has_and_belongs_to_many
-          association.foreign_key.to_sym
-        else
-          raise "Unknown association type: #{association.macro.inspect}"
-        end
+        association.foreign_key.to_sym
       end
     end
   end
