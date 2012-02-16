@@ -263,4 +263,18 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
   end
+  
+  describe "#render" do
+    it "is configurable" do
+      RailsAdmin.config Team do
+        field :name do
+          render do
+            'rendered'
+          end
+        end
+      end
+      RailsAdmin.config(Team).field(:name).render.should == 'rendered'
+    end
+  end
+
 end

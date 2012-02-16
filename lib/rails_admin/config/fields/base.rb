@@ -156,7 +156,7 @@ module RailsAdmin
             v.is_a?(ActiveModel::Validations::LengthValidator)}.try{|v| v.options} || {}
         end
 
-        register_instance_option(:partial) do
+        register_instance_option :partial do
           :form_field
         end
 
@@ -201,15 +201,16 @@ module RailsAdmin
         register_instance_option :children_fields do
           []
         end
-                
+        
+        register_instance_option :render do
+          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
+        end
+
         def editable
           return false if @properties && @properties[:read_only]
           !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
         end
         
-        def render
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
-        end
 
         # Is this an association
         def association?
