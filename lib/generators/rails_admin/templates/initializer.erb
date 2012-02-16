@@ -31,10 +31,10 @@ RailsAdmin.config do |config|
 
   #  ==> Included models
   # Add all excluded models here:
-  # config.excluded_models = [<%= RailsAdmin::AbstractModel.all_models.map(&:name).join(', ') %>]
+  # config.excluded_models = [<%= RailsAdmin::AbstractModel.all.map{|am| am.model.to_s }.join(', ') %>]
 
   # Add models here if you want to go 'whitelist mode':
-  # config.included_models = [<%= RailsAdmin::AbstractModel.all_models.map(&:name).join(', ') %>]
+  # config.included_models = [<%= RailsAdmin::AbstractModel.all.map{|am| am.model.to_s }.join(', ') %>]
 
   # Application wide tried label methods for models' instances
   # config.label_methods << :description # Default is [:name, :title]

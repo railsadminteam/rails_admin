@@ -190,6 +190,26 @@ module RailsAdmin
           raise ArgumentError, "Search operator '#{operator}' not supported"
         end
       end
+      
+      # pool of all found model names from the whole application
+      def models_pool
+        possible = 
+          included_models.map(&:to_s).presence || 
+          ([Rails.application] + Rails::Application::Railties.engines).map do |app|
+            (app.paths['app/models'] + app.config.autoload_paths).map do |load_path|
+              Dir.glob(app.root.join(load_path)).map do |load_dir|
+                Dir.glob(load_dir + "/**/*.rb").map do |filename|
+                  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+                  lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+                end
+              end
+            end
+          end.flatten
+        
+        excluded = (excluded_models.map(&:to_s) + ['RailsAdmin::History'])
+        
+        (possible - excluded).uniq.sort{|x, y| x.to_s <=> y.to_s}
+      end
 
       # Loads a model configuration instance from the registry or registers
       # a new one if one is yet to be added.
@@ -206,7 +226,7 @@ module RailsAdmin
       def model(entity, &block)
         key = begin
           if entity.kind_of?(RailsAdmin::AbstractModel)
-            entity.model.name.to_sym
+            entity.model.try(:name).try :to_sym
           elsif entity.kind_of?(Class)
             entity.name.to_sym
           elsif entity.kind_of?(String) || entity.kind_of?(Symbol)
@@ -281,9 +301,15 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Hideable
       def visible_models
-        self.models.select {|m| m.visible? }.sort do |a, b|
+        models.select(&:visible).sort do |a, b|
           (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
         end
+      end
+      
+      private
+
+      def lchomp(base, arg)
+        base.to_s.reverse.chomp(arg.to_s.reverse).reverse
       end
     end
 

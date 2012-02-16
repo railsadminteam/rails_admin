@@ -10,9 +10,9 @@ module RailsAdmin
 
       def self.polymorphic_parents(name)
         @@polymorphic_parents ||= {}.tap do |hash|
-          RailsAdmin::AbstractModel.all_models.each do |klass|
-            klass.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
-              (hash[reflection.options[:as].to_sym] ||= []) << klass
+          RailsAdmin::AbstractModel.all(:active_record).each do |am|
+            am.model.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
+              (hash[reflection.options[:as].to_sym] ||= []) << am.model
             end
           end
         end

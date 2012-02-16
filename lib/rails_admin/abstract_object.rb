@@ -1,4 +1,4 @@
- module RailsAdmin
+module RailsAdmin
   class AbstractObject
     # undef almost all of this class's methods so it will pass almost
     # everything through to its delegate using method_missing (below).

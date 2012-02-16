@@ -48,19 +48,19 @@ module RailsAdmin
       # Unless configured in a model config block, it'll try to use :name followed by :title methods, then
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
-      register_instance_option(:object_label_method) do
+      register_instance_option :object_label_method do
         @object_label_method ||= Config.label_methods.find { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
       end
 
-      register_instance_option(:label) do
+      register_instance_option :label do
         (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
       end
 
-      register_instance_option(:label_plural) do
+      register_instance_option :label_plural do
         (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => 2, :default => label.pluralize)
       end
 
-      register_instance_option(:weight) do
+      register_instance_option :weight do
         0
       end
 
@@ -75,7 +75,7 @@ module RailsAdmin
         end
       end
 
-      register_instance_option(:navigation_label) do
+      register_instance_option :navigation_label do
          @navigation_label ||= (self.parent ? nil : (((parent_module = abstract_model.model.parent) != Object) ? parent_module.to_s : nil))
       end
 

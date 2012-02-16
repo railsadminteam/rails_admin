@@ -63,8 +63,7 @@ RSpec.configure do |config|
     RailsAdmin.reset
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest, Category]
     RailsAdmin::Config.audit_with :history
-    RailsAdmin::AbstractModel.all_models = nil
-    RailsAdmin::AbstractModel.all_abstract_models = nil
+    RailsAdmin::AbstractModel.all = nil
     RailsAdmin::AbstractModel.new("Category").destroy_all!
     RailsAdmin::AbstractModel.new("Division").destroy_all!
     RailsAdmin::AbstractModel.new("Draft").destroy_all!
