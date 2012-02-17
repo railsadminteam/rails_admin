@@ -194,17 +194,19 @@ module RailsAdmin
       # pool of all found model names from the whole application
       def models_pool
         possible = 
-          included_models.map(&:to_s).presence || 
-          ([Rails.application] + Rails::Application::Railties.engines).map do |app|
-            (app.paths['app/models'] + app.config.autoload_paths).map do |load_path|
-              Dir.glob(app.root.join(load_path)).map do |load_dir|
-                Dir.glob(load_dir + "/**/*.rb").map do |filename|
-                  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
-                  lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+          included_models.map(&:to_s).presence || (
+          @@system_models ||= # memoization for tests
+            ([Rails.application] + Rails::Application::Railties.engines).map do |app|
+              (app.paths['app/models'] + app.config.autoload_paths).map do |load_path|
+                Dir.glob(app.root.join(load_path)).map do |load_dir|
+                  Dir.glob(load_dir + "/**/*.rb").map do |filename|
+                    # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+                    lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+                  end
                 end
               end
-            end
-          end.flatten
+            end.flatten
+          )
         
         excluded = (excluded_models.map(&:to_s) + ['RailsAdmin::History'])
         

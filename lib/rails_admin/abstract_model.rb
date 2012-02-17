@@ -6,6 +6,10 @@ module RailsAdmin
     attr_reader :model, :adapter
     
     class << self
+      def reset
+        @@all = nil
+      end
+      
       def all(adapter = nil)
         @@all ||= Config.models_pool.map{ |m| new(m) }.compact
         adapter ? @@all.select{|m| m.adapter == adapter} : @@all

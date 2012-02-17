@@ -31,9 +31,4 @@ module RailsAdmin
       RailsAdmin::Config
     end
   end
-
-  # Reset RailsAdmin configuration to defaults
-  def self.reset
-    RailsAdmin::Config.reset
-  end
 end

@@ -4,7 +4,7 @@ require 'rails_admin/abstract_object'
 
 module RailsAdmin
   module Adapters
-    module ActiveRecord
+    module ActiveRecord      
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial]
       @@polymorphic_parents = nil
 
@@ -55,13 +55,7 @@ module RailsAdmin
       end
 
       def destroy(objects)
-        [objects].flatten.map &:destroy
-      end
-
-      def destroy_all!
-        model.all.each do |object|
-          object.destroy
-        end
+        Array.wrap(objects).each &:destroy
       end
 
       def has_and_belongs_to_many_associations

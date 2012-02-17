@@ -60,31 +60,27 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.before(:each) do
-    RailsAdmin.reset
+    RailsAdmin::Config.reset
+    RailsAdmin::AbstractModel.reset
     RailsAdmin::Config.excluded_models = [RelTest, FieldTest, Category]
     RailsAdmin::Config.audit_with :history
-    RailsAdmin::AbstractModel.all = nil
-    RailsAdmin::AbstractModel.new("Category").destroy_all!
-    RailsAdmin::AbstractModel.new("Division").destroy_all!
-    RailsAdmin::AbstractModel.new("Draft").destroy_all!
-    RailsAdmin::AbstractModel.new("Fan").destroy_all!
-    RailsAdmin::AbstractModel.new("League").destroy_all!
-    RailsAdmin::AbstractModel.new("Player").destroy_all!
-    RailsAdmin::AbstractModel.new("Team").destroy_all!
-    RailsAdmin::AbstractModel.new("User").destroy_all!
-    RailsAdmin::AbstractModel.new("Foo::Bar").destroy_all!
-    RailsAdmin::AbstractModel.new("FieldTest").destroy_all!
-
-    user = User.create(
+    Category.delete_all
+    Division.delete_all
+    Draft.delete_all
+    Fan.delete_all
+    League.delete_all
+    Player.delete_all
+    Team.delete_all
+    User.delete_all
+    Foo::Bar.delete_all
+    FieldTest.delete_all
+    login_as User.create(
       :email => "username@example.com",
       :password => "password"
     )
-
-    login_as user
   end
 
   config.after(:each) do
-    
     Warden.test_reset!
   end
 end
