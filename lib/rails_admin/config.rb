@@ -208,7 +208,7 @@ module RailsAdmin
         
         excluded = (excluded_models.map(&:to_s) + ['RailsAdmin::History'])
         
-        (possible - excluded).uniq.sort{|x, y| x.to_s <=> y.to_s}
+        (possible - excluded).uniq.sort
       end
 
       # Loads a model configuration instance from the registry or registers
