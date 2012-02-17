@@ -1,5 +1,6 @@
 .controls
-  %ul.nav.nav-pills{:style => 'margin-bottom:0px'}
+  %ul.nav{:style => 'margin-bottom:0px; display:none'}
+  %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content", :class => (field.active? ? 'active' : '') }
   = form.errors_for(field)
   = form.help_for(field)
   
@@ -10,7 +11,25 @@
 
 = form.javascript_for(field) do
   :plain
-    $("#{form.jquery_namespace(field)}>.tab-content>.fields").addClass('tab-pane').each(function(){
-      $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+    var field = $("#{form.jquery_namespace(field)}");
+    var nav = field.find("> .controls > .nav");
+    var content = field.find("> .tab-content");
+    var toggler = field.find('> .controls > .toggler');
+    
+    content.children(".fields").addClass('tab-pane').each(function(){
+      nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>');
     });
-    $("#{form.jquery_namespace(field)}>.controls>.nav>li>a[data-toggle]:first").tab('show');
+    
+    var first_tab = nav.find("> li > a[data-toggle='tab']:first");
+    
+    first_tab.tab('show');
+    field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html());
+    
+    if (toggler.hasClass('active')) {
+      toggler.children('i').addClass('icon-chevron-down');
+      content.show()
+    } else {
+      toggler.children('i').addClass('icon-chevron-right');
+      content.hide()
+    }
+    

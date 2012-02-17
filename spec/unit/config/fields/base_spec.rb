@@ -276,5 +276,11 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Team).field(:name).render.should == 'rendered'
     end
   end
-
+  
+  describe '#active' do
+    it 'is false by default' do
+      RailsAdmin.config(Team).field(:division).active?.should be_false  
+    end
+  end
+  
 end

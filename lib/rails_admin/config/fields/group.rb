@@ -49,7 +49,12 @@ module RailsAdmin
         def visible_fields
           section.with(bindings).visible_fields.select {|f| self == f.group }
         end
-
+        
+        # Should it open by default
+        register_instance_option :active? do
+          true
+        end
+        
         # Configurable group label which by default is group's name humanized.
         register_instance_option :label do
           (@label ||= {})[::I18n.locale] ||= (parent.fields.find{|f|f.name == self.name}.try(:label) || name.to_s.humanize)

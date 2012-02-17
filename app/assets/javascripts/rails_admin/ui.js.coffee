@@ -27,4 +27,27 @@ $(document).ready ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
+  $('.form-horizontal legend').has('i.icon-chevron-right').each ->
+    $(this).siblings('.control-group').hide()
+
   $('[rel=tooltip]').tooltip(delay: { show: 200, hide: 500 });
+
+  $('[data-target]').live 'click', ->
+    if !$(this).hasClass('disabled')
+      if $(this).has('i.icon-chevron-down').length
+        $(this).removeClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
+        $($(this).data('target')).select(':visible').hide('slow')
+      else
+        if $(this).has('i.icon-chevron-right').length
+          $(this).addClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
+          $($(this).data('target')).select(':hidden').show('slow')
+
+  $('.form-horizontal legend').live 'click', ->
+    if $(this).has('i.icon-chevron-down').length
+      $(this).siblings('.control-group:visible').hide('slow')
+      $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
+    else
+      if $(this).has('i.icon-chevron-right').length
+        $(this).siblings('.control-group:hidden').show('slow')
+        $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
+    

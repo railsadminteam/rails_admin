@@ -1,9 +1,11 @@
 .controls
-  = form.link_to_add "<i class=\"icon-plus icon-white\"></i> #{wording_for(:link, :new, field.associated_model_config.abstract_model)}".html_safe, field.name, { :class => 'btn btn-info' }
+  .btn-group
+    %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content, #{form.jquery_namespace(field)} > .controls > .nav", :class => (field.active? ? 'active' : '')}
+      %i.icon-white
+    = form.link_to_add "<i class=\"icon-plus icon-white\"></i> #{wording_for(:link, :new, field.associated_model_config.abstract_model)}".html_safe, field.name, { :class => 'btn btn-info' }
   = form.errors_for(field)
   = form.help_for(field)
   %ul.nav.nav-tabs{ :style => 'margin-top:5px' }
-  
 .tab-content
   = form.fields_for field.name do |nested_form|
     = nested_form.link_to_remove '<span class="btn btn-small btn-danger"><i class="icon-trash icon-white"></i></span>'.html_safe
@@ -11,10 +13,29 @@
 
 = form.javascript_for(field) do
   :plain
-    $("#{form.jquery_namespace(field)}>.tab-content>.fields").addClass('tab-pane').each(function(){
-      $("#{form.jquery_namespace(field)}>.controls>.nav").append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.objects_infos').data('object-label') + '</a></li>');
+    var field = $("#{form.jquery_namespace(field)}");
+    var nav = field.find('> .controls > .nav');
+    var content = field.find('> .tab-content');
+    var toggler = field.find('> .controls > .btn-group > .toggler');
+    
+    // add each nested field to a tab-pane and reference it in the nav
+    content.children(".fields").addClass('tab-pane').each(function(){
+      nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>');
     });
-    $("#{form.jquery_namespace(field)}>.controls>.nav>li>a[data-toggle]:first").tab('show');
-    if($("#{form.jquery_namespace(field)}>.controls>.nav").children().length == 0) {
-      $("#{form.jquery_namespace(field)}>.controls>.nav").hide()
+    
+    // init first tab, toggler and content/tabs visibility
+    nav.find("> li > a[data-toggle='tab']:first").tab('show');
+    if(nav.children().length == 0) {
+      nav.hide(); content.hide();
+      toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
+    } else {
+      if (toggler.hasClass('active')) {
+        nav.show(); content.show();
+        toggler.children('i').addClass('icon-chevron-down')
+      } else {
+        nav.hide(); content.hide();
+        toggler.children('i').addClass('icon-chevron-right')
+      }
     }
+    
+    // dynamic behaviour is in nested-form-hooks

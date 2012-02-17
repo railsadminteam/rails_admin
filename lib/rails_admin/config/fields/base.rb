@@ -187,6 +187,11 @@ module RailsAdmin
           not editable
         end
         
+        # init status in the view
+        register_instance_option :active? do
+          false
+        end
+
         register_instance_option :visible? do
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|

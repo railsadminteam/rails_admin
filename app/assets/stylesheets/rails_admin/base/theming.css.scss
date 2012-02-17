@@ -5,6 +5,10 @@
 
 body.rails_admin {
   
+  .thumbnail {
+    display:inline-block;
+  }
+
   /* room for upper navbar */
   padding-top: 60px;
   
@@ -27,6 +31,13 @@ body.rails_admin {
   
   /* new/edit/export forms */
   .form-horizontal {
+    legend {
+      cursor:pointer;
+      i {
+        vertical-align: inherit !important;
+      }
+    }
+    
     /* We want input size to be used, unfixate input width */
     input, textarea {
       width:auto;
@@ -36,12 +47,6 @@ body.rails_admin {
     }
     input[type=file] {
       display:block;
-    }
-    .thumbnail {
-      float:left;
-      & + * {
-        clear:left;
-      }
     }
     
     /* nested forms */
