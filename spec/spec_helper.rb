@@ -75,7 +75,7 @@ RSpec.configure do |config|
     RailsAdmin::AbstractModel.new("Foo::Bar").destroy_all!
     RailsAdmin::AbstractModel.new("FieldTest").destroy_all!
 
-    user = RailsAdmin::AbstractModel.new("User").create(
+    user = User.create(
       :email => "username@example.com",
       :password => "password"
     )

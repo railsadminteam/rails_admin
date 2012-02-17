@@ -45,7 +45,7 @@ describe "RailsAdmin History" do
 
       context "with a lot of histories" do
         before :each do
-          player = @model.create(:team_id => -1, :number => -1, :name => "Player 1")
+          player = Player.create(:team_id => -1, :number => -1, :name => "Player 1")
           101.times do |i|
             player.number = i
             RailsAdmin::History.create_history_item "change #{i}", player, @model, nil

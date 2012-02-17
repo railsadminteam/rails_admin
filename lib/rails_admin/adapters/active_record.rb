@@ -50,10 +50,6 @@ module RailsAdmin
         model.scoped
       end
 
-      def create(params = {})
-        model.create(params)
-      end
-
       def new(params = {})
         RailsAdmin::AbstractObject.new(model.new(params))
       end

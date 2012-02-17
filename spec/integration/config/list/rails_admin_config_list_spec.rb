@@ -421,7 +421,7 @@ describe "RailsAdmin Config DSL List Section" do
     let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
     let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
 
-    before(:each) { @players = RailsAdmin::AbstractModel.new("Player").create(players) }
+    before(:each) { @players = Player.create(players) }
 
     context "should be configurable" do
       it "globaly" do
@@ -453,7 +453,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
 
       it "globaly and overrideable per model" do
-        RailsAdmin::AbstractModel.new("League").create(leagues)
+        League.create(leagues)
 
         RailsAdmin::Config.models do
           list do
