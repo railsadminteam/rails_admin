@@ -29,7 +29,7 @@ module RailsAdmin
     end
 
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
-      model_config = abstract_model && RailsAdmin.config(abstract_model)
+      model_config = abstract_model.try(:config)
       object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
       

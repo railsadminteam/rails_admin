@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "AbstractObject" do
   describe "proxy" do
     let(:object) { mock("object") }
-    let(:abstract_object) { RailsAdmin::AbstractObject.new(object) }
+    let(:abstract_object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new(object) }
 
     it "should act like a proxy" do
       object.should_receive(:method_call)
@@ -13,7 +13,7 @@ describe "AbstractObject" do
 
   describe "create" do
     let(:player) { Player.new }
-    let(:object) { RailsAdmin::AbstractObject.new player }
+    let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
     let(:name) { "Stefan Kiszonka" }
     let(:number) { 87 }
     let(:position) { "Fifth baseman" }
@@ -59,7 +59,7 @@ describe "AbstractObject" do
 
     describe "a record with has_many associations" do
       let(:league) { League.new }
-      let(:object) { RailsAdmin::AbstractObject.new league }
+      let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new league }
       let(:name) { "Awesome League" }
       let(:teams) { [Factory(:team)] }
       let(:divisions) { [Division.create!(:name => 'div 1', :league => League.create!(:name => 'north')), Division.create!(:name => 'div 2', :league => League.create!(:name => 'south'))] }
@@ -82,7 +82,7 @@ describe "AbstractObject" do
       let(:name) { "Stefan Koza" }
       let(:suspended) { true }
       let(:player) { Factory :player, :suspended => true, :name => name, :draft => Factory(:draft) }
-      let(:object) { RailsAdmin::AbstractObject.new player }
+      let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
       let(:new_team) { Factory :team }
       let(:new_suspended) { false }
       let(:new_draft) { nil }
@@ -106,7 +106,7 @@ describe "AbstractObject" do
 
   describe "destroy" do
     let(:player) { Factory :player }
-    let(:object) { RailsAdmin::AbstractObject.new player }
+    let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
 
     before do
       object.destroy

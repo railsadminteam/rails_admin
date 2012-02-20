@@ -45,7 +45,6 @@ module RailsAdmin
       # @see RailsAdmin::Config::Fields.registry
       def self.factory(parent)
         fields = []
-        return fields unless parent.abstract_model.model_store_exists?
         # Load fields for all properties (columns)
 
         parent.abstract_model.properties.each do |properties|

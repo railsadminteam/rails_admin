@@ -26,10 +26,10 @@ describe RailsAdmin::Config do
 
     it 'excluded? returns true for any model not on the list' do
       RailsAdmin.config.included_models = [Team, League]
-
-      team_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Team'))
-      fan_config = RailsAdmin.config(RailsAdmin::AbstractModel.new('Fan'))
-
+      
+      team_config = RailsAdmin::AbstractModel.new('Team').config
+      fan_config = RailsAdmin::AbstractModel.new('Fan').config
+      
       fan_config.should be_excluded
       team_config.should_not be_excluded
     end

@@ -1,7 +1,8 @@
 require 'active_support/core_ext/string/inflections'
 require 'active_model/mass_assignment_security'
 
-require 'rails_admin/config/base'
+require 'rails_admin/config/proxyable'
+require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/association'
@@ -10,19 +11,23 @@ require 'rails_admin/config/fields/groupable'
 module RailsAdmin
   module Config
     module Fields
-      class Base < RailsAdmin::Config::Base
-        attr_reader :name, :properties
+      class Base
+        include RailsAdmin::Config::Proxyable
+        include RailsAdmin::Config::Configurable
+        include RailsAdmin::Config::Hideable
+        
+        attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
-
+        
         def self.inherited(klass)
           klass.instance_variable_set("@view_helper", :text_field)
         end
 
-        include RailsAdmin::Config::Hideable
-
         def initialize(parent, name, properties)
-          super(parent)
-          
+          @parent = parent
+          @root = parent.root
+
+          @abstract_model = parent.abstract_model
           @defined = false
           @name = name
           @order = 0

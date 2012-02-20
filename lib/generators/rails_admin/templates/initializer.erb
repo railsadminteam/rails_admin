@@ -82,11 +82,11 @@ RailsAdmin.config do |config|
 <% RailsAdmin::AbstractModel.all.map do |abstract_model| -%>
   # config.model <%= abstract_model.model.model_name %> do
   #   # Found associations:
-<%= RailsAdmin.config(abstract_model).export.fields.select{|f| f.association?}.map do |field|
+<%= abstract_model.config.export.fields.select{|f| f.association?}.map do |field|
 %{  #     configure #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
 end.join("\n") -%>
   #   # Found columns:
-<%= RailsAdmin.config(abstract_model).export.fields.select{|f| !f.association?}.map do |field|
+<%= abstract_model.config.export.fields.select{|f| !f.association?}.map do |field|
 %{  #     configure #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
 end.join("\n") -%>
   #   # Sections:

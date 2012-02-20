@@ -17,16 +17,20 @@ $("table#history th.header").live "click", ->
     window.location = $(this).data("link")
   
 $(document).ready ->
+  
   $('.pjax').pjax('[data-pjax-container]')
+  
   $('.pjax-form').live 'submit', (event) ->
     event.preventDefault()
     $.pjax
       container: '[data-pjax-container]'
       url: this.action + (if (this.action.indexOf('?') != -1) then '&' else '?') + $(this).serialize()
+  
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
+    
   $('.form-horizontal legend').has('i.icon-chevron-right').each ->
     $(this).siblings('.control-group').hide()
 

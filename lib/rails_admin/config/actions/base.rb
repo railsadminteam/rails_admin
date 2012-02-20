@@ -1,12 +1,15 @@
-require 'rails_admin/config/base'
+require 'rails_admin/config/proxyable'
+require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
 
 module RailsAdmin
   module Config
     module Actions
-      class Base < RailsAdmin::Config::Base
+      class Base
+        include RailsAdmin::Config::Proxyable
+        include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-        
+
         # http://twitter.github.com/bootstrap/base-css.html#icons
         register_instance_option :link_icon do
           'icon-question-sign'
@@ -14,7 +17,7 @@ module RailsAdmin
         
         # Should the action be visible
         register_instance_option :visible? do
-          authorized? && (bindings[:abstract_model] ? RailsAdmin.config(bindings[:abstract_model]).with(bindings).try(:visible?) : true)
+          authorized? && (bindings[:abstract_model] ? bindings[:abstract_model].config.with(bindings).try(:visible?) : true)
         end
         
         register_instance_option :authorized? do

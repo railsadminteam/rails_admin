@@ -1,18 +1,25 @@
 require 'active_support/core_ext/string/inflections'
+require 'rails_admin/config/proxyable'
+require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
 
 module RailsAdmin
   module Config
     module Fields
       # A container for groups of fields in edit views
-      class Group < RailsAdmin::Config::Base
+      class Group
+        include RailsAdmin::Config::Proxyable
+        include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-
-        attr_reader :name
+        
+        attr_reader :name, :abstract_model
         attr_accessor :section
-
+        
         def initialize(parent, name)
-          super(parent)
+          @parent = parent
+          @root = parent.root
+          
+          @abstract_model = parent.abstract_model
           @section = parent
           @name = name.to_s.tr(' ', '_').downcase.to_sym
         end

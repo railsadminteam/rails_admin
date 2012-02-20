@@ -127,7 +127,7 @@ module RailsAdmin
     def get_association_scope_from_params
       return nil unless params[:associated_collection].present?
       source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
-      source_model_config = RailsAdmin.config(source_abstract_model)
+      source_model_config = source_abstract_model.config
       source_object = source_abstract_model.get(params[:source_object_id])
       action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
       association = source_model_config.send(action).fields.find{|f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)

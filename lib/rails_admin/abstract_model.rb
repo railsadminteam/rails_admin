@@ -1,5 +1,3 @@
-require 'active_support/core_ext/string/inflections'
-
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
@@ -14,7 +12,7 @@ module RailsAdmin
         @@all ||= Config.models_pool.map{ |m| new(m) }.compact
         adapter ? @@all.select{|m| m.adapter == adapter} : @@all
       end
-    
+      
       alias_method :old_new, :new
       def new(m)
         m = m.is_a?(Class) ? m : m.constantize
@@ -34,6 +32,10 @@ module RailsAdmin
       end
     end
     
+    def config
+      Config.model self
+    end
+      
     def to_param
       model.to_s.split("::").map(&:underscore).join("~")
     end

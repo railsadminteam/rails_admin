@@ -13,7 +13,7 @@ module RailsAdmin
 
       @model = objects.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
-      @model_config = RailsAdmin.config(@abstract_model)
+      @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
       @fields = @model_config.export.fields.select{|f| @methods.include? f.name }
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
