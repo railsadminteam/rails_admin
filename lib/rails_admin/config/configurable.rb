@@ -1,10 +1,8 @@
 module RailsAdmin
   module Config
-    # A base class for all configurables.
+    # A module for all configurables.
 
     module Configurable
-      attr_reader :parent, :root
-      
       def self.included(base)
         base.send :extend, ClassMethods
       end

@@ -14,6 +14,7 @@ module RailsAdmin
         
         attr_reader :name, :abstract_model
         attr_accessor :section
+        attr_reader :parent, :root
         
         def initialize(parent, name)
           @parent = parent

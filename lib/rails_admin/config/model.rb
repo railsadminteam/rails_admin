@@ -21,6 +21,7 @@ module RailsAdmin
       
       attr_reader :abstract_model
       attr_accessor :groups
+      attr_reader :parent, :root
       
       def initialize(entity)
         @parent = nil

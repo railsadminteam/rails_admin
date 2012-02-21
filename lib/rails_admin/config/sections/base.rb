@@ -15,6 +15,7 @@ module RailsAdmin
         include RailsAdmin::Config::HasGroups
         
         attr_reader :abstract_model
+        attr_reader :parent, :root
         
         def initialize(parent)
           @parent = parent

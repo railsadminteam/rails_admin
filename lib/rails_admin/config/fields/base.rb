@@ -18,6 +18,7 @@ module RailsAdmin
         
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
+        attr_reader :parent, :root
         
         def self.inherited(klass)
           klass.instance_variable_set("@view_helper", :text_field)

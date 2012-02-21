@@ -9,7 +9,7 @@ module RailsAdmin
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-
+        
         # http://twitter.github.com/bootstrap/base-css.html#icons
         register_instance_option :link_icon do
           'icon-question-sign'
@@ -41,7 +41,8 @@ module RailsAdmin
         
         # This block is evaluated in the context of the controller when action is called
         # You can access:
-        # - @abstract_model & @model_config if your on a model or object scope
+        # - @objects if you're on a model scope
+        # - @abstract_model & @model_config if you're on a model or object scope
         # - @object if you're on an object scope
         register_instance_option :controller do
           Proc.new do
