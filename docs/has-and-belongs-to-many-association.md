@@ -2,7 +2,7 @@ Synopsys:
 
 ```ruby
 class Team < ActiveRecord::Base
-  has_and_belongs_to_many :fans, :inverse_of => :teams
+  has_and_belongs_to_many :fans
 
   # for a multiselect widget: (natural choice for n-n associations)
 
@@ -16,13 +16,14 @@ end
 
 # for info
 class Fan < ActiveRecord::Base
-  has_and_belongs_to_many :teams, :inverse_of => :fans
+  has_and_belongs_to_many :teams
 end
 
 
 RailsAdmin.config |config| do
   config.model Team do
     configure :fans do
+      inverse_of :teams
       # configuration here
     end
   end
