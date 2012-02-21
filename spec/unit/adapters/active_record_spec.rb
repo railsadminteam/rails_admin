@@ -43,7 +43,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
   
   describe '#associations' do
     it 'lists associations' do
-      @post.associations.map{|a|a[:name]}.should == [:a_r_blog, :a_r_categories, :a_r_comments]
+      @post.associations.map{|a|a[:name].to_s}.sort.should == ['a_r_blog', 'a_r_categories', 'a_r_comments']
     end
     
     it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
