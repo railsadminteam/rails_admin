@@ -47,7 +47,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
     end
     
     it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.sort.should == [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]
+      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.map(&:to_s).sort.should == ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
   end
 end
