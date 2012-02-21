@@ -8,13 +8,10 @@ group :development, :test do
   gem 'rails_admin_custom_field', :git => 'git://github.com/bbenezech/rails_admin_custom_field.git'
   
   platforms :jruby do
-    gem 'jruby-openssl', '~> 0.7'
-    # activerecord-jdbc-adapter does not yet have a rails 3.1 compatible release
-    gem 'activerecord-jdbc-adapter', :git => 'git://github.com/jruby/activerecord-jdbc-adapter.git'
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
       gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
-      gem 'jdbc-mysql', '~> 5.1'
+      gem 'jdbc-mysql', '~> 5.1'  
     when 'postgresql'
       gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
       gem 'jdbc-postgres', '~> 9.0'
