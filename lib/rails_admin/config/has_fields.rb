@@ -110,7 +110,7 @@ module RailsAdmin
       # Get all fields defined as visible, in the correct order.
       def visible_fields
         i = 0
-        all_fields.map {|f| f.with(bindings) }.select(&:visible).sort_by{|f| [f.order, i += 1] } # stable sort, damn
+        all_fields.map {|f| f.with(bindings) }.select(&:visible?).sort_by{|f| [f.order, i += 1] } # stable sort, damn
       end
       
       protected

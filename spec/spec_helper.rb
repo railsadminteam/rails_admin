@@ -72,7 +72,6 @@ RSpec.configure do |config|
     Player.delete_all
     Team.delete_all
     User.delete_all
-    Foo::Bar.delete_all
     FieldTest.delete_all
     login_as User.create(
       :email => "username@example.com",

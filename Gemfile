@@ -4,7 +4,6 @@ source 'https://rubygems.org'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'foo', :path => './spec/dummy_app/foo'
   gem 'rails_admin_custom_field', :git => 'git://github.com/bbenezech/rails_admin_custom_field.git'
   
   platforms :jruby do
