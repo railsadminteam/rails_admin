@@ -81,6 +81,22 @@ module RailsAdmin
         end
       end
 
+      def model_store_exists?
+        model.table_exists?
+      end
+
+      def table_name
+        model.table_name
+      end
+
+      def serialized_attributes
+        model.serialized_attributes
+      end
+
+      def accessible_by(*args)
+        model.accessible_by(*args)
+      end
+
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))

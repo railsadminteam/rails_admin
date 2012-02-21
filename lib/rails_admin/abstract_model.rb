@@ -24,11 +24,16 @@ module RailsAdmin
 
     def initialize(m)
       @model_name = m.to_s
-      # ActiveRecord
       if m.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !m.abstract_class?
+        # ActiveRecord
         @adapter = :active_record
         require 'rails_admin/adapters/active_record'
         extend Adapters::ActiveRecord
+      elsif m.ancestors.map(&:to_s).include?('Mongoid::Document')
+        # Mongoid
+        @adapter = :mongoid
+        require 'rails_admin/adapters/mongoid'
+        extend Adapters::Mongoid
       end
     end
 

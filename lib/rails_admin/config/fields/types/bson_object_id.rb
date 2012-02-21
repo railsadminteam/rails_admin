@@ -1,19 +1,29 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class BsonObjectId < RailsAdmin::Config::Fields::Base
+        class BsonObjectId < RailsAdmin::Config::Fields::Types::String
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:column_width) do
-            100
+          register_instance_option(:label) do
+            label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
+            label = "_id" if label == ''
+            label
           end
 
           register_instance_option(:help) do
             "BSON::ObjectId"
+          end
+
+          register_instance_option(:read_only) do
+            true
+          end
+
+          register_instance_option(:visible?) do
+            @name.to_s != '_id'
           end
         end
       end

@@ -30,6 +30,8 @@ group :development, :test do
   end
 
   gem 'cancan'
+  gem 'bson_ext'
+  gem 'mongoid'
 end
 
 group :debug do
