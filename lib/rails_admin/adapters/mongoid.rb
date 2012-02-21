@@ -109,7 +109,7 @@ module RailsAdmin
                 "Array"          => :string,
                 "BigDecimal"     => :string,
                 "Boolean"        => :boolean,
-                "Date"           => :datetime,
+                "Date"           => :date,
                 "DateTime"       => :datetime,
                 "Float"          => :float,
                 "Hash"           => :string,
@@ -154,7 +154,6 @@ module RailsAdmin
       def get_conditions_hash(model_config, query, filters)
         query_statements = []
         filters_statements = []
-        values = []
         conditions = {}
 
         if query.present?
@@ -162,11 +161,9 @@ module RailsAdmin
           queryable_fields.each do |field|
             searchable_columns = field.searchable_columns.flatten
             searchable_columns.each do |field_infos|
-              statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
+              statement = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
               if statement
                 query_statements << statement
-                values << value1 unless value1.nil?
-                values << value2 unless value2.nil?
               end
             end
           end
@@ -176,34 +173,27 @@ module RailsAdmin
           conditions['$or'] = query_statements
         end
 
-=begin
-        # TODO: support filters
         if filters.present?
           @filterable_fields = model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.to_sym] = field.searchable_columns; memo }
           filters.each_pair do |field_name, filters_dump|
             filters_dump.each do |filter_index, filter_dump|
               field_statements = []
               @filterable_fields[field_name.to_sym].each do |field_infos|
-                statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+                statement = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
                 if statement
                   field_statements << statement
-                  values << value1 unless value1.nil?
-                  values << value2 unless value2.nil?
                 end
               end
-              filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
+              filters_statements.push(field_statements) unless field_statements.empty?
             end
           end
         end
 
         unless filters_statements.empty?
-         conditions[0] += " AND " unless conditions == [""]
-         conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
+          conditions = { '$and' => [ conditions, filters_statements ].flatten }
         end
 
-        conditions += values
-=end
-        conditions != {} ? { :conditions => conditions } : {}
+        conditions.any? ? { :conditions => conditions } : {}
       end
 
       def build_statement(column, type, value, operator)
@@ -216,32 +206,29 @@ module RailsAdmin
         # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
         return if operator == '_discard' || value == '_discard'
 
-=begin
-        # TODO: support types
         # filtering data with unary operator, not type dependent
         if operator == '_blank' || value == '_blank'
-          return ["(#{column} IS NULL OR #{column} = '')"]
+          return { column => [nil, ''] }
         elsif operator == '_present' || value == '_present'
-          return ["(#{column} IS NOT NULL AND #{column} != '')"]
+          return { column => {'$ne' => nil}, column => {'$ne' => ''} }
         elsif operator == '_null' || value == '_null'
-          return ["(#{column} IS NULL)"]
+          return { column => nil }
         elsif operator == '_not_null' || value == '_not_null'
-          return ["(#{column} IS NOT NULL)"]
+          return { column => {'$ne' => nil} }
         elsif operator == '_empty' || value == '_empty'
-          return ["(#{column} = '')"]
+          return { column => '' }
         elsif operator == '_not_empty' || value == '_not_empty'
-          return ["(#{column} != '')"]
+          return { column => {'$ne' => ''} }
         end
         # now we go type specific
         case type
         when :boolean
-          return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
-          return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
+          return { column => false } if ['false', 'f', '0'].include?(value)
+          return { column => true } if ['true', 't', '1'].include?(value)
         when :integer, :belongs_to_association
           return if value.blank?
-          ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
+          { column => value.to_i } if value.to_i.to_s == value
         when :string, :text
-=end
           return if value.blank?
           value = case operator
           when 'default', 'like'
@@ -254,7 +241,6 @@ module RailsAdmin
             value.to_s
           end
           { column => value }
-=begin
         when :datetime, :timestamp, :date
           return unless operator != 'default'
           values = case operator
@@ -276,12 +262,13 @@ module RailsAdmin
             return if (value.blank? || value.match(/([0-9]{8})/).nil?)
             [Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').beginning_of_day, Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').end_of_day]
           end
-          ["(#{column} BETWEEN ? AND ?)", *values]
+          { column => { '$gte' => values[0], '$lte' => values[1] } }
         when :enum
           return if value.blank?
-          ["(#{column} IN (?))", [value].flatten]
+          { column => [value].flatten }
+        else
+          { column => value }
         end
-=end
       end
 
       private
@@ -299,7 +286,7 @@ module RailsAdmin
 
       def association_foreign_type_lookup(association)
         if association.polymorphic?
-          association.foreign_type.try(:to_sym) || :"#{association.name}_type"
+          association.type.try(:to_sym) || :"#{association.name}_type"
         end
       end
 
@@ -308,7 +295,7 @@ module RailsAdmin
       end
 
       def association_polymorphic_lookup(association)
-        association.polymorphic? && association.polymorphic
+        association.polymorphic?
       end
 
       def association_parent_key_lookup(association)
