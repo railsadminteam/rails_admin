@@ -51,7 +51,7 @@ end
 
 #### Readonly
 
-:readonly options are automatically inferred on associations fields and won't be editable in forms.
+`:readonly` options are automatically inferred from associations and won't be editable in forms.
 
 #### Nested form
 
