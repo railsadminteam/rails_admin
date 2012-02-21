@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rails_admin/extensions/history/history'
 
 describe RailsAdmin::Config do
 
@@ -38,7 +39,9 @@ describe RailsAdmin::Config do
 
   describe ".add_extension" do
     before do
-      RailsAdmin::EXTENSIONS = []
+      silence_warnings do
+        RailsAdmin::EXTENSIONS = []
+      end
     end
       
     it "registers the extension with RailsAdmin" do

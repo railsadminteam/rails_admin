@@ -14,7 +14,6 @@ require 'rspec/rails'
 require 'factory_girl'
 require 'factories'
 require 'database_helpers'
-require 'generator_helpers'
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -54,7 +53,6 @@ RSpec.configure do |config|
 
   config.include RSpec::Matchers
   config.include DatabaseHelpers
-  config.include GeneratorHelpers
   config.include RailsAdmin::Engine.routes.url_helpers
 
   config.include Warden::Test::Helpers
