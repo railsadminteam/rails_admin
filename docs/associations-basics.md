@@ -35,16 +35,14 @@ See [[associations scoping]] for more informations on how to limit and filter pr
 If you set the `:inverse_of` option on your relations, RailsAdmin will automatically populate the inverse relationship
 in the modal creation window. (link next to :belongs\_to and :has\_many multiselect widgets)
 
-It will also hide the inverse relation on nested forms. As a good practice, you should always set `:inverse_of` options to all your associations, even if these are useless to ActiveRecord. RailsAdmin will take advantage of them.
-
-If ActiveRecord complains about `Unknown key: inverse_of`, it's likely you're trying to set the inverse relationship of a `polymorphic belongs_to` association. It can't accept it because the inverse association must be unique.
+It will also hide the inverse relation on nested forms. As a good practice, you should always set `:inverse_of` options to all your associations, even if these are useless to ActiveRecord (in combination with :through and :as). RailsAdmin will take advantage of them. But it will bomb 'Unknown key: inverse_of' on HABTMs, you'll need to set them manually:
 
 Simply set it directly into your configuration:
 
 ```ruby
 config.model Team do
-  field :comments do
-    inverse_of :commentable
+  field :categories do
+    inverse_of :teams
   end
 end
 ```
