@@ -23,14 +23,13 @@ group :development, :test do
     when 'mysql'
       gem 'mysql', '~> 2.8'
     when 'postgresql'
-      gem 'pg', '~> 0.10'
+      gem 'pg', '~> 0.13'
     else
       gem 'sqlite3', '~> 1.3'
     end
   end
 
   gem 'cancan'
-  gem 'silent-postgres'
 end
 
 group :debug do
