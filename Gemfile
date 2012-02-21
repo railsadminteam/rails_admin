@@ -4,8 +4,6 @@ source 'https://rubygems.org'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'rails_admin_custom_field', :git => 'git://github.com/bbenezech/rails_admin_custom_field.git'
-  
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'

@@ -1,6 +1,7 @@
 class RailsAdmin::History < ActiveRecord::Base
+  
   self.table_name = :rails_admin_histories
-
+  
   IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 
   def self.latest

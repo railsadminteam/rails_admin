@@ -1,5 +1,9 @@
 class Division < ActiveRecord::Base
-  self.primary_key = :custom_id
+  if Rails.version < '3.2'
+    set_primary_key :custom_id
+  else
+    self.primary_key = :custom_id
+  end
   validates_numericality_of(:custom_league_id, :only_integer => true)
   validates_presence_of(:name)
 
