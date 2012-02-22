@@ -2,7 +2,8 @@
   theme = ENV['RAILS_ADMIN_THEME'] || :default
   require_asset 'jquery'
   require_asset 'jquery_ujs'
-  require_asset 'rails_admin/jquery_nested_form'
+  require_asset 'jquery_nested_form'
+  require_asset 'rails_admin/ra.nested-form-hooks'
   require_asset 'jquery.remotipart'
   require_asset 'rails_admin/jquery.pjax'
   require_asset 'rails_admin/jquery-ui-1.8.16.custom.js'
@@ -13,7 +14,6 @@
   require_asset 'rails_admin/ra.filtering-multiselect'
   require_asset 'rails_admin/ra.filtering-select'
   require_asset 'rails_admin/ra.remote-form'
-  require_asset 'rails_admin/ra.nested-form-hooks'
   require_asset 'rails_admin/ui'
   require_asset "rails_admin/themes/#{theme}/ui"
   require_asset 'rails_admin/custom/ui'

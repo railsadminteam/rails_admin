@@ -1,5 +1,11 @@
 $ = jQuery
 
+$(document).ready ->
+  window.nestedFormEvents.insertFields = (content, assoc, link) ->
+    tab_content = $(link).closest(".controls").siblings(".tab-content")
+    tab_content.append content
+    tab_content.children().last()
+
 $('form').live 'nested:fieldAdded', (content) ->
   field = content.field.addClass('tab-pane');
   new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>')
