@@ -302,8 +302,9 @@ module RailsAdmin
       # Get all models that are configured as visible sorted by their weight and label.
       #
       # @see RailsAdmin::Config::Hideable
+
       def visible_models(bindings)
-        models.map{|m| m.with(bindings) }.select(&:visible?).sort do |a, b|
+        models.map{|m| m.with(bindings) }.select{|m| m.visible? && bindings[:controller].authorized?(:index, m.abstract_model)}.sort do |a, b|
           (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
         end
       end

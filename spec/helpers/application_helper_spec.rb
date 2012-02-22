@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe RailsAdmin::ApplicationHelper do
   
+  before do
+    controller.stub(:authorized?).and_return(true)
+  end
+  
   describe '#current_action?' do
     it 'should return true if current_action, false otherwise' do
       @action = RailsAdmin::Config::Actions.find(:index)

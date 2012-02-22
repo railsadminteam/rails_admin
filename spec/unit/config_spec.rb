@@ -228,7 +228,7 @@ describe RailsAdmin::Config do
   end
   
   describe '.visible_models' do
-    it 'passes controller bindings, find visible models' do
+    it 'passes controller bindings, find visible models, order them' do
       RailsAdmin.config do |config| 
         config.included_models = [Player, Fan, Comment, Team]
         
@@ -236,6 +236,7 @@ describe RailsAdmin::Config do
           hide
         end
         config.model Fan do
+          weight -1
           show
         end
         config.model Comment do
@@ -250,7 +251,15 @@ describe RailsAdmin::Config do
         end
       end
       
-      RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin))).map(&:abstract_model).map(&:model).should == [Comment, Fan]
+      RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model).should == [Fan, Comment]
+    end
+    
+    it 'hides unallowed models' do
+      RailsAdmin.config do |config| 
+        config.included_models = [Comment]
+      end
+      RailsAdmin.config.visible_models(:controller => double(:authorized? => true)).map(&:abstract_model).map(&:model).should == [Comment]
+      RailsAdmin.config.visible_models(:controller => double(:authorized? => false)).map(&:abstract_model).map(&:model).should == []
     end
   end
     
