@@ -24,7 +24,6 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      controller.should_receive(:authorized?).exactly(1).times.and_return(true)
       helper.action(:my_custom_dashboard_key).should be
     end
     
@@ -62,7 +61,6 @@ describe RailsAdmin::ApplicationHelper do
     it 'should return actions by type' do
       abstract_model = RailsAdmin::AbstractModel.new(Player)
       object = FactoryGirl.create :player
-      controller.should_receive(:authorized?).exactly(22).times.and_return(true)
       helper.actions(:all, abstract_model, object).map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app]
       helper.actions(:root, abstract_model, object).map(&:custom_key).should == [:dashboard]
       helper.actions(:collection, abstract_model, object).map(&:custom_key).should == [:index, :new, :export, :bulk_delete, :history_index]
@@ -124,7 +122,6 @@ describe RailsAdmin::ApplicationHelper do
   describe "#breadcrumb" do
     it "gives us a breadcrumb" do
       @action = RailsAdmin::Config::Actions.find(:edit, {:abstract_model => RailsAdmin::AbstractModel.new(Team), :object => Team.new(:name => 'the avengers')})
-      controller.should_receive(:authorized?).exactly(3).times.and_return(true)
       bc = helper.breadcrumb
       bc.should match /Dashboard/ # dashboard
       bc.should match /Teams/ # list
@@ -157,8 +154,7 @@ describe RailsAdmin::ApplicationHelper do
       @action = RailsAdmin::Config::Actions.find :show
       @abstract_model = RailsAdmin::AbstractModel.new(Team)
       @object = Team.new(:name => 'the avengers')
-      controller.should_receive(:authorized?).exactly(3).times.and_return(true)
-      
+    
       helper.menu_for(:root).should match /Dashboard/ 
       helper.menu_for(:collection, @abstract_model).should match /List/
       helper.menu_for(:member, @abstract_model, @object).should match /Show/
@@ -179,7 +175,6 @@ describe RailsAdmin::ApplicationHelper do
       end
       
       @action = RailsAdmin::Config::Actions.find :dashboard
-      controller.should_receive(:authorized?).exactly(1).times.and_return(true)
       helper.menu_for(:root).should_not match /Dashboard/
     end
   end
@@ -272,7 +267,6 @@ describe RailsAdmin::ApplicationHelper do
         end
       end
       @action = RailsAdmin::Config::Actions.find :index
-      controller.should_receive(:authorized?).exactly(2).times.and_return(true)
       result = helper.bulk_menu(RailsAdmin::AbstractModel.new(Team))
       result.should match "zorg_action"
       result.should match "blub"
