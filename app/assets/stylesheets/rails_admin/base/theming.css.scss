@@ -121,13 +121,6 @@ body.rails_admin {
     margin-left: -375px;
   }
   
-  /* needed while https://github.com/thomas-mcdonald/bootstrap-sass/commit/6c37fa981b14502748f0935bd385e11ccc965a3f isn't released */
-  .nav-list .active > a:hover {
-    color: $white;
-    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
-    background-color: $linkColor;
-  }
-  
   /* nested nav */
   .nav.nav-list {
     .nav-level-1 {
