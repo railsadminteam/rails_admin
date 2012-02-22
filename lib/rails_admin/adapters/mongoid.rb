@@ -5,6 +5,10 @@ require 'rails_admin/adapters/mongoid/abstract_object'
 module RailsAdmin
   module Adapters
     module Mongoid
+      def new(params = {})
+        AbstractObject.new(model.new)
+      end
+
       def get(id)
         if object = model.where(:_id=>BSON::ObjectId(id)).first
           AbstractObject.new object
@@ -13,8 +17,8 @@ module RailsAdmin
         end
       end
 
-      def count(options = {},scope=nil)
-        criteria_for_options(options).count
+      def scoped
+        model.scoped
       end
 
       def first(options = {},scope=nil)
@@ -25,16 +29,8 @@ module RailsAdmin
         criteria_for_options(options)
       end
       
-      def scoped
-        model.scoped
-      end
-
-      def create(params = {})
-        model.create(params)
-      end
-
-      def new(params = {})
-        AbstractObject.new(model.new)
+      def count(options = {},scope=nil)
+        criteria_for_options(options).count
       end
 
       def destroy(ids)
@@ -42,34 +38,6 @@ module RailsAdmin
         destroyed = Array(model.where(:_id.in=>ids))
         model.destroy_all(:conditions=>{:_id.in=>ids})
         destroyed
-      end
-
-      def destroy_all!
-        model.destroy_all
-      end
-
-      def has_and_belongs_to_many_associations
-        associations.select do |association|
-          association[:type] == :has_and_belongs_to_many
-        end
-      end
-
-      def has_many_associations
-        associations.select do |association|
-          association[:type] == :has_many
-        end
-      end
-
-      def has_one_associations
-        associations.select do |association|
-          association[:type] == :has_one
-        end
-      end
-
-      def belongs_to_associations
-        associations.select do |association|
-          association[:type] == :belongs_to
-        end
       end
 
       def associations
@@ -89,12 +57,6 @@ module RailsAdmin
             :read_only => nil,
             :nested_form => nil
           }
-        end
-      end
-
-      def polymorphic_associations
-        (has_many_associations + has_one_associations).select do |association|
-          association[:options][:as]
         end
       end
 
@@ -308,9 +270,9 @@ module RailsAdmin
 
       def association_child_model_lookup(association)
         case association.macro
-        when :referenced_in
+        when :referenced_in, :embedded_in
           association.inverse_klass
-        when :references_one, :references_many, :references_and_referenced_in_many
+        when :references_one, :references_many, :references_and_referenced_in_many, :embeds_one, :embeds_many
           association.klass
         else
           raise "Unknown association type: #{association.macro.inspect}"
@@ -318,7 +280,7 @@ module RailsAdmin
       end
 
       def association_child_key_lookup(association)
-        association.foreign_key.to_sym
+        association.foreign_key.to_sym rescue nil
       end
       
       def criteria_for_options(options)
@@ -338,16 +300,16 @@ module RailsAdmin
 
       def association_type_lookup(macro)
         case macro.to_sym
-        when :referenced_in
+        when :referenced_in, :embedded_in
           :belongs_to
-        when :references_one
+        when :references_one, :embeds_one
           :has_one
-        when :references_many
+        when :references_many, :embeds_many
           :has_many
         when :references_and_referenced_in_many
           :has_and_belongs_to_many
         else
-          raise "Unknown association type: #{association.macro.inspect}"
+          raise "Unknown association type: #{macro.inspect}"
         end
       end
     end
