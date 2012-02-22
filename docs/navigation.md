@@ -66,7 +66,10 @@ Or by passing a block that will be lazy evaluated each time the option is read:
 
 ```ruby
 config.model Team do
-  visible { false }
+  visible do
+    # controller bindings is available here. Example:
+    bindings[:controller].current_user.role == :admin
+  end
 end
 ```
 
