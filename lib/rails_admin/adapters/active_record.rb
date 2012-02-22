@@ -5,7 +5,8 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial]
-      
+      LIKE_OPERATOR =  ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql" ? 'ILIKE' : 'LIKE'
+
       def new(params = {})
         AbstractObject.new(model.new(params))
       end
@@ -31,7 +32,8 @@ module RailsAdmin
         scope = scope.includes(options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.where(model.primary_key => options[:bulk_ids]) if options[:bulk_ids]
-        scope = scope.where(options[:conditions]) if options[:conditions]
+        scope = scope.where(query_conditions(options[:query])) if options[:query]
+        scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
         scope = scope.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
         scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
         scope
@@ -79,66 +81,47 @@ module RailsAdmin
         end
       end
       
-      def get_conditions_hash(model_config, query, filters)
-        @like_operator =  "ILIKE" if ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql"
-        @like_operator ||= "LIKE"
-
-        query_statements = []
-        filters_statements = []
+      private
+      
+      def query_conditions(query, fields = config.list.fields.select(&:queryable?))
+        statements = []
         values = []
-        conditions = [""]
+        
+        fields.each do |field|
+          field.searchable_columns.flatten.each do |column_infos|
+            statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
+            statements << statement if statement
+            values << value1 unless value1.nil?
+            values << value2 unless value2.nil?
+          end
+        end
+        
+        [statements.join(' OR '), *values]
+      end
+      
+      # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
+      # "0055" is the filter index, no use here. o is the operator, v the value
+      def filter_conditions(filters, fields = config.list.fields.select(&:filterable?))
+        statements = []
+        values = []
 
-        if query.present?
-          queryable_fields = model_config.list.fields.select(&:queryable?)
-          queryable_fields.each do |field|
-            searchable_columns = field.searchable_columns.flatten
-            searchable_columns.each do |field_infos|
-              statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
-              if statement
-                query_statements << statement
-                values << value1 unless value1.nil?
-                values << value2 unless value2.nil?
-              end
+        filters.each_pair do |field_name, filters_dump|
+          filters_dump.each do |filter_index, filter_dump|
+            field_statements = []
+            fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
+              statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+              field_statements << statement if statement.present?
+              values << value1 unless value1.nil?
+              values << value2 unless value2.nil?
             end
+            statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
           end
         end
 
-        unless query_statements.empty?
-          conditions[0] += " AND " unless conditions == [""]
-          conditions[0] += "(#{query_statements.join(" OR ")})"
-        end
-
-        if filters.present?
-          @filterable_fields = model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.to_sym] = field.searchable_columns; memo }
-          filters.each_pair do |field_name, filters_dump|
-            filters_dump.each do |filter_index, filter_dump|
-              field_statements = []
-              @filterable_fields[field_name.to_sym].each do |field_infos|
-                statement, value1, value2 = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-                if statement
-                  field_statements << statement
-                  values << value1 unless value1.nil?
-                  values << value2 unless value2.nil?
-                end
-              end
-              filters_statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
-            end
-          end
-        end
-
-        unless filters_statements.empty?
-         conditions[0] += " AND " unless conditions == [""]
-         conditions[0] += "#{filters_statements.join(" AND ")}" # filters should all be true
-        end
-
-        conditions += values
-        conditions != [""] ? { :conditions => conditions } : {}
+        [statements.join(' AND '), *values]
       end
 
-
-
       def build_statement(column, type, value, operator)
-
         # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
         return if operator == '_discard' || value == '_discard'
 
@@ -177,7 +160,7 @@ module RailsAdmin
           when 'is', '='
             "#{value}"
           end
-          ["(#{column} #{@like_operator} ?)", value]
+          ["(#{column} #{LIKE_OPERATOR} ?)", value]
         when :datetime, :timestamp, :date
           return unless operator != 'default'
           values = case operator
@@ -202,11 +185,9 @@ module RailsAdmin
           ["(#{column} BETWEEN ? AND ?)", *values]
         when :enum
           return if value.blank?
-          ["(#{column} IN (?))", [value].flatten]
+          ["(#{column} IN (?))", Array.wrap(value)]
         end
       end
-      
-      private
 
       @@polymorphic_parents = nil
 
