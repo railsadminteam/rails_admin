@@ -158,6 +158,8 @@ module RailsAdmin
         conditions.any? ? { :conditions => conditions } : {}
       end
 
+      private
+
       def build_statement(column, type, value, operator)
         # remove table_name
         table_prefix = "#{table_name}."
@@ -233,12 +235,14 @@ module RailsAdmin
         end
       end
 
-      private
-
       def association_parent_model_lookup(association)
         case association.macro
         when :referenced_in
-          association.klass
+          if association.polymorphic?
+            RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, association.name) || []
+          else
+            association.klass
+          end
         when :references_one, :references_many, :references_and_referenced_in_many
           association.inverse_klass
         else
@@ -248,7 +252,7 @@ module RailsAdmin
 
       def association_foreign_type_lookup(association)
         if association.polymorphic?
-          association.type.try(:to_sym) || :"#{association.name}_type"
+          association.inverse_type.try(:to_sym) || :"#{association.name}_type"
         end
       end
 

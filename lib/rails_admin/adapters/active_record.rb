@@ -137,6 +137,8 @@ module RailsAdmin
         [statements.join(' AND '), *values]
       end
 
+      private
+
       def build_statement(column, type, value, operator)
         # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
         return if operator == '_discard' || value == '_discard'
@@ -205,24 +207,11 @@ module RailsAdmin
         end
       end
 
-      @@polymorphic_parents = nil
-
-      def self.polymorphic_parents(name)
-        @@polymorphic_parents ||= {}.tap do |hash|
-          RailsAdmin::AbstractModel.all(:active_record).each do |am|
-            am.model.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
-              (hash[reflection.options[:as].to_sym] ||= []) << am.model
-            end
-          end
-        end
-        @@polymorphic_parents[name.to_sym]
-      end
-
       def association_parent_model_lookup(association)
         case association.macro
         when :belongs_to
           if association.options[:polymorphic]
-            RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name) || []
+            RailsAdmin::AbstractModel.polymorphic_parents(:active_record, association.name) || []
           else
             association.klass
           end

@@ -70,4 +70,6 @@ RSpec.configure do |config|
   config.after(:each) do
     Warden.test_reset!
   end
+
+  config.seed = ENV['SEED'] if ENV['SEED']
 end
