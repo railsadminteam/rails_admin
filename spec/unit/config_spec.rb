@@ -226,7 +226,35 @@ describe RailsAdmin::Config do
       end
     end
   end
+  
+  describe '.visible_models' do
+    it 'passes controller bindings, find visible models' do
+      RailsAdmin.config do |config| 
+        config.included_models = [Player, Fan, Comment, Team]
+        
+        config.model Player do
+          hide
+        end
+        config.model Fan do
+          show
+        end
+        config.model Comment do
+          visible do
+            bindings[:controller]._current_user.role == :admin
+          end
+        end
+        config.model Team do
+          visible do
+            bindings[:controller]._current_user.role != :admin
+          end
+        end
+      end
+      
+      RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin))).map(&:abstract_model).map(&:model).should == [Comment, Fan]
+    end
+  end
     
+  
 end
 
 module ExampleModule

@@ -42,7 +42,7 @@ module RailsAdmin
     
     
     def main_navigation
-      nodes_stack = RailsAdmin::Config.visible_models.select { |model| authorized?(:index, model.abstract_model) }
+      nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller).select { |model| authorized?(:index, model.abstract_model) }
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
         
         %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + 

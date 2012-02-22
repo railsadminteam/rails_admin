@@ -15,7 +15,7 @@ module RailsAdmin
         register_instance_option :controller do
           Proc.new do
             @history = @auditing_adapter && @auditing_adapter.latest || []
-            @abstract_models = RailsAdmin::Config.visible_models.map(&:abstract_model)
+            @abstract_models = RailsAdmin::Config.visible_models(:controller => self).map(&:abstract_model)
 
             @most_recent_changes = {}
             @count = {}
