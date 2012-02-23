@@ -137,8 +137,6 @@ module RailsAdmin
         [statements.join(' AND '), *values]
       end
 
-      private
-
       def build_statement(column, type, value, operator)
         # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
         return if operator == '_discard' || value == '_discard'

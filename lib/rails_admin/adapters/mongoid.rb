@@ -24,15 +24,28 @@ module RailsAdmin
       end
 
       def first(options = {},scope=nil)
-        criteria_for_options(options).first
+        all(options, scope).first
       end
 
       def all(options = {},scope=nil)
-        criteria_for_options(options)
+        scope ||= self.scoped
+        scope = scope.includes(options[:include]) if options[:include]
+        scope = scope.limit(options[:limit]) if options[:limit]
+        scope = scope.all_in(:_id => options[:bulk_ids]) if options[:bulk_ids]
+        scope = scope.where(query_conditions(options[:query])) if options[:query]
+        scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
+        scope = scope.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
+        scope = if options[:sort] && options[:sort_reverse]
+          scope.desc(options[:sort])
+        elsif options[:sort]
+          scope.asc(options[:sort])
+        else
+          scope
+        end
       end
       
       def count(options = {},scope=nil)
-        criteria_for_options(options).count
+        all(options.merge({:limit => false, :page => false}), scope).count
       end
 
       def destroy(ids)
@@ -120,52 +133,53 @@ module RailsAdmin
         scoped
       end
 
-      def get_conditions_hash(model_config, query, filters)
-        query_statements = []
-        filters_statements = []
-        conditions = {}
+      private
 
-        if query.present?
-          queryable_fields = model_config.list.fields.select(&:queryable?)
-          queryable_fields.each do |field|
-            searchable_columns = field.searchable_columns.flatten
-            searchable_columns.each do |field_infos|
-              statement = build_statement(field_infos[:column], field_infos[:type], query, field.search_operator)
-              if statement
-                query_statements << statement
-              end
-            end
+      def query_conditions(query, fields = config.list.fields.select(&:queryable?))
+        statements = []
+
+        fields.each do |field|
+          field.searchable_columns.flatten.each do |column_infos|
+            statement = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
+            statements << statement if statement
           end
         end
 
-        unless query_statements.empty?
-          conditions['$or'] = query_statements
+        if statements.any?
+          { '$or' => statements }
+        else
+          {}
         end
-
-        if filters.present?
-          @filterable_fields = model_config.list.fields.select(&:filterable?).inject({}){ |memo, field| memo[field.name.to_sym] = field.searchable_columns; memo }
-          filters.each_pair do |field_name, filters_dump|
-            filters_dump.each do |filter_index, filter_dump|
-              field_statements = []
-              @filterable_fields[field_name.to_sym].each do |field_infos|
-                statement = build_statement(field_infos[:column], field_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-                if statement
-                  field_statements << statement
-                end
-              end
-              filters_statements.push(field_statements) unless field_statements.empty?
-            end
-          end
-        end
-
-        unless filters_statements.empty?
-          conditions = { '$and' => [ conditions, filters_statements ].flatten }
-        end
-
-        conditions.any? ? { :conditions => conditions } : {}
       end
 
-      private
+      # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
+      # "0055" is the filter index, no use here. o is the operator, v the value
+      def filter_conditions(filters, fields = config.list.fields.select(&:filterable?))
+        statements = []
+
+        filters.each_pair do |field_name, filters_dump|
+          filters_dump.each do |filter_index, filter_dump|
+            field_statements = []
+            fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
+              statement = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+              field_statements << statement if statement.present?
+            end
+            if field_statements.any?
+              if field_statements.length > 1
+                statements << { '$or' => field_statements }
+              else
+                statements << field_statements.first
+              end
+            end
+          end
+        end
+
+        if statements.any?
+          { '$and' => statements }
+        else
+          {}
+        end
+      end
 
       def build_statement(column, type, value, operator)
         # remove table_name
@@ -179,9 +193,9 @@ module RailsAdmin
 
         # filtering data with unary operator, not type dependent
         if operator == '_blank' || value == '_blank'
-          return { column => [nil, ''] }
+          return { column => {'$in' => [nil, '']} }
         elsif operator == '_present' || value == '_present'
-          return { column => {'$ne' => nil}, column => {'$ne' => ''} }
+          return { column => {'$nin' => [nil, '']} }
         elsif operator == '_null' || value == '_null'
           return { column => nil }
         elsif operator == '_not_null' || value == '_not_null'
@@ -294,21 +308,6 @@ module RailsAdmin
         association.foreign_key.to_sym rescue nil
       end
       
-      def criteria_for_options(options)
-        criteria = model.where(options[:conditions])
-        criteria = criteria.includes(options[:include]) if options[:include]
-        criteria = criteria.limit(options[:limit]) if options[:limit]
-        criteria = criteria.all_in(:_id => options[:bulk_ids]) if options[:bulk_ids]
-        criteria = criteria.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
-        criteria = if options[:sort] && options[:sort_reverse]
-          criteria.desc(options[:sort])
-        elsif options[:sort]
-          criteria.asc(options[:sort])
-        else
-          criteria
-        end
-      end
-
       def association_type_lookup(macro)
         case macro.to_sym
         when :referenced_in, :embedded_in
