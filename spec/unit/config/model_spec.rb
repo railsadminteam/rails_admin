@@ -53,12 +53,6 @@ describe RailsAdmin::Config::Model do
     end
   end
   
-  describe "#page_type" do
-    it "should be model's name" do
-      RailsAdmin.config(Comment).page_type.should == 'comment'
-    end
-  end
-  
   describe "#parent" do
     it "should be nil for ActiveRecord::Base inherited models" do
       RailsAdmin.config(Comment).parent.should be_nil

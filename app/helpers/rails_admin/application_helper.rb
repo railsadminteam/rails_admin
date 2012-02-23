@@ -48,7 +48,7 @@ module RailsAdmin
         %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + 
         nodes.select{|n| n.parent.nil? || !n.parent.in?(nodes_stack.map{|c| c.abstract_model.model }) }.map do |node|
           %{
-            <li#{' class="active"' if node.page_type == @page_type }>
+            <li#{' class="active"' if node == @model_config }>
               <a href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
             </li>
             #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model.to_s}, 1)}
@@ -60,7 +60,7 @@ module RailsAdmin
     def navigation nodes_stack, nodes, level
       nodes.map do |node|
         %{             
-          <li#{' class="active"' if node.page_type == @page_type }>
+          <li#{' class="active"' if node == @model_config }>
             <a class="nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
           </li>
           #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model.to_s}, level + 1)}
