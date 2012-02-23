@@ -5,6 +5,8 @@ require 'rails_admin/adapters/mongoid/abstract_object'
 module RailsAdmin
   module Adapters
     module Mongoid
+      STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
+
       def new(params = {})
         AbstractObject.new(model.new)
       end
@@ -65,32 +67,37 @@ module RailsAdmin
         @properties = model.fields.map do |name,field|
           ar_type =
             if name == '_type'
-              :mongoid_type
+              { :type => :mongoid_type, :length => 1024 }
+            elsif field.type.to_s == 'String'
+              if (length = length_validation_lookup(name)) && length < 256
+                { :type => :string, :length => length }
+              elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
+                { :type => :string, :length => 255 }
+              else
+                { :type => :text, :length => nil }
+              end
             else
               {
-                "Array"          => :string,
-                "BigDecimal"     => :string,
-                "Boolean"        => :boolean,
-                "Date"           => :date,
-                "DateTime"       => :datetime,
-                "Float"          => :float,
-                "Hash"           => :string,
-                "Integer"        => :integer,
-                "String"         => :string,
-                "Time"           => :datetime,
-                "BSON::ObjectId" => :bson_object_id,
-                "Object"         => :bson_object_id
+                "Array"          => { :type => :text, :length => nil },
+                "BigDecimal"     => { :type => :string, :length => 1024 },
+                "Boolean"        => { :type => :boolean, :length => nil },
+                "BSON::ObjectId" => { :type => :bson_object_id, :length => nil },
+                "Date"           => { :type => :date, :length => nil },
+                "DateTime"       => { :type => :datetime, :length => nil },
+                "Float"          => { :type => :float, :length => nil },
+                "Hash"           => { :type => :string, :length => nil },
+                "Integer"        => { :type => :integer, :length => nil },
+                "Time"           => { :type => :datetime, :length => nil },
+                "Object"         => { :type => :bson_object_id, :length => nil },
               }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
             end
 
           {
             :name => field.name.to_sym,
             :pretty_name => field.name.to_s.gsub('_', ' ').strip.capitalize,
-            :type => ar_type,
-            :length => 1024,
             :nullable? => true,
             :serial? => false,
-          }
+          }.merge(ar_type)
         end
       end
 
@@ -314,6 +321,18 @@ module RailsAdmin
           :has_and_belongs_to_many
         else
           raise "Unknown association type: #{macro.inspect}"
+        end
+      end
+
+      def length_validation_lookup(name)
+        shortest = model.validators.select do |validator|
+          validator.attributes.include?(name.to_sym) &&
+            validator.class == ActiveModel::Validations::LengthValidator
+        end.min{|a, b| a.options[:maximum] <=> b.options[:maximum] }
+        if shortest
+          shortest.options[:maximum]
+        else
+          false
         end
       end
     end

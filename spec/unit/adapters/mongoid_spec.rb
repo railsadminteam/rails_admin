@@ -27,6 +27,11 @@ describe RailsAdmin::Adapters::Mongoid do
     class MongoUser
       include Mongoid::Document
       references_one :mongo_profile
+      field :name, :type => String
+      field :message, :type => String
+      field :short_text, :type => String
+
+      validates :short_text, :length => {:maximum => 255}
     end
 
     class MongoProfile
@@ -135,6 +140,43 @@ describe RailsAdmin::Adapters::Mongoid do
       }
       param[:child_model_proc].call.should == MongoComment
       param[:parent_model_proc].call.should == [MongoBlog, MongoPost]
+    end
+  end
+
+  describe "field type detection" do
+    it "maps Mongoid column types to RA types" do
+      @user.properties.should == [
+        { :name => :_type,
+          :pretty_name => "Type",
+          :nullable? => true,
+          :serial? => false,
+          :type => :mongoid_type,
+          :length => 1024 },
+        { :name => :_id,
+          :pretty_name => "Id",
+          :nullable? => true,
+          :serial? => false,
+          :type => :bson_object_id,
+          :length => nil },
+        { :name => :name,
+          :pretty_name => "Name",
+          :nullable? => true,
+          :serial? => false,
+          :type => :string,
+          :length => 255 },
+        { :name => :message,
+          :pretty_name => "Message",
+          :nullable? => true,
+          :serial? => false,
+          :type => :text,
+          :length => nil },
+        { :name => :short_text,
+          :pretty_name => "Short text",
+          :nullable? => true,
+          :serial? => false,
+          :type => :string,
+          :length => 255 }
+      ]
     end
   end
 end
