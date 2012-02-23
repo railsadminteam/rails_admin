@@ -3,15 +3,15 @@ module RailsAdmin
     module Actions
       class Delete < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)
-        
+
         register_instance_option :member do
           true
         end
-        
+
         register_instance_option :route_fragment do
           'delete'
         end
-        
+
         register_instance_option :http_methods do
           [:get, :delete]
         end
@@ -19,18 +19,18 @@ module RailsAdmin
         register_instance_option :authorization_key do
           :destroy
         end
-        
+
         register_instance_option :controller do
           Proc.new do
             if request.get? # DELETE
-            
+
               respond_to do |format|
                 format.html { render @action.template_name }
                 format.js   { render @action.template_name, :layout => false }
               end
-            
+
             elsif request.delete? # DESTROY
-              
+
               @auditing_adapter && @auditing_adapter.delete_object("Destroyed #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
               if @abstract_model.destroy(@object)
                 flash[:success] = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.delete.done"))
@@ -39,14 +39,14 @@ module RailsAdmin
               end
 
               redirect_to back_or_index
-              
+
             end
           end
         end
-      
+
         register_instance_option :link_icon do
           'icon-remove'
-        end        
+        end
       end
     end
   end

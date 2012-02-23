@@ -80,7 +80,7 @@ module RailsAdmin
       # If a block is passed it will be evaluated in the context of each field
       def fields(*field_names,&block)
         return all_fields if field_names.empty? && !block
-        
+
         if field_names.empty?
           defined = _fields.select {|f| f.defined }
           defined = _fields if defined.empty?
@@ -101,28 +101,28 @@ module RailsAdmin
       def fields_of_type(type, &block)
         _fields.select {|f| type == f.type }.map! {|f| f.instance_eval &block } if block
       end
-      
+
       # Accessor for all fields
       def all_fields
         ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).map{|f| f.section = self; f }
       end
-      
+
       # Get all fields defined as visible, in the correct order.
       def visible_fields
         i = 0
         all_fields.map {|f| f.with(bindings) }.select(&:visible?).sort_by{|f| [f.order, i += 1] } # stable sort, damn
       end
-      
+
       protected
-      
-      # Raw fields. 
+
+      # Raw fields.
       # Recursively returns parent section's raw fields
       # Duping it if accessed for modification.
       def _fields(readonly = false)
         return @_fields if @_fields
         return @_ro_fields if readonly && @_ro_fields
-        
-        unless self.class == RailsAdmin::Config::Sections::Base 
+
+        unless self.class == RailsAdmin::Config::Sections::Base
           # parent is RailsAdmin::Config::Model, recursion is on Section's classes
           @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
         else # recursion tail

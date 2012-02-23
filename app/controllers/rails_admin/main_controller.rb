@@ -1,17 +1,17 @@
 module RailsAdmin
 
   class MainController < RailsAdmin::ApplicationController
-            
+
     include ActionView::Helpers::TextHelper
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper
-    
+
     layout "rails_admin/application"
-    
+
     before_filter :get_model, :except => RailsAdmin::Config::Actions.all(:root).map(&:action_name)
     before_filter :get_object, :only => RailsAdmin::Config::Actions.all(:member).map(&:action_name)
     before_filter :check_for_cancel
-    
+
     RailsAdmin::Config::Actions.all.each do |action|
       class_eval %{
         def #{action.action_name}
@@ -19,12 +19,12 @@ module RailsAdmin
           @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
           @action = action.with({:controller => self, :abstract_model => @abstract_model, :object => @object})
           @page_name = wording_for(:title)
-          
+
           instance_eval &@action.controller
         end
       }
     end
-    
+
     def bulk_action
       self.send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(:controller => self, :abstract_model => @abstract_model).select(&:bulkable?).map(&:route_fragment))
     end
@@ -33,12 +33,12 @@ module RailsAdmin
       scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
       scope = model_config.abstract_model.scoped.merge(scope)
       scope = scope.instance_eval(&additional_scope) if additional_scope
-      
+
       get_collection(model_config, scope, pagination)
     end
 
     private
-    
+
     def back_or_index
       params[:return_to].presence && params[:return_to].include?(request.host) && (params[:return_to] != request.fullpath) ? params[:return_to] : index_path
     end
@@ -69,7 +69,7 @@ module RailsAdmin
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
     end
-    
+
     def get_attributes
       attributes = params[@abstract_model.to_param.gsub('~','_')] || {}
       attributes.each do |key, value|
@@ -80,7 +80,7 @@ module RailsAdmin
       end
       attributes
     end
-    
+
     def redirect_to_on_success
       notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]

@@ -8,21 +8,21 @@ module RailsAdmin
         #                                                  ^^^^^
         # the unnecessary "to_s" above is a workaround for meta_where, see
         # https://github.com/sferik/rails_admin/issues/374
-        
+
         attr_accessor :object
-        
+
         def initialize(object)
           self.object = object
         end
-        
+
         def set_attributes(attributes, role = nil)
           object.assign_attributes(attributes, :as => role)
         end
-        
+
         def save(options = { :validate => true })
           object.save(options)
         end
-        
+
         def method_missing(name, *args, &block)
           self.object.send(name, *args, &block)
         end

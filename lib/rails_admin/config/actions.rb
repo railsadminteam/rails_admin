@@ -1,7 +1,7 @@
 module RailsAdmin
   module Config
     module Actions
-      
+
       class << self
         def all(scope = nil, bindings = {})
           if scope.is_a?(Hash)
@@ -25,25 +25,25 @@ module RailsAdmin
           actions = actions.map{ |action| action.with(bindings) }
           bindings[:controller] ? actions.select(&:visible?) : actions
         end
-        
+
         def find custom_key, bindings = {}
           init_actions!
           action = @@actions.find{ |a| a.custom_key == custom_key }.with(bindings)
           bindings[:controller] ? (action.try(:visible?) && action || nil) : action
         end
-        
+
         def collection key, parent_class = :base, &block
           add_action key, parent_class, :collection, &block
         end
-        
+
         def member key, parent_class = :base, &block
           add_action key, parent_class, :member, &block
         end
-        
+
         def root key, parent_class = :base, &block
           add_action key, parent_class, :root, &block
         end
-        
+
         def add_action key, parent_class, parent, &block
           a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
           a.instance_eval(%{
@@ -59,17 +59,17 @@ module RailsAdmin
             raise "Action #{a.custom_key} already exist. Please change its custom key"
           end
         end
-          
+
         def reset
           @@actions = nil
         end
-        
+
         def register(name, klass = nil)
           if klass == nil && name.kind_of?(Class)
             klass = name
             name = klass.to_s.demodulize.underscore.to_sym
           end
-        
+
           instance_eval %{
             def #{name}(&block)
               action = #{klass}.new
@@ -82,9 +82,9 @@ module RailsAdmin
             end
           }
         end
-        
-        private 
-        
+
+        private
+
         def init_actions!
           @@actions ||= [
             Dashboard.new,

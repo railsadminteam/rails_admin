@@ -1,20 +1,20 @@
 require 'spec_helper'
 
 describe RailsAdmin::ApplicationHelper do
-  
+
   before do
     controller.stub(:authorized?).and_return(true)
   end
-  
+
   describe '#current_action?' do
     it 'should return true if current_action, false otherwise' do
       @action = RailsAdmin::Config::Actions.find(:index)
-      
+
       helper.current_action?(RailsAdmin::Config::Actions.find(:index)).should be_true
       helper.current_action?(RailsAdmin::Config::Actions.find(:show)).should_not be_true
     end
   end
-  
+
   describe '#action' do
     it 'should return action by :custom_key' do
       RailsAdmin.config do |config|
@@ -26,7 +26,7 @@ describe RailsAdmin::ApplicationHelper do
       end
       helper.action(:my_custom_dashboard_key).should be
     end
-    
+
     it 'should return only visible actions' do
       RailsAdmin.config do |config|
         config.actions do
@@ -35,10 +35,10 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      
+
       helper.action(:dashboard).should == nil
     end
-        
+
     it 'should return only visible actions, passing all bindings' do
       RailsAdmin.config do |config|
         config.actions do
@@ -56,7 +56,7 @@ describe RailsAdmin::ApplicationHelper do
       helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Player), Team.new).should be_nil
     end
   end
-  
+
   describe "#actions" do
     it 'should return actions by type' do
       abstract_model = RailsAdmin::AbstractModel.new(Player)
@@ -66,7 +66,7 @@ describe RailsAdmin::ApplicationHelper do
       helper.actions(:collection, abstract_model, object).map(&:custom_key).should == [:index, :new, :export, :bulk_delete, :history_index]
       helper.actions(:member, abstract_model, object).map(&:custom_key).should == [:show, :edit, :delete, :history_show, :show_in_app]
     end
-    
+
     it 'should only return visible actions, passing bindings correctly' do
       RailsAdmin.config do |config|
         config.actions do
@@ -79,13 +79,13 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      
+
       helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Team.new).map(&:custom_key).should == [:test_bindings]
       helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Player.new).map(&:custom_key).should == []
       helper.actions(:all, RailsAdmin::AbstractModel.new(Player), Team.new).map(&:custom_key).should == []
     end
   end
-  
+
   describe "#wording_for" do
     it "gives correct wording even if action is not visible" do
       RailsAdmin.config do |config|
@@ -95,30 +95,30 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      
+
       helper.wording_for(:menu, :index).should == "List"
     end
-    
+
     it "passes correct bindings" do
       helper.wording_for(:title, :edit, RailsAdmin::AbstractModel.new(Team), Team.new(:name => 'the avengers')).should == "Edit Team 'the avengers'"
     end
-    
+
     it "defaults correct bindings" do
       @action = RailsAdmin::Config::Actions.find :edit
       @abstract_model = RailsAdmin::AbstractModel.new(Team)
       @object = Team.new(:name => 'the avengers')
       helper.wording_for(:title).should == "Edit Team 'the avengers'"
     end
-    
+
     it "does not try to use the wrong :label_metod" do
       @abstract_model = RailsAdmin::AbstractModel.new(Draft)
       @object = Draft.new
-      
+
       helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team)).should == "Add a new Team"
     end
-    
+
   end
-  
+
   describe "#breadcrumb" do
     it "gives us a breadcrumb" do
       @action = RailsAdmin::Config::Actions.find(:edit, {:abstract_model => RailsAdmin::AbstractModel.new(Team), :object => Team.new(:name => 'the avengers')})
@@ -129,7 +129,7 @@ describe RailsAdmin::ApplicationHelper do
       bc.should match /Edit/ # current (edit)
     end
   end
-  
+
   describe "#menu_for" do
     it 'passes model and object as bindings and generates a menu, excluding non-get actions' do
       RailsAdmin.config do |config|
@@ -150,21 +150,21 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      
+
       @action = RailsAdmin::Config::Actions.find :show
       @abstract_model = RailsAdmin::AbstractModel.new(Team)
       @object = Team.new(:name => 'the avengers')
-    
-      helper.menu_for(:root).should match /Dashboard/ 
+
+      helper.menu_for(:root).should match /Dashboard/
       helper.menu_for(:collection, @abstract_model).should match /List/
       helper.menu_for(:member, @abstract_model, @object).should match /Show/
-      
+
       @abstract_model = RailsAdmin::AbstractModel.new(Player)
       @object = Player.new
       helper.menu_for(:collection, @abstract_model).should_not match /List/
       helper.menu_for(:member, @abstract_model, @object).should_not match /Show/
     end
-    
+
     it "excludes non-get actions" do
       RailsAdmin.config do |config|
         config.actions do
@@ -173,12 +173,12 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      
+
       @action = RailsAdmin::Config::Actions.find :dashboard
       helper.menu_for(:root).should_not match /Dashboard/
     end
   end
-  
+
   describe "#main_navigation" do
     it 'should show included models' do
       RailsAdmin.config do |config|
@@ -186,7 +186,7 @@ describe RailsAdmin::ApplicationHelper do
       end
       helper.main_navigation.should match /(nav\-header).*(Navigation).*(Balls).*(Comments)/m
     end
-    
+
     it 'should not show unvisible models' do
       RailsAdmin.config do |config|
         config.included_models = [Ball, Comment]
@@ -198,7 +198,7 @@ describe RailsAdmin::ApplicationHelper do
       result.should match /(nav\-header).*(Navigation).*(Balls)/m
       result.should_not match "Comments"
     end
-    
+
     it "should show children of hidden models" do # https://github.com/sferik/rails_admin/issues/978
       RailsAdmin.config do |config|
         config.included_models = [Ball, Hardball]
@@ -208,14 +208,14 @@ describe RailsAdmin::ApplicationHelper do
       end
       helper.main_navigation.should match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
-    
+
     it "should show children of excluded models" do
       RailsAdmin.config do |config|
         config.included_models = [Hardball]
       end
       helper.main_navigation.should match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
-    
+
     it 'should "nest" in navigation label' do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
@@ -225,7 +225,7 @@ describe RailsAdmin::ApplicationHelper do
       end
       helper.main_navigation.should match /(nav\-header).*(commentable).*(Comments)/m
     end
-    
+
     it 'should "nest" in parent model' do
       RailsAdmin.config do |config|
         config.included_models = [Player, Comment]
@@ -235,20 +235,20 @@ describe RailsAdmin::ApplicationHelper do
       end
       helper.main_navigation.should match /(Players).*(nav\-level\-1).*(Comments)/m
     end
-    
+
     it 'should order' do
       RailsAdmin.config do |config|
         config.included_models = [Player, Comment]
       end
       helper.main_navigation.should match /(Comments).*(Players)/m
-      
-      RailsAdmin.config(Comment) do 
+
+      RailsAdmin.config(Comment) do
         weight 1
       end
       helper.main_navigation.should match /(Players).*(Comments)/m
     end
   end
-  
+
   describe "#bulk_menu" do
     it 'should include all visible bulkable actions' do
       RailsAdmin.config do |config|

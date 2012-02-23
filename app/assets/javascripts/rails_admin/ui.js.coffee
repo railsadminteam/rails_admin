@@ -15,7 +15,7 @@ $("#list a, #list form").live "ajax:complete", (xhr, data, status) ->
 $("table#history th.header[data-href]").live "click", ->
   window.location = $(this).data('href')
 
-$('.pjax').live 'click', (event) -> 
+$('.pjax').live 'click', (event) ->
   if $.support.pjax
     event.preventDefault()
     $.pjax
@@ -27,7 +27,7 @@ $('.pjax').live 'click', (event) ->
 
 $('.pjax-form').live 'submit', (event) ->
   if $.support.pjax
-    event.preventDefault() 
+    event.preventDefault()
     $.pjax
       container: '[data-pjax-container]'
       url: this.action + (if (this.action.indexOf('?') != -1) then '&' else '?') + $(this).serialize()
@@ -53,15 +53,15 @@ $('.form-horizontal legend').live 'click', ->
       $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
 
 $(document).ready ->
-  
+
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
-    
+
   $('.form-horizontal legend').has('i.icon-chevron-right').each ->
     $(this).siblings('.control-group').hide()
 
   $('[rel=tooltip]').tooltip(delay: { show: 200, hide: 500 });
 
-    
+

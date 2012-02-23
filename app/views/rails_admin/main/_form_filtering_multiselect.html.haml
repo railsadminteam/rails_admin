@@ -2,7 +2,7 @@
   related_id = params[:associations] && params[:associations][field.name.to_s]
   config = field.associated_model_config
   source_abstract_model = RailsAdmin.config(form.object.class).abstract_model
-  
+
   if form.object.new_record? && related_id.present? && related_id != 'new'
     selected = [config.abstract_model.get(related_id)]
   else
@@ -31,8 +31,8 @@
 - if authorized? :new, config.abstract_model
   - path_hash = { :model_name => config.abstract_model.to_param, :modal => true }
   - path_hash.merge!({ :associations => { field.inverse_of => (form.object.id || 'new') } }) if field.inverse_of
-  = link_to "<i class=\"icon-plus icon-white\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', :data => { :link => new_path(path_hash) }, :class => "create btn btn-info", :style => 'margin-left:10px'  
-  
+  = link_to "<i class=\"icon-plus icon-white\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', :data => { :link => new_path(path_hash) }, :class => "create btn btn-info", :style => 'margin-left:10px'
+
 = form.javascript_for(field) do
   :plain
     $("#{form.jquery_namespace(field)} select").filteringMultiselect({

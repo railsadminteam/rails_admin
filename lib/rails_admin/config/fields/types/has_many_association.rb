@@ -16,7 +16,7 @@ module RailsAdmin
           register_instance_option :orderable do
             false
           end
-          
+
           def method_name
             nested_form ? "#{super}_attributes" : "#{super.to_s.singularize}_ids" # name_ids
           end

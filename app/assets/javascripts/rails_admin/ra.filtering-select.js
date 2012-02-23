@@ -75,20 +75,20 @@
                 $(self.element.parents('.controls')[0]).find('.update').addClass('disabled');
                 return false;
               }
-              
+
             }
           }
         })
-      if(select.attr('placeholder')) 
+      if(select.attr('placeholder'))
         input.attr('placeholder', select.attr('placeholder'))
-        
+
       input.data("autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
           .data("item.autocomplete", item)
           .append( $( "<a></a>" ).html( item.label || item.id ) )
           .appendTo(ul);
       };
-      
+
       // replace with dropdown button once ready in twitter-bootstrap
       var button = this.button = $('<label class="add-on ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="Show All Items" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text">&nbsp;</span></label>')
         .click(function() {
@@ -102,17 +102,17 @@
           input.autocomplete("search", "");
           input.focus();
         });
-      
+
       filtering_select.append(input).append(button).insertAfter(select);
-      
-        
+
+
     },
 
     _getResultSet: function(request, data, xhr) {
-	    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+      var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
 
       return $.map(data, function(el, i) {
-				// match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
+        // match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
         if ((el.id || el.value) && (xhr || matcher.test(el.label))) {
           return {
             label: el.label ? el.label.replace(

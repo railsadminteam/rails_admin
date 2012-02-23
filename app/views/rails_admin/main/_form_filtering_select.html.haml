@@ -2,7 +2,7 @@
   config = field.associated_model_config
   related_id = params[:associations] && params[:associations][field.name.to_s]
   source_abstract_model = RailsAdmin.config(form.object.class).abstract_model
-  
+
   if form.object.new_record? && related_id.present? && related_id != 'new'
     selected = config.abstract_model.get(related_id)
     selected_id = selected.id
@@ -15,7 +15,7 @@
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
 
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :modal => true, :id => '__ID__') : ''
-  
+
   xhr = !field.associated_collection_cache_all
 
   collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(config.object_label_method), o.id] }

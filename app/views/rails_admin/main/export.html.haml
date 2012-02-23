@@ -25,7 +25,7 @@
             %label.checkbox{:for => "schema_#{list}_#{field.name}"}
               = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
               = field.label
-    
+
     - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
       - fields = field.associated_model_config.export.with(:view => self, :object => (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
       .control-group
@@ -36,7 +36,7 @@
             %label.checkbox{:for => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
               = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
               = associated_model.human_attribute_name(associated_model_field.name)
-  
+
   %fieldset
     %legend
       %i.icon-chevron-down
@@ -48,7 +48,7 @@
         -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
         = select_tag 'csv_options[encoding_to]', options_for_select(["", "UTF-8", "UTF-16LE", "UTF-16BE", "UTF-32LE", "UTF-32BE", "UTF-7", "ISO-8859-1", "ISO-8859-15", "IBM-850", "MacRoman", "Windows-1252", "ISO-8859-3", "IBM-852", "ISO-8859-2", "MacCE", "Windows-1250", "IBM-855", "ISO-8859-5", "ISO-IR-111", "KOI8-R", "MacCyrillic", "Windows-1251", "CP-866", "KOI-U", "MacUkranian", "GB2312", "GBK", "GB18030", "HZ", "ISO-2022-CN", "Big5", "Big5-HKSCS", "EUC-TW", "EUC-JP", "ISO-2022-JP", "Shift_JIS", "EUC-KR", "UHC", "JOHAB", "ISO-2022-KR"])
         %p.help-block= t('admin.export.csv.encoding_to_help', :name => guessed_encoding)
-    
+
     .control-group
       %label.control-label{:for => "csv_options_skip_header"}= t('admin.export.csv.skip_header')
       .controls

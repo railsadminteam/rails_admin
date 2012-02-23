@@ -6,7 +6,7 @@ module RailsAdmin
       def self.included(base)
         base.send :extend, ClassMethods
       end
-      
+
       def has_option?(name)
         options = self.class.instance_variable_get("@config_options")
         options && options.has_key?(name)
@@ -21,8 +21,8 @@ module RailsAdmin
       def register_deprecated_instance_option(option_name, replacement_option_name)
         scope = class << self; self; end;
         self.class.register_deprecated_instance_option(option_name, replacement_option_name, scope)
-      end      
-      
+      end
+
       module ClassMethods
         # Register an instance option. Instance option is a configuration
         # option that stores its value within an instance variable and is
@@ -42,7 +42,7 @@ module RailsAdmin
               send(option_name)
             end
           end
-          
+
           # Define getter/setter by the option name
           scope.send(:define_method, option_name) do |*args, &block|
             if !args[0].nil? || block

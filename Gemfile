@@ -8,7 +8,7 @@ group :development, :test do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
       gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
-      gem 'jdbc-mysql', '~> 5.1'  
+      gem 'jdbc-mysql', '~> 5.1'
     when 'postgresql'
       gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
       gem 'jdbc-postgres', '~> 9.0'

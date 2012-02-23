@@ -21,7 +21,7 @@ module RailsAdmin
     if(configuration = options[:configuration])
       CONFIGURATION_ADAPTERS[extension_key] = extension_definition::ConfigurationAdapter
     end
-    
+
     if(configuration = options[:auditing])
       AUDITING_ADAPTERS[extension_key] = extension_definition::AuditingAdapter
     end

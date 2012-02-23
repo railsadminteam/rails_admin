@@ -3,7 +3,7 @@ ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| html_tag }
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::NestedForm::BuilderMixin
-    
+
     def generate(options = {})
       options.reverse_merge!({
         :action => @template.controller.params[:action],
@@ -11,7 +11,7 @@ module RailsAdmin
         :nested_in => false
       })
       groups = options[:model_config].send(options[:nested_in] ? :nested : options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups
-      
+
       object_infos +
       groups.map do |fieldset|
         fieldset_for fieldset, options[:nested_in]
@@ -44,11 +44,11 @@ module RailsAdmin
         end
       end
     end
-    
+
     def input_for field
       @template.content_tag(:div, :class => 'controls') do
-        field_for(field) + 
-        errors_for(field) + 
+        field_for(field) +
+        errors_for(field) +
         help_for(field)
       end
     end
@@ -68,14 +68,14 @@ module RailsAdmin
         field.render
       end
     end
-    
+
     def object_infos
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
       object_label = (object.new_record? ? I18n.t('admin.form.new_model', :name => model_label) : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
       %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{object_label}"></span>}.html_safe
     end
-    
+
     def javascript_for(field, options = {}, &block)
       %{<script type="text/javascript">
           jQuery(function($) {
@@ -87,20 +87,20 @@ module RailsAdmin
           });
         </script>}.html_safe
     end
-    
+
     def jquery_namespace field
       %{#{(@template.controller.params[:modal] ? '#modal ' : '')}##{dom_id(field)}_field}
     end
-    
+
     def dom_id field
-      (@dom_id ||= {})[field.name] ||= 
+      (@dom_id ||= {})[field.name] ||=
         [
           @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, ""),
           options[:index],
           field.method_name
         ].reject(&:blank?).join('_')
     end
-    
+
     def dom_name field
       (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Types::HasManyAssociation) ? '[]' : ''}}
     end

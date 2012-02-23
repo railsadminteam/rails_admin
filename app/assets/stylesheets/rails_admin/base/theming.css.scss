@@ -4,14 +4,14 @@
 */
 
 body.rails_admin {
-  
+
   .thumbnail {
     display:inline-block;
   }
 
   /* room for upper navbar */
   padding-top: 60px;
-  
+
   /* Application name */
   .navbar .brand {
     small {
@@ -19,16 +19,16 @@ body.rails_admin {
       font-weight:bold;
     }
   }
-  
+
   .sidebar-nav {
     padding: 9px 0;
   }
-  
+
   /* fat labels in forms */
   .label.form-label {
     padding: 7px 7px 8px 7px;
   }
-  
+
   /* new/edit/export forms */
   .form-horizontal {
     legend {
@@ -37,7 +37,7 @@ body.rails_admin {
         vertical-align: inherit !important;
       }
     }
-    
+
     /* We want input size to be used, unfixate input width */
     input, textarea {
       width:auto;
@@ -48,7 +48,7 @@ body.rails_admin {
     input[type=file] {
       display:block;
     }
-    
+
     /* nested forms */
     .tab-content .tab-pane {
       border-left:5px solid $blue;
@@ -65,7 +65,7 @@ body.rails_admin {
         }
       }
     }
-    
+
     /* double nesting, guys. Easy. */
     .tab-content .tab-content .tab-pane {
       border-color:lighten($blue, 20%);
@@ -82,7 +82,7 @@ body.rails_admin {
         }
       }
     }
-    
+
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
       border-color:lighten($blue, 30%);
@@ -98,7 +98,7 @@ body.rails_admin {
         }
       }
     }
-    
+
     /* totally awesome! nesting on 4 levels! */
     .tab-content .tab-content .tab-content  .tab-content .tab-pane {
       border-color:lighten($blue, 40%);
@@ -120,7 +120,7 @@ body.rails_admin {
     width: 750px;
     margin-left: -375px;
   }
-  
+
   /* nested nav */
   .nav.nav-list {
     .nav-level-1 {
@@ -134,7 +134,7 @@ body.rails_admin {
     }
   }
 
-  /* tab links should match icon color */ 
+  /* tab links should match icon color */
   .nav.nav-tabs li.icon a {
     color: $black;
   }
@@ -196,7 +196,7 @@ body.rails_admin {
       text-overflow: ellipsis;
       max-width:150px;
     }
-    
+
     /* icons */
     td.links {
       max-width: none;

@@ -14,7 +14,7 @@ module RailsAdmin
           def self.column_names
             @column_names
           end
-          
+
           def parse_input(params)
             params[name] = params[name].presence
           end
@@ -27,7 +27,7 @@ module RailsAdmin
           def value
             ""
           end
-          
+
           register_instance_option :visible do
             self.section.is_a?(RailsAdmin::Config::Sections::Edit)
           end

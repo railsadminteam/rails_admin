@@ -8,13 +8,13 @@ RailsAdmin.config do |config|
   # I18n.default_locale = :de
 
   config.current_user_method { current_<%= @model_name.underscore %> } # auto-generated
-  
+
   # If you want to track changes on your models:
   # config.audit_with :history, <%= @model_name.classify %>
-  
+
   # Or with a PaperTrail: (you need to install it first)
   # config.audit_with :paper_trail, <%= @model_name.classify %>
-  
+
   # Set the admin name here (optional second array element will appear in a beautiful RailsAdmin red ©)
   config.main_app_name = ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin']
   # or for a dynamic name:
