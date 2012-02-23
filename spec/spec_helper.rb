@@ -61,6 +61,8 @@ RSpec.configure do |config|
     Team.delete_all
     User.delete_all
     FieldTest.delete_all
+    Author.delete_all
+    Article.delete_all
     login_as User.create(
       :email => "username@example.com",
       :password => "password"

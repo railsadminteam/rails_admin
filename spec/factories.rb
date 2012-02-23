@@ -63,4 +63,12 @@ FactoryGirl.define do
   factory :hardball do
     color('blue')
   end
+
+  factory :article do
+    sequence(:title) { |n| "Article #{n}" }
+  end
+
+  factory :author do
+    sequence(:name) { |n| "Author #{n}" }
+  end
 end

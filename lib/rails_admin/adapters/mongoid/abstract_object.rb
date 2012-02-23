@@ -3,6 +3,25 @@ module RailsAdmin
   module Adapters
     module Mongoid
       class AbstractObject < RailsAdmin::Adapters::ActiveRecord::AbstractObject
+        def initialize(object)
+          super
+          object.associations.each do |name, association|
+            if association.macro == :references_many
+              instance_eval(<<EOS)
+                def #{name.to_s.singularize}_ids
+                  #{name}.map{|item| item.id }
+                end
+
+                def #{name.to_s.singularize}_ids=(items)
+                  self.#{name} = items.
+                    map{|item_id| self.#{name}.klass.find(item_id) rescue nil }.
+                    compact
+                end
+EOS
+            end
+          end
+        end
+
         def attributes=(attributes)
           object.send :attributes=, attributes
         end
@@ -10,14 +29,6 @@ module RailsAdmin
         def destroy
           object.destroy
           object
-        end
-
-        def method_missing(name, *args, &block)
-          if(md = /(.+)_ids$/.match name.to_s)
-            object.send(md[1].pluralize).map{|r| r.id}
-          else
-            super
-          end
         end
       end
     end
