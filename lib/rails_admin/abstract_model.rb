@@ -1,7 +1,7 @@
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
-    attr_reader :model, :adapter
+    attr_reader :adapter
     
     class << self
       def reset
@@ -23,13 +23,18 @@ module RailsAdmin
     end
     
     def initialize(m)
-      @model = m
+      @model_name = m.to_s
       # ActiveRecord
-      if @model.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !@model.abstract_class?
+      if m.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !m.abstract_class?
         @adapter = :active_record
         require 'rails_admin/adapters/active_record'
         extend Adapters::ActiveRecord
       end
+    end
+    
+    # do not store a reference to the model, does not play well with ActiveReload/Rails3.2 
+    def model
+      @model_name.try :constantize
     end
     
     def config
