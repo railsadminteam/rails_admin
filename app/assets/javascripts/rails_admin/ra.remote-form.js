@@ -94,11 +94,11 @@
           if(widget.element.find('.filtering-select').length) { // select input
             var input = widget.element.find('.filtering-select').children('.ra-filtering-select-input');
             input.val(json.label);
-            if (!select.find('option[value=' + json.id + ']').length) // replace
+            if (!select.find('option[value=' + json.id + ']').length) { // not a replace
               select.html(option).val(json.id);
-
+              widget.element.find('.update').removeClass('disabled');
+            }
           } else { // multi-select input
-
             var input = widget.element.find('.ra-filtering-select-input');
             var multiselect = widget.element.find('.ra-multiselect');
             if (multiselect.find('option[value=' + json.id + ']').length) { // replace
