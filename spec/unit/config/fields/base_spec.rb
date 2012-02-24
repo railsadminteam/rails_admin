@@ -282,5 +282,10 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Team).field(:division).active?.should be_false
     end
   end
-
+  
+  describe '#associated_collection' do
+    it 'returns [] when type is blank?' do
+      RailsAdmin.config(Comment).fields.find{|f|f.name == :commentable}.associated_collection('').should be_empty
+    end
+  end
 end

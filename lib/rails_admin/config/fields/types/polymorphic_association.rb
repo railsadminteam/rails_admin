@@ -38,7 +38,7 @@ module RailsAdmin
           end
 
           def associated_collection(type)
-            return [] if type.nil?
+            return [] if type.blank?
             config = RailsAdmin.config(type)
             config.abstract_model.all.map do |object|
               [object.send(config.object_label_method), object.id]
