@@ -34,7 +34,6 @@
               %ul.nav.nav-tabs
                 = menu_for((@abstract_model ? (@object.try(:id) ? :member : :collection) : :root), @abstract_model, @object)
                 = content_for :contextual_tabs
-              %span.row
               = yield
               %footer
                 %p &copy; RailsAdmin 2012

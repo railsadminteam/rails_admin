@@ -1,7 +1,7 @@
 - params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
 - visible_fields = @model_config.export.with(:view => self, :object => @abstract_model.model.new).visible_fields
 
-= form_tag export_path(params.merge(:all => true)), :method => 'post', :class => 'form-horizontal' do
+= form_tag export_path(params.merge(:all => true)), :method => 'post', :class => 'form-horizontal denser' do
 
   %input{:name => "send_data", :type => "hidden", :value => "true"}/
   %fieldset

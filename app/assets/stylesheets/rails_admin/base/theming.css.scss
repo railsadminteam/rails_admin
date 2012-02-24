@@ -37,7 +37,40 @@ body.rails_admin {
         vertical-align: inherit !important;
       }
     }
-
+    
+    &.denser {
+      .controls .nav {
+        margin-bottom:5px;
+      }
+      .remove_nested_fields {
+        position:absolute;
+      }
+      margin:0px;
+      p {
+        font-size: 12px;
+        line-height: 16px;
+      }
+      .help-block {
+        margin-top: 0px;
+      }
+      .input-prepend, .input-append {
+        margin-bottom: 0px;
+        label {
+          margin-bottom: 0px;
+        }
+      }
+      .control-group {
+        margin: 0px;
+        padding-top:15px;
+      }
+      .control-label {
+        width:145px;
+      }
+      legend {
+        margin-bottom:0px;
+      }
+    }
+    
     /* We want input size to be used, unfixate input width */
     input, textarea {
       width:auto;
@@ -72,7 +105,6 @@ body.rails_admin {
       margin-left:10px;
       fieldset {
         margin-left:-20px;
-        margin-bottom: -18px;
         .control-group > label {
           padding-left:20px;
           width:120px;
@@ -124,13 +156,13 @@ body.rails_admin {
   /* nested nav */
   .nav.nav-list {
     .nav-level-1 {
-      padding-left:20px;
-    }
-    .nav-level-2 {
       padding-left:30px;
     }
+    .nav-level-2 {
+      padding-left:60px;
+    }
     .nav-level-3 {
-      padding-left:40px;
+      padding-left:90px;
     }
   }
 
