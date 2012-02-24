@@ -28,7 +28,7 @@
             '<option data-additional-fieldset="false"' + (field_operator == "last_week" ? 'selected="selected"' : '') + ' value="last_week">Last week</option>' +
             '<option data-additional-fieldset="true" ' + (field_operator == "less_than" ? 'selected="selected"' : '') + ' value="less_than">Less than ... days ago</option>' +
             '<option data-additional-fieldset="true" ' + (field_operator == "more_than" ? 'selected="selected"' : '') + ' value="more_than">More than ... days ago</option>' +
-            '<option data-additional-fieldset="true" ' + (field_operator == "mmddyyyy"	? 'selected="selected"' : '') + ' value="mmddyyyy">On specific date (mmddyyyy)</option>' +
+            '<option data-additional-fieldset="true" ' + (field_operator == "mmddyyyy"  ? 'selected="selected"' : '') + ' value="mmddyyyy">On specific date (mmddyyyy)</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option data-additional-fieldset="false"' + (field_operator == "_not_null"  ? 'selected="selected"' : '') + ' value="_not_null">Is present</option>' +
             '<option data-additional-fieldset="false"' + (field_operator == "_null"    ? 'selected="selected"' : '') + ' value="_null" >Is blank</option>' +
@@ -43,7 +43,7 @@
               '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">Is blank</option>' +
               '<option disabled="disabled">---------</option>' +
               field_options +
-            '</select>' + 
+            '</select>' +
             '<select multiple="multiple" style="display:' + (multiple_values ? 'inline-block' : 'none') + '" ' + (multiple_values ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="select-multiple input-small">' +
               field_options +
             '</select> ' +

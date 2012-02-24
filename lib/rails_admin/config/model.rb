@@ -18,15 +18,15 @@ module RailsAdmin
       include RailsAdmin::Config::Configurable
       include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
-      
+
       attr_reader :abstract_model
       attr_accessor :groups
       attr_reader :parent, :root
-      
+
       def initialize(entity)
         @parent = nil
         @root = self
-        
+
         @abstract_model = begin
           if entity.kind_of?(RailsAdmin::AbstractModel)
             entity

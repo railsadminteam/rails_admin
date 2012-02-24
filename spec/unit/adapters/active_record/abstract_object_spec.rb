@@ -116,7 +116,7 @@ describe "AbstractObject" do
       Player.exists?(player.id).should == false
     end
   end
-  
+
   describe "object_label_method" do
     it 'should be configurable' do
       RailsAdmin.config League do
@@ -128,7 +128,7 @@ describe "AbstractObject" do
       RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
     end
   end
-  
+
   describe "model store does not exist" do
     before(:each)  { drop_all_tables }
     after(:all)    { migrate_database }

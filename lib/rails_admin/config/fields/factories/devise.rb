@@ -7,7 +7,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   if properties[:name] == :encrypted_password
     extensions = [:password_salt, :reset_password_token, :remember_token]
     model = parent.abstract_model.model
-  
+
     fields << RailsAdmin::Config::Fields::Types.load(:password).new(parent, :password, properties)
     fields << RailsAdmin::Config::Fields::Types.load(:password).new(parent, :password_confirmation, properties)
     extensions.each do |ext|

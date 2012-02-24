@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Sections do
-  
+
   describe "configure" do
     it "should configure without changing the section default list" do
       RailsAdmin.config Team do
@@ -30,7 +30,7 @@ describe RailsAdmin::Config::Sections do
       fields.count.should == 1 # not 19
     end
   end
-  
+
   describe "DSL field inheritance" do
     it 'should be tested' do
       RailsAdmin.config do |config|
@@ -40,21 +40,21 @@ describe RailsAdmin::Config::Sections do
               @label ||= "modified base #{label}"
             end
           end
-          list do 
+          list do
             field :name do
               label do
                 @label ||= "modified list #{label}"
               end
             end
           end
-          edit do 
+          edit do
             field :name do
               label do
                 @label ||= "modified edit #{label}"
               end
             end
           end
-          create do 
+          create do
             field :name do
               label do
                 @label ||= "modified create #{label}"
@@ -62,7 +62,7 @@ describe RailsAdmin::Config::Sections do
             end
           end
         end
-        
+
       end
       RailsAdmin.config(Fan).visible_fields.count.should == 1
       RailsAdmin.config(Fan).visible_fields.first.label.should == 'modified base His Name'
@@ -73,7 +73,7 @@ describe RailsAdmin::Config::Sections do
       RailsAdmin.config(Fan).update.visible_fields.first.label.should == 'modified edit His Name'
     end
   end
-  
+
   describe "DSL group inheritance" do
     it 'should be tested' do
       RailsAdmin.config do |config|
@@ -82,36 +82,36 @@ describe RailsAdmin::Config::Sections do
             group "a" do
               field :founded
             end
-            
+
             group "b" do
               field :name
               field :wins
             end
           end
-          
+
           edit do
             group "a" do
               field :name
             end
-            
+
             group "c" do
               field :founded
               field :wins
             end
           end
-          
+
           update do
             group "d" do
               field :wins
             end
-            
+
             group "e" do
               field :losses
             end
           end
         end
       end
-      
+
       RailsAdmin.config(Team).list.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:founded], [:name, :wins]]
       RailsAdmin.config(Team).edit.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]
       RailsAdmin.config(Team).create.visible_groups.map{|g| g.visible_fields.map(&:name) }.should == [[:name], [:founded, :wins]]

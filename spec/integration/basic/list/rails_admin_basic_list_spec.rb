@@ -11,7 +11,7 @@ describe "RailsAdmin Basic List" do
       visit dashboard_path
     end
   end
-  
+
   describe "GET /admin/typo" do
     it "should redirect to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'
@@ -19,7 +19,7 @@ describe "RailsAdmin Basic List" do
       find('.alert-error').should have_content("Model 'Whatever' could not be found")
     end
   end
-  
+
   describe "GET /admin/balls/545-typo" do
     it "should redirect to balls index and inform the user the id wasn't found" do
       visit '/admin/ball/545-typo'
@@ -38,15 +38,15 @@ describe "RailsAdmin Basic List" do
       should have_content("List of Players")
       should have_content("Created at")
       should have_content("Updated at")
-      
+
       # it "shows the show, edit and delete links" do
       should have_selector("td a", :text => 'Show')
       should have_selector("td a", :text => 'Edit')
       should have_selector("td a", :text => 'Delete')
-      
+
       # it "has the search box with some prompt text" do
       should have_selector("input[placeholder='Filter']")
-      
+
       # https://github.com/sferik/rails_admin/issues/362
       # test that no link uses the "wildcard route" with the main
       # controller and list method
@@ -76,7 +76,7 @@ describe "RailsAdmin Basic List" do
         should have_no_content(@players[i].name)
       end
     end
-      
+
     it "should allow to filter on one attribute" do
       visit index_path(:model_name => "player", :f => {:injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)

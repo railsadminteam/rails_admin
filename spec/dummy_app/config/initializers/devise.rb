@@ -6,7 +6,7 @@ Devise.setup do |config|
   config.case_insensitive_keys = []
   config.use_salt_as_remember_token = true
   config.reset_password_within = 6.hours
-  
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in DeviseMailer.
   config.mailer_sender = "please-change-me@config-initializers-devise.com"

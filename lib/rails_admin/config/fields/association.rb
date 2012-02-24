@@ -78,7 +78,7 @@ module RailsAdmin
         def polymorphic?
           association[:polymorphic]
         end
-        
+
         # Reader for nested attributes
         register_instance_option :nested_form do
           association[:nested_form]
@@ -88,7 +88,7 @@ module RailsAdmin
         def value
           bindings[:object].send(association[:name])
         end
-        
+
         def virtual?
           true
         end

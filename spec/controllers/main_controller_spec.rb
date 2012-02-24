@@ -1,20 +1,20 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController do
-  
-  
+
+
   describe "get_sort_hash" do
     it 'should work with belongs_to associations with label method virtual' do
       controller.params = { :sort => "parent_category", :model_name =>"categories" }
       controller.send(:get_sort_hash, RailsAdmin.config(Category)).should == {:sort=>"categories.parent_category_id", :sort_reverse=>true}
     end
-  
+
     it 'should work with belongs_to associations with label method real column' do
       controller.params = { :sort => "team", :model_name =>"players" }
       controller.send(:get_sort_hash, RailsAdmin.config(Player)).should == {:sort=>"teams.name", :sort_reverse=>true}
     end
   end
-  
+
   describe "list_entries called from view" do
     before do
       @teams = 40.times.map { FactoryGirl.create :team }
@@ -107,8 +107,8 @@ describe RailsAdmin::MainController do
       controller.list_entries.length.should == @players.size
 
     end
-    
-    
-    
+
+
+
   end
 end

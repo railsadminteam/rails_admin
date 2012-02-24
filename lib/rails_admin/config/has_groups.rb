@@ -2,7 +2,7 @@ require 'rails_admin/config/fields/group'
 
 module RailsAdmin
   module Config
-    module HasGroups      
+    module HasGroups
       # Accessor for a group
       #
       # If group with given name does not yet exist it will be created. If a

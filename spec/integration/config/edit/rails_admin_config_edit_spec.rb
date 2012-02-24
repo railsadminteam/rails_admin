@@ -7,12 +7,12 @@ describe "RailsAdmin Config DSL Edit Section" do
   subject { page }
 
   describe "default_value" do
-    
+
     it "should be set for all types of input fields" do
       RailsAdmin.config do |config|
         config.excluded_models = []
         config.model(FieldTest) do
-        
+
           field :string_field do
             default_value 'string_field default_value'
           end
@@ -27,14 +27,14 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      
+
       visit new_path(:model_name => "field_test")
       find_field('field_test[string_field]').value.should == 'string_field default_value'
       find_field('field_test[text_field]').value.should == 'string_field text_field'
       find_field('field_test[date_field]').value.should == Date.today.to_s
       has_checked_field?('field_test[boolean_field]').should be_true
     end
-    
+
     it "should set default value for selects" do
       RailsAdmin.config(Team) do
         field :color, :enum do
@@ -554,7 +554,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     after(:each) do
       Time.zone = 'UTC'
     end
-    
+
     describe "a datetime field" do
 
       it "should default to %B %d, %Y %H:%M" do
@@ -741,7 +741,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
     end
   end
-  
+
   describe 'bindings' do
     it 'should be present at creation time' do
       RailsAdmin.config do |config|
@@ -754,7 +754,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      
+
       visit new_path(:model_name => 'category')
       should have_no_css('#category_parent_category_id')
       click_button 'Save'
@@ -764,8 +764,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_content('Category successfully updated')
     end
   end
-  
-  describe 'nested form' do 
+
+  describe 'nested form' do
 
     it 'should work' do
       RailsAdmin::Config.excluded_models = [RelTest]
@@ -783,7 +783,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       @record.nested_field_tests.length.should == 1
       @record.nested_field_tests[0].title.should == 'nested field test title 1 edited'
     end
-    
+
     it 'should set bindings[:object] to nested object' do
       RailsAdmin::Config.excluded_models = [RelTest]
       RailsAdmin.config(NestedFieldTest) do
@@ -800,10 +800,10 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit edit_path(:model_name => "field_test", :id => @record.id)
       find('#field_test_nested_field_tests_attributes_0_title_field').should have_content('NestedFieldTest')
     end
-    
+
     it 'should be desactivable' do
       RailsAdmin::Config.excluded_models = [RelTest]
-      
+
       visit new_path(:model_name => "field_test")
       should have_selector('.add_nested_fields')
       RailsAdmin.config(FieldTest) do

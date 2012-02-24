@@ -26,7 +26,7 @@ module RailsAdmin
           register_instance_option(:export_value) do
             resource_url.to_s
           end
-          
+
           register_instance_option(:pretty_value) do
             if value.presence
               v = bindings[:view]
@@ -45,12 +45,12 @@ module RailsAdmin
           register_instance_option :image? do
             (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
           end
-          
+
           # virtual class
           def resource_url
             raise 'not implemented'
           end
-          
+
           def virtual?
             true
           end

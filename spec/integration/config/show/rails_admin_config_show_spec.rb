@@ -12,7 +12,7 @@ describe "RailsAdmin Config DSL Show Section" do
 
     visit show_path(:model_name => "team", :id => team.id)
   end
-  
+
   describe "compact_show_view" do
 
     it 'should hide empty fields in show view by default' do

@@ -6,7 +6,7 @@
   sort_reverse = params[:sort_reverse]
   sort = params[:sort]
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
-  
+
   export_action = RailsAdmin::Config::Actions.find(:export, { :controller => self.controller, :abstract_model => @abstract_model })
   export_action = export_action && authorized?(export_action.authorization_key, @abstract_model) ? export_action : nil
 

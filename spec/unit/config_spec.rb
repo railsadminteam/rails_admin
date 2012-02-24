@@ -27,10 +27,10 @@ describe RailsAdmin::Config do
 
     it 'excluded? returns true for any model not on the list' do
       RailsAdmin.config.included_models = [Team, League]
-      
+
       team_config = RailsAdmin::AbstractModel.new('Team').config
       fan_config = RailsAdmin::AbstractModel.new('Fan').config
-      
+
       fan_config.should be_excluded
       team_config.should_not be_excluded
     end
@@ -43,7 +43,7 @@ describe RailsAdmin::Config do
         RailsAdmin::EXTENSIONS = []
       end
     end
-      
+
     it "registers the extension with RailsAdmin" do
       RailsAdmin.add_extension(:example, ExampleModule)
       RailsAdmin::EXTENSIONS.select { |name| name == :example }.length.should == 1
@@ -133,7 +133,7 @@ describe RailsAdmin::Config do
       end
     end
   end
-  
+
   describe ".audit_with" do
     context "given a key for a extension with auditing" do
       before do
@@ -159,7 +159,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config.audit_with.call
       end
     end
-    
+
     context "given paper_trail as the extension for auditing" do
       before do
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, {
@@ -226,12 +226,12 @@ describe RailsAdmin::Config do
       end
     end
   end
-  
+
   describe '.visible_models' do
     it 'passes controller bindings, find visible models, order them' do
-      RailsAdmin.config do |config| 
+      RailsAdmin.config do |config|
         config.included_models = [Player, Fan, Comment, Team]
-        
+
         config.model Player do
           hide
         end
@@ -250,20 +250,20 @@ describe RailsAdmin::Config do
           end
         end
       end
-      
+
       RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model).should == [Fan, Comment]
     end
-    
+
     it 'hides unallowed models' do
-      RailsAdmin.config do |config| 
+      RailsAdmin.config do |config|
         config.included_models = [Comment]
       end
       RailsAdmin.config.visible_models(:controller => double(:authorized? => true)).map(&:abstract_model).map(&:model).should == [Comment]
       RailsAdmin.config.visible_models(:controller => double(:authorized? => false)).map(&:abstract_model).map(&:model).should == []
     end
   end
-    
-  
+
+
 end
 
 module ExampleModule

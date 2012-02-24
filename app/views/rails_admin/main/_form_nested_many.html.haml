@@ -17,12 +17,12 @@
     var nav = field.find('> .controls > .nav');
     var content = field.find('> .tab-content');
     var toggler = field.find('> .controls > .btn-group > .toggler');
-    
+
     // add each nested field to a tab-pane and reference it in the nav
     content.children(".fields").addClass('tab-pane').each(function(){
       nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>');
     });
-    
+
     // init first tab, toggler and content/tabs visibility
     nav.find("> li > a[data-toggle='tab']:first").tab('show');
     if(nav.children().length == 0) {
@@ -37,5 +37,5 @@
         toggler.children('i').addClass('icon-chevron-right')
       }
     }
-    
+
     // dynamic behaviour is in nested-form-hooks

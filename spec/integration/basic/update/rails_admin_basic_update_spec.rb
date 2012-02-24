@@ -85,7 +85,7 @@ describe "RailsAdmin Basic Update" do
       RailsAdmin.config do |c|
         c.audit_with :history
       end
-      
+
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
 
@@ -97,7 +97,7 @@ describe "RailsAdmin Basic Update" do
       @league.divisions.should include(@divisions[0])
       @league.divisions.should_not include(@divisions[1])
       @league.divisions.should_not include(@divisions[2])
-      
+
       RailsAdmin::History.where(:item => @league.id).collect(&:message).should include("Added Divisions ##{@divisions[0].id} associations, Changed name")
 
       page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})

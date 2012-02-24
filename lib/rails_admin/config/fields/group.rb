@@ -11,15 +11,15 @@ module RailsAdmin
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-        
+
         attr_reader :name, :abstract_model
         attr_accessor :section
         attr_reader :parent, :root
-        
+
         def initialize(parent, name)
           @parent = parent
           @root = parent.root
-          
+
           @abstract_model = parent.abstract_model
           @section = parent
           @name = name.to_s.tr(' ', '_').downcase.to_sym
@@ -57,12 +57,12 @@ module RailsAdmin
         def visible_fields
           section.with(bindings).visible_fields.select {|f| self == f.group }
         end
-        
+
         # Should it open by default
         register_instance_option :active? do
           true
         end
-        
+
         # Configurable group label which by default is group's name humanized.
         register_instance_option :label do
           (@label ||= {})[::I18n.locale] ||= (parent.fields.find{|f|f.name == self.name}.try(:label) || name.to_s.humanize)

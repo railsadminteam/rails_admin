@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
-  
+
   describe "#children_fields" do
-    
+
     it 'should be empty by default' do
       RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields.should == []
     end
-    
+
     it 'should contain child key for belongs to associations' do
       RailsAdmin.config(Team).fields.find{ |f| f.name == :division }.children_fields.should == [:division_id]
     end
-    
+
     it 'should contain child keys for polymorphic belongs to associations' do
       RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields.should == [:commentable_id, :commentable_type]
     end
-    
+
     context 'of a Paperclip installation' do
       it 'should be a _file_name field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.should == [:paperclip_asset_file_name]
@@ -27,7 +27,7 @@ describe RailsAdmin::Config::Fields::Base do
         f.filterable?.should be_false
       end
     end
-    
+
     context 'of a Dragonfly installation' do
       it 'should be a _name field and _uid field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.children_fields.should == [:dragonfly_asset_name, :dragonfly_asset_uid]
@@ -39,9 +39,9 @@ describe RailsAdmin::Config::Fields::Base do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.children_fields.should == [:carrierwave_asset]
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.hidden?.should be_false
       end
-    end    
+    end
   end
-  
+
   describe "#html_default_value" do
     it 'should be default_value for new records when value is nil' do
       RailsAdmin.config Team do
@@ -60,13 +60,13 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value.should be_nil
     end
   end
-  
+
   describe "#default_value" do
     it 'should be nil by default' do
       RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.default_value.should be_nil
     end
   end
-  
+
   describe "#css_class" do
     it "should have a default and be user customizable" do
       RailsAdmin.config Team do
@@ -82,7 +82,7 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.css_class.should == "name_field" # default
     end
   end
-  
+
   describe "#associated_collection_cache_all" do
     it "should default to true if associated collection count < 100" do
       RailsAdmin.config(Team).edit.fields.find{|f| f.name == :players}.associated_collection_cache_all.should == true
@@ -95,13 +95,13 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Team).edit.fields.find{|f| f.name == :players}.associated_collection_cache_all.should == false
     end
   end
-  
+
   describe '#searchable_columns' do
     describe 'for belongs_to fields' do
       it "should find label method on the opposite side for belongs_to associations by default" do
         RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.should == [{:column=>"divisions.name", :type=>:string}, {:column=>"teams.division_id", :type=>:integer}]
       end
-    
+
       it "should search on opposite table for belongs_to" do
         RailsAdmin.config(Team) do
           field :division do
@@ -110,7 +110,7 @@ describe RailsAdmin::Config::Fields::Base do
         end
         RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.should == [{:column=>"divisions.custom_id", :type=>:integer}]
       end
-    
+
       it "should search on asked table with model name" do
         RailsAdmin.config(Team) do
           field :division do
@@ -119,7 +119,7 @@ describe RailsAdmin::Config::Fields::Base do
         end
         RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.should == [{:column=>"leagues.name", :type=>:string}]
       end
-    
+
       it "should search on asked table with table name" do
         RailsAdmin.config(Team) do
           field :division do
@@ -129,14 +129,14 @@ describe RailsAdmin::Config::Fields::Base do
         RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.should == [{:column=>"leagues.name", :type=>:string}]
       end
     end
-    
+
     describe 'for basic type fields' do
-      
+
       it 'should use base table and find correct column type' do
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :text_field}.searchable_columns.should == [{:column=>"field_tests.text_field", :type=>:text}]
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :integer_field}.searchable_columns.should == [{:column=>"field_tests.integer_field", :type=>:integer}]
       end
-      
+
       it 'should be customizable to another field on the same table' do
         RailsAdmin.config(FieldTest) do
           field :time_field do
@@ -145,7 +145,7 @@ describe RailsAdmin::Config::Fields::Base do
         end
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :time_field}.searchable_columns.should == [{:column=>"field_tests.date_field", :type=>:date}]
       end
-      
+
       it 'should be customizable to another field on another table with :table_name' do
         RailsAdmin.config(FieldTest) do
           field :string_field do
@@ -154,7 +154,7 @@ describe RailsAdmin::Config::Fields::Base do
         end
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :string_field}.searchable_columns.should == [{:column=>"nested_field_tests.title", :type=>:string}]
       end
-      
+
       it 'should be customizable to another field on another model with ModelClass' do
         RailsAdmin.config(FieldTest) do
           field :string_field do
@@ -164,9 +164,9 @@ describe RailsAdmin::Config::Fields::Base do
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :string_field}.searchable_columns.should == [{:column=>"nested_field_tests.title", :type=>:string}]
       end
     end
-    
+
     describe 'for mapped fields' do
-      
+
       it 'should find the underlying column on the base table' do
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :paperclip_asset}.searchable_columns.should == [{:column=>"field_tests.paperclip_asset_file_name", :type=>:string}]
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :dragonfly_asset}.searchable_columns.should == [{:column=>"field_tests.dragonfly_asset_name", :type=>:string}]
@@ -174,8 +174,8 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
   end
-  
-  
+
+
   describe "#searchable and #sortable" do
     it 'should be false if column is virtual, true otherwise' do
       RailsAdmin.config League do
@@ -188,7 +188,7 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.sortable.should == true
       RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.searchable.should == true
     end
-    
+
     context 'of a virtual field with children fields' do
       it 'should target the first children field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.searchable.should == :paperclip_asset_file_name
@@ -263,7 +263,7 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
   end
-  
+
   describe "#render" do
     it "is configurable" do
       RailsAdmin.config Team do
@@ -276,11 +276,11 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Team).field(:name).render.should == 'rendered'
     end
   end
-  
+
   describe '#active' do
     it 'is false by default' do
-      RailsAdmin.config(Team).field(:division).active?.should be_false  
+      RailsAdmin.config(Team).field(:division).active?.should be_false
     end
   end
-  
+
 end

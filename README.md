@@ -22,7 +22,7 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 
 * Actions
 
-Custom actions are finally there. Default should stay put. To customize them, please have a look at: 
+Custom actions are finally there. Default should stay put. To customize them, please have a look at:
 
 
 [Wiki: actions](https://github.com/sferik/rails_admin/wiki/Actions)<br>

@@ -77,7 +77,7 @@ describe "RailsAdmin CanCan Authorization" do
       ]
 
       visit index_path(:model_name => "player")
-      
+
       should have_content(@players[0].name)
       should_not have_content(@players[1].name)
       should_not have_content("Add new")
@@ -245,7 +245,7 @@ describe "RailsAdmin CanCan Authorization" do
       visit delete_path(:model_name => "player", :id => player_id)
 
       click_button "Yes, I'm sure"
-      
+
       Player.exists?(player_id).should be_false
     end
 

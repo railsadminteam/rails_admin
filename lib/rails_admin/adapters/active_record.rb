@@ -10,7 +10,7 @@ module RailsAdmin
       def new(params = {})
         AbstractObject.new(model.new(params))
       end
-      
+
       def get(id)
         if object = model.where(model.primary_key => id).first
           AbstractObject.new object
@@ -18,15 +18,15 @@ module RailsAdmin
           nil
         end
       end
-      
+
       def scoped
         model.scoped
       end
-      
+
       def first(options = {}, scope = nil)
         all(options, scope).first
       end
-      
+
       def all(options = {}, scope = nil)
         scope ||= self.scoped
         scope = scope.includes(options[:include]) if options[:include]
@@ -38,11 +38,11 @@ module RailsAdmin
         scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
         scope
       end
-      
+
       def count(options = {}, scope = nil)
         all(options.merge({:limit => false, :page => false}), scope).count
       end
-      
+
       def destroy(objects)
         Array.wrap(objects).each &:destroy
       end
@@ -66,7 +66,7 @@ module RailsAdmin
           }
         end
       end
-      
+
       def properties
         columns = model.columns.reject {|c| c.type.blank? || DISABLED_COLUMN_TYPES.include?(c.type.to_sym) }
         columns.map do |property|
@@ -80,13 +80,13 @@ module RailsAdmin
           }
         end
       end
-      
+
       private
-      
+
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
         statements = []
         values = []
-        
+
         fields.each do |field|
           field.searchable_columns.flatten.each do |column_infos|
             statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
@@ -95,10 +95,10 @@ module RailsAdmin
             values << value2 unless value2.nil?
           end
         end
-        
+
         [statements.join(' OR '), *values]
       end
-      
+
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_conditions(filters, fields = config.list.fields.select(&:filterable?))

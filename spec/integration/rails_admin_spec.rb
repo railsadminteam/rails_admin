@@ -39,7 +39,7 @@ describe "RailsAdmin" do
       should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]')
     end
   end
-  
+
   describe 'hidden fields with default values' do
     it "should show up with default value, hidden" do
       RailsAdmin.config Player do
@@ -52,15 +52,15 @@ describe "RailsAdmin" do
           end
         end
       end
-      
+
       visit new_path(:model_name => "player")
       should have_selector("#player_name[type=hidden][value='username@example.com']")
       should_not have_selector("#player_name[type=hidden][value='toto@example.com']")
     end
   end
-  
+
   describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
-    
+
     it 'should be accessible from the list view' do
       RailsAdmin.config Player do
         list do
@@ -69,7 +69,7 @@ describe "RailsAdmin" do
               bindings[:view]._current_user.email == 'username@example.com'
             end
           end
-          
+
           field :team do
             visible do
               bindings[:view]._current_user.email == 'foo@example.com'
@@ -77,7 +77,7 @@ describe "RailsAdmin" do
           end
         end
       end
-      
+
       visit index_path(:model_name => "player")
       should have_selector(".header.name_field")
       should_not have_selector(".header.team_field")

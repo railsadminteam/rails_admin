@@ -20,7 +20,7 @@ $('form').live 'nested:fieldAdded', (content) ->
   content.select(':hidden').show('slow') # show tabs content if hidden
   # toggler 'on' if inactive
   toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right')
-  
+
 $('form').live 'nested:fieldRemoved', (content) ->
   field = content.field
   nav = field.closest(".control-group").children('.controls').children('.nav')
@@ -28,13 +28,13 @@ $('form').live 'nested:fieldRemoved', (content) ->
   parent_group = field.closest(".control-group")
   controls = parent_group.children('.controls')
   toggler = controls.find('.toggler')
-  
+
   # try to activate another tab
   (if current_li.next().length then current_li.next() else current_li.prev()).children('a:first').tab('show')
-  
+
   current_li.remove()
-  
+
   if nav.children().length == 0 # removed last tab
     nav.select(':visible').hide('slow') # hide nav. No use anymore.
     # toggler 'off' if active
-    toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right') 
+    toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right')

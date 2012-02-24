@@ -16,7 +16,7 @@
     _create: function() {
       var widget = this
       var dom_widget = widget.element;
-      
+
       var edit_url = dom_widget.find('select').data('edit-url');
       if(typeof(edit_url) != 'undefined' && edit_url.length) {
         dom_widget.find('.ra-multiselect option').live('dblclick', function(e){
@@ -27,7 +27,7 @@
       dom_widget.find('.create').unbind().bind("click", function(e){
         widget._bindModalOpening(e, $(this).data('link'))
       });
-      
+
       dom_widget.find('.update').unbind().bind("click", function(e){
         if(value = dom_widget.find('select').val()) {
           widget._bindModalOpening(e, $(this).data('link').replace('__ID__', value))
@@ -36,7 +36,7 @@
         }
       });
     },
-    
+
     _bindModalOpening: function(e, url) {
       e.preventDefault();
       widget = this;
@@ -59,7 +59,7 @@
         dataType: 'text'
       });
     },
-    
+
     _bindFormEvents: function() {
       var widget = this,
           dialog = this._getModal(),
@@ -67,19 +67,19 @@
           saveButtonText = dialog.find(":submit[name=_save]").html(),
           cancelButtonText = dialog.find(":submit[name=_continue]").html();
       dialog.find('.form-actions').remove();
-      
+
       form.attr("data-remote", true);
-      dialog.find('.modal-header-title').text(form.data('title'));      
+      dialog.find('.modal-header-title').text(form.data('title'));
       dialog.find('.cancel-action').unbind().click(function(){
         dialog.modal('hide');
         return false;
       }).html(cancelButtonText);
-      
+
       dialog.find('.save-action').unbind().click(function(){
         form.submit();
         return false;
       }).html(saveButtonText);
-      
+
       form.bind("ajax:complete", function(xhr, data, status) {
         if (status == 'error') {
           dialog.find('.modal-body').html(data.responseText);
@@ -90,15 +90,15 @@
           var json = $.parseJSON(data.responseText);
           var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
           var select = widget.element.find('select').filter(":hidden");
-          
+
           if(widget.element.find('.filtering-select').length) { // select input
             var input = widget.element.find('.filtering-select').children('.ra-filtering-select-input');
             input.val(json.label);
             if (!select.find('option[value=' + json.id + ']').length) // replace
               select.html(option).val(json.id);
-          
+
           } else { // multi-select input
-          
+
             var input = widget.element.find('.ra-filtering-select-input');
             var multiselect = widget.element.find('.ra-multiselect');
             if (multiselect.find('option[value=' + json.id + ']').length) { // replace
@@ -114,7 +114,7 @@
         }
       });
     },
-    
+
     _getModal: function() {
       var widget = this;
       if (!widget.dialog) {
