@@ -48,11 +48,8 @@ module RailsAdmin
         all(options.merge({:limit => false, :page => false}), scope).count
       end
 
-      def destroy(ids)
-        ids = ids.map{|i| BSON::ObjectId(i)}
-        destroyed = Array(model.where(:_id.in=>ids))
-        model.destroy_all(:conditions=>{:_id.in=>ids})
-        destroyed
+      def destroy(objects)
+        Array.wrap(objects).each &:destroy
       end
 
       def associations
