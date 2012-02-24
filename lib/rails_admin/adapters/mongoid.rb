@@ -111,13 +111,6 @@ module RailsAdmin
         end
       end
 
-      def model_store_exists?
-        # Collections are created on demand, so they always 'exist'.
-        # If need to know if pre-exist we can do something like
-        #     model.db.collection_names.include?(model.collection.name)
-        true
-      end
-
       def table_name
         model.name.tableize
       end

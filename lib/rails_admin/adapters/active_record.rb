@@ -81,10 +81,6 @@ module RailsAdmin
         end
       end
 
-      def model_store_exists?
-        model.table_exists?
-      end
-
       def table_name
         model.table_name
       end

@@ -1,6 +1,12 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
 ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
+
+if ENV['INVOKE_SIMPLECOV']
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
+
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
 require 'rspec/rails'
