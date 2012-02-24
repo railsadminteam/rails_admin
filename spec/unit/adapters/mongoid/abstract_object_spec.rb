@@ -18,13 +18,13 @@ describe "Mongoid::AbstractObject" do
       @author.articles.should == []
       @author.article_ids = @articles.map(&:id)
       @author.reload
-      @author.articles.should == @articles
+      @author.articles.sort.should == @articles.sort
     end
 
     it "skips invalid id on assignment through foo_ids=" do
       @author.article_ids = @articles.map{|item| item.id.to_s }.unshift('4f431021dcf2310db7000006')
       @author.reload
-      @author.articles.should == @articles
+      @author.articles.sort.should == @articles.sort
     end
   end
 end
