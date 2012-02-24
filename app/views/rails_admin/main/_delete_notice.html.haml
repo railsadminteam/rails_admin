@@ -1,6 +1,6 @@
 - object = delete_notice
 
-%li{:style => 'display:block; margin-bottom:10px'}
+%li{:style => 'display:block; margin-top:10px'}
   %span.label= @abstract_model.pretty_name
   = link_to @model_config.with(:object => object).object_label, show_path(:model_name => @abstract_model.to_param, :id => object.id)
   %ul

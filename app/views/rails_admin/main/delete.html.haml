@@ -10,5 +10,9 @@
 = form_for(@object, :url => delete_path(:model_name => @abstract_model.to_param, :id => @object.id), :html => {:method => "delete"}) do
   %input{:type => :hidden, :name => 'return_to', :value => (params[:return_to].presence || request.referer)}
   .form-actions
-    %button.btn.btn-danger{:type => "submit", :'data-disable-with' => t("admin.form.confirmation")}= t("admin.form.confirmation")
-    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.form.cancel")}= t("admin.form.cancel")
+    %button.btn.btn-danger{:type => "submit", :'data-disable-with' => t("admin.form.confirmation")}
+      %i.icon-white.icon-ok
+      = t("admin.form.confirmation")
+    %button.btn{:type => "submit", :name => "_continue", :'data-disable-with' => t("admin.form.cancel")}
+      %i.icon-remove
+      = t("admin.form.cancel")
