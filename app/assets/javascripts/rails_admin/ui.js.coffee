@@ -1,13 +1,7 @@
 $ = jQuery
 
-$("#list input.checkbox.toggle").on "click", ->
-  checked_status = $(this).is(":checked")
-  $("td.action.select input.checkbox[name='bulk_ids[]']").each ->
-    $(this).attr "checked", checked_status
-    if checked_status
-      $(this).parent().addClass "checked"
-    else
-      $(this).parent().removeClass "checked"
+$("#list input.toggle").live "click", ->
+  $("#list [name='bulk_ids[]']").attr "checked", $(this).is(":checked")
 
 $("#list a, #list form").live "ajax:complete", (xhr, data, status) ->
   $("#list").replaceWith data.responseText
