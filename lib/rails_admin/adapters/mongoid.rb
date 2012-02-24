@@ -95,7 +95,7 @@ module RailsAdmin
                 "Date"           => { :type => :date, :length => nil },
                 "DateTime"       => { :type => :datetime, :length => nil },
                 "Float"          => { :type => :float, :length => nil },
-                "Hash"           => { :type => :string, :length => nil },
+                "Hash"           => { :type => :text, :length => nil },
                 "Integer"        => { :type => :integer, :length => nil },
                 "Time"           => { :type => :datetime, :length => nil },
                 "Object"         => { :type => :bson_object_id, :length => nil },

@@ -7,7 +7,7 @@ module RailsAdmin
           super
           object.associations.each do |name, association|
             if association.macro == :references_many
-              instance_eval(<<EOS)
+              instance_eval <<-RUBY, __FILE__, __LINE__ + 1
                 def #{name.to_s.singularize}_ids
                   #{name}.map{|item| item.id }
                 end
@@ -17,7 +17,7 @@ module RailsAdmin
                     map{|item_id| self.#{name}.klass.find(item_id) rescue nil }.
                     compact
                 end
-EOS
+RUBY
             end
           end
         end
