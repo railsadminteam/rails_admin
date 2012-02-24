@@ -44,20 +44,24 @@
         return false;
 
       var dialog = this._getModal();
-      $.ajax({
-        url: url,
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader("Accept", "text/javascript");
-        },
-        success: function(data, status, xhr) {
-          dialog.find('.modal-body').html(data);
-          widget._bindFormEvents();
-        },
-        error: function(xhr, status, error) {
-          dialog.find('.modal-body').html(xhr.responseText);
-        },
-        dataType: 'text'
-      });
+      
+      setTimeout(function(){ // fix race condition with modal insertion in the dom (Chrome => Team/add a new fan => #modal not found when it should have). Somehow .on('show') is too early, tried it too.
+        $.ajax({
+          url: url,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader("Accept", "text/javascript");
+          },
+          success: function(data, status, xhr) {
+              dialog.find('.modal-body').html(data);
+              widget._bindFormEvents();
+          },
+          error: function(xhr, status, error) {
+            dialog.find('.modal-body').html(xhr.responseText);
+          },
+          dataType: 'text'
+        });
+      },100);
+
     },
 
     _bindFormEvents: function() {
@@ -84,9 +88,7 @@
         if (status == 'error') {
           dialog.find('.modal-body').html(data.responseText);
           widget._bindFormEvents();
-
         } else {
-
           var json = $.parseJSON(data.responseText);
           var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
           var select = widget.element.find('select').filter(":hidden");
