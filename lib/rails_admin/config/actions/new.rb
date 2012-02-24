@@ -56,7 +56,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-pencil'
+          'icon-plus'
         end
       end
     end
