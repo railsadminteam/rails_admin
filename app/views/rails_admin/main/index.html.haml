@@ -67,6 +67,11 @@
   %script
     jQuery(function($) {
     = @ordered_filter_string
+    /* Check all checkbox */
+    $('input.checkbox.toggle').tooltip();
+    $('input.checkbox.toggle').click(function () {
+    $('input.checkbox[name|="bulk_ids[]"]').attr('checked', this.checked);
+    });
     });
   %style
     - properties.select{ |p| p.column_width.present? }.each do |property|
@@ -89,7 +94,7 @@
       %thead
         %tr
           %th.shrink
-            %input.toggle{:type => "checkbox"}
+            %input.toggle{:type => "checkbox", :title => "#{t('admin.misc.chose_all')}"}
           - if other_left
             %th.other.left.shrink= "..."
           - properties.each do |property|
