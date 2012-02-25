@@ -19,6 +19,7 @@ Available translations:
 * [[Russian (Russia): ru|https://gist.github.com/1788510#file_rails_admin.ru.yml]]
 * [[Catalan: ca|https://gist.github.com/1764593]]
 * [[Danish: da|https://gist.github.com/1780778]]
+* [[Dutch: nl|https://gist.github.com/1909240]]
 * Add your own (create a gist first)
 
 You can find old translations here:
