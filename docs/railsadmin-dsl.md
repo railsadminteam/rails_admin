@@ -260,7 +260,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-This content is mostly useful when the admin doign the data entry is not familiar with the system or as a way to display inline documentation.
+This content is mostly useful when the admin doing the data entry is not familiar with the system or as a way to display inline documentation.
 
 
 **Field groupings - syntax**
@@ -307,6 +307,23 @@ If you have :user_id field with a user association, use :user as the attribute
 In fact the first examples `group :default` configuration is unnecessary
 as the default group has already initialized all fields and belongs to
 associations for itself.
+
+**Field groupings - toggles**
+
+By default, all field groups (other than :default) will have a toggle and start off active.  To change the default and have a field group start off with the toggle inactive, use 'active false'
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      group :advanced do
+        active false
+      end
+    end
+  end
+end
+```
+
 
 **Fields**
 
