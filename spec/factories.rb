@@ -71,4 +71,10 @@ FactoryGirl.define do
   factory :author do
     sequence(:name) { |n| "Author #{n}" }
   end
+
+  factory :mongoid_field_test do
+    sequence(:name) { |n| "Mongoid Field Test #{n}" }
+    array_field([1])
+    hash_field({:a => 1})
+  end
 end

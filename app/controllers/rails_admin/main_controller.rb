@@ -77,7 +77,7 @@ module RailsAdmin
       attributes.each do |key, value|
         # Deserialize the attribute if attribute is serialized
         if @abstract_model.serialized_attributes.keys.include?(key) and value.is_a? String
-          attributes[key] = YAML::load(value)
+          attributes[key] = YAML::load(value) || nil
         end
       end
       attributes

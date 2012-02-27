@@ -88,14 +88,14 @@ module RailsAdmin
               end
             else
               {
-                "Array"          => { :type => :text, :length => nil },
+                "Array"          => { :type => :array, :length => nil },
                 "BigDecimal"     => { :type => :string, :length => 1024 },
                 "Boolean"        => { :type => :boolean, :length => nil },
                 "BSON::ObjectId" => { :type => :bson_object_id, :length => nil },
                 "Date"           => { :type => :date, :length => nil },
                 "DateTime"       => { :type => :datetime, :length => nil },
                 "Float"          => { :type => :float, :length => nil },
-                "Hash"           => { :type => :text, :length => nil },
+                "Hash"           => { :type => :hash, :length => nil },
                 "Integer"        => { :type => :integer, :length => nil },
                 "Time"           => { :type => :datetime, :length => nil },
                 "Object"         => { :type => :bson_object_id, :length => nil },
@@ -116,7 +116,13 @@ module RailsAdmin
       end
 
       def serialized_attributes
-        {}
+        @serialized_attributes ||= Hash[model.fields.map do |name, field|
+          if ['Array', 'Hash'].include? field.type.to_s
+            [name.to_s, ::ActiveRecord::Coders::YAMLColumn.new(field.type)] # for compatibility
+          else
+            nil
+          end
+        end.compact]
       end
 
       def accessible_by(*args)
