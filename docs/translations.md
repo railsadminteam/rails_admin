@@ -10,7 +10,7 @@ See [[https://github.com/plataformatec/devise/wiki/I18n]] and [[https://github.c
 
 Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]] to your `config/locales` directory and adapt it to your needs.
 
-Available translations:
+Community sourced translations:
 
 * [[English: en|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]]
 * [[French: fr|https://gist.github.com/1632279]]
@@ -26,6 +26,6 @@ Available translations:
 * [[Dutch: nl|https://gist.github.com/1909240]]
 * Add your own (create a gist first)
 
-You can find old translations here:
+You can find old included translations here:
 
 [[https://github.com/sferik/rails_admin/tree/df631d6d4ed49a5417d8135000611c37f6a3ed9b/config/locales]]
