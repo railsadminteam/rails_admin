@@ -1,7 +1,7 @@
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
-    attr_reader :adapter
+    attr_reader :adapter, :model_name
 
     class << self
       def reset

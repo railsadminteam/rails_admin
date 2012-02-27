@@ -40,7 +40,7 @@ module RailsAdmin
       end
 
       def excluded?
-        @excluded ||= !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
+        @excluded ||= !RailsAdmin::AbstractModel.all.map(&:model_name).include?(abstract_model.try(:model_name))
       end
 
       def object_label
@@ -75,7 +75,7 @@ module RailsAdmin
       end
 
       register_instance_option :navigation_label do
-         @navigation_label ||= (self.parent ? nil : (((parent_module = abstract_model.model.parent) != Object) ? parent_module.to_s : nil))
+         @navigation_label ||= (parent_module = abstract_model.model.parent) != Object ? parent_module.to_s : nil
       end
 
       # Act as a proxy for the base section configuration that actually
