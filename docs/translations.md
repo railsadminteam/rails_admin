@@ -1,3 +1,7 @@
+## Rails
+
+Pick [[your locale here|https://github.com/svenfuchs/rails-i18n/tree/master/rails/locale]]
+
 ## Devise
 
 See [[https://github.com/plataformatec/devise/wiki/I18n]] and [[https://github.com/tigrish/devise-i18n]]
