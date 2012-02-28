@@ -28,7 +28,7 @@ module RailsAdmin
 
         def find custom_key, bindings = {}
           init_actions!
-          action = @@actions.find{ |a| a.custom_key == custom_key }.with(bindings)
+          action = @@actions.find{ |a| a.custom_key == custom_key }.try(:with, bindings)
           bindings[:controller] ? (action.try(:visible?) && action || nil) : action
         end
 

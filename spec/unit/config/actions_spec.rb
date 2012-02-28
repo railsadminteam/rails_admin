@@ -27,6 +27,10 @@ describe RailsAdmin::Config::Actions do
       RailsAdmin::Config::Actions.find(:show).should be_a(RailsAdmin::Config::Actions::Show)
     end
 
+    it 'should return nil when no action is found by the custom key' do
+      RailsAdmin::Config::Actions.find(:non_existent_action_key).should be_nil
+    end
+
     it 'should return visible action passing binding if controller binding is given, and pass action visible or not if no' do
       RailsAdmin.config do |config|
         config.actions do
