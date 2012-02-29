@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe RailsAdmin::MainController do
@@ -107,8 +109,58 @@ describe RailsAdmin::MainController do
       controller.list_entries.length.should == @players.size
 
     end
+  end
+  
+  describe "sanitize_params_for!" do
+    it 'sanitize params recursively in nested forms' do
+      RailsAdmin.config Comment do
+        configure :created_at do
+          show
+        end
+      end
+      
+      RailsAdmin.config NestedFieldTest do
+        configure :created_at do
+          show
+        end
+      end
 
-
-
+      I18n.locale = :fr
+      controller.params = {
+        "field_test"=>{
+          :"datetime_field"=>"1 août 2010", 
+          "nested_field_tests_attributes"=>{
+            "new_1330520162002"=>{
+              "comment_attributes"=>{
+                :"created_at"=>"2 août 2010"
+              },
+              :"created_at"=>"3 août 2010"
+            }
+          }, 
+          "comment_attributes"=>{
+            :"created_at"=>"4 août 2010"
+          }
+        }
+      }
+      
+      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+      
+      controller.params.should == {
+        "field_test"=>{
+          :datetime_field=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00', 
+          "nested_field_tests_attributes"=>{
+            "new_1330520162002"=>{
+              "comment_attributes"=>{
+                :created_at=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
+              }, 
+              :created_at=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
+            }
+          }, 
+          "comment_attributes"=>{
+            :created_at=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
+          }
+        }
+      }
+    end
   end
 end

@@ -28,6 +28,10 @@ module RailsAdmin
           def method_name
             nested_form ? "#{self.name}_attributes" : "#{self.name}_id"
           end
+          
+          def multiple?
+            false
+          end
         end
       end
     end

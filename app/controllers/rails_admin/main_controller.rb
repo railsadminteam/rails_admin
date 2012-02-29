@@ -69,18 +69,7 @@ module RailsAdmin
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
     end
-
-    def get_attributes
-      attributes = params[@abstract_model.to_param.gsub('~','_')] || {}
-      attributes.each do |key, value|
-        # Deserialize the attribute if attribute is serialized
-        if @abstract_model.model.serialized_attributes.keys.include?(key) and value.is_a? String
-          attributes[key] = YAML::load(value)
-        end
-      end
-      attributes
-    end
-
+    
     def redirect_to_on_success
       notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]
@@ -89,6 +78,18 @@ module RailsAdmin
         redirect_to edit_path(:id => @object.id, :return_to => params[:return_to]), :flash => { :success => notice }
       else
         redirect_to back_or_index, :flash => { :success => notice }
+      end
+    end
+
+    def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
+      fields = model_config.send(action).fields
+      fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }
+
+      fields.select(&:nested_form).each do |association|
+        children_params = association.multiple? ? _params[association.method_name].try(:values) : [_params[association.method_name]].compact
+        (children_params || []).each do |children_param|
+          sanitize_params_for!(:nested, association.associated_model_config, children_param)
+        end
       end
     end
 

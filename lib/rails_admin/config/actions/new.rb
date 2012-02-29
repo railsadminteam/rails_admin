@@ -34,13 +34,13 @@ module RailsAdmin
 
               @modified_assoc = []
               @object = @abstract_model.new
-              @attributes = get_attributes
-              @model_config.create.fields.each {|f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
+              sanitize_params_for! :create
+              
+              @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
               @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
-              @object.set_attributes(@attributes, _attr_accessible_role)
-
+              
               if @object.save
                 @auditing_adapter && @auditing_adapter.create_object("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
                 respond_to do |format|

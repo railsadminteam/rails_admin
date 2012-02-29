@@ -88,7 +88,12 @@ module RailsAdmin
         def value
           bindings[:object].send(association[:name])
         end
-
+        
+        # has many?
+        def multiple?
+          true
+        end
+        
         def virtual?
           true
         end

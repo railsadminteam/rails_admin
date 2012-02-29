@@ -25,12 +25,16 @@ module RailsAdmin
             elsif request.put? # UPDATE
 
               @cached_assocations_hash = associations_hash
-              @attributes = get_attributes
               @modified_assoc = []
 
               @old_object = @object.dup
-              @model_config.update.fields.map { |f| f.parse_input(@attributes) if f.respond_to?(:parse_input) }
-              @object.set_attributes(@attributes, _attr_accessible_role)
+              
+              sanitize_params_for! :update
+              
+              @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
+              @authorization_adapter && @authorization_adapter.attributes_for(:update, @abstract_model).each do |name, value|
+                @object.send("#{name}=", value)
+              end
 
               if @object.save
                 @auditing_adapter && @auditing_adapter.update_object(@abstract_model, @object, @cached_assocations_hash, associations_hash, @modified_assoc, @old_object, _current_user)

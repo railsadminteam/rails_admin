@@ -5,10 +5,8 @@ module RailsAdmin
     module Fields
       module Types
         class BelongsToAssociation < RailsAdmin::Config::Fields::Association
-          # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          # Accessor for field's formatted value
           register_instance_option :formatted_value do
             (o = value) && o.send(associated_model_config.object_label_method)
           end
@@ -34,7 +32,11 @@ module RailsAdmin
           end
 
           def method_name
-            nested_form ? "#{association[:child_key]}_attributes" : association[:child_key]
+            nested_form ? "#{self.name}_attributes" : association[:child_key]
+          end
+          
+          def multiple?
+            false
           end
         end
       end
