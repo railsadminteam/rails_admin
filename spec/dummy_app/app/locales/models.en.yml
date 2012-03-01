@@ -1,0 +1,16 @@
+en:
+  activerecord:
+    attributes:
+      fan:
+        name: His Name
+      team:
+        manager: Team Manager
+        fans: Some Fans
+fr:
+  activerecord:
+    attributes:
+      fan:
+        name: Son nom
+      team:
+        manager: Manager de l'équipe
+        fans: Quelques fans

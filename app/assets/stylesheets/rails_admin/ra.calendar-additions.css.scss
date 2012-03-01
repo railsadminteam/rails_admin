@@ -1,0 +1,25 @@
+.ui-timepicker-table table th.periods {
+  padding:0;
+}
+
+.ui-datepicker {
+  /* fix glitches */
+  border-width:0px;
+  table{
+    margin:0px;
+  }
+  /* make present day stand out */
+  td.ui-datepicker-today {
+    background:#ccc;
+    -webkit-box-shadow:inset 0 1px 1px #333;
+    -moz-box-shadow:inset 0 1px 1px #333;
+    box-shadow:0 1px 1px #333 inset;
+    .ui-state-highlight{
+      background:transparent;
+      border:none;
+      -webkit-box-shadow:none;
+      -moz-box-shadow:none;
+      box-shadow:none;
+    }
+  }
+}

@@ -1,0 +1,76 @@
+<%
+  theme = ENV['RAILS_ADMIN_THEME'] || :default
+%>
+
+/***  Variables  ***/
+
+@import "bootstrap/variables";
+@import "rails_admin/base/variables";
+@import "rails_admin/themes/<%= theme %>/variables";
+@import "rails_admin/custom/variables";
+
+/***  Mixins  ***/
+
+@import "bootstrap/mixins";
+@import "rails_admin/base/mixins";
+@import "rails_admin/themes/<%= theme %>/mixins";
+@import "rails_admin/custom/mixins";
+
+/*** Reset ***/
+@import "bootstrap/reset";
+
+/***  Libraries  ***/
+
+@import "rails_admin/aristo/jquery-ui-1.8.7.custom";
+@import "rails_admin/jquery.ui.timepicker";
+@import "rails_admin/ra.calendar-additions";
+@import "rails_admin/ra.filtering-multiselect";
+
+/***  Bootstrap Theming  ***/
+
+@import "bootstrap/scaffolding";
+@import "bootstrap/grid";
+@import "bootstrap/layouts";
+@import "bootstrap/type";
+@import "bootstrap/code";
+@import "bootstrap/forms";
+@import "bootstrap/tables";
+@import "bootstrap/sprites";
+@import "bootstrap/dropdowns";
+@import "bootstrap/wells";
+@import "bootstrap/component-animations";
+@import "bootstrap/close";
+@import "bootstrap/buttons";
+@import "bootstrap/button-groups";
+@import "bootstrap/alerts";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+@import "bootstrap/pager";
+@import "bootstrap/modals";
+@import "bootstrap/tooltip";
+@import "bootstrap/popovers";
+@import "bootstrap/thumbnails";
+@import "bootstrap/labels";
+@import "bootstrap/progress-bars";
+@import "bootstrap/accordion";
+@import "bootstrap/carousel";
+@import "bootstrap/hero-unit";
+@import "bootstrap/utilities";
+
+/***  RailsAdmin Theming  ***/
+
+@import "rails_admin/base/theming";
+@import "rails_admin/themes/<%= theme %>/theming";
+@import "rails_admin/custom/theming";
+
+
+
+
+
+
+
+
+
+

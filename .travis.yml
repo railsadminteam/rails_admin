@@ -1,0 +1,76 @@
+before_install: gem install bundler --pre
+bundler_args: "--without debug"
+script: spec/ci.sh
+rvm:
+  - 1.9.3
+  - rbx
+  - ree
+  - jruby
+env:
+  - "CI_DB_ADAPTER=sqlite3"
+  - "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+  - "CI_DB_ADAPTER=mysql"
+gemfile:
+  - Gemfile
+  - Gemfile31
+notifications:
+  irc: "irc.freenode.org#railsadmin"
+matrix:
+  exclude:
+    - rvm: ree
+      env: "CI_DB_ADAPTER=sqlite3"
+      gemfile: Gemfile
+    - rvm: ree
+      env: "CI_DB_ADAPTER=sqlite3"
+      gemfile: Gemfile31
+    - rvm: ree
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+      gemfile: Gemfile
+    - rvm: ree
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+      gemfile: Gemfile31
+    - rvm: ree
+      gemfile: Gemfile31
+      env: "CI_DB_ADAPTER=mysql"
+
+    - rvm: rbx
+      env: "CI_DB_ADAPTER=sqlite3"
+      gemfile: Gemfile
+    - rvm: rbx
+      env: "CI_DB_ADAPTER=sqlite3"
+      gemfile: Gemfile31
+    - rvm: rbx
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+      gemfile: Gemfile
+    - rvm: rbx
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+      gemfile: Gemfile31
+    - rvm: rbx
+      env: "CI_DB_ADAPTER=mysql"
+      gemfile: Gemfile31
+
+    - rvm: jruby
+      env: "CI_DB_ADAPTER=mysql"
+      gemfile: Gemfile
+    - rvm: jruby
+      env: "CI_DB_ADAPTER=mysql"
+      gemfile: Gemfile31
+    - rvm: jruby
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+      gemfile: Gemfile
+    - rvm: jruby
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+      gemfile: Gemfile31
+    - rvm: jruby
+      env: "CI_DB_ADAPTER=sqlite3"
+      gemfile: Gemfile31
+
+    - rvm: 1.9.3
+      env: "CI_DB_ADAPTER=mysql"
+      gemfile: Gemfile
+    - rvm: 1.9.3
+      env: "CI_DB_ADAPTER=mysql"
+      gemfile: Gemfile31
+    - rvm: 1.9.3
+      gemfile: Gemfile31
+      env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"

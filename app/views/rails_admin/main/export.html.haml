@@ -1,0 +1,75 @@
+- params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
+- visible_fields = @model_config.export.with(:view => self, :object => @abstract_model.model.new).visible_fields
+
+= form_tag export_path(params.merge(:all => true)), :method => 'post', :class => 'form-horizontal denser' do
+
+  %input{:name => "send_data", :type => "hidden", :value => "true"}/
+  %fieldset
+    %legend
+      %i.icon-chevron-down
+      = t('admin.export.select')
+    .control-group
+      %label.control-label{:rel => 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', :name => @model_config.label_plural.downcase)
+      .controls
+        - visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.each do |field|
+          - list = field.virtual? ? 'methods' : 'only'
+          - if field.association? && field.association[:polymorphic]
+            %label.checkbox{:for => "schema_#{list}_#{field.method_name}"}
+              = check_box_tag "schema[#{list}][]", field.method_name, true, { :id => "schema_#{list}_#{field.method_name}" }
+              = field.label + " [id]"
+            - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]
+            %label.checkbox{:for => "schema_#{list}_#{polymorphic_type_column_name}"}
+              = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { :id => "schema_#{list}_#{polymorphic_type_column_name}" }
+              = field.label + " [type]"
+          - else
+            %label.checkbox{:for => "schema_#{list}_#{field.name}"}
+              = check_box_tag "schema[#{list}][]", field.name, true, { :id => "schema_#{list}_#{field.name}" }
+              = field.label
+
+    - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
+      - fields = field.associated_model_config.export.with(:view => self, :object => (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
+      .control-group
+        %label.control-label{:rel => 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label.downcase)
+        .controls
+          - fields.each do |associated_model_field|
+            - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
+            %label.checkbox{:for => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
+              = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
+              = associated_model.human_attribute_name(associated_model_field.name)
+
+  %fieldset
+    %legend
+      %i.icon-chevron-down
+      = t('admin.export.options_for', :name => 'csv')
+    .control-group
+      - guessed_encoding = (Rails.configuration.database_configuration[Rails.env]['encoding'].presence rescue 'UTF-8') || 'UTF-8'
+      %label.control-label{:for => "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
+      .controls
+        -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
+        = select_tag 'csv_options[encoding_to]', options_for_select(["", "UTF-8", "UTF-16LE", "UTF-16BE", "UTF-32LE", "UTF-32BE", "UTF-7", "ISO-8859-1", "ISO-8859-15", "IBM-850", "MacRoman", "Windows-1252", "ISO-8859-3", "IBM-852", "ISO-8859-2", "MacCE", "Windows-1250", "IBM-855", "ISO-8859-5", "ISO-IR-111", "KOI8-R", "MacCyrillic", "Windows-1251", "CP-866", "KOI-U", "MacUkranian", "GB2312", "GBK", "GB18030", "HZ", "ISO-2022-CN", "Big5", "Big5-HKSCS", "EUC-TW", "EUC-JP", "ISO-2022-JP", "Shift_JIS", "EUC-KR", "UHC", "JOHAB", "ISO-2022-KR"])
+        %p.help-block= t('admin.export.csv.encoding_to_help', :name => guessed_encoding)
+
+    .control-group
+      %label.control-label{:for => "csv_options_skip_header"}= t('admin.export.csv.skip_header')
+      .controls
+        = check_box_tag 'csv_options[skip_header]', 'true'
+        %p.help-block= t('admin.export.csv.skip_header_help')
+
+    .control-group
+      %label.control-label{:for => "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
+      .controls
+        = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" })
+        %p.help-block= t('admin.export.csv.col_sep_help', :value => t('admin.export.csv.default_col_sep'))
+
+  .form-actions
+    %input{:type => :hidden, :name => 'return_to', :value => (params[:return_to].presence || request.referer)}
+    %button.btn.btn-primary{:type => "submit", :name => 'csv'}
+      %i.icon-white.icon-ok
+      = t("admin.export.confirmation", :name => 'csv')
+    %button.btn.btn-info{:type => "submit", :name => 'json'}
+      = t("admin.export.confirmation", :name => 'json')
+    %button.btn.btn-info{:type => "submit", :name => 'xml'}
+      = t("admin.export.confirmation", :name => 'xml')
+    %button.btn{:type => "submit", :name => "_continue"}
+      %i.icon-remove
+      = t("admin.form.cancel")

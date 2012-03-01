@@ -1,0 +1,129 @@
+en:
+  home:
+    name: Home
+  views:
+    pagination:
+      previous: "&laquo; Prev"
+      next: "Next &raquo;"
+      truncate: "…"
+  admin:
+    misc:
+      search: "Search"
+      filter: "Filter"
+      refresh: "Refresh"
+      show_all: "Show all"
+      add_filter: "Add filter"
+      bulk_menu_title: "Selected items"
+      remove: "Remove"
+      add_new: "Add new"
+      chosen: "Chosen %{name}"
+      chose_all: "Choose all"
+      clear_all: "Clear all"
+      up: "Up"
+      down: "Down"
+      navigation: "Navigation"
+      log_out: "Log out"
+      ago: "ago"
+    flash:
+      successful: "%{name} successfully %{action}"
+      error: "%{name} failed to be %{action}"
+      noaction: "No actions were taken"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
+    table_headers:
+      model_name: "Model name"
+      last_used: "Last used"
+      records: "Records"
+      username: "User"
+      changes: "Changes"
+      created_at: "Date/Time"
+      item: "Item"
+      message: "Message"
+    actions:
+      dashboard:
+        title: "Site administration"
+        menu: "Dashboard"
+        breadcrumb: "Dashboard"
+      index:
+        title: "List of %{model_label_plural}"
+        menu: "List"
+        breadcrumb: "%{model_label_plural}"
+      show:
+        title: "Details for %{model_label} '%{object_label}'"
+        menu: "Show"
+        breadcrumb: "%{object_label}"
+      show_in_app:
+        menu: "Show in app"
+      new:
+        title: "New %{model_label}"
+        menu: "Add new"
+        breadcrumb: "New"
+        link: "Add a new %{model_label}"
+        done: "created"
+      edit:
+        title: "Edit %{model_label} '%{object_label}'"
+        menu: "Edit"
+        breadcrumb: "Edit"
+        link: "Edit this %{model_label}"
+        done: "updated"
+      delete:
+        title: "Delete %{model_label} '%{object_label}'"
+        menu: "Delete"
+        breadcrumb: "Delete"
+        link: "Delete '%{object_label}'"
+        done: "deleted"
+      bulk_delete:
+        title: "Delete %{model_label_plural}"
+        menu: "Multiple delete"
+        breadcrumb: "Multiple delete"
+        bulk_link: "Delete selected %{model_label_plural}"
+      export:
+        title: "Export %{model_label_plural}"
+        menu: "Export"
+        breadcrumb: "Export"
+        link: "Export found %{model_label_plural}"
+        bulk_link: "Export selected %{model_label_plural}"
+        done: "exported"
+      history_index:
+        title: "History for %{model_label_plural}"
+        menu: "History"
+        breadcrumb: "History"
+      history_show:
+        title: "History for %{model_label} '%{object_label}'"
+        menu: "History"
+        breadcrumb: "History"
+    form:
+      cancel: "Cancel"
+      basic_info: "Basic info"
+      required: "Required"
+      optional: "Optional"
+      one_char: "character"
+      char_length_up_to: "length up to"
+      char_length_of: "length of"
+      save: "Save"
+      save_and_add_another: "Save and add another"
+      save_and_edit: "Save and edit"
+      all_of_the_following_related_items_will_be_deleted: "? The following related items may be deleted or orphaned:"
+      are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete this %{model_name}"
+      confirmation: "Yes, I'm sure"
+      bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+      new_model: "%{name} (new)"
+    export:
+      confirmation: "Export to %{name}"
+      select: "Select fields to export"
+      fields_from: "Fields from %{name}"
+      fields_from_associated: "Fields from associated %{name}"
+      display: "Display %{name}: %{type}"
+      options_for: "Options for %{name}"
+      empty_value_for_associated_objects: "<empty>"
+      click_to_reverse_selection: 'Click to reverse selection'
+      csv:
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Encode to"
+        encoding_to_help: "Choose output encoding. Leave empty to let current input encoding untouched: (%{name})"
+        skip_header: "No header"
+        skip_header_help: "Do not output a header (no fields description)"
+        default_col_sep: ","
+        col_sep: "Column separator"
+        col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
