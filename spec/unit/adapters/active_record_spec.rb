@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'timecop'
 require 'rails_admin/adapters/active_record'
 
 
@@ -314,19 +315,21 @@ describe RailsAdmin::Adapters::ActiveRecord do
       it "supports #{type} query" do
         @abstract_model.send(:build_statement, :field, type, "", "default").should be_nil
         @abstract_model.send(:build_statement, :field, type, "", "is").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "", "today").should ==
-          ["(field BETWEEN ? AND ?)", Date.today.beginning_of_day, Date.today.end_of_day]
-        @abstract_model.send(:build_statement, :field, type, "", "yesterday").should ==
-          ["(field BETWEEN ? AND ?)", Date.yesterday.beginning_of_day, Date.yesterday.end_of_day]
-        @abstract_model.send(:build_statement, :field, type, "", "this_week").should ==
-          ["(field BETWEEN ? AND ?)", Date.today.beginning_of_week.beginning_of_day, Date.today.end_of_week.end_of_day]
-        @abstract_model.send(:build_statement, :field, type, "", "last_week").should ==
-          ["(field BETWEEN ? AND ?)", 1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
-        @abstract_model.send(:build_statement, :field, type, "", "less_than").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "1", "less_than").
-          should satisfy{|e| e.first == "(field > ?)" && (Time.now - e.last).between?(1.day.to_i, 2.day.to_i-1) }
-        @abstract_model.send(:build_statement, :field, type, "1", "more_than").
-          should satisfy{|e| e.first == "(field < ?)" && (Time.now - e.last).between?(1.day.to_i, 2.day.to_i-1) }
+        Timecop.freeze(Time.utc(2012,1,15,12,0,0)) do
+          @abstract_model.send(:build_statement, :field, type, "", "today").to_s.should ==
+            '["(field BETWEEN ? AND ?)", Sun, 15 Jan 2012 00:00:00 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
+          @abstract_model.send(:build_statement, :field, type, "", "yesterday").to_s.should ==
+            '["(field BETWEEN ? AND ?)", Sat, 14 Jan 2012 00:00:00 UTC +00:00, Sat, 14 Jan 2012 23:59:59 UTC +00:00]'
+          @abstract_model.send(:build_statement, :field, type, "", "this_week").to_s.should ==
+            '["(field BETWEEN ? AND ?)", Mon, 09 Jan 2012 00:00:00 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
+          @abstract_model.send(:build_statement, :field, type, "", "last_week").to_s.should ==
+            '["(field BETWEEN ? AND ?)", Mon, 02 Jan 2012 00:00:00 UTC +00:00, Sun, 08 Jan 2012 23:59:59 UTC +00:00]'
+          @abstract_model.send(:build_statement, :field, type, "", "less_than").should be_nil
+          @abstract_model.send(:build_statement, :field, type, "1", "less_than").to_s.should ==
+            '["(field >= ?)", Sat, 14 Jan 2012 12:00:00 UTC +00:00]'
+          @abstract_model.send(:build_statement, :field, type, "1", "more_than").to_s.should ==
+            '["(field <= ?)", Sat, 14 Jan 2012 12:00:00 UTC +00:00]'
+        end
         @abstract_model.send(:build_statement, :field, type, "", "mmddyyyy").should be_nil
         @abstract_model.send(:build_statement, :field, type, "201105", "mmddyyyy").should be_nil
         @abstract_model.send(:build_statement, :field, type, "12312011", "mmddyyyy").to_s.should ==

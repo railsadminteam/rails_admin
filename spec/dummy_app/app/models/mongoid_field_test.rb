@@ -5,6 +5,7 @@ class MongoidFieldTest
   field :title, :type => String
   field :subject, :type => String
   field :description, :type => String
+  field :short_text, :type => String
   field :array_field, :type => Array
   field :big_decimal_field, :type => BigDecimal
   field :boolean_field, :type => Boolean
@@ -16,4 +17,6 @@ class MongoidFieldTest
   field :integer_field, :type => Integer
   field :time_field, :type => Time
   field :object_field, :type => Object
+
+  validates :short_text, :length => {:maximum => 255}
 end

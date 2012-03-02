@@ -31,7 +31,7 @@ module RailsAdmin
         scope ||= self.scoped
         scope = scope.includes(options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
-        scope = scope.all_in(:_id => options[:bulk_ids]) if options[:bulk_ids]
+        scope = scope.any_in(:_id => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(query_conditions(options[:query])) if options[:query]
         scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
         scope = scope.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
@@ -220,6 +220,8 @@ module RailsAdmin
             Regexp.compile("#{Regexp.escape(value)}$")
           when 'is', '='
             value.to_s
+          else
+            return
           end
           { column => value }
         when :datetime, :timestamp, :date
@@ -235,20 +237,20 @@ module RailsAdmin
             [1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
           when 'less_than'
             return if value.blank?
-            [value.to_i.days.ago, DateTime.now]
+            return { column => { '$gte' => value.to_i.days.ago } }
           when 'more_than'
             return if value.blank?
-            [2000.years.ago, value.to_i.days.ago]
+            return { column => { '$lte' => value.to_i.days.ago } }
           when 'mmddyyyy'
             return if (value.blank? || value.match(/([0-9]{8})/).nil?)
             [Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').beginning_of_day, Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').end_of_day]
+          else
+            return
           end
           { column => { '$gte' => values[0], '$lte' => values[1] } }
         when :enum
           return if value.blank?
-          { column => [value].flatten }
-        else
-          { column => value }
+          { column => { "$in" => Array.wrap(value) } }
         end
       end
 

@@ -188,10 +188,10 @@ module RailsAdmin
             [1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
           when 'less_than'
             return if value.blank?
-            return ["(#{column} > ?)", value.to_i.days.ago]
+            return ["(#{column} >= ?)", value.to_i.days.ago]
           when 'more_than'
             return if value.blank?
-            return ["(#{column} < ?)", value.to_i.days.ago]
+            return ["(#{column} <= ?)", value.to_i.days.ago]
           when 'mmddyyyy'
             return if (value.blank? || value.match(/([0-9]{8})/).nil?)
             [Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').beginning_of_day, Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').end_of_day]
