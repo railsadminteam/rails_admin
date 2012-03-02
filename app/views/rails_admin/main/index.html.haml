@@ -53,7 +53,7 @@
       %a.dropdown-toggle{:href => '#', :'data-toggle' => "dropdown"}
         = t('admin.misc.add_filter')
         %b.caret
-      %ul.dropdown-menu#filters
+      %ul.dropdown-menu#filters{:style => 'left:auto; right:0;'}
         - @filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
