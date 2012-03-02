@@ -7,9 +7,7 @@ module RailsAdmin
         class Text < RailsAdmin::Config::Fields::Base
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
-
-          @view_helper = :text_area
-
+          
           # CKEditor is disabled by default
           register_instance_option(:ckeditor) do
             false

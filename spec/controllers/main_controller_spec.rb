@@ -161,6 +161,7 @@ describe RailsAdmin::MainController do
           }
         }
       }
+      I18n.locale = :en
     end
   end
 end

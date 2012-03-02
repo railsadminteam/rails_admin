@@ -1,4 +1,4 @@
-= form.send field.view_helper, field.method_name, field.html_attributes.reverse_merge((hdv = field.html_default_value).nil? ? {} : { :value => hdv })
+= form.text_area field.method_name, field.html_attributes.reverse_merge((hdv = field.html_default_value).nil? ? { :value => field.formatted_value } : { :value => hdv })
 
 - if field.ckeditor
   = javascript_tag do

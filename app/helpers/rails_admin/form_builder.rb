@@ -62,7 +62,7 @@ module RailsAdmin
     end
 
     def field_for field
-      if field.read_only
+      if field.read_only?
         field.pretty_value.to_s.html_safe
       else
         field.render
@@ -102,7 +102,7 @@ module RailsAdmin
     end
 
     def dom_name field
-      (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Types::HasManyAssociation) ? '[]' : ''}}
+      (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''}}
     end
   end
 end

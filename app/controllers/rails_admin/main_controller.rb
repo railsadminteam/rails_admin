@@ -82,6 +82,7 @@ module RailsAdmin
     end
 
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
+      return unless _params.present?
       fields = model_config.send(action).fields
       fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }
 
