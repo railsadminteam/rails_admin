@@ -8,7 +8,7 @@ require 'rails_admin/config/fields/types/password'
 # @see RailsAdmin::Config::Fields::Types::Password.column_names
 # @see RailsAdmin::Config::Fields.register_factory
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-  if RailsAdmin::Config::Fields::Types::Password.column_names.include?(properties[:name])
+  if [:password].include?(properties[:name])
     fields << RailsAdmin::Config::Fields::Types::Password.new(parent, properties[:name], properties)
     true
   else

@@ -8,11 +8,8 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @column_names = [:password]
-          @view_helper = :password_field
-
-          def self.column_names
-            @column_names
+          register_instance_option :view_helper do
+            :password_field
           end
 
           def parse_input(params)

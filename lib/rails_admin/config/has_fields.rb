@@ -126,7 +126,7 @@ module RailsAdmin
           # parent is RailsAdmin::Config::Model, recursion is on Section's classes
           @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
         else # recursion tail
-          @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self).map{|f| f.group :default; f }
+          @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
         end
         readonly ? @_ro_fields : (@_fields ||= @_ro_fields.map(&:clone))
       end

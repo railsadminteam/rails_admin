@@ -1,10 +1,7 @@
-require 'active_support/core_ext/string/inflections'
-require 'active_model/mass_assignment_security'
-
 require 'rails_admin/config/proxyable'
 require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/fields/groupable'
+require 'rails_admin/config/groupable'
 
 module RailsAdmin
   module Config
@@ -13,14 +10,11 @@ module RailsAdmin
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-
+        include RailsAdmin::Config::Groupable
+        
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
-
-        def self.inherited(klass)
-          klass.instance_variable_set("@view_helper", :text_field)
-        end
 
         def initialize(parent, name, properties)
           @parent = parent
@@ -32,8 +26,6 @@ module RailsAdmin
           @order = 0
           @properties = properties
           @section = parent
-          
-          extend RailsAdmin::Config::Fields::Groupable
         end
 
         register_instance_option :css_class do
@@ -184,7 +176,7 @@ module RailsAdmin
         end
 
         register_instance_option :view_helper do
-          @view_helper ||= self.class.instance_variable_get("@view_helper")
+          :text_field
         end
 
         register_instance_option :read_only? do

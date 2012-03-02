@@ -3,7 +3,7 @@ require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/file_upload'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-  extensions = [nil, :file_name, ]
+  extensions = [nil, :file_name]
   model = parent.abstract_model.model
 
   if defined?(::CarrierWave) && (model = parent.abstract_model.model).kind_of?(CarrierWave::Mount) && model.uploaders.include?(attachment_name = properties[:name].to_s.chomp('_file_name').to_sym)

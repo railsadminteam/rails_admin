@@ -8,7 +8,9 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @view_helper = :number_field
+          register_instance_option :view_helper do
+            :number_field
+          end
 
           register_instance_option(:sort_reverse?) do
             serial?

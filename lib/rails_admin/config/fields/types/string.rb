@@ -8,8 +8,6 @@ module RailsAdmin
 
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @view_helper = :text_field
-
           register_instance_option(:html_attributes) do
             {
               :maxlength => length,
