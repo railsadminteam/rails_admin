@@ -118,15 +118,11 @@ module RailsAdmin
       def serialized_attributes
         @serialized_attributes ||= Hash[model.fields.map do |name, field|
           if ['Array', 'Hash'].include? field.type.to_s
-            [name.to_s, ::ActiveRecord::Coders::YAMLColumn.new(field.type)] # for compatibility
+            [name.to_s, nil] # TODO: support Coder
           else
             nil
           end
         end.compact]
-      end
-
-      def accessible_by(*args)
-        scoped
       end
 
       private

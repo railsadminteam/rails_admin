@@ -29,9 +29,9 @@ group :development, :test do
     end
   end
 
-  gem 'cancan'
   gem 'bson_ext'
   gem 'mongoid'
+  gem 'cancan'
 end
 
 group :debug do

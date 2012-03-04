@@ -22,10 +22,6 @@ RUBY
           end
         end
 
-        def attributes=(attributes)
-          object.send :attributes=, attributes
-        end
-
         def destroy
           object.destroy
           object

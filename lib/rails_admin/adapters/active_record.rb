@@ -89,10 +89,6 @@ module RailsAdmin
         model.serialized_attributes
       end
 
-      def accessible_by(*args)
-        model.accessible_by(*args)
-      end
-
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
