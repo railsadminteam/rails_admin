@@ -385,7 +385,7 @@
  * http://docs.jquery.com/UI/Autocomplete#theming
  */
 .ui-autocomplete {
-	position: absolute; cursor: default; z-index: 3;
+	position: absolute; cursor: default; z-index: 1051 !important;
 		-moz-border-radius: 0; 
 		-webkit-border-radius: 0;
 		border-radius: 0;
