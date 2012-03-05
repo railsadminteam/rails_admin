@@ -53,10 +53,9 @@ module RailsAdmin
             :name => association.name.to_sym,
             :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
             :type => association.macro,
-            :parent_model_proc => Proc.new { association_parent_model_lookup(association) },
-            :parent_key => association_parent_key_lookup(association),
-            :child_model_proc => Proc.new { association_child_model_lookup(association) },
-            :child_key => association_child_key_lookup(association),
+            :model_proc => Proc.new { association_model_lookup(association) },
+            :primary_key_proc => Proc.new { association_primary_key_lookup(association) },
+            :foreign_key => association_foreign_key_lookup(association),
             :foreign_type => association_foreign_type_lookup(association),
             :as => association_as_lookup(association),
             :polymorphic => association_polymorphic_lookup(association),
@@ -202,18 +201,11 @@ module RailsAdmin
         @@polymorphic_parents[name.to_sym]
       end
 
-      def association_parent_model_lookup(association)
-        case association.macro
-        when :belongs_to
-          if association.options[:polymorphic]
-            RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name) || []
-          else
-            association.klass
-          end
-        when :has_one, :has_many, :has_and_belongs_to_many
-          association.active_record
+      def association_model_lookup(association)
+        if association.options[:polymorphic]
+          RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name) || []
         else
-          raise "Unknown association type: #{association.macro.inspect}"
+          association.klass
         end
       end
 
@@ -235,8 +227,8 @@ module RailsAdmin
         association.options[:polymorphic]
       end
 
-      def association_parent_key_lookup(association)
-        [:id]
+      def association_primary_key_lookup(association)
+        association.options[:primary_key] || association.klass.primary_key
       end
 
       def association_inverse_of_lookup(association)
@@ -247,18 +239,7 @@ module RailsAdmin
         association.options[:readonly]
       end
 
-      def association_child_model_lookup(association)
-        case association.macro
-        when :belongs_to
-          association.active_record
-        when :has_one, :has_many, :has_and_belongs_to_many
-          association.klass
-        else
-          raise "Unknown association type: #{association.macro.inspect}"
-        end
-      end
-
-      def association_child_key_lookup(association)
+      def association_foreign_key_lookup(association)
         association.foreign_key.to_sym
       end
     end

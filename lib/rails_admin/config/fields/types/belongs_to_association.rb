@@ -23,16 +23,12 @@ module RailsAdmin
             nested_form ? :form_nested_one : :form_filtering_select
           end
 
-          def associated_model_config
-            @config ||= RailsAdmin.config(association[:parent_model_proc].call)
-          end
-
           def selected_id
-            bindings[:object].send(child_key)
+            bindings[:object].send(foreign_key)
           end
 
           def method_name
-            nested_form ? "#{self.name}_attributes" : association[:child_key]
+            nested_form ? "#{self.name}_attributes" : association[:foreign_key]
           end
           
           def multiple?

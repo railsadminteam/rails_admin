@@ -56,24 +56,29 @@ module RailsAdmin
 
         # Reader for the association's child model's configuration
         def associated_model_config
-          @associated_model_config ||= RailsAdmin.config(association[:child_model_proc].call)
+          @associated_model_config ||= RailsAdmin.config(association[:model_proc].call)
         end
 
         # Reader for the association's child model object's label method
         def associated_label_method
           @associated_label_method ||= associated_model_config.object_label_method
         end
-
-        # Reader for the association's child key
-        def child_key
-          association[:child_key]
+        
+        # Reader for associated primary key
+        def associated_primary_key
+          @associated_primary_key ||= association[:primary_key_proc].call
+        end
+        
+        # Reader for the association's key
+        def foreign_key
+          association[:foreign_key]
         end
 
         # Reader for the inverse relationship
         def inverse_of
           association[:inverse_of]
         end
-
+        
         # Reader whether this is a polymorphic association
         def polymorphic?
           association[:polymorphic]

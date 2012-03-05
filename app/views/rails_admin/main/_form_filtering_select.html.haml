@@ -5,8 +5,8 @@
 
   if form.object.new_record? && related_id.present? && related_id != 'new'
     selected = config.abstract_model.get(related_id)
-    selected_id = selected.id
-    selected_name = selected.send(config.object_label_method)
+    selected_id = selected.send(field.associated_primary_key)
+    selected_name = selected.send(field.associated_label_method)
   else
     selected_id = field.selected_id
     selected_name = field.formatted_value
@@ -17,8 +17,8 @@
   edit_url = authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :modal => true, :id => '__ID__') : ''
 
   xhr = !field.associated_collection_cache_all
-
-  collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(config.object_label_method), o.id] }
+  
+  collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(field.associated_label_method), o.send(field.associated_primary_key)] }
 
 - selected_id = (hdv = field.html_default_value).nil? ? selected_id : hdv
 = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes.reverse_merge({:placeholder => t('admin.misc.search')})

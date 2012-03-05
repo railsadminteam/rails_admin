@@ -19,7 +19,7 @@ class RailsAdmin::History < ActiveRecord::Base
     end
 
     model.associations.each do |t|
-      assoc = changed_property_list.index(t[:child_key].to_param)
+      assoc = changed_property_list.index(t[:foreign_key].to_param)
       changed_property_list[assoc] = "associated #{t[:pretty_name]}" if assoc
     end
 
