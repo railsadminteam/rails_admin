@@ -154,6 +154,34 @@ describe "RailsAdmin Basic Update" do
     end
   end
 
+  describe "update with serialized objects of Mongoid" do
+    before(:each) do
+      @field_test = FactoryGirl.create :mongoid_field_test
+
+      visit edit_path(:model_name => "mongoid_field_test", :id => @field_test.id)
+    end
+
+    it "should save the serialized data" do
+      fill_in "mongoid_field_test[array_field]", :with => "[4, 2]"
+      fill_in "mongoid_field_test[hash_field]", :with => "{ a: 6, b: 2 }"
+      click_button "Save"
+
+      @field_test.reload
+      @field_test.array_field.should eql([4, 2])
+      @field_test.hash_field.should eql({ "a" => 6, "b" => 2 })
+    end
+
+    it "should clear data when empty string is passed" do
+      fill_in "mongoid_field_test[array_field]", :with => ""
+      fill_in "mongoid_field_test[hash_field]", :with => ""
+      click_button "Save"
+
+      @field_test.reload
+      @field_test.array_field.should eql(nil)
+      @field_test.hash_field.should eql(nil)
+    end
+  end
+
   describe "update with overridden to_param" do
     before(:each) do
       @ball = FactoryGirl.create :ball

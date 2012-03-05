@@ -80,6 +80,14 @@ module RailsAdmin
         end
       end
 
+      def table_name
+        model.table_name
+      end
+
+      def serialized_attributes
+        model.serialized_attributes
+      end
+
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
@@ -158,6 +166,8 @@ module RailsAdmin
             "%#{value}"
           when 'is', '='
             "#{value}"
+          else
+            return
           end
           ["(#{column} #{LIKE_OPERATOR} ?)", value]
         when :datetime, :timestamp, :date
@@ -173,13 +183,15 @@ module RailsAdmin
             [1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
           when 'less_than'
             return if value.blank?
-            [value.to_i.days.ago, DateTime.now]
+            return ["(#{column} >= ?)", value.to_i.days.ago]
           when 'more_than'
             return if value.blank?
-            [2000.years.ago, value.to_i.days.ago]
+            return ["(#{column} <= ?)", value.to_i.days.ago]
           when 'mmddyyyy'
             return if (value.blank? || value.match(/([0-9]{8})/).nil?)
             [Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').beginning_of_day, Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').end_of_day]
+          else
+            return
           end
           ["(#{column} BETWEEN ? AND ?)", *values]
         when :enum
@@ -188,22 +200,9 @@ module RailsAdmin
         end
       end
 
-      @@polymorphic_parents = nil
-
-      def self.polymorphic_parents(name)
-        @@polymorphic_parents ||= {}.tap do |hash|
-          RailsAdmin::AbstractModel.all(:active_record).each do |am|
-            am.model.reflect_on_all_associations.select{|r| r.options[:as] }.each do |reflection|
-              (hash[reflection.options[:as].to_sym] ||= []) << am.model
-            end
-          end
-        end
-        @@polymorphic_parents[name.to_sym]
-      end
-
       def association_model_lookup(association)
         if association.options[:polymorphic]
-          RailsAdmin::Adapters::ActiveRecord.polymorphic_parents(association.name) || []
+          RailsAdmin::AbstractModel.polymorphic_parents(:active_record, association.name) || []
         else
           association.klass
         end

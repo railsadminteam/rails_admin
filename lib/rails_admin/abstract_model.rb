@@ -20,15 +20,38 @@ module RailsAdmin
       rescue LoadError, NameError
         nil
       end
+
+      @@polymorphic_parents = {}
+
+      def polymorphic_parents(adapter, name)
+        @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
+          all(adapter).each do |am|
+            am.associations.select{|r| r[:as] }.each do |association|
+              (hash[association[:as].to_sym] ||= []) << am.model
+            end
+          end
+        end
+        @@polymorphic_parents[adapter.to_sym][name.to_sym]
+      end
+
+      # For testing
+      def reset_polymorphic_parents
+        @@polymorphic_parents = {}
+      end
     end
 
     def initialize(m)
       @model_name = m.to_s
-      # ActiveRecord
       if m.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !m.abstract_class?
+        # ActiveRecord
         @adapter = :active_record
         require 'rails_admin/adapters/active_record'
         extend Adapters::ActiveRecord
+      elsif m.ancestors.map(&:to_s).include?('Mongoid::Document')
+        # Mongoid
+        @adapter = :mongoid
+        require 'rails_admin/adapters/mongoid'
+        extend Adapters::Mongoid
       end
     end
 
