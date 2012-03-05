@@ -67,12 +67,11 @@ describe RailsAdmin::Adapters::Mongoid do
 
     it "has correct parameter of belongs_to association" do
       param = @post.associations.select{|a| a[:name] == :mongo_blog}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:mongo_blog,
         :pretty_name=>"Mongo blog",
         :type=>:belongs_to,
-        :parent_key=>[:_id],
-        :child_key=>:mongo_blog_id,
+        :foreign_key=>:mongo_blog_id,
         :foreign_type=>nil,
         :as=>nil,
         :polymorphic=>false,
@@ -80,18 +79,17 @@ describe RailsAdmin::Adapters::Mongoid do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == MongoPost
-      param[:parent_model_proc].call.should == MongoBlog
+      param[:primary_key_proc].call.should == :_id
+      param[:model_proc].call.should == MongoBlog
     end
 
     it "has correct parameter of has_many association" do
       param = @blog.associations.select{|a| a[:name] == :mongo_posts}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:mongo_posts,
         :pretty_name=>"Mongo posts",
         :type=>:has_many,
-        :parent_key=>[:_id],
-        :child_key=>:mongo_blog_id,
+        :foreign_key=>:mongo_blog_id,
         :foreign_type=>nil,
         :as=>nil,
         :polymorphic=>false,
@@ -99,18 +97,17 @@ describe RailsAdmin::Adapters::Mongoid do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == MongoPost
-      param[:parent_model_proc].call.should == MongoBlog
+      param[:primary_key_proc].call.should == :_id
+      param[:model_proc].call.should == MongoPost
     end
 
     it "has correct parameter of has_and_belongs_to_many association" do
       param = @post.associations.select{|a| a[:name] == :mongo_categories}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:mongo_categories,
         :pretty_name=>"Mongo categories",
         :type=>:has_and_belongs_to_many,
-        :parent_key=>[:_id],
-        :child_key=>:mongo_category_ids,
+        :foreign_key=>:mongo_category_ids,
         :foreign_type=>nil,
         :as=>nil,
         :polymorphic=>false,
@@ -118,19 +115,18 @@ describe RailsAdmin::Adapters::Mongoid do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == MongoCategory
-      param[:parent_model_proc].call.should == MongoPost
+      param[:primary_key_proc].call.should == :_id
+      param[:model_proc].call.should == MongoCategory
     end
 
     it "has correct parameter of polymorphic belongs_to association" do
       RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       param = @comment.associations.select{|a| a[:name] == :commentable}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:commentable,
         :pretty_name=>"Commentable",
         :type=>:belongs_to,
-        :parent_key=>[:_id],
-        :child_key=>:commentable_id,
+        :foreign_key=>:commentable_id,
         :foreign_type=>:commentable_type,
         :as=>nil,
         :polymorphic=>true,
@@ -138,8 +134,8 @@ describe RailsAdmin::Adapters::Mongoid do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == MongoComment
-      param[:parent_model_proc].call.should == [MongoBlog, MongoPost]
+      param[:primary_key_proc].call.should == :_id
+      param[:model_proc].call.should == [MongoBlog, MongoPost]
     end
   end
 

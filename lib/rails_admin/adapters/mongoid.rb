@@ -58,10 +58,9 @@ module RailsAdmin
             :name => association.name.to_sym,
             :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
             :type => association_type_lookup(association.macro),
-            :parent_model_proc => Proc.new { association_parent_model_lookup(association) },
-            :parent_key => association_parent_key_lookup(association),
-            :child_model_proc => Proc.new { association_child_model_lookup(association) },
-            :child_key => association_child_key_lookup(association),
+            :model_proc => Proc.new { association_model_proc_lookup(association) },
+            :primary_key_proc => Proc.new { association_primary_key_lookup(association) },
+            :foreign_key => association_foreign_key_lookup(association),
             :foreign_type => association_foreign_type_lookup(association),
             :as => association_as_lookup(association),
             :polymorphic => association_polymorphic_lookup(association),
@@ -250,18 +249,11 @@ module RailsAdmin
         end
       end
 
-      def association_parent_model_lookup(association)
-        case association.macro
-        when :referenced_in
-          if association.polymorphic?
-            RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, association.name) || []
-          else
-            association.klass
-          end
-        when :references_one, :references_many, :references_and_referenced_in_many
-          association.inverse_klass
+      def association_model_proc_lookup(association)
+        if association.polymorphic?
+          RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, association.name) || []
         else
-          raise "Unknown association type: #{association.macro.inspect}"
+          association.klass
         end
       end
 
@@ -279,26 +271,15 @@ module RailsAdmin
         association.polymorphic?
       end
 
-      def association_parent_key_lookup(association)
-        [:_id]
+      def association_primary_key_lookup(association)
+        :_id # todo
       end
 
       def association_inverse_of_lookup(association)
         association.inverse_of.try :to_sym
       end
 
-      def association_child_model_lookup(association)
-        case association.macro
-        when :referenced_in, :embedded_in
-          association.inverse_klass
-        when :references_one, :references_many, :references_and_referenced_in_many, :embeds_one, :embeds_many
-          association.klass
-        else
-          raise "Unknown association type: #{association.macro.inspect}"
-        end
-      end
-
-      def association_child_key_lookup(association)
+      def association_foreign_key_lookup(association)
         association.foreign_key.to_sym rescue nil
       end
       

@@ -61,12 +61,11 @@ describe RailsAdmin::Adapters::ActiveRecord do
 
     it "has correct parameter of belongs_to association" do
       param = @post.associations.select{|a| a[:name] == :a_r_blog}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:a_r_blog,
         :pretty_name=>"A r blog",
         :type=>:belongs_to,
-        :parent_key=>[:id],
-        :child_key=>:a_r_blog_id,
+        :foreign_key=>:a_r_blog_id,
         :foreign_type=>nil,
         :as=>nil,
         :polymorphic=>nil,
@@ -74,18 +73,17 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == ARPost
-      param[:parent_model_proc].call.should == ARBlog
+      param[:primary_key_proc].call.should == 'id'
+      param[:model_proc].call.should == ARBlog
     end
 
     it "has correct parameter of has_many association" do
       param = @blog.associations.select{|a| a[:name] == :a_r_posts}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:a_r_posts,
         :pretty_name=>"A r posts",
         :type=>:has_many,
-        :parent_key=>[:id],
-        :child_key=>:ar_blog_id,
+        :foreign_key=>:ar_blog_id,
         :foreign_type=>nil,
         :as=>nil,
         :polymorphic=>nil,
@@ -93,18 +91,17 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == ARPost
-      param[:parent_model_proc].call.should == ARBlog
+      param[:primary_key_proc].call.should == 'id'
+      param[:model_proc].call.should == ARPost
     end
 
     it "has correct parameter of has_and_belongs_to_many association" do
       param = @post.associations.select{|a| a[:name] == :a_r_categories}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:a_r_categories,
         :pretty_name=>"A r categories",
         :type=>:has_and_belongs_to_many,
-        :parent_key=>[:id],
-        :child_key=>:ar_post_id,
+        :foreign_key=>:ar_post_id,
         :foreign_type=>nil,
         :as=>nil,
         :polymorphic=>nil,
@@ -112,19 +109,18 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == ARCategory
-      param[:parent_model_proc].call.should == ARPost
+      param[:primary_key_proc].call.should == 'id'
+      param[:model_proc].call.should == ARCategory
     end
 
     it "has correct parameter of polymorphic belongs_to association" do
       RailsAdmin::Config.stub!(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
       param = @comment.associations.select{|a| a[:name] == :commentable}.first
-      param.reject{|k, v| [:child_model_proc, :parent_model_proc].include? k }.should == {
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
         :name=>:commentable,
         :pretty_name=>"Commentable",
         :type=>:belongs_to,
-        :parent_key=>[:id],
-        :child_key=>:commentable_id,
+        :foreign_key=>:commentable_id,
         :foreign_type=>:commentable_type,
         :as=>nil,
         :polymorphic=>true,
@@ -132,8 +128,8 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :read_only=>nil,
         :nested_form=>nil
       }
-      param[:child_model_proc].call.should == ARComment
-      param[:parent_model_proc].call.should == [ARBlog, ARPost]
+      # param[:primary_key_proc].call.should == 'id' Should not be called for polymorphic relations. Todo, Handle this niver
+      param[:model_proc].call.should == [ARBlog, ARPost]
     end
   end
 
