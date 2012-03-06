@@ -32,15 +32,11 @@ module RailsAdmin
     end
 
     def field_wrapper_for field, nested_in
-      if field.is_a?(RailsAdmin::Config::Fields::Types::Hidden)
-        input_for(field)
-      else
-        # do not show nested field if the target is the origin
-        unless field.inverse_of.presence && field.inverse_of == nested_in
-          @template.content_tag(:div, :class => "control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, :class => 'control-label') +
-            (field.nested_form ? field_for(field) : input_for(field))
-          end
+      # do not show nested field if the target is the origin
+      unless field.inverse_of.presence && field.inverse_of == nested_in
+        @template.content_tag(:div, :class => "control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
+          label(field.method_name, field.label, :class => 'control-label') +
+          (field.nested_form ? field_for(field) : input_for(field))
         end
       end
     end
