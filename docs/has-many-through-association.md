@@ -44,7 +44,7 @@ class BlockGridAssociation < ActiveRecord::Base
   default_scope order(:position) # if you need ordered blocks
 end
 
-RailsAdmin.config |config| do
+RailsAdmin.config do |config|
   config.model Grid do
     configure :block_grid_associations do
       visible(false)
