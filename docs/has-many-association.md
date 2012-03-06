@@ -20,7 +20,7 @@ class Player < ActiveRecord::Base
 end
 
 
-RailsAdmin.config |config| do
+RailsAdmin.config do |config|
   config.model Team do
     configure :players do
       # configuration here
