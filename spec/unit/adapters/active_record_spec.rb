@@ -311,26 +311,16 @@ describe RailsAdmin::Adapters::ActiveRecord do
     [:datetime, :timestamp, :date].each do |type|
       it "supports #{type} query" do
         @abstract_model.send(:build_statement, :field, type, "", "default").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "", "is").should be_nil
         Timecop.freeze(Time.utc(2012,1,15,12,0,0)) do
           @abstract_model.send(:build_statement, :field, type, "", "today").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Sun, 15 Jan 2012 00:00:00 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
+            '["(field BETWEEN ? AND ?)", Sat, 14 Jan 2012 23:59:59 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
           @abstract_model.send(:build_statement, :field, type, "", "yesterday").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Sat, 14 Jan 2012 00:00:00 UTC +00:00, Sat, 14 Jan 2012 23:59:59 UTC +00:00]'
+            '["(field BETWEEN ? AND ?)", Fri, 13 Jan 2012 23:59:59 UTC +00:00, Sat, 14 Jan 2012 23:59:59 UTC +00:00]'
           @abstract_model.send(:build_statement, :field, type, "", "this_week").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Mon, 09 Jan 2012 00:00:00 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
+            '["(field BETWEEN ? AND ?)", Sun, 08 Jan 2012 23:59:59 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
           @abstract_model.send(:build_statement, :field, type, "", "last_week").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Mon, 02 Jan 2012 00:00:00 UTC +00:00, Sun, 08 Jan 2012 23:59:59 UTC +00:00]'
-          @abstract_model.send(:build_statement, :field, type, "", "less_than").should be_nil
-          @abstract_model.send(:build_statement, :field, type, "1", "less_than").to_s.should ==
-            '["(field >= ?)", Sat, 14 Jan 2012 12:00:00 UTC +00:00]'
-          @abstract_model.send(:build_statement, :field, type, "1", "more_than").to_s.should ==
-            '["(field <= ?)", Sat, 14 Jan 2012 12:00:00 UTC +00:00]'
+            '["(field BETWEEN ? AND ?)", Sun, 01 Jan 2012 23:59:59 UTC +00:00, Sun, 08 Jan 2012 23:59:59 UTC +00:00]'
         end
-        @abstract_model.send(:build_statement, :field, type, "", "mmddyyyy").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "201105", "mmddyyyy").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "12312011", "mmddyyyy").to_s.should ==
-          '["(field BETWEEN ? AND ?)", Sat, 31 Dec 2011 00:00:00 UTC +00:00, Sat, 31 Dec 2011 23:59:59 UTC +00:00]'
       end
     end
 
