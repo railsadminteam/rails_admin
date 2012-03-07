@@ -111,7 +111,7 @@ module RailsAdmin
       end
 
       def table_name
-        model.name.tableize
+        model.collection.name
       end
 
       def serialized_attributes
@@ -130,9 +130,23 @@ module RailsAdmin
         statements = []
 
         fields.each do |field|
+          conditions_per_collection = {}
           field.searchable_columns.flatten.each do |column_infos|
-            statement = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
-            statements << statement if statement
+            collection_name, column_name = column_infos[:column].split('.')
+            statement = build_statement(column_name, column_infos[:type], query, field.search_operator)
+            if statement
+              conditions_per_collection[collection_name] ||= []
+              conditions_per_collection[collection_name] << statement
+            end
+          end
+          conditions_per_collection.each do |collection_name, conditions|
+            if collection_name == table_name
+              # conditions referring current model column are passed directly
+              statements.concat conditions
+            else
+              # otherwise, collect ids of documents that satisfy search condition
+              statements.concat perform_search_on_associated_collection(field.name, conditions)
+            end
           end
         end
 
@@ -150,12 +164,28 @@ module RailsAdmin
 
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
-            field_statements = []
-            fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
-              statement = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-              field_statements << statement if statement.present?
+            conditions_per_collection = {}
+            field = fields.find{|f| f.name.to_s == field_name}
+            next unless field
+            field.searchable_columns.each do |column_infos|
+              collection_name, column_name = column_infos[:column].split('.')
+              statement = build_statement(column_name, column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+              if statement
+                conditions_per_collection[collection_name] ||= []
+                conditions_per_collection[collection_name] << statement
+              end
             end
-            if field_statements.any?
+            if conditions_per_collection.any?
+              field_statements = []
+              conditions_per_collection.each do |collection_name, conditions|
+                if collection_name == table_name
+                  # conditions referring current model column are passed directly
+                  field_statements.concat conditions
+                else
+                  # otherwise, collect ids of documents that satisfy search condition
+                  field_statements.concat perform_search_on_associated_collection(field.name, conditions)
+                end
+              end
               if field_statements.length > 1
                 statements << { '$or' => field_statements }
               else
@@ -173,12 +203,6 @@ module RailsAdmin
       end
 
       def build_statement(column, type, value, operator)
-        # remove table_name
-        table_prefix = "#{table_name}."
-        if column[0, table_prefix.length] == table_prefix
-          column = column[table_prefix.length..-1]
-        end
-
         # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
         return if operator == '_discard' || value == '_discard'
 
@@ -307,6 +331,24 @@ module RailsAdmin
           shortest.options[:maximum]
         else
           false
+        end
+      end
+
+      def perform_search_on_associated_collection(field_name, conditions)
+        target_association = associations.find{|a| a[:name] == field_name }
+        return [] unless target_association
+        case target_association[:type]
+        when :belongs_to
+          model = target_association[:parent_model_proc].call
+          [{ target_association[:child_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:parent_key].first)} }}]
+        when :has_many
+          model = target_association[:child_model_proc].call
+          [{ target_association[:parent_key].first.to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:child_key])} }}]
+        when :has_and_belongs_to_many
+          model = target_association[:child_model_proc].call
+          [{ target_association[:child_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:parent_key].first)} }}]
+        else
+          []
         end
       end
     end

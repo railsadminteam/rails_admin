@@ -5,4 +5,5 @@ class Article
   field :body,  :type => String
 
   referenced_in :author
+  references_and_referenced_in_many :tags
 end

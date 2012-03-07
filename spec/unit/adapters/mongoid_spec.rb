@@ -308,11 +308,15 @@ describe RailsAdmin::Adapters::Mongoid do
       end
 
       it "supports pagination" do
-        @abstract_model.all(:page => 2, :per => 1).should == @articles[1..1]
+        @abstract_model.all(:sort => :_id, :page => 2, :per => 1).to_a.should == @articles[1..1]
+        # To prevent RSpec matcher to call Mongoid::Criteria#== method,
+        # (we want to test equality of query result, not of Mongoid criteria)
+        # to_a is added to invoke Mongoid query
       end
 
       it "supports ordering" do
-        @abstract_model.all(:sort => "id", :sort_reverse => true).should == @articles.sort
+        @abstract_model.all(:sort => :_id, :sort_reverse => false).to_a.should == @articles.sort
+        @abstract_model.all(:sort => :_id, :sort_reverse => true).to_a.should == @articles.sort.reverse
       end
 
       it "supports querying" do
@@ -321,6 +325,82 @@ describe RailsAdmin::Adapters::Mongoid do
 
       it "supports filtering" do
         @abstract_model.all(:filters => {"title" => {"0000" => {:o=>"is", :v=>@articles[1].title}}}).should == @articles[1..1]
+      end
+
+      it "ignores non-existent field name on filtering" do
+        lambda{ @abstract_model.all(:filters => {"dummy" => {"0000" => {:o=>"is", :v=>@articles[1].title}}}) }.should_not raise_error
+      end
+    end
+  end
+
+  describe "searching on association" do
+    describe "whose type is belongs_to" do
+      before do
+        RailsAdmin.config Article do
+          field :author do
+            queryable true
+          end
+        end
+        @articles = FactoryGirl.create_list(:article, 3)
+        @author = FactoryGirl.create :author, :name => 'foobar'
+        @author.articles << @articles[1]
+        @abstract_model = RailsAdmin::AbstractModel.new('Article')
+      end
+
+      it "supports querying" do
+        @abstract_model.all(:query => 'foobar').to_a.should == @articles[1..1]
+      end
+
+      it "supports filtering" do
+        @abstract_model.all(:filters => {"author" => {"0000" => {:o=>"is", :v=>'foobar'}}}).to_a.should == @articles[1..1]
+      end
+    end
+
+    describe "whose type is has_many" do
+      before do
+        RailsAdmin.config Author do
+          field :articles do
+            queryable true
+            searchable :all
+          end
+        end
+        @authors = FactoryGirl.create_list(:author, 3)
+        @articles = [{:author => @authors[1]},
+                     {:author => @authors[1], :title => 'foobar'},
+                     {:author => @authors[2]}].map{|h| FactoryGirl.create :article, h}
+        @abstract_model = RailsAdmin::AbstractModel.new('Author')
+      end
+
+      it "supports querying" do
+        @abstract_model.all(:query => 'foobar').to_a.should == @authors[1..1]
+      end
+
+      it "supports filtering" do
+        @abstract_model.all(:filters => {"articles" => {"0000" => {:o=>"is", :v=>'foobar'}}}).to_a.should == @authors[1..1]
+      end
+    end
+
+    describe "whose type is has_and_belongs_to_many" do
+      before do
+        RailsAdmin.config Article do
+          field :tags do
+            queryable true
+            searchable :all
+          end
+        end
+        @articles = FactoryGirl.create_list(:article, 3)
+        @tags = [{}, {:name => 'foobar'}, {}].map{|h| FactoryGirl.create :tag, h}
+        @articles[1].tags = [@tags[0], @tags[1]]
+        @articles[2].tags << @tags[2]
+        @abstract_model = RailsAdmin::AbstractModel.new('Article')
+      end
+
+      it "supports querying" do
+        @abstract_model.all(:query => 'foobar').to_a.should == @articles[1..1]
+      end
+
+      it "supports filtering" do
+        @abstract_model.all(:filters => {"tags" => {"0000" => {:o=>"is", :v=>'foobar'}}}).to_a.should == @articles[1..1]
       end
     end
   end
@@ -342,12 +422,12 @@ describe RailsAdmin::Adapters::Mongoid do
     end
 
     it "returns filter statement" do
-      pending "Alternative for SQL join query should be implemented"
+      @author = FactoryGirl.create :author, :name => 'Author 1'
       @abstract_model.send(
         :filter_conditions,
         {"title" => {"0000" => {:o=>"is", :v=>"foo"}},
          "author" => {"0001" => {:o=>"like", :v=>"1"}}}
-      ).should == {"$and"=>[{"title"=>"foo"}, {"$or"=>[{"authors.name"=>/1/}, {"author_id"=>"1"}]}]}
+      ).should == {"$and"=>[{"title"=>"foo"}, {"author_id"=>{"$in"=>[@author.id]}}]}
     end
   end
 
