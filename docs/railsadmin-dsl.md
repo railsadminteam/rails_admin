@@ -195,9 +195,7 @@ You can inherit from it to customize form output.
 **Field groupings**
 
 By default RailsAdmin groups fields in the edit views (create and update views)
-by including all database columns and belongs to associations to "Basic info"
-group which is displayed on top of form. Below that are displayed all the other
-associations a model has, one group per association.
+by including all database columns and associations to the `:default` group.
 
 The configuration accessors are `edit`, `create` and `update`. First one is a
 batch accessor which configures both create and update views. For consistency,
@@ -220,9 +218,8 @@ RailsAdmin.config do |config|
 end
 ```
 
-This would hide the "Basic info" group which is accessed by the symbol :default.
-Associations' groups can be accessed by the name of the association, such as
-:fans or :players. The hide method is just a shortcut for the actual `visible`
+This would hide the default group which is accessed by the symbol :default.
+The hide method is just a shortcut for the actual `visible`
 option which was mentioned in the beginning of the navigation section.
 
 **Field groupings - labels**
@@ -305,7 +302,7 @@ Use association name as translation key for label for association fields.
 If you have :user_id field with a user association, use :user as the attribute
 
 In fact the first examples `group :default` configuration is unnecessary
-as the default group has already initialized all fields and belongs to
+as the default group has already initialized all fields and
 associations for itself.
 
 **Field groupings - toggles**
@@ -332,6 +329,24 @@ declare fields, only defined fields will be visible and they will be presented
 in the order defined. Thus both examples would render a form with
 only one group (labeled "Default group") that would contain only one
 element (labeled "Title").
+
+If you would like to configure fields in the default group without changing the other
+fields already included in the default group, you can use the `configure` block like this:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      configure :name do
+        hide
+      end
+    end
+  end
+end
+```
+
+This would hide the name field on the team edit page, but it would not affect
+any of the other field defaults.
 
 In the list view label is the text displayed in the field's column header, but
 in the edit views label literally means the html label element associated with
