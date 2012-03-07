@@ -1,4 +1,5 @@
 :ruby
+  require 'rails_admin/config/fields/types/datetime.rb'
   query = params[:query]
   params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export, :_pjax)
   params.delete(:query) if params[:query].blank?
@@ -38,12 +39,14 @@
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
     field_options = case field.type
     when :enum
-      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['v']).gsub("\n", '')
+      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['v'])
     else
       ''
     end
-    "$.filters.append('#{escape_javascript field.label.to_s}', '#{escape_javascript field.name.to_s}', '#{escape_javascript field.type.to_s}', '#{escape_javascript  filter_hash['v'].to_s}', '#{escape_javascript filter_hash['o'].to_s}', '#{escape_javascript field_options.to_s}', #{filter_hash['v'].is_a?(Array)}, '#{escape_javascript filter_index.to_s}');"
-  end.join if @ordered_filters
+    %{
+      $.filters.append(#{field.label.to_json}, #{field.name.to_json}, #{field.type.to_json}, #{filter_hash['v'].to_json}, #{filter_hash['o'].to_json}, #{field_options.to_json}, #{filter_index.to_json});
+    }
+  end.join.html_safe if @ordered_filters
 
 
 = content_for :contextual_tabs do
@@ -57,16 +60,29 @@
         - @filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
-            - h options_for_select(field.with(:object => @abstract_model.model.new).enum).gsub("\n", '')
+            - options_for_select(field.with(:object => @abstract_model.model.new).enum)
           - else
             - ''
           %li
-            %a{:href => '#', "data-field-label" => field.label, "data-field-name" => field.name, "data-field-options" => field_options, "data-field-type" => field.type, "data-field-value" => ""}= field.label
+            %a{:href => '#', :"data-field-label" => field.label, :"data-field-name" => field.name, :"data-field-options" => field_options.html_safe, :"data-field-type" => field.type, :"data-field-value" => ""}= field.label
 
 #list{:'data-pjax-container' => true}
   %script
     jQuery(function($) {
+    $.filters.options.regional = {
+    datePicker: {
+    dateFormat: #{raw I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).to_json},
+    dayNames: #{raw RailsAdmin::Config::Fields::Types::Datetime.day_names.to_json},
+    dayNamesShort: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_day_names.to_json},
+    dayNamesMin: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_day_names.to_json},
+    firstDay: "1",
+    monthNames: #{raw RailsAdmin::Config::Fields::Types::Datetime.month_names.to_json},
+    monthNamesShort: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_month_names.to_json},
+    }
+    }
+    
     = @ordered_filter_string
+    
     });
   %style
     - properties.select{ |p| p.column_width.present? }.each do |property|

@@ -40,6 +40,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
     @profile = RailsAdmin::AbstractModel.new(ARProfile)
     @comment = RailsAdmin::AbstractModel.new(ARComment)
   end
+  
 
   describe '#associations' do
     it 'lists associations' do
@@ -50,4 +51,25 @@ describe RailsAdmin::Adapters::ActiveRecord do
       (@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.map(&:to_s).sort.should == ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
   end
+  
+  
+  describe '#all' do
+    context 'filters on dates' do
+      it 'lists elements within outbound limits' do
+        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+        
+        FieldTest.create!(:date_field => Date.strptime("01/01/2012", date_format))
+        FieldTest.create!(:date_field => Date.strptime("01/02/2012", date_format))
+        FieldTest.create!(:date_field => Date.strptime("01/03/2012", date_format))
+        FieldTest.create!(:date_field => Date.strptime("01/04/2012", date_format))
+        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
+        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
+        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
+        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
+        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
+        
+      end
+    end
+  end
+
 end
