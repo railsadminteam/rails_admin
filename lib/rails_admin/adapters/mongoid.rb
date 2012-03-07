@@ -337,16 +337,12 @@ module RailsAdmin
       def perform_search_on_associated_collection(field_name, conditions)
         target_association = associations.find{|a| a[:name] == field_name }
         return [] unless target_association
+        model = target_association[:model_proc].call
         case target_association[:type]
-        when :belongs_to
-          model = target_association[:parent_model_proc].call
-          [{ target_association[:child_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:parent_key].first)} }}]
+        when :belongs_to, :has_and_belongs_to_many
+          [{ target_association[:foreign_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:primary_key_proc].call)} }}]
         when :has_many
-          model = target_association[:child_model_proc].call
-          [{ target_association[:parent_key].first.to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:child_key])} }}]
-        when :has_and_belongs_to_many
-          model = target_association[:child_model_proc].call
-          [{ target_association[:child_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:parent_key].first)} }}]
+          [{ target_association[:primary_key_proc].call.to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:foreign_key])} }}]
         else
           []
         end
