@@ -161,8 +161,6 @@ module RailsAdmin
           end
           ["(#{column} #{LIKE_OPERATOR} ?)", value]
         when :datetime, :timestamp, :date
-          return if value.blank?
-
           date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
           case operator 
           when 'between'
