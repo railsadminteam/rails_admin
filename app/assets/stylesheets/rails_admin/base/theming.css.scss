@@ -31,6 +31,11 @@ body.rails_admin {
 
   /* new/edit/export forms */
   .form-horizontal {
+    /* hide hidden fields controls by default */
+    .control-group .hidden_type {
+      display:none;
+    }
+    
     legend {
       cursor:pointer;
       i {

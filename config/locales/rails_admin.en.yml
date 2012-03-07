@@ -8,6 +8,7 @@ en:
       truncate: "…"
   admin:
     misc:
+      filter_date_format: "mm/dd/yy" # a combination of 'dd', 'mm' and 'yy' with any delimiter. No other interpolation will be done!
       search: "Search"
       filter: "Filter"
       refresh: "Refresh"

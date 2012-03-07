@@ -45,7 +45,7 @@ $('.form-horizontal legend').live 'click', ->
     if $(this).has('i.icon-chevron-right').length
       $(this).siblings('.control-group:hidden').show('slow')
       $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
-
+      
 $(document).ready ->
 
   $('.animate-width-to').each ->
