@@ -24,6 +24,7 @@ Community sourced translations:
 * [[Catalan: ca|https://gist.github.com/1764593]]
 * [[Danish: da|https://gist.github.com/1780778]]
 * [[Dutch: nl|https://gist.github.com/1909240]]
+* [[Traditional Chinese: zh-TW|https://gist.github.com/2001808]]
 * Add your own (create a gist first)
 
 You can find old included translations here:
