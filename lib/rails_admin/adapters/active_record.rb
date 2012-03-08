@@ -171,28 +171,7 @@ module RailsAdmin
           end
           ["(#{column} #{LIKE_OPERATOR} ?)", value]
         when :datetime, :timestamp, :date
-
-          date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-          case operator 
-          when 'between'
-            start_date = value[1].present? ? (Date.strptime(value[1], date_format).yesterday.end_of_day rescue false) : false
-            end_date   = value[2].present? ? (Date.strptime(value[2], date_format).end_of_day rescue false) : false
-          when 'today'
-            start_date = Date.today.yesterday.end_of_day
-            end_date   = Date.today.end_of_day
-          when 'yesterday'
-            start_date = Date.yesterday.yesterday.end_of_day
-            end_date   = Date.yesterday.end_of_day
-          when 'this_week'
-            start_date = Date.today.beginning_of_week.yesterday.end_of_day
-            end_date   = Date.today.end_of_week.end_of_day
-          when 'last_week'
-            start_date = 1.week.ago.to_date.beginning_of_week.yesterday.end_of_day
-            end_date   = 1.week.ago.to_date.end_of_week.end_of_day
-          else # default
-            start_date = (Date.strptime(Array.wrap(value).first, date_format).yesterday.end_of_day rescue false)
-            end_date   = (Date.strptime(Array.wrap(value).first, date_format).end_of_day rescue false)
-          end
+          start_date, end_date = get_filtering_duration(operator, value)
           
           if start_date && end_date
             ["(#{column} BETWEEN ? AND ?)", start_date, end_date]

@@ -509,23 +509,14 @@ describe RailsAdmin::Adapters::Mongoid do
         @abstract_model.send(:build_statement, :field, type, "", "is").should be_nil
         Timecop.freeze(Time.utc(2012,1,15,12,0,0)) do
           @abstract_model.send(:build_statement, :field, type, "", "today").to_s.should ==
-            '{:field=>{"$gte"=>Sun, 15 Jan 2012 00:00:00 UTC +00:00, "$lte"=>Sun, 15 Jan 2012 23:59:59 UTC +00:00}}'
+            '{:field=>{"$gte"=>Sat, 14 Jan 2012 23:59:59 UTC +00:00, "$lte"=>Sun, 15 Jan 2012 23:59:59 UTC +00:00}}'
           @abstract_model.send(:build_statement, :field, type, "", "yesterday").to_s.should ==
-            '{:field=>{"$gte"=>Sat, 14 Jan 2012 00:00:00 UTC +00:00, "$lte"=>Sat, 14 Jan 2012 23:59:59 UTC +00:00}}'
+            '{:field=>{"$gte"=>Fri, 13 Jan 2012 23:59:59 UTC +00:00, "$lte"=>Sat, 14 Jan 2012 23:59:59 UTC +00:00}}'
           @abstract_model.send(:build_statement, :field, type, "", "this_week").to_s.should ==
-            '{:field=>{"$gte"=>Mon, 09 Jan 2012 00:00:00 UTC +00:00, "$lte"=>Sun, 15 Jan 2012 23:59:59 UTC +00:00}}'
+            '{:field=>{"$gte"=>Sun, 08 Jan 2012 23:59:59 UTC +00:00, "$lte"=>Sun, 15 Jan 2012 23:59:59 UTC +00:00}}'
           @abstract_model.send(:build_statement, :field, type, "", "last_week").to_s.should ==
-            '{:field=>{"$gte"=>Mon, 02 Jan 2012 00:00:00 UTC +00:00, "$lte"=>Sun, 08 Jan 2012 23:59:59 UTC +00:00}}'
-          @abstract_model.send(:build_statement, :field, type, "", "less_than").should be_nil
-          @abstract_model.send(:build_statement, :field, type, "1", "less_than").to_s.should ==
-            '{:field=>{"$gte"=>Sat, 14 Jan 2012 12:00:00 UTC +00:00}}'
-          @abstract_model.send(:build_statement, :field, type, "1", "more_than").to_s.should ==
-            '{:field=>{"$lte"=>Sat, 14 Jan 2012 12:00:00 UTC +00:00}}'
+            '{:field=>{"$gte"=>Sun, 01 Jan 2012 23:59:59 UTC +00:00, "$lte"=>Sun, 08 Jan 2012 23:59:59 UTC +00:00}}'
         end
-        @abstract_model.send(:build_statement, :field, type, "", "mmddyyyy").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "201105", "mmddyyyy").should be_nil
-        @abstract_model.send(:build_statement, :field, type, "12312011", "mmddyyyy").to_s.should ==
-          '{:field=>{"$gte"=>Sat, 31 Dec 2011 00:00:00 UTC +00:00, "$lte"=>Sat, 31 Dec 2011 23:59:59 UTC +00:00}}'
       end
     end
 

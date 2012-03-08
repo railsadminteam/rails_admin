@@ -240,29 +240,15 @@ module RailsAdmin
           end
           { column => value }
         when :datetime, :timestamp, :date
-          return unless operator != 'default'
-          values = case operator
-          when 'today'
-            [Date.today.beginning_of_day, Date.today.end_of_day]
-          when 'yesterday'
-            [Date.yesterday.beginning_of_day, Date.yesterday.end_of_day]
-          when 'this_week'
-            [Date.today.beginning_of_week.beginning_of_day, Date.today.end_of_week.end_of_day]
-          when 'last_week'
-            [1.week.ago.to_date.beginning_of_week.beginning_of_day, 1.week.ago.to_date.end_of_week.end_of_day]
-          when 'less_than'
-            return if value.blank?
-            return { column => { '$gte' => value.to_i.days.ago } }
-          when 'more_than'
-            return if value.blank?
-            return { column => { '$lte' => value.to_i.days.ago } }
-          when 'mmddyyyy'
-            return if (value.blank? || value.match(/([0-9]{8})/).nil?)
-            [Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').beginning_of_day, Date.strptime(value.match(/([0-9]{8})/)[1], '%m%d%Y').end_of_day]
-          else
-            return
+          start_date, end_date = get_filtering_duration(operator, value)
+
+          if start_date && end_date
+            { column => { '$gte' => start_date, '$lte' => end_date } }
+          elsif start_date
+            { column => { '$gte' => start_date } }
+          elsif end_date
+            { column => { '$lte' => end_date } }
           end
-          { column => { '$gte' => values[0], '$lte' => values[1] } }
         when :enum
           return if value.blank?
           { column => { "$in" => Array.wrap(value) } }
