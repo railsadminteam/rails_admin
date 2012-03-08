@@ -85,7 +85,7 @@ module RailsAdmin
       end
 
       def serialized_attributes
-        model.serialized_attributes
+        model.serialized_attributes.keys
       end
 
       private

@@ -87,14 +87,14 @@ module RailsAdmin
               end
             else
               {
-                "Array"          => { :type => :array, :length => nil },
+                "Array"          => { :type => :serialized, :length => nil },
                 "BigDecimal"     => { :type => :string, :length => 1024 },
                 "Boolean"        => { :type => :boolean, :length => nil },
                 "BSON::ObjectId" => { :type => :bson_object_id, :length => nil },
                 "Date"           => { :type => :date, :length => nil },
                 "DateTime"       => { :type => :datetime, :length => nil },
                 "Float"          => { :type => :float, :length => nil },
-                "Hash"           => { :type => :hash, :length => nil },
+                "Hash"           => { :type => :serialized, :length => nil },
                 "Integer"        => { :type => :integer, :length => nil },
                 "Time"           => { :type => :datetime, :length => nil },
                 "Object"         => { :type => :bson_object_id, :length => nil },
@@ -115,13 +115,9 @@ module RailsAdmin
       end
 
       def serialized_attributes
-        @serialized_attributes ||= Hash[model.fields.map do |name, field|
-          if ['Array', 'Hash'].include? field.type.to_s
-            [name.to_s, nil] # TODO: support Coder
-          else
-            nil
-          end
-        end.compact]
+        # Mongoid Array and Hash type columns are mapped to RA serialized type
+        # through type detection in self#properties.
+        []
       end
 
       private

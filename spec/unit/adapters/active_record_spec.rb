@@ -343,7 +343,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
     end
 
     it "#serialized_attributes works" do
-      RailsAdmin::AbstractModel.new('User').serialized_attributes.keys.should == ["roles"]
+      RailsAdmin::AbstractModel.new('User').serialized_attributes.should == ["roles"]
     end
   end
   

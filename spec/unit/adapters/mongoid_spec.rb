@@ -162,7 +162,7 @@ describe RailsAdmin::Adapters::Mongoid do
           :pretty_name => "Array field",
           :nullable? => true,
           :serial? => false,
-          :type => :array,
+          :type => :serialized,
           :length => nil },
         { :name => :big_decimal_field,
           :pretty_name => "Big decimal field",
@@ -210,7 +210,7 @@ describe RailsAdmin::Adapters::Mongoid do
           :pretty_name => "Hash field",
           :nullable? => true,
           :serial? => false,
-          :type => :hash,
+          :type => :serialized,
           :length => nil },
         { :name => :integer_field,
           :pretty_name => "Integer field",
@@ -546,16 +546,24 @@ describe RailsAdmin::Adapters::Mongoid do
     it "#table_name works" do
       @abstract_model.table_name.should == 'articles'
     end
+  end
 
-    it "#serialized_attributes works" do
-      class MongoUser
-        include Mongoid::Document
-        field :name, :type => String
-        field :array_field, :type => Array
-        field :hash_field, :type => Hash
-      end
+  describe "serialization" do
+    before do
+      @abstract_model = RailsAdmin::AbstractModel.new('MongoidFieldTest')
+      @controller = RailsAdmin::MainController.new
+    end
 
-      RailsAdmin::AbstractModel.new('MongoUser').serialized_attributes.keys.should == ["array_field", "hash_field"]
+    it "accepts array value" do
+      params = {:array_field => '[1,3]'}
+      @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
+      params[:array_field].should == [1, 3]
+    end
+
+    it "accepts hash value" do
+      params = {:hash_field => '{a: 1, b: 3}'}
+      @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
+      params[:hash_field].should == {"a"=>1, "b"=>3}
     end
   end
 end
