@@ -1,6 +1,6 @@
 Devise is installed by default.
 
-If needed, you can tweak the authentification hooks it in your `rails_admin.rb` initializer:
+If needed, you can tweak the authentication hooks it in your `rails_admin.rb` initializer:
 
 Example for Warden with an 'admin' scope:
 
