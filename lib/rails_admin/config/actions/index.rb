@@ -37,7 +37,9 @@ module RailsAdmin
 
               format.json do
                 output = if params[:compact]
-                  @objects.map{ |o| { :id => o.id, :label => o.send(@model_config.object_label_method) } }
+                  primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
+                  label_method = @model_config.object_label_method
+                  @objects.map{ |o| { :id => o.send(primary_key_method), :label => o.send(label_method) } }
                 else
                   @objects.to_json(@schema)
                 end

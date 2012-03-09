@@ -60,8 +60,8 @@ module RailsAdmin
         end
 
         # Reader for the association's child model object's label method
-        def associated_label_method
-          @associated_label_method ||= associated_model_config.object_label_method
+        def associated_object_label_method
+          @associated_object_label_method ||= associated_model_config.object_label_method
         end
         
         # Reader for associated primary key
