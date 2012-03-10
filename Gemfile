@@ -42,6 +42,7 @@ group :debug do
 
   platform :mri_19 do
     gem 'ruby-debug19'
+    gem 'simplecov', :require => false
   end
 end
 
