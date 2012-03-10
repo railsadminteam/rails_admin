@@ -218,7 +218,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
     end
 
     it "returns query statement" do
-      @abstract_model.send(:query_conditions, "word").should == ["(balls.color LIKE ?) OR (balls.type LIKE ?)", "%word%", "%word%"]
+      @abstract_model.send(:query_conditions, "word").should == ["(balls.color #{@like} ?) OR (balls.type #{@like} ?)", "%word%", "%word%"]
     end
   end
 
@@ -238,7 +238,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
 
   describe "#build_statement" do
     before do
-      @abstract_model = RailsAdmin::AbstractModel.new('Team')
+      @abstract_model = RailsAdmin::AbstractModel.new('FieldTest')
     end
 
     it "ignores '_discard' operator or value" do
@@ -308,19 +308,20 @@ describe RailsAdmin::Adapters::ActiveRecord do
       @abstract_model.send(:build_statement, :field, :string, "foo", "is").should == ["(field #{@like} ?)", "foo"]
     end
 
-    [:datetime, :timestamp, :date].each do |type|
-      it "supports #{type} query" do
-        @abstract_model.send(:build_statement, :field, type, "", "default").should be_nil
-        Timecop.freeze(Time.utc(2012,1,15,12,0,0)) do
-          @abstract_model.send(:build_statement, :field, type, "", "today").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Sat, 14 Jan 2012 23:59:59 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
-          @abstract_model.send(:build_statement, :field, type, "", "yesterday").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Fri, 13 Jan 2012 23:59:59 UTC +00:00, Sat, 14 Jan 2012 23:59:59 UTC +00:00]'
-          @abstract_model.send(:build_statement, :field, type, "", "this_week").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Sun, 08 Jan 2012 23:59:59 UTC +00:00, Sun, 15 Jan 2012 23:59:59 UTC +00:00]'
-          @abstract_model.send(:build_statement, :field, type, "", "last_week").to_s.should ==
-            '["(field BETWEEN ? AND ?)", Sun, 01 Jan 2012 23:59:59 UTC +00:00, Sun, 08 Jan 2012 23:59:59 UTC +00:00]'
-        end
+    context 'filters on dates' do
+      it 'lists elements within outbound limits' do
+        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+
+        FieldTest.create!(:date_field => Date.strptime("01/01/2012", date_format))
+        FieldTest.create!(:date_field => Date.strptime("01/02/2012", date_format))
+        FieldTest.create!(:date_field => Date.strptime("01/03/2012", date_format))
+        FieldTest.create!(:date_field => Date.strptime("01/04/2012", date_format))
+        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
+        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
+        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
+        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
+        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
+
       end
     end
 
@@ -346,25 +347,4 @@ describe RailsAdmin::Adapters::ActiveRecord do
       RailsAdmin::AbstractModel.new('User').serialized_attributes.should == ["roles"]
     end
   end
-  
-  
-  describe '#all' do
-    context 'filters on dates' do
-      it 'lists elements within outbound limits' do
-        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-        
-        FieldTest.create!(:date_field => Date.strptime("01/01/2012", date_format))
-        FieldTest.create!(:date_field => Date.strptime("01/02/2012", date_format))
-        FieldTest.create!(:date_field => Date.strptime("01/03/2012", date_format))
-        FieldTest.create!(:date_field => Date.strptime("01/04/2012", date_format))
-        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
-        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
-        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
-        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
-        RailsAdmin.config(FieldTest).abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
-        
-      end
-    end
-  end
-
 end

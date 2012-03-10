@@ -69,6 +69,7 @@ RSpec.configure do |config|
     FieldTest.delete_all
     Author.delete_all
     Article.delete_all
+    MongoidFieldTest.delete_all
     login_as User.create(
       :email => "username@example.com",
       :password => "password"
