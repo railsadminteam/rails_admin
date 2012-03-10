@@ -110,6 +110,19 @@ describe RailsAdmin::MainController do
 
     end
   end
+
+  describe "index" do
+    it "uses source association's primary key with :compact, not target model's default primary key" do
+      class TeamWithNumberedPlayers < ActiveRecord::Base
+        self.table_name = 'teams'
+        has_many :numbered_players, :class_name => 'Player', :primary_key => :number, :foreign_key => 'team_id'
+      end
+      FactoryGirl.create :team
+      TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, :number => 123)]
+      returned = get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
+      returned.body.should =~ /\"id\"\:123/
+    end
+  end
   
   describe "sanitize_params_for!" do
     it 'sanitize params recursively in nested forms' do
