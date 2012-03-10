@@ -135,15 +135,7 @@ module RailsAdmin
               conditions_per_collection[collection_name] << statement
             end
           end
-          conditions_per_collection.each do |collection_name, conditions|
-            if collection_name == table_name
-              # conditions referring current model column are passed directly
-              statements.concat conditions
-            else
-              # otherwise, collect ids of documents that satisfy search condition
-              statements.concat perform_search_on_associated_collection(field.name, conditions)
-            end
-          end
+          statements.concat make_condition_for_current_collection(field, conditions_per_collection)
         end
 
         if statements.any?
@@ -172,16 +164,7 @@ module RailsAdmin
               end
             end
             if conditions_per_collection.any?
-              field_statements = []
-              conditions_per_collection.each do |collection_name, conditions|
-                if collection_name == table_name
-                  # conditions referring current model column are passed directly
-                  field_statements.concat conditions
-                else
-                  # otherwise, collect ids of documents that satisfy search condition
-                  field_statements.concat perform_search_on_associated_collection(field.name, conditions)
-                end
-              end
+              field_statements = make_condition_for_current_collection(field, conditions_per_collection)
               if field_statements.length > 1
                 statements << { '$or' => field_statements }
               else
@@ -316,6 +299,20 @@ module RailsAdmin
         end
       end
 
+      def make_condition_for_current_collection(target_field, conditions_per_collection)
+        result =[]
+        conditions_per_collection.each do |collection_name, conditions|
+          if collection_name == table_name
+            # conditions referring current model column are passed directly
+            result.concat conditions
+          else
+            # otherwise, collect ids of documents that satisfy search condition
+            result.concat perform_search_on_associated_collection(target_field.name, conditions)
+          end
+        end
+        result
+      end
+
       def perform_search_on_associated_collection(field_name, conditions)
         target_association = associations.find{|a| a[:name] == field_name }
         return [] unless target_association
@@ -325,8 +322,6 @@ module RailsAdmin
           [{ target_association[:foreign_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:primary_key_proc].call)} }}]
         when :has_many
           [{ target_association[:primary_key_proc].call.to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:foreign_key])} }}]
-        else
-          []
         end
       end
     end
