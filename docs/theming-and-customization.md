@@ -37,8 +37,8 @@ Put all the real theming in `theming.css.scss`. It can be regular CSS, LESS or [
 
 Note that if you choose to use SCSS, you can:
 
-* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.css.scss`. (available mixins [[here|https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/mixins.css.scss]])
-* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.css.scss`. (available variables [[here|https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/variables.css.scss]])
+* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.css.scss`. (available mixins [[here|https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_mixins.scss]])
+* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.css.scss`. (available variables [[here|https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_variables.scss]])
 * In `theming.css.scss`:
   * use all mixins and variables. (your owns, Bootstrap's and RailsAdmin's)
   * include any other .scss file with `@import rails_admin/themes/__THEME_NAME__/my_scss_file` and organize your the rest of your theme the way you want.
