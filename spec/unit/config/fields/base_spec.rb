@@ -16,6 +16,15 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields.should == [:commentable_id, :commentable_type]
     end
 
+    it "should have correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column" do
+      class CommentReversed < ActiveRecord::Base
+        @columns = [ActiveRecord::ConnectionAdapters::Column.new('commentable_type', nil, 'string'),
+                    ActiveRecord::ConnectionAdapters::Column.new('commentable_id', nil, 'integer')]
+        belongs_to :commentable, :polymorphic => true
+      end
+      RailsAdmin.config(CommentReversed).fields.map(&:name).sort.should == [:commentable, :commentable_id, :commentable_type]
+    end
+
     context 'of a Paperclip installation' do
       it 'should be a _file_name field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.should == [:paperclip_asset_file_name]

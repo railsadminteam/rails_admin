@@ -29,6 +29,8 @@ group :development, :test do
     end
   end
 
+  gem 'bson_ext'
+  gem 'mongoid'
   gem 'cancan'
 end
 
@@ -40,6 +42,7 @@ group :debug do
 
   platform :mri_19 do
     gem 'ruby-debug19'
+    gem 'simplecov', :require => false
   end
 end
 

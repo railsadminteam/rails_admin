@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2'
 gem 'devise', '~> 2.0'
+gem 'bson_ext'
+gem 'mongoid'
 gem 'rails_admin', :path => '../../'
 gem 'mlb', '~> 0.5'
 gem 'paperclip', '~> 2.4'

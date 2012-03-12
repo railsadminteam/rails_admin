@@ -4,7 +4,7 @@ require 'rails_admin/config/fields/types/belongs_to_association'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   if association = parent.abstract_model.associations.find {|a| a[:foreign_key] == properties[:name] }
-    field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : :belongs_to}_association").new(parent, association[:name], association)
+    field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : association[:type]}_association").new(parent, association[:name], association)
     fields << field
 
     child_columns = []
@@ -13,7 +13,10 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
 
     if association[:polymorphic]
       type_colum = parent.abstract_model.properties.find {|p| p[:name].to_s == association[:foreign_type].to_s }
-      child_columns << RailsAdmin::Config::Fields.default_factory.call(parent, type_colum, fields)
+      unless type_field = fields.find{|f| f.name.to_s == type_colum[:name].to_s }
+        type_field = RailsAdmin::Config::Fields.default_factory.call(parent, type_colum, fields)
+      end
+      child_columns << type_field
     end
 
     child_columns.each do |child_column|
