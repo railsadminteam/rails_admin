@@ -2,9 +2,8 @@ before_install: gem install bundler --pre
 bundler_args: "--without debug"
 script: spec/ci.sh
 rvm:
+  - 1.8.7
   - 1.9.3
-  - rbx
-  - ree
   - jruby
 env:
   - "CI_DB_ADAPTER=sqlite3"
