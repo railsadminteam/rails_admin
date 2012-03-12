@@ -1,4 +1,3 @@
-before_install: gem install bundler --pre
 bundler_args: "--without debug"
 script: spec/ci.sh
 rvm:
@@ -12,8 +11,7 @@ env:
 gemfile:
   - Gemfile
   - Gemfile31
-notifications:
-  irc: "irc.freenode.org#railsadmin"
+language: ruby
 matrix:
   exclude:
     - rvm: ree
@@ -73,3 +71,5 @@ matrix:
     - rvm: 1.9.3
       gemfile: Gemfile31
       env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+notifications:
+  irc: "irc.freenode.org#railsadmin"
