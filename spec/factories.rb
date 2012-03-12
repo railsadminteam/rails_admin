@@ -31,6 +31,11 @@ FactoryGirl.define do
     sequence(:name) { |n| "League #{n}" }
   end
 
+  factory :division do
+    sequence(:custom_league_id)
+    sequence(:name) { |n| "Division #{n}" }
+  end
+
   factory :fan do
     sequence(:name) { |n| "Fan #{n}" }
   end
