@@ -60,4 +60,20 @@ end
 
 Note: `has_many :through` associations are not considered any differently from vanilla `has_many` association. In particular, no special help is provided to edit join table attributes; you can edit indifferently the join-table or the target table.
 
+### Alternative
+
+The code above didn't work for me. There were some join models created with the position attribute set, and then the self.blocks assignment created new join models with a nil position. So, why not just do the assignment first and then update the positions? I don't know if the code is equivalent to the former, but it works for me and it's a lot simpler.
+
+```ruby
+def block_ids=(ids)
+  unless (ids = ids.map(&:to_i).select { |i| i>0 }) == block_grid_associations.map(&:block_id)
+    self.blocks = Block.find(ids)
+
+    ids.each_with_index do |id, index|
+      block_grid_associations.select { |b| b.block_id == id }.first.position = (index+1)
+    end
+  end
+end
+```
+
 [[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
