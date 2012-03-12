@@ -25,6 +25,13 @@ module RailsAdmin
           register_instance_option(:visible?) do
             @name.to_s != '_id'
           end
+
+          def parse_input(params)
+            begin
+              params[name] = (params[name].blank? ? nil : BSON::ObjectId(params[name])) if params[name].is_a?(::String)
+            rescue BSON::InvalidObjectId
+            end
+          end
         end
       end
     end

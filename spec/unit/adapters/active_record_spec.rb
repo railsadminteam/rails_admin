@@ -68,7 +68,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :foreign_key=>:a_r_blog_id,
         :foreign_type=>nil,
         :as=>nil,
-        :polymorphic=>nil,
+        :polymorphic=>false,
         :inverse_of=>nil,
         :read_only=>nil,
         :nested_form=>nil
@@ -86,7 +86,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :foreign_key=>:ar_blog_id,
         :foreign_type=>nil,
         :as=>nil,
-        :polymorphic=>nil,
+        :polymorphic=>false,
         :inverse_of=>nil,
         :read_only=>nil,
         :nested_form=>nil
@@ -104,7 +104,7 @@ describe RailsAdmin::Adapters::ActiveRecord do
         :foreign_key=>:ar_post_id,
         :foreign_type=>nil,
         :as=>nil,
-        :polymorphic=>nil,
+        :polymorphic=>false,
         :inverse_of=>nil,
         :read_only=>nil,
         :nested_form=>nil
@@ -130,6 +130,24 @@ describe RailsAdmin::Adapters::ActiveRecord do
       }
       # param[:primary_key_proc].call.should == 'id' Should not be called for polymorphic relations. Todo, Handle this niver
       param[:model_proc].call.should == [ARBlog, ARPost]
+    end
+
+    it "has correct parameter of polymorphic inverse has_many association" do
+      param = @blog.associations.select{|a| a[:name] == :a_r_comments}.first
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
+        :name=>:a_r_comments,
+        :pretty_name=>"A r comments",
+        :type=>:has_many,
+        :foreign_key=>:commentable_id,
+        :foreign_type=>nil,
+        :as=>:commentable,
+        :polymorphic=>false,
+        :inverse_of=>nil,
+        :read_only=>nil,
+        :nested_form=>nil
+      }
+      param[:primary_key_proc].call.should == 'id'
+      param[:model_proc].call.should == ARComment
     end
   end
   

@@ -52,6 +52,10 @@ module RailsAdmin
         Array.wrap(objects).each &:destroy
       end
 
+      def primary_key
+        :_id
+      end
+
       def associations
         model.associations.values.map do |association|
           {
@@ -239,7 +243,7 @@ module RailsAdmin
       end
 
       def association_model_proc_lookup(association)
-        if association.polymorphic?
+        if association.polymorphic? && association.macro == :referenced_in
           RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, association.name) || []
         else
           association.klass
@@ -247,7 +251,7 @@ module RailsAdmin
       end
 
       def association_foreign_type_lookup(association)
-        if association.polymorphic?
+        if association.polymorphic? && association.macro == :referenced_in
           association.inverse_type.try(:to_sym) || :"#{association.name}_type"
         end
       end
@@ -257,7 +261,7 @@ module RailsAdmin
       end
 
       def association_polymorphic_lookup(association)
-        association.polymorphic?
+        !!association.polymorphic? && association.macro == :referenced_in
       end
 
       def association_primary_key_lookup(association)

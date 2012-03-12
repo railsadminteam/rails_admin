@@ -137,6 +137,25 @@ describe RailsAdmin::Adapters::Mongoid do
       param[:primary_key_proc].call.should == :_id
       param[:model_proc].call.should == [MongoBlog, MongoPost]
     end
+
+    it "has correct parameter of polymorphic inverse has_many association" do
+      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      param = @blog.associations.select{|a| a[:name] == :mongo_comments}.first
+      param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }.should == {
+        :name=>:mongo_comments,
+        :pretty_name=>"Mongo comments",
+        :type=>:has_many,
+        :foreign_key=>:commentable_id,
+        :foreign_type=>nil,
+        :as=>:commentable,
+        :polymorphic=>false,
+        :inverse_of=>nil,
+        :read_only=>nil,
+        :nested_form=>nil
+      }
+      param[:primary_key_proc].call.should == :_id
+      param[:model_proc].call.should == MongoComment
+    end
   end
 
   describe "#properties" do

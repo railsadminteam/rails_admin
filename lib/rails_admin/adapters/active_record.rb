@@ -224,7 +224,7 @@ module RailsAdmin
       end
 
       def association_polymorphic_lookup(association)
-        association.options[:polymorphic]
+        !!association.options[:polymorphic]
       end
 
       def association_primary_key_lookup(association)

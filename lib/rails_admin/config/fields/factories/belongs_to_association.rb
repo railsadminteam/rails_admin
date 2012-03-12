@@ -13,7 +13,10 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
 
     if association[:polymorphic]
       type_colum = parent.abstract_model.properties.find {|p| p[:name].to_s == association[:foreign_type].to_s }
-      child_columns << RailsAdmin::Config::Fields.default_factory.call(parent, type_colum, fields)
+      unless type_field = fields.find{|f| f.name.to_s == type_colum[:name].to_s }
+        type_field = RailsAdmin::Config::Fields.default_factory.call(parent, type_colum, fields)
+      end
+      child_columns << type_field
     end
 
     child_columns.each do |child_column|
