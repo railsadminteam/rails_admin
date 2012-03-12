@@ -4,6 +4,7 @@ require 'remotipart'
 require 'bootstrap-sass'
 require 'kaminari'
 require 'rack-pjax'
+require 'jquery-ui-rails'
 require 'nested_form'
 require 'rails_admin'
 
