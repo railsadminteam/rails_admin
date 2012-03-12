@@ -232,25 +232,30 @@ describe RailsAdmin::Adapters::ActiveRecord do
 
   describe "#query_conditions" do
     before do
-      @abstract_model = RailsAdmin::AbstractModel.new('Ball')
+      @abstract_model = RailsAdmin::AbstractModel.new('Team')
+      @teams = [{}, {:name=>'somewhere foos'}, {:manager=>'foo junior'}].
+        map{|h| FactoryGirl.create :team, h}
     end
 
-    it "returns query statement" do
-      @abstract_model.send(:query_conditions, "word").should == ["(balls.color #{@like} ?) OR (balls.type #{@like} ?)", "%word%", "%word%"]
+    it "makes conrrect query" do
+      @abstract_model.all(:query => "foo").sort.should == @teams[1..2]
     end
   end
 
   describe "#filter_conditions" do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Team')
+      @division = FactoryGirl.create :division, :name => 'bar division'
+      @teams = [{}, {:division=>@division}, {:name=>'somewhere foos', :division=>@division}, {:name=>'nowhere foos'}].
+        map{|h| FactoryGirl.create :team, h}
     end
 
-    it "returns filter statement" do
-      @abstract_model.send(
-        :filter_conditions,
-        {"name" => {"0000" => {:o=>"is", :v=>"Jets"}},
-         "division" => {"0001" => {:o=>"like", :v=>"1"}}}
-      ).should == ["((teams.name #{@like} ?)) AND ((divisions.name #{@like} ?) OR (teams.division_id = ?))", "Jets", "%1%", 1]
+    it "makes conrrect query" do
+      @abstract_model.all(
+        :filters => {"name" => {"0000" => {:o=>"like", :v=>"foo"}},
+                     "division" => {"0001" => {:o=>"like", :v=>"bar"}}},
+        :include => :division
+      ).should == [@teams[2]]
     end
   end
 
