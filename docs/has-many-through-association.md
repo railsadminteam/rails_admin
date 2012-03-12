@@ -62,18 +62,21 @@ Note: `has_many :through` associations are not considered any differently from v
 
 ### Alternative
 
-The code above didn't work for me. There were some join models created with the position attribute set, and then the self.blocks assignment created new join models with a nil position. So, why not just do the assignment first and then update the positions? I don't know if the code is equivalent to the former, but it works for me and it's a lot simpler.
+The code above didn't work for me. There were some join models created with the position attribute set, and then the self.blocks assignment created new join models with a nil position. I don't know if the code is equivalent to the former, but it works for me and it's a lot simpler.
 
 ```ruby
 def block_ids=(ids)
-  unless (ids = ids.map(&:to_i).select { |i| i>0 }) == block_grid_associations.map(&:block_id)
-    self.blocks = Block.find(ids)
+    unless (ids = ids.map(&:to_i).select { |i| i>0 }) == (current_ids = question_occurrences.map(&:block_id))
+      ids.each_with_index do |id, index|
+        if current_ids.include? (id)
+          block_grid_associations.select { |b| b.block_id == id }.first.position = (index+1)
+        else
+          block_grid_associations.build({:block_id => id, :position => (index+1)})
+        end
 
-    ids.each_with_index do |id, index|
-      block_grid_associations.select { |b| b.block_id == id }.first.position = (index+1)
+      end
     end
   end
-end
 ```
 
 [[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
