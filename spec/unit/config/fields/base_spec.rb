@@ -17,12 +17,12 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     it "should have correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column" do
-      class CommentReversed < ActiveRecord::Base
-        @columns = [ActiveRecord::ConnectionAdapters::Column.new('commentable_type', nil, 'string'),
-                    ActiveRecord::ConnectionAdapters::Column.new('commentable_id', nil, 'integer')]
+      class CommentReversed < Tableless
+        column :commentable_type, :string
+        column :commentable_id, :integer
         belongs_to :commentable, :polymorphic => true
       end
-      RailsAdmin.config(CommentReversed).fields.map(&:name).sort.should == [:commentable, :commentable_id, :commentable_type]
+      RailsAdmin.config(CommentReversed).fields.map{|f| f.name.to_s}.sort.should == ['commentable', 'commentable_id', 'commentable_type']
     end
 
     context 'of a Paperclip installation' do
