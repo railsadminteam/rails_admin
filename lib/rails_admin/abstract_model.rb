@@ -20,15 +20,38 @@ module RailsAdmin
       rescue LoadError, NameError
         nil
       end
+
+      @@polymorphic_parents = {}
+
+      def polymorphic_parents(adapter, name)
+        @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
+          all(adapter).each do |am|
+            am.associations.select{|r| r[:as] }.each do |association|
+              (hash[association[:as].to_sym] ||= []) << am.model
+            end
+          end
+        end
+        @@polymorphic_parents[adapter.to_sym][name.to_sym]
+      end
+
+      # For testing
+      def reset_polymorphic_parents
+        @@polymorphic_parents = {}
+      end
     end
 
     def initialize(m)
       @model_name = m.to_s
-      # ActiveRecord
       if m.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !m.abstract_class?
+        # ActiveRecord
         @adapter = :active_record
         require 'rails_admin/adapters/active_record'
         extend Adapters::ActiveRecord
+      elsif m.ancestors.map(&:to_s).include?('Mongoid::Document')
+        # Mongoid
+        @adapter = :mongoid
+        require 'rails_admin/adapters/mongoid'
+        extend Adapters::Mongoid
       end
     end
 
@@ -51,6 +74,37 @@ module RailsAdmin
 
     def pretty_name
       model.model_name.human
+    end
+
+    private
+
+    def get_filtering_duration(operator, value)
+      date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+      case operator
+      when 'between'
+        start_date = value[1].present? ? (beginning_of_date(Date.strptime(value[1], date_format)) rescue false) : false
+        end_date   = value[2].present? ? (Date.strptime(value[2], date_format).end_of_day rescue false) : false
+      when 'today'
+        start_date = beginning_of_date(Date.today)
+        end_date   = Date.today.end_of_day
+      when 'yesterday'
+        start_date = beginning_of_date(Date.yesterday)
+        end_date   = Date.yesterday.end_of_day
+      when 'this_week'
+        start_date = beginning_of_date(Date.today.beginning_of_week)
+        end_date   = Date.today.end_of_week.end_of_day
+      when 'last_week'
+        start_date = beginning_of_date(1.week.ago.to_date.beginning_of_week)
+        end_date   = 1.week.ago.to_date.end_of_week.end_of_day
+      else # default
+        start_date = (beginning_of_date(Date.strptime(Array.wrap(value).first, date_format)) rescue false)
+        end_date   = (Date.strptime(Array.wrap(value).first, date_format).end_of_day rescue false)
+      end
+      [start_date, end_date]
+    end
+
+    def beginning_of_date(date)
+      date.beginning_of_day
     end
   end
 end

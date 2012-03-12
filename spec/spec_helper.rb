@@ -1,6 +1,12 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
 ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
+
+if ENV['INVOKE_SIMPLECOV']
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
+
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
 require 'rspec/rails'
@@ -61,6 +67,10 @@ RSpec.configure do |config|
     Team.delete_all
     User.delete_all
     FieldTest.delete_all
+    Author.delete_all
+    Article.delete_all
+    MongoidFieldTest.delete_all
+    Tag.delete_all
     login_as User.create(
       :email => "username@example.com",
       :password => "password"
@@ -70,4 +80,6 @@ RSpec.configure do |config|
   config.after(:each) do
     Warden.test_reset!
   end
+
+  config.seed = ENV['SEED'] if ENV['SEED']
 end

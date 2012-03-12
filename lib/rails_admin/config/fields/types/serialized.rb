@@ -13,7 +13,7 @@ module RailsAdmin
           end
           
           def parse_input(params)
-            params[name] = (params[name].blank? ? nil : YAML.load(params[name]))
+            params[name] = (params[name].blank? ? nil : YAML.load(params[name])) if params[name].is_a?(::String)
           end
         end
       end
