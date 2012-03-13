@@ -1,11 +1,9 @@
-before_install: gem install bundler --pre
 bundler_args: "--without debug"
 script: spec/ci.sh
 rvm:
+  - 1.8.7
   - 1.9.3
-  - rbx
-  - ree
-  - jruby
+  - jruby-18mode
 env:
   - "CI_DB_ADAPTER=sqlite3"
   - "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
@@ -13,8 +11,7 @@ env:
 gemfile:
   - Gemfile
   - Gemfile31
-notifications:
-  irc: "irc.freenode.org#railsadmin"
+language: ruby
 matrix:
   exclude:
     - rvm: ree
@@ -49,19 +46,19 @@ matrix:
       env: "CI_DB_ADAPTER=mysql"
       gemfile: Gemfile31
 
-    - rvm: jruby
+    - rvm: jruby-18mode
       env: "CI_DB_ADAPTER=mysql"
       gemfile: Gemfile
-    - rvm: jruby
+    - rvm: jruby-18mode
       env: "CI_DB_ADAPTER=mysql"
       gemfile: Gemfile31
-    - rvm: jruby
+    - rvm: jruby-18mode
       env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
       gemfile: Gemfile
-    - rvm: jruby
+    - rvm: jruby-18mode
       env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
       gemfile: Gemfile31
-    - rvm: jruby
+    - rvm: jruby-18mode
       env: "CI_DB_ADAPTER=sqlite3"
       gemfile: Gemfile31
 
@@ -74,3 +71,5 @@ matrix:
     - rvm: 1.9.3
       gemfile: Gemfile31
       env: "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+notifications:
+  irc: "irc.freenode.org#railsadmin"

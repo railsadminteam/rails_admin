@@ -18,62 +18,6 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 [plukevdh]: https://github.com/plukevdh
 [reinh]: https://github.com/reinh
 
-## <a name="announcements"></a>Announcements
-
-* Actions
-
-Custom actions are finally there. Default should stay put. To customize them, please have a look at:
-
-
-[Wiki: actions](https://github.com/sferik/rails_admin/wiki/Actions)<br>
-[Documented source code: Base Action class](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb)
-
-
-* Translations
-
-Translations have been totally revamped (for custom actions)
-
-Translation keys for actions now look like:
-
-```yaml
-
-en:
-  admin:
-    actions:
-      <action_name>:
-        title: "..."
-        menu: "..."
-        breadcrumb: "..."
-
-```
-
-Other keys may have changed too.
-
-Old outdated translations have been removed, you must now fetch them from the wiki.
-
-See [Wiki](https://github.com/sferik/rails_admin/wiki/Translations) for more informations.
-
-Thanks a lot to all the translators sharing their work, sorry for the added work (it was really needed).
-
-* History
-
-If you wish to continue using the old history feature, please add this to your initializer:
-
-```ruby
-config.audit_with :history, User
-```
-
-Alternatively, [PaperTrail](https://github.com/airblade/paper_trail) is now officially compatible. 
-Install it, add `has_paper_trail` to the models you wish to track, and add the following code to your initializer:
-
-```ruby
-config.audit_with :paper_trail, User
-```
-
-Change `User` with the class you use with Devise.
-
-By default, there won't be any history shown.
-
 ## <a name="features"></a>Features
 
 * Display database tables
@@ -89,6 +33,7 @@ By default, there won't be any history shown.
 * User action history (internally or via [PaperTrail](https://github.com/airblade/paper_trail))
 * Supported ORMs
   * ActiveRecord
+  * Mongoid [new]
 
 ## <a name="demo"></a>Demo
 

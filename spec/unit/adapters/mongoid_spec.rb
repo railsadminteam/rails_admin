@@ -58,11 +58,11 @@ describe RailsAdmin::Adapters::Mongoid do
     end
 
     it 'lists associations' do
-      @post.associations.map{|a|a[:name]}.should == [:mongo_blog, :mongo_categories, :mongo_comments]
+      @post.associations.map{|a|a[:name].to_s}.sort.should == ['mongo_blog', 'mongo_categories', 'mongo_comments']
     end
 
     it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.sort.should == [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]
+      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type].to_s}.uniq.sort.should == ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
 
     it "has correct parameter of belongs_to association" do
@@ -164,7 +164,7 @@ describe RailsAdmin::Adapters::Mongoid do
     end
 
     it "maps Mongoid column types to RA types" do
-      @abstract_model.properties.sort{|a,b| a[:name] <=> b[:name] }.should == [
+      @abstract_model.properties.sort{|a,b| a[:name].to_s <=> b[:name].to_s }.should == [
         { :name => :_id,
           :pretty_name => "Id",
           :nullable? => true,
@@ -427,26 +427,28 @@ describe RailsAdmin::Adapters::Mongoid do
   describe "#query_conditions" do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Article')
+      @articles = [{}, {:title=>'Many foos'}, {:body=>'foo shortage'}].
+        map{|h| FactoryGirl.create :article, h}
     end
 
-    it "returns query statement" do
-      @abstract_model.send(:query_conditions, "word").should ==
-        {"$or"=>[{"title"=>/word/}, {"body"=>/word/}]}
+    it "makes conrrect query" do
+      @abstract_model.all(:query => "foo").sort.should == @articles[1..2]
     end
   end
 
   describe "#filter_conditions" do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Article')
+      @author = FactoryGirl.create :author, :name => 'king of bar'
+      @articles = [{}, {:author=>@author}, {:title=>'Many foos', :author=>@author}, {:title=>'Great foo'}].
+        map{|h| FactoryGirl.create :article, h}
     end
 
-    it "returns filter statement" do
-      @author = FactoryGirl.create :author, :name => 'Author 1'
-      @abstract_model.send(
-        :filter_conditions,
-        {"title" => {"0000" => {:o=>"is", :v=>"foo"}},
-         "author" => {"0001" => {:o=>"like", :v=>"1"}}}
-      ).should == {"$and"=>[{"title"=>"foo"}, {"author_id"=>{"$in"=>[@author.id]}}]}
+    it "makes conrrect query" do
+      @abstract_model.all(:filters =>
+        {"title" => {"0000" => {:o=>"like", :v=>"foo"}},
+         "author" => {"0001" => {:o=>"like", :v=>"bar"}}}
+      ).should == [@articles[2]]
     end
   end
 
@@ -565,7 +567,7 @@ describe RailsAdmin::Adapters::Mongoid do
     end
 
     it "accepts array value" do
-      params = {:array_field => '[1,3]'}
+      params = {:array_field => '[1, 3]'}
       @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
       params[:array_field].should == [1, 3]
     end
