@@ -42,7 +42,7 @@ module RailsAdmin
       return '' if @objects.blank?
 
       # encoding shenanigans first
-      @encoding_from = if [nil, '', 'utf8', 'utf-8', 'UTF8', 'UTF-8'].include?(encoding = Rails.configuration.database_configuration[Rails.env]['encoding'])
+      @encoding_from = if [nil, '', 'utf8', 'utf-8', 'UTF8', 'UTF-8'].include?(encoding = @abstract_model.encoding)
         'UTF-8'
       else
         encoding

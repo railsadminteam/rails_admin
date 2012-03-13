@@ -124,6 +124,10 @@ module RailsAdmin
         []
       end
 
+      def encoding
+        'UTF-8'
+      end
+
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
