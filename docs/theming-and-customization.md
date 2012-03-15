@@ -8,7 +8,7 @@ app/assets/stylesheets/rails_admin/custom/theming.css.scss
 app/assets/stylesheets/rails_admin/custom/variables.css.scss
 app/assets/javascripts/rails_admin/custom/ui.js
 ```
-Remember not to forget to re-compile your assets o simply delete the content of your tmp/cache folder.
+Don't forget to re-compile your assets o simply delete the content of your tmp/cache folder.
 
 ### To create a distributable theme
 
