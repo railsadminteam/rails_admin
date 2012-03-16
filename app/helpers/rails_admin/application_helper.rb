@@ -79,7 +79,7 @@ module RailsAdmin
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, :class => "#{"active" if current_action?(a, am, o)}") do
             if a.http_methods.include?(:get)
-              link_to wording_for(:breadcrumb, a, am, o), { :action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => o.try(:id) }
+              link_to wording_for(:breadcrumb, a, am, o), { :action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil) }
             else
               content_tag(:span, wording_for(:breadcrumb, a, am, o))
             end
@@ -95,7 +95,7 @@ module RailsAdmin
         wording = wording_for(:menu, action)
         %{
           <li data-original-title="#{wording}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
-            <a href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => object.try(:id) })}">
+            <a href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil) })}">
               <i class="#{action.link_icon}"></i>
               <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
             </a>
