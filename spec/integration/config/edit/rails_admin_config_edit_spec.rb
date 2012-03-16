@@ -814,6 +814,16 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "field_test")
       should have_no_selector('.add_nested_fields')
     end
+
+    it 'should work with Mongoid' do
+      RailsAdmin::Config.excluded_models = [RelTest]
+      @record = Article.create :notes => [{:subject => 'nested'}]
+      visit edit_path(:model_name => "article", :id => @record.id)
+      fill_in "article_notes_attributes_0_subject", :with => 'note subject 1 edited'
+      click_button "Save"
+      @record.reload
+      @record.notes[0].subject.should == 'note subject 1 edited'
+    end
   end
 
 

@@ -70,7 +70,7 @@ module RailsAdmin
             :polymorphic => association_polymorphic_lookup(association),
             :inverse_of => association_inverse_of_lookup(association),
             :read_only => nil,
-            :nested_form => nil
+            :nested_form => association_nested_attributes_options_lookup(association)
           }
         end
       end
@@ -126,6 +126,10 @@ module RailsAdmin
 
       def encoding
         'UTF-8'
+      end
+
+      def embedded?
+        @embedded ||= !!model.associations.values.find{|a| a.macro.to_sym == :embedded_in }
       end
 
       private
@@ -258,6 +262,10 @@ module RailsAdmin
         if association.polymorphic? && association.macro == :referenced_in
           association.inverse_type.try(:to_sym) || :"#{association.name}_type"
         end
+      end
+
+      def association_nested_attributes_options_lookup(association)
+        model.nested_attributes_options.try { |o| o[association.name.to_sym] }
       end
 
       def association_as_lookup(association)

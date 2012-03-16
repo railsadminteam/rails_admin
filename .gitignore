@@ -12,6 +12,7 @@
 /spec/generators/tmp
 /spec/lib/tmp
 Gemfile.lock
+Gemfile31.lock
 coverage/*
 db/*.sqlite3
 db/*.sqlite3-journal
