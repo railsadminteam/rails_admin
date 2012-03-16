@@ -39,7 +39,8 @@ module RailsAdmin
           args.each do |arg|
             @nested_attributes_options[arg.to_sym] = options.reverse_merge(:allow_destroy=>false, :update_only=>false)
           end
-          accepts_nested_attributes_for_without_rails_admin(*args, options)
+          args << options
+          accepts_nested_attributes_for_without_rails_admin(*args)
         end
       end
     end
