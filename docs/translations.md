@@ -12,19 +12,19 @@ Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_ad
 
 Community sourced translations:
 
+* [[Catalan: ca|https://gist.github.com/1764593]]
+* [[Chinese (Traditional): zh-TW|https://gist.github.com/2001808]]
+* [[Danish: da|https://gist.github.com/1780778]]
+* [[Dutch: nl|https://gist.github.com/1909240]]
 * [[English: en|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]]
 * [[French: fr|https://gist.github.com/1632279]]
-* [[Japanese: ja|https://gist.github.com/1662352#file_rails_admin.ja.yml]]
-* [[Spanish (Spain): es|https://gist.github.com/1647597#file_rails_admin.es.yml]]
 * [[Italian (Italy): it|https://gist.github.com/1700678#file_rails_admin.it.yml]]
+* [[Japanese: ja|https://gist.github.com/1662352#file_rails_admin.ja.yml]]
 * [[Polish (Poland): pl|https://gist.github.com/1717477#file_rails_admin.pl.yml]]
 * [[Portuguese (Brazil): pt-BR|https://gist.github.com/1844723#file_rails_admin.pt_br.yml]]
 * [[Portuguese (Portugal): pt-PT|https://gist.github.com/1751856#file_rails_admin.pt-PT.yml]]
 * [[Russian (Russia): ru|https://gist.github.com/1788510#file_rails_admin.ru.yml]]
-* [[Catalan: ca|https://gist.github.com/1764593]]
-* [[Danish: da|https://gist.github.com/1780778]]
-* [[Dutch: nl|https://gist.github.com/1909240]]
-* [[Traditional Chinese: zh-TW|https://gist.github.com/2001808]]
+* [[Spanish (Spain): es|https://gist.github.com/1647597#file_rails_admin.es.yml]]
 * Add your own (create a gist first)
 
 You can find old included translations here:
