@@ -15,7 +15,7 @@ module RailsAdmin
         end
 
         register_instance_option :sort_by do
-          parent.abstract_model.model.primary_key
+          parent.abstract_model.primary_key
         end
 
         register_instance_option :sort_reverse? do

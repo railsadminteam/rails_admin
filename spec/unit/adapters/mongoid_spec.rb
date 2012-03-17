@@ -327,15 +327,15 @@ describe RailsAdmin::Adapters::Mongoid do
       end
 
       it "supports pagination" do
-        @abstract_model.all(:sort => :_id, :page => 2, :per => 1).to_a.should == @articles[1..1]
+        @abstract_model.all(:sort => 'articles._id', :page => 2, :per => 1).to_a.should == @articles[1..1]
         # To prevent RSpec matcher to call Mongoid::Criteria#== method,
         # (we want to test equality of query result, not of Mongoid criteria)
         # to_a is added to invoke Mongoid query
       end
 
       it "supports ordering" do
-        @abstract_model.all(:sort => :_id, :sort_reverse => false).to_a.should == @articles.sort
-        @abstract_model.all(:sort => :_id, :sort_reverse => true).to_a.should == @articles.sort.reverse
+        @abstract_model.all(:sort => 'articles._id', :sort_reverse => false).to_a.should == @articles.sort
+        @abstract_model.all(:sort => 'articles._id', :sort_reverse => true).to_a.should == @articles.sort.reverse
       end
 
       it "supports querying" do
