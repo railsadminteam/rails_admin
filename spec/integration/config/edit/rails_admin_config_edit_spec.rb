@@ -822,15 +822,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_no_selector('.add_nested_fields')
     end
 
-    it 'should work with Mongoid' do
-      @record = Article.create :notes => [{:subject => 'nested'}]
-      visit edit_path(:model_name => "article", :id => @record.id)
-      fill_in "article_notes_attributes_0_subject", :with => 'note subject 1 edited'
-      click_button "Save"
-      @record.reload
-      @record.notes[0].subject.should == 'note subject 1 edited'
-    end
-
     describe "with nested_attributes_options given" do
       before do
         FieldTest.nested_attributes_options.stub(:[]).with(:comment).

@@ -154,7 +154,7 @@ describe "RailsAdmin Basic Update" do
     end
   end
 
-  describe "update with serialized objects of Mongoid" do
+  describe "update with serialized objects of Mongoid", :mongoid => true do
     before(:each) do
       @field_test = FactoryGirl.create :mongoid_field_test
 

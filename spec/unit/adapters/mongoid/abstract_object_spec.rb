@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rails_admin/adapters/mongoid/abstract_object'
 
-describe "Mongoid::AbstractObject" do
+describe "Mongoid::AbstractObject", :mongoid => true do
   before(:each) do
     @articles = FactoryGirl.create_list :article, 3
     @author = RailsAdmin::Adapters::Mongoid::AbstractObject.new FactoryGirl.create :author

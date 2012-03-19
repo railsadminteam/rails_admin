@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'remotipart', '~> 1.0'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'carrierwave'
+  gem.add_development_dependency 'database_cleaner'
   gem.add_development_dependency 'devise'
   gem.add_development_dependency 'dragonfly'
   gem.add_development_dependency 'factory_girl'

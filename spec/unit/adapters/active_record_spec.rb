@@ -1,9 +1,7 @@
 require 'spec_helper'
 require 'timecop'
-require 'rails_admin/adapters/active_record'
 
-
-describe RailsAdmin::Adapters::ActiveRecord do
+describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
   before do
     @like = ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == "postgresql" ? 'ILIKE' : 'LIKE'
   end

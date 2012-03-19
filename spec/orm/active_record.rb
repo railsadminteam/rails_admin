@@ -1,3 +1,11 @@
+ActiveRecord::Base.connection.tables.each do |table|
+  ActiveRecord::Base.connection.drop_table(table)
+end
+
+silence_stream(STDOUT) do
+  ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
+end
+
 class Tableless < ActiveRecord::Base
   def self.columns
     @columns ||= [];

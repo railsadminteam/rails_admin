@@ -1,8 +1,7 @@
 require 'spec_helper'
 require 'timecop'
-require 'rails_admin/adapters/mongoid'
 
-describe RailsAdmin::Adapters::Mongoid do
+describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
   describe '#associations' do
     before :all do
       RailsAdmin::AbstractModel.reset_polymorphic_parents

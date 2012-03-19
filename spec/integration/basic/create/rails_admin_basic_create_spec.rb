@@ -138,17 +138,4 @@ describe "RailsAdmin Basic Create" do
       should have_content("Player failed to be created. Player is cheating")
     end
   end
-
-  describe "creation of Mongoid habtm model object" do
-    before(:each) do
-      visit new_path(:model_name => "tag")
-      fill_in "tag[name]", :with => "Funny"
-      click_button "Save"
-      @tag = RailsAdmin::AbstractModel.new("Tag").first
-    end
-
-    it "should create an object with correct attributes" do
-      @tag.name.should eql("Funny")
-    end
-  end
 end
