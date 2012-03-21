@@ -81,7 +81,7 @@
 
 ### User integration
 
-* [[Authentification]]
+* [[Authentication]]
   * [[With Devise (installed by default)|https://github.com/plataformatec/devise]]
   * [[Manually|https://gist.github.com/1278355]]
   * [[None|no authentification]]
