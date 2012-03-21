@@ -213,7 +213,8 @@ describe RailsAdmin::Adapters::ActiveRecord do
       end
 
       it "supports pagination" do
-        @abstract_model.all(:page => 2, :per => 1).should == @players[1..1]
+        @abstract_model.all(:sort => "id", :page => 2, :per => 1).should == @players[1..1]
+        @abstract_model.all(:sort => "id", :page => 1, :per => 2).should == @players[1..2].reverse
       end
 
       it "supports ordering" do
