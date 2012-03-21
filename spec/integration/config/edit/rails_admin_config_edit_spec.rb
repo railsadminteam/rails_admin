@@ -264,15 +264,23 @@ describe "RailsAdmin Config DSL Edit Section" do
             label "Belong's to associations"
             field :division
           end
+          group :basic_info do
+            field :manager
+          end
         end
       end
       visit new_path(:model_name => "team")
       should have_selector("legend", :text => "Basic info")
+      all("legend", :text => "Basic info").tap do |nodes|
+        nodes.count.should == 2
+        nodes.first.visible?.should be_false
+        nodes.last.visible?.should be_true
+      end
       should have_selector("legend", :text => "Belong's to associations")
       should have_selector("label", :text => "Name")
       should have_selector("label", :text => "Logo url")
       should have_selector("label", :text => "Division")
-      should have_selector(".control-group", :count => 3)
+      should have_selector(".control-group", :count => 4)
     end
 
     it "should have accessor for its fields by type" do

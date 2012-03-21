@@ -23,7 +23,7 @@ module RailsAdmin
       if (fields = fieldset.with(:form => self, :object => @object, :view => @template).visible_fields).length > 0
         @template.content_tag :fieldset do
           contents = []
-          contents << @template.content_tag(:legend, %{<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}}.html_safe, :style => "#{fieldset.label == I18n.translate("admin.form.basic_info") ? 'display:none' : ''}")
+          contents << @template.content_tag(:legend, %{<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}}.html_safe, :style => "#{fieldset.name == :default ? 'display:none' : ''}")
           contents << @template.content_tag(:p, fieldset.help) if fieldset.help.present?
           contents << fields.map{ |field| field_wrapper_for(field, nested_in) }.join
           contents.join.html_safe
