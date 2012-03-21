@@ -12,7 +12,12 @@ module RailsAdmin
       end
 
       def get(id)
-        if object = model.where(:_id=>BSON::ObjectId(id)).first
+        begin
+          id = BSON::ObjectId(id) unless id.is_a?(BSON::ObjectId)
+        rescue BSON::InvalidObjectId
+          return nil
+        end
+        if object = model.where(:_id=>id).first
           AbstractObject.new object
         else
           nil

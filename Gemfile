@@ -39,6 +39,7 @@ group :mongoid do
 end
 
 group :development, :test do
+  gem 'dragonfly'
   gem 'cancan'
 end
 

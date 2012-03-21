@@ -56,7 +56,7 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
-    RailsAdmin::Config.audit_with :history
+    RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
     login_as User.create(
       :email => "username@example.com",
       :password => "password"

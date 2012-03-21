@@ -10,7 +10,7 @@ module RailsAdmin
 
           register_instance_option(:label) do
             label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
-            label = "_id" if label == ''
+            label = "Id" if label == ''
             label
           end
 
@@ -20,10 +20,6 @@ module RailsAdmin
 
           register_instance_option(:read_only) do
             true
-          end
-
-          register_instance_option(:visible?) do
-            @name.to_s != '_id'
           end
 
           def parse_input(params)

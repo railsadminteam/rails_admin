@@ -1,3 +1,5 @@
+require 'rails_admin/extensions/history/history'
+
 ActiveRecord::Base.connection.tables.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
 end
@@ -7,25 +9,27 @@ silence_stream(STDOUT) do
 end
 
 class Tableless < ActiveRecord::Base
-  def self.columns
-    @columns ||= [];
-  end
+  class <<self
+    def columns
+      @columns ||= [];
+    end
 
-  def self.column(name, sql_type = nil, default = nil, null = true)
-    columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default,
-      sql_type.to_s, null)
-  end
+    def column(name, sql_type = nil, default = nil, null = true)
+      columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default,
+                                                              sql_type.to_s, null)
+    end
 
-  def self.columns_hash
-    @columns_hash ||= Hash[columns.map { |column| [column.name, column] }]
-  end
+    def columns_hash
+      @columns_hash ||= Hash[columns.map { |column| [column.name, column] }]
+    end
 
-  def self.column_names
-    @column_names ||= columns.map { |column| column.name }
-  end
+    def column_names
+      @column_names ||= columns.map { |column| column.name }
+    end
 
-  def self.column_defaults
-    @column_defaults ||= columns.map { |column| [column.name, nil] }.inject({}) { |m, e| m[e[0]] = e[1]; m }
+    def column_defaults
+      @column_defaults ||= columns.map { |column| [column.name, nil] }.inject({}) { |m, e| m[e[0]] = e[1]; m }
+    end
   end
 
   # Override the save method to prevent exceptions.

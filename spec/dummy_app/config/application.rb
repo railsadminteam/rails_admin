@@ -5,7 +5,10 @@ require "action_mailer/railtie"
 require "active_resource/railtie"
 require "sprockets/railtie"
 
-require "#{CI_ORM}/railtie" rescue nil
+begin
+  require "#{CI_ORM}/railtie"
+rescue LoadError
+end
 
 require 'devise'
 
