@@ -256,7 +256,7 @@ module RailsAdmin
       end
 
       def association_model_proc_lookup(association)
-        if association.polymorphic? && association.macro == :referenced_in
+        if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
           RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, association.name) || []
         else
           association.klass
@@ -264,7 +264,7 @@ module RailsAdmin
       end
 
       def association_foreign_type_lookup(association)
-        if association.polymorphic? && association.macro == :referenced_in
+        if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
           association.inverse_type.try(:to_sym) || :"#{association.name}_type"
         end
       end
@@ -278,7 +278,7 @@ module RailsAdmin
       end
 
       def association_polymorphic_lookup(association)
-        !!association.polymorphic? && association.macro == :referenced_in
+        !!association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
       end
 
       def association_primary_key_lookup(association)
@@ -295,13 +295,13 @@ module RailsAdmin
       
       def association_type_lookup(macro)
         case macro.to_sym
-        when :referenced_in, :embedded_in
+        when :belongs_to, :referenced_in, :embedded_in
           :belongs_to
-        when :references_one, :embeds_one
+        when :has_one, :references_one, :embeds_one
           :has_one
-        when :references_many, :embeds_many
+        when :has_many, :references_many, :embeds_many
           :has_many
-        when :references_and_referenced_in_many
+        when :has_and_belongs_to_many, :references_and_referenced_in_many
           :has_and_belongs_to_many
         else
           raise "Unknown association type: #{macro.inspect}"

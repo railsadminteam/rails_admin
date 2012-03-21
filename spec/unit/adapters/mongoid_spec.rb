@@ -8,15 +8,15 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
       class MongoBlog
         include Mongoid::Document
-        references_many :mongo_posts
-        references_many :mongo_comments, :as => :commentable
+        has_many :mongo_posts
+        has_many :mongo_comments, :as => :commentable
       end
 
       class MongoPost
         include Mongoid::Document
-        referenced_in :mongo_blog
+        belongs_to :mongo_blog
         has_and_belongs_to_many :mongo_categories
-        references_many :mongo_comments, :as => :commentable
+        has_many :mongo_comments, :as => :commentable
       end
 
       class MongoCategory
@@ -26,7 +26,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
       class MongoUser
         include Mongoid::Document
-        references_one :mongo_profile
+        has_one :mongo_profile
         field :name, :type => String
         field :message, :type => String
         field :short_text, :type => String
@@ -36,12 +36,12 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
       class MongoProfile
         include Mongoid::Document
-        referenced_in :mongo_user
+        belongs_to :mongo_user
       end
 
       class MongoComment
         include Mongoid::Document
-        referenced_in :commentable, :polymorphic => true
+        belongs_to :commentable, :polymorphic => true
       end
 
       @blog = RailsAdmin::AbstractModel.new(MongoBlog)
