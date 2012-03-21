@@ -285,7 +285,7 @@ module RailsAdmin
       
       def association_type_lookup(macro)
         case macro.to_sym
-        when :referenced_in, :embedded_in
+        when :referenced_in, :embedded_in, :belongs_to
           :belongs_to
         when :references_one, :embeds_one
           :has_one
