@@ -37,7 +37,10 @@ describe "RailsAdmin CanCan Authorization" do
   subject { page }
 
   before(:each) do
-    RailsAdmin.config{|c| c.authorize_with(:cancan); c.audit_with(:history, User) }
+    RailsAdmin.config do |c|
+      c.authorize_with(:cancan)
+      c.audit_with(:history, User) if CI_ORM == :active_record
+    end
     @user = FactoryGirl.create :user
     login_as @user
   end

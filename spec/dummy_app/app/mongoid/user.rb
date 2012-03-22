@@ -5,14 +5,12 @@ class User
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
-  field :roles, :type => Array
-
-  # Setup accessible (or protected) attributes for your model
-  #attr_accessible :email, :password, :password_confirmation, :remember_me, :roles, :avatar
-
+  include Mongoid::Timestamps
 
   # Add Paperclip support for avatars
   has_mongoid_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+
+  field :roles, :type => Array
 
   def attr_accessible_role
     :custom_role

@@ -24,8 +24,8 @@ describe RailsAdmin::MainController do
     end
 
     it "should paginate" do
-      controller.list_entries(RailsAdmin.config(Team), :index, nil, false).length.should == 40
-      controller.list_entries(RailsAdmin.config(Team), :index, nil, true).length.should == 20
+      controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length.should == 40
+      controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length.should == 20
     end
   end
 
@@ -47,7 +47,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      controller.list_entries.length.should == @players.size
+      controller.list_entries.to_a.length.should == @players.size
     end
 
     it "scopes associated collection records according to associated_collection_scope" do
@@ -63,7 +63,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      controller.list_entries.length.should == 3
+      controller.list_entries.to_a.length.should == 3
     end
 
     it "scopes associated collection records according to bindings" do
@@ -85,7 +85,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      controller.list_entries.length.should == @team.revenue
+      controller.list_entries.to_a.length.should == @team.revenue.to_i
     end
 
 
@@ -99,7 +99,7 @@ describe RailsAdmin::MainController do
           associated_collection_cache_all false
         end
       end
-      controller.list_entries.length.should == 30
+      controller.list_entries.to_a.length.should == 30
 
       RailsAdmin.config Team do
         field :players do
@@ -112,9 +112,8 @@ describe RailsAdmin::MainController do
   end
 
   describe "index" do
-    it "uses source association's primary key with :compact, not target model's default primary key" do
-      class TeamWithNumberedPlayers < ActiveRecord::Base
-        self.table_name = 'teams'
+    it "uses source association's primary key with :compact, not target model's default primary key", :skip_mongoid => true do
+      class TeamWithNumberedPlayers < Team
         has_many :numbered_players, :class_name => 'Player', :primary_key => :number, :foreign_key => 'team_id'
       end
       FactoryGirl.create :team

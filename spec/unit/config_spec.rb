@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'rails_admin/extensions/history/history'
 
 describe RailsAdmin::Config do
 
@@ -21,7 +20,7 @@ describe RailsAdmin::Config do
       RailsAdmin::AbstractModel.all.map(&:model).should == [League]
     end
 
-    it 'should always exclude history' do
+    it 'should always exclude history', :active_record => true do
       RailsAdmin::AbstractModel.all.map(&:model).should_not include(RailsAdmin::History)
     end
 

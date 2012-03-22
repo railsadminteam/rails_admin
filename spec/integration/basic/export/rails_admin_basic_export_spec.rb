@@ -14,9 +14,11 @@ describe "RailsAdmin Export" do
     @player.comments = (@comments = 2.times.map { FactoryGirl.create(:comment) })
     @player.save
 
+    @abstract_model = RailsAdmin::AbstractModel.new(Player)
+
     # removed schema=>only=>created_at
     @non_default_schema = {
-      "only"=>["id", "updated_at", "deleted_at", "name", "position", "number", "retired", "injured", "born_on", "notes", "suspended"],
+      "only"=>[@abstract_model.primary_key, "updated_at", "deleted_at", "name", "position", "number", "retired", "injured", "born_on", "notes", "suspended"],
       "include"=>{
         "team"=>{"only"=>["id", "created_at", "updated_at", "name", "logo_url", "manager", "ballpark", "mascot", "founded", "wins", "losses", "win_percentage", "revenue", "color"]},
         "draft"=>{"only"=>["id", "created_at", "updated_at", "date", "round", "pick", "overall", "college", "notes"]},

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "RailsAdmin Config DSL List Section" do
+  DEFAULT_PRIMARY_KEY = RailsAdmin::AbstractModel.new(Player).primary_key.to_sym
 
   subject { page }
 
@@ -115,7 +116,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should show some fields on demand with fields list, respect ordering and configure them" do
       RailsAdmin.config Fan do
         list do
-          fields :name, :id do
+          fields :name, DEFAULT_PRIMARY_KEY do
             label do
               "Modified #{label}"
             end
@@ -239,7 +240,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should have option to disable sortability" do
       RailsAdmin.config Fan do
         list do
-          field :id do
+          field DEFAULT_PRIMARY_KEY do
             sortable false
           end
           field :name
@@ -256,7 +257,7 @@ describe "RailsAdmin Config DSL List Section" do
           fields_of_type :datetime do
             sortable false
           end
-          field :id
+          field DEFAULT_PRIMARY_KEY
           field :name
           field :created_at
           field :updated_at
@@ -275,7 +276,7 @@ describe "RailsAdmin Config DSL List Section" do
           fields_of_type :datetime do
             sortable false
           end
-          field :id
+          field DEFAULT_PRIMARY_KEY
           field :name
           field :created_at
           field :updated_at
@@ -421,7 +422,7 @@ describe "RailsAdmin Config DSL List Section" do
     let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
     let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
 
-    before(:each) { @players = Player.create(players) }
+    before(:each) { @players = players.map{|h| Player.create(h) }}
 
     context "should be configurable" do
       it "globaly" do
@@ -453,7 +454,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
 
       it "globaly and overrideable per model" do
-        League.create(leagues)
+        leagues.map{|h| League.create(h) }
 
         RailsAdmin::Config.models do
           list do
@@ -464,7 +465,7 @@ describe "RailsAdmin Config DSL List Section" do
 
         RailsAdmin.config Player do
           list do
-            sort_by :id
+            sort_by DEFAULT_PRIMARY_KEY
             sort_reverse true
           end
         end

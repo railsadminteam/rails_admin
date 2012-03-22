@@ -215,7 +215,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search over more than one attribute" do
+    it "should allow to search over more than one attribute", :focus => true do
       RailsAdmin.config Player do
         list do
           field :id

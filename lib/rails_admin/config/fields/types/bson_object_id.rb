@@ -22,6 +22,10 @@ module RailsAdmin
             true
           end
 
+          register_instance_option(:sort_reverse?) do
+            serial?
+          end
+
           def parse_input(params)
             begin
               params[name] = (params[name].blank? ? nil : BSON::ObjectId(params[name])) if params[name].is_a?(::String)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "AbstractObject" do
+describe "AbstractObject", :active_record => true do
   describe "proxy" do
     let(:object) { mock("object") }
     let(:abstract_object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new(object) }

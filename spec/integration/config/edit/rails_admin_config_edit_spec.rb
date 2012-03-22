@@ -207,7 +207,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       it "should use the :minimum setting from the validation" do
-        class Team
+        Team.class_eval do
           validates_length_of :name, :minimum => 1
         end
         visit new_path(:model_name => "team")
@@ -216,7 +216,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       it "should use the :maximum setting from the validation" do
-        class Team
+        Team.class_eval do
           validates_length_of :name, :maximum => 49
         end
         visit new_path(:model_name => "team")
@@ -225,7 +225,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       it "should use the minimum of db column size or :maximum setting from the validation" do
-        class Team
+        Team.class_eval do
           validates_length_of :name, :maximum => 51
         end
         visit new_path(:model_name => "team")
@@ -234,7 +234,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       it "should use the :minimum and :maximum from the validation" do
-        class Team
+        Team.class_eval do
           validates_length_of :name, :minimum => 1, :maximum => 49
         end
         visit new_path(:model_name => "team")
@@ -243,7 +243,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       it "should use the range from the validation" do
-        class Team
+        Team.class_eval do
           validates_length_of :name, :in => 1..49
         end
         visit new_path(:model_name => "team")
@@ -555,7 +555,6 @@ describe "RailsAdmin Config DSL Edit Section" do
   describe "input format of" do
 
     before(:each) do
-      RailsAdmin::Config.excluded_models = [RelTest]
       @time = ::Time.now.getutc
     end
 
@@ -604,7 +603,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
     end
 
-    describe "a timestamp field" do
+    describe "a timestamp field", :active_record => true do
 
       it "should default to %B %d, %Y %H:%M" do
         visit new_path(:model_name => "field_test")
@@ -774,10 +773,6 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe 'nested form' do
-    before do
-      RailsAdmin::Config.excluded_models = [RelTest]
-    end
-
     it 'should work' do
       visit new_path(:model_name => "field_test")
       fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
@@ -850,7 +845,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
 
-  describe "fields which are nullable and have AR validations" do
+  describe "fields which are nullable and have AR validations", :active_record => true do
 
     it "should be required" do
       # draft.notes is nullable and has no validation
@@ -913,7 +908,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "Enum field support" do
     it "should auto-detect enumeration when object responds to '\#{method}_enum'" do
-      class Team
+      Team.class_eval do
         def color_enum
           ["blue", "green", "red"]
         end
@@ -930,7 +925,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     it "should allow configuration of the enum method" do
-      class Team
+      Team.class_eval do
         def color_list
           ["blue", "green", "red"]
         end
@@ -949,7 +944,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     it "should allow direct listing of enumeration options and override enum method" do
-      class Team
+      Team.class_eval do
         def color_list
           ["blue", "green", "red"]
         end

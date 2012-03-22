@@ -1,7 +1,6 @@
 require 'spec_helper'
-require 'rails_admin/extensions/history/history'
 
-describe "RailsAdmin History" do
+describe "RailsAdmin History", :active_record => true do
   describe "model history fetch" do
     before :each do
       RailsAdmin::History.delete_all
