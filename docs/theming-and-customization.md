@@ -66,7 +66,7 @@ ENV['RAILS_ADMIN_THEME'] = 'example_theme'
 
 ### Resources:
 
-* [[Boostrap|http://twitter.github.com/bootstrap/]]
+* [[Bootstrap|http://twitter.github.com/bootstrap/]]
 * [[Bootstrap Sass|https://github.com/thomas-mcdonald/bootstrap-sass]]
 
 ### Existing themes:
