@@ -131,11 +131,9 @@ operating system. Ideally, a bug report should include a pull request with faili
 3. Implement your feature or bug fix.  *NOTE* - there's a small test app located in the 
 spec/dummy_app directory that you can use to experiment with rails_admin.
 4. Add documentation for your feature or bug fix.
-5. Run `bundle exec rake doc:yard`. If your changes are not 100% documented, go back to step 4.
-6. Add specs for your feature or bug fix.
-7. Run `bundle exec rake spec`. If your changes are not 100% covered, go back to step 6.
-8. Commit and push your changes.
-9. Submit a pull request. Please do not include changes to the gemspec, version, or history file. 
+5. Add specs for your feature or bug fix.
+6. Commit and push your changes.
+7. Submit a pull request. Please do not include changes to the gemspec, version, or history file. 
 (If you want to create your own version for some reason, please do so in a separate commit.)
 
 ## <a name="versions"></a>Supported Ruby Versions
