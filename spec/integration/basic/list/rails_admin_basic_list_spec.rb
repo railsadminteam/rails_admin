@@ -215,7 +215,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search over more than one attribute", :focus => true do
+    it "should allow to search over more than one attribute" do
       RailsAdmin.config Player do
         list do
           field :id
@@ -225,13 +225,13 @@ describe "RailsAdmin Basic List" do
           end
         end
       end
-      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.first.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.first.id, :o => 'is'}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
       # same with a different id
-      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.last.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.last.id, :o => 'is'}}})
       should have_no_content(@players[0].name)
       should have_no_content(@players[1].name)
       should have_no_content(@players[2].name)

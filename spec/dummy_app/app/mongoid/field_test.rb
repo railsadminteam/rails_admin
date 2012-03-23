@@ -26,14 +26,15 @@ class FieldTest
   field :protected_field, :type => String
   has_mongoid_attached_file :paperclip_asset, :styles => { :thumb => "100x100>" }
 
-  attr_accessible :comment_attributes, :nested_field_tests_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :string_field, :text_field, :integer_field, :float_field, :decimal_field, :datetime_field, :timestamp_field, :time_field, :date_field, :boolean_field, :array_field, :hash_field, :created_at, :updated_at, :format
-  attr_accessible :comment_attributes, :nested_field_tests_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :string_field, :text_field, :integer_field, :float_field, :decimal_field, :datetime_field, :timestamp_field, :time_field, :date_field, :boolean_field, :array_field, :hash_field, :created_at, :updated_at, :format, :restricted_field, :as => :custom_role
-  attr_accessible :comment_attributes, :nested_field_tests_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :string_field, :text_field, :integer_field, :float_field, :decimal_field, :datetime_field, :timestamp_field, :time_field, :date_field, :boolean_field, :array_field, :hash_field, :created_at, :updated_at, :format, :protected_field, :as => :extra_safe_role
+  attr_accessible :comment_attributes, :nested_field_tests_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :name, :string_field, :text_field, :integer_field, :float_field, :decimal_field, :datetime_field, :timestamp_field, :time_field, :date_field, :boolean_field, :array_field, :hash_field, :created_at, :updated_at, :format
+  attr_accessible :comment_attributes, :nested_field_tests_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :name, :string_field, :text_field, :integer_field, :float_field, :decimal_field, :datetime_field, :timestamp_field, :time_field, :date_field, :boolean_field, :array_field, :hash_field, :created_at, :updated_at, :format, :restricted_field, :as => :custom_role
+  attr_accessible :comment_attributes, :nested_field_tests_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :name, :string_field, :text_field, :integer_field, :float_field, :decimal_field, :datetime_field, :timestamp_field, :time_field, :date_field, :boolean_field, :array_field, :hash_field, :created_at, :updated_at, :format, :protected_field, :as => :extra_safe_role
 
   has_many :nested_field_tests, :dependent => :destroy, :inverse_of => :field_test
   accepts_nested_attributes_for :nested_field_tests, :allow_destroy => true
 
-  has_one :comment, :as => :commentable
+  # on creation, comment is not saved without :autosave => true
+  has_one :comment, :as => :commentable, :autosave => true
   accepts_nested_attributes_for :comment, :allow_destroy => true
 
   attr_accessor :delete_paperclip_asset

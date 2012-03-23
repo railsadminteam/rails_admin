@@ -28,7 +28,7 @@ RUBY
                 def #{name.to_s}_id=(item_id)
                   item = (#{association.klass}.find(item_id) rescue nil)
                   if persisted?
-                    #{name} = [item].compact
+                    self.#{name} = item
                   else
                     item.update_attribute('#{association.foreign_key}', id) if item
                   end

@@ -149,7 +149,7 @@ module RailsAdmin
         #
         register_instance_option :valid_length do
           @valid_length ||= abstract_model.model.validators_on(name).find{|v|
-            v.is_a?(ActiveModel::Validations::LengthValidator)}.try{|v| v.options} || {}
+            v.kind == :length }.try{|v| v.options} || {}
         end
 
         register_instance_option :partial do
@@ -162,8 +162,8 @@ module RailsAdmin
         register_instance_option :required? do
           @required ||= !!([name] + children_fields).uniq.find do |column_name|
             !!abstract_model.model.validators_on(column_name).find do |v|
-              v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
-              v.is_a?(ActiveModel::Validations::NumericalityValidator) && !v.options[:allow_nil]
+              v.kind == :presence && !v.options[:allow_nil] ||
+              v.kind == :numericality && !v.options[:allow_nil]
             end
           end
         end
@@ -274,6 +274,23 @@ module RailsAdmin
 
         def html_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
+        end
+
+        def inspect
+          "#<#{self.class.name}[#{name}] #{
+            instance_variables.map do |v|
+              value = instance_variable_get(v)
+              if [:@parent, :@root, :@section].include? v
+                if value.respond_to? :name
+                  "#{v}=#{value.name.inspect}"
+                else
+                  "#{v}=#{value.class.name}"
+                end
+              else
+                "#{v}=#{value.inspect}"
+              end
+            end.join(", ")
+          }>"
         end
       end
     end

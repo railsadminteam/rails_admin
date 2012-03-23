@@ -31,9 +31,9 @@ class Team
   validates_numericality_of :revenue, :allow_nil => true
   # needed to force these attributes to :string type
   validates_length_of :logo_url, :maximum => 255
-  validates_length_of :manager, :maximum => 255
-  validates_length_of :ballpark, :maximum => 255
-  validates_length_of :mascot, :maximum => 255
+  validates_length_of :manager, :maximum => 100
+  validates_length_of :ballpark, :maximum => 100
+  validates_length_of :mascot, :maximum => 100
 
   def player_names_truncated
     players.map{|p| p.name}.join(", ")[0..32]

@@ -7,11 +7,11 @@ class Player
   field :name, :type => String
   field :position, :type => String
   field :number, :type => Integer
-  field :retired, :type => Boolean
-  field :injured, :type => Boolean
+  field :retired, :type => Boolean, :default => false
+  field :injured, :type => Boolean, :default => false
   field :born_on, :type => Date
   field :notes, :type => String
-  field :suspended, :type => Boolean
+  field :suspended, :type => Boolean, :default => false
 
   validates_presence_of(:name)
   validates_numericality_of(:number, :only_integer => true)
