@@ -26,11 +26,13 @@ RailsAdmin.config do |config|
 end
 ```
 
-At this point, all authorization will fail and no one will be able to access the admin pages. To grant access, add this to `Ability#initialize`.
+At this point, all authorization will fail and no one will be able to access the admin pages. To grant access, add this to `Ability#initialize`.  You must also grant access to the `dashboard`, or the login will fail there.
 
 ```ruby
-can :access, :rails_admin
+can :access, :rails_admin   # grant access to rails_admin
+can :dashboard              # grant access to the dashboard
 ```
+
 
 Then, you will need to grant access on each of the models. Here's a complete example of an `Ability` class which defines different permissions depending upon the user's role.
 
