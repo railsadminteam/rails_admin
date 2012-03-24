@@ -146,42 +146,45 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     describe "help" do
       before(:each) do
-        # save validation setting
-        @team_validate_callbacks = Team._validate_callbacks.dup
+        class HelpTest < Tableless
+          column :name, 'string(50)'
+          column :division, :string
+        end
+        RailsAdmin.config.included_models = [HelpTest]
       end
 
       after(:each) do
         # restore validation setting
-        Team._validators[:name] = []
-        Team._validate_callbacks = @team_validate_callbacks
+        HelpTest._validators[:name] = []
+        HelpTest.reset_callbacks(:validate)
       end
 
       it "should show help section if present" do
-        RailsAdmin.config Team do
+        RailsAdmin.config HelpTest do
           edit do
             group :default do
               help "help paragraph to display"
             end
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(:model_name => "help_test")
         should have_selector('fieldset>p', :text => "help paragraph to display")
       end
 
       it "should not show help if not present" do
-        RailsAdmin.config Team do
+        RailsAdmin.config HelpTest do
           edit do
             group :default do
               label 'no help'
             end
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(:model_name => "help_test")
         should_not have_selector('fieldset>p')
       end
 
       it "should be able to display multiple help if there are multiple sections" do
-        RailsAdmin.config Team do
+        RailsAdmin.config HelpTest do
           edit do
             group :default do
               field :name
@@ -194,65 +197,65 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(:model_name => "help_test")
         should have_selector("fieldset>p", :text => 'help for default')
         should have_selector("fieldset>p", :text => 'help for other section')
         should have_selector("fieldset>p", :count => 2)
       end
 
       it "should use the :is setting from the validation" do
-        Team.class_eval do
+        HelpTest.class_eval do
           validates_length_of :name, :is => 3
         end
-        visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 3.")
+        visit new_path(:model_name => "help_test")
+        find("#help_test_name_field .help-block").should have_content("Length of 3.")
       end
 
       describe "using ORM column size", :skip_mongoid => true do
         it "should use the db column size for the maximum length" do
-          visit new_path(:model_name => "team")
-          find("#team_name_field .help-block").should have_content("Length up to 50.")
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
         end
 
         it "should use the :minimum setting from the validation" do
-          Team.class_eval do
+          HelpTest.class_eval do
             validates_length_of :name, :minimum => 1
           end
-          visit new_path(:model_name => "team")
-          find("#team_name_field .help-block").should have_content("Length of 1-50.")
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length of 1-50.")
         end
 
         it "should use the :maximum setting from the validation" do
-          Team.class_eval do
+          HelpTest.class_eval do
             validates_length_of :name, :maximum => 49
           end
-          visit new_path(:model_name => "team")
-          find("#team_name_field .help-block").should have_content("Length up to 49.")
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 49.")
         end
 
         it "should use the minimum of db column size or :maximum setting from the validation" do
-          Team.class_eval do
+          HelpTest.class_eval do
             validates_length_of :name, :maximum => 51
           end
-          visit new_path(:model_name => "team")
-          find("#team_name_field .help-block").should have_content("Length up to 50.")
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
         end
       end
 
       it "should use the :minimum and :maximum from the validation" do
-        Team.class_eval do
+        HelpTest.class_eval do
           validates_length_of :name, :minimum => 1, :maximum => 49
         end
-        visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 1-49.")
+        visit new_path(:model_name => "help_test")
+        find("#help_test_name_field .help-block").should have_content("Length of 1-49.")
       end
 
       it "should use the range from the validation" do
-        Team.class_eval do
+        HelpTest.class_eval do
           validates_length_of :name, :in => 1..49
         end
-        visit new_path(:model_name => "team")
-        find("#team_name_field .help-block").should have_content("Length of 1-49.")
+        visit new_path(:model_name => "help_test")
+        find("#help_test_name_field .help-block").should have_content("Length of 1-49.")
       end
 
     end

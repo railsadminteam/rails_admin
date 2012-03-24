@@ -19,11 +19,11 @@ describe "RailsAdmin Export" do
 
     # removed schema=>only=>created_at
     @non_default_schema = {
-      "only"=>[@abstract_model.primary_key, "updated_at", "deleted_at", "name", "position", "number", "retired", "injured", "born_on", "notes", "suspended"],
+      "only"=>[PK_COLUMN.to_s, "updated_at", "deleted_at", "name", "position", "number", "retired", "injured", "born_on", "notes", "suspended"],
       "include"=>{
-        "team"=>{"only"=>["id", "created_at", "updated_at", "name", "logo_url", "manager", "ballpark", "mascot", "founded", "wins", "losses", "win_percentage", "revenue", "color"]},
-        "draft"=>{"only"=>["id", "created_at", "updated_at", "date", "round", "pick", "overall", "college", "notes"]},
-        "comments"=>{"only"=>["id", "content", "created_at", "updated_at"]}
+        "team"=>{"only"=>[PK_COLUMN.to_s, "created_at", "updated_at", "name", "logo_url", "manager", "ballpark", "mascot", "founded", "wins", "losses", "win_percentage", "revenue", "color"]},
+        "draft"=>{"only"=>[PK_COLUMN.to_s, "created_at", "updated_at", "date", "round", "pick", "overall", "college", "notes"]},
+        "comments"=>{"only"=>[PK_COLUMN.to_s, "content", "created_at", "updated_at"]}
       }
     }
   end
@@ -75,7 +75,12 @@ describe "RailsAdmin Export" do
 
       # spec fails on non 1.9 mri rubies because of this https://github.com/rails/rails/pull/2076
       # waiting for fix (rails-3.1.4?)
-      should have_content @player.team.name if RUBY_VERSION =~ /1\.9/
+      # and Mongoid with ActiveModel 3.1 does not support to_xml's :include options
+      # (due change of implementation in ActiveModel::Serializers between 3.1 and 3.2)
+      if RUBY_VERSION =~ /1\.9/ &&
+          (CI_ORM != :mongoid || (CI_ORM == :mongoid && ActiveModel::VERSION::STRING >= "3.2"))
+        should have_content @player.team.name
+      end
     end
 
     it "should export polymorphic fields the easy way for now" do

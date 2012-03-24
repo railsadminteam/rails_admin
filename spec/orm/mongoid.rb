@@ -2,13 +2,15 @@ class Tableless
   include Mongoid::Document
 
   class <<self
-    def column(name, sql_type = nil, default = nil, null = true)
+    def column(name, sql_type = 'string', default = nil, null = true)
+      # ignore length
+      sql_type = sql_type.to_s.sub(/\(.*\)/, '').to_sym
       field name, :type => {
         :integer => Integer,
         :string => String,
         :text => String,
         :date => Date,
-      }[sql_type]
+      }[sql_type], :default => default
     end
   end
 end

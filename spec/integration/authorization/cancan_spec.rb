@@ -74,6 +74,12 @@ describe "RailsAdmin CanCan Authorization" do
     end
 
     it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
+      # ensure :name column to be shown
+      RailsAdmin.config Player do
+        list do
+          field :name
+        end
+      end
       @players = [
         FactoryGirl.create(:player, :retired => false),
         FactoryGirl.create(:player, :retired => true),

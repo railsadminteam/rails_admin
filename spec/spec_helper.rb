@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] = "test"
 ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = [:active_record, :mongoid]
+PK_COLUMN = {:active_record=>:id, :mongoid=>:_id}[CI_ORM]
 
 if ENV['INVOKE_SIMPLECOV']
   require 'simplecov'
@@ -14,8 +15,8 @@ require File.expand_path('../dummy_app/config/environment', __FILE__)
 require 'rspec/rails'
 require 'factory_girl'
 require 'factories'
-require "orm/#{CI_ORM}"
 require 'database_cleaner'
+require "orm/#{CI_ORM}"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true

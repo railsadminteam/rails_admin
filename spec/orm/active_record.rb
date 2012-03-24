@@ -1,5 +1,7 @@
 require 'rails_admin/extensions/history/history'
 
+DatabaseCleaner.strategy = :transaction
+
 ActiveRecord::Base.connection.tables.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
 end
