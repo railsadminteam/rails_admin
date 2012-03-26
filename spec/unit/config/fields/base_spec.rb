@@ -44,7 +44,7 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
 
-    context 'of a Carrierwave installation', :active_record => true do
+    context 'of a Carrierwave installation' do
       it 'should be the parent field itself' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.children_fields.should == [:carrierwave_asset]
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.hidden?.should be_false
@@ -184,7 +184,7 @@ describe RailsAdmin::Config::Fields::Base do
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :dragonfly_asset}.searchable_columns.map{|c| c[:column]}.should == ["field_tests.dragonfly_asset_name"]
       end
 
-      it 'of carrierwave should find the underlying column on the base table', :active_record => true do
+      it 'of carrierwave should find the underlying column on the base table' do
         RailsAdmin.config(FieldTest).fields.find{|f| f.name == :carrierwave_asset}.searchable_columns.map{|c| c[:column]}.should == ["field_tests.carrierwave_asset"]
       end
     end
@@ -215,7 +215,7 @@ describe RailsAdmin::Config::Fields::Base do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.sortable.should == :dragonfly_asset_name
       end
 
-      it 'of carrierwave should target the first children field', :active_record => true do
+      it 'of carrierwave should target the first children field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.searchable.should == :carrierwave_asset
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.sortable.should == :carrierwave_asset
       end

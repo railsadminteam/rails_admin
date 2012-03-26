@@ -30,19 +30,21 @@ group :active_record do
   end
   gem 'paperclip', '~> 2.4'
   gem 'carrierwave'
+  gem 'dragonfly'
 end
 
 group :mongoid do
   gem 'bson_ext'
   gem 'mongoid'
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+  gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+  gem 'dragonfly'
 end
 
 gem 'devise', '~> 2.0'
 gem 'rails_admin', :path => '../../'
 gem 'mlb', '~> 0.5'
 gem 'mini_magick'
-gem 'dragonfly'
 
 # Gems used only for assets and not required
 # in production environments by default.

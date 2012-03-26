@@ -30,16 +30,18 @@ group :active_record do
   end
   gem 'paperclip'
   gem 'carrierwave'
+  gem 'dragonfly'
 end
 
 group :mongoid do
   gem 'bson_ext'
   gem 'mongoid'
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+  gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+  gem 'dragonfly'
 end
 
 group :development, :test do
-  gem 'dragonfly'
   gem 'cancan'
 end
 
