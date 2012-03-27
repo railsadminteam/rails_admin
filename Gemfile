@@ -28,7 +28,7 @@ group :active_record do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem 'paperclip'
+  gem 'paperclip', '~>2.4'
   gem 'carrierwave'
   gem 'dragonfly'
 end
@@ -37,6 +37,7 @@ group :mongoid do
   gem 'bson_ext'
   gem 'mongoid'
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+  gem 'paperclip', '~>2.4'
   gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   gem 'dragonfly'
 end
@@ -54,6 +55,10 @@ group :debug do
   platform :mri_19 do
     gem 'ruby-debug19'
     gem 'simplecov', :require => false
+  end
+
+  platform :jruby do
+    gem 'ruby-debug'
   end
 end
 

@@ -39,6 +39,7 @@ describe "AbstractObject", :active_record => true do
 
     describe "a record with protected attributes and has_one association" do
       let(:draft) { Factory :draft }
+      let(:number) { draft.player.number + 1 } # to avoid collision
 
       before do
         object.set_attributes({ :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil, :draft_id => draft.id })

@@ -24,7 +24,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'generator_spec'
   gem.add_development_dependency 'launchy'
   gem.add_development_dependency 'mini_magick'
-  gem.add_development_dependency 'paperclip'
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency 'timecop'
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]

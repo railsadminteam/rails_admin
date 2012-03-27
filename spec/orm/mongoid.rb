@@ -1,3 +1,5 @@
+require 'rails_admin/adapters/mongoid'
+
 class Tableless
   include Mongoid::Document
 

@@ -37,6 +37,7 @@ group :mongoid do
   gem 'bson_ext'
   gem 'mongoid'
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+  gem 'paperclip', '~> 2.4'
   gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   gem 'dragonfly'
 end
