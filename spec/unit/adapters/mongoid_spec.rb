@@ -57,11 +57,11 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'lists associations' do
-      @post.associations.map{|a|a[:name].to_s}.sort.should == ['mongo_blog', 'mongo_categories', 'mongo_comments']
+      @post.associations.map{|a|a[:name].to_s}.should =~ ['mongo_blog', 'mongo_categories', 'mongo_comments']
     end
 
     it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type].to_s}.uniq.sort.should == ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
+      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type].to_s}.uniq.should =~ ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
 
     it "has correct parameter of belongs_to association" do
@@ -72,6 +72,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :type=>:belongs_to,
         :foreign_key=>:mongo_blog_id,
         :foreign_type=>nil,
+        :foreign_inverse_of=>nil,
         :as=>nil,
         :polymorphic=>false,
         :inverse_of=>nil,
@@ -90,6 +91,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :type=>:has_many,
         :foreign_key=>:mongo_blog_id,
         :foreign_type=>nil,
+        :foreign_inverse_of=>nil,
         :as=>nil,
         :polymorphic=>false,
         :inverse_of=>nil,
@@ -108,6 +110,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :type=>:has_and_belongs_to_many,
         :foreign_key=>:mongo_category_ids,
         :foreign_type=>nil,
+        :foreign_inverse_of=>nil,
         :as=>nil,
         :polymorphic=>false,
         :inverse_of=>nil,
@@ -127,6 +130,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :type=>:belongs_to,
         :foreign_key=>:commentable_id,
         :foreign_type=>:commentable_type,
+        :foreign_inverse_of=>(Mongoid::VERSION >= '3.0.0' ? :commentable_field : nil),
         :as=>nil,
         :polymorphic=>true,
         :inverse_of=>nil,
@@ -146,6 +150,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :type=>:has_many,
         :foreign_key=>:commentable_id,
         :foreign_type=>nil,
+        :foreign_inverse_of=>nil,
         :as=>:commentable,
         :polymorphic=>false,
         :inverse_of=>nil,
@@ -165,8 +170,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     it "maps Mongoid column types to RA types" do
       @abstract_model.properties.select{|p| %w(_id _type array_field big_decimal_field
         boolean_field bson_object_id_field date_field datetime_field float_field
-        hash_field integer_field name object_field short_text subject text_field time_field title).
-        include? p[:name].to_s}.sort{|a,b| a[:name].to_s <=> b[:name].to_s }.should == [
+        hash_field integer_field name object_field range_field short_text string_field subject symbol_field text_field time_field title).
+        include? p[:name].to_s}.should =~ [
         { :name => :_id,
           :pretty_name => "Id",
           :nullable? => true,
@@ -178,7 +183,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
           :nullable? => true,
           :serial? => false,
           :type => :mongoid_type,
-          :length => 1024 },
+          :length => nil },
         { :name => :array_field,
           :pretty_name => "Array field",
           :nullable? => true,
@@ -245,14 +250,32 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
           :serial? => false,
           :type => :bson_object_id,
           :length => nil },
+        { :name => :range_field,
+          :pretty_name => "Range field",
+          :nullable? => true,
+          :serial? => false,
+          :type => :serialized,
+          :length => nil },
         { :name => :short_text,
           :pretty_name => "Short text",
           :nullable? => true,
           :serial? => false,
           :type => :string,
           :length => 255 },
+        { :name => :string_field,
+          :pretty_name => "String field",
+          :nullable? => true,
+          :serial? => false,
+          :type => :text,
+          :length => nil },
         { :name => :subject,
           :pretty_name => "Subject",
+          :nullable? => true,
+          :serial? => false,
+          :type => :string,
+          :length => 255 },
+        { :name => :symbol_field,
+          :pretty_name => "Symbol field",
           :nullable? => true,
           :serial? => false,
           :type => :string,
@@ -312,7 +335,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     describe "#all" do
       it "works without options" do
-        @abstract_model.all.sort.should == @players.sort
+        @abstract_model.all.to_a.should =~ @players
       end
 
       it "supports eager loading" do
@@ -324,8 +347,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       it "supports retrieval by bulk_ids" do
-        @abstract_model.all(:bulk_ids => @players[0..1].map{|player| player.id.to_s }).
-          sort.should == @players[0..1].sort
+        @abstract_model.all(:bulk_ids => @players[0..1].map{|player| player.id.to_s }).to_a.should =~ @players[0..1]
       end
 
       it "supports pagination" do
@@ -434,7 +456,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it "makes conrrect query" do
-      @abstract_model.all(:query => "foo").sort.should == @players[1..2]
+      @abstract_model.all(:query => "foo").to_a.should =~ @players[1..2]
     end
   end
 

@@ -35,10 +35,17 @@ end
 
 group :mongoid do
   gem 'bson_ext'
-  gem 'mongoid'
+  case ENV['CI_ORM_VERSION']
+  when 'head'
+    gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
+    # For now, carrierwave-mongooid's mongoid dependency is restricted to '~> 2.1'
+    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
+  else
+    gem 'mongoid'
+    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+  end
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
   gem 'paperclip', '~>2.4'
-  gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   gem 'dragonfly'
 end
 

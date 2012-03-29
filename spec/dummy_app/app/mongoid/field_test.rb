@@ -17,7 +17,9 @@ class FieldTest
   field :hash_field, :type => Hash
   field :integer_field, :type => Integer
   field :object_field, :type => Object
+  field :range_field, :type => Range
   field :string_field, :type => String
+  field :symbol_field, :type => Symbol
   field :text_field, :type => String
   field :time_field, :type => Time
 

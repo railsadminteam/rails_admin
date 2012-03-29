@@ -50,11 +50,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'lists associations' do
-      @post.associations.map{|a|a[:name].to_s}.sort.should == ['a_r_blog', 'a_r_categories', 'a_r_comments']
+      @post.associations.map{|a|a[:name].to_s}.should =~ ['a_r_blog', 'a_r_categories', 'a_r_comments']
     end
 
     it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.map(&:to_s).sort.should == ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
+      (@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.map(&:to_s).should =~ ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
 
     it "has correct parameter of belongs_to association" do
@@ -194,7 +194,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     describe "#all" do
       it "works without options" do
-        @abstract_model.all.sort.should == @players.sort
+        @abstract_model.all.should =~ @players
       end
 
       it "supports eager loading" do
@@ -206,8 +206,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       end
 
       it "supports retrieval by bulk_ids" do
-        @abstract_model.all(:bulk_ids => @players[0..1].map{|player| player.id }).
-          sort.should == @players[0..1].sort
+        @abstract_model.all(:bulk_ids => @players[0..1].map(&:id)).should =~ @players[0..1]
       end
 
       it "supports pagination" do
@@ -237,7 +236,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it "makes conrrect query" do
-      @abstract_model.all(:query => "foo").sort.should == @teams[1..2]
+      @abstract_model.all(:query => "foo").should =~ @teams[1..2]
     end
   end
 

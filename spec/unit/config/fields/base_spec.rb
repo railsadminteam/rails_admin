@@ -3,6 +3,12 @@ require 'spec_helper'
 describe RailsAdmin::Config::Fields::Base do
 
   describe "#children_fields" do
+    POLYMORPHIC_CHILDREN =
+      if CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
+        [:commentable_id, :commentable_type, :commentable_field]
+      else
+        [:commentable_id, :commentable_type]
+      end
 
     it 'should be empty by default' do
       RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields.should == []
@@ -13,7 +19,7 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     it 'should contain child keys for polymorphic belongs to associations' do
-      RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields.should == [:commentable_id, :commentable_type]
+      RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields.should =~ POLYMORPHIC_CHILDREN
     end
 
     it "should have correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column" do
@@ -23,7 +29,7 @@ describe RailsAdmin::Config::Fields::Base do
         belongs_to :commentable, :polymorphic => true
       end
       RailsAdmin.config(CommentReversed).fields.map{|f| f.name.to_s}.
-        select{|f| /^comment/ =~ f}.sort.should == ['commentable', 'commentable_id', 'commentable_type']
+        select{|f| /^comment/ =~ f}.should =~ ['commentable'].concat(POLYMORPHIC_CHILDREN.map(&:to_s))
     end
 
     context 'of a Paperclip installation' do

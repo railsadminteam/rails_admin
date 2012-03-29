@@ -8,15 +8,18 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << field
 
     child_columns = []
-    id_column = parent.abstract_model.properties.find {|p| p[:name].to_s == association[:foreign_key].to_s }
-    child_columns << RailsAdmin::Config::Fields.default_factory.call(parent, id_column, fields)
+    possible_field_names =
+      if association[:polymorphic]
+        [:foreign_key, :foreign_type, :foreign_inverse_of]
+      else
+        [:foreign_key]
+      end.map{|k| association[k] }.compact
 
-    if association[:polymorphic]
-      type_colum = parent.abstract_model.properties.find {|p| p[:name].to_s == association[:foreign_type].to_s }
-      unless type_field = fields.find{|f| f.name.to_s == type_colum[:name].to_s }
-        type_field = RailsAdmin::Config::Fields.default_factory.call(parent, type_colum, fields)
+    parent.abstract_model.properties.select{|p| possible_field_names.include? p[:name] }.each do |column|
+      unless child_field = fields.find{|f| f.name.to_s == column[:name].to_s }
+        child_field = RailsAdmin::Config::Fields.default_factory.call(parent, column, fields)
       end
-      child_columns << type_field
+      child_columns << child_field
     end
 
     child_columns.each do |child_column|

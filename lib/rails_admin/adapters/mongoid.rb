@@ -66,6 +66,7 @@ module RailsAdmin
             :primary_key_proc => Proc.new { association_primary_key_lookup(association) },
             :foreign_key => association_foreign_key_lookup(association),
             :foreign_type => association_foreign_type_lookup(association),
+            :foreign_inverse_of => association_foreign_inverse_of_lookup(association),
             :as => association_as_lookup(association),
             :polymorphic => association_polymorphic_lookup(association),
             :inverse_of => association_inverse_of_lookup(association),
@@ -80,35 +81,38 @@ module RailsAdmin
         @properties = model.fields.map do |name,field|
           ar_type =
             if name == '_id'
-              { :type => :bson_object_id, :length => nil, :serial? => true }
+              { :type => :bson_object_id, :serial? => true }
             elsif name == '_type'
-              { :type => :mongoid_type, :length => 1024 }
+              { :type => :mongoid_type, :length => nil }
             elsif field.type.to_s == 'String'
               if (length = length_validation_lookup(name)) && length < 256
                 { :type => :string, :length => length }
               elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
                 { :type => :string, :length => 255 }
               else
-                { :type => :text, :length => nil }
+                { :type => :text }
               end
             else
               {
-                "Array"          => { :type => :serialized, :length => nil },
-                "BigDecimal"     => { :type => :decimal, :length => nil },
-                "Boolean"        => { :type => :boolean, :length => nil },
-                "BSON::ObjectId" => { :type => :bson_object_id, :length => nil },
-                "Date"           => { :type => :date, :length => nil },
-                "DateTime"       => { :type => :datetime, :length => nil },
-                "Float"          => { :type => :float, :length => nil },
-                "Hash"           => { :type => :serialized, :length => nil },
-                "Integer"        => { :type => :integer, :length => nil },
-                "Time"           => { :type => :datetime, :length => nil },
-                "Object"         => { :type => :bson_object_id, :length => nil },
+                "Array"          => { :type => :serialized },
+                "BigDecimal"     => { :type => :decimal },
+                "Boolean"        => { :type => :boolean },
+                "BSON::ObjectId" => { :type => :bson_object_id },
+                "Date"           => { :type => :date },
+                "DateTime"       => { :type => :datetime },
+                "Float"          => { :type => :float },
+                "Hash"           => { :type => :serialized },
+                "Integer"        => { :type => :integer },
+                "Time"           => { :type => :datetime },
+                "Object"         => { :type => :bson_object_id },
+                "Range"          => { :type => :serialized },
+                "Symbol"         => { :type => :string, :length => 255 },
               }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
             end
 
           {
             :name => field.name.to_sym,
+            :length => nil,
             :pretty_name => field.name.to_s.gsub('_', ' ').strip.capitalize,
             :nullable? => true,
             :serial? => false,
@@ -269,6 +273,12 @@ module RailsAdmin
         end
       end
 
+      def association_foreign_inverse_of_lookup(association)
+        if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro) && association.respond_to?(:inverse_of_field)
+          association.inverse_of_field.try(:to_sym)
+        end
+      end
+
       def association_nested_attributes_options_lookup(association)
         model.nested_attributes_options.try { |o| o[association.name.to_sym] }
       end
@@ -311,7 +321,7 @@ module RailsAdmin
       def length_validation_lookup(name)
         shortest = model.validators.select do |validator|
           validator.attributes.include?(name.to_sym) &&
-            validator.is_a?(ActiveModel::Validations::LengthValidator) &&
+            validator.kind == :length &&
             validator.options[:maximum]
         end.min{|a, b| a.options[:maximum] <=> b.options[:maximum] }
         if shortest

@@ -18,13 +18,14 @@ describe "Mongoid::AbstractObject", :mongoid => true do
       @team.players.should == []
       @team.player_ids = @players.map(&:id)
       @team.reload
-      @team.players.sort.should == @players.sort
+      @team.players.map(&:id).should =~ @players.map(&:id)
     end
 
     it "skips invalid id on assignment through foo_ids=" do
       @team.player_ids = @players.map{|item| item.id.to_s }.unshift('4f431021dcf2310db7000006')
       @team.reload
-      @team.players.sort.should == @players.sort
+      @players.each &:reload
+      @team.players.map(&:id).should =~ @players.map(&:id)
     end
   end
 end
