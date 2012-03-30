@@ -6,6 +6,11 @@ describe "RailsAdmin Config DSL List Section" do
 
   describe "css hooks" do
     it "should be present" do
+      RailsAdmin.config Team do
+        list do
+          field :name
+        end
+      end
       FactoryGirl.create :team
       visit index_path(:model_name => "team")
       should have_selector("th.header.string_type.name_field")
@@ -69,10 +74,8 @@ describe "RailsAdmin Config DSL List Section" do
 
     it "should show all by default" do
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("Created at")
-      find("th:nth-child(4)").should have_content("Updated at")
-      find("th:nth-child(5)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "Created at", "Updated at", "His Name", "Teams"]
     end
 
     it "should hide some fields on demand with a block" do
@@ -84,8 +87,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "His Name", "Teams"]
     end
 
     it "should hide some fields on demand with fields list" do
@@ -95,8 +98,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "His Name", "Teams"]
     end
 
     it "should add some fields on demand with a block" do
@@ -108,14 +111,14 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "His Name", "Teams"]
     end
 
     it "should show some fields on demand with fields list, respect ordering and configure them" do
       RailsAdmin.config Fan do
         list do
-          fields :name, :id do
+          fields :name, PK_COLUMN do
             label do
               "Modified #{label}"
             end
@@ -124,24 +127,22 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
 
-      find("th:nth-child(2)").should have_content("Modified His Name")
-      find("th:nth-child(3)").should have_content("Modified Id")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Modified Id", "Modified His Name"]
     end
 
     it "should show all fields if asked" do
       RailsAdmin.config Fan do
         list do
           include_all_fields
-          field :id
+          field PK_COLUMN
           field :name
         end
       end
       visit index_path(:model_name => "fan")
 
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("Created at")
-      find("th:nth-child(4)").should have_content("Updated at")
-      find("th:nth-child(5)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "Created at", "Updated at", "His Name", "Teams"]
     end
 
     it "should appear in order defined" do
@@ -149,28 +150,26 @@ describe "RailsAdmin Config DSL List Section" do
         list do
           field :updated_at
           field :name
-          field :id
+          field PK_COLUMN
           field :created_at
         end
       end
       visit index_path(:model_name => "fan")
 
-      find("th:nth-child(2)").should have_content("Updated at")
-      find("th:nth-child(3)").should have_content("His Name")
-      find("th:nth-child(4)").should have_content("Id")
-      find("th:nth-child(5)").should have_content("Created at")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should == ["Updated at", "His Name", "Id", "Created at"]
     end
 
     it "should only list the defined fields if some fields are defined" do
       RailsAdmin.config Fan do
         list do
-          field :id
+          field PK_COLUMN
           field :name
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should == ["Id", "His Name"]
       should have_no_selector("th:nth-child(4).header")
     end
 
@@ -187,7 +186,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should be renameable" do
       RailsAdmin.config Fan do
         list do
-          field :id do
+          field PK_COLUMN do
             label "Identifier"
           end
           field :name
@@ -207,10 +206,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("Created at (datetime)")
-      find("th:nth-child(4)").should have_content("Updated at (datetime)")
-      find("th:nth-child(5)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
     end
 
     it "should be globally renameable by type" do
@@ -222,10 +219,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Id")
-      find("th:nth-child(3)").should have_content("Created at (datetime)")
-      find("th:nth-child(4)").should have_content("Updated at (datetime)")
-      find("th:nth-child(5)").should have_content("His Name")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
     end
 
     it "should be sortable by default" do
@@ -239,7 +234,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should have option to disable sortability" do
       RailsAdmin.config Fan do
         list do
-          field :id do
+          field PK_COLUMN do
             sortable false
           end
           field :name
@@ -256,7 +251,7 @@ describe "RailsAdmin Config DSL List Section" do
           fields_of_type :datetime do
             sortable false
           end
-          field :id
+          field PK_COLUMN
           field :name
           field :created_at
           field :updated_at
@@ -275,7 +270,7 @@ describe "RailsAdmin Config DSL List Section" do
           fields_of_type :datetime do
             sortable false
           end
-          field :id
+          field PK_COLUMN
           field :name
           field :created_at
           field :updated_at
@@ -297,10 +292,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      should have_selector("th:nth-child(2)", :text => "Id")
-      should have_selector("th:nth-child(3)", :text => "His Name")
-      should have_no_selector("th:nth-child(4)", :text => "Created at")
-      should have_no_selector("th:nth-child(5)", :text => "Updated at")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "His Name", "Teams"]
     end
 
     it "should have option to hide fields by type globally" do
@@ -312,16 +305,14 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      should have_selector("th:nth-child(2)", :text => "Id")
-      should have_selector("th:nth-child(3)", :text => "His Name")
-      should have_no_selector("th:nth-child(4)", :text => "Created at")
-      should have_no_selector("th:nth-child(5)", :text => "Updated at")
+      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
+        should =~ ["Id", "His Name", "Teams"]
     end
 
     it "should have option to customize column width" do
       RailsAdmin.config Fan do
         list do
-          field :id do
+          field PK_COLUMN do
             column_width 200
           end
           field :name
@@ -331,14 +322,14 @@ describe "RailsAdmin Config DSL List Section" do
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
       visit index_path(:model_name => "fan")
-      find('style').should have_content('#list th.id_field')
-      find('style').should have_content('#list td.id_field')
+      find('style').should have_content("#list th.#{PK_COLUMN}_field")
+      find('style').should have_content("#list td.#{PK_COLUMN}_field")
     end
 
     it "should have option to customize output formatting" do
       RailsAdmin.config Fan do
         list do
-          field :id
+          field PK_COLUMN
           field :name do
             formatted_value do
               value.to_s.upcase
@@ -357,7 +348,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should have a simple option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :created_at do
             date_format :short
@@ -373,7 +364,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should have option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :created_at do
             strftime_format "%Y-%m-%d"
@@ -389,7 +380,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "should allow addition of virtual fields (object methods)" do
       RailsAdmin.config Team do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :player_names_truncated
         end
@@ -421,7 +412,7 @@ describe "RailsAdmin Config DSL List Section" do
     let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
     let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
 
-    before(:each) { @players = Player.create(players) }
+    before(:each) { @players = players.map{|h| Player.create(h) }}
 
     context "should be configurable" do
       it "globaly" do
@@ -453,7 +444,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
 
       it "globaly and overrideable per model" do
-        League.create(leagues)
+        leagues.map{|h| League.create(h) }
 
         RailsAdmin::Config.models do
           list do
@@ -464,7 +455,7 @@ describe "RailsAdmin Config DSL List Section" do
 
         RailsAdmin.config Player do
           list do
-            sort_by :id
+            sort_by PK_COLUMN
             sort_reverse true
           end
         end
@@ -475,7 +466,13 @@ describe "RailsAdmin Config DSL List Section" do
         end
 
         visit index_path(:model_name => "player")
-        @players.sort_by{|p| p[:id]}.map{|p| p[:name]}.reverse.each_with_index do |name, i|
+        @players.sort_by do |p|
+          if p[PK_COLUMN].is_a?(Integer)
+            p[PK_COLUMN]
+          else
+            p[PK_COLUMN].to_s
+          end
+        end.map{|p| p[:name]}.reverse.each_with_index do |name, i|
           find("tbody tr:nth-child(#{i + 1})").should have_content(name)
         end
       end

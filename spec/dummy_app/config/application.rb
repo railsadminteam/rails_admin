@@ -1,15 +1,22 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'rails/all'
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "active_resource/railtie"
+require "sprockets/railtie"
+
+begin
+  require "#{CI_ORM}/railtie"
+rescue LoadError
+end
+
 require 'devise'
-require 'paperclip'
-require 'carrierwave'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  # Bundler.require(*Rails.groups(:assets => %w(development test)))
   # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
+  Bundler.require(:default, :assets, Rails.env, CI_ORM)
 end
 
 module DummyApp
@@ -20,6 +27,8 @@ module DummyApp
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
+    config.eager_load_paths.reject!{ |p| p =~ /\/app\/(\w+)$/ && !%w(controllers helpers views).push(CI_ORM).include?($1) }
+    config.autoload_paths += %W(#{config.root}/app/#{CI_ORM})
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.

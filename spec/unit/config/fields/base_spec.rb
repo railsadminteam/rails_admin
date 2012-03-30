@@ -22,12 +22,13 @@ describe RailsAdmin::Config::Fields::Base do
         column :commentable_id, :integer
         belongs_to :commentable, :polymorphic => true
       end
-      RailsAdmin.config(CommentReversed).fields.map{|f| f.name.to_s}.sort.should == ['commentable', 'commentable_id', 'commentable_type']
+      RailsAdmin.config(CommentReversed).fields.map{|f| f.name.to_s}.
+        select{|f| /^comment/ =~ f}.sort.should == ['commentable', 'commentable_id', 'commentable_type']
     end
 
     context 'of a Paperclip installation' do
       it 'should be a _file_name field' do
-        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.should == [:paperclip_asset_file_name]
+        RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.include?(:paperclip_asset_file_name).should be_true
       end
 
       it 'should be hidden, not filterable' do
@@ -108,7 +109,7 @@ describe RailsAdmin::Config::Fields::Base do
   describe '#searchable_columns' do
     describe 'for belongs_to fields' do
       it "should find label method on the opposite side for belongs_to associations by default" do
-        RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.should == [{:column=>"divisions.name", :type=>:string}, {:column=>"teams.division_id", :type=>:integer}]
+        RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.map{|c| c[:column]}.should == ["divisions.name", "teams.division_id"]
       end
 
       it "should search on opposite table for belongs_to" do
@@ -117,7 +118,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :custom_id
           end
         end
-        RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.should == [{:column=>"divisions.custom_id", :type=>:integer}]
+        RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.map{|c| c[:column]}.should == ["divisions.custom_id"]
       end
 
       it "should search on asked table with model name" do
@@ -175,11 +176,16 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     describe 'for mapped fields' do
+      it 'of paperclip should find the underlying column on the base table' do
+        RailsAdmin.config(FieldTest).fields.find{|f| f.name == :paperclip_asset}.searchable_columns.map{|c| c[:column]}.should == ["field_tests.paperclip_asset_file_name"]
+      end
 
-      it 'should find the underlying column on the base table' do
-        RailsAdmin.config(FieldTest).fields.find{|f| f.name == :paperclip_asset}.searchable_columns.should == [{:column=>"field_tests.paperclip_asset_file_name", :type=>:string}]
-        RailsAdmin.config(FieldTest).fields.find{|f| f.name == :dragonfly_asset}.searchable_columns.should == [{:column=>"field_tests.dragonfly_asset_name", :type=>:string}]
-        RailsAdmin.config(FieldTest).fields.find{|f| f.name == :carrierwave_asset}.searchable_columns.should == [{:column=>"field_tests.carrierwave_asset", :type=>:string}]
+      it 'of dragonfly should find the underlying column on the base table' do
+        RailsAdmin.config(FieldTest).fields.find{|f| f.name == :dragonfly_asset}.searchable_columns.map{|c| c[:column]}.should == ["field_tests.dragonfly_asset_name"]
+      end
+
+      it 'of carrierwave should find the underlying column on the base table' do
+        RailsAdmin.config(FieldTest).fields.find{|f| f.name == :carrierwave_asset}.searchable_columns.map{|c| c[:column]}.should == ["field_tests.carrierwave_asset"]
       end
     end
   end
@@ -199,11 +205,17 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     context 'of a virtual field with children fields' do
-      it 'should target the first children field' do
+      it 'of paperclip should target the first children field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.searchable.should == :paperclip_asset_file_name
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.sortable.should == :paperclip_asset_file_name
+      end
+
+      it 'of dragonfly should target the first children field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.searchable.should == :dragonfly_asset_name
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.sortable.should == :dragonfly_asset_name
+      end
+
+      it 'of carrierwave should target the first children field' do
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.searchable.should == :carrierwave_asset
         RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.sortable.should == :carrierwave_asset
       end

@@ -37,7 +37,10 @@ describe "RailsAdmin CanCan Authorization" do
   subject { page }
 
   before(:each) do
-    RailsAdmin.config{|c| c.authorize_with(:cancan); c.audit_with(:history, User) }
+    RailsAdmin.config do |c|
+      c.authorize_with(:cancan)
+    end
+    @player_model = RailsAdmin::AbstractModel.new(Player)
     @user = FactoryGirl.create :user
     login_as @user
   end
@@ -71,6 +74,12 @@ describe "RailsAdmin CanCan Authorization" do
     end
 
     it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
+      # ensure :name column to be shown
+      RailsAdmin.config Player do
+        list do
+          field :name
+        end
+      end
       @players = [
         FactoryGirl.create(:player, :retired => false),
         FactoryGirl.create(:player, :retired => true),
@@ -246,7 +255,7 @@ describe "RailsAdmin CanCan Authorization" do
 
       click_button "Yes, I'm sure"
 
-      Player.exists?(player_id).should be_false
+      @player_model.get(player_id).should be_nil
     end
 
     it "GET /admin/player/1/delete with retired player should raise access denied" do
@@ -270,8 +279,8 @@ describe "RailsAdmin CanCan Authorization" do
       retired_player = FactoryGirl.create :player, :retired => true
 
       page.driver.delete(bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
-      Player.exists?(active_player.id).should be_false
-      Player.exists?(retired_player.id).should be_true
+      @player_model.get(active_player.id).should be_nil
+      @player_model.get(retired_player.id).should_not be_nil
     end
   end
 
@@ -293,8 +302,8 @@ describe "RailsAdmin CanCan Authorization" do
       retired_player = FactoryGirl.create :player, :retired => true
 
       page.driver.delete(bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
-      Player.exists?(active_player.id).should be_false
-      Player.exists?(retired_player.id).should be_true
+      @player_model.get(active_player.id).should be_nil
+      @player_model.get(retired_player.id).should_not be_nil
     end
   end
 

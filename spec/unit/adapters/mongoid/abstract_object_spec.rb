@@ -1,30 +1,30 @@
 require 'spec_helper'
 require 'rails_admin/adapters/mongoid/abstract_object'
 
-describe "Mongoid::AbstractObject" do
+describe "Mongoid::AbstractObject", :mongoid => true do
   before(:each) do
-    @articles = FactoryGirl.create_list :article, 3
-    @author = RailsAdmin::Adapters::Mongoid::AbstractObject.new FactoryGirl.create :author
+    @players = FactoryGirl.create_list :player, 3
+    @team = RailsAdmin::Adapters::Mongoid::AbstractObject.new FactoryGirl.create :team
   end
 
   describe "references_many association" do
     it "supports retrieval of ids through foo_ids" do
-      @author.article_ids.should == []
-      article = FactoryGirl.create :article, :author => @author
-      @author.article_ids.should == [article.id]
+      @team.player_ids.should == []
+      player = FactoryGirl.create :player, :team => @team
+      @team.player_ids.should == [player.id]
     end
 
     it "supports assignment of items through foo_ids=" do
-      @author.articles.should == []
-      @author.article_ids = @articles.map(&:id)
-      @author.reload
-      @author.articles.sort.should == @articles.sort
+      @team.players.should == []
+      @team.player_ids = @players.map(&:id)
+      @team.reload
+      @team.players.sort.should == @players.sort
     end
 
     it "skips invalid id on assignment through foo_ids=" do
-      @author.article_ids = @articles.map{|item| item.id.to_s }.unshift('4f431021dcf2310db7000006')
-      @author.reload
-      @author.articles.sort.should == @articles.sort
+      @team.player_ids = @players.map{|item| item.id.to_s }.unshift('4f431021dcf2310db7000006')
+      @team.reload
+      @team.players.sort.should == @players.sort
     end
   end
 end

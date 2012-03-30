@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
-group :development, :test do
+group :active_record do
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
@@ -28,9 +28,21 @@ group :development, :test do
       gem 'sqlite3', '~> 1.3'
     end
   end
+  gem 'paperclip', '~>2.4'
+  gem 'carrierwave'
+  gem 'dragonfly'
+end
 
+group :mongoid do
   gem 'bson_ext'
   gem 'mongoid'
+  gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+  gem 'paperclip', '~>2.4'
+  gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+  gem 'dragonfly'
+end
+
+group :development, :test do
   gem 'cancan'
 end
 
@@ -43,6 +55,10 @@ group :debug do
   platform :mri_19 do
     gem 'ruby-debug19'
     gem 'simplecov', :require => false
+  end
+
+  platform :jruby do
+    gem 'ruby-debug'
   end
 end
 

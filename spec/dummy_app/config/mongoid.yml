@@ -1,12 +1,6 @@
 defaults: &defaults
-  host: localhost
-  autocreate_indexes: false
-  allow_dynamic_fields: true
-  include_root_in_json: false
-  parameterize_keys: true
-  persist_in_safe_mode: false
-  raise_not_found_error: true
-  reconnect_time: 3
+  use_utc: false
+  use_activesupport_time_zone: true
 
 development:
   <<: *defaults

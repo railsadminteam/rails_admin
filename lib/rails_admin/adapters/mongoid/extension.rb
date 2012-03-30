@@ -34,7 +34,7 @@ module RailsAdmin
         # Mongoid accepts_nested_attributes_for does not store options in accessible scope,
         # so we intercept the call and store it in instance variable which can be accessed from outside
         def accepts_nested_attributes_for_with_rails_admin(*args)
-          @nested_attributes_options = {}
+          @nested_attributes_options ||= {}
           options = args.extract_options!
           args.each do |arg|
             @nested_attributes_options[arg.to_sym] = options.reverse_merge(:allow_destroy=>false, :update_only=>false)

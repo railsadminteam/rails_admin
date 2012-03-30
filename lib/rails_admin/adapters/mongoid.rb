@@ -12,7 +12,12 @@ module RailsAdmin
       end
 
       def get(id)
-        if object = model.where(:_id=>BSON::ObjectId(id)).first
+        begin
+          id = BSON::ObjectId(id) unless id.is_a?(BSON::ObjectId)
+        rescue BSON::InvalidObjectId
+          return nil
+        end
+        if object = model.where(:_id=>id).first
           AbstractObject.new object
         else
           nil
@@ -74,7 +79,9 @@ module RailsAdmin
         @properties if @properties
         @properties = model.fields.map do |name,field|
           ar_type =
-            if name == '_type'
+            if name == '_id'
+              { :type => :bson_object_id, :length => nil, :serial? => true }
+            elsif name == '_type'
               { :type => :mongoid_type, :length => 1024 }
             elsif field.type.to_s == 'String'
               if (length = length_validation_lookup(name)) && length < 256
@@ -87,7 +94,7 @@ module RailsAdmin
             else
               {
                 "Array"          => { :type => :serialized, :length => nil },
-                "BigDecimal"     => { :type => :string, :length => 1024 },
+                "BigDecimal"     => { :type => :decimal, :length => nil },
                 "Boolean"        => { :type => :boolean, :length => nil },
                 "BSON::ObjectId" => { :type => :bson_object_id, :length => nil },
                 "Date"           => { :type => :date, :length => nil },
@@ -211,7 +218,7 @@ module RailsAdmin
         when :boolean
           return { column => false } if ['false', 'f', '0'].include?(value)
           return { column => true } if ['true', 't', '1'].include?(value)
-        when :integer, :belongs_to_association
+        when :integer
           return if value.blank?
           { column => value.to_i } if value.to_i.to_s == value
         when :string, :text
@@ -242,6 +249,9 @@ module RailsAdmin
         when :enum
           return if value.blank?
           { column => { "$in" => Array.wrap(value) } }
+        when :belongs_to_association, :bson_object_id
+          object_id = (BSON::ObjectId(value) rescue nil)
+          { column => object_id } if object_id
         end
       end
 
@@ -301,7 +311,8 @@ module RailsAdmin
       def length_validation_lookup(name)
         shortest = model.validators.select do |validator|
           validator.attributes.include?(name.to_sym) &&
-            validator.class == ActiveModel::Validations::LengthValidator
+            validator.is_a?(ActiveModel::Validations::LengthValidator) &&
+            validator.options[:maximum]
         end.min{|a, b| a.options[:maximum] <=> b.options[:maximum] }
         if shortest
           shortest.options[:maximum]
@@ -344,9 +355,9 @@ module RailsAdmin
           return scope
         end
         if options[:sort_reverse]
-          scope.desc field_name
-        else
           scope.asc field_name
+        else
+          scope.desc field_name
         end
       end
     end

@@ -1,16 +1,20 @@
 en:
-  activerecord:
+  activerecord: &en_attributes
     attributes:
       fan:
         name: His Name
       team:
         manager: Team Manager
         fans: Some Fans
+  mongoid:
+    *en_attributes
 fr:
-  activerecord:
+  activerecord: &fr_attributes
     attributes:
       fan:
         name: Son nom
       team:
         manager: Manager de l'équipe
         fans: Quelques fans
+  mongoid:
+    *fr_attributes

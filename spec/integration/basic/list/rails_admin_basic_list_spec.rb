@@ -58,6 +58,14 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player" do
     before do
+      RailsAdmin.config Player do
+        list do
+          field :name
+          field :team
+          field :injured
+          field :retired
+        end
+      end
       @teams = 2.times.map do
         FactoryGirl.create(:team)
       end
@@ -117,7 +125,7 @@ describe "RailsAdmin Basic List" do
     it "should allow to search a belongs_to attribute over the base table" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team do
             searchable Player => :team_id
@@ -135,7 +143,7 @@ describe "RailsAdmin Basic List" do
     it "should allow to search a belongs_to attribute over the target table" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team do
             searchable Team => :name
@@ -152,7 +160,7 @@ describe "RailsAdmin Basic List" do
     it "should allow to search a belongs_to attribute over the target table with a table name specified as a hash" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team do
             searchable :teams => :name
@@ -169,7 +177,7 @@ describe "RailsAdmin Basic List" do
     it "should allow to search a belongs_to attribute over the target table with a table name specified as a string" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team do
             searchable 'teams.name'
@@ -186,7 +194,7 @@ describe "RailsAdmin Basic List" do
     it "should allow to search a belongs_to attribute over the label method by default" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team
         end
@@ -201,7 +209,7 @@ describe "RailsAdmin Basic List" do
     it "should allow to search a belongs_to attribute over the target table when an attribute is specified" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team do
             searchable :name
@@ -218,20 +226,20 @@ describe "RailsAdmin Basic List" do
     it "should allow to search over more than one attribute" do
       RailsAdmin.config Player do
         list do
-          field :id
+          field PK_COLUMN
           field :name
           field :team do
             searchable [:name, {Player => :team_id}]
           end
         end
       end
-      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.first.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.first.id, :o => 'is'}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)
       should have_no_content(@players[3].name)
       # same with a different id
-      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.last.id}}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams.first.name}, "2" => {:v => @teams.last.id, :o => 'is'}}})
       should have_no_content(@players[0].name)
       should have_no_content(@players[1].name)
       should have_no_content(@players[2].name)
