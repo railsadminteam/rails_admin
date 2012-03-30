@@ -1,6 +1,6 @@
 [[Roadmap]]
 
-[[Troubleshoot? check me first|Known issues]]
+[[Troubleshoot? check me first|Troubleshoot]]
 
 
 ### Configuration
