@@ -1,7 +1,7 @@
 ## Known incompatibilities, from namespacing issues:
 
  * [[nested_form|https://github.com/ryanb/nested_form]] (simply [[use the fork requested by RailsAdmin|https://github.com/bbenezech/nested_form]], it is 100% API compatible with Ryan's)
- * various [[Twitter Bootstrap|https://github.com/twitter/bootstrap]] Asset-Pipeline vendoring libraries (use the one [[provided by RailsAdmin, sass version|https://github.com/thomas-mcdonald/bootstrap-sass]])
+ * various [[Twitter Bootstrap|https://github.com/twitter/bootstrap]] Asset-Pipeline vendoring libraries (use [[bootstrap-sass|https://github.com/thomas-mcdonald/bootstrap-sass]] requested by RailsAdmin]])
  * [[will_paginate|https://github.com/mislav/will_paginate]] (use [[kaminari|https://github.com/amatsuda/kaminari]])
 
 ## Other issues:
@@ -57,13 +57,6 @@ If you still have issue with the asset pipeline:
 * copy all asset related configuration from application.rb and environment/*.rb files from a fresh (`rails new dummy`) rails app
 * remove old assets with `bundle exec rake assets:clean` when in development
 * read thoroughly the [Rails Guide](http://guides.rubyonrails.org/asset_pipeline.html)
-
-***
-
-**Kaminari vs Will_paginate** errors
-
-They are not really compatible at the moment. If you find a fix, please provide.
-See: https://github.com/gregbell/active_admin/issues/330
 
 ***
 
