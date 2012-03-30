@@ -85,7 +85,7 @@ You should now be able to administer your site at
 All configuration documentation has moved to the wiki: https://github.com/sferik/rails_admin/wiki
 
 ## <a name="support"></a>Support
-Please see [list of known issues](https://github.com/sferik/rails_admin/wiki/Known-issues) first.
+Please see [list of known issues](https://github.com/sferik/rails_admin/wiki/Troubleshoot) first.
 
 If you have a question, please check this README, the wiki, and the list of known issues.
 
