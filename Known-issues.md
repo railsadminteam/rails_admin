@@ -1,7 +1,7 @@
 ## Known incompatibilities, from namespacing issues:
 
  * [[nested_form|https://github.com/ryanb/nested_form]] (simply [[use the fork requested by RailsAdmin|https://github.com/bbenezech/nested_form]], it is 100% API compatible with Ryan's)
- * various bootstrap libraries (use the one [[provided by RailsAdmin, sass version|https://github.com/thomas-mcdonald/bootstrap-sass]])
+ * various [[Twitter Bootstrap|https://github.com/twitter/bootstrap]] Asset-Pipeline vendoring libraries (use the one [[provided by RailsAdmin, sass version|https://github.com/thomas-mcdonald/bootstrap-sass]])
  * [[will_paginate|https://github.com/mislav/will_paginate]] (use [[kaminari|https://github.com/amatsuda/kaminari]])
 
 ## Other issues:
