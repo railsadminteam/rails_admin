@@ -31,7 +31,7 @@ config.model Asset do
     field :asset, :carrierwave
   end
 end
-config.model Category do
+config.model Article do
   nested do
     field :post_thumbnail
   end
