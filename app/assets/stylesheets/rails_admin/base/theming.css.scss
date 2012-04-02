@@ -89,6 +89,13 @@ body.rails_admin {
 
     /* nested forms */
     .tab-content .tab-pane {
+      &>.remove_nested_fields {
+        display:none;
+      }
+      &:hover>.remove_nested_fields {
+        display:block;
+      }
+      
       border-left:5px solid $blue;
       padding-left:5px;
       fieldset {
