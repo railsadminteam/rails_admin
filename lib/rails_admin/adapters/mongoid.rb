@@ -6,6 +6,7 @@ module RailsAdmin
   module Adapters
     module Mongoid
       STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
+      DISABLED_COLUMN_TYPES = ['Range']
 
       def new(params = {})
         AbstractObject.new(model.new)
@@ -77,8 +78,8 @@ module RailsAdmin
       end
 
       def properties
-        @properties if @properties
-        @properties = model.fields.map do |name,field|
+        fields = model.fields.reject{|name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
+        fields.map do |name,field|
           ar_type =
             if name == '_id'
               { :type => :bson_object_id, :serial? => true }
@@ -105,7 +106,6 @@ module RailsAdmin
                 "Integer"        => { :type => :integer },
                 "Time"           => { :type => :datetime },
                 "Object"         => { :type => :bson_object_id },
-                "Range"          => { :type => :serialized },
                 "Symbol"         => { :type => :string, :length => 255 },
               }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
             end
