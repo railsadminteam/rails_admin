@@ -503,4 +503,19 @@ describe "RailsAdmin Config DSL List Section" do
       end
     end
   end
+
+  describe 'embedded model', :mongoid => true do
+    it "should not show link to individual object's page" do
+      RailsAdmin.config FieldTest do
+        list do
+          field :embeds
+        end
+      end
+      @record = FactoryGirl.create :field_test
+      2.times.each{|i| @record.embeds.create :name => "embed #{i}"}
+      visit index_path(:model_name => "field_test")
+      should_not have_link('embed 0')
+      should_not have_link('embed 1')
+    end
+  end
 end

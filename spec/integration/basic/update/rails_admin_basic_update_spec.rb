@@ -136,7 +136,7 @@ describe "RailsAdmin Basic Update" do
       # TODO: Mongoid 3.0.0 lacks ability of numericality validation on Integer field.
       # This is caused by change in https://github.com/mongoid/mongoid/pull/1698
       # I believe this should be a bug in Mongoid.
-      body.should have_content("Player failed to be updated") unless CI_ORM == :mongoid && ENV['CI_ORM_VERSION'] == 'head'
+      body.should have_content("Player failed to be updated") unless CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
     end
   end
 
