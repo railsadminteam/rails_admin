@@ -10,6 +10,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         include Mongoid::Document
         has_many :mongo_posts
         has_many :mongo_comments, :as => :commentable
+        field :mongo_blog_id
       end
 
       class MongoPost
@@ -100,6 +101,11 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       }
       param[:primary_key_proc].call.should == :_id
       param[:model_proc].call.should == MongoPost
+      @post.properties.find{|f| f[:name] == :mongo_blog_id}[:type].should == :bson_object_id
+    end
+
+    it "should not confuse foreign_key column which belongs to associated model" do
+      @blog.properties.find{|f| f[:name] == :mongo_blog_id}[:type].should == :string
     end
 
     it "has correct parameter of has_and_belongs_to_many association" do
@@ -169,8 +175,9 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it "maps Mongoid column types to RA types" do
       @abstract_model.properties.select{|p| %w(_id _type array_field big_decimal_field
-        boolean_field bson_object_id_field date_field datetime_field float_field
-        hash_field integer_field name object_field range_field short_text string_field subject symbol_field text_field time_field title).
+        boolean_field bson_object_id_field date_field datetime_field default_field float_field
+        hash_field integer_field name object_field range_field short_text string_field subject
+        symbol_field text_field time_field title).
         include? p[:name].to_s}.should =~ [
         { :name => :_id,
           :pretty_name => "Id",
@@ -220,6 +227,12 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
           :serial? => false,
           :type => :datetime,
           :length => nil },
+        { :name => :default_field,
+          :pretty_name => "Default field",
+          :nullable? => true,
+          :serial? => false,
+          :type => :string,
+          :length => 255 },
         { :name => :float_field,
           :pretty_name => "Float field",
           :nullable? => true,
@@ -248,8 +261,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
           :pretty_name => "Object field",
           :nullable? => true,
           :serial? => false,
-          :type => :bson_object_id,
-          :length => nil },
+          :type => :string,
+          :length => 255 },
         { :name => :short_text,
           :pretty_name => "Short text",
           :nullable? => true,
