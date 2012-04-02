@@ -29,8 +29,12 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       visit new_path(:model_name => "field_test")
-      find_field('field_test[string_field]').value.should == 'string_field default_value'
-      find_field('field_test[text_field]').value.should == 'string_field text_field'
+      # In Rails 3.2.3 behavior of textarea has changed to insert newline after the opening tag,
+      # but Capybara's RackTest driver is not up to this behavior change.
+      # (https://github.com/jnicklas/capybara/issues/677)
+      # So we manually cut off first newline character as a workaround here.
+      find_field('field_test[string_field]').value.gsub(/^\n/, '').should == 'string_field default_value'
+      find_field('field_test[text_field]').value.gsub(/^\n/, '').should == 'string_field text_field'
       find_field('field_test[date_field]').value.should == Date.today.to_s
       has_checked_field?('field_test[boolean_field]').should be_true
     end
