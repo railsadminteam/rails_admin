@@ -282,7 +282,15 @@ module RailsAdmin
       end
 
       def association_nested_attributes_options_lookup(association)
-        model.nested_attributes_options.try { |o| o[association.name.to_sym] }
+        nested = model.nested_attributes_options.try { |o| o[association.name.to_sym] }
+        if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym)
+          raise <<-MSG.gsub(/^\s+/, '')
+          Embbeded association without accept_nested_attributes_for can't be handled by RailsAdmin,
+          because embedded model doesn't have top-level access.
+          Please add `accept_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
+          MSG
+        end
+        nested
       end
 
       def association_as_lookup(association)
@@ -302,7 +310,9 @@ module RailsAdmin
       end
 
       def association_foreign_key_lookup(association)
-        association.foreign_key.to_sym rescue nil
+        unless [:embeds_one, :embeds_many].include?(association.macro.to_sym)
+          association.foreign_key.to_sym rescue nil
+        end
       end
       
       def association_type_lookup(macro)
