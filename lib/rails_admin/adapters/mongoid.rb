@@ -285,9 +285,9 @@ module RailsAdmin
         nested = model.nested_attributes_options.try { |o| o[association.name.to_sym] }
         if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym)
           raise <<-MSG.gsub(/^\s+/, '')
-          Embbeded association without accept_nested_attributes_for can't be handled by RailsAdmin,
+          Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
           because embedded model doesn't have top-level access.
-          Please add `accept_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
+          Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
           MSG
         end
         nested

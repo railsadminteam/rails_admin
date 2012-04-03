@@ -233,10 +233,10 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }.should raise_error(RuntimeError,
-        "Embbeded association without accept_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accept_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
+        "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
       )
       lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }.should raise_error(RuntimeError,
-        "Embbeded association without accept_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accept_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
+        "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
       )
      end
   end
