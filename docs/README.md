@@ -118,3 +118,4 @@
 ### Plugins
 
 * [Coordinates with Google Maps](https://github.com/jasonl/rails_admin_map_field)
+* [ActsAsTaggableOn tag_list field](https://github.com/kryzhovnik/rails_admin_tag_list)
