@@ -13,7 +13,7 @@
 
         %tr{:class => row_class, :"data-link" => index_path}
           %td
-            %span.show= link_to abstract_model.config.label_plural, index_path
+            %span.show= link_to abstract_model.config.label_plural, index_path, :class => 'pjax'
           %td
             - if (last_used = @most_recent_changes[abstract_model.pretty_name])
               = time_ago_in_words last_used

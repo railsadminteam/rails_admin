@@ -6,7 +6,7 @@ module RailsAdmin
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper
 
-    layout "rails_admin/application"
+    layout :get_layout
 
     before_filter :get_model, :except => RailsAdmin::Config::Actions.all(:root).map(&:action_name)
     before_filter :get_object, :only => RailsAdmin::Config::Actions.all(:member).map(&:action_name)
@@ -40,6 +40,10 @@ module RailsAdmin
     end
 
     private
+    
+    def get_layout
+      "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
+    end
 
     def back_or_index
       params[:return_to].presence && params[:return_to].include?(request.host) && (params[:return_to] != request.fullpath) ? params[:return_to] : index_path

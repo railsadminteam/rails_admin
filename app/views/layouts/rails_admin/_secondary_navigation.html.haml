@@ -1,8 +1,8 @@
 %ul.nav.pull-right
   - actions(:root).each do |action|
-    %li= link_to wording_for(:menu, action), { :action => action.action_name, :controller => 'rails_admin/main' }
+    %li= link_to wording_for(:menu, action), { :action => action.action_name, :controller => 'rails_admin/main' }, :class => 'pjax'
   - if main_app_root_path = (main_app.root_path rescue false)
-    %li= link_to t('home.name').capitalize, main_app_root_path
+    %li= link_to t('home.name').capitalize, main_app_root_path, :class => 'pjax'
   - if _current_user
     - if user_link = edit_user_link
       %li= user_link

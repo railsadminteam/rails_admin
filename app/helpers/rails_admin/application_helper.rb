@@ -47,8 +47,8 @@ module RailsAdmin
         %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe +
         nodes.select{|n| n.parent.nil? || !n.parent.to_s.in?(nodes_stack.map{|c| c.abstract_model.model_name }) }.map do |node|
           %{
-            <li#{' class="active"' if node == @model_config }>
-              <a href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
+            <li data-model="#{node.abstract_model.to_param}">
+              <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
             </li>
             #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model_name}, 1)}
           }.html_safe
@@ -59,8 +59,8 @@ module RailsAdmin
     def navigation nodes_stack, nodes, level
       nodes.map do |node|
         %{
-          <li#{' class="active"' if node == @model_config }>
-            <a class="nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
+          <li data-model="#{node.abstract_model.to_param}">
+            <a class="pjax nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
           </li>
           #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level + 1)}
         }.html_safe
@@ -79,7 +79,7 @@ module RailsAdmin
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, :class => "#{"active" if current_action?(a, am, o)}") do
             if a.http_methods.include?(:get)
-              link_to wording_for(:breadcrumb, a, am, o), { :action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil) }
+              link_to wording_for(:breadcrumb, a, am, o), { :action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil) }, :class => 'pjax'
             else
               content_tag(:span, wording_for(:breadcrumb, a, am, o))
             end
@@ -95,7 +95,7 @@ module RailsAdmin
         wording = wording_for(:menu, action)
         %{
           <li data-original-title="#{wording}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
-            <a href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil) })}">
+            <a class="pjax" href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil) })}">
               <i class="#{action.link_icon}"></i>
               <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
             </a>
