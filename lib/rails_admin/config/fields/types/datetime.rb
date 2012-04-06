@@ -107,8 +107,6 @@ module RailsAdmin
             }
 
             options = options.merge self.class.js_plugin_options
-
-            ActiveSupport::JSON.encode(options).html_safe
           end
 
           def localized_format(scope = [:time, :formats])

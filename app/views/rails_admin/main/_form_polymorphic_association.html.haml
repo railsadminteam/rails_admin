@@ -6,29 +6,5 @@
   selected = field.bindings[:object].send(field.association[:name])
   column_type_dom_id = form.dom_id(field).sub(field.method_name.to_s, type_column)
 
-= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id
+= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id, :data => { :polymorphic => true, :urls => field.polymorphic_type_urls.to_json }
 = form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :style => "margin-left:10px;"
-
-= form.javascript_for(field) do
-  :plain
-    var urls = #{field.polymorphic_type_urls.to_json.html_safe };
-    $("#{form.jquery_namespace(field)} ##{column_type_dom_id}").bind("change", function(e){
-      if ("" == $(this).val()) {
-        $("##{ form.dom_id(field) }").html('<option value=""></option>');
-      } else {
-        $.ajax({
-          url: urls[$(this).val()],
-          data: { compact: true, all: true },
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader("Accept", "application/json");
-          },
-          success: function(data, status, xhr) {
-            var html = '<option></option>';
-            $(data).each(function(i, el) {
-              html += '<option value="' + el.id + '">' + el.label + '</option>';
-            });
-            $("#{form.jquery_namespace(field)} ##{ form.dom_id(field) }").html(html);
-          }
-        });
-      }
-    });

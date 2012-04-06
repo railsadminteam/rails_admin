@@ -1,4 +1,4 @@
-.controls
+.controls{:data => { :nestedmany => true }}
   .btn-group
     %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content, #{form.jquery_namespace(field)} > .controls > .nav", :class => (field.active? ? 'active' : '')}
       %i.icon-white
@@ -12,32 +12,3 @@
     - if field.nested_form[:allow_destroy] || nested_form.options[:child_index] == "new_#{field.name}"
       = nested_form.link_to_remove '<span class="btn btn-small btn-danger"><i class="icon-trash icon-white"></i></span>'.html_safe
     = nested_form.generate({:action => :nested, :model_config => field.associated_model_config, :nested_in => field.name })
-
-= form.javascript_for(field) do
-  :plain
-    var field = $("#{form.jquery_namespace(field)}");
-    var nav = field.find('> .controls > .nav');
-    var content = field.find('> .tab-content');
-    var toggler = field.find('> .controls > .btn-group > .toggler');
-
-    // add each nested field to a tab-pane and reference it in the nav
-    content.children(".fields").addClass('tab-pane').each(function(){
-      nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>');
-    });
-
-    // init first tab, toggler and content/tabs visibility
-    nav.find("> li > a[data-toggle='tab']:first").tab('show');
-    if(nav.children().length == 0) {
-      nav.hide(); content.hide();
-      toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
-    } else {
-      if (toggler.hasClass('active')) {
-        nav.show(); content.show();
-        toggler.children('i').addClass('icon-chevron-down')
-      } else {
-        nav.hide(); content.hide();
-        toggler.children('i').addClass('icon-chevron-right')
-      }
-    }
-
-    // dynamic behaviour is in nested-form-hooks

@@ -3,7 +3,7 @@
 .toggle{:style => ('display:none;' if file && field.delete_method && form.object.send(field.delete_method) == '1')}
   - if value = field.pretty_value
     = value
-  = form.file_field(field.name, field.html_attributes)
+  = form.file_field(field.name, field.html_attributes.reverse_merge({ :data => { :fileupload => true } }))
 - if field.optional? && field.errors.blank? && file && field.delete_method
   %a.btn.btn-info{:href => '#', :'data-toggle' => 'button', :onclick => "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false"}
     %i.icon-white.icon-trash
@@ -11,8 +11,3 @@
   = form.check_box(field.delete_method, :style => 'display:none;' )
 - if field.cache_method
   = form.hidden_field(field.cache_method)
-= form.javascript_for(field) do
-  :plain
-    $("#{form.jquery_namespace(field)} .delete input[type='checkbox']").live('click', function() {
-      $(this).parents('.input').first().children('.toggle').toggle('slow');
-    });

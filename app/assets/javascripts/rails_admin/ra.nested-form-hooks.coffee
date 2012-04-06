@@ -7,7 +7,7 @@ $(document).ready ->
     tab_content.children().last()
 
 $('form').live 'nested:fieldAdded', (content) ->
-  field = content.field.addClass('tab-pane');
+  field = content.field.addClass('tab-pane')
   new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>')
   parent_group = field.closest('.control-group')
   controls = parent_group.children('.controls')
@@ -15,6 +15,7 @@ $('form').live 'nested:fieldAdded', (content) ->
   content = parent_group.children('.tab-content')
   toggler = controls.find('.toggler')
   nav.append(new_tab)
+  $(window.document).trigger('rails_admin.dom_ready') # fire dom_ready for new player in town
   new_tab.children('a').tab('show') # activate added tab
   nav.select(':hidden').show('slow') # show nav if hidden
   content.select(':hidden').show('slow') # show tabs content if hidden
