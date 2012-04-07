@@ -949,6 +949,23 @@ describe "RailsAdmin Config DSL Edit Section" do
       Team.send(:remove_method, :color_enum) # Reset
     end
 
+    it "should auto-detect enumeration when class responds to '::{method}_enum'" do
+      Team.instance_eval do
+        def color_enum
+          ["blue", "green", "red"]
+        end
+      end
+      RailsAdmin.config Team do
+        edit do
+          field :color
+        end
+      end
+      visit new_path(:model_name => "team")
+      should have_selector(".enum_type select")
+      should have_content("green")
+      Team.instance_eval { undef :color_enum } # Reset
+    end
+
     it "should allow configuration of the enum method" do
       Team.class_eval do
         def color_list
@@ -966,6 +983,25 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(".enum_type select")
       should have_content("green")
       Team.send(:remove_method, :color_list) # Reset
+    end
+
+    it "should allow configuration of the enum class method" do
+      Team.instance_eval do
+        def color_list
+          ["blue", "green", "red"]
+        end
+      end
+      RailsAdmin.config Team do
+        edit do
+          field :color, :enum do
+            enum_method :color_list
+          end
+        end
+      end
+      visit new_path(:model_name => "team")
+      should have_selector(".enum_type select")
+      should have_content("green")
+      Team.instance_eval { undef :color_list } # Reset
     end
 
     it "should allow direct listing of enumeration options and override enum method" do
