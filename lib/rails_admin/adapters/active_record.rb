@@ -4,7 +4,7 @@ require 'rails_admin/adapters/active_record/abstract_object'
 module RailsAdmin
   module Adapters
     module ActiveRecord
-      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial]
+      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore]
       AR_ADAPTER = ::ActiveRecord::Base.configurations[Rails.env]['adapter']
       LIKE_OPERATOR = AR_ADAPTER == "postgresql" ? 'ILIKE' : 'LIKE'
 
