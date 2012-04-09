@@ -10,7 +10,7 @@ If you have a `:color` column in your Team model, RailsAdmin will check if Team#
 If it does, then you're done.
 
 The result call will be sent to `FormOptionsHelper#options_for_select` to fill the select box.
-See http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select for possible output (hash, array)
+See [this](http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select) for possible output (hash, array)
 
 ```ruby
 def Team < ActiveRecord::Base
