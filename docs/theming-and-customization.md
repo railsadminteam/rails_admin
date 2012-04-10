@@ -62,6 +62,7 @@ gem 'rails_admin_example_theme', :git => 'git://github.com/bbenezech/rails_admin
 ```
 
 Inside `config/application.rb`, just after `Bundler.require`:
+
 ```ruby
 ENV['RAILS_ADMIN_THEME'] = 'example_theme'
 ```
