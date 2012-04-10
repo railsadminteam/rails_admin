@@ -10,7 +10,16 @@ module RailsAdmin
         :model_config => @template.instance_variable_get(:@model_config),
         :nested_in => false
       })
-      groups = options[:model_config].send(options[:nested_in] ? :nested : options[:action]).with(:form => self, :object => @object, :view => @template).visible_groups
+
+      if options[:nested_in]
+        action = :nested
+      elsif @template.request.format == 'text/javascript'
+        action = :modal      
+      else
+        action = options[:action]
+      end
+      
+      groups = options[:model_config].send(action).with(:form => self, :object => @object, :view => @template).visible_groups
 
       object_infos +
       groups.map do |fieldset|
