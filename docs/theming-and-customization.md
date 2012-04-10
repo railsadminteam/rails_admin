@@ -17,11 +17,13 @@ rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/152
 ```
 
 Then add to your application `Gemfile` (before RailsAdmin):
+
 ```ruby
 gem 'rails_admin_<__THEME_NAME__>', :path => '../rails_admin_<__THEME_NAME__>'
 ```
 
-Inside your rails_admin application `config/application.rb`, just after `Bundler.require`:
+Inside your rails\_admin application `config/application.rb`, just after `Bundler.require`:
+
 ```ruby
 ENV['RAILS_ADMIN_THEME'] = '<__THEME_NAME__>'
 ```
