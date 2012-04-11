@@ -76,6 +76,7 @@
   * [[Create]]
   * [[Update]]
   * [[Nested]]
+  * [[Modal]]
 
 
 ### User integration
