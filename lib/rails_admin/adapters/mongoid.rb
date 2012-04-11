@@ -235,7 +235,7 @@ module RailsAdmin
             return
           end
           { column => value }
-        when :datetime, :timestamp, :date
+        when :date
           start_date, end_date = get_filtering_duration(operator, value)
 
           if start_date && end_date
@@ -244,6 +244,16 @@ module RailsAdmin
             { column => { '$gte' => start_date } }
           elsif end_date
             { column => { '$lte' => end_date } }
+          end
+        when :datetime, :timestamp
+          start_date, end_date = get_filtering_duration(operator, value)
+
+          if start_date && end_date
+            { column => { '$gte' => start_date.to_time.beginning_of_day, '$lte' => end_date.to_time.end_of_day } }
+          elsif start_date
+            { column => { '$gte' => start_date.to_time.beginning_of_day } }
+          elsif end_date
+            { column => { '$lte' => end_date.to_time.end_of_day } }
           end
         when :enum
           return if value.blank?

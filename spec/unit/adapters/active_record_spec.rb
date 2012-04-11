@@ -342,7 +342,20 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
         @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
         @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
         @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
+      end
+    end
 
+    context 'filters on datetimes' do
+      it 'lists elements within outbound limits' do
+        FieldTest.create!(:datetime_field => Time.local(2012, 1, 1, 23, 59, 59))
+        FieldTest.create!(:datetime_field => Time.local(2012, 1, 2, 0, 0, 0))
+        FieldTest.create!(:datetime_field => Time.local(2012, 1, 3, 23, 59, 59))
+        FieldTest.create!(:datetime_field => Time.local(2012, 1, 4, 0, 0, 0))
+        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
+        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
+        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
+        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
+        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
       end
     end
 
