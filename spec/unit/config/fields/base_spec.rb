@@ -315,4 +315,25 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(Comment).fields.find{|f|f.name == :commentable}.associated_collection('').should be_empty
     end
   end
+
+  describe '#visible?' do
+    it "should be false when fields have specific name " do
+      class FieldVisibilityTest < Tableless
+        column :id, :integer
+        column :_id, :integer
+        column :_type, :string
+        column :name, :string
+        column :created_at, :datetime
+        column :updated_at, :datetime
+        column :deleted_at, :datetime
+        column :created_on, :datetime
+        column :updated_on, :datetime
+        column :deleted_on, :datetime
+      end
+      RailsAdmin.config(FieldVisibilityTest).base.fields.select{|f| f.visible? }.map(&:name).should =~ [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
+      RailsAdmin.config(FieldVisibilityTest).list.fields.select{|f| f.visible? }.map(&:name).should =~ [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
+      RailsAdmin.config(FieldVisibilityTest).edit.fields.select{|f| f.visible? }.map(&:name).should =~ [:name]
+      RailsAdmin.config(FieldVisibilityTest).show.fields.select{|f| f.visible? }.map(&:name).should =~ [:name]
+    end
+  end
 end

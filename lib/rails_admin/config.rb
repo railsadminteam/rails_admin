@@ -277,8 +277,9 @@ module RailsAdmin
         @audit = nil
         @current_user = nil
         @default_hidden_fields = {}
-        @default_hidden_fields[:edit] = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
-        @default_hidden_fields[:show] = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:base] = [:_type]
+        @default_hidden_fields[:edit] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:show] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
         @default_items_per_page = 20
         @default_search_operator = 'default'
         @attr_accessible_role = nil

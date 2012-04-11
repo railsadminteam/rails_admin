@@ -12,6 +12,7 @@ class Tableless
         :string => String,
         :text => String,
         :date => Date,
+        :datetime => DateTime,
       }[sql_type], :default => default
     end
   end
