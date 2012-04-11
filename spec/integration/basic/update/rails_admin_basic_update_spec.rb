@@ -64,13 +64,14 @@ describe "RailsAdmin Basic Update" do
     before(:each) do
       @player = FactoryGirl.create :player
       @draft = FactoryGirl.create :draft
-      page.driver.put edit_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => 42, :position => "Second baseman"})
+      @number = @draft.player.number + 1 # to avoid collision
+      page.driver.put edit_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => @number, :position => "Second baseman"})
       @player.reload
     end
 
     it "should update an object with correct attributes" do
       @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
+      @player.number.should eql(@number)
       @player.position.should eql("Second baseman")
     end
 
