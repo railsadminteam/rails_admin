@@ -914,7 +914,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "draft")
-      should have_selector("script", :text => /CKEDITOR\.replace.*?draft_notes/)
+      should have_selector('textarea#draft_notes[data-richtext="ckeditor"]')
     end
   end
 
