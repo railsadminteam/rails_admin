@@ -28,9 +28,7 @@ group :active_record do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem 'paperclip'
   gem 'carrierwave'
-  gem 'dragonfly'
 end
 
 group :mongoid do
@@ -38,19 +36,19 @@ group :mongoid do
   case ENV['CI_ORM_VERSION']
   when 'head'
     gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
-    # For now, carrierwave-mongooid's mongoid dependency is restricted to '~> 2.1'
+    # For now, carrierwave-mongoid's mongoid dependency is restricted to '~> 2.1'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
   else
     gem 'mongoid'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   end
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
-  gem 'paperclip'
-  gem 'dragonfly'
 end
 
 group :development, :test do
   gem 'cancan'
+  gem 'dragonfly'
+  gem 'paperclip', '~> 2.7'
 end
 
 group :debug do
