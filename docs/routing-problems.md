@@ -12,7 +12,8 @@ DummyApp::Application.routes.draw do
 end
 ```
 
-Note 3 things: 
-* `mount RailsAdmin::Engine => '/admin'` will catch all `/admin` urls, including `/administrator`, which would then blow up in RailsAdmin!
-* if you choose to put a catch-up root route before `mount RailsAdmin::Engine`, make sure it doesn't catch '/admin/'
-* a root url is necessary for Devise, and will be used in RailsAdmin (home button)
+Note 3 things:
+
+  * `mount RailsAdmin::Engine => '/admin'` will catch all `/admin` urls, including `/administrator`, which would then blow up in RailsAdmin!
+  * if you choose to put a catch-up root route before `mount RailsAdmin::Engine`, make sure it doesn't catch '/admin/'
+  * a root url is necessary for Devise, and will be used in RailsAdmin (home button)
