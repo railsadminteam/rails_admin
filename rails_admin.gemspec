@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'database_cleaner'
   gem.add_development_dependency 'devise'
   gem.add_development_dependency 'dragonfly'
-  gem.add_development_dependency 'factory_girl'
+  gem.add_development_dependency 'factory_girl', '~> 2.6'
   gem.add_development_dependency 'generator_spec'
   gem.add_development_dependency 'launchy'
   gem.add_development_dependency 'mini_magick'
