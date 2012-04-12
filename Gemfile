@@ -28,7 +28,7 @@ group :active_record do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem 'paperclip', '~>2.4'
+  gem 'paperclip'
   gem 'carrierwave'
   gem 'dragonfly'
 end
@@ -45,7 +45,7 @@ group :mongoid do
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   end
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
-  gem 'paperclip', '~>2.4'
+  gem 'paperclip'
   gem 'dragonfly'
 end
 
