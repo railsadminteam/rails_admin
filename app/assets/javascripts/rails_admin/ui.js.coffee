@@ -3,30 +3,36 @@ $ = jQuery
 $("#list input.toggle").live "click", ->
   $("#list [name='bulk_ids[]']").attr "checked", $(this).is(":checked")
 
-$('.pjax').live 'click', (event) ->
-  if $.support.pjax
+if $.support.pjax
+  $('a.pjax, th.pjax').live 'click', (event) ->
     event.preventDefault()
     $.pjax
       container: $(this).data('pjax-container') || '[data-pjax-container]'
       url: $(this).data('href') || $(this).attr('href')
-      timeout: 2000
-  else if $(this).data('href') # not a native #href, need some help
-    window.location = $(this).data('href')
-
-$('.pjax-form').live 'submit', (event) ->
-  if $.support.pjax
+  $('form.pjax button[type="submit"]').live 'click', (event) ->
     event.preventDefault()
+    form = $(this).closest('form')[0]
     $.pjax
-      container: $(this).data('pjax-container') || '[data-pjax-container]'
-      url: this.action + (if (this.action.indexOf('?') != -1) then '&' else '?') + $(this).serialize()
-      timeout: 2000
+      container: $(form).data('pjax-container') || '[data-pjax-container]'
+      url: form.action + (if form.action.indexOf('?') != -1 then '&' else '?') + $(this).attr('name') + "="
+      data: $(form).serialize()
+      type: $(form).attr('method')
+else 
+  if $(this).data('href') # not a native #href, need some help
+    event.preventDefault()
+    window.location = $(this).data('href')
 
 $(document)
   .on 'pjax:start', ->
-    $('#loading').show()
+    $('#loading').show() # show loading..
   .on 'pjax:end', -> 
-    $('#loading').hide()
-
+    $('#loading').hide() # hide it
+  .on 'pjax:error', (pjax, xhr, textStatus, errorThrown, options) ->
+    options.success(xhr.responseText, errorThrown, xhr) # handle 406 (form validation failed)
+    false # disable redirect fallback
+  .on 'pjax:timeout', ->
+    false # disable timeout
+  
 $('[data-target]').live 'click', ->
   if !$(this).hasClass('disabled')
     if $(this).has('i.icon-chevron-down').length

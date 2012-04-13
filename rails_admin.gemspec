@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'haml', '~> 3.1'
   gem.add_dependency 'jquery-rails', '>= 1.0'
   gem.add_dependency 'kaminari', '~> 0.12'
-  gem.add_dependency 'rack-pjax', '~> 0.5'
+  gem.add_dependency 'pjax_rails'
   gem.add_dependency 'rails', '~> 3.1'
   gem.add_dependency 'remotipart', '~> 1.0'
   gem.add_development_dependency 'cancan'
