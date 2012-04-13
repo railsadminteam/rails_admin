@@ -35,7 +35,7 @@
             - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
             %label.checkbox{:for => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
               = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
-              = associated_model.human_attribute_name(associated_model_field.name)
+              = associated_model_field.label
 
   %fieldset
     %legend
