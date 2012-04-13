@@ -45,12 +45,6 @@ group :mongoid do
   gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 end
 
-group :development, :test do
-  gem 'cancan'
-  gem 'dragonfly'
-  gem 'paperclip', '~> 2.7'
-end
-
 group :debug do
   platform :mri_18 do
     gem 'ruby-debug'

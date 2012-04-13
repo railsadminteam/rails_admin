@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rack-pjax', '~> 0.5'
   gem.add_dependency 'rails', '~> 3.1'
   gem.add_dependency 'remotipart', '~> 1.0'
+  gem.add_development_dependency 'cancan'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'carrierwave'
   gem.add_development_dependency 'database_cleaner'
@@ -24,6 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'generator_spec'
   gem.add_development_dependency 'launchy'
   gem.add_development_dependency 'mini_magick'
+  gem.add_development_dependency 'paperclip', '~> 2.7'
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency 'timecop'
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
