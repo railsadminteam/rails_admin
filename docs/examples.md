@@ -1,4 +1,4 @@
 #### Drop your examples here, eh?
 
 ##### chadical's examples
-- [[Burly, dynamically reloading RailsAdmin.config, enjoy. (Some goofy stuff going on in there but. hey it works for me.)|https://github.com/sferik/rails_admin/wiki/Burly_Dynamically_Reloading_RailsAdmin_Config]]
+- [[Burly, dynamically reloading RailsAdmin.config, enjoy. (Some goofy stuff going on in there but. hey it works for me.)|https://github.com/sferik/rails_admin/wiki/Example-Burly-Dynamically-Reloading-RailsAdmin-Config]]
