@@ -2,7 +2,6 @@
 *.log
 *.rbc
 *.swp
-.DS_Store
 .bundle
 .idea/
 .rvmrc
