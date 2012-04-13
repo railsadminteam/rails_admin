@@ -667,3 +667,6 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
+### Examples
+[[Select and Multi-Select using Enumeration field type approach|https://github.com/sferik/rails_admin/wiki/Enumeration]]
