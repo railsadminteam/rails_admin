@@ -38,4 +38,29 @@ field :color, :enum do
 end
 ```
 
+### Multi-select ENUM example using User.roles as example...
+During Create/Update, display a Multi-Select List box for :roles field.
+Stores/Retrieves the selected options as array into a single db string field as serialized array.
+
+#### init/rails_admin.rb
+```ruby
+edit do
+    field :roles do
+        render do
+            bindings[:form].select( "roles", bindings[:object].roles_enum, {}, { :multiple => true })
+        end
+    end
+end
+```
+
+#### model/user.rb
+```ruby
+class User < ActiveRecord::Base
+    serialize :roles, Array
+    def roles_enum
+        [ [ 'role one', 1 ], [ 'role 2', 2 ], [ 'role 3', 3 ] ]
+    end
+end
+```
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/enum.rb]]
