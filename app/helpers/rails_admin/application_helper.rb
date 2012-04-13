@@ -10,7 +10,9 @@ module RailsAdmin
     end
 
     def current_action?(action, abstract_model = @abstract_model, object = @object)
-      @action.custom_key == action.custom_key && abstract_model.try(:to_param) == @abstract_model.try(:to_param) && @object.try(:id) == object.try(:id)
+      @action.custom_key == action.custom_key && 
+      abstract_model.try(:to_param) == @abstract_model.try(:to_param) && 
+      (@object.try(:persisted?) ? @object.id == object.try(:id) : !object.try(:persisted?))
     end
 
     def action(key, abstract_model = nil, object = nil)
