@@ -1,7 +1,7 @@
 $(document).live 'rails_admin.dom_ready', ->
-  
+
   if $('form').length # don't waste time otherwise
-  
+
     # colorpicker
 
     $('[data-color]').each ->
@@ -54,7 +54,7 @@ $(document).live 'rails_admin.dom_ready', ->
         $(this).parents('.control-group').first().remoteForm()
 
     # nested-many
-  
+
     $('[data-nestedmany]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find('> .controls > .nav')
@@ -111,7 +111,7 @@ $(document).live 'rails_admin.dom_ready', ->
         else
           $.ajax
             url: urls[type_select.val()]
-            data: 
+            data:
               compact: true
               all: true
             beforeSend: (xhr) ->
