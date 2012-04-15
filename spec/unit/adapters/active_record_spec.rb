@@ -192,6 +192,10 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       Player.all.should == @players[2..2]
     end
 
+    it "#where returns filtered results" do
+      @abstract_model.where(:name => @players.first.name).should == [@players.first]
+    end
+
     describe "#all" do
       it "works without options" do
         @abstract_model.all.should =~ @players
