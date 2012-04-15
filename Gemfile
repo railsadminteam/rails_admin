@@ -32,7 +32,7 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'bson_ext'
+  gem 'bson_ext', :platforms => [:ruby, :mswin, :mingw]
   case ENV['CI_ORM_VERSION']
   when 'head'
     gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
@@ -67,6 +67,7 @@ end
 
 group :development, :test do
   gem 'cancan'
+  gem 'devise'
   gem 'paperclip', '~> 2.7'
 end
 

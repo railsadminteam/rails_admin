@@ -1,6 +1,6 @@
 bundler_args: "--without debug"
 rvm:
-  - jruby-18mode
+  - jruby-19mode
   - 1.8.7
   - 1.9.3
 env:
@@ -12,11 +12,11 @@ env:
 language: ruby
 matrix:
   exclude:
-    - rvm: jruby-18mode
+    - rvm: jruby-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
-    - rvm: jruby-18mode
+    - rvm: jruby-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
-    - rvm: jruby-18mode
+    - rvm: jruby-19mode
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
     - rvm: 1.8.7
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
