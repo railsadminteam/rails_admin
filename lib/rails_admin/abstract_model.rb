@@ -76,6 +76,10 @@ module RailsAdmin
       model.model_name.human
     end
 
+    def where(conditions)
+      model.where(conditions)
+    end
+
     private
 
     def get_filtering_duration(operator, value)
