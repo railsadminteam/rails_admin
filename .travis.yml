@@ -20,6 +20,8 @@ matrix:
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
     - rvm: 1.8.7
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
+  allow_failures:
+    - env: "CI_ORM=mongoid CI_ORM_VERSION=head"
 notifications:
   irc: "irc.freenode.org#railsadmin"
 script: spec/ci.sh
