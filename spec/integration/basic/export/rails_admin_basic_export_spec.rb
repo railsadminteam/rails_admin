@@ -59,8 +59,8 @@ describe "RailsAdmin Export" do
       csv.flatten.should include(@player.team.name)
       csv.flatten.should include(@player.draft.college)
 
-      should have_content @player.comments.first.content.split("\n").first.strip # can't match for more than one line
-      should have_content @player.comments.second.content.split("\n").first.strip
+      csv.flatten.join(' ').should include(@player.comments.first.content.split("\n").first.strip)
+      csv.flatten.join(' ').should include(@player.comments.second.content.split("\n").first.strip)
     end
 
     it "should allow to export to JSON" do

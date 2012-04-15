@@ -32,10 +32,10 @@
         %label.control-label{:rel => 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label.downcase)
         .controls
           - fields.each do |associated_model_field|
-            - list = associated_model_field.type != 'virtual' ? 'only' : 'methods'
+            - list = associated_model_field.virtual? ? 'methods' : 'only'
             %label.checkbox{:for => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
               = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { :id => "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
-              = associated_model.human_attribute_name(associated_model_field.name)
+              = associated_model_field.label
 
   %fieldset
     %legend

@@ -34,7 +34,7 @@ class FieldTest
   attr_accessible *(basic_accessible_fields + [:restricted_field, {:as => :custom_role}])
   attr_accessible *(basic_accessible_fields + [:protected_field, {:as => :extra_safe_role}])
 
-  has_many :nested_field_tests, :dependent => :destroy, :inverse_of => :field_test
+  has_many :nested_field_tests, :dependent => :destroy, :inverse_of => :field_test, :autosave => true
   accepts_nested_attributes_for :nested_field_tests, :allow_destroy => true
 
   # on creation, comment is not saved without :autosave => true

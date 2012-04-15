@@ -38,7 +38,7 @@ describe "AbstractObject", :active_record => true do
     end
 
     describe "a record with protected attributes and has_one association" do
-      let(:draft) { Factory :draft }
+      let(:draft) { FactoryGirl.create(:draft) }
       let(:number) { draft.player.number + 1 } # to avoid collision
 
       before do
@@ -62,7 +62,7 @@ describe "AbstractObject", :active_record => true do
       let(:league) { League.new }
       let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new league }
       let(:name) { "Awesome League" }
-      let(:teams) { [Factory(:team)] }
+      let(:teams) { [FactoryGirl.create(:team)] }
       let(:divisions) { [Division.create!(:name => 'div 1', :league => League.create!(:name => 'north')), Division.create!(:name => 'div 2', :league => League.create!(:name => 'south'))] }
 
       before do
@@ -82,9 +82,9 @@ describe "AbstractObject", :active_record => true do
     describe "a record with protected attributes and has_one association" do
       let(:name) { "Stefan Koza" }
       let(:suspended) { true }
-      let(:player) { Factory :player, :suspended => true, :name => name, :draft => Factory(:draft) }
+      let(:player) { FactoryGirl.create(:player, :suspended => true, :name => name, :draft => FactoryGirl.create(:draft)) }
       let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
-      let(:new_team) { Factory :team }
+      let(:new_team) { FactoryGirl.create(:team) }
       let(:new_suspended) { false }
       let(:new_draft) { nil }
       let(:new_number) { player.number + 29 }
@@ -106,7 +106,7 @@ describe "AbstractObject", :active_record => true do
   end
 
   describe "destroy" do
-    let(:player) { Factory :player }
+    let(:player) { FactoryGirl.create(:player) }
     let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
 
     before do

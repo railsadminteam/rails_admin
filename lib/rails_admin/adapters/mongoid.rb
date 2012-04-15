@@ -14,13 +14,8 @@ module RailsAdmin
 
       def get(id)
         begin
-          id = BSON::ObjectId(id) unless id.is_a?(BSON::ObjectId)
-        rescue BSON::InvalidObjectId
-          return nil
-        end
-        if object = model.where(:_id=>id).first
-          AbstractObject.new object
-        else
+          AbstractObject.new(model.find(id))
+        rescue BSON::InvalidObjectId, ::Mongoid::Errors::DocumentNotFound
           nil
         end
       end
@@ -90,24 +85,22 @@ module RailsAdmin
             "Float"          => { :type => :float },
             "Hash"           => { :type => :serialized },
             "Integer"        => { :type => :integer },
-            "Object"         => lambda do
+            "Object"         => (
               if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
                 { :type => :bson_object_id }
               else
                 { :type => :string, :length => 255 }
               end
-            end.call,
-            "String"         => lambda do
-              if name == '_type'
-                { :type => :mongoid_type, :length => nil }
-              elsif (length = length_validation_lookup(name)) && length < 256
+            ),
+            "String"         => (
+              if (length = length_validation_lookup(name)) && length < 256
                 { :type => :string, :length => length }
               elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
                 { :type => :string, :length => 255 }
               else
                 { :type => :text }
               end
-            end.call,
+            ),
             "Symbol"         => { :type => :string, :length => 255 },
             "Time"           => { :type => :datetime },
           }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
@@ -242,7 +235,7 @@ module RailsAdmin
             return
           end
           { column => value }
-        when :datetime, :timestamp, :date
+        when :date
           start_date, end_date = get_filtering_duration(operator, value)
 
           if start_date && end_date
@@ -251,6 +244,16 @@ module RailsAdmin
             { column => { '$gte' => start_date } }
           elsif end_date
             { column => { '$lte' => end_date } }
+          end
+        when :datetime, :timestamp
+          start_date, end_date = get_filtering_duration(operator, value)
+
+          if start_date && end_date
+            { column => { '$gte' => start_date.to_time.beginning_of_day, '$lte' => end_date.to_time.end_of_day } }
+          elsif start_date
+            { column => { '$gte' => start_date.to_time.beginning_of_day } }
+          elsif end_date
+            { column => { '$lte' => end_date.to_time.end_of_day } }
           end
         when :enum
           return if value.blank?

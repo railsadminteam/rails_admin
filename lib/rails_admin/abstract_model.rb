@@ -86,29 +86,23 @@ module RailsAdmin
       date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
       case operator
       when 'between'
-        start_date = value[1].present? ? (beginning_of_date(Date.strptime(value[1], date_format)) rescue false) : false
-        end_date   = value[2].present? ? (Date.strptime(value[2], date_format).end_of_day rescue false) : false
+        start_date = value[1].present? ? (Date.strptime(value[1], date_format) rescue false) : false
+        end_date   = value[2].present? ? (Date.strptime(value[2], date_format) rescue false) : false
       when 'today'
-        start_date = beginning_of_date(Date.today)
-        end_date   = Date.today.end_of_day
+        start_date = end_date = Date.today
       when 'yesterday'
-        start_date = beginning_of_date(Date.yesterday)
-        end_date   = Date.yesterday.end_of_day
+        start_date = end_date = Date.yesterday
       when 'this_week'
-        start_date = beginning_of_date(Date.today.beginning_of_week)
-        end_date   = Date.today.end_of_week.end_of_day
+        start_date = Date.today.beginning_of_week
+        end_date   = Date.today.end_of_week
       when 'last_week'
-        start_date = beginning_of_date(1.week.ago.to_date.beginning_of_week)
-        end_date   = 1.week.ago.to_date.end_of_week.end_of_day
+        start_date = 1.week.ago.to_date.beginning_of_week
+        end_date   = 1.week.ago.to_date.end_of_week
       else # default
-        start_date = (beginning_of_date(Date.strptime(Array.wrap(value).first, date_format)) rescue false)
-        end_date   = (Date.strptime(Array.wrap(value).first, date_format).end_of_day rescue false)
+        start_date = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
+        end_date   = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
       end
       [start_date, end_date]
-    end
-
-    def beginning_of_date(date)
-      date.beginning_of_day
     end
   end
 end

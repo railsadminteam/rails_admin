@@ -262,7 +262,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
           :pretty_name => "Type",
           :nullable? => true,
           :serial? => false,
-          :type => :mongoid_type,
+          :type => :text,
           :length => nil },
         { :name => :array_field,
           :pretty_name => "Array field",
@@ -628,21 +628,18 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       @abstract_model.send(:build_statement, :field, :string, "foo", "is").should == {:field=>'foo'}
     end
 
-    context 'filters on dates' do
-      it 'lists elements within outbound limits' do
-        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+    it 'supports date type query' do
+      @abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } }).should == {"$and"=>[{"date_field"=>{"$gte"=>Date.new(2012,1,2), "$lte"=>Date.new(2012,1,3)}}]}
+      @abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).should == {"$and"=>[{"date_field"=>{"$gte"=>Date.new(2012,1,3)}}]}
+      @abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).should == {"$and"=>[{"date_field"=>{"$lte"=>Date.new(2012,1,2)}}]}
+      @abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).should == {"$and"=>[{"date_field"=>{"$gte"=>Date.new(2012,1,2), "$lte"=>Date.new(2012,1,2)}}]}
+    end
 
-        FieldTest.create!(:date_field => Date.strptime("01/01/2012", date_format))
-        FieldTest.create!(:date_field => Date.strptime("01/02/2012", date_format))
-        FieldTest.create!(:date_field => Date.strptime("01/03/2012", date_format))
-        FieldTest.create!(:date_field => Date.strptime("01/04/2012", date_format))
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
-
-      end
+    it 'supports datetime type query' do
+      @abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).should == {"$and"=>[{"datetime_field"=>{"$gte"=>Time.local(2012,1,2), "$lte"=>Time.local(2012,1,3).end_of_day}}]}
+      @abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).should == {"$and"=>[{"datetime_field"=>{"$gte"=>Time.local(2012,1,3)}}]}
+      @abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).should == {"$and"=>[{"datetime_field"=>{"$lte"=>Time.local(2012,1,2).end_of_day}}]}
+      @abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).should == {"$and"=>[{"datetime_field"=>{"$gte"=>Time.local(2012,1,2), "$lte"=>Time.local(2012,1,2).end_of_day}}]}
     end
 
     it "supports enum type query" do
