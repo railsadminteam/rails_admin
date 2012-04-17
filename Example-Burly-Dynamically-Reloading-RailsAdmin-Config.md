@@ -146,8 +146,9 @@ class ApplicationController < ActionController::Base
                     field :mdm_priority
                     field :comment
                     field :mdm_status do
+                        associated_collection_cache_all false
                         associated_collection_scope do
-                            Proc.new { |scope| scope = scope.where(status_type: 'Test Scenario') }
+                            Proc.new { |scope| scope = scope.where(status_type: 'Test Scenario').reorder( 'mdm_statuses.position desc, mdm_statuses.name asc' ) }
                         end
                     end
                     field :planned_start_date
@@ -159,8 +160,8 @@ class ApplicationController < ActionController::Base
                     field :test_cases do
                         partial "child_multiselect_clearonsave"
                         help "Double-Click Items To Edit."
-                        associated_collection_scope do
-                            associated_collection_cache_all false
+                        associated_collection_cache_all false
+                        associated_collection_scope do                            
                             ts = bindings[:object]
                             Proc.new { |scope| scope = scope.where("test_cases.test_scenario_id = #{ts.id || 0} or test_cases.test_scenario_id is null") }
                         end
@@ -169,8 +170,8 @@ class ApplicationController < ActionController::Base
                     field :test_scripts do
                         partial "child_multiselect_clearonsave"
                         help "Double-Click Items To Edit."
+                        associated_collection_cache_all false
                         associated_collection_scope do
-                            associated_collection_cache_all false
                             ts = bindings[:object]
                             Proc.new { |scope| scope = scope.where("test_scripts.test_scenario_id = #{ts.id || 0} or test_scripts.test_scenario_id is null") }
                         end
@@ -178,8 +179,8 @@ class ApplicationController < ActionController::Base
                     field :test_blocks do
                         partial "child_multiselect_clearonsave"
                         help "Double-Click Items To Edit."
+                        associated_collection_cache_all false
                         associated_collection_scope do
-                            associated_collection_cache_all false
                             ts = bindings[:object]
                             Proc.new { |scope|
                                 # had to override original sql to exclude available blockers that closed....
@@ -193,8 +194,8 @@ class ApplicationController < ActionController::Base
                     field :test_selenium_uploads do
                         partial "child_multiselect_clearonsave"
                         help "Double-Click Items To Edit."
+                        associated_collection_cache_all false
                         associated_collection_scope do
-                            associated_collection_cache_all false
                             ts = bindings[:object]
                             Proc.new { |scope| scope = scope.where("test_scenario_id = #{ts.id || 0} or test_scenario_id is null") }
                         end
@@ -224,8 +225,9 @@ class ApplicationController < ActionController::Base
                     help "Url/Path to Requirements Document for this test case."
                 end
                 configure :mdm_status do
+                    associated_collection_cache_all false
                     associated_collection_scope do
-                        Proc.new { |scope| scope = scope.where(status_type: 'Test Case') }
+                        Proc.new { |scope| scope = scope.where(status_type: 'Test Case').reorder( 'mdm_statuses.position desc, mdm_statuses.name asc' ) }
                     end
                 end
                 field :created_date
@@ -234,8 +236,8 @@ class ApplicationController < ActionController::Base
                 field :test_blocks do
                     partial "child_multiselect_clearonsave"
                     help "Double-Click Items To Edit."
+                    associated_collection_cache_all false
                     associated_collection_scope do
-                        associated_collection_cache_all false
                         ts = bindings[:object]
                         Proc.new { |scope|
                             # had to override original sql to exclude available blockers that closed....
@@ -263,8 +265,9 @@ class ApplicationController < ActionController::Base
                     help "Required. Example: UITest_CSW_01_Admin.test_CSW_01"
                 end
                 configure :mdm_status do
+                    associated_collection_cache_all false
                     associated_collection_scope do
-                        Proc.new { |scope| scope = scope.where(status_type: 'Test Script') }
+                        Proc.new { |scope| scope = scope.where(status_type: 'Test Script').reorder( 'mdm_statuses.position desc, mdm_statuses.name asc' ) }
                     end
                 end
                 field :created_date
@@ -274,8 +277,8 @@ class ApplicationController < ActionController::Base
                 field :test_blocks do
                     partial "child_multiselect_clearonsave"
                     help "Double-Click Items To Edit."
+                    associated_collection_cache_all false
                     associated_collection_scope do
-                        associated_collection_cache_all false
                         ts = bindings[:object]
                         Proc.new { |scope|
                             # had to override original sql to exclude available blockers that closed....
@@ -309,8 +312,9 @@ class ApplicationController < ActionController::Base
                 weight 20
                 # TODO block-priority to drop-down
                 configure :mdm_status do
+                    associated_collection_cache_all false
                     associated_collection_scope do
-                        Proc.new { |scope| scope = scope.where(status_type: 'Test Blocker') }
+                        Proc.new { |scope| scope = scope.where(status_type: 'Test Blocker').reorder( 'mdm_statuses.position desc, mdm_statuses.name asc' ) }
                     end
                 end
                 configure :priority, :belongs_to_association do
@@ -359,10 +363,10 @@ class ApplicationController < ActionController::Base
                 navigation_label 'Chad'
                 weight 850
                 configure :mdm_status do
+                    associated_collection_cache_all false
                     associated_collection_scope do
-                        ts = bindings[:object]
                         Proc.new { |scope|
-                            scope = scope.where(status_type: 'QaBam Task')
+                            scope = scope.where(status_type: 'QaBam Task').reorder( 'mdm_statuses.position desc, mdm_statuses.name asc' )
                         }
                     end
                 end
