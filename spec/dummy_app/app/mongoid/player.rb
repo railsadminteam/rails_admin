@@ -13,6 +13,9 @@ class Player
   field :notes, :type => String
   field :suspended, :type => Boolean, :default => false
 
+  attr_accessible :name, :team_id, :position, :number, :retired, :injured, :born_on, :notes, :comment_ids, :created_at
+  attr_protected :suspended
+
   validates_presence_of(:name)
   validates_numericality_of(:number, :only_integer => true)
   validates_uniqueness_of(:number, :scope => :team_id, :message => "There is already a player with that number on this team")
@@ -23,7 +26,6 @@ class Player
 
   has_one :draft, :dependent => :destroy
   has_many :comments, :as => :commentable
-  attr_protected :suspended
 
   def draft_id
     self.draft.try :id

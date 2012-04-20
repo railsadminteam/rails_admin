@@ -4,6 +4,8 @@ class Ball
 
   field :color, :type => String
 
+  attr_accessible :color
+
   validates_presence_of :color
 
   def to_param

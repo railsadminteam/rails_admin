@@ -5,6 +5,8 @@ module Cms
     field :content, :type => String
     include Mongoid::Timestamps
 
+    attr_accessible :title, :content
+
     validates :title, :content, :presence => true
   end
 end

@@ -1,4 +1,5 @@
 class Ball < ActiveRecord::Base
+  attr_accessible :color
 
   validates_presence_of :color
 
