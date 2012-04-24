@@ -54,7 +54,7 @@ Run:
 
 And then run:
 
-    $ rails g rails_admin:install
+    $ rails g active_admin:install
 
 This generator will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
