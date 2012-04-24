@@ -4,7 +4,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # colorpicker
 
-    $('[data-color]').each ->
+    $('form [data-color]').each ->
       that = this
       $(this).ColorPicker
         color: $(that).val()
@@ -20,24 +20,24 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # datetime
 
-    $('[data-datetimepicker]').each ->
+    $('form [data-datetimepicker]').each ->
       $(this).datetimepicker $(this).data('options')
 
     # enumeration
 
-    $('[data-enumeration]').each ->
+    $('form [data-enumeration]').each ->
       $(this).filteringSelect $(this).data('options')
 
     # fileupload
 
-    $('[data-fileupload]').each ->
+    $('form [data-fileupload]').each ->
       input = this
       $(this).find(".delete input[type='checkbox']").live 'click', ->
         $(input).children('.toggle').toggle('slow')
 
     # filtering-multiselect
 
-    $('[data-filteringmultiselect]').each ->
+    $('form [data-filteringmultiselect]').each ->
       $(this).filteringMultiselect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
         $(this).parents('.control-group').find('.btn').remove()
@@ -46,7 +46,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # filtering-select
 
-    $('[data-filteringselect]').each ->
+    $('form [data-filteringselect]').each ->
       $(this).filteringSelect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
         $(this).parents('.control-group').find('.btn').remove()
@@ -55,7 +55,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # nested-many
 
-    $('[data-nestedmany]').each ->
+    $('form [data-nestedmany]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find('> .controls > .nav')
       content = field.find('> .tab-content')
@@ -81,7 +81,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # nested-one
 
-    $('[data-nestedone]').each ->
+    $('form [data-nestedone]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find("> .controls > .nav")
       content = field.find("> .tab-content")
@@ -100,7 +100,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # polymorphic-association
 
-    $('[data-polymorphic]').each ->
+    $('form [data-polymorphic]').each ->
       type_select = $(this)
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
@@ -124,7 +124,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    $('[data-richtext=ckeditor]').each ->
+    $('form [data-richtext=ckeditor]').each ->
       window.CKEDITOR_BASEPATH = '/assets/ckeditor/'
       options = $(this).data('options')
       if not window.CKEDITOR
