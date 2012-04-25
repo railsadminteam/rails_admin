@@ -130,5 +130,5 @@ $(document).live 'rails_admin.dom_ready', ->
       if not window.CKEDITOR
         $(window.document).append('<script src="' + options['jspath'] + '"><\/script>')
       if instance = window.CKEDITOR.instances[this.id]
-        window.CKEDITOR.remove(instance)
+        instance.destroy(true)
       window.CKEDITOR.replace(this, options['options'])
