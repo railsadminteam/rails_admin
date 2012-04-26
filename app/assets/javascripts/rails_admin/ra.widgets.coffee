@@ -124,7 +124,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    $('form [data-richtext=ckeditor]:not(.ckeditored)').each ->
+    $('form [data-richtext=ckeditor]').not('.ckeditored').each ->
       window.CKEDITOR_BASEPATH = '/assets/ckeditor/'
       options = $(this).data('options')
       if not window.CKEDITOR
