@@ -124,7 +124,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    $('form [data-richtext=ckeditor]').each ->
+    $('form [data-richtext=ckeditor]:not(.ckeditored)').each ->
       window.CKEDITOR_BASEPATH = '/assets/ckeditor/'
       options = $(this).data('options')
       if not window.CKEDITOR
@@ -132,3 +132,4 @@ $(document).live 'rails_admin.dom_ready', ->
       if instance = window.CKEDITOR.instances[this.id]
         instance.destroy(true)
       window.CKEDITOR.replace(this, options['options'])
+      $(this).addClass('ckeditored')
