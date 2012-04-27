@@ -4,7 +4,7 @@ it will be triggered through a before filter on every action in Rails Admin.
 ```ruby
 RailsAdmin.config do |config|
   config.authorize_with do
-    redirect_to root_path unless warden.user.is_admin?
+    redirect_to main_app.root_path unless warden.user.is_admin?
   end
 end
 ```
