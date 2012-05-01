@@ -35,11 +35,13 @@ module RailsAdmin
         scope = scope.any_in(:_id => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(query_conditions(options[:query])) if options[:query]
         scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
-        scope = scope.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
+        if options[:page] && options[:per]
+          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
+        end
         scope = sort_by(options, scope) if options[:sort]
         scope
       end
-      
+
       def count(options = {},scope=nil)
         all(options.merge({:limit => false, :page => false}), scope).count
       end
@@ -317,7 +319,7 @@ module RailsAdmin
           association.foreign_key.to_sym rescue nil
         end
       end
-      
+
       def association_type_lookup(macro)
         case macro.to_sym
         when :belongs_to, :referenced_in, :embedded_in
