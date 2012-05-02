@@ -23,7 +23,7 @@ If you have Asset model class as a polymorphic and you want thumbnail in you Art
 
 ```ruby
 class Article < ActiveRecord::Base
-  has_one :post_thumbnail, as: :assetable, class_name: Asset
+  has_one :post_thumbnail, :as => :assetable, :class_name => Asset
 end
 ```
 
