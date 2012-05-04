@@ -33,7 +33,7 @@ I18n.default_locale = :de
 
 **current_user method**
 
-The current_user is usually inferred from your Devise settings and added to your initilizer file automatically.
+The current_user is usually inferred from your Devise settings and added to your initializer file automatically.
 
 If needed, it can be customized as such:
 
