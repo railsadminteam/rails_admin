@@ -35,7 +35,9 @@ module RailsAdmin
         scope = scope.where(model.primary_key => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(query_conditions(options[:query])) if options[:query]
         scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
-        scope = scope.page(options[:page]).per(options[:per]) if options[:page] && options[:per]
+        if options[:page] && options[:per]
+          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
+        end
         scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
         scope
       end

@@ -54,7 +54,7 @@ class RailsAdmin::History < ActiveRecord::Base
     else
       history = history.order('created_at DESC')
     end
-    all ? history : history.page(page.presence || "1").per(per_page)
+    all ? history : history.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
   end
 
   def self.history_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
@@ -65,6 +65,6 @@ class RailsAdmin::History < ActiveRecord::Base
     else
       history = history.order('created_at DESC')
     end
-    all ? history : history.page(page.presence || "1").per(per_page)
+    all ? history : history.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
   end
 end
