@@ -58,7 +58,15 @@ end
 class User < ActiveRecord::Base
     serialize :roles, Array
     def roles_enum
-        [ [ 'role one', 1 ], [ 'role 2', 2 ], [ 'role 3', 3 ] ]
+        [ [ 'role one', '1' ], [ 'role 2', '2' ], [ 'role 3', '3' ] ]
+    end
+    def has_role?( role )
+        # example called from cancan's app/models/ability.rb
+        # if user.has_role?( :ADMIN
+
+        # for roles array stored in db... take each value, see if it matches the second column in the roles_enum array, if so, return the 1st col of the enum as a uprcase,space_to_underscore,symbol .
+        assigned_roles = self.roles.map { |r| self.roles_enum.rassoc(r)[0].gsub(/ /, '_').upcase.to_sym }
+        assigned_roles.include?( role )
     end
 end
 ```
