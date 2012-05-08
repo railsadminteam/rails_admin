@@ -1,4 +1,4 @@
-# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png?skin_name=chrome)][pledgie]
+# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png)][pledgie]
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
 [travis]: http://travis-ci.org/sferik/rails_admin
@@ -92,46 +92,49 @@ All configuration documentation has moved to the wiki: https://github.com/sferik
 ![Polymophic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
 
 ## Support
-Please see [list of known issues](https://github.com/sferik/rails_admin/wiki/Troubleshoot) first.
+If you have a question, please check this README, the wiki, and the [list of
+known issues][troubleshoot].
 
-If you have a question, please check this README, the wiki, and the list of known issues.
+[troubleshoot]: https://github.com/sferik/rails_admin/wiki/Troubleshoot
 
 If you still have a question, you can ask the [official RailsAdmin mailing
-list](http://groups.google.com/group/rails_admin) or ping sferik on IRC in
-[#railsadmin on
-irc.freenode.net](http://webchat.freenode.net/?channels=railsadmin).
+list][list].
 
-If you think you found a bug in RailsAdmin, you can [submit an
-issue](https://github.com/sferik/rails_admin#issues).
-No feature requests or questions please (the mailing list is
-active and is the preferred venue for feature requests and questions).
+[list]: http://groups.google.com/group/rails_admin
+
+If you think you found a bug in RailsAdmin, you can [submit an issue][issues].
 
 ## Contributing
-In the spirit of [free software](http://www.fsf.org/licensing/essays/free-sw.html),
-**everyone** is encouraged to help improve this project.
+In the spirit of [free software][free-sw], **everyone** is encouraged to help
+improve this project.
+
+[free-sw]: http://www.fsf.org/licensing/essays/free-sw.html
 
 Here are some ways *you* can contribute:
 
 * by using alpha, beta, and prerelease versions
 * by reporting bugs
 * by suggesting new features
-* by [translating to a new language](https://github.com/sferik/rails_admin/wiki/Translations)
 * by writing or editing documentation
 * by writing specifications
-* by writing code (**no patch is too small**: fix typos, add comments, clean up inconsistent whitespace)
+* by writing code (**no patch is too small**: fix typos, add comments, clean up
+  inconsistent whitespace)
 * by refactoring code
-* by resolving [issues](https://github.com/sferik/rails_admin/issues)
+* by fixing [issues][]
 * by reviewing patches
-* [financially](http://pledgie.com/campaigns/15917)
+* [financially][pledgie]
+
+[issues]: https://github.com/sferik/rails_admin/issues
 
 ## Submitting an Issue
-We use the [GitHub issue tracker](https://github.com/sferik/rails_admin/issues)
-to track bugs and features. Before submitting a bug report or feature request,
-please check to make sure it hasn't already been submitted. When submitting a
-bug report, please include a [Gist](https://gist.github.com/) that includes a
-stack trace and any details that may be necessary to reproduce the bug,
-including your gem version, Ruby version, and operating system. Ideally, a bug
-report should include a pull request with failing specs.
+We use the [GitHub issue tracker][issues] to track bugs and features. Before
+submitting a bug report or feature request, check to make sure it hasn't
+already been submitted. When submitting a bug report, please include a [Gist][]
+that includes a stack trace and any details that may be necessary to reproduce
+the bug, including your gem version, Ruby version, and operating system.
+Ideally, a bug report should include a pull request with failing specs.
+
+[gist]: https://gist.github.com/
 
 ## Submitting a Pull Request
 1. [Fork the repository.][fork]
