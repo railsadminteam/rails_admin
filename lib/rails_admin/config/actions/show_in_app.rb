@@ -18,7 +18,6 @@ module RailsAdmin
           end
         end
 
-
         register_instance_option :link_icon do
           'icon-eye-open'
         end

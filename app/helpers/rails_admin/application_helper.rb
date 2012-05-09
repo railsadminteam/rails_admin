@@ -96,8 +96,8 @@ module RailsAdmin
       actions.map do |action|
         wording = wording_for(:menu, action)
         %{
-          <li data-original-title="#{wording}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
-            <a class="pjax" href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil) })}">
+          <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
+            <a class="#{action.key == :show_in_app ? '' : 'pjax'}" href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil) })}">
               <i class="#{action.link_icon}"></i>
               <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
             </a>

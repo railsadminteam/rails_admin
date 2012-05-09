@@ -60,6 +60,3 @@ $(document).live 'rails_admin.dom_ready', ->
 
   $('.form-horizontal legend').has('i.icon-chevron-right').each ->
     $(this).siblings('.control-group').hide()
-
-  $('[rel=tooltip]').tooltip(delay: { show: 200, hide: 500 });
-
