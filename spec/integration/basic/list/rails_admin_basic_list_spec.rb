@@ -313,6 +313,16 @@ describe "RailsAdmin Basic List" do
     it "should respond successfully" do
       2.times.map { FactoryGirl.create :player }
       visit index_path(:model_name => "player", :all => true)
+      find('div.total-count').should have_content("2 players")
+    end
+  end
+
+  describe "GET /admin/player show with pagination disabled by :associated_collection" do
+    it "should respond successfully" do
+      @team = FactoryGirl.create :team
+      2.times.map { FactoryGirl.create :player, :team => @team }
+      visit index_path(:model_name => "player", :associated_collection => "players", :compact => true, :current_action => 'update', :source_abstract_model => 'team', :source_object_id => @team.id)
+      find('div.total-count').should have_content("2 players")
     end
   end
 
