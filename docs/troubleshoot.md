@@ -41,14 +41,6 @@ will reduce your compilation time and is recommended.
 Note that this is needed on **Heroku** if you set `compile = false` and don't versionate `public/assets`.
 More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
 
-Another problem on `heroku`, if you get a `ActionView::Template::Error (rails_admin/rails_admin.css isn't precompiled)`, this means that Heroku did not get the precompile array at compilation time from RailsAdmin engine.
-
-Add this to your `config/environments/production.rb`:
-
-```ruby
-  config.assets.precompile += ["rails_admin/rails_admin.js", "rails_admin/rails_admin.css", "rails_admin/jquery.colorpicker.js", "rails_admin/jquery.colorpicker.css"]
-```
-
 If you still have issue with the asset pipeline:
 
 * make sure you didn't commit your assets in public/assets
