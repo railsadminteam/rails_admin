@@ -132,7 +132,7 @@
             %td.last.links
               %ul.inline= menu_for :member, @abstract_model, object, true
     - if @objects.respond_to?(:total_count)
-      - total_count = @objects.total_count
+      - total_count = @objects.total_count.to_i
       = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)
       = link_to(t("admin.misc.show_all"), index_path(params.merge(:all => true)), :class => "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.label_plural.downcase}"

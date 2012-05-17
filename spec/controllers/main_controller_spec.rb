@@ -67,7 +67,7 @@ describe RailsAdmin::MainController do
     end
 
     it "scopes associated collection records according to bindings" do
-      @team.revenue = 3
+      @team.revenue = BigDecimal.new('3')
       @team.save
 
       @players = 5.times.map do

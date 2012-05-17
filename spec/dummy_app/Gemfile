@@ -44,7 +44,7 @@ group :mongoid do
     gem 'mongoid'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   end
-  gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
+  gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/mshibuya/mongoid-paperclip.git', :branch => 'fix-stop-patching-logger'
   gem 'paperclip', '~> 2.4'
   gem 'dragonfly'
 end

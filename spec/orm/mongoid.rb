@@ -1,5 +1,7 @@
 require 'rails_admin/adapters/mongoid'
 
+Paperclip.logger = Logger.new(nil)
+
 class Tableless
   include Mongoid::Document
 

@@ -36,13 +36,15 @@ group :mongoid do
   case ENV['CI_ORM_VERSION']
   when 'head'
     gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
+    gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/mshibuya/mongoid-paperclip.git', :branch => 'fix-stop-patching-logger'
     # For now, carrierwave-mongoid's mongoid dependency is restricted to '~> 2.1'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
+    gem 'database_cleaner', :git => 'git://github.com/potatosalad/database_cleaner.git'
   else
     gem 'mongoid'
+    gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
   end
-  gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 end
 
 group :debug do

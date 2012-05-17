@@ -15,8 +15,13 @@ module RailsAdmin
       def get(id)
         begin
           AbstractObject.new(model.find(id))
-        rescue BSON::InvalidObjectId, ::Mongoid::Errors::DocumentNotFound
-          nil
+        rescue => e
+          if ['BSON::InvalidObjectId', 'Mongoid::Errors::DocumentNotFound',
+              'Mongoid::Errors::InvalidFind', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
+            nil
+          else
+            raise e
+          end
         end
       end
 
@@ -82,6 +87,7 @@ module RailsAdmin
             "BigDecimal"     => { :type => :decimal },
             "Boolean"        => { :type => :boolean },
             "BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
+            "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
             "Date"           => { :type => :date },
             "DateTime"       => { :type => :datetime },
             "Float"          => { :type => :float },
@@ -118,7 +124,7 @@ module RailsAdmin
       end
 
       def table_name
-        model.collection.name
+        model.collection.name.to_s
       end
 
       def serialized_attributes
@@ -261,7 +267,7 @@ module RailsAdmin
           return if value.blank?
           { column => { "$in" => Array.wrap(value) } }
         when :belongs_to_association, :bson_object_id
-          object_id = (BSON::ObjectId(value) rescue nil)
+          object_id = (BSON::ObjectId.from_string(value) rescue nil)
           { column => object_id } if object_id
         end
       end
