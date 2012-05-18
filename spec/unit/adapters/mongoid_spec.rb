@@ -238,7 +238,24 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }.should raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
       )
-     end
+    end
+
+    it "should work with inherited embeds_many model" do
+      class MongoEmbedsParent
+        include Mongoid::Document
+        embeds_many :mongo_embeddeds
+        accepts_nested_attributes_for :mongo_embeddeds
+      end
+
+      class MongoEmbedded
+        include Mongoid::Document
+        embedded_in :mongo_embeds_many
+      end
+
+      class MongoEmbedsChild < MongoEmbedsParent; end
+
+      lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsChild).associations }.should_not raise_error
+    end
   end
 
   describe "#properties" do
