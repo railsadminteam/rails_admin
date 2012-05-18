@@ -1,8 +1,9 @@
 bundler_args: "--without debug"
 rvm:
-  - jruby-19mode
   - 1.8.7
   - 1.9.3
+  - jruby-19mode
+  - rbx-19mode
 env:
   - "CI_ORM=active_record CI_DB_ADAPTER=sqlite3"
   - "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
@@ -12,16 +13,23 @@ env:
 language: ruby
 matrix:
   exclude:
+    - rvm: 1.8.7
+      env: "CI_ORM=mongoid CI_ORM_VERSION=head"
     - rvm: jruby-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
     - rvm: jruby-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
     - rvm: jruby-19mode
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
-    - rvm: 1.8.7
+    - rvm: rbx-19mode
+      env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+    - rvm: rbx-19mode
+      env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
+    - rvm: rbx-19mode
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
   allow_failures:
     - env: "CI_ORM=mongoid CI_ORM_VERSION=head"
+    - rvm: rbx-19mode
 notifications:
   irc: "irc.freenode.org#railsadmin"
 script: spec/ci.sh
