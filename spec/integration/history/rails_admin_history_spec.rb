@@ -72,6 +72,12 @@ describe "RailsAdmin History", :active_record => true do
           RailsAdmin::History.latest.count.should == 100
         end
 
+        it 'should get latest ones orderly' do
+          latest = RailsAdmin::History.latest
+          latest.first.message.should == "change 100"
+          latest.last.message.should == "change 1"
+        end
+
         it "should render a XHR request successfully" do
           xhr :get, history_index_path(@model, :page => 2)
         end
