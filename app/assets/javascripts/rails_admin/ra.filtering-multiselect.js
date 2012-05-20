@@ -103,24 +103,28 @@
       this.addAll.click(function(e){
         widget._select($('option', widget.collection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       /* Add to selection */
       this.add.click(function(e){
         widget._select($(':selected', widget.collection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       /* Remove all from selection */
       this.removeAll.click(function(e){
         widget._deSelect($('option', widget.selection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       /* Remove from selection */
       this.remove.click(function(e){
         widget._deSelect($(':selected', widget.selection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       var timeout = null;
