@@ -124,7 +124,7 @@ module RailsAdmin
       end
 
       def table_name
-        model.collection.name.to_s
+        model.collection_name.to_s
       end
 
       def serialized_attributes
@@ -149,7 +149,7 @@ module RailsAdmin
         fields.each do |field|
           conditions_per_collection = {}
           field.searchable_columns.flatten.each do |column_infos|
-            collection_name, column_name = column_infos[:column].split('.')
+            collection_name, column_name = parse_collection_name(column_infos[:column])
             statement = build_statement(column_name, column_infos[:type], query, field.search_operator)
             if statement
               conditions_per_collection[collection_name] ||= []
@@ -177,7 +177,7 @@ module RailsAdmin
             field = fields.find{|f| f.name.to_s == field_name}
             next unless field
             field.searchable_columns.each do |column_infos|
-              collection_name, column_name = column_infos[:column].split('.')
+              collection_name, column_name = parse_collection_name(column_infos[:column])
               statement = build_statement(column_name, column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
               if statement
                 conditions_per_collection[collection_name] ||= []
@@ -351,6 +351,15 @@ module RailsAdmin
           shortest.options[:maximum]
         else
           false
+        end
+      end
+
+      def parse_collection_name(column)
+        collection_name, column_name = column.split('.')
+        if [:embeds_one, :embeds_many].include?(model.associations[collection_name].try(:macro).try(:to_sym))
+          [table_name, column]
+        else
+          [collection_name, column_name]
         end
       end
 

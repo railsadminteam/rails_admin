@@ -547,6 +547,29 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         @abstract_model.all(:filters => {"fans" => {"0000" => {:o=>"is", :v=>'foobar'}}}).to_a.should == @teams[1..1]
       end
     end
+
+    describe "whose type is embedded has_many" do
+      before do
+        RailsAdmin.config FieldTest do
+          field :embeds do
+            queryable true
+            searchable :all
+          end
+        end
+        @field_tests = FactoryGirl.create_list(:field_test, 3)
+        @field_tests[0].embeds.create :name => 'foo'
+        @field_tests[1].embeds.create :name => 'bar'
+        @abstract_model = RailsAdmin::AbstractModel.new('FieldTest')
+      end
+
+      it "supports querying" do
+        @abstract_model.all(:query => 'bar').to_a.should == @field_tests[1..1]
+      end
+
+      it "supports filtering" do
+        @abstract_model.all(:filters => {"embeds" => {"0000" => {:o=>"is", :v=>'bar'}}}).to_a.should == @field_tests[1..1]
+      end
+    end
   end
 
   describe "#query_conditions" do
