@@ -52,6 +52,7 @@
           select: function(event, ui) {
             var option = $('<option value="' + ui.item.id + '" selected="selected">' + ui.item.value + '</option>');
             select.html(option);
+            select.trigger("change", ui.item.id);
             self._trigger("selected", event, {
               item: option
             });
@@ -79,6 +80,14 @@
             }
           }
         })
+        .keyup(function() {
+          /* Clear select options and trigger change if selected item is deleted */
+          if ($(this).val().length == 0) {
+            select.empty();
+            select.trigger("change");
+          }
+        })
+
       if(select.attr('placeholder'))
         input.attr('placeholder', select.attr('placeholder'))
 
