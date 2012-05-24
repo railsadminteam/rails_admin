@@ -44,7 +44,7 @@ module RailsAdmin
           # bindings[:object] & bindings[:controller] available
           associated_collection_scope_limit = (self.associated_collection_cache_all ? nil : 30)
           Proc.new do |scope|
-            scope.limit(associated_collection_scope_limit).order('id DESC')
+            scope.limit(associated_collection_scope_limit)
           end
         end
         
