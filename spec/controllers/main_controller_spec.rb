@@ -107,7 +107,22 @@ describe RailsAdmin::MainController do
         end
       end
       controller.list_entries.length.should == @players.size
+    end
 
+    it "ordering of associated collection records number less than 100 shoud be grouped by desc" do
+      @players = 99.times.map do
+        FactoryGirl.create :player
+      end
+
+      controller.list_entries.to_a.first.should == @players.last
+    end
+
+    it "ordering of associated collection records number over 100 shoud be grouped by desc" do
+      @players = 100.times.map do
+        FactoryGirl.create :player
+      end
+
+      controller.list_entries.to_a.first.should == @players.last
     end
   end
 
