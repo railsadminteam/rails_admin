@@ -37,15 +37,15 @@ module RailsAdmin
           #Pass the theme and mode for Codemirror
           register_instance_option(:codemirror_config) do
             {
-              :mode => "css",
-              :theme => "neat"
+              :mode => 'css',
+              :theme => 'night'
             }
           end
 
           register_instance_option(:codemirror_assets) do
             {
-              :mode => "/assets/codemirror/modes/css.js",  
-              :theme => "/assets/codemirror/themes/neat.css"
+              :mode => '/assets/codemirror/modes/css.js',  
+              :theme => '/assets/codemirror/themes/night.css'
             }
           end
 
