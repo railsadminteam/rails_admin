@@ -50,8 +50,13 @@ module RailsAdmin
           end
 
           #Use this if you want to point to a cloud instances of CodeMirror
-          register_instance_option(:codemirror_location) do
+          register_instance_option(:codemirror_js_location) do
             '/assets/codemirror.js'
+          end
+
+          #Use this if you want to point to a cloud instances of CodeMirror
+          register_instance_option(:codemirror_css_location) do
+            '/assets/codemirror.css'
           end
 
           register_instance_option(:html_attributes) do

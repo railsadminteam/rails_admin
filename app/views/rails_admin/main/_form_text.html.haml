@@ -11,7 +11,8 @@
   elsif field.codemirror
     richtext = 'codemirror'
     js_data = {
-      :jspath => field.codemirror_location,
+      :csspath => field.codemirror_css_location,
+      :jspath => field.codemirror_js_location,
       :options => field.codemirror_config,
       :locations => field.codemirror_assets
     }
