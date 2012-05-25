@@ -19,6 +19,41 @@ module RailsAdmin
             "/assets/ckeditor/config.js"
           end
 
+          #Use this if you want to point to a cloud instances of CKeditor
+          register_instance_option(:ckeditor_location) do
+            '/assets/ckeditor/ckeditor.js'
+          end
+
+          #Use this if you want to point to a cloud instances of the base CKeditor
+          register_instance_option(:ckeditor_base_location) do
+            '/assets/ckeditor/'
+          end
+
+          # Codemirror is disabled by default and CKEditor takes presedence
+          register_instance_option(:codemirror) do
+            false
+          end
+
+          #Pass the theme and mode for Codemirror
+          register_instance_option(:codemirror_config) do
+            {
+              :mode => "css",
+              :theme => "default"
+            }
+          end
+
+          register_instance_option(:codemirror_assets) do
+            {
+              :mode => "/assets/javascripts/codemirror/modes/css.js",  
+              :theme => "/assets/stylesheets/codemirror/default.css"
+            }
+          end
+
+          #Use this if you want to point to a cloud instances of CodeMirror
+          register_instance_option(:codemirror_location) do
+            '/assets/javascript/codemirror.js'
+          end
+
           register_instance_option(:html_attributes) do
             {
               :cols => "48",

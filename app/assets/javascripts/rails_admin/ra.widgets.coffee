@@ -125,11 +125,24 @@ $(document).live 'rails_admin.dom_ready', ->
     # ckeditor
 
     $('form [data-richtext=ckeditor]').not('.ckeditored').each ->
-      window.CKEDITOR_BASEPATH = '/assets/ckeditor/'
       options = $(this).data('options')
+      window.CKEDITOR_BASEPATH = options['base_location']
       if not window.CKEDITOR
         $(window.document).append('<script src="' + options['jspath'] + '"><\/script>')
       if instance = window.CKEDITOR.instances[this.id]
         instance.destroy(true)
       window.CKEDITOR.replace(this, options['options'])
       $(this).addClass('ckeditored')
+
+    # codemirror
+
+    $('form [data-richtext=codemirror]').not('.codemirrored').each ->
+      options = $(this).data('options')
+      if not window.CodeMirror
+        $(window.document).append('<script src="' + options['locations']['mode'] + '"><\/script>')
+        $(window.document).append('<script src="' + options['locations']['theme'] + '"><\/script>')
+        $(window.document).append('<script src="' + options['jspath'] + '"><\/script>')
+      if instance = window.CodeMirror.instances[this.id]
+        instance.destroy(true)
+      CodeMirror.fromTextArea(this, options['options'])
+      $(this).addClass('codemirrored')

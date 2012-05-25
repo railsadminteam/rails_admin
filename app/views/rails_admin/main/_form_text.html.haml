@@ -2,10 +2,18 @@
   if field.ckeditor
     richtext = 'ckeditor'
     js_data = {
-      :jspath => '/assets/ckeditor/ckeditor.js',
+      :jspath => field.ckeditor_location,
+      :base_location => field.ckeditor_base_location,
       :options => { 
         :customConfig => field.ckeditor_config_js
       }
+    }
+  elsif field.codemirror
+    richtext = 'codemirror'
+    js_data = {
+      :jspath => field.codemirror_location,
+      :options => field.codemirror_config
+      :locations => field.codemirror_assets
     }
   else
     richtext = false
