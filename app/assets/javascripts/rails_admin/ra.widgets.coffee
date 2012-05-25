@@ -139,9 +139,8 @@ $(document).live 'rails_admin.dom_ready', ->
     $('form [data-richtext=codemirror]').not('.codemirrored').each ->
       options = $(this).data('options')
       if not window.CodeMirror
-        head  = document.getElementsByTagName('head')[0];
         $(window.document).append('<script src="' + options['locations']['mode'] + '" type="text\/javascript"><\/script>')
-        head.appendChild('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
+        $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
         $(window.document).append('<script src="' + options['jspath'] + '" type="text\/javascript"><\/script>')
       CodeMirror.fromTextArea(this, {mode: options['options']['mode'], theme: options['options']['theme']})
       $(this).addClass('codemirrored')
