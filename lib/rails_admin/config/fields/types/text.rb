@@ -44,14 +44,14 @@ module RailsAdmin
 
           register_instance_option(:codemirror_assets) do
             {
-              :mode => "/assets/javascripts/codemirror/modes/css.js",  
-              :theme => "/assets/stylesheets/codemirror/default.css"
+              :mode => "/assets/codemirror/modes/css.js",  
+              :theme => "/assets/codemirror/themes/default.css"
             }
           end
 
           #Use this if you want to point to a cloud instances of CodeMirror
           register_instance_option(:codemirror_location) do
-            '/assets/javascript/codemirror.js'
+            '/assets/codemirror.js'
           end
 
           register_instance_option(:html_attributes) do

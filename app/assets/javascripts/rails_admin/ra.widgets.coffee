@@ -142,7 +142,5 @@ $(document).live 'rails_admin.dom_ready', ->
         $(window.document).append('<script src="' + options['locations']['mode'] + '"><\/script>')
         $(window.document).append('<script src="' + options['locations']['theme'] + '"><\/script>')
         $(window.document).append('<script src="' + options['jspath'] + '"><\/script>')
-      if instance = window.CodeMirror.instances[this.id]
-        instance.destroy(true)
       CodeMirror.fromTextArea(this, options['options'])
       $(this).addClass('codemirrored')
