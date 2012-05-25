@@ -38,14 +38,14 @@ module RailsAdmin
           register_instance_option(:codemirror_config) do
             {
               :mode => "css",
-              :theme => "default"
+              :theme => "neat"
             }
           end
 
           register_instance_option(:codemirror_assets) do
             {
               :mode => "/assets/codemirror/modes/css.js",  
-              :theme => "/assets/codemirror/themes/default.css"
+              :theme => "/assets/codemirror/themes/neat.css"
             }
           end
 
