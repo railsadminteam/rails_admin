@@ -142,5 +142,6 @@ $(document).live 'rails_admin.dom_ready', ->
       $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
       $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
       $(window.document).append('<script src="' + options['jspath'] + '" type="text\/javascript"><\/script>')
+      alert options['locations']['mode'] 
       CodeMirror.fromTextArea(this, {mode: options['options']['mode'], theme: options['options']['theme']})
       $(this).addClass('codemirrored')
