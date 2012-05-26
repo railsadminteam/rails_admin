@@ -67,6 +67,10 @@ mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Feel free to change
 
 It will also add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
 
+Finally run:
+
+    $ bundle exec rake db:migrate
+
 Optionally, you may wish to set up [Cancan](https://github.com/ryanb/cancan),
 [PaperTrail](https://github.com/airblade/paper_trail), [CKeditor](https://github.com/galetahub/ckeditor)
 
