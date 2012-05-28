@@ -121,4 +121,22 @@ describe "RailsAdmin" do
     end
   end
 
+  describe "secondary navigation" do
+    it "should have Gravatar image" do
+      visit dashboard_path
+      should have_selector("ul.nav.pull-right li img")
+    end
+
+    it "should not show Gravatar when user doesn't have email method" do
+      User.any_instance.stub(:respond_to?).with(:email).and_return(false)
+      visit dashboard_path
+      should_not have_selector("ul.nav.pull-right li img")
+    end
+
+    it "should not cause error when email is nil" do
+      User.any_instance.stub(:email).and_return(nil)
+      visit dashboard_path
+      should have_selector("body.rails_admin")
+    end
+  end
 end
