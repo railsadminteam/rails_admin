@@ -918,6 +918,26 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
+  describe "CodeMirror Support" do
+
+    it "should start with CodeMirror disabled" do
+       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
+       field.codemirror.should be false
+    end
+
+    it "should add Javascript to enable CodeMirror" do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes do
+            codemirror true
+          end
+        end
+      end
+      visit new_path(:model_name => "draft")
+      should have_selector('textarea#draft_notes[data-richtext="codemirror"]')
+    end
+  end
+
   describe "Paperclip Support" do
 
     it "should show a file upload field" do
