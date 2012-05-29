@@ -70,7 +70,7 @@ end
 group :development, :test do
   gem 'cancan'
   gem 'devise'
-  gem 'paperclip'
+  gem 'paperclip', '~> 2.7'
 end
 
 gemspec
