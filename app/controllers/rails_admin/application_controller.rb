@@ -55,6 +55,8 @@ module RailsAdmin
       instance_eval &RailsAdmin::Config.current_user_method
     end
 
+    alias_method :user_for_paper_trail, :_current_user
+
     def _attr_accessible_role
       instance_eval &RailsAdmin::Config.attr_accessible_role
     end
