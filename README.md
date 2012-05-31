@@ -58,7 +58,10 @@ And then run:
 
 This generator will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
 don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
-recommended to protect your data from anonymous users.
+recommended to protect your data from anonymous users. Note: If you do not already have [Devise](https://github.com/plataformatec/devise) 
+installed, make sure you remove the registerable module from the generated user model.  
+
+
 It will modify your `config/routes.rb`, adding:
 
 ```ruby
