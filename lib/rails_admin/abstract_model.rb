@@ -83,7 +83,7 @@ module RailsAdmin
     private
 
     def get_filtering_duration(operator, value)
-      date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+      date_format = I18n.t("rails_admin.admin.misc.filter_date_format", :default => I18n.t("rails_admin.admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
       case operator
       when 'between'
         start_date = value[1].present? ? (Date.strptime(value[1], date_format) rescue false) : false

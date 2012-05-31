@@ -8,7 +8,7 @@ describe RailsAdmin::AbstractModel do
 
     context 'on dates' do
       it 'lists elements within outbound limits' do
-        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+        date_format = I18n.t("rails_admin.admin.misc.filter_date_format", :default => I18n.t("rails_admin.admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
 
         FactoryGirl.create(:field_test, :date_field => Date.strptime("01/01/2012", date_format))
         FactoryGirl.create(:field_test, :date_field => Date.strptime("01/02/2012", date_format))

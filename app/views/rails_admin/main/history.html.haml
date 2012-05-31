@@ -7,18 +7,18 @@
 
 = form_tag("", :method => "get", :class => "search pjax-form form-inline") do
   .well
-    %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("admin.misc.filter")}", :class => 'input-small'}
-    %button.btn.btn-primary{:type => "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+    %input{:name => "query", :type => "search", :value => query, :placeholder => "#{t("rails_admin.admin.misc.filter")}", :class => 'input-small'}
+    %button.btn.btn-primary{:type => "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("rails_admin.admin.misc.refresh")}
       %i.icon-white.icon-refresh
-      = t("admin.misc.refresh")
+      = t("rails_admin.admin.misc.refresh")
 %table#history.table.table-striped.table-condensed
   %thead
     %tr
       - columns = []
-      - columns << { :property_name => "created_at", :css_class => "created_at",:link_text => t('admin.table_headers.created_at') }
-      - columns << { :property_name => "username",   :css_class => "username",  :link_text => t('admin.table_headers.username')   }
-      - columns << { :property_name => "item",       :css_class => "item",      :link_text => t('admin.table_headers.item')       } if @general
-      - columns << { :property_name => "message",    :css_class => "message",   :link_text => t('admin.table_headers.message')    }
+      - columns << { :property_name => "created_at", :css_class => "created_at",:link_text => t('rails_admin.admin.table_headers.created_at') }
+      - columns << { :property_name => "username",   :css_class => "username",  :link_text => t('rails_admin.admin.table_headers.username')   }
+      - columns << { :property_name => "item",       :css_class => "item",      :link_text => t('rails_admin.admin.table_headers.item')       } if @general
+      - columns << { :property_name => "message",    :css_class => "message",   :link_text => t('rails_admin.admin.table_headers.message')    }
 
       - columns.each do |column|
         - property_name = column[:property_name]
@@ -38,5 +38,5 @@
 
 - unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, :theme => 'twitter-bootstrap', :remote => true)
-  = link_to(t("admin.misc.show_all"), send(path_method, params.merge(:all => true)), :class => "show-all btn pjax") unless (tc = @history.total_count) <= @history.size || tc > 100
+  = link_to(t("rails_admin.admin.misc.show_all"), send(path_method, params.merge(:all => true)), :class => "show-all btn pjax") unless (tc = @history.total_count) <= @history.size || tc > 100
 

@@ -16,7 +16,7 @@ module RailsAdmin
       @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
       @fields = @model_config.export.fields.select{|f| @methods.include? f.name }
-      @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
+      @empty = ::I18n.t('rails_admin.admin.export.empty_value_for_associated_objects')
       @associations = {}
 
       (schema.delete(:include) || {}).each do |key, values|
@@ -61,11 +61,11 @@ module RailsAdmin
       csv_string = CSVClass.generate(options[:generator] ? options[:generator].symbolize_keys.delete_if {|key, value| value.blank? } : {}) do |csv|
         unless options[:skip_header]
           csv << @fields.map do |field|
-            output(::I18n.t('admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
+            output(::I18n.t('rails_admin.admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
           end +
           @associations.map do |association_name, option_hash|
             option_hash[:fields].map do |field|
-              output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
+              output(::I18n.t('rails_admin.admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
             end
           end.flatten
         end

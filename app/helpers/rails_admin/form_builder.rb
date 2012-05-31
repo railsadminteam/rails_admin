@@ -14,11 +14,11 @@ module RailsAdmin
       if options[:nested_in]
         action = :nested
       elsif @template.request.format == 'text/javascript'
-        action = :modal      
+        action = :modal
       else
         action = options[:action]
       end
-      
+
       groups = options[:model_config].send(action).with(:form => self, :object => @object, :view => @template).visible_groups
 
       object_infos +
@@ -50,7 +50,7 @@ module RailsAdmin
           end
         end
       else
-        (field.nested_form ? field_for(field) : input_for(field))      
+        (field.nested_form ? field_for(field) : input_for(field))
       end
     end
 
@@ -81,7 +81,7 @@ module RailsAdmin
     def object_infos
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
-      object_label = (object.new_record? ? I18n.t('admin.form.new_model', :name => model_label) : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
+      object_label = (object.new_record? ? I18n.t('rails_admin.admin.form.new_model', :name => model_label) : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
       %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{object_label}"></span>}.html_safe
     end
 
