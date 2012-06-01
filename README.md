@@ -79,7 +79,7 @@ devise_for :admins
 Consider renaming your RailsAdmin namespace:
 
 ```ruby
-mount RailsAdmin::Engine => '/radmin', :as => 'rails_admin'
+mount RailsAdmin::Engine => '/rails-admin', :as => 'rails_admin'
 devise_for :admins
 ```
 
