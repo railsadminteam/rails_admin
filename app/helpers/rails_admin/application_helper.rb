@@ -10,8 +10,8 @@ module RailsAdmin
     end
 
     def current_action?(action, abstract_model = @abstract_model, object = @object)
-      @action.custom_key == action.custom_key && 
-      abstract_model.try(:to_param) == @abstract_model.try(:to_param) && 
+      @action.custom_key == action.custom_key &&
+      abstract_model.try(:to_param) == @abstract_model.try(:to_param) &&
       (@object.try(:persisted?) ? @object.id == object.try(:id) : !object.try(:persisted?))
     end
 
@@ -35,7 +35,7 @@ module RailsAdmin
       object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
 
-      I18n.t("admin.actions.#{action.i18n_key}.#{label}",
+      t("rails_admin.admin.actions.#{action.i18n_key}.#{label}",
         :model_label => model_config.try(:label),
         :model_label_plural => model_config.try(:label_plural),
         :object_label => model_config && object.try(model_config.object_label_method)
@@ -43,10 +43,10 @@ module RailsAdmin
     end
 
     def main_navigation
-      nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller)      
+      nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller)
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
 
-        %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe +
+        %{<li class='nav-header'>#{navigation_label || t('rails_admin.admin.misc.navigation')}</li>}.html_safe +
         nodes.select{|n| n.parent.nil? || !n.parent.to_s.in?(nodes_stack.map{|c| c.abstract_model.model_name }) }.map do |node|
           %{
             <li data-model="#{node.abstract_model.to_param}">
@@ -110,7 +110,7 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, { :class => 'dropdown', :style => 'float:right' } do
-        content_tag(:a, { :class => 'dropdown-toggle', :'data-toggle' => "dropdown", :href => '#' }) { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
+        content_tag(:a, { :class => 'dropdown-toggle', :'data-toggle' => "dropdown", :href => '#' }) { t('rails_admin.admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
         content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
           actions.map do |action|
             content_tag :li do

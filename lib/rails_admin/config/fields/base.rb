@@ -11,7 +11,7 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Groupable
-        
+
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
@@ -120,7 +120,7 @@ module RailsAdmin
 
         # Accessor for field's help text displayed below input field.
         register_instance_option :help do
-          (@help ||= {})[::I18n.locale] ||= (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
+          (@help ||= {})[::I18n.locale] ||= (required? ? I18n.translate("rails_admin.admin.form.required") : I18n.translate("rails_admin.admin.form.optional")) + '. '
         end
 
         register_instance_option :html_attributes do

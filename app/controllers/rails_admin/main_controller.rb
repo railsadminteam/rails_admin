@@ -40,7 +40,7 @@ module RailsAdmin
     end
 
     private
-    
+
     def get_layout
       "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
     end
@@ -77,7 +77,7 @@ module RailsAdmin
     end
 
     def redirect_to_on_success
-      notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
+      notice = t("rails_admin.admin.flash.successful", :name => @model_config.label, :action => t("rails_admin.admin.actions.#{@action.key}.done"))
       if params[:_add_another]
         redirect_to new_path(:return_to => params[:return_to]), :flash => { :success => notice }
       elsif params[:_add_edit]
@@ -103,7 +103,7 @@ module RailsAdmin
     def handle_save_error whereto = :new
       action = params[:action]
 
-      flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
+      flash.now[:error] = t("rails_admin.admin.flash.error", :name => @model_config.label, :action => t("rails_admin.admin.actions.#{@action.key}.done"))
       flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
 
       respond_to do |format|
@@ -114,7 +114,7 @@ module RailsAdmin
 
     def check_for_cancel
       if params[:_continue]
-        redirect_to(back_or_index, :flash => { :info => t("admin.flash.noaction") })
+        redirect_to(back_or_index, :flash => { :info => t("rails_admin.admin.flash.noaction") })
       end
     end
 
