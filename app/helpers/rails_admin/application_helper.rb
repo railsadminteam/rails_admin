@@ -114,7 +114,7 @@ module RailsAdmin
         content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
           actions.map do |action|
             content_tag :li do
-              link_to wording_for(:bulk_link, action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit()"
+              link_to wording_for(:bulk_link, action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"
             end
           end.join.html_safe
         end
