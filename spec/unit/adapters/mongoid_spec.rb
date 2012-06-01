@@ -438,8 +438,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       @abstract_model.get('4f4f0824dcf2315093000000').should be_nil
     end
 
-    it "#first returns first item" do
-      @abstract_model.first.should == @players.first
+    it "#first returns a player" do
+      @players.should include @abstract_model.first
     end
 
     it "#count returns count of items" do
@@ -465,7 +465,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       it "supports limiting" do
-        @abstract_model.all(:limit => 2).to_a.count.should == 2
+        @abstract_model.all(:limit => 2).to_a.should have(2).items
       end
 
       it "supports retrieval by bulk_ids" do

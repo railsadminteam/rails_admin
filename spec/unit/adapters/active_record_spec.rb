@@ -179,8 +179,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       @abstract_model.get('abc').should be_nil
     end
 
-    it "#first returns first item" do
-      @abstract_model.first.should == @players.first
+    it "#first returns a player" do
+      @players.should include @abstract_model.first
     end
 
     it "#count returns count of items" do
@@ -206,7 +206,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       end
 
       it "supports limiting" do
-        @abstract_model.all(:limit => 2).count.should == 2
+        @abstract_model.all(:limit => 2).should have(2).items
       end
 
       it "supports retrieval by bulk_ids" do
