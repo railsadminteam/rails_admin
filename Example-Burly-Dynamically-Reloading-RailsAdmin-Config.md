@@ -1,7 +1,7 @@
 #### Move your RailsAdmin.config block into the app controller for dynamic reloading of changes in dev, etc
 #### Then stare at the various examples below...
 
-````ruby
+```ruby
 class ApplicationController < ActionController::Base
     protect_from_forgery
 
