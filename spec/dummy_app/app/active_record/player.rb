@@ -13,6 +13,10 @@ class Player < ActiveRecord::Base
     record.errors.add(:base, "Player is cheating") if value.to_s =~ /on steroids/
   end
 
+  before_destroy :destroy_hook
+
+  def destroy_hook; end
+
   def draft_id
     self.draft.try :id
   end

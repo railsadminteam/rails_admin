@@ -15,18 +15,26 @@ describe "RailsAdmin Basic Destroy" do
     it "should destroy an object" do
       @player.should be_nil
     end
+
+    it "should show success message" do
+      should have_content('Player successfully deleted')
+    end
   end
 
-  describe "destroy with errors" do
+  describe "handle destroy errors" do
     before(:each) do
-      Player.any_instance.stub(:destroy).and_return false
+      Player.any_instance.stub(:destroy_hook).and_return false
       @player = FactoryGirl.create :player
       visit delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
     end
 
-    it "should destroy an object" do
+    it "should not destroy an object" do
       @player.reload.should be
+    end
+
+    it "should show error message" do
+      should have_content('Player failed to be deleted')
     end
   end
 

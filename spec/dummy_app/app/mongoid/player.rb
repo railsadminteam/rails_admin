@@ -27,6 +27,10 @@ class Player
   has_one :draft, :dependent => :destroy
   has_many :comments, :as => :commentable
 
+  before_destroy :destroy_hook
+
+  def destroy_hook; end
+
   def draft_id
     self.draft.try :id
   end

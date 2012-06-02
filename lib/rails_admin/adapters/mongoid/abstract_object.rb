@@ -37,11 +37,6 @@ RUBY
             end
           end
         end
-
-        def destroy
-          object.destroy
-          object
-        end
       end
     end
   end
