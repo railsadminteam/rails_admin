@@ -5,7 +5,7 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore]
-      AR_ADAPTER = ::ActiveRecord::Base.configurations[Rails.env]['adapter']
+      AR_ADAPTER = Rails.configuration.database_configuration[Rails.env]['adapter']
       LIKE_OPERATOR = AR_ADAPTER == "postgresql" ? 'ILIKE' : 'LIKE'
 
       def new(params = {})
