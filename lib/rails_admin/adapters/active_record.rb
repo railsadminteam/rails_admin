@@ -5,8 +5,14 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore]
-      AR_ADAPTER = Rails.configuration.database_configuration[Rails.env]['adapter']
-      LIKE_OPERATOR = AR_ADAPTER == "postgresql" ? 'ILIKE' : 'LIKE'
+
+      def ar_adapter
+        Rails.configuration.database_configuration[Rails.env]['adapter']
+      end
+
+      def like_operator
+        ar_adapter == "postgresql" ? 'ILIKE' : 'LIKE'
+      end
 
       def new(params = {})
         AbstractObject.new(model.new(params))
@@ -184,7 +190,7 @@ module RailsAdmin
           else
             return
           end
-          ["(#{column} #{LIKE_OPERATOR} ?)", value]
+          ["(#{column} #{like_operator} ?)", value]
         when :date
           start_date, end_date = get_filtering_duration(operator, value)
 
