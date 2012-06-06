@@ -63,8 +63,10 @@ $(document).live 'rails_admin.dom_ready', ->
       # add each nested field to a tab-pane and reference it in the nav
       content.children('.fields:not(.tab-pane)').addClass('tab-pane').each ->
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
-      # init first tab, toggler and content/tabs visibility
-      nav.find("> li > a[data-toggle='tab']:first").tab('show')
+      # only if no tab is set to active
+      if nav.find("> li.active").length == 0
+        # init first tab, toggler and content/tabs visibility
+        nav.find("> li > a[data-toggle='tab']:first").tab('show')
       if nav.children().length == 0
         nav.hide()
         content.hide()
