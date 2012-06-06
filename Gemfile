@@ -32,7 +32,6 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'bson_ext', :platforms => [:ruby, :mswin, :mingw]
   case ENV['CI_ORM_VERSION']
   when 'head'
     gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
@@ -41,6 +40,9 @@ group :mongoid do
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
     gem 'database_cleaner', :git => 'git://github.com/potatosalad/database_cleaner.git'
   else
+    gem 'bson', '1.6.2'
+    gem 'bson_ext', :platforms => [:ruby, :mswin, :mingw]
+    gem 'mongo', '1.6.2'
     gem 'mongoid'
     gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
