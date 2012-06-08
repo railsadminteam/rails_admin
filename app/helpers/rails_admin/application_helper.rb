@@ -46,8 +46,7 @@ module RailsAdmin
       nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller)      
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
 
-        %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe +
-        nodes.select{|n| n.parent.nil? || !n.parent.to_s.in?(nodes_stack.map{|c| c.abstract_model.model_name }) }.map do |node|
+        li_stack = nodes.select{|n| n.parent.nil? || !n.parent.to_s.in?(nodes_stack.map{|c| c.abstract_model.model_name }) }.map do |node|
           %{
             <li data-model="#{node.abstract_model.to_param}">
               <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
@@ -55,6 +54,12 @@ module RailsAdmin
             #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model_name}, 1)}
           }.html_safe
         end.join.html_safe
+
+        if li_stack.present?
+          li_stack = %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + li_stack
+        end
+
+        li_stack
       end.join.html_safe
     end
 
