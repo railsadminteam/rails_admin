@@ -1,18 +1,18 @@
 - object = delete_notice
+- show_enabled = RailsAdmin::Config::Actions.all.map(&:key).include?(:show)
 
 %li{:style => 'display:block; margin-top:10px'}
   %span.label= @abstract_model.pretty_name
-  = link_to @model_config.with(:object => object).object_label, show_path(:model_name => @abstract_model.to_param, :id => object.id)
+  - if show_enabled
+    = link_to @model_config.with(:object => object).object_label, show_path(:model_name => @abstract_model.to_param, :id => object.id)
+  - else
+    = @model_config.with(:object => object).object_label
   %ul
-    - @abstract_model.associations.select{|a| a[:type] == :has_many }.each do |association|
-      - object.send(association[:name]).each do |child|
-        %li
-          - child_config = RailsAdmin.config(child)
-          = association[:pretty_name]
+    - @abstract_model.each_associated_children(object) do |association, child|
+      %li
+        - child_config = RailsAdmin.config(child)
+        = association[:pretty_name]
+        - if show_enabled
           = link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))
-    - @abstract_model.associations.select{|a| a[:type] == :has_one }.each do |association|
-      - if child = object.send(association[:name])
-        %li
-          - child_config = RailsAdmin.config(child)
-          = association[:pretty_name]
-          = link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))
+        - else
+          = child_config.with(:object => child).object_label

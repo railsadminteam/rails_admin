@@ -80,6 +80,21 @@ module RailsAdmin
       model.where(conditions)
     end
 
+    def each_associated_children(object)
+      associations.each do |association|
+        case association[:type]
+        when :has_one
+          if child = object.send(association[:name])
+            yield(association, child)
+          end
+        when :has_many
+          object.send(association[:name]).each do |child|
+            yield(association, child)
+          end
+        end
+      end
+    end
+
     private
 
     def get_filtering_duration(operator, value)
