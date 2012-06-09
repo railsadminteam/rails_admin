@@ -187,6 +187,20 @@ describe RailsAdmin::ApplicationHelper do
       helper.main_navigation.should match /(nav\-header).*(Navigation).*(Balls).*(Comments)/m
     end
 
+    it 'should not draw empty navigation labels' do
+      RailsAdmin.config do |config|
+        config.included_models = [Ball, Comment, Comment::Confirmed]
+        config.model Comment do
+          navigation_label 'Commentz'
+        end
+        config.model Comment::Confirmed do
+          label_plural 'Confirmed'
+        end
+      end
+      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m
+      helper.main_navigation.should_not match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m
+    end
+
     it 'should not show unvisible models' do
       RailsAdmin.config do |config|
         config.included_models = [Ball, Comment]
