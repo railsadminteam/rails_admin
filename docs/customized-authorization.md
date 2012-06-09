@@ -5,7 +5,7 @@ You have access to the controller ('this'), you can decide wether the user shoul
 
 RailsAdmin.config do |config|
   config.authorize_with do 
-    redirect_to root_path unless current_user.try(:admin?)
+    redirect_to root_path unless warden.user.try(:admin?)
   end
 end
 ```
