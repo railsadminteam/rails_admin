@@ -75,7 +75,7 @@ Finally run:
     $ bundle exec rake db:migrate
 
 Optionally, you may wish to set up [Cancan](https://github.com/ryanb/cancan),
-[PaperTrail](https://github.com/airblade/paper_trail), [CKeditor](https://github.com/galetahub/ckeditor)
+[PaperTrail](https://github.com/airblade/paper_trail), [CKeditor](https://github.com/galetahub/ckeditor), [CodeMirror](https://github.com/fixlr/codemirror-rails)
 
 More on that in the [Wiki](https://github.com/sferik/rails_admin/wiki)
 
