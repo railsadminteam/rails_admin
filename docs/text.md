@@ -18,4 +18,6 @@ end
 
 Note that CKeditor won't appear in AJAX-loaded modals, due to CKeditor limitations with AJAX loading/unloading (basically it's crap).
 
+[[Support for Codemirror|https://github.com/sferik/rails_admin/commit/61a7e0e7ec21e4183777aa8944cc4f6cc89b9bdc]] was also added recently
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/text.rb]]
