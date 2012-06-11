@@ -61,4 +61,24 @@ describe "RailsAdmin Basic Destroy" do
     end
   end
 
+  describe 'destroy from show page' do
+    it 'should redirect to the index instead of trying to show the deleted object' do
+      @player = FactoryGirl.create :player
+      visit show_path(:model_name => 'player', :id => @player.id)
+      visit delete_path(:model_name => "player", :id => @player.id)
+      click_button "Yes, I'm sure"
+
+      URI.parse(page.current_url).path.should ==(index_path(:model_name => 'player'))
+    end
+
+    it 'should redirect back to the object on error' do
+      Player.any_instance.stub(:destroy_hook).and_return false
+      @player = FactoryGirl.create :player
+      visit show_path(:model_name => 'player', :id => @player.id)
+      visit delete_path(:model_name => "player", :id => @player.id)
+      click_button "Yes, I'm sure"
+
+      URI.parse(page.current_url).path.should ==(show_path(:model_name => 'player', :id => @player.id))
+    end
+  end
 end
