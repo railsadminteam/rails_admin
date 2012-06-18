@@ -41,6 +41,13 @@ will reduce your compilation time and is recommended.
 Note that this is needed on **Heroku** if you set `compile = false` and don't versionate `public/assets`.
 More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
 
+Also, as of version 0.0.4, you have to add this to successfully precompile assets. This is also needed if you're deploying in **Heroku**.
+(See [[#1192|https://github.com/sferik/rails_admin/issues/1192]] for the issue report and [[#1046|https://github.com/sferik/rails_admin/issues/1046]] for the fix.)
+
+```ruby
+config.assets.precompile += ['rails_admin/rails_admin.css', 'rails_admin/rails_admin.js']
+```
+
 If you still have issue with the asset pipeline:
 
 * make sure you didn't commit your assets in public/assets
