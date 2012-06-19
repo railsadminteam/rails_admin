@@ -399,7 +399,7 @@ RailsAdmin.config do |config|
     field :published do
       read_only true
       pretty_value do
-        bindings[:object].published? ? 'Yes, it's live!' : 'No, in the loop...'
+        bindings[:object].published? ? "Yes, it's live!" : "No, in the loop..."
       end
     end
   end
