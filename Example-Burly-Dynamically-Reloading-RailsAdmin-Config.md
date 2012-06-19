@@ -1,4 +1,4 @@
-## Here a more proper way to play with rails_admin in development mode, no need to move config block everytimes
+## Automatically reload rails_admin configuration when in development mode
 
 ```ruby
 class ApplicationController < ActionController::Base
@@ -13,6 +13,7 @@ private
     models.each do |m|
       RailsAdmin::Config.reset_model(m)
     end
+    RailsAdmin::Config::Actions.reset
 
     load("#{Rails.root}/config/initializers/rails_admin.rb")
   end
