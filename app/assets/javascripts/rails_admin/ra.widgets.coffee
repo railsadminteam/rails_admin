@@ -132,7 +132,6 @@ $(document).live 'rails_admin.dom_ready', ->
       window.CKEDITOR_BASEPATH = options['base_location']
       if not window.CKEDITOR
         $.getScript options['jspath'], (e1) ->
-          alert 'wtf'
           if instance = window.CKEDITOR.instances[this.id]
             instance.destroy(true)
           window.CKEDITOR.replace(textarea, options['options'])
