@@ -126,12 +126,12 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    $('form [data-richtext=ckeditor]').not('.ckeditored').each ->
+    $('form [data-richtext=ckeditor]').not('.ckeditored').each (index, domEle) ->
       options = $(this).data('options')
       textarea = this
       window.CKEDITOR_BASEPATH = options['base_location']
       if not window.CKEDITOR
-        $.getScript options['jspath'], (e1) ->
+        $.getScript options['jspath'], (script, textStatus, jqXHR) ->
           if instance = window.CKEDITOR.instances[this.id]
             instance.destroy(true)
           window.CKEDITOR.replace(textarea, options['options'])
@@ -144,18 +144,18 @@ $(document).live 'rails_admin.dom_ready', ->
 
     #codemirror
 
-    $('form [data-richtext=codemirror]').not('.codemirrored').each ->
+    $('form [data-richtext=codemirror]').not('.codemirrored').each (index, domEle) ->
       options = $(this).data('options')
       textarea = this
       if not window.CodeMirror
-        $.getScript options['jspath'], (e1) ->
-          $.getScript options['locations']['mode'], (e2) ->
+        $.getScript options['jspath'], (script, textStatus, jqXHR) ->
+          $.getScript options['locations']['mode'], (script, textStatus, jqXHR) ->
             $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
             $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
             CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
             $(this).addClass('codemirrored')
       else
-        $.getScript options['locations']['mode'], (e1) ->
+        $.getScript options['locations']['mode'], (script, textStatus, jqXHR) ->
           $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
           CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
           $(this).addClass('codemirrored')
