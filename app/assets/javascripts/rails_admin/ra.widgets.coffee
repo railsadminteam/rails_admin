@@ -126,24 +126,44 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    $('form [data-richtext=ckeditor]').not('.ckeditored').each ->
-      options = $(this).data('options')
-      window.CKEDITOR_BASEPATH = options['base_location']
+    goCkeditors = (array) =>
+      array.each (index, domEle) ->
+        options = $(this).data
+        if instance = window.CKEDITOR.instances[this.id]
+            instance.destroy(true)
+        window.CKEDITOR.replace(this, options['options'])
+        $(this).addClass('ckeditored')
+
+    array = $('form [data-richtext=ckeditor]').not('.ckeditored')
+    if array.length
+      @array = array
       if not window.CKEDITOR
-        $(window.document).append('<script src="' + options['jspath'] + '"><\/script>')
-      if instance = window.CKEDITOR.instances[this.id]
-        instance.destroy(true)
-      window.CKEDITOR.replace(this, options['options'])
-      $(this).addClass('ckeditored')
+        options = $(array[0]).data('options')
+        window.CKEDITOR_BASEPATH = options['base_location']
+        $.getScript options['jspath'], (script, textStatus, jqXHR) =>
+          goCkeditors(@array)
+      else
+        goCkeditors(@array)
 
     #codemirror
 
-    $('form [data-richtext=codemirror]').not('.codemirrored').each ->
-      options = $(this).data('options')
+    goCodeMirrors = (array) =>
+      array.each (index, domEle) ->
+        options = $(this).data('options')
+        textarea = this
+        $.getScript options['locations']['mode'], (script, textStatus, jqXHR) ->
+          $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
+          CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
+          $(textarea).addClass('codemirrored')
+
+    array = $('form [data-richtext=codemirror]').not('.codemirrored')      
+    if array.length
+      @array = array
       if not window.CodeMirror
-        $(window.document).append('<script src="' + options['jspath'] + '" type="text\/javascript"><\/script>')
-        $('head').append('<script src="' + options['locations']['mode'] + '" type="text\/javascript"><\/script>')
+        options = $(array[0]).data('options')
         $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
-        $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
-      CodeMirror.fromTextArea(this,{mode:options['options']['mode'],theme:options['options']['theme']})
-      $(this).addClass('codemirrored')
+        $.getScript options['jspath'], (script, textStatus, jqXHR) =>
+          goCodeMirrors(@array)
+      else
+        goCodeMirrors(@array)
+

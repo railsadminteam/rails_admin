@@ -2,10 +2,10 @@
   if field.ckeditor
     richtext = 'ckeditor'
     js_data = {
-      :jspath => field.ckeditor_location,
+      :jspath => field.ckeditor_location ? field.ckeditor_location : field.ckeditor_base_location + "ckeditor.js",
       :base_location => field.ckeditor_base_location,
       :options => { 
-        :customConfig => field.ckeditor_config_js
+        :customConfig => field.ckeditor_config_js ? field.ckeditor_config_js : field.ckeditor_base_location + "config.js"
       }
     }
   elsif field.codemirror
