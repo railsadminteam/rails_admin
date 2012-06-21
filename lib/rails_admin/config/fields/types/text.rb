@@ -16,12 +16,12 @@ module RailsAdmin
           # If you want to have a different toolbar configuration for CKEditor
           # create your own custom config.js and override this configuration
           register_instance_option(:ckeditor_config_js) do
-            "/assets/ckeditor/config.js"
+            nil
           end
 
           #Use this if you want to point to a cloud instances of CKeditor
           register_instance_option(:ckeditor_location) do
-            '/assets/ckeditor/ckeditor.js'
+            nil
           end
 
           #Use this if you want to point to a cloud instances of the base CKeditor
@@ -62,8 +62,8 @@ module RailsAdmin
 
           register_instance_option(:html_attributes) do
             {
-              :cols => "48",
-              :rows => "3"
+              :cols => '48',
+              :rows => '3'
             }
           end
 
