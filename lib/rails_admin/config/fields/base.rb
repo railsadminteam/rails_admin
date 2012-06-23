@@ -22,7 +22,7 @@ module RailsAdmin
 
           @abstract_model = parent.abstract_model
           @defined = false
-          @name = name
+          @name = name.to_sym
           @order = 0
           @properties = properties
           @section = parent

@@ -2,6 +2,15 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
 
+  describe "#name" do
+    it 'should be normalized to Symbol' do
+      RailsAdmin.config Team do
+        field 'name'
+      end
+      RailsAdmin.config('Team').fields.first.name.should == :name
+    end
+  end
+
   describe "#children_fields" do
     POLYMORPHIC_CHILDREN =
       if CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
