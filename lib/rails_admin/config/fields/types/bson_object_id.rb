@@ -28,7 +28,7 @@ module RailsAdmin
 
           def parse_input(params)
             begin
-              params[name] = (params[name].blank? ? nil : BSON::ObjectId.from_string(params[name])) if params[name].is_a?(::String)
+              params[name] = (params[name].blank? ? nil : abstract_model.object_id_from_string(params[name])) if params[name].is_a?(::String)
             rescue => e
               unless ['BSON::InvalidObjectId', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
                 raise e

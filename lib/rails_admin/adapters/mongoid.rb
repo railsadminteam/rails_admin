@@ -7,6 +7,7 @@ module RailsAdmin
     module Mongoid
       STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
       DISABLED_COLUMN_TYPES = ['Range']
+      ObjectId = (::Mongoid::VERSION >= '3' ? ::Moped::BSON::ObjectId : ::BSON::ObjectId)
 
       def new(params = {})
         AbstractObject.new(model.new)
@@ -141,6 +142,10 @@ module RailsAdmin
         @embedded ||= !!model.associations.values.find{|a| a.macro.to_sym == :embedded_in }
       end
 
+      def object_id_from_string(str)
+        ObjectId.from_string(str)
+      end
+
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
@@ -267,7 +272,7 @@ module RailsAdmin
           return if value.blank?
           { column => { "$in" => Array.wrap(value) } }
         when :belongs_to_association, :bson_object_id
-          object_id = (BSON::ObjectId.from_string(value) rescue nil)
+          object_id = (object_id_from_string(value) rescue nil)
           { column => object_id } if object_id
         end
       end

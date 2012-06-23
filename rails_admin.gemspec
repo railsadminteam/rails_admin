@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'cancan'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'carrierwave'
-  gem.add_development_dependency 'database_cleaner'
+  gem.add_development_dependency 'database_cleaner', '~> 0.8'
   gem.add_development_dependency 'devise'
   gem.add_development_dependency 'dragonfly'
   gem.add_development_dependency 'factory_girl', '~> 2.6'
