@@ -28,7 +28,7 @@ end
 
 ***
 
-## Dirty way
+## Less Desirable Method ("Dirty" just sounds so... dirty.)
 
 #### Move your RailsAdmin.config block into the app controller for dynamic reloading of changes in dev, etc
 #### Then stare at the various examples below...
