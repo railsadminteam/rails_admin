@@ -39,9 +39,10 @@ group :mongoid do
     # For now, carrierwave-mongoid's mongoid dependency is restricted to '~> 2.1'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
   else
-    gem 'bson', '1.6.2'
-    gem 'bson_ext', :platforms => [:ruby, :mswin, :mingw]
-    gem 'mongo', '1.6.2'
+    platforms :ruby, :mswin, :mingw do
+      gem 'bson', '1.6.2'
+      gem 'bson_ext'
+    end
     gem 'mongoid'
     gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
