@@ -90,7 +90,13 @@ module RailsAdmin
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
       return unless _params.present?
       fields = model_config.send(action).fields
-      fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }
+      fields.select{ |f| f.respond_to?(:parse_input) }.each do |f|
+        begin
+          f.parse_input(_params)
+        rescue Exception => e
+          @object.errors.add(f.label, e.message )
+        end
+      end
 
       fields.select(&:nested_form).each do |association|
         children_params = association.multiple? ? _params[association.method_name].try(:values) : [_params[association.method_name]].compact

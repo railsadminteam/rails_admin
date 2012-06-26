@@ -75,11 +75,11 @@
       this.columns.left.append(this.collection)
                           .append(this.addAll);
 
-      this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
+      this.add = $('<a href="#" class="ra-multiselect-item-add"><span class="ui-icon ui-icon-circle-triangle-e">' + this.options.regional.add + '</span></a>');
 
-      this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
+      this.remove = $('<a href="#" class="ra-multiselect-item-remove"><span class="ui-icon ui-icon-circle-triangle-w">' + this.options.regional.remove + '</span></a>');
 
-      this.columns.center.append(this.add).append(this.remove)
+      this.columns.center.append(this.add).append(this.remove);
       if (this.options.sortable) {
         this.up = $('<a href="#" class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + this.options.regional.up + '</a>');
         this.down = $('<a href="#" class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + this.options.regional.down + '</a>');
