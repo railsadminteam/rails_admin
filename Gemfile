@@ -40,7 +40,7 @@ group :mongoid do
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
   else
     platforms :ruby, :mswin, :mingw do
-      gem 'bson', '1.6.2'
+      gem 'bson'
       gem 'bson_ext'
     end
     gem 'mongoid'
