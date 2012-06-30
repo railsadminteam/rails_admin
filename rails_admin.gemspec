@@ -38,5 +38,5 @@ Gem::Specification.new do |gem|
   gem.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
   gem.summary = %q{Admin for Rails}
   gem.test_files = Dir['spec/**/*']
-  gem.version = RailsAdmin::VERSION
+  gem.version = RailsAdmin::Version
 end
