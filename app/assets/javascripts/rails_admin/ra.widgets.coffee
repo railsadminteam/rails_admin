@@ -120,7 +120,7 @@ $(document).live 'rails_admin.dom_ready', ->
               xhr.setRequestHeader("Accept", "application/json")
             success: (data, status, xhr) ->
               html = '<option></option>'
-              $(data).each (i, el) ->
+              $(data.main).each (i, el) ->
                 html += '<option value="' + el.id + '">' + el.label + '</option>'
               object_select.html(html)
 
