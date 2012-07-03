@@ -173,6 +173,9 @@ module RailsAdmin
         when :boolean
           return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
           return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
+        when :decimal
+          return if value.blank?
+          ["(#{column} = ?)", value.to_f] if value.to_f.to_s == value
         when :integer, :belongs_to_association
           return if value.blank?
           ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value

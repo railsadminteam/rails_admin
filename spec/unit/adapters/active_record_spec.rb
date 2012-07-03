@@ -323,6 +323,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       @abstract_model.send(:build_statement, :field, :integer, 'word', nil).should be_nil
     end
 
+    it "supports decimal type query" do
+      @abstract_model.send(:build_statement, :field, :decimal, "1.1", nil).should == ["(field = ?)", 1.1]
+      @abstract_model.send(:build_statement, :field, :decimal, 'word', nil).should be_nil
+    end
+
     it "supports string type query" do
       @abstract_model.send(:build_statement, :field, :string, "", nil).should be_nil
       @abstract_model.send(:build_statement, :field, :string, "foo", "was").should be_nil
