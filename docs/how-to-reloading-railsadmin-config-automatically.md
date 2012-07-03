@@ -19,7 +19,7 @@ private
   end
 
   def rails_admin_path?
-    true if controller_path =~ /rails_admin/ && Rails.env == "development"
+    controller_path =~ /rails_admin/ && Rails.env == "development"
   end
 
 end
