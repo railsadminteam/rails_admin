@@ -70,7 +70,7 @@ platforms :jruby, :mingw_18, :ruby_18 do
 end
 
 group :development, :test do
-  gem 'cancan'
+  gem 'cancan', '1.6.7'
   gem 'devise'
   gem 'paperclip', '~> 2.7'
 end
