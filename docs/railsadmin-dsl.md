@@ -491,7 +491,7 @@ end
 
 ### Configuring fields ###
 
-** Fields - exclude some fields **
+**Fields - exclude some fields**
 
 By default *all* fields found on your model will be added to list/edit/export views,  if no field is found for the section and model.
 
@@ -539,7 +539,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-** Fields - include some fields **
+**Fields - include some fields**
 
 It is also possible to add fields by group and configure them by group:
 
