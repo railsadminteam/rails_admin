@@ -31,7 +31,7 @@ config.assets.enabled = true
 ```
 
 Please note that `initializer/rails_admin.rb` is very likely to require access to your DB.
-Thus if don't need access to your application at asset compilation time,
+Thus, if you don't need access to your application at asset compilation time,
 
 ```ruby
 config.assets.initialize_on_precompile = false
