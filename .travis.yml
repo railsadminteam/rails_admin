@@ -9,10 +9,13 @@ env:
   - "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
   - "CI_ORM=active_record CI_DB_ADAPTER=mysql"
   - "CI_ORM=mongoid"
+  - "CI_ORM=mongoid CI_ORM_VERSION=2.4"
   - "CI_ORM=mongoid CI_ORM_VERSION=head"
 language: ruby
 matrix:
   exclude:
+    - rvm: 1.8.7
+      env: "CI_ORM=mongoid"
     - rvm: 1.8.7
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
     - rvm: jruby-19mode
@@ -20,11 +23,15 @@ matrix:
     - rvm: jruby-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
     - rvm: jruby-19mode
+      env: "CI_ORM=mongoid CI_ORM_VERSION=2.4"
+    - rvm: jruby-19mode
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
     - rvm: rbx-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
     - rvm: rbx-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
+    - rvm: rbx-19mode
+      env: "CI_ORM=mongoid CI_ORM_VERSION=2.4"
     - rvm: rbx-19mode
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
   allow_failures:

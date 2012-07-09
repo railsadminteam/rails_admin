@@ -33,19 +33,21 @@ end
 
 group :mongoid do
   case ENV['CI_ORM_VERSION']
-  when 'head'
-    gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
-    gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/mshibuya/mongoid-paperclip.git', :branch => 'fix-stop-patching-logger'
-    # For now, carrierwave-mongoid's mongoid dependency is restricted to '~> 2.1'
-    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/tanordheim/carrierwave-mongoid.git', :branch => 'mongoid_3_0'
-  else
+  when '2.4'
     platforms :ruby, :mswin, :mingw do
-      gem 'bson'
       gem 'bson_ext'
     end
-    gem 'mongoid'
+    gem 'mongoid', '~> 2.4'
     gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+  when 'head'
+    gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
+    gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/meskyanichi/mongoid-paperclip.git', :branch => 'develop'
+    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/jnicklas/carrierwave-mongoid.git', :branch => 'mongoid-3.0'
+  else
+    gem 'mongoid', '~> 3.0.0'
+    gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/meskyanichi/mongoid-paperclip.git', :branch => 'develop'
+    gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/jnicklas/carrierwave-mongoid.git', :branch => 'mongoid-3.0'
   end
 end
 

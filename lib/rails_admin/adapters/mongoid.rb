@@ -36,7 +36,7 @@ module RailsAdmin
 
       def all(options = {},scope=nil)
         scope ||= self.scoped
-        scope = scope.includes(options[:include]) if options[:include]
+        scope = scope.includes(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.any_in(:_id => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(query_conditions(options[:query])) if options[:query]
