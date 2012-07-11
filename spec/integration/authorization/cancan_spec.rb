@@ -9,7 +9,9 @@ class Ability
       can :manage, Player if user.roles.include? :manage_player
       can :read, Player, :retired => false if user.roles.include? :read_player
       can :create, Player, :suspended => true if user.roles.include? :create_player
+      can :create, Player, :id => 2 if user.roles.include? :create_player
       can :update, Player, :retired => false if user.roles.include? :update_player
+      can :update, Player, :id => 2 if user.roles.include? :update_player
       can :destroy, Player, :retired => false if user.roles.include? :destroy_player
       can :history, Player, :retired => false if user.roles.include? :history_player
       can :show_in_app, Player, :retired => false if user.roles.include? :show_in_app_player
@@ -128,6 +130,7 @@ describe "RailsAdmin CanCan Authorization" do
       should_not have_content("Edit")
 
       @player = RailsAdmin::AbstractModel.new("Player").first
+      @player.id.should eql(1)
       @player.name.should eql("Jackie Robinson")
       @player.number.should eql(42)
       @player.position.should eql("Second baseman")

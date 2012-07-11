@@ -38,9 +38,9 @@ module RailsAdmin
               
               @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
               @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
-                @object.send("#{name}=", value)
+                @object.send("#{name}=", value) unless name == :id
               end
-              
+
               if @object.save
                 @auditing_adapter && @auditing_adapter.create_object("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
                 respond_to do |format|
