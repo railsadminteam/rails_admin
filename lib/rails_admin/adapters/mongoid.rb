@@ -239,9 +239,9 @@ module RailsAdmin
           when 'default', 'like'
             Regexp.compile(Regexp.escape(value), Regexp::IGNORECASE)
           when 'starts_with'
-            Regexp.compile("^#{Regexp.escape(value)}")
+            Regexp.compile("^#{Regexp.escape(value)}", Regexp::IGNORECASE)
           when 'ends_with'
-            Regexp.compile("#{Regexp.escape(value)}$")
+            Regexp.compile("#{Regexp.escape(value)}$", Regexp::IGNORECASE)
           when 'is', '='
             value.to_s
           else
