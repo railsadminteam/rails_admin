@@ -36,6 +36,7 @@ matrix:
       env: "CI_ORM=mongoid CI_ORM_VERSION=head"
   allow_failures:
     - env: "CI_ORM=mongoid CI_ORM_VERSION=head"
+    - rvm: jruby-19mode
     - rvm: rbx-19mode
 notifications:
   irc: "irc.freenode.org#railsadmin"
