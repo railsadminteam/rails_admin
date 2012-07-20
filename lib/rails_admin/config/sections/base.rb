@@ -23,6 +23,23 @@ module RailsAdmin
 
           @abstract_model = root.abstract_model
         end
+
+        def inspect
+          "#<#{self.class.name} #{
+            instance_variables.map do |v|
+              value = instance_variable_get(v)
+              if [:@parent, :@root, :@abstract_model].include? v
+                if value.respond_to? :name
+                  "#{v}=#{value.name.inspect}"
+                else
+                  "#{v}=#{value.class.name}"
+                end
+              else
+                "#{v}=#{value.inspect}"
+              end
+            end.join(", ")
+          }>"
+        end
       end
     end
   end
