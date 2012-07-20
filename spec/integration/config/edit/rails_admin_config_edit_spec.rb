@@ -853,6 +853,14 @@ describe "RailsAdmin Config DSL Edit Section" do
         should have_selector('.fields_blueprint .remove_nested_fields')
       end
     end
+
+    describe "when a field which have the same name of nested_in field's" do
+      it "should not hide fields which is not associated with nesting parent field's model" do
+        visit new_path(:model_name => "field_test")
+        should_not have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
+        should have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id')
+      end
+    end
   end
 
   describe 'embedded model', :mongoid => true do
