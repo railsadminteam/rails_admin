@@ -2,6 +2,8 @@
 
 [[Examples]]
 
+* [[How to: Reloading RailsAdmin Config Automatically]](in development mode)
+
 [[Roadmap]]
 
 ### Configuration
