@@ -82,7 +82,7 @@ module RailsAdmin
 
       def properties
         columns = model.columns.reject do |c|
-          c.type.blank? || DISABLED_COLUMN_TYPES.include?(c.type.to_sym) || DISABLED_COLUMN_MATCHERS.any? {|matcher| matcher.match(c.type)}
+          c.type.blank? || DISABLED_COLUMN_TYPES.include?(c.type.to_sym) || DISABLED_COLUMN_MATCHERS.any? {|matcher| matcher.match(c.type.to_s)}
         end
         columns.map do |property|
           {
