@@ -30,7 +30,7 @@ end
 
 ### Solving incompatibility with authentication in production
 
-There's a solution proposed by [@adamkangas](https://github.com/adamkangas), for context, see #147
+There's a solution proposed by [@adamkangas](https://github.com/adamkangas), for context, see [#147](https://github.com/NoamB/sorcery/issues/147)
 
 This requires forcing `Sorcery::Controller` inclusion at the end of `sorcery.rb` initializer:
 
