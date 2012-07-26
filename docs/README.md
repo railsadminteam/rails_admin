@@ -88,6 +88,7 @@
 * [[Authentication]]
   * [[With Devise (installed by default)|https://github.com/plataformatec/devise]]
   * [[Manually|https://gist.github.com/1278355]]
+  * [[Sorcery]]
   * [[None|no authentification]]
 * [[Authorization setup]]
   * [[CanCan (recommended)|CanCan]]
