@@ -2,7 +2,7 @@ Here are listed community proposed solutions to solve Sorcery and RailsAdmin com
 
 ### Authentication
 
-This was proposed by David Tuite on (SO)[http://stackoverflow.com/questions/9815062/rails-admin-with-sorcery/9834837]
+This was proposed by David Tuite on [SO](http://stackoverflow.com/questions/9815062/rails-admin-with-sorcery/9834837)
 
 Authentication with Sorcery requires manual tweaking of `rails_admin.rb` initializer.
 
