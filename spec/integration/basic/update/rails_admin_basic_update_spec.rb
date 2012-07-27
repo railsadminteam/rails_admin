@@ -143,6 +143,12 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with serialized objects" do
     before(:each) do
+      RailsAdmin.config do |c|
+        c.model User do
+          configure :roles, :serialized
+        end
+      end
+
       @user = FactoryGirl.create :user
 
       visit edit_path(:model_name => "user", :id => @user.id)

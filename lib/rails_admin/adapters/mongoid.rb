@@ -83,55 +83,18 @@ module RailsAdmin
       def properties
         fields = model.fields.reject{|name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
         fields.map do |name,field|
-          ar_type = {
-            "Array"          => { :type => :serialized },
-            "BigDecimal"     => { :type => :decimal },
-            "Boolean"        => { :type => :boolean },
-            "BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
-            "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
-            "Date"           => { :type => :date },
-            "DateTime"       => { :type => :datetime },
-            "Float"          => { :type => :float },
-            "Hash"           => { :type => :serialized },
-            "Integer"        => { :type => :integer },
-            "Object"         => (
-              if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
-                { :type => :bson_object_id }
-              else
-                { :type => :string, :length => 255 }
-              end
-            ),
-            "String"         => (
-              if (length = length_validation_lookup(name)) && length < 256
-                { :type => :string, :length => length }
-              elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
-                { :type => :string, :length => 255 }
-              else
-                { :type => :text }
-              end
-            ),
-            "Symbol"         => { :type => :string, :length => 255 },
-            "Time"           => { :type => :datetime },
-          }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
-
           {
             :name => field.name.to_sym,
             :length => nil,
             :pretty_name => field.name.to_s.gsub('_', ' ').strip.capitalize,
             :nullable? => true,
             :serial? => false,
-          }.merge(ar_type)
+          }.merge(type_lookup(name, field))
         end
       end
 
       def table_name
         model.collection_name.to_s
-      end
-
-      def serialized_attributes
-        # Mongoid Array and Hash type columns are mapped to RA serialized type
-        # through type detection in self#properties.
-        []
       end
 
       def encoding
@@ -275,6 +238,39 @@ module RailsAdmin
           object_id = (object_id_from_string(value) rescue nil)
           { column => object_id } if object_id
         end
+      end
+
+      def type_lookup(name, field)
+        {
+          "Array"          => { :type => :serialized },
+          "BigDecimal"     => { :type => :decimal },
+          "Boolean"        => { :type => :boolean },
+          "BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
+          "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
+          "Date"           => { :type => :date },
+          "DateTime"       => { :type => :datetime },
+          "Float"          => { :type => :float },
+          "Hash"           => { :type => :serialized },
+          "Integer"        => { :type => :integer },
+          "Object"         => (
+            if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
+              { :type => :bson_object_id }
+            else
+              { :type => :string, :length => 255 }
+            end
+          ),
+            "String"         => (
+              if (length = length_validation_lookup(name)) && length < 256
+                { :type => :string, :length => length }
+              elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
+                { :type => :string, :length => 255 }
+              else
+                { :type => :text }
+              end
+          ),
+            "Symbol"         => { :type => :string, :length => 255 },
+            "Time"           => { :type => :datetime },
+        }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
       end
 
       def association_model_proc_lookup(association)

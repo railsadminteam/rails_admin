@@ -960,101 +960,185 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "Enum field support" do
-    it "should auto-detect enumeration when object responds to '\#{method}_enum'" do
-      Team.class_eval do
-        def color_enum
-          ["blue", "green", "red"]
-        end
-      end
-      RailsAdmin.config Team do
-        edit do
-          field :color
-        end
-      end
-      visit new_path(:model_name => "team")
-      should have_selector(".enum_type select")
-      should have_content("green")
-      Team.send(:remove_method, :color_enum) # Reset
-    end
-
-    it "should auto-detect enumeration when class responds to '::{method}_enum'" do
-      Team.instance_eval do
-        def color_enum
-          ["blue", "green", "red"]
-        end
-      end
-      RailsAdmin.config Team do
-        edit do
-          field :color
-        end
-      end
-      visit new_path(:model_name => "team")
-      should have_selector(".enum_type select")
-      should have_content("green")
-      Team.instance_eval { undef :color_enum } # Reset
-    end
-
-    it "should allow configuration of the enum method" do
-      Team.class_eval do
-        def color_list
-          ["blue", "green", "red"]
-        end
-      end
-      RailsAdmin.config Team do
-        edit do
-          field :color, :enum do
-            enum_method :color_list
+    describe "when object responds to '\#{method}_enum'" do
+      before do
+        Team.class_eval do
+          def color_enum
+            ["blue", "green", "red"]
           end
         end
-      end
-      visit new_path(:model_name => "team")
-      should have_selector(".enum_type select")
-      should have_content("green")
-      Team.send(:remove_method, :color_list) # Reset
-    end
-
-    it "should allow configuration of the enum class method" do
-      Team.instance_eval do
-        def color_list
-          ["blue", "green", "red"]
-        end
-      end
-      RailsAdmin.config Team do
-        edit do
-          field :color, :enum do
-            enum_method :color_list
+        RailsAdmin.config Team do
+          edit do
+            field :color
           end
         end
+        visit new_path(:model_name => "team")
       end
-      visit new_path(:model_name => "team")
-      should have_selector(".enum_type select")
-      should have_content("green")
-      Team.instance_eval { undef :color_list } # Reset
+
+      after do
+        Team.send(:remove_method, :color_enum)
+      end
+
+      it "should auto-detect enumeration" do
+        should have_selector(".enum_type select")
+        should_not have_selector(".enum_type select[multiple]")
+        should have_content("green")
+      end
     end
 
-    it "should allow direct listing of enumeration options and override enum method" do
-      Team.class_eval do
-        def color_list
-          ["blue", "green", "red"]
+    describe "when class responds to '\#{method}_enum'" do
+      before do
+        Team.instance_eval do
+          def color_enum
+            ["blue", "green", "red"]
+          end
         end
+        RailsAdmin.config Team do
+          edit do
+            field :color
+          end
+        end
+        visit new_path(:model_name => "team")
       end
-      RailsAdmin.config Team do
-        edit do
-          field :color, :enum do
-            enum_method :color_list
-            enum do
-              ["yellow", "black"]
+
+      after do
+        Team.instance_eval { undef :color_enum }
+      end
+
+      it "should auto-detect enumeration" do
+        should have_selector(".enum_type select")
+        should have_content("green")
+      end
+    end
+
+    describe "the enum instance method" do
+      before do
+        Team.class_eval do
+          def color_list
+            ["blue", "green", "red"]
+          end
+        end
+        RailsAdmin.config Team do
+          edit do
+            field :color, :enum do
+              enum_method :color_list
             end
           end
         end
+        visit new_path(:model_name => "team")
       end
-      visit new_path(:model_name => "team")
-      should have_selector(".enum_type select")
-      should have_no_content("green")
-      should have_content("yellow")
-      Team.send(:remove_method, :color_list) # Reset
+
+      after do
+        Team.send(:remove_method, :color_list)
+      end
+
+      it "should allow configuration" do
+        should have_selector(".enum_type select")
+        should have_content("green")
+      end
     end
 
+    describe "the enum class method" do
+      before do
+        Team.instance_eval do
+          def color_list
+            ["blue", "green", "red"]
+          end
+        end
+        RailsAdmin.config Team do
+          edit do
+            field :color, :enum do
+              enum_method :color_list
+            end
+          end
+        end
+        visit new_path(:model_name => "team")
+      end
+
+      after do
+        Team.instance_eval { undef :color_list }
+      end
+
+      it "should allow configuration" do
+        should have_selector(".enum_type select")
+        should have_content("green")
+      end
+    end
+
+    describe "when overriding enum configuration" do
+      before do
+        Team.class_eval do
+          def color_list
+            ["blue", "green", "red"]
+          end
+        end
+        RailsAdmin.config Team do
+          edit do
+            field :color, :enum do
+              enum_method :color_list
+              enum do
+                ["yellow", "black"]
+              end
+            end
+          end
+        end
+        visit new_path(:model_name => "team")
+      end
+
+      after do
+        Team.send(:remove_method, :color_list)
+      end
+
+      it "should allow direct listing of enumeration options and override enum method" do
+        should have_selector(".enum_type select")
+        should have_no_content("green")
+        should have_content("yellow")
+      end
+    end
+
+    describe "when serialize is enabled in ActiveRecord model", :active_record => true do
+      before do
+        Team.instance_eval do
+          serialize :color
+          def color_enum
+            ["blue", "green", "red"]
+          end
+        end
+        visit new_path(:model_name => "team")
+      end
+
+      after do
+        Team.serialized_attributes.clear
+        Team.instance_eval { undef :color_enum }
+      end
+
+      it "should make enumeration multi-selectable" do
+        should have_selector(".enum_type select[multiple]")
+      end
+    end
+
+    describe "when serialize is enabled in Mongoid model", :mongoid => true do
+      before do
+        Team.instance_eval do
+          field :color, :type => Array
+          def color_enum
+            ["blue", "green", "red"]
+          end
+        end
+        visit new_path(:model_name => "team")
+      end
+
+      after do
+        Team.instance_eval do
+          field :color, :type => String
+          undef :color_enum
+        end
+      end
+
+      it "should make enumeration multi-selectable" do
+        should have_selector(".enum_type select[multiple]")
+      end
+    end
   end
 
   describe "ColorPicker Support" do

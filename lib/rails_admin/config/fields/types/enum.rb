@@ -28,6 +28,10 @@ module RailsAdmin
               value.presence || ' - '
             end
           end
+
+          register_instance_option(:multiple?) do
+            properties && [:serialized].include?(properties[:type])
+          end
         end
       end
     end

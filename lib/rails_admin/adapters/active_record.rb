@@ -88,20 +88,15 @@ module RailsAdmin
           {
             :name => property.name.to_sym,
             :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
-            :type => property.type,
             :length => property.limit,
             :nullable? => property.null,
             :serial? => property.primary,
-          }
+          }.merge(type_lookup(property))
         end
       end
 
       def table_name
         model.table_name
-      end
-
-      def serialized_attributes
-        model.serialized_attributes.keys
       end
 
       def encoding
@@ -220,6 +215,14 @@ module RailsAdmin
         when :enum
           return if value.blank?
           ["(#{column} IN (?))", Array.wrap(value)]
+        end
+      end
+
+      def type_lookup(property)
+        if model.serialized_attributes[property.name.to_s]
+          {:type => :serialized}
+        else
+          {:type => property.type}
         end
       end
 

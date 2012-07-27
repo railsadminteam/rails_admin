@@ -151,13 +151,14 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
   
 
   describe "#properties" do
-    before do
-      @abstract_model = RailsAdmin::AbstractModel.new('Player')
+    it "returns parameters of string-type field" do
+      RailsAdmin::AbstractModel.new('Player').properties.select{|f| f[:name] == :name}.should ==
+        [{:name => :name, :pretty_name => "Name", :type => :string, :length => 100, :nullable? => false, :serial? => false}]
     end
 
-    it "returns parameters of string-type field" do
-      @abstract_model.properties.select{|f| f[:name] == :name}.should ==
-        [{:name => :name, :pretty_name => "Name", :type => :string, :length => 100, :nullable? => false, :serial? => false}]
+    it "maps serialized attribute to :serialized field type" do
+      RailsAdmin::AbstractModel.new('User').properties.find{|f| f[:name] == :roles}.should ==
+        {:name => :roles, :pretty_name => "Roles", :length => 255, :nullable? => true, :serial? => false, :type => :serialized}
     end
   end
 
@@ -369,10 +370,6 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it "#table_name works" do
       @abstract_model.table_name.should == 'players'
-    end
-
-    it "#serialized_attributes works" do
-      RailsAdmin::AbstractModel.new('User').serialized_attributes.should == ["roles"]
     end
   end
 end
