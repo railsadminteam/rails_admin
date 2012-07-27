@@ -47,7 +47,7 @@ describe "RailsAdmin CanCan Authorization" do
 
   describe "with no roles" do
     before(:each) do
-      @user.update_attribute(:roles, [])
+      @user.update_attributes(:roles => [])
     end
 
     it "GET /admin should raise CanCan::AccessDenied" do
@@ -63,7 +63,7 @@ describe "RailsAdmin CanCan Authorization" do
 
   describe "with read player role" do
     before(:each) do
-      @user.update_attribute(:roles, [:admin, :read_player])
+      @user.update_attributes(:roles => [:admin, :read_player])
     end
 
     it "GET /admin should show Player but not League" do
@@ -111,7 +111,7 @@ describe "RailsAdmin CanCan Authorization" do
 
   describe "with create and read player role" do
     before(:each) do
-      @user.update_attribute(:roles, [:admin, :read_player, :create_player])
+      @user.update_attributes(:roles => [:admin, :read_player, :create_player])
     end
 
     it "GET /admin/player/new should render and create record upon submission" do
@@ -144,7 +144,7 @@ describe "RailsAdmin CanCan Authorization" do
 
   describe "with update and read player role" do
     before(:each) do
-      @user.update_attribute(:roles, [:admin, :read_player, :update_player])
+      @user.update_attributes(:roles => [:admin, :read_player, :update_player])
     end
 
     it "GET /admin/player/1/edit should render and update record upon submission" do
@@ -179,7 +179,7 @@ describe "RailsAdmin CanCan Authorization" do
   describe "with history role" do
     it 'shows links to history action' do
 
-      @user.update_attribute(:roles, [:admin, :read_player, :history_player])
+      @user.update_attributes(:roles => [:admin, :read_player, :history_player])
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => "player")
@@ -200,7 +200,7 @@ describe "RailsAdmin CanCan Authorization" do
   describe "with show in app role" do
     it 'shows links to show in app action' do
 
-      @user.update_attribute(:roles, [:admin, :read_player, :show_in_app_player])
+      @user.update_attributes(:roles => [:admin, :read_player, :show_in_app_player])
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => "player")
@@ -223,7 +223,7 @@ describe "RailsAdmin CanCan Authorization" do
   describe "with all roles" do
     it 'shows links to all actions' do
 
-      @user.update_attribute(:roles, [:admin, :manage_player])
+      @user.update_attributes(:roles => [:admin, :manage_player])
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => "player")
@@ -245,7 +245,7 @@ describe "RailsAdmin CanCan Authorization" do
 
   describe "with destroy and read player role" do
     before(:each) do
-      @user.update_attribute(:roles, [:admin, :read_player, :destroy_player])
+      @user.update_attributes(:roles => [:admin, :read_player, :destroy_player])
     end
 
     it "GET /admin/player/1/delete should render and destroy record upon submission" do
@@ -286,7 +286,7 @@ describe "RailsAdmin CanCan Authorization" do
 
   describe "with exception role" do
     it "GET /admin/player/bulk_delete should render records which are authorized to" do
-      @user.update_attribute(:roles, [:admin, :test_exception])
+      @user.update_attributes(:roles => [:admin, :test_exception])
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
@@ -297,7 +297,7 @@ describe "RailsAdmin CanCan Authorization" do
     end
 
     it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
-      @user.update_attribute(:roles, [:admin, :test_exception])
+      @user.update_attributes(:roles => [:admin, :test_exception])
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
@@ -316,7 +316,7 @@ describe "RailsAdmin CanCan Authorization" do
 
     describe "with admin role only" do
       before(:each) do
-        @user.update_attribute(:roles, [:admin])
+        @user.update_attributes(:roles => [:admin])
       end
 
       it "GET /admin/team should render successfully" do

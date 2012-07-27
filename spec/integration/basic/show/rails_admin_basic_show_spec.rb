@@ -39,7 +39,7 @@ describe "RailsAdmin Basic Show" do
     before(:each) do
       @player = FactoryGirl.create :player
       @team   = FactoryGirl.create :team
-      @player.update_attribute(:team_id, @team.id)
+      @player.update_attributes(:team_id => @team.id)
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
