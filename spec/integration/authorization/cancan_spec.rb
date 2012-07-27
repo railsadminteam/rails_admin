@@ -4,6 +4,7 @@ class Ability
   include CanCan::Ability
   def initialize(user)
     can :access, :rails_admin if user.roles.include? :admin
+    cannot :statistics
     unless user.roles.include? :test_exception
       can :dashboard
       can :manage, Player if user.roles.include? :manage_player
@@ -29,6 +30,7 @@ class AdminAbility
     can :access, :rails_admin if user.roles.include? :admin
     can :show_in_app, :all
     can :manage, :all
+    can :statistics
   end
 end
 
@@ -72,6 +74,11 @@ describe "RailsAdmin CanCan Authorization" do
       body.should_not have_content("League")
       body.should_not have_content("Add new")
     end
+
+    it "GET /admin/ should not show statistics" do
+      visit dashboard_path
+      body.should_not have_content('Records')
+    end    
 
     it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
       # ensure :name column to be shown
@@ -352,7 +359,11 @@ describe "RailsAdmin CanCan Authorization" do
         visit delete_path(:model_name => "player", :id => @player.id)
         page.status_code.should == 200
       end
+
+      it "GET /admin/ should show statistics" do
+        visit dashboard_path
+        body.should have_content('Records')
+      end
     end
   end
-
 end
