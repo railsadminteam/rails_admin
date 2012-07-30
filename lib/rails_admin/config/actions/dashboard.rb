@@ -15,18 +15,20 @@ module RailsAdmin
         register_instance_option :controller do
           Proc.new do
             @history = @auditing_adapter && @auditing_adapter.latest || []
-            @abstract_models = RailsAdmin::Config.visible_models(:controller => self).map(&:abstract_model)
+            if RailsAdmin::Config.statistics
+              @abstract_models = RailsAdmin::Config.visible_models(:controller => self).map(&:abstract_model)
 
-            @most_recent_changes = {}
-            @count = {}
-            @max = 0
-            @abstract_models.each do |t|
-              scope = @authorization_adapter && @authorization_adapter.query(:index, t)
-              current_count = t.count({}, scope)
-              @max = current_count > @max ? current_count : @max
-              @count[t.pretty_name] = current_count
-              if t.properties.find{|c| c[:name] == :updated_at }
-                @most_recent_changes[t.pretty_name] = t.first(:sort => :updated_at).try(:updated_at)
+              @most_recent_changes = {}
+              @count = {}
+              @max = 0
+              @abstract_models.each do |t|
+                scope = @authorization_adapter && @authorization_adapter.query(:index, t)
+                current_count = t.count({}, scope)
+                @max = current_count > @max ? current_count : @max
+                @count[t.pretty_name] = current_count
+                if t.properties.find{|c| c[:name] == :updated_at }
+                  @most_recent_changes[t.pretty_name] = t.first(:sort => :updated_at).try(:updated_at)
+                end
               end
             end
             render @action.template_name, :status => (flash[:error].present? ? :not_found : 200)
