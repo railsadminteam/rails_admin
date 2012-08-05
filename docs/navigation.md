@@ -81,8 +81,7 @@ accessors will be appended with ? whereas the writers will not be. That is, if
 you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
 
-**Create a navigation_label in navigation**
-
+**Treeview List**
 ```ruby
 # Given there are the following models: League, Team and Division
 
@@ -104,6 +103,8 @@ Obtained navigation:
       Division
       Team
     ...
+
+**Create a navigation_label in navigation**
 
 You probably want to change the name of the navigation_label.
 This can be easily achieved with the 'navigation_label' method of the parent model.
