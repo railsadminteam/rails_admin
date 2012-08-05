@@ -83,6 +83,23 @@ module RailsAdmin
       def method_missing(m, *args, &block)
         self.send(:base).send(m, *args, &block)
       end
+
+      def inspect
+        "#<#{self.class.name}[#{abstract_model.model.name}] #{
+          instance_variables.map do |v|
+            value = instance_variable_get(v)
+            if [:@parent, :@root].include? v
+              if value.respond_to? :name
+                "#{v}=#{value.name.inspect}"
+              else
+                "#{v}=#{value.class.name}"
+              end
+            else
+              "#{v}=#{value.inspect}"
+            end
+          end.join(", ")
+        }>"
+      end
     end
   end
 end

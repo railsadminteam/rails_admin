@@ -11,7 +11,7 @@ module RailsAdmin
     def initialize(objects = [], schema = {})
       return self if (@objects = objects).blank?
 
-      @model = objects.first.class
+      @model = objects.dup.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact

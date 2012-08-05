@@ -686,10 +686,10 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     it "supports string type query" do
       @abstract_model.send(:build_statement, :field, :string, "", nil).should be_nil
       @abstract_model.send(:build_statement, :field, :string, "foo", "was").should be_nil
-      @abstract_model.send(:build_statement, :field, :string, "foo", "default").should == {:field=>/foo/}
-      @abstract_model.send(:build_statement, :field, :string, "foo", "like").should == {:field=>/foo/}
-      @abstract_model.send(:build_statement, :field, :string, "foo", "starts_with").should == {:field=>/^foo/}
-      @abstract_model.send(:build_statement, :field, :string, "foo", "ends_with").should == {:field=>/foo$/}
+      @abstract_model.send(:build_statement, :field, :string, "foo", "default").should == {:field=>/foo/i}
+      @abstract_model.send(:build_statement, :field, :string, "foo", "like").should == {:field=>/foo/i}
+      @abstract_model.send(:build_statement, :field, :string, "foo", "starts_with").should == {:field=>/^foo/i}
+      @abstract_model.send(:build_statement, :field, :string, "foo", "ends_with").should == {:field=>/foo$/i}
       @abstract_model.send(:build_statement, :field, :string, "foo", "is").should == {:field=>'foo'}
     end
 

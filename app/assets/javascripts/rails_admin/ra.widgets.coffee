@@ -26,7 +26,10 @@ $(document).live 'rails_admin.dom_ready', ->
     # enumeration
 
     $('form [data-enumeration]').each ->
-      $(this).filteringSelect $(this).data('options')
+      if $(this).is('[multiple]')
+        $(this).filteringMultiselect $(this).data('options')
+      else
+        $(this).filteringSelect $(this).data('options')
 
     # fileupload
 

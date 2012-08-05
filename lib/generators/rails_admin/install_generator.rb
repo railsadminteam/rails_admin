@@ -43,7 +43,7 @@ module RailsAdmin
         generate "devise", model_name
       else
         display "And you already set it up, good! We just need to know about your user model name..."
-        guess = routes.match(/devise_for :(\w+)/)[1].try(:singularize)
+        guess = routes.match(/devise_for +:(\w+)/)[1].try(:singularize)
         display("We found '#{guess}' (should be one of 'user', 'admin', etc.)")
         model_name = ask_for("Correct Devise model name if needed.", guess, _model_name)
         unless guess == model_name

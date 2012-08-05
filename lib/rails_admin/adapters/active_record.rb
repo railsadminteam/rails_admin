@@ -5,6 +5,7 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore]
+      DISABLED_COLUMN_MATCHERS = [/_array$/]
 
       def ar_adapter
         Rails.configuration.database_configuration[Rails.env]['adapter']
@@ -80,25 +81,22 @@ module RailsAdmin
       end
 
       def properties
-        columns = model.columns.reject {|c| c.type.blank? || DISABLED_COLUMN_TYPES.include?(c.type.to_sym) }
+        columns = model.columns.reject do |c|
+          c.type.blank? || DISABLED_COLUMN_TYPES.include?(c.type.to_sym) || DISABLED_COLUMN_MATCHERS.any? {|matcher| matcher.match(c.type.to_s)}
+        end
         columns.map do |property|
           {
             :name => property.name.to_sym,
             :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
-            :type => property.type,
             :length => property.limit,
             :nullable? => property.null,
             :serial? => property.primary,
-          }
+          }.merge(type_lookup(property))
         end
       end
 
       def table_name
         model.table_name
-      end
-
-      def serialized_attributes
-        model.serialized_attributes.keys
       end
 
       def encoding
@@ -173,6 +171,9 @@ module RailsAdmin
         when :boolean
           return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
           return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
+        when :decimal
+          return if value.blank?
+          ["(#{column} = ?)", value.to_f] if value.to_f.to_s == value
         when :integer, :belongs_to_association
           return if value.blank?
           ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
@@ -214,6 +215,14 @@ module RailsAdmin
         when :enum
           return if value.blank?
           ["(#{column} IN (?))", Array.wrap(value)]
+        end
+      end
+
+      def type_lookup(property)
+        if model.serialized_attributes[property.name.to_s]
+          {:type => :serialized}
+        else
+          {:type => property.type}
         end
       end
 

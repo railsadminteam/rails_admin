@@ -280,7 +280,8 @@ module RailsAdmin
           "#<#{self.class.name}[#{name}] #{
             instance_variables.map do |v|
               value = instance_variable_get(v)
-              if [:@parent, :@root, :@section].include? v
+              if [:@parent, :@root, :@section, :@children_fields_registered,
+                  :@associated_model_config, :@group, :@bindings].include? v
                 if value.respond_to? :name
                   "#{v}=#{value.name.inspect}"
                 else

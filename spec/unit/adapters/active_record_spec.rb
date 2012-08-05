@@ -151,13 +151,14 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
   
 
   describe "#properties" do
-    before do
-      @abstract_model = RailsAdmin::AbstractModel.new('Player')
+    it "returns parameters of string-type field" do
+      RailsAdmin::AbstractModel.new('Player').properties.select{|f| f[:name] == :name}.should ==
+        [{:name => :name, :pretty_name => "Name", :type => :string, :length => 100, :nullable? => false, :serial? => false}]
     end
 
-    it "returns parameters of string-type field" do
-      @abstract_model.properties.select{|f| f[:name] == :name}.should ==
-        [{:name => :name, :pretty_name => "Name", :type => :string, :length => 100, :nullable? => false, :serial? => false}]
+    it "maps serialized attribute to :serialized field type" do
+      RailsAdmin::AbstractModel.new('User').properties.find{|f| f[:name] == :roles}.should ==
+        {:name => :roles, :pretty_name => "Roles", :length => 255, :nullable? => true, :serial? => false, :type => :serialized}
     end
   end
 
@@ -323,6 +324,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       @abstract_model.send(:build_statement, :field, :integer, 'word', nil).should be_nil
     end
 
+    it "supports decimal type query" do
+      @abstract_model.send(:build_statement, :field, :decimal, "1.1", nil).should == ["(field = ?)", 1.1]
+      @abstract_model.send(:build_statement, :field, :decimal, 'word', nil).should be_nil
+    end
+
     it "supports string type query" do
       @abstract_model.send(:build_statement, :field, :string, "", nil).should be_nil
       @abstract_model.send(:build_statement, :field, :string, "foo", "was").should be_nil
@@ -364,10 +370,6 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it "#table_name works" do
       @abstract_model.table_name.should == 'players'
-    end
-
-    it "#serialized_attributes works" do
-      RailsAdmin::AbstractModel.new('User').serialized_attributes.should == ["roles"]
     end
   end
 end

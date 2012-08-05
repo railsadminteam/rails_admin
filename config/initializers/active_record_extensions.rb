@@ -9,7 +9,7 @@ if defined?(::ActiveRecord)
     end
 
     def safe_send(value)
-      if self.attributes.find{ |k,v| k.to_s == value.to_s }
+      if self.has_attribute?(value)
         self.read_attribute(value)
       else
         self.send(value)
