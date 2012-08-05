@@ -14,6 +14,7 @@ Community sourced translations:
 
 * [[Catalan: ca|https://gist.github.com/1764593]]
 * [[Chinese (Traditional): zh-TW|https://gist.github.com/2001808]]
+* [[Chinese (Simplified): zh-CN|https://gist.github.com/3262623]]
 * [[Danish: da|https://gist.github.com/1780778]]
 * [[Dutch: nl|https://gist.github.com/1909240]]
 * [[English: en|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]]
