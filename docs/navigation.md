@@ -98,8 +98,7 @@ Obtained navigation:
 
     Dashboard
     ...
-    League # (non-clickable)
-      League
+    League
       Division
       Team
     ...
