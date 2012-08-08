@@ -25,7 +25,41 @@ private
 end
 ```
 
+## Automatic Model List
 
+#### To avoid having to maintain a list of models manually you can extend your ORM to collect them upon initialization.
+
+```ruby
+# config/initializers/mongoid.rb
+module Mongoid::Document
+  @@models = []
+
+  def self.included base
+    @@models << base
+  end
+
+  def self.models
+    @@models
+  end
+end
+```
+
+```ruby
+# config/initializers/active_record.rb
+class ActiveRecord::Base
+  @@models = []
+
+  def self.inherited sub_class
+    @@models << sub_class
+  end
+
+  def self.models
+    @@models
+  end
+end
+```
+
+Then instead of `%W(User UserProfile)` you can do `Mongoid::Document.models` or `ActiveRecord::Base.models`
 ***
 
 ## Less Desirable Method ("Dirty" just sounds so... dirty.)
