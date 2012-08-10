@@ -154,13 +154,48 @@ describe "RailsAdmin Config DSL Edit Section" do
           column :name, 'string(50)'
           column :division, :string
         end
-        RailsAdmin.config.included_models = [HelpTest]
+        RailsAdmin.config.included_models = [HelpTest, Team]
       end
 
       after(:each) do
         # restore validation setting
         HelpTest._validators[:name] = []
         HelpTest.reset_callbacks(:validate)
+      end
+
+      context "using mongoid", :skip_active_record => true do
+        it "should use the db column size for the maximum length" do
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 255.")
+        end
+
+        it "should return nil for the maximum length" do
+          visit new_path(:model_name => "team")
+          find("#team_custom_field_field .help-block").should_not have_content("Length")
+        end
+      end
+
+      context "using active_record", :skip_mongoid => true do
+        it "should use the db column size for the maximum length" do
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
+        end
+
+        it "should use the :minimum setting from the validation" do
+          HelpTest.class_eval do
+            validates_length_of :name, :minimum => 1
+          end
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length of 1-50.")
+        end
+
+        it "should use the minimum of db column size or :maximum setting from the validation" do
+          HelpTest.class_eval do
+            validates_length_of :name, :maximum => 51
+          end
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
+        end
       end
 
       it "should show help section if present" do
@@ -215,35 +250,12 @@ describe "RailsAdmin Config DSL Edit Section" do
         find("#help_test_name_field .help-block").should have_content("Length of 3.")
       end
 
-      describe "using ORM column size", :skip_mongoid => true do
-        it "should use the db column size for the maximum length" do
-          visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
+      it "should use the :maximum setting from the validation" do
+        HelpTest.class_eval do
+          validates_length_of :name, :maximum => 49
         end
-
-        it "should use the :minimum setting from the validation" do
-          HelpTest.class_eval do
-            validates_length_of :name, :minimum => 1
-          end
-          visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length of 1-50.")
-        end
-
-        it "should use the :maximum setting from the validation" do
-          HelpTest.class_eval do
-            validates_length_of :name, :maximum => 49
-          end
-          visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length up to 49.")
-        end
-
-        it "should use the minimum of db column size or :maximum setting from the validation" do
-          HelpTest.class_eval do
-            validates_length_of :name, :maximum => 51
-          end
-          visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
-        end
+        visit new_path(:model_name => "help_test")
+        find("#help_test_name_field .help-block").should have_content("Length up to 49.")
       end
 
       it "should use the :minimum and :maximum from the validation" do
