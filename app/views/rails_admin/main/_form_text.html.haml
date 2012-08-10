@@ -16,6 +16,15 @@
       :options => field.codemirror_config,
       :locations => field.codemirror_assets
     }
+  elsif field.tinymce
+    richtext = 'tinymce'
+    js_data = {
+      :jspath => field.tinymce_js_location,
+      :jqpath => field.tinymce_jquery_location,
+      :theme => field.tinymce_theme_options,
+      :base => field.tinymce_base_location,
+      :options => field.tinymce_options
+    }
   else
     richtext = false
     js_data = {}

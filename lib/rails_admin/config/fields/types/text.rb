@@ -67,6 +67,31 @@ module RailsAdmin
             }
           end
 
+          # TinyMCE is disabled by default
+          register_instance_option(:tinymce) do
+            false
+          end
+
+          register_instance_option(:tinymce_js_location) do
+            "/assets/tinymce/tiny_mce_jquery_src.js"
+          end
+
+          register_instance_option(:tinymce_jquery_location) do
+            "/assets/tinymce/jquery.tinymce.js"
+          end
+
+          register_instance_option(:tinymce_theme_options) do
+            "advanced"
+          end
+
+          register_instance_option(:tinymce_options) do
+            {}
+          end
+
+          register_instance_option(:tinymce_base_location) do
+            '/assets/tinymce'
+          end
+
           register_instance_option(:partial) do
             :form_text
           end

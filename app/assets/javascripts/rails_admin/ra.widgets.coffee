@@ -137,16 +137,45 @@ $(document).live 'rails_admin.dom_ready', ->
         window.CKEDITOR.replace(this, options['options'])
         $(this).addClass('ckeditored')
 
-    array = $('form [data-richtext=ckeditor]').not('.ckeditored')
-    if array.length
-      @array = array
+    arrayck = $('form [data-richtext=ckeditor]').not('.ckeditored')
+    if arrayck.length
+      @arrayck = arrayck
       if not window.CKEDITOR
-        options = $(array[0]).data('options')
+        options = $(arrayck[0]).data('options')
         window.CKEDITOR_BASEPATH = options['base_location']
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
-          goCkeditors(@array)
+          goCkeditors(@arrayck)
       else
-        goCkeditors(@array)
+        goCkeditors(@arrayck)
+
+    #tinymce
+
+    gotinyMCE = (array) =>
+      array.each (index, domEle) ->
+        options = $(this).data('options')
+        tinyMCE.init(jQuery.extend({
+          mode : "exact",
+          elements : $(this).attr("id")
+        }, options))
+        $(this).addClass('tinymced')
+
+
+    arraytmc = $('form [data-richtext=tinymce]').not('.tinymced')
+    if arraytmc.length
+      @arraytmc = arraytmc
+      if not window.tinyMCE
+        options = $(arraytmc[0]).data('options')
+        window.tinyMCEPreInit = {
+          base: options['base'],
+          theme: options['theme'],
+          suffix: '',
+          mode: "specific_textareas"
+        }
+        $.getScript options['jspath'], (script, textStatus, jqXHR) =>
+          $.getScript options['jqpath'], (script, textStatus, jqXHR) =>
+            gotinyMCE(@arraytmc)
+      else
+        gotinyMCE(@arraytmc)
 
     #codemirror
 
@@ -159,14 +188,14 @@ $(document).live 'rails_admin.dom_ready', ->
           CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
           $(textarea).addClass('codemirrored')
 
-    array = $('form [data-richtext=codemirror]').not('.codemirrored')      
-    if array.length
-      @array = array
+    arraycm = $('form [data-richtext=codemirror]').not('.codemirrored')      
+    if arraycm.length
+      @arraycm = arraycm
       if not window.CodeMirror
-        options = $(array[0]).data('options')
+        options = $(arraycm[0]).data('options')
         $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
-          goCodeMirrors(@array)
+          goCodeMirrors(@arraycm)
       else
-        goCodeMirrors(@array)
+        goCodeMirrors(@arraycm)
 
