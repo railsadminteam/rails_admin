@@ -188,6 +188,14 @@ describe "RailsAdmin Config DSL Edit Section" do
           visit new_path(:model_name => "help_test")
           find("#help_test_name_field .help-block").should have_content("Length of 1-50.")
         end
+
+        it "should use the minimum of db column size or :maximum setting from the validation" do
+          HelpTest.class_eval do
+            validates_length_of :name, :maximum => 51
+          end
+          visit new_path(:model_name => "help_test")
+          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
+        end
       end
 
       it "should show help section if present" do
@@ -248,14 +256,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
         visit new_path(:model_name => "help_test")
         find("#help_test_name_field .help-block").should have_content("Length up to 49.")
-      end
-
-      it "should use the minimum of db column size or :maximum setting from the validation" do
-        HelpTest.class_eval do
-          validates_length_of :name, :maximum => 51
-        end
-        visit new_path(:model_name => "help_test")
-        find("#help_test_name_field .help-block").should have_content("Length up to 51.")
       end
 
       it "should use the :minimum and :maximum from the validation" do
