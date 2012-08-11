@@ -159,7 +159,7 @@ $(document).live 'rails_admin.dom_ready', ->
           CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
           $(textarea).addClass('codemirrored')
 
-    array = $('form [data-richtext=codemirror]').not('.codemirrored')      
+    array = $('form [data-richtext=codemirror]').not('.codemirrored')
     if array.length
       @array = array
       if not window.CodeMirror
@@ -170,3 +170,21 @@ $(document).live 'rails_admin.dom_ready', ->
       else
         goCodeMirrors(@array)
 
+    # bootstrap_wysihtml5
+
+    goBootstrapWysihtml5s = (array) =>
+      array.each ->
+        $(@).addClass('bootstrap-wysihtml5ed')
+        $(@).closest('.controls').addClass('well')
+        $(@).wysihtml5()
+
+    array = $('form [data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')
+    if array.length
+      @array = array
+      if not window.wysihtml5
+        options = $(array[0]).data('options')
+        $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
+        $.getScript options['jspath'], (script, textStatus, jqXHR) =>
+          goBootstrapWysihtml5s(@array)
+      else
+        goBootstrapWysihtml5s(@array)
