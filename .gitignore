@@ -29,3 +29,4 @@ tmp/**/*
 .idea/*.xml
 .sass-cache
 nbproject
+.DS_Store
