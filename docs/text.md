@@ -1,3 +1,19 @@
+### Optional bootstrap-wysihtml5 integration
+
+http://jhollingworth.github.com/bootstrap-wysihtml5/
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    edit do
+      field :description, :text do
+        bootstrap_wysihtml5 true
+      end
+    end
+  end
+end
+```
+
 ### Optional CKEditor integration
 
 To use the CKEditor with Upload function, add [Rails-CKEditor](https://github.com/galetahub/ckeditor) to your Gemfile (`gem 'ckeditor'`) and follow [Rails-CKEditor](https://github.com/galetahub/ckeditor) installation instructions.
