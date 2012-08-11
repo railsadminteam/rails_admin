@@ -4,7 +4,7 @@
     js_data = {
       :jspath => field.ckeditor_location ? field.ckeditor_location : field.ckeditor_base_location + "ckeditor.js",
       :base_location => field.ckeditor_base_location,
-      :options => { 
+      :options => {
         :customConfig => field.ckeditor_config_js ? field.ckeditor_config_js : field.ckeditor_base_location + "config.js"
       }
     }
@@ -15,6 +15,12 @@
       :jspath => field.codemirror_js_location,
       :options => field.codemirror_config,
       :locations => field.codemirror_assets
+    }
+  elsif field.bootstrap_wysihtml5
+    richtext = 'bootstrap-wysihtml5'
+    js_data = {
+      :csspath => field.bootstrap_wysihtml5_css_location,
+      :jspath => field.bootstrap_wysihtml5_js_location
     }
   else
     richtext = false

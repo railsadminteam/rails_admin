@@ -962,6 +962,26 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
+  describe "bootstrap_wysihtml5 Support" do
+
+    it "should start with bootstrap_wysihtml5 disabled" do
+       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
+       field.bootstrap_wysihtml5.should be false
+    end
+
+    it "should add Javascript to enable bootstrap_wysihtml5" do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes do
+            bootstrap_wysihtml5 true
+          end
+        end
+      end
+      visit new_path(:model_name => "draft")
+      should have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
+    end
+  end
+
   describe "Paperclip Support" do
 
     it "should show a file upload field" do

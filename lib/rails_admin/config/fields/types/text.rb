@@ -7,7 +7,7 @@ module RailsAdmin
         class Text < RailsAdmin::Config::Fields::Base
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
-          
+
           # CKEditor is disabled by default
           register_instance_option(:ckeditor) do
             false
@@ -45,7 +45,7 @@ module RailsAdmin
           #Pass the location of the theme and mode for Codemirror
           register_instance_option(:codemirror_assets) do
             {
-              :mode => '/assets/codemirror/modes/css.js',  
+              :mode => '/assets/codemirror/modes/css.js',
               :theme => '/assets/codemirror/themes/night.css'
             }
           end
@@ -60,6 +60,19 @@ module RailsAdmin
             '/assets/codemirror.css'
           end
 
+          # bootstrap_wysihtml5
+          register_instance_option(:bootstrap_wysihtml5) do
+            false
+          end
+
+          register_instance_option(:bootstrap_wysihtml5_css_location) do
+            '/assets/bootstrap-wysihtml5.css'
+          end
+
+          register_instance_option(:bootstrap_wysihtml5_js_location) do
+            '/assets/bootstrap-wysihtml5-all.js'
+          end
+
           register_instance_option(:html_attributes) do
             {
               :cols => '48',
@@ -69,6 +82,10 @@ module RailsAdmin
 
           register_instance_option(:partial) do
             :form_text
+          end
+
+          register_instance_option :formatted_value do
+            value.to_s.html_safe
           end
         end
       end
