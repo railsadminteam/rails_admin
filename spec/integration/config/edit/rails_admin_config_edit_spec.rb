@@ -273,7 +273,6 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit new_path(:model_name => "help_test")
         find("#help_test_name_field .help-block").should have_content("Length of 1-49.")
       end
-
     end
 
     it "should have accessor for its fields" do
@@ -329,6 +328,12 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Division")
       should have_selector("label", :text => "Manager (STRING)")
       should have_selector("label", :text => "Ballpark (STRING)")
+    end
+
+    it 'should be required' do
+      visit new_path(:model_name => "team")
+      should have_selector '.required#team_manager_field'
+      find('.required#team_manager_field input#team_manager')['required'].should_not be_blank
     end
   end
 
@@ -888,7 +893,6 @@ describe "RailsAdmin Config DSL Edit Section" do
       @record.embeds[0].name.should == 'embed 1 edited'
     end
   end
-
 
   describe "fields which are nullable and have AR validations", :active_record => true do
 
