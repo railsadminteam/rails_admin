@@ -2,6 +2,8 @@
 
 http://jhollingworth.github.com/bootstrap-wysihtml5/
 
+add `gem 'bootstrap-wysihtml5-rails'` to your Gemfile
+
 ```ruby
 RailsAdmin.config do |config|
   config.model Team do
