@@ -38,6 +38,21 @@ $(document).live 'rails_admin.dom_ready', ->
       $(this).find(".delete input[type='checkbox']").live 'click', ->
         $(input).children('.toggle').toggle('slow')
 
+    # fileupload-preview
+
+    $('form [data-fileupload]').change ->
+      input = this
+      image_container = $("#" + input.id).parent().children("#preview")
+      ext = $("#" + input.id).val().split('.').pop().toLowerCase()
+      if input.files and input.files[0] and $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) != -1
+        reader = new FileReader()
+        reader.onload = (e) ->
+          image_container.attr "src", e.target.result
+        reader.readAsDataURL input.files[0]
+        image_container.show()
+      else
+        image_container.hide()
+
     # filtering-multiselect
 
     $('form [data-filteringmultiselect]').each ->
