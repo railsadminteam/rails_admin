@@ -4,8 +4,8 @@
   .wrap
     - if value = field.pretty_value
       = value
-    %img#preview{:src => "#", :width => 100, :height => 100}
-    = form.file_field(field.name, field.html_attributes.reverse_merge({ :data => { :fileupload => true }, :onchange => "generatePreview(this);" }))
+    %img#preview{:src => "#", :width => 100, :height => 100, :style => "display: none"}
+    = form.file_field(field.name, field.html_attributes.reverse_merge({ :data => { :fileupload => true }}))
 - if field.optional? && field.errors.blank? && file && field.delete_method
   %a.btn.btn-info{:href => '#', :'data-toggle' => 'button', :onclick => "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false"}
     %i.icon-white.icon-trash
@@ -13,19 +13,3 @@
   = form.check_box(field.delete_method, :style => 'display:none;' )
 - if field.cache_method
   = form.hidden_field(field.cache_method)
-
-:plain
-  <script type="text/javascript">
-    function generatePreview(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        var i_id = input.id;
-
-        reader.onload = function (e) {
-            $('#' + i_id).parent().children('#preview').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-  </script>
