@@ -138,6 +138,10 @@ module RailsAdmin
           (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
         end
 
+        register_instance_option :hint do
+          (@hint ||= "")
+        end
+
         # Accessor for field's maximum length per database.
         #
         # @see RailsAdmin::AbstractModel.properties

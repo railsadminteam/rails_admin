@@ -113,7 +113,7 @@
             - if property.sortable
               - sort_location = index_path params.except('sort_reverse').except('page').merge(:sort => property.name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
               - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
-            %th{:class => "#{property.sortable && "header pjax" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location)}= property.label
+            %th{:class => "#{property.sortable && "header pjax" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), :rel => "tooltip", :title => "#{property.hint}"}= property.label
           - if other_right
             %th.other.right.shrink= "..."
           %th.last.shrink
