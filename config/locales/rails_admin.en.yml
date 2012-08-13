@@ -22,6 +22,7 @@ en:
       up: "Up"
       down: "Down"
       navigation: "Navigation"
+      navigation_static_label: "Links"
       log_out: "Log out"
       ago: "ago"
     flash:
