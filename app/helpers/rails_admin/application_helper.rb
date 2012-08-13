@@ -65,7 +65,7 @@ module RailsAdmin
 
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.map do |title, url|
-        content_tag(:li, link_to(title.to_s, url, target: '_blank')).html_safe
+        content_tag(:li, link_to(title.to_s, url, :target => '_blank')).html_safe
       end.join.html_safe
 
       if li_stack.present?
