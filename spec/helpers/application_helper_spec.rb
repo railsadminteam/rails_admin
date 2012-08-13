@@ -263,6 +263,43 @@ describe RailsAdmin::ApplicationHelper do
     end
   end
 
+  describe '#static_navigation' do
+    it 'should show not show static nav if no static links defined' do
+      RailsAdmin.config do |config|
+        config.navigation_static_links = {}
+      end
+      helper.static_navigation.should be_empty
+    end
+
+    it 'should show links if defined' do
+      RailsAdmin.config do |config|
+        config.navigation_static_links = {
+          'Test Link' => 'http://www.google.com'
+        }
+      end
+      helper.static_navigation.should match /Test Link/
+    end
+
+    it 'should show default header if navigation_static_label not defined in config' do
+      RailsAdmin.config do |config|
+        config.navigation_static_links = {
+          'Test Link' => 'http://www.google.com'
+        }
+      end
+      helper.static_navigation.should match I18n.t('admin.misc.navigation_static_label')
+    end
+
+    it 'should show custom header if defined' do
+      RailsAdmin.config do |config|
+        config.navigation_static_label = "Test Header"
+        config.navigation_static_links = {
+          'Test Link' => 'http://www.google.com'
+        }
+      end
+      helper.static_navigation.should match /Test Header/
+    end
+  end
+
   describe "#bulk_menu" do
     it 'should include all visible bulkable actions' do
       RailsAdmin.config do |config|

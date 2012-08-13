@@ -21,6 +21,7 @@
         .span3
           .well.sidebar-nav
             %ul.nav.nav-list= main_navigation
+            %ul.nav.nav-list= static_navigation
         .span9
           .row-fluid
             .content{:'data-pjax-container' => true}= render :template => 'layouts/rails_admin/pjax'
