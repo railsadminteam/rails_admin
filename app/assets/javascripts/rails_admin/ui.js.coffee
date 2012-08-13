@@ -62,3 +62,5 @@ $(document).live 'rails_admin.dom_ready', ->
 
   $('.form-horizontal legend').has('i.icon-chevron-right').each ->
     $(this).siblings('.control-group').hide()
+
+  $(".table").tooltip selector: "th[rel=tooltip]"

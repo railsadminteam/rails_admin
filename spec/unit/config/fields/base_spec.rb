@@ -92,6 +92,21 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
+  describe "#hint" do
+    it "should be user customizable" do
+      RailsAdmin.config Team do
+        list do
+          field :division do
+            hint "Great Division"
+          end
+          field :name
+        end
+      end
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :division}.hint.should == "Great Division" # custom
+      RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.hint.should == "" # default
+    end
+  end
+
   describe "#css_class" do
     it "should have a default and be user customizable" do
       RailsAdmin.config Team do
