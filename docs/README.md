@@ -127,3 +127,4 @@
 * [Coordinates with Google Maps](https://github.com/trademobile/rails_admin_map_field)
 * [ActsAsTaggableOn tag_list field](https://github.com/kryzhovnik/rails_admin_tag_list)
 * [Rich: an opinionated CKEditor implementation with file uploads](https://github.com/bastiaanterhorst/rich)
+* [Image cropping with rails_admin_jcrop](https://github.com/janx/rails_admin_jcrop)
