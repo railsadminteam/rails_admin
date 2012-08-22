@@ -16,7 +16,11 @@ describe RailsAdmin::Config do
     describe "set to false" do
       before do
         RailsAdmin.config do |c|
-          c.statistics = false
+          c.actions do
+            dashboard do
+              statistics false
+            end
+          end
         end
       end
 

@@ -66,9 +66,6 @@ module RailsAdmin
       # @see RailsAdmin::Config.model
       attr_reader :registry
 
-      # hides dashboard record count bars when set to false
-      attr_accessor :statistics
-
       # accepts a hash of static links to be shown below the main navigation
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
@@ -296,7 +293,6 @@ module RailsAdmin
         @label_methods = [:name, :title]
         @main_app_name = Proc.new { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
-        @statistics = true
         @navigation_static_links = {}
         @navigation_static_label = nil
         RailsAdmin::Config::Actions.reset

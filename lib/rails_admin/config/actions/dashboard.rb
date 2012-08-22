@@ -15,7 +15,7 @@ module RailsAdmin
         register_instance_option :controller do
           Proc.new do
             @history = @auditing_adapter && @auditing_adapter.latest || []
-            if RailsAdmin::Config.statistics
+            if @action.statistics?
               @abstract_models = RailsAdmin::Config.visible_models(:controller => self).map(&:abstract_model)
 
               @most_recent_changes = {}
@@ -41,6 +41,10 @@ module RailsAdmin
 
         register_instance_option :link_icon do
           'icon-home'
+        end
+
+        register_instance_option :statistics? do
+          true
         end
       end
     end
