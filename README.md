@@ -180,7 +180,6 @@ Ideally, a bug report should include a pull request with failing specs.
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby implementations:
 
-* Ruby 1.8.7
 * Ruby 1.9.2
 * Ruby 1.9.3
 * [Rubinius][]
