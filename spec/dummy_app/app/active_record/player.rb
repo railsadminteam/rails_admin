@@ -1,11 +1,12 @@
 class Player < ActiveRecord::Base
-  attr_accessible :name, :team_id, :position, :number, :retired, :injured, :born_on, :notes, :comment_ids, :created_at
+  attr_accessible :text, :name, :team_id, :position, :number, :retired, :injured, :born_on, :notes, :comment_ids, :created_at
   attr_protected :suspended
 
   belongs_to :team, :inverse_of => :players
   has_one :draft, :dependent => :destroy
   has_many :comments, :as => :commentable
 
+  translates :text
   validates_presence_of(:name)
   validates_numericality_of(:number, :only_integer => true)
   validates_uniqueness_of(:number, :scope => :team_id, :message => "There is already a player with that number on this team")

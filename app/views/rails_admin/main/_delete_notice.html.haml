@@ -12,7 +12,7 @@
       %li
         - child_config = RailsAdmin.config(child)
         = association[:pretty_name]
-        - if show_enabled
+        - if show_enabled & child.id
           = link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))
         - else
           = child_config.with(:object => child).object_label
