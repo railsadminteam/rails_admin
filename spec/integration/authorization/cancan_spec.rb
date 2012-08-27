@@ -18,8 +18,15 @@ class Ability
       can :access, :rails_admin
       can :manage, :all
       can :show_in_app, :all
-      cannot [:update, :destroy], Player
-      can [:update, :destroy], Player, :retired => false
+      
+      
+      # fix for buggy and inconsistent behaviour in Cancan 1.6.8 => https://github.com/ryanb/cancan/issues/721
+      if CI_ORM != :mongoid
+        cannot [:update, :destroy], Player
+        can [:update, :destroy], Player, :retired => false
+      else
+        cannot [:update, :destroy], Player, :retired => true
+      end
     end
   end
 end
