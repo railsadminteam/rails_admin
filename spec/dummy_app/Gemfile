@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2'
 
+gem 'cancan'
+
 group :active_record do
   platforms :jruby do
     gem 'jruby-openssl', '~> 0.7'
@@ -28,7 +30,7 @@ group :active_record do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem 'paperclip', '~> 2.7'
+  gem 'paperclip'
   gem 'carrierwave'
   gem 'dragonfly'
 end
@@ -51,7 +53,7 @@ group :mongoid do
     gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/meskyanichi/mongoid-paperclip.git', :branch => 'develop'
     gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/jnicklas/carrierwave-mongoid.git', :branch => 'mongoid-3.0'
   end
-  gem 'paperclip', '~> 2.7'
+  gem 'paperclip'
   gem 'dragonfly'
 end
 

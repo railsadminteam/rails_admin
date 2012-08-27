@@ -18,7 +18,8 @@ class Ability
       can :access, :rails_admin
       can :manage, :all
       can :show_in_app, :all
-      cannot [:update, :destroy], Player, :retired => true
+      cannot [:update, :destroy], Player
+      can [:update, :destroy], Player, :retired => false
     end
   end
 end
@@ -291,7 +292,7 @@ describe "RailsAdmin CanCan Authorization" do
       retired_player = FactoryGirl.create :player, :retired => true
 
       page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
-
+      
       should have_content(active_player.name)
       should_not have_content(retired_player.name)
     end

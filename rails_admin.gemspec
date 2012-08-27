@@ -5,8 +5,8 @@ Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
   gem.add_dependency 'bbenezech-nested_form', '~> 0.0.6'
   gem.add_dependency 'sass-rails', '~> 3.1'
-  gem.add_dependency 'bootstrap-sass', ['~> 2.0', '>= 2.0.3']
-  gem.add_dependency 'jquery-ui-rails', ['>= 0.5', '< 2']
+  gem.add_dependency 'bootstrap-sass', ['~> 2.0.3']
+  gem.add_dependency 'jquery-ui-rails', ['>= 0.5']
   gem.add_dependency 'builder', '~> 3.0'
   gem.add_dependency 'coffee-rails', '~> 3.1'
   gem.add_dependency 'haml', '~> 3.1'
@@ -21,11 +21,11 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'database_cleaner', '~> 0.8'
   gem.add_development_dependency 'devise'
   gem.add_development_dependency 'dragonfly'
-  gem.add_development_dependency 'factory_girl', '~> 2.6'
+  gem.add_development_dependency 'factory_girl'
   gem.add_development_dependency 'generator_spec'
   gem.add_development_dependency 'launchy'
   gem.add_development_dependency 'mini_magick'
-  gem.add_development_dependency 'paperclip', '~> 2.7'
+  gem.add_development_dependency 'paperclip'
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency 'timecop'
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
