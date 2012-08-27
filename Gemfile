@@ -75,6 +75,7 @@ group :development, :test do
   gem 'cancan', '1.6.7'
   gem 'devise'
   gem 'paperclip', '~> 2.7'
+  gem 'globalize3'
 end
 
 gemspec

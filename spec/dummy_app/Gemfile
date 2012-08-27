@@ -59,6 +59,7 @@ gem 'devise', '~> 2.0'
 gem 'rails_admin', :path => '../../'
 gem 'mlb', '~> 0.5'
 gem 'mini_magick'
+gem 'globalize3'
 
 # Gems used only for assets and not required
 # in production environments by default.

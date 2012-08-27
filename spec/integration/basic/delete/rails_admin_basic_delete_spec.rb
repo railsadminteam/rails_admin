@@ -1,5 +1,11 @@
 require 'spec_helper'
 
+# forces a read of text which is translated by globalize3,
+# which creates empty translations
+def custom_player_label
+  "#{self.name} - #{self.text}"
+end
+
 describe "RailsAdmin Basic Delete" do
 
   subject { page }
@@ -48,6 +54,33 @@ describe "RailsAdmin Basic Delete" do
       should_not have_selector("a[href=\"/admin/player/#{@player.id}\"]")
       should_not have_selector("a[href=\"/admin/draft/#{@draft.id}\"]")
       should_not have_selector("a[href=\"/admin/comment/#{@comment.id}\"]")
+    end
+  end
+
+  describe "with globalize3 empty translation associations" do
+    before(:each) do
+      RailsAdmin.config.actions do
+        dashboard
+        index
+        delete
+	show
+      end
+      RailsAdmin.config do |c|
+        c.model Player do
+          object_label_method do
+            :custom_player_label
+          end
+        end
+      end
+      @draft = FactoryGirl.create :draft
+      @player = @draft.player
+      visit delete_path(:model_name => "player", :id => @player.id)
+      save_and_open_page
+    end
+
+    it "should show \"Delete model\"" do
+      should have_content("delete this player")
+      should have_content("new Player::Translation")
     end
   end
 end
