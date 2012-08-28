@@ -35,14 +35,14 @@ body.rails_admin {
     .control-group .hidden_type {
       display:none;
     }
-
+    
     legend {
       cursor:pointer;
       i {
         vertical-align: inherit !important;
       }
     }
-
+    
     &.denser {
       .controls .nav {
         margin-bottom:5px;
@@ -67,12 +67,6 @@ body.rails_admin {
       .control-group {
         margin: 0px;
         padding-top:15px;
-
-        &.required {
-          .control-label {
-            font-weight:bold;
-          }
-        }
       }
       .control-label {
         width:145px;
@@ -81,7 +75,7 @@ body.rails_admin {
         margin-bottom:0px;
       }
     }
-
+    
     /* We want input size to be used, unfixate input width */
     input, textarea {
       width:auto;
@@ -101,7 +95,7 @@ body.rails_admin {
       &:hover>.remove_nested_fields {
         display:block;
       }
-
+      
       border-left:5px solid $blue;
       padding-left:5px;
       fieldset {
