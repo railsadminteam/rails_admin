@@ -30,8 +30,8 @@ DummyApp::Application.configure do
   config.active_record.auto_explain_threshold_in_seconds = 0.5 if CI_ORM == :active_record
 
   # Do not compress assets
-  config.assets.compress = true
+  config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = false
+  config.assets.debug = true
 end

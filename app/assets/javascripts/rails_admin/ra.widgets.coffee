@@ -83,6 +83,7 @@ $(document).live 'rails_admin.dom_ready', ->
       toggler = field.find('> .controls > .btn-group > .toggler')
       # add each nested field to a tab-pane and reference it in the nav
       content.children('.fields:not(.tab-pane)').addClass('tab-pane').each ->
+        $(this).attr('id', 'unique-id-' + (new Date().getTime()) + Math.floor(Math.random()*100000)) # some elements are created on the same ms
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       # only if no tab is set to active
       if nav.find("> li.active").length == 0
@@ -109,7 +110,7 @@ $(document).live 'rails_admin.dom_ready', ->
       nav = field.find("> .controls > .nav")
       content = field.find("> .tab-content")
       toggler = field.find('> .controls > .toggler')
-      content.children(".fields:not(.tab-pane)").addClass('tab-pane').each ->
+      content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
       first_tab.tab('show')

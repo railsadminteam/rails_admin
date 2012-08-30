@@ -862,7 +862,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit edit_path(:model_name => "field_test", :id => @record.id)
         find('#field_test_nested_field_tests_attributes_0_title').value.should == 'nested title 1'
         should_not have_selector('form .remove_nested_fields')
-        should have_selector('.fields_blueprint .remove_nested_fields')
+        should have_selector('[id$="_fields_blueprint"] .remove_nested_fields')
       end
     end
 
