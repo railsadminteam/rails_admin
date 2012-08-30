@@ -1,6 +1,5 @@
 ## Known incompatibilities, from namespacing issues:
 
- * [[nested_form|https://github.com/ryanb/nested_form]] (simply [[use the forked RailsAdmin dependency|https://github.com/bbenezech/nested_form]], it is 100% API compatible with Ryan's)
  * various [[Twitter Bootstrap|https://github.com/twitter/bootstrap]] Asset-Pipeline vendoring libraries (use RailsAdmin dependency [[bootstrap-sass|https://github.com/thomas-mcdonald/bootstrap-sass]])
  * [[devise_invitable|https://github.com/scambra/devise_invitable]] can result in an issue. See [[this|http://stackoverflow.com/questions/6012792/devise-invitable-rails-admin-conflict]] Stack Overflow question for more info.
  * [[<s>will_paginate</s>|https://github.com/mislav/will_paginate]] (Now we have a way to avoid method name collision. See 'Conflict between will_paginate and kaminari' section below)
