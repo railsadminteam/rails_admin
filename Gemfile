@@ -33,7 +33,7 @@ end
 
 group :mongoid do
   gem 'mongoid', '~> 3.0'
-  gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/meskyanichi/mongoid-paperclip.git', :branch => 'develop'
+  gem 'mongoid-paperclip', '~> 0.0.8', :require => 'mongoid_paperclip'
   gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/jnicklas/carrierwave-mongoid.git', :branch => 'mongoid-3.0'
 end
 
