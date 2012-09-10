@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   #gem.add_dependency 'bbenezech-nested_form', '~> 0.0.6'
   gem.add_dependency 'nested_form', '~> 0.2.3'
   gem.add_dependency 'sass-rails', '~> 3.1'
-  gem.add_dependency 'bootstrap-sass', ['~> 2.0.3']
+  gem.add_dependency 'bootstrap-sass', ['~> 2.0']
   gem.add_dependency 'jquery-ui-rails', ['>= 0.5']
   gem.add_dependency 'builder', '~> 3.0'
   gem.add_dependency 'coffee-rails', '~> 3.1'
