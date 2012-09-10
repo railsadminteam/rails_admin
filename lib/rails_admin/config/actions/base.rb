@@ -9,6 +9,10 @@ module RailsAdmin
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
+        
+        register_instance_option :only do
+          nil
+        end
 
         # http://twitter.github.com/bootstrap/base-css.html#icons
         register_instance_option :link_icon do
@@ -17,7 +21,7 @@ module RailsAdmin
 
         # Should the action be visible
         register_instance_option :visible? do
-          authorized? && (bindings[:abstract_model] ? bindings[:abstract_model].config.with(bindings).try(:visible?) : true)
+          (only.nil? || only.include?(bindings[:abstract_model].model)) && authorized? && (bindings[:abstract_model] ? bindings[:abstract_model].config.with(bindings).try(:visible?) : true)
         end
 
         register_instance_option :authorized? do
