@@ -1,31 +1,31 @@
-ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| html_tag }
-
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::NestedForm::BuilderMixin
 
     def generate(options = {})
-      options.reverse_merge!({
-        :action => @template.controller.params[:action],
-        :model_config => @template.instance_variable_get(:@model_config),
-        :nested_in => false
-      })
+      without_field_error_proc_added_div do
+        options.reverse_merge!({
+          :action => @template.controller.params[:action],
+          :model_config => @template.instance_variable_get(:@model_config),
+          :nested_in => false
+        })
 
-      if options[:nested_in]
-        action = :nested
-      elsif @template.request.format == 'text/javascript'
-        action = :modal
-      else
-        action = options[:action]
+        if options[:nested_in]
+          action = :nested
+        elsif @template.request.format == 'text/javascript'
+          action = :modal
+        else
+          action = options[:action]
+        end
+
+        groups = options[:model_config].send(action).with(:form => self, :object => @object, :view => @template).visible_groups
+
+        object_infos +
+        groups.map do |fieldset|
+          fieldset_for fieldset, options[:nested_in]
+        end.join.html_safe +
+        (options[:nested_in] ? '' : @template.render(:partial => 'rails_admin/main/submit_buttons'))
       end
-
-      groups = options[:model_config].send(action).with(:form => self, :object => @object, :view => @template).visible_groups
-
-      object_infos +
-      groups.map do |fieldset|
-        fieldset_for fieldset, options[:nested_in]
-      end.join.html_safe +
-      (options[:nested_in] ? '' : @template.render(:partial => 'submit_buttons'))
     end
 
     def fieldset_for fieldset, nested_in
@@ -102,5 +102,16 @@ module RailsAdmin
     def dom_name field
       (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''}}
     end
+    
+    protected
+      def without_field_error_proc_added_div
+        default_field_error_proc = ::ActionView::Base.field_error_proc
+        begin
+          ::ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| html_tag }
+          yield
+        ensure
+          ::ActionView::Base.field_error_proc = default_field_error_proc
+        end
+      end
   end
 end

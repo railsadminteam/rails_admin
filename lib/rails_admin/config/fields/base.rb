@@ -208,7 +208,7 @@ module RailsAdmin
         end
 
         register_instance_option :render do
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
+          bindings[:view].render :partial => "rails_admin/main/#{partial}", :locals => {:field => self, :form => bindings[:form] }
         end
 
         def editable?
