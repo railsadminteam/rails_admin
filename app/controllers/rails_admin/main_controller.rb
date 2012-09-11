@@ -113,7 +113,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      if params[:_continue]
+      if params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
         redirect_to(back_or_index, :flash => { :info => t("admin.flash.noaction") })
       end
     end

@@ -3,7 +3,15 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController do
-
+  
+  describe "#check_for_cancel" do
+    
+    it "should redirect to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
+      controller.stub(:back_or_index) { raise StandardError.new('redirected back') }
+      expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete" } }.to raise_error('redirected back')
+      expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.to_not raise_error('redirected back')
+    end
+  end
 
   describe "#get_sort_hash" do
     it 'should work with belongs_to associations with label method virtual' do
