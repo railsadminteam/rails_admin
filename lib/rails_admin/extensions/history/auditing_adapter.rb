@@ -4,7 +4,7 @@ module RailsAdmin
       class AuditingAdapter
         def initialize(controller, user_class = User)
           @controller = controller
-          @user_class = user_class
+          @user_class = user_class.to_s.constantize
           require 'rails_admin/extensions/history/history'
         end
 

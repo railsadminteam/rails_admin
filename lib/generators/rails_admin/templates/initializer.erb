@@ -3,99 +3,98 @@
 
 RailsAdmin.config do |config|
 
-  # If your default_local is different from :en, uncomment the following 2 lines and set your default locale here:
-  # require 'i18n'
-  # I18n.default_locale = :de
 
+  ################  Global configuration  ################
+
+  # Set the admin name here (optional second array element will appear in red). For example:
+  config.main_app_name = ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin']
+  # or for a more dynamic name:
+  # config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.titleize, controller.params['action'].titleize] }
+
+  # RailsAdmin may need a way to know who the current user is]
   config.current_user_method { current_<%= @model_name.underscore %> } # auto-generated
 
   # If you want to track changes on your models:
-  # config.audit_with :history, <%= @model_name.classify %>
+  # config.audit_with :history, '<%= @model_name.classify %>'
 
   # Or with a PaperTrail: (you need to install it first)
-  # config.audit_with :paper_trail, <%= @model_name.classify %>
+  # config.audit_with :paper_trail, '<%= @model_name.classify %>'
 
-  # Set the admin name here (optional second array element will appear in a beautiful RailsAdmin red ©)
-  config.main_app_name = ['<%= Rails.application.engine_name.titleize.chomp(' Application') %>', 'Admin']
-  # or for a dynamic name:
-  # config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.titleize, controller.params['action'].titleize] }
-
-
-  #  ==> Global show view settings
-  # Display empty fields in show views
+  # Display empty fields in show views:
   # config.compact_show_view = false
 
-  #  ==> Global list view settings
   # Number of default rows per-page:
   # config.default_items_per_page = 20
 
-  #  ==> Included models
-  # Add all excluded models here:
-  # config.excluded_models = [<%= RailsAdmin::AbstractModel.all.map{|am| am.model.to_s }.join(', ') %>]
+  # Exclude specific models (keep the others):
+  # config.excluded_models = [<%= RailsAdmin::AbstractModel.all.map{|am| "'#{am.model}'" }.join(', ') %>]
 
-  # Add models here if you want to go 'whitelist mode':
-  # config.included_models = [<%= RailsAdmin::AbstractModel.all.map{|am| am.model.to_s }.join(', ') %>]
+  # Include specific models (exclude the others):
+  # config.included_models = [<%= RailsAdmin::AbstractModel.all.map{|am| "'#{am.model}'" }.join(', ') %>]
 
-  # Application wide tried label methods for models' instances
+  # Label methods for model instances:
   # config.label_methods << :description # Default is [:name, :title]
 
-  #  ==> Global models configuration
-  # config.models do
-  #   # Configuration here will affect all included models in all scopes, handle with care!
-  #
-  #   list do
-  #     # Configuration here will affect all included models in list sections (same for show, export, edit, update, create)
-  #
-  #     fields_of_type :date do
-  #       # Configuration here will affect all date fields, in the list section, for all included models. See README for a comprehensive type list.
-  #     end
-  #   end
-  # end
-  #
-  #  ==> Model specific configuration
-  # Keep in mind that *all* configuration blocks are optional.
-  # RailsAdmin will try his best to provide the best defaults for each section, for each field.
-  # Try to override as few things as possible, in the most generic way. Try to avoid setting labels for models and attributes, use ActiveRecord I18n API instead.
-  # Less code is better code!
-  # config.model MyModel do
-  #   # Cross-section field configuration
-  #   object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
-  #   label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
-  #   label_plural 'My models'      # Same, plural
-  #   weight -1                     # Navigation priority. Bigger is higher.
-  #   parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
-  #   navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
-  #   # Section specific configuration:
-  #   list do
-  #     filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
-  #     items_per_page 100    # Override default_items_per_page
-  #     sort_by :id           # Sort column (default is primary key)
-  #     sort_reverse true     # Sort direction (default is true for primary key, last created first)
-  #     # Here goes the fields configuration for the list view
-  #   end
-  # end
 
-  # Your model's configuration, to help you get started:
+  ################  Model configuration  ################
 
-  # All fields marked as 'hidden' won't be shown anywhere in the rails_admin unless you mark them as visible. (visible(true))
+  # Each model configuration can alternatively:
+  #   - stay here in a `config.model 'ModelName' do ... end` block
+  #   - go in the model definition file in a `rails_admin do ... end` block
+  
+  # This is your choice to make:
+  #   - This initializer is loaded once at startup (modifications will show up when restarting the application) but all RailsAdmin configuration would stay in one place.
+  #   - Models are reloaded at each request in development mode (when modified), which may smooth your RailsAdmin development workflow.
+
+
+  # Now you probably need to tour the wiki a bit: https://github.com/sferik/rails_admin/wiki
+  # Anyway, here is how RailsAdmin saw your application's models when you ran the initializer:
 
 <% RailsAdmin::AbstractModel.all.map do |abstract_model| -%>
-  # config.model <%= abstract_model.model.model_name %> do
+
+
+  ###  <%= abstract_model.model.model_name %>  ###
+
+  # config.model '<%= abstract_model.model.model_name %>' do
+
+  #   # You can copy this to a 'rails_admin do ... end' block inside your <%= abstract_model.model.model_name.underscore %>.rb model definition
+  
   #   # Found associations:
+
 <%= abstract_model.config.export.fields.select{|f| f.association?}.map do |field|
 %{  #     configure #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
-end.join("\n") -%>
+end.join("\n") %>
+
   #   # Found columns:
+
 <%= abstract_model.config.export.fields.select{|f| !f.association?}.map do |field|
 %{  #     configure #{field.name.inspect}, #{field.type.inspect}#{"         # Hidden" unless field.visible?} }
-end.join("\n") -%>
-  #   # Sections:
-  #   list do; end
-  #   export do; end
-  #   show do; end
-  #   edit do; end
-  #   create do; end
-  #   update do; end
+end.join("\n") %>
+
+  #   # Cross-section configuration:
+  
+  #     # object_label_method :name     # Name of the method called for pretty printing an *instance* of ModelName
+  #     # label 'My model'              # Name of ModelName (smartly defaults to ActiveRecord's I18n API)
+  #     # label_plural 'My models'      # Same, plural
+  #     # weight 0                      # Navigation priority. Bigger is higher.
+  #     # parent OtherModel             # Set parent model for navigation. MyModel will be nested below. OtherModel will be on first position of the dropdown
+  #     # navigation_label              # Sets dropdown entry's name in navigation. Only for parents!
+  
+  #   # Section specific configuration:
+  
+  #     list do
+  #       # filters [:id, :name]  # Array of field names which filters should be shown by default in the table header
+  #       # items_per_page 100    # Override default_items_per_page
+  #       # sort_by :id           # Sort column (default is primary key)
+  #       # sort_reverse true     # Sort direction (default is true for primary key, last created first)
+  #     end
+  #     show do; end
+  #     edit do; end
+  #     export do; end
+  #     # also see the create, update, modal and nested sections, which override edit in specific cases (resp. when creating, updating, modifying from another model in a popup modal or modifying from another model nested form)
+  #     # you can override a cross-section field configuration in any section with the same syntax `configure :field_name do ... end`
+  #     # using `field` instead of `configure` will exclude all other fields and force the ordering
   # end
 <%- end -%>
+
 end
