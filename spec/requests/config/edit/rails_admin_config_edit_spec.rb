@@ -537,7 +537,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       it "should cover a timezone lag even if in UTC+n:00 timezone." do
         Time.zone = 'Tokyo' # +09:00
 
-        visit new_path(:model_name => "field_test")
+        visit rails_admin_new_path(:model_name => "field_test")
         fill_in "field_test[date_field]", :with => @time.strftime("%B %d, %Y")
         click_button "Save"
         @record = RailsAdmin::AbstractModel.new("FieldTest").first
