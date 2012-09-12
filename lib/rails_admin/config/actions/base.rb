@@ -27,8 +27,8 @@ module RailsAdmin
         register_instance_option :visible? do
           authorized? and (
             bindings[:abstract_model].nil? or (
-              (only.nil? or [only].flatten.include?(bindings[:abstract_model].model)) and
-              ![except].flatten.include?(bindings[:abstract_model].model) and
+              (only.nil? or [only].flatten.map(&:to_s).include?(bindings[:abstract_model].model.to_s)) and
+              ![except].flatten.map(&:to_s).include?(bindings[:abstract_model].model.to_s) and
               bindings[:abstract_model].config.with(bindings).visible?
           ))
         end
