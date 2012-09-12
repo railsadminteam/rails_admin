@@ -10,7 +10,7 @@
 
 1. [[Base RailsAdmin configuration|Base configuration]]
 2. [[Actions]]
-3. [[Model configuration, navigation|Navigation]]
+3. [[Navigation]]
 4. [[Fields configuration|Railsadmin-DSL]]
 5. [[Translations]]
 
