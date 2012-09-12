@@ -534,6 +534,15 @@ describe "RailsAdmin Config DSL Edit Section" do
         @record.date_field.should eql(::Date.parse(@time.to_s))
       end
 
+      it "should cover a timezone lag even if in UTC+n:00 timezone." do
+        Time.zone = 'Tokyo' # +09:00
+
+        visit new_path(:model_name => "field_test")
+        fill_in "field_test[date_field]", :with => @time.strftime("%B %d, %Y")
+        click_button "Save"
+        @record = RailsAdmin::AbstractModel.new("FieldTest").first
+        @record.date_field.should eql(::Date.parse(@time.to_s))
+      end
 
       it "should have a simple customization option" do
         RailsAdmin.config FieldTest do
