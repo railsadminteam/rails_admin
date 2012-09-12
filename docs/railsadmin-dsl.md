@@ -598,102 +598,15 @@ RailsAdmin.config do |config|
 end
 ```
 
-Note that some fields are hidden by default (associations) and that you can display them to the list view by
+Note that some fields are hidden by default (source fields for belongs_to associations) and that you can display them to the list view by
 manually setting them to visible:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model League do
-    list do
-      field :teams do
-        visible true
-      end
-    end
-  end
-end
-```
-
-### Mass Assignment Operations ###
-
-**Mass assign for every model configuration**
-
-Mass assignment operations are used to pass in configuration blocks for
-multiple targets at once. For instance, the code below configures every models'
-every field with an uppercased label in the list view.
-
-```ruby
-RailsAdmin.config do |config|
-  config.models do
-    list do
-      fields do
-        label do
-          label.upcase # in this context label refers to default label method
-        end
-      end
-    end
-  end
-end
-```
-
-**Mass assign for every section (create, list, navigation and update)**
-
-If one would like to assign that same behavior for all the different views in
-RailsAdmin (create, list, navigation and update) one could pass the label
-definition one level higher:
-
-```ruby
-RailsAdmin.config do |config|
-  config.models do
-    fields do
-      label do
-        label.upcase
-      end
-    end
-  end
-end
-```
-
-As the navigation section does not define the `fields` method this
-configuration is only effective for create, list and update views.
-
-Naturally this also works for a single model configuration:
-
-```ruby
-RailsAdmin.config do |config|
   config.model Team do
-    fields do
-      label do
-        label.upcase
-      end
-    end
-  end
-end
-```
-
-**Mass assign by field type**
-
-One can also assign configurations for all fields by type. For instance
-modifying the date presentation of all datetime fields in all sections can be
-accomplished like this:
-
-```ruby
-RailsAdmin.config do |config|
-  config.models do
-    fields_of_type :datetime do
-      strftime_format "%Y-%m-%d"
-    end
-  end
-end
-```
-
-Or even scope it like this:
-
-```ruby
-RailsAdmin.config do |config|
-  config.models do
     list do
-      fields_of_type :datetime do
-        date_format :compact
+      field :league_id do
+        visible true
       end
     end
   end
