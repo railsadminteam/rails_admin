@@ -18,6 +18,18 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 [plukevdh]: https://github.com/plukevdh
 [reinh]: https://github.com/reinh
 
+## Announcements
+
+* config.models do ... end is deprecated, for performance reasons (and it forces early loading of all application's models). Please duplicate to each concerned model instead before next release. If you really must replace with:
+ 
+```ruby
+config.models.each do |m|
+  config.model m do
+    # <<<< here goes your code
+  end
+end
+```
+
 ## Features
 
 * Display database tables
@@ -43,6 +55,7 @@ Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy
 [dummy_app]: https://github.com/bbenezech/dummy_app
 
 ## Installation
+
 In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
@@ -98,6 +111,7 @@ Optionally, you may wish to set up [Cancan](https://github.com/ryanb/cancan),
 More on that in the [Wiki](https://github.com/sferik/rails_admin/wiki)
 
 ## Usage
+
 Start the server:
 
     $ rails server
@@ -110,6 +124,7 @@ You should now be able to administer your site at
 All configuration documentation has moved to the wiki: https://github.com/sferik/rails_admin/wiki
 
 ## Screenshots
+
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "dashboard view")
 ![Delete view](https://github.com/sferik/rails_admin/raw/master/screenshots/delete.png "delete view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "list view")
@@ -117,6 +132,7 @@ All configuration documentation has moved to the wiki: https://github.com/sferik
 ![Polymophic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
 
 ## Support
+
 If you have a question, please check this README, the wiki, and the [list of
 known issues][troubleshoot].
 
@@ -130,6 +146,7 @@ list][list].
 If you think you found a bug in RailsAdmin, you can [submit an issue][issues].
 
 ## Contributing
+
 In the spirit of [free software][free-sw], **everyone** is encouraged to help
 improve this project.
 

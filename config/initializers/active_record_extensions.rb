@@ -1,7 +1,7 @@
 if defined?(::ActiveRecord)
   class ActiveRecord::Base
     def self.rails_admin(&block)
-      RailsAdmin::Config.model(self, &block)
+      RailsAdmin.config(self, &block)
     end
 
     def rails_admin_default_object_label_method

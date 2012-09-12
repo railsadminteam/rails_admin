@@ -436,7 +436,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     it "should be globally renameable by type" do
-      RailsAdmin::Config.models do
+      RailsAdmin.config 'Team' do
         edit do
           fields_of_type :string do
             label { "#{label} (STRING)" }
@@ -515,7 +515,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     it "should be globally hideable by type" do
-      RailsAdmin::Config.models do
+      RailsAdmin.config 'Team' do
         edit do
           fields_of_type :string do
             hide

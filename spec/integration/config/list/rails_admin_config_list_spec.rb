@@ -28,36 +28,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
     end
 
-    it "should be configurable" do
-      RailsAdmin::Config.models do
-        list do
-          items_per_page 1
-        end
-      end
-      visit index_path(:model_name => "league")
-      should have_selector("tbody tr", :count => 1)
-      visit index_path(:model_name => "player")
-      should have_selector("tbody tr", :count => 1)
-    end
-
     it "should be configurable per model" do
-      RailsAdmin.config League do
-        list do
-          items_per_page 1
-        end
-      end
-      visit index_path(:model_name => "league")
-      should have_selector("tbody tr", :count => 1)
-      visit index_path(:model_name => "player")
-      should have_selector("tbody tr", :count => 2)
-    end
-
-    it "should be globally configurable and overrideable per model" do
-      RailsAdmin::Config.models do
-        list do
-          items_per_page 20
-        end
-      end
       RailsAdmin.config League do
         list do
           items_per_page 1
@@ -211,7 +182,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be globally renameable by type" do
-      RailsAdmin::Config.models do
+      RailsAdmin.config 'Fan' do
         list do
           fields_of_type :datetime do
             label { "#{label} (datetime)" }
@@ -265,7 +236,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to disable sortability by type globally" do
-      RailsAdmin::Config.models do
+      RailsAdmin.config 'Fan' do
         list do
           fields_of_type :datetime do
             sortable false
@@ -297,7 +268,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to hide fields by type globally" do
-      RailsAdmin::Config.models do
+      RailsAdmin.config 'Fan' do
         list do
           fields_of_type :datetime do
             hide
@@ -415,21 +386,6 @@ describe "RailsAdmin Config DSL List Section" do
     before(:each) { @players = players.map{|h| Player.create(h) }}
 
     context "should be configurable" do
-      it "globaly" do
-        RailsAdmin.config do |config|
-          config.models do
-            list do
-              sort_by :created_at
-              sort_reverse true
-            end
-          end
-        end
-        visit index_path(:model_name => "player")
-        player_names_by_date.reverse.each_with_index do |name, i|
-          find("tbody tr:nth-child(#{i + 1})").should have_content(name)
-        end
-      end
-
       it "per model" do
         RailsAdmin.config Player do
           list do
@@ -439,40 +395,6 @@ describe "RailsAdmin Config DSL List Section" do
         end
         visit index_path(:model_name => "player")
         player_names_by_date.reverse.each_with_index do |name, i|
-          find("tbody tr:nth-child(#{i + 1})").should have_content(name)
-        end
-      end
-
-      it "globaly and overrideable per model" do
-        leagues.map{|h| League.create(h) }
-
-        RailsAdmin::Config.models do
-          list do
-            sort_by :created_at
-            sort_reverse true
-          end
-        end
-
-        RailsAdmin.config Player do
-          list do
-            sort_by PK_COLUMN
-            sort_reverse true
-          end
-        end
-
-        visit index_path(:model_name => "league")
-        league_names_by_date.reverse.each_with_index do |name, i|
-          find("tbody tr:nth-child(#{i + 1})").should have_content(name)
-        end
-
-        visit index_path(:model_name => "player")
-        @players.sort_by do |p|
-          if p[PK_COLUMN].is_a?(Integer)
-            p[PK_COLUMN]
-          else
-            p[PK_COLUMN].to_s
-          end
-        end.map{|p| p[:name]}.reverse.each_with_index do |name, i|
           find("tbody tr:nth-child(#{i + 1})").should have_content(name)
         end
       end
