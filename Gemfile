@@ -38,23 +38,10 @@ group :mongoid do
 end
 
 group :debug do
-  platform :mri_18 do
-    gem 'ruby-debug'
-    gem 'linecache'
-  end
-
   platform :mri_19 do
-    gem 'ruby-debug19'
+    gem 'debugger'
     gem 'simplecov', :require => false
   end
-
-  platform :jruby do
-    gem 'ruby-debug'
-  end
-end
-
-platforms :jruby, :mingw_18, :ruby_18 do
-  gem 'fastercsv', '~> 1.5'
 end
 
 group :development, :test do
