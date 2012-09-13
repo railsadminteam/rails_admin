@@ -90,7 +90,6 @@ module RailsAdmin
       begin
         (parent_actions ||= []) << action
       end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent))
-      parent_actions << action(:dashboard) if parent_actions.last.key != :dashboard # in case chain is interrupted
 
       content_tag(:ul, :class => "breadcrumb") do
         parent_actions.map do |a|
