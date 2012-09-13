@@ -50,4 +50,18 @@ describe "RailsAdmin Basic Delete" do
       should_not have_selector("a[href=\"/admin/comment/#{@comment.id}\"]")
     end
   end
+
+  describe "delete of an object which has an associated item without id" do
+    before(:each) do
+      @player = FactoryGirl.create :player
+      Player.any_instance.stub(:draft).and_return(Draft.new)
+      visit delete_path(:model_name => "player", :id => @player.id)
+    end
+
+    it "should show \"Delete model\"" do
+      should_not have_content("Routing Error")
+      should have_content("delete this player")
+      should have_link(@player.name, :href => "/admin/player/#{@player.id}")
+    end
+  end
 end
