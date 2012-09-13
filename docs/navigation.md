@@ -2,16 +2,18 @@
 
 You can include/exclude models totally. They won't appear in RailsAdmin at all.
 
+By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to
+be accessible through RailsAdmin. 
+
 **Blacklist Approach**
+
+The `excluded_models` configuration above permits the blacklisting of individual model classes.
 
 ```ruby
 config.excluded_models << "ClassName"
 ```
 
 **Whitelist Approach**
-
-By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to
-be accessible through RailsAdmin. The `excluded_models` configuration above permits the blacklisting of individual model classes.
 
 If you prefer a whitelist approach, then you can use the `included_models` configuration option instead:
 
@@ -43,7 +45,22 @@ config.model Box do
   label "Beautiful box" 
   label_plural "Beautiful boxen"
 end
+```
 
+But again, this is **way better** to it in `config/locale/en.yml`:
+
+```yml
+en:
+  ...
+  activerecord:
+    models:
+      box: 
+        one: Beautiful box
+        other: Beautiful boxen
+    attributes:
+      box:
+        color: "Shade of grey"
+        ...
 ```
 
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
