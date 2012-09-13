@@ -213,7 +213,12 @@ module RailsAdmin
 
         def editable?
           return false if @properties && @properties[:read_only]
-          !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
+          active_model_attr_accessible = !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
+          return true if active_model_attr_accessible
+          if RailsAdmin::Config.yell_for_non_accessible_fields
+            Rails.logger.debug "\n\n[RailsAdmin] Please add 'attr_accessible :#{self.method_name}' in your '#{bindings[:object].class}' model definition if you want to make it editable.\nYou can also explicitely mark this field as read-only: \n\nconfig.model #{bindings[:object].class} do\n  field :#{self.name} do\n    read_only true\n  end\nend\n\nAdd 'config.yell_for_non_accessible_fields = false' in your 'rails_admin.rb' initializer if you do not want to see these warnings\n\n"
+          end
+          false
         end
 
         # Is this an association

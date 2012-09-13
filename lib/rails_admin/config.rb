@@ -69,6 +69,9 @@ module RailsAdmin
       # accepts a hash of static links to be shown below the main navigation
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
+      
+      # yell about fields that are not marked as accessible
+      attr_accessor :yell_for_non_accessible_fields
 
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
@@ -280,6 +283,7 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def reset
         @compact_show_view = true
+        @yell_for_non_accessible_fields = true
         @authenticate = nil
         @authorize = nil
         @audit = nil

@@ -360,4 +360,30 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config(FieldVisibilityTest).show.fields.select{|f| f.visible? }.map(&:name).should =~ [:name]
     end
   end
+  
+  describe '#editable?' do
+    it 'should yell for non attr_accessible fields if config.yell_for_non_accessible_fields is true' do
+      RailsAdmin.config do |config|
+        config.yell_for_non_accessible_fields = true
+        config.model FieldTest do
+          field :protected_field
+        end
+      end
+      Rails.logger.should_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field'/ }
+      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :default))).editable?
+      editable.should == false
+    end
+    
+    it 'should not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false' do
+      RailsAdmin.config do |config|
+        config.yell_for_non_accessible_fields = false
+        config.model FieldTest do
+          field :protected_field
+        end
+      end
+      Rails.logger.should_not_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field'/ }
+      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :default))).editable?
+      editable.should == false
+    end
+  end
 end
