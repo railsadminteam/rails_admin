@@ -11,7 +11,7 @@
     - @abstract_model.each_associated_children(object) do |association, child|
       %li
         - child_config = RailsAdmin.config(child)
-        = association[:pretty_name]
+        = @abstract_model.model.human_attribute_name association[:name]
         - if show_enabled & child.id
           = link_to(child_config.with(:object => child).object_label, show_path(:model_name => child_config.abstract_model.to_param, :id => child.id))
         - else
