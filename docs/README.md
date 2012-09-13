@@ -1,11 +1,5 @@
 [[Troubleshoot? check me first|Troubleshoot]]
 
-[[Examples]]
-
-* [[How to: Reloading RailsAdmin Config Automatically]](in development mode)
-
-[[Roadmap]]
-
 ### Configuration
 
 1. [[Base RailsAdmin configuration|Base configuration]]
