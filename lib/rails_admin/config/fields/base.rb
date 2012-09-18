@@ -164,7 +164,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          context = (bindings && bindings[:object].try(:persisted?) ? :update : :create)          
+          context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)          
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.find do |column_name|
             !!abstract_model.model.validators_on(column_name).find do |v|
               !v.options[:allow_nil] and
