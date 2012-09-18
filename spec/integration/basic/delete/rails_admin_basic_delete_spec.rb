@@ -5,14 +5,11 @@ describe "RailsAdmin Basic Delete" do
   subject { page }
 
   describe "delete" do
-    before(:each) do
+    it "should show \"Delete model\"" do
       @draft = FactoryGirl.create :draft
       @player = @draft.player
       @comment = @player.comments.create
       visit delete_path(:model_name => "player", :id => @player.id)
-    end
-
-    it "should show \"Delete model\"" do
       should have_content("delete this player")
       should have_link(@player.name, :href => "/admin/player/#{@player.id}")
       should have_link("Draft ##{@draft.id}", :href => "/admin/draft/#{@draft.id}")

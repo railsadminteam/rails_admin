@@ -3,7 +3,6 @@ require 'spec_helper'
 describe RailsAdmin::Config::Fields::Base do
 
   describe "#required" do
-    
     it "should read the :on => :create/:update validate option" do
       RailsAdmin.config Ball do
         field 'color'

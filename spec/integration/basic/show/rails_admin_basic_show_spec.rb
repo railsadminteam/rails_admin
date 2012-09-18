@@ -4,22 +4,14 @@ describe "RailsAdmin Basic Show" do
   subject { page }
 
   describe "show" do
-    before(:each) do
+    it "should have History, Edit, Delete, Details and attributes" do
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "player", :id => @player.id)
-    end
 
-    it "should have History, Edit, Delete" do
       should have_selector("a", :text => "History")
       should have_selector("a", :text => "Edit")
       should have_selector("a", :text => "Delete")
-    end
-
-    it "should show 'Details'" do
       should have_content("Details")
-    end
-
-    it "should show attributes" do
       should have_content("Name")
       should have_content(@player.name)
       should have_content("Number")

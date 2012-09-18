@@ -29,12 +29,9 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "GET /admin/player as list" do
-    before do
+    it "should show \"List of Models\", should show filters and should show column headers" do
       21.times { FactoryGirl.create :player } # two pages of players
       visit index_path(:model_name => "player")
-    end
-
-    it "should show \"List of Models\", should show filters and should show column headers" do
       should have_content("List of Players")
       should have_content("Created at")
       should have_content("Updated at")
@@ -281,31 +278,31 @@ describe "RailsAdmin Basic List" do
     end
   end
 
-  describe "GET /admin/player with 20 pages, page 8" do
+  describe "GET /admin/player with 3 pages, page 2" do
     before(:each) do
       items_per_page = RailsAdmin.config.default_items_per_page
-      (items_per_page * 20).times { FactoryGirl.create(:player) }
-      visit index_path(:model_name => "player", :page => 8)
+      (items_per_page * 3).times { FactoryGirl.create(:player) }
+      visit index_path(:model_name => "player", :page => 2)
     end
 
     it "should paginate correctly" do
       find('.pagination ul li:first').should have_content("« Prev")
       find('.pagination ul li:last').should have_content("Next »")
-      find('.pagination ul li.active').should have_content("8")
+      find('.pagination ul li.active').should have_content("2")
     end
   end
 
-  describe "list with 20 pages, page 20" do
+  describe "list with 3 pages, page 3" do
     before(:each) do
       items_per_page = RailsAdmin.config.default_items_per_page
-      @players = (items_per_page * 20).times.map { FactoryGirl.create(:player) }
-      visit index_path(:model_name => "player", :page => 20)
+      @players = (items_per_page * 3).times.map { FactoryGirl.create(:player) }
+      visit index_path(:model_name => "player", :page => 3)
     end
 
     it "should paginate correctly and contain the right item" do
       find('.pagination ul li:first').should have_content("« Prev")
       find('.pagination ul li:last').should have_content("Next »")
-      find('.pagination ul li.active').should have_content("20")
+      find('.pagination ul li.active').should have_content("3")
     end
   end
 

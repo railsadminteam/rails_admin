@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config do
-
+  
   describe ".included_models" do
 
     it 'should only use included models' do

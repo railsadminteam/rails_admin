@@ -4,6 +4,30 @@ require 'spec_helper'
 
 describe RailsAdmin::MainController do
   
+  describe "#dashboard" do
+    before do
+      controller.stub(:render).and_return(true) # no rendering
+    end
+    
+    it "should show statistics by default" do
+      RailsAdmin.config(Player).abstract_model.should_receive(:count).and_return(0)
+      controller.dashboard
+    end
+    
+    it "should not show statistics if turned off" do
+      RailsAdmin.config do |c|
+        c.actions do
+          dashboard do
+            statistics false
+          end
+        end
+      end
+      
+      RailsAdmin.config(Player).abstract_model.should_not_receive(:count)
+      controller.dashboard
+    end
+  end
+  
   describe "#check_for_cancel" do
     
     it "should redirect to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do

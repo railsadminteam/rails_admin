@@ -5,6 +5,22 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL Edit Section" do
 
   subject { page }
+  
+  describe " a field with 'format' as a name (Kernel function)" do
+
+    it "should be updatable without any error" do
+      RailsAdmin.config FieldTest do
+        edit do
+          field :format
+        end
+      end
+      visit new_path(:model_name => "field_test")
+      fill_in "field_test[format]", :with => "test for format"
+      click_button "Save"
+      @record = RailsAdmin::AbstractModel.new("FieldTest").first
+      @record.format.should eql("test for format")
+    end
+  end
 
   describe "default_value" do
 
@@ -575,213 +591,6 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
-  describe "input format of" do
-
-    before(:each) do
-      @time = ::Time.now.getutc
-    end
-
-    after(:each) do
-      Time.zone = 'UTC'
-    end
-
-    describe "a datetime field" do
-
-      it "should default to %B %d, %Y %H:%M" do
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[datetime_field]", :with => @time.strftime("%B %d, %Y %H:%M")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.datetime_field.strftime("%Y-%m-%d %H:%M").should eql(@time.strftime("%Y-%m-%d %H:%M"))
-      end
-
-      it "should have a simple customization option" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :datetime_field do
-              date_format :default
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[datetime_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.datetime_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
-      end
-
-      it "should have a customization option" do
-        RailsAdmin.config FieldTest do
-          list do
-            field :datetime_field do
-              strftime_format "%Y-%m-%d %H:%M:%S"
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[datetime_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.datetime_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
-      end
-
-      it "should do round-trip saving properly with non-UTC timezones" do
-        Time.zone = 'Vienna'
-        time = Time.zone.parse('2012-09-01 12:00:00 +02:00')
-        @record = FieldTest.create!(:datetime_field => time)
-        visit edit_path(:model_name => "field_test", :id => @record.id)
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.datetime_field.should == time
-      end
-    end
-
-    describe "a timestamp field", :active_record => true do
-
-      it "should default to %B %d, %Y %H:%M" do
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[timestamp_field]", :with => @time.strftime("%B %d, %Y %H:%M")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.timestamp_field.strftime("%Y-%m-%d %H:%M").should eql(@time.strftime("%Y-%m-%d %H:%M"))
-      end
-
-      it "should have a simple customization option" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :timestamp_field do
-              date_format :default
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[timestamp_field]", :with => @time.strftime("%a, %d %b %Y %H:%M:%S")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.timestamp_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
-      end
-
-      it "should have a customization option" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :timestamp_field do
-              strftime_format "%Y-%m-%d %H:%M:%S"
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[timestamp_field]", :with => @time.strftime("%Y-%m-%d %H:%M:%S")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.timestamp_field.to_s(:rfc822).should eql(@time.to_s(:rfc822))
-      end
-    end
-
-    describe " a field with 'format' as a name (Kernel function)" do
-
-      it "should be updatable without any error" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :format
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[format]", :with => "test for format"
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.format.should eql("test for format")
-      end
-    end
-
-
-    describe "a time field" do
-
-      it "should default to %H:%M" do
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[time_field]", :with => @time.strftime("%H:%M")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
-      end
-
-      it "should interpret time value as UTC when timezone is specified" do
-        Time.zone = 'Eastern Time (US & Canada)' # -05:00
-
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[time_field]", :with => @time.strftime("%H:%M")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
-      end
-
-      it "should have a customization option" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :time_field do
-              strftime_format "%I:%M %p"
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[time_field]", :with => @time.strftime("%I:%M %p")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
-      end
-    end
-
-    describe "a date field" do
-
-      it "should default to %B %d, %Y" do
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[date_field]", :with => @time.strftime("%B %d, %Y")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.date_field.should eql(::Date.parse(@time.to_s))
-      end
-
-      it "should cover a timezone lag even if in UTC+n:00 timezone." do
-        Time.zone = 'Tokyo' # +09:00
-
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[date_field]", :with => @time.strftime("%B %d, %Y")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.date_field.should eql(::Date.parse(@time.to_s))
-      end
-
-      it "should have a simple customization option" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :date_field do
-              date_format :default
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[date_field]", :with => @time.strftime("%Y-%m-%d")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.date_field.should eql(::Date.parse(@time.to_s))
-      end
-
-      it "should have a customization option" do
-        RailsAdmin.config FieldTest do
-          edit do
-            field :date_field do
-              strftime_format "%Y-%m-%d"
-            end
-          end
-        end
-        visit new_path(:model_name => "field_test")
-        fill_in "field_test[date_field]", :with => @time.strftime("%Y-%m-%d")
-        click_button "Save"
-        @record = RailsAdmin::AbstractModel.new("FieldTest").first
-        @record.date_field.should eql(::Date.parse(@time.to_s))
-      end
-    end
-  end
-
   describe 'bindings' do
     it 'should be present at creation time' do
       RailsAdmin.config do |config|
@@ -807,17 +616,15 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe 'nested form' do
     it 'should work' do
-      visit new_path(:model_name => "field_test")
-      fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
-      click_button "Save"
-      @record = RailsAdmin::AbstractModel.new("FieldTest").first
-      @record.comment.content.should == 'nested comment content'
+      @record = FactoryGirl.create :field_test
       @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
       visit edit_path(:model_name => "field_test", :id => @record.id)
+      fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
       fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
       page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
       click_button "Save"
       @record.reload
+      @record.comment.content.should == 'nested comment content'
       @record.nested_field_tests.length.should == 1
       @record.nested_field_tests[0].title.should == 'nested field test title 1 edited'
     end
