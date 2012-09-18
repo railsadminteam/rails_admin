@@ -793,6 +793,21 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "draft")
       should have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
     end
+
+    it "should allow custom wysihtml5 configuration" do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes do
+            bootstrap_wysihtml5 true
+            bootstrap_wysihtml5_config_options :image => false
+          end
+        end
+      end
+
+      visit new_path(:model_name => "draft")
+      should have_selector('a.btn[data-wysihtml5-command="bold"]') #Shown by default
+      should_not have_selector('a.btn[data-wysihtml5-command="insertImage"]')
+    end
   end
 
   describe "Paperclip Support" do

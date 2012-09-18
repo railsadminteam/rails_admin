@@ -65,6 +65,12 @@ module RailsAdmin
             false
           end
 
+          # If you want to have a different toolbar configuration for wysihtml5
+          # create your own custom config.js and override this configuration
+          register_instance_option(:bootstrap_wysihtml5_config_options) do
+            nil
+          end
+
           register_instance_option(:bootstrap_wysihtml5_css_location) do
             '/assets/bootstrap-wysihtml5.css'
           end
