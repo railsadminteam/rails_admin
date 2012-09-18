@@ -2,3 +2,6 @@
  *= require rails_admin/imports.css.scss
 */
 /* Nothing else here (sass @import statements create weird pbs in a self required scss file) */
+<%
+require_asset 'bootstrap-wysihtml5' if Module.const_defined? 'BootstrapWysihtml5Rails'
+%>
