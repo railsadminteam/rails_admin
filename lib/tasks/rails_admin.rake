@@ -1,7 +1,10 @@
 namespace :rails_admin do
   desc "Disable rails_admin initializer"
   task :disable_initializer do
-    ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true' if ENV['SKIP_RAILS_ADMIN_INITIALIZER'].nil?
+    if ENV['SKIP_RAILS_ADMIN_INITIALIZER'].nil?
+      ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
+      puts "[RailsAdmin] RailsAdmin initialization disabled by default. Pass SKIP_RAILS_ADMIN_INITIALIZER=false if you need it."
+    end
   end
   
   desc "Install rails_admin"

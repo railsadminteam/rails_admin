@@ -20,7 +20,9 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 
 ## Announcements
 
-* config.models do ... end is deprecated, for performance reasons (and it forces early loading of all application's models). Please duplicate to each concerned model instead before next release. If you really must replace with:
+* for those with `rake db:migrate` errors, update to master and check that you see the line: "[RailsAdmin] RailsAdmin initialization disabled by default." when you launch the task. If not (or if migrations still don't work), open a ticket with an application on Github that can reproduce the issue.
+
+* `config.models do ... end` is deprecated (note the 's' to models, `config.model(MyModel) do .. end` is fine), for performance reasons (forces early loading of all application's models). Duplicate to each model instead, before next release. If you really need the old behavior:
  
 ```ruby
 config.models.each do |m|
