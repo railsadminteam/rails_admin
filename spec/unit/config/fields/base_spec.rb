@@ -2,6 +2,18 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
 
+  describe "#required" do
+    
+    it "should read the :on => :create/:update validate option" do
+      RailsAdmin.config Ball do
+        field 'color'
+      end
+      
+      RailsAdmin.config('Ball').fields.first.with(:object => Ball.new).should be_required
+      RailsAdmin.config('Ball').fields.first.with(:object => FactoryGirl.create(:ball)).should_not be_required
+    end
+  end
+
   describe "#name" do
     it 'should be normalized to Symbol' do
       RailsAdmin.config Team do

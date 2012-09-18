@@ -164,10 +164,12 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          @required ||= !!([name] + children_fields).uniq.find do |column_name|
+          context = (bindings && bindings[:object].try(:persisted?) ? :update : :create)          
+          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.find do |column_name|
             !!abstract_model.model.validators_on(column_name).find do |v|
-              v.kind == :presence && !v.options[:allow_nil] ||
-              v.kind == :numericality && !v.options[:allow_nil]
+              !v.options[:allow_nil] and
+              [:presence, :numericality].include?(v.kind) and
+              (v.options[:on] == context or v.options[:on].blank?)
             end
           end
         end
