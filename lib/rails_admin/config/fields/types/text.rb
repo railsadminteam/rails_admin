@@ -65,14 +65,6 @@ module RailsAdmin
             false
           end
 
-          register_instance_option(:bootstrap_wysihtml5_css_location) do
-            '/assets/bootstrap-wysihtml5.css'
-          end
-
-          register_instance_option(:bootstrap_wysihtml5_js_location) do
-            '/assets/bootstrap-wysihtml5-all.js'
-          end
-
           register_instance_option(:html_attributes) do
             {
               :cols => '48',
