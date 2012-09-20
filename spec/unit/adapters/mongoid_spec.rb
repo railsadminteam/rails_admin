@@ -683,6 +683,18 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
     end
 
+    it "supports integer type range query" do
+      @abstract_model.send(:build_statement, :field, :integer, ['', '', ''], nil).should be_nil
+      @abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], nil).should == {:field => 2}
+      @abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], nil).should == {:field => {"$gte" => 3}}
+      @abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], nil).should == {:field => {"$lte" => 5}}
+      @abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], nil).should == {:field => {"$gte" => 10, "$lte" => 20}}
+      @abstract_model.send(:build_statement, :field, :integer, ['15', '10', '20'], nil).should == {:field => {"$gte" => 10, "$lte" => 20}}
+      @abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''     ], nil).should be_nil
+      @abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], nil).should be_nil
+      @abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], nil).should be_nil
+    end
+
     it "supports string type query" do
       expect(@abstract_model.send(:build_statement, :field, :string, "", nil)).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :string, "foo", "was")).to be_nil
