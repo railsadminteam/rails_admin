@@ -373,6 +373,10 @@ describe RailsAdmin::Config::Fields::Base do
   end
   
   describe '#editable?' do
+    before do
+      Moped.logger.stub!(:debug) if defined?(Moped)
+    end
+
     it 'should yell for non attr_accessible fields if config.yell_for_non_accessible_fields is true' do
       RailsAdmin.config do |config|
         config.yell_for_non_accessible_fields = true
