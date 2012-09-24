@@ -8,7 +8,12 @@ module RailsAdmin
         end
 
         def message
-          "#{@version.event} #{@version.item_type} id #{@version.item_id}"
+          @message = "#{@version.event} #{@version.item_type} ID #{@version.item_id}"
+          @version.respond_to?(:changeset) ? @message + " [" + changes + "]" : @message
+        end
+        
+        def changes
+          @version.changeset.to_a.collect {|c| c[0] + " = " + c[1][1].to_s}.join(", ")
         end
 
         def created_at
