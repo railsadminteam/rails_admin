@@ -7,7 +7,7 @@
 - if field.optional? && field.errors.blank? && file && field.delete_method
   %a.btn.btn-info{:href => '#', :'data-toggle' => 'button', :onclick => "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false"}
     %i.icon-white.icon-trash
-    = I18n.t('admin.actions.delete.menu').capitalize + " #{field.method_name}"
+    = I18n.t('admin.actions.delete.menu').capitalize + " #{field.label.downcase}"
   = form.check_box(field.delete_method, :style => 'display:none;' )
 - if field.cache_method
   = form.hidden_field(field.cache_method)
