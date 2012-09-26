@@ -83,15 +83,15 @@ It will modify your `config/routes.rb`, adding:
 mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Feel free to change '/admin' to any namespace you need.
 ```
 
-Note: Your RailsAdmin namespace cannot match your Devise model name, or you will get an infinite redirect error.
+Note: The `devise_for` route must be placed before the mounted engine. The following will generate infinite redirects.
 The following will generate infinite redirects.
 
 ```ruby
-devise_for :admins
 mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+devise_for :admins
 ```
 
-Consider renaming your RailsAdmin namespace:
+This will resolve the infinite redirect error:
 
 ```ruby
 devise_for :admins
