@@ -25,3 +25,5 @@ matrix:
 notifications:
   irc: "irc.freenode.org#railsadmin"
 script: spec/ci.sh
+services:
+  - mongodb

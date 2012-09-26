@@ -131,7 +131,7 @@ All configuration documentation has moved to the wiki: https://github.com/sferik
 ![Delete view](https://github.com/sferik/rails_admin/raw/master/screenshots/delete.png "delete view")
 ![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "list view")
 ![Nested view](https://github.com/sferik/rails_admin/raw/master/screenshots/nested.png "nested view")
-![Polymophic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
+![Polymorphic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
 
 ## Support
 
