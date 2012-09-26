@@ -87,15 +87,15 @@ Note: Your RailsAdmin namespace cannot match your Devise model name, or you will
 The following will generate infinite redirects.
 
 ```ruby
-mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 devise_for :admins
+mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 ```
 
 Consider renaming your RailsAdmin namespace:
 
 ```ruby
-mount RailsAdmin::Engine => '/rails_admin', :as => 'rails_admin'
 devise_for :admins
+mount RailsAdmin::Engine => '/rails_admin', :as => 'rails_admin'
 ```
 
 See [#715](https://github.com/sferik/rails_admin/issues/715) for more details.
