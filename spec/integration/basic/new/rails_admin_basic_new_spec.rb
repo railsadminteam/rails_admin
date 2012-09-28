@@ -71,4 +71,11 @@ describe "RailsAdmin Basic New" do
     end
   end
 
+  describe "GET /admin/image/new" do
+    it "should show required for paperclip attached file with validates_attachment_presence" do
+      visit new_path(:model_name => "image")
+
+      should have_selector("div", :text => /File\s*Required/)
+    end
+  end
 end
