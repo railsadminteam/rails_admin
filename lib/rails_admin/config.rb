@@ -272,7 +272,6 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def models(&block)
         if block
-          raise 'coucou'
           ActiveSupport::Deprecation.warn("'config.models do ... end' is deprecated for performance reasons and will be removed in next major release, please duplicate to every concerned model instead.")
         end
         RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
