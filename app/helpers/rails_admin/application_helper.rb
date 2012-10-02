@@ -49,15 +49,7 @@ module RailsAdmin
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
 
         nodes = nodes.select{ |n| n.parent.nil? || !n.parent.to_s.in?(node_model_names) }
-        li_stack = nodes.map do |node|
-          model_param = node.abstract_model.to_param
-
-          %{<li data-model="#{model_param}">
-              <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)}">#{node.label_plural}</a>
-            </li>
-            #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model_name}, 1)}
-          }
-        end.join
+        li_stack = navigation nodes_stack, nodes
 
         label = navigation_label || t('admin.misc.navigation')
         %{<li class='nav-header'>#{label}</li>#{li_stack}} if li_stack.present?
@@ -74,7 +66,7 @@ module RailsAdmin
       li_stack
     end
 
-    def navigation nodes_stack, nodes, level
+    def navigation nodes_stack, nodes, level=0
       nodes.map do |node|
         model_param = node.abstract_model.to_param
 
