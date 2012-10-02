@@ -55,11 +55,7 @@ module RailsAdmin
           }
         end.join
 
-        if li_stack.present?
-          li_stack = %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>} + li_stack
-        end
-
-        li_stack
+        %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>#{li_stack.presence}}
       end.join.html_safe
     end
 
@@ -68,11 +64,7 @@ module RailsAdmin
         content_tag(:li, link_to(title.to_s, url, :target => '_blank'))
       end.join
 
-      if li_stack.present?
-        li_stack = %{<li class='nav-header'>#{RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')}</li>} + li_stack
-      end
-
-      li_stack.html_safe
+      %{<li class='nav-header'>#{RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')}</li>#{li_stack.presence}}.html_safe
     end
 
     def navigation nodes_stack, nodes, level
