@@ -85,7 +85,6 @@ mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Feel free to change
 ```
 
 Note: The `devise_for` route must be placed before the mounted engine. The following will generate infinite redirects.
-The following will generate infinite redirects.
 
 ```ruby
 mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
