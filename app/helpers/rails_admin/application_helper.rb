@@ -57,7 +57,7 @@ module RailsAdmin
         end.join
 
         label = navigation_label || t('admin.misc.navigation')
-        %{<li class='nav-header'>#{label}</li>#{li_stack.presence}}
+        %{<li class='nav-header'>#{label}</li>#{li_stack}} if li_stack.present?
       end.join.html_safe
     end
 
@@ -67,7 +67,7 @@ module RailsAdmin
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
-      %{<li class='nav-header'>#{label}</li>#{li_stack.presence}}.html_safe
+      %{<li class='nav-header'>#{label}</li>#{li_stack}} if li_stack.present?
     end
 
     def navigation nodes_stack, nodes, level
