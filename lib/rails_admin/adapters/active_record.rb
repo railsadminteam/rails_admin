@@ -134,6 +134,10 @@ module RailsAdmin
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
             field_statements = []
+            unless fields.find{ |f| f.name.to_s == field_name.pluralize }.nil?
+              # :has_and_belongs_to_many_association
+              field_name = field_name.pluralize
+            end
             fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
               statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
               field_statements << statement if statement.present?
