@@ -47,15 +47,17 @@ module RailsAdmin
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
 
         li_stack = nodes.select{|n| n.parent.nil? || !n.parent.to_s.in?(nodes_stack.map{|c| c.abstract_model.model_name }) }.map do |node|
-          %{
-            <li data-model="#{node.abstract_model.to_param}">
-              <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
+          model_param = node.abstract_model.to_param
+
+          %{<li data-model="#{model_param}">
+              <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)}">#{node.label_plural}</a>
             </li>
             #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model_name}, 1)}
           }
         end.join
 
-        %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>#{li_stack.presence}}
+        label = navigation_label || t('admin.misc.navigation')
+        %{<li class='nav-header'>#{label}</li>#{li_stack.presence}}
       end.join.html_safe
     end
 
@@ -64,14 +66,16 @@ module RailsAdmin
         content_tag(:li, link_to(title.to_s, url, :target => '_blank'))
       end.join
 
-      %{<li class='nav-header'>#{RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')}</li>#{li_stack.presence}}.html_safe
+      label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
+      %{<li class='nav-header'>#{label}</li>#{li_stack.presence}}.html_safe
     end
 
     def navigation nodes_stack, nodes, level
       nodes.map do |node|
-        %{
-          <li data-model="#{node.abstract_model.to_param}">
-            <a class="pjax nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
+        model_param = node.abstract_model.to_param
+
+        %{<li data-model="#{node.abstract_model.to_param}">
+            <a class="pjax nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)}">#{node.label_plural}</a>
           </li>
           #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level + 1)}
         }
