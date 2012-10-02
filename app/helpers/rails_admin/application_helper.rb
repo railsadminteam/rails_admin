@@ -69,9 +69,11 @@ module RailsAdmin
     def navigation nodes_stack, nodes, level=0
       nodes.map do |node|
         model_param = node.abstract_model.to_param
+        url         = url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)
+        level_class = "nav-level-#{level}" if level > 0
 
         %{<li data-model="#{model_param}">
-            <a class="pjax nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)}">#{node.label_plural}</a>
+            <a class="pjax#{level_class}" href="#{url}">#{node.label_plural}</a>
           </li>
           #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level + 1)}
         }
