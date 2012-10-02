@@ -270,7 +270,7 @@ module RailsAdmin
           ),
             "Symbol"         => { :type => :string, :length => 255 },
             "Time"           => { :type => :datetime },
-        }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
+        }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
       end
 
       def association_model_proc_lookup(association)
