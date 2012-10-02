@@ -251,6 +251,7 @@ module RailsAdmin
           "DateTime"       => { :type => :datetime },
           "Float"          => { :type => :float },
           "Hash"           => { :type => :serialized },
+          "Money"          => { :type => :serialized },
           "Integer"        => { :type => :integer },
           "Object"         => (
             if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
