@@ -52,11 +52,11 @@ module RailsAdmin
               <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
             </li>
             #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model_name}, 1)}
-          }.html_safe
-        end.join.html_safe
+          }
+        end.join
 
         if li_stack.present?
-          li_stack = %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + li_stack
+          li_stack = %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>} + li_stack
         end
 
         li_stack
@@ -65,14 +65,14 @@ module RailsAdmin
 
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.map do |title, url|
-        content_tag(:li, link_to(title.to_s, url, :target => '_blank')).html_safe
-      end.join.html_safe
+        content_tag(:li, link_to(title.to_s, url, :target => '_blank'))
+      end.join
 
       if li_stack.present?
-        li_stack = %{<li class='nav-header'>#{RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')}</li>}.html_safe + li_stack
+        li_stack = %{<li class='nav-header'>#{RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')}</li>} + li_stack
       end
 
-      li_stack
+      li_stack.html_safe
     end
 
     def navigation nodes_stack, nodes, level
@@ -82,7 +82,7 @@ module RailsAdmin
             <a class="pjax nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
           </li>
           #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level + 1)}
-        }.html_safe
+        }
       end.join
     end
 
@@ -126,16 +126,17 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, { :class => 'dropdown', :style => 'float:right' } do
-        content_tag(:a, { :class => 'dropdown-toggle', :'data-toggle' => "dropdown", :href => '#' }) { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
+        content_tag(:a, { :class => 'dropdown-toggle', :'data-toggle' => "dropdown", :href => '#' }) { t('admin.misc.bulk_menu_title') + '<b class="caret"></b>' } +
         content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
           actions.map do |action|
             content_tag :li do
               link_to wording_for(:bulk_link, action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"
             end
-          end.join.html_safe
+          end.join
         end
-      end
+      end.html_safe
     end
+
   end
 end
 
