@@ -1,8 +1,9 @@
-# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png)][pledgie]
+# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Code Climate](https://codeclimate.com/badge.png)][codeclimate] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png)][pledgie]
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
 [travis]: http://travis-ci.org/sferik/rails_admin
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
+[codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [pledgie]: http://www.pledgie.com/campaigns/15917
 
 It started as a port of [MerbAdmin][merb-admin] to Rails 3 and was implemented
