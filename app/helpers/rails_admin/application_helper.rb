@@ -72,11 +72,10 @@ module RailsAdmin
         url         = url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)
         level_class = "nav-level-#{level}" if level > 0
 
-        %{<li data-model="#{model_param}">
-            <a class="pjax#{level_class}" href="#{url}">#{node.label_plural}</a>
-          </li>
-          #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level + 1)}
-        }
+        li = content_tag :li, "data-model"=>model_param do
+          link_to node.label_plural, url, :class => "pjax#{level_class}"
+        end
+        li + navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level+1)
       end.join
     end
 
