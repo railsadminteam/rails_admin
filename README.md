@@ -1,8 +1,9 @@
-# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png)][pledgie]
+# RailsAdmin [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium] [![Code Climate](https://codeclimate.com/badge.png)][codeclimate] [![Click here to lend your support to: RailsAdmin and make a donation at www.pledgie.com !](https://www.pledgie.com/campaigns/15917.png)][pledgie]
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
 [travis]: http://travis-ci.org/sferik/rails_admin
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
+[codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [pledgie]: http://www.pledgie.com/campaigns/15917
 
 It started as a port of [MerbAdmin][merb-admin] to Rails 3 and was implemented
@@ -83,7 +84,7 @@ It will modify your `config/routes.rb`, adding:
 mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Feel free to change '/admin' to any namespace you need.
 ```
 
-Note: Your RailsAdmin namespace cannot match your Devise model name, or you will get an infinite redirect error.
+Note: The `devise_for` route must be placed before the mounted engine. The following will generate infinite redirects.
 The following will generate infinite redirects.
 
 ```ruby
@@ -91,11 +92,11 @@ mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 devise_for :admins
 ```
 
-Consider renaming your RailsAdmin namespace:
+This will resolve the infinite redirect error:
 
 ```ruby
-mount RailsAdmin::Engine => '/rails_admin', :as => 'rails_admin'
 devise_for :admins
+mount RailsAdmin::Engine => '/rails_admin', :as => 'rails_admin'
 ```
 
 See [#715](https://github.com/sferik/rails_admin/issues/715) for more details.
