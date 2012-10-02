@@ -794,19 +794,20 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
     end
 
-    it "should allow custom wysihtml5 configuration" do
+    it "should include custom wysihtml5 configuration" do
       RailsAdmin.config Draft do
         edit do
           field :notes do
             bootstrap_wysihtml5 true
             bootstrap_wysihtml5_config_options :image => false
+            bootstrap_wysihtml5_css_location 'stub_css.css'
+            bootstrap_wysihtml5_js_location 'stub_js.js'
           end
         end
       end
 
       visit new_path(:model_name => "draft")
-      should have_selector('a.btn[data-wysihtml5-command="bold"]') #Shown by default
-      should_not have_selector('a.btn[data-wysihtml5-command="insertImage"]')
+      should have_selector("textarea#draft_notes[data-richtext=\"bootstrap-wysihtml5\"][data-options]")
     end
   end
 
