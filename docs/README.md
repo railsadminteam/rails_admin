@@ -122,3 +122,4 @@
 * [ActsAsTaggableOn tag_list field](https://github.com/kryzhovnik/rails_admin_tag_list)
 * [Rich: an opinionated CKEditor implementation with file uploads](https://github.com/bastiaanterhorst/rich)
 * [Image cropping with rails_admin_jcrop](https://github.com/janx/rails_admin_jcrop)
+* [Drag and drop tree view](https://github.com/dalpo/rails_admin_nestable)
