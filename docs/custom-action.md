@@ -22,3 +22,10 @@ See the Base class your `ActionName` will inherit from:
 [[https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb]]
 
 It is also possible to inherit from any other action class.
+
+## Useful link 
+ Here some useful link describing how to create custom action in Rails admin 
+
+ [[http://blog.endpoint.com/2012/03/railsadmin-custom-action-case-study.html]]
+
+ 
