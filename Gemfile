@@ -1,21 +1,9 @@
 source 'https://rubygems.org'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
 group :active_record do
   platforms :jruby do
-    case ENV['CI_DB_ADAPTER']
-    when 'mysql'
-      gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
-      gem 'jdbc-mysql', '~> 5.1'
-    when 'postgresql'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
-      gem 'jdbc-postgres', '~> 9.0'
-    else
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.2'
-      gem 'jdbc-sqlite3', '~> 3.6'
-    end
+    gem 'activerecord-jdbcsqlite3-adapter', '~> 1.2'
+    gem 'jdbc-sqlite3', '~> 3.6'
   end
 
   platforms :ruby, :mswin, :mingw do
@@ -28,7 +16,6 @@ group :active_record do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem 'carrierwave'
 end
 
 group :mongoid do
@@ -39,15 +26,25 @@ end
 
 group :debug do
   platform :mri_19 do
-    gem 'debugger'
-    gem 'simplecov', :require => false
+    gem 'debugger', '~> 1.2'
+    gem 'simplecov', '~> 0.6', :require => false
   end
 end
 
 group :development, :test do
-  gem 'cancan'
-  gem 'devise'
-  gem 'paperclip'
+  gem 'cancan', '~> 1.6'
+  gem 'capybara', '~> 1.1'
+  gem 'carrierwave', '~> 0.6'
+  gem 'database_cleaner', '~> 0.8'
+  gem 'devise', '~> 2.1'
+  gem 'dragonfly', '~> 0.9'
+  gem 'factory_girl', '~> 4.1'
+  gem 'generator_spec', '~> 0.8'
+  gem 'launchy', '~> 2.1'
+  gem 'mini_magick', '~> 3.4'
+  gem 'paperclip', '~> 3.3'
+  gem 'rspec-rails', '~> 2.11'
+  gem 'timecop', '~> 0.5'
 end
 
 gemspec
