@@ -5,7 +5,7 @@ require 'spec_helper'
 describe "RailsAdmin Config DSL Edit Section" do
 
   subject { page }
-  
+
   describe " a field with 'format' as a name (Kernel function)" do
 
     it "should be updatable without any error" do
@@ -18,7 +18,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       fill_in "field_test[format]", :with => "test for format"
       click_button "Save"
       @record = RailsAdmin::AbstractModel.new("FieldTest").first
-      @record.format.should eql("test for format")
+      expect(@record.format).to eq("test for format")
     end
   end
 
@@ -49,10 +49,10 @@ describe "RailsAdmin Config DSL Edit Section" do
       # but Capybara's RackTest driver is not up to this behavior change.
       # (https://github.com/jnicklas/capybara/issues/677)
       # So we manually cut off first newline character as a workaround here.
-      find_field('field_test[string_field]').value.gsub(/^\n/, '').should == 'string_field default_value'
-      find_field('field_test[text_field]').value.gsub(/^\n/, '').should == 'string_field text_field'
-      find_field('field_test[date_field]').value.should == Date.today.to_s
-      has_checked_field?('field_test[boolean_field]').should be_true
+      expect(find_field('field_test[string_field]').value.gsub(/^\n/, '')).to eq('string_field default_value')
+      expect(find_field('field_test[text_field]').value.gsub(/^\n/, '')).to eq('string_field text_field')
+      expect(find_field('field_test[date_field]').value).to eq(Date.today.to_s)
+      expect(has_checked_field?('field_test[boolean_field]')).to be_true
     end
 
     it "should set default value for selects" do
@@ -65,7 +65,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find_field('team[color]').value.should == 'black'
+      expect(find_field('team[color]').value).to eq('black')
     end
   end
 
@@ -95,8 +95,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_no_selector "field_test[protected_field]"
       click_button "Save"
       @field_test = FieldTest.first
-      @field_test.string_field.should == "No problem here"
-      @field_test.restricted_field.should == "I'm allowed to do that as :custom_role only"
+      expect(@field_test.string_field).to eq("No problem here")
+      expect(@field_test.restricted_field).to eq("I'm allowed to do that as :custom_role only")
     end
   end
 
@@ -182,19 +182,19 @@ describe "RailsAdmin Config DSL Edit Section" do
       context "using mongoid", :skip_active_record => true do
         it "should use the db column size for the maximum length" do
           visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length up to 255.")
+          expect(find("#help_test_name_field .help-block")).to have_content("Length up to 255.")
         end
 
         it "should return nil for the maximum length" do
           visit new_path(:model_name => "team")
-          find("#team_custom_field_field .help-block").should_not have_content("Length")
+          expect(find("#team_custom_field_field .help-block")).not_to have_content("Length")
         end
       end
 
       context "using active_record", :skip_mongoid => true do
         it "should use the db column size for the maximum length" do
           visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
+          expect(find("#help_test_name_field .help-block")).to have_content("Length up to 50.")
         end
 
         it "should use the :minimum setting from the validation" do
@@ -202,7 +202,7 @@ describe "RailsAdmin Config DSL Edit Section" do
             validates_length_of :name, :minimum => 1
           end
           visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length of 1-50.")
+          expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-50.")
         end
 
         it "should use the minimum of db column size or :maximum setting from the validation" do
@@ -210,7 +210,7 @@ describe "RailsAdmin Config DSL Edit Section" do
             validates_length_of :name, :maximum => 51
           end
           visit new_path(:model_name => "help_test")
-          find("#help_test_name_field .help-block").should have_content("Length up to 50.")
+          expect(find("#help_test_name_field .help-block")).to have_content("Length up to 50.")
         end
       end
 
@@ -263,7 +263,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           validates_length_of :name, :is => 3
         end
         visit new_path(:model_name => "help_test")
-        find("#help_test_name_field .help-block").should have_content("Length of 3.")
+        expect(find("#help_test_name_field .help-block")).to have_content("Length of 3.")
       end
 
       it "should use the :maximum setting from the validation" do
@@ -271,7 +271,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           validates_length_of :name, :maximum => 49
         end
         visit new_path(:model_name => "help_test")
-        find("#help_test_name_field .help-block").should have_content("Length up to 49.")
+        expect(find("#help_test_name_field .help-block")).to have_content("Length up to 49.")
       end
 
       it "should use the :minimum and :maximum from the validation" do
@@ -279,7 +279,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           validates_length_of :name, :minimum => 1, :maximum => 49
         end
         visit new_path(:model_name => "help_test")
-        find("#help_test_name_field .help-block").should have_content("Length of 1-49.")
+        expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-49.")
       end
 
       it "should use the range from the validation" do
@@ -287,7 +287,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           validates_length_of :name, :in => 1..49
         end
         visit new_path(:model_name => "help_test")
-        find("#help_test_name_field .help-block").should have_content("Length of 1-49.")
+        expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-49.")
       end
 
     end
@@ -311,9 +311,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "team")
       should have_selector("legend", :text => "Basic info")
       all("legend", :text => "Basic info").tap do |nodes|
-        nodes.count.should == 2
-        nodes.first.visible?.should be_false
-        nodes.last.visible?.should be_true
+        expect(nodes.count).to eq(2)
+        expect(nodes.first.visible?).to be_false
+        expect(nodes.last.visible?).to be_true
       end
       should have_selector("legend", :text => "Belong's to associations")
       should have_selector("label", :text => "Name")
@@ -565,9 +565,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find("#team_manager_field .help-block").should have_content("Required. Length up to 100. Additional help text for manager field.")
-      find("#team_division_id_field .help-block").should have_content("Required")
-      find("#team_name_field .help-block").should_not have_content("Additional help text")
+      expect(find("#team_manager_field .help-block")).to have_content("Required. Length up to 100. Additional help text for manager field.")
+      expect(find("#team_division_id_field .help-block")).to have_content("Required")
+      expect(find("#team_name_field .help-block")).not_to have_content("Additional help text")
     end
 
     it "should have option to override required status" do
@@ -585,9 +585,9 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      find("#team_manager_field .help-block").should have_content("Optional")
-      find("#team_division_id_field .help-block").should have_content("Optional")
-      find("#team_name_field .help-block").should have_content("Required")
+      expect(find("#team_manager_field .help-block")).to have_content("Optional")
+      expect(find("#team_division_id_field .help-block")).to have_content("Optional")
+      expect(find("#team_name_field .help-block")).to have_content("Required")
     end
   end
 
@@ -624,9 +624,9 @@ describe "RailsAdmin Config DSL Edit Section" do
       page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
       click_button "Save"
       @record.reload
-      @record.comment.content.should == 'nested comment content'
-      @record.nested_field_tests.length.should == 1
-      @record.nested_field_tests[0].title.should == 'nested field test title 1 edited'
+      expect(@record.comment.content).to eq('nested comment content')
+      expect(@record.nested_field_tests.length).to eq(1)
+      expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
     end
 
     it 'should set bindings[:object] to nested object' do
@@ -642,7 +642,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       @record = FieldTest.create
       @record.nested_field_tests << NestedFieldTest.create!(:title => 'title 1')
       visit edit_path(:model_name => "field_test", :id => @record.id)
-      find('#field_test_nested_field_tests_attributes_0_title_field').should have_content('NestedFieldTest')
+      expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
     end
 
     it 'should be desactivable' do
@@ -677,7 +677,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
           and_return({:allow_destroy=>false, :update_only=>false})
         visit edit_path(:model_name => "field_test", :id => @record.id)
-        find('#field_test_nested_field_tests_attributes_0_title').value.should == 'nested title 1'
+        expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
         should_not have_selector('form .remove_nested_fields')
         should have_selector('[id$="_fields_blueprint"] .remove_nested_fields')
       end
@@ -701,8 +701,8 @@ describe "RailsAdmin Config DSL Edit Section" do
       page.find('#field_test_embeds_attributes_1__destroy').set('true')
       click_button "Save"
       @record.reload
-      @record.embeds.length.should == 1
-      @record.embeds[0].name.should == 'embed 1 edited'
+      expect(@record.embeds.length).to eq(1)
+      expect(@record.embeds[0].name).to eq('embed 1 edited')
     end
   end
 
@@ -712,26 +712,26 @@ describe "RailsAdmin Config DSL Edit Section" do
     it "should be required" do
       # draft.notes is nullable and has no validation
       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-      field.properties[:nullable?].should be true
-      field.required?.should be false
+      expect(field.properties[:nullable?]).to be_true
+      expect(field.required?).to be_false
 
       # draft.date is nullable in the schema but has an AR
       # validates_presence_of validation that makes it required
       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :date}
-      field.properties[:nullable?].should be true
-      field.required?.should be true
+      expect(field.properties[:nullable?]).to be_true
+      expect(field.required?).to be_true
 
       # draft.round is nullable in the schema but has an AR
       # validates_numericality_of validation that makes it required
       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :round}
-      field.properties[:nullable?].should be true
-      field.required?.should be true
+      expect(field.properties[:nullable?]).to be_true
+      expect(field.required?).to be_true
 
       # team.revenue is nullable in the schema but has an AR
       # validates_numericality_of validation that allows nil
       field = RailsAdmin::config("Team").edit.fields.find{|f| f.name == :revenue}
-      field.properties[:nullable?].should be true
-      field.required?.should be false
+      expect(field.properties[:nullable?]).to be_true
+      expect(field.required?).to be_false
     end
   end
 
@@ -739,7 +739,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     it "should start with CKEditor disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       field.ckeditor.should be false
+       expect(field.ckeditor).to be_false
     end
 
     it "should add Javascript to enable CKEditor" do
@@ -759,7 +759,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     it "should start with CodeMirror disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       field.codemirror.should be false
+       expect(field.codemirror).to be_false
     end
 
     it "should add Javascript to enable CodeMirror" do
@@ -779,7 +779,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     it "should start with bootstrap_wysihtml5 disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       field.bootstrap_wysihtml5.should be false
+       expect(field.bootstrap_wysihtml5).to be_false
     end
 
     it "should add Javascript to enable bootstrap_wysihtml5" do

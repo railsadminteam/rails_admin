@@ -23,11 +23,11 @@ describe "RailsAdmin Config DSL Show Section" do
     let(:body) { page.body }
 
     it 'should create a JSON uri' do
-      uri.should == "/admin/player/#{@player.id}.json"
+      expect(uri).to eq("/admin/player/#{@player.id}.json")
     end
 
     it 'should contain the JSONified object' do
-      body.should include(@player.to_json)
+      expect(body).to include(@player.to_json)
     end
   end
 

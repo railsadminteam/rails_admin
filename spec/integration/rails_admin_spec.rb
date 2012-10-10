@@ -41,7 +41,7 @@ describe "RailsAdmin" do
   end
 
   describe 'hidden fields with default values' do
-    
+
     before (:each) do
       RailsAdmin.config Player do
         include_all_fields
@@ -54,17 +54,17 @@ describe "RailsAdmin" do
         end
       end
     end
-    
+
     it "should show up with default value, hidden" do
       visit new_path(:model_name => "player")
       should have_selector("#player_name[type=hidden][value='username@example.com']")
       should_not have_selector("#player_name[type=hidden][value='toto@example.com']")
     end
-    
+
     it "should not show label" do
       should_not have_selector("label", :text => "Name")
     end
-    
+
     it "should not show help block" do
       should_not have_xpath("id('player_name')/../p[@class='help-block']")
     end

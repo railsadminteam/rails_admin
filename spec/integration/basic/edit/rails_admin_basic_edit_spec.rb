@@ -20,9 +20,9 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should show non-required fields as \"Optional\"" do
-      find("#player_position_field .help-block").should have_content("Optional")
-      find("#player_born_on_field .help-block").should have_content("Optional")
-      find("#player_notes_field .help-block").should have_content("Optional")
+      expect(find("#player_position_field .help-block")).to have_content("Optional")
+      expect(find("#player_born_on_field .help-block")).to have_content("Optional")
+      expect(find("#player_notes_field .help-block")).to have_content("Optional")
     end
   end
 
@@ -59,9 +59,9 @@ describe "RailsAdmin Basic Edit" do
 
     it "should show associated objects" do
       should have_selector "#fan_team_ids" do |select|
-        select[0].should have_selector 'option[selected="selected"]'
-        select[1].should_not have_selector 'option[selected="selected"]'
-        select[2].should_not have_selector 'option[selected="selected"]'
+        expect(select[0]).to have_selector 'option[selected="selected"]'
+        expect(select[1]).not_to have_selector 'option[selected="selected"]'
+        expect(select[2]).not_to have_selector 'option[selected="selected"]'
       end
     end
   end
@@ -72,7 +72,7 @@ describe "RailsAdmin Basic Edit" do
     end
 
     it "should raise NotFound" do
-      page.driver.status_code.should eql(404)
+      expect(page.driver.status_code).to eq(404)
     end
   end
 
@@ -103,7 +103,7 @@ describe "RailsAdmin Basic Edit" do
       visit '/admin/ball?sort=color'
       click_link 'Edit'
       click_button 'Cancel'
-      page.current_url.should == 'http://www.example.com/admin/ball?sort=color'
+      expect(page.current_url).to eq('http://www.example.com/admin/ball?sort=color')
     end
   end
 end

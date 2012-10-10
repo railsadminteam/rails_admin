@@ -10,7 +10,7 @@ describe 'ActiveRecord::Base', :active_record => true do
       @player.should_receive(:read_attribute).exactly(1).times do |*args|
         original_method.call(*args)
       end
-      @player.safe_send(:number).should == 23
+      expect(@player.safe_send(:number)).to eq(23)
     end
   end
 end

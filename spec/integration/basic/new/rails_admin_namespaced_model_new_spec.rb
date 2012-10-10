@@ -6,13 +6,13 @@ describe "RailsAdmin Namespaced Model New" do
 
   describe "AbstractModel#to_param" do
     it 'turns namespaces into prefixes with ~' do
-      RailsAdmin::AbstractModel.new("Cms::BasicPage").to_param.should == 'cms~basic_page'
+      expect(RailsAdmin::AbstractModel.new("Cms::BasicPage").to_param).to eq('cms~basic_page')
     end
   end
 
   describe "ApplicationController#to_model_name" do
     it 'turns cms~basic_page into Cms::BasicPage' do
-      RailsAdmin::ApplicationController.new.to_model_name('cms~basic_page').should == 'Cms::BasicPage'
+      expect(RailsAdmin::ApplicationController.new.to_model_name('cms~basic_page')).to eq('Cms::BasicPage')
     end
   end
 

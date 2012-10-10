@@ -25,15 +25,15 @@ describe "AbstractObject", :active_record => true do
       end
 
       it "should create a Player with given attributes" do
-        object.save.should be_true
+        expect(object.save).to be_true
 
         player.reload
-        player.name.should == name
-        player.number.should == number
-        player.position.should == position
-        player.suspended.should == false # protected
-        player.draft.should == nil
-        player.team.should == nil
+        expect(player.name).to eq(name)
+        expect(player.number).to eq(number)
+        expect(player.position).to eq(position)
+        expect(player.suspended).to be_false
+        expect(player.draft).to be_nil
+        expect(player.team).to be_nil
       end
     end
 
@@ -46,15 +46,15 @@ describe "AbstractObject", :active_record => true do
       end
 
       it "should create a Player with given attributes" do
-        object.save.should be_true
+        expect(object.save).to be_true
 
         player.reload
-        player.name.should == name
-        player.number.should == number
-        player.position.should == position
-        player.suspended.should == false # protected
-        player.draft.should == draft.reload
-        player.team.should == nil
+        expect(player.name).to eq(name)
+        expect(player.number).to eq(number)
+        expect(player.position).to eq(position)
+        expect(player.suspended).to be_false
+        expect(player.draft).to eq(draft.reload)
+        expect(player.team).to be_nil
       end
     end
 
@@ -70,10 +70,10 @@ describe "AbstractObject", :active_record => true do
       end
 
       it "should create a League with given attributes and associations" do
-        object.save.should be_true
+        expect(object.save).to be_true
         league.reload
-        league.name.should == name
-        league.divisions.should == divisions
+        expect(league.name).to eq(name)
+        expect(league.divisions).to eq(divisions)
       end
     end
   end
@@ -96,11 +96,11 @@ describe "AbstractObject", :active_record => true do
 
       it "should update a record and associations" do
         object.reload
-        object.number.should == new_number
-        object.name.should == name
-        object.draft.should == nil
-        object.suspended.should == true # protected
-        object.team.should == new_team
+        expect(object.number).to eq(new_number)
+        expect(object.name).to eq(name)
+        expect(object.draft).to be_nil
+        expect(object.suspended).to be_true
+        expect(object.team).to eq(new_team)
       end
     end
   end
@@ -114,7 +114,7 @@ describe "AbstractObject", :active_record => true do
     end
 
     it "should delete the record" do
-      Player.exists?(player.id).should == false
+      expect(Player.exists?(player.id)).to be_false
     end
   end
 
@@ -126,7 +126,7 @@ describe "AbstractObject", :active_record => true do
 
       @league = FactoryGirl.create :league
 
-      RailsAdmin.config('League').with(:object => @league).object_label.should == "League '#{@league.name}'"
+      expect(RailsAdmin.config('League').with(:object => @league).object_label).to eq("League '#{@league.name}'")
     end
   end
 end

@@ -14,13 +14,13 @@ describe RailsAdmin::Config::Fields::Types::Time do
 
     it "should read %H:%M" do
       @object.time_field = @field.parse_input({ :time_field => @time.strftime("%H:%M") })
-      @object.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
+      expect(@object.time_field.strftime("%H:%M")).to eq(@time.strftime("%H:%M"))
     end
 
     it "should interpret time value as UTC when timezone is specified" do
       Time.zone = 'Eastern Time (US & Canada)' # -05:00
       @object.time_field = @field.parse_input({ :time_field => @time.strftime("%H:%M") })
-      @object.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
+      expect(@object.time_field.strftime("%H:%M")).to eq(@time.strftime("%H:%M"))
     end
 
     it "should have a customization option" do
@@ -32,7 +32,7 @@ describe RailsAdmin::Config::Fields::Types::Time do
         end
       end
       @object.time_field = @field.parse_input({ :time_field => @time.strftime("%I:%M %p") })
-      @object.time_field.strftime("%H:%M").should eql(@time.strftime("%H:%M"))
+      expect(@object.time_field.strftime("%H:%M")).to eq(@time.strftime("%H:%M"))
     end
   end
 end

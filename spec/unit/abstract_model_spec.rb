@@ -14,11 +14,11 @@ describe RailsAdmin::AbstractModel do
         FactoryGirl.create(:field_test, :date_field => Date.strptime("01/02/2012", date_format))
         FactoryGirl.create(:field_test, :date_field => Date.strptime("01/03/2012", date_format))
         FactoryGirl.create(:field_test, :date_field => Date.strptime("01/04/2012", date_format))
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
+        expect(@abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count).to eq(2)
+        expect(@abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count).to eq(1)
+        expect(@abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count).to eq(2)
+        expect(@abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count).to eq(2)
+        expect(@abstract_model.all(:filters => { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count).to eq(1)
 
       end
     end
@@ -34,11 +34,11 @@ describe RailsAdmin::AbstractModel do
         else
           FactoryGirl.create(:field_test, :datetime_field => Time.local(2012, 1, 4, 0, 0, 0))
         end
-        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count.should == 1
-        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count.should == 2
-        @abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count.should == 1
+        expect(@abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).count).to eq(2)
+        expect(@abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/02/2012"], :o => 'between' } } } ).count).to eq(1)
+        expect(@abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).count).to eq(2)
+        expect(@abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).count).to eq(2)
+        expect(@abstract_model.all(:filters => { "datetime_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).count).to eq(1)
       end
     end
   end

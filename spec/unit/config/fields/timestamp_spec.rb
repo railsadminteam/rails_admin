@@ -14,7 +14,7 @@ describe RailsAdmin::Config::Fields::Types::Timestamp do
 
     it "should read %B %d, %Y %H:%M" do
       @object.timestamp_field = @field.parse_input({ :timestamp_field => @time.strftime("%B %d, %Y %H:%M") })
-      @object.timestamp_field.strftime("%Y-%m-%d %H:%M").should eql(@time.strftime("%Y-%m-%d %H:%M"))
+      expect(@object.timestamp_field.strftime("%Y-%m-%d %H:%M")).to eq(@time.strftime("%Y-%m-%d %H:%M"))
     end
   end
 end

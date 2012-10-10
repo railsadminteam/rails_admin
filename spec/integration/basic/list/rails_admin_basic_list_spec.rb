@@ -15,16 +15,16 @@ describe "RailsAdmin Basic List" do
   describe "GET /admin/typo" do
     it "should redirect to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'
-      page.driver.status_code.should eql(404)
-      find('.alert-error').should have_content("Model 'Whatever' could not be found")
+      expect(page.driver.status_code).to eq(404)
+      expect(find('.alert-error')).to have_content("Model 'Whatever' could not be found")
     end
   end
 
   describe "GET /admin/balls/545-typo" do
     it "should redirect to balls index and inform the user the id wasn't found" do
       visit '/admin/ball/545-typo'
-      page.driver.status_code.should eql(404)
-      find('.alert-error').should have_content("Ball with id '545-typo' could not be found")
+      expect(page.driver.status_code).to eq(404)
+      expect(find('.alert-error')).to have_content("Ball with id '545-typo' could not be found")
     end
   end
 
@@ -286,9 +286,9 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly" do
-      find('.pagination ul li:first').should have_content("« Prev")
-      find('.pagination ul li:last').should have_content("Next »")
-      find('.pagination ul li.active').should have_content("2")
+      expect(find('.pagination ul li:first')).to have_content("« Prev")
+      expect(find('.pagination ul li:last')).to have_content("Next »")
+      expect(find('.pagination ul li.active')).to have_content("2")
     end
   end
 
@@ -300,9 +300,9 @@ describe "RailsAdmin Basic List" do
     end
 
     it "should paginate correctly and contain the right item" do
-      find('.pagination ul li:first').should have_content("« Prev")
-      find('.pagination ul li:last').should have_content("Next »")
-      find('.pagination ul li.active').should have_content("3")
+      expect(find('.pagination ul li:first')).to have_content("« Prev")
+      expect(find('.pagination ul li:last')).to have_content("Next »")
+      expect(find('.pagination ul li.active')).to have_content("3")
     end
   end
 
@@ -310,7 +310,7 @@ describe "RailsAdmin Basic List" do
     it "should respond successfully" do
       2.times.map { FactoryGirl.create :player }
       visit index_path(:model_name => "player", :all => true)
-      find('div.total-count').should have_content("2 players")
+      expect(find('div.total-count')).to have_content("2 players")
     end
   end
 
@@ -319,7 +319,7 @@ describe "RailsAdmin Basic List" do
       @team = FactoryGirl.create :team
       2.times.map { FactoryGirl.create :player, :team => @team }
       visit index_path(:model_name => "player", :associated_collection => "players", :compact => true, :current_action => 'update', :source_abstract_model => 'team', :source_object_id => @team.id)
-      find('div.total-count').should have_content("2 players")
+      expect(find('div.total-count')).to have_content("2 players")
     end
   end
 
@@ -327,10 +327,10 @@ describe "RailsAdmin Basic List" do
     it "should have_content an array with 2 elements and contain an array of elements with keys id and label" do
       2.times.map { FactoryGirl.create :player }
       response = page.driver.get(index_path(:model_name => "player", :compact => true, :format => :json))
-      ActiveSupport::JSON.decode(response.body).length.should eql(2)
+      expect(ActiveSupport::JSON.decode(response.body).length).to eq(2)
       ActiveSupport::JSON.decode(response.body).each do |object|
-        object.should have_key("id")
-        object.should have_key("label")
+        expect(object).to have_key("id")
+        expect(object).to have_key("label")
       end
     end
   end
@@ -339,7 +339,7 @@ describe "RailsAdmin Basic List" do
     let(:player) { FactoryGirl.create :player }
 
     before do
-      Player.count.should == 0
+      expect(Player.count).to eq(0)
     end
 
     it "finds the player if the query matches the default search opeartor" do

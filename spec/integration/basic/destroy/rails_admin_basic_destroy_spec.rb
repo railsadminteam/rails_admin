@@ -13,7 +13,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "should destroy an object" do
-      @player.should be_nil
+      expect(@player).to be_nil
     end
 
     it "should show success message" do
@@ -30,7 +30,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "should not destroy an object" do
-      @player.reload.should be
+      expect(@player.reload).to be
     end
 
     it "should show error message" do
@@ -47,7 +47,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "should not destroy an object" do
-      @player.should be
+      expect(@player).to be
     end
   end
 
@@ -57,7 +57,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "should raise NotFound" do
-      page.driver.status_code.should eql(404)
+      expect(page.driver.status_code).to eq(404)
     end
   end
 
@@ -68,7 +68,7 @@ describe "RailsAdmin Basic Destroy" do
       visit delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
 
-      URI.parse(page.current_url).path.should ==(index_path(:model_name => 'player'))
+      expect(URI.parse(page.current_url).path).to eq(index_path(:model_name => 'player'))
     end
 
     it 'should redirect back to the object on error' do
@@ -78,7 +78,7 @@ describe "RailsAdmin Basic Destroy" do
       visit delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
 
-      URI.parse(page.current_url).path.should ==(show_path(:model_name => 'player', :id => @player.id))
+      expect(URI.parse(page.current_url).path).to eq(show_path(:model_name => 'player', :id => @player.id))
     end
   end
 end

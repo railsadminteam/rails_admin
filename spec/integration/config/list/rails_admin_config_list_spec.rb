@@ -45,8 +45,8 @@ describe "RailsAdmin Config DSL List Section" do
 
     it "should show all by default" do
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "Created at", "Updated at", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "Created at", "Updated at", "His Name", "Teams"]
     end
 
     it "should hide some fields on demand with a block" do
@@ -58,8 +58,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "His Name", "Teams"]
     end
 
     it "should hide some fields on demand with fields list" do
@@ -69,8 +69,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "His Name", "Teams"]
     end
 
     it "should add some fields on demand with a block" do
@@ -82,8 +82,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "His Name", "Teams"]
     end
 
     it "should show some fields on demand with fields list, respect ordering and configure them" do
@@ -97,9 +97,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Modified Id", "Modified His Name"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Modified Id", "Modified His Name"]
     end
 
     it "should show all fields if asked" do
@@ -111,9 +110,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "Created at", "Updated at", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "Created at", "Updated at", "His Name", "Teams"]
     end
 
     it "should appear in order defined" do
@@ -126,9 +124,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should == ["Updated at", "His Name", "Id", "Created at"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to eq(["Updated at", "His Name", "Id", "Created at"])
     end
 
     it "should only list the defined fields if some fields are defined" do
@@ -139,8 +136,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should == ["Id", "His Name"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to eq(["Id", "His Name"])
       should have_no_selector("th:nth-child(4).header")
     end
 
@@ -151,7 +148,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("His Name")
+      expect(find("th:nth-child(2)")).to have_content("His Name")
     end
 
     it "should be renameable" do
@@ -164,8 +161,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      find("th:nth-child(2)").should have_content("Identifier")
-      find("th:nth-child(3)").should have_content("His Name")
+      expect(find("th:nth-child(2)")).to have_content("Identifier")
+      expect(find("th:nth-child(3)")).to have_content("His Name")
     end
 
     it "should be renameable by type" do
@@ -177,8 +174,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
     end
 
     it "should be globally renameable by type" do
@@ -190,8 +187,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
     end
 
     it "should be sortable by default" do
@@ -263,8 +260,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "His Name", "Teams"]
     end
 
     it "should have option to hide fields by type globally" do
@@ -276,8 +273,8 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }.
-        should =~ ["Id", "His Name", "Teams"]
+      expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+        to match_array ["Id", "His Name", "Teams"]
     end
 
     it "should have option to customize column width" do
@@ -293,8 +290,8 @@ describe "RailsAdmin Config DSL List Section" do
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
       visit index_path(:model_name => "fan")
-      find('style').should have_content("#list th.#{PK_COLUMN}_field")
-      find('style').should have_content("#list td.#{PK_COLUMN}_field")
+      expect(find('style')).to have_content("#list th.#{PK_COLUMN}_field")
+      expect(find('style')).to have_content("#list td.#{PK_COLUMN}_field")
     end
 
     it "should have option to customize output formatting" do
@@ -312,8 +309,8 @@ describe "RailsAdmin Config DSL List Section" do
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
       visit index_path(:model_name => "fan")
-      find('tbody tr:nth-child(1) td:nth-child(3)').should have_content(@fans[1].name.upcase)
-      find('tbody tr:nth-child(2) td:nth-child(3)').should have_content(@fans[0].name.upcase)
+      expect(find('tbody tr:nth-child(1) td:nth-child(3)')).to have_content(@fans[1].name.upcase)
+      expect(find('tbody tr:nth-child(2) td:nth-child(3)')).to have_content(@fans[0].name.upcase)
     end
 
     it "should have a simple option to customize output formatting of date fields" do
@@ -359,7 +356,7 @@ describe "RailsAdmin Config DSL List Section" do
       @team = FactoryGirl.create :team
       @players = 2.times.map { FactoryGirl.create :player, :team => @team }
       visit index_path(:model_name => "team")
-      find('tbody tr:nth-child(1) td:nth-child(4)').should have_content(@players.collect(&:name).join(", "))
+      expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.collect(&:name).join(", "))
     end
   end
 
@@ -395,7 +392,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
         visit index_path(:model_name => "player")
         player_names_by_date.reverse.each_with_index do |name, i|
-          find("tbody tr:nth-child(#{i + 1})").should have_content(name)
+          expect(find("tbody tr:nth-child(#{i + 1})")).to have_content(name)
         end
       end
     end
@@ -408,7 +405,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "player")
       player_names_by_date.reverse.each_with_index do |name, i|
-        find("tbody tr:nth-child(#{i + 1})").should have_content(name)
+        expect(find("tbody tr:nth-child(#{i + 1})")).to have_content(name)
       end
     end
 
@@ -421,7 +418,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "player")
       player_names_by_date.each_with_index do |name, i|
-        find("tbody tr:nth-child(#{i + 1})").should have_content(name)
+        expect(find("tbody tr:nth-child(#{i + 1})")).to have_content(name)
       end
     end
   end

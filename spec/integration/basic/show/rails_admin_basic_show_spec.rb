@@ -22,10 +22,9 @@ describe "RailsAdmin Basic Show" do
   describe "GET /admin/players/123this-id-doesnt-exist" do
     it "should raise NotFound" do
       visit '/admin/players/123this-id-doesnt-exist'
-      page.driver.status_code.should eql(404)
+      expect(page.driver.status_code).to eq(404)
     end
   end
-
 
   describe "show with belongs_to association" do
     before(:each) do

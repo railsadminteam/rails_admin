@@ -23,7 +23,7 @@ describe "RailsAdmin Basic Delete" do
     end
 
     it "should raise NotFound" do
-      page.driver.status_code.should eql(404)
+      expect(page.driver.status_code).to eq(404)
     end
   end
 

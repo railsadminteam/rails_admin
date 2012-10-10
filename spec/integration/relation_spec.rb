@@ -17,19 +17,19 @@ describe 'table relations' do
 
   describe 'column with nullable fk and no model validations' do
     it 'should be optional' do
-      @fields.find{ |f| f.name == :league }.required?.should == false
+      expect(@fields.find{ |f| f.name == :league }.required?).to be_false
     end
   end
 
   describe 'column with non-nullable fk and no model validations' do
     it 'should not be required' do
-      @fields.find{ |f| f.name == :division }.required?.should == false
+      expect(@fields.find{ |f| f.name == :division }.required?).to be_false
     end
   end
 
   describe 'column with nullable fk and a numericality model validation' do
     it 'should be required' do
-      @fields.find{ |f| f.name == :player }.required?.should == true
+      expect(@fields.find{ |f| f.name == :player }.required?).to be_true
     end
   end
 end

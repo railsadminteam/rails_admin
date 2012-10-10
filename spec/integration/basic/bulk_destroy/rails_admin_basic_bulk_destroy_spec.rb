@@ -15,15 +15,15 @@ describe "RailsAdmin Basic Bulk Destroy" do
     end
 
     it "should not contain deleted records" do
-      RailsAdmin::AbstractModel.new("Player").count.should == 1
-      RailsAdmin::History.count.should == @delete_ids.count
+      expect(RailsAdmin::AbstractModel.new("Player").count).to eq(1)
+      expect(RailsAdmin::History.count).to eq(@delete_ids.count)
       RailsAdmin::History.all.each do |history|
-        history.table.should == "Player"
+        expect(history.table).to eq("Player")
       end
       RailsAdmin::History.all.each do |history|
-        @delete_ids.should include(history.item)
+        expect(@delete_ids).to include(history.item)
       end
-      page.should have_selector(".alert-success", :text => "2 Players successfully deleted")
+      expect(page).to have_selector(".alert-success", :text => "2 Players successfully deleted")
     end
   end
 
@@ -36,7 +36,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
     end
 
     it "should not delete records" do
-      RailsAdmin::AbstractModel.new("Player").count.should == 3
+      expect(RailsAdmin::AbstractModel.new("Player").count).to eq(3)
     end
   end
 end

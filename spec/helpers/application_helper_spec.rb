@@ -10,8 +10,8 @@ describe RailsAdmin::ApplicationHelper do
     it 'should return true if current_action, false otherwise' do
       @action = RailsAdmin::Config::Actions.find(:index)
 
-      helper.current_action?(RailsAdmin::Config::Actions.find(:index)).should be_true
-      helper.current_action?(RailsAdmin::Config::Actions.find(:show)).should_not be_true
+      expect(helper.current_action?(RailsAdmin::Config::Actions.find(:index))).to be_true
+      expect(helper.current_action?(RailsAdmin::Config::Actions.find(:show))).not_to be_true
     end
   end
 
@@ -24,7 +24,7 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      helper.action(:my_custom_dashboard_key).should be
+      expect(helper.action(:my_custom_dashboard_key)).to be
     end
 
     it 'should return only visible actions' do
@@ -36,7 +36,7 @@ describe RailsAdmin::ApplicationHelper do
         end
       end
 
-      helper.action(:dashboard).should == nil
+      expect(helper.action(:dashboard)).to be_nil
     end
 
     it 'should return only visible actions, passing all bindings' do
@@ -51,9 +51,9 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
       end
-      helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Team), Team.new).should be
-      helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Team), Player.new).should be_nil
-      helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Player), Team.new).should be_nil
+      expect(helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Team), Team.new)).to be
+      expect(helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Team), Player.new)).to be_nil
+      expect(helper.action(:test_bindings, RailsAdmin::AbstractModel.new(Player), Team.new)).to be_nil
     end
   end
 
@@ -61,10 +61,10 @@ describe RailsAdmin::ApplicationHelper do
     it 'should return actions by type' do
       abstract_model = RailsAdmin::AbstractModel.new(Player)
       object = FactoryGirl.create :player
-      helper.actions(:all, abstract_model, object).map(&:custom_key).should == [:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app]
-      helper.actions(:root, abstract_model, object).map(&:custom_key).should == [:dashboard]
-      helper.actions(:collection, abstract_model, object).map(&:custom_key).should == [:index, :new, :export, :bulk_delete, :history_index]
-      helper.actions(:member, abstract_model, object).map(&:custom_key).should == [:show, :edit, :delete, :history_show, :show_in_app]
+      expect(helper.actions(:all, abstract_model, object).map(&:custom_key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
+      expect(helper.actions(:root, abstract_model, object).map(&:custom_key)).to eq([:dashboard])
+      expect(helper.actions(:collection, abstract_model, object).map(&:custom_key)).to eq([:index, :new, :export, :bulk_delete, :history_index])
+      expect(helper.actions(:member, abstract_model, object).map(&:custom_key)).to eq([:show, :edit, :delete, :history_show, :show_in_app])
     end
 
     it 'should only return visible actions, passing bindings correctly' do
@@ -80,9 +80,9 @@ describe RailsAdmin::ApplicationHelper do
         end
       end
 
-      helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Team.new).map(&:custom_key).should == [:test_bindings]
-      helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Player.new).map(&:custom_key).should == []
-      helper.actions(:all, RailsAdmin::AbstractModel.new(Player), Team.new).map(&:custom_key).should == []
+      expect(helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Team.new).map(&:custom_key)).to eq([:test_bindings])
+      expect(helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Player.new).map(&:custom_key)).to eq([])
+      expect(helper.actions(:all, RailsAdmin::AbstractModel.new(Player), Team.new).map(&:custom_key)).to eq([])
     end
   end
 
@@ -96,25 +96,25 @@ describe RailsAdmin::ApplicationHelper do
         end
       end
 
-      helper.wording_for(:menu, :index).should == "List"
+      expect(helper.wording_for(:menu, :index)).to eq("List")
     end
 
     it "passes correct bindings" do
-      helper.wording_for(:title, :edit, RailsAdmin::AbstractModel.new(Team), Team.new(:name => 'the avengers')).should == "Edit Team 'the avengers'"
+      expect(helper.wording_for(:title, :edit, RailsAdmin::AbstractModel.new(Team), Team.new(:name => 'the avengers'))).to eq("Edit Team 'the avengers'")
     end
 
     it "defaults correct bindings" do
       @action = RailsAdmin::Config::Actions.find :edit
       @abstract_model = RailsAdmin::AbstractModel.new(Team)
       @object = Team.new(:name => 'the avengers')
-      helper.wording_for(:title).should == "Edit Team 'the avengers'"
+      expect(helper.wording_for(:title)).to eq("Edit Team 'the avengers'")
     end
 
     it "does not try to use the wrong :label_metod" do
       @abstract_model = RailsAdmin::AbstractModel.new(Draft)
       @object = Draft.new
 
-      helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team)).should == "Add a new Team"
+      expect(helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team))).to eq("Add a new Team")
     end
 
   end
@@ -123,10 +123,10 @@ describe RailsAdmin::ApplicationHelper do
     it "gives us a breadcrumb" do
       @action = RailsAdmin::Config::Actions.find(:edit, {:abstract_model => RailsAdmin::AbstractModel.new(Team), :object => Team.new(:name => 'the avengers')})
       bc = helper.breadcrumb
-      bc.should match /Dashboard/ # dashboard
-      bc.should match /Teams/ # list
-      bc.should match /the avengers/  # show
-      bc.should match /Edit/ # current (edit)
+      expect(bc).to match /Dashboard/ # dashboard
+      expect(bc).to match /Teams/ # list
+      expect(bc).to match /the avengers/  # show
+      expect(bc).to match /Edit/ # current (edit)
     end
   end
 
@@ -155,14 +155,14 @@ describe RailsAdmin::ApplicationHelper do
       @abstract_model = RailsAdmin::AbstractModel.new(Team)
       @object = Team.new(:name => 'the avengers')
 
-      helper.menu_for(:root).should match /Dashboard/
-      helper.menu_for(:collection, @abstract_model).should match /List/
-      helper.menu_for(:member, @abstract_model, @object).should match /Show/
+      expect(helper.menu_for(:root)).to match /Dashboard/
+      expect(helper.menu_for(:collection, @abstract_model)).to match /List/
+      expect(helper.menu_for(:member, @abstract_model, @object)).to match /Show/
 
       @abstract_model = RailsAdmin::AbstractModel.new(Player)
       @object = Player.new
-      helper.menu_for(:collection, @abstract_model).should_not match /List/
-      helper.menu_for(:member, @abstract_model, @object).should_not match /Show/
+      expect(helper.menu_for(:collection, @abstract_model)).not_to match /List/
+      expect(helper.menu_for(:member, @abstract_model, @object)).not_to match /Show/
     end
 
     it "excludes non-get actions" do
@@ -175,7 +175,7 @@ describe RailsAdmin::ApplicationHelper do
       end
 
       @action = RailsAdmin::Config::Actions.find :dashboard
-      helper.menu_for(:root).should_not match /Dashboard/
+      expect(helper.menu_for(:root)).not_to match /Dashboard/
     end
   end
 
@@ -184,7 +184,7 @@ describe RailsAdmin::ApplicationHelper do
       RailsAdmin.config do |config|
         config.included_models = [Ball, Comment]
       end
-      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Balls).*(Comments)/m
+      expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Balls).*(Comments)/m
     end
 
     it 'should not draw empty navigation labels' do
@@ -197,8 +197,8 @@ describe RailsAdmin::ApplicationHelper do
           label_plural 'Confirmed'
         end
       end
-      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m
-      helper.main_navigation.should_not match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m
+      expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m
+      expect(helper.main_navigation).not_to match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m
     end
 
     it 'should not show unvisible models' do
@@ -209,8 +209,8 @@ describe RailsAdmin::ApplicationHelper do
         end
       end
       result = helper.main_navigation
-      result.should match /(nav\-header).*(Navigation).*(Balls)/m
-      result.should_not match "Comments"
+      expect(result).to match /(nav\-header).*(Navigation).*(Balls)/m
+      expect(result).not_to match "Comments"
     end
 
     it "should show children of hidden models" do # https://github.com/sferik/rails_admin/issues/978
@@ -220,14 +220,14 @@ describe RailsAdmin::ApplicationHelper do
           hide
         end
       end
-      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Hardballs)/m
+      expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
 
     it "should show children of excluded models" do
       RailsAdmin.config do |config|
         config.included_models = [Hardball]
       end
-      helper.main_navigation.should match /(nav\-header).*(Navigation).*(Hardballs)/m
+      expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
 
     it 'should "nest" in navigation label' do
@@ -237,7 +237,7 @@ describe RailsAdmin::ApplicationHelper do
           navigation_label 'commentable'
         end
       end
-      helper.main_navigation.should match /(nav\-header).*(commentable).*(Comments)/m
+      expect(helper.main_navigation).to match /(nav\-header).*(commentable).*(Comments)/m
     end
 
     it 'should "nest" in parent model' do
@@ -247,19 +247,19 @@ describe RailsAdmin::ApplicationHelper do
           parent Player
         end
       end
-      helper.main_navigation.should match /(Players).*(nav\-level\-1).*(Comments)/m
+      expect(helper.main_navigation).to match /(Players).*(nav\-level\-1).*(Comments)/m
     end
 
     it 'should order' do
       RailsAdmin.config do |config|
         config.included_models = [Player, Comment]
       end
-      helper.main_navigation.should match /(Comments).*(Players)/m
+      expect(helper.main_navigation).to match /(Comments).*(Players)/m
 
       RailsAdmin.config(Comment) do
         weight 1
       end
-      helper.main_navigation.should match /(Players).*(Comments)/m
+      expect(helper.main_navigation).to match /(Players).*(Comments)/m
     end
   end
 
@@ -268,7 +268,7 @@ describe RailsAdmin::ApplicationHelper do
       RailsAdmin.config do |config|
         config.navigation_static_links = {}
       end
-      helper.static_navigation.should be_empty
+      expect(helper.static_navigation).to be_empty
     end
 
     it 'should show links if defined' do
@@ -277,7 +277,7 @@ describe RailsAdmin::ApplicationHelper do
           'Test Link' => 'http://www.google.com'
         }
       end
-      helper.static_navigation.should match /Test Link/
+      expect(helper.static_navigation).to match /Test Link/
     end
 
     it 'should show default header if navigation_static_label not defined in config' do
@@ -286,7 +286,7 @@ describe RailsAdmin::ApplicationHelper do
           'Test Link' => 'http://www.google.com'
         }
       end
-      helper.static_navigation.should match I18n.t('admin.misc.navigation_static_label')
+      expect(helper.static_navigation).to match I18n.t('admin.misc.navigation_static_label')
     end
 
     it 'should show custom header if defined' do
@@ -296,7 +296,7 @@ describe RailsAdmin::ApplicationHelper do
           'Test Link' => 'http://www.google.com'
         }
       end
-      helper.static_navigation.should match /Test Header/
+      expect(helper.static_navigation).to match /Test Header/
     end
   end
 
@@ -319,10 +319,10 @@ describe RailsAdmin::ApplicationHelper do
       end
       @action = RailsAdmin::Config::Actions.find :index
       result = helper.bulk_menu(RailsAdmin::AbstractModel.new(Team))
-      result.should match "zorg_action"
-      result.should match "blub"
+      expect(result).to match "zorg_action"
+      expect(result).to match "blub"
 
-      helper.bulk_menu(RailsAdmin::AbstractModel.new(Player)).should_not match "blub"
+      expect(helper.bulk_menu(RailsAdmin::AbstractModel.new(Player))).not_to match "blub"
     end
   end
 end

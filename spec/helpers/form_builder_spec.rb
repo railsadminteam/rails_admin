@@ -10,8 +10,8 @@ describe "RailsAdmin::FormBuilder" do
     end
     
     it 'should not add additional error div from default ActionView::Base.field_error_proc' do
-      @builder.generate({ :action => :create, :model_config => RailsAdmin.config(Player) }).should_not have_css(".field_with_errors")
-      @builder.generate({ :action => :create, :model_config => RailsAdmin.config(Player) }).should have_css(".control-group.error")
+      expect(@builder.generate({ :action => :create, :model_config => RailsAdmin.config(Player) })).not_to have_css(".field_with_errors")
+      expect(@builder.generate({ :action => :create, :model_config => RailsAdmin.config(Player) })).to have_css(".control-group.error")
     end
   end
 end

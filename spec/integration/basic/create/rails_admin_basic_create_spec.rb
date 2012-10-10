@@ -14,9 +14,9 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should create an object with correct attributes" do
-      @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
-      @player.position.should eql("Second baseman")
+      expect(@player.name).to eq("Jackie Robinson")
+      expect(@player.number).to eq(42)
+      expect(@player.position).to eq("Second baseman")
     end
   end
 
@@ -33,9 +33,9 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should create an object with correct attributes" do
-      @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
-      @player.position.should eql("Second baseman")
+      expect(@player.name).to eq("Jackie Robinson")
+      expect(@player.number).to eq(42)
+      expect(@player.position).to eq("Second baseman")
     end
   end
 
@@ -52,9 +52,9 @@ describe "RailsAdmin Basic Create" do
     end
 
     it "should create an object with correct attributes" do
-      @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
-      @player.position.should eql("Second baseman")
+      expect(@player.name).to eq("Jackie Robinson")
+      expect(@player.number).to eq(42)
+      expect(@player.position).to eq("Second baseman")
     end
   end
 
@@ -69,7 +69,7 @@ describe "RailsAdmin Basic Create" do
 
     it "should create an object with correct associations" do
       @draft.reload
-      @player.draft.should eql(@draft)
+      expect(@player.draft).to eq(@draft)
     end
   end
 
@@ -82,9 +82,9 @@ describe "RailsAdmin Basic Create" do
 
     it "should create an object with correct associations" do
       @divisions[0].reload
-      @league.divisions.should include(@divisions[0])
-      @league.divisions.should_not include(@divisions[1])
-      @league.divisions.should_not include(@divisions[2])
+      expect(@league.divisions).to include(@divisions[0])
+      expect(@league.divisions).not_to include(@divisions[1])
+      expect(@league.divisions).not_to include(@divisions[2])
     end
   end
 
@@ -97,9 +97,9 @@ describe "RailsAdmin Basic Create" do
 
     it "should create an object with correct associations" do
       @teams[0].reload
-      @fan.teams.should include(@teams[0])
-      @fan.teams.should_not include(@teams[1])
-      @fan.teams.should_not include(@teams[2])
+      expect(@fan.teams).to include(@teams[0])
+      expect(@fan.teams).not_to include(@teams[1])
+      expect(@fan.teams).not_to include(@teams[2])
     end
   end
 
