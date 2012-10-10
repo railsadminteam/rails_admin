@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'timecop'
 
-describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
-  describe '#associations' do
+describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
+  describe "#associations" do
     before :all do
       RailsAdmin::AbstractModel.reset_polymorphic_parents
 
@@ -67,11 +67,11 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       RailsAdmin::AbstractModel.reset_polymorphic_parents
     end
 
-    it 'lists associations' do
+    it "lists associations" do
       expect(@post.associations.map{|a| a[:name]}).to match_array [:mongo_blog, :mongo_categories, :mongo_comments, :mongo_note]
     end
 
-    it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
+    it "reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]" do
       expect((@post.associations + @blog.associations + @user.associations).map{|a|a[:type].to_s}.uniq).to match_array ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
 
@@ -693,14 +693,14 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :string, "foo", "is")).to eq({:field => 'foo'})
     end
 
-    it 'supports date type query' do
+    it "supports date type query" do
       expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } })).to eq({"$and" => [{"date_field" => {"$gte" => Date.new(2012,1,2), "$lte" => Date.new(2012,1,3)}}]})
       expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } )).to eq({"$and" => [{"date_field" => {"$gte" => Date.new(2012,1,3)}}]})
       expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } )).to eq({"$and" => [{"date_field" => {"$lte" => Date.new(2012,1,2)}}]})
       expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } )).to eq({"$and" => [{"date_field" => {"$gte" => Date.new(2012,1,2), "$lte" => Date.new(2012,1,2)}}]})
     end
 
-    it 'supports datetime type query' do
+    it "supports datetime type query" do
       expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } )).to eq({"$and" => [{"datetime_field" => {"$gte" => Time.local(2012,1,2), "$lte" => Time.local(2012,1,3).end_of_day}}]})
       expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } )).to eq({"$and" => [{"datetime_field" => {"$gte" => Time.local(2012,1,3)}}]})
       expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } )).to eq({"$and" => [{"datetime_field" => {"$lte" => Time.local(2012,1,2).end_of_day}}]})

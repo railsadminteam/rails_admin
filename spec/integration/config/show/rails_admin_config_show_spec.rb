@@ -22,25 +22,25 @@ describe "RailsAdmin Config DSL Show Section" do
     let(:uri) { show_path(:model_name => 'player', :id => @player.id, :format => :json) }
     let(:body) { page.body }
 
-    it 'should create a JSON uri' do
+    it "should create a JSON uri" do
       expect(uri).to eq("/admin/player/#{@player.id}.json")
     end
 
-    it 'should contain the JSONified object' do
+    it "should contain the JSONified object" do
       expect(body).to include(@player.to_json)
     end
   end
 
   describe "compact_show_view" do
 
-    it 'should hide empty fields in show view by default' do
+    it "should hide empty fields in show view by default" do
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "league", :id => @player.id)
       should_not have_css(".born_on_field")
     end
 
 
-    it 'should be disactivable' do
+    it "should be disactivable" do
       RailsAdmin.config do |c|
         c.compact_show_view = false
       end
@@ -242,7 +242,7 @@ describe "RailsAdmin Config DSL Show Section" do
     end
 
     it "should be globally renameable by type" do
-      RailsAdmin.config 'Team' do
+      RailsAdmin.config Team do
         show do
           fields_of_type :string do
             label { "#{label} (STRING)" }
@@ -298,7 +298,7 @@ describe "RailsAdmin Config DSL Show Section" do
     end
 
     it "should be globally hideable by type" do
-      RailsAdmin.config 'Team' do
+      RailsAdmin.config Team do
         show do
           fields_of_type :string do
             hide
@@ -318,7 +318,7 @@ describe "RailsAdmin Config DSL Show Section" do
     end
   end
 
-  describe 'embedded model', :mongoid => true do
+  describe "embedded model", :mongoid => true do
     it "should not show link to individual object's page" do
       @record = FactoryGirl.create :field_test
       2.times.each{|i| @record.embeds.create :name => "embed #{i}"}

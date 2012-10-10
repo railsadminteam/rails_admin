@@ -179,7 +179,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should be globally renameable by type" do
-      RailsAdmin.config 'Fan' do
+      RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
             label { "#{label} (datetime)" }
@@ -233,7 +233,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to disable sortability by type globally" do
-      RailsAdmin.config 'Fan' do
+      RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
             sortable false
@@ -265,7 +265,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
 
     it "should have option to hide fields by type globally" do
-      RailsAdmin.config 'Fan' do
+      RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
             hide
@@ -423,7 +423,7 @@ describe "RailsAdmin Config DSL List Section" do
     end
   end
 
-  describe 'embedded model', :mongoid => true do
+  describe "embedded model", :mongoid => true do
     it "should not show link to individual object's page" do
       RailsAdmin.config FieldTest do
         list do

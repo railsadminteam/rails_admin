@@ -32,7 +32,7 @@ describe RailsAdmin::Config::Sections do
   end
 
   describe "DSL field inheritance" do
-    it 'should be tested' do
+    it "should be tested" do
       RailsAdmin.config do |config|
         config.model Fan do
           field :name do
@@ -75,7 +75,7 @@ describe RailsAdmin::Config::Sections do
   end
 
   describe "DSL group inheritance" do
-    it 'should be tested' do
+    it "should be tested" do
       RailsAdmin.config do |config|
         config.model Team do
           list do

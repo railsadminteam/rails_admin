@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "AbstractObject", :active_record => true do
+describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record => true do
   describe "proxy" do
     let(:object) { mock("object") }
     let(:abstract_object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new(object) }
@@ -119,7 +119,7 @@ describe "AbstractObject", :active_record => true do
   end
 
   describe "object_label_method" do
-    it 'should be configurable' do
+    it "should be configurable" do
       RailsAdmin.config League do
         object_label_method { :custom_name }
       end

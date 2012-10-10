@@ -452,7 +452,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     it "should be globally renameable by type" do
-      RailsAdmin.config 'Team' do
+      RailsAdmin.config Team do
         edit do
           fields_of_type :string do
             label { "#{label} (STRING)" }
@@ -531,7 +531,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     it "should be globally hideable by type" do
-      RailsAdmin.config 'Team' do
+      RailsAdmin.config Team do
         edit do
           fields_of_type :string do
             hide
@@ -591,8 +591,8 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
-  describe 'bindings' do
-    it 'should be present at creation time' do
+  describe "bindings" do
+    it "should be present at creation time" do
       RailsAdmin.config do |config|
         config.excluded_models = []
       end
@@ -614,8 +614,8 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
-  describe 'nested form' do
-    it 'should work' do
+  describe "nested form" do
+    it "should work" do
       @record = FactoryGirl.create :field_test
       @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
       visit edit_path(:model_name => "field_test", :id => @record.id)
@@ -629,7 +629,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
     end
 
-    it 'should set bindings[:object] to nested object' do
+    it "should set bindings[:object] to nested object" do
       RailsAdmin.config(NestedFieldTest) do
         nested do
           field :title do
@@ -645,7 +645,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
     end
 
-    it 'should be desactivable' do
+    it "should be desactivable" do
       visit new_path(:model_name => "field_test")
       should have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       RailsAdmin.config(FieldTest) do
@@ -663,7 +663,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           and_return({:allow_destroy=>true, :update_only=>false})
       end
 
-      it 'should not show add button when :update_only is true' do
+      it "should not show add button when :update_only is true" do
         FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
           and_return({:allow_destroy=>true, :update_only=>true})
         visit new_path(:model_name => "field_test")
@@ -671,7 +671,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         should_not have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       end
 
-      it 'should not show destroy button except for newly created when :allow_destroy is false' do
+      it "should not show destroy button except for newly created when :allow_destroy is false" do
         @record = FieldTest.create
         @record.nested_field_tests << NestedFieldTest.create!(:title => 'nested title 1')
         FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
@@ -692,8 +692,8 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
-  describe 'embedded model', :mongoid => true do
-    it 'should work' do
+  describe "embedded model", :mongoid => true do
+    it "should work" do
       @record = FactoryGirl.create :field_test
       2.times.each{|i| @record.embeds.create :name => "embed #{i}"}
       visit edit_path(:model_name => "field_test", :id => @record.id)

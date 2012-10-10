@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "RailsAdmin" do
+describe RailsAdmin do
 
   subject { page }
 
@@ -40,7 +40,7 @@ describe "RailsAdmin" do
     end
   end
 
-  describe 'hidden fields with default values' do
+  describe "hidden fields with default values" do
 
     before (:each) do
       RailsAdmin.config Player do
@@ -70,9 +70,9 @@ describe "RailsAdmin" do
     end
   end
 
-  describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
+  describe "_current_user" do # https://github.com/sferik/rails_admin/issues/549
 
-    it 'should be accessible from the list view' do
+    it "should be accessible from the list view" do
       RailsAdmin.config Player do
         list do
           field :name do

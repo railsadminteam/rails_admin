@@ -3,13 +3,13 @@ require 'spec_helper'
 describe RailsAdmin::Config::Actions do
 
   describe "default" do
-    it 'should be as before' do
+    it "should be as before" do
       expect(RailsAdmin::Config::Actions.all.map(&:key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
     end
   end
 
-  describe 'find' do
-    it 'should find by custom key' do
+  describe "find" do
+    it "should find by custom key" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard do
@@ -27,11 +27,11 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.find(:show)).to be_a(RailsAdmin::Config::Actions::Show)
     end
 
-    it 'should return nil when no action is found by the custom key' do
+    it "should return nil when no action is found by the custom key" do
       expect(RailsAdmin::Config::Actions.find(:non_existent_action_key)).to be_nil
     end
 
-    it 'should return visible action passing binding if controller binding is given, and pass action visible or not if no' do
+    it "should return visible action passing binding if controller binding is given, and pass action visible or not if no" do
       RailsAdmin.config do |config|
         config.actions do
           root :custom_root do
@@ -46,7 +46,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.find(:custom_root, {:controller => "controller"})).to be_a(RailsAdmin::Config::Actions::Base)
     end
 
-    it 'should check bindings[:abstract_model] visibility while checking action\'s visibility' do
+    it "should check bindings[:abstract_model] visibility while checking action\'s visibility" do
       RailsAdmin.config Team do
         hide
       end
@@ -55,7 +55,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Team)})).to be_nil
     end
 
-    it 'should check bindings[:abstract_model] presence while checking action\'s visibility' do
+    it "should check bindings[:abstract_model] presence while checking action\'s visibility" do
       RailsAdmin.config do |config|
         config.excluded_models << Team
       end
@@ -64,8 +64,8 @@ describe RailsAdmin::Config::Actions do
     end
   end
 
-  describe 'all' do
-    it 'should return all defined actions' do
+  describe "all" do
+    it "should return all defined actions" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard
@@ -76,7 +76,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.all.map(&:key)).to eq([:dashboard, :index])
     end
 
-    it 'should restrict by scope' do
+    it "should restrict by scope" do
       RailsAdmin.config do |config|
         config.actions do
           root :custom_root
@@ -89,7 +89,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.all(:member).map(&:key)).to eq([:custom_member])
     end
 
-    it 'should return all visible actions passing binding if controller binding is given, and pass all actions if no' do
+    it "should return all visible actions passing binding if controller binding is given, and pass all actions if no" do
       RailsAdmin.config do |config|
         config.actions do
           root :custom_root do
@@ -106,7 +106,7 @@ describe RailsAdmin::Config::Actions do
   end
 
   describe "customized through DSL" do
-    it 'should add the one asked' do
+    it "should add the one asked" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard
@@ -118,7 +118,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.all.map(&:key)).to eq([:dashboard, :index, :show])
     end
 
-    it 'should allow to customize the custom_key when customizing an existing action' do
+    it "should allow to customize the custom_key when customizing an existing action" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard do
@@ -130,7 +130,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.all.map(&:key)).to eq([:dashboard])
     end
 
-    it 'should allow to change the key and the custom_key when "subclassing" an existing action' do
+    it "should allow to change the key and the custom_key when subclassing an existing action" do
       RailsAdmin.config do |config|
         config.actions do
           root :my_dashboard_key, :dashboard do
@@ -143,7 +143,7 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.all.map(&:class)).to eq([RailsAdmin::Config::Actions::Dashboard])
     end
 
-    it 'should not add the same custom_key twice' do
+    it "should not add the same custom_key twice" do
       expect do
         RailsAdmin.config do |config|
           config.actions do
@@ -163,7 +163,7 @@ describe RailsAdmin::Config::Actions do
       end.to raise_error("Action index already exist. Please change its custom key")
     end
 
-    it 'should add the same key with different custom key' do
+    it "should add the same key with different custom key" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard

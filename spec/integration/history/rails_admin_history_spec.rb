@@ -68,11 +68,11 @@ describe "RailsAdmin History", :active_record => true do
           end
         end
 
-        it 'should get latest ones' do
+        it "should get latest ones" do
           expect(RailsAdmin::History.latest.count).to eq(100)
         end
 
-        it 'should get latest ones orderly' do
+        it "should get latest ones orderly" do
           latest = RailsAdmin::History.latest
           expect(latest.first.message).to eq("change 100")
           expect(latest.last.message).to eq("change 1")

@@ -4,27 +4,27 @@ describe RailsAdmin::Config do
 
   describe ".included_models" do
 
-    it 'should only use included models' do
+    it "should only use included models" do
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to eq([League, Team]) # it gets sorted
     end
 
-    it 'should not restrict models if included_models is left empty' do
+    it "should not restrict models if included_models is left empty" do
       RailsAdmin.config.included_models = []
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to include(Team, League)
     end
 
-    it 'should further remove excluded models (whitelist - blacklist)' do
+    it "should further remove excluded models (whitelist - blacklist)" do
       RailsAdmin.config.excluded_models = [Team]
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to eq([League])
     end
 
-    it 'should always exclude history', :active_record => true do
+    it "should always exclude history", :active_record => true do
       expect(RailsAdmin::AbstractModel.all.map(&:model)).not_to include(RailsAdmin::History)
     end
 
-    it 'excluded? returns true for any model not on the list' do
+    it "excluded? returns true for any model not on the list" do
       RailsAdmin.config.included_models = [Team, League]
 
       team_config = RailsAdmin::AbstractModel.new('Team').config
@@ -225,8 +225,8 @@ describe RailsAdmin::Config do
     end
   end
 
-  describe '.visible_models' do
-    it 'passes controller bindings, find visible models, order them' do
+  describe ".visible_models" do
+    it "passes controller bindings, find visible models, order them" do
       RailsAdmin.config do |config|
         config.included_models = [Player, Fan, Comment, Team]
 
@@ -252,7 +252,7 @@ describe RailsAdmin::Config do
       expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [Fan, Comment]
     end
 
-    it 'hides unallowed models' do
+    it "hides unallowed models" do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
       end

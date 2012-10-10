@@ -14,7 +14,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#name" do
-    it 'should be normalized to Symbol' do
+    it "should be normalized to Symbol" do
       RailsAdmin.config Team do
         field 'name'
       end
@@ -30,15 +30,15 @@ describe RailsAdmin::Config::Fields::Base do
         [:commentable_id, :commentable_type]
       end
 
-    it 'should be empty by default' do
+    it "should be empty by default" do
       expect(RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields).to eq([])
     end
 
-    it 'should contain child key for belongs to associations' do
+    it "should contain child key for belongs to associations" do
       expect(RailsAdmin.config(Team).fields.find{ |f| f.name == :division }.children_fields).to eq([:division_id])
     end
 
-    it 'should contain child keys for polymorphic belongs to associations' do
+    it "should contain child keys for polymorphic belongs to associations" do
       expect(RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields).to match_array POLYMORPHIC_CHILDREN
     end
 
@@ -51,26 +51,26 @@ describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config(CommentReversed).fields.map{|f| f.name.to_s}.select{|f| /^comment/ =~ f}).to match_array ['commentable'].concat(POLYMORPHIC_CHILDREN.map(&:to_s))
     end
 
-    context 'of a Paperclip installation' do
-      it 'should be a _file_name field' do
+    context "of a Paperclip installation" do
+      it "should be a _file_name field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.include?(:paperclip_asset_file_name)).to be_true
       end
 
-      it 'should be hidden, not filterable' do
+      it "should be hidden, not filterable" do
         f = RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset_file_name }
         expect(f.hidden?).to be_true
         expect(f.filterable?).to be_false
       end
     end
 
-    context 'of a Dragonfly installation' do
-      it 'should be a _name field and _uid field' do
+    context "of a Dragonfly installation" do
+      it "should be a _name field and _uid field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.children_fields).to eq([:dragonfly_asset_name, :dragonfly_asset_uid])
       end
     end
 
-    context 'of a Carrierwave installation' do
-      it 'should be the parent field itself' do
+    context "of a Carrierwave installation" do
+      it "should be the parent field itself" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.children_fields).to eq([:carrierwave_asset])
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.hidden?).to be_false
       end
@@ -78,7 +78,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#html_default_value" do
-    it 'should be default_value for new records when value is nil' do
+    it "should be default_value for new records when value is nil" do
       RailsAdmin.config Team do
         list do
           field :name do
@@ -97,7 +97,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#default_value" do
-    it 'should be nil by default' do
+    it "should be nil by default" do
       expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.default_value).to be_nil
     end
   end
@@ -146,8 +146,8 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe '#searchable_columns' do
-    describe 'for belongs_to fields' do
+  describe "#searchable_columns" do
+    describe "for belongs_to fields" do
       it "should find label method on the opposite side for belongs_to associations by default" do
         expect(RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.map{|c| c[:column]}).to eq(["divisions.name", "teams.division_id"])
       end
@@ -180,14 +180,14 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
 
-    describe 'for basic type fields' do
+    describe "for basic type fields" do
 
-      it 'should use base table and find correct column type' do
+      it "should use base table and find correct column type" do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :text_field}.searchable_columns).to eq([{:column=>"field_tests.text_field", :type=>:text}])
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :integer_field}.searchable_columns).to eq([{:column=>"field_tests.integer_field", :type=>:integer}])
       end
 
-      it 'should be customizable to another field on the same table' do
+      it "should be customizable to another field on the same table" do
         RailsAdmin.config(FieldTest) do
           field :time_field do
             searchable :date_field
@@ -196,7 +196,7 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :time_field}.searchable_columns).to eq([{:column=>"field_tests.date_field", :type=>:date}])
       end
 
-      it 'should be customizable to another field on another table with :table_name' do
+      it "should be customizable to another field on another table with :table_name" do
         RailsAdmin.config(FieldTest) do
           field :string_field do
             searchable :nested_field_tests => :title
@@ -205,7 +205,7 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :string_field}.searchable_columns).to eq([{:column=>"nested_field_tests.title", :type=>:string}])
       end
 
-      it 'should be customizable to another field on another model with ModelClass' do
+      it "should be customizable to another field on another model with ModelClass" do
         RailsAdmin.config(FieldTest) do
           field :string_field do
             searchable NestedFieldTest => :title
@@ -215,16 +215,16 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
 
-    describe 'for mapped fields' do
-      it 'of paperclip should find the underlying column on the base table' do
+    describe "for mapped fields" do
+      it "of paperclip should find the underlying column on the base table" do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :paperclip_asset}.searchable_columns.map{|c| c[:column]}).to eq(["field_tests.paperclip_asset_file_name"])
       end
 
-      it 'of dragonfly should find the underlying column on the base table' do
+      it "of dragonfly should find the underlying column on the base table" do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :dragonfly_asset}.searchable_columns.map{|c| c[:column]}).to eq(["field_tests.dragonfly_asset_name"])
       end
 
-      it 'of carrierwave should find the underlying column on the base table' do
+      it "of carrierwave should find the underlying column on the base table" do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :carrierwave_asset}.searchable_columns.map{|c| c[:column]}).to eq(["field_tests.carrierwave_asset"])
       end
     end
@@ -232,7 +232,7 @@ describe RailsAdmin::Config::Fields::Base do
 
 
   describe "#searchable and #sortable" do
-    it 'should be false if column is virtual, true otherwise' do
+    it "should be false if column is virtual, true otherwise" do
       RailsAdmin.config League do
         field :virtual_column
         field :name
@@ -244,18 +244,18 @@ describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config('League').export.fields.find{ |f| f.name == :name }.searchable).to be_true
     end
 
-    context 'of a virtual field with children fields' do
-      it 'of paperclip should target the first children field' do
+    context "of a virtual field with children fields" do
+      it "of paperclip should target the first children field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.searchable).to eq(:paperclip_asset_file_name)
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.sortable).to eq(:paperclip_asset_file_name)
       end
 
-      it 'of dragonfly should target the first children field' do
+      it "of dragonfly should target the first children field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.searchable).to eq(:dragonfly_asset_name)
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.sortable).to eq(:dragonfly_asset_name)
       end
 
-      it 'of carrierwave should target the first children field' do
+      it "of carrierwave should target the first children field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.searchable).to eq(:carrierwave_asset)
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.sortable).to eq(:carrierwave_asset)
       end
@@ -263,7 +263,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#virtual?" do
-    it 'should be true if column has no properties, false otherwise' do
+    it "should be true if column has no properties, false otherwise" do
       RailsAdmin.config League do
         field :virtual_column
         field :name
@@ -338,19 +338,19 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe '#active' do
-    it 'is false by default' do
+  describe "#active" do
+    it "is false by default" do
       expect(RailsAdmin.config(Team).field(:division).active?).to be_false
     end
   end
 
-  describe '#associated_collection' do
-    it 'returns [] when type is blank?' do
+  describe "#associated_collection" do
+    it "returns [] when type is blank?" do
       expect(RailsAdmin.config(Comment).fields.find{|f|f.name == :commentable}.associated_collection('')).to be_empty
     end
   end
 
-  describe '#visible?' do
+  describe "#visible?" do
     it "should be false when fields have specific name " do
       class FieldVisibilityTest < Tableless
         column :id, :integer
@@ -371,12 +371,12 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe '#editable?' do
+  describe "#editable?" do
     before do
       Moped.logger.stub!(:debug) if defined?(Moped)
     end
 
-    it 'should yell for non attr_accessible fields if config.yell_for_non_accessible_fields is true' do
+    it "should yell for non attr_accessible fields if config.yell_for_non_accessible_fields is true" do
       RailsAdmin.config do |config|
         config.yell_for_non_accessible_fields = true
         config.model FieldTest do
@@ -388,7 +388,7 @@ describe RailsAdmin::Config::Fields::Base do
       expect(editable).to be_false
     end
 
-    it 'should not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false' do
+    it "should not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false" do
       RailsAdmin.config do |config|
         config.yell_for_non_accessible_fields = false
         config.model FieldTest do

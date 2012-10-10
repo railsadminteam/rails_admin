@@ -42,7 +42,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "readonly associations" do
 
-    it 'should not be editable' do
+    it "should not be editable" do
       @league = FactoryGirl.create :league
       visit edit_path(:model_name => "league", :id => @league.id)
       should_not have_selector('select#league_team_ids')

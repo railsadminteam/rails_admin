@@ -4,7 +4,7 @@ describe "RailsAdmin Namespaced Model Create" do
 
   subject { page }
 
-  it 'should create object with correct attributes' do
+  it "should create object with correct attributes" do
     visit new_path(:model_name => "cms~basic_page")
 
     fill_in "cms_basic_page[title]", :with => "Hello"

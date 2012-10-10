@@ -185,7 +185,7 @@ describe "RailsAdmin CanCan Authorization" do
   end
 
   describe "with history role" do
-    it 'shows links to history action' do
+    it "shows links to history action" do
 
       @user.update_attributes(:roles => [:admin, :read_player, :history_player])
       @player = FactoryGirl.create :player
@@ -206,7 +206,7 @@ describe "RailsAdmin CanCan Authorization" do
   end
 
   describe "with show in app role" do
-    it 'shows links to show in app action' do
+    it "shows links to show in app action" do
 
       @user.update_attributes(:roles => [:admin, :read_player, :show_in_app_player])
       @player = FactoryGirl.create :player
@@ -229,7 +229,7 @@ describe "RailsAdmin CanCan Authorization" do
   end
 
   describe "with all roles" do
-    it 'shows links to all actions' do
+    it "shows links to all actions" do
 
       @user.update_attributes(:roles => [:admin, :manage_player])
       @player = FactoryGirl.create :player

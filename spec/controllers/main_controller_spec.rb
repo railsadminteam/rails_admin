@@ -38,12 +38,12 @@ describe RailsAdmin::MainController do
   end
 
   describe "#get_sort_hash" do
-    it 'should work with belongs_to associations with label method virtual' do
+    it "should work with belongs_to associations with label method virtual" do
       controller.params = { :sort => "parent_category", :model_name =>"categories" }
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>"categories.parent_category_id", :sort_reverse=>true})
     end
 
-    it 'should work with belongs_to associations with label method real column' do
+    it "should work with belongs_to associations with label method real column" do
       controller.params = { :sort => "team", :model_name =>"players" }
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>"teams.name", :sort_reverse=>true})
     end
@@ -174,7 +174,7 @@ describe RailsAdmin::MainController do
   end
 
   describe "sanitize_params_for!" do
-    it 'sanitize params recursively in nested forms' do
+    it "sanitize params recursively in nested forms" do
       RailsAdmin.config Comment do
         configure :created_at do
           show
