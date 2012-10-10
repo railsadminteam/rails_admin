@@ -3,7 +3,7 @@ require 'spec_helper'
 describe RailsAdmin::Config::Sections do
 
   describe "configure" do
-    it "should configure without changing the section default list" do
+    it "configures without changing the section default list" do
       RailsAdmin.config Team do
         edit do
           configure :name do
@@ -16,7 +16,7 @@ describe RailsAdmin::Config::Sections do
       expect(fields.count).to be >= 19 # not 1
     end
 
-    it "should not change the section list if set" do
+    it "does not change the section list if set" do
       RailsAdmin.config Team do
         edit do
           field :manager
@@ -32,7 +32,7 @@ describe RailsAdmin::Config::Sections do
   end
 
   describe "DSL field inheritance" do
-    it "should be tested" do
+    it "is tested" do
       RailsAdmin.config do |config|
         config.model Fan do
           field :name do
@@ -75,7 +75,7 @@ describe RailsAdmin::Config::Sections do
   end
 
   describe "DSL group inheritance" do
-    it "should be tested" do
+    it "is tested" do
       RailsAdmin.config do |config|
         config.model Team do
           list do

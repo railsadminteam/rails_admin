@@ -21,7 +21,7 @@ describe "RailsAdmin Namespaced Model New" do
       visit new_path(:model_name => "cms~basic_page")
     end
 
-    it "should have correct input field names" do
+    it "has correct input field names" do
       should have_selector("label[for=cms_basic_page_title]")
       should have_selector("input#cms_basic_page_title[name='cms_basic_page[title]']")
       should have_selector("label[for=cms_basic_page_content]")

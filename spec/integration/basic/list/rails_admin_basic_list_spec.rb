@@ -7,13 +7,13 @@ describe "RailsAdmin Basic List" do
   subject { page }
 
   describe "GET /admin" do
-    it "should respond successfully" do
+    it "responds successfully" do
       visit dashboard_path
     end
   end
 
   describe "GET /admin/typo" do
-    it "should redirect to dashboard and inform the user the model wasn't found" do
+    it "redirects to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'
       expect(page.driver.status_code).to eq(404)
       expect(find('.alert-error')).to have_content("Model 'Whatever' could not be found")
@@ -21,7 +21,7 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "GET /admin/balls/545-typo" do
-    it "should redirect to balls index and inform the user the id wasn't found" do
+    it "redirects to balls index and inform the user the id wasn't found" do
       visit '/admin/ball/545-typo'
       expect(page.driver.status_code).to eq(404)
       expect(find('.alert-error')).to have_content("Ball with id '545-typo' could not be found")
@@ -29,7 +29,7 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "GET /admin/player as list" do
-    it "should show \"List of Models\", should show filters and should show column headers" do
+    it "shows \"List of Models\", should show filters and should show column headers" do
       21.times { FactoryGirl.create :player } # two pages of players
       visit index_path(:model_name => "player")
       should have_content("List of Players")
@@ -47,7 +47,7 @@ describe "RailsAdmin Basic List" do
       # https://github.com/sferik/rails_admin/issues/362
       # test that no link uses the "wildcard route" with the main
       # controller and list method
-      # it "should not use the 'wildcard route'" do
+      # it "does not use the 'wildcard route'" do
       should have_selector("a[href*='all=true']") # make sure we're fully testing pagination
       should have_no_selector("a[href^='/rails_admin/main/list']")
     end
@@ -74,7 +74,7 @@ describe "RailsAdmin Basic List" do
       ]
     end
 
-    it "should allow to query on any attribute" do
+    it "allows to query on any attribute" do
       visit index_path(:model_name => "player", :query => @players[0].name)
       should have_content(@players[0].name)
       (1..3).each do |i|
@@ -82,7 +82,7 @@ describe "RailsAdmin Basic List" do
       end
     end
 
-    it "should allow to filter on one attribute" do
+    it "allows to filter on one attribute" do
       visit index_path(:model_name => "player", :f => {:injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)
       should have_no_content(@players[1].name)
@@ -90,7 +90,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to combine filters on two different attributes" do
+    it "allows to combine filters on two different attributes" do
       visit index_path(:model_name => "player", :f => {:retired => {"1" => {:v => "true"}}, :injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)
       (1..3).each do |i|
@@ -98,7 +98,7 @@ describe "RailsAdmin Basic List" do
       end
     end
 
-    it "should allow to filter on belongs_to relationships" do
+    it "allows to filter on belongs_to relationships" do
       visit index_path(:model_name => "player", :f => {:team => {"1" => { :v => @teams[0].name }}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
@@ -106,7 +106,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to disable search on attributes" do
+    it "allows to disable search on attributes" do
       RailsAdmin.config Player do
         list do
           field :position
@@ -119,7 +119,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[0].name)
     end
 
-    it "should allow to search a belongs_to attribute over the base table" do
+    it "allows to search a belongs_to attribute over the base table" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -137,7 +137,7 @@ describe "RailsAdmin Basic List" do
     end
 
 
-    it "should allow to search a belongs_to attribute over the target table" do
+    it "allows to search a belongs_to attribute over the target table" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -154,7 +154,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search a belongs_to attribute over the target table with a table name specified as a hash" do
+    it "allows to search a belongs_to attribute over the target table with a table name specified as a hash" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -171,7 +171,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search a belongs_to attribute over the target table with a table name specified as a string" do
+    it "allows to search a belongs_to attribute over the target table with a table name specified as a string" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -188,7 +188,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search a belongs_to attribute over the label method by default" do
+    it "allows to search a belongs_to attribute over the label method by default" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -203,7 +203,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search a belongs_to attribute over the target table when an attribute is specified" do
+    it "allows to search a belongs_to attribute over the target table when an attribute is specified" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -220,7 +220,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should allow to search over more than one attribute" do
+    it "allows to search over more than one attribute" do
       RailsAdmin.config Player do
         list do
           field PK_COLUMN
@@ -243,7 +243,7 @@ describe "RailsAdmin Basic List" do
       should have_no_content(@players[3].name)
     end
 
-    it "should display base filters when no filters are present in the params" do
+    it "displays base filters when no filters are present in the params" do
       RailsAdmin.config Player do
         list do
           filters [:name, :team]
@@ -262,7 +262,7 @@ describe "RailsAdmin Basic List" do
       visit index_path(:model_name => "player")
     end
 
-    it "should show \"2 results\"" do
+    it "shows \"2 results\"" do
       should have_content("2 players")
     end
   end
@@ -273,7 +273,7 @@ describe "RailsAdmin Basic List" do
       visit index_path(:model_name => "player")
     end
 
-    it "should show \"20 results\"" do
+    it "shows \"20 results\"" do
       should have_content("20 players")
     end
   end
@@ -285,7 +285,7 @@ describe "RailsAdmin Basic List" do
       visit index_path(:model_name => "player", :page => 2)
     end
 
-    it "should paginate correctly" do
+    it "paginates correctly" do
       expect(find('.pagination ul li:first')).to have_content("« Prev")
       expect(find('.pagination ul li:last')).to have_content("Next »")
       expect(find('.pagination ul li.active')).to have_content("2")
@@ -299,7 +299,7 @@ describe "RailsAdmin Basic List" do
       visit index_path(:model_name => "player", :page => 3)
     end
 
-    it "should paginate correctly and contain the right item" do
+    it "paginates correctly and contain the right item" do
       expect(find('.pagination ul li:first')).to have_content("« Prev")
       expect(find('.pagination ul li:last')).to have_content("Next »")
       expect(find('.pagination ul li.active')).to have_content("3")
@@ -307,7 +307,7 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "GET /admin/player show all" do
-    it "should respond successfully" do
+    it "responds successfully" do
       2.times.map { FactoryGirl.create :player }
       visit index_path(:model_name => "player", :all => true)
       expect(find('div.total-count')).to have_content("2 players")
@@ -315,7 +315,7 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "GET /admin/player show with pagination disabled by :associated_collection" do
-    it "should respond successfully" do
+    it "responds successfully" do
       @team = FactoryGirl.create :team
       2.times.map { FactoryGirl.create :player, :team => @team }
       visit index_path(:model_name => "player", :associated_collection => "players", :compact => true, :current_action => 'update', :source_abstract_model => 'team', :source_object_id => @team.id)
@@ -324,7 +324,7 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "list as compact json" do
-    it "should have_content an array with 2 elements and contain an array of elements with keys id and label" do
+    it "has_content an array with 2 elements and contain an array of elements with keys id and label" do
       2.times.map { FactoryGirl.create :player }
       response = page.driver.get(index_path(:model_name => "player", :compact => true, :format => :json))
       expect(ActiveSupport::JSON.decode(response.body).length).to eq(2)

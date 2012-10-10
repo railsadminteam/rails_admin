@@ -9,12 +9,12 @@ describe RailsAdmin::MainController do
       controller.stub(:render).and_return(true) # no rendering
     end
 
-    it "should show statistics by default" do
+    it "shows statistics by default" do
       RailsAdmin.config(Player).abstract_model.should_receive(:count).and_return(0)
       controller.dashboard
     end
 
-    it "should not show statistics if turned off" do
+    it "does not show statistics if turned off" do
       RailsAdmin.config do |c|
         c.actions do
           dashboard do
@@ -30,7 +30,7 @@ describe RailsAdmin::MainController do
 
   describe "#check_for_cancel" do
 
-    it "should redirect to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
+    it "redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
       controller.stub(:back_or_index) { raise StandardError.new('redirected back') }
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete" } }.to raise_error('redirected back')
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.to_not raise_error('redirected back')
@@ -38,12 +38,12 @@ describe RailsAdmin::MainController do
   end
 
   describe "#get_sort_hash" do
-    it "should work with belongs_to associations with label method virtual" do
+    it "works with belongs_to associations with label method virtual" do
       controller.params = { :sort => "parent_category", :model_name =>"categories" }
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>"categories.parent_category_id", :sort_reverse=>true})
     end
 
-    it "should work with belongs_to associations with label method real column" do
+    it "works with belongs_to associations with label method real column" do
       controller.params = { :sort => "team", :model_name =>"players" }
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>"teams.name", :sort_reverse=>true})
     end
@@ -55,7 +55,7 @@ describe RailsAdmin::MainController do
       controller.params = { :model_name => "teams" }
     end
 
-    it "should paginate" do
+    it "paginates" do
       expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length).to eq(21)
       expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length).to eq(20)
     end
@@ -67,7 +67,7 @@ describe RailsAdmin::MainController do
       controller.params = { :model_name => "teams", :bulk_action => "bulk_delete", :bulk_ids => @teams.map(&:id) }
     end
 
-    it "should not paginate" do
+    it "does not paginate" do
       expect(controller.list_entries(RailsAdmin.config(Team), :bulk_delete).to_a.length).to eq(21)
     end
   end

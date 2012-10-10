@@ -114,7 +114,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       expect(@post.properties.find{|f| f[:name] == :mongo_blog_id}[:type]).to eq(:bson_object_id)
     end
 
-    it "should not confuse foreign_key column which belongs to associated model" do
+    it "does not confuse foreign_key column which belongs to associated model" do
       expect(@blog.properties.find{|f| f[:name] == :mongo_blog_id}[:type]).to eq(:string)
     end
 
@@ -215,7 +215,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       expect(param[:model_proc].call).to eq(MongoNote)
     end
 
-    it "should raise error when embeds_* is used without accepts_nested_attributes_for" do
+    it "raises error when embeds_* is used without accepts_nested_attributes_for" do
       class MongoEmbedsOne
         include Mongoid::Document
         embeds_one :mongo_embedded
@@ -240,7 +240,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       )
     end
 
-    it "should work with inherited embeds_many model" do
+    it "works with inherited embeds_many model" do
       class MongoEmbedsParent
         include Mongoid::Document
         embeds_many :mongo_embeddeds
@@ -407,7 +407,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       expect(RailsAdmin::AbstractModel.new('LengthValiated').send(:length_validation_lookup, :text)).to eq(50)
     end
 
-    it "should not cause problem with custom validators" do
+    it "does not cause problem with custom validators" do
       class MyCustomValidator < ActiveModel::Validator
         def validate(r); end
       end

@@ -4,23 +4,23 @@ describe RailsAdmin::Config do
 
   describe ".included_models" do
 
-    it "should only use included models" do
+    it "only uses included models" do
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to eq([League, Team]) # it gets sorted
     end
 
-    it "should not restrict models if included_models is left empty" do
+    it "does not restrict models if included_models is left empty" do
       RailsAdmin.config.included_models = []
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to include(Team, League)
     end
 
-    it "should further remove excluded models (whitelist - blacklist)" do
+    it "removes excluded models (whitelist - blacklist)" do
       RailsAdmin.config.excluded_models = [Team]
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to eq([League])
     end
 
-    it "should always exclude history", :active_record => true do
+    it "always excludes history", :active_record => true do
       expect(RailsAdmin::AbstractModel.all.map(&:model)).not_to include(RailsAdmin::History)
     end
 
@@ -260,7 +260,7 @@ describe RailsAdmin::Config do
       expect(RailsAdmin.config.visible_models(:controller => double(:authorized? => false)).map(&:abstract_model).map(&:model)).to eq([])
     end
 
-    it "should not contain embedded model", :mongoid => true do
+    it "does not contain embedded model", :mongoid => true do
       RailsAdmin.config do |config|
         config.included_models = [FieldTest, Comment, Embed]
       end

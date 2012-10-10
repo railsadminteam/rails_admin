@@ -8,7 +8,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe " a field with 'format' as a name (Kernel function)" do
 
-    it "should be updatable without any error" do
+    it "is updatable without any error" do
       RailsAdmin.config FieldTest do
         edit do
           field :format
@@ -24,7 +24,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "default_value" do
 
-    it "should be set for all types of input fields" do
+    it "is set for all types of input fields" do
       RailsAdmin.config do |config|
         config.excluded_models = []
         config.model(FieldTest) do
@@ -55,7 +55,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(has_checked_field?('field_test[boolean_field]')).to be_true
     end
 
-    it "should set default value for selects" do
+    it "sets default value for selects" do
       RailsAdmin.config(Team) do
         field :color, :enum do
           default_value 'black'
@@ -72,7 +72,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   describe "attr_accessible" do
 
 
-    it "should be configurable in the controller scope" do
+    it "is configurable in the controller scope" do
 
       RailsAdmin.config do |config|
         config.excluded_models = []
@@ -101,7 +101,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "css hooks" do
-    it "should be present" do
+    it "is present" do
       visit new_path(:model_name => "team")
       should have_selector("#team_division_id_field.belongs_to_association_type.division_field")
     end
@@ -109,7 +109,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "field groupings" do
 
-    it "should be hideable" do
+    it "is hideable" do
       RailsAdmin.config Team do
         edit do
           group :default do
@@ -135,7 +135,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_no_selector("input#team_revenue")
     end
 
-    it "should hide association groupings" do
+    it "hides association groupings" do
       RailsAdmin.config Team do
         edit do
           group :players do
@@ -152,7 +152,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_no_selector("select#team_player_ids")
     end
 
-    it "should be renameable" do
+    it "is renameable" do
       RailsAdmin.config Team do
         edit do
           group :default do
@@ -180,24 +180,24 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
 
       context "using mongoid", :skip_active_record => true do
-        it "should use the db column size for the maximum length" do
+        it "uses the db column size for the maximum length" do
           visit new_path(:model_name => "help_test")
           expect(find("#help_test_name_field .help-block")).to have_content("Length up to 255.")
         end
 
-        it "should return nil for the maximum length" do
+        it "returns nil for the maximum length" do
           visit new_path(:model_name => "team")
           expect(find("#team_custom_field_field .help-block")).not_to have_content("Length")
         end
       end
 
       context "using active_record", :skip_mongoid => true do
-        it "should use the db column size for the maximum length" do
+        it "uses the db column size for the maximum length" do
           visit new_path(:model_name => "help_test")
           expect(find("#help_test_name_field .help-block")).to have_content("Length up to 50.")
         end
 
-        it "should use the :minimum setting from the validation" do
+        it "uses the :minimum setting from the validation" do
           HelpTest.class_eval do
             validates_length_of :name, :minimum => 1
           end
@@ -205,7 +205,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-50.")
         end
 
-        it "should use the minimum of db column size or :maximum setting from the validation" do
+        it "uses the minimum of db column size or :maximum setting from the validation" do
           HelpTest.class_eval do
             validates_length_of :name, :maximum => 51
           end
@@ -214,7 +214,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      it "should show help section if present" do
+      it "shows help section if present" do
         RailsAdmin.config HelpTest do
           edit do
             group :default do
@@ -226,7 +226,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         should have_selector('fieldset>p', :text => "help paragraph to display")
       end
 
-      it "should not show help if not present" do
+      it "does not show help if not present" do
         RailsAdmin.config HelpTest do
           edit do
             group :default do
@@ -238,7 +238,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         should_not have_selector('fieldset>p')
       end
 
-      it "should be able to display multiple help if there are multiple sections" do
+      it "is able to display multiple help if there are multiple sections" do
         RailsAdmin.config HelpTest do
           edit do
             group :default do
@@ -258,7 +258,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         should have_selector("fieldset>p", :count => 2)
       end
 
-      it "should use the :is setting from the validation" do
+      it "uses the :is setting from the validation" do
         HelpTest.class_eval do
           validates_length_of :name, :is => 3
         end
@@ -266,7 +266,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         expect(find("#help_test_name_field .help-block")).to have_content("Length of 3.")
       end
 
-      it "should use the :maximum setting from the validation" do
+      it "uses the :maximum setting from the validation" do
         HelpTest.class_eval do
           validates_length_of :name, :maximum => 49
         end
@@ -274,7 +274,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         expect(find("#help_test_name_field .help-block")).to have_content("Length up to 49.")
       end
 
-      it "should use the :minimum and :maximum from the validation" do
+      it "uses the :minimum and :maximum from the validation" do
         HelpTest.class_eval do
           validates_length_of :name, :minimum => 1, :maximum => 49
         end
@@ -282,7 +282,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-49.")
       end
 
-      it "should use the range from the validation" do
+      it "uses the range from the validation" do
         HelpTest.class_eval do
           validates_length_of :name, :in => 1..49
         end
@@ -292,7 +292,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     end
 
-    it "should have accessor for its fields" do
+    it "has accessor for its fields" do
       RailsAdmin.config Team do
         edit do
           group :default do
@@ -322,7 +322,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(".control-group", :count => 4)
     end
 
-    it "should have accessor for its fields by type" do
+    it "has accessor for its fields by type" do
       RailsAdmin.config Team do
         edit do
           group :default do
@@ -350,7 +350,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "items' fields" do
 
-    it "should show all by default" do
+    it "shows all by default" do
       visit new_path(:model_name => "team")
       should have_selector("select#team_division_id")
       should have_selector("input#team_name")
@@ -367,7 +367,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("select#team_fan_ids")
     end
 
-    it "should appear in order defined" do
+    it "appears in order defined" do
       RailsAdmin.config Team do
         edit do
           field :manager
@@ -381,7 +381,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(:xpath, "//*[contains(@class, 'field')][3]//*[@id='team_name']")
     end
 
-    it "should only show the defined fields if some fields are defined" do
+    it "only shows the defined fields if some fields are defined" do
       RailsAdmin.config Team do
         edit do
           field :division
@@ -394,7 +394,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(".control-group", :count => 2)
     end
 
-    it "should delegates the label option to the ActiveModel API and memoize I18n awarly" do
+    it "delegates the label option to the ActiveModel API and memoize I18n awarly" do
       RailsAdmin.config Team do
         edit do
           field :manager
@@ -411,7 +411,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       I18n.locale = :en
     end
 
-    it "should be renameable" do
+    it "is renameable" do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -427,7 +427,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Name")
     end
 
-    it "should be renameable by type" do
+    it "is renameable by type" do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -451,7 +451,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Fans")
     end
 
-    it "should be globally renameable by type" do
+    it "is globally renameable by type" do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -475,7 +475,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Fans")
     end
 
-    it "should be flaggable as read only and be configurable with formatted_value" do
+    it "is flaggable as read only and be configurable with formatted_value" do
       RailsAdmin.config Team do
         edit do
           field :name do
@@ -490,7 +490,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_content("I'm outputed in the form")
     end
 
-    it "should be hideable" do
+    it "is hideable" do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -506,7 +506,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("#team_name")
     end
 
-    it "should be hideable by type" do
+    it "is hideable by type" do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -530,7 +530,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Fans")
     end
 
-    it "should be globally hideable by type" do
+    it "is globally hideable by type" do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -554,7 +554,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector("label", :text => "Fans")
     end
 
-    it "should have option to customize the help text" do
+    it "has option to customize the help text" do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -570,7 +570,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(find("#team_name_field .help-block")).not_to have_content("Additional help text")
     end
 
-    it "should have option to override required status" do
+    it "has option to override required status" do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -592,7 +592,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "bindings" do
-    it "should be present at creation time" do
+    it "is present at creation time" do
       RailsAdmin.config do |config|
         config.excluded_models = []
       end
@@ -615,7 +615,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "nested form" do
-    it "should work" do
+    it "works" do
       @record = FactoryGirl.create :field_test
       @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
       visit edit_path(:model_name => "field_test", :id => @record.id)
@@ -629,7 +629,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
     end
 
-    it "should set bindings[:object] to nested object" do
+    it "sets bindings[:object] to nested object" do
       RailsAdmin.config(NestedFieldTest) do
         nested do
           field :title do
@@ -645,7 +645,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
     end
 
-    it "should be desactivable" do
+    it "is desactivable" do
       visit new_path(:model_name => "field_test")
       should have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       RailsAdmin.config(FieldTest) do
@@ -663,7 +663,7 @@ describe "RailsAdmin Config DSL Edit Section" do
           and_return({:allow_destroy=>true, :update_only=>false})
       end
 
-      it "should not show add button when :update_only is true" do
+      it "does not show add button when :update_only is true" do
         FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
           and_return({:allow_destroy=>true, :update_only=>true})
         visit new_path(:model_name => "field_test")
@@ -671,7 +671,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         should_not have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       end
 
-      it "should not show destroy button except for newly created when :allow_destroy is false" do
+      it "does not show destroy button except for newly created when :allow_destroy is false" do
         @record = FieldTest.create
         @record.nested_field_tests << NestedFieldTest.create!(:title => 'nested title 1')
         FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
@@ -684,7 +684,7 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
 
     describe "when a field which have the same name of nested_in field's" do
-      it "should not hide fields which is not associated with nesting parent field's model" do
+      it "does not hide fields which is not associated with nesting parent field's model" do
         visit new_path(:model_name => "field_test")
         should_not have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
         should have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id')
@@ -693,7 +693,7 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "embedded model", :mongoid => true do
-    it "should work" do
+    it "works" do
       @record = FactoryGirl.create :field_test
       2.times.each{|i| @record.embeds.create :name => "embed #{i}"}
       visit edit_path(:model_name => "field_test", :id => @record.id)
@@ -709,7 +709,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "fields which are nullable and have AR validations", :active_record => true do
 
-    it "should be required" do
+    it "is required" do
       # draft.notes is nullable and has no validation
       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
       expect(field.properties[:nullable?]).to be_true
@@ -737,12 +737,12 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "CKEditor Support" do
 
-    it "should start with CKEditor disabled" do
+    it "starts with CKEditor disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
        expect(field.ckeditor).to be_false
     end
 
-    it "should add Javascript to enable CKEditor" do
+    it "adds Javascript to enable CKEditor" do
       RailsAdmin.config Draft do
         edit do
           field :notes do
@@ -757,12 +757,12 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "CodeMirror Support" do
 
-    it "should start with CodeMirror disabled" do
+    it "starts with CodeMirror disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
        expect(field.codemirror).to be_false
     end
 
-    it "should add Javascript to enable CodeMirror" do
+    it "adds Javascript to enable CodeMirror" do
       RailsAdmin.config Draft do
         edit do
           field :notes do
@@ -777,12 +777,12 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "bootstrap_wysihtml5 Support" do
 
-    it "should start with bootstrap_wysihtml5 disabled" do
+    it "starts with bootstrap_wysihtml5 disabled" do
        field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
        expect(field.bootstrap_wysihtml5).to be_false
     end
 
-    it "should add Javascript to enable bootstrap_wysihtml5" do
+    it "adds Javascript to enable bootstrap_wysihtml5" do
       RailsAdmin.config Draft do
         edit do
           field :notes do
@@ -797,7 +797,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
   describe "Paperclip Support" do
 
-    it "should show a file upload field" do
+    it "shows a file upload field" do
       RailsAdmin.config User do
         edit do
           field :avatar
@@ -828,7 +828,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         Team.send(:remove_method, :color_enum)
       end
 
-      it "should auto-detect enumeration" do
+      it "auto-detects enumeration" do
         should have_selector(".enum_type select")
         should_not have_selector(".enum_type select[multiple]")
         should have_content("green")
@@ -854,7 +854,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         Team.instance_eval { undef :color_enum }
       end
 
-      it "should auto-detect enumeration" do
+      it "auto-detects enumeration" do
         should have_selector(".enum_type select")
         should have_content("green")
       end
@@ -881,7 +881,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         Team.send(:remove_method, :color_list)
       end
 
-      it "should allow configuration" do
+      it "allows configuration" do
         should have_selector(".enum_type select")
         should have_content("green")
       end
@@ -908,7 +908,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         Team.instance_eval { undef :color_list }
       end
 
-      it "should allow configuration" do
+      it "allows configuration" do
         should have_selector(".enum_type select")
         should have_content("green")
       end
@@ -938,7 +938,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         Team.send(:remove_method, :color_list)
       end
 
-      it "should allow direct listing of enumeration options and override enum method" do
+      it "allows direct listing of enumeration options and override enum method" do
         should have_selector(".enum_type select")
         should have_no_content("green")
         should have_content("yellow")
@@ -961,7 +961,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         Team.instance_eval { undef :color_enum }
       end
 
-      it "should make enumeration multi-selectable" do
+      it "makes enumeration multi-selectable" do
         should have_selector(".enum_type select[multiple]")
       end
     end
@@ -984,14 +984,14 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      it "should make enumeration multi-selectable" do
+      it "makes enumeration multi-selectable" do
         should have_selector(".enum_type select[multiple]")
       end
     end
   end
 
   describe "ColorPicker Support" do
-    it "should show input with class color" do
+    it "shows input with class color" do
       RailsAdmin.config Team do
         edit do
           field :color, :color

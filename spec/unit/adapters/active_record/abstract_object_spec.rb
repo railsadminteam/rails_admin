@@ -5,7 +5,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
     let(:object) { mock("object") }
     let(:abstract_object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new(object) }
 
-    it "should act like a proxy" do
+    it "acts like a proxy" do
       object.should_receive(:method_call)
       abstract_object.method_call
     end
@@ -24,7 +24,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         object.set_attributes({ :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil })
       end
 
-      it "should create a Player with given attributes" do
+      it "creates a Player with given attributes" do
         expect(object.save).to be_true
 
         player.reload
@@ -45,7 +45,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         object.set_attributes({ :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil, :draft_id => draft.id })
       end
 
-      it "should create a Player with given attributes" do
+      it "creates a Player with given attributes" do
         expect(object.save).to be_true
 
         player.reload
@@ -69,7 +69,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         object.set_attributes({ :name  => name, :division_ids => divisions.map(&:id) })
       end
 
-      it "should create a League with given attributes and associations" do
+      it "creates a League with given attributes and associations" do
         expect(object.save).to be_true
         league.reload
         expect(league.name).to eq(name)
@@ -94,7 +94,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         object.save
       end
 
-      it "should update a record and associations" do
+      it "updates a record and associations" do
         object.reload
         expect(object.number).to eq(new_number)
         expect(object.name).to eq(name)
@@ -113,13 +113,13 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
       object.destroy
     end
 
-    it "should delete the record" do
+    it "deletes the record" do
       expect(Player.exists?(player.id)).to be_false
     end
   end
 
   describe "object_label_method" do
-    it "should be configurable" do
+    it "is configurable" do
       RailsAdmin.config League do
         object_label_method { :custom_name }
       end

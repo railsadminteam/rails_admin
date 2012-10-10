@@ -7,7 +7,7 @@ describe RailsAdmin::ApplicationHelper do
   end
 
   describe "#current_action?" do
-    it "should return true if current_action, false otherwise" do
+    it "returns true if current_action, false otherwise" do
       @action = RailsAdmin::Config::Actions.find(:index)
 
       expect(helper.current_action?(RailsAdmin::Config::Actions.find(:index))).to be_true
@@ -16,7 +16,7 @@ describe RailsAdmin::ApplicationHelper do
   end
 
   describe "#action" do
-    it "should return action by :custom_key" do
+    it "returns action by :custom_key" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard do
@@ -27,7 +27,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.action(:my_custom_dashboard_key)).to be
     end
 
-    it "should return only visible actions" do
+    it "returns only visible actions" do
       RailsAdmin.config do |config|
         config.actions do
           dashboard do
@@ -39,7 +39,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.action(:dashboard)).to be_nil
     end
 
-    it "should return only visible actions, passing all bindings" do
+    it "returns only visible actions, passing all bindings" do
       RailsAdmin.config do |config|
         config.actions do
           member :test_bindings do
@@ -58,7 +58,7 @@ describe RailsAdmin::ApplicationHelper do
   end
 
   describe "#actions" do
-    it "should return actions by type" do
+    it "returns actions by type" do
       abstract_model = RailsAdmin::AbstractModel.new(Player)
       object = FactoryGirl.create :player
       expect(helper.actions(:all, abstract_model, object).map(&:custom_key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
@@ -67,7 +67,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.actions(:member, abstract_model, object).map(&:custom_key)).to eq([:show, :edit, :delete, :history_show, :show_in_app])
     end
 
-    it "should only return visible actions, passing bindings correctly" do
+    it "only returns visible actions, passing bindings correctly" do
       RailsAdmin.config do |config|
         config.actions do
           member :test_bindings do
@@ -180,14 +180,14 @@ describe RailsAdmin::ApplicationHelper do
   end
 
   describe "#main_navigation" do
-    it "should show included models" do
+    it "shows included models" do
       RailsAdmin.config do |config|
         config.included_models = [Ball, Comment]
       end
       expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Balls).*(Comments)/m
     end
 
-    it "should not draw empty navigation labels" do
+    it "does not draw empty navigation labels" do
       RailsAdmin.config do |config|
         config.included_models = [Ball, Comment, Comment::Confirmed]
         config.model Comment do
@@ -201,7 +201,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.main_navigation).not_to match /(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m
     end
 
-    it "should not show unvisible models" do
+    it "does not show unvisible models" do
       RailsAdmin.config do |config|
         config.included_models = [Ball, Comment]
         config.model Comment do
@@ -213,7 +213,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(result).not_to match "Comments"
     end
 
-    it "should show children of hidden models" do # https://github.com/sferik/rails_admin/issues/978
+    it "shows children of hidden models" do # https://github.com/sferik/rails_admin/issues/978
       RailsAdmin.config do |config|
         config.included_models = [Ball, Hardball]
         config.model Ball do
@@ -223,14 +223,14 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
 
-    it "should show children of excluded models" do
+    it "shows children of excluded models" do
       RailsAdmin.config do |config|
         config.included_models = [Hardball]
       end
       expect(helper.main_navigation).to match /(nav\-header).*(Navigation).*(Hardballs)/m
     end
 
-    it "should nest in navigation label" do
+    it "nests in navigation label" do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
         config.model Comment do
@@ -240,7 +240,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.main_navigation).to match /(nav\-header).*(commentable).*(Comments)/m
     end
 
-    it "should nest in parent model" do
+    it "nests in parent model" do
       RailsAdmin.config do |config|
         config.included_models = [Player, Comment]
         config.model Comment do
@@ -250,7 +250,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.main_navigation).to match /(Players).*(nav\-level\-1).*(Comments)/m
     end
 
-    it "should order" do
+    it "orders" do
       RailsAdmin.config do |config|
         config.included_models = [Player, Comment]
       end
@@ -264,14 +264,14 @@ describe RailsAdmin::ApplicationHelper do
   end
 
   describe "#static_navigation" do
-    it "should show not show static nav if no static links defined" do
+    it "shows not show static nav if no static links defined" do
       RailsAdmin.config do |config|
         config.navigation_static_links = {}
       end
       expect(helper.static_navigation).to be_empty
     end
 
-    it "should show links if defined" do
+    it "shows links if defined" do
       RailsAdmin.config do |config|
         config.navigation_static_links = {
           'Test Link' => 'http://www.google.com'
@@ -280,7 +280,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.static_navigation).to match /Test Link/
     end
 
-    it "should show default header if navigation_static_label not defined in config" do
+    it "shows default header if navigation_static_label not defined in config" do
       RailsAdmin.config do |config|
         config.navigation_static_links = {
           'Test Link' => 'http://www.google.com'
@@ -289,7 +289,7 @@ describe RailsAdmin::ApplicationHelper do
       expect(helper.static_navigation).to match I18n.t('admin.misc.navigation_static_label')
     end
 
-    it "should show custom header if defined" do
+    it "shows custom header if defined" do
       RailsAdmin.config do |config|
         config.navigation_static_label = "Test Header"
         config.navigation_static_links = {
@@ -301,7 +301,7 @@ describe RailsAdmin::ApplicationHelper do
   end
 
   describe "#bulk_menu" do
-    it "should include all visible bulkable actions" do
+    it "includes all visible bulkable actions" do
       RailsAdmin.config do |config|
         config.actions do
           index

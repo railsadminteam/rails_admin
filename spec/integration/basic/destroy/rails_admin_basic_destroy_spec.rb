@@ -12,11 +12,11 @@ describe "RailsAdmin Basic Destroy" do
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
-    it "should destroy an object" do
+    it "destroys an object" do
       expect(@player).to be_nil
     end
 
-    it "should show success message" do
+    it "shows success message" do
       should have_content('Player successfully deleted')
     end
   end
@@ -29,11 +29,11 @@ describe "RailsAdmin Basic Destroy" do
       click_button "Yes, I'm sure"
     end
 
-    it "should not destroy an object" do
+    it "does not destroy an object" do
       expect(@player.reload).to be
     end
 
-    it "should show error message" do
+    it "shows error message" do
       should have_content('Player failed to be deleted')
     end
   end
@@ -46,7 +46,7 @@ describe "RailsAdmin Basic Destroy" do
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
-    it "should not destroy an object" do
+    it "does not destroy an object" do
       expect(@player).to be
     end
   end
@@ -56,13 +56,13 @@ describe "RailsAdmin Basic Destroy" do
       page.driver.delete(delete_path(:model_name => "player", :id => 1))
     end
 
-    it "should raise NotFound" do
+    it "raises NotFound" do
       expect(page.driver.status_code).to eq(404)
     end
   end
 
   describe "destroy from show page" do
-    it "should redirect to the index instead of trying to show the deleted object" do
+    it "redirects to the index instead of trying to show the deleted object" do
       @player = FactoryGirl.create :player
       visit show_path(:model_name => 'player', :id => @player.id)
       visit delete_path(:model_name => "player", :id => @player.id)
@@ -71,7 +71,7 @@ describe "RailsAdmin Basic Destroy" do
       expect(URI.parse(page.current_url).path).to eq(index_path(:model_name => 'player'))
     end
 
-    it "should redirect back to the object on error" do
+    it "redirects back to the object on error" do
       Player.any_instance.stub(:destroy_hook).and_return false
       @player = FactoryGirl.create :player
       visit show_path(:model_name => 'player', :id => @player.id)

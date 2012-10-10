@@ -10,7 +10,7 @@ describe "RailsAdmin Basic Update" do
       visit edit_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should return to edit page" do
+    it "returns to edit page" do
       fill_in "player[name]", :with => ""
       click_button "Save"
       expect(page.driver.status_code).to eq(406)
@@ -32,7 +32,7 @@ describe "RailsAdmin Basic Update" do
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
-    it "should update an object with correct attributes" do
+    it "updates an object with correct attributes" do
       expect(@player.name).to eq("Jackie Robinson")
       expect(@player.number).to eq(42)
       expect(@player.position).to eq("Second baseman")
@@ -53,7 +53,7 @@ describe "RailsAdmin Basic Update" do
       @player.reload
     end
 
-    it "should update an object with correct attributes" do
+    it "updates an object with correct attributes" do
       expect(@player.name).to eq("Jackie Robinson")
       expect(@player.number).to eq(42)
       expect(@player.position).to eq("Second baseman")
@@ -69,20 +69,20 @@ describe "RailsAdmin Basic Update" do
       @player.reload
     end
 
-    it "should update an object with correct attributes" do
+    it "updates an object with correct attributes" do
       expect(@player.name).to eq("Jackie Robinson")
       expect(@player.number).to eq(@number)
       expect(@player.position).to eq("Second baseman")
     end
 
-    it "should update an object with correct associations" do
+    it "updates an object with correct associations" do
       @draft.reload
       expect(@player.draft).to eq(@draft)
     end
   end
 
   describe "update with has-many association" do
-    it "should be fillable and emptyable", :active_record => true do
+    it "is fillable and emptyable", :active_record => true do
       RailsAdmin.config do |c|
         c.audit_with :history
       end
@@ -114,7 +114,7 @@ describe "RailsAdmin Basic Update" do
       page.driver.put(edit_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
     end
 
-    it "should raise NotFound" do
+    it "raises NotFound" do
       expect(page.driver.status_code).to eq(404)
     end
   end
@@ -133,7 +133,7 @@ describe "RailsAdmin Basic Update" do
       @player.reload
     end
 
-    it "should show an error message" do
+    it "shows an error message" do
       # TODO: Mongoid 3.0.0 lacks ability of numericality validation on Integer field.
       # This is caused by change in https://github.com/mongoid/mongoid/pull/1698
       # I believe this should be a bug in Mongoid.
@@ -159,7 +159,7 @@ describe "RailsAdmin Basic Update" do
       @user.reload
     end
 
-    it "should save the serialized data" do
+    it "saves the serialized data" do
       expect(@user.roles).to eq(['admin','user'])
     end
   end
@@ -171,7 +171,7 @@ describe "RailsAdmin Basic Update" do
       visit edit_path(:model_name => "field_test", :id => @field_test.id)
     end
 
-    it "should save the serialized data" do
+    it "saves the serialized data" do
       fill_in "field_test[array_field]", :with => "[4, 2]"
       fill_in "field_test[hash_field]", :with => "{ a: 6, b: 2 }"
       click_button "Save"
@@ -181,7 +181,7 @@ describe "RailsAdmin Basic Update" do
       expect(@field_test.hash_field).to eq({ "a" => 6, "b" => 2 })
     end
 
-    it "should clear data when empty string is passed" do
+    it "clears data when empty string is passed" do
       fill_in "field_test[array_field]", :with => ""
       fill_in "field_test[hash_field]", :with => ""
       click_button "Save"
@@ -204,7 +204,7 @@ describe "RailsAdmin Basic Update" do
       @ball.reload
     end
 
-    it "should update an object with correct attributes" do
+    it "updates an object with correct attributes" do
       expect(@ball.color).to eq("gray")
     end
   end
@@ -221,7 +221,7 @@ describe "RailsAdmin Basic Update" do
       @hardball.reload
     end
 
-    it "should update an object with correct attributes" do
+    it "updates an object with correct attributes" do
       expect(@hardball.color).to eq("cyan")
     end
   end

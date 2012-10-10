@@ -30,7 +30,7 @@ describe "RailsAdmin Export" do
 
   describe "POST /admin/players/export (prompt)" do
 
-    it "should allow to export to CSV with associations and default schema, containing properly translated header and follow configuration" do
+    it "allows to export to CSV with associations and default schema, containing properly translated header and follow configuration" do
       RailsAdmin.config do |c|
         c.model Player do
           include_all_fields
@@ -63,13 +63,13 @@ describe "RailsAdmin Export" do
       expect(csv.flatten.join(' ')).to include(@player.comments.second.content.split("\n").first.strip)
     end
 
-    it "should allow to export to JSON" do
+    it "allows to export to JSON" do
       visit export_path(:model_name => 'player')
       click_button 'Export to json'
       should have_content @player.team.name
     end
 
-    it "should allow to export to XML" do
+    it "allows to export to XML" do
       visit export_path(:model_name => 'player')
       click_button 'Export to xml'
 
@@ -83,7 +83,7 @@ describe "RailsAdmin Export" do
       end
     end
 
-    it "should export polymorphic fields the easy way for now" do
+    it "exports polymorphic fields the easy way for now" do
       visit export_path(:model_name => 'comment')
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
@@ -97,7 +97,7 @@ describe "RailsAdmin Export" do
   end
 
   describe "POST /admin/players/export :format => :csv" do
-    it "should export with modified schema" do
+    it "exports with modified schema" do
       page.driver.post(export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } }))
       csv = CSV.parse find('body').text
       expect(csv[0]).not_to include('Created at')

@@ -14,7 +14,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
       click_button "Yes, I'm sure"
     end
 
-    it "should not contain deleted records" do
+    it "does not contain deleted records" do
       expect(RailsAdmin::AbstractModel.new("Player").count).to eq(1)
       expect(RailsAdmin::History.count).to eq(@delete_ids.count)
       RailsAdmin::History.all.each do |history|
@@ -35,7 +35,7 @@ describe "RailsAdmin Basic Bulk Destroy" do
       click_button "Cancel"
     end
 
-    it "should not delete records" do
+    it "does not delete records" do
       expect(RailsAdmin::AbstractModel.new("Player").count).to eq(3)
     end
   end

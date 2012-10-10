@@ -3,7 +3,7 @@ require 'spec_helper'
 describe RailsAdmin::Config::Fields::Base do
 
   describe "#required" do
-    it "should read the :on => :create/:update validate option" do
+    it "reads the :on => :create/:update validate option" do
       RailsAdmin.config Ball do
         field 'color'
       end
@@ -14,7 +14,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#name" do
-    it "should be normalized to Symbol" do
+    it "is normalized to Symbol" do
       RailsAdmin.config Team do
         field 'name'
       end
@@ -30,19 +30,19 @@ describe RailsAdmin::Config::Fields::Base do
         [:commentable_id, :commentable_type]
       end
 
-    it "should be empty by default" do
+    it "is empty by default" do
       expect(RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields).to eq([])
     end
 
-    it "should contain child key for belongs to associations" do
+    it "contains child key for belongs to associations" do
       expect(RailsAdmin.config(Team).fields.find{ |f| f.name == :division }.children_fields).to eq([:division_id])
     end
 
-    it "should contain child keys for polymorphic belongs to associations" do
+    it "contains child keys for polymorphic belongs to associations" do
       expect(RailsAdmin.config(Comment).fields.find{ |f| f.name == :commentable }.children_fields).to match_array POLYMORPHIC_CHILDREN
     end
 
-    it "should have correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column" do
+    it "has correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column" do
       class CommentReversed < Tableless
         column :commentable_type, :string
         column :commentable_id, :integer
@@ -52,11 +52,11 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     context "of a Paperclip installation" do
-      it "should be a _file_name field" do
+      it "is a _file_name field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset }.children_fields.include?(:paperclip_asset_file_name)).to be_true
       end
 
-      it "should be hidden, not filterable" do
+      it "is hidden, not filterable" do
         f = RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :paperclip_asset_file_name }
         expect(f.hidden?).to be_true
         expect(f.filterable?).to be_false
@@ -64,13 +64,13 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     context "of a Dragonfly installation" do
-      it "should be a _name field and _uid field" do
+      it "is a _name field and _uid field" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :dragonfly_asset }.children_fields).to eq([:dragonfly_asset_name, :dragonfly_asset_uid])
       end
     end
 
     context "of a Carrierwave installation" do
-      it "should be the parent field itself" do
+      it "is the parent field itself" do
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.children_fields).to eq([:carrierwave_asset])
         expect(RailsAdmin.config(FieldTest).fields.find{ |f| f.name == :carrierwave_asset }.hidden?).to be_false
       end
@@ -78,7 +78,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#html_default_value" do
-    it "should be default_value for new records when value is nil" do
+    it "is default_value for new records when value is nil" do
       RailsAdmin.config Team do
         list do
           field :name do
@@ -97,13 +97,13 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#default_value" do
-    it "should be nil by default" do
+    it "is nil by default" do
       expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.default_value).to be_nil
     end
   end
 
   describe "#hint" do
-    it "should be user customizable" do
+    it "is user customizable" do
       RailsAdmin.config Team do
         list do
           field :division do
@@ -118,7 +118,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#css_class" do
-    it "should have a default and be user customizable" do
+    it "has a default and be user customizable" do
       RailsAdmin.config Team do
         list do
           field :division do
@@ -134,11 +134,11 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#associated_collection_cache_all" do
-    it "should default to true if associated collection count < 100" do
+    it "defaults to true if associated collection count < 100" do
       expect(RailsAdmin.config(Team).edit.fields.find{|f| f.name == :players}.associated_collection_cache_all).to be_true
     end
 
-    it "should default to false if associated collection count >= 100" do
+    it "defaults to false if associated collection count >= 100" do
       @players = 100.times.map do
         FactoryGirl.create :player
       end
@@ -148,11 +148,11 @@ describe RailsAdmin::Config::Fields::Base do
 
   describe "#searchable_columns" do
     describe "for belongs_to fields" do
-      it "should find label method on the opposite side for belongs_to associations by default" do
+      it "finds label method on the opposite side for belongs_to associations by default" do
         expect(RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.map{|c| c[:column]}).to eq(["divisions.name", "teams.division_id"])
       end
 
-      it "should search on opposite table for belongs_to" do
+      it "searches on opposite table for belongs_to" do
         RailsAdmin.config(Team) do
           field :division do
             searchable :custom_id
@@ -161,7 +161,7 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns.map{|c| c[:column]}).to eq(["divisions.custom_id"])
       end
 
-      it "should search on asked table with model name" do
+      it "searches on asked table with model name" do
         RailsAdmin.config(Team) do
           field :division do
             searchable League => :name
@@ -170,7 +170,7 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(Team).fields.find{|f| f.name == :division}.searchable_columns).to eq([{:column=>"leagues.name", :type=>:string}])
       end
 
-      it "should search on asked table with table name" do
+      it "searches on asked table with table name" do
         RailsAdmin.config(Team) do
           field :division do
             searchable :leagues => :name
@@ -182,12 +182,12 @@ describe RailsAdmin::Config::Fields::Base do
 
     describe "for basic type fields" do
 
-      it "should use base table and find correct column type" do
+      it "uses base table and find correct column type" do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :text_field}.searchable_columns).to eq([{:column=>"field_tests.text_field", :type=>:text}])
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :integer_field}.searchable_columns).to eq([{:column=>"field_tests.integer_field", :type=>:integer}])
       end
 
-      it "should be customizable to another field on the same table" do
+      it "is customizable to another field on the same table" do
         RailsAdmin.config(FieldTest) do
           field :time_field do
             searchable :date_field
@@ -196,7 +196,7 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :time_field}.searchable_columns).to eq([{:column=>"field_tests.date_field", :type=>:date}])
       end
 
-      it "should be customizable to another field on another table with :table_name" do
+      it "is customizable to another field on another table with :table_name" do
         RailsAdmin.config(FieldTest) do
           field :string_field do
             searchable :nested_field_tests => :title
@@ -205,7 +205,7 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(FieldTest).fields.find{|f| f.name == :string_field}.searchable_columns).to eq([{:column=>"nested_field_tests.title", :type=>:string}])
       end
 
-      it "should be customizable to another field on another model with ModelClass" do
+      it "is customizable to another field on another model with ModelClass" do
         RailsAdmin.config(FieldTest) do
           field :string_field do
             searchable NestedFieldTest => :title
@@ -232,7 +232,7 @@ describe RailsAdmin::Config::Fields::Base do
 
 
   describe "#searchable and #sortable" do
-    it "should be false if column is virtual, true otherwise" do
+    it "is false if column is virtual, true otherwise" do
       RailsAdmin.config League do
         field :virtual_column
         field :name
@@ -263,7 +263,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#virtual?" do
-    it "should be true if column has no properties, false otherwise" do
+    it "is true if column has no properties, false otherwise" do
       RailsAdmin.config League do
         field :virtual_column
         field :name
@@ -351,7 +351,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#visible?" do
-    it "should be false when fields have specific name " do
+    it "is false when fields have specific name " do
       class FieldVisibilityTest < Tableless
         column :id, :integer
         column :_id, :integer
@@ -376,7 +376,7 @@ describe RailsAdmin::Config::Fields::Base do
       Moped.logger.stub!(:debug) if defined?(Moped)
     end
 
-    it "should yell for non attr_accessible fields if config.yell_for_non_accessible_fields is true" do
+    it "yells for non attr_accessible fields if config.yell_for_non_accessible_fields is true" do
       RailsAdmin.config do |config|
         config.yell_for_non_accessible_fields = true
         config.model FieldTest do
@@ -388,7 +388,7 @@ describe RailsAdmin::Config::Fields::Base do
       expect(editable).to be_false
     end
 
-    it "should not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false" do
+    it "does not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false" do
       RailsAdmin.config do |config|
         config.yell_for_non_accessible_fields = false
         config.model FieldTest do

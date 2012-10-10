@@ -5,7 +5,7 @@ describe "RailsAdmin Config DSL List Section" do
   subject { page }
 
   describe "css hooks" do
-    it "should be present" do
+    it "is present" do
       RailsAdmin.config Team do
         list do
           field :name
@@ -28,7 +28,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
     end
 
-    it "should be configurable per model" do
+    it "is configurable per model" do
       RailsAdmin.config League do
         list do
           items_per_page 1
@@ -43,13 +43,13 @@ describe "RailsAdmin Config DSL List Section" do
 
   describe "items' fields" do
 
-    it "should show all by default" do
+    it "shows all by default" do
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
         to match_array ["Id", "Created at", "Updated at", "His Name", "Teams"]
     end
 
-    it "should hide some fields on demand with a block" do
+    it "hides some fields on demand with a block" do
       RailsAdmin.config Fan do
         list do
           exclude_fields_if do
@@ -62,7 +62,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "His Name", "Teams"]
     end
 
-    it "should hide some fields on demand with fields list" do
+    it "hides some fields on demand with fields list" do
       RailsAdmin.config Fan do
         list do
           exclude_fields :created_at, :updated_at
@@ -73,7 +73,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "His Name", "Teams"]
     end
 
-    it "should add some fields on demand with a block" do
+    it "adds some fields on demand with a block" do
       RailsAdmin.config Fan do
         list do
           include_fields_if do
@@ -86,7 +86,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "His Name", "Teams"]
     end
 
-    it "should show some fields on demand with fields list, respect ordering and configure them" do
+    it "shows some fields on demand with fields list, respect ordering and configure them" do
       RailsAdmin.config Fan do
         list do
           fields :name, PK_COLUMN do
@@ -101,7 +101,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Modified Id", "Modified His Name"]
     end
 
-    it "should show all fields if asked" do
+    it "shows all fields if asked" do
       RailsAdmin.config Fan do
         list do
           include_all_fields
@@ -114,7 +114,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "Created at", "Updated at", "His Name", "Teams"]
     end
 
-    it "should appear in order defined" do
+    it "appears in order defined" do
       RailsAdmin.config Fan do
         list do
           field :updated_at
@@ -128,7 +128,7 @@ describe "RailsAdmin Config DSL List Section" do
         to eq(["Updated at", "His Name", "Id", "Created at"])
     end
 
-    it "should only list the defined fields if some fields are defined" do
+    it "only lists the defined fields if some fields are defined" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN
@@ -141,7 +141,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_no_selector("th:nth-child(4).header")
     end
 
-    it "should delegate the label option to the ActiveModel API" do
+    it "delegates the label option to the ActiveModel API" do
       RailsAdmin.config Fan do
         list do
           field :name
@@ -151,7 +151,7 @@ describe "RailsAdmin Config DSL List Section" do
       expect(find("th:nth-child(2)")).to have_content("His Name")
     end
 
-    it "should be renameable" do
+    it "is renameable" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN do
@@ -165,7 +165,7 @@ describe "RailsAdmin Config DSL List Section" do
       expect(find("th:nth-child(3)")).to have_content("His Name")
     end
 
-    it "should be renameable by type" do
+    it "is renameable by type" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
@@ -178,7 +178,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
     end
 
-    it "should be globally renameable by type" do
+    it "is globally renameable by type" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
@@ -191,7 +191,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
     end
 
-    it "should be sortable by default" do
+    it "is sortable by default" do
       visit index_path(:model_name => "fan")
       should have_selector("th:nth-child(2).header")
       should have_selector("th:nth-child(3).header")
@@ -199,7 +199,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_selector("th:nth-child(5).header")
     end
 
-    it "should have option to disable sortability" do
+    it "has option to disable sortability" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN do
@@ -213,7 +213,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_selector("th:nth-child(3).header")
     end
 
-    it "should have option to disable sortability by type" do
+    it "has option to disable sortability by type" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
@@ -232,7 +232,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_no_selector("th:nth-child(5).header")
     end
 
-    it "should have option to disable sortability by type globally" do
+    it "has option to disable sortability by type globally" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
@@ -251,7 +251,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_no_selector("th:nth-child(5).header")
     end
 
-    it "should have option to hide fields by type" do
+    it "has option to hide fields by type" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
@@ -264,7 +264,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "His Name", "Teams"]
     end
 
-    it "should have option to hide fields by type globally" do
+    it "has option to hide fields by type globally" do
       RailsAdmin.config Fan do
         list do
           fields_of_type :datetime do
@@ -277,7 +277,7 @@ describe "RailsAdmin Config DSL List Section" do
         to match_array ["Id", "His Name", "Teams"]
     end
 
-    it "should have option to customize column width" do
+    it "has option to customize column width" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN do
@@ -294,7 +294,7 @@ describe "RailsAdmin Config DSL List Section" do
       expect(find('style')).to have_content("#list td.#{PK_COLUMN}_field")
     end
 
-    it "should have option to customize output formatting" do
+    it "has option to customize output formatting" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN
@@ -313,7 +313,7 @@ describe "RailsAdmin Config DSL List Section" do
       expect(find('tbody tr:nth-child(2) td:nth-child(3)')).to have_content(@fans[0].name.upcase)
     end
 
-    it "should have a simple option to customize output formatting of date fields" do
+    it "has a simple option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN
@@ -329,7 +329,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_selector("tbody tr:nth-child(1) td:nth-child(4)", :text => /\d{2} \w{3} \d{1,2}:\d{1,2}/)
     end
 
-    it "should have option to customize output formatting of date fields" do
+    it "has option to customize output formatting of date fields" do
       RailsAdmin.config Fan do
         list do
           field PK_COLUMN
@@ -345,7 +345,7 @@ describe "RailsAdmin Config DSL List Section" do
       should have_selector("tbody tr:nth-child(1) td:nth-child(4)", :text => /\d{4}-\d{2}-\d{2}/)
     end
 
-    it "should allow addition of virtual fields (object methods)" do
+    it "allows addition of virtual fields (object methods)" do
       RailsAdmin.config Team do
         list do
           field PK_COLUMN
@@ -397,7 +397,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
     end
 
-    it "should have reverse direction by default" do
+    it "has reverse direction by default" do
       RailsAdmin.config Player do
         list do
           sort_by :created_at
@@ -409,7 +409,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
     end
 
-    it "should allow change default direction" do
+    it "allows change default direction" do
       RailsAdmin.config Player do
         list do
           sort_by :created_at
@@ -424,7 +424,7 @@ describe "RailsAdmin Config DSL List Section" do
   end
 
   describe "embedded model", :mongoid => true do
-    it "should not show link to individual object's page" do
+    it "does not show link to individual object's page" do
       RailsAdmin.config FieldTest do
         list do
           field :embeds

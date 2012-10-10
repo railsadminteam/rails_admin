@@ -12,13 +12,13 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       Time.zone = 'UTC'
     end
 
-    it "should be able to read %B %d, %Y %H:%M" do
+    it "is able to read %B %d, %Y %H:%M" do
       @object = FactoryGirl.create(:field_test)
       @object.datetime_field = @field.parse_input({ :datetime_field => @time.strftime("%B %d, %Y %H:%M") })
       expect(@object.datetime_field.strftime("%Y-%m-%d %H:%M")).to eq(@time.strftime("%Y-%m-%d %H:%M"))
     end
 
-    it "should be able to read %a, %d %b %Y %H:%M:%S" do
+    it "is able to read %a, %d %b %Y %H:%M:%S" do
       RailsAdmin.config FieldTest do
         edit do
           field :datetime_field do
@@ -31,7 +31,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
     end
 
-    it "should have a customization option" do
+    it "has a customization option" do
       RailsAdmin.config FieldTest do
         list do
           field :datetime_field do
@@ -44,7 +44,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
     end
 
-    it "should do round-trip saving properly with non-UTC timezones" do
+    it "does round-trip saving properly with non-UTC timezones" do
       Time.zone = 'Vienna'
       @object = FactoryGirl.create(:field_test)
       @object.datetime_field = @field.parse_input({ :datetime_field => '2012-09-01 12:00:00 +02:00' })

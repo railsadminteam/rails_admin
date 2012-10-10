@@ -10,16 +10,16 @@ describe "RailsAdmin Basic Edit" do
       visit edit_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should show \"Edit model\"" do
+    it "shows \"Edit model\"" do
       should have_content("Edit Player")
     end
 
-    it "should show required fields as \"Required\"" do
+    it "shows required fields as \"Required\"" do
       should have_selector("div", :text => /Name\s*Required/)
       should have_selector("div", :text => /Number\s*Required/)
     end
 
-    it "should show non-required fields as \"Optional\"" do
+    it "shows non-required fields as \"Optional\"" do
       expect(find("#player_position_field .help-block")).to have_content("Optional")
       expect(find("#player_born_on_field .help-block")).to have_content("Optional")
       expect(find("#player_notes_field .help-block")).to have_content("Optional")
@@ -27,13 +27,13 @@ describe "RailsAdmin Basic Edit" do
   end
 
   describe "association with inverse_of option" do
-    it "should add a related id to the belongs_to create team link" do
+    it "adds a related id to the belongs_to create team link" do
       @player = FactoryGirl.create :player
       visit edit_path(:model_name => "player", :id => @player.id)
       should have_selector("a", :href => 'admin/teams/new?associations[players]=' + @player.id.to_s)
     end
 
-    it "should add a related id to the has_many create team link" do
+    it "adds a related id to the has_many create team link" do
       @team = FactoryGirl.create :team
       visit edit_path(:model_name => "team", :id => @team.id)
       should have_selector("a", :href => 'admin/players/new?associations[team]=' + @team.id.to_s)
@@ -42,7 +42,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "readonly associations" do
 
-    it "should not be editable" do
+    it "is not editable" do
       @league = FactoryGirl.create :league
       visit edit_path(:model_name => "league", :id => @league.id)
       should_not have_selector('select#league_team_ids')
@@ -57,7 +57,7 @@ describe "RailsAdmin Basic Edit" do
       visit edit_path(:model_name => "fan", :id => @fan.id)
     end
 
-    it "should show associated objects" do
+    it "shows associated objects" do
       should have_selector "#fan_team_ids" do |select|
         expect(select[0]).to have_selector 'option[selected="selected"]'
         expect(select[1]).not_to have_selector 'option[selected="selected"]'
@@ -71,7 +71,7 @@ describe "RailsAdmin Basic Edit" do
       visit edit_path(:model_name => "player", :id => 1)
     end
 
-    it "should raise NotFound" do
+    it "raises NotFound" do
       expect(page.driver.status_code).to eq(404)
     end
   end
@@ -90,7 +90,7 @@ describe "RailsAdmin Basic Edit" do
       visit edit_path(:model_name => "ball", :id => @ball.id)
     end
 
-    it "should display a link to the delete page" do
+    it "displays a link to the delete page" do
       should have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
     end
 
@@ -98,7 +98,7 @@ describe "RailsAdmin Basic Edit" do
 
   describe "clicking cancel when editing an object" do
 
-    it "should send back to previous URL" do
+    it "sends back to previous URL" do
       @ball = FactoryGirl.create :ball
       visit '/admin/ball?sort=color'
       click_link 'Edit'

@@ -12,7 +12,7 @@ describe RailsAdmin::Config::Fields::Types::Timestamp do
       Time.zone = 'UTC'
     end
 
-    it "should read %B %d, %Y %H:%M" do
+    it "reads %B %d, %Y %H:%M" do
       @object.timestamp_field = @field.parse_input({ :timestamp_field => @time.strftime("%B %d, %Y %H:%M") })
       expect(@object.timestamp_field.strftime("%Y-%m-%d %H:%M")).to eq(@time.strftime("%Y-%m-%d %H:%M"))
     end
