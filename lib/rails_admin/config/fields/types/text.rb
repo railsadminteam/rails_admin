@@ -65,6 +65,13 @@ module RailsAdmin
             false
           end
 
+          # If you want to have a different toolbar configuration for wysihtml5
+          # you can use a Ruby hash to configure these options:
+          # https://github.com/jhollingworth/bootstrap-wysihtml5/#advanced
+          register_instance_option(:bootstrap_wysihtml5_config_options) do
+            nil
+          end
+
           register_instance_option(:bootstrap_wysihtml5_css_location) do
             '/assets/bootstrap-wysihtml5.css'
           end
