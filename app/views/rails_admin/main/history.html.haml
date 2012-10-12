@@ -34,7 +34,7 @@
         %td= object.username
         - if @general
           %td= object.item
-        %td= object.changes
+        %td= object.message
 
 - unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, :theme => 'twitter-bootstrap', :remote => true)
