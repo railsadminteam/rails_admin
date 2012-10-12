@@ -195,7 +195,7 @@ $(document).live 'rails_admin.dom_ready', ->
       array.each ->
         $(@).addClass('bootstrap-wysihtml5ed')
         $(@).closest('.controls').addClass('well')
-        $(@).wysihtml5()
+        $(@).wysihtml5 { stylesheets: false }
 
     array = $('form [data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')
     if array.length
