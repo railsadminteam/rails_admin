@@ -15,7 +15,7 @@ module RailsAdmin
           @properties
         end
 
-        register_instance_option(:pretty_value) do
+        register_instance_option :pretty_value do
           v = bindings[:view]
           [value].flatten.select(&:present?).map do |associated|
             amc = polymorphic? ? RailsAdmin.config(associated) : associated_model_config # perf optimization for non-polymorphic associations
@@ -29,12 +29,12 @@ module RailsAdmin
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.
-        register_instance_option(:visible?) do
+        register_instance_option :visible? do
           @visible ||= !self.associated_model_config.excluded?
         end
 
         # use the association name as a key, not the association key anymore!
-        register_instance_option(:label) do
+        register_instance_option :label do
           (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name association[:name]
         end
 

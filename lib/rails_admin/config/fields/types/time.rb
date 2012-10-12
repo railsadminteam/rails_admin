@@ -26,7 +26,7 @@ module RailsAdmin
             ::DateTime.parse(date_string)
           end
 
-          register_instance_option(:strftime_format) do
+          register_instance_option :strftime_format do
             (localized_format.include? "%p") ? "%I:%M %p" : "%H:%M"
           end
         end

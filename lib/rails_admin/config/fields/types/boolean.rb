@@ -12,16 +12,16 @@ module RailsAdmin
             :check_box
           end
 
-          register_instance_option(:formatted_value) do
+          register_instance_option :formatted_value do
             bindings[:view].image_tag("rails_admin/#{value ? 'bullet_black' : 'bullet_white'}.png", :alt => value.to_s)
           end
 
-          register_instance_option(:export_value) do
+          register_instance_option :export_value do
             value.to_s
           end
 
           # Accessor for field's help text displayed below input field.
-          register_instance_option(:help) do
+          register_instance_option :help do
             ""
           end
         end

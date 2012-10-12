@@ -237,14 +237,14 @@ module RailsAdmin
 
         # Reader whether field is optional.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional?
           not required?
         end
 
         # Inverse accessor whether this field is required.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
           if !state.nil? || block
             required state.nil? ? proc { false == (instance_eval &block) } : false == state
