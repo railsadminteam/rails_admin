@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2'
+gem 'strong_parameters', github: 'rails/strong_parameters' # 0.1.5 min, not released yet
 
 group :active_record do
   platforms :jruby do

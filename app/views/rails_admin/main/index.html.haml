@@ -11,7 +11,7 @@
   export_action = RailsAdmin::Config::Actions.find(:export, { :controller => self.controller, :abstract_model => @abstract_model })
   export_action = export_action && authorized?(export_action.authorization_key, @abstract_model) ? export_action : nil
 
-  properties = @model_config.list.with(:view => self, :object => @abstract_model.model.new).visible_fields
+  properties = @model_config.list.with(:controller => self.controller, :view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   sets = get_column_sets(properties)

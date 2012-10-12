@@ -394,21 +394,26 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(".control-group", :count => 2)
     end
 
-    it "delegates the label option to the ActiveModel API and memoize I18n awarly" do
-      RailsAdmin.config Team do
-        edit do
-          field :manager
-          field :fans
-        end
+    describe "I18n awarly" do
+      after :each do
+        I18n.locale = :en
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Team Manager")
-      should have_selector("label", :text => "Some Fans")
-      I18n.locale = :fr
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Manager de l'équipe")
-      should have_selector("label", :text => "Quelques fans")
-      I18n.locale = :en
+      
+      it "delegates the label option to the ActiveModel API and memoizes it" do
+        RailsAdmin.config Team do
+          edit do
+            field :manager
+            field :fans
+          end
+        end
+        visit new_path(:model_name => "team")
+        should have_selector("label", :text => "Team Manager")
+        should have_selector("label", :text => "Some Fans")
+        I18n.locale = :fr
+        visit new_path(:model_name => "team")
+        should have_selector("label", :text => "Manager de l'équipe")
+        should have_selector("label", :text => "Quelques fans")
+      end
     end
 
     it "is renameable" do

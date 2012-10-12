@@ -733,13 +733,13 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "accepts array value" do
-      params = {:array_field => '[1, 3]'}
+      params = HashWithIndifferentAccess.new({:array_field => '[1, 3]'})
       @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
       expect(params[:array_field]).to eq([1, 3])
     end
 
     it "accepts hash value" do
-      params = {:hash_field => '{a: 1, b: 3}'}
+      params = HashWithIndifferentAccess.new({:hash_field => '{a: 1, b: 3}'})
       @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
       expect(params[:hash_field]).to eq({"a" => 1, "b" => 3})
     end

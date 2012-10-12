@@ -32,6 +32,7 @@ group :debug do
 end
 
 group :development, :test do
+  gem 'strong_parameters', github: 'rails/strong_parameters' # 0.1.5 min, not released yet
   gem 'cancan', '~> 1.6'
   gem 'capybara', '~> 1.1'
   gem 'carrierwave', '~> 0.6'

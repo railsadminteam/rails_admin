@@ -174,6 +174,13 @@ describe RailsAdmin::MainController do
   end
 
   describe "sanitize_params_for!" do
+    before do
+      I18n.locale = :fr
+    end
+    after do
+      I18n.locale = :en
+    end
+
     it "sanitize params recursively in nested forms" do
       RailsAdmin.config Comment do
         configure :created_at do
@@ -186,44 +193,45 @@ describe RailsAdmin::MainController do
           show
         end
       end
-
-      I18n.locale = :fr
-      controller.params = {
+      
+      controller.params = HashWithIndifferentAccess.new({
         "field_test"=>{
-          :"datetime_field"=>"1 août 2010",
+          "unallowed_field" => "I shouldn't be here",
+          "datetime_field"=>"1 août 2010",
           "nested_field_tests_attributes"=>{
             "new_1330520162002"=>{
               "comment_attributes"=>{
-                :"created_at"=>"2 août 2010"
+                "unallowed_field" => "I shouldn't be here",
+                "created_at"=>"2 août 2010"
               },
-              :"created_at"=>"3 août 2010"
+              "created_at"=>"3 août 2010"
             }
           },
           "comment_attributes"=>{
-            :"created_at"=>"4 août 2010"
+            "unallowed_field" => "I shouldn't be here",
+            "created_at"=>"4 août 2010"
           }
         }
-      }
+      })
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
 
       expect(controller.params).to eq({
         "field_test"=>{
-          :datetime_field=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
+          "datetime_field"=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
           "nested_field_tests_attributes"=>{
             "new_1330520162002"=>{
               "comment_attributes"=>{
-                :created_at=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
+                "created_at"=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
               },
-              :created_at=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
+              "created_at"=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
             }
           },
           "comment_attributes"=>{
-            :created_at=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
+            "created_at"=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
           }
         }
       })
-      I18n.locale = :en
     end
   end
 end

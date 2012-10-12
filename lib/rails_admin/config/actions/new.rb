@@ -34,8 +34,9 @@ module RailsAdmin
 
               @modified_assoc = []
               @object = @abstract_model.new
-              sanitize_params_for! :create
-              
+              satisfy_strong_params!
+              sanitize_params_for!(request.xhr? ? :modal : :create)
+
               @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
               @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)

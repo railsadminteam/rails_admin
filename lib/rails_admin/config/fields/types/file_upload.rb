@@ -13,20 +13,20 @@ module RailsAdmin
                                    
           register_instance_option :thumb_method do
             nil                    
-          end                      
-                                   
+          end
+
           register_instance_option :delete_method do
             nil                    
           end                      
-                                   
+
           register_instance_option :cache_method do
             nil                    
           end                      
-                                   
+
           register_instance_option :export_value do
             resource_url.to_s      
           end                      
-                                   
+
           register_instance_option :pretty_value do
             if value.presence
               v = bindings[:view]

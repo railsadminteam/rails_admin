@@ -28,9 +28,9 @@ module RailsAdmin
           end
 
           def method_name
-            nested_form ? "#{self.name}_attributes" : association[:foreign_key]
+            nested_form ? "#{self.name}_attributes".to_sym : association[:foreign_key]
           end
-          
+
           def multiple?
             false
           end
