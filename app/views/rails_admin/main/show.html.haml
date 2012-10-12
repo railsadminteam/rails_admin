@@ -11,4 +11,5 @@
             - if !values[index].nil? || !RailsAdmin::config.compact_show_view
               %dt.label{:class => "#{field.type_css_class} #{field.css_class}"}= field.label
               %dd
-                %pre.prettyprint= field.pretty_value
+                .field_value{:class=>field.css_class}
+                  = simple_format(field.pretty_value)
