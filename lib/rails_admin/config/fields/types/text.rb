@@ -70,7 +70,7 @@ module RailsAdmin
           end
 
           register_instance_option(:bootstrap_wysihtml5_js_location) do
-            '/assets/bootstrap-wysihtml5-all.js'
+            '/assets/bootstrap-wysihtml5.js'
           end
 
           register_instance_option(:html_attributes) do
