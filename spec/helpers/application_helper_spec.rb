@@ -247,7 +247,7 @@ describe RailsAdmin::ApplicationHelper do
           parent Player
         end
       end
-      expect(helper.main_navigation).to match /(Players).*(nav\-level\-1).*(Comments)/m
+      expect(helper.main_navigation).to match /(Players).* (nav\-level\-1).*(Comments)/m
     end
 
     it "orders" do
