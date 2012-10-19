@@ -11,7 +11,6 @@ describe "RailsAdmin Basic Show" do
       should have_selector("a", :text => "History")
       should have_selector("a", :text => "Edit")
       should have_selector("a", :text => "Delete")
-      should have_selector("div", :class=>"field_value")
       should have_content("Details")
       should have_content("Name")
       should have_content(@player.name)
