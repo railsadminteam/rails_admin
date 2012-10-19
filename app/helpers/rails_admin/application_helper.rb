@@ -70,7 +70,7 @@ module RailsAdmin
       nodes.map do |node|
         model_param = node.abstract_model.to_param
         url         = url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)
-        level_class = "nav-level-#{level}" if level > 0
+        level_class = " nav-level-#{level}" if level > 0
 
         li = content_tag :li, "data-model"=>model_param do
           link_to node.label_plural, url, :class => "pjax#{level_class}"
