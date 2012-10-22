@@ -18,6 +18,7 @@ module RailsAdmin
         m = m.is_a?(Class) ? m : m.constantize
         (am = old_new(m)).model && am.adapter ? am : nil
       rescue LoadError, NameError
+        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$!})"
         nil
       end
 
