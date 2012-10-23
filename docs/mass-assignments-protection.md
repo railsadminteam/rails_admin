@@ -31,3 +31,15 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
+Another example:
+
+```ruby
+attr_accessible :email, :password, :password_confirmation, :username, :full_name, :as => [:default, :admin]
+attr_accessible :is_admin, as: :admin
+```
+
+rails_admin initializer:
+```ruby
+config.attr_accessible_role { :admin }
+```
