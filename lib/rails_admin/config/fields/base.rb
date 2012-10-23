@@ -274,6 +274,11 @@ module RailsAdmin
         register_instance_option :nested_form do
           false
         end
+        
+        # Allowed methods for the field in forms
+        register_instance_option :allowed_methods do
+          [method_name]
+        end
 
         def inverse_of
           nil
@@ -286,6 +291,7 @@ module RailsAdmin
         def html_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
+        
 
         def inspect
           "#<#{self.class.name}[#{name}] #{

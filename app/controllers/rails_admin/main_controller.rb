@@ -96,7 +96,9 @@ module RailsAdmin
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
       return unless _params.present?
       fields = model_config.send(action).with(:controller => self, :view => self.view_context, :object => @object).visible_fields
-      allowed_methods = fields.map{|f| f.children_fields << f.method_name }.flatten.uniq.map(&:to_s) << "id" << "_destroy"
+      allowed_methods = fields.map{|f| 
+        f.allowed_methods
+      }.flatten.uniq.map(&:to_s) << "id" << "_destroy"
       fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }
       _params.slice!(*allowed_methods)
       fields.select(&:nested_form).each do |association|

@@ -9,8 +9,8 @@ module RailsAdmin
 
           register_instance_option :partial do
             :form_file_upload      
-          end                      
-                                   
+          end
+
           register_instance_option :thumb_method do
             nil                    
           end
@@ -44,6 +44,10 @@ module RailsAdmin
 
           register_instance_option :image? do
             (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
+          end
+          
+          register_instance_option :allowed_methods do
+            [method_name, delete_method, cache_method].compact
           end
 
           # virtual class

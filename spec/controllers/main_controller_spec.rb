@@ -233,5 +233,44 @@ describe RailsAdmin::MainController do
         }
       })
     end
+    
+    it "allows for delete method with Carrierwave" do
+
+      RailsAdmin.config FieldTest do
+        field :carrierwave_asset
+        field :dragonfly_asset
+        field :paperclip_asset do
+          delete_method :delete_paperclip_asset
+        end
+      end
+      controller.params = HashWithIndifferentAccess.new({
+        "field_test"=>{
+          "carrierwave_asset" => "test",
+          "carrierwave_asset_cache" => "test", 
+          "remove_carrierwave_asset" => "test", 
+          "dragonfly_asset" => "test",
+          "remove_dragonfly_asset" => "test",
+          "retained_dragonfly_asset" => "test",
+          "paperclip_asset" => "test",
+          "delete_paperclip_asset" => "test",
+          "should_not_be_here" => "test"
+        }
+      })
+
+      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+      expect(controller.params).to eq(
+        "field_test"=>{
+          "carrierwave_asset"=>"test", 
+          "remove_carrierwave_asset"=>"test", 
+          "carrierwave_asset_cache"=>"test", 
+          "dragonfly_asset"=>"test", 
+          "remove_dragonfly_asset"=>"test", 
+          "retained_dragonfly_asset"=>"test", 
+          "paperclip_asset"=>"test",
+          "delete_paperclip_asset"=>"test"
+        })
+    end
   end
+  
+  
 end
