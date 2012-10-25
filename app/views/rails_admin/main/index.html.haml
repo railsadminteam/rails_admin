@@ -36,7 +36,11 @@
     filter_for_field = duplet[1]
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
-    field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
+    field = @filterable_fields.find do |field|
+      filter_name = filter_name.pluralize if
+        field.type == :has_and_belongs_to_many_association
+      field.name == filter_name.to_sym
+    end   
     field_options = case field.type
     when :enum
       options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['v'])
