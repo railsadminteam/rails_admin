@@ -307,7 +307,14 @@ describe "RailsAdmin Basic List" do
   end
 
   describe "GET /admin/player show all" do
-    it "responds successfully" do
+    it "responds successfully with a single model" do
+      FactoryGirl.create :player
+      visit index_path(:model_name => "player", :all => true)
+      expect(find('div.total-count')).to have_content("1 player")
+      expect(find('div.total-count')).not_to have_content("1 players")
+    end
+
+    it "responds successfully with multiple models" do
       2.times.map { FactoryGirl.create :player }
       visit index_path(:model_name => "player", :all => true)
       expect(find('div.total-count')).to have_content("2 players")
