@@ -63,6 +63,10 @@ module RailsAdmin
         (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => 2, :default => label.pluralize)
       end
 
+      def pluralize(count)
+        count == 1 ? label : label_plural
+      end
+
       register_instance_option :weight do
         0
       end
