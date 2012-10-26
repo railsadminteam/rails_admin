@@ -3,6 +3,7 @@
 [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium]
 [![Code Climate](https://codeclimate.com/badge.png)][codeclimate]
 [![Pledgie](https://www.pledgie.com/campaigns/15917.png)][pledgie]
+[![Flattr](http://api.flattr.com/button/flattr-badge-large.png)][flattr]
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
@@ -10,6 +11,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
 [codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [pledgie]: http://www.pledgie.com/campaigns/15917
+[flattr]: http://flattr.com/thing/799416/sferikrailsadmin-on-GitHub
 
 It started as a port of [MerbAdmin][merb-admin] to Rails 3 and was implemented
 as a [Ruby Summer of Code project][rubysoc] by [Bogdan Gaza][hurrycane] with
