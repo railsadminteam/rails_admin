@@ -37,6 +37,10 @@ module RailsAdmin
             nil
           end
 
+          register_instance_option :allowed_methods do
+            [children_fields]
+          end
+
           def associated_collection(type)
             return [] if type.blank?
             config = RailsAdmin.config(type)
