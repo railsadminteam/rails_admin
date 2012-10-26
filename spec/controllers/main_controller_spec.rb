@@ -174,64 +174,66 @@ describe RailsAdmin::MainController do
   end
 
   describe "sanitize_params_for!" do
-    before do
-      I18n.locale = :fr
-    end
-    after do
-      I18n.locale = :en
-    end
-
-    it "sanitize params recursively in nested forms" do
-      RailsAdmin.config Comment do
-        configure :created_at do
-          show
-        end
+    context "in France" do
+      before do
+        I18n.locale = :fr
+      end
+      after do
+        I18n.locale = :en
       end
 
-      RailsAdmin.config NestedFieldTest do
-        configure :created_at do
-          show
+      it "sanitize params recursively in nested forms" do
+        RailsAdmin.config Comment do
+          configure :created_at do
+            show
+          end
         end
-      end
+
+        RailsAdmin.config NestedFieldTest do
+          configure :created_at do
+            show
+          end
+        end
       
-      controller.params = HashWithIndifferentAccess.new({
-        "field_test"=>{
-          "unallowed_field" => "I shouldn't be here",
-          "datetime_field"=>"1 août 2010",
-          "nested_field_tests_attributes"=>{
-            "new_1330520162002"=>{
-              "comment_attributes"=>{
-                "unallowed_field" => "I shouldn't be here",
-                "created_at"=>"2 août 2010"
-              },
-              "created_at"=>"3 août 2010"
-            }
-          },
-          "comment_attributes"=>{
+        controller.params = HashWithIndifferentAccess.new({
+          "field_test"=>{
             "unallowed_field" => "I shouldn't be here",
-            "created_at"=>"4 août 2010"
-          }
-        }
-      })
-
-      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
-
-      expect(controller.params).to eq({
-        "field_test"=>{
-          "datetime_field"=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
-          "nested_field_tests_attributes"=>{
-            "new_1330520162002"=>{
-              "comment_attributes"=>{
-                "created_at"=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
-              },
-              "created_at"=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
+            "datetime_field"=>"1 août 2010",
+            "nested_field_tests_attributes"=>{
+              "new_1330520162002"=>{
+                "comment_attributes"=>{
+                  "unallowed_field" => "I shouldn't be here",
+                  "created_at"=>"2 août 2010"
+                },
+                "created_at"=>"3 août 2010"
+              }
+            },
+            "comment_attributes"=>{
+              "unallowed_field" => "I shouldn't be here",
+              "created_at"=>"4 août 2010"
             }
-          },
-          "comment_attributes"=>{
-            "created_at"=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
           }
-        }
-      })
+        })
+
+        controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+
+        expect(controller.params).to eq({
+          "field_test"=>{
+            "datetime_field"=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
+            "nested_field_tests_attributes"=>{
+              "new_1330520162002"=>{
+                "comment_attributes"=>{
+                  "created_at"=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
+                },
+                "created_at"=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
+              }
+            },
+            "comment_attributes"=>{
+              "created_at"=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
+            }
+          }
+        })
+      end
     end
     
     it "allows for delete method with Carrierwave" do
@@ -268,6 +270,25 @@ describe RailsAdmin::MainController do
           "retained_dragonfly_asset"=>"test", 
           "paperclip_asset"=>"test",
           "delete_paperclip_asset"=>"test"
+        })
+    end
+    
+    it "allows for polymorphic associations parameters" do
+      RailsAdmin.config Comment do
+        field :commentable
+      end
+      
+      controller.params = HashWithIndifferentAccess.new({
+        "comment"=>{
+          "commentable_id" => "test",
+          "commentable_type" => "test"
+        }
+      })
+      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
+      expect(controller.params).to eq(
+        "comment"=>{
+          "commentable_id" => "test",
+          "commentable_type" => "test"
         })
     end
   end
