@@ -11,6 +11,12 @@ describe RailsAdmin::Config::Fields::Base do
       RailsAdmin.config('Ball').fields.first.with(:object => Ball.new).should be_required
       RailsAdmin.config('Ball').fields.first.with(:object => FactoryGirl.create(:ball)).should_not be_required
     end
+
+    context 'on a Paperclip installation' do
+      it "should detect required fields" do
+        RailsAdmin.config('Image').fields.find{ |f| f.name == :file }.with(:object => Image.new).should be_required
+      end
+    end
   end
 
   describe "#name" do

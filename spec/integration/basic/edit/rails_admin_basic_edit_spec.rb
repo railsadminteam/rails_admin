@@ -106,13 +106,4 @@ describe "RailsAdmin Basic Edit" do
       page.current_url.should == 'http://www.example.com/admin/ball?sort=color'
     end
   end
-
-  describe "image edit" do
-    it "should show required for paperclip attached file with validates_attachment_presence" do
-      @image = FactoryGirl.create :image
-      visit edit_path(:model_name => "image", :id => @image.id)
-      
-      should have_selector("div", :text => /Required./)
-    end
-  end
 end
