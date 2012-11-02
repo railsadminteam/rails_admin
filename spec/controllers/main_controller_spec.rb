@@ -61,6 +61,19 @@ describe RailsAdmin::MainController do
     end
   end
 
+  describe "#list_entries called from view with kaminari custom param_name" do
+    before do
+      @teams = 21.times.map { FactoryGirl.create :team }
+      controller.params = { :model_name => "teams" }
+      Kaminari.config.param_name = :pagina
+    end
+
+    it "paginates" do
+      expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length).to eq(21)
+      expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length).to eq(20)
+    end
+  end
+
   describe "#list_entries called with bulk_ids" do
     before do
       @teams = 21.times.map { FactoryGirl.create :team }
