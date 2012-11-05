@@ -69,7 +69,7 @@ module RailsAdmin
       # accepts a hash of static links to be shown below the main navigation
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
-      
+
       # yell about fields that are not marked as accessible
       attr_accessor :yell_for_non_accessible_fields
 

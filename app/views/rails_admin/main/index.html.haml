@@ -80,9 +80,9 @@
     monthNamesShort: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_month_names.to_json}
     }
     }
-    
+
     = @ordered_filter_string
-    
+
     });
   %style
     - properties.select{ |p| p.column_width.present? }.each do |property|

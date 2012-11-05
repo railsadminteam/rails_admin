@@ -11,7 +11,7 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Groupable
-        
+
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
@@ -164,7 +164,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)          
+          context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.find do |column_name|
             !!abstract_model.model.validators_on(column_name).find do |v|
               !v.options[:allow_nil] and
@@ -274,7 +274,7 @@ module RailsAdmin
         register_instance_option :nested_form do
           false
         end
-        
+
         # Allowed methods for the field in forms
         register_instance_option :allowed_methods do
           [method_name]
@@ -291,7 +291,7 @@ module RailsAdmin
         def html_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
-        
+
 
         def inspect
           "#<#{self.class.name}[#{name}] #{

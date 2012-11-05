@@ -41,7 +41,7 @@ module RailsAdmin
               @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
-              
+
               if @object.save
                 @auditing_adapter && @auditing_adapter.create_object("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
                 respond_to do |format|

@@ -102,7 +102,7 @@ module RailsAdmin
     def dom_name field
       (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''}}
     end
-    
+
     protected
       def without_field_error_proc_added_div
         default_field_error_proc = ::ActionView::Base.field_error_proc

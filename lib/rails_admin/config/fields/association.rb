@@ -46,12 +46,12 @@ module RailsAdmin
             scope.limit(associated_collection_scope_limit)
           end
         end
-        
+
         # inverse relationship
         register_instance_option :inverse_of do
           association[:inverse_of]
         end
-        
+
         # preload entire associated collection (per associated_collection_scope) on load
         # Be sure to set limit in associated_collection_scope if set is large
         register_instance_option :associated_collection_cache_all do
@@ -67,17 +67,17 @@ module RailsAdmin
         def associated_object_label_method
           @associated_object_label_method ||= associated_model_config.object_label_method
         end
-        
+
         # Reader for associated primary key
         def associated_primary_key
           @associated_primary_key ||= association[:primary_key_proc].call
         end
-        
+
         # Reader for the association's key
         def foreign_key
           association[:foreign_key]
         end
-        
+
         # Reader whether this is a polymorphic association
         def polymorphic?
           association[:polymorphic]
@@ -92,12 +92,12 @@ module RailsAdmin
         def value
           bindings[:object].send(association[:name])
         end
-        
+
         # has many?
         def multiple?
           true
         end
-        
+
         def virtual?
           true
         end

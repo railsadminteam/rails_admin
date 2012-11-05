@@ -15,7 +15,7 @@ module RailsAdmin
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
-      @fields = @methods.map {|m| @model_config.export.fields.find {|f| f.name == m} }      
+      @fields = @methods.map {|m| @model_config.export.fields.find {|f| f.name == m} }
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       @associations = {}
 
