@@ -46,7 +46,9 @@ Devise.setup do |config|
 end
 
 RSpec.configure do |config|
-  require 'rspec/expectations'
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
 
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers
@@ -58,6 +60,7 @@ RSpec.configure do |config|
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
     RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
+    RailsAdmin::Config.yell_for_non_accessible_fields = false
     login_as User.create(
       :email => "username@example.com",
       :password => "password"

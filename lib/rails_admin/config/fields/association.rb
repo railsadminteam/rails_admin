@@ -15,14 +15,13 @@ module RailsAdmin
           @properties
         end
 
-        register_instance_option(:pretty_value) do
+        register_instance_option :pretty_value do
           v = bindings[:view]
           [value].flatten.select(&:present?).map do |associated|
-            amc = polymorphic? ? RailsAdmin::Config.model(associated) : associated_model_config # perf optimization for non-polymorphic associations
+            amc = polymorphic? ? RailsAdmin.config(associated) : associated_model_config # perf optimization for non-polymorphic associations
             am = amc.abstract_model
             wording = associated.send(amc.object_label_method)
-            can_see = v.authorized?(:show, am, associated) && !am.embedded?
-            can_see = can_see && (show_action = RailsAdmin::Config::Actions.find(:show, { :controller => v.controller, :abstract_model => am, :object => associated }))
+            can_see = !am.embedded? && (show_action = v.action(:show, am, associated))
             can_see ? v.link_to(wording, v.url_for(:action => show_action.action_name, :model_name => am.to_param, :id => associated.id), :class => 'pjax') : wording
           end.to_sentence.html_safe
         end
@@ -30,12 +29,12 @@ module RailsAdmin
         # Accessor whether association is visible or not. By default
         # association checks whether the child model is excluded in
         # configuration or not.
-        register_instance_option(:visible?) do
+        register_instance_option :visible? do
           @visible ||= !self.associated_model_config.excluded?
         end
 
         # use the association name as a key, not the association key anymore!
-        register_instance_option(:label) do
+        register_instance_option :label do
           (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name association[:name]
         end
 
@@ -47,12 +46,12 @@ module RailsAdmin
             scope.limit(associated_collection_scope_limit)
           end
         end
-        
+
         # inverse relationship
         register_instance_option :inverse_of do
           association[:inverse_of]
         end
-        
+
         # preload entire associated collection (per associated_collection_scope) on load
         # Be sure to set limit in associated_collection_scope if set is large
         register_instance_option :associated_collection_cache_all do
@@ -68,17 +67,17 @@ module RailsAdmin
         def associated_object_label_method
           @associated_object_label_method ||= associated_model_config.object_label_method
         end
-        
+
         # Reader for associated primary key
         def associated_primary_key
           @associated_primary_key ||= association[:primary_key_proc].call
         end
-        
+
         # Reader for the association's key
         def foreign_key
           association[:foreign_key]
         end
-        
+
         # Reader whether this is a polymorphic association
         def polymorphic?
           association[:polymorphic]
@@ -93,12 +92,12 @@ module RailsAdmin
         def value
           bindings[:object].send(association[:name])
         end
-        
+
         # has many?
         def multiple?
           true
         end
-        
+
         def virtual?
           true
         end

@@ -3,32 +3,19 @@ require File.expand_path('../lib/rails_admin/version', __FILE__)
 
 Gem::Specification.new do |gem|
   # If you add a dependency, please maintain alphabetical order
-  #gem.add_dependency 'bbenezech-nested_form', '~> 0.0.6'
   gem.add_dependency 'nested_form', '~> 0.2.3'
   gem.add_dependency 'sass-rails', '~> 3.1'
-  gem.add_dependency 'bootstrap-sass', ['~> 2.0.3']
-  gem.add_dependency 'jquery-ui-rails', ['>= 0.5']
+  gem.add_dependency 'bootstrap-sass', '~> 2.1'
+  gem.add_dependency 'font-awesome-sass-rails', '~> 2.0'
+  gem.add_dependency 'jquery-ui-rails', '~> 2.0'
   gem.add_dependency 'builder', '~> 3.0'
   gem.add_dependency 'coffee-rails', '~> 3.1'
   gem.add_dependency 'haml', '~> 3.1'
-  gem.add_dependency 'jquery-rails', '>= 1.0.17'
-  gem.add_dependency 'kaminari', '~> 0.12'
-  gem.add_dependency 'rack-pjax', '~> 0.5'
+  gem.add_dependency 'jquery-rails', '~> 2.1'
+  gem.add_dependency 'kaminari', '~> 0.14'
+  gem.add_dependency 'rack-pjax', '~> 0.6'
   gem.add_dependency 'rails', '~> 3.1'
   gem.add_dependency 'remotipart', '~> 1.0'
-  gem.add_development_dependency 'cancan'
-  gem.add_development_dependency 'capybara'
-  gem.add_development_dependency 'carrierwave'
-  gem.add_development_dependency 'database_cleaner', '~> 0.8'
-  gem.add_development_dependency 'devise'
-  gem.add_development_dependency 'dragonfly'
-  gem.add_development_dependency 'factory_girl'
-  gem.add_development_dependency 'generator_spec'
-  gem.add_development_dependency 'launchy'
-  gem.add_development_dependency 'mini_magick'
-  gem.add_development_dependency 'paperclip'
-  gem.add_development_dependency 'rspec-rails'
-  gem.add_development_dependency 'timecop'
   gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
   gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
   gem.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']

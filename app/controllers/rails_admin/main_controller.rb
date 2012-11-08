@@ -29,7 +29,7 @@ module RailsAdmin
       self.send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(:controller => self, :abstract_model => @abstract_model).select(&:bulkable?).map(&:route_fragment))
     end
 
-    def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all]))
+    def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
       scope = model_config.abstract_model.scoped
       if auth_scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
         scope = scope.merge(auth_scope)
@@ -87,11 +87,20 @@ module RailsAdmin
       end
     end
 
+    def satisfy_strong_params!
+      if @abstract_model.model.ancestors.map(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')
+        params[@abstract_model.param_key].try :permit!
+      end
+    end
+
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
       return unless _params.present?
-      fields = model_config.send(action).fields
+      fields = model_config.send(action).with(:controller => self, :view => self.view_context, :object => @object).visible_fields
+      allowed_methods = fields.map{|f|
+        f.allowed_methods
+      }.flatten.uniq.map(&:to_s) << "id" << "_destroy"
       fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }
-
+      _params.slice!(*allowed_methods)
       fields.select(&:nested_form).each do |association|
         children_params = association.multiple? ? _params[association.method_name].try(:values) : [_params[association.method_name]].compact
         (children_params || []).each do |children_param|
@@ -113,7 +122,7 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      if params[:_continue]
+      if params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
         redirect_to(back_or_index, :flash => { :info => t("admin.flash.noaction") })
       end
     end

@@ -251,6 +251,7 @@ module RailsAdmin
           "DateTime"       => { :type => :datetime },
           "Float"          => { :type => :float },
           "Hash"           => { :type => :serialized },
+          "Money"          => { :type => :serialized },
           "Integer"        => { :type => :integer },
           "Object"         => (
             if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
@@ -270,7 +271,7 @@ module RailsAdmin
           ),
             "Symbol"         => { :type => :string, :length => 255 },
             "Time"           => { :type => :datetime },
-        }[field.type.to_s] or raise "Need to map field #{field.type.to_s} for field name #{name} in #{model.inspect}"
+        }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
       end
 
       def association_model_proc_lookup(association)

@@ -9,7 +9,7 @@ module RailsAdmin
           self.nested_attributes_options = {}
           class << self
             def rails_admin(&block)
-              RailsAdmin::Config.model(self, &block)
+              RailsAdmin.config(self, &block)
             end
             alias_method_chain :accepts_nested_attributes_for, :rails_admin
           end

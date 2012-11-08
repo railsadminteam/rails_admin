@@ -37,6 +37,10 @@ module RailsAdmin
         display "Looks like you've already installed it, good!"
       end
 
+      namespace = ask_for("Where do you want to mount rails_admin?", "admin", _namespace)
+      gsub_file "config/routes.rb", /mount RailsAdmin::Engine => \'\/.+\', :as => \'rails_admin\'/, ''
+      route("mount RailsAdmin::Engine => '/#{namespace}', :as => 'rails_admin'")
+
       unless routes.index("devise_for")
         model_name = ask_for("What would you like the user model to be called?", "user", _model_name)
         display "Now setting up devise with user model name '#{model_name}':"
@@ -75,9 +79,6 @@ module RailsAdmin
       end
       display "Adding a migration..."
       migration_template 'migration.rb', 'db/migrate/create_rails_admin_histories_table.rb' rescue display $!.message
-      namespace = ask_for("Where do you want to mount rails_admin?", "admin", _namespace)
-      gsub_file "config/routes.rb", /mount RailsAdmin::Engine => \'\/.+\', :as => \'rails_admin\'/, ''
-      route("mount RailsAdmin::Engine => '/#{namespace}', :as => 'rails_admin'")
       display "Job's done: migrate, start your server and visit '/#{namespace}'!", :blue
     end
   end

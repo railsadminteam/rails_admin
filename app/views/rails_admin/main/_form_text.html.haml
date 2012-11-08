@@ -20,7 +20,8 @@
     richtext = 'bootstrap-wysihtml5'
     js_data = {
       :csspath => field.bootstrap_wysihtml5_css_location,
-      :jspath => field.bootstrap_wysihtml5_js_location
+      :jspath => field.bootstrap_wysihtml5_js_location,
+      :config_options => field.bootstrap_wysihtml5_config_options.to_json
     }
   else
     richtext = false

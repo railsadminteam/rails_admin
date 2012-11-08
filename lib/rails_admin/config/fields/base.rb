@@ -11,7 +11,7 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Groupable
-        
+
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
@@ -164,10 +164,12 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          @required ||= !!([name] + children_fields).uniq.find do |column_name|
+          context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)
+          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.find do |column_name|
             !!abstract_model.model.validators_on(column_name).find do |v|
-              v.kind == :presence && !v.options[:allow_nil] ||
-              v.kind == :numericality && !v.options[:allow_nil]
+              !v.options[:allow_nil] and
+              [:presence, :numericality].include?(v.kind) and
+              (v.options[:on] == context or v.options[:on].blank?)
             end
           end
         end
@@ -208,12 +210,17 @@ module RailsAdmin
         end
 
         register_instance_option :render do
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
+          bindings[:view].render :partial => "rails_admin/main/#{partial}", :locals => {:field => self, :form => bindings[:form] }
         end
 
         def editable?
           return false if @properties && @properties[:read_only]
-          !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
+          active_model_attr_accessible = !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
+          return true if active_model_attr_accessible
+          if RailsAdmin::Config.yell_for_non_accessible_fields
+            Rails.logger.debug "\n\n[RailsAdmin] Please add 'attr_accessible :#{self.method_name}' in your '#{bindings[:object].class}' model definition if you want to make it editable.\nYou can also explicitely mark this field as read-only: \n\nconfig.model #{bindings[:object].class} do\n  field :#{self.name} do\n    read_only true\n  end\nend\n\nAdd 'config.yell_for_non_accessible_fields = false' in your 'rails_admin.rb' initializer if you do not want to see these warnings\n\n"
+          end
+          false
         end
 
         # Is this an association
@@ -230,14 +237,14 @@ module RailsAdmin
 
         # Reader whether field is optional.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional?
           not required?
         end
 
         # Inverse accessor whether this field is required.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
           if !state.nil? || block
             required state.nil? ? proc { false == (instance_eval &block) } : false == state
@@ -268,6 +275,11 @@ module RailsAdmin
           false
         end
 
+        # Allowed methods for the field in forms
+        register_instance_option :allowed_methods do
+          [method_name]
+        end
+
         def inverse_of
           nil
         end
@@ -279,6 +291,7 @@ module RailsAdmin
         def html_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
+
 
         def inspect
           "#<#{self.class.name}[#{name}] #{

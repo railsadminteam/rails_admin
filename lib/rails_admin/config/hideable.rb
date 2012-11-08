@@ -4,7 +4,7 @@ module RailsAdmin
     module Hideable
       # Visibility defaults to true.
       def self.included(klass)
-        klass.register_instance_option(:visible?) do
+        klass.register_instance_option :visible? do
           !root.try :excluded?
         end
       end

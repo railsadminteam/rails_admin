@@ -2,6 +2,7 @@ require 'rails'
 require 'jquery-rails'
 require 'remotipart'
 require 'bootstrap-sass'
+require 'font-awesome-sass-rails'
 require 'kaminari'
 require 'rack-pjax'
 require 'jquery-ui-rails'
@@ -17,6 +18,10 @@ module RailsAdmin
 
     initializer "RailsAdmin pjax hook" do |app|
       app.config.middleware.use Rack::Pjax
+    end
+
+    rake_tasks do
+      Dir[File.join(File.dirname(__FILE__),'../tasks/*.rake')].each { |f| load f }
     end
   end
 end

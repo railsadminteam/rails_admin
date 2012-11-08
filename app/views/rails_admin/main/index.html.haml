@@ -11,7 +11,7 @@
   export_action = RailsAdmin::Config::Actions.find(:export, { :controller => self.controller, :abstract_model => @abstract_model })
   export_action = export_action && authorized?(export_action.authorization_key, @abstract_model) ? export_action : nil
 
-  properties = @model_config.list.with(:view => self, :object => @abstract_model.model.new).visible_fields
+  properties = @model_config.list.with(:controller => self.controller, :view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   sets = get_column_sets(properties)
@@ -80,9 +80,9 @@
     monthNamesShort: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_month_names.to_json}
     }
     }
-    
+
     = @ordered_filter_string
-    
+
     });
   %style
     - properties.select{ |p| p.column_width.present? }.each do |property|
@@ -135,6 +135,6 @@
       - total_count = @objects.total_count.to_i
       = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)
       = link_to(t("admin.misc.show_all"), index_path(params.merge(:all => true)), :class => "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
-      .clearfix.total-count= "#{total_count} #{@model_config.label_plural.downcase}"
+      .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
     - else
-      .clearfix.total-count= "#{@objects.size} #{@model_config.label_plural.downcase}"
+      .clearfix.total-count= "#{@objects.size} #{@model_config.pluralize(@objects.size).downcase}"

@@ -8,22 +8,22 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:partial) do
+          register_instance_option :partial do
             :form_polymorphic_association
           end
 
           # Accessor whether association is visible or not. By default
           # association checks that any of the child models are included in
           # configuration.
-          register_instance_option(:visible?) do
+          register_instance_option :visible? do
             associated_model_config.length > 0
           end
 
-          register_instance_option(:sortable) do
+          register_instance_option :sortable do
             false
           end
 
-          register_instance_option(:searchable) do
+          register_instance_option :searchable do
             false
           end
 
@@ -35,6 +35,10 @@ module RailsAdmin
           # TODO not supported yet
           register_instance_option :associated_collection_scope do
             nil
+          end
+
+          register_instance_option :allowed_methods do
+            [children_fields]
           end
 
           def associated_collection(type)

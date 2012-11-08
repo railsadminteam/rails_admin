@@ -44,53 +44,45 @@ module RailsAdmin
 
     def main_navigation
       nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller)
+      node_model_names = nodes_stack.map{ |c| c.abstract_model.model_name }
+
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
 
-        li_stack = nodes.select{|n| n.parent.nil? || !n.parent.to_s.in?(nodes_stack.map{|c| c.abstract_model.model_name }) }.map do |node|
-          %{
-            <li data-model="#{node.abstract_model.to_param}">
-              <a class="pjax" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
-            </li>
-            #{navigation(nodes_stack, nodes_stack.select{|n| n.parent.to_s == node.abstract_model.model_name}, 1)}
-          }.html_safe
-        end.join.html_safe
+        nodes = nodes.select{ |n| n.parent.nil? || !n.parent.to_s.in?(node_model_names) }
+        li_stack = navigation nodes_stack, nodes
 
-        if li_stack.present?
-          li_stack = %{<li class='nav-header'>#{navigation_label || t('admin.misc.navigation')}</li>}.html_safe + li_stack
-        end
-
-        li_stack
+        label = navigation_label || t('admin.misc.navigation')
+        %{<li class='nav-header'>#{label}</li>#{li_stack}} if li_stack.present?
       end.join.html_safe
     end
 
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.map do |title, url|
-        content_tag(:li, link_to(title.to_s, url, :target => '_blank')).html_safe
-      end.join.html_safe
+        content_tag(:li, link_to(title.to_s, url, :target => '_blank'))
+      end.join
 
-      if li_stack.present?
-        li_stack = %{<li class='nav-header'>#{RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')}</li>}.html_safe + li_stack
-      end
-
+      label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
+      li_stack = %{<li class='nav-header'>#{label}</li>#{li_stack}}.html_safe if li_stack.present?
       li_stack
     end
 
-    def navigation nodes_stack, nodes, level
+    def navigation nodes_stack, nodes, level=0
       nodes.map do |node|
-        %{
-          <li data-model="#{node.abstract_model.to_param}">
-            <a class="pjax nav-level-#{level}" href="#{url_for(:action => :index, :controller => 'rails_admin/main', :model_name => node.abstract_model.to_param)}">#{node.label_plural}</a>
-          </li>
-          #{navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level + 1)}
-        }.html_safe
-      end.join
+        model_param = node.abstract_model.to_param
+        url         = url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)
+        level_class = " nav-level-#{level}" if level > 0
+
+        li = content_tag :li, "data-model"=>model_param do
+          link_to node.label_plural, url, :class => "pjax#{level_class}"
+        end
+        li + navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level+1)
+      end.join.html_safe
     end
 
     def breadcrumb action = @action, acc = []
       begin
         (parent_actions ||= []) << action
       end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent))
-      parent_actions << action(:dashboard) if parent_actions.last.key != :dashboard # in case chain is interrupted
 
       content_tag(:ul, :class => "breadcrumb") do
         parent_actions.map do |a|
@@ -135,8 +127,9 @@ module RailsAdmin
             end
           end.join.html_safe
         end
-      end
+      end.html_safe
     end
+
   end
 end
 

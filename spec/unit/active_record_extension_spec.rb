@@ -1,8 +1,8 @@
 require 'spec_helper'
 require File.expand_path('../../../config/initializers/active_record_extensions', __FILE__)
 
-describe 'ActiveRecord::Base', :active_record => true do
-  describe '#safe_send' do
+describe "ActiveRecord::Base", :active_record => true do
+  describe "#safe_send" do
     it "only calls #read_attribute once" do
       @player = Player.new
       @player.number = 23
@@ -10,7 +10,7 @@ describe 'ActiveRecord::Base', :active_record => true do
       @player.should_receive(:read_attribute).exactly(1).times do |*args|
         original_method.call(*args)
       end
-      @player.safe_send(:number).should == 23
+      expect(@player.safe_send(:number)).to eq(23)
     end
   end
 end

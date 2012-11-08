@@ -8,7 +8,8 @@ module RailsAdmin
         end
 
         def message
-          "#{@version.event} #{@version.item_type} id #{@version.item_id}"
+          @message = "#{@version.event} #{@version.item_type} ID #{@version.item_id}"
+          @version.respond_to?(:changeset) ? @message + " [" + @version.changeset.to_a.collect {|c| c[0] + " = " + c[1][1].to_s}.join(", ") + "]" : @message
         end
 
         def created_at
@@ -40,7 +41,7 @@ module RailsAdmin
         def initialize(controller, user_class = User)
           raise "PaperTrail not found" unless defined?(PaperTrail)
           @controller = controller
-          @user_class = user_class
+          @user_class = user_class.to_s.constantize
         end
 
         def latest

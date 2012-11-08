@@ -1,21 +1,9 @@
 source 'https://rubygems.org'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
 group :active_record do
   platforms :jruby do
-    case ENV['CI_DB_ADAPTER']
-    when 'mysql'
-      gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
-      gem 'jdbc-mysql', '~> 5.1'
-    when 'postgresql'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
-      gem 'jdbc-postgres', '~> 9.0'
-    else
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.2'
-      gem 'jdbc-sqlite3', '~> 3.6'
-    end
+    gem 'activerecord-jdbcsqlite3-adapter', '~> 1.2'
+    gem 'jdbc-sqlite3', '~> 3.6'
   end
 
   platforms :ruby, :mswin, :mingw do
@@ -28,39 +16,36 @@ group :active_record do
       gem 'sqlite3', '~> 1.3'
     end
   end
-  gem 'carrierwave'
 end
 
 group :mongoid do
   gem 'mongoid', '~> 3.0'
-  gem 'mongoid-paperclip', :require => 'mongoid_paperclip', :git => 'git://github.com/meskyanichi/mongoid-paperclip.git', :branch => 'develop'
+  gem 'mongoid-paperclip', '~> 0.0.8', :require => 'mongoid_paperclip'
   gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/jnicklas/carrierwave-mongoid.git', :branch => 'mongoid-3.0'
 end
 
 group :debug do
-  platform :mri_18 do
-    gem 'ruby-debug'
-    gem 'linecache'
-  end
-
   platform :mri_19 do
-    gem 'ruby-debug19'
-    gem 'simplecov', :require => false
+    gem 'debugger', '~> 1.2'
+    gem 'simplecov', '~> 0.6', :require => false
   end
-
-  platform :jruby do
-    gem 'ruby-debug'
-  end
-end
-
-platforms :jruby, :mingw_18, :ruby_18 do
-  gem 'fastercsv', '~> 1.5'
 end
 
 group :development, :test do
-  gem 'cancan'
-  gem 'devise'
-  gem 'paperclip'
+  gem 'strong_parameters', '~> 0.1.5'
+  gem 'cancan', '~> 1.6'
+  gem 'capybara', '~> 1.1'
+  gem 'carrierwave', '~> 0.6'
+  gem 'database_cleaner', '~> 0.8'
+  gem 'devise', '~> 2.1'
+  gem 'dragonfly', '~> 0.9'
+  gem 'factory_girl', '~> 4.1'
+  gem 'generator_spec', '~> 0.8'
+  gem 'launchy', '~> 2.1'
+  gem 'mini_magick', '~> 3.4'
+  gem 'paperclip', '~> 3.3'
+  gem 'rspec-rails', '~> 2.11'
+  gem 'timecop', '~> 0.5'
 end
 
 gemspec

@@ -4,37 +4,36 @@ describe RailsAdmin::Config do
 
   describe ".included_models" do
 
-    it 'should only use included models' do
+    it "only uses included models" do
       RailsAdmin.config.included_models = [Team, League]
-      RailsAdmin::AbstractModel.all.map(&:model).should == [League, Team] #it gets sorted
+      expect(RailsAdmin::AbstractModel.all.map(&:model)).to eq([League, Team]) # it gets sorted
     end
 
-    it 'should not restrict models if included_models is left empty' do
+    it "does not restrict models if included_models is left empty" do
       RailsAdmin.config.included_models = []
-      RailsAdmin::AbstractModel.all.map(&:model).should include(Team, League)
+      expect(RailsAdmin::AbstractModel.all.map(&:model)).to include(Team, League)
     end
 
-    it 'should further remove excluded models (whitelist - blacklist)' do
+    it "removes excluded models (whitelist - blacklist)" do
       RailsAdmin.config.excluded_models = [Team]
       RailsAdmin.config.included_models = [Team, League]
-      RailsAdmin::AbstractModel.all.map(&:model).should == [League]
+      expect(RailsAdmin::AbstractModel.all.map(&:model)).to eq([League])
     end
 
-    it 'should always exclude history', :active_record => true do
-      RailsAdmin::AbstractModel.all.map(&:model).should_not include(RailsAdmin::History)
+    it "always excludes history", :active_record => true do
+      expect(RailsAdmin::AbstractModel.all.map(&:model)).not_to include(RailsAdmin::History)
     end
 
-    it 'excluded? returns true for any model not on the list' do
+    it "excluded? returns true for any model not on the list" do
       RailsAdmin.config.included_models = [Team, League]
 
       team_config = RailsAdmin::AbstractModel.new('Team').config
       fan_config = RailsAdmin::AbstractModel.new('Fan').config
 
-      fan_config.should be_excluded
-      team_config.should_not be_excluded
+      expect(fan_config).to be_excluded
+      expect(team_config).not_to be_excluded
     end
   end
-
 
   describe ".add_extension" do
     before do
@@ -45,7 +44,7 @@ describe RailsAdmin::Config do
 
     it "registers the extension with RailsAdmin" do
       RailsAdmin.add_extension(:example, ExampleModule)
-      RailsAdmin::EXTENSIONS.select { |name| name == :example }.length.should == 1
+      expect(RailsAdmin::EXTENSIONS.select { |name| name == :example }.length).to eq(1)
     end
 
     context "given an extension with an authorization adapter" do
@@ -53,7 +52,7 @@ describe RailsAdmin::Config do
         RailsAdmin.add_extension(:example, ExampleModule, {
           :authorization => true
         })
-        RailsAdmin::AUTHORIZATION_ADAPTERS[:example].should == ExampleModule::AuthorizationAdapter
+        expect(RailsAdmin::AUTHORIZATION_ADAPTERS[:example]).to eq(ExampleModule::AuthorizationAdapter)
       end
     end
 
@@ -62,7 +61,7 @@ describe RailsAdmin::Config do
         RailsAdmin.add_extension(:example, ExampleModule, {
           :auditing => true
         })
-        RailsAdmin::AUDITING_ADAPTERS[:example].should == ExampleModule::AuditingAdapter
+        expect(RailsAdmin::AUDITING_ADAPTERS[:example]).to eq(ExampleModule::AuditingAdapter)
       end
     end
 
@@ -71,14 +70,14 @@ describe RailsAdmin::Config do
         RailsAdmin.add_extension(:example, ExampleModule, {
           :configuration => true
         })
-        RailsAdmin::CONFIGURATION_ADAPTERS[:example].should == ExampleModule::ConfigurationAdapter
+        expect(RailsAdmin::CONFIGURATION_ADAPTERS[:example]).to eq(ExampleModule::ConfigurationAdapter)
       end
     end
   end
 
   describe ".attr_accessible_role" do
     it "sould be :default by default" do
-      RailsAdmin.config.attr_accessible_role.call.should == :default
+      expect(RailsAdmin.config.attr_accessible_role.call).to eq(:default)
     end
 
     it "sould be configurable with user role for example" do
@@ -88,21 +87,21 @@ describe RailsAdmin::Config do
         end
       end
 
-      RailsAdmin.config.attr_accessible_role.call.should == :admin
+      expect(RailsAdmin.config.attr_accessible_role.call).to eq(:admin)
     end
   end
 
   describe ".main_app_name" do
 
     it "as a default meaningful dynamic value" do
-      RailsAdmin.config.main_app_name.call.should == ['Dummy App', 'Admin']
+      expect(RailsAdmin.config.main_app_name.call).to eq(['Dummy App', 'Admin'])
     end
 
     it "can be configured" do
       RailsAdmin.config do |config|
         config.main_app_name = ['static','value']
       end
-      RailsAdmin.config.main_app_name.should == ['static','value']
+      expect(RailsAdmin.config.main_app_name).to eq(['static','value'])
     end
   end
 
@@ -170,7 +169,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        RailsAdmin.config.audit_with.call.should_not raise_exception ArgumentError
+        expect(RailsAdmin.config.audit_with.call).not_to raise_exception ArgumentError
       end
     end
   end
@@ -198,7 +197,7 @@ describe RailsAdmin::Config do
             configurator = configuration_adapter
           end
         end
-        configurator.should be_a(ExampleModule::ConfigurationAdapter)
+        expect(configurator).to be_a(ExampleModule::ConfigurationAdapter)
       end
     end
   end
@@ -209,7 +208,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.default_search_operator = 'starts_with'
         end
-        RailsAdmin::Config.default_search_operator.should == 'starts_with'
+        expect(RailsAdmin::Config.default_search_operator).to eq('starts_with')
       end
 
       it "errors on unrecognized search operator" do
@@ -221,13 +220,13 @@ describe RailsAdmin::Config do
       end
 
       it "defaults to 'default'" do
-        RailsAdmin::Config.default_search_operator.should == 'default'
+        expect(RailsAdmin::Config.default_search_operator).to eq('default')
       end
     end
   end
 
-  describe '.visible_models' do
-    it 'passes controller bindings, find visible models, order them' do
+  describe ".visible_models" do
+    it "passes controller bindings, find visible models, order them" do
       RailsAdmin.config do |config|
         config.included_models = [Player, Fan, Comment, Team]
 
@@ -250,23 +249,23 @@ describe RailsAdmin::Config do
         end
       end
 
-      RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model).should =~ [Fan, Comment]
+      expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [Fan, Comment]
     end
 
-    it 'hides unallowed models' do
+    it "hides unallowed models" do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
       end
-      RailsAdmin.config.visible_models(:controller => double(:authorized? => true)).map(&:abstract_model).map(&:model).should == [Comment]
-      RailsAdmin.config.visible_models(:controller => double(:authorized? => false)).map(&:abstract_model).map(&:model).should == []
+      expect(RailsAdmin.config.visible_models(:controller => double(:authorized? => true)).map(&:abstract_model).map(&:model)).to eq([Comment])
+      expect(RailsAdmin.config.visible_models(:controller => double(:authorized? => false)).map(&:abstract_model).map(&:model)).to eq([])
     end
 
-    it "should not contain embedded model", :mongoid => true do
+    it "does not contain embedded model", :mongoid => true do
       RailsAdmin.config do |config|
         config.included_models = [FieldTest, Comment, Embed]
       end
 
-      RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model).should =~ [FieldTest, Comment]
+      expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [FieldTest, Comment]
      end
   end
 end
