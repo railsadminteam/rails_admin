@@ -9,7 +9,7 @@ module RailsAdmin
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
-        
+
         register_instance_option :only do
           nil
         end

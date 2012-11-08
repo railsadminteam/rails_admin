@@ -133,15 +133,15 @@ module RailsAdmin
             params[name] = self.class.normalize(params[name], "#{localized_date_format} #{localized_time_format}") if params[name].present?
           end
 
-          register_instance_option(:sort_reverse?) do
+          register_instance_option :sort_reverse? do
             true
           end
 
-          register_instance_option(:date_format) do
+          register_instance_option :date_format do
             self.class.format
           end
 
-          register_instance_option(:formatted_value) do
+          register_instance_option :formatted_value do
             unless (time = value).nil?
               I18n.l(time, :format => strftime_format)
             else
@@ -149,11 +149,11 @@ module RailsAdmin
             end
           end
 
-          register_instance_option(:partial) do
+          register_instance_option :partial do
             :form_datetime
           end
 
-          register_instance_option(:strftime_format) do
+          register_instance_option :strftime_format do
             localized_format self.class.i18n_scope
           end
         end

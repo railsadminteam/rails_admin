@@ -18,7 +18,7 @@ module RailsAdmin
           action = options[:action]
         end
 
-        groups = options[:model_config].send(action).with(:form => self, :object => @object, :view => @template).visible_groups
+        groups = options[:model_config].send(action).with(:form => self, :object => @object, :view => @template, :controller => @template.controller).visible_groups
 
         object_infos +
         groups.map do |fieldset|
@@ -29,7 +29,7 @@ module RailsAdmin
     end
 
     def fieldset_for fieldset, nested_in
-      if (fields = fieldset.with(:form => self, :object => @object, :view => @template).visible_fields).length > 0
+      if (fields = fieldset.with(:form => self, :object => @object, :view => @template, :controller => @template.controller).visible_fields).length > 0
         @template.content_tag :fieldset do
           contents = []
           contents << @template.content_tag(:legend, %{<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}}.html_safe, :style => "#{fieldset.name == :default ? 'display:none' : ''}")
@@ -102,7 +102,7 @@ module RailsAdmin
     def dom_name field
       (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''}}
     end
-    
+
     protected
       def without_field_error_proc_added_div
         default_field_error_proc = ::ActionView::Base.field_error_proc

@@ -3,18 +3,18 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController do
-  
+
   describe "#dashboard" do
     before do
       controller.stub(:render).and_return(true) # no rendering
     end
-    
-    it "should show statistics by default" do
+
+    it "shows statistics by default" do
       RailsAdmin.config(Player).abstract_model.should_receive(:count).and_return(0)
       controller.dashboard
     end
-    
-    it "should not show statistics if turned off" do
+
+    it "does not show statistics if turned off" do
       RailsAdmin.config do |c|
         c.actions do
           dashboard do
@@ -22,15 +22,15 @@ describe RailsAdmin::MainController do
           end
         end
       end
-      
+
       RailsAdmin.config(Player).abstract_model.should_not_receive(:count)
       controller.dashboard
     end
   end
-  
+
   describe "#check_for_cancel" do
-    
-    it "should redirect to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
+
+    it "redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
       controller.stub(:back_or_index) { raise StandardError.new('redirected back') }
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete" } }.to raise_error('redirected back')
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.to_not raise_error('redirected back')
@@ -38,14 +38,14 @@ describe RailsAdmin::MainController do
   end
 
   describe "#get_sort_hash" do
-    it 'should work with belongs_to associations with label method virtual' do
+    it "works with belongs_to associations with label method virtual" do
       controller.params = { :sort => "parent_category", :model_name =>"categories" }
-      controller.send(:get_sort_hash, RailsAdmin.config(Category)).should == {:sort=>"categories.parent_category_id", :sort_reverse=>true}
+      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>"categories.parent_category_id", :sort_reverse=>true})
     end
 
-    it 'should work with belongs_to associations with label method real column' do
+    it "works with belongs_to associations with label method real column" do
       controller.params = { :sort => "team", :model_name =>"players" }
-      controller.send(:get_sort_hash, RailsAdmin.config(Player)).should == {:sort=>"teams.name", :sort_reverse=>true}
+      expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>"teams.name", :sort_reverse=>true})
     end
   end
 
@@ -55,9 +55,9 @@ describe RailsAdmin::MainController do
       controller.params = { :model_name => "teams" }
     end
 
-    it "should paginate" do
-      controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length.should == 21
-      controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length.should == 20
+    it "paginates" do
+      expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length).to eq(21)
+      expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length).to eq(20)
     end
   end
 
@@ -67,8 +67,8 @@ describe RailsAdmin::MainController do
       controller.params = { :model_name => "teams", :bulk_action => "bulk_delete", :bulk_ids => @teams.map(&:id) }
     end
 
-    it "should not paginate" do
-      controller.list_entries(RailsAdmin.config(Team), :bulk_delete).to_a.length.should == 21
+    it "does not paginate" do
+      expect(controller.list_entries(RailsAdmin.config(Team), :bulk_delete).to_a.length).to eq(21)
     end
   end
 
@@ -90,7 +90,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      controller.list_entries.to_a.length.should == @players.size
+      expect(controller.list_entries.to_a.length).to eq(@players.size)
     end
 
     it "scopes associated collection records according to associated_collection_scope" do
@@ -106,7 +106,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      controller.list_entries.to_a.length.should == 3
+      expect(controller.list_entries.to_a.length).to eq(3)
     end
 
     it "scopes associated collection records according to bindings" do
@@ -128,7 +128,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      controller.list_entries.to_a.length.should == @team.revenue.to_i
+      expect(controller.list_entries.to_a.length).to eq(@team.revenue.to_i)
     end
 
 
@@ -142,14 +142,14 @@ describe RailsAdmin::MainController do
           associated_collection_cache_all false
         end
       end
-      controller.list_entries.to_a.length.should == 30
+      expect(controller.list_entries.to_a.length).to eq(30)
 
       RailsAdmin.config Team do
         field :players do
           associated_collection_cache_all true
         end
       end
-      controller.list_entries.length.should == @players.size
+      expect(controller.list_entries.length).to eq(@players.size)
     end
 
     it "orders associated collection records by desc" do
@@ -157,7 +157,7 @@ describe RailsAdmin::MainController do
         FactoryGirl.create :player
       end
 
-      controller.list_entries.to_a.first.should == @players.last
+      expect(controller.list_entries.to_a.first).to eq(@players.last)
     end
   end
 
@@ -169,61 +169,129 @@ describe RailsAdmin::MainController do
       FactoryGirl.create :team
       TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, :number => 123)]
       returned = get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
-      returned.body.should =~ /\"id\"\:123/
+      expect(returned.body).to match /\"id\"\:123/
+    end
+  end
+
+  describe "sanitize_params_for!" do
+    context "in France" do
+      before do
+        I18n.locale = :fr
+      end
+      after do
+        I18n.locale = :en
+      end
+
+      it "sanitize params recursively in nested forms" do
+        RailsAdmin.config Comment do
+          configure :created_at do
+            show
+          end
+        end
+
+        RailsAdmin.config NestedFieldTest do
+          configure :created_at do
+            show
+          end
+        end
+      
+        controller.params = HashWithIndifferentAccess.new({
+          "field_test"=>{
+            "unallowed_field" => "I shouldn't be here",
+            "datetime_field"=>"1 août 2010",
+            "nested_field_tests_attributes"=>{
+              "new_1330520162002"=>{
+                "comment_attributes"=>{
+                  "unallowed_field" => "I shouldn't be here",
+                  "created_at"=>"2 août 2010"
+                },
+                "created_at"=>"3 août 2010"
+              }
+            },
+            "comment_attributes"=>{
+              "unallowed_field" => "I shouldn't be here",
+              "created_at"=>"4 août 2010"
+            }
+          }
+        })
+
+        controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+
+        expect(controller.params).to eq({
+          "field_test"=>{
+            "datetime_field"=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
+            "nested_field_tests_attributes"=>{
+              "new_1330520162002"=>{
+                "comment_attributes"=>{
+                  "created_at"=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
+                },
+                "created_at"=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
+              }
+            },
+            "comment_attributes"=>{
+              "created_at"=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
+            }
+          }
+        })
+      end
+    end
+    
+    it "allows for delete method with Carrierwave" do
+
+      RailsAdmin.config FieldTest do
+        field :carrierwave_asset
+        field :dragonfly_asset
+        field :paperclip_asset do
+          delete_method :delete_paperclip_asset
+        end
+      end
+      controller.params = HashWithIndifferentAccess.new({
+        "field_test"=>{
+          "carrierwave_asset" => "test",
+          "carrierwave_asset_cache" => "test", 
+          "remove_carrierwave_asset" => "test", 
+          "dragonfly_asset" => "test",
+          "remove_dragonfly_asset" => "test",
+          "retained_dragonfly_asset" => "test",
+          "paperclip_asset" => "test",
+          "delete_paperclip_asset" => "test",
+          "should_not_be_here" => "test"
+        }
+      })
+
+      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+      expect(controller.params).to eq(
+        "field_test"=>{
+          "carrierwave_asset"=>"test", 
+          "remove_carrierwave_asset"=>"test", 
+          "carrierwave_asset_cache"=>"test", 
+          "dragonfly_asset"=>"test", 
+          "remove_dragonfly_asset"=>"test", 
+          "retained_dragonfly_asset"=>"test", 
+          "paperclip_asset"=>"test",
+          "delete_paperclip_asset"=>"test"
+        })
+    end
+    
+    it "allows for polymorphic associations parameters" do
+      RailsAdmin.config Comment do
+        field :commentable
+      end
+      
+      controller.params = HashWithIndifferentAccess.new({
+        "comment"=>{
+          "commentable_id" => "test",
+          "commentable_type" => "test"
+        }
+      })
+      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
+      expect(controller.params).to eq(
+        "comment"=>{
+          "commentable_id" => "test",
+          "commentable_type" => "test"
+        })
     end
   end
   
-  describe "sanitize_params_for!" do
-    it 'sanitize params recursively in nested forms' do
-      RailsAdmin.config Comment do
-        configure :created_at do
-          show
-        end
-      end
-
-      RailsAdmin.config NestedFieldTest do
-        configure :created_at do
-          show
-        end
-      end
-
-      I18n.locale = :fr
-      controller.params = {
-        "field_test"=>{
-          :"datetime_field"=>"1 août 2010", 
-          "nested_field_tests_attributes"=>{
-            "new_1330520162002"=>{
-              "comment_attributes"=>{
-                :"created_at"=>"2 août 2010"
-              },
-              :"created_at"=>"3 août 2010"
-            }
-          }, 
-          "comment_attributes"=>{
-            :"created_at"=>"4 août 2010"
-          }
-        }
-      }
-
-      controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
-
-      controller.params.should == {
-        "field_test"=>{
-          :datetime_field=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00', 
-          "nested_field_tests_attributes"=>{
-            "new_1330520162002"=>{
-              "comment_attributes"=>{
-                :created_at=>'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
-              }, 
-              :created_at=>'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
-            }
-          }, 
-          "comment_attributes"=>{
-            :created_at=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
-          }
-        }
-      }
-      I18n.locale = :en
-    end
-  end
+  
 end

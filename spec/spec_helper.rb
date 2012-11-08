@@ -46,7 +46,9 @@ Devise.setup do |config|
 end
 
 RSpec.configure do |config|
-  require 'rspec/expectations'
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
 
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers

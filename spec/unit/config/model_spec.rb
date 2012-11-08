@@ -9,9 +9,9 @@ describe RailsAdmin::Config::Model do
       end
     end
 
-    it "should say false when included, true otherwise" do
-      RailsAdmin.config(Player).excluded?.should == true
-      RailsAdmin.config(Comment).excluded?.should == false
+    it "returns false when included, true otherwise" do
+      expect(RailsAdmin.config(Player).excluded?).to be_true
+      expect(RailsAdmin.config(Comment).excluded?).to be_false
     end
   end
 
@@ -22,54 +22,54 @@ describe RailsAdmin::Config::Model do
       end
     end
 
-    it "should send object_label_method to binding[:object]" do
+    it "sends object_label_method to binding[:object]" do
       c = Comment.new(:content => 'test')
-      RailsAdmin.config(Comment).with(:object => c).object_label.should == 'test'
+      expect(RailsAdmin.config(Comment).with(:object => c).object_label).to eq('test')
     end
   end
 
   describe "#object_label_method" do
-    it "should be first of Config.label_methods if found as a column on model, or :rails_admin_default_object_label_method" do
-      RailsAdmin.config(Comment).object_label_method.should == :rails_admin_default_object_label_method
-      RailsAdmin.config(Division).object_label_method.should == :name
+    it "is first of Config.label_methods if found as a column on model, or :rails_admin_default_object_label_method" do
+      expect(RailsAdmin.config(Comment).object_label_method).to eq(:rails_admin_default_object_label_method)
+      expect(RailsAdmin.config(Division).object_label_method).to eq(:name)
     end
   end
 
   describe "#label" do
-    it "should be pretty" do
-      RailsAdmin.config(Comment).label.should == 'Comment'
+    it "is pretty" do
+      expect(RailsAdmin.config(Comment).label).to eq('Comment')
     end
   end
 
   describe "#label_plural" do
-    it "should be pretty" do
-      RailsAdmin.config(Comment).label_plural.should == 'Comments'
+    it "is pretty" do
+      expect(RailsAdmin.config(Comment).label_plural).to eq('Comments')
     end
   end
 
   describe "#weight" do
-    it "should be 0" do
-      RailsAdmin.config(Comment).weight.should == 0
+    it "is 0" do
+      expect(RailsAdmin.config(Comment).weight).to eq(0)
     end
   end
 
   describe "#parent" do
-    it "should be nil for ActiveRecord::Base inherited models" do
-      RailsAdmin.config(Comment).parent.should be_nil
+    it "is nil for ActiveRecord::Base inherited models" do
+      expect(RailsAdmin.config(Comment).parent).to be_nil
     end
 
-    it "should be parent model otherwise" do
-      RailsAdmin.config(Hardball).parent.should == Ball
+    it "is parent model otherwise" do
+      expect(RailsAdmin.config(Hardball).parent).to eq(Ball)
     end
   end
 
   describe "#navigation_label" do
-    it "should be nil if parent module is Object" do
-      RailsAdmin.config(Comment).navigation_label.should be_nil
+    it "is nil if parent module is Object" do
+      expect(RailsAdmin.config(Comment).navigation_label).to be_nil
     end
 
-    it "should be parent module otherwise" do
-      RailsAdmin.config(Cms::BasicPage).navigation_label.should == "Cms"
+    it "is parent module otherwise" do
+      expect(RailsAdmin.config(Cms::BasicPage).navigation_label).to eq("Cms")
     end
   end
 end

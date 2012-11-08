@@ -1,5 +1,5 @@
 - params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
-- visible_fields = @model_config.export.with(:view => self, :object => @abstract_model.model.new).visible_fields
+- visible_fields = @model_config.export.with(:view => self, :object => @abstract_model.model.new, :controller => self.controller).visible_fields
 
 = form_tag export_path(params.merge(:all => true)), :method => 'post', :class => 'form-horizontal denser' do
 
@@ -27,7 +27,7 @@
               = field.label
 
     - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
-      - fields = field.associated_model_config.export.with(:view => self, :object => (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
+      - fields = field.associated_model_config.export.with(:controller => self.controller, :view => self, :object => (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
       .control-group
         %label.control-label{:rel => 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), :onclick => 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', :name => field.label.downcase)
         .controls

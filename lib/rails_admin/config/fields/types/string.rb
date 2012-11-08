@@ -8,14 +8,14 @@ module RailsAdmin
 
           RailsAdmin::Config::Fields::Types::register(self)
 
-          register_instance_option(:html_attributes) do
+          register_instance_option :html_attributes do
             {
               :maxlength => length,
               :size => [50, length.to_i].min
             }
            end
 
-          register_instance_option(:help) do
+          register_instance_option :help do
             text = (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
             if valid_length.present? && valid_length[:is].present?
               text += "#{I18n.translate("admin.form.char_length_of").capitalize} #{valid_length[:is]}."
@@ -33,7 +33,7 @@ module RailsAdmin
             text
           end
 
-          register_instance_option(:partial) do
+          register_instance_option :partial do
             :form_field
           end
         end

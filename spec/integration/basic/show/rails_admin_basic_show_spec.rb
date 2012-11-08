@@ -4,7 +4,7 @@ describe "RailsAdmin Basic Show" do
   subject { page }
 
   describe "show" do
-    it "should have History, Edit, Delete, Details and attributes" do
+    it "has History, Edit, Delete, Details and attributes" do
       @player = FactoryGirl.create :player
       visit show_path(:model_name => "player", :id => @player.id)
 
@@ -20,12 +20,11 @@ describe "RailsAdmin Basic Show" do
   end
 
   describe "GET /admin/players/123this-id-doesnt-exist" do
-    it "should raise NotFound" do
+    it "raises NotFound" do
       visit '/admin/players/123this-id-doesnt-exist'
-      page.driver.status_code.should eql(404)
+      expect(page.driver.status_code).to eq(404)
     end
   end
-
 
   describe "show with belongs_to association" do
     before(:each) do
@@ -35,7 +34,7 @@ describe "RailsAdmin Basic Show" do
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should show associated objects" do
+    it "shows associated objects" do
       should have_css("a[href='/admin/team/#{@team.id}']")
     end
   end
@@ -47,7 +46,7 @@ describe "RailsAdmin Basic Show" do
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should show associated objects" do
+    it "shows associated objects" do
       should have_css("a[href='/admin/draft/#{@draft.id}']")
     end
   end
@@ -62,7 +61,7 @@ describe "RailsAdmin Basic Show" do
       visit show_path(:model_name => "player", :id => @player.id)
     end
 
-    it "should show associated objects" do
+    it "shows associated objects" do
       should have_css("a[href='/admin/comment/#{@comment1.id}']")
       should have_css("a[href='/admin/comment/#{@comment2.id}']")
       should_not have_css("a[href='/admin/comment/#{@comment3.id}']")
@@ -76,7 +75,7 @@ describe "RailsAdmin Basic Show" do
       visit show_path(:model_name => "comment", :id => @comment.id)
     end
 
-    it "should show associated object" do
+    it "shows associated object" do
       should have_css("a[href='/admin/player/#{@player.id}']")
     end
   end

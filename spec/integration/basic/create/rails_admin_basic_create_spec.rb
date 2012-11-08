@@ -13,10 +13,10 @@ describe "RailsAdmin Basic Create" do
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
-    it "should create an object with correct attributes" do
-      @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
-      @player.position.should eql("Second baseman")
+    it "creates an object with correct attributes" do
+      expect(@player.name).to eq("Jackie Robinson")
+      expect(@player.number).to eq(42)
+      expect(@player.position).to eq("Second baseman")
     end
   end
 
@@ -32,10 +32,10 @@ describe "RailsAdmin Basic Create" do
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
-    it "should create an object with correct attributes" do
-      @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
-      @player.position.should eql("Second baseman")
+    it "creates an object with correct attributes" do
+      expect(@player.name).to eq("Jackie Robinson")
+      expect(@player.number).to eq(42)
+      expect(@player.position).to eq("Second baseman")
     end
   end
 
@@ -51,10 +51,10 @@ describe "RailsAdmin Basic Create" do
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
-    it "should create an object with correct attributes" do
-      @player.name.should eql("Jackie Robinson")
-      @player.number.should eql(42)
-      @player.position.should eql("Second baseman")
+    it "creates an object with correct attributes" do
+      expect(@player.name).to eq("Jackie Robinson")
+      expect(@player.number).to eq(42)
+      expect(@player.position).to eq("Second baseman")
     end
   end
 
@@ -67,9 +67,9 @@ describe "RailsAdmin Basic Create" do
       @player = RailsAdmin::AbstractModel.new("Player").all.last # first is created by FactoryGirl
     end
 
-    it "should create an object with correct associations" do
+    it "creates an object with correct associations" do
       @draft.reload
-      @player.draft.should eql(@draft)
+      expect(@player.draft).to eq(@draft)
     end
   end
 
@@ -80,11 +80,11 @@ describe "RailsAdmin Basic Create" do
       @league = RailsAdmin::AbstractModel.new("League").all.last
     end
 
-    it "should create an object with correct associations" do
+    it "creates an object with correct associations" do
       @divisions[0].reload
-      @league.divisions.should include(@divisions[0])
-      @league.divisions.should_not include(@divisions[1])
-      @league.divisions.should_not include(@divisions[2])
+      expect(@league.divisions).to include(@divisions[0])
+      expect(@league.divisions).not_to include(@divisions[1])
+      expect(@league.divisions).not_to include(@divisions[2])
     end
   end
 
@@ -95,11 +95,11 @@ describe "RailsAdmin Basic Create" do
       @fan = RailsAdmin::AbstractModel.new("Fan").first
     end
 
-    it "should create an object with correct associations" do
+    it "creates an object with correct associations" do
       @teams[0].reload
-      @fan.teams.should include(@teams[0])
-      @fan.teams.should_not include(@teams[1])
-      @fan.teams.should_not include(@teams[2])
+      expect(@fan.teams).to include(@teams[0])
+      expect(@fan.teams).not_to include(@teams[1])
+      expect(@fan.teams).not_to include(@teams[2])
     end
   end
 
@@ -111,7 +111,7 @@ describe "RailsAdmin Basic Create" do
       page.driver.post new_path(:model_name => "player", :player => {:name => @player.name, :number => @player.number.to_s, :position => @player.position, :team_id => @team.id})
     end
 
-    it "should show an error message" do
+    it "shows an error message" do
       should have_content("There is already a player with that number on this team")
     end
   end
@@ -121,7 +121,7 @@ describe "RailsAdmin Basic Create" do
       page.driver.post(new_path(:model_name => "player", :id => 1), :params => {:player => {}})
     end
 
-    it "should show an error message" do
+    it "shows an error message" do
       should have_content("Player failed to be created")
       should have_selector "form", :action => "/admin/players"
     end
@@ -134,7 +134,7 @@ describe "RailsAdmin Basic Create" do
       click_button "Save and add another"
     end
 
-    it "should show error base error message in flash" do
+    it "shows error base error message in flash" do
       should have_content("Player failed to be created. Player is cheating")
     end
   end

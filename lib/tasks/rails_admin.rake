@@ -6,7 +6,7 @@ namespace :rails_admin do
       puts "[RailsAdmin] RailsAdmin initialization disabled by default. Pass SKIP_RAILS_ADMIN_INITIALIZER=false if you need it."
     end
   end
-  
+
   desc "Install rails_admin"
   task :install do
     system 'rails g rails_admin:install'
@@ -16,7 +16,7 @@ namespace :rails_admin do
   task :uninstall do
     system 'rails g rails_admin:uninstall'
   end
-  
+
   desc "CI env for Travis"
   task :prepare_ci_env do
     ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'

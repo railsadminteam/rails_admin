@@ -12,7 +12,7 @@ module RailsAdmin
             :number_field
           end
 
-          register_instance_option(:sort_reverse?) do
+          register_instance_option :sort_reverse? do
             serial?
           end
         end

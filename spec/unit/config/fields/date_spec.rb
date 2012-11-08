@@ -12,19 +12,19 @@ describe RailsAdmin::Config::Fields::Types::Date do
       Time.zone = 'UTC'
     end
 
-    it "should read %B %d, %Y by default" do
+    it "reads %B %d, %Y by default" do
       @object.date_field = @field.parse_input({ :date_field => @time.strftime("%B %d, %Y") })
-      @object.date_field.should eql(::Date.parse(@time.to_s))
+      expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
 
-    it "should cover a timezone lag even if in UTC+n:00 timezone." do
+    it "covers a timezone lag even if in UTC+n:00 timezone." do
       Time.zone = 'Tokyo' # +09:00
 
       @object.date_field = @field.parse_input({ :date_field => @time.strftime("%B %d, %Y") })
-      @object.date_field.should eql(::Date.parse(@time.to_s))
+      expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
 
-    it "should have a simple customization option" do
+    it "has a simple customization option" do
       RailsAdmin.config FieldTest do
         edit do
           field :date_field do
@@ -34,10 +34,10 @@ describe RailsAdmin::Config::Fields::Types::Date do
       end
 
       @object.date_field = @field.parse_input({ :date_field => @time.strftime("%Y-%m-%d") })
-      @object.date_field.should eql(::Date.parse(@time.to_s))
+      expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
 
-    it "should have a customization option" do
+    it "has a customization option" do
       RailsAdmin.config FieldTest do
         edit do
           field :date_field do
@@ -47,7 +47,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
       end
 
       @object.date_field = @field.parse_input({ :date_field => @time.strftime("%Y/%m/%d") })
-      @object.date_field.should eql(::Date.parse(@time.to_s))
+      expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
   end
 end

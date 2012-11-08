@@ -8,9 +8,9 @@ describe RailsAdmin::CSVConverter do
         field :name
       end
     end
-    
+
     objects = [FactoryGirl.create(:player)]
     schema = {:only =>[:number, :name]}
-    RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2].should =~ /Number,Name/
+    expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match /Number,Name/
   end
 end

@@ -11,7 +11,7 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Groupable
-        
+
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
@@ -164,7 +164,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)          
+          context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.find do |column_name|
             !!abstract_model.model.validators_on(column_name).find do |v|
               !v.options[:allow_nil] and
@@ -237,14 +237,14 @@ module RailsAdmin
 
         # Reader whether field is optional.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional?
           not required?
         end
 
         # Inverse accessor whether this field is required.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
           if !state.nil? || block
             required state.nil? ? proc { false == (instance_eval &block) } : false == state
@@ -275,6 +275,11 @@ module RailsAdmin
           false
         end
 
+        # Allowed methods for the field in forms
+        register_instance_option :allowed_methods do
+          [method_name]
+        end
+
         def inverse_of
           nil
         end
@@ -286,6 +291,7 @@ module RailsAdmin
         def html_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
+
 
         def inspect
           "#<#{self.class.name}[#{name}] #{
