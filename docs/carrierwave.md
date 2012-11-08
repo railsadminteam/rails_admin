@@ -1,4 +1,4 @@
-Automatically detected.
+Once added to your Gemfile, and after ```bundle install``` has been run, Carrierwave is ready to be used with rails admin.  No further configuration is required to integrate it.
 
 Your model should look like this:
 
