@@ -1,5 +1,3 @@
-## Navigation
-
 You can include/exclude models totally. They won't appear in RailsAdmin at all.
 
 By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to
