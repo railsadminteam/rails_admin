@@ -128,3 +128,19 @@ en:
         default_col_sep: ","
         col_sep: "Column separator"
         col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
+    filters:
+      values:
+        is_true: "True"
+        is_false: "False"
+        present: "Is present"
+        blank: "Is blank"
+        date_default: "Date ..."
+        between: "Between ... and ..."
+        today: "Today"
+        yesterday: "Yesterday"
+        this_week: "This week"
+        last_week: "Last week"
+        contains: "Contains"
+        is: "Is exactly"
+        starts_with: "Starts with"
+        ends_with: "Ends with"
