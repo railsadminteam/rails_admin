@@ -52,6 +52,7 @@ module RailsAdmin
           end
 
           def formatted_date_value
+            value = bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
             value.nil? ? "" : I18n.l(value, :format => localized_date_format).strip
           end
 
