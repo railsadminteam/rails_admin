@@ -194,8 +194,22 @@ module RailsAdmin
           return { column => false } if ['false', 'f', '0'].include?(value)
           return { column => true } if ['true', 't', '1'].include?(value)
         when :integer
-          return if value.blank?
-          { column => value.to_i } if value.to_i.to_s == value
+          case value
+          when Array then
+            val, range_begin, range_end = *value.map{|v| v.blank? ? nil : (v == v.to_i.to_s) ? v.to_i : nil}
+            if range_begin && range_end
+              { column => {'$gte' => range_begin, '$lte' => range_end} }
+            elsif range_begin
+              { column => {'$gte' => range_begin} }
+            elsif range_end
+              { column => {'$lte' => range_end} }
+            elsif val
+              { column => val }
+            end
+          else
+            s = value.to_s
+            return s =~ /^[\-]?\d+$/ ? { column => s.to_i } : nil
+          end
         when :string, :text
           return if value.blank?
           value = case operator
