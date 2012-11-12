@@ -178,14 +178,17 @@ module RailsAdmin
           case value
           when Array then
             val, range_begin, range_end = *value.map{|v| v.blank? ? nil : (v == v.to_i.to_s) ? v.to_i : nil}
-            if range_begin && range_end
-              ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
-            elsif range_begin
-              ["(#{column} >= ?)", range_begin]
-            elsif range_end
-              ["(#{column} <= ?)", range_end]
-            elsif val
-              ["(#{column} = ?)", val]
+            case operator
+            when 'between'
+              if range_begin && range_end
+                ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
+              elsif range_begin
+                ["(#{column} >= ?)", range_begin]
+              elsif range_end
+                ["(#{column} <= ?)", range_end]
+              end
+            else
+              ["(#{column} = ?)", val] if val
             end
           else
             s = value.to_s

@@ -319,20 +319,28 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
     end
 
     it "supports integer type query" do
-      expect(@abstract_model.send(:build_statement, :field, :integer, "1", nil)).to eq(["(field = ?)", 1])
+      expect(@abstract_model.send(:build_statement, :field, :integer, "1"   , nil)).to eq(["(field = ?)", 1])
       expect(@abstract_model.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, "1"   , 'default')).to eq(["(field = ?)", 1])
+      expect(@abstract_model.send(:build_statement, :field, :integer, 'word', 'default')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, "1"   , 'between')).to eq(["(field = ?)", 1])
+      expect(@abstract_model.send(:build_statement, :field, :integer, 'word', 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['6', ''  , ''  ], 'default')).to eq(["(field = ?)", 6])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['7', '10', ''  ], 'default')).to eq(["(field = ?)", 7])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['8', ''  , '20'], 'default')).to eq(["(field = ?)", 8])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['9', '10', '20'], 'default')).to eq(["(field = ?)", 9])
     end
 
     it "supports integer type range query" do
-      @abstract_model.send(:build_statement, :field, :integer, ['', '', ''], nil).should be_nil
-      @abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], nil).should == ["(field = ?)", 2]
-      @abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], nil).should == ["(field >= ?)", 3]
-      @abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], nil).should == ["(field <= ?)", 5]
-      @abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], nil).should == ["(field BETWEEN ? AND ?)", 10, 20]
-      @abstract_model.send(:build_statement, :field, :integer, ['15', '10', '20'], nil).should == ["(field BETWEEN ? AND ?)", 10, 20]
-      @abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''     ], nil).should be_nil
-      @abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], nil).should be_nil
-      @abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], nil).should be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', ''], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(["(field >= ?)", 3])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(["(field <= ?)", 5])
+      expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(["(field BETWEEN ? AND ?)", 10, 20])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['15', '10', '20'], 'between')).to eq(["(field BETWEEN ? AND ?)", 10, 20])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''     ], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
     end
 
     it "supports decimal type query" do
