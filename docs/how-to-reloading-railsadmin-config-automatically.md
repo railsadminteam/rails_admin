@@ -60,6 +60,15 @@ end
 ```
 
 Then instead of `%W(User UserProfile)` you can do `Mongoid::Document.models` or `ActiveRecord::Base.models`
+
+If the above throws the following error when accessing an index page while using ActiveRecord :
+
+    undefined method `page' for #<ActiveRecord::Relation>
+
+then delete `config/initializer/active_record.rb` and replace the model loading in the controller (the first line of `reload_rails_admin`) with :
+
+    models = ActiveRecord::Base.descendants
+
 ***
 
 ## Less Desirable Method ("Dirty" just sounds so... dirty.)
