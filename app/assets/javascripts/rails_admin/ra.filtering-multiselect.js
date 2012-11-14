@@ -109,6 +109,7 @@
       /* Add to selection */
       this.add.click(function(e){
         widget._select($(':selected', widget.collection));
+        
         e.preventDefault();
         widget.selection.trigger('change');
       });
@@ -183,7 +184,7 @@
     _deSelect: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        widget.element.find("option[value=" + option.value + "]").removeAttr("selected");
+        widget.element.find('option[value="' + option.value + '"]').removeAttr("selected");
       });
       $(options).appendTo(this.collection).attr('selected', false);
     },
@@ -235,7 +236,7 @@
     _select: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        var el = widget.element.find("option[value=" + option.value + "]");
+        var el = widget.element.find('option[value="' + option.value + '"]');
         if (el.length) {
           el.attr("selected", "selected");
         } else {
@@ -251,8 +252,8 @@
         options.each(function(i, option) {
           var prev = $(option).prev();
           if (prev.length > 0) {
-            var el = widget.element.find("option[value=" + option.value + "]");
-            var el_prev = widget.element.find("option[value=" + prev[0].value + "]");
+            var el = widget.element.find('option[value="' + option.value + '"]');
+            var el_prev = widget.element.find('option[value="' + prev[0].value + '"]');
             el_prev.before(el);
             prev.before($(option));
           }
@@ -262,8 +263,8 @@
         options.reverse().each(function(i, option) {
           var next = $(option).next();
           if (next.length > 0) {
-            var el = widget.element.find("option[value=" + option.value + "]");
-            var el_next = widget.element.find("option[value=" + next[0].value + "]");
+            var el = widget.element.find('option[value="' + option.value + '"]');
+            var el_next = widget.element.find('option[value="' + next[0].value + '"]');
             el_next.after(el);
             next.after($(option));
           }
@@ -272,7 +273,7 @@
     },
 
     selected: function(value) {
-      return this.element.find("option[value=" + value + "]").attr("selected");
+      return this.element.find('option[value="' + value + '"]').attr("selected");
     },
 
     destroy: function() {
