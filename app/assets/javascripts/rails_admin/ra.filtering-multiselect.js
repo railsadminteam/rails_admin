@@ -159,7 +159,7 @@
         var i, html = "";
         for (i in matches) {
           if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
-            html += '<option value="' + matches[i].id + '">' + matches[i].label + '</option>';
+            html += '<option value="' + matches[i].id + '" title="' + matches[i].label + '">' + matches[i].label + '</option>';
           }
         }
 
@@ -173,10 +173,10 @@
       this.element.find("option").each(function(i, option) {
         if (option.selected) {
           widget._cache[option.value] = option.innerHTML;
-          $(option).clone().appendTo(widget.selection).attr("selected", false);
+          $(option).clone().appendTo(widget.selection).attr("selected", false).attr("title", $(option).text());
         } else {
           widget._cache[option.value] = option.innerHTML;
-          $(option).clone().appendTo(widget.collection).attr("selected", false);
+          $(option).clone().appendTo(widget.collection).attr("selected", false).attr("title", $(option).text());
         }
       });
     },
