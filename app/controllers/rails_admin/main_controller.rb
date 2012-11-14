@@ -86,7 +86,7 @@ module RailsAdmin
         redirect_to back_or_index, :flash => { :success => notice }
       end
     end
-    
+
     def satisfy_strong_params!
       if @abstract_model.model.ancestors.map(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')
         params[@abstract_model.param_key].try :permit!
@@ -96,7 +96,7 @@ module RailsAdmin
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
       return unless _params.present?
       fields = model_config.send(action).with(:controller => self, :view => self.view_context, :object => @object).visible_fields
-      allowed_methods = fields.map{|f| 
+      allowed_methods = fields.map{|f|
         f.allowed_methods
       }.flatten.uniq.map(&:to_s) << "id" << "_destroy"
       fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }

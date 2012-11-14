@@ -8,24 +8,24 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option :partial do
-            :form_file_upload      
+            :form_file_upload
           end
 
           register_instance_option :thumb_method do
-            nil                    
+            nil
           end
 
           register_instance_option :delete_method do
-            nil                    
-          end                      
+            nil
+          end
 
           register_instance_option :cache_method do
-            nil                    
-          end                      
+            nil
+          end
 
           register_instance_option :export_value do
-            resource_url.to_s      
-          end                      
+            resource_url.to_s
+          end
 
           register_instance_option :pretty_value do
             if value.presence
@@ -45,7 +45,7 @@ module RailsAdmin
           register_instance_option :image? do
             (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
           end
-          
+
           register_instance_option :allowed_methods do
             [method_name, delete_method, cache_method].compact
           end

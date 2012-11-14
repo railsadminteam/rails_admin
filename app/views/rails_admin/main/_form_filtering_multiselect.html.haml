@@ -11,16 +11,16 @@
   selected_ids = selected.map{|s| s.send(field.associated_primary_key)}
 
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
-  
+
   xhr = !field.associated_collection_cache_all
-  
+
   collection = if xhr
     selected.map { |o| [o.send(field.associated_object_label_method), o.send(field.associated_primary_key)] }
   else
     i = 0
     controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(field.associated_object_label_method), o.send(field.associated_primary_key)] }.sort_by {|a| [selected_ids.index(a[1]) || selected_ids.size, i+=1] }
   end
-  
+
   js_data = {
     :xhr => xhr,
     :'edit-url' => (authorized?(:edit, config.abstract_model) ? edit_path(:model_name => config.abstract_model.to_param, :id => '__ID__') : ''),
@@ -36,7 +36,7 @@
       :down      => t("admin.misc.down")
     }
   }
-  
+
 %input{:name => form.dom_name(field), :type => "hidden", :value => ""}
 
 - selected_ids = (hdv = field.html_default_value).nil? ? selected_ids : hdv
