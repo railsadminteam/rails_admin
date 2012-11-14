@@ -69,12 +69,15 @@
       this.collection = $('<select multiple="multiple"></select>');
 
       this.collection.addClass("ra-multiselect-collection");
-
+      
       this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
-
-      this.columns.left.append(this.collection)
+      
+      this.columns.left.html(this.collection)
                           .append(this.addAll);
-
+      
+      this.collection.wrap('<div class="wrapper"/>');
+      
+      
       this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
 
       this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
@@ -87,11 +90,15 @@
       }
 
       this.selection = $('<select class="ra-multiselect-selection" multiple="multiple"></select>');
+      
+      
 
       this.removeAll = $('<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
 
       this.columns.right.append(this.selection)
                            .append(this.removeAll);
+      
+      this.selection.wrap('<div class="wrapper"/>');
 
       this.element.css({display: "none"});
     },
