@@ -14,7 +14,7 @@ describe RailsAdmin::Config::Fields::Base do
 
     context 'on a Paperclip installation' do
       it "should detect required fields" do
-        RailsAdmin.config('Image').fields.find{ |f| f.name == :file }.with(:object => Image.new).should be_required
+        expect(RailsAdmin.config('Image').fields.find{ |f| f.name == :file }.with(:object => Image.new)).to be_required
       end
     end
   end
