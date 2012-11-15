@@ -70,5 +70,4 @@ describe "RailsAdmin Basic New" do
       expect(page).to have_css("select#team_player_ids option[selected='selected'][value='#{@player.id}']")
     end
   end
-
 end
