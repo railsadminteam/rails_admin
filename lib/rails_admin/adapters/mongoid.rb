@@ -290,7 +290,7 @@ module RailsAdmin
 
       def association_model_proc_lookup(association)
         if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
-          RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, association.name) || []
+          RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, self.model.model_name, association.name) || []
         else
           association.klass
         end
