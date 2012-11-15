@@ -10,6 +10,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         include Mongoid::Document
         has_many :mongo_posts
         has_many :mongo_comments, :as => :commentable
+        belongs_to :librarian, :polymorphic => true
         field :mongo_blog_id
       end
 
@@ -25,11 +26,14 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       class MongoCategory
         include Mongoid::Document
         has_and_belongs_to_many :mongo_posts
+        belongs_to :librarian, :polymorphic => true
       end
 
       class MongoUser
         include Mongoid::Document
         has_one :mongo_profile
+        has_many :mongo_categories, :as => :librarian
+
         embeds_many :mongo_notes
         accepts_nested_attributes_for :mongo_notes
         field :name, :type => String
@@ -42,6 +46,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       class MongoProfile
         include Mongoid::Document
         belongs_to :mongo_user
+        has_many :mongo_blogs, :as => :librarian
       end
 
       class MongoComment
@@ -53,7 +58,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         include Mongoid::Document
         embedded_in :mongo_post
         embedded_in :mongo_user
-      end
+      end      
 
       @blog     = RailsAdmin::AbstractModel.new MongoBlog
       @post     = RailsAdmin::AbstractModel.new MongoPost
@@ -175,6 +180,12 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
       })
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoComment)
+    end
+
+    it 'has correct opposite model lookup for polymorphic associations' do
+      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoUser]
+      expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoProfile]
     end
 
     it "has correct parameter of embeds_one association" do

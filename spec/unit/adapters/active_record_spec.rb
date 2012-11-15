@@ -13,6 +13,7 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
       class ARBlog < ActiveRecord::Base
         has_many :a_r_posts
         has_many :a_r_comments, :as => :commentable
+        belongs_to :librarian, :polymorphic => true
       end
 
       class ARPost < ActiveRecord::Base
@@ -23,14 +24,17 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
 
       class ARCategory < ActiveRecord::Base
         has_and_belongs_to_many :a_r_posts
+        belongs_to :librarian, :polymorphic => true
       end
 
       class ARUser < ActiveRecord::Base
         has_one :a_r_profile
+        has_many :a_r_categories, :as => :librarian
       end
 
       class ARProfile < ActiveRecord::Base
         belongs_to :a_r_user
+        has_many :a_r_blogs, :as => :librarian
       end
 
       class ARComment < ActiveRecord::Base
@@ -148,6 +152,13 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
       })
       expect(param[:primary_key_proc].call).to eq('id')
       expect(param[:model_proc].call).to eq(ARComment)
+    end
+    
+    
+    it 'has correct opposite model lookup for polymorphic associations' do
+      RailsAdmin::Config.stub!(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
+      expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARUser]
+      expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARProfile]
     end
   end
 
