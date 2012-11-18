@@ -152,7 +152,7 @@ list][list].
 
 [list]: http://groups.google.com/group/rails_admin
 
-If you think you found a bug in RailsAdmin, you can [submit an issue][issues].
+If you think you found a bug in RailsAdmin, you can [submit an issue](https://github.com/sferik/rails_admin/issues/new).
 
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby implementations:
