@@ -4,6 +4,12 @@
  * [[devise_invitable|https://github.com/scambra/devise_invitable]] can result in an issue. See [[this|http://stackoverflow.com/questions/6012792/devise-invitable-rails-admin-conflict]] Stack Overflow question for more info.
  * [[<s>will_paginate</s>|https://github.com/mislav/will_paginate]] (Now we have a way to avoid method name collision. See 'Conflict between will_paginate and kaminari' section below)
 
+## Known fix for twitter-bootstrap-rails:
+
+Just copy the rails_admin/app/assets/javascripts/rails_admin/rails_admin.js.erb file to <yourapp>/app/assets/javascripts/rails_admin/rails_admin.js.erb.
+Then replace "require_asset 'bootstrap'" with "require_asset 'twitter/bootstrap'".
+Now twitter-bootstrap-rails works with rails_admin.
+
 ## Other issues:
 
 **Locale is being forced to `:en`** whereas config.i18n.default_locale = `:de`
