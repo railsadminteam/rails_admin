@@ -39,7 +39,7 @@ describe "RailsAdmin Config DSL Edit Section" do
             default_value true
           end
           field :date_field do
-            default_value Date.today.to_s
+            default_value Date.today
           end
         end
       end

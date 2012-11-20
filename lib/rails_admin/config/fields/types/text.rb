@@ -90,10 +90,6 @@ module RailsAdmin
           register_instance_option :partial do
             :form_text
           end
-
-          register_instance_option :formatted_value do
-            value.to_s.html_safe
-          end
         end
       end
     end

@@ -87,18 +87,19 @@
 	background: #f00;
 }
 .colorpicker input {
-	background-color: transparent;
-	border: 1px solid transparent;
-	position: absolute;
-	font-size: 10px;
-	font-family: Arial, Helvetica, sans-serif;
-	color: #898989;
-	top: 4px;
-	right: 11px;
-	text-align: right;
-	margin: 0;
-	padding: 0;
-	height: 11px;
+	background-color: transparent !important;
+	border: 1px solid transparent !important;
+	position: absolute !important;
+	font-size: 10px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	color: #898989 !important;
+	top: 4px !important;
+	right: 11px !important;
+	text-align: right !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	height: 11px !important;
+	width: auto !important;
 }
 .colorpicker_hex {
 	position: absolute;

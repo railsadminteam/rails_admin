@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source :rubygems
 
 group :active_record do
   platforms :jruby do

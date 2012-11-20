@@ -72,6 +72,19 @@
           '</select>'
           var additional_control = '<input class="additional-fieldset input-small" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
+        case 'integer':
+          var control = '<select class="switch-additionnal-fieldsets input-small" name="' + operator_name + '">' +
+            '<option ' + (field_operator == "default"   ? 'selected="selected"' : '') + ' data-additional-fieldset="default" value="default">Number ...</option>' +
+            '<option ' + (field_operator == "between"   ? 'selected="selected"' : '') + ' data-additional-fieldset="between" value="between">Between ... and ...</option>' +
+            '<option disabled="disabled">---------</option>' +
+            '<option ' + (field_operator == "_not_null" ? 'selected="selected"' : '') + ' value="_not_null">Is present</option>' +
+            '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >Is blank</option>' +
+          '</select>'
+          var additional_control = 
+          '<input class="additional-fieldset default input-small" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="integer" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' + 
+          '<input placeholder="-∞" class="additional-fieldset between input-small" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="integer" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' + 
+          '<input placeholder="∞" class="additional-fieldset between input-small" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="integer" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          break;
         default:
           var control = '<input type="text" class="input-small" name="' + value_name + '" value="' + field_value + '"/> ';
           break;

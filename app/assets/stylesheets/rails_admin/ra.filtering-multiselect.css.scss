@@ -19,8 +19,18 @@
   }
 
   .ra-multiselect-column {
-    width: 190px;
     float: left;
+    .wrapper {
+      width: 200px;
+      overflow-x: auto;
+      select {
+        height: auto;
+        min-height: 120px;
+        margin-bottom: 5px;
+        width: auto;
+        min-width: 200px;
+      }
+    }
   }
 
   .ra-multiselect-center {
@@ -30,11 +40,6 @@
     .ui-icon {
       margin: 5px auto;
     }
-  }
-  .ra-multiselect-collection, .ra-multiselect-selection {
-    height: 130px;
-    margin-bottom: 5px;
-    width: 100%;
   }
 
   span.ui-icon {
