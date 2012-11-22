@@ -8,7 +8,9 @@
           %p= fieldset.help
         %dl
           - fields.each_with_index do |field, index|
-            - if !values[index].nil? || !RailsAdmin::config.compact_show_view
-              %dt.label{:class => "#{field.type_css_class} #{field.css_class}"}= field.label
-              %dd
-                %pre.prettyprint= field.pretty_value
+            - unless values[index].nil? && RailsAdmin::config.compact_show_view
+              %dt
+                %span.label.label-info{:class => "#{field.type_css_class} #{field.css_class}"}
+                  = field.label
+              %dd.well
+                = field.pretty_value

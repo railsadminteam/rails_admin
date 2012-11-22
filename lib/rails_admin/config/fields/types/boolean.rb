@@ -13,11 +13,18 @@ module RailsAdmin
           end
 
           register_instance_option :formatted_value do
-            bindings[:view].image_tag("rails_admin/#{value ? 'bullet_black' : 'bullet_white'}.png", :alt => value.to_s)
+            case value
+            when nil
+              %{<span class="badge">-</span>}
+            when false                  
+              %{<span class="badge badge-important">&#x2718;</span>}
+            when true                   
+              %{<span class="badge badge-success">&#x2713;</span>}
+            end.html_safe
           end
 
           register_instance_option :export_value do
-            value.to_s
+            value.inspect
           end
 
           # Accessor for field's help text displayed below input field.
