@@ -12,7 +12,7 @@ group :active_record do
   platforms :ruby, :mswin, :mingw do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
-      gem 'mysql', '~> 2.8'
+      gem 'mysql', '~> 2.9'
     when 'postgresql'
       gem 'pg', '~> 0.13'
     else
