@@ -3,7 +3,7 @@ require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/belongs_to_association'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-  if association = parent.abstract_model.associations.find {|a| a[:foreign_key] == properties[:name] && a[:type] == :belongs_to }
+  if association = parent.abstract_model.associations.find {|a| a[:foreign_key] == properties[:name] && [:belongs_to, :has_and_belongs_to_many].include?(a[:type]) }
     field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : association[:type]}_association").new(parent, association[:name], association)
     fields << field
 
