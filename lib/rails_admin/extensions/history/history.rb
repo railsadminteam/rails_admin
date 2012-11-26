@@ -15,7 +15,7 @@ class RailsAdmin::History < ActiveRecord::Base
     create(
        :message => [message].flatten.join(', '),
        :item => object.id,
-       :table => abstract_model.pretty_name,
+       :table => abstract_model.model.to_s,
        :username => user.try(:email)
      )
   end
