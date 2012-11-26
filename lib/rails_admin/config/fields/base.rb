@@ -279,6 +279,10 @@ module RailsAdmin
         register_instance_option :allowed_methods do
           [method_name]
         end
+        
+        def parse_input(params)
+          # overriden
+        end
 
         def inverse_of
           nil
