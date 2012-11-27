@@ -168,8 +168,16 @@ describe RailsAdmin::MainController do
       end
       FactoryGirl.create :team
       TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, :number => 123)]
-      returned = get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
-      expect(returned.body).to match /\"id\"\:123/
+      get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
+      expect(response.body).to match /\"id\":\"123\"/
+    end
+
+    context "as JSON" do
+      it "returns strings" do
+        FactoryGirl.create :player, :team => (FactoryGirl.create :team)
+        get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team', :associated_collection => 'players', :current_action => :create, :compact => true, :format => :json}
+        expect(JSON.parse(response.body).first["id"]).to be_a_kind_of String
+      end
     end
   end
 
