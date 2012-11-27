@@ -5,7 +5,7 @@ describe RailsAdmin::AbstractModel do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('FieldTest')
     end
-    
+
     context "ActiveModel::ForbiddenAttributesProtection" do
       it "is present" do
         @abstract_model.model.ancestors.map(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')

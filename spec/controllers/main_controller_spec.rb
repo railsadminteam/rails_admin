@@ -194,7 +194,7 @@ describe RailsAdmin::MainController do
             show
           end
         end
-      
+
         controller.params = HashWithIndifferentAccess.new({
           "field_test"=>{
             "unallowed_field" => "I shouldn't be here",
@@ -235,7 +235,7 @@ describe RailsAdmin::MainController do
         })
       end
     end
-    
+
     it "allows for delete method with Carrierwave" do
 
       RailsAdmin.config FieldTest do
@@ -248,8 +248,8 @@ describe RailsAdmin::MainController do
       controller.params = HashWithIndifferentAccess.new({
         "field_test"=>{
           "carrierwave_asset" => "test",
-          "carrierwave_asset_cache" => "test", 
-          "remove_carrierwave_asset" => "test", 
+          "carrierwave_asset_cache" => "test",
+          "remove_carrierwave_asset" => "test",
           "dragonfly_asset" => "test",
           "remove_dragonfly_asset" => "test",
           "retained_dragonfly_asset" => "test",
@@ -262,22 +262,22 @@ describe RailsAdmin::MainController do
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
       expect(controller.params).to eq(
         "field_test"=>{
-          "carrierwave_asset"=>"test", 
-          "remove_carrierwave_asset"=>"test", 
-          "carrierwave_asset_cache"=>"test", 
-          "dragonfly_asset"=>"test", 
-          "remove_dragonfly_asset"=>"test", 
-          "retained_dragonfly_asset"=>"test", 
+          "carrierwave_asset"=>"test",
+          "remove_carrierwave_asset"=>"test",
+          "carrierwave_asset_cache"=>"test",
+          "dragonfly_asset"=>"test",
+          "remove_dragonfly_asset"=>"test",
+          "retained_dragonfly_asset"=>"test",
           "paperclip_asset"=>"test",
           "delete_paperclip_asset"=>"test"
         })
     end
-    
+
     it "allows for polymorphic associations parameters" do
       RailsAdmin.config Comment do
         field :commentable
       end
-      
+
       controller.params = HashWithIndifferentAccess.new({
         "comment"=>{
           "commentable_id" => "test",
@@ -292,6 +292,6 @@ describe RailsAdmin::MainController do
         })
     end
   end
-  
-  
+
+
 end

@@ -58,7 +58,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         include Mongoid::Document
         embedded_in :mongo_post
         embedded_in :mongo_user
-      end      
+      end
 
       @blog     = RailsAdmin::AbstractModel.new MongoBlog
       @post     = RailsAdmin::AbstractModel.new MongoPost
