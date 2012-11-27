@@ -153,8 +153,8 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
       expect(param[:primary_key_proc].call).to eq('id')
       expect(param[:model_proc].call).to eq(ARComment)
     end
-    
-    
+
+
     it 'has correct opposite model lookup for polymorphic associations' do
       RailsAdmin::Config.stub!(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
       expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARUser]
@@ -362,13 +362,17 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
     it "supports string type query" do
       expect(@abstract_model.send(:build_statement, :field, :string, "", nil)).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :string, "foo", "was")).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "default")).to eq(["(field #{@like} ?)", "%foo%"])
-      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "like")).to eq(["(field #{@like} ?)", "%foo%"])
-      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "starts_with")).to eq(["(field #{@like} ?)", "foo%"])
-      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "ends_with")).to eq(["(field #{@like} ?)", "%foo"])
-      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "is")).to eq(["(field #{@like} ?)", "foo"])
+      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "default")).to eq(["(LOWER(field) #{@like} ?)", "%foo%"])
+      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "like")).to eq(["(LOWER(field) #{@like} ?)", "%foo%"])
+      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "starts_with")).to eq(["(LOWER(field) #{@like} ?)", "foo%"])
+      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "ends_with")).to eq(["(LOWER(field) #{@like} ?)", "%foo"])
+      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "is")).to eq(["(LOWER(field) #{@like} ?)", "foo"])
     end
 
+    it "performs case-insensitive searches" do
+      expect(@abstract_model.send(:build_statement, :field, :string, "foo", "default")).to eq(["(LOWER(field) #{@like} ?)", "%foo%"])
+      expect(@abstract_model.send(:build_statement, :field, :string, "FOO", "default")).to eq(["(LOWER(field) #{@like} ?)", "%foo%"])
+    end
 
     it "supports date type query" do
       expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } })).to eq(["((field_tests.date_field BETWEEN ? AND ?))", Date.new(2012,1,2), Date.new(2012,1,3)])
