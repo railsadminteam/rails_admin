@@ -21,14 +21,14 @@ class RailsAdmin::History < ActiveRecord::Base
   end
 
   def self.history_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-    history = where(:table => model.pretty_name)
+    history = where(:table => model.to_s)
     history = history.where("message LIKE ? OR username LIKE ?", "%#{query}%", "%#{query}%") if query
     history = history.order(sort_reverse == "true" ? "#{sort} DESC" : sort) if sort
     all ? history : history.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
   end
 
   def self.history_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-    history = where(:table => model.pretty_name, :item => object.id)
+    history = where(:table => model.to_s, :item => object.id)
     history = history.where("message LIKE ? OR username LIKE ?", "%#{query}%", "%#{query}%") if query
     history = history.order(sort_reverse == "true" ? "#{sort} DESC" : sort) if sort
     all ? history : history.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)

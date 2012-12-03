@@ -69,6 +69,10 @@ module RailsAdmin
       @model_name.split("::").map(&:underscore).join("~")
     end
 
+    def to_s
+      model.to_s
+    end
+
     def param_key
       @model_name.split("::").map(&:underscore).join("_")
     end
