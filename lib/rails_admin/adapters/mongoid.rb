@@ -263,6 +263,7 @@ module RailsAdmin
           "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
           "Date"           => { :type => :date },
           "DateTime"       => { :type => :datetime },
+          "ActiveSupport::TimeWithZone" => { :type => :datetime },
           "Float"          => { :type => :float },
           "Hash"           => { :type => :serialized },
           "Money"          => { :type => :serialized },
