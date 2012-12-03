@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe RailsAdmin::AbstractModel do
+
+  describe "#to_s" do
+    it 'returns model\'s name' do
+      expect(RailsAdmin::AbstractModel.new(Cms::BasicPage).to_s).to eq Cms::BasicPage.to_s
+    end
+  end
+
   describe "filters" do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('FieldTest')

@@ -61,6 +61,10 @@ module RailsAdmin
       @model_name.constantize
     end
 
+    def to_s
+      model.to_s
+    end
+
     def config
       Config.model self
     end
