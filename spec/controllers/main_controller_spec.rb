@@ -68,6 +68,10 @@ describe RailsAdmin::MainController do
       Kaminari.config.param_name = :pagina
     end
 
+    after do
+      Kaminari.config.param_name = :page
+    end
+
     it "paginates" do
       expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length).to eq(21)
       expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length).to eq(20)
