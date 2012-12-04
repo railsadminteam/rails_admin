@@ -20,7 +20,7 @@ module RailsAdmin
       routes = File.open(Rails.root.join("config/routes.rb")).try :read
       initializer = (File.open(Rails.root.join("config/initializers/rails_admin.rb")) rescue nil).try :read
 
-      display "Hello, RailsAdmin installer will help you sets things up!", :blue
+      display "Hello, RailsAdmin installer will help you set things up!", :blue
       display "I need to work with Devise, let's look at a few things first:"
       display "Checking for a current installation of devise..."
       unless defined?(Devise)
