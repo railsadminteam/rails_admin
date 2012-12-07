@@ -19,8 +19,9 @@ module RailsAdmin
       end
 
       def store(block)
-        if @block
-          raise "Only one config block per model is allowed. Please check configurations blocks for #{@entity}."
+        if @block # reset model to not eval twice
+          @model = RailsAdmin::Config::Model.new(@entity)
+          @block_already_evaluated = false
         end
         @block = block
       end

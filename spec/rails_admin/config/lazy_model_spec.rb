@@ -12,21 +12,25 @@ describe RailsAdmin::Config::LazyModel do
       lazy_model.store(block)
     end
 
-    it "executes only when woken there is a read operation" do
+    it "executes only when reading" do
       RailsAdmin::Config::Model.any_instance.should_receive(:register_instance_option).with('parameter')
       lazy_model.store(block)
       lazy_model.groups # an arbitrary instance method on RailsAdmin::Config::Model to wake up lazy_model
     end
 
-    it "raise an error when attempting to double store a configuration" do
+    it "evaluates only last block" do
+      RailsAdmin::Config::Model.any_instance.should_not_receive(:register_instance_option).with('parameter')
+      RailsAdmin::Config::Model.any_instance.should_receive(:register_instance_option).with('other parameter')
       lazy_model.store(block)
-      expect { lazy_model.store(other_block) }.to raise_error(RuntimeError, /Please check configurations blocks for Team/)
+      lazy_model.store(other_block)
+      lazy_model.groups
     end
 
-    it "raise an error when attempting to double store a configuration, even after block was evaluated" do
+    it "resets models when a new block is given" do
       lazy_model.store(block)
       lazy_model.groups
-      expect { lazy_model.store(other_block) }.to raise_error(RuntimeError, /Please check configurations blocks for Team/)
+      RailsAdmin::Config::Model.should_receive(:new)
+      lazy_model.store(other_block)
     end
 
     it "evaluates config block only once" do
