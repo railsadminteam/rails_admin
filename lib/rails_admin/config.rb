@@ -244,9 +244,12 @@ module RailsAdmin
             entity.class.name.to_sym
           end
         end
-        config = @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
-        config.store(block) if block
-        config
+
+        if block
+          @registry[key] = RailsAdmin::Config::LazyModel.new(entity, &block)
+        else
+          @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        end
       end
 
       def default_hidden_fields=(fields)
