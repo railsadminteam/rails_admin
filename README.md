@@ -31,16 +31,19 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 RailsAdmin model configuration is now lazy loaded.
 
 ```ruby
-config.model do
+config.model 'Team' do
   ...
 end
 
 # or
-
-rails_admin do
-  ...
+class Team
+  rails_admin do
+    ...
+  end
 end
 ```
+
+won't load the Team model.
 
 Incidentally, you are only allowed one configuration block per model.
 
