@@ -22,5 +22,18 @@ describe RailsAdmin::Config::LazyModel do
       lazy_model.store(block)
       expect { lazy_model.store(other_block) }.to raise_error(RuntimeError, /Please check configurations blocks for Team/)
     end
+
+    it "raise an error when attempting to double store a configuration, even after block was evaluated" do
+      lazy_model.store(block)
+      lazy_model.groups
+      expect { lazy_model.store(other_block) }.to raise_error(RuntimeError, /Please check configurations blocks for Team/)
+    end
+
+    it "evaluates config block only once" do
+      RailsAdmin::Config::Model.any_instance.should_receive(:register_instance_option).once.with('parameter')
+      lazy_model.store(block)
+      lazy_model.groups
+      lazy_model.groups
+    end
   end
 end

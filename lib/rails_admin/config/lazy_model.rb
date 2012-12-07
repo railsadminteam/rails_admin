@@ -8,10 +8,10 @@ module RailsAdmin
       end
 
       def method_missing(method, *args, &block)
-        if @block
-          @model = RailsAdmin::Config::Model.new(@entity)
+        if @block && not(@block_already_evaluated)
+          @model ||= RailsAdmin::Config::Model.new(@entity)
           @model.instance_eval(&@block)
-          @block = nil
+          @block_already_evaluated = true
         else
           @model ||= RailsAdmin::Config::Model.new(@entity)
         end
@@ -20,7 +20,7 @@ module RailsAdmin
 
       def store(block)
         if @block
-          raise "Only one config block per model is allowed. Please check configurations blocks for #{@entity}. "
+          raise "Only one config block per model is allowed. Please check configurations blocks for #{@entity}."
         end
         @block = block
       end

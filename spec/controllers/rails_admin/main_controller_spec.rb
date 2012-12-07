@@ -149,7 +149,7 @@ describe RailsAdmin::MainController do
     end
 
 
-    it "limits associated collection records number to 30 if cache_all is false and doesn't otherwise" do
+    it "limits associated collection records number to 30 if cache_all is false" do
       @players = 40.times.map do
         FactoryGirl.create :player
       end
@@ -160,6 +160,12 @@ describe RailsAdmin::MainController do
         end
       end
       expect(controller.list_entries.to_a.length).to eq(30)
+    end
+
+    it "doesn't limit associated collection records number to 30 if cache_all is true" do
+      @players = 40.times.map do
+        FactoryGirl.create :player
+      end
 
       RailsAdmin.config Team do
         field :players do
