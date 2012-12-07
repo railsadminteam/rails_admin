@@ -1,4 +1,4 @@
-require 'rails_admin/config/model'
+require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'
 require 'active_support/core_ext/class/attribute_accessors'
 
@@ -244,8 +244,8 @@ module RailsAdmin
             entity.class.name.to_sym
           end
         end
-        config = @registry[key] ||= RailsAdmin::Config::Model.new(entity)
-        config.instance_eval(&block) if block
+        config = @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        config.run(block) if block
         config
       end
 
