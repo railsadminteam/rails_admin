@@ -245,7 +245,7 @@ module RailsAdmin
           end
         end
         config = @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
-        config.run(block) if block
+        config.store(block) if block
         config
       end
 
@@ -272,7 +272,7 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def models(&block)
         if block
-          ActiveSupport::Deprecation.warn("'config.models do ... end' is deprecated for performance reasons and will be removed in next major release, please duplicate to every concerned model instead.")
+          raise("'config.models do ... end' was removed for performance reasons, please duplicate to every concerned model instead.")
         end
         RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
       end

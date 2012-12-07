@@ -362,10 +362,6 @@ describe "RailsAdmin Config DSL List Section" do
 
   # sort_by and sort_reverse options
   describe "default sorting" do
-    before(:each) do
-      RailsAdmin.config(Player){ list { field :name } }
-    end
-
     let(:today){ Date.today }
     let(:players) do
       [{ :name => "Jackie Robinson",  :created_at => today,            :team_id => rand(99999), :number => 42 },
@@ -388,6 +384,7 @@ describe "RailsAdmin Config DSL List Section" do
           list do
             sort_by :created_at
             sort_reverse true
+            field :name
           end
         end
         visit index_path(:model_name => "player")
@@ -401,6 +398,7 @@ describe "RailsAdmin Config DSL List Section" do
       RailsAdmin.config Player do
         list do
           sort_by :created_at
+          field :name
         end
       end
       visit index_path(:model_name => "player")
@@ -414,6 +412,7 @@ describe "RailsAdmin Config DSL List Section" do
         list do
           sort_by :created_at
           sort_reverse false
+          field :name
         end
       end
       visit index_path(:model_name => "player")
