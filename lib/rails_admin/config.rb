@@ -270,11 +270,8 @@ module RailsAdmin
       # instances.
       #
       # @see RailsAdmin::Config.registry
-      def models(&block)
-        if block
-          raise("'config.models do ... end' was removed for performance reasons, please duplicate to every concerned model instead.")
-        end
-        RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
+      def models
+        RailsAdmin::AbstractModel.all.map{|m| model(m)}
       end
 
       # Reset all configurations to defaults.
