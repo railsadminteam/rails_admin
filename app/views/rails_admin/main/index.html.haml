@@ -21,7 +21,7 @@
   @index = 0
   @ordered_filters = (params[:f] || @model_config.list.filters).inject({}) { |memo, filter|
     field_name = filter.is_a?(Array) ? filter.first : filter
-  (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "value" => '' } }) .each do |index, filter_hash|
+  (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "v" => '' } }) .each do |index, filter_hash|
       unless filter_hash['disabled']
         memo[index] = { field_name => filter_hash }
       else
