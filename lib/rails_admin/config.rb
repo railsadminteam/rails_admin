@@ -266,9 +266,6 @@ module RailsAdmin
 
       # Returns all model configurations
       #
-      # If a block is given it is evaluated in the context of configuration
-      # instances.
-      #
       # @see RailsAdmin::Config.registry
       def models
         RailsAdmin::AbstractModel.all.map{|m| model(m)}
