@@ -10,6 +10,17 @@ Just copy the rails_admin/app/assets/javascripts/rails_admin/rails_admin.js.erb 
 Then replace "require_asset 'bootstrap'" with "require_asset 'twitter/bootstrap'".
 Now twitter-bootstrap-rails works with rails_admin.
 
+## Known fix for anjlab-bootstrap-rails:
+
+I am using gem [anjlab-bootstrap-rails](https://github.com/anjlab/bootstrap-rails), the fix steps for javascript as the above one, but we also need to fix the stylesheets import. Not sure if it's missing or not required for the above fix, we do need the additonal step if you are using this gem.
+
+First, Just copy the rails_admin/app/assets/javascripts/rails_admin/rails_admin.js.erb file to <yourapp>/app/assets/javascripts/rails_admin/rails_admin.js.erb.
+Then replace "require_asset 'bootstrap'" with "require_asset 'twitter/bootstrap'".
+
+Second, Just copy the rails_admin/app/assets/stylesheets/rails_admin/imports.css.scss.erb file to <yourapp>/app/assets/stylesheets/rails_admin/imports.css.scss.erb.
+Then replace "@import "bootstrap" with "@import "twitter/bootstrap".
+Now twitter-bootstrap-rails works with rails_admin.
+
 ## Other issues:
 
 **Locale is being forced to `:en`** whereas config.i18n.default_locale = `:de`
