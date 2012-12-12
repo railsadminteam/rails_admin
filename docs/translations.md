@@ -10,7 +10,9 @@ See [[https://github.com/plataformatec/devise/wiki/I18n]] and [[https://github.c
 
 Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]] to your `config/locales` directory and adapt it to your needs.
 
-***Make sure your existing locales do not have admin: key under :en, :es, :de etc. You will get translation missing then
+## Translation Missing?
+
+Make sure your existing locales do not have admin: key under :en, :es, :de etc. You will get translation missing warning then
 
 Community sourced translations:
 
