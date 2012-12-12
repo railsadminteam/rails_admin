@@ -34,6 +34,22 @@ sure that new models are not automatically added to RailsAdmin, e.g. because of 
 
 Once done with the choice of model, you can customize the way they appear in the navigation.
 
+**Static links**
+
+Static links can be appended to the main navigation:
+
+```ruby
+config.navigation_static_links = {
+  'Google' => 'http://www.google.com'
+}
+```
+
+They are displayed in a separate group with default name 'Links', but you can change it:
+
+```ruby
+config.navigation_static_label = "My Links"
+```
+
 **Setting the model's label**
 
 RailsAdmin will use ActiveModel I18n API by default, so this shouldn't be needed. Still, you can configure label, and its plural, if needed:
