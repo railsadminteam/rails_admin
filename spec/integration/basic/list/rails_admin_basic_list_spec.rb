@@ -53,11 +53,36 @@ describe "RailsAdmin Basic List" do
     end
   end
 
+  #for test has_many association and filters
+  describe "GET /admin/division" do
+    let!(:premier_division) { FactoryGirl.create(:premier_division)}
+    let!(:second_division) { FactoryGirl.create(:second_division)}
+    let!(:premier_teams) {FactoryGirl.create_list(:team, 5,division: premier_division)}
+    let!(:second_teams) { FactoryGirl.create_list(:team, 5,division: second_division)}
+
+    context 'on the list page of division' do
+      setup do
+      RailsAdmin.config Division do
+        list do
+          field :name
+          field :teams , :has_many_association do
+            searchable [:name]
+            visible true
+          end
+        end
+      end
+      end
+      it "allows to filter on has_many relationships" do
+        visit index_path(:model_name => "division" , :f =>  {"0000" => {:o => "is", :v => premier_teams.first.name }})
+        should have_content(premier_teams.first.name)
+        should have_no_content(second_teams.first.name)
+      end
+    end
+  end
+
   describe "GET /admin/player" do
     before do
-      @teams = 2.times.map do
-        FactoryGirl.create(:team)
-      end
+      @teams =  FactoryGirl.create_list(:team,2)
       @players = [
         FactoryGirl.create(:player, :retired => true, :injured => true, :team => @teams[0]),
         FactoryGirl.create(:player, :retired => true, :injured => false, :team => @teams[0]),
@@ -66,7 +91,7 @@ describe "RailsAdmin Basic List" do
       ]
     end
 
-    it "allows to query on any attribute" do
+    context "base list action of players" do
       RailsAdmin.config Player do
         list do
           field :name
@@ -76,62 +101,37 @@ describe "RailsAdmin Basic List" do
         end
       end
 
-      visit index_path(:model_name => "player", :query => @players[0].name)
-      should have_content(@players[0].name)
-      (1..3).each do |i|
-        should have_no_content(@players[i].name)
-      end
-    end
-
-    it "allows to filter on one attribute" do
-      RailsAdmin.config Player do
-        list do
-          field :name
-          field :team
-          field :injured
-          field :retired
+      it "allows to query on any attribute" do
+        visit index_path(:model_name => "player", :query => @players[0].name)
+        should have_content(@players[0].name)
+        (1..3).each do |i|
+          should have_no_content(@players[i].name)
         end
       end
 
-      visit index_path(:model_name => "player", :f => {:injured => {"1" => {:v => "true"}}})
-      should have_content(@players[0].name)
-      should have_no_content(@players[1].name)
-      should have_content(@players[2].name)
-      should have_no_content(@players[3].name)
-    end
+      it "allows to filter on one attribute" do
+        visit index_path(:model_name => "player", :f => {:injured => {"1" => {:v => "true"}}})
+        should have_content(@players[0].name)
+        should have_no_content(@players[1].name)
+        should have_content(@players[2].name)
+        should have_no_content(@players[3].name)
+      end
 
-    it "allows to combine filters on two different attributes" do
-      RailsAdmin.config Player do
-        list do
-          field :name
-          field :team
-          field :injured
-          field :retired
+      it "allows to combine filters on two different attributes" do
+        visit index_path(:model_name => "player", :f => {:retired => {"1" => {:v => "true"}}, :injured => {"1" => {:v => "true"}}})
+        should have_content(@players[0].name)
+        (1..3).each do |i|
+          should have_no_content(@players[i].name)
         end
       end
 
-      visit index_path(:model_name => "player", :f => {:retired => {"1" => {:v => "true"}}, :injured => {"1" => {:v => "true"}}})
-      should have_content(@players[0].name)
-      (1..3).each do |i|
-        should have_no_content(@players[i].name)
+      it "allows to filter on belongs_to relationships" do
+        visit index_path(:model_name => "player", :f => {:team => {"1" => { :v => @teams[0].name }}})
+        should have_content(@players[0].name)
+        should have_content(@players[1].name)
+        should have_no_content(@players[2].name)
+        should have_no_content(@players[3].name)
       end
-    end
-
-    it "allows to filter on belongs_to relationships" do
-      RailsAdmin.config Player do
-        list do
-          field :name
-          field :team
-          field :injured
-          field :retired
-        end
-      end
-
-      visit index_path(:model_name => "player", :f => {:team => {"1" => { :v => @teams[0].name }}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
     end
 
     it "allows to disable search on attributes" do

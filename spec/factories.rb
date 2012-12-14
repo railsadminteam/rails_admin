@@ -18,6 +18,7 @@ FactoryGirl.define do
   end
 
   factory :team do
+    division
     sequence(:division_id)
     sequence(:name) { |n| "Team #{n}" }
     sequence(:manager) { |n| "Manager #{n}" }
@@ -34,6 +35,17 @@ FactoryGirl.define do
   factory :division do
     sequence(:custom_league_id)
     sequence(:name) { |n| "Division #{n}" }
+
+    trait :premier do
+     name "Premier division"
+    end
+
+    trait :second do
+      name "Second division"
+    end
+
+    factory :premier_division,  traits: [:premier]
+    factory :second_division,   traits: [:second]
   end
 
   factory :fan do
