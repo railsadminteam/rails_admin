@@ -251,8 +251,8 @@ describe "RailsAdmin Basic List" do
       end
 
       visit index_path(:model_name => "player")
-      should have_content(%{$.filters.append("Name", "name", "string", null, null, "", 1);})
-      should have_content(%{$.filters.append("Team", "team", "belongs_to_association", null, null, "", 2);})
+      should have_content(%{$.filters.append("Name", "name", "string", "", null, "", 1);})
+      should have_content(%{$.filters.append("Team", "team", "belongs_to_association", "", null, "", 2);})
     end
   end
 
