@@ -21,7 +21,7 @@ end
 group :mongoid do
   gem 'mongoid', '~> 3.0'
   gem 'mongoid-paperclip', '~> 0.0.8', :require => 'mongoid_paperclip'
-  gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid', :git => 'git://github.com/jnicklas/carrierwave-mongoid.git', :branch => 'mongoid-3.0'
+  gem 'carrierwave-mongoid', '~> 0.3', :require => 'carrierwave/mongoid'
 end
 
 group :debug do
