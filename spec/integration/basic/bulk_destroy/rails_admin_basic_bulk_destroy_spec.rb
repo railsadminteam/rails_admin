@@ -9,8 +9,13 @@ describe "RailsAdmin Basic Bulk Destroy" do
       RailsAdmin.config { |c| c.audit_with :history }
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @delete_ids))
 
+      # NOTE: This uses an internal, unsupported capybara API which could break at any moment. We
+      # should refactor this test so that it either A) uses capybara's supported API (only GET
+      # requests via visit) or B) just uses Rack::Test (and doesn't use capybara for browser
+      # interaction like click_button).
+      page.driver.browser.reset_host!
+      page.driver.browser.process :post, bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @delete_ids, '_method' => 'post')
       click_button "Yes, I'm sure"
     end
 
@@ -31,7 +36,13 @@ describe "RailsAdmin Basic Bulk Destroy" do
     before do
       @players = 3.times.map { FactoryGirl.create(:player) }
       @delete_ids = @players[0..1].map(&:id)
-      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @delete_ids))
+
+      # NOTE: This uses an internal, unsupported capybara API which could break at any moment. We
+      # should refactor this test so that it either A) uses capybara's supported API (only GET
+      # requests via visit) or B) just uses Rack::Test (and doesn't use capybara for browser
+      # interaction like click_button).
+      page.driver.browser.reset_host!
+      page.driver.browser.process :post, bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => @delete_ids, '_method' => 'post')
       click_button "Cancel"
     end
 

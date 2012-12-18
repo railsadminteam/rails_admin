@@ -46,7 +46,7 @@ describe "RailsAdmin Export" do
       should have_content 'Select fields to export'
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
-      csv = CSV.parse find('body').text
+      csv = CSV.parse page.driver.response.body.force_encoding("utf-8") # comes through as us-ascii on some platforms
       expect(csv[0]).to match_array ["Id", "Created at", "Updated at", "Deleted at", "Name", "Position",
         "Number", "Retired", "Injured", "Born on", "Notes", "Suspended", "Id [Team]", "Created at [Team]",
         "Updated at [Team]", "Name [Team]", "Logo url [Team]", "Team Manager [Team]", "Ballpark [Team]",
@@ -87,7 +87,7 @@ describe "RailsAdmin Export" do
       visit export_path(:model_name => 'comment')
       select "<comma> ','", :from => "csv_options_generator_col_sep"
       click_button 'Export to csv'
-      csv = CSV.parse find('body').text
+      csv = CSV.parse page.driver.response.body
       expect(csv[0]).to match_array ["Id", "Commentable", "Commentable type", "Content", "Created at", "Updated at"]
       csv[1..-1].each do |line|
         expect(line[csv[0].index('Commentable')]).to eq(@player.id.to_s)
