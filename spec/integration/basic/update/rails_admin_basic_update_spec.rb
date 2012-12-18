@@ -12,9 +12,9 @@ describe "RailsAdmin Basic Update" do
 
     it "returns to edit page" do
       fill_in "player[name]", :with => ""
-      click_button "Save"
+      first(:button, "Save").click
       expect(page.driver.status_code).to eq(406)
-      should have_selector "form", :action => "/admin/players/#{@player.id}"
+      should have_selector "form[action='#{edit_path(:model_name => "player", :id => @player.id)}']"
     end
   end
 
@@ -27,7 +27,7 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      click_button "Save"
+      first(:button, "Save").click
 
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -65,7 +65,7 @@ describe "RailsAdmin Basic Update" do
       @player = FactoryGirl.create :player
       @draft = FactoryGirl.create :draft
       @number = @draft.player.number + 1 # to avoid collision
-      page.driver.put edit_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => @number, :position => "Second baseman"})
+      put edit_path(:model_name => "player", :id => @player.id, :player => {:name => "Jackie Robinson", :draft_id => @draft.id, :number => @number, :position => "Second baseman"})
       @player.reload
     end
 
@@ -90,7 +90,7 @@ describe "RailsAdmin Basic Update" do
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
 
-      page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
+      put edit_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
 
       old_name = @league.name
       @league.reload
@@ -102,7 +102,7 @@ describe "RailsAdmin Basic Update" do
 
       expect(RailsAdmin::History.where(:item => @league.id).collect(&:message)).to include("name: \"#{old_name}\" -> \"National League\"")
 
-      page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
+      put edit_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
 
       @league.reload
       expect(@league.divisions).to be_empty
@@ -111,11 +111,11 @@ describe "RailsAdmin Basic Update" do
 
   describe "update with missing object" do
     before(:each) do
-      page.driver.put(edit_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}})
+      put edit_path(:model_name => "player", :id => 1), :params => {:player => {:name => "Jackie Robinson", :number => 42, :position => "Second baseman"}}
     end
 
     it "raises NotFound" do
-      expect(page.driver.status_code).to eq(404)
+      expect(response.code).to eq("404")
     end
   end
 
@@ -128,7 +128,7 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "a"
       fill_in "player[position]", :with => "Second baseman"
-      click_button "Save"
+      first(:button, "Save").click
 
       @player.reload
     end
@@ -137,7 +137,7 @@ describe "RailsAdmin Basic Update" do
       # TODO: Mongoid 3.0.0 lacks ability of numericality validation on Integer field.
       # This is caused by change in https://github.com/mongoid/mongoid/pull/1698
       # I believe this should be a bug in Mongoid.
-      expect(body).to have_content("Player failed to be updated") unless CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
+      expect(Capybara.string(body)).to have_content("Player failed to be updated") unless CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
     end
   end
 
@@ -154,7 +154,7 @@ describe "RailsAdmin Basic Update" do
       visit edit_path(:model_name => "user", :id => @user.id)
 
       fill_in "user[roles]", :with => %{['admin', 'user']}
-      click_button "Save"
+      first(:button, "Save").click
 
       @user.reload
     end
@@ -174,7 +174,7 @@ describe "RailsAdmin Basic Update" do
     it "saves the serialized data" do
       fill_in "field_test[array_field]", :with => "[4, 2]"
       fill_in "field_test[hash_field]", :with => "{ a: 6, b: 2 }"
-      click_button "Save"
+      first(:button, "Save").click
 
       @field_test.reload
       expect(@field_test.array_field).to eq([4, 2])
@@ -184,7 +184,7 @@ describe "RailsAdmin Basic Update" do
     it "clears data when empty string is passed" do
       fill_in "field_test[array_field]", :with => ""
       fill_in "field_test[hash_field]", :with => ""
-      click_button "Save"
+      first(:button, "Save").click
 
       @field_test.reload
       expect(@field_test.array_field).to eq(nil)
