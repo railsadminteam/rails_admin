@@ -398,7 +398,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       after :each do
         I18n.locale = :en
       end
-      
+
       it "delegates the label option to the ActiveModel API and memoizes it" do
         RailsAdmin.config Team do
           edit do

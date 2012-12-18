@@ -16,7 +16,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
       end.map{|k| association[k] }.compact
 
     parent.abstract_model.properties.select{|p| possible_field_names.include? p[:name] }.each do |column|
-      unless child_field = fields.find{|f| f.name.to_s == column[:name].to_s }        
+      unless child_field = fields.find{|f| f.name.to_s == column[:name].to_s }
         child_field = RailsAdmin::Config::Fields.default_factory.call(parent, column, fields)
       end
       child_columns << child_field
