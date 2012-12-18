@@ -55,14 +55,6 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player" do
     before do
-      RailsAdmin.config Player do
-        list do
-          field :name
-          field :team
-          field :injured
-          field :retired
-        end
-      end
       @teams = 2.times.map do
         FactoryGirl.create(:team)
       end
@@ -75,6 +67,15 @@ describe "RailsAdmin Basic List" do
     end
 
     it "allows to query on any attribute" do
+      RailsAdmin.config Player do
+        list do
+          field :name
+          field :team
+          field :injured
+          field :retired
+        end
+      end
+
       visit index_path(:model_name => "player", :query => @players[0].name)
       should have_content(@players[0].name)
       (1..3).each do |i|
@@ -83,6 +84,15 @@ describe "RailsAdmin Basic List" do
     end
 
     it "allows to filter on one attribute" do
+      RailsAdmin.config Player do
+        list do
+          field :name
+          field :team
+          field :injured
+          field :retired
+        end
+      end
+
       visit index_path(:model_name => "player", :f => {:injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)
       should have_no_content(@players[1].name)
@@ -91,6 +101,15 @@ describe "RailsAdmin Basic List" do
     end
 
     it "allows to combine filters on two different attributes" do
+      RailsAdmin.config Player do
+        list do
+          field :name
+          field :team
+          field :injured
+          field :retired
+        end
+      end
+
       visit index_path(:model_name => "player", :f => {:retired => {"1" => {:v => "true"}}, :injured => {"1" => {:v => "true"}}})
       should have_content(@players[0].name)
       (1..3).each do |i|
@@ -99,6 +118,15 @@ describe "RailsAdmin Basic List" do
     end
 
     it "allows to filter on belongs_to relationships" do
+      RailsAdmin.config Player do
+        list do
+          field :name
+          field :team
+          field :injured
+          field :retired
+        end
+      end
+
       visit index_path(:model_name => "player", :f => {:team => {"1" => { :v => @teams[0].name }}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
@@ -251,8 +279,8 @@ describe "RailsAdmin Basic List" do
       end
 
       visit index_path(:model_name => "player")
-      should have_content(%{$.filters.append("Name", "name", "string", null, null, "", 1);})
-      should have_content(%{$.filters.append("Team", "team", "belongs_to_association", null, null, "", 2);})
+      should have_content(%{$.filters.append("Name", "name", "string", "", null, "", 1);})
+      should have_content(%{$.filters.append("Team", "team", "belongs_to_association", "", null, "", 2);})
     end
   end
 

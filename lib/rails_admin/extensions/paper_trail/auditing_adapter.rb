@@ -8,7 +8,7 @@ module RailsAdmin
         end
 
         def message
-          @message = "#{@version.event} #{@version.item_type} ID #{@version.item_id}"
+          @message = @version.event
           @version.respond_to?(:changeset) ? @message + " [" + @version.changeset.to_a.collect {|c| c[0] + " = " + c[1][1].to_s}.join(", ") + "]" : @message
         end
 
@@ -48,15 +48,15 @@ module RailsAdmin
           ::Version.limit(100).map{|version| VersionProxy.new(version, @user_class)}
         end
 
-        def delete_object(message, object, model, user)
+        def delete_object(object, model, user)
           # do nothing
         end
 
-        def update_object(model, object, associations_before, associations_after, modified_associations, old_object, user)
+        def update_object(object, model, user, changes)
           # do nothing
         end
 
-        def create_object(message, object, abstract_model, user)
+        def create_object(object, abstract_model, user)
           # do nothing
         end
 

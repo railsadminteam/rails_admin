@@ -99,7 +99,7 @@ module RailsAdmin
       allowed_methods = fields.map{|f|
         f.allowed_methods
       }.flatten.uniq.map(&:to_s) << "id" << "_destroy"
-      fields.select{ |f| f.respond_to?(:parse_input) }.each {|f| f.parse_input(_params) }
+      fields.each {|f| f.parse_input(_params) }
       _params.slice!(*allowed_methods)
       fields.select(&:nested_form).each do |association|
         children_params = association.multiple? ? _params[association.method_name].try(:values) : [_params[association.method_name]].compact
@@ -130,7 +130,7 @@ module RailsAdmin
     def get_collection(model_config, scope, pagination)
       associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
       options = {}
-      options = options.merge(:page => (params[:page] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if pagination
+      options = options.merge(:page => (params[Kaminari.config.param_name] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if pagination
       options = options.merge(:include => associations) unless associations.blank?
       options = options.merge(get_sort_hash(model_config))
       options = options.merge(:query => params[:query]) if params[:query].present?
@@ -148,17 +148,6 @@ module RailsAdmin
       action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
       @association = source_model_config.send(action).fields.find{|f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
       @association.associated_collection_scope
-    end
-
-    def associations_hash
-      associations = {}
-      @abstract_model.associations.each do |association|
-        if [:has_many, :has_and_belongs_to_many].include?(association[:type])
-          records = Array(@object.send(association[:name]))
-          associations[association[:name]] = records.collect(&:id)
-        end
-      end
-      associations
     end
   end
 end

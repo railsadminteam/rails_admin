@@ -43,7 +43,7 @@ module RailsAdmin
               end
 
               if @object.save
-                @auditing_adapter && @auditing_adapter.create_object("Created #{@model_config.with(:object => @object).object_label}", @object, @abstract_model, _current_user)
+                @auditing_adapter && @auditing_adapter.create_object(@object, @abstract_model, _current_user)
                 respond_to do |format|
                   format.html { redirect_to_on_success }
                   format.js   { render :json => { :id => @object.id.to_s, :label => @model_config.with(:object => @object).object_label } }

@@ -1,4 +1,4 @@
-require 'rails_admin/config/model'
+require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'
 require 'active_support/core_ext/class/attribute_accessors'
 
@@ -244,9 +244,12 @@ module RailsAdmin
             entity.class.name.to_sym
           end
         end
-        config = @registry[key] ||= RailsAdmin::Config::Model.new(entity)
-        config.instance_eval(&block) if block
-        config
+
+        if block
+          @registry[key] = RailsAdmin::Config::LazyModel.new(entity, &block)
+        else
+          @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        end
       end
 
       def default_hidden_fields=(fields)
@@ -266,15 +269,9 @@ module RailsAdmin
 
       # Returns all model configurations
       #
-      # If a block is given it is evaluated in the context of configuration
-      # instances.
-      #
       # @see RailsAdmin::Config.registry
-      def models(&block)
-        if block
-          ActiveSupport::Deprecation.warn("'config.models do ... end' is deprecated for performance reasons and will be removed in next major release, please duplicate to every concerned model instead.")
-        end
-        RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
+      def models
+        RailsAdmin::AbstractModel.all.map{|m| model(m)}
       end
 
       # Reset all configurations to defaults.

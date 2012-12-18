@@ -33,7 +33,7 @@ module RailsAdmin
               url = resource_url
               if self.image
                 thumb_url = resource_url(thumb_method)
-                (url != thumb_url) ? v.link_to(v.image_tag(thumb_url), url, :class => 'thumbnail', :target => 'blank') : v.image_tag(thumb_url)
+                (url != thumb_url) ? v.link_to(v.image_tag(thumb_url, :class => 'img-polaroid'), url, :target => 'blank') : v.image_tag(thumb_url)
               else
                 v.link_to(nil, url, :target => 'blank')
               end

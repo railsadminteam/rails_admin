@@ -89,9 +89,10 @@ describe "RailsAdmin Basic Update" do
 
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
-
+      
       page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:name => "National League", :division_ids => [@divisions[0].id] })
-
+      
+      old_name = @league.name
       @league.reload
       expect(@league.name).to eq("National League")
       @divisions[0].reload
@@ -99,13 +100,12 @@ describe "RailsAdmin Basic Update" do
       expect(@league.divisions).not_to include(@divisions[1])
       expect(@league.divisions).not_to include(@divisions[2])
 
-      expect(RailsAdmin::History.where(:item => @league.id).collect(&:message)).to include("Added Divisions ##{@divisions[0].id} associations, Changed name")
+      expect(RailsAdmin::History.where(:item => @league.id).collect(&:message)).to include("name: \"#{old_name}\" -> \"National League\"")
 
       page.driver.put edit_path(:model_name => "league", :id => @league.id, :league => {:division_ids => [""]})
 
       @league.reload
       expect(@league.divisions).to be_empty
-      expect(RailsAdmin::History.where(:item => @league.id).collect(&:message)).to include("Removed Divisions ##{@divisions[0].id} associations")
     end
   end
 

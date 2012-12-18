@@ -15,7 +15,7 @@ describe RailsAdmin::Config::Actions::Base do
       expect(RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Team)})).to be_nil
       expect(RailsAdmin::Config::Actions.find(:index, {:controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Cms::BasicPage)})).to be_visible
     end
-    
+
     it "excludes models referenced in the except array" do
       RailsAdmin.config do |config|
         config.actions do

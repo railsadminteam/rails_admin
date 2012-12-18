@@ -5,8 +5,9 @@ module RailsAdmin
 
     include RailsAdmin::I18nSupport
 
-    def authorized?(*args)
-      @authorization_adapter.nil? || @authorization_adapter.authorized?(*args)
+    def authorized?(action, abstract_model = nil, object = nil)
+      object = nil if object.try :new_record?
+      @authorization_adapter.nil? || @authorization_adapter.authorized?(action, abstract_model, object)
     end
 
     def current_action?(action, abstract_model = @abstract_model, object = @object)

@@ -61,6 +61,23 @@ describe RailsAdmin::MainController do
     end
   end
 
+  describe "#list_entries called from view with kaminari custom param_name" do
+    before do
+      @teams = 21.times.map { FactoryGirl.create :team }
+      controller.params = { :model_name => "teams" }
+      Kaminari.config.param_name = :pagina
+    end
+
+    after do
+      Kaminari.config.param_name = :page
+    end
+
+    it "paginates" do
+      expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, false).to_a.length).to eq(21)
+      expect(controller.list_entries(RailsAdmin.config(Team), :index, nil, true).to_a.length).to eq(20)
+    end
+  end
+
   describe "#list_entries called with bulk_ids" do
     before do
       @teams = 21.times.map { FactoryGirl.create :team }
@@ -132,7 +149,7 @@ describe RailsAdmin::MainController do
     end
 
 
-    it "limits associated collection records number to 30 if cache_all is false and doesn't otherwise" do
+    it "limits associated collection records number to 30 if cache_all is false" do
       @players = 40.times.map do
         FactoryGirl.create :player
       end
@@ -143,6 +160,12 @@ describe RailsAdmin::MainController do
         end
       end
       expect(controller.list_entries.to_a.length).to eq(30)
+    end
+
+    it "doesn't limit associated collection records number to 30 if cache_all is true" do
+      @players = 40.times.map do
+        FactoryGirl.create :player
+      end
 
       RailsAdmin.config Team do
         field :players do
@@ -168,8 +191,16 @@ describe RailsAdmin::MainController do
       end
       FactoryGirl.create :team
       TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, :number => 123)]
-      returned = get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
-      expect(returned.body).to match /\"id\"\:123/
+      get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
+      expect(response.body).to match /\"id\":\"123\"/
+    end
+
+    context "as JSON" do
+      it "returns strings" do
+        FactoryGirl.create :player, :team => (FactoryGirl.create :team)
+        get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team', :associated_collection => 'players', :current_action => :create, :compact => true, :format => :json}
+        expect(JSON.parse(response.body).first["id"]).to be_a_kind_of String
+      end
     end
   end
 
@@ -194,7 +225,7 @@ describe RailsAdmin::MainController do
             show
           end
         end
-      
+
         controller.params = HashWithIndifferentAccess.new({
           "field_test"=>{
             "unallowed_field" => "I shouldn't be here",
@@ -235,7 +266,7 @@ describe RailsAdmin::MainController do
         })
       end
     end
-    
+
     it "allows for delete method with Carrierwave" do
 
       RailsAdmin.config FieldTest do
@@ -248,8 +279,8 @@ describe RailsAdmin::MainController do
       controller.params = HashWithIndifferentAccess.new({
         "field_test"=>{
           "carrierwave_asset" => "test",
-          "carrierwave_asset_cache" => "test", 
-          "remove_carrierwave_asset" => "test", 
+          "carrierwave_asset_cache" => "test",
+          "remove_carrierwave_asset" => "test",
           "dragonfly_asset" => "test",
           "remove_dragonfly_asset" => "test",
           "retained_dragonfly_asset" => "test",
@@ -262,22 +293,22 @@ describe RailsAdmin::MainController do
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
       expect(controller.params).to eq(
         "field_test"=>{
-          "carrierwave_asset"=>"test", 
-          "remove_carrierwave_asset"=>"test", 
-          "carrierwave_asset_cache"=>"test", 
-          "dragonfly_asset"=>"test", 
-          "remove_dragonfly_asset"=>"test", 
-          "retained_dragonfly_asset"=>"test", 
+          "carrierwave_asset"=>"test",
+          "remove_carrierwave_asset"=>"test",
+          "carrierwave_asset_cache"=>"test",
+          "dragonfly_asset"=>"test",
+          "remove_dragonfly_asset"=>"test",
+          "retained_dragonfly_asset"=>"test",
           "paperclip_asset"=>"test",
           "delete_paperclip_asset"=>"test"
         })
     end
-    
+
     it "allows for polymorphic associations parameters" do
       RailsAdmin.config Comment do
         field :commentable
       end
-      
+
       controller.params = HashWithIndifferentAccess.new({
         "comment"=>{
           "commentable_id" => "test",
@@ -292,6 +323,6 @@ describe RailsAdmin::MainController do
         })
     end
   end
-  
-  
+
+
 end

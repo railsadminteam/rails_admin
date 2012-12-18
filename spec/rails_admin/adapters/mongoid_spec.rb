@@ -58,7 +58,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         include Mongoid::Document
         embedded_in :mongo_post
         embedded_in :mongo_user
-      end      
+      end
 
       @blog     = RailsAdmin::AbstractModel.new MongoBlog
       @post     = RailsAdmin::AbstractModel.new MongoPost
@@ -276,7 +276,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
 
     it "maps Mongoid column types to RA types" do
       expect(@abstract_model.properties.select{|p| %w(_id _type array_field big_decimal_field
-        boolean_field bson_object_id_field date_field datetime_field default_field float_field
+        boolean_field bson_object_id_field date_field datetime_field time_with_zone_field default_field float_field
         hash_field integer_field name object_field range_field short_text string_field subject
         symbol_field text_field time_field title).
         include? p[:name].to_s}).to match_array [
@@ -324,6 +324,12 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
           :length => nil },
         { :name => :datetime_field,
           :pretty_name => "Datetime field",
+          :nullable? => true,
+          :serial? => false,
+          :type => :datetime,
+          :length => nil },
+        { :name => :time_with_zone_field,
+          :pretty_name => "Time with zone field",
           :nullable? => true,
           :serial? => false,
           :type => :datetime,

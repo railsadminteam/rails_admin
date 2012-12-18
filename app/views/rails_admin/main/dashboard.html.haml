@@ -11,18 +11,21 @@
         - if authorized? :index, abstract_model
           - index_path = index_path(:model_name => abstract_model.to_param)
           - row_class = "#{cycle("odd", "even")}#{" link" if index_path}"
-
           %tr{:class => row_class, :"data-link" => index_path}
+            - last_used = @most_recent_changes[abstract_model.pretty_name]
+            - active = last_used.try(:today?)
             %td
               %span.show= link_to abstract_model.config.label_plural, index_path, :class => 'pjax'
             %td
-              - if (last_used = @most_recent_changes[abstract_model.pretty_name])
+              - if last_used
                 = time_ago_in_words last_used
                 = t "admin.misc.ago"
             %td
               - count = @count[abstract_model.pretty_name]
-              - percent = count > 0 ? (@max < 2.0 ? count : ((Math.log(count) * 100.0) / Math.log(@max))) : -1
-              .label.animate-width-to{:class => 'label-'+get_indicator(percent), :'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent - 1].max.to_i}%", :style => "width:2%"}= @count[abstract_model.pretty_name]
+              - percent = count > 0 ? (@max <= 1 ? count : ((Math.log(count) * 100.0) / Math.log(@max)).to_i + 1) : -1
+              .progress{:style => "margin-bottom:0px", :class => "progress-#{get_indicator(percent)} #{active && 'active progress-striped'}"  }
+                .bar.animate-width-to{:'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent].max.to_i}%", :style => "width:2%"}
+                  = @count[abstract_model.pretty_name]
             %td.links
               %ul.inline= menu_for :collection, abstract_model, nil, true
 - if @auditing_adapter && authorized?(:history)

@@ -28,17 +28,24 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 
 ## Announcements
 
-* for those with `rake db:migrate` errors, update to master and check that you see the line: "[RailsAdmin] RailsAdmin initialization disabled by default." when you launch the task. If not (or if migrations still don't work), open a ticket with an application on Github that can reproduce the issue.
-
-* `config.models do ... end` is deprecated (note the 's' to models, `config.model(MyModel) do .. end` is fine), for performance reasons (forces early loading of all application's models). Duplicate to each model instead, before next release. If you really need the old behavior:
+RailsAdmin model configuration is now lazy loaded.
 
 ```ruby
-config.models.each do |m|
-  config.model m do
-    # <<<< here goes your code
+config.model 'Team' do
+  ...
+end
+
+# or
+class Team
+  rails_admin do
+    ...
   end
 end
 ```
+
+won't load the Team model.
+
+Incidentally, you are only allowed one configuration block per model.
 
 ## Features
 

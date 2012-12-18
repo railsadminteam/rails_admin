@@ -406,7 +406,7 @@ describe RailsAdmin::Config::Fields::Base do
       expect(editable).to be_false
     end
   end
-  
+
   describe "#allowed_methods" do
     it 'includes method_name' do
       RailsAdmin.config do |config|
