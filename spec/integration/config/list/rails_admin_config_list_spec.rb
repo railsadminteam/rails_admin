@@ -290,8 +290,10 @@ describe "RailsAdmin Config DSL List Section" do
       end
       @fans = 2.times.map { FactoryGirl.create :fan }
       visit index_path(:model_name => "fan")
-      expect(find('style')).to have_content("#list th.#{PK_COLUMN}_field")
-      expect(find('style')).to have_content("#list td.#{PK_COLUMN}_field")
+      # NOTE: Capybara really doesn't want us to look at invisible text. This test
+      # could break at any moment.
+      expect(find('style').native.text).to include("#list th.#{PK_COLUMN}_field")
+      expect(find('style').native.text).to include("#list td.#{PK_COLUMN}_field")
     end
 
     it "has option to customize output formatting" do
