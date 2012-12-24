@@ -9,7 +9,7 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 

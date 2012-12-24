@@ -132,7 +132,7 @@ describe "RailsAdmin CanCan Authorization" do
       fill_in "player[name]", :with   => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       should_not have_content("Edit")
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -165,7 +165,7 @@ describe "RailsAdmin CanCan Authorization" do
       should_not have_content("History")
       should_not have_content("Show in app")
       fill_in "player[name]", :with => "Jackie Robinson"
-      first(:button, "Save").click
+      click_button "Save" # click_button "Save" # first(:button, "Save").click
       @player.reload
       expect(@player.name).to eq("Jackie Robinson")
     end

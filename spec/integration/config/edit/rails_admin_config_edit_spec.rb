@@ -16,7 +16,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit new_path(:model_name => "field_test")
       fill_in "field_test[format]", :with => "test for format"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       @record = RailsAdmin::AbstractModel.new("FieldTest").first
       expect(@record.format).to eq("test for format")
     end
@@ -93,7 +93,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       fill_in "field_test[string_field]", :with => "No problem here"
       fill_in "field_test[restricted_field]", :with => "I'm allowed to do that as :custom_role only"
       should have_no_selector "field_test[protected_field]"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       @field_test = FieldTest.first
       expect(@field_test.string_field).to eq("No problem here")
       expect(@field_test.restricted_field).to eq("I'm allowed to do that as :custom_role only")
@@ -610,10 +610,10 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       visit new_path(:model_name => 'category')
       should have_no_css('#category_parent_category_id')
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       visit edit_path(:model_name => 'category', :id => Category.first)
       should have_css('#category_parent_category_id')
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       should have_content('Category successfully updated')
     end
   end
@@ -626,7 +626,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
       fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
       page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       @record.reload
       expect(@record.comment.content).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
@@ -705,7 +705,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit edit_path(:model_name => "field_test", :id => @record.id)
       fill_in "field_test_embeds_attributes_0_name", :with => 'embed 1 edited'
       page.find('#field_test_embeds_attributes_1__destroy').set('true')
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       @record.reload
       expect(@record.embeds.length).to eq(1)
       expect(@record.embeds[0].name).to eq('embed 1 edited')

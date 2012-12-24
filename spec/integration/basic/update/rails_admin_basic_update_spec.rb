@@ -12,7 +12,7 @@ describe "RailsAdmin Basic Update" do
 
     it "returns to edit page" do
       fill_in "player[name]", :with => ""
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
       expect(page.driver.status_code).to eq(406)
       should have_selector "form[action='#{edit_path(:model_name => "player", :id => @player.id)}']"
     end
@@ -27,7 +27,7 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
 
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
@@ -128,7 +128,7 @@ describe "RailsAdmin Basic Update" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "a"
       fill_in "player[position]", :with => "Second baseman"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
 
       @player.reload
     end
@@ -154,7 +154,7 @@ describe "RailsAdmin Basic Update" do
       visit edit_path(:model_name => "user", :id => @user.id)
 
       fill_in "user[roles]", :with => %{['admin', 'user']}
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
 
       @user.reload
     end
@@ -174,7 +174,7 @@ describe "RailsAdmin Basic Update" do
     it "saves the serialized data" do
       fill_in "field_test[array_field]", :with => "[4, 2]"
       fill_in "field_test[hash_field]", :with => "{ a: 6, b: 2 }"
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
 
       @field_test.reload
       expect(@field_test.array_field).to eq([4, 2])
@@ -184,7 +184,7 @@ describe "RailsAdmin Basic Update" do
     it "clears data when empty string is passed" do
       fill_in "field_test[array_field]", :with => ""
       fill_in "field_test[hash_field]", :with => ""
-      first(:button, "Save").click
+      click_button "Save" # first(:button, "Save").click
 
       @field_test.reload
       expect(@field_test.array_field).to eq(nil)
