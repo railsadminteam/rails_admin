@@ -30,7 +30,8 @@ describe "RailsAdmin Basic List" do
 
   describe "GET /admin/player as list" do
     it "shows \"List of Models\", should show filters and should show column headers" do
-      21.times { FactoryGirl.create :player } # two pages of players
+      RailsAdmin.config.default_items_per_page = 1
+      2.times { FactoryGirl.create :player } # two pages of players
       visit index_path(:model_name => "player")
       should have_content("List of Players")
       should have_content("Created at")
@@ -295,19 +296,20 @@ describe "RailsAdmin Basic List" do
     end
   end
 
-  describe "GET /admin/player with 20 objects" do
+  describe "GET /admin/player with 2 objects" do
     before(:each) do
-      @players = 20.times.map { FactoryGirl.create :player }
+      @players = 2.times.map { FactoryGirl.create :player }
       visit index_path(:model_name => "player")
     end
 
-    it "shows \"20 results\"" do
-      should have_content("20 players")
+    it "shows \"2 results\"" do
+      should have_content("2 players")
     end
   end
 
   describe "GET /admin/player with 3 pages, page 2" do
-    before(:each) do
+    before do
+      RailsAdmin.config.default_items_per_page = 1
       items_per_page = RailsAdmin.config.default_items_per_page
       (items_per_page * 3).times { FactoryGirl.create(:player) }
       visit index_path(:model_name => "player", :page => 2)
