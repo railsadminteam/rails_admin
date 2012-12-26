@@ -20,20 +20,17 @@ class Player < ActiveRecord::Base
     def draft_id=(id)
       self.draft = Draft.find_by_id(id)
     end
+
+  rails_admin do
+    configure :draft do
+      # configuration here
+    end
+  end
 end
 
 # for info
 class Draft < ActiveRecord::Base
   belongs_to :player, :inverse_of => :draft
-end
-
-
-RailsAdmin.config |config| do
-  config.model Player do
-    configure :draft do
-      # configuration here
-    end
-  end
 end
 ```
 
