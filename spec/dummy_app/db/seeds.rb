@@ -10,7 +10,6 @@ user_model.new(:email => 'username@example.com', :password => 'password', :passw
 
 MLB::Team.all.each do |mlb_team|
   unless league = league_model.where(:name => mlb_team.league).first
-    puts mlb_team.league
     league = league_model.model.new(:name => mlb_team.league)
     league.save!
   end
