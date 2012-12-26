@@ -12,20 +12,17 @@ class Player < ActiveRecord::Base
 
     attr_accessible :team_attributes
     accepts_nested_attributes_for :team, :allow_destroy => true
+
+  rails_admin do
+    configure :team do
+      # configuration here
+    end
+  end
 end
 
 # for info
 class Team < ActiveRecord::Base
   has_many :players, :inverse_of => :team
-end
-
-
-RailsAdmin.config |config| do
-  config.model Player do
-    configure :team do
-      # configuration here
-    end
-  end
 end
 ```
 
