@@ -12,20 +12,17 @@ class Team < ActiveRecord::Base
   # for a multiselect widget:
 
     attr_accessible :player_ids
+
+  rails_admin do
+    configure :players do
+      # configuration here
+    end
+  end
 end
 
 # for info
 class Player < ActiveRecord::Base
   belongs_to :team, :inverse_of => :players
-end
-
-
-RailsAdmin.config do |config|
-  config.model Team do
-    configure :players do
-      # configuration here
-    end
-  end
 end
 ```
 
