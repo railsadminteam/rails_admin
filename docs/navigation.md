@@ -55,7 +55,7 @@ config.navigation_static_label = "My Links"
 RailsAdmin will use ActiveModel I18n API by default, so this shouldn't be needed. Still, you can configure label, and its plural, if needed:
 
 ```ruby
-config.model Box do
+config.model 'Box' do
   label "Beautiful box" 
   label_plural "Beautiful boxen"
 end
@@ -88,7 +88,7 @@ as false:
 By passing the value as an argument:
 
 ```ruby
-config.model Team do
+config.model 'Team' do
   visible false
 end
 ```
@@ -96,7 +96,7 @@ end
 Or by passing a block that will be lazy evaluated each time the option is read:
 
 ```ruby
-config.model Team do
+config.model 'Team' do
   visible do
     # controller bindings is available here. Example:
     bindings[:controller].current_user.role == :admin
@@ -116,11 +116,11 @@ you want to get the Team model's visibility, you use
 ```ruby
 # Given there are the following models: League, Team and Division
 
-config.model Team do
+config.model 'Team' do
   parent League
 end
 
-config.model Division do
+config.model 'Division' do
   parent League
 end
 ```
@@ -142,7 +142,7 @@ This can be easily achieved with the 'navigation_label' method of the parent mod
 Added to previous example:
 
 ```ruby
-config.model League do
+config.model 'League' do
   navigation_label 'League related'
 end
 ```
@@ -168,7 +168,7 @@ menu subset. (but parent will always be first inside his submenu).
 Example:
 
 ```ruby
-config.model League do
+config.model 'League' do
   navigation_label 'League related'
   weight -1
 end
@@ -181,7 +181,7 @@ The 'League related' navigation label will move to the topmost position.
 Set the method name for instances' label. Will default to the first `Config.label_methods` (see [[base configuration]]) that instances respond to. You can set it explicitly:
 
 ```ruby
-config.model Team do
+config.model 'Team' do
   object_label_method :custom_name_method
 end
 ```
