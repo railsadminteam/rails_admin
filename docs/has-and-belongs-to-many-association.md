@@ -12,21 +12,18 @@ class Team < ActiveRecord::Base
    
     accepts_nested_attributes_for :fans, :allow_destroy => true
     attr_accessible :fans_attributes
-end
 
-# for info
-class Fan < ActiveRecord::Base
-  has_and_belongs_to_many :teams
-end
-
-
-RailsAdmin.config |config| do
-  config.model Team do
+  rails_admin do
     configure :fans do
       inverse_of :teams
       # configuration here
     end
   end
+end
+
+# for info
+class Fan < ActiveRecord::Base
+  has_and_belongs_to_many :teams
 end
 ```
 
