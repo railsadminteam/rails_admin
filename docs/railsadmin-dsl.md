@@ -52,7 +52,7 @@ effects.
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     object_label_method do
       :custom_label_method
     end
@@ -80,7 +80,7 @@ and they will be presented in the order defined:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :name
       field :created_at
@@ -97,7 +97,7 @@ authorization to view field) you can pass a block for the `visible` option
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :name
       field :created_at
@@ -121,7 +121,7 @@ The header of a list view column can be changed with the familiar label method:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :name do
         label "Title"
@@ -144,7 +144,7 @@ The field's output can be modified:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :name do
         formatted_value do # used in form views
@@ -174,7 +174,7 @@ application's view helpers:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :name do
         formatted_value do
@@ -240,7 +240,7 @@ Field groups can be hidden:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       group :default do
         hide
@@ -260,7 +260,7 @@ Field groups can be renamed:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       group :default do
         label "Team information"
@@ -278,7 +278,7 @@ Field groups can have a set of instructions which is displayed under the label:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       group :default do
         label "Team information"
@@ -301,7 +301,7 @@ equal configuration:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       group :default do
         label "Default group"
@@ -315,7 +315,7 @@ RailsAdmin.config do |config|
 end
 
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       group :default do
         label "Default group"
@@ -343,7 +343,7 @@ By default, all field groups (other than :default) will have a toggle and start 
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       group :advanced do
         active false
@@ -367,7 +367,7 @@ fields already included in the default group, you can use the `configure` block 
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       configure :name do
         hide
@@ -394,7 +394,7 @@ partial per default, but that can be overridden:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       field :name do
         partial "my_awesome_partial"
@@ -411,7 +411,7 @@ One can also completely override the rendering logic:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       field :name do
         def render
@@ -427,11 +427,13 @@ You can flag a field as read only, and if necessary fine-tune the output with pr
 
 ```ruby
 RailsAdmin.config do |config|
-  edit do
-    field :published do
-      read_only true
-      pretty_value do
-        bindings[:object].published? ? "Yes, it's live!" : "No, in the loop..."
+  config.model 'Team' do
+    edit do
+      field :published do
+        read_only true
+        pretty_value do
+          bindings[:object].published? ? "Yes, it's live!" : "No, in the loop..."
+        end
       end
     end
   end
@@ -447,7 +449,7 @@ like to have it as a string type we could accomplish that like this:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       field :description, :string do
          # configuration here
@@ -462,7 +464,7 @@ left out:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       field :description, :string
     end
@@ -487,7 +489,7 @@ Then you can use your custom class in a field:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       field :name, :my_awesome_type do
         # configuration here
@@ -510,7 +512,7 @@ Everything can be overridden with `help`:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     edit do
       field :name
       field :email do
@@ -539,7 +541,7 @@ Example:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model League do
+  config.model 'League' do
     list do
       exclude_fields_if do
         type == :datetime
@@ -559,7 +561,7 @@ Example:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model League do
+  config.model 'League' do
     list do
       field :name do
         # snipped specific configuration for name attribute
@@ -579,7 +581,7 @@ Example:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model League do
+  config.model 'League' do
     list do
       # all selected fields will be added, but you can't configure them.
       # If you need to select them by type, see *fields_of_type*
@@ -603,7 +605,7 @@ manually setting them to visible:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :league_id do
         visible true
