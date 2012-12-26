@@ -29,6 +29,17 @@ class Grid < ActiveRecord::Base
    
     accepts_nested_attributes_for :blocks, :allow_destroy => true
     attr_accessible :blocks_attributes
+
+  rails_admin do
+    configure :block_grid_associations do
+      visible(false)
+    end
+
+    configure :blocks do
+      orderable(true) # only for multiselect widget currently. Will add the possibility to order blocks
+      # configuration here
+    end
+  end
 end
 
 # for info
@@ -42,19 +53,6 @@ class BlockGridAssociation < ActiveRecord::Base
   belongs_to :block
   belongs_to :grid
   default_scope order(:position) # if you need ordered blocks
-end
-
-RailsAdmin.config do |config|
-  config.model Grid do
-    configure :block_grid_associations do
-      visible(false)
-    end
-
-    configure :blocks do
-      orderable(true) # only for multiselect widget currently. Will add the possibility to order blocks
-      # configuration here
-    end
-  end
 end
 ```
 
