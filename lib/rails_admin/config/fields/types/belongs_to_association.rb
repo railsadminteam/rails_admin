@@ -12,7 +12,7 @@ module RailsAdmin
           end
 
           register_instance_option :sortable do
-            @sortable ||= associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {self.abstract_model.table_name => self.method_name}
+            @sortable ||= abstract_model.adapter_supports_joins? && associated_model_config.abstract_model.properties.map{ |p| p[:name] }.include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {self.abstract_model.table_name => self.method_name}
           end
 
           register_instance_option :searchable do

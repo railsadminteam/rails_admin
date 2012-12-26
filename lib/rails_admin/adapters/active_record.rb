@@ -107,6 +107,10 @@ module RailsAdmin
         false
       end
 
+      def adapter_supports_joins?
+        true
+      end
+
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))

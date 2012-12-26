@@ -109,6 +109,10 @@ module RailsAdmin
         ObjectId.from_string(str)
       end
 
+      def adapter_supports_joins?
+        false
+      end
+
       private
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
@@ -409,6 +413,7 @@ module RailsAdmin
 
       def sort_by(options, scope)
         return scope unless options[:sort]
+
         field_name, collection_name = options[:sort].to_s.split('.').reverse
         if collection_name && collection_name != table_name
           # sorting by associated model column is not supported, so just ignore
