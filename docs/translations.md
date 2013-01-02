@@ -32,7 +32,7 @@ Community sourced translations:
 * [[Russian (Russia): ru|https://gist.github.com/1788510#file_rails_admin.ru.yml]]
 * [[Slovenian (Slovenia): sl|https://gist.github.com/3290930#file_rails_admin.sl.yml]]
 * [[Spanish (Spain): es|https://gist.github.com/1647597#file_rails_admin.es.yml]]
-* [[Swedish sv|https://gist.github.com/4433235]]
+* [[Swedish: sv|https://gist.github.com/4433235]]
 * [[Norwegian: no|https://gist.github.com/2844960#file_rails_admin.nb.yml]]
 * [[Turkish: tr|https://gist.github.com/2888924#file_rails_admin.tr.yml]]
 * Add your own (create a gist first)
