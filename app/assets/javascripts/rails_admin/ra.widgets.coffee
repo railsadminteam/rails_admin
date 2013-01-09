@@ -200,9 +200,9 @@ $(document).live 'rails_admin.dom_ready', ->
     array = $('form [data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')
     if array.length
       @array = array
+      options = $(array[0]).data('options')
+      config_options = $.parseJSON(options['config_options'])
       if not window.wysihtml5
-        options = $(array[0]).data('options')
-        config_options = $.parseJSON(options['config_options'])
         $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
           goBootstrapWysihtml5s(@array, config_options)
