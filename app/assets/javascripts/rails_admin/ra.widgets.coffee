@@ -148,24 +148,24 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    goCkeditors = (array) =>
-      array.each (index, domEle) ->
+    goCkeditors = ->
+      $('form [data-richtext=ckeditor]').not('.ckeditored').each (index, domEle) ->
         options = $(this).data
         if instance = window.CKEDITOR.instances[this.id]
-            instance.destroy(true)
+          instance.destroy(true)
+
         window.CKEDITOR.replace(this, options['options'])
         $(this).addClass('ckeditored')
 
-    array = $('form [data-richtext=ckeditor]').not('.ckeditored')
-    if array.length
-      @array = array
+    $editors = $('form [data-richtext=ckeditor]').not('.ckeditored')
+    if $editors.length
       if not window.CKEDITOR
-        options = $(array[0]).data('options')
+        options = $editors.first().data('options')
         window.CKEDITOR_BASEPATH = options['base_location']
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
-          goCkeditors(@array)
+          goCkeditors()
       else
-        goCkeditors(@array)
+        goCkeditors()
 
     #codemirror
 
