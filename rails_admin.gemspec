@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sass-rails', '~> 3.1'
   spec.add_dependency 'bootstrap-sass', '~> 2.1'
   spec.add_dependency 'font-awesome-sass-rails', '>= 3.0.0.1'
-  spec.add_dependency 'jquery-ui-rails', '~> 2.0'
+  spec.add_dependency 'jquery-ui-rails', '~> 3.0'
   spec.add_dependency 'builder', '~> 3.0'
   spec.add_dependency 'coffee-rails', '~> 3.1'
   spec.add_dependency 'haml', '~> 3.1'
