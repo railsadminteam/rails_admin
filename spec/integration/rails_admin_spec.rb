@@ -140,5 +140,11 @@ describe RailsAdmin do
       visit dashboard_path
       should have_selector("body.rails_admin")
     end
+
+    it "shows a log out link" do
+      visit dashboard_path
+      click_link "Log out"
+      should have_content("Sign in")
+    end
   end
 end

@@ -31,6 +31,13 @@ module RailsAdmin
       link_to _current_user.email, url_for(:action => edit_action.action_name, :model_name => abstract_model.to_param, :id => _current_user.id, :controller => 'rails_admin/main')
     end
 
+    def logout_path
+      if defined?(Devise)
+        scope = Devise::Mapping.find_scope!(_current_user)
+        main_app.send("destroy_#{scope}_session_path") rescue false
+      end
+    end
+
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
       model_config = abstract_model.try(:config)
       object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
