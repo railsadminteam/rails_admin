@@ -1,4 +1,5 @@
 # RailsAdmin
+[![Gem Version](https://badge.fury.io/rb/rails_admin.png)][gem]
 [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png?branch=master)][travis]
 [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium]
 [![Code Climate](https://codeclimate.com/badge.png)][codeclimate]
@@ -7,6 +8,7 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+[gem]: https://rubygems.org/gems/rails_admin
 [travis]: http://travis-ci.org/sferik/rails_admin
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
 [codeclimate]: https://codeclimate.com/github/sferik/rails_admin
