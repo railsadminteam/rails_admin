@@ -6,7 +6,7 @@ $(document).ready ->
     tab_content.append content
     tab_content.children().last()
 
-$('form').live 'nested:fieldAdded', (content) ->
+$(document).on 'nested:fieldAdded', 'form', (content) ->
   field = content.field.addClass('tab-pane').attr('id', 'unique-id-' + (new Date().getTime()))
   new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>')
   parent_group = field.closest('.control-group')
@@ -22,7 +22,7 @@ $('form').live 'nested:fieldAdded', (content) ->
   # toggler 'on' if inactive
   toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right')
 
-$('form').live 'nested:fieldRemoved', (content) ->
+$(document).on 'nested:fieldRemoved', 'form', (content) ->
   field = content.field
   nav = field.closest(".control-group").children('.controls').children('.nav')
   current_li = nav.children('li').has('a[href=#' + field.attr('id') + ']')

@@ -1,4 +1,4 @@
-$(document).live 'rails_admin.dom_ready', ->
+$(document).on 'rails_admin.dom_ready', ->
 
   if $('form').length # don't waste time otherwise
 
@@ -35,7 +35,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     $('form [data-fileupload]').each ->
       input = this
-      $(this).find(".delete input[type='checkbox']").live 'click', ->
+      $(document).on 'click', $(this).find(".delete input[type='checkbox']"), ->
         $(input).children('.toggle').toggle('slow')
 
     # fileupload-preview
