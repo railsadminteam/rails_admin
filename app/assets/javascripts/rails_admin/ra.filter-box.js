@@ -101,7 +101,7 @@
     }
   }
 
-  $("#filters a").live('click', function(e) {
+  $(document).on('click', "#filters a", function(e) {
     e.preventDefault();
     $.filters.append(
       $(this).data('field-label'),
@@ -114,14 +114,14 @@
     );
   });
 
-  $('#filters_box .delete').live('click', function(e) {
+  $(document).on('click', "#filters_box .delete", function(e) {
     e.preventDefault();
     form = $(this).parents('form');
     $(this).parents('.filter').remove();
     !$("#filters_box").children().length && $("hr.filters_box:visible").hide('slow');
   });
 
-  $('#filters_box .switch-select').live('click', function(e) {
+  $(document).on('click', "#filters_box .switch-select", function(e) {
     e.preventDefault();
     var selected_select = $(this).siblings('select:visible');
     var not_selected_select = $(this).siblings('select:hidden');
@@ -130,7 +130,7 @@
     $(this).find('i').toggleClass("icon-plus icon-minus")
   });
 
-  $('#filters_box .switch-additionnal-fieldsets').live('change', function() {
+  $(document).on('change', "#filters_box .switch-additionnal-fieldsets", function(e) {
     var selected_option = $(this).find('option:selected');
     if(klass = $(selected_option).data('additional-fieldset')) {
       $(this).siblings('.additional-fieldset:not(.' + klass + ')').hide('slow');
