@@ -44,7 +44,7 @@
         return false;
 
       var dialog = this._getModal();
-      
+
       setTimeout(function(){ // fix race condition with modal insertion in the dom (Chrome => Team/add a new fan => #modal not found when it should have). Somehow .on('show') is too early, tried it too.
         $.ajax({
           url: url,
@@ -83,9 +83,9 @@
         form.submit();
         return false;
       }).html(saveButtonText);
-      
+
       $(document).trigger('rails_admin.dom_ready')
-      
+
       form.bind("ajax:complete", function(xhr, data, status) {
         if (status == 'error') {
           dialog.find('.modal-body').html(data.responseText);
@@ -122,8 +122,7 @@
     _getModal: function() {
       var widget = this;
       if (!widget.dialog) {
-        widget.dialog = $('\
-          <div id="modal" class="modal fade">\
+        widget.dialog = $('<div id="modal" class="modal fade">\
             <div class="modal-header">\
               <a href="#" class="close" data-dismiss="modal">&times;</a>\
               <h3 class="modal-header-title">...</h3>\
