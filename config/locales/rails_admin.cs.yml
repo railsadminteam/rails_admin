@@ -27,7 +27,7 @@ cs:
       ago: "před"
     flash:
       successful: "%{name} úspěšně %{action}"
-      error: "%{name} se nepovedlo %{action}"
+      error: "%{name} nebylo %{action}"
       noaction: "Neprovodeny žádné akce"
       model_not_found: "Model '%{model}' se nepodařilo nalézt"
       object_not_found: "%{model} s id '%{id}' se nepodařilo nalézt"
