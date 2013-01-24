@@ -35,7 +35,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     $('form [data-fileupload]').each ->
       input = this
-      $(document).on 'click', $(this).find(".delete input[type='checkbox']"), ->
+      $(this).on 'click', ".delete input[type='checkbox']", ->
         $(input).children('.toggle').toggle('slow')
 
     # fileupload-preview
