@@ -1,7 +1,7 @@
 $ = jQuery
 
 $(document).on "click", "#list input.toggle", ->
-  $("#list [name='bulk_ids[]']").attr "checked", $(this).is(":checked")
+  $("#list [name='bulk_ids[]']").prop "checked", $(this).is(":checked")
 
 $(document).on 'click', '.pjax', (event) ->
   if event.which > 1 || event.metaKey || event.ctrlKey
