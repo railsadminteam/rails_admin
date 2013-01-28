@@ -1,4 +1,5 @@
 require 'rails_admin/config/fields/types/string'
+require 'filemagic'
 
 module RailsAdmin
   module Config
@@ -43,7 +44,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
+            (url = resource_url.to_s) && FileMagic.new.file(resource_path).match(/png|jpg|jpeg|gif/)
           end
 
           register_instance_option :allowed_methods do

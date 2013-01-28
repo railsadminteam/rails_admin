@@ -21,6 +21,10 @@ module RailsAdmin
           def resource_url(thumb = false)
             value.try(:url, (thumb || :original))
           end
+
+          def resource_path(thumb = false)
+            value.try(:path, (thumb || :original))
+          end
         end
       end
     end
