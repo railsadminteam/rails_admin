@@ -46,6 +46,7 @@ group :development, :test do
   gem 'paperclip', '~> 3.3'
   gem 'rspec-rails', '~> 2.11'
   gem 'timecop', '~> 0.5'
+  gem 'ruby-filemagic', '~> 0.4'
 end
 
 gemspec

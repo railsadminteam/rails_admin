@@ -34,6 +34,11 @@ module RailsAdmin
             return nil unless (v = value)
             thumb ? v.thumb(thumb).try(:url) : v.url
           end
+
+          def resource_path thumb = false
+            return nil unless (v = value)
+            thumb ? v.thumb(thumb).try(:path) : v.path
+          end
         end
       end
     end
