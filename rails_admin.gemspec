@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.name = 'rails_admin'
   spec.require_paths = ['lib']
   spec.required_rubygems_version = '>= 1.3.6'
-  spec.signing_key = '/Users/sferik/.gem/private_key.pem' if $0 =~ /gem\z/
+  spec.signing_key = File.expand_path("~/.gem/private_key.pem") if $0 =~ /gem\z/
   spec.summary = %q{Admin for Rails}
   spec.test_files = Dir['spec/**/*']
   spec.version = RailsAdmin::Version
