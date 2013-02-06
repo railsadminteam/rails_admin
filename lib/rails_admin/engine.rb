@@ -1,15 +1,15 @@
-require 'rails'
-require 'jquery-rails'
-require 'remotipart'
 require 'bootstrap-sass'
 require 'font-awesome-sass-rails'
-require 'kaminari'
-require 'rack-pjax'
+require 'jquery-rails'
 require 'jquery-ui-rails'
+require 'kaminari'
 require 'nested_form'
+require 'rack-pjax'
+require 'rails'
 require 'rails_admin'
-
+require 'remotipart'
 require 'safe_yaml'
+
 YAML.enable_arbitrary_object_deserialization!
 SafeYAML::OPTIONS[:suppress_warnings] = true
 
