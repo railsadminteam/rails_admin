@@ -9,6 +9,10 @@ require 'jquery-ui-rails'
 require 'nested_form'
 require 'rails_admin'
 
+require 'safe_yaml'
+YAML.enable_arbitrary_object_deserialization!
+SafeYAML::OPTIONS[:suppress_warnings] = true
+
 module RailsAdmin
   class Engine < Rails::Engine
     isolate_namespace RailsAdmin

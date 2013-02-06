@@ -30,24 +30,20 @@ Hoeven][plukevdh], and [Rein Henrichs][reinh].
 
 ## Announcements
 
-RailsAdmin model configuration is now lazy loaded.
+### [Action required] Security issue
 
-```ruby
-config.model 'Team' do
-  ...
-end
+`RailsAdmin::Config::Fields::Types::Serialized#parse_input` was unsafe, because it was using the infamous `YAML#load`.
 
-# or
-class Team
-  rails_admin do
-    ...
-  end
-end
-```
+To fix this, RailsAdmin now uses [safe_yaml](https://github.com/dtao/safe_yaml), with `enable_arbitrary_object_deserialization` and `suppress_warnings` on, for maximum compatibity with all existing apps.
 
-won't load the Team model.
+If you want to load safely YAML in your own app, you can use `YAML.load(something, safe: true)`
 
-Incidentally, you are only allowed one configuration block per model.
+If you use Serialized with RailsAdmin with non-totally-trusted users, your server is at risk. Update your gem to `> 0.4.3` (should be released any time soon) or to a [patched commit]()
+
+Rails3.0 and other branches may be at risk too, I strongly suggest to not use those any more.
+
+More information about the whole drama [here](https://github.com/tenderlove/psych/issues/119).
+
 
 ## Features
 
