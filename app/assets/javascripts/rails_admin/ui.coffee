@@ -1,7 +1,7 @@
 $ = jQuery
 
 $(document).on "click", "#list input.toggle", ->
-  $("#list [name='bulk_ids[]']").attr "checked", $(this).is(":checked")
+  $("#list [name='bulk_ids[]']").prop "checked", $(this).is(":checked")
 
 $(document).on 'click', '.pjax', (event) ->
   if event.which > 1 || event.metaKey || event.ctrlKey
@@ -47,6 +47,10 @@ $(document).on 'click', '.form-horizontal legend', ->
     if $(this).has('i.icon-chevron-right').length
       $(this).siblings('.control-group:hidden').show('slow')
       $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
+
+$(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields', ->
+  $(this).children('input[type="hidden"]').val($(this).hasClass('active')).
+    siblings('i').toggleClass('icon-check icon-trash')
 
 $(document).ready ->
   $(document).trigger('rails_admin.dom_ready')
