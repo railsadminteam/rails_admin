@@ -139,6 +139,7 @@ This library aims to support and is [tested against][travis] the following Ruby 
 
 * Ruby 1.9.2
 * Ruby 1.9.3
+* Ruby 2.0.0
 * [Rubinius][]
 * [JRuby][]
 

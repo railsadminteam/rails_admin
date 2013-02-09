@@ -2,6 +2,7 @@ bundler_args: "--without debug"
 rvm:
   - jruby-19mode
   - 1.9.3
+  - 2.0.0
 env:
   - "CI_ORM=mongoid"
   - "CI_ORM=active_record CI_DB_ADAPTER=sqlite3"
