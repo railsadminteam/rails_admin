@@ -60,7 +60,7 @@ module RailsAdmin
       end
 
       register_instance_option :label_plural do
-        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => 2, :default => label.pluralize)
+        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => 'other', :default => label.pluralize)
       end
 
       def pluralize(count)
