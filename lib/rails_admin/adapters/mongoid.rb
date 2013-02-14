@@ -197,22 +197,34 @@ module RailsAdmin
         when :boolean
           return { column => false } if ['false', 'f', '0'].include?(value)
           return { column => true } if ['true', 't', '1'].include?(value)
-        when :integer
+        when :integer, :decimal, :float
           case value
           when Array then
-            val, range_begin, range_end = *value.map{|v| v.blank? ? nil : (v == v.to_i.to_s) ? v.to_i : nil}
-            if range_begin && range_end
-              { column => {'$gte' => range_begin, '$lte' => range_end} }
-            elsif range_begin
-              { column => {'$gte' => range_begin} }
-            elsif range_end
-              { column => {'$lte' => range_end} }
-            elsif val
-              { column => val }
+            val, range_begin, range_end = *value.map do |v|
+              if (v.to_i.to_s == v || v.to_f.to_s == v)
+                type == :integer ? v.to_i : v.to_f
+              else
+                nil
+              end
+            end
+            case operator
+            when 'between'
+              if range_begin && range_end
+                { column => {'$gte' => range_begin, '$lte' => range_end} }
+              elsif range_begin
+                { column => {'$gte' => range_begin} }
+              elsif range_end
+                { column => {'$lte' => range_end} }
+              end
+            else
+              { column => val } if val
             end
           else
-            s = value.to_s
-            return s =~ /^[\-]?\d+$/ ? { column => s.to_i } : nil
+            if (value.to_i.to_s == value || value.to_f.to_s == value)
+              type == :integer ? { column => value.to_i } : { column => value.to_f }
+            else
+              nil
+            end
           end
         when :string, :text
           return if value.blank?
