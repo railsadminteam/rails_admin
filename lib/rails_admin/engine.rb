@@ -10,8 +10,8 @@ require 'rails_admin'
 require 'remotipart'
 require 'safe_yaml'
 
-YAML.enable_arbitrary_object_deserialization!
 SafeYAML::OPTIONS[:suppress_warnings] = true
+SafeYAML::OPTIONS[:default_mode] = :unsafe
 
 module RailsAdmin
   class Engine < Rails::Engine
