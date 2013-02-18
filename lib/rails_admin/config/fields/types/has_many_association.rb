@@ -17,6 +17,11 @@ module RailsAdmin
             false
           end
 
+          # read-only parent objects
+          register_instance_option :parent_readonly do
+            self.associated_model_config.excluded?
+          end
+
           def method_name
             nested_form ? "#{super}_attributes".to_sym : "#{super.to_s.singularize}_ids".to_sym  # name_ids
           end
