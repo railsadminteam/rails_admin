@@ -150,7 +150,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     goCkeditors = ->
       $('form [data-richtext=ckeditor]').not('.ckeditored').each (index, domEle) ->
-        window.CKEDITOR.replace(this, $(this).data['options'])
+        window.CKEDITOR.replace(this, $(this).data('options'))
         $(this).addClass('ckeditored')
 
     $editors = $('form [data-richtext=ckeditor]').not('.ckeditored')
