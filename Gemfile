@@ -40,7 +40,7 @@ end
 
 group :test do
   gem 'cancan', '>= 1.6'
-  gem 'capybara', '>= 2.0'
+  gem 'capybara', '1.1'
   gem 'carrierwave', '>= 0.8'
   gem 'database_cleaner', '>= 0.8'
   gem 'devise', '>= 2.1'

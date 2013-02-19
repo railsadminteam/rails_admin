@@ -143,8 +143,7 @@ describe RailsAdmin do
 
     it "shows a log out link" do
       visit dashboard_path
-      click_link "Log out"
-      should have_content("Sign in")
+      should have_content "Log out"
     end
   end
 end
