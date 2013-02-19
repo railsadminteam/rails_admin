@@ -90,7 +90,7 @@ module RailsAdmin
 
         # Reader for the association's value unformatted
         def value
-          bindings[:object].safe_send(association[:name])
+          bindings[:object].send(association[:name])
         end
 
         # has many?
