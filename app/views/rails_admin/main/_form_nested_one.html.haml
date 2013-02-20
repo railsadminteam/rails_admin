@@ -7,4 +7,8 @@
 - form.object.send("build_#{field.name}") unless form.object.send(field.name)
 .tab-content
   = form.fields_for field.name do |nested_form|
+    - if field.nested_form[:allow_destroy] && nested_form.object.persisted?
+      = link_to "javascript:void(0)", :class => 'remove_nested_one_fields btn btn-small btn-danger', :'data-toggle' => 'button', :title => I18n.t('admin.misc.remove') do
+        = content_tag :i, nil, :class => 'icon-white icon-trash'
+        = nested_form.hidden_field :_destroy, :id => nil
     = nested_form.generate({:action => :nested, :model_config => field.associated_model_config, :nested_in => field.name })
