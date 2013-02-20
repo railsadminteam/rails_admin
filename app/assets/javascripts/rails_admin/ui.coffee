@@ -48,6 +48,10 @@ $(document).on 'click', '.form-horizontal legend', ->
       $(this).siblings('.control-group:hidden').show('slow')
       $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
 
+$(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields', ->
+  $(this).children('input[type="hidden"]').val($(this).hasClass('active')).
+    siblings('i').toggleClass('icon-check icon-trash')
+
 $(document).ready ->
   $(document).trigger('rails_admin.dom_ready')
 
