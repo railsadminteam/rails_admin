@@ -96,7 +96,7 @@
         '<span class="label label-info form-label"><a href="#" class="delete"><i class="icon-trash icon-white"></i></a> ' + field_label + '</span> ' +
         control + " " +
         (additional_control || '') +
-      '</div> ';
+      '</p> ';
       $('#filters_box').append(content);
       $('#filters_box .date').datepicker(this.options.regional.datePicker);
       $("hr.filters_box:hidden").show('slow');
