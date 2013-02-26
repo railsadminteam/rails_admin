@@ -42,6 +42,7 @@ group :test do
   gem 'cancan', '>= 1.6'
   gem 'capybara', '~> 1.1'
   gem 'carrierwave', '>= 0.8'
+  gem 'coveralls', :require => false
   gem 'database_cleaner', '>= 0.8'
   gem 'devise', '>= 2.1'
   gem 'dragonfly', '>= 0.9'

@@ -5,10 +5,14 @@ CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = [:active_record, :mongoid]
 PK_COLUMN = {:active_record=>:id, :mongoid=>:_id}[CI_ORM]
 
-if ENV['INVOKE_SIMPLECOV']
-  require 'simplecov'
-  SimpleCov.start 'rails'
-end
+require 'simplecov'
+require 'coveralls'
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
