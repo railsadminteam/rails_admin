@@ -124,4 +124,4 @@
 * [Image cropping with rails_admin_jcrop](https://github.com/janx/rails_admin_jcrop)
 * [Drag and drop tree view](https://github.com/dalpo/rails_admin_nestable)
 * [Histeroid: Mongoid 3.1 history audit support](https://github.com/franc/rails_admin_histeroid)
- 
+* [Import: Import data from a csv files](https://github.com/stephskardal/rails_admin_import) 
