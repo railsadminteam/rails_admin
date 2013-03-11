@@ -103,3 +103,14 @@ end
 ```
 
 to make kaminari to use different paginating method from will_paginate's.
+
+
+***
+
+**Redirect loop when visiting /admin**
+
+In `config/routes.rb` switch lines for devise and RA so they are in this order:
+```
+devise_for :admins
+mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+```
