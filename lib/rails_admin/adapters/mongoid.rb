@@ -105,6 +105,10 @@ module RailsAdmin
         @embedded ||= !!model.associations.values.find{|a| a.macro.to_sym == :embedded_in }
       end
 
+      def cyclic?
+        @cyclic ||= !!model.cyclic?
+      end
+
       def object_id_from_string(str)
         ObjectId.from_string(str)
       end

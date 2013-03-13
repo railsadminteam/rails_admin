@@ -267,6 +267,13 @@ describe RailsAdmin::Config do
 
       expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [FieldTest, Comment]
      end
+
+    it "basically does not contain embedded model except model using recursively_embeds_many or recursively_embeds_one", :mongoid => true do
+      RailsAdmin.config do |config|
+        config.included_models = [FieldTest, Comment, Embed, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
+      end
+      expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [FieldTest, Comment, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
+    end
   end
 end
 

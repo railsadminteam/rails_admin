@@ -107,6 +107,10 @@ module RailsAdmin
         false
       end
 
+      def cyclic?
+        false
+      end
+
       def adapter_supports_joins?
         true
       end
