@@ -126,6 +126,6 @@
 * [Drag and drop tree view for Ancestry gem](https://github.com/dalpo/rails_admin_nestable)
 * [Drag and drop tree view for Awesome Nested Set / mongoid nested set](https://github.com/rs-pro/rails_admin_nested_set)
 * [Histeroid: Mongoid 3.1 history audit support](https://github.com/franc/rails_admin_histeroid)
-* [Import: Import data from a csv files](https://github.com/stephskardal/rails_admin_import) 
+* [Import: Import data from a csv file](https://github.com/stephskardal/rails_admin_import) 
+* [Import++ Extends import to immigrate records from an rss feed. Experimental.](git@github.com:adamwong246/rails_admin_import.git) 
 * [Toggle boolean fields in index view](https://github.com/rs-pro/rails_admin_toggleable) 
-
