@@ -123,6 +123,8 @@
 * [ActsAsTaggableOn tag_list field](https://github.com/kryzhovnik/rails_admin_tag_list)
 * [Rich: an opinionated CKEditor implementation with file uploads](https://github.com/bastiaanterhorst/rich)
 * [Image cropping with rails_admin_jcrop](https://github.com/janx/rails_admin_jcrop)
-* [Drag and drop tree view](https://github.com/dalpo/rails_admin_nestable)
+* [Drag and drop tree view for Ancestry gem](https://github.com/dalpo/rails_admin_nestable)
+* [Drag and drop tree view for Awesome Nested Set / mongoid nested set](https://github.com/rs-pro/rails_admin_nested_set)
+
 * [Histeroid: Mongoid 3.1 history audit support](https://github.com/franc/rails_admin_histeroid)
 * [Import: Import data from a csv files](https://github.com/stephskardal/rails_admin_import) 
