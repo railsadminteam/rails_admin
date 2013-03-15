@@ -67,7 +67,11 @@ module RailsAdmin
             sort = :created_at
             sort_reverse = "true"
           end
-          versions = ::Version.where :item_type => model.model.name
+          if model.model.base_class.name == model.model.name
+            versions = ::Version.where :item_type => model.model.name
+          else
+            versions = ::Version.where :item_id => model.model.all
+          end
           versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
@@ -81,7 +85,7 @@ module RailsAdmin
             sort = :created_at
             sort_reverse = "true"
           end
-          versions = ::Version.where :item_type => model.model.name, :item_id => object.id
+          versions = ::Version.where :item_type => model.model.base_class.name, :item_id => object.id
           versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
