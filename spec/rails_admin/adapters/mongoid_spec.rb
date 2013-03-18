@@ -275,7 +275,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "maps Mongoid column types to RA types" do
-      expect(@abstract_model.properties.select{|p| %w(_id _type array_field big_decimal_field
+      expect(@abstract_model.properties.select{|p| %w(_id array_field big_decimal_field
         boolean_field bson_object_id_field date_field datetime_field time_with_zone_field default_field float_field
         hash_field integer_field name object_field range_field short_text string_field subject
         symbol_field text_field time_field title).
@@ -285,12 +285,6 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
           :nullable? => true,
           :serial? => true,
           :type => :bson_object_id,
-          :length => nil },
-        { :name => :_type,
-          :pretty_name => "Type",
-          :nullable? => true,
-          :serial? => false,
-          :type => :text,
           :length => nil },
         { :name => :array_field,
           :pretty_name => "Array field",
