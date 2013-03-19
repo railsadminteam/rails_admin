@@ -90,9 +90,10 @@
   * [[Declarative Authorization (possible)|Declarative Authorization]]
   * [[Manually|Customized authorization]]
 * [[Mass-assignments protection]]
-* Auditing (change historic)
+* Auditing (change history)
   * [[History (internal)|History]]
   * [[PaperTrail (recommended)|PaperTrail]]
+  * [mongoid_audit](https://github.com/rs-pro/mongoid-audit)
   * None. (Default)
 
 ### Extend RailsAdmin (RailsAdmin API)
