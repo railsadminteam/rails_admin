@@ -35,14 +35,14 @@ body.rails_admin {
     .control-group .hidden_type {
       display:none;
     }
-    
+
     legend {
       cursor:pointer;
       i {
         vertical-align: inherit !important;
       }
     }
-    
+
     &.denser {
       .controls .nav {
         margin-bottom:5px;
@@ -75,7 +75,7 @@ body.rails_admin {
         margin-bottom:0px;
       }
     }
-    
+
     /* We want input size to be used, unfixate input width */
     input, textarea {
       width:auto;
@@ -89,13 +89,16 @@ body.rails_admin {
 
     /* nested forms */
     .tab-content .tab-pane {
-      &>.remove_nested_fields {
+      &>.remove_nested_fields,
+      &>.remove_nested_one_fields {
         display:none;
       }
-      &:hover>.remove_nested_fields {
+      &:hover>.remove_nested_fields,
+      &:hover>.remove_nested_one_fields,
+      &>.remove_nested_one_fields.active {
         display:block;
       }
-      
+
       border-left:5px solid $blue;
       padding-left:5px;
       fieldset {

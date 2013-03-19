@@ -31,7 +31,7 @@
 - if authorized? :new, config.abstract_model
   - path_hash = { :model_name => config.abstract_model.to_param, :modal => true }
   - path_hash.merge!({ :associations => { field.inverse_of => (form.object.persisted? ? form.object.id : 'new') } }) if field.inverse_of
-  = link_to "<i class=\"icon-plus icon-white\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', :data => { :link => new_path(path_hash) }, :class => "btn btn-info create", :style => 'float:left; margin-left:10px'
+  = link_to "<i class=\"icon-plus icon-white\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', :data => { :link => new_path(path_hash) }, :class => "btn btn-info create", :style => 'margin-left:10px'
 
 - if edit_url.present?
-  = link_to "<i class=\"icon-pencil icon-white\"></i> ".html_safe + wording_for(:link, :edit, config.abstract_model), '#', :data => { :link => edit_url }, :class => "btn btn-info update #{field.value.nil? && 'disabled'}", :style => 'float:left; margin-left:10px'
+  = link_to "<i class=\"icon-pencil icon-white\"></i> ".html_safe + wording_for(:link, :edit, config.abstract_model), '#', :data => { :link => edit_url }, :class => "btn btn-info update #{field.value.nil? && 'disabled'}", :style => 'margin-left:10px'

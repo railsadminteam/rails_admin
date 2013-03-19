@@ -21,7 +21,7 @@
   @index = 0
   @ordered_filters = (params[:f] || @model_config.list.filters).inject({}) { |memo, filter|
     field_name = filter.is_a?(Array) ? filter.first : filter
-  (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "value" => '' } }) .each do |index, filter_hash|
+  (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "v" => '' } }) .each do |index, filter_hash|
       unless filter_hash['disabled']
         memo[index] = { field_name => filter_hash }
       else
@@ -126,7 +126,7 @@
               %td.other.left= link_to "...", @other_left_link, :class => 'pjax'
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
-              %td{:class => "#{property.css_class} #{property.type_css_class}", :title => strip_tags(value)}= value
+              %td{:class => "#{property.css_class} #{property.type_css_class}", :title => strip_tags(value.to_s)}= value
             - if @other_right_link ||= other_right && index_path(params.merge(:set => (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link, :class => 'pjax'
             %td.last.links

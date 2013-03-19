@@ -1,20 +1,20 @@
 /*
- * Timepicker stylesheet
- * Highly inspired from datepicker
- * FG - Nov 2010 - Web3R
- *
- * version 0.0.3 : Fixed some settings, more dynamic
- * version 0.0.4 : Removed width:100% on tables
- * version 0.1.1 : set width 0 on tables to fix an ie6 bug
- */
+* Timepicker stylesheet
+* Highly inspired from datepicker
+* FG - Nov 2010 - Web3R
+*
+* version 0.0.3 : Fixed some settings, more dynamic
+* version 0.0.4 : Removed width:100% on tables
+* version 0.1.1 : set width 0 on tables to fix an ie6 bug
+*/
 
 .ui-timepicker-inline { display: inline; }
 
-#ui-timepicker-div { padding: 0.2em }
+#ui-timepicker-div { padding: 0.2em; background-color: #fff; }
 .ui-timepicker-table { display: inline-table; width: 0; }
 .ui-timepicker-table table { margin:0.15em 0 0 0; border-collapse: collapse; }
 
-.ui-timepicker-hours, .ui-timepicker-minutes { padding: 0.2em;  }
+.ui-timepicker-hours, .ui-timepicker-minutes { padding: 0.2em; }
 
 .ui-timepicker-table .ui-timepicker-title { line-height: 1.8em; text-align: center; }
 .ui-timepicker-table td { padding: 0.1em; width: 2.2em; }
@@ -22,10 +22,9 @@
 
 /* span for disabled cells */
 .ui-timepicker-table td span {
-	display:block;
+    display:block;
     padding:0.2em 0.3em 0.2em 0.5em;
     width: 1.2em;
-
     text-align:right;
     text-decoration:none;
 }

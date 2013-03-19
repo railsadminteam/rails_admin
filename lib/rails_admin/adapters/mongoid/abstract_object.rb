@@ -13,11 +13,11 @@ module RailsAdmin
                 end
 
                 def #{name.to_s.singularize}_ids=(item_ids)
-                  items = Array.wrap(item_ids).map{|item_id| #{name}.klass.find(item_id) rescue nil }.compact
+                  __items__ = Array.wrap(item_ids).map{|item_id| #{name}.klass.find(item_id) rescue nil }.compact
                   if persisted?
-                    #{name}.substitute items
+                    #{name}.substitute __items__
                   else
-                    items.each do |item|
+                    __items__.each do |item|
                       item.update_attribute('#{association.foreign_key}', id)
                     end
                   end

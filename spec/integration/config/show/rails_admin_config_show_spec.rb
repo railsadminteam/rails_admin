@@ -54,7 +54,7 @@ describe "RailsAdmin Config DSL Show Section" do
   describe "css hooks" do
     it "is present" do
       do_request
-      
+
       should have_selector("dt .name_field.string_type")
     end
   end

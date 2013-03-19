@@ -1,9 +1,9 @@
 $ = jQuery
 
-$("#list input.toggle").live "click", ->
-  $("#list [name='bulk_ids[]']").attr "checked", $(this).is(":checked")
+$(document).on "click", "#list input.toggle", ->
+  $("#list [name='bulk_ids[]']").prop "checked", $(this).is(":checked")
 
-$('.pjax').live 'click', (event) ->
+$(document).on 'click', '.pjax', (event) ->
   if event.which > 1 || event.metaKey || event.ctrlKey
     return
   else if $.support.pjax
@@ -15,7 +15,7 @@ $('.pjax').live 'click', (event) ->
   else if $(this).data('href') # not a native #href, need some help
     window.location = $(this).data('href')
 
-$('.pjax-form').live 'submit', (event) ->
+$(document).on 'submit', '.pjax-form', (event) ->
   if $.support.pjax
     event.preventDefault()
     $.pjax
@@ -29,7 +29,7 @@ $(document)
   .on 'pjax:end', ->
     $('#loading').hide()
 
-$('[data-target]').live 'click', ->
+$(document).on 'click', '[data-target]', ->
   if !$(this).hasClass('disabled')
     if $(this).has('i.icon-chevron-down').length
       $(this).removeClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
@@ -39,7 +39,7 @@ $('[data-target]').live 'click', ->
         $(this).addClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
         $($(this).data('target')).select(':hidden').show('slow')
 
-$('.form-horizontal legend').live 'click', ->
+$(document).on 'click', '.form-horizontal legend', ->
   if $(this).has('i.icon-chevron-down').length
     $(this).siblings('.control-group:visible').hide('slow')
     $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
@@ -48,13 +48,17 @@ $('.form-horizontal legend').live 'click', ->
       $(this).siblings('.control-group:hidden').show('slow')
       $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
 
+$(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields', ->
+  $(this).children('input[type="hidden"]').val($(this).hasClass('active')).
+    siblings('i').toggleClass('icon-check icon-trash')
+
 $(document).ready ->
   $(document).trigger('rails_admin.dom_ready')
 
-$(document).live 'pjax:end', ->
+$(document).on 'pjax:end', ->
   $(document).trigger('rails_admin.dom_ready')
 
-$(document).live 'rails_admin.dom_ready', ->
+$(document).on 'rails_admin.dom_ready', ->
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")

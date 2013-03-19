@@ -1,7 +1,8 @@
-bundler_args: "--without debug"
+bundler_args: "--without development"
 rvm:
   - jruby-19mode
   - 1.9.3
+  - 2.0.0
 env:
   - "CI_ORM=mongoid"
   - "CI_ORM=active_record CI_DB_ADAPTER=sqlite3"
@@ -14,8 +15,16 @@ matrix:
       env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
     - rvm: jruby-19mode
       env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+    - rvm: 1.9.3
+      env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
+    - rvm: 1.9.3
+      env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
 notifications:
   irc: "irc.freenode.org#railsadmin"
-script: spec/ci.sh
+before_script:
+  - cd spec/dummy_app
+  - bundle install
+  - bundle exec rake rails_admin:prepare_ci_env db:create db:migrate
+  - cd ../../
 services:
   - mongodb

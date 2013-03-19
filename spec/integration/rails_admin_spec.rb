@@ -8,6 +8,7 @@ describe RailsAdmin do
     it "is disableable" do
       logout
       RailsAdmin.config do |config|
+        config.included_models = []
         config.authenticate_with {}
       end
       visit dashboard_path
@@ -19,6 +20,7 @@ describe RailsAdmin do
   # file as template for a new translation).
   describe "localization" do
     it "defaults to English" do
+      RailsAdmin.config.included_models = []
       visit dashboard_path
 
       should have_content("Site administration")
@@ -137,6 +139,11 @@ describe RailsAdmin do
       User.any_instance.stub(:email).and_return(nil)
       visit dashboard_path
       should have_selector("body.rails_admin")
+    end
+
+    it "shows a log out link" do
+      visit dashboard_path
+      should have_content "Log out"
     end
   end
 end

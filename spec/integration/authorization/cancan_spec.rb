@@ -76,9 +76,9 @@ describe "RailsAdmin CanCan Authorization" do
 
     it "GET /admin should show Player but not League" do
       visit dashboard_path
-      expect(body).to have_content("Player")
-      expect(body).not_to have_content("League")
-      expect(body).not_to have_content("Add new")
+      should have_content("Player")
+      should_not have_content("League")
+      should_not have_content("Add new")
     end
 
     it "GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions" do
@@ -132,7 +132,7 @@ describe "RailsAdmin CanCan Authorization" do
       fill_in "player[name]", :with   => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      click_button "Save"
+      click_button "Save" # first(:button, "Save").click
       should_not have_content("Edit")
 
       @player = RailsAdmin::AbstractModel.new("Player").first
@@ -165,7 +165,7 @@ describe "RailsAdmin CanCan Authorization" do
       should_not have_content("History")
       should_not have_content("Show in app")
       fill_in "player[name]", :with => "Jackie Robinson"
-      click_button "Save"
+      click_button "Save" # click_button "Save" # first(:button, "Save").click
       @player.reload
       expect(@player.name).to eq("Jackie Robinson")
     end
@@ -276,17 +276,17 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      post bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id))
 
-      should have_content(active_player.name)
-      should_not have_content(retired_player.name)
+      expect(response.body).to include(active_player.name)
+      expect(response.body).not_to include(retired_player.name)
     end
 
     it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.delete(bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      delete bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id))
       expect(@player_model.get(active_player.id)).to be_nil
       expect(@player_model.get(retired_player.id)).not_to be_nil
     end
@@ -298,10 +298,10 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.post(bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      post bulk_action_path(:bulk_action => 'bulk_delete', :model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id))
 
-      should have_content(active_player.name)
-      should_not have_content(retired_player.name)
+      expect(response.body).to include(active_player.name)
+      expect(response.body).not_to include(retired_player.name)
     end
 
     it "POST /admin/player/bulk_destroy should destroy records which are authorized to" do
@@ -309,7 +309,7 @@ describe "RailsAdmin CanCan Authorization" do
       active_player = FactoryGirl.create :player, :retired => false
       retired_player = FactoryGirl.create :player, :retired => true
 
-      page.driver.delete(bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id)))
+      delete bulk_delete_path(:model_name => "player", :bulk_ids => [active_player, retired_player].map(&:id))
       expect(@player_model.get(active_player.id)).to be_nil
       expect(@player_model.get(retired_player.id)).not_to be_nil
     end

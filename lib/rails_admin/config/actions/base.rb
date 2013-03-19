@@ -54,6 +54,11 @@ module RailsAdmin
           false
         end
 
+        # Render via pjax?
+        register_instance_option :pjax? do
+          true
+        end
+
         # This block is evaluated in the context of the controller when action is called
         # You can access:
         # - @objects if you're on a model scope

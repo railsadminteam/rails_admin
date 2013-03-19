@@ -16,7 +16,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       end
       visit new_path(:model_name => "field_test")
       fill_in "field_test[format]", :with => "test for format"
-      click_button "Save"
+      click_button "Save" # first(:button, "Save").click
       @record = RailsAdmin::AbstractModel.new("FieldTest").first
       expect(@record.format).to eq("test for format")
     end
@@ -93,7 +93,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       fill_in "field_test[string_field]", :with => "No problem here"
       fill_in "field_test[restricted_field]", :with => "I'm allowed to do that as :custom_role only"
       should have_no_selector "field_test[protected_field]"
-      click_button "Save"
+      click_button "Save" # first(:button, "Save").click
       @field_test = FieldTest.first
       expect(@field_test.string_field).to eq("No problem here")
       expect(@field_test.restricted_field).to eq("I'm allowed to do that as :custom_role only")
@@ -161,7 +161,10 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      should have_selector("legend", :text => "Renamed group")
+      # NOTE: capybara 2.0 is exceedingly reluctant to reveal the text of invisible elements. This was
+      # the least terrible option I was able to find. It would probably be better to refactor the test
+      # so the label we're looking for is displayed.
+      expect(find("legend", :visible => false).native.text).to include("Renamed group")
     end
 
     describe "help" do
@@ -309,12 +312,8 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       visit new_path(:model_name => "team")
-      should have_selector("legend", :text => "Basic info")
-      all("legend", :text => "Basic info").tap do |nodes|
-        expect(nodes.count).to eq(2)
-        expect(nodes.first.visible?).to be_false
-        expect(nodes.last.visible?).to be_true
-      end
+      should have_selector("legend", :text => "Basic info", :visible => false)
+      should have_selector("legend", :text => "Basic info", :visible => true)
       should have_selector("legend", :text => "Belong's to associations")
       should have_selector("label", :text => "Name")
       should have_selector("label", :text => "Logo url")
@@ -398,7 +397,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       after :each do
         I18n.locale = :en
       end
-      
+
       it "delegates the label option to the ActiveModel API and memoizes it" do
         RailsAdmin.config Team do
           edit do
@@ -611,10 +610,10 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       visit new_path(:model_name => 'category')
       should have_no_css('#category_parent_category_id')
-      click_button 'Save'
+      click_button "Save" # first(:button, "Save").click
       visit edit_path(:model_name => 'category', :id => Category.first)
       should have_css('#category_parent_category_id')
-      click_button 'Save'
+      click_button "Save" # first(:button, "Save").click
       should have_content('Category successfully updated')
     end
   end
@@ -627,7 +626,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
       fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
       page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
-      click_button "Save"
+      click_button "Save" # first(:button, "Save").click
       @record.reload
       expect(@record.comment.content).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
@@ -706,7 +705,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit edit_path(:model_name => "field_test", :id => @record.id)
       fill_in "field_test_embeds_attributes_0_name", :with => 'embed 1 edited'
       page.find('#field_test_embeds_attributes_1__destroy').set('true')
-      click_button "Save"
+      click_button "Save" # first(:button, "Save").click
       @record.reload
       expect(@record.embeds.length).to eq(1)
       expect(@record.embeds[0].name).to eq('embed 1 edited')

@@ -30,13 +30,13 @@ describe "RailsAdmin Basic Edit" do
     it "adds a related id to the belongs_to create team link" do
       @player = FactoryGirl.create :player
       visit edit_path(:model_name => "player", :id => @player.id)
-      should have_selector("a", :href => 'admin/teams/new?associations[players]=' + @player.id.to_s)
+      should have_selector("a[data-link='/admin/team/new?associations%5Bplayers%5D=#{@player.id.to_s}&modal=true']")
     end
 
     it "adds a related id to the has_many create team link" do
       @team = FactoryGirl.create :team
       visit edit_path(:model_name => "team", :id => @team.id)
-      should have_selector("a", :href => 'admin/players/new?associations[team]=' + @team.id.to_s)
+      should have_selector("a[data-link='/admin/player/new?associations%5Bteam%5D=#{@team.id.to_s}&modal=true']")
     end
   end
 

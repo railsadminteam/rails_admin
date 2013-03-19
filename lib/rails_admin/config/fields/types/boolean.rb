@@ -16,9 +16,9 @@ module RailsAdmin
             case value
             when nil
               %{<span class="badge">-</span>}
-            when false                  
+            when false
               %{<span class="badge badge-important">&#x2718;</span>}
-            when true                   
+            when true
               %{<span class="badge badge-success">&#x2713;</span>}
             end.html_safe
           end

@@ -1,4 +1,4 @@
 --color
 --fail-fast
---order random
+--order=random
 --profile

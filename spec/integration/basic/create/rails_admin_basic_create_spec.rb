@@ -9,7 +9,7 @@ describe "RailsAdmin Basic Create" do
       fill_in "player[name]", :with => "Jackie Robinson"
       fill_in "player[number]", :with => "42"
       fill_in "player[position]", :with => "Second baseman"
-      click_button "Save"
+      click_button "Save" # first(:button, "Save").click
       @player = RailsAdmin::AbstractModel.new("Player").first
     end
 
@@ -62,7 +62,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @draft = FactoryGirl.create :draft
 
-      page.driver.post new_path(:model_name => "player", :player => {:name => "Jackie Robinson", :number => 42, :position => 'Second baseman', :draft_id => @draft.id})
+      post new_path(:model_name => "player", :player => {:name => "Jackie Robinson", :number => 42, :position => 'Second baseman', :draft_id => @draft.id})
 
       @player = RailsAdmin::AbstractModel.new("Player").all.last # first is created by FactoryGirl
     end
@@ -76,7 +76,7 @@ describe "RailsAdmin Basic Create" do
   describe "create with has-many association" do
     before(:each) do
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
-      page.driver.post new_path(:model_name => "league", :league => {:name => "National League", :division_ids =>[@divisions[0].id]})
+      post new_path(:model_name => "league", :league => {:name => "National League", :division_ids =>[@divisions[0].id]})
       @league = RailsAdmin::AbstractModel.new("League").all.last
     end
 
@@ -91,7 +91,7 @@ describe "RailsAdmin Basic Create" do
   describe "create with has-and-belongs-to-many association" do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
-      page.driver.post new_path(:model_name => "fan", :fan => {:name => "John Doe", :team_ids => [@teams[0].id] })
+      post new_path(:model_name => "fan", :fan => {:name => "John Doe", :team_ids => [@teams[0].id] })
       @fan = RailsAdmin::AbstractModel.new("Fan").first
     end
 
@@ -108,22 +108,21 @@ describe "RailsAdmin Basic Create" do
       @team = FactoryGirl.create :team
       @player = FactoryGirl.create :player, :team => @team
 
-      page.driver.post new_path(:model_name => "player", :player => {:name => @player.name, :number => @player.number.to_s, :position => @player.position, :team_id => @team.id})
+      post new_path(:model_name => "player", :player => {:name => @player.name, :number => @player.number.to_s, :position => @player.position, :team_id => @team.id})
     end
 
     it "shows an error message" do
-      should have_content("There is already a player with that number on this team")
+      expect(response.body).to include("There is already a player with that number on this team")
     end
   end
 
   describe "create with invalid object" do
     before(:each) do
-      page.driver.post(new_path(:model_name => "player", :id => 1), :params => {:player => {}})
+      post new_path(:model_name => "player", :player => {:id => 1})
     end
 
     it "shows an error message" do
-      should have_content("Player failed to be created")
-      should have_selector "form", :action => "/admin/players"
+      expect(response.body).to include("Player failed to be created")
     end
   end
 

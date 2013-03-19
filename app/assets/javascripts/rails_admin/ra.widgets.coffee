@@ -1,4 +1,4 @@
-$(document).live 'rails_admin.dom_ready', ->
+$(document).on 'rails_admin.dom_ready', ->
 
   if $('form').length # don't waste time otherwise
 
@@ -35,7 +35,7 @@ $(document).live 'rails_admin.dom_ready', ->
 
     $('form [data-fileupload]').each ->
       input = this
-      $(this).find(".delete input[type='checkbox']").live 'click', ->
+      $(this).on 'click', ".delete input[type='checkbox']", ->
         $(input).children('.toggle').toggle('slow')
 
     # fileupload-preview
@@ -148,24 +148,23 @@ $(document).live 'rails_admin.dom_ready', ->
 
     # ckeditor
 
-    goCkeditors = (array) =>
-      array.each (index, domEle) ->
-        options = $(this).data
-        if instance = window.CKEDITOR.instances[this.id]
+    goCkeditors = ->
+      $('form [data-richtext=ckeditor]').not('.ckeditored').each (index, domEle) ->
+        try
+          if instance = window.CKEDITOR.instances[this.id]
             instance.destroy(true)
-        window.CKEDITOR.replace(this, options['options'])
+        window.CKEDITOR.replace(this, $(this).data('options'))
         $(this).addClass('ckeditored')
 
-    array = $('form [data-richtext=ckeditor]').not('.ckeditored')
-    if array.length
-      @array = array
+    $editors = $('form [data-richtext=ckeditor]').not('.ckeditored')
+    if $editors.length
       if not window.CKEDITOR
-        options = $(array[0]).data('options')
+        options = $editors.first().data('options')
         window.CKEDITOR_BASEPATH = options['base_location']
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
-          goCkeditors(@array)
+          goCkeditors()
       else
-        goCkeditors(@array)
+        goCkeditors()
 
     #codemirror
 
@@ -200,9 +199,9 @@ $(document).live 'rails_admin.dom_ready', ->
     array = $('form [data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')
     if array.length
       @array = array
+      options = $(array[0]).data('options')
+      config_options = $.parseJSON(options['config_options'])
       if not window.wysihtml5
-        options = $(array[0]).data('options')
-        config_options = $.parseJSON(options['config_options'])
         $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
           goBootstrapWysihtml5s(@array, config_options)
