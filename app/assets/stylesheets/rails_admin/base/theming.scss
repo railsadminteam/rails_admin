@@ -47,7 +47,8 @@ body.rails_admin {
       .controls .nav {
         margin-bottom:5px;
       }
-      .remove_nested_fields {
+      .remove_nested_fields,
+      .remove_nested_one_fields {
         position:absolute;
       }
       margin:0px;
