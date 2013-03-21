@@ -2,7 +2,7 @@
   .btn-group
     %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content, #{form.jquery_namespace(field)} > .controls > .nav", :class => (field.active? ? 'active' : '')}
       %i.icon-white
-    - unless field.nested_form[:update_only]
+    - unless field.nested_form[:update_only] || !field.inline_add
       = form.link_to_add "<i class=\"icon-plus icon-white\"></i> #{wording_for(:link, :new, field.associated_model_config.abstract_model)}".html_safe, field.name, { :class => 'btn btn-info' }
   = form.errors_for(field)
   = form.help_for(field)
