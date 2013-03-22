@@ -129,4 +129,5 @@
 * [Histeroid: Mongoid 3.1 history audit support](https://github.com/franc/rails_admin_histeroid)
 * [Import: Import data from a csv file](https://github.com/stephskardal/rails_admin_import) 
 * [Import++ Extends import plugin. Allows the user to set a key field to lookup records, updating if the record exists and creating a new records otherwise. Also allows user to immigrate records from an rss feed. Experimental.](https://github.com/adamwong246/rails_admin_import) 
-* [Toggle boolean fields in index view](https://github.com/rs-pro/rails_admin_toggleable) 
+* [Toggle boolean fields in index view](https://github.com/rs-pro/rails_admin_toggleable)
+* [Enumerize: Enumerated attributes with I18n and ActiveRecord/Mongoid support](https://github.com/brainspec/enumerize)
