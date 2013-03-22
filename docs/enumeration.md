@@ -38,6 +38,10 @@ field :color, :enum do
 end
 ```
 
+### Integration with enum plugins
+
+* The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate _enum methods.
+
 ### Multi-select ENUM example using User.roles as example...
 During Create/Update, display a Multi-Select Widget for :roles field.
 Stores/Retrieves the selected options as array into a single db string field as serialized array.
