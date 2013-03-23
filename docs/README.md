@@ -131,3 +131,4 @@
 * [Import++ Extends import plugin. Allows the user to set a key field to lookup records, updating if the record exists and creating a new records otherwise. Also allows user to immigrate records from an rss feed. Experimental.](https://github.com/adamwong246/rails_admin_import) 
 * [Toggle boolean fields in index view](https://github.com/rs-pro/rails_admin_toggleable)
 * [Enumerize: Enumerated attributes with I18n and ActiveRecord/Mongoid support](https://github.com/brainspec/enumerize)
+* [Application setting for rails_admin and mongoid](https://github.com/rs-pro/rails_admin_settings)
