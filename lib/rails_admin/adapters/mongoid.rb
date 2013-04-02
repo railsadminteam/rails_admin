@@ -6,7 +6,7 @@ module RailsAdmin
   module Adapters
     module Mongoid
       STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
-      DISABLED_COLUMN_TYPES = ['Range']
+      DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary']
       ObjectId = (::Mongoid::VERSION >= '3' ? ::Moped::BSON::ObjectId : ::BSON::ObjectId)
 
       def new(params = {})
