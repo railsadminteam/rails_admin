@@ -9,7 +9,7 @@
       %div.controls
         %label.checkbox{:for => 'check_all'}
           = 'Select All Fields'
-          = check_box_tag 'all', 'all', true, { :id => 'check_all', :onclick => "var is_checked = jQuery('#check_all').prop('checked');var elems = jQuery('#fields_to_export label input');is_checked ? jQuery(elems).prop('checked', true) : jQuery(elems).prop('checked',false);"}	
+          = check_box_tag 'all', 'all', true, { :id => 'check_all' }	
     %legend
       %i.icon-chevron-down
       = t('admin.export.select')
