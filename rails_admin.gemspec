@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
   spec.add_dependency 'bootstrap-sass', '~> 2.2'
   spec.add_dependency 'builder', '~> 3.0'
-  spec.add_dependency 'coffee-rails', '~> 3.1'
+  spec.add_dependency 'coffee-rails', '~> 4.0.0.beta1'
   spec.add_dependency 'font-awesome-sass-rails', ['~> 3.0', '>= 3.0.0.1']
   spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency 'jquery-rails', '~> 2.1'
@@ -15,10 +15,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'kaminari', '~> 0.14'
   spec.add_dependency 'nested_form', '~> 0.3'
   spec.add_dependency 'rack-pjax', '~> 0.6'
-  spec.add_dependency 'rails', '~> 3.1'
+  spec.add_dependency 'rails', '~> 4.0.0.beta1'
   spec.add_dependency 'remotipart', '~> 1.0'
   spec.add_dependency 'safe_yaml', '~> 0.6'
-  spec.add_dependency 'sass-rails', '~> 3.1'
+  spec.add_dependency 'sass-rails', '~> 4.0.0.beta1'
   spec.add_development_dependency 'bundler', '~> 1.0'
   spec.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
   spec.cert_chain = ['certs/sferik.pem']
