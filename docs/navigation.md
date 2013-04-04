@@ -80,6 +80,16 @@ en:
 This label will be used anywhere the model name is shown, e.g. on the navigation tabs,
 Dashboard page, list pages, etc.
 
+**Setting the navigation icon**
+
+You can set the navigation icon from the bootstrap theme this way :
+
+```ruby
+config.model 'User' do
+  navigation_icon 'icon-user'
+end
+```
+
 **Hiding a model**
 
 You can hide a model from the top navigation by marking its `visible` option
