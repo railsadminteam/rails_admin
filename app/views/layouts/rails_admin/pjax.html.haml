@@ -8,7 +8,7 @@
 - flash && flash.each do |key, value|
   .alert{:class => "alert-#{key}"}
     %a.close{:href => '#', :'data-dismiss' => "alert"}×
-    = value
+    = value.html_safe
 = breadcrumb
 %ul.nav.nav-tabs
   = menu_for((@abstract_model ? (@object.try(:persisted?) ? :member : :collection) : :root), @abstract_model, @object)
