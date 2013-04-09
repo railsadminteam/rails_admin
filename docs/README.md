@@ -98,7 +98,6 @@
 
 ### Extend RailsAdmin (RailsAdmin API)
 
-* [[Railsadmin DSL|Railsadmin-DSL]]
 * [[Theming and customization]]
 * [[Custom action]]
 * [[Custom field]]
