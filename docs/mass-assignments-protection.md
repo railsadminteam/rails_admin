@@ -1,4 +1,4 @@
-Only visible field are editable in RailsAdmin. Other will get caught and sanitized.
+Only visible fields are editable in RailsAdmin. Others will get caught and sanitized.
 
 Basically you don't need to protect your attributes in RailsAdmin.
 
