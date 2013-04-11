@@ -62,7 +62,7 @@ module RailsAdmin
         "#{abstract_model.table_name}.#{params[:sort]}"
       elsif field.sortable == false # use default sort, asked field is not sortable
         "#{abstract_model.table_name}.#{model_config.list.sort_by}"
-      elsif field.sortable.is_a?(String) && field.sortable.include?('.') # just provide sortable, don't do anything smart
+      elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
         field.sortable
       elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
         "#{field.sortable.keys.first}.#{field.sortable.values.first}"

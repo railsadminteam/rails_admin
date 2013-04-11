@@ -38,6 +38,24 @@ describe RailsAdmin::MainController do
   end
 
   describe "#get_sort_hash" do
+    context "options sortable is a hash" do
+      before do
+        RailsAdmin.config('Player') do
+          configure :team do
+            sortable do
+              :'team.name'
+            end
+          end
+        end
+      end
+
+      it "returns the option with no changes" do
+        controller.params = { :sort => "team", :model_name =>"players" }
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>:"team.name", :sort_reverse=>true})
+      end
+    end
+
+
     it "works with belongs_to associations with label method virtual" do
       controller.params = { :sort => "parent_category", :model_name =>"categories" }
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>"categories.parent_category_id", :sort_reverse=>true})
