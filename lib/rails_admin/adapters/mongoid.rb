@@ -331,7 +331,7 @@ module RailsAdmin
 
       def association_nested_attributes_options_lookup(association)
         nested = model.nested_attributes_options.try { |o| o[association.name.to_sym] }
-        if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym)
+        if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym) && !association.cyclic
           raise <<-MSG.gsub(/^\s+/, '')
           Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
           because embedded model doesn't have top-level access.

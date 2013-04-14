@@ -269,6 +269,14 @@ describe RailsAdmin::Config do
      end
 
     it "basically does not contain embedded model except model using recursively_embeds_many or recursively_embeds_one", :mongoid => true do
+      class RecursivelyEmbedsOne
+        include Mongoid::Document
+        recursively_embeds_one
+      end
+      class RecursivelyEmbedsMany
+        include Mongoid::Document
+        recursively_embeds_many
+      end
       RailsAdmin.config do |config|
         config.included_models = [FieldTest, Comment, Embed, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
       end
