@@ -32,7 +32,7 @@ module RailsAdmin
             end
           end
         end
-        @@polymorphic_parents[adapter.to_sym][[model_name.underscore, name].join('_').to_sym]
+        @@polymorphic_parents[adapter.to_sym][[model_name.to_s.underscore, name].join('_').to_sym]
       end
 
       # For testing
@@ -70,11 +70,11 @@ module RailsAdmin
     end
 
     def to_param
-      @model_name.split("::").map(&:underscore).join("~")
+      @model_name.split("::").map(&:to_s.underscore).join("~")
     end
 
     def param_key
-      @model_name.split("::").map(&:underscore).join("_")
+      @model_name.split("::").map(&:to_s.underscore).join("_")
     end
 
     def pretty_name
