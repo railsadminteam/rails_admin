@@ -70,11 +70,11 @@ module RailsAdmin
     end
 
     def to_param
-      @model_name.split("::").map(&:to_s.underscore).join("~")
+      @model_name.to_s.split("::").map(&:underscore).join("~")
     end
 
     def param_key
-      @model_name.split("::").map(&:to_s.underscore).join("_")
+      @model_name.to_s.split("::").map(&:underscore).join("_")
     end
 
     def pretty_name
