@@ -56,7 +56,7 @@ module RailsAdmin
       end
 
       register_instance_option :label do
-        (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
+        (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.to_s.demodulize.underscore.humanize)
       end
 
       register_instance_option :label_plural do
