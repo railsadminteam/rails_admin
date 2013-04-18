@@ -258,7 +258,7 @@ module RailsAdmin
 
       def association_model_lookup(association)
         if association.options[:polymorphic]
-          RailsAdmin::AbstractModel.polymorphic_parents(:active_record, self.model.model_name, association.name) || []
+          RailsAdmin::AbstractModel.polymorphic_parents(:active_record, self.model.model_name.to_s, association.name) || []
         else
           association.klass
         end
