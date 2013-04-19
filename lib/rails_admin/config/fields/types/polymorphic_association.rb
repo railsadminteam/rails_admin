@@ -32,7 +32,6 @@ module RailsAdmin
             false
           end
 
-          # TODO not supported yet
           register_instance_option :associated_collection_scope do
             nil
           end
@@ -44,7 +43,10 @@ module RailsAdmin
           def associated_collection(type)
             return [] if type.blank?
             config = RailsAdmin.config(type)
-            config.abstract_model.all.map do |object|
+            associated_models = config.abstract_model
+            associated_models = associated_collection_scope.call(associated_models) unless associated_collection_scope.nil?
+            associated_models = associated_models.all
+            associated_models.map do |object|
               [object.send(config.object_label_method), object.id]
             end
           end
