@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 group :active_record do
+  gem 'protected_attributes'
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
@@ -17,8 +18,8 @@ group :active_record do
 
   platforms :ruby, :mswin, :mingw do
     case ENV['CI_DB_ADAPTER']
-    when 'mysql'
-      gem 'mysql', '~> 2.8.1'
+    when 'mysql2'
+      gem 'mysql2', '~> 0.3.11'
     when 'postgresql'
       gem 'pg', '>= 0.14'
     else
@@ -44,9 +45,10 @@ group :test do
   gem 'capybara', '~> 1.1'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls', :require => false
-  gem 'database_cleaner', '>= 0.8'
+  gem 'database_cleaner', '>= 0.8', :github => 'bmabey/database_cleaner'
   gem 'devise', github: 'idl3/devise', branch: 'rails4'
   gem 'dragonfly', '>= 0.9'
+  gem 'rack-cache', :require => 'rack/cache'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
