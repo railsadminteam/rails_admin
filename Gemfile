@@ -28,9 +28,10 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'mongoid', '>= 3.0'
+  gem 'mongoid', github: 'mongoid/mongoid'
   gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
-  gem 'carrierwave-mongoid', '>= 0.4', :require => 'carrierwave/mongoid'
+  gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+  gem 'carrierwave-mongoid', github: 'jnicklas/carrierwave-mongoid', :require => 'carrierwave/mongoid'
 end
 
 group :development do
