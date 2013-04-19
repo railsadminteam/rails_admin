@@ -3,6 +3,7 @@ module RailsAdmin
     module Mongoid
       module Extension
         extend ActiveSupport::Concern
+        include ActiveModel::MassAssignmentSecurity
 
         included do
           class_attribute :nested_attributes_options

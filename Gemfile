@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
+gem 'protected_attributes', '~> 1.0'
+
 group :active_record do
-  gem 'protected_attributes'
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
@@ -11,7 +12,7 @@ group :active_record do
       gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
       gem 'jdbc-postgres', '>= 9.2'
     else
-      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
       gem 'jdbc-sqlite3', '>= 3.7'
     end
   end

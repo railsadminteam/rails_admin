@@ -2,9 +2,9 @@ source :rubygems
 
 gem 'rails', '~> 4.0.0.beta1'
 gem 'rack-cache', :require => 'rack/cache'
+gem 'protected_attributes', '~> 1.0'
 
 group :active_record do
-  gem 'protected_attributes'
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
