@@ -196,7 +196,7 @@ options to set the time formatting:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :name
       field :created_at do
