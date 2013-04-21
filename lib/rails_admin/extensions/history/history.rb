@@ -5,7 +5,7 @@ class RailsAdmin::History < ActiveRecord::Base
 
   attr_accessible :message, :item, :table, :username
 
-  default_scope order('id DESC')
+  default_scope { order('id DESC') }
 
   def self.latest
     self.limit(100)
