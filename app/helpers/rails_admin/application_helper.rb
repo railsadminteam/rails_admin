@@ -44,8 +44,8 @@ module RailsAdmin
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
 
       I18n.t("admin.actions.#{action.i18n_key}.#{label}",
-        :model_label => model_config.try(:label),
-        :model_label_plural => model_config.try(:label_plural),
+        :model_label => model_config && model_config.label,
+        :model_label_plural => model_config && model_config.label_plural,
         :object_label => model_config && object.try(model_config.object_label_method)
       )
     end

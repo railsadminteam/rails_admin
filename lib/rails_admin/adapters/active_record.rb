@@ -293,7 +293,9 @@ module RailsAdmin
       end
 
       def association_read_only_lookup(association)
-        association.options[:readonly]
+        if association.scope.is_a? Proc
+          association.klass.all.instance_eval(&association.scope).readonly_value
+        end
       end
 
       def association_foreign_key_lookup(association)
