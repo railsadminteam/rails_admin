@@ -27,6 +27,9 @@ module RailsAdmin
         display "Adding devise gem to your Gemfile:"
         append_file "Gemfile", "\n", :force => true
         gem 'devise'
+        Bundler.with_clean_env do
+          run "bundle install"
+        end
       else
         display "Found it!"
       end
