@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'font-awesome-sass-rails', ['~> 3.0', '>= 3.0.0.1']
   spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency 'jquery-rails', '~> 2.1'
-  spec.add_dependency 'jquery-ui-rails', '~> 3.0'
+  spec.add_dependency 'jquery-ui-rails', '~> 4.0'
   spec.add_dependency 'kaminari', '~> 0.14'
   spec.add_dependency 'nested_form', '~> 0.3'
   spec.add_dependency 'rack-pjax', '~> 0.6'
