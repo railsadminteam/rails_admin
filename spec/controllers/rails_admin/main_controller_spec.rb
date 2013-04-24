@@ -215,13 +215,6 @@ describe RailsAdmin::MainController do
       @comment = FactoryGirl.create :comment
       controller.params = { :associated_collection => "commentable", :current_action => "update", :source_abstract_model => 'comment', :source_object_id => @comment.id, :model_name => "player", :action => 'index' }
       controller.get_model # set @model_config for Team
-    end
-
-    it "scopes polymorphic associated records" do
-      @player = FactoryGirl.create :player, :injured => true
-      @player.comments << FactoryGirl.create(:comment)
-      @player2 = FactoryGirl.create :player, :injured => false
-      @player2.comments << FactoryGirl.create(:comment) # comment for another player
 
       RailsAdmin.config Comment do
         field :commentable do
@@ -233,6 +226,14 @@ describe RailsAdmin::MainController do
           end
         end
       end
+    end
+
+    it "scopes polymorphic associated records" do
+      @player = FactoryGirl.create :player, :injured => true
+      @player.comments << FactoryGirl.create(:comment)
+      @player2 = FactoryGirl.create :player, :injured => false
+      @player2.comments << FactoryGirl.create(:comment) # comment for another player
+
       expect(controller.list_entries.to_a).to eq([@player])
     end
   end
