@@ -27,7 +27,7 @@ describe "RailsAdmin Config DSL Show Section" do
     end
 
     it "contains the JSONified object" do
-      expect(body).to include(@player.to_json)
+      expect(body).to include(@player.reload.to_json)
     end
   end
 
