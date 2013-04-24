@@ -228,7 +228,6 @@ describe RailsAdmin::MainController do
           associated_collection_scope do
             commentable = bindings[:object]
             Proc.new { |scope|
-              binding.pry
               scope.where(:injured => true)
             }
           end
