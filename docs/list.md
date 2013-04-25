@@ -61,7 +61,9 @@ RailsAdmin.config do |config|
   config.model Player do
     list do
       sort_by :name
-      sort_reverse false
+      field :name do
+        sort_reverse false
+      end
     end
   end
 end
