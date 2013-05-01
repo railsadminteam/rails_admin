@@ -26,7 +26,7 @@ module RailsAdmin
 
           #Use this if you want to point to a cloud instances of the base CKeditor
           register_instance_option :ckeditor_base_location do
-            '/assets/ckeditor/'
+            "#{Rails.application.config.assets.prefix}/ckeditor/"
           end
 
           # Codemirror is disabled by default and CKEditor takes precedence
