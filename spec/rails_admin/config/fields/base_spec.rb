@@ -377,36 +377,6 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe "#editable?" do
-    before do
-      Moped.logger.stub!(:debug) if defined?(Moped)
-    end
-
-    it "yells for non attr_accessible fields if config.yell_for_non_accessible_fields is true" do
-      RailsAdmin.config do |config|
-        config.yell_for_non_accessible_fields = true
-        config.model FieldTest do
-          field :protected_field
-        end
-      end
-      Rails.logger.should_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field'/ }
-      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :default))).editable?
-      expect(editable).to be_false
-    end
-
-    it "does not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false" do
-      RailsAdmin.config do |config|
-        config.yell_for_non_accessible_fields = false
-        config.model FieldTest do
-          field :protected_field
-        end
-      end
-      Rails.logger.should_not_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field'/ }
-      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :default))).editable?
-      expect(editable).to be_false
-    end
-  end
-
   describe "#allowed_methods" do
     it 'includes method_name' do
       RailsAdmin.config do |config|

@@ -1,6 +1,7 @@
 class Player
   include Mongoid::Document
   include Mongoid::Timestamps
+  include ActiveModel::ForbiddenAttributesProtection
 
   field :deleted_at, :type => DateTime
   belongs_to :team, :inverse_of => :players
@@ -12,9 +13,6 @@ class Player
   field :born_on, :type => Date
   field :notes, :type => String
   field :suspended, :type => Boolean, :default => false
-
-  attr_accessible :name, :team_id, :position, :number, :retired, :injured, :born_on, :notes, :comment_ids, :created_at
-  attr_protected :suspended
 
   validates_presence_of(:name)
   validates_numericality_of(:number, :only_integer => true)

@@ -1,6 +1,4 @@
 class Draft < ActiveRecord::Base
-  attr_accessible :player_id, :team_id, :date, :round, :pick, :overall, :college, :notes
-
   belongs_to :team
   belongs_to :player
 

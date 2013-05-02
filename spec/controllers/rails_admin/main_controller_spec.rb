@@ -276,6 +276,27 @@ describe RailsAdmin::MainController do
       end
     end
 
+    describe "satisfy_strong_params!" do
+      before do
+        ActionController::Parameters.permit_all_parameters = false
+      end
+
+      after do
+        ActionController::Parameters.permit_all_parameters = true
+      end
+
+      it "enforces permit!" do
+        controller.params = HashWithIndifferentAccess.new({
+          "model_name"=>"player",
+          "player"=>{ "name" => "foo" }
+        })
+        controller.send(:get_model)
+        expect(controller.params['player'].permitted?).to be_false
+        controller.send(:satisfy_strong_params!)
+        expect(controller.params['player'].permitted?).to be_true
+      end
+    end
+
     it "allows for delete method with Carrierwave" do
 
       RailsAdmin.config FieldTest do

@@ -18,8 +18,6 @@ class Team
   field :color, :type => String
   field :custom_field, :type => String
 
-  attr_accessible :name, :division, :division_id, :logo_url, :manager, :ballpark, :mascot, :founded, :wins, :losses, :win_percentage, :revenue, :color, :custom_field, :fan_ids, :player_ids, :comment_ids
-
   has_many :players, :inverse_of => :team, :order => :_id.asc
   has_and_belongs_to_many :fans
   has_many :comments, :as => :commentable
