@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'protected_attributes', '~> 1.0'
-
 group :active_record do
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
