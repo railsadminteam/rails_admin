@@ -11,16 +11,19 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
   new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>')
   parent_group = field.closest('.control-group')
   controls = parent_group.children('.controls')
+  has_one = controls.data('nestedone') != undefined
   nav = controls.children('.nav')
   content = parent_group.children('.tab-content')
   toggler = controls.find('.toggler')
   nav.append(new_tab)
   $(window.document).trigger('rails_admin.dom_ready') # fire dom_ready for new player in town
   new_tab.children('a').tab('show') # activate added tab
-  nav.select(':hidden').show('slow') # show nav if hidden
+  nav.select(':hidden').show('slow') unless has_one # show nav if hidden
   content.select(':hidden').show('slow') # show tabs content if hidden
   # toggler 'on' if inactive
   toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right')
+
+  controls.find('.add_nested_fields').removeClass('add_nested_fields').html(field.children('.object-infos').data('object-label')) if has_one
 
 $(document).on 'nested:fieldRemoved', 'form', (content) ->
   field = content.field
@@ -28,6 +31,7 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
   current_li = nav.children('li').has('a[href=#' + field.attr('id') + ']')
   parent_group = field.closest(".control-group")
   controls = parent_group.children('.controls')
+  has_one = controls.data('nestedone') != undefined
   toggler = controls.find('.toggler')
 
   # try to activate another tab
@@ -39,3 +43,8 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
     nav.select(':visible').hide('slow') # hide nav. No use anymore.
     # toggler 'off' if active
     toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right')
+
+  if has_one
+    add_button = toggler.next()
+    add_button.addClass('add_nested_fields').html(add_button.data('add-label'))
+

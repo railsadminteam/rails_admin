@@ -109,18 +109,25 @@ $(document).on 'rails_admin.dom_ready', ->
       field = $(this).parents('.control-group').first()
       nav = field.find("> .controls > .nav")
       content = field.find("> .tab-content")
-      toggler = field.find('> .controls > .toggler')
+      toggler = field.find('> .controls > .btn-group > .toggler')
       content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
+        field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').html( $(this).children('.object-infos').data('object-label') )
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
       first_tab.tab('show')
       field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html())
-      if toggler.hasClass('active')
-        toggler.children('i').addClass('icon-chevron-down')
-        content.show()
-      else
-        toggler.children('i').addClass('icon-chevron-right')
+      nav.hide()
+      if nav.children().length == 0
+        nav.hide()
         content.hide()
+        toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
+      else
+        if toggler.hasClass('active')
+          toggler.children('i').addClass('icon-chevron-down')
+          content.show()
+        else
+          toggler.children('i').addClass('icon-chevron-right')
+          content.hide()
 
     # polymorphic-association
 
