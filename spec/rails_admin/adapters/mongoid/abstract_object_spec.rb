@@ -29,19 +29,50 @@ describe "RailsAdmin::Adapters::Mongoid::AbstractObject", :mongoid => true do
       expect(@team.players.map(&:id)).to match_array @players.map(&:id)
     end
 
-    it 'calls the models custom setter' do
-      expect(@team.custom_field).to eq(nil)
-      @team.player_ids = @players.map(&:id)
-      expect(@team.custom_field).to eq(@players.map(&:id) * ', ')
+    describe "model's custom setter" do
+      before do
+        Team.class_eval do
+          def player_ids= players_ids
+            self.custom_field = players_ids * ', '
+          end
+        end
+      end
+
+      after do
+        Team.class_eval do
+          undef player_ids=
+        end
+      end
+
+      it "have been called" do
+        expect(@team.custom_field).to eq(nil)
+        @team.player_ids = @players.map(&:id)
+        expect(@team.custom_field).to eq(@players.map(&:id) * ', ')
+      end
     end
   end
 
   describe "references_one association" do
-    it 'calls the models custom setter' do
-      expect(@draft.notes).to eq(nil)
-      puts @team.draft.inspect
-      @team.draft_id = @draft.id
-      expect(@team.custom_field).to eq(@draft.id.to_s)
+    describe "model's custom setter" do
+      before do
+        Team.class_eval do
+          def draft_id= draft_id
+            self.custom_field = draft_id.to_s
+          end
+        end
+      end
+
+      after do
+        Team.class_eval do
+          undef draft_id=
+        end
+      end
+
+      it "have been called" do
+        expect(@team.custom_field).to eq(nil)
+        @team.draft_id = @draft.id
+        expect(@team.custom_field).to eq(@draft.id.to_s)
+      end
     end
   end
 end

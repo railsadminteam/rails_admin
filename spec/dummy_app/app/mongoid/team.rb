@@ -23,7 +23,6 @@ class Team
   has_many :players, :inverse_of => :team, :order => :_id.asc
   has_and_belongs_to_many :fans
   has_many :comments, :as => :commentable
-  has_one :draft
 
   validates_presence_of :division_id, :only_integer => true
   validates_presence_of :manager
@@ -44,13 +43,5 @@ class Team
 
   def color_enum
     ['white', 'black', 'red', 'green', 'blu<e>é']
-  end
-
-  def player_ids= players_ids
-    self.custom_field = players_ids * ', '
-  end
-
-  def draft_id= draft_id
-    self.custom_field = draft_id.to_s
   end
 end

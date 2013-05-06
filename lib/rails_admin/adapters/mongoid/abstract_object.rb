@@ -14,9 +14,7 @@ module RailsAdmin
 
                 def #{name.to_s.singularize}_ids=(item_ids)
                   __items__ = Array.wrap(item_ids).map{|item_id| #{name}.klass.find(item_id) rescue nil }.compact
-                  if persisted?
-                    #{name}.substitute __items__
-                  else
+                  unless persisted?
                     __items__.each do |item|
                       item.update_attribute('#{association.foreign_key}', id)
                     end
@@ -28,10 +26,9 @@ RUBY
               instance_eval <<-RUBY, __FILE__, __LINE__ + 1
                 def #{name.to_s}_id=(item_id)
                   item = (#{association.klass}.find(item_id) rescue nil)
-                  if persisted?
-                    self.#{name} = item
-                  else
-                    item.update_attribute('#{association.foreign_key}', id) if item
+                  return unless item
+                  unless persisted?
+                    item.update_attribute('#{association.foreign_key}', id)
                   end
                   super item.id
                 end
