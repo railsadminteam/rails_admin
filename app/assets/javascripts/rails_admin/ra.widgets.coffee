@@ -113,6 +113,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       tab_content = field.find("> .tab-content")
       toggler = field.find('> .controls > .btn-group > .toggler')
       tab_content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
+        # Convert the "add nested field" button to just showing the title of the new model
         field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').html( $(this).children('.object-infos').data('object-label') )
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
