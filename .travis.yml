@@ -27,5 +27,6 @@ before_script:
   - bundle exec rake rails_admin:prepare_ci_env
   - bundle exec rake db:create db:migrate
   - cd ../../
+script: xvfb-run rspec
 services:
   - mongodb
