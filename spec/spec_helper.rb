@@ -54,6 +54,8 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  config.use_transactional_fixtures = false
+
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers
 
@@ -62,6 +64,11 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :request
 
   config.before(:each) do
+    if Capybara.current_driver == :rack_test
+      DatabaseCleaner.strategy = :transaction
+    else
+      DatabaseCleaner.strategy = :truncation
+    end
     DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
@@ -85,4 +92,6 @@ RSpec.configure do |config|
       config.filter_run_excluding orm => true
     end
   end
+
+  Capybara.javascript_driver = :webkit
 end
