@@ -56,6 +56,7 @@ group :test do
   gem 'rspec-rails', '>= 2.14'
   gem 'simplecov', :require => false
   gem 'timecop', '>= 0.5'
+  gem 'capybara-webkit'
 end
 
 gemspec
