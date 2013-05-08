@@ -23,7 +23,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 To fix this, RailsAdmin now uses [safe_yaml](https://github.com/dtao/safe_yaml), with `enable_arbitrary_object_deserialization` and `suppress_warnings` on, for maximum compatibity with all existing apps.
 
-Incidentally, if you want to load safely YAML in your own app, you can use `YAML.load(something, safe: true)`, since RailsAdmin does not force safe load by default (you might be parsing objects in YAML coming from a safe source).
+Incidentally, if you want to safely load YAML in your own app, you can use `YAML.load(something, safe: true)`, since RailsAdmin does not force safe load by default (you might be parsing objects in YAML coming from a safe source).
 
 If you use Serialized with RailsAdmin with non-totally-trusted users, your server is at risk. Update your gem to `> 0.4.3` (should be released any time soon) or to at least this [patched commit](https://github.com/sferik/rails_admin/commit/3cc862d061f541200b93531122f7dac4b1c7a68b) if you use `master~HEAD`
 
