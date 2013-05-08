@@ -56,8 +56,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.use_transactional_fixtures = false
-
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers
 
