@@ -56,7 +56,8 @@ group :test do
   gem 'rspec-rails', '>= 2.14'
   gem 'simplecov', :require => false
   gem 'timecop', '>= 0.5'
-  gem 'capybara-webkit'
+  gem 'faye-websocket', '0.4.4'
+  gem 'poltergeist', '~> 1.0.2'
 end
 
 gemspec
