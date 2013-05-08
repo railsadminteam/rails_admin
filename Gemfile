@@ -55,7 +55,8 @@ group :test do
   gem 'simplecov', :require => false
   gem 'strong_parameters', '>= 0.1.6'
   gem 'timecop', '>= 0.5'
-  gem 'capybara-webkit'
+  gem 'faye-websocket', '0.4.4'
+  gem 'poltergeist', '~> 1.0.2'
 end
 
 gemspec

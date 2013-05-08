@@ -49,6 +49,8 @@ Devise.setup do |config|
   config.stretches = 0
 end
 
+require 'capybara/poltergeist'
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
@@ -93,5 +95,5 @@ RSpec.configure do |config|
     end
   end
 
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :poltergeist
 end
