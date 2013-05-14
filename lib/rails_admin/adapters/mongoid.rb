@@ -274,6 +274,7 @@ module RailsAdmin
         {
           "Array"          => { :type => :serialized },
           "BigDecimal"     => { :type => :decimal },
+          "Mongoid::Boolean"        => { :type => :boolean },
           "Boolean"        => { :type => :boolean },
           "BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
           "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
