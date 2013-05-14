@@ -1,5 +1,6 @@
 en:
   admin:
+    loading: "Loading..."
     home:
       name: "Home"
     pagination:
@@ -112,6 +113,7 @@ en:
     export:
       confirmation: "Export to %{name}"
       select: "Select fields to export"
+      select_all_fields: "Select All Fields"
       fields_from: "Fields from %{name}"
       fields_from_associated: "Fields from associated %{name}"
       display: "Display %{name}: %{type}"
