@@ -7,7 +7,7 @@
     = stylesheet_link_tag "rails_admin/rails_admin.css", :media => :all
     = javascript_include_tag "rails_admin/rails_admin.js"
   %body.rails_admin
-    #loading.label.label-warning{:style => 'display:none; position:fixed; right:20px; bottom:20px; z-index:100000'} Loading...
+    #loading.label.label-warning{:style => 'display:none; position:fixed; right:20px; bottom:20px; z-index:100000'}= t('admin.loading')
     .navbar.navbar-fixed-top
       .navbar-inner
         .container-fluid
