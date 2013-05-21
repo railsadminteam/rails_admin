@@ -164,11 +164,11 @@ RailsAdmin.config do |config|
         searchable false
       end
 
-      field :name do (2)
+      field :name do # (2)
         searchable :last_name
       end
       # OR
-      field :name do (3)
+      field :name do # (3)
         searchable [:first_name, :last_name]
       end
 
