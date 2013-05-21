@@ -64,11 +64,8 @@ RSpec.configure do |config|
   config.include Capybara::DSL, :type => :request
 
   config.before(:each) do
-    if Capybara.current_driver == :rack_test
-      DatabaseCleaner.strategy = :transaction
-    else
-      DatabaseCleaner.strategy = :truncation
-    end
+    DatabaseCleaner.strategy = :truncation if Capybara.current_driver == :poltergeist
+
     DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
