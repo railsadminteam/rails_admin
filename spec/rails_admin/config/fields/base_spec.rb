@@ -29,12 +29,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#children_fields" do
-    POLYMORPHIC_CHILDREN =
-      if CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
-        [:commentable_id, :commentable_type, :commentable_field]
-      else
-        [:commentable_id, :commentable_type]
-      end
+    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type]
 
     it "is empty by default" do
       expect(RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields).to eq([])
