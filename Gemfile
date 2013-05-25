@@ -44,7 +44,7 @@ group :test do
   gem 'capybara', '~> 1.1'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls', :require => false
-  gem 'database_cleaner', '>= 0.8', :github => 'bmabey/database_cleaner'
+  gem 'database_cleaner', '~> 1.0'
   gem 'devise', github: 'idl3/devise', branch: 'rails4'
   gem 'dragonfly', '>= 0.9'
   gem 'rack-cache', :require => 'rack/cache'
