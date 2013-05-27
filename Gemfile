@@ -41,7 +41,7 @@ end
 
 group :test do
   gem 'cancan', '>= 1.6'
-  gem 'capybara', '~> 1.1'
+  gem 'capybara', '~> 2.0'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls', :require => false
   gem 'database_cleaner', '~> 1.0'

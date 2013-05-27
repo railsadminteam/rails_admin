@@ -34,11 +34,11 @@ describe RailsAdmin do
     # Note: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it "loads stylesheets in header" do
-      should have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]')
+      should have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]', :visible => false)
     end
 
     it "loads javascript files in body" do
-      should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]')
+      should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]', :visible => false)
     end
   end
 
