@@ -1,8 +1,7 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'rails', '~> 4.0.0.beta1'
+gem 'rails', '~> 4.0.0.rc1'
 gem 'rack-cache', :require => 'rack/cache'
-gem 'protected_attributes', '~> 1.0'
 
 group :active_record do
   platforms :jruby do
@@ -39,7 +38,7 @@ group :mongoid do
 end
 
 gem 'carrierwave', '>= 0.8'
-gem 'devise', github: 'idl3/devise', branch: 'rails4'
+gem 'devise', '~> 3.0.0.rc'
 gem 'dragonfly', '>= 0.9'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.6'

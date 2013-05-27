@@ -45,7 +45,7 @@ group :test do
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls', :require => false
   gem 'database_cleaner', '~> 1.0'
-  gem 'devise', github: 'idl3/devise', branch: 'rails4'
+  gem 'devise', '~> 3.0.0.rc'
   gem 'dragonfly', '>= 0.9'
   gem 'rack-cache', :require => 'rack/cache'
   gem 'factory_girl', '>= 4.2'
