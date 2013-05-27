@@ -23,6 +23,14 @@ module RailsAdmin
             nested_form ? :form_nested_one : :form_filtering_select
           end
 
+          register_instance_option :inline_add do
+            true
+          end
+
+          register_instance_option :inline_edit do
+            true
+          end
+
           def selected_id
             bindings[:object].send(foreign_key)
           end

@@ -593,6 +593,79 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(find("#team_division_id_field .help-block")).to have_content("Optional")
       expect(find("#team_name_field .help-block")).to have_content("Required")
     end
+
+    it "can hide the add button on an associated field" do
+      RailsAdmin.config Player do
+        edit do
+          field :team do
+            inline_add false
+          end
+          field :draft do
+            inline_add false
+          end
+          field :comments do
+            inline_add false
+          end
+        end
+      end
+      visit new_path(:model_name => "player")
+      should have_no_selector('a', :text => 'Add a new Team')
+      should have_no_selector('a', :text => 'Add a new Draft')
+      should have_no_selector('a', :text => 'Add a new Comment')
+    end
+
+    it "can show the add button on an associated field" do
+      RailsAdmin.config Player do
+        edit do
+          field :team do
+            inline_add true
+          end
+          field :draft do
+            inline_add true
+          end
+          field :comments do
+            inline_add true
+          end
+        end
+      end
+      visit new_path(:model_name => "player")
+      should have_selector('a', :text => 'Add a new Team')
+      should have_selector('a', :text => 'Add a new Draft')
+      should have_selector('a', :text => 'Add a new Comment')
+    end
+
+    it "can hide the edit button on an associated field" do
+      RailsAdmin.config Player do
+        edit do
+          field :team do
+            inline_edit false
+          end
+          field :draft do
+            inline_edit false
+          end
+        end
+      end
+      visit new_path(:model_name => "player")
+      should have_no_selector('a', :text => 'Edit this Team')
+      should have_no_selector('a', :text => 'Edit this Draft')
+    end
+
+    it "can show the edit button on an associated field" do
+      RailsAdmin.config Player do
+        edit do
+          field :team do
+            inline_edit true
+          end
+          field :draft do
+            inline_edit true
+          end
+        end
+      end
+      visit new_path(:model_name => "player")
+      should have_selector('a', :text => 'Edit this Team')
+      should have_selector('a', :text => 'Edit this Draft')
+    end
+
   end
 
   describe "bindings" do
@@ -1023,4 +1096,5 @@ describe "RailsAdmin Config DSL Edit Section" do
       should have_selector(".color_type input")
     end
   end
+
 end

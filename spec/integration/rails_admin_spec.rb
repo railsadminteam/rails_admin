@@ -130,6 +130,7 @@ describe RailsAdmin do
     end
 
     it "does not show Gravatar when user doesn't have email method" do
+      User.any_instance.stub(:respond_to?).and_return(true)
       User.any_instance.stub(:respond_to?).with(:email).and_return(false)
       visit dashboard_path
       should_not have_selector("ul.nav.pull-right li img")

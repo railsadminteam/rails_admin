@@ -82,6 +82,10 @@ module RailsAdmin
          @navigation_label ||= (parent_module = abstract_model.model.parent) != Object ? parent_module.to_s : nil
       end
 
+      register_instance_option :navigation_icon do
+        nil
+      end
+
       # Act as a proxy for the base section configuration that actually
       # store the configurations.
       def method_missing(m, *args, &block)

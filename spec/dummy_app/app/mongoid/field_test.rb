@@ -12,6 +12,7 @@ class FieldTest
   field :big_decimal_field, :type => BigDecimal
   field :boolean_field, :type => Boolean
   field :bson_object_id_field, :type => RailsAdmin::Adapters::Mongoid::ObjectId
+  field :bson_binary_field, :type => Moped::BSON::Binary
   field :date_field, :type => Date
   field :datetime_field, :type => DateTime
   field :time_with_zone_field, :type => ActiveSupport::TimeWithZone

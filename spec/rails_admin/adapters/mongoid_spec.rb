@@ -243,12 +243,24 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         embedded_in :mongo_embeds_many
       end
 
+      class MongoRecursivelyEmbedsOne
+        include Mongoid::Document
+        recursively_embeds_one
+      end
+
+      class MongoRecursivelyEmbedsMany
+        include Mongoid::Document
+        recursively_embeds_many
+      end
+
       expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }).to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
       )
       expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }).to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
       )
+      expect(lambda{ RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations }).not_to raise_error
+      expect(lambda{ RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations }).not_to raise_error
     end
 
     it "works with inherited embeds_many model" do
@@ -275,11 +287,11 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "maps Mongoid column types to RA types" do
-      expect(@abstract_model.properties.select{|p| %w(_id _type array_field big_decimal_field
-        boolean_field bson_object_id_field date_field datetime_field time_with_zone_field default_field float_field
-        hash_field integer_field name object_field range_field short_text string_field subject
-        symbol_field text_field time_field title).
-        include? p[:name].to_s}).to match_array [
+      expect(@abstract_model.properties.select{|p| %w(_id array_field big_decimal_field
+        boolean_field bson_object_id_field bson_binary_field date_field datetime_field
+        time_with_zone_field default_field float_field hash_field integer_field name
+        object_field range_field short_text string_field subject symbol_field text_field
+        time_field title).include? p[:name].to_s}).to match_array [
         { :name => :_id,
           :pretty_name => "Id",
           :nullable? => true,
