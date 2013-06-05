@@ -7,11 +7,11 @@ Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
   spec.add_dependency 'bootstrap-sass', '~> 2.2'
   spec.add_dependency 'builder', '~> 3.0'
-  spec.add_dependency 'coffee-rails', '~> 4.0.0.beta1'
-  spec.add_dependency 'font-awesome-sass-rails', ['~> 3.0', '>= 3.0.0.1']
+  spec.add_dependency 'coffee-rails', ['>= 3.1', '< 5']
+  spec.add_dependency 'font-awesome-rails', '~> 3.0'
   spec.add_dependency 'haml', '~> 4.0'
-  spec.add_dependency 'jquery-rails', '~> 2.1'
-  spec.add_dependency 'jquery-ui-rails', '~> 3.0'
+  spec.add_dependency 'jquery-rails', ['>= 2.1', '< 4']
+  spec.add_dependency 'jquery-ui-rails', ['>= 3.0', '< 5']
   spec.add_dependency 'kaminari', '~> 0.14'
   spec.add_dependency 'nested_form', '~> 0.3'
   spec.add_dependency 'rack-pjax', '~> 0.6'
