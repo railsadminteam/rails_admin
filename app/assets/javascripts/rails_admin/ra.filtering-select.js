@@ -91,9 +91,9 @@
       if(select.attr('placeholder'))
         input.attr('placeholder', select.attr('placeholder'))
 
-      input.data("autocomplete")._renderItem = function(ul, item) {
+      input.data("ui-autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
-          .data("item.autocomplete", item)
+          .data("ui-autocomplete-item", item)
           .append( $( "<a></a>" ).html( item.label || item.id ) )
           .appendTo(ul);
       };
