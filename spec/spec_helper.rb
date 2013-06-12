@@ -49,6 +49,8 @@ Devise.setup do |config|
   config.stretches = 0
 end
 
+require 'capybara/poltergeist'
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
@@ -62,6 +64,8 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :request
 
   config.before(:each) do
+    DatabaseCleaner.strategy = :truncation if Capybara.current_driver == :poltergeist
+
     DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
@@ -85,4 +89,6 @@ RSpec.configure do |config|
       config.filter_run_excluding orm => true
     end
   end
+
+  Capybara.javascript_driver = :poltergeist
 end
