@@ -57,6 +57,5 @@ group :test do
   gem 'simplecov', :require => false
   gem 'timecop', '>= 0.5'
 end
-gem 'sass-rails', github: 'rails/sass-rails'
 
 gemspec
