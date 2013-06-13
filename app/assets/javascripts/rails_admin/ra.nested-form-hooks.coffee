@@ -15,7 +15,7 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
   content = parent_group.children('.tab-content')
   toggler = controls.find('.toggler')
   nav.append(new_tab)
-  $(window.document).trigger('rails_admin.dom_ready') # fire dom_ready for new player in town
+  $(window.document).trigger('rails_admin.dom_ready', [field, parent_group]) # fire dom_ready for new player in town
   new_tab.children('a').tab('show') # activate added tab
   nav.select(':hidden').show('slow') # show nav if hidden
   content.select(':hidden').show('slow') # show tabs content if hidden

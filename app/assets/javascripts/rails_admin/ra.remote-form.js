@@ -84,7 +84,7 @@
         return false;
       }).html(saveButtonText);
 
-      $(document).trigger('rails_admin.dom_ready')
+      $(document).trigger('rails_admin.dom_ready', [form])
 
       form.bind("ajax:complete", function(xhr, data, status) {
         if (status == 'error') {
