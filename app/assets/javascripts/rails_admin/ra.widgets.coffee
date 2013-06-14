@@ -1,10 +1,12 @@
-$(document).on 'rails_admin.dom_ready', ->
+$(document).on 'rails_admin.dom_ready', (e, content) ->
 
-  if $('form').length # don't waste time otherwise
+  content = if content then content else $('form')
+
+  if content.length # don't waste time otherwise
 
     # colorpicker
 
-    $('form [data-color]').each ->
+    content.find('[data-color]').each ->
       that = this
       $(this).ColorPicker
         color: $(that).val()
@@ -20,12 +22,12 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # datetime
 
-    $('form [data-datetimepicker]').each ->
+    content.find('[data-datetimepicker]').each ->
       $(this).datetimepicker $(this).data('options')
 
     # enumeration
 
-    $('form [data-enumeration]').each ->
+    content.find('[data-enumeration]').each ->
       if $(this).is('[multiple]')
         $(this).filteringMultiselect $(this).data('options')
       else
@@ -33,14 +35,14 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # fileupload
 
-    $('form [data-fileupload]').each ->
+    content.find('[data-fileupload]').each ->
       input = this
       $(this).on 'click', ".delete input[type='checkbox']", ->
         $(input).children('.toggle').toggle('slow')
 
     # fileupload-preview
 
-    $('form [data-fileupload]').change ->
+    content.find('[data-fileupload]').change ->
       input = this
       image_container = $("#" + input.id).parent().children(".preview")
       unless image_container.length
@@ -58,7 +60,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # filtering-multiselect
 
-    $('form [data-filteringmultiselect]').each ->
+    content.find('[data-filteringmultiselect]').each ->
       $(this).filteringMultiselect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
         $(this).parents('.control-group').find('.btn').remove()
@@ -67,7 +69,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # filtering-select
 
-    $('form [data-filteringselect]').each ->
+    content.find('[data-filteringselect]').each ->
       $(this).filteringSelect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
         $(this).parents('.control-group').find('.btn').remove()
@@ -76,7 +78,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # nested-many
 
-    $('form [data-nestedmany]').each ->
+    content.find('[data-nestedmany]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find('> .controls > .nav')
       content = field.find('> .tab-content')
@@ -105,7 +107,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # nested-one
 
-    $('form [data-nestedone]').each ->
+    content.find('[data-nestedone]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find("> .controls > .nav")
       content = field.find("> .tab-content")
@@ -124,7 +126,7 @@ $(document).on 'rails_admin.dom_ready', ->
 
     # polymorphic-association
 
-    $('form [data-polymorphic]').each ->
+    content.find('[data-polymorphic]').each ->
       type_select = $(this)
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
@@ -149,14 +151,14 @@ $(document).on 'rails_admin.dom_ready', ->
     # ckeditor
 
     goCkeditors = ->
-      $('form [data-richtext=ckeditor]').not('.ckeditored').each (index, domEle) ->
+      content.find('[data-richtext=ckeditor]').not('.ckeditored').each (index, domEle) ->
         try
           if instance = window.CKEDITOR.instances[this.id]
             instance.destroy(true)
         window.CKEDITOR.replace(this, $(this).data('options'))
         $(this).addClass('ckeditored')
 
-    $editors = $('form [data-richtext=ckeditor]').not('.ckeditored')
+    $editors = content.find('[data-richtext=ckeditor]').not('.ckeditored')
     if $editors.length
       if not window.CKEDITOR
         options = $editors.first().data('options')
@@ -177,7 +179,7 @@ $(document).on 'rails_admin.dom_ready', ->
           CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
           $(textarea).addClass('codemirrored')
 
-    array = $('form [data-richtext=codemirror]').not('.codemirrored')
+    array = content.find('[data-richtext=codemirror]').not('.codemirrored')
     if array.length
       @array = array
       if not window.CodeMirror
@@ -196,7 +198,7 @@ $(document).on 'rails_admin.dom_ready', ->
         $(@).closest('.controls').addClass('well')
         $(@).wysihtml5(config_options)
 
-    array = $('form [data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')
+    array = content.find('[data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')
     if array.length
       @array = array
       options = $(array[0]).data('options')
