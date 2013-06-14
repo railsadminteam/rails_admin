@@ -19,6 +19,8 @@ matrix:
       env: "CI_ORM=active_record CI_DB_ADAPTER=mysql"
     - rvm: 1.9.3
       env: "CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
+  allow_failures:
+    - jruby-19mode
 notifications:
   irc: "irc.freenode.org#railsadmin"
 before_script:
