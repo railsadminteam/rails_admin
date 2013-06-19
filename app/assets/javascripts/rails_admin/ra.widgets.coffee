@@ -81,28 +81,28 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     content.find('[data-nestedmany]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find('> .controls > .nav')
-      content = field.find('> .tab-content')
+      tab_content = field.find('> .tab-content')
       toggler = field.find('> .controls > .btn-group > .toggler')
       # add each nested field to a tab-pane and reference it in the nav
-      content.children('.fields:not(.tab-pane)').addClass('tab-pane').each ->
+      tab_content.children('.fields:not(.tab-pane)').addClass('tab-pane').each ->
         $(this).attr('id', 'unique-id-' + (new Date().getTime()) + Math.floor(Math.random()*100000)) # some elements are created on the same ms
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       # only if no tab is set to active
       if nav.find("> li.active").length == 0
-        # init first tab, toggler and content/tabs visibility
+        # init first tab, toggler and tab_content/tabs visibility
         nav.find("> li > a[data-toggle='tab']:first").tab('show')
       if nav.children().length == 0
         nav.hide()
-        content.hide()
+        tab_content.hide()
         toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
       else
         if toggler.hasClass('active')
           nav.show()
-          content.show()
+          tab_content.show()
           toggler.children('i').addClass('icon-chevron-down')
         else
           nav.hide()
-          content.hide()
+          tab_content.hide()
           toggler.children('i').addClass('icon-chevron-right')
 
     # nested-one
@@ -110,19 +110,19 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     content.find('[data-nestedone]').each ->
       field = $(this).parents('.control-group').first()
       nav = field.find("> .controls > .nav")
-      content = field.find("> .tab-content")
+      tab_content = field.find("> .tab-content")
       toggler = field.find('> .controls > .toggler')
-      content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
+      tab_content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
       first_tab.tab('show')
       field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html())
       if toggler.hasClass('active')
         toggler.children('i').addClass('icon-chevron-down')
-        content.show()
+        tab_content.show()
       else
         toggler.children('i').addClass('icon-chevron-right')
-        content.hide()
+        tab_content.hide()
 
     # polymorphic-association
 
