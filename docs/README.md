@@ -80,10 +80,9 @@
 ### User integration
 
 * [[Authentication]]
-  * [[With Devise (installed by default)|https://github.com/plataformatec/devise]]
-  * [[Manually|https://gist.github.com/1278355]]
+  * With [[Devise|https://github.com/plataformatec/devise]] (installed by default)
   * [[Sorcery]]
-  * [[None|no authentification]]
+  * [[Manually (without Devise)]]
 * [[Authorization setup]]
   * [[CanCan (recommended)|CanCan]]
   * [[CanCan with relation to current Model|CanCan:-remove-associated-action-buttons-in-forms]]
@@ -132,4 +131,3 @@
 * [Enumerize: Enumerated attributes with I18n and ActiveRecord/Mongoid support](https://github.com/brainspec/enumerize)
 * [Application setting for rails_admin and mongoid](https://github.com/rs-pro/rails_admin_settings)
 * [Nice mass file uploads with jQuery File Upload for rails_admin and AR/mongoid](https://github.com/glebtv/rails-uploader)
-
