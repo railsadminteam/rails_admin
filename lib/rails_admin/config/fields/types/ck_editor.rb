@@ -34,6 +34,10 @@ module RailsAdmin
           register_instance_option :partial do
             :form_ck_editor
           end
+
+          [:base_location, :config_js, :location].each do |key|
+            register_deprecated_instance_option :"ckeditor_#{key}", key
+          end
         end
       end
     end

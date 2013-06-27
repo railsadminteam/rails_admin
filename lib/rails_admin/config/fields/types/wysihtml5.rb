@@ -33,6 +33,10 @@ module RailsAdmin
           register_instance_option :partial do
             :form_wysihtml5
           end
+
+          [:config_options, :css_location, :js_location].each do |key|
+            register_deprecated_instance_option :"bootstrap_wysihtml5_#{key}", key
+          end
         end
       end
     end

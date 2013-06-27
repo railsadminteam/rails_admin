@@ -44,6 +44,10 @@ module RailsAdmin
           register_instance_option :partial do
             :form_code_mirror
           end
+
+          [:assets, :config, :css_location, :js_location].each do |key|
+            register_deprecated_instance_option :"codemirror_#{key}", key
+          end
         end
       end
     end
