@@ -1,7 +1,4 @@
 class Player < ActiveRecord::Base
-  attr_accessible :name, :team_id, :position, :number, :retired, :injured, :born_on, :notes, :comment_ids, :created_at
-  attr_protected :suspended
-
   belongs_to :team, :inverse_of => :players
   has_one :draft, :dependent => :destroy
   has_many :comments, :as => :commentable

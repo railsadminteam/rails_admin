@@ -29,12 +29,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe "#children_fields" do
-    POLYMORPHIC_CHILDREN =
-      if CI_ORM == :mongoid && Mongoid::VERSION >= '3.0.0'
-        [:commentable_id, :commentable_type, :commentable_field]
-      else
-        [:commentable_id, :commentable_type]
-      end
+    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type]
 
     it "is empty by default" do
       expect(RailsAdmin.config(Team).fields.find{ |f| f.name == :name }.children_fields).to eq([])
@@ -374,48 +369,6 @@ describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select{|f| f.visible? }.map(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
       expect(RailsAdmin.config(FieldVisibilityTest).edit.fields.select{|f| f.visible? }.map(&:name)).to match_array [:name]
       expect(RailsAdmin.config(FieldVisibilityTest).show.fields.select{|f| f.visible? }.map(&:name)).to match_array [:name]
-    end
-  end
-
-  describe "#editable?" do
-    before do
-      Moped.logger.stub!(:debug) if defined?(Moped)
-    end
-
-    it "yells for non attr_accessible fields if config.yell_for_non_accessible_fields is true" do
-      RailsAdmin.config do |config|
-        config.yell_for_non_accessible_fields = true
-        config.model FieldTest do
-          field :protected_field
-        end
-      end
-      Rails.logger.should_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field'/ }
-      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :default))).editable?
-      expect(editable).to be_false
-    end
-
-    it "yells for non attr_accessible fields specified role if config.yell_for_non_accessible_fields is true" do
-      RailsAdmin.config do |config|
-        config.yell_for_non_accessible_fields = true
-        config.model FieldTest do
-          field :protected_field
-        end
-      end
-      Rails.logger.should_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field, :as => :admin'/ }
-      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :admin))).editable?
-      expect(editable).to be_false
-    end
-
-    it "does not yell for non attr_accessible fields if config.yell_for_non_accessible_fields is false" do
-      RailsAdmin.config do |config|
-        config.yell_for_non_accessible_fields = false
-        config.model FieldTest do
-          field :protected_field
-        end
-      end
-      Rails.logger.should_not_receive(:debug).with {|msg| msg =~ /Please add 'attr_accessible :protected_field'/ }
-      editable = RailsAdmin.config(FieldTest).field(:protected_field).with(:object => FactoryGirl.create(:field_test), :view => double(:controller => double(:_attr_accessible_role => :default))).editable?
-      expect(editable).to be_false
     end
   end
 

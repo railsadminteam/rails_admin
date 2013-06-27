@@ -412,17 +412,19 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
     end
 
     it "supports date type query" do
-      expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } })).to eq(["((field_tests.date_field BETWEEN ? AND ?))", Date.new(2012,1,2), Date.new(2012,1,3)])
-      expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } )).to eq(["((field_tests.date_field >= ?))", Date.new(2012,1,3)])
-      expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } )).to eq(["((field_tests.date_field <= ?))", Date.new(2012,1,2)])
-      expect(@abstract_model.send(:filter_conditions, { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } )).to eq(["((field_tests.date_field BETWEEN ? AND ?))", Date.new(2012,1,2), Date.new(2012,1,2)])
+      scope = FieldTest.all
+      expect(@abstract_model.send(:filter_scope, scope, { "date_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } }).where_values).to eq(["(field_tests.date_field BETWEEN '2012-01-02' AND '2012-01-03')"])
+      expect(@abstract_model.send(:filter_scope, scope, { "date_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).where_values).to eq(["(field_tests.date_field >= '2012-01-03')"])
+      expect(@abstract_model.send(:filter_scope, scope, { "date_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).where_values).to eq(["(field_tests.date_field <= '2012-01-02')"])
+      expect(@abstract_model.send(:filter_scope, scope, { "date_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).where_values).to eq(["(field_tests.date_field BETWEEN '2012-01-02' AND '2012-01-02')"])
     end
 
     it "supports datetime type query" do
-      expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } )).to eq(["((field_tests.datetime_field BETWEEN ? AND ?))", Time.local(2012,1,2), Time.local(2012,1,3).end_of_day])
-      expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } )).to eq(["((field_tests.datetime_field >= ?))", Time.local(2012,1,3)])
-      expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } )).to eq(["((field_tests.datetime_field <= ?))", Time.local(2012,1,2).end_of_day])
-      expect(@abstract_model.send(:filter_conditions, { "datetime_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } )).to eq(["((field_tests.datetime_field BETWEEN ? AND ?))", Time.local(2012,1,2), Time.local(2012,1,2).end_of_day])
+      scope = FieldTest.all
+      expect(@abstract_model.send(:filter_scope, scope,  { "datetime_field" => { "1" => { :v => ["", "01/02/2012", "01/03/2012"], :o => 'between' } } } ).where_values).to eq(scope.where(["(field_tests.datetime_field BETWEEN ? AND ?)", Time.local(2012,1,2), Time.local(2012,1,3).end_of_day]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope, { "datetime_field" => { "1" => { :v => ["", "01/03/2012", ""], :o => 'between' } } } ).where_values).to eq(scope.where(["(field_tests.datetime_field >= ?)", Time.local(2012,1,3)]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope, { "datetime_field" => { "1" => { :v => ["", "", "01/02/2012"], :o => 'between' } } } ).where_values).to eq(scope.where(["(field_tests.datetime_field <= ?)", Time.local(2012,1,2).end_of_day]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope, { "datetime_field" => { "1" => { :v => ["01/02/2012"], :o => 'default' } } } ).where_values).to eq(scope.where(["(field_tests.datetime_field BETWEEN ? AND ?)", Time.local(2012,1,2), Time.local(2012,1,2).end_of_day]).where_values)
     end
 
     it "supports enum type query" do
@@ -436,7 +438,7 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
     end
 
     it "#scoped returns relation object" do
-      expect(@abstract_model.scoped).to be_instance_of(ActiveRecord::Relation)
+      expect(@abstract_model.scoped).to be_a_kind_of(ActiveRecord::Relation)
     end
 
     it "#table_name works" do

@@ -32,7 +32,7 @@ module RailsAdmin
             end
           end
         end
-        @@polymorphic_parents[adapter.to_sym][[model_name.underscore, name].join('_').to_sym]
+        @@polymorphic_parents[adapter.to_sym][[model_name.to_s.underscore, name].join('_').to_sym]
       end
 
       # For testing

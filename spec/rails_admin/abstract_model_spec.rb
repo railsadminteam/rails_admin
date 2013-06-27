@@ -58,9 +58,9 @@ describe RailsAdmin::AbstractModel do
 
   context "with Kaminari" do
     before do
+      @paged = Player.page(1)
       Kaminari.config.page_method_name = :per_page_kaminari
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
-      @paged = Player.page(1)
     end
 
     after do

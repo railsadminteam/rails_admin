@@ -1,6 +1,7 @@
 class User
   include Mongoid::Document
   include Mongoid::Paperclip
+  include ActiveModel::ForbiddenAttributesProtection
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
@@ -44,8 +45,6 @@ class User
   # field :invitation_token, :type => String
 
   include Mongoid::Timestamps
-
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :roles, :avatar
 
   # Add Paperclip support for avatars
   has_mongoid_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }

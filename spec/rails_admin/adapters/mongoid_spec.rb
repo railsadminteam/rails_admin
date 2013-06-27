@@ -151,7 +151,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         :type => :belongs_to,
         :foreign_key => :commentable_id,
         :foreign_type => :commentable_type,
-        :foreign_inverse_of => (Mongoid::VERSION >= '3.0.0' ? :commentable_field : nil),
+        :foreign_inverse_of => nil,
         :as => nil,
         :polymorphic => true,
         :inverse_of => nil,

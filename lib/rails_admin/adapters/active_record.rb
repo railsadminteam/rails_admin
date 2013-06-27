@@ -28,7 +28,7 @@ module RailsAdmin
       end
 
       def scoped
-        model.scoped
+        model.all
       end
 
       def first(options = {}, scope = nil)
@@ -40,8 +40,8 @@ module RailsAdmin
         scope = scope.includes(options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.where(model.primary_key => options[:bulk_ids]) if options[:bulk_ids]
-        scope = scope.where(query_conditions(options[:query])) if options[:query]
-        scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
+        scope = query_scope(scope, options[:query]) if options[:query]
+        scope = filter_scope(scope, options[:filters]) if options[:filters]
         if options[:page] && options[:per]
           scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
@@ -117,9 +117,10 @@ module RailsAdmin
 
       private
 
-      def query_conditions(query, fields = config.list.fields.select(&:queryable?))
+      def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
         statements = []
         values = []
+        tables = []
 
         fields.each do |field|
           field.searchable_columns.flatten.each do |column_infos|
@@ -127,32 +128,33 @@ module RailsAdmin
             statements << statement if statement
             values << value1 unless value1.nil?
             values << value2 unless value2.nil?
+            table, column = column_infos[:column].split('.')
+            tables.push(table) if column
           end
         end
-
-        [statements.join(' OR '), *values]
+        scope.where(statements.join(' OR '), *values).references(*(tables.uniq))
       end
 
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
-      def filter_conditions(filters, fields = config.list.fields.select(&:filterable?))
-        statements = []
-        values = []
-
+      def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
-            field_statements = []
+            statements = []
+            values = []
+            tables = []
             fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
               statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-              field_statements << statement if statement.present?
+              statements << statement if statement.present?
               values << value1 unless value1.nil?
               values << value2 unless value2.nil?
+              table, column = column_infos[:column].split('.')
+              tables.push(table) if column
             end
-            statements << "(#{field_statements.join(' OR ')})" unless field_statements.empty?
+            scope = scope.where(statements.join(' OR '), *values).references(*(tables.uniq))
           end
         end
-
-        [statements.join(' AND '), *values]
+        scope
       end
 
       def build_statement(column, type, value, operator)
@@ -262,7 +264,7 @@ module RailsAdmin
 
       def association_model_lookup(association)
         if association.options[:polymorphic]
-          RailsAdmin::AbstractModel.polymorphic_parents(:active_record, self.model.model_name, association.name) || []
+          RailsAdmin::AbstractModel.polymorphic_parents(:active_record, self.model.model_name.to_s, association.name) || []
         else
           association.klass
         end
@@ -295,7 +297,9 @@ module RailsAdmin
       end
 
       def association_read_only_lookup(association)
-        association.options[:readonly]
+        if association.scope.is_a? Proc
+          association.klass.all.instance_eval(&association.scope).readonly_value
+        end
       end
 
       def association_foreign_key_lookup(association)

@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types::register(self)
 
           register_instance_option :formatted_value do
-            YAML.dump(value)
+            YAML.dump(value) unless value.nil?
           end
 
           def parse_input(params)

@@ -31,13 +31,13 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         expect(player.name).to eq(name)
         expect(player.number).to eq(number)
         expect(player.position).to eq(position)
-        expect(player.suspended).to be_false
+        expect(player.suspended).to be_true
         expect(player.draft).to be_nil
         expect(player.team).to be_nil
       end
     end
 
-    describe "a record with protected attributes and has_one association" do
+    describe "a record with has_one association" do
       let(:draft) { FactoryGirl.create(:draft) }
       let(:number) { draft.player.number + 1 } # to avoid collision
 
@@ -52,7 +52,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         expect(player.name).to eq(name)
         expect(player.number).to eq(number)
         expect(player.position).to eq(position)
-        expect(player.suspended).to be_false
+        expect(player.suspended).to be_true
         expect(player.draft).to eq(draft.reload)
         expect(player.team).to be_nil
       end
@@ -79,7 +79,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
   end
 
   describe "update" do
-    describe "a record with protected attributes and has_one association" do
+    describe "a record with has_one association" do
       let(:name) { "Stefan Koza" }
       let(:suspended) { true }
       let(:player) { FactoryGirl.create(:player, :suspended => true, :name => name, :draft => FactoryGirl.create(:draft)) }
@@ -99,7 +99,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
         expect(object.number).to eq(new_number)
         expect(object.name).to eq(name)
         expect(object.draft).to be_nil
-        expect(object.suspended).to be_true
+        expect(object.suspended).to be_false
         expect(object.team).to eq(new_team)
       end
     end

@@ -756,7 +756,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         visit edit_path(:model_name => "field_test", :id => @record.id)
         expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
         should_not have_selector('form .remove_nested_fields')
-        expect(find('div#nested_field_tests_fields_blueprint')[:'data-blueprint']).to match(
+        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(
           /<a[^>]* class="remove_nested_fields"[^>]*>/)
       end
     end
@@ -765,7 +765,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       it "does not hide fields which are not associated with nesting parent field's model" do
         visit new_path(:model_name => "field_test")
         should_not have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-        expect(find('div#nested_field_tests_fields_blueprint')[:'data-blueprint']).to match(
+        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(
           /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/)
       end
     end
@@ -815,18 +815,10 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "CKEditor Support" do
-
-    it "starts with CKEditor disabled" do
-       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       expect(field.ckeditor).to be_false
-    end
-
     it "adds Javascript to enable CKEditor" do
       RailsAdmin.config Draft do
         edit do
-          field :notes do
-            ckeditor true
-          end
+          field :notes, :ck_editor
         end
       end
       visit new_path(:model_name => "draft")
@@ -835,18 +827,10 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "CodeMirror Support" do
-
-    it "starts with CodeMirror disabled" do
-       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       expect(field.codemirror).to be_false
-    end
-
     it "adds Javascript to enable CodeMirror" do
       RailsAdmin.config Draft do
         edit do
-          field :notes do
-            codemirror true
-          end
+          field :notes, :code_mirror
         end
       end
       visit new_path(:model_name => "draft")
@@ -855,18 +839,10 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "bootstrap_wysihtml5 Support" do
-
-    it "starts with bootstrap_wysihtml5 disabled" do
-       field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-       expect(field.bootstrap_wysihtml5).to be_false
-    end
-
     it "adds Javascript to enable bootstrap_wysihtml5" do
       RailsAdmin.config Draft do
         edit do
-          field :notes do
-            bootstrap_wysihtml5 true
-          end
+          field :notes, :wysihtml5
         end
       end
       visit new_path(:model_name => "draft")
@@ -876,11 +852,10 @@ describe "RailsAdmin Config DSL Edit Section" do
     it "should include custom wysihtml5 configuration" do
       RailsAdmin.config Draft do
         edit do
-          field :notes do
-            bootstrap_wysihtml5 true
-            bootstrap_wysihtml5_config_options :image => false
-            bootstrap_wysihtml5_css_location 'stub_css.css'
-            bootstrap_wysihtml5_js_location 'stub_js.js'
+          field :notes, :wysihtml5 do
+            config_options :image => false
+            css_location 'stub_css.css'
+            js_location 'stub_js.js'
           end
         end
       end
