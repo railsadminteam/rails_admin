@@ -394,7 +394,7 @@ module RailsAdmin
       end
 
       def parse_collection_name(column)
-        collection_name, column_name = column.split('.')
+        collection_name, match, column_name = column.rpartition(".")
         if [:embeds_one, :embeds_many].include?(model.associations[collection_name].try(:macro).try(:to_sym))
           [table_name, column]
         else
@@ -433,7 +433,7 @@ module RailsAdmin
 
         case options[:sort]
         when String
-          field_name, collection_name = options[:sort].split('.').reverse
+          collection_name, match, field_name = options[:sort].rpartition(".")
           if collection_name && collection_name != table_name
             raise "sorting by associated model column is not supported in Non-Relational databases"
           end
