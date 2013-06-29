@@ -18,7 +18,7 @@
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
 ## Announcements
-### Support for AcitveModel::MassAssignmentSecurity has been dropped
+### Support for ActiveModel::MassAssignmentSecurity has been dropped
 
 RailsAdmin no longer controls field visibility regarding attr_accessible status, nor uses role on mass assignment.
 See discussion [here](https://github.com/sferik/rails_admin/issues/1443#issuecomment-17132073).
