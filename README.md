@@ -67,7 +67,7 @@ In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
     gem 'rails_admin'
-
+    gem 'protected_attributes' #for rails 4.0.0
 Run:
 
     bundle install
