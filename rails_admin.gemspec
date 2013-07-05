@@ -32,6 +32,6 @@ Gem::Specification.new do |spec|
   spec.required_rubygems_version = '>= 1.3.5'
   spec.signing_key = File.expand_path("~/.gem/private_key.pem") if $0 =~ /gem\z/
   spec.summary = %q{Admin for Rails}
-  spec.test_files = Dir['spec/**/*']
+  spec.test_files = Dir['spec/**/*'].reject {|f| f.end_with? "log"}
   spec.version = RailsAdmin::Version
 end
