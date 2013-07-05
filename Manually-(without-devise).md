@@ -3,7 +3,7 @@ You can skip installation of Devise and choose whatever authorization option for
 Just install with
 
 ```bash
-$ rails generator rails_admin:install --skip-devise
+$ rails generate rails_admin:install --skip-devise
 ```
 
 and you're ready to use RailsAdmin without any access control.
