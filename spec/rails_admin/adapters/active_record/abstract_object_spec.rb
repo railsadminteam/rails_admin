@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record => true do
   describe "proxy" do
-    let(:object) { mock("object") }
+    let(:object) { double("object") }
     let(:abstract_object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new(object) }
 
     it "acts like a proxy" do
