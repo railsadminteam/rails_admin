@@ -59,11 +59,11 @@ describe "RailsAdmin CanCan Authorization" do
     end
 
     it "GET /admin should raise CanCan::AccessDenied" do
-      expect{ visit dashboard_path }.to raise_error CanCan::AccessDenied
+      expect{ visit dashboard_path }.to raise_error(CanCan::AccessDenied)
     end
 
     it "GET /admin/player should raise CanCan::AccessDenied" do
-      expect{ visit index_path(:model_name => "player") }.to raise_error CanCan::AccessDenied
+      expect{ visit index_path(:model_name => "player") }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -104,11 +104,11 @@ describe "RailsAdmin CanCan Authorization" do
     end
 
     it "GET /admin/team should raise CanCan::AccessDenied" do
-      expect{ visit index_path(:model_name => "team") }.to raise_error CanCan::AccessDenied
+      expect{ visit index_path(:model_name => "team") }.to raise_error(CanCan::AccessDenied)
     end
 
     it "GET /admin/player/new should raise CanCan::AccessDenied" do
-      expect{ visit new_path(:model_name => "player") }.to raise_error CanCan::AccessDenied
+      expect{ visit new_path(:model_name => "player") }.to raise_error(CanCan::AccessDenied)
     end
 
   end
@@ -140,7 +140,7 @@ describe "RailsAdmin CanCan Authorization" do
 
     it "GET /admin/player/1/edit should raise access denied" do
       @player = FactoryGirl.create :player
-      expect{ visit edit_path(:model_name => "player", :id => @player.id) }.to raise_error CanCan::AccessDenied
+      expect{ visit edit_path(:model_name => "player", :id => @player.id) }.to raise_error(CanCan::AccessDenied)
     end
 
   end
@@ -167,12 +167,12 @@ describe "RailsAdmin CanCan Authorization" do
 
     it "GET /admin/player/1/edit with retired player should raise access denied" do
       @player = FactoryGirl.create :player, :retired => true
-      expect{ visit edit_path(:model_name => "player", :id => @player.id) }.to raise_error CanCan::AccessDenied
+      expect{ visit edit_path(:model_name => "player", :id => @player.id) }.to raise_error(CanCan::AccessDenied)
     end
 
     it "GET /admin/player/1/delete should raise access denied" do
       @player = FactoryGirl.create :player
-      expect{ visit delete_path(:model_name => "player", :id => @player.id) }.to raise_error CanCan::AccessDenied
+      expect{ visit delete_path(:model_name => "player", :id => @player.id) }.to raise_error(CanCan::AccessDenied)
     end
 
   end
@@ -261,7 +261,7 @@ describe "RailsAdmin CanCan Authorization" do
 
     it "GET /admin/player/1/delete with retired player should raise access denied" do
       @player = FactoryGirl.create :player, :retired => true
-      expect{ visit delete_path(:model_name => "player", :id => @player.id) }.to raise_error CanCan::AccessDenied
+      expect{ visit delete_path(:model_name => "player", :id => @player.id) }.to raise_error(CanCan::AccessDenied)
     end
 
     it "GET /admin/player/bulk_delete should render records which are authorized to" do

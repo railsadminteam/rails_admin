@@ -33,7 +33,7 @@ describe RailsAdmin::MainController do
     it "redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
       allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete" } }.to raise_error('redirected back')
-      expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.to_not raise_error('redirected back')
+      expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.not_to raise_error
     end
   end
 
