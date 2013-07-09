@@ -13,7 +13,7 @@ end
 describe RailsAdmin::ApplicationHelper do
   describe '#authorized?' do
     before do
-      RailsAdmin.config.stub(_current_user: FactoryGirl.create(:user))
+      allow(RailsAdmin.config).to receive(:_current_user).and_return(FactoryGirl.create(:user))
       helper.instance_variable_set('@authorization_adapter', RailsAdmin::AUTHORIZATION_ADAPTERS[:cancan].new(RailsAdmin.config, TestAbility))
     end
 
@@ -27,7 +27,7 @@ describe RailsAdmin::ApplicationHelper do
 
   describe 'with #authorized? stubbed' do
     before do
-      controller.stub(:authorized?).and_return(true)
+      allow(controller).to receive(:authorized?).and_return(true)
     end
 
     describe "#current_action?" do

@@ -6,7 +6,7 @@ describe RailsAdmin::MainController do
 
   describe "#dashboard" do
     before do
-      controller.stub(:render).and_return(true) # no rendering
+      allow(controller).to receive(:render).and_return(true) # no rendering
     end
 
     it "shows statistics by default" do
@@ -31,7 +31,7 @@ describe RailsAdmin::MainController do
   describe "#check_for_cancel" do
 
     it "redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
-      controller.stub(:back_or_index) { raise StandardError.new('redirected back') }
+      allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete" } }.to raise_error('redirected back')
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.to_not raise_error('redirected back')
     end

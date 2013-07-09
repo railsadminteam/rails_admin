@@ -736,12 +736,12 @@ describe "RailsAdmin Config DSL Edit Section" do
 
     describe "with nested_attributes_options given" do
       before do
-        FieldTest.nested_attributes_options.stub(:[]).with(any_args()).
+        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args()).
           and_return({:allow_destroy=>true, :update_only=>false})
       end
 
       it "does not show add button when :update_only is true" do
-        FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
+        allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
           and_return({:allow_destroy=>true, :update_only=>true})
         visit new_path(:model_name => "field_test")
         should have_selector('.toggler')
@@ -751,7 +751,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       it "does not show destroy button except for newly created when :allow_destroy is false" do
         @record = FieldTest.create
         @record.nested_field_tests << NestedFieldTest.create!(:title => 'nested title 1')
-        FieldTest.nested_attributes_options.stub(:[]).with(:nested_field_tests).
+        allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
           and_return({:allow_destroy=>false, :update_only=>false})
         visit edit_path(:model_name => "field_test", :id => @record.id)
         expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
