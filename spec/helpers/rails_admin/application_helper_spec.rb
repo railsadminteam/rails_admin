@@ -6,7 +6,7 @@ class TestAbility
   def initialize(user)
     can :access, :rails_admin
     can :edit, FieldTest
-    cannot :edit, FieldTest, string_field: 'dangerous'
+    cannot :edit, FieldTest, :string_field => 'dangerous'
   end
 end
 
@@ -19,9 +19,9 @@ describe RailsAdmin::ApplicationHelper do
 
     it 'doesn\'t test unpersisted objects' do
       am = RailsAdmin.config(FieldTest).abstract_model
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'dangerous'))).to be_false
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'not-dangerous'))).to be_true
-      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, string_field: 'dangerous'))).to be_true
+      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, :string_field => 'dangerous'))).to be_false
+      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, :string_field => 'not-dangerous'))).to be_true
+      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, :string_field => 'dangerous'))).to be_true
     end
   end
 

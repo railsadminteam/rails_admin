@@ -59,7 +59,7 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers
 
-  config.include Capybara::DSL, type: :request
+  config.include Capybara::DSL, :type => :request
 
   config.before(:each) do
     DatabaseCleaner.start
