@@ -114,7 +114,7 @@ describe RailsAdmin::Config do
       end
 
       it "initializes the authorization adapter" do
-        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin::Config)
+        expect(ExampleModule::AuthorizationAdapter).to receive(:new).with(RailsAdmin::Config)
         RailsAdmin.config do |config|
           config.authorize_with(:example)
         end
@@ -123,7 +123,7 @@ describe RailsAdmin::Config do
 
       it "passes through any additional arguments to the initializer" do
         options = { :option => true }
-        ExampleModule::AuthorizationAdapter.should_receive(:new).with(RailsAdmin::Config, options)
+        expect(ExampleModule::AuthorizationAdapter).to receive(:new).with(RailsAdmin::Config, options)
         RailsAdmin.config do |config|
           config.authorize_with(:example, options)
         end
@@ -141,7 +141,7 @@ describe RailsAdmin::Config do
       end
 
       it "initializes the auditing adapter" do
-        ExampleModule::AuditingAdapter.should_receive(:new).with(RailsAdmin::Config)
+        expect(ExampleModule::AuditingAdapter).to receive(:new).with(RailsAdmin::Config)
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
@@ -150,7 +150,7 @@ describe RailsAdmin::Config do
 
       it "passes through any additional arguments to the initializer" do
         options = { :option => true }
-        ExampleModule::AuditingAdapter.should_receive(:new).with(RailsAdmin::Config, options)
+        expect(ExampleModule::AuditingAdapter).to receive(:new).with(RailsAdmin::Config, options)
         RailsAdmin.config do |config|
           config.audit_with(:example, options)
         end
@@ -184,7 +184,7 @@ describe RailsAdmin::Config do
       end
 
       it "initializes configuration adapter" do
-        ExampleModule::ConfigurationAdapter.should_receive(:new)
+        expect(ExampleModule::ConfigurationAdapter).to receive(:new)
         RailsAdmin.config do |config|
           config.configure_with(:example)
         end

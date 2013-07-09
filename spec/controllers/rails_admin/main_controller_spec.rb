@@ -10,7 +10,7 @@ describe RailsAdmin::MainController do
     end
 
     it "shows statistics by default" do
-      RailsAdmin.config(Player).abstract_model.should_receive(:count).and_return(0)
+      expect(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
       controller.dashboard
     end
 
@@ -23,7 +23,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      RailsAdmin.config(Player).abstract_model.should_not_receive(:count)
+      expect(RailsAdmin.config(Player).abstract_model).not_to receive(:count)
       controller.dashboard
     end
   end

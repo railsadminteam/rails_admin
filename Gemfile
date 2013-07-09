@@ -53,7 +53,7 @@ group :test do
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', '>= 3.4'
-  gem 'rspec-rails', '>= 2.11'
+  gem 'rspec-rails', '>= 2.14'
   gem 'simplecov', :require => false
   gem 'timecop', '>= 0.5'
 end

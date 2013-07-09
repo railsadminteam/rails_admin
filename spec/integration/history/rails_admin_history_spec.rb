@@ -36,7 +36,7 @@ describe "RailsAdmin History", :active_record => true do
       end
 
       it "supports pagination when Kaminari's page_method_name is customized" do
-        RailsAdmin::History.should_receive(:per_page_kaminari).twice.and_return(@paged)
+        expect(RailsAdmin::History).to receive(:per_page_kaminari).twice.and_return(@paged)
         RailsAdmin::History.history_for_model @model, nil, false, false, false, nil
         RailsAdmin::History.history_for_object @model, Player.first, nil, false, false, false, nil
       end

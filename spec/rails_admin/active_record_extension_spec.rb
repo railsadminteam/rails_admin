@@ -7,7 +7,7 @@ describe "ActiveRecord::Base", :active_record => true do
       @player = Player.new
       @player.number = 23
       original_method = @player.method(:read_attribute)
-      @player.should_receive(:read_attribute).exactly(1).times do |*args|
+      expect(@player).to receive(:read_attribute).exactly(1).times do |*args|
         original_method.call(*args)
       end
       expect(@player.safe_send(:number)).to eq(23)

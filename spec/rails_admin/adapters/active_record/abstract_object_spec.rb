@@ -6,7 +6,7 @@ describe "RailsAdmin::Adapters::ActiveRecord::AbstractObject", :active_record =>
     let(:abstract_object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new(object) }
 
     it "acts like a proxy" do
-      object.should_receive(:method_call)
+      expect(object).to receive(:method_call)
       abstract_object.method_call
     end
   end
