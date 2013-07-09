@@ -143,7 +143,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "has correct parameter of polymorphic belongs_to association" do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      RailsAdmin::Config.stub(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       param = @comment.associations.find{|a| a[:name] == :commentable}
       expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :commentable,
@@ -163,7 +163,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "has correct parameter of polymorphic inverse has_many association" do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      RailsAdmin::Config.stub(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       param = @blog.associations.find{|a| a[:name] == :mongo_comments}
       expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_comments,
@@ -183,7 +183,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it 'has correct opposite model lookup for polymorphic associations' do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      RailsAdmin::Config.stub(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoUser]
       expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoProfile]
     end

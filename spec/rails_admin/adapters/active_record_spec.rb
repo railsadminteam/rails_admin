@@ -116,7 +116,7 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
     end
 
     it "has correct parameter of polymorphic belongs_to association" do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
+      RailsAdmin::Config.stub(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
       param = @comment.associations.select{|a| a[:name] == :commentable}.first
       expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :commentable,
@@ -156,7 +156,7 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
 
 
     it 'has correct opposite model lookup for polymorphic associations' do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
+      RailsAdmin::Config.stub(:models_pool).and_return(["ARBlog", "ARPost", "ARCategory", "ARUser", "ARProfile", "ARComment"])
       expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARUser]
       expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARProfile]
     end
