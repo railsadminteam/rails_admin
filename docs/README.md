@@ -44,9 +44,6 @@
 * [[String]]
   * [[Password]]
 * [[Text]]
-  * [[CKEditor]]
-  * [[CodeMirror]]
-  * [[Wysihtml5]]
 * [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
 
 
