@@ -6,7 +6,7 @@
 
 ## Known fix for twitter-bootstrap-rails:
 
-Just copy the rails_admin/app/assets/javascripts/rails_admin/rails_admin.js.erb file to <yourapp>/app/assets/javascripts/rails_admin/rails_admin.js.erb.
+Just copy the `<path to gems>rails_admin/app/assets/javascripts/rails_admin/rails_admin.js` file to `<yourapp>/app/assets/javascripts/rails_admin/rails_admin.js`.
 Then replace "require_asset 'bootstrap'" with "require_asset 'twitter/bootstrap'".
 Now twitter-bootstrap-rails works with rails_admin.
 
