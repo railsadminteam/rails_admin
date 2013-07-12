@@ -134,3 +134,4 @@
 * [Enumerize: Enumerated attributes with I18n and ActiveRecord/Mongoid support](https://github.com/brainspec/enumerize)
 * [Application setting for rails_admin and mongoid](https://github.com/rs-pro/rails_admin_settings)
 * [Nice mass file uploads with jQuery File Upload for rails_admin and AR/mongoid](https://github.com/glebtv/rails-uploader)
+* [Charts using Highcharts](https://github.com/pgeraghty/rails_admin_charts)
