@@ -51,7 +51,7 @@ describe "RailsAdmin Basic Delete" do
   describe "delete of an object which has an associated item without id" do
     before(:each) do
       @player = FactoryGirl.create :player
-      Player.any_instance.stub(:draft).and_return(Draft.new)
+      allow_any_instance_of(Player).to receive(:draft).and_return(Draft.new)
       visit delete_path(:model_name => "player", :id => @player.id)
     end
 

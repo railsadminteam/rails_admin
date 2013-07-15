@@ -23,7 +23,7 @@ describe "RailsAdmin Basic Destroy" do
 
   describe "handle destroy errors" do
     before(:each) do
-      Player.any_instance.stub(:destroy_hook).and_return false
+      allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
       @player = FactoryGirl.create :player
       visit delete_path(:model_name => "player", :id => @player.id)
       click_button "Yes, I'm sure"
@@ -72,7 +72,7 @@ describe "RailsAdmin Basic Destroy" do
     end
 
     it "redirects back to the object on error" do
-      Player.any_instance.stub(:destroy_hook).and_return false
+      allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
       @player = FactoryGirl.create :player
       visit show_path(:model_name => 'player', :id => @player.id)
       click_link "Delete"
