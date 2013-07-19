@@ -5,8 +5,8 @@ You can configure more options of CKEditor "config.js" file following the [Api D
 ```ruby
 RailsAdmin.config do |config|
   config.model Team do
-    field :content do
-      ckeditor true
+    edit do
+      field :description, :ck_editor
     end
   end
 end
