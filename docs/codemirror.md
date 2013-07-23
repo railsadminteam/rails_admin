@@ -8,7 +8,12 @@ to your Gemfile.
 RailsAdmin.config do |config|
   config.model Team do
     edit do
+      # For RailsAdmin >= 0.5.0
       field :description, :code_mirror
+      # For RailsAdmin < 0.5.0
+      # field :description do
+      #   codemirror true
+      # end
     end
   end
 end
