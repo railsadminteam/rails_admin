@@ -6,7 +6,12 @@ Add `gem 'bootstrap-wysihtml5-rails'` to your Gemfile
 RailsAdmin.config do |config|
   config.model Team do
     edit do
+      # For RailsAdmin >= 0.5.0
       field :description, :wysihtml5
+      # For RailsAdmin < 0.5.0
+      # field :description do
+      #   bootstrap_wysihtml5 true
+      # end
     end
   end
 end
