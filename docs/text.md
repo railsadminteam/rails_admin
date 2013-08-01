@@ -26,9 +26,12 @@ You can configure more options of CKEditor "config.js" file following the [Api D
 RailsAdmin.config do |config|
   config.model Team do
     edit do
-      field :description, :text do
-        ckeditor true
-      end
+      # For RailsAdmin >= 0.5.0
+      field :description, :ck_editor
+      # For RailsAdmin < 0.5.0
+      # field :description do
+      #   ckeditor true
+      # end
     end
   end
 end
