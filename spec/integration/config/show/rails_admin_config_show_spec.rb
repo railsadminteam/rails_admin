@@ -51,6 +51,23 @@ describe "RailsAdmin Config DSL Show Section" do
     end
   end
 
+  describe "bindings" do
+    it "should be present" do
+      RailsAdmin.config Team do |c|
+        show do
+          field :name do
+            show do
+              bindings[:object] and bindings[:view] and bindings[:controller]
+            end
+          end
+        end
+      end
+
+    do_request
+
+    should have_selector("dt .name_field.string_type")    end
+  end
+
   describe "css hooks" do
     it "is present" do
       do_request
