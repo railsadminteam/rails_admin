@@ -28,4 +28,14 @@ It is also possible to inherit from any other action class.
 
  [[http://blog.endpoint.com/2012/03/railsadmin-custom-action-case-study.html]]
 
+## Double pjax
+
+If you're seeing a double call to your new action, try disabling pjax.
+
+```ruby
+register_instance_option :pjax? do
+  false
+end
+```
+
  
