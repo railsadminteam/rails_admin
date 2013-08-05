@@ -10,7 +10,7 @@
       - @abstract_models.each do |abstract_model|
         - if authorized? :index, abstract_model
           - index_path = index_path(:model_name => abstract_model.to_param)
-          - row_class = "#{cycle("odd", "even")}#{" link" if index_path}"
+          - row_class = "#{cycle("odd", "even")}#{" link" if index_path} #{abstract_model.param_key}_links"
           %tr{:class => row_class, :"data-link" => index_path}
             - last_used = @most_recent_changes[abstract_model.pretty_name]
             - active = last_used.try(:today?)

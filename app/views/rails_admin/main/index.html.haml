@@ -119,7 +119,7 @@
           %th.last.shrink
       %tbody
         - @objects.each do |object|
-          %tr
+          %tr{:class => "#{@abstract_model.param_key}_row"}
             %td
               = check_box_tag "bulk_ids[]", object.id, false
             - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {:set => (params[:set].to_i - 1)} : {}))
