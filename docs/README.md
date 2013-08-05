@@ -8,6 +8,10 @@
 4. [[Fields configuration|Railsadmin-DSL]]
 5. [[Translations]]
 
+### Integration Testing
+
+[[Rspec with Capybara examples]]
+
 ### Actions
 
 [[Base|Base Action]]
