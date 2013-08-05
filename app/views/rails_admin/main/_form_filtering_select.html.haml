@@ -25,7 +25,7 @@
     :remote_source => index_path(config.abstract_model.to_param, :source_object_id => form.object.id, :source_abstract_model => source_abstract_model.to_param, :associated_collection => field.name, :current_action => current_action, :compact => true)
   }
 
-- selected_id = (hdv = field.html_default_value).nil? ? selected_id : hdv
+- selected_id = (hdv = field.form_default_value).nil? ? selected_id : hdv
 = form.select field.method_name, collection, { :selected => selected_id, :include_blank => true }, field.html_attributes.reverse_merge({ :data => { :filteringselect => true, :options => js_data.to_json }, :placeholder => t('admin.misc.search') })
 
 - if authorized?(:new, config.abstract_model) && field.inline_add

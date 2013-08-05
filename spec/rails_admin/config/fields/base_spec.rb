@@ -78,7 +78,7 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe "#html_default_value" do
+  describe "#form_default_value" do
     it "is default_value for new records when value is nil" do
       RailsAdmin.config Team do
         list do
@@ -88,12 +88,12 @@ describe RailsAdmin::Config::Fields::Base do
         end
       end
       @team = Team.new
-      expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value).to eq('default value')
+      expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).form_default_value).to eq('default value')
       @team.name = 'set value'
-      expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value).to be_nil
+      expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).form_default_value).to be_nil
       @team = FactoryGirl.create :team
       @team.name = nil
-      expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).html_default_value).to be_nil
+      expect(RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}.with(:object => @team).form_default_value).to be_nil
     end
   end
 

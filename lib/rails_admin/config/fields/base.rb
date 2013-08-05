@@ -104,7 +104,7 @@ module RailsAdmin
         end
 
         register_instance_option :formatted_value do
-          value.to_s
+          value
         end
 
         # output for pretty printing (show, list)
@@ -286,10 +286,13 @@ module RailsAdmin
           name
         end
 
-        def html_default_value
+        def form_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
 
+        def form_value
+          self.form_default_value.nil? ? self.formatted_value : self.form_default_value
+        end
 
         def inspect
           "#<#{self.class.name}[#{name}] #{

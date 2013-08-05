@@ -24,13 +24,6 @@ module RailsAdmin
             "#{Rails.application.config.assets.prefix}/ckeditor/"
           end
 
-          register_instance_option :html_attributes do
-            {
-              :cols => '48',
-              :rows => '3'
-            }
-          end
-
           register_instance_option :partial do
             :form_ck_editor
           end

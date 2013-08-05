@@ -39,7 +39,7 @@
 
 %input{:name => form.dom_name(field), :type => "hidden", :value => ""}
 
-- selected_ids = (hdv = field.html_default_value).nil? ? selected_ids : hdv
+- selected_ids = (hdv = field.form_default_value).nil? ? selected_ids : hdv
 = form.select field.method_name, collection, { :selected => selected_ids, :object => form.object }, field.html_attributes.reverse_merge({:data => { :filteringmultiselect => true, :options => js_data.to_json }, :multiple => true})
 - if authorized?(:new, config.abstract_model) && field.inline_add
   - path_hash = { :model_name => config.abstract_model.to_param, :modal => true }

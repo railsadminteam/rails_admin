@@ -23,12 +23,6 @@ module RailsAdmin
             ActionController::Base.helpers.asset_path('bootstrap-wysihtml5.js')
           end
 
-          register_instance_option :html_attributes do
-            {
-              :cols => '48',
-              :rows => '3'
-            }
-          end
 
           register_instance_option :partial do
             :form_wysihtml5

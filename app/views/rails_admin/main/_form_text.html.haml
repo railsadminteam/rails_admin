@@ -1,1 +1,1 @@
-= form.text_area field.method_name, field.html_attributes.reverse_merge(:data => { :richtext => false, :options => {}.to_json }).reverse_merge((hdv = field.html_default_value).nil? ? { :value => field.formatted_value } : { :value => hdv })
+= form.text_area field.method_name, field.html_attributes.reverse_merge(:data => { :richtext => false, :options => {}.to_json }).reverse_merge({ :value => field.form_value })

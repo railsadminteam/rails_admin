@@ -34,13 +34,6 @@ module RailsAdmin
             '/assets/codemirror.css'
           end
 
-          register_instance_option :html_attributes do
-            {
-              :cols => '48',
-              :rows => '3'
-            }
-          end
-
           register_instance_option :partial do
             :form_code_mirror
           end
