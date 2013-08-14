@@ -23,7 +23,7 @@ module RailsAdmin
                 @object.send("#{name}=", value)
               end
               if object_params = params[@abstract_model.to_param]
-                @object.set_attributes(@object.attributes.merge(object_params), _attr_accessible_role)
+                @object.set_attributes(object_params, _attr_accessible_role)
               end
               respond_to do |format|
                 format.html { render @action.template_name }
