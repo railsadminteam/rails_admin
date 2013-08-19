@@ -176,7 +176,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         textarea = this
         $.getScript options['locations']['mode'], (script, textStatus, jqXHR) ->
           $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
-          CodeMirror.fromTextArea(textarea,{mode:options['options']['mode'],theme:options['options']['theme']})
+          CodeMirror.fromTextArea(textarea,options['options'])
           $(textarea).addClass('codemirrored')
 
     array = content.find('[data-richtext=codemirror]').not('.codemirrored')
