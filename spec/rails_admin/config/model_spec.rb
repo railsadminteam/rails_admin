@@ -46,7 +46,7 @@ describe RailsAdmin::Config::Model do
       expect(RailsAdmin.config(Comment).label_plural).to eq('Comments')
     end
 
-    context "when using i18n as label source" do
+    context "when using i18n as label source", skip_mongoid: true do
       around do |example|
         I18n.backend.class.send(:include, I18n::Backend::Pluralization)
         I18n.backend.store_translations :xx, {
