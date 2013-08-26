@@ -3,10 +3,10 @@ require 'spec_helper'
 describe "RailsAdmin::FormBuilder" do
   describe "#generate" do
     before do
-      helper.stub(:authorized?).and_return(true)
+      allow(helper).to receive(:authorized?).and_return(true)
       (@object = Player.new).save
       @builder = RailsAdmin::FormBuilder.new(:player, @object, helper, {}, nil)
-      @builder.stub(:field_for).and_return("field")
+      allow(@builder).to receive(:field_for).and_return("field")
     end
 
     it "does not add additional error div from default ActionView::Base.field_error_proc" do

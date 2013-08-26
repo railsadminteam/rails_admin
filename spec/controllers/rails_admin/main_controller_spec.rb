@@ -6,11 +6,11 @@ describe RailsAdmin::MainController do
 
   describe "#dashboard" do
     before do
-      controller.stub(:render).and_return(true) # no rendering
+      allow(controller).to receive(:render).and_return(true) # no rendering
     end
 
     it "shows statistics by default" do
-      RailsAdmin.config(Player).abstract_model.should_receive(:count).and_return(0)
+      expect(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
       controller.dashboard
     end
 
@@ -23,7 +23,7 @@ describe RailsAdmin::MainController do
         end
       end
 
-      RailsAdmin.config(Player).abstract_model.should_not_receive(:count)
+      expect(RailsAdmin.config(Player).abstract_model).not_to receive(:count)
       controller.dashboard
     end
   end
@@ -31,13 +31,31 @@ describe RailsAdmin::MainController do
   describe "#check_for_cancel" do
 
     it "redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present" do
-      controller.stub(:back_or_index) { raise StandardError.new('redirected back') }
+      allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
       expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete" } }.to raise_error('redirected back')
-      expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.to_not raise_error('redirected back')
+      expect { get :bulk_delete, { :model_name => "player", :bulk_action =>"bulk_delete", :bulk_ids => [] } }.not_to raise_error
     end
   end
 
   describe "#get_sort_hash" do
+    context "options sortable is a hash" do
+      before do
+        RailsAdmin.config('Player') do
+          configure :team do
+            sortable do
+              :'team.name'
+            end
+          end
+        end
+      end
+
+      it "returns the option with no changes" do
+        controller.params = { :sort => "team", :model_name =>"players" }
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>:"team.name", :sort_reverse=>true})
+      end
+    end
+
+
     it "works with belongs_to associations with label method virtual" do
       controller.params = { :sort => "parent_category", :model_name =>"categories" }
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>"categories.parent_category_id", :sort_reverse=>true})
@@ -273,6 +291,27 @@ describe RailsAdmin::MainController do
             }
           }
         })
+      end
+    end
+
+    describe "satisfy_strong_params!" do
+      before do
+        ActionController::Parameters.permit_all_parameters = false
+      end
+
+      after do
+        ActionController::Parameters.permit_all_parameters = true
+      end
+
+      it "enforces permit!" do
+        controller.params = HashWithIndifferentAccess.new({
+          "model_name"=>"player",
+          "player"=>{ "name" => "foo" }
+        })
+        controller.send(:get_model)
+        expect(controller.params['player'].permitted?).to be_false
+        controller.send(:satisfy_strong_params!)
+        expect(controller.params['player'].permitted?).to be_true
       end
     end
 

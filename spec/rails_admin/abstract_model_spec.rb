@@ -58,9 +58,9 @@ describe RailsAdmin::AbstractModel do
 
   context "with Kaminari" do
     before do
+      @paged = Player.page(1)
       Kaminari.config.page_method_name = :per_page_kaminari
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
-      @paged = Player.page(1)
     end
 
     after do
@@ -68,7 +68,7 @@ describe RailsAdmin::AbstractModel do
     end
 
     it "supports pagination when Kaminari's page_method_name is customized" do
-      Player.should_receive(:per_page_kaminari).once.and_return(@paged)
+      expect(Player).to receive(:per_page_kaminari).once.and_return(@paged)
       @abstract_model.all(:sort => PK_COLUMN, :page => 1, :per => 2)
     end
   end

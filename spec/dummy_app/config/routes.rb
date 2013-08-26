@@ -4,7 +4,7 @@ DummyApp::Application.routes.draw do
 
   devise_for :users
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-  root :to => "rails_admin::Main#dashboard"
+  root :to => "rails_admin/main#dashboard"
   # https://github.com/sferik/rails_admin/issues/362
-  match ':controller(/:action(/:id(.:format)))'
+  get ':controller(/:action(/:id(.:format)))'
 end

@@ -203,8 +203,8 @@ module RailsAdmin
         possible =
           included_models.map(&:to_s).presence || (
           @@system_models ||= # memoization for tests
-            ([Rails.application] + Rails::Application::Railties.engines).map do |app|
-              (app.paths['app/models'] + app.config.autoload_paths).map do |load_path|
+            ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
+              (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
                 Dir.glob(app.root.join(load_path)).map do |load_dir|
                   Dir.glob(load_dir + "/**/*.rb").map do |filename|
                     # app/models/module/class.rb => module/class.rb => module/class => Module::Class
@@ -315,7 +315,7 @@ module RailsAdmin
       # @see RailsAdmin::Config::Hideable
 
       def visible_models(bindings)
-        models.map{|m| m.with(bindings) }.select{|m| m.visible? && bindings[:controller].authorized?(:index, m.abstract_model) && !m.abstract_model.embedded?}.sort do |a, b|
+        models.map{|m| m.with(bindings) }.select{|m| m.visible? && bindings[:controller].authorized?(:index, m.abstract_model) && (!m.abstract_model.embedded? || m.abstract_model.cyclic?)}.sort do |a, b|
           (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
         end
       end

@@ -34,11 +34,11 @@ describe RailsAdmin do
     # Note: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it "loads stylesheets in header" do
-      should have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]')
+      should have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]', :visible => false)
     end
 
     it "loads javascript files in body" do
-      should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]')
+      should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]', :visible => false)
     end
   end
 
@@ -130,13 +130,15 @@ describe RailsAdmin do
     end
 
     it "does not show Gravatar when user doesn't have email method" do
-      User.any_instance.stub(:respond_to?).with(:email).and_return(false)
+      allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
+      allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(false)
       visit dashboard_path
       should_not have_selector("ul.nav.pull-right li img")
     end
 
     it "does not cause error when email is nil" do
-      User.any_instance.stub(:email).and_return(nil)
+      allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
+      allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(nil)
       visit dashboard_path
       should have_selector("body.rails_admin")
     end

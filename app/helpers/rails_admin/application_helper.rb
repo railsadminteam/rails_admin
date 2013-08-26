@@ -44,8 +44,8 @@ module RailsAdmin
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
 
       I18n.t("admin.actions.#{action.i18n_key}.#{label}",
-        :model_label => model_config.try(:label),
-        :model_label_plural => model_config.try(:label_plural),
+        :model_label => model_config && model_config.label,
+        :model_label_plural => model_config && model_config.label_plural,
         :object_label => model_config && object.try(model_config.object_label_method)
       )
     end
@@ -79,9 +79,10 @@ module RailsAdmin
         model_param = node.abstract_model.to_param
         url         = url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)
         level_class = " nav-level-#{level}" if level > 0
+        nav_icon = node.navigation_icon ? %{<i class="#{node.navigation_icon}"></i>}.html_safe : ''
 
         li = content_tag :li, "data-model"=>model_param do
-          link_to node.label_plural, url, :class => "pjax#{level_class}"
+          link_to nav_icon + node.label_plural, url, :class => "pjax#{level_class}"
         end
         li + navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level+1)
       end.join.html_safe

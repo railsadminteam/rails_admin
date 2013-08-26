@@ -27,7 +27,7 @@ describe "RailsAdmin Config DSL Show Section" do
     end
 
     it "contains the JSONified object" do
-      expect(body).to include(@player.to_json)
+      expect(body).to include(@player.reload.to_json)
     end
   end
 
@@ -49,6 +49,23 @@ describe "RailsAdmin Config DSL Show Section" do
       visit show_path(:model_name => "player", :id => @player.id)
       should have_css(".born_on_field")
     end
+  end
+
+  describe "bindings" do
+    it "should be present" do
+      RailsAdmin.config Team do |c|
+        show do
+          field :name do
+            show do
+              bindings[:object] and bindings[:view] and bindings[:controller]
+            end
+          end
+        end
+      end
+
+    do_request
+
+    should have_selector("dt .name_field.string_type")    end
   end
 
   describe "css hooks" do

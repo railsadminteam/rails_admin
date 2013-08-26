@@ -6,7 +6,7 @@ module RailsAdmin
   module Adapters
     module Mongoid
       STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
-      DISABLED_COLUMN_TYPES = ['Range']
+      DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary']
       ObjectId = (::Mongoid::VERSION >= '3' ? ::Moped::BSON::ObjectId : ::BSON::ObjectId)
 
       def new(params = {})
@@ -103,6 +103,10 @@ module RailsAdmin
 
       def embedded?
         @embedded ||= !!model.associations.values.find{|a| a.macro.to_sym == :embedded_in }
+      end
+
+      def cyclic?
+        @cyclic ||= !!model.cyclic?
       end
 
       def object_id_from_string(str)
@@ -274,6 +278,7 @@ module RailsAdmin
         {
           "Array"          => { :type => :serialized },
           "BigDecimal"     => { :type => :decimal },
+          "Mongoid::Boolean"        => { :type => :boolean },
           "Boolean"        => { :type => :boolean },
           "BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
           "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
@@ -327,7 +332,7 @@ module RailsAdmin
 
       def association_nested_attributes_options_lookup(association)
         nested = model.nested_attributes_options.try { |o| o[association.name.to_sym] }
-        if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym)
+        if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym) && !association.cyclic
           raise <<-MSG.gsub(/^\s+/, '')
           Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
           because embedded model doesn't have top-level access.
@@ -426,10 +431,14 @@ module RailsAdmin
       def sort_by(options, scope)
         return scope unless options[:sort]
 
-        field_name, collection_name = options[:sort].to_s.split('.').reverse
-        if collection_name && collection_name != table_name
-          # sorting by associated model column is not supported, so just ignore
-          return scope
+        case options[:sort]
+        when String
+          field_name, collection_name = options[:sort].split('.').reverse
+          if collection_name && collection_name != table_name
+            raise "sorting by associated model column is not supported in Non-Relational databases"
+          end
+        when Symbol
+          field_name = options[:sort].to_s
         end
         if options[:sort_reverse]
           scope.asc field_name

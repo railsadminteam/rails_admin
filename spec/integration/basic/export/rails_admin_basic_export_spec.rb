@@ -99,7 +99,7 @@ describe "RailsAdmin Export" do
   describe "POST /admin/players/export :format => :csv" do
     it "exports with modified schema" do
       page.driver.post(export_path(:model_name => 'player', :schema => @non_default_schema, :csv => true, :all => true, :csv_options => { :generator => { :col_sep => "," } }))
-      csv = CSV.parse find('body').text
+      csv = CSV.parse page.driver.response.body
       expect(csv[0]).not_to include('Created at')
     end
   end

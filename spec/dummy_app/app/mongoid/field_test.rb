@@ -1,6 +1,7 @@
 class FieldTest
   include Mongoid::Document
   include Mongoid::Paperclip
+  include ActiveModel::ForbiddenAttributesProtection
 
   field :name, :type => String
   field :title, :type => String
@@ -11,6 +12,7 @@ class FieldTest
   field :big_decimal_field, :type => BigDecimal
   field :boolean_field, :type => Boolean
   field :bson_object_id_field, :type => RailsAdmin::Adapters::Mongoid::ObjectId
+  field :bson_binary_field, :type => Moped::BSON::Binary
   field :date_field, :type => Date
   field :datetime_field, :type => DateTime
   field :time_with_zone_field, :type => ActiveSupport::TimeWithZone
@@ -29,11 +31,6 @@ class FieldTest
   field :restricted_field, :type => String
   field :protected_field, :type => String
   has_mongoid_attached_file :paperclip_asset, :styles => { :thumb => "100x100>" }
-
-  basic_accessible_fields = [:comment_attributes, :nested_field_tests_attributes, :embed_attributes, :embeds_attributes, :dragonfly_asset, :remove_dragonfly_asset, :retained_dragonfly_asset, :carrierwave_asset, :carrierwave_asset_cache, :remove_carrierwave_asset, :paperclip_asset, :delete_paperclip_asset, :comment_id, :name, :array_field, :big_decimal_field, :boolean_field, :bson_object_id_field, :date_field, :datetime_field, :time_with_zone_field, :default_field, :float_field, :hash_field, :integer_field, :object_field, :range_field, :string_field, :symbol_field, :text_field, :time_field, :created_at, :updated_at, :format]
-  attr_accessible *basic_accessible_fields
-  attr_accessible *(basic_accessible_fields + [:restricted_field, {:as => :custom_role}])
-  attr_accessible *(basic_accessible_fields + [:protected_field, {:as => :extra_safe_role}])
 
   has_many :nested_field_tests, :dependent => :destroy, :inverse_of => :field_test, :autosave => true
   accepts_nested_attributes_for :nested_field_tests, :allow_destroy => true

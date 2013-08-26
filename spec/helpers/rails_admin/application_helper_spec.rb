@@ -6,28 +6,28 @@ class TestAbility
   def initialize(user)
     can :access, :rails_admin
     can :edit, FieldTest
-    cannot :edit, FieldTest, string_field: 'dangerous'
+    cannot :edit, FieldTest, :string_field => 'dangerous'
   end
 end
 
 describe RailsAdmin::ApplicationHelper do
   describe '#authorized?' do
     before do
-      RailsAdmin.config.stub(_current_user: FactoryGirl.create(:user))
+      allow(RailsAdmin.config).to receive(:_current_user).and_return(FactoryGirl.create(:user))
       helper.instance_variable_set('@authorization_adapter', RailsAdmin::AUTHORIZATION_ADAPTERS[:cancan].new(RailsAdmin.config, TestAbility))
     end
 
     it 'doesn\'t test unpersisted objects' do
       am = RailsAdmin.config(FieldTest).abstract_model
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'dangerous'))).to be_false
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'not-dangerous'))).to be_true
-      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, string_field: 'dangerous'))).to be_true
+      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, :string_field => 'dangerous'))).to be_false
+      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, :string_field => 'not-dangerous'))).to be_true
+      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, :string_field => 'dangerous'))).to be_true
     end
   end
 
   describe 'with #authorized? stubbed' do
     before do
-      controller.stub(:authorized?).and_return(true)
+      allow(controller).to receive(:authorized?).and_return(true)
     end
 
     describe "#current_action?" do

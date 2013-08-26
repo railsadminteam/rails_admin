@@ -56,11 +56,11 @@ module RailsAdmin
       end
 
       register_instance_option :label do
-        (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:default => abstract_model.model.model_name.demodulize.underscore.humanize)
+        (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human
       end
 
       register_instance_option :label_plural do
-        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => 'other', :default => label.pluralize)
+        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(:count => Float::INFINITY, :default => label.pluralize)
       end
 
       def pluralize(count)
@@ -80,6 +80,10 @@ module RailsAdmin
 
       register_instance_option :navigation_label do
          @navigation_label ||= (parent_module = abstract_model.model.parent) != Object ? parent_module.to_s : nil
+      end
+
+      register_instance_option :navigation_icon do
+        nil
       end
 
       # Act as a proxy for the base section configuration that actually

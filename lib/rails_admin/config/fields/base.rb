@@ -104,7 +104,7 @@ module RailsAdmin
         end
 
         register_instance_option :formatted_value do
-          value.to_s
+          value
         end
 
         # output for pretty printing (show, list)
@@ -214,13 +214,7 @@ module RailsAdmin
         end
 
         def editable?
-          return false if @properties && @properties[:read_only]
-          active_model_attr_accessible = !bindings[:object].class.active_authorizer[bindings[:view].controller.send(:_attr_accessible_role)].deny?(self.method_name)
-          return true if active_model_attr_accessible
-          if RailsAdmin::Config.yell_for_non_accessible_fields
-            Rails.logger.debug "\n\n[RailsAdmin] Please add 'attr_accessible :#{self.method_name}' in your '#{bindings[:object].class}' model definition if you want to make it editable.\nYou can also explicitely mark this field as read-only: \n\nconfig.model #{bindings[:object].class} do\n  field :#{self.name} do\n    read_only true\n  end\nend\n\nAdd 'config.yell_for_non_accessible_fields = false' in your 'rails_admin.rb' initializer if you do not want to see these warnings\n\n"
-          end
-          false
+          !(@properties && @properties[:read_only])
         end
 
         # Is this an association
@@ -292,10 +286,13 @@ module RailsAdmin
           name
         end
 
-        def html_default_value
+        def form_default_value
           bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
         end
 
+        def form_value
+          self.form_default_value.nil? ? self.formatted_value : self.form_default_value
+        end
 
         def inspect
           "#<#{self.class.name}[#{name}] #{

@@ -41,7 +41,7 @@
               %td= label
           - else
             %td= "#{@abstract_model.config.label} ##{object.item}"
-        %td= object.message.in?('delete', 'new') ? t("admin.actions.#{object.message}.done").capitalize : object.message
+        %td= object.message.in?(['delete', 'new']) ? t("admin.actions.#{object.message}.done").capitalize : object.message
 
 - unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, :theme => 'twitter-bootstrap', :remote => true)

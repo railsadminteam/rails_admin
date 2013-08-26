@@ -18,12 +18,21 @@
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
 ## Announcements
+### Support for ActiveModel::MassAssignmentSecurity has been dropped
+
+RailsAdmin no longer controls field visibility regarding attr_accessible status, nor uses role on mass assignment.
+See discussion [here](https://github.com/sferik/rails_admin/issues/1443#issuecomment-17132073).
+
+### Richtext editor DSL(for CKEditor, CodeMirror, bootstrap-wysihtml5) has been changed
+
+They are configured by field type, not through Text field's extra options. For detail, see [CKEditor](https://github.com/sferik/rails_admin/wiki/CKEditor), [CodeMirror](https://github.com/sferik/rails_admin/wiki/CodeMirror), [Wysihtml5](https://github.com/sferik/rails_admin/wiki/Wysihtml5) in Wiki.
+
 ### [Action required] Security issue
 `RailsAdmin::Config::Fields::Types::Serialized#parse_input` was unsafe, because it was using the infamous `YAML#load`.
 
 To fix this, RailsAdmin now uses [safe_yaml](https://github.com/dtao/safe_yaml), with `enable_arbitrary_object_deserialization` and `suppress_warnings` on, for maximum compatibity with all existing apps.
 
-Incidentally, if you want to load safely YAML in your own app, you can use `YAML.load(something, safe: true)`, since RailsAdmin does not force safe load by default (you might be parsing objects in YAML coming from a safe source).
+Incidentally, if you want to safely load YAML in your own app, you can use `YAML.load(something, safe: true)`, since RailsAdmin does not force safe load by default (you might be parsing objects in YAML coming from a safe source).
 
 If you use Serialized with RailsAdmin with non-totally-trusted users, your server is at risk. Update your gem to `> 0.4.3` (should be released any time soon) or to at least this [patched commit](https://github.com/sferik/rails_admin/commit/3cc862d061f541200b93531122f7dac4b1c7a68b) if you use `master~HEAD`
 

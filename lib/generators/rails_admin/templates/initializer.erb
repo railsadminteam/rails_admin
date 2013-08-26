@@ -12,7 +12,7 @@ RailsAdmin.config do |config|
   # config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.titleize, controller.params['action'].titleize] }
 
   # RailsAdmin may need a way to know who the current user is]
-  config.current_user_method { current_<%= @model_name.underscore %> } # auto-generated
+  config.current_user_method { <%= @current_user_method %> } # auto-generated
 
   # If you want to track changes on your models:
   # config.audit_with :history, '<%= @model_name.classify %>'
@@ -57,7 +57,7 @@ RailsAdmin.config do |config|
 
   # config.model '<%= abstract_model.model.model_name %>' do
 
-  #   # You can copy this to a 'rails_admin do ... end' block inside your <%= abstract_model.model.model_name.underscore %>.rb model definition
+  #   # You can copy this to a 'rails_admin do ... end' block inside your <%= abstract_model.model.model_name.to_s.underscore %>.rb model definition
 
   #   # Found associations:
 

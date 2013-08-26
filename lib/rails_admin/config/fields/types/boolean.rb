@@ -1,5 +1,3 @@
-require 'builder'
-
 module RailsAdmin
   module Config
     module Fields
@@ -12,7 +10,7 @@ module RailsAdmin
             :check_box
           end
 
-          register_instance_option :formatted_value do
+          register_instance_option :pretty_value do
             case value
             when nil
               %{<span class="badge">-</span>}

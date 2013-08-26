@@ -5,8 +5,6 @@ class Division < ActiveRecord::Base
     self.primary_key = :custom_id
   end
 
-  attr_accessible :name, :league, :custom_league_id, :team_ids
-
   belongs_to :league, :foreign_key => 'custom_league_id'
   has_many :teams
 

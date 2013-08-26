@@ -18,8 +18,6 @@ module RailsAdmin
           register_instance_option :help do
             false
           end
-
-
         end
       end
     end

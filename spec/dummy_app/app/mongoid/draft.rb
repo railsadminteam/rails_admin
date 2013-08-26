@@ -11,8 +11,6 @@ class Draft
   field :college, :type => String
   field :notes, :type => String
 
-  attr_accessible :player_id, :team_id, :date, :round, :pick, :overall, :college, :notes
-
   validates_presence_of(:player_id, :only_integer => true)
   validates_presence_of(:team_id, :only_integer => true)
   validates_presence_of(:date)

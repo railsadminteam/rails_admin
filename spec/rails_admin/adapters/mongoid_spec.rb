@@ -143,7 +143,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "has correct parameter of polymorphic belongs_to association" do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       param = @comment.associations.find{|a| a[:name] == :commentable}
       expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :commentable,
@@ -151,7 +151,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         :type => :belongs_to,
         :foreign_key => :commentable_id,
         :foreign_type => :commentable_type,
-        :foreign_inverse_of => (Mongoid::VERSION >= '3.0.0' ? :commentable_field : nil),
+        :foreign_inverse_of => nil,
         :as => nil,
         :polymorphic => true,
         :inverse_of => nil,
@@ -163,7 +163,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it "has correct parameter of polymorphic inverse has_many association" do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       param = @blog.associations.find{|a| a[:name] == :mongo_comments}
       expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_comments,
@@ -183,7 +183,7 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
     end
 
     it 'has correct opposite model lookup for polymorphic associations' do
-      RailsAdmin::Config.stub!(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(["MongoBlog", "MongoPost", "MongoCategory", "MongoUser", "MongoProfile", "MongoComment"])
       expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoUser]
       expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoProfile]
     end
@@ -243,12 +243,24 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
         embedded_in :mongo_embeds_many
       end
 
+      class MongoRecursivelyEmbedsOne
+        include Mongoid::Document
+        recursively_embeds_one
+      end
+
+      class MongoRecursivelyEmbedsMany
+        include Mongoid::Document
+        recursively_embeds_many
+      end
+
       expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }).to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
       )
       expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }).to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
       )
+      expect(lambda{ RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations }).not_to raise_error
+      expect(lambda{ RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations }).not_to raise_error
     end
 
     it "works with inherited embeds_many model" do
@@ -276,10 +288,10 @@ describe "RailsAdmin::Adapters::Mongoid", :mongoid => true do
 
     it "maps Mongoid column types to RA types" do
       expect(@abstract_model.properties.select{|p| %w(_id array_field big_decimal_field
-        boolean_field bson_object_id_field date_field datetime_field time_with_zone_field default_field float_field
-        hash_field integer_field name object_field range_field short_text string_field subject
-        symbol_field text_field time_field title).
-        include? p[:name].to_s}).to match_array [
+        boolean_field bson_object_id_field bson_binary_field date_field datetime_field
+        time_with_zone_field default_field float_field hash_field integer_field name
+        object_field range_field short_text string_field subject symbol_field text_field
+        time_field title).include? p[:name].to_s}).to match_array [
         { :name => :_id,
           :pretty_name => "Id",
           :nullable? => true,

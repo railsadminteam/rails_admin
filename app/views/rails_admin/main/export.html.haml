@@ -4,7 +4,12 @@
 = form_tag export_path(params.merge(:all => true)), :method => 'post', :class => 'form-horizontal denser' do
 
   %input{:name => "send_data", :type => "hidden", :value => "true"}/
-  %fieldset
+  %fieldset{:id => 'fields_to_export'}
+    %div.control-group
+      %div.controls
+        %label.checkbox{:for => 'check_all'}
+          = t('admin.export.select_all_fields')
+          = check_box_tag 'all', 'all', true, { :id => 'check_all' }
     %legend
       %i.icon-chevron-down
       = t('admin.export.select')

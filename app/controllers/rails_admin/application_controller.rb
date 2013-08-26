@@ -8,7 +8,7 @@ module RailsAdmin
   end
 
   class ApplicationController < ::ApplicationController
-    newrelic_ignore if defined?(NewRelic)
+    newrelic_ignore if defined?(NewRelic) && respond_to?(:newrelic_ignore)
 
     before_filter :_authenticate!
     before_filter :_authorize!

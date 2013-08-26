@@ -5,10 +5,6 @@ class User < ActiveRecord::Base
 
   serialize :roles, Array
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :roles, :avatar
-
-
   # Add Paperclip support for avatars
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 

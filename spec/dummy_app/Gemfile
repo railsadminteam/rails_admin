@@ -1,7 +1,7 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2'
-gem 'strong_parameters', '>= 0.1.6'
+gem 'rails', '~> 4.0.0'
+gem 'rack-cache', :require => 'rack/cache'
 
 group :active_record do
   platforms :jruby do
@@ -20,8 +20,8 @@ group :active_record do
 
   platforms :ruby, :mswin, :mingw do
     case ENV['CI_DB_ADAPTER']
-    when 'mysql'
-      gem 'mysql', '~> 2.8.1'
+    when 'mysql2'
+      gem 'mysql2', '~> 0.3.11'
     when 'postgresql'
       gem 'pg', '>= 0.14'
     else
@@ -31,13 +31,14 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'mongoid', '>= 3.0'
+  gem 'mongoid', github: 'mongoid/mongoid'
   gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
-  gem 'carrierwave-mongoid', '>= 0.4', :require => 'carrierwave/mongoid'
+  gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+  gem 'carrierwave-mongoid', github: 'jnicklas/carrierwave-mongoid', :require => 'carrierwave/mongoid'
 end
 
 gem 'carrierwave', '>= 0.8'
-gem 'devise', '>= 2.2'
+gem 'devise', '~> 3.0.0.rc'
 gem 'dragonfly', '>= 0.9'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.6'
@@ -47,8 +48,8 @@ gem 'rails_admin', :path => '../../'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2'
-  gem 'coffee-rails', '~> 3.2'
+  gem 'sass-rails', '~> 4.0.0'
+  gem 'coffee-rails', '~> 4.0.0'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'

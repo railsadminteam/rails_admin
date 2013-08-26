@@ -3,9 +3,11 @@ class RailsAdmin::History < ActiveRecord::Base
 
   IGNORED_ATTRS = Set[:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
 
-  attr_accessible :message, :item, :table, :username
+  if defined?(ActiveModel::MassAssignmentSecurity) && ancestors.include?(ActiveModel::MassAssignmentSecurity)
+    attr_accessible :message, :item, :table, :username
+  end
 
-  default_scope order('id DESC')
+  default_scope { order('id DESC') }
 
   def self.latest
     self.limit(100)

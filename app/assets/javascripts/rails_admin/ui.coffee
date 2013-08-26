@@ -68,3 +68,10 @@ $(document).on 'rails_admin.dom_ready', ->
     $(this).siblings('.control-group').hide()
 
   $(".table").tooltip selector: "th[rel=tooltip]"
+
+$(document).on 'click', '#fields_to_export label input#check_all', () ->
+  elems = $('#fields_to_export label input')
+  if $('#fields_to_export label input#check_all').is ':checked'
+    $(elems).prop('checked', true)
+  else
+    $(elems).prop('checked',false)

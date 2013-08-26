@@ -45,6 +45,52 @@ describe RailsAdmin::Config::Model do
     it "is pretty" do
       expect(RailsAdmin.config(Comment).label_plural).to eq('Comments')
     end
+
+    context "when using i18n as label source", skip_mongoid: true do
+      around do |example|
+        I18n.backend.class.send(:include, I18n::Backend::Pluralization)
+        I18n.backend.store_translations :xx, {
+          activerecord: {
+            models: {
+              comment: {
+                one: 'one', two: 'two', other: 'other'
+              }
+            }
+          }
+        }
+        I18n.locale = :xx
+
+        example.run
+
+        I18n.locale = :en
+      end
+
+      context "and the locale uses a specific pluralization rule" do
+        before do
+          I18n.backend.store_translations :xx, {
+            i18n: {
+              plural: {
+                rule: ->(count) {
+                  if count == 0
+                    :zero
+                  elsif count == 1
+                    :one
+                  elsif count == 2
+                    :two
+                  else
+                    :other
+                  end
+                }
+              }
+            },
+          }
+        end
+
+        it "always uses :other as pluralization key" do
+          expect(RailsAdmin.config(Comment).label_plural).to eq('other')
+        end
+      end
+    end
   end
 
   describe "#weight" do
