@@ -22,7 +22,7 @@
             '<option value="false"' + (field_value == "false" ? 'selected="selected"' : '') + '>False</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
-            '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank"  >Is blank</option>' +
+            '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank"  >Has blank</option>' +
           '</select>';
           break;
         case 'date':
@@ -49,7 +49,7 @@
           var control = '<select style="display:' + (multiple_values ? 'none' : 'inline-block') + '" ' + (multiple_values ? '' : 'name="' + value_name + '"') + ' data-name="' + value_name + '" class="select-single input-small">' +
               '<option value="_discard">...</option>' +
               '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
-              '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">Is blank</option>' +
+              '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">Has blank</option>' +
               '<option disabled="disabled">---------</option>' +
               field_options +
             '</select>' +
@@ -72,6 +72,18 @@
           '</select>'
           var additional_control = '<input class="additional-fieldset input-small" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
+          case 'has_many_association':
+              var control = '<select class="switch-additionnal-fieldsets input-small" value="' + field_operator + '" name="' + operator_name + '">' +
+                  '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">Contains</option>' +
+                  '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">Is exactly</option>' +
+                  '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">Starts with</option>' +
+                  '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">Ends with</option>' +
+                  '<option disabled="disabled">---------</option>' +
+                  '<option ' + (field_operator == "_present"    ? 'selected="selected"' : '') + ' value="_present">Is present</option>' +
+                  '<option ' + (field_operator == "_blank"      ? 'selected="selected"' : '') + ' value="_blank">Is blank</option>' +
+                  '</select>'
+              var additional_control = '<input class="additional-fieldset input-small" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+              break;
         case 'integer':
         case 'decimal':
         case 'float':
