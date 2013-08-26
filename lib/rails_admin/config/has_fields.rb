@@ -19,8 +19,12 @@ module RailsAdmin
         # Register a custom field type if one is provided and it is different from
         # one found in default stack
         elsif !type.nil? && type != (field.nil? ? nil : field.type)
-          _fields.delete(field) unless field.nil?
-          properties = abstract_model.properties.find {|p| name == p[:name] }
+          if !field.nil?
+            properties = field.properties
+            _fields.delete(field)
+          else
+            properties = abstract_model.properties.find {|p| name == p[:name] }
+          end
           field = (_fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
 
