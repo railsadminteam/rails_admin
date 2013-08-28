@@ -15,8 +15,8 @@ module RailsAdmin
           self.object = object
         end
 
-        def set_attributes(attributes, role = nil)
-          object.assign_attributes(attributes, :as => role)
+        def set_attributes(attributes, options = {})
+          object.assign_attributes(attributes, options)
         end
 
         def save(options = { :validate => true })
