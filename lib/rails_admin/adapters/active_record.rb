@@ -124,7 +124,8 @@ module RailsAdmin
 
         fields.each do |field|
           field.searchable_columns.flatten.each do |column_infos|
-            statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
+            type = column_infos[:type] == :enum ? field.properties[:type] : column_infos[:type]
+            statement, value1, value2 = build_statement(column_infos[:column], type, query, field.search_operator)
             statements << statement if statement
             values << value1 unless value1.nil?
             values << value2 unless value2.nil?
