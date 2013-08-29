@@ -14,6 +14,7 @@ module RailsAdmin
 
     class_option :skip_devise, :type => :boolean, :aliases => '-D',
       :desc => "Skip installation and setup of devise gem."
+    class_option :skip_haml, :type => :boolean, :desc => "Skip installation of haml-rails gem and haml initializer"
     argument :_model_name, :type => :string, :required => false, :desc => "Devise user model name"
     argument :_namespace, :type => :string, :required => false, :desc => "RailsAdmin url namespace"
     desc "RailsAdmin installation generator"
@@ -68,6 +69,36 @@ module RailsAdmin
           end
         end
       end
+
+      if options[:skip_haml]
+        display "Skipping haml installation..."
+      else
+        display "Checking for a current installation of haml..."
+        unless defined?(Haml)
+          display "Adding haml-rails gem to your Gemfile:"
+          append_file "Gemfile", "\n", :force => true
+          gem 'haml-rails'
+          Bundler.with_clean_env do
+            run "bundle install"
+          end
+        else
+          display "Found it!"
+        end
+        haml_initializer = (File.open(Rails.root.join("config/initializers/haml.rb")) rescue nil).try :read
+        if haml_initializer
+          haml_ugly = haml_initializer.match(/Haml::Template\.options\[:ugly\]/) ||
+            (defined?(Haml::Template) && Haml::Template.options[:ugly]) ||
+            Haml::Options.defaults[:ugly]
+          unless haml_ugly
+            display "Enabling ugly mode in haml initializer..."
+            append_file "config/initializers/haml.rb", "Haml::Template.options[:ugly] = true\n"
+          end
+        else
+          display "Adding haml initializer to enable ugly mode..."
+          initializer "haml.rb", "Haml::Template.options[:ugly] = true\n"
+        end
+      end
+
       display "Now you'll need an initializer..."
       @current_user_method = model_name ? "current_#{model_name.to_s.underscore}" : ""
       @model_name = model_name || '<your user class>'
