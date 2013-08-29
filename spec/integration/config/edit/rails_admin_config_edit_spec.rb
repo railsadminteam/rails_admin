@@ -69,37 +69,6 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
-  describe "attr_accessible" do
-
-
-    it "is configurable in the controller scope" do
-
-      RailsAdmin.config do |config|
-        config.excluded_models = []
-        config.attr_accessible_role do
-          _current_user.attr_accessible_role # sould be :custom_role
-        end
-
-        config.model FieldTest do
-          edit do
-            field :string_field
-            field :restricted_field
-            field :protected_field
-          end
-        end
-      end
-
-      visit new_path(:model_name => "field_test")
-      fill_in "field_test[string_field]", :with => "No problem here"
-      fill_in "field_test[restricted_field]", :with => "I'm allowed to do that as :custom_role only"
-      should have_no_selector "field_test[protected_field]"
-      click_button "Save" # first(:button, "Save").click
-      @field_test = FieldTest.first
-      expect(@field_test.string_field).to eq("No problem here")
-      expect(@field_test.restricted_field).to eq("I'm allowed to do that as :custom_role only")
-    end
-  end
-
   describe "css hooks" do
     it "is present" do
       visit new_path(:model_name => "team")

@@ -75,22 +75,6 @@ describe RailsAdmin::Config do
     end
   end
 
-  describe ".attr_accessible_role" do
-    it "sould be :default by default" do
-      expect(RailsAdmin.config.attr_accessible_role.call).to eq(:default)
-    end
-
-    it "sould be configurable with user role for example" do
-      RailsAdmin.config do |config|
-        config.attr_accessible_role do
-          :admin
-        end
-      end
-
-      expect(RailsAdmin.config.attr_accessible_role.call).to eq(:admin)
-    end
-  end
-
   describe ".main_app_name" do
 
     it "as a default meaningful dynamic value" do

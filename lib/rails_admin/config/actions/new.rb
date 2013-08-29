@@ -23,7 +23,7 @@ module RailsAdmin
                 @object.send("#{name}=", value)
               end
               if object_params = params[@abstract_model.to_param]
-                @object.set_attributes(@object.attributes.merge(object_params), _attr_accessible_role)
+                @object.set_attributes(@object.attributes.merge(object_params))
               end
               respond_to do |format|
                 format.html { render @action.template_name }
@@ -37,7 +37,7 @@ module RailsAdmin
               satisfy_strong_params!
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
-              @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
+              @object.set_attributes(params[@abstract_model.param_key])
               @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
