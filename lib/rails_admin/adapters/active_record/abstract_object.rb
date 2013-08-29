@@ -15,7 +15,7 @@ module RailsAdmin
           self.object = object
         end
 
-        def set_attributes(attributes, role = nil)
+        def set_attributes(attributes)
           object.assign_attributes(attributes)
         end
 

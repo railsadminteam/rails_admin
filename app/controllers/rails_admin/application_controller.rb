@@ -14,7 +14,7 @@ module RailsAdmin
     before_filter :_authorize!
     before_filter :_audit!
 
-    helper_method :_current_user, :_attr_accessible_role, :_get_plugin_name
+    helper_method :_current_user, :_get_plugin_name
 
     attr_reader :object, :model_config, :abstract_model
 
@@ -56,10 +56,6 @@ module RailsAdmin
     end
 
     alias_method :user_for_paper_trail, :_current_user
-
-    def _attr_accessible_role
-      instance_eval &RailsAdmin::Config.attr_accessible_role
-    end
 
     rescue_from RailsAdmin::ObjectNotFound do
       flash[:error] = I18n.t('admin.flash.object_not_found', :model => @model_name, :id => params[:id])
