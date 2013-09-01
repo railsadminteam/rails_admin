@@ -1,4 +1,4 @@
-Synopsys:
+Synopsis:
 
 ```ruby
 class Player < ActiveRecord::Base
