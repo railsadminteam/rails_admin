@@ -42,6 +42,24 @@ end
 
 * The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate _enum methods.
 
+* The [bitmask_attributes gem](https://github.com/joelmoss/bitmask_attributes) can be configured this way:
+** Single-select
+```ruby
+    configure :my_mask, :enum do
+      enum_method do
+        name
+      end
+
+      enum do
+        Hash[abstract_model.model.bitmasks[name].map { |k,v| [k.humanize.titleize, v] }]
+      end
+
+      pretty_value do
+        bindings[:object].send(name).map{|v| v.to_s.humanize.titleize }.join(', ')
+      end
+    end
+```
+
 ### Multi-select ENUM example using User.roles as example...
 During Create/Update, display a Multi-Select Widget for :roles field.
 Stores/Retrieves the selected options as array into a single db string field as serialized array.
