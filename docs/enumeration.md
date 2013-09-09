@@ -43,7 +43,6 @@ end
 * The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate _enum methods.
 
 * The [bitmask_attributes gem](https://github.com/joelmoss/bitmask_attributes) can be configured this way:
-** Single-select
 ```ruby
     configure :my_mask, :enum do
       enum_method do
@@ -56,6 +55,15 @@ end
 
       pretty_value do
         bindings[:object].send(name).map{|v| v.to_s.humanize.titleize }.join(', ')
+      end
+
+      def form_value
+        bindings[:object].send(name)
+      end
+
+      # set this to true for multi-select
+      multiple do
+        false
       end
     end
 ```
