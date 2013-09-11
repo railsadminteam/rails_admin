@@ -292,7 +292,7 @@ module RailsAdmin
         @registry = {}
         @navigation_static_links = {}
         @navigation_static_label = nil
-        @navigation_static_links_options = ActiveSupport::HashWithIndifferentAccess.new
+        @navigation_static_links_options = ActiveSupport::HashWithIndifferentAccess.new({:target => '_blank'})
         RailsAdmin::Config::Actions.reset
       end
 
