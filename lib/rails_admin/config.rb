@@ -66,6 +66,7 @@ module RailsAdmin
 
       # accepts a hash of static links to be shown below the main navigation
       attr_accessor :navigation_static_links
+      attr_accessor :navigation_static_links_options
       attr_accessor :navigation_static_label
 
       # yell about fields that are not marked as accessible
@@ -291,6 +292,7 @@ module RailsAdmin
         @registry = {}
         @navigation_static_links = {}
         @navigation_static_label = nil
+        @navigation_static_links_options = ActiveSupport::HashWithIndifferentAccess.new
         RailsAdmin::Config::Actions.reset
       end
 
