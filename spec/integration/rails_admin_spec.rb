@@ -23,7 +23,7 @@ describe RailsAdmin do
       RailsAdmin.config.included_models = []
       visit dashboard_path
 
-      should have_content("Site administration")
+      should have_content("Site Administration")
       should have_content("Dashboard")
     end
   end

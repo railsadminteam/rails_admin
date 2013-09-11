@@ -43,7 +43,7 @@ en:
       message: "Message"
     actions:
       dashboard:
-        title: "Site administration"
+        title: "Site Administration"
         menu: "Dashboard"
         breadcrumb: "Dashboard"
       index:
