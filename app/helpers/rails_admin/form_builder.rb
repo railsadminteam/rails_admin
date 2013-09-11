@@ -83,7 +83,7 @@ module RailsAdmin
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
       object_label = (object.new_record? ? I18n.t('admin.form.new_model', :name => model_label) : object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}")
-      %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{object_label}"></span>}.html_safe
+      %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI::escapeHTML(object_label)}"></span>}.html_safe
     end
 
     def jquery_namespace field
