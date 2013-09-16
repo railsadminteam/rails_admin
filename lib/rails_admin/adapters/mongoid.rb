@@ -83,10 +83,11 @@ module RailsAdmin
       def properties
         fields = model.fields.reject{|name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
         fields.map do |name,field|
+          sym_name = field.options[:as] || field.name.to_sym
           {
-            :name => field.name.to_sym,
+            :name => sym_name,
             :length => nil,
-            :pretty_name => field.name.to_s.gsub('_', ' ').strip.capitalize,
+            :pretty_name => sym_name.to_s.gsub('_', ' ').strip.capitalize,
             :nullable? => true,
             :serial? => false,
           }.merge(type_lookup(name, field))
