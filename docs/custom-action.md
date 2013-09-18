@@ -1,7 +1,7 @@
 ## Create a reusable action `ActionName`
 
 ```bash
-rails plugin new rails_admin_<action_name> -m https://raw.github.com/gist/1621146/ --skip-gemfile --skip-bundle -T -O -S -J --full
+rails plugin new rails_admin_<action_name> -m https://gist.github.com/bbenezech/1621146/raw/5268788e715397bf476c83d76d335f152095e659/rails_admin_action_creator --skip-gemfile --skip-bundle -T -O -S -J --full
 ```
 
 ## Add it to your project
