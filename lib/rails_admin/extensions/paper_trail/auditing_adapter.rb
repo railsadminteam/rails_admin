@@ -67,7 +67,12 @@ module RailsAdmin
             sort = :created_at
             sort_reverse = "true"
           end
-          versions = ::Version.where :item_type => model.model.name
+          model_class = model.model.base_class
+          versions = ::Version.where :item_type => model_class.name
+          if model_class.base_class != model_class && model_class.columns_hash.include?(model_class.inheritance_column)
+            # Single Table Inheritance
+            versions = versions.where(model_class.inheritance_column => model_class.name)
+          end
           versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
