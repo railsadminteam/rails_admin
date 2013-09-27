@@ -12,6 +12,10 @@ module RailsAdmin
         options && options.has_key?(name)
       end
 
+      def options
+        self.class.instance_variable_get("@config_options")
+      end
+
       # Register an instance option for this object only
       def register_instance_option(option_name, &default)
         scope = class << self; self; end;
@@ -41,6 +45,10 @@ module RailsAdmin
             scope.send(:define_method, "#{option_name.chop!}?") do
               send(option_name)
             end
+          end
+
+          scope.send(:define_method, "#{option_name}_supplied?") do 
+            !instance_variable_get("@#{option_name}_registered").nil?
           end
 
           # Define getter/setter by the option name
