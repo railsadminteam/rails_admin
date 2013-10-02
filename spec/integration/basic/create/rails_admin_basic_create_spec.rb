@@ -64,7 +64,7 @@ describe "RailsAdmin Basic Create" do
 
       post new_path(:model_name => "player", :player => {:name => "Jackie Robinson", :number => 42, :position => 'Second baseman', :draft_id => @draft.id})
 
-      @player = RailsAdmin::AbstractModel.new("Player").all.last # first is created by FactoryGirl
+      @player = RailsAdmin::AbstractModel.new("Player").all.to_a.last # first is created by FactoryGirl
     end
 
     it "creates an object with correct associations" do
@@ -77,7 +77,7 @@ describe "RailsAdmin Basic Create" do
     before(:each) do
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
       post new_path(:model_name => "league", :league => {:name => "National League", :division_ids =>[@divisions[0].id]})
-      @league = RailsAdmin::AbstractModel.new("League").all.last
+      @league = RailsAdmin::AbstractModel.new("League").all.to_a.last
     end
 
     it "creates an object with correct associations" do
