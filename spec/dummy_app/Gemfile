@@ -40,6 +40,7 @@ end
 gem 'carrierwave', '>= 0.8'
 gem 'devise', '~> 3.0.0.rc'
 gem 'dragonfly', '>= 0.9'
+gem 'haml-rails'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.6'
 gem 'paperclip', '>= 3.4'

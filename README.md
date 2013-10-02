@@ -66,6 +66,7 @@ Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy
 In your `Gemfile`, add the following dependencies:
 
     gem 'fastercsv' # Only required on Ruby 1.8 and below
+    gem 'haml-rails'
     gem 'rails_admin'
 
 Run:

@@ -50,6 +50,7 @@ group :test do
   gem 'rack-cache', :require => 'rack/cache'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
+  gem 'haml-rails'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', '>= 3.4'
