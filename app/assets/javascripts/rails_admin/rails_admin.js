@@ -15,6 +15,7 @@
 //=  require 'rails_admin/jquery.pjax'
 //=  require 'jquery_nested_form'
 //=  require 'rails_admin/ra.nested-form-hooks'
+//=  require 'rails_admin/ra.i18n'
 //=  require 'bootstrap'
 //=  require 'rails_admin/ra.widgets'
 //=  require 'rails_admin/ui'
