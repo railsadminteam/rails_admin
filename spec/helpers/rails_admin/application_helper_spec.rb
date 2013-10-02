@@ -322,6 +322,30 @@ describe RailsAdmin::ApplicationHelper do
         end
         expect(helper.static_navigation).to match /Test Header/
       end
+
+      it "sets options to static links" do
+        RailsAdmin.config do |config|
+          config.navigation_static_links = {
+            'Test Link' => 'http://www.google.com'
+          }
+          config.navigation_static_links_options = {
+            :rel => 'nofollow'
+          }
+        end
+        expect(helper.static_navigation).to match(/rel="nofollow"/)
+      end
+
+      it "overrides default links options" do
+        RailsAdmin.config do |config|
+          config.navigation_static_links = {
+            'Test Link' => 'http://www.google.com'
+          }
+          config.navigation_static_links_options = {
+            :target => nil
+          }
+        end
+        expect(helper.static_navigation).not_to match(/target="_blank"/)
+      end
     end
 
     describe "#bulk_menu" do
