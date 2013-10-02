@@ -30,7 +30,7 @@ end
 group :mongoid do
   gem 'mongoid', github: 'mongoid/mongoid'
   gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
-  gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+  gem 'mongoid-grid_fs', github: 'mshibuya/mongoid-grid_fs', branch: 'fix-bson-namespacing'
   gem 'carrierwave-mongoid', github: 'jnicklas/carrierwave-mongoid', :require => 'carrierwave/mongoid'
 end
 

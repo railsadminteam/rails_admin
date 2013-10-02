@@ -153,7 +153,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect(RailsAdmin.config.audit_with.call).not_to raise_error
+        expect{ RailsAdmin.config.audit_with.call }.not_to raise_error
       end
     end
   end
