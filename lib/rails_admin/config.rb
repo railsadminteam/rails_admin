@@ -237,11 +237,9 @@ module RailsAdmin
           end
         end
 
-        if block
-          @registry[key] = RailsAdmin::Config::LazyModel.new(entity, &block)
-        else
-          @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
-        end
+        @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        @registry[key].add_deferred_block(&block) if block
+        @registry[key]
       end
 
       def default_hidden_fields=(fields)
