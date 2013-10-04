@@ -13,20 +13,19 @@ module RailsAdmin
       def method_missing(method, *args, &block)
         if !@model
           @model = RailsAdmin::Config::Model.new(@entity)
-          # Configuration defined in the model class should take precedence
-          # over configuration defined in initializers/rails_admin.rb.
+          # When evaluating multiple configuration blocks, the order of
+          # execution is important. As one would expect (in my opinion),
+          # options defined within a resource should take precedence over
+          # more general options defined in an initializer. This way,
+          # general settings for a number of resources could be specified
+          # in the initializer, while models could override these settings
+          # later, if required.
           #
-          # Due to the way the Rails initialization process works,
-          # configuration blocks found in app/models/MODEL.rb are added to
-          # @deferred_bocks before blocks defined in initializers/rails_admin.rb. 
-          # Executing blocks in the order of addition would yield unexpected
-          # behaviour, as blocks from the initializer would overwrite settings 
-          # defined in model classes.
-          #
-          # In order to maintain the expected precedence (model configuration over
-          # initializer configuration), all blocks are executed in reverse order.
-          #
-          # Given the following code containing initialization blocks:
+          # CAVEAT: It cannot be guaranteed that blocks defined in an initializer
+          # will be loaded (and adde to @deferred_blocks) first. For instance, if 
+          # the initializer references a model class before defining
+          # a RailsAdmin configuration block, the configuration from the
+          # resource will get added to @deferred_blocks first:
           #
           #     # app/models/some_model.rb
           #     class SomeModel
@@ -36,20 +35,15 @@ module RailsAdmin
           #     end
           #
           #     # config/initializers/rails_admin.rb
-          #     config.model SomeModel do
+          #     model = 'SomeModel'.constantize # blocks from SomeModel get loaded
+          #     model.config model do           # blocks from initializer gets loaded
           #       :
           #     end
           #
-          # The block from app/models/some_model.rb will be added to
-          # @deferred_blocks in front of the one from config/initializers/rails_admin.rb.
-          # In order to give precedence to the block from SomeModel,
-          # execute blocks in reverse order.
-          #
-          # CAVEAT: if, for some reason, a model would specify multiple configuration
-          # blocks, later blocks would be executed before earlier blocks - which could
-          # result in unexpected behaviour. However (and therefore), defining multiple
-          # configuration blocks within a single model class are discouraged.
-          @deferred_blocks.flatten.reverse.each do |block|
+          # Thus, sort all blocks to excute for a resource by Proc.source_path,
+          # to guarantee that blocks from 'config/initializers' evaluate before
+          # blocks defined within a model class.
+          @deferred_blocks.flatten.sort_by{|p| p.source_location.first =~ /config\/initializers/ ? 0 : 1}.each do |block|
             @model.instance_eval(&block)
           end
         end
