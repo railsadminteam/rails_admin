@@ -15,7 +15,7 @@ Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_ad
 Make sure your existing locales do not have admin: key under :en, :es, :de etc. You will get translation missing warning then
 
 Community sourced translations:
-* [[Arabic: tr|https://gist.github.com/yamanaltereh/6874413]]
+* [[Arabic: ar|https://gist.github.com/yamanaltereh/6874413]]
 * [[Catalan: ca|https://gist.github.com/1764593]]
 * [[Chinese (Traditional): zh-TW|https://gist.github.com/2001808]]
 * [[Chinese (Simplified): zh-CN|https://gist.github.com/3262623]]
