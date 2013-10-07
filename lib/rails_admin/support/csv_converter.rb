@@ -40,7 +40,6 @@ module RailsAdmin
 
     def to_csv(options)
       options ||= {}
-      return '' if @objects.blank?
 
       # encoding shenanigans first
       @encoding_from = UTF8_ENCODINGS.include?(@abstract_model.encoding) ? 'UTF-8' : @abstract_model.encoding
@@ -66,7 +65,8 @@ module RailsAdmin
             end
           end.flatten
         end
-        @objects.each do |o|
+        method = @objects.respond_to?(:find_each) ? :find_each : :each
+        @objects.send(method) do |o|
 
 
           csv << @fields.map do |field|
