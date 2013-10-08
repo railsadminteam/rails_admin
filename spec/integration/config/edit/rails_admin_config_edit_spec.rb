@@ -697,25 +697,27 @@ describe "RailsAdmin Config DSL Edit Section" do
       @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
       visit edit_path(:model_name => "field_test", :id => @record.id)
 
-      page.find('#field_test_comment_attributes_field .add_nested_fields').click()
+      find('#field_test_comment_attributes_field .add_nested_fields').click()
       fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
      
-      # Poltergeist fails to set the value of the invisible elements, have to do it with jquery
-      page.execute_script('$("#field_test_nested_field_tests_attributes_0_title").val("nested field test title 1 edited")')
-      page.execute_script('$("#field_test_nested_field_tests_attributes_1__destroy").val("true")')
-
-      #fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
-      #page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
+      fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited', :visible => false
+      find('#field_test_nested_field_tests_attributes_1__destroy', :visible => false).set('true')
 
       click_button "Save" # first(:button, "Save").click
 
       @record.reload
 
-      #sleep 1 # Without the sleep, the nested attributes are not loaded yet when the subsequent asserts are executed.
-
       expect(@record.comment.content.strip).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
+    end
+
+    it "is optional for has_one" do
+      @record = FactoryGirl.create :field_test
+      visit edit_path(:model_name => "field_test", :id => @record.id)
+      click_button "Save"
+      @record.reload
+      expect(@record.comment).to be_nil
     end
 
     it "sets bindings[:object] to nested object" do
