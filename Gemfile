@@ -40,18 +40,19 @@ end
 
 group :test do
   gem 'cancan', '>= 1.6'
-  gem 'capybara', '~> 1.1'
+  gem 'capybara', '~> 2.0'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls', :require => false
-  gem 'database_cleaner', '>= 0.8'
-  gem 'devise', '>= 2.1'
+  gem 'database_cleaner', '~> 1.0.0' # https://github.com/bmabey/database_cleaner/issues/224
+  gem 'devise', '~> 2.1'
   gem 'dragonfly', '>= 0.9'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', '>= 3.4'
-  gem 'rspec-rails', '>= 2.11'
+  gem 'poltergeist'
+  gem 'rspec-rails', '>= 2.14'
   gem 'simplecov', :require => false
   gem 'strong_parameters', '>= 0.1.6'
   gem 'timecop', '>= 0.5'

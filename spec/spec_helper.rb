@@ -49,6 +49,9 @@ Devise.setup do |config|
   config.stretches = 0
 end
 
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
@@ -62,6 +65,8 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :request
 
   config.before(:each) do
+    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
+
     DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
