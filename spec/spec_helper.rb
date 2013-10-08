@@ -50,6 +50,7 @@ Devise.setup do |config|
 end
 
 require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -64,7 +65,7 @@ RSpec.configure do |config|
   config.include Capybara::DSL, :type => :request
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :truncation if Capybara.current_driver == :poltergeist
+    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
@@ -89,6 +90,4 @@ RSpec.configure do |config|
       config.filter_run_excluding orm => true
     end
   end
-
-  Capybara.javascript_driver = :poltergeist
 end

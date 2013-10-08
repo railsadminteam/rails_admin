@@ -44,7 +44,7 @@ group :test do
   gem 'capybara', '~> 2.0'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls', :require => false
-  gem 'database_cleaner', '~> 1.0'
+  gem 'database_cleaner', '~> 1.0.0' # https://github.com/bmabey/database_cleaner/issues/224
   gem 'devise', '~> 3.0.0.rc'
   gem 'dragonfly', '>= 0.9'
   gem 'rack-cache', :require => 'rack/cache'
@@ -53,11 +53,10 @@ group :test do
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', '>= 3.4'
+  gem 'poltergeist'
   gem 'rspec-rails', '>= 2.14'
   gem 'simplecov', :require => false
   gem 'timecop', '>= 0.5'
-  gem 'faye-websocket', '0.4.4'
-  gem 'poltergeist', '~> 1.0.2'
 end
 
 gemspec
