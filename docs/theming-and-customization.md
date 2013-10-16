@@ -10,6 +10,8 @@ app/assets/javascripts/rails_admin/custom/ui.js
 ```
 Don't forget to re-compile your assets or simply delete the content of your `tmp/cache` folder.
 
+RailsAdmin uses jquery-pajax (https://github.com/defunkt/jquery-pjax) to load pages instead normal HTTP requests, use ` $(document).on('rails_admin.dom_ready', function(){ /* your js code here */ }); ` instead jQuery's default on ready function ` $(function(){ /* your js code here */ }); ` to check if page is loaded. It will work to both normal and pajax requests.
+
 ### To create a distributable theme
 
 ```
