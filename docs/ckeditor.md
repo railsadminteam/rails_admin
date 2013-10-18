@@ -17,6 +17,20 @@ RailsAdmin.config do |config|
 end
 ```
 
-Note that CKeditor won't appear in AJAX-loaded modals, due to CKeditor limitations with AJAX loading/unloading (basically it's crap).
+Although ckeditor is loaded in modal windows (e.g. twb), by default changes are not saved by submitting the modal. This is because the underlying textarea gets not updated before the ajax post request is issued. To prevent this you can use the following code:
+```coffeescript
+$(document).ready ->
+  $(document).on 'mousedown', '.save-action', (e) -> # triggers also when submitting form with enter
+    for instance of CKEDITOR.instances
+      editor = CKEDITOR.instances[instance]
+      if editor.checkDirty()
+        editor.updateElement();
+    return true;
+```
+Add this code to assets/rails_admin/custom/ckeditor_ajax.js.coffee and create a file assets/rails_admin/custom/ui.js that loads this coffee file into asset pipeline:
+```
+//= require rails_admin/custom/ckeditor_ajax
+```
+At this time this only worked in dev env for me. Because in production the ui.js is not compiled into rails_admin assets by default ... And adding it to precompile did not help either ...
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb]]
