@@ -8,8 +8,7 @@ improve this project.
 Here are some ways *you* can contribute:
 
 * by using alpha, beta, and prerelease versions
-* by reporting bugs
-* by suggesting new features
+* by triaging bug reports
 * by writing or editing documentation
 * by writing specifications
 * by writing code (**no patch is too small**: fix typos, add comments, clean up
@@ -17,20 +16,28 @@ Here are some ways *you* can contribute:
 * by refactoring code
 * by fixing [issues][]
 * by reviewing patches
+* by suggesting new features
 * [financially][pledgie]
 
 [issues]: https://github.com/sferik/rails_admin/issues
 [pledgie]: http://www.pledgie.com/campaigns/15917
 
 ## Submitting an Issue
-We use the [GitHub issue tracker][issues] to track bugs and features. Before
-submitting a bug report or feature request, check to make sure it hasn't
-already been submitted. When submitting a bug report, please include a [Gist][]
-that includes a stack trace and any details that may be necessary to reproduce
-the bug, including your gem version, Ruby version, and operating system.
-Ideally, a bug report should include a pull request with failing specs.
+
+We use the [GitHub issue tracker][issues] to track bugs and features,
+and the [mailing list][list] for user support. If you've got a "how do
+I do this?" or "this doesn't seem to work the way I expect" type of
+issue or just want some help please post a message to the [mailing
+list][list].  If you're confident that you've found a bug in
+rails_admin, please open an issue, but check to make sure it hasn't
+already been submitted. When submitting a bug report, please include a
+[Gist][] that includes a stack trace and any details that may be
+necessary to reproduce the bug, including your gem version, Ruby
+version, and operating system.  Ideally, a bug report should include a
+pull request with failing specs.
 
 [gist]: https://gist.github.com/
+[list]: http://groups.google.com/group/rails_admin
 
 ## Submitting a Pull Request
 1. [Fork the repository.][fork]
