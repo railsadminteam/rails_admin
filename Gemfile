@@ -45,6 +45,13 @@ group :development do
 end
 
 group :test do
+  # we were getting strange behavior only in jruby with rspec-core
+  # 2.14.6.  All of the tests would pass but the rake task would
+  # return 1 and cause the Travis build to fail, for example
+  # https://travis-ci.org/sferik/rails_admin/jobs/12765829.  On my
+  # machine it failed intermittently but on Travis it was consistent.
+  # 2.14.5 works consistently so for now we'll pin it to that version.
+  gem 'rspec-core', '2.14.5'
   gem 'cancan', '>= 1.6'
   gem 'capybara', '~> 2.0'
   gem 'carrierwave', '>= 0.8'
