@@ -28,12 +28,7 @@ group :active_record do
 end
 
 group :mongoid do
-  # https://github.com/ahoward/mongoid-grid_fs/pull/31
-  # mongoid commit cc7a0e709066aff444bc21cd9826e1568603934d broke
-  # mongoid-grid_fs so we're pinning it to the commit before that.  we
-  # can un-pin mongoid when mongoid-grid_fs becomes compatible with
-  # mongoid master.
-  gem 'mongoid', github: 'mongoid/mongoid', ref: '484aa0721e'
+  gem 'mongoid', github: 'mongoid/mongoid'
   gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
   gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
   gem 'carrierwave-mongoid', github: 'jnicklas/carrierwave-mongoid', :require => 'carrierwave/mongoid'
