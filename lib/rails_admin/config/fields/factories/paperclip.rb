@@ -3,7 +3,7 @@ require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/file_upload'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-  extensions = [:file_name, :content_type, :file_size, :updated_at]
+  extensions = [:file_name, :content_type, :file_size, :updated_at, :fingerprint]
   model = parent.abstract_model.model
   if (properties[:name].to_s =~ /^(.+)_file_name$/) and defined?(::Paperclip) and model.attachment_definitions and model.attachment_definitions.has_key?(attachment_name = $1.to_sym)
     field = RailsAdmin::Config::Fields::Types.load(:paperclip).new(parent, attachment_name, properties)
