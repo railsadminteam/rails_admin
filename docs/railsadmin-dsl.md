@@ -232,7 +232,8 @@ by including all database columns and associations to the `:default` group.
 The configuration accessors are `edit`, `create` and `update`. First one is a
 batch accessor which configures both create and update views. For consistency,
 these examples only include the batch accessor `edit`, but if you need differing
-create and update views just replace `edit` with `create` or `update`.
+create and update views just replace `edit` with `create` or `update`. If you need
+to configure the form when it is displayed as a modal, replace `edit` with `modal`.
 
 **Field groupings - visibility**
 
