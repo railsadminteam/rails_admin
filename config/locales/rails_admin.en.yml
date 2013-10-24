@@ -128,7 +128,7 @@ en:
       new_model: "%{name} (new)"
     help:
       team:
-        name: "Team Name Help Text"
+        name: "Team Name Help Text."
     export:
       confirmation: "Export to %{name}"
       select: "Select fields to export"
