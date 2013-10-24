@@ -560,7 +560,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "team")
       expect(find("#team_manager_field .help-block")).to have_content("Optional")
       expect(find("#team_division_id_field .help-block")).to have_content("Optional")
-      expect(find("#team_name_field .help-block")).to have_content("Required")
+      expect(find("#team_name_field .help-block")).to have_content(I18n.translate("admin.help.team.name"))
     end
 
     it "can hide the add button on an associated field" do

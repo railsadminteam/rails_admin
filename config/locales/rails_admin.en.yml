@@ -126,6 +126,9 @@ en:
       confirmation: "Yes, I'm sure"
       bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
       new_model: "%{name} (new)"
+    help:
+      team:
+        name: "Team Name Help Text"
     export:
       confirmation: "Export to %{name}"
       select: "Select fields to export"
