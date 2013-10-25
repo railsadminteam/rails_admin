@@ -204,7 +204,7 @@ module RailsAdmin
                   end
                 end
               end
-            end.flatten
+            end.flatten.reject {|m| m.starts_with?('Concerns::') }
           )
 
         excluded = (excluded_models.map(&:to_s) + ['RailsAdmin::History'])
