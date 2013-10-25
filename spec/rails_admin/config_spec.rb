@@ -267,6 +267,12 @@ describe RailsAdmin::Config do
       expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [FieldTest, Comment, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
     end
   end
+
+  describe '.models_pool' do
+    it "should not include classnames start with Concerns::" do
+      expect(RailsAdmin::Config.models_pool.select{|m| m.match(/^Concerns::/)}).to be_empty
+    end
+  end
 end
 
 module ExampleModule
