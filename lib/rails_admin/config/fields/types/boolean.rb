@@ -26,7 +26,7 @@ module RailsAdmin
           end
 
           # Accessor for field's help text displayed below input field.
-          register_instance_option :help do
+          def generic_help
             ""
           end
         end

@@ -118,6 +118,21 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
+  describe "#help" do
+    it "has a default and be user customizable via i18n" do
+      RailsAdmin.config Team do
+        list do
+          field :division
+          field :name
+        end
+      end
+      field_specific_i18n = RailsAdmin.config('Team').list.fields.find{|f| f.name == :name}
+      expect(field_specific_i18n.help).to eq(I18n.translate("admin.help.team.name")) # custom via locales yml
+      field_no_specific_i18n = RailsAdmin.config('Team').list.fields.find{|f| f.name == :division}
+      expect(field_no_specific_i18n.help).to eq(field_no_specific_i18n.generic_help) # rails_admin generic fallback
+    end
+  end
+
   describe "#css_class" do
     it "has a default and be user customizable" do
       RailsAdmin.config Team do
