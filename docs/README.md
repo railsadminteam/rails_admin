@@ -1,5 +1,9 @@
 [[Troubleshoot? check me first|Troubleshoot]]
 
+### Overview
+
+1. [[Introduction to RailsAdmin|http://www.slideshare.net/benoitbenezech/rails-admin-overbest-practices]]
+
 ### Configuration
 
 1. [[Base RailsAdmin configuration|Base configuration]]
