@@ -38,6 +38,15 @@ field :color, :enum do
 end
 ```
 
+```ruby
+field :color, :enum do 
+  enum do
+    # ActiveRecord querys
+    Team.last(2).map { |c| [ c.name, c.id ] }
+  end
+end
+```
+
 ### Integration with enum plugins
 
 * The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate _enum methods.
