@@ -44,6 +44,25 @@ field :color, :enum do
   end
 end
 ```
+
+*** If you are using enumerator in `has_one` association field, be aware to place `_id` after field's name in RailsAdmin initializer otherwise you can have problems.
+
+```ruby
+field :responsible_id, :enum do
+  enum do
+    # ...
+  end
+end
+
+# instead
+
+field :responsible, :enum do
+  enum do
+    # ...
+  end
+end
+```
+
 ### Integration with enum plugins
 
 * The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate _enum methods.
