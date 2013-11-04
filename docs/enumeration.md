@@ -33,10 +33,10 @@ field :color, :enum do
 
   # or doing it directly inline
   enum do
+    # simple array
     ['green', 'white']
   end
 
-  # or this last
   enum do
     # ActiveRecord querys
     Team.last(2).map { |c| [ c.name, c.id ] }
