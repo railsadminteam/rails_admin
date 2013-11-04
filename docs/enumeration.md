@@ -45,7 +45,7 @@ field :color, :enum do
 end
 ```
 
-*** If you are using enumerator in `has_one` association field, be aware to place `_id` after field's name in RailsAdmin initializer otherwise you can have problems.
+*** If you are using enumerator in `has_one` association field, be aware to place `_id` after field's name in RailsAdmin initializer, otherwise you can have problems.
 
 ```ruby
 field :responsible_id, :enum do
