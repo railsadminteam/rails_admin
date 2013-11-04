@@ -39,7 +39,8 @@ field :color, :enum do
 
   enum do
     # ActiveRecord querys
-    Team.last(2).map { |c| [ c.name, c.id ] }
+    except = bindings[:view]._current_user.team_id
+    Team.where('id != ?', except).map { |c| [ c.name, c.id ] }
   end
 end
 ```
