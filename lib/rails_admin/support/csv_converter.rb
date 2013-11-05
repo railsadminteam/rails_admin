@@ -38,8 +38,7 @@ module RailsAdmin
       end
     end
 
-    def to_csv(options)
-      options ||= {}
+    def to_csv(options = {})
       return '' if @objects.blank?
 
       # encoding shenanigans first
@@ -60,25 +59,23 @@ module RailsAdmin
           csv << @fields.map do |field|
             output(::I18n.t('admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
           end +
-          @associations.map do |association_name, option_hash|
+          @associations.flat_map do |association_name, option_hash|
             option_hash[:fields].map do |field|
               output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
             end
-          end.flatten
+          end
         end
+
         @objects.each do |o|
-
-
           csv << @fields.map do |field|
             output(field.with(:object => o).export_value)
           end +
-          @associations.map do |association_name, option_hash|
-
+          @associations.flat_map do |association_name, option_hash|
             associated_objects = [o.send(association_name)].flatten.compact
             option_hash[:fields].map do |field|
               output(associated_objects.map{ |ao| field.with(:object => ao).export_value.presence || @empty }.join(','))
             end
-          end.flatten
+          end
         end
       end
 
