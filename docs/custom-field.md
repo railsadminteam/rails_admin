@@ -1,7 +1,7 @@
 ## Create a reusable field `FieldName`
 
 ```
-rails plugin new rails_admin_<field_name> -m https://gist.github.com/bbenezech/1626605 --skip-gemfile --skip-bundle -T -O -S -J --full
+rails plugin new rails_admin_<field_name> -m https://gist.github.com/bbenezech/1626605/raw/8f67e4eb05418a92a20649fc551fcd1bacb481d1/rails_admin_field_creator --skip-gemfile --skip-bundle -T -O -S -J --full
 ```
 
 ## Add it to your project
