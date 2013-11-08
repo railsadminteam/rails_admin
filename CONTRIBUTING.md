@@ -22,14 +22,17 @@ Here are some ways *you* can contribute:
 [issues]: https://github.com/sferik/rails_admin/issues
 [pledgie]: http://www.pledgie.com/campaigns/15917
 
+## Getting Help
+
+We use a [mailing list][list] for user support. If you've got a "how do
+I do this?" or "this doesn't seem to work the way I expect" type of
+issue or just want some help, please post a message to the [mailing
+list][list].
+
 ## Submitting an Issue
 
-We use the [GitHub issue tracker][issues] to track bugs and features,
-and the [mailing list][list] for user support. If you've got a "how do
-I do this?" or "this doesn't seem to work the way I expect" type of
-issue or just want some help please post a message to the [mailing
-list][list].  If you're confident that you've found a bug in
-rails_admin, please open an issue, but check to make sure it hasn't
+If you're confident that you've found a bug in
+rails_admin, please [open an issue][issues], but check to make sure it hasn't
 already been submitted. When submitting a bug report, please include a
 [Gist][] that includes a stack trace and any details that may be
 necessary to reproduce the bug, including your gem version, Ruby
