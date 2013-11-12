@@ -22,8 +22,6 @@ module RailsAdmin
       def get(id)
         if object = model.where(model.primary_key => id).first
           AbstractObject.new object
-        else
-          nil
         end
       end
 
@@ -187,8 +185,6 @@ module RailsAdmin
             val, range_begin, range_end = *value.map do |v|
               if (v.to_i.to_s == v || v.to_f.to_s == v)
                 type == :integer ? v.to_i : v.to_f
-              else
-                nil
               end
             end
             case operator
@@ -206,8 +202,6 @@ module RailsAdmin
           else
             if value.to_i.to_s == value || value.to_f.to_s == value
               type == :integer ? ["(#{column} = ?)", value.to_i] : ["(#{column} = ?)", value.to_f]
-            else
-              nil
             end
           end
         when :belongs_to_association

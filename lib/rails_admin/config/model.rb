@@ -79,7 +79,9 @@ module RailsAdmin
       end
 
       register_instance_option :navigation_label do
-         @navigation_label ||= (parent_module = abstract_model.model.parent) != Object ? parent_module.to_s : nil
+        @navigation_label ||= if (parent_module = abstract_model.model.parent) != Object
+          parent_module.to_s
+        end
       end
 
       register_instance_option :navigation_icon do

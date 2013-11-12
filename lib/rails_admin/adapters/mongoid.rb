@@ -227,8 +227,6 @@ module RailsAdmin
           else
             if (value.to_i.to_s == value || value.to_f.to_s == value)
               type == :integer ? { column => value.to_i } : { column => value.to_f }
-            else
-              nil
             end
           end
         when :string, :text

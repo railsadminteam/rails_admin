@@ -23,7 +23,7 @@
       - columns.each do |column|
         - property_name = column[:property_name]
         - selected = (sort == property_name)
-        - sort_direction = selected ? (sort_reverse ? "headerSortUp" : "headerSortDown") : nil
+        - sort_direction = (sort_reverse ? "headerSortUp" : "headerSortDown" if selected)
         - sort_location = send(path_method, params.except("sort_reverse").merge(:model_name => @abstract_model.to_param, :sort => property_name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {}))
         %th{:class => "header pjax #{column[:css_class]} #{sort_direction if selected}", :'data-href' => sort_location}= column[:link_text]
   %tbody
