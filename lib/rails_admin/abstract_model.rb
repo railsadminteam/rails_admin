@@ -15,7 +15,7 @@ module RailsAdmin
 
       alias_method :old_new, :new
       def new(m)
-        m = m.is_a?(Class) ? m : m.constantize
+        m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
       rescue LoadError, NameError
         puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$!})" unless Rails.env.test?
@@ -43,16 +43,11 @@ module RailsAdmin
 
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
-      if model.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !model.abstract_class?
-        # ActiveRecord
-        @adapter = :active_record
-        require 'rails_admin/adapters/active_record'
-        extend Adapters::ActiveRecord
-      elsif model.ancestors.map(&:to_s).include?('Mongoid::Document')
-        # Mongoid
-        @adapter = :mongoid
-        require 'rails_admin/adapters/mongoid'
-        extend Adapters::Mongoid
+      ancestors = model.ancestors.map(&:to_s)
+      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
+        initialize_active_record
+      elsif ancestors.include?('Mongoid::Document')
+        initialize_mongoid
       end
     end
 
@@ -106,8 +101,8 @@ module RailsAdmin
       date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
       case operator
       when 'between'
-        start_date = value[1].present? ? (Date.strptime(value[1], date_format) rescue false) : false
-        end_date   = value[2].present? ? (Date.strptime(value[2], date_format) rescue false) : false
+        start_date = value[1].present? && Date.strptime(value[1], date_format)
+        end_date   = value[2].present? && Date.strptime(value[2], date_format)
       when 'today'
         start_date = end_date = Date.today
       when 'yesterday'
@@ -123,6 +118,18 @@ module RailsAdmin
         end_date   = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
       end
       [start_date, end_date]
+    end
+
+    def initialize_active_record
+      @adapter = :active_record
+      require 'rails_admin/adapters/active_record'
+      extend Adapters::ActiveRecord
+    end
+
+    def initialize_mongoid
+      @adapter = :mongoid
+      require 'rails_admin/adapters/mongoid'
+      extend Adapters::Mongoid
     end
   end
 end
