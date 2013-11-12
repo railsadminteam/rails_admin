@@ -18,12 +18,12 @@ module RailsAdmin
         begin
           AbstractObject.new(model.find(id))
         rescue => e
-          if ['BSON::InvalidObjectId', 'Mongoid::Errors::DocumentNotFound',
-              'Mongoid::Errors::InvalidFind', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
-            nil
-          else
-            raise e
-          end
+          raise e if %w[
+            BSON::InvalidObjectId
+            Mongoid::Errors::DocumentNotFound
+            Mongoid::Errors::InvalidFind
+            Moped::Errors::InvalidObjectId
+          ].exclude?(e.class.to_s)
         end
       end
 
@@ -208,19 +208,11 @@ module RailsAdmin
             val, range_begin, range_end = *value.map do |v|
               if (v.to_i.to_s == v || v.to_f.to_s == v)
                 type == :integer ? v.to_i : v.to_f
-              else
-                nil
               end
             end
             case operator
             when 'between'
-              if range_begin && range_end
-                { column => {'$gte' => range_begin, '$lte' => range_end} }
-              elsif range_begin
-                { column => {'$gte' => range_begin} }
-              elsif range_end
-                { column => {'$lte' => range_end} }
-              end
+              datetime_filter(column, range_begin, range_end)
             else
               { column => val } if val
             end
@@ -245,25 +237,9 @@ module RailsAdmin
           end
           { column => value }
         when :date
-          start_date, end_date = get_filtering_duration(operator, value)
-
-          if start_date && end_date
-            { column => { '$gte' => start_date, '$lte' => end_date } }
-          elsif start_date
-            { column => { '$gte' => start_date } }
-          elsif end_date
-            { column => { '$lte' => end_date } }
-          end
+          datetime_filter(column, *get_filtering_duration(operator, value))
         when :datetime, :timestamp
-          start_date, end_date = get_filtering_duration(operator, value)
-
-          if start_date && end_date
-            { column => { '$gte' => start_date.to_time.beginning_of_day, '$lte' => end_date.to_time.end_of_day } }
-          elsif start_date
-            { column => { '$gte' => start_date.to_time.beginning_of_day } }
-          elsif end_date
-            { column => { '$lte' => end_date.to_time.end_of_day } }
-          end
+          datetime_filter(column, *get_filtering_duration(operator, value), true)
         when :enum
           return if value.blank?
           { column => { "$in" => Array.wrap(value) } }
@@ -272,6 +248,22 @@ module RailsAdmin
           { column => object_id } if object_id
         end
       end
+
+      def datetime_filter(column, start_date, end_date, datetime = false)
+        if datetime
+          start_date = start_date.to_time.beginning_of_day if start_date
+          end_date = end_date.to_time.end_of_day if end_date
+        end
+
+        if start_date && end_date
+          { column => { '$gte' => start_date, '$lte' => end_date } }
+        elsif start_date
+          { column => { '$gte' => start_date } }
+        elsif end_date
+          { column => { '$lte' => end_date } }
+        end
+      end
+      protected :datetime_filter
 
       def type_lookup(name, field)
         {
@@ -385,11 +377,8 @@ module RailsAdmin
             validator.kind == :length &&
             validator.options[:maximum]
         end.min{|a, b| a.options[:maximum] <=> b.options[:maximum] }
-        if shortest
-          shortest.options[:maximum]
-        else
-          false
-        end
+
+        shortest && shortest.options[:maximum]
       end
 
       def parse_collection_name(column)

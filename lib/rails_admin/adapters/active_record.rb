@@ -177,8 +177,8 @@ module RailsAdmin
         # now we go type specific
         case type
         when :boolean
-          return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
-          return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
+          return ["(#{column} IS NULL OR #{column} = ?)", false] if %w[false f 0].include?(value)
+          return ["(#{column} = ?)", true] if %w[true t 1].include?(value)
         when :integer, :decimal, :float
           case value
           when Array then
@@ -189,13 +189,7 @@ module RailsAdmin
             end
             case operator
             when 'between'
-              if range_begin && range_end
-                ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
-              elsif range_begin
-                ["(#{column} >= ?)", range_begin]
-              elsif range_end
-                ["(#{column} <= ?)", range_end]
-              end
+              datetime_filter(column, range_begin, range_end)
             else
               ["(#{column} = ?)", val] if val
             end
@@ -223,30 +217,30 @@ module RailsAdmin
           end
           ["(LOWER(#{column}) #{like_operator} ?)", value]
         when :date
-          start_date, end_date = get_filtering_duration(operator, value)
-
-          if start_date && end_date
-            ["(#{column} BETWEEN ? AND ?)", start_date, end_date]
-          elsif start_date
-            ["(#{column} >= ?)", start_date]
-          elsif end_date
-            ["(#{column} <= ?)", end_date]
-          end
+          datetime_filter(column, *get_filtering_duration(operator, value))
         when :datetime, :timestamp
-          start_date, end_date = get_filtering_duration(operator, value)
-
-          if start_date && end_date
-            ["(#{column} BETWEEN ? AND ?)", start_date.to_time.beginning_of_day, end_date.to_time.end_of_day]
-          elsif start_date
-            ["(#{column} >= ?)", start_date.to_time.beginning_of_day]
-          elsif end_date
-            ["(#{column} <= ?)", end_date.to_time.end_of_day]
-          end
+          datetime_filter(column, *get_filtering_duration(operator, value), true)
         when :enum
           return if value.blank?
           ["(#{column} IN (?))", Array.wrap(value)]
         end
       end
+
+      def datetime_filter(column, start_date, end_date, datetime = false)
+        if datetime
+          start_date = start_date.to_time.beginning_of_day if start_date
+          end_date = end_date.to_time.end_of_day if end_date
+        end
+
+        if start_date && end_date
+          ["(#{column} BETWEEN ? AND ?)", start_date, end_date]
+        elsif start_date
+          ["(#{column} >= ?)", start_date]
+        elsif end_date
+          ["(#{column} <= ?)", end_date]
+        end
+      end
+      protected :datetime_filter
 
       def type_lookup(property)
         if model.serialized_attributes[property.name.to_s]
