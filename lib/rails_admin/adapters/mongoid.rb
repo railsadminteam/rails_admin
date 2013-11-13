@@ -63,21 +63,7 @@ module RailsAdmin
 
       def associations
         model.associations.values.map do |association|
-          {
-            :name => association.name.to_sym,
-            :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
-            :type => association_type_lookup(association.macro),
-            :model_proc => Proc.new { association_model_proc_lookup(association) },
-            :primary_key_proc => Proc.new { association_primary_key_lookup(association) },
-            :foreign_key => association_foreign_key_lookup(association),
-            :foreign_type => association_foreign_type_lookup(association),
-            :foreign_inverse_of => association_foreign_inverse_of_lookup(association),
-            :as => association_as_lookup(association),
-            :polymorphic => association_polymorphic_lookup(association),
-            :inverse_of => association_inverse_of_lookup(association),
-            :read_only => nil,
-            :nested_form => association_nested_attributes_options_lookup(association)
-          }
+          Association.new(association, model).to_options_hash
         end
       end
 
@@ -301,75 +287,6 @@ module RailsAdmin
         }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
       end
 
-      def association_model_proc_lookup(association)
-        if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
-          RailsAdmin::AbstractModel.polymorphic_parents(:mongoid, self.model.model_name, association.name) || []
-        else
-          association.klass
-        end
-      end
-
-      def association_foreign_type_lookup(association)
-        if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
-          association.inverse_type.try(:to_sym) || :"#{association.name}_type"
-        end
-      end
-
-      def association_foreign_inverse_of_lookup(association)
-        if association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro) && association.respond_to?(:inverse_of_field)
-          association.inverse_of_field.try(:to_sym)
-        end
-      end
-
-      def association_nested_attributes_options_lookup(association)
-        nested = model.nested_attributes_options.try { |o| o[association.name.to_sym] }
-        if !nested && [:embeds_one, :embeds_many].include?(association.macro.to_sym) && !association.cyclic
-          raise <<-MSG.gsub(/^\s+/, '')
-          Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
-          because embedded model doesn't have top-level access.
-          Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
-          MSG
-        end
-        nested
-      end
-
-      def association_as_lookup(association)
-        association.as.try :to_sym
-      end
-
-      def association_polymorphic_lookup(association)
-        !!association.polymorphic? && [:referenced_in, :belongs_to].include?(association.macro)
-      end
-
-      def association_primary_key_lookup(association)
-        :_id # todo
-      end
-
-      def association_inverse_of_lookup(association)
-        association.inverse_of.try :to_sym
-      end
-
-      def association_foreign_key_lookup(association)
-        unless [:embeds_one, :embeds_many].include?(association.macro.to_sym)
-          association.foreign_key.to_sym rescue nil
-        end
-      end
-
-      def association_type_lookup(macro)
-        case macro.to_sym
-        when :belongs_to, :referenced_in, :embedded_in
-          :belongs_to
-        when :has_one, :references_one, :embeds_one
-          :has_one
-        when :has_many, :references_many, :embeds_many
-          :has_many
-        when :has_and_belongs_to_many, :references_and_referenced_in_many
-          :has_and_belongs_to_many
-        else
-          raise "Unknown association type: #{macro.inspect}"
-        end
-      end
-
       def length_validation_lookup(name)
         shortest = model.validators.select do |validator|
           validator.respond_to?(:attributes) &&
@@ -433,6 +350,119 @@ module RailsAdmin
         else
           scope.desc field_name
         end
+      end
+
+      private
+      class Association
+        attr_reader :association, :model
+        def initialize(association, model)
+          @association = association
+          @model = model
+          @options = association.options
+        end
+
+        def to_options_hash
+          {
+            :name => name.to_sym,
+            :pretty_name => display_name,
+            :type => type_lookup,
+            :model_proc => Proc.new { model_proc_lookup },
+            :primary_key_proc => Proc.new { primary_key_lookup },
+            :foreign_key => foreign_key_lookup,
+            :foreign_type => foreign_type_lookup,
+            :foreign_inverse_of => foreign_inverse_of_lookup,
+            :as => as_lookup,
+            :polymorphic => polymorphic_lookup,
+            :inverse_of => inverse_of_lookup,
+            :read_only => nil,
+            :nested_form => nested_attributes_options_lookup
+          }
+        end
+
+        private
+
+        def display_name
+          name.to_s.tr('_', ' ').capitalize
+        end
+
+        def model_proc_lookup
+          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+            polymorphic_parents(:mongoid, model_name, name) || []
+          else
+            klass
+          end
+        end
+
+        def foreign_type_lookup
+          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+            inverse_type.try(:to_sym) || :"#{name}_type"
+          end
+        end
+
+        def foreign_inverse_of_lookup
+          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+            inverse_of_field.try(:to_sym)
+          end
+        end
+
+        def nested_attributes_options_lookup
+          nested = model_nested_attributes_options.try { |o| o[name.to_sym] }
+          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !association.cyclic
+            raise <<-MSG.gsub(/^\s+/, '')
+            Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
+            because embedded model doesn't have top-level access.
+            Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
+            MSG
+          end
+          nested
+        end
+
+        def as_lookup
+          as.try :to_sym
+        end
+
+        def polymorphic_lookup
+          !!polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+        end
+
+        def primary_key_lookup
+          :_id # todo
+        end
+
+        def inverse_of_field
+          association.respond_to?(:inverse_of_field) && association.inverse_of_field
+        end
+
+        def inverse_of_lookup
+          inverse_of.try :to_sym
+        end
+
+        def foreign_key_lookup
+          if [:embeds_one, :embeds_many].exclude?(macro.to_sym)
+            foreign_key.to_sym rescue nil
+          end
+        end
+
+        def type_lookup
+          case macro.to_sym
+          when :belongs_to, :referenced_in, :embedded_in
+            :belongs_to
+          when :has_one, :references_one, :embeds_one
+            :has_one
+          when :has_many, :references_many, :embeds_many
+            :has_many
+          when :has_and_belongs_to_many, :references_and_referenced_in_many
+            :has_and_belongs_to_many
+          else
+            raise "Unknown association type: #{macro.inspect}"
+          end
+        end
+
+        delegate :foreign_key, :macro, :name, :options, :scope, :polymorphic?,
+                 :klass, :inverse_of, :inverse_type, :as,
+                 :to => :association, :prefix => false
+        delegate :name, :nested_attributes_options, :to => :model, :prefix => true
+        delegate :polymorphic_parents, :to => RailsAdmin::AbstractModel
       end
     end
   end
