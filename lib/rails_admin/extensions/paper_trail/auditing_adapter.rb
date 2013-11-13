@@ -61,6 +61,15 @@ module RailsAdmin
         end
 
         def listing_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+          listing_for_model_or_object(model, object=nil, query, sort, sort_reverse, all, page, per_page)
+        end
+
+        def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+          listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page)
+        end
+
+        protected
+        def listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page)
           if sort.present?
             sort = COLUMN_MAPPING[sort.to_sym]
           else
@@ -68,20 +77,7 @@ module RailsAdmin
             sort_reverse = "true"
           end
           versions = ::Version.where :item_type => model.model.name
-          versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
-          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
-          versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
-          versions.map{|version| VersionProxy.new(version, @user_class)}
-        end
-
-        def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-          if sort.present?
-            sort = COLUMN_MAPPING[sort.to_sym]
-          else
-            sort = :created_at
-            sort_reverse = "true"
-          end
-          versions = ::Version.where :item_type => model.model.name, :item_id => object.id
+          versions = versions.where :item_id => object.id if object
           versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
