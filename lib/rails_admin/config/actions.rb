@@ -52,12 +52,7 @@ module RailsAdmin
               :#{key}
             end
           })
-          a.instance_eval(&block) if block
-          unless a.custom_key.in?((@@actions || []).map(&:custom_key))
-            (@@actions ||= []) << a
-          else
-            raise "Action #{a.custom_key} already exist. Please change its custom key"
-          end
+          add_action_custom_key(a, &block)
         end
 
         def reset
@@ -73,12 +68,7 @@ module RailsAdmin
           instance_eval %{
             def #{name}(&block)
               action = #{klass}.new
-              action.instance_eval &block if block
-              unless action.custom_key.in?((@@actions || []).map(&:custom_key))
-                (@@actions ||= []) << action
-              else
-                raise "Action \#{action.custom_key} already exist. Please change its custom key"
-              end
+              add_action_custom_key(action, &block)
             end
           }
         end
@@ -99,6 +89,16 @@ module RailsAdmin
             HistoryIndex.new,
             ShowInApp.new,
           ]
+        end
+
+        def add_action_custom_key(action, &block)
+          action.instance_eval(&block) if block
+          @@actions ||= []
+          unless action.custom_key.in?(@@actions.map(&:custom_key))
+            @@actions << action
+          else
+            raise "Action #{action.custom_key} already exists. Please change its custom key."
+          end
         end
 
       end
