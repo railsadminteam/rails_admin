@@ -7,14 +7,6 @@ module RailsAdmin
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry]
       DISABLED_COLUMN_MATCHERS = [/_array$/]
 
-      def ar_adapter
-        Rails.configuration.database_configuration[Rails.env]['adapter']
-      end
-
-      def like_operator
-        ar_adapter == "postgresql" ? 'ILIKE' : 'LIKE'
-      end
-
       def new(params = {})
         AbstractObject.new(model.new(params))
       end
@@ -139,91 +131,8 @@ module RailsAdmin
       end
 
       def build_statement(column, type, value, operator)
-        # this operator/value has been discarded (but kept in the dom to override the one stored in the various links of the page)
-        return if operator == '_discard' || value == '_discard'
-
-        # filtering data with unary operator, not type dependent
-        if operator == '_blank' || value == '_blank'
-          return ["(#{column} IS NULL OR #{column} = '')"]
-        elsif operator == '_present' || value == '_present'
-          return ["(#{column} IS NOT NULL AND #{column} != '')"]
-        elsif operator == '_null' || value == '_null'
-          return ["(#{column} IS NULL)"]
-        elsif operator == '_not_null' || value == '_not_null'
-          return ["(#{column} IS NOT NULL)"]
-        elsif operator == '_empty' || value == '_empty'
-          return ["(#{column} = '')"]
-        elsif operator == '_not_empty' || value == '_not_empty'
-          return ["(#{column} != '')"]
-        end
-
-        # now we go type specific
-        case type
-        when :boolean
-          return ["(#{column} IS NULL OR #{column} = ?)", false] if %w[false f 0].include?(value)
-          return ["(#{column} = ?)", true] if %w[true t 1].include?(value)
-        when :integer, :decimal, :float
-          case value
-          when Array then
-            val, range_begin, range_end = *value.map do |v|
-              if (v.to_i.to_s == v || v.to_f.to_s == v)
-                type == :integer ? v.to_i : v.to_f
-              end
-            end
-            case operator
-            when 'between'
-              datetime_filter(column, range_begin, range_end)
-            else
-              ["(#{column} = ?)", val] if val
-            end
-          else
-            if value.to_i.to_s == value || value.to_f.to_s == value
-              type == :integer ? ["(#{column} = ?)", value.to_i] : ["(#{column} = ?)", value.to_f]
-            end
-          end
-        when :belongs_to_association
-          return if value.blank?
-          ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
-        when :string, :text
-          return if value.blank?
-          value = case operator
-          when 'default', 'like'
-            "%#{value.downcase}%"
-          when 'starts_with'
-            "#{value.downcase}%"
-          when 'ends_with'
-            "%#{value.downcase}"
-          when 'is', '='
-            "#{value.downcase}"
-          else
-            return
-          end
-          ["(LOWER(#{column}) #{like_operator} ?)", value]
-        when :date
-          datetime_filter(column, *get_filtering_duration(operator, value))
-        when :datetime, :timestamp
-          datetime_filter(column, *get_filtering_duration(operator, value), true)
-        when :enum
-          return if value.blank?
-          ["(#{column} IN (?))", Array.wrap(value)]
-        end
+        StatementBuilder.new(column, type, value, operator).to_statement
       end
-
-      def datetime_filter(column, start_date, end_date, datetime = false)
-        if datetime
-          start_date = start_date.to_time.beginning_of_day if start_date
-          end_date = end_date.to_time.end_of_day if end_date
-        end
-
-        if start_date && end_date
-          ["(#{column} BETWEEN ? AND ?)", start_date, end_date]
-        elsif start_date
-          ["(#{column} >= ?)", start_date]
-        elsif end_date
-          ["(#{column} <= ?)", end_date]
-        end
-      end
-      protected :datetime_filter
 
       def type_lookup(property)
         if model.serialized_attributes[property.name.to_s]
@@ -304,6 +213,96 @@ module RailsAdmin
                  :to => :association, :prefix => false
         delegate :name, :to => :model, :prefix => true
         delegate :polymorphic_parents, :to => RailsAdmin::AbstractModel
+      end
+
+      class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
+        protected
+
+        def unary_operators
+          {
+            '_blank' => ["(#{@column} IS NULL OR #{@column} = '')"],
+            '_present' => ["(#{@column} IS NOT NULL AND #{@column} != '')"],
+            '_null' => ["(#{@column} IS NULL)"],
+            '_not_null' => ["(#{@column} IS NOT NULL)"],
+            '_empty' => ["(#{@column} = '')"],
+            '_not_empty' => ["(#{@column} != '')"]
+          }
+        end
+
+        private
+
+        def datetime_filter(start_date, end_date, datetime = false)
+          if datetime
+            start_date = start_date.to_time.beginning_of_day if start_date
+            end_date = end_date.to_time.end_of_day if end_date
+          end
+
+          if start_date && end_date
+            ["(#{@column} BETWEEN ? AND ?)", start_date, end_date]
+          elsif start_date
+            ["(#{@column} >= ?)", start_date]
+          elsif end_date
+            ["(#{@column} <= ?)", end_date]
+          end
+        end
+
+        def build_statement_for_type
+          case @type
+          when :boolean
+            return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
+            return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+          when :integer, :decimal, :float
+            case @value
+            when Array then
+              val, range_begin, range_end = *@value.map do |v|
+                @type == :integer ? v.to_i : v.to_f if [v.to_i.to_s, v.to_f.to_s].include?(v)
+              end
+              case @operator
+              when 'between'
+                datetime_filter(range_begin, range_end)
+              else
+                ["(#{@column} = ?)", val] if val
+              end
+            else
+              if @value.to_i.to_s == @value || @value.to_f.to_s == @value
+                ["(#{@column} = ?)", (@type == :integer ? @value.to_i : @value.to_f)]
+              end
+            end
+          when :belongs_to_association
+            return if @value.blank?
+            ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value
+          when :string, :text
+            return if @value.blank?
+            @value = case @operator
+            when 'default', 'like'
+              "%#{@value.downcase}%"
+            when 'starts_with'
+              "#{@value.downcase}%"
+            when 'ends_with'
+              "%#{@value.downcase}"
+            when 'is', '='
+              "#{@value.downcase}"
+            else
+              return
+            end
+            ["(LOWER(#{@column}) #{like_operator} ?)", @value]
+          when :date
+            datetime_filter(*get_filtering_duration)
+          when :datetime, :timestamp
+            datetime_filter(*get_filtering_duration, true)
+          when :enum
+            return if @value.blank?
+            ["(#{@column} IN (?))", Array.wrap(@value)]
+          end
+        end
+
+        def ar_adapter
+          Rails.configuration.database_configuration[Rails.env]['adapter']
+        end
+
+        def like_operator
+          ar_adapter == "postgresql" ? 'ILIKE' : 'LIKE'
+        end
       end
     end
   end

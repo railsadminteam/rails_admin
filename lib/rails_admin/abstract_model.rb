@@ -97,29 +97,6 @@ module RailsAdmin
 
     private
 
-    def get_filtering_duration(operator, value)
-      date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-      case operator
-      when 'between'
-        start_date = value[1].present? && Date.strptime(value[1], date_format)
-        end_date   = value[2].present? && Date.strptime(value[2], date_format)
-      when 'today'
-        start_date = end_date = Date.today
-      when 'yesterday'
-        start_date = end_date = Date.yesterday
-      when 'this_week'
-        start_date = Date.today.beginning_of_week
-        end_date   = Date.today.end_of_week
-      when 'last_week'
-        start_date = 1.week.ago.to_date.beginning_of_week
-        end_date   = 1.week.ago.to_date.end_of_week
-      else # default
-        start_date = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
-        end_date   = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
-      end
-      [start_date, end_date]
-    end
-
     def initialize_active_record
       @adapter = :active_record
       require 'rails_admin/adapters/active_record'
@@ -130,6 +107,55 @@ module RailsAdmin
       @adapter = :mongoid
       require 'rails_admin/adapters/mongoid'
       extend Adapters::Mongoid
+    end
+
+    class StatementBuilder
+      def initialize(column, type, value, operator)
+        @column = column
+        @type = type
+        @value = value
+        @operator = operator
+      end
+
+      def to_statement
+        return if [@operator, @value].any? { |v| v == '_discard' }
+
+        unary_operators[@operator] || unary_operators[@value] ||
+          build_statement_for_type
+      end
+
+      protected
+
+      def get_filtering_duration
+        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+        case @operator
+        when 'between'
+          start_date = @value[1].present? && Date.strptime(@value[1], date_format)
+          end_date   = @value[2].present? && Date.strptime(@value[2], date_format)
+        when 'today'
+          start_date = end_date = Date.today
+        when 'yesterday'
+          start_date = end_date = Date.yesterday
+        when 'this_week'
+          start_date = Date.today.beginning_of_week
+          end_date   = Date.today.end_of_week
+        when 'last_week'
+          start_date = 1.week.ago.to_date.beginning_of_week
+          end_date   = 1.week.ago.to_date.end_of_week
+        else # default
+          start_date = (Date.strptime(Array.wrap(@value).first, date_format) rescue false)
+          end_date   = (Date.strptime(Array.wrap(@value).first, date_format) rescue false)
+        end
+        [start_date, end_date]
+      end
+
+      def build_statement_for_type
+        raise "You must override build_statement_for_type in your StatementBuilder"
+      end
+
+      def unary_operators
+        raise "You must override unary_operators in your StatementBuilder"
+      end
     end
   end
 end
