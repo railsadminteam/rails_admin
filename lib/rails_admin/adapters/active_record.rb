@@ -193,32 +193,32 @@ module RailsAdmin
           return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
         when :integer, :decimal, :float
           case value
-            when Array then
-              val, range_begin, range_end = *value.map do |v|
-                if (v.to_i.to_s == v || v.to_f.to_s == v)
-                  type == :integer ? v.to_i : v.to_f
-                else
-                  nil
-                end
-              end
-              case operator
-                when 'between'
-                  if range_begin && range_end
-                    ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
-                  elsif range_begin
-                    ["(#{column} >= ?)", range_begin]
-                  elsif range_end
-                    ["(#{column} <= ?)", range_end]
-                  end
-                else
-                  ["(#{column} = ?)", val] if val
-              end
-            else
-              if value.to_i.to_s == value || value.to_f.to_s == value
-                type == :integer ? ["(#{column} = ?)", value.to_i] : ["(#{column} = ?)", value.to_f]
+          when Array then
+            val, range_begin, range_end = *value.map do |v|
+              if (v.to_i.to_s == v || v.to_f.to_s == v)
+                type == :integer ? v.to_i : v.to_f
               else
                 nil
               end
+            end
+            case operator
+            when 'between'
+              if range_begin && range_end
+                ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
+              elsif range_begin
+                ["(#{column} >= ?)", range_begin]
+              elsif range_end
+                ["(#{column} <= ?)", range_end]
+              end
+            else
+              ["(#{column} = ?)", val] if val
+            end
+          else
+            if value.to_i.to_s == value || value.to_f.to_s == value
+              type == :integer ? ["(#{column} = ?)", value.to_i] : ["(#{column} = ?)", value.to_f]
+            else
+              nil
+            end
           end
         when :belongs_to_association
           return if value.blank?
@@ -226,17 +226,17 @@ module RailsAdmin
         when :string, :text
           return if value.blank?
           value = case operator
-                    when 'default', 'like'
-                      "%#{value.downcase}%"
-                    when 'starts_with'
-                      "#{value.downcase}%"
-                    when 'ends_with'
-                      "%#{value.downcase}"
-                    when 'is', '='
-                      "#{value.downcase}"
-                    else
-                      return
-                  end
+          when 'default', 'like'
+            "%#{value.downcase}%"
+          when 'starts_with'
+            "#{value.downcase}%"
+          when 'ends_with'
+            "%#{value.downcase}"
+          when 'is', '='
+            "#{value.downcase}"
+          else
+            return
+        end
           ["(LOWER(#{column}) #{like_operator} ?)", value]
         when :date
           start_date, end_date = get_filtering_duration(operator, value)
