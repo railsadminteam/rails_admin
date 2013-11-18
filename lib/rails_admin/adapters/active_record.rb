@@ -236,7 +236,7 @@ module RailsAdmin
             "#{value.downcase}"
           else
             return
-        end
+          end
           ["(LOWER(#{column}) #{like_operator} ?)", value]
         when :date
           start_date, end_date = get_filtering_duration(operator, value)
