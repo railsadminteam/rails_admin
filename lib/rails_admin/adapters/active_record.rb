@@ -117,41 +117,51 @@ module RailsAdmin
 
       private
 
-      def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
-        statements = []
-        values = []
-        tables = []
+      class WhereBuilder
 
-        fields.each do |field|
+        def initialize(scope)
+          @statements = []
+          @values = []
+          @tables = []
+          @scope = scope
+        end
+
+        def add(field, &build_statement)
           field.searchable_columns.flatten.each do |column_infos|
-            statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
-            statements << statement if statement
-            values << value1 unless value1.nil?
-            values << value2 unless value2.nil?
+            statement, value1, value2 = build_statement.call(column_infos)
+            @statements << statement if statement.present?
+            @values << value1 unless value1.nil?
+            @values << value2 unless value2.nil?
             table, column = column_infos[:column].split('.')
-            tables.push(table) if column
+            @tables.push(table) if column
           end
         end
-        scope.where(statements.join(' OR '), *values).references(*(tables.uniq))
+
+        def build
+          @scope.where(@statements.join(' OR '), *@values).references(*(@tables.uniq))
+        end
+      end
+
+      def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
+        wb = WhereBuilder.new(scope)
+        fields.each do |field|
+          wb.add(field) do |column_infos|
+            build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
+          end
+        end
+        wb.build
       end
 
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |filter_index, filter_dump|
-            statements = []
-            values = []
-            tables = []
-            fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
-              statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-              statements << statement if statement.present?
-              values << value1 unless value1.nil?
-              values << value2 unless value2.nil?
-              table, column = column_infos[:column].split('.')
-              tables.push(table) if column
+          filters_dump.each do |_, filter_dump|
+            wb = WhereBuilder.new(scope)
+            wb.add(fields.find{|f| f.name.to_s == field_name}) do |column_infos|
+              build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
             end
-            scope = scope.where(statements.join(' OR '), *values).references(*(tables.uniq))
+            scope = wb.build
           end
         end
         scope
