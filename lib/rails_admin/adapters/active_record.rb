@@ -64,18 +64,18 @@ module RailsAdmin
       def associations
         model.reflect_on_all_associations.map do |association|
           {
-            :name => association.name.to_sym,
-            :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
-            :type => association.macro,
-            :model_proc => Proc.new { association_model_lookup(association) },
-            :primary_key_proc => Proc.new { association_primary_key_lookup(association) },
-            :foreign_key => association_foreign_key_lookup(association),
-            :foreign_type => association_foreign_type_lookup(association),
-            :as => association_as_lookup(association),
-            :polymorphic => association_polymorphic_lookup(association),
-            :inverse_of => association_inverse_of_lookup(association),
-            :read_only => association_read_only_lookup(association),
-            :nested_form => association_nested_attributes_options_lookup(association)
+              :name => association.name.to_sym,
+              :pretty_name => association.name.to_s.tr('_', ' ').capitalize,
+              :type => association.macro,
+              :model_proc => Proc.new { association_model_lookup(association) },
+              :primary_key_proc => Proc.new { association_primary_key_lookup(association) },
+              :foreign_key => association_foreign_key_lookup(association),
+              :foreign_type => association_foreign_type_lookup(association),
+              :as => association_as_lookup(association),
+              :polymorphic => association_polymorphic_lookup(association),
+              :inverse_of => association_inverse_of_lookup(association),
+              :read_only => association_read_only_lookup(association),
+              :nested_form => association_nested_attributes_options_lookup(association)
           }
         end
       end
@@ -86,11 +86,11 @@ module RailsAdmin
         end
         columns.map do |property|
           {
-            :name => property.name.to_sym,
-            :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
-            :length => property.limit,
-            :nullable? => property.null,
-            :serial? => property.primary,
+              :name => property.name.to_sym,
+              :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
+              :length => property.limit,
+              :nullable? => property.null,
+              :serial? => property.primary,
           }.merge(type_lookup(property))
         end
       end
@@ -117,51 +117,41 @@ module RailsAdmin
 
       private
 
-      class WhereBuilder
-
-        def initialize(scope)
-          @statements = []
-          @values = []
-          @tables = []
-          @scope = scope
-        end
-
-        def add(field, &build_statement)
-          field.searchable_columns.flatten.each do |column_infos|
-            statement, value1, value2 = build_statement.call(column_infos)
-            @statements << statement if statement.present?
-            @values << value1 unless value1.nil?
-            @values << value2 unless value2.nil?
-            table, column = column_infos[:column].split('.')
-            @tables.push(table) if column
-          end
-        end
-
-        def build
-          @scope.where(@statements.join(' OR '), *@values).references(*(@tables.uniq))
-        end
-      end
-
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
-        wb = WhereBuilder.new(scope)
+        statements = []
+        values = []
+        tables = []
+
         fields.each do |field|
-          wb.add(field) do |column_infos|
-            build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
+          field.searchable_columns.flatten.each do |column_infos|
+            statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
+            statements << statement if statement
+            values << value1 unless value1.nil?
+            values << value2 unless value2.nil?
+            table, column = column_infos[:column].split('.')
+            tables.push(table) if column
           end
         end
-        wb.build
+        scope.where(statements.join(' OR '), *values).references(*(tables.uniq))
       end
 
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |_, filter_dump|
-            wb = WhereBuilder.new(scope)
-            wb.add(fields.find{|f| f.name.to_s == field_name}) do |column_infos|
-              build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+          filters_dump.each do |filter_index, filter_dump|
+            statements = []
+            values = []
+            tables = []
+            fields.find{|f| f.name.to_s == field_name}.searchable_columns.each do |column_infos|
+              statement, value1, value2 = build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
+              statements << statement if statement.present?
+              values << value1 unless value1.nil?
+              values << value2 unless value2.nil?
+              table, column = column_infos[:column].split('.')
+              tables.push(table) if column
             end
-            scope = wb.build
+            scope = scope.where(statements.join(' OR '), *values).references(*(tables.uniq))
           end
         end
         scope
@@ -188,79 +178,79 @@ module RailsAdmin
 
         # now we go type specific
         case type
-        when :boolean
-          return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
-          return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
-        when :integer, :decimal, :float
-          case value
-          when Array then
-            val, range_begin, range_end = *value.map do |v|
-              if (v.to_i.to_s == v || v.to_f.to_s == v)
-                type == :integer ? v.to_i : v.to_f
+          when :boolean
+            return ["(#{column} IS NULL OR #{column} = ?)", false] if ['false', 'f', '0'].include?(value)
+            return ["(#{column} = ?)", true] if ['true', 't', '1'].include?(value)
+          when :integer, :decimal, :float
+            case value
+              when Array then
+                val, range_begin, range_end = *value.map do |v|
+                  if (v.to_i.to_s == v || v.to_f.to_s == v)
+                    type == :integer ? v.to_i : v.to_f
+                  else
+                    nil
+                  end
+                end
+                case operator
+                  when 'between'
+                    if range_begin && range_end
+                      ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
+                    elsif range_begin
+                      ["(#{column} >= ?)", range_begin]
+                    elsif range_end
+                      ["(#{column} <= ?)", range_end]
+                    end
+                  else
+                    ["(#{column} = ?)", val] if val
+                end
               else
-                nil
-              end
+                if value.to_i.to_s == value || value.to_f.to_s == value
+                  type == :integer ? ["(#{column} = ?)", value.to_i] : ["(#{column} = ?)", value.to_f]
+                else
+                  nil
+                end
             end
-            case operator
-            when 'between'
-              if range_begin && range_end
-                ["(#{column} BETWEEN ? AND ?)", range_begin, range_end]
-              elsif range_begin
-                ["(#{column} >= ?)", range_begin]
-              elsif range_end
-                ["(#{column} <= ?)", range_end]
-              end
-            else
-              ["(#{column} = ?)", val] if val
-            end
-          else
-            if value.to_i.to_s == value || value.to_f.to_s == value
-              type == :integer ? ["(#{column} = ?)", value.to_i] : ["(#{column} = ?)", value.to_f]
-            else
-              nil
-            end
-          end
-        when :belongs_to_association
-          return if value.blank?
-          ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
-        when :string, :text
-          return if value.blank?
-          value = case operator
-          when 'default', 'like'
-            "%#{value.downcase}%"
-          when 'starts_with'
-            "#{value.downcase}%"
-          when 'ends_with'
-            "%#{value.downcase}"
-          when 'is', '='
-            "#{value.downcase}"
-          else
-            return
-          end
-          ["(LOWER(#{column}) #{like_operator} ?)", value]
-        when :date
-          start_date, end_date = get_filtering_duration(operator, value)
+          when :belongs_to_association
+            return if value.blank?
+            ["(#{column} = ?)", value.to_i] if value.to_i.to_s == value
+          when :string, :text
+            return if value.blank?
+            value = case operator
+                      when 'default', 'like'
+                        "%#{value.downcase}%"
+                      when 'starts_with'
+                        "#{value.downcase}%"
+                      when 'ends_with'
+                        "%#{value.downcase}"
+                      when 'is', '='
+                        "#{value.downcase}"
+                      else
+                        return
+                    end
+            ["(LOWER(#{column}) #{like_operator} ?)", value]
+          when :date
+            start_date, end_date = get_filtering_duration(operator, value)
 
-          if start_date && end_date
-            ["(#{column} BETWEEN ? AND ?)", start_date, end_date]
-          elsif start_date
-            ["(#{column} >= ?)", start_date]
-          elsif end_date
-            ["(#{column} <= ?)", end_date]
-          end
-        when :datetime, :timestamp
-          start_date, end_date = get_filtering_duration(operator, value)
+            if start_date && end_date
+              ["(#{column} BETWEEN ? AND ?)", start_date, end_date]
+            elsif start_date
+              ["(#{column} >= ?)", start_date]
+            elsif end_date
+              ["(#{column} <= ?)", end_date]
+            end
+          when :datetime, :timestamp
+            start_date, end_date = get_filtering_duration(operator, value)
 
-          if start_date && end_date
-            ["(#{column} BETWEEN ? AND ?)", start_date.to_time.beginning_of_day, end_date.to_time.end_of_day]
-          elsif start_date
-            ["(#{column} >= ?)", start_date.to_time.beginning_of_day]
-          elsif end_date
-            ["(#{column} <= ?)", end_date.to_time.end_of_day]
-          end
-        when :enum
-          return if value.blank?
-          ["(#{column} IN (?))", Array.wrap(value)]
+            if start_date && end_date
+              ["(#{column} BETWEEN ? AND ?)", start_date.to_time.beginning_of_day, end_date.to_time.end_of_day]
+            elsif start_date
+              ["(#{column} >= ?)", start_date.to_time.beginning_of_day]
+            elsif end_date
+              ["(#{column} <= ?)", end_date.to_time.end_of_day]
+            end
+          when :enum
+            return if value.blank?
+            ["(#{column} IN (?))", Array.wrap(value)]
         end
       end
 
