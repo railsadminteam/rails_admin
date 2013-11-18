@@ -1,0 +1,58 @@
+[class^="icon-"]{
+  @extend .fa;
+}
+.icon-info-sign{
+  @extend .fa-info-circle;
+}
+.icon-plus{
+  @extend .fa-plus;
+}
+.icon-minus{
+  @extend .fa-minus;
+}
+.icon-trash{
+  @extend .fa-trash-o;
+}
+.icon-chevron-right{
+  @extend .fa-chevron-right;
+}
+.icon-chevron-down{
+  @extend .fa-chevron-down;
+}
+.icon-check{
+  @extend .fa-check-square-o;
+}
+.icon-pencil{
+  @extend .fa-pencil;
+}
+.icon-ok{
+  @extend .fa-check;
+}
+.icon-remove{
+  //fa 4 dose'nt have none of cross, remove, delete
+  @extend .fa-times;
+}
+.icon-refresh{
+  @extend .fa-refresh;
+}
+.icon-question-sign{
+  @extend .fa-question-circle;
+}
+.icon-home{
+  @extend .fa-home;
+}
+.icon-share{
+  @extend .fa-share-square-o;
+}
+.icon-book{
+  @extend .fa-book;
+}
+.icon-th-list{
+  @extend .fa-th-list;
+}
+.icon-eye-open{
+  @extend .fa-eye;
+}
+.icon-white{
+  color:white;
+}

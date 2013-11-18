@@ -1,75 +1,63 @@
-@charset "UTF-8";
+/*!
+ * Bootstrap v2.3.2
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
 
-<%
-  theme = ENV['RAILS_ADMIN_THEME'] || :default
-%>
-
-/***  Variables  ***/
-
-@import "rails_admin/bootstrap/variables";
-@import "rails_admin/base/variables";
-@import "rails_admin/themes/<%= theme %>/variables";
-@import "rails_admin/custom/variables";
-
-/***  Mixins  ***/
-
+// Core variables and mixins
+@import "rails_admin/bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
 @import "rails_admin/bootstrap/mixins";
-@import "rails_admin/base/mixins";
-@import "rails_admin/themes/<%= theme %>/mixins";
-@import "rails_admin/custom/mixins";
 
-/*** Reset ***/
+// CSS Reset
 @import "rails_admin/bootstrap/reset";
-/***  Libraries  ***/
 
-@import "rails_admin/aristo/jquery-ui-1.8.7.custom";
-@import "rails_admin/jquery.ui.timepicker";
-@import "rails_admin/ra.calendar-additions";
-@import "rails_admin/ra.filtering-multiselect";
-@import "rails_admin/ra.widgets";
-@import "rails_admin/jquery.colorpicker";
-
-/*** Font-awesome ***/
-
-@import 'font-awesome';
-@import 'rails_admin/base/font-awesome-4-compability';
-
-/***  Bootstrap Theming  ***/
-
+// Grid system and page structure
 @import "rails_admin/bootstrap/scaffolding";
 @import "rails_admin/bootstrap/grid";
 @import "rails_admin/bootstrap/layouts";
+
+// Base CSS
 @import "rails_admin/bootstrap/type";
+@import "rails_admin/bootstrap/code";
 @import "rails_admin/bootstrap/forms";
 @import "rails_admin/bootstrap/tables";
+
+// Components: common
+@import "rails_admin/bootstrap/sprites";
 @import "rails_admin/bootstrap/dropdowns";
 @import "rails_admin/bootstrap/wells";
 @import "rails_admin/bootstrap/component-animations";
 @import "rails_admin/bootstrap/close";
+
+// Components: Buttons & Alerts
 @import "rails_admin/bootstrap/buttons";
 @import "rails_admin/bootstrap/button-groups";
-@import "rails_admin/bootstrap/alerts";
+@import "rails_admin/bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons
+
+// Components: Nav
 @import "rails_admin/bootstrap/navs";
 @import "rails_admin/bootstrap/navbar";
 @import "rails_admin/bootstrap/breadcrumbs";
 @import "rails_admin/bootstrap/pagination";
 @import "rails_admin/bootstrap/pager";
+
+// Components: Popovers
 @import "rails_admin/bootstrap/modals";
 @import "rails_admin/bootstrap/tooltip";
 @import "rails_admin/bootstrap/popovers";
+
+// Components: Misc
 @import "rails_admin/bootstrap/thumbnails";
+@import "rails_admin/bootstrap/media";
 @import "rails_admin/bootstrap/labels-badges";
 @import "rails_admin/bootstrap/progress-bars";
 @import "rails_admin/bootstrap/accordion";
 @import "rails_admin/bootstrap/carousel";
 @import "rails_admin/bootstrap/hero-unit";
-@import "rails_admin/bootstrap/utilities";
 
-/***  RailsAdmin Theming  ***/
-
-@import "rails_admin/base/theming";
-@import "rails_admin/themes/<%= theme %>/theming";
-@import "rails_admin/custom/theming";
-
-
-
+// Utility classes
+@import "rails_admin/bootstrap/utilities"; // Has to be last to override when necessary
