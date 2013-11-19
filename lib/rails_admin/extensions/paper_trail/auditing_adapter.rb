@@ -45,7 +45,7 @@ module RailsAdmin
         end
 
         def latest
-          ::Version.limit(100).map{|version| VersionProxy.new(version, @user_class)}
+          ::Version.order('id DESC').limit(100).map{|version| VersionProxy.new(version, @user_class)}
         end
 
         def delete_object(object, model, user)
