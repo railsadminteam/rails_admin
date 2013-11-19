@@ -17,10 +17,10 @@ Here are some ways *you* can contribute:
 * by fixing [issues][]
 * by reviewing patches
 * by suggesting new features
-* [financially][pledgie]
+* [financially][gittip]
 
 [issues]: https://github.com/sferik/rails_admin/issues
-[pledgie]: http://www.pledgie.com/campaigns/15917
+[gittip]: https://www.gittip.com/sferik/
 
 ## Getting Help
 
