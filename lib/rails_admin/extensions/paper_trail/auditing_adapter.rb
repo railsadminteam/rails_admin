@@ -61,33 +61,29 @@ module RailsAdmin
           # do nothing
         end
 
-        def listing_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-          if sort.present?
-            sort = COLUMN_MAPPING[sort.to_sym]
-          else
-            sort = :created_at
-            sort_reverse = "true"
-          end
-          versions = VERSION.where :item_type => model.model.name
-          versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
-          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
-          versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
-          versions.map{|version| VersionProxy.new(version, @user_class)}
+        def listing_for_model(model, query, sort, sort_reverse, all, page, per_page)
+          listing({ :item_type => model.model.name }, query, sort, sort_reverse, all, page, per_page)
         end
 
-        def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-          if sort.present?
-            sort = COLUMN_MAPPING[sort.to_sym]
-          else
-            sort = :created_at
-            sort_reverse = "true"
-          end
-          versions = VERSION.where :item_type => model.model.name, :item_id => object.id
-          versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
-          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
-          versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
-          versions.map{|version| VersionProxy.new(version, @user_class)}
+        def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page)
+          listing({ :item_type => model.model.name, :item_id => object.id }, query, sort, sort_reverse, all, page, per_page)
         end
+
+        private
+
+          def listing(conditions, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+            if sort.present?
+              sort = COLUMN_MAPPING[sort.to_sym]
+            else
+              sort = :created_at
+              sort_reverse = "true"
+            end
+            versions = VERSION.where conditions
+            versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
+            versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
+            versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
+            versions.map{|version| VersionProxy.new(version, @user_class)}
+          end
       end
     end
   end
