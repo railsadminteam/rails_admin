@@ -152,7 +152,6 @@ module RailsAdmin
         end
       end
 
-      private
       class Association
         attr_reader :association, :model
 
