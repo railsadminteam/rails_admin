@@ -127,26 +127,7 @@ module RailsAdmin
       protected
 
       def get_filtering_duration
-        date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-        case @operator
-        when 'between'
-          start_date = @value[1].present? && Date.strptime(@value[1], date_format)
-          end_date   = @value[2].present? && Date.strptime(@value[2], date_format)
-        when 'today'
-          start_date = end_date = Date.today
-        when 'yesterday'
-          start_date = end_date = Date.yesterday
-        when 'this_week'
-          start_date = Date.today.beginning_of_week
-          end_date   = Date.today.end_of_week
-        when 'last_week'
-          start_date = 1.week.ago.to_date.beginning_of_week
-          end_date   = 1.week.ago.to_date.end_of_week
-        else # default
-          start_date = (Date.strptime(Array.wrap(@value).first, date_format) rescue false)
-          end_date   = (Date.strptime(Array.wrap(@value).first, date_format) rescue false)
-        end
-        [start_date, end_date]
+        FilteringDuration.new(@operator, @value).get_duration
       end
 
       def build_statement_for_type
@@ -155,6 +136,65 @@ module RailsAdmin
 
       def unary_operators
         raise "You must override unary_operators in your StatementBuilder"
+      end
+      
+      class FilteringDuration
+        def initialize(operator, value)
+          @value = value
+          @operator = operator
+        end
+
+        def get_duration
+          case @operator
+            when 'between'   then between
+            when 'today'     then today
+            when 'yesterday' then yesterday
+            when 'this_week' then this_week
+            when 'last_week' then last_week
+            else default
+          end
+        end
+
+        def today
+          [Date.today, Date.today]
+        end
+
+        def yesterday
+          [Date.yesterday, Date.yesterday]
+        end
+
+        def this_week
+          [Date.today.beginning_of_week, Date.today.end_of_week]
+        end
+
+        def last_week
+          [1.week.ago.to_date.beginning_of_week,
+            1.week.ago.to_date.end_of_week]
+        end
+
+        def between
+          [convert_to_date(@value[1]), convert_to_date(@value[2])]
+        end
+
+        def default
+          [default_date, default_date]
+        end
+
+        private
+
+        def date_format
+          I18n.t("admin.misc.filter_date_format",
+          :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+        end
+
+        def convert_to_date(value)
+          value.present? && Date.strptime(value, date_format)
+        end
+
+        def default_date
+          default_date_value = Array.wrap(@value).first
+          convert_to_date(default_date_value) rescue false
+        end
       end
     end
   end
