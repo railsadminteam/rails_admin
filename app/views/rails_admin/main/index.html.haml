@@ -9,7 +9,7 @@
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
 
   export_action = RailsAdmin::Config::Actions.find(:export, { :controller => self.controller, :abstract_model => @abstract_model })
-  export_action = export_action && authorized?(export_action.authorization_key, @abstract_model) ? export_action : nil
+  export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
 
   properties = @model_config.list.with(:controller => self.controller, :view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
@@ -112,8 +112,8 @@
             - selected = (sort == property.name.to_s)
             - if property.sortable
               - sort_location = index_path params.except('sort_reverse').except('page').merge(:sort => property.name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
-              - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
-            %th{:class => "#{property.sortable && "header pjax" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), :rel => "tooltip", :title => "#{property.hint}"}= property.label
+              - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
+            %th{:class => "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), :rel => "tooltip", :title => "#{property.hint}"}= property.label
           - if other_right
             %th.other.right.shrink= "..."
           %th.last.shrink
