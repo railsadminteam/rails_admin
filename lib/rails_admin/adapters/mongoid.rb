@@ -102,19 +102,30 @@ module RailsAdmin
 
       private
 
-      def query_conditions(query, fields = config.list.fields.select(&:queryable?))
-        statements = []
+      def build_statement(column, type, value, operator)
+        StatementBuilder.new(column, type, value, operator).to_statement
+      end
 
-        fields.each do |field|
-          conditions_per_collection = {}
-          field.searchable_columns.flatten.each do |column_infos|
+      def make_field_conditions(field, value, operator)
+        conditions_per_collection = {}
+        if field
+          field.searchable_columns.each do |column_infos|
             collection_name, column_name = parse_collection_name(column_infos[:column])
-            statement = build_statement(column_name, column_infos[:type], query, field.search_operator)
+            statement = build_statement(column_name, column_infos[:type], value, operator)
             if statement
               conditions_per_collection[collection_name] ||= []
               conditions_per_collection[collection_name] << statement
             end
           end
+        end
+        conditions_per_collection
+      end
+
+      def query_conditions(query, fields = config.list.fields.select(&:queryable?))
+        statements = []
+
+        fields.each do |field|
+          conditions_per_collection = make_field_conditions(field, query, field.search_operator)
           statements.concat make_condition_for_current_collection(field, conditions_per_collection)
         end
 
@@ -125,10 +136,6 @@ module RailsAdmin
         end
       end
 
-      def build_statement(column, type, value, operator)
-        StatementBuilder.new(column, type, value, operator).to_statement
-      end
-
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_conditions(filters, fields = config.list.fields.select(&:filterable?))
@@ -136,24 +143,13 @@ module RailsAdmin
 
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |filter_index, filter_dump|
-            conditions_per_collection = {}
             field = fields.find{|f| f.name.to_s == field_name}
-            next unless field
-            field.searchable_columns.each do |column_infos|
-              collection_name, column_name = parse_collection_name(column_infos[:column])
-              statement = build_statement(column_name, column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-              if statement
-                conditions_per_collection[collection_name] ||= []
-                conditions_per_collection[collection_name] << statement
-              end
-            end
-            if conditions_per_collection.any?
-              field_statements = make_condition_for_current_collection(field, conditions_per_collection)
-              if field_statements.length > 1
-                statements << { '$or' => field_statements }
-              else
-                statements << field_statements.first
-              end
+            conditions_per_collection = make_field_conditions(field, filter_dump[:v], (filter_dump[:o] || 'default'))
+            field_statements = make_condition_for_current_collection(field, conditions_per_collection)
+            if field_statements.many?
+              statements << { '$or' => field_statements }
+            elsif field_statements.any?
+              statements << field_statements.first
             end
           end
         end
