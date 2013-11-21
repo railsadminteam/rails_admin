@@ -99,9 +99,9 @@ module RailsAdmin
           @scope = scope
         end
 
-        def add(field, &build_statement)
+        def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
-            statement, value1, value2 = build_statement.call(column_infos)
+            statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator).to_statement
             @statements << statement if statement.present?
             @values << value1 unless value1.nil?
             @values << value2 unless value2.nil?
@@ -118,10 +118,9 @@ module RailsAdmin
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
         wb = WhereBuilder.new(scope)
         fields.each do |field|
-          wb.add(field) do |column_infos|
-            build_statement(column_infos[:column], column_infos[:type], query, field.search_operator)
-          end
+          wb.add(field, query, field.search_operator)
         end
+        # OR all query statements
         wb.build
       end
 
@@ -131,9 +130,8 @@ module RailsAdmin
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
             wb = WhereBuilder.new(scope)
-            wb.add(fields.find{|f| f.name.to_s == field_name}) do |column_infos|
-              build_statement(column_infos[:column], column_infos[:type], filter_dump[:v], (filter_dump[:o] || 'default'))
-            end
+            wb.add(fields.find{|f| f.name.to_s == field_name}, filter_dump[:v], (filter_dump[:o] || 'default'))
+            # AND current filter statements to other filter statements
             scope = wb.build
           end
         end
