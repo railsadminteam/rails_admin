@@ -397,54 +397,75 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-          when :boolean
-            return { @column => false } if %w[false f 0].include?(@value)
-            return { @column => true } if %w[true t 1].include?(@value)
-          when :integer, :decimal, :float
-            case @value
-            when Array then
-              val, range_begin, range_end = *@value.map do |v|
-                if (v.to_i.to_s == v || v.to_f.to_s == v)
-                  @type == :integer ? v.to_i : v.to_f
-                end
-              end
-              case @operator
-              when 'between'
-                datetime_filter(range_begin, range_end)
-              else
-                { @column => val } if val
-              end
-            else
-              if (@value.to_i.to_s == @value || @value.to_f.to_s == @value)
-                @type == :integer ? { @column => @value.to_i } : { @column => @value.to_f }
-              end
-            end
-          when :string, :text
-            return if @value.blank?
-            @value = case @operator
-            when 'default', 'like'
-              Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
-            when 'starts_with'
-              Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
-            when 'ends_with'
-              Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
-            when 'is', '='
-              @value.to_s
-            else
-              return
-            end
-            { @column => @value }
-          when :date
-            datetime_filter(*get_filtering_duration)
-          when :datetime, :timestamp
-            datetime_filter(*get_filtering_duration, true)
-          when :enum
-            return if @value.blank?
-            { @column => { "$in" => Array.wrap(@value) } }
-          when :belongs_to_association, :bson_object_id
-            object_id = (object_id_from_string(@value) rescue nil)
-            { @column => object_id } if object_id
+            when :boolean                   then build_statement_for_boolean
+            when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
+            when :string, :text             then build_statement_for_string_or_text
+            when :date                      then build_statement_for_date
+            when :datetime, :timestamp      then build_statement_for_datetime_or_timestamp
+            when :enum                      then build_statement_for_enum
+            when :belongs_to_association, :bson_object_id then build_statement_for_belongs_to_association_or_bson_object_id
           end
+        end
+
+        def build_statement_for_boolean
+          return { @column => false } if %w[false f 0].include?(@value)
+          return { @column => true } if %w[true t 1].include?(@value)
+        end
+
+        def build_statement_for_integer_decimal_or_float
+          case @value
+          when Array then
+            val, range_begin, range_end = *@value.map do |v|
+              if (v.to_i.to_s == v || v.to_f.to_s == v)
+                @type == :integer ? v.to_i : v.to_f
+              end
+            end
+            case @operator
+            when 'between'
+              datetime_filter(range_begin, range_end)
+            else
+              { @column => val } if val
+            end
+          else
+            if (@value.to_i.to_s == @value || @value.to_f.to_s == @value)
+              @type == :integer ? { @column => @value.to_i } : { @column => @value.to_f }
+            end
+          end
+        end
+
+        def build_statement_for_string_or_text
+          return if @value.blank?
+          @value = case @operator
+          when 'default', 'like'
+            Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
+          when 'starts_with'
+            Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
+          when 'ends_with'
+            Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
+          when 'is', '='
+            @value.to_s
+          else
+            return
+          end
+          { @column => @value }
+        end
+
+        def build_statement_for_date
+          datetime_filter(*get_filtering_duration)
+        end
+
+        def build_statement_for_datetime_or_timestamp
+          datetime_filter(*get_filtering_duration, true)
+        end
+
+        def build_statement_for_enum
+          return if @value.blank?
+          { @column => { "$in" => Array.wrap(@value) } }
+        end
+
+        def build_statement_for_belongs_to_association_or_bson_object_id
+          object_id = (object_id_from_string(@value) rescue nil)
+          { @column => object_id } if object_id
         end
 
         def datetime_filter(start_date, end_date, datetime = false)
