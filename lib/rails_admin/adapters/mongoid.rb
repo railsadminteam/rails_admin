@@ -424,13 +424,17 @@ module RailsAdmin
             when 'between'
               datetime_filter(range_begin, range_end)
             else
-              { @column => val } if val
+              column_for_value(val) if val
             end
           else
             if (@value.to_i.to_s == @value || @value.to_f.to_s == @value)
-              @type == :integer ? { @column => @value.to_i } : { @column => @value.to_f }
+              @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
             end
           end
+        end
+
+        def column_for_value(value)
+          { @column => value }
         end
 
         def build_statement_for_string_or_text

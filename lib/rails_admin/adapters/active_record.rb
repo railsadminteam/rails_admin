@@ -274,19 +274,25 @@ module RailsAdmin
           case @value
           when Array then
             val, range_begin, range_end = *@value.map do |v|
-              @type == :integer ? v.to_i : v.to_f if [v.to_i.to_s, v.to_f.to_s].include?(v)
+              if (v.to_i.to_s == v || v.to_f.to_s == v)
+                @type == :integer ? v.to_i : v.to_f
+              end
             end
             case @operator
             when 'between'
               datetime_filter(range_begin, range_end)
             else
-              ["(#{@column} = ?)", val] if val
+              column_for_value(val) if val
             end
           else
             if @value.to_i.to_s == @value || @value.to_f.to_s == @value
-              ["(#{@column} = ?)", (@type == :integer ? @value.to_i : @value.to_f)]
+              @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
             end
           end
+        end
+
+        def column_for_value(value)
+          ["(#{@column} = ?)", value]
         end
 
         def build_statement_for_belongs_to_association
