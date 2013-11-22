@@ -311,14 +311,6 @@ module RailsAdmin
           ["(LOWER(#{@column}) #{like_operator} ?)", @value]
         end
 
-        def build_statement_for_date
-          datetime_filter(*get_filtering_duration)
-        end
-
-        def build_statement_for_datetime_or_timestamp
-          datetime_filter(*get_filtering_duration, true)
-        end
-
         def build_statement_for_enum
           return if @value.blank?
           ["(#{@column} IN (?))", Array.wrap(@value)]

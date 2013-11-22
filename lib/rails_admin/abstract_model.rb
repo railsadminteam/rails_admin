@@ -134,6 +134,14 @@ module RailsAdmin
         raise "You must override build_statement_for_type in your StatementBuilder"
       end
 
+      def build_statement_for_date
+        datetime_filter(*get_filtering_duration)
+      end
+
+      def build_statement_for_datetime_or_timestamp
+        datetime_filter(*get_filtering_duration, true)
+      end
+
       def unary_operators
         raise "You must override unary_operators in your StatementBuilder"
       end
