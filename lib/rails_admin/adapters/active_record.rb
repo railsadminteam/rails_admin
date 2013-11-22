@@ -255,52 +255,73 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-          when :boolean
-            return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
-            return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
-          when :integer, :decimal, :float
-            case @value
-            when Array then
-              val, range_begin, range_end = *@value.map do |v|
-                @type == :integer ? v.to_i : v.to_f if [v.to_i.to_s, v.to_f.to_s].include?(v)
-              end
-              case @operator
-              when 'between'
-                datetime_filter(range_begin, range_end)
-              else
-                ["(#{@column} = ?)", val] if val
-              end
-            else
-              if @value.to_i.to_s == @value || @value.to_f.to_s == @value
-                ["(#{@column} = ?)", (@type == :integer ? @value.to_i : @value.to_f)]
-              end
-            end
-          when :belongs_to_association
-            return if @value.blank?
-            ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value
-          when :string, :text
-            return if @value.blank?
-            @value = case @operator
-            when 'default', 'like'
-              "%#{@value.downcase}%"
-            when 'starts_with'
-              "#{@value.downcase}%"
-            when 'ends_with'
-              "%#{@value.downcase}"
-            when 'is', '='
-              "#{@value.downcase}"
-            else
-              return
-            end
-            ["(LOWER(#{@column}) #{like_operator} ?)", @value]
-          when :date
-            datetime_filter(*get_filtering_duration)
-          when :datetime, :timestamp
-            datetime_filter(*get_filtering_duration, true)
-          when :enum
-            return if @value.blank?
-            ["(#{@column} IN (?))", Array.wrap(@value)]
+            when :boolean                   then build_statement_for_boolean
+            when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
+            when :belongs_to_association    then build_statement_for_belongs_to_association
+            when :string, :text             then build_statement_for_string_or_text
+            when :date                      then build_statement_for_date
+            when :datetime, :timestamp      then build_statement_for_datetime_or_timestamp
+            when :enum                      then build_statement_for_enum
           end
+        end
+
+        def build_statement_for_boolean
+          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
+          return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+        end
+
+        def build_statement_for_integer_decimal_or_float
+          case @value
+          when Array then
+            val, range_begin, range_end = *@value.map do |v|
+              @type == :integer ? v.to_i : v.to_f if [v.to_i.to_s, v.to_f.to_s].include?(v)
+            end
+            case @operator
+            when 'between'
+              datetime_filter(range_begin, range_end)
+            else
+              ["(#{@column} = ?)", val] if val
+            end
+          else
+            if @value.to_i.to_s == @value || @value.to_f.to_s == @value
+              ["(#{@column} = ?)", (@type == :integer ? @value.to_i : @value.to_f)]
+            end
+          end
+        end
+
+        def build_statement_for_belongs_to_association
+          return if @value.blank?
+          ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value
+        end
+
+        def build_statement_for_string_or_text
+          return if @value.blank?
+          @value = case @operator
+          when 'default', 'like'
+            "%#{@value.downcase}%"
+          when 'starts_with'
+            "#{@value.downcase}%"
+          when 'ends_with'
+            "%#{@value.downcase}"
+          when 'is', '='
+            "#{@value.downcase}"
+          else
+            return
+          end
+          ["(LOWER(#{@column}) #{like_operator} ?)", @value]
+        end
+
+        def build_statement_for_date
+          datetime_filter(*get_filtering_duration)
+        end
+
+        def build_statement_for_datetime_or_timestamp
+          datetime_filter(*get_filtering_duration, true)
+        end
+
+        def build_statement_for_enum
+          return if @value.blank?
+          ["(#{@column} IN (?))", Array.wrap(@value)]
         end
 
         def ar_adapter
