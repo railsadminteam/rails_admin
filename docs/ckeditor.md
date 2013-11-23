@@ -31,6 +31,5 @@ Add this code to assets/rails_admin/custom/ckeditor_ajax.js.coffee and create a 
 ```
 //= require rails_admin/custom/ckeditor_ajax
 ```
-At this time this only worked in dev env for me. Because in production the ui.js is not compiled into rails_admin assets by default ... And adding it to precompile did not help either ...
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb]]
