@@ -59,11 +59,11 @@ module RailsAdmin
           csv << @fields.map do |field|
             output(::I18n.t('admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
           end +
-          @associations.map do |association_name, option_hash|
+          @associations.flat_map do |association_name, option_hash|
             option_hash[:fields].map do |field|
               output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
             end
-          end.flatten
+          end
         end
         method = @objects.respond_to?(:find_each) ? :find_each : :each
         @objects.send(method) do |o|
@@ -72,13 +72,13 @@ module RailsAdmin
           csv << @fields.map do |field|
             output(field.with(:object => o).export_value)
           end +
-          @associations.map do |association_name, option_hash|
+          @associations.flat_map do |association_name, option_hash|
 
             associated_objects = [o.send(association_name)].flatten.compact
             option_hash[:fields].map do |field|
               output(associated_objects.map{ |ao| field.with(:object => ao).export_value.presence || @empty }.join(','))
             end
-          end.flatten
+          end
         end
       end
 
