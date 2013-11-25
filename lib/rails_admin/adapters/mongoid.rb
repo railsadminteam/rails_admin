@@ -108,14 +108,12 @@ module RailsAdmin
 
       def make_field_conditions(field, value, operator)
         conditions_per_collection = {}
-        if field
-          field.searchable_columns.each do |column_infos|
-            collection_name, column_name = parse_collection_name(column_infos[:column])
-            statement = build_statement(column_name, column_infos[:type], value, operator)
-            if statement
-              conditions_per_collection[collection_name] ||= []
-              conditions_per_collection[collection_name] << statement
-            end
+        field.searchable_columns.each do |column_infos|
+          collection_name, column_name = parse_collection_name(column_infos[:column])
+          statement = build_statement(column_name, column_infos[:type], value, operator)
+          if statement
+            conditions_per_collection[collection_name] ||= []
+            conditions_per_collection[collection_name] << statement
           end
         end
         conditions_per_collection
@@ -144,6 +142,7 @@ module RailsAdmin
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
             field = fields.find{|f| f.name.to_s == field_name}
+            next unless field
             conditions_per_collection = make_field_conditions(field, filter_dump[:v], (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
             if field_statements.many?
