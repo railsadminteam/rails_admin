@@ -238,18 +238,13 @@ module RailsAdmin
 
         private
 
-        def datetime_filter(start_date, end_date, datetime = false)
-          if datetime
-            start_date = start_date.to_time.beginning_of_day if start_date
-            end_date = end_date.to_time.end_of_day if end_date
-          end
-
-          if start_date && end_date
-            ["(#{@column} BETWEEN ? AND ?)", start_date, end_date]
-          elsif start_date
-            ["(#{@column} >= ?)", start_date]
-          elsif end_date
-            ["(#{@column} <= ?)", end_date]
+        def range_filter(min, max)
+          if min && max
+            ["(#{@column} BETWEEN ? AND ?)", min, max]
+          elsif min
+            ["(#{@column} >= ?)", min]
+          elsif max
+            ["(#{@column} <= ?)", max]
           end
         end
 

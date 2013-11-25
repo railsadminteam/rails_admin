@@ -438,18 +438,13 @@ module RailsAdmin
           { @column => object_id } if object_id
         end
 
-        def datetime_filter(start_date, end_date, datetime = false)
-          if datetime
-            start_date = start_date.to_time.beginning_of_day if start_date
-            end_date = end_date.to_time.end_of_day if end_date
-          end
-
-          if start_date && end_date
-            { @column => { '$gte' => start_date, '$lte' => end_date } }
-          elsif start_date
-            { @column => { '$gte' => start_date } }
-          elsif end_date
-            { @column => { '$lte' => end_date } }
+        def range_filter(min, max)
+          if min && max
+            { @column => { '$gte' => min, '$lte' => max } }
+          elsif min
+            { @column => { '$gte' => min } }
+          elsif max
+            { @column => { '$lte' => max } }
           end
         end
 
