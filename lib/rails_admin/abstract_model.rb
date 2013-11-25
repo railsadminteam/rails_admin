@@ -130,6 +130,15 @@ module RailsAdmin
         FilteringDuration.new(@operator, @value).get_duration
       end
 
+      def build_statement_for_type_generic
+        build_statement_for_type || case @type
+          when :date                  then build_statement_for_date
+          when :datetime, :timestamp  then build_statement_for_datetime_or_timestamp
+          else
+            raise "Statement builder for type '#{@type}' not implemented."
+          end
+      end
+
       def build_statement_for_type
         raise "You must override build_statement_for_type in your StatementBuilder"
       end
@@ -173,7 +182,7 @@ module RailsAdmin
       def range_filter(min, max)
         raise "You must override range_filter in your StatementBuilder"
       end
-      
+
       class FilteringDuration
         def initialize(operator, value)
           @value = value

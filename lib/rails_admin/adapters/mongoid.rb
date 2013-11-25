@@ -395,8 +395,6 @@ module RailsAdmin
             when :boolean                   then build_statement_for_boolean
             when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
             when :string, :text             then build_statement_for_string_or_text
-            when :date                      then build_statement_for_date
-            when :datetime, :timestamp      then build_statement_for_datetime_or_timestamp
             when :enum                      then build_statement_for_enum
             when :belongs_to_association, :bson_object_id then build_statement_for_belongs_to_association_or_bson_object_id
           end

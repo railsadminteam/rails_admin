@@ -254,8 +254,6 @@ module RailsAdmin
             when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
             when :belongs_to_association    then build_statement_for_belongs_to_association
             when :string, :text             then build_statement_for_string_or_text
-            when :date                      then build_statement_for_date
-            when :datetime, :timestamp      then build_statement_for_datetime_or_timestamp
             when :enum                      then build_statement_for_enum
           end
         end
