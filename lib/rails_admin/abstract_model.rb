@@ -121,7 +121,7 @@ module RailsAdmin
         return if [@operator, @value].any? { |v| v == '_discard' }
 
         unary_operators[@operator] || unary_operators[@value] ||
-          build_statement_for_type
+          build_statement_for_type_generic
       end
 
       protected
