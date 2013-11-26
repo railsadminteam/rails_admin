@@ -45,7 +45,7 @@ group :test do
   gem 'coveralls', :require => false
   gem 'database_cleaner', '~> 1.0.0' # https://github.com/bmabey/database_cleaner/issues/224
   gem 'devise', '~> 2.1'
-  gem 'dragonfly', '>= 0.9'
+  gem 'dragonfly', '~> 0.9.0'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
