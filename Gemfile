@@ -34,7 +34,7 @@ group :mongoid do
   gem 'carrierwave-mongoid', github: 'jnicklas/carrierwave-mongoid', :require => 'carrierwave/mongoid'
 end
 
-group :development do
+group :development, :test do
   gem 'pry', '>= 0.9'
   gem 'pry-debugger', '>= 0.2', :platforms => :mri_19
 end

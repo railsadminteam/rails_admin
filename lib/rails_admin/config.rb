@@ -192,24 +192,9 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
-        possible =
-          included_models.map(&:to_s).presence || (
-          @@system_models ||= # memoization for tests
-            ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
-              (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
-                Dir.glob(app.root.join(load_path)).map do |load_dir|
-                  Dir.glob(load_dir + "/**/*.rb").map do |filename|
-                    # app/models/module/class.rb => module/class.rb => module/class => Module::Class
-                    lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
-                  end
-                end
-              end
-            end.flatten.reject {|m| m.starts_with?('Concerns::') }
-          )
-
         excluded = (excluded_models.map(&:to_s) + ['RailsAdmin::History'])
 
-        (possible - excluded).uniq.sort
+        (viable_models - excluded).uniq.sort
       end
 
       # Loads a model configuration instance from the registry or registers
@@ -307,8 +292,12 @@ module RailsAdmin
       # @see RailsAdmin::Config::Hideable
 
       def visible_models(bindings)
-        models.map{|m| m.with(bindings) }.select{|m| m.visible? && bindings[:controller].authorized?(:index, m.abstract_model) && (!m.abstract_model.embedded? || m.abstract_model.cyclic?)}.sort do |a, b|
-          (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
+        visible_models_with_bindings(bindings).sort do |a, b|
+          if (weight_order = a.weight <=> b.weight) == 0
+            a.label.downcase <=> b.label.downcase
+          else
+            weight_order
+          end
         end
       end
 
@@ -316,6 +305,30 @@ module RailsAdmin
 
       def lchomp(base, arg)
         base.to_s.reverse.chomp(arg.to_s.reverse).reverse
+      end
+
+      def viable_models
+        included_models.map(&:to_s).presence || (
+          @@system_models ||= # memoization for tests
+            ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
+              (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
+                Dir.glob(app.root.join(load_path)).map do |load_dir|
+                  Dir.glob(load_dir + "/**/*.rb").map do |filename|
+                    # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+                    lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+                  end
+                end
+              end
+            end.flatten.reject {|m| m.starts_with?('Concerns::') }
+          )
+      end
+
+      def visible_models_with_bindings(bindings)
+        models.map {|m| m.with(bindings)}.select do |m|
+          m.visible? &&
+            bindings[:controller].authorized?(:index, m.abstract_model) &&
+            (!m.abstract_model.embedded? || m.abstract_model.cyclic?)
+        end
       end
     end
 
