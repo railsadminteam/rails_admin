@@ -1,58 +1,153 @@
-[class^="icon-"]{
-  @extend .fa;
+[class^="icon-"],
+[class*=" icon-"] {
+  @extend .fa
 }
-.icon-info-sign{
-  @extend .fa-info-circle;
-}
-.icon-plus{
-  @extend .fa-plus;
-}
-.icon-minus{
-  @extend .fa-minus;
-}
-.icon-trash{
-  @extend .fa-trash-o;
-}
-.icon-chevron-right{
-  @extend .fa-chevron-right;
-}
-.icon-chevron-down{
-  @extend .fa-chevron-down;
-}
-.icon-check{
-  @extend .fa-check-square-o;
-}
-.icon-pencil{
-  @extend .fa-pencil;
-}
-.icon-ok{
-  @extend .fa-check;
-}
-.icon-remove{
-  //fa 4 dose'nt have none of cross, remove, delete
-  @extend .fa-times;
-}
-.icon-refresh{
-  @extend .fa-refresh;
-}
-.icon-question-sign{
-  @extend .fa-question-circle;
-}
-.icon-home{
-  @extend .fa-home;
-}
-.icon-share{
-  @extend .fa-share-square-o;
-}
-.icon-book{
-  @extend .fa-book;
-}
-.icon-th-list{
-  @extend .fa-th-list;
-}
-.icon-eye-open{
-  @extend .fa-eye;
-}
-.icon-white{
-  color:white;
-}
+
+.icon-glass              { @extend .fa-glass; }
+.icon-music              { @extend .fa-music; }
+.icon-search             { @extend .fa-search; }
+.icon-envelope           { @extend .fa-envelope; }
+.icon-heart              { @extend .fa-heart; }
+.icon-star               { @extend .fa-star; }
+.icon-star-empty         { @extend .fa-star-o; }
+.icon-user               { @extend .fa-user; }
+.icon-film               { @extend .fa-film; }
+.icon-th-large           { @extend .fa-th-large; }
+.icon-th                 { @extend .fa-th; }
+.icon-th-list            { @extend .fa-th-list; }
+.icon-ok                 { @extend .fa-check; }
+.icon-remove             { @extend .fa-times; }
+.icon-zoom-in            { @extend .fa-search-plus; }
+.icon-zoom-out           { @extend .fa-search-minus; }
+.icon-off                { @extend .fa-power-off; }
+.icon-signal             { @extend .fa-signal; }
+.icon-cog                { @extend .fa-cog; }
+.icon-trash              { @extend .fa-trash-o; }
+
+.icon-home               { @extend .fa-home; }
+.icon-file               { @extend .fa-file; }
+.icon-time               { @extend .fa-clock-o; }
+.icon-road               { @extend .fa-road; }
+.icon-download-alt       { @extend .fa-download; }
+.icon-download           { @extend .fa-download; }
+.icon-upload             { @extend .fa-upload; }
+.icon-inbox              { @extend .fa-inbox; }
+.icon-play-circle        { @extend .fa-play-circle; }
+.icon-repeat             { @extend .fa-repeat; }
+.icon-refresh            { @extend .fa-refresh; }
+.icon-list-alt           { @extend .fa-list-alt; }
+.icon-lock               { @extend .fa-lock; }
+.icon-flag               { @extend .fa-flag; }
+.icon-headphones         { @extend .fa-headphones; }
+.icon-volume-off         { @extend .fa-volume-off; }
+.icon-volume-down        { @extend .fa-volume-down; }
+.icon-volume-up          { @extend .fa-volume-up; }
+.icon-qrcode             { @extend .fa-qrcode; }
+.icon-barcode            { @extend .fa-barcode; }
+
+.icon-tag                { @extend .fa-tag; }
+.icon-tags               { @extend .fa-tags; }
+.icon-book               { @extend .fa-book; }
+.icon-bookmark           { @extend .fa-bookmark; }
+.icon-print              { @extend .fa-print; }
+.icon-camera             { @extend .fa-camera; }
+.icon-font               { @extend .fa-font; }
+.icon-bold               { @extend .fa-bold; }
+.icon-italic             { @extend .fa-italic; }
+.icon-text-height        { @extend .fa-text-height; }
+.icon-text-width         { @extend .fa-text-width; }
+.icon-align-left         { @extend .fa-align-left; }
+.icon-align-center       { @extend .fa-align-center; }
+.icon-align-right        { @extend .fa-align-right; }
+.icon-align-justify      { @extend .fa-align-justify; }
+.icon-list               { @extend .fa-list; }
+.icon-indent-left        { @extend .fa-indent; }
+.icon-indent-right       { @extend .fa-dedent; }
+.icon-facetime-video     { @extend .fa-video-camera; }
+.icon-picture            { @extend .fa-picture-o; }
+
+.icon-pencil             { @extend .fa-pencil; }
+.icon-map-marker         { @extend .fa-map-marker; }
+.icon-adjust             { @extend .fa-adjust; }
+.icon-tint               { @extend .fa-tint; }
+.icon-edit               { @extend .fa-edit; }
+.icon-share              { @extend .fa-share-square-o; }
+.icon-check              { @extend .fa-check; }
+.icon-move               { @extend .fa-arrows; }
+.icon-step-backward      { @extend .fa-step-backward; }
+.icon-fast-backward      { @extend .fa-fast-backward; }
+.icon-backward           { @extend .fa-backward; }
+.icon-play               { @extend .fa-play; }
+.icon-pause              { @extend .fa-pause; }
+.icon-stop               { @extend .fa-stop; }
+.icon-forward            { @extend .fa-forward; }
+.icon-fast-forward       { @extend .fa-fast-forward; }
+.icon-step-forward       { @extend .fa-step-forward; }
+.icon-eject              { @extend .fa-eject; }
+.icon-chevron-left       { @extend .fa-chevron-left; }
+.icon-chevron-right      { @extend .fa-chevron-right; }
+
+.icon-plus-sign          { @extend .fa-plus-circle; }
+.icon-minus-sign         { @extend .fa-minus-circle; }
+.icon-remove-sign        { @extend .fa-times-circle; }
+.icon-ok-sign            { @extend .fa-check-circle; }
+.icon-question-sign      { @extend .fa-question-circle; }
+.icon-info-sign          { @extend .fa-info-circle; }
+.icon-screenshot         { @extend .fa-crosshairs; }
+.icon-remove-circle      { @extend .fa-times-circle-o; }
+.icon-ok-circle          { @extend .fa-check-circle-o; }
+.icon-ban-circle         { @extend .fa-ban; }
+.icon-arrow-left         { @extend .fa-arrow-left; }
+.icon-arrow-right        { @extend .fa-arrow-right; }
+.icon-arrow-up           { @extend .fa-arrow-up; }
+.icon-arrow-down         { @extend .fa-arrow-down; }
+.icon-share-alt          { @extend .fa-share; }
+.icon-resize-full        { @extend .fa-expand; }
+.icon-resize-small       { @extend .fa-compress; }
+.icon-plus               { @extend .fa-plus; }
+.icon-minus              { @extend .fa-minus; }
+.icon-asterisk           { @extend .fa-asterisk; }
+
+.icon-exclamation-sign   { @extend .fa-exclamation-circle; }
+.icon-gift               { @extend .fa-gift; }
+.icon-leaf               { @extend .fa-leaf; }
+.icon-fire               { @extend .fa-fire; }
+.icon-eye-open           { @extend .fa-eye; }
+.icon-eye-close          { @extend .fa-eye-slash; }
+.icon-warning-sign       { @extend .fa-warning; }
+.icon-plane              { @extend .fa-plane; }
+.icon-calendar           { @extend .fa-calendar; }
+.icon-random             { @extend .fa-random; }
+.icon-comment            { @extend .fa-comment; }
+.icon-magnet             { @extend .fa-magnet; }
+.icon-chevron-up         { @extend .fa-chevron-up; }
+.icon-chevron-down       { @extend .fa-chevron-down; }
+.icon-retweet            { @extend .fa-retweet; }
+.icon-shopping-cart      { @extend .fa-shopping-cart; }
+.icon-folder-close       { @extend .fa-folder; }
+.icon-folder-open        { @extend .fa-folder-open; }
+.icon-resize-vertical    { @extend .fa-arrows-v; }
+.icon-resize-horizontal  { @extend .fa-arrows-h; }
+
+.icon-hdd                { @extend .fa-hdd-o; }
+.icon-bullhorn           { @extend .fa-bullhorn; }
+.icon-bell               { @extend .fa-bell; }
+.icon-certificate        { @extend .fa-certificate; }
+.icon-thumbs-up          { @extend .fa-thumbs-up; }
+.icon-thumbs-down        { @extend .fa-thumbs-down; }
+.icon-hand-right         { @extend .fa-hand-o-right; }
+.icon-hand-left          { @extend .fa-hand-o-left; }
+.icon-hand-up            { @extend .fa-hand-o-up; }
+.icon-hand-down          { @extend .fa-hand-o-down; }
+.icon-circle-arrow-right { @extend .fa-arrow-circle-right; }
+.icon-circle-arrow-left  { @extend .fa-arrow-circle-left; }
+.icon-circle-arrow-up    { @extend .fa-arrow-circle-up; }
+.icon-circle-arrow-down  { @extend .fa-arrow-circle-down; }
+.icon-globe              { @extend .fa-globe; }
+.icon-wrench             { @extend .fa-wrench; }
+.icon-tasks              { @extend .fa-tasks; }
+.icon-filter             { @extend .fa-filter; }
+.icon-briefcase          { @extend .fa-briefcase; }
+.icon-fullscreen         { @extend .fa-arrows-alt; }
+
+.icon-white              { color:white; }
