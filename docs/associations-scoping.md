@@ -73,3 +73,7 @@ end
 ```
 The advantage here is that user will never be able to see 'wrong' contacts and he won't be able to set a wrong email.
 More on cancan's own page.
+
+### Restricting fields through roles or some condition
+
+You can also restrict some field through role or some condition, [take a look at this post](http://blog.glaucocustodio.com/2013/11/28/conditional-fields-in-rails-admin/)
