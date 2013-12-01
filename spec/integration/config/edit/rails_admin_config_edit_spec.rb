@@ -668,7 +668,7 @@ describe "RailsAdmin Config DSL Edit Section" do
 
       find('#field_test_comment_attributes_field .add_nested_fields').click()
       fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
-     
+
       fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited', :visible => false
       find('#field_test_nested_field_tests_attributes_1__destroy', :visible => false).set('true')
 
