@@ -21,7 +21,7 @@ group :active_record do
   platforms :ruby, :mswin, :mingw do
     case ENV['CI_DB_ADAPTER']
     when 'mysql2'
-      gem 'mysql2', '~> 0.3.11'
+      gem 'mysql2', '~> 0.3.14'
     when 'postgresql'
       gem 'pg', '>= 0.14'
     else
@@ -34,12 +34,12 @@ group :mongoid do
   gem 'mongoid', github: 'mongoid/mongoid'
   gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
   gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
-  gem 'carrierwave-mongoid', github: 'jnicklas/carrierwave-mongoid', :require => 'carrierwave/mongoid'
+  gem 'carrierwave-mongoid', '>= 0.6.3', :require => 'carrierwave/mongoid'
 end
 
 gem 'carrierwave', '>= 0.8'
-gem 'devise', '~> 3.0.0.rc'
-gem 'dragonfly', '>= 0.9'
+gem 'devise', '>= 3.2'
+gem 'dragonfly', '~> 0.9.0'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.6'
 gem 'paperclip', '>= 3.4'
