@@ -47,7 +47,7 @@ module RailsAdmin
 
       # Add a BOM for utf8 encodings, helps with utf8 auto-detect for some versions of Excel.
       # Don't add if utf8 but user don't want to touch input encoding:
-      # If user chooses utf8, he will open it in utf8 and BOM will disappear at reading.
+      # If user chooses utf8, they will open it in utf8 and BOM will disappear at reading.
       # But that way "English" users who don't bother and chooses to let utf8 by default won't get BOM added
       # and will not see it if Excel opens the file with a different encoding.
       if options[:encoding_to] == 'UTF-8'
