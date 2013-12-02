@@ -41,8 +41,17 @@ module RailsAdmin
         def initialize(controller, user_class = 'User', version_class = '::Version')
           raise "PaperTrail not found" unless defined?(PaperTrail)
           @controller = controller
-          @user_class = user_class.to_s.constantize rescue "Please set up Papertrail's user model explicitely. Ex: config.audit_with :paper_trail, 'User'"
-          @version_class = version_class.to_s.constantize  rescue "Please set up Papertrail's version model explicitely. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
+          begin
+            @user_class = user_class.to_s.constantize
+          rescue NameError => e
+            raise "Please set up Papertrail's user model explicitely. Ex: config.audit_with :paper_trail, 'User'"
+          end
+
+          begin
+            @version_class = version_class.to_s.constantize 
+          rescue NameError => e
+            raise "Please set up Papertrail's version model explicitely. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
+          end
         end
 
         def latest
