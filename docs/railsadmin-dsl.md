@@ -524,6 +524,29 @@ RailsAdmin.config do |config|
 end
 ```
 
+Since v0.6 you can also override your fields help text based on rails i18n functionality, using your locale files:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model 'Team' do
+    edit do
+      field :name
+      field :email
+    end
+  end
+end
+```
+
+```yml
+en:
+  admin:
+    help:
+      team:
+        email: '%{help}. Popular webmail addresses not allowed'
+```
+
+%{help} will be replaced by the rails_admin default generated help message.
+
 ### Configuring fields ###
 
 **Fields - exclude some fields**
