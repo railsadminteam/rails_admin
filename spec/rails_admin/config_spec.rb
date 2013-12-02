@@ -144,7 +144,7 @@ describe RailsAdmin::Config do
 
     context "given paper_trail as the extension for auditing" do
       before do
-        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, {
+        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::History, {
           :auditing => true
         })
       end
