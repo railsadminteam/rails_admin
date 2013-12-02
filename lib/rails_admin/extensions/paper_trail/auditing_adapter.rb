@@ -9,7 +9,7 @@ module RailsAdmin
 
         def message
           @message = @version.event
-          @version.respond_to?(:changeset) ? @message + " [" + @version.changeset.to_a.collect {|c| c[0] + " = " + c[1][1].to_s}.join(", ") + "]" : @message
+          @version.respond_to?(:changeset) && @version.changeset.present? ? @message + " [" + @version.changeset.to_a.collect {|c| c[0] + " = " + c[1][1].to_s}.join(", ") + "]" : @message
         end
 
         def created_at
@@ -38,14 +38,15 @@ module RailsAdmin
           :message => :event
         }
 
-        def initialize(controller, user_class = User)
+        def initialize(controller, user_class = 'User', version_class = '::Version')
           raise "PaperTrail not found" unless defined?(PaperTrail)
           @controller = controller
-          @user_class = user_class.to_s.constantize
+          @user_class = user_class.to_s.constantize rescue "Please set up Papertrail's user model explicitely. Ex: config.audit_with :paper_trail, 'User'"
+          @version_class = version_class.to_s.constantize  rescue "Please set up Papertrail's version model explicitely. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
         end
 
         def latest
-          ::Version.limit(100).map{|version| VersionProxy.new(version, @user_class)}
+          @version_class.limit(100).map{|version| VersionProxy.new(version, @user_class)}
         end
 
         def delete_object(object, model, user)
@@ -76,7 +77,7 @@ module RailsAdmin
             sort = :created_at
             sort_reverse = "true"
           end
-          versions = ::Version.where :item_type => model.model.name
+          versions = @version_class.where :item_type => model.model.name
           versions = versions.where :item_id => object.id if object
           versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
