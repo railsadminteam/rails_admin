@@ -14,7 +14,8 @@ $ bundle exec rails generate paper_trail:install --with-changes
 * add this to your `rails_admin.rb` initializer:
 
 ```ruby
-config.audit_with :paper_trail, User
+config.audit_with :paper_trail, 'User', 'Papertrail::Version' # PaperTrail >= 3.0.0
+config.audit_with :paper_trail, 'User', 'Version' # PaperTrail < 3.0.0
 ```
 
 User should be your 'user' model.
