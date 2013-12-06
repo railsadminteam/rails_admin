@@ -130,6 +130,7 @@
 ### Plugins
 
 * [Coordinates with Google Maps](https://github.com/trademobile/rails_admin_map_field)
+* [Google Maps with Places and Foursquare Venues](https://github.com/thinkclay/rails_admin_place_field)
 * [ActsAsTaggableOn tag_list field](https://github.com/kryzhovnik/rails_admin_tag_list)
 * [Rich: an opinionated CKEditor implementation with file uploads](https://github.com/bastiaanterhorst/rich)
 * [Image cropping with rails_admin_jcrop](https://github.com/janx/rails_admin_jcrop)
