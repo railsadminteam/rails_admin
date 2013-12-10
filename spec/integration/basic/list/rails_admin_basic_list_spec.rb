@@ -440,5 +440,97 @@ describe "RailsAdmin Basic List" do
     end
 
   end
+  
+  describe "Scopes" do
+    before(:each) do
+      RailsAdmin.config do |config|
+        config.model Team do
+          list do
+            scopes [nil, :red, :white]
+          end
+        end
+      end
+      @teams = [
+        FactoryGirl.create(:team, color: 'red'),
+        FactoryGirl.create(:team, color: 'red'),
+        FactoryGirl.create(:team, color: 'white'),
+        FactoryGirl.create(:team, color: 'black')
+      ]
+    end
+    
+    it "displays configured scopes" do
+      visit index_path(:model_name => "team")
+      expect(find('#scope_selector li:first')).to have_content("All")
+      expect(find('#scope_selector li:nth-child(2)')).to have_content("Red")
+      expect(find('#scope_selector li:nth-child(3)')).to have_content("White")
+      expect(find('#scope_selector li:last')).to have_content("White")
+      expect(find('#scope_selector li.active')).to have_content("All")
+    end
+    
+    it 'shows only scoped records' do
+      visit index_path(:model_name => "team")
+      should have_content(@teams[0].name)
+      should have_content(@teams[1].name)
+      should have_content(@teams[2].name)
+      should have_content(@teams[3].name)
 
+      visit index_path(:model_name => "team", scope: 'red')
+      expect(find('#scope_selector li.active')).to have_content("Red")
+      should have_content(@teams[0].name)
+      should have_content(@teams[1].name)
+      should have_no_content(@teams[2].name)
+      should have_no_content(@teams[3].name)
+
+      visit index_path(:model_name => "team", scope: 'white')
+      expect(find('#scope_selector li.active')).to have_content("White")
+      should have_no_content(@teams[0].name)
+      should have_no_content(@teams[1].name)
+      should have_content(@teams[2].name)
+      should have_no_content(@teams[3].name)
+    end
+    it 'shows all records instead when scope not in list' do
+      visit index_path(:model_name => "team", scope: 'green')
+      should have_content(@teams[0].name)
+      should have_content(@teams[1].name)
+      should have_content(@teams[2].name)
+      should have_content(@teams[3].name)
+    end
+    describe 'i18n' do
+      before :each do 
+        en = { :admin => { :scopes => {
+          :_all => 'every',
+          :red => 'krasnyj'
+        } }}
+        I18n.backend.store_translations(:en, en)
+      end
+      context 'global' do
+        it "displays configured scopes" do
+          visit index_path(:model_name => "team")
+          expect(find('#scope_selector li:first')).to have_content("every")
+          expect(find('#scope_selector li:nth-child(2)')).to have_content("krasnyj")
+          expect(find('#scope_selector li:nth-child(3)')).to have_content("White")
+          expect(find('#scope_selector li:last')).to have_content("White")
+          expect(find('#scope_selector li.active')).to have_content("every")
+        end
+      end
+      context 'per model' do
+        before :each do 
+          en = { :admin => { :scopes => { :team => {
+            :_all => 'any',
+            :red => 'kr'
+          }}}}
+          I18n.backend.store_translations(:en, en)
+        end
+        it "displays configured scopes" do
+          visit index_path(:model_name => "team")
+          expect(find('#scope_selector li:first')).to have_content("any")
+          expect(find('#scope_selector li:nth-child(2)')).to have_content("kr")
+          expect(find('#scope_selector li:nth-child(3)')).to have_content("White")
+          expect(find('#scope_selector li:last')).to have_content("White")
+          expect(find('#scope_selector li.active')).to have_content("any")
+        end
+      end
+    end
+  end
 end
+
