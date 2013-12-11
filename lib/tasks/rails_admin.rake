@@ -1,12 +1,4 @@
 namespace :rails_admin do
-  desc "Disable rails_admin initializer"
-  task :disable_initializer do
-    if ENV['SKIP_RAILS_ADMIN_INITIALIZER'].nil?
-      ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
-      puts "[RailsAdmin] RailsAdmin initialization disabled by default. Pass SKIP_RAILS_ADMIN_INITIALIZER=false if you need it."
-    end
-  end
-
   desc "Install rails_admin"
   task :install do
     system 'rails g rails_admin:install'
@@ -19,7 +11,6 @@ namespace :rails_admin do
 
   desc "CI env for Travis"
   task :prepare_ci_env do
-    ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
     adapter = ENV["CI_DB_ADAPTER"] || "sqlite3"
     database = ENV["CI_DB_DATABASE"] || ("sqlite3" == adapter ? "db/development.sqlite3" : "ci_rails_admin")
 
@@ -43,6 +34,3 @@ namespace :rails_admin do
     end
   end
 end
-
-task :environment => 'rails_admin:disable_initializer'
-

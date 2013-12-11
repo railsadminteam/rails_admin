@@ -1,6 +1,5 @@
 # Configure Rails Envinronment
 ENV["RAILS_ENV"] = "test"
-ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'true'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = [:active_record, :mongoid]
 PK_COLUMN = {:active_record=>:id, :mongoid=>:_id}[CI_ORM]
@@ -27,8 +26,6 @@ ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.default_url_options[:host] = "example.com"
 
 Rails.backtrace_cleaner.remove_silencers!
-
-ENV['SKIP_RAILS_ADMIN_INITIALIZER'] = 'false'
 
 # Don't need passwords in test DB to be secure, but we would like 'em to be
 # fast -- and the stretches mechanism is intended to make passwords
