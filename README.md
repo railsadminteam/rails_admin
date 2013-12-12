@@ -103,6 +103,8 @@ See [#715](https://github.com/sferik/rails_admin/issues/715) for more details.
 
 It will also add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
 
+Note: If you already have an admin user class generated with Devise, be sure to delete the migration file add_fields_to_admin that's automatically generated when you installed rails_admin. Do that before proceeding with the next step of migrating your database.
+
 Finally run:
 
     bundle exec rake db:migrate
