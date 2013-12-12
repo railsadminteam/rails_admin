@@ -3,14 +3,14 @@ models and following some Rails conventions. For a more tailored experience, it 
 configuration DSL which allows you to customize many aspects of the interface.
 
 A customized configuration guide is generated at installation in `config/initializers/rails_admin.rb`
-
 This initializer in `config/initializer/rails_admin.rb` is executed at startup time, once.
 
 Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
-
 You can force it if needed:
 
 `SKIP_RAILS_ADMIN_INITIALIZER=false rake mytask`
+
+The configurations explained here (and more) are defined as `attr_accessor` in https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config.rb. Make sure to also check that source file out to see all available configuration options.
 
 **Set the application name:**
 
