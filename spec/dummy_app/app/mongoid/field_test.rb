@@ -30,7 +30,7 @@ class FieldTest
   field :format, :type => String
   field :restricted_field, :type => String
   field :protected_field, :type => String
-  has_mongoid_attached_file :paperclip_asset, :styles => { :thumb => '100x100>' }
+  has_mongoid_attached_file :paperclip_asset, :styles => {:thumb => '100x100>'}
 
   has_many :nested_field_tests, :dependent => :destroy, :inverse_of => :field_test, :autosave => true
   accepts_nested_attributes_for :nested_field_tests, :allow_destroy => true

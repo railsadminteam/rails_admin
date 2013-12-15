@@ -19,7 +19,7 @@ module RailsAdmin
           object.assign_attributes(attributes)
         end
 
-        def save(options = { :validate => true })
+        def save(options = {:validate => true})
           object.save(options)
         end
 

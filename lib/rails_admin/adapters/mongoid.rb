@@ -128,7 +128,7 @@ module RailsAdmin
         end
 
         if statements.any?
-          { '$or' => statements }
+          {'$or' => statements}
         else
           {}
         end
@@ -146,7 +146,7 @@ module RailsAdmin
             conditions_per_collection = make_field_conditions(field, filter_dump[:v], (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
             if field_statements.many?
-              statements << { '$or' => field_statements }
+              statements << {'$or' => field_statements}
             elsif field_statements.any?
               statements << field_statements.first
             end
@@ -154,7 +154,7 @@ module RailsAdmin
         end
 
         if statements.any?
-          { '$and' => statements }
+          {'$and' => statements}
         else
           {}
         end
@@ -162,37 +162,37 @@ module RailsAdmin
 
       def type_lookup(name, field)
         {
-          'Array'          => { :type => :serialized },
-          'BigDecimal'     => { :type => :decimal },
-          'Mongoid::Boolean'        => { :type => :boolean },
-          'Boolean'        => { :type => :boolean },
-          'BSON::ObjectId' => { :type => :bson_object_id, :serial? => (name == primary_key) },
-          'Moped::BSON::ObjectId' => { :type => :bson_object_id, :serial? => (name == primary_key) },
-          'Date'           => { :type => :date },
-          'DateTime'       => { :type => :datetime },
-          'ActiveSupport::TimeWithZone' => { :type => :datetime },
-          'Float'          => { :type => :float },
-          'Hash'           => { :type => :serialized },
-          'Money'          => { :type => :serialized },
-          'Integer'        => { :type => :integer },
+          'Array'          => {:type => :serialized},
+          'BigDecimal'     => {:type => :decimal},
+          'Mongoid::Boolean'        => {:type => :boolean},
+          'Boolean'        => {:type => :boolean},
+          'BSON::ObjectId' => {:type => :bson_object_id, :serial? => (name == primary_key)},
+          'Moped::BSON::ObjectId' => {:type => :bson_object_id, :serial? => (name == primary_key)},
+          'Date'           => {:type => :date},
+          'DateTime'       => {:type => :datetime},
+          'ActiveSupport::TimeWithZone' => {:type => :datetime},
+          'Float'          => {:type => :float},
+          'Hash'           => {:type => :serialized},
+          'Money'          => {:type => :serialized},
+          'Integer'        => {:type => :integer},
           'Object'         => (
             if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
-              { :type => :bson_object_id }
+              {:type => :bson_object_id}
             else
-              { :type => :string, :length => 255 }
+              {:type => :string, :length => 255}
             end
           ),
             'String'         => (
               if (length = length_validation_lookup(name)) && length < 256
-                { :type => :string, :length => length }
+                {:type => :string, :length => length}
               elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
-                { :type => :string, :length => 255 }
+                {:type => :string, :length => 255}
               else
-                { :type => :text }
+                {:type => :text}
               end
           ),
-            'Symbol'         => { :type => :string, :length => 255 },
-            'Time'           => { :type => :datetime },
+            'Symbol'         => {:type => :string, :length => 255},
+            'Time'           => {:type => :datetime},
         }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
       end
 
@@ -236,9 +236,9 @@ module RailsAdmin
         model = target_association[:model_proc].call
         case target_association[:type]
         when :belongs_to, :has_and_belongs_to_many
-          [{ target_association[:foreign_key].to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:primary_key_proc].call)} }}]
+          [{target_association[:foreign_key].to_s => {'$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:primary_key_proc].call)}}}]
         when :has_many
-          [{ target_association[:primary_key_proc].call.to_s => { '$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:foreign_key])} }}]
+          [{target_association[:primary_key_proc].call.to_s => {'$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:foreign_key])}}}]
         end
       end
 
@@ -379,12 +379,12 @@ module RailsAdmin
 
         def unary_operators
           {
-            '_blank' => { @column => {'$in' => [nil, '']} },
-            '_present' => { @column => {'$nin' => [nil, '']} },
-            '_null' => { @column => nil },
-            '_not_null' => { @column => {'$ne' => nil} },
-            '_empty' => { @column => '' },
-            '_not_empty' => { @column => {'$ne' => ''} }
+            '_blank' => {@column => {'$in' => [nil, '']}},
+            '_present' => {@column => {'$nin' => [nil, '']}},
+            '_null' => {@column => nil},
+            '_not_null' => {@column => {'$ne' => nil}},
+            '_empty' => {@column => ''},
+            '_not_empty' => {@column => {'$ne' => ''}}
           }
         end
 
@@ -401,12 +401,12 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return { @column => false } if %w[false f 0].include?(@value)
-          return { @column => true } if %w[true t 1].include?(@value)
+          return {@column => false} if %w[false f 0].include?(@value)
+          return {@column => true} if %w[true t 1].include?(@value)
         end
 
         def column_for_value(value)
-          { @column => value }
+          {@column => value}
         end
 
         def build_statement_for_string_or_text
@@ -423,26 +423,26 @@ module RailsAdmin
           else
             return
           end
-          { @column => @value }
+          {@column => @value}
         end
 
         def build_statement_for_enum
           return if @value.blank?
-          { @column => { '$in' => Array.wrap(@value) } }
+          {@column => {'$in' => Array.wrap(@value)}}
         end
 
         def build_statement_for_belongs_to_association_or_bson_object_id
           object_id = (object_id_from_string(@value) rescue nil)
-          { @column => object_id } if object_id
+          {@column => object_id} if object_id
         end
 
         def range_filter(min, max)
           if min && max
-            { @column => { '$gte' => min, '$lte' => max } }
+            {@column => {'$gte' => min, '$lte' => max}}
           elsif min
-            { @column => { '$gte' => min } }
+            {@column => {'$gte' => min}}
           elsif max
-            { @column => { '$lte' => max } }
+            {@column => {'$lte' => max}}
           end
         end
 

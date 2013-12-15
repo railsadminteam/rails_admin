@@ -47,7 +47,7 @@ class User
   include Mongoid::Timestamps
 
   # Add Paperclip support for avatars
-  has_mongoid_attached_file :avatar, :styles => { :medium => '300x300>', :thumb => '100x100>' }
+  has_mongoid_attached_file :avatar, :styles => {:medium => '300x300>', :thumb => '100x100>'}
 
   field :roles, :type => Array
 

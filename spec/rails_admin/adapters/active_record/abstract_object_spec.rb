@@ -21,7 +21,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', :active_record =>
 
     describe 'a record without associations' do
       before do
-        object.set_attributes({ :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil })
+        object.set_attributes({:name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil})
       end
 
       it 'creates a Player with given attributes' do
@@ -42,7 +42,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', :active_record =>
       let(:number) { draft.player.number + 1 } # to avoid collision
 
       before do
-        object.set_attributes({ :name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil, :draft_id => draft.id })
+        object.set_attributes({:name => name, :number => number, :position => position, :suspended => suspended, :team_id => nil, :draft_id => draft.id})
       end
 
       it 'creates a Player with given attributes' do
@@ -66,7 +66,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', :active_record =>
       let(:divisions) { [Division.create!(:name => 'div 1', :league => League.create!(:name => 'north')), Division.create!(:name => 'div 2', :league => League.create!(:name => 'south'))] }
 
       before do
-        object.set_attributes({ :name  => name, :division_ids => divisions.map(&:id) })
+        object.set_attributes({:name  => name, :division_ids => divisions.map(&:id)})
       end
 
       it 'creates a League with given attributes and associations' do
@@ -90,7 +90,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', :active_record =>
       let(:new_number) { player.number + 29 }
 
       before do
-        object.set_attributes({ :number => new_number, :team_id => new_team.id, :suspended => new_suspended, :draft_id => new_draft })
+        object.set_attributes({:number => new_number, :team_id => new_team.id, :suspended => new_suspended, :draft_id => new_draft})
         object.save
       end
 

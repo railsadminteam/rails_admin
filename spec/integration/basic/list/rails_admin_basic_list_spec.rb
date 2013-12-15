@@ -128,7 +128,7 @@ describe "RailsAdmin Basic List" do
         end
       end
 
-      visit index_path(:model_name => "player", :f => {:team => {"1" => { :v => @teams[0].name }}})
+      visit index_path(:model_name => "player", :f => {:team => {"1" => {:v => @teams[0].name}}})
       should have_content(@players[0].name)
       should have_content(@players[1].name)
       should have_no_content(@players[2].name)

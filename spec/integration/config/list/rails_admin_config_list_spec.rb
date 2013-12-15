@@ -366,14 +366,14 @@ describe 'RailsAdmin Config DSL List Section' do
   describe 'default sorting' do
     let(:today){ Date.today }
     let(:players) do
-      [{ :name => 'Jackie Robinson',  :created_at => today,            :team_id => rand(99999), :number => 42 },
-       { :name => 'Deibinson Romero', :created_at => (today - 2.days), :team_id => rand(99999), :number => 13 },
-       { :name => 'Sandy Koufax',     :created_at => (today - 1.days), :team_id => rand(99999), :number => 32 }]
+      [{:name => 'Jackie Robinson',  :created_at => today,            :team_id => rand(99999), :number => 42},
+       {:name => 'Deibinson Romero', :created_at => (today - 2.days), :team_id => rand(99999), :number => 13},
+       {:name => 'Sandy Koufax',     :created_at => (today - 1.days), :team_id => rand(99999), :number => 32}]
     end
     let(:leagues) do
-      [{ :name => 'American',      :created_at => (today - 1.day) },
-       { :name => 'Florida State', :created_at => (today - 2.days)},
-       { :name => 'National',      :created_at => today }]
+      [{:name => 'American',      :created_at => (today - 1.day)},
+       {:name => 'Florida State', :created_at => (today - 2.days)},
+       {:name => 'National',      :created_at => today}]
     end
     let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
     let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }

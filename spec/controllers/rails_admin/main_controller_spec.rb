@@ -32,8 +32,8 @@ describe RailsAdmin::MainController do
 
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
       allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
-      expect { get :bulk_delete, { :model_name => 'player', :bulk_action =>'bulk_delete' } }.to raise_error('redirected back')
-      expect { get :bulk_delete, { :model_name => 'player', :bulk_action =>'bulk_delete', :bulk_ids => [] } }.not_to raise_error
+      expect { get :bulk_delete, {:model_name => 'player', :bulk_action =>'bulk_delete'} }.to raise_error('redirected back')
+      expect { get :bulk_delete, {:model_name => 'player', :bulk_action =>'bulk_delete', :bulk_ids => []} }.not_to raise_error
     end
   end
 
@@ -50,27 +50,27 @@ describe RailsAdmin::MainController do
       end
 
       it 'returns the option with no changes' do
-        controller.params = { :sort => 'team', :model_name =>'players' }
+        controller.params = {:sort => 'team', :model_name =>'players'}
         expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>:"team.name", :sort_reverse=>true})
       end
     end
 
 
     it 'works with belongs_to associations with label method virtual' do
-      controller.params = { :sort => 'parent_category', :model_name =>'categories' }
+      controller.params = {:sort => 'parent_category', :model_name =>'categories'}
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>'categories.parent_category_id', :sort_reverse=>true})
     end
 
     context 'using mongoid, not supporting joins', :mongoid => true do
       it 'gives back the remote table with label name' do
-        controller.params = { :sort => 'team', :model_name =>'players' }
+        controller.params = {:sort => 'team', :model_name =>'players'}
         expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>'players.team_id', :sort_reverse=>true})
       end
     end
 
     context 'using active_record, supporting joins', :active_record => true do
       it 'gives back the local column'  do
-        controller.params = { :sort => 'team', :model_name =>'players' }
+        controller.params = {:sort => 'team', :model_name =>'players'}
         expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>'teams.name', :sort_reverse=>true})
       end
     end
@@ -79,7 +79,7 @@ describe RailsAdmin::MainController do
   describe '#list_entries called from view' do
     before do
       @teams = 21.times.map { FactoryGirl.create :team }
-      controller.params = { :model_name => 'teams' }
+      controller.params = {:model_name => 'teams'}
     end
 
     it 'paginates' do
@@ -91,7 +91,7 @@ describe RailsAdmin::MainController do
   describe '#list_entries called from view with kaminari custom param_name' do
     before do
       @teams = 21.times.map { FactoryGirl.create :team }
-      controller.params = { :model_name => 'teams' }
+      controller.params = {:model_name => 'teams'}
       Kaminari.config.param_name = :pagina
     end
 
@@ -108,7 +108,7 @@ describe RailsAdmin::MainController do
   describe '#list_entries called with bulk_ids' do
     before do
       @teams = 21.times.map { FactoryGirl.create :team }
-      controller.params = { :model_name => 'teams', :bulk_action => 'bulk_delete', :bulk_ids => @teams.map(&:id) }
+      controller.params = {:model_name => 'teams', :bulk_action => 'bulk_delete', :bulk_ids => @teams.map(&:id)}
     end
 
     it 'does not paginate' do
@@ -119,7 +119,7 @@ describe RailsAdmin::MainController do
   describe '#list_entries for associated_collection' do
     before do
       @team = FactoryGirl.create :team
-      controller.params = { :associated_collection => 'players', :current_action => 'update', :source_abstract_model => 'team', :source_object_id => @team.id, :model_name => 'player', :action => 'index' }
+      controller.params = {:associated_collection => 'players', :current_action => 'update', :source_abstract_model => 'team', :source_object_id => @team.id, :model_name => 'player', :action => 'index'}
       controller.get_model # set @model_config for Team
     end
 
@@ -306,7 +306,7 @@ describe RailsAdmin::MainController do
       it 'enforces permit!' do
         controller.params = HashWithIndifferentAccess.new({
           'model_name'=>'player',
-          'player'=>{ 'name' => 'foo' }
+          'player'=>{'name' => 'foo'}
         })
         controller.send(:get_model)
         expect(controller.params['player'].permitted?).to be_false

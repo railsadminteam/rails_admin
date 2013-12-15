@@ -13,14 +13,14 @@ describe RailsAdmin::Config::Fields::Types::Date do
     end
 
     it 'reads %B %d, %Y by default' do
-      @object.date_field = @field.parse_input({ :date_field => @time.strftime('%B %d, %Y') })
+      @object.date_field = @field.parse_input({:date_field => @time.strftime('%B %d, %Y')})
       expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
 
     it 'covers a timezone lag even if in UTC+n:00 timezone.' do
       Time.zone = 'Tokyo' # +09:00
 
-      @object.date_field = @field.parse_input({ :date_field => @time.strftime('%B %d, %Y') })
+      @object.date_field = @field.parse_input({:date_field => @time.strftime('%B %d, %Y')})
       expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
 
@@ -33,7 +33,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
         end
       end
 
-      @object.date_field = @field.parse_input({ :date_field => @time.strftime('%Y-%m-%d') })
+      @object.date_field = @field.parse_input({:date_field => @time.strftime('%Y-%m-%d')})
       expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
 
@@ -46,7 +46,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
         end
       end
 
-      @object.date_field = @field.parse_input({ :date_field => @time.strftime('%Y/%m/%d') })
+      @object.date_field = @field.parse_input({:date_field => @time.strftime('%Y/%m/%d')})
       expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
   end

@@ -79,11 +79,11 @@ module RailsAdmin
     def redirect_to_on_success
       notice = t('admin.flash.successful', :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]
-        redirect_to new_path(:return_to => params[:return_to]), :flash => { :success => notice }
+        redirect_to new_path(:return_to => params[:return_to]), :flash => {:success => notice}
       elsif params[:_add_edit]
-        redirect_to edit_path(:id => @object.id, :return_to => params[:return_to]), :flash => { :success => notice }
+        redirect_to edit_path(:id => @object.id, :return_to => params[:return_to]), :flash => {:success => notice}
       else
-        redirect_to back_or_index, :flash => { :success => notice }
+        redirect_to back_or_index, :flash => {:success => notice}
       end
     end
 
@@ -123,7 +123,7 @@ module RailsAdmin
 
     def check_for_cancel
       if params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
-        redirect_to(back_or_index, :flash => { :info => t('admin.flash.noaction') })
+        redirect_to(back_or_index, :flash => {:info => t('admin.flash.noaction')})
       end
     end
 

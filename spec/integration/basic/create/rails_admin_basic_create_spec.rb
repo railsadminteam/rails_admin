@@ -91,7 +91,7 @@ describe 'RailsAdmin Basic Create' do
   describe 'create with has-and-belongs-to-many association' do
     before(:each) do
       @teams = 3.times.map { FactoryGirl.create :team }
-      post new_path(:model_name => 'fan', :fan => {:name => 'John Doe', :team_ids => [@teams[0].id] })
+      post new_path(:model_name => 'fan', :fan => {:name => 'John Doe', :team_ids => [@teams[0].id]})
       @fan = RailsAdmin::AbstractModel.new('Fan').first
     end
 

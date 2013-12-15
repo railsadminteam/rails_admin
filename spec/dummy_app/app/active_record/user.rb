@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   serialize :roles, Array
 
   # Add Paperclip support for avatars
-  has_attached_file :avatar, :styles => { :medium => '300x300>', :thumb => '100x100>' }
+  has_attached_file :avatar, :styles => {:medium => '300x300>', :thumb => '100x100>'}
 
   attr_accessor :delete_avatar
   before_validation { self.avatar = nil if self.delete_avatar == '1' }

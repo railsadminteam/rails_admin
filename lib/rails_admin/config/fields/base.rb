@@ -73,12 +73,12 @@ module RailsAdmin
         register_instance_option :searchable_columns do
           @searchable_columns ||= case self.searchable
           when true
-            [{ :column => "#{self.abstract_model.table_name}.#{self.name}", :type => self.type }]
+            [{:column => "#{self.abstract_model.table_name}.#{self.name}", :type => self.type}]
           when false
             []
           when :all # valid only for associations
             table_name = self.associated_model_config.abstract_model.table_name
-            self.associated_model_config.list.fields.map { |f| { :column => "#{table_name}.#{f.name}", :type => f.type } }
+            self.associated_model_config.list.fields.map { |f| {:column => "#{table_name}.#{f.name}", :type => f.type} }
           else
             [self.searchable].flatten.map do |f|
               if f.is_a?(String) && f.include?('.')                            #  table_name.column
@@ -98,7 +98,7 @@ module RailsAdmin
                 type = property && property[:type]
               end
 
-              { :column => "#{table_name}.#{column}", :type => (type || :string) }
+              {:column => "#{table_name}.#{column}", :type => (type || :string)}
             end
           end
         end
@@ -210,7 +210,7 @@ module RailsAdmin
         end
 
         register_instance_option :render do
-          bindings[:view].render :partial => "rails_admin/main/#{partial}", :locals => {:field => self, :form => bindings[:form] }
+          bindings[:view].render :partial => "rails_admin/main/#{partial}", :locals => {:field => self, :form => bindings[:form]}
         end
 
         def editable?

@@ -17,17 +17,17 @@ module RailsAdmin
     end
 
     def action(key, abstract_model = nil, object = nil)
-      RailsAdmin::Config::Actions.find(key, { :controller => self.controller, :abstract_model => abstract_model, :object => object })
+      RailsAdmin::Config::Actions.find(key, {:controller => self.controller, :abstract_model => abstract_model, :object => object})
     end
 
     def actions(scope = :all, abstract_model = nil, object = nil)
-      RailsAdmin::Config::Actions.all(scope, { :controller => self.controller, :abstract_model => abstract_model, :object => object })
+      RailsAdmin::Config::Actions.all(scope, {:controller => self.controller, :abstract_model => abstract_model, :object => object})
     end
 
     def edit_user_link
       return nil unless authorized?(:edit, _current_user.class, _current_user) && _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
-      return nil unless edit_action = RailsAdmin::Config::Actions.find(:edit, {:controller => self.controller, :abstract_model => abstract_model, :object => _current_user })
+      return nil unless edit_action = RailsAdmin::Config::Actions.find(:edit, {:controller => self.controller, :abstract_model => abstract_model, :object => _current_user})
       link_to _current_user.email, url_for(:action => edit_action.action_name, :model_name => abstract_model.to_param, :id => _current_user.id, :controller => 'rails_admin/main')
     end
 
@@ -119,7 +119,7 @@ module RailsAdmin
         wording = wording_for(:menu, action)
         %{
           <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
-            <a class="#{action.pjax? ? 'pjax' : ''}" href="#{url_for({ :action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil) })}">
+            <a class="#{action.pjax? ? 'pjax' : ''}" href="#{url_for({:action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil)})}">
               <i class="#{action.link_icon}"></i>
               <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
             </a>
@@ -131,8 +131,8 @@ module RailsAdmin
     def bulk_menu abstract_model = @abstract_model
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
-      content_tag :li, { :class => 'dropdown', :style => 'float:right' } do
-        content_tag(:a, { :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :href => '#' }) { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
+      content_tag :li, {:class => 'dropdown', :style => 'float:right'} do
+        content_tag(:a, {:class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :href => '#'}) { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
         content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
           actions.map do |action|
             content_tag :li do

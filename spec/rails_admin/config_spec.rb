@@ -106,7 +106,7 @@ describe RailsAdmin::Config do
       end
 
       it 'passes through any additional arguments to the initializer' do
-        options = { :option => true }
+        options = {:option => true}
         expect(ExampleModule::AuthorizationAdapter).to receive(:new).with(RailsAdmin::Config, options)
         RailsAdmin.config do |config|
           config.authorize_with(:example, options)
@@ -133,7 +133,7 @@ describe RailsAdmin::Config do
       end
 
       it 'passes through any additional arguments to the initializer' do
-        options = { :option => true }
+        options = {:option => true}
         expect(ExampleModule::AuditingAdapter).to receive(:new).with(RailsAdmin::Config, options)
         RailsAdmin.config do |config|
           config.audit_with(:example, options)

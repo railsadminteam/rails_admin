@@ -90,7 +90,7 @@ describe 'RailsAdmin Basic Update' do
       @league = FactoryGirl.create :league
       @divisions = 3.times.map { Division.create!(:name => "div #{Time.now.to_f}", :league => League.create!(:name => "league #{Time.now.to_f}")) }
 
-      put edit_path(:model_name => 'league', :id => @league.id, :league => {:name => 'National League', :division_ids => [@divisions[0].id] })
+      put edit_path(:model_name => 'league', :id => @league.id, :league => {:name => 'National League', :division_ids => [@divisions[0].id]})
 
       old_name = @league.name
       @league.reload
@@ -178,7 +178,7 @@ describe 'RailsAdmin Basic Update' do
 
       @field_test.reload
       expect(@field_test.array_field).to eq([4, 2])
-      expect(@field_test.hash_field).to eq({ 'a' => 6, 'b' => 2 })
+      expect(@field_test.hash_field).to eq({'a' => 6, 'b' => 2})
     end
 
     it 'clears data when empty string is passed' do
