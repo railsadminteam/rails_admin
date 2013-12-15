@@ -9,7 +9,7 @@ module RailsAdmin
 
         def message
           @message = @version.event
-          @version.respond_to?(:changeset) && @version.changeset.present? ? @message + " [" + @version.changeset.to_a.collect {|c| c[0] + " = " + c[1][1].to_s}.join(", ") + "]" : @message
+          @version.respond_to?(:changeset) && @version.changeset.present? ? @message + ' [' + @version.changeset.to_a.collect {|c| c[0] + ' = ' + c[1][1].to_s}.join(', ') + ']' : @message
         end
 
         def created_at
@@ -39,7 +39,7 @@ module RailsAdmin
         }
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
-          raise "PaperTrail not found" unless defined?(PaperTrail)
+          raise 'PaperTrail not found' unless defined?(PaperTrail)
           @controller = controller
           begin
             @user_class = user_class.to_s.constantize
@@ -84,13 +84,13 @@ module RailsAdmin
             sort = COLUMN_MAPPING[sort.to_sym]
           else
             sort = :created_at
-            sort_reverse = "true"
+            sort_reverse = 'true'
           end
           versions = @version_class.where :item_type => model.model.name
           versions = versions.where :item_id => object.id if object
-          versions = versions.where("event LIKE ?", "%#{query}%") if query.present?
-          versions = versions.order(sort_reverse == "true" ? "#{sort} DESC" : sort)
-          versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || "1").per(per_page)
+          versions = versions.where('event LIKE ?', "%#{query}%") if query.present?
+          versions = versions.order(sort_reverse == 'true' ? "#{sort} DESC" : sort)
+          versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || '1').per(per_page)
           versions.map{|version| VersionProxy.new(version, @user_class)}
         end
       end

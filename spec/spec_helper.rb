@@ -1,5 +1,5 @@
 # Configure Rails Envinronment
-ENV["RAILS_ENV"] = "test"
+ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = [:active_record, :mongoid]
 PK_COLUMN = {:active_record=>:id, :mongoid=>:_id}[CI_ORM]
@@ -27,7 +27,7 @@ require "orm/#{CI_ORM}"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.default_url_options[:host] = "example.com"
+ActionMailer::Base.default_url_options[:host] = 'example.com'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -74,8 +74,8 @@ RSpec.configure do |config|
     RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
     RailsAdmin::Config.yell_for_non_accessible_fields = false
     login_as User.create(
-      :email => "username@example.com",
-      :password => "password"
+      :email => 'username@example.com',
+      :password => 'password'
     )
   end
 

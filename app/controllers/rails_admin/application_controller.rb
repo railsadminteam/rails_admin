@@ -30,7 +30,7 @@ module RailsAdmin
     end
 
     def to_model_name(param)
-      model_name = param.split("~").map(&:camelize).join("::")
+      model_name = param.split('~').map(&:camelize).join('::')
     end
 
     private

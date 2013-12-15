@@ -7,5 +7,5 @@ class NestedFieldTest
   include Mongoid::Timestamps
 
   has_one :comment, :as => :commentable, :autosave => true
-  accepts_nested_attributes_for :comment, :allow_destroy => true, :reject_if => proc { |attributes| attributes["content"].blank? }
+  accepts_nested_attributes_for :comment, :allow_destroy => true, :reject_if => proc { |attributes| attributes['content'].blank? }
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Types::Timestamp do
-  describe "#parse_input", :active_record => true do
+  describe '#parse_input', :active_record => true do
     before :each do
       @object = FactoryGirl.create(:field_test)
       @time = ::Time.now.getutc
@@ -12,9 +12,9 @@ describe RailsAdmin::Config::Fields::Types::Timestamp do
       Time.zone = 'UTC'
     end
 
-    it "reads %B %d, %Y %H:%M" do
-      @object.timestamp_field = @field.parse_input({ :timestamp_field => @time.strftime("%B %d, %Y %H:%M") })
-      expect(@object.timestamp_field.strftime("%Y-%m-%d %H:%M")).to eq(@time.strftime("%Y-%m-%d %H:%M"))
+    it 'reads %B %d, %Y %H:%M' do
+      @object.timestamp_field = @field.parse_input({ :timestamp_field => @time.strftime('%B %d, %Y %H:%M') })
+      expect(@object.timestamp_field.strftime('%Y-%m-%d %H:%M')).to eq(@time.strftime('%Y-%m-%d %H:%M'))
     end
   end
 end

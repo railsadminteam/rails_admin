@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'safe_yaml', '~> 0.9'
   spec.add_dependency 'sass-rails', '~> 4.0'
   spec.add_development_dependency 'bundler', '~> 1.0'
-  spec.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
+  spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech']
   spec.cert_chain = ['certs/sferik.pem']
   spec.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
   spec.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
   spec.name = 'rails_admin'
   spec.require_paths = ['lib']
   spec.required_rubygems_version = '>= 1.3.5'
-  spec.signing_key = File.expand_path("~/.gem/private_key.pem") if $0 =~ /gem\z/
+  spec.signing_key = File.expand_path('~/.gem/private_key.pem') if $0 =~ /gem\z/
   spec.summary = %q{Admin for Rails}
-  spec.test_files = Dir['spec/**/*'].reject {|f| f.end_with? "log"}
+  spec.test_files = Dir['spec/**/*'].reject {|f| f.end_with? 'log'}
   spec.version = RailsAdmin::Version
 end

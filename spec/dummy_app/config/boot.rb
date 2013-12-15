@@ -1,5 +1,5 @@
 unless defined?(CI_ORM)
-  CI_ORM = (ENV["CI_ORM"] || :active_record).to_sym
+  CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 end
 require 'rubygems'
 

@@ -21,7 +21,7 @@ module RailsAdmin
     DEFAULT_AUDIT = Proc.new {}
 
     DEFAULT_CURRENT_USER = Proc.new do
-      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
+      request.env['warden'].try(:user) || respond_to?(:current_user) && current_user
     end
 
 
@@ -313,7 +313,7 @@ module RailsAdmin
             ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
               (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
                 Dir.glob(app.root.join(load_path)).map do |load_dir|
-                  Dir.glob(load_dir + "/**/*.rb").map do |filename|
+                  Dir.glob(load_dir + '/**/*.rb').map do |filename|
                     # app/models/module/class.rb => module/class.rb => module/class => Module::Class
                     lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
                   end

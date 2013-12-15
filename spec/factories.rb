@@ -42,7 +42,7 @@ FactoryGirl.define do
 
   factory :user do
     sequence(:email) { |n| "username_#{n}@example.com" }
-    sequence(:password) { |n| "password" }
+    sequence(:password) { |n| 'password' }
   end
 
   factory :field_test do

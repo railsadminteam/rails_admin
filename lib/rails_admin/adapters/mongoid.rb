@@ -6,7 +6,7 @@ module RailsAdmin
   module Adapters
     module Mongoid
       STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
-      DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary', "BSON::Binary"]
+      DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary', 'BSON::Binary']
       ObjectId = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId
 
 
@@ -162,27 +162,27 @@ module RailsAdmin
 
       def type_lookup(name, field)
         {
-          "Array"          => { :type => :serialized },
-          "BigDecimal"     => { :type => :decimal },
-          "Mongoid::Boolean"        => { :type => :boolean },
-          "Boolean"        => { :type => :boolean },
-          "BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
-          "Moped::BSON::ObjectId" => { :type => :bson_object_id, :serial? => (name == primary_key) },
-          "Date"           => { :type => :date },
-          "DateTime"       => { :type => :datetime },
-          "ActiveSupport::TimeWithZone" => { :type => :datetime },
-          "Float"          => { :type => :float },
-          "Hash"           => { :type => :serialized },
-          "Money"          => { :type => :serialized },
-          "Integer"        => { :type => :integer },
-          "Object"         => (
+          'Array'          => { :type => :serialized },
+          'BigDecimal'     => { :type => :decimal },
+          'Mongoid::Boolean'        => { :type => :boolean },
+          'Boolean'        => { :type => :boolean },
+          'BSON::ObjectId' => { :type => :bson_object_id, :serial? => (name == primary_key) },
+          'Moped::BSON::ObjectId' => { :type => :bson_object_id, :serial? => (name == primary_key) },
+          'Date'           => { :type => :date },
+          'DateTime'       => { :type => :datetime },
+          'ActiveSupport::TimeWithZone' => { :type => :datetime },
+          'Float'          => { :type => :float },
+          'Hash'           => { :type => :serialized },
+          'Money'          => { :type => :serialized },
+          'Integer'        => { :type => :integer },
+          'Object'         => (
             if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
               { :type => :bson_object_id }
             else
               { :type => :string, :length => 255 }
             end
           ),
-            "String"         => (
+            'String'         => (
               if (length = length_validation_lookup(name)) && length < 256
                 { :type => :string, :length => length }
               elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
@@ -191,8 +191,8 @@ module RailsAdmin
                 { :type => :text }
               end
           ),
-            "Symbol"         => { :type => :string, :length => 255 },
-            "Time"           => { :type => :datetime },
+            'Symbol'         => { :type => :string, :length => 255 },
+            'Time'           => { :type => :datetime },
         }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
       end
 
@@ -249,7 +249,7 @@ module RailsAdmin
         when String
           field_name, collection_name = options[:sort].split('.').reverse
           if collection_name && collection_name != table_name
-            raise "sorting by associated model column is not supported in Non-Relational databases"
+            raise 'sorting by associated model column is not supported in Non-Relational databases'
           end
         when Symbol
           field_name = options[:sort].to_s
@@ -428,7 +428,7 @@ module RailsAdmin
 
         def build_statement_for_enum
           return if @value.blank?
-          { @column => { "$in" => Array.wrap(@value) } }
+          { @column => { '$in' => Array.wrap(@value) } }
         end
 
         def build_statement_for_belongs_to_association_or_bson_object_id

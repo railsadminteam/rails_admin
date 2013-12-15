@@ -77,7 +77,7 @@ module RailsAdmin
     end
 
     def redirect_to_on_success
-      notice = t("admin.flash.successful", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
+      notice = t('admin.flash.successful', :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]
         redirect_to new_path(:return_to => params[:return_to]), :flash => { :success => notice }
       elsif params[:_add_edit]
@@ -98,7 +98,7 @@ module RailsAdmin
       fields = model_config.send(action).with(:controller => self, :view => self.view_context, :object => @object).visible_fields
       allowed_methods = fields.map{|f|
         f.allowed_methods
-      }.flatten.uniq.map(&:to_s) << "id" << "_destroy"
+      }.flatten.uniq.map(&:to_s) << 'id' << '_destroy'
       fields.each {|f| f.parse_input(_params) }
       _params.slice!(*allowed_methods)
       fields.select(&:nested_form).each do |association|
@@ -112,7 +112,7 @@ module RailsAdmin
     def handle_save_error whereto = :new
       action = params[:action]
 
-      flash.now[:error] = t("admin.flash.error", :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
+      flash.now[:error] = t('admin.flash.error', :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
 
       respond_to do |format|
@@ -123,7 +123,7 @@ module RailsAdmin
 
     def check_for_cancel
       if params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
-        redirect_to(back_or_index, :flash => { :info => t("admin.flash.noaction") })
+        redirect_to(back_or_index, :flash => { :info => t('admin.flash.noaction') })
       end
     end
 

@@ -65,11 +65,11 @@ module RailsAdmin
     end
 
     def to_param
-      @model_name.split("::").map(&:underscore).join("~")
+      @model_name.split('::').map(&:underscore).join('~')
     end
 
     def param_key
-      @model_name.split("::").map(&:underscore).join("_")
+      @model_name.split('::').map(&:underscore).join('_')
     end
 
     def pretty_name
@@ -138,7 +138,7 @@ module RailsAdmin
       end
 
       def build_statement_for_type
-        raise "You must override build_statement_for_type in your StatementBuilder"
+        raise 'You must override build_statement_for_type in your StatementBuilder'
       end
 
       def build_statement_for_integer_decimal_or_float
@@ -174,11 +174,11 @@ module RailsAdmin
       end
 
       def unary_operators
-        raise "You must override unary_operators in your StatementBuilder"
+        raise 'You must override unary_operators in your StatementBuilder'
       end
 
       def range_filter(min, max)
-        raise "You must override range_filter in your StatementBuilder"
+        raise 'You must override range_filter in your StatementBuilder'
       end
 
       class FilteringDuration
@@ -226,8 +226,8 @@ module RailsAdmin
         private
 
         def date_format
-          I18n.t("admin.misc.filter_date_format",
-          :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+          I18n.t('admin.misc.filter_date_format',
+          :default => I18n.t('admin.misc.filter_date_format', :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
         end
 
         def convert_to_date(value)
