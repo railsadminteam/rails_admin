@@ -59,4 +59,11 @@ group :test do
   gem 'timecop', '>= 0.5'
 end
 
+platforms :rbx do
+  gem 'racc'
+  gem 'rubinius-coverage'
+  gem 'rubysl'
+  gem 'rubysl-test-unit'
+end
+
 gemspec
