@@ -41,3 +41,4 @@ before_script:
   - cd ../../
 services:
   - mongodb
+script: bundle exec rake default

@@ -36,7 +36,11 @@ end
 
 group :development, :test do
   gem 'pry', '>= 0.9'
-  gem 'pry-debugger', '>= 0.2', :platforms => [:mri_19, :mri_20]
+  gem 'pry-rescue', '>= 1.2'
+  platforms :mri_19, :mri_20 do
+    gem 'pry-debugger', '>= 0.2'
+    gem 'pry-stack_explorer', '>= 0.4.9.1'
+  end
 end
 
 group :test do
@@ -47,14 +51,15 @@ group :test do
   gem 'database_cleaner', '>= 1.2'
   gem 'devise', '>= 3.2'
   gem 'dragonfly', '~> 0.9.0'
-  gem 'rack-cache', :require => 'rack/cache'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', '>= 3.4'
   gem 'poltergeist', :github => 'jonleighton/poltergeist'
+  gem 'rack-cache', :require => 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
+  gem 'rubocop', '>= 0.15'
   gem 'simplecov', :require => false
   gem 'timecop', '>= 0.5'
 end
