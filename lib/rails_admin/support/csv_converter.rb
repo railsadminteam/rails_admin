@@ -16,7 +16,7 @@ module RailsAdmin
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
-      @fields = @methods.map {|m| export_fields_for(m).first }
+      @fields = @methods.map { |m| export_fields_for(m).first }
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       schema_include = schema.delete(:include) || {}
 
@@ -31,7 +31,7 @@ module RailsAdmin
           :model => abstract_model.model,
           :abstract_model => abstract_model,
           :model_config => model_config,
-          :fields => methods.map {|m| export_fields_for(m, model_config).first }
+          :fields => methods.map { |m| export_fields_for(m, model_config).first }
         }
         hash
       end
@@ -79,7 +79,7 @@ module RailsAdmin
     end
 
     def generate_csv_string(options)
-      generator_options = (options[:generator] || {}).symbolize_keys.delete_if {|_, value| value.blank? }
+      generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
       CSVClass.generate(generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
@@ -108,7 +108,7 @@ module RailsAdmin
       @associations.flat_map do |association_name, option_hash|
         associated_objects = [object.send(association_name)].flatten.compact
         option_hash[:fields].map do |field|
-          output(associated_objects.map{ |ao| field.with(:object => ao).export_value.presence || @empty }.join(','))
+          output(associated_objects.map { |ao| field.with(:object => ao).export_value.presence || @empty }.join(','))
         end
       end
     end

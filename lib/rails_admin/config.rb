@@ -248,7 +248,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def models
-        RailsAdmin::AbstractModel.all.map{|m| model(m)}
+        RailsAdmin::AbstractModel.all.map { |m| model(m) }
       end
 
       # Reset all configurations to defaults.
@@ -319,12 +319,12 @@ module RailsAdmin
                   end
                 end
               end
-            end.flatten.reject {|m| m.starts_with?('Concerns::') }
+            end.flatten.reject { |m| m.starts_with?('Concerns::') }
           )
       end
 
       def visible_models_with_bindings(bindings)
-        models.map {|m| m.with(bindings)}.select do |m|
+        models.map { |m| m.with(bindings) }.select do |m|
           m.visible? &&
             bindings[:controller].authorized?(:index, m.abstract_model) &&
             (!m.abstract_model.embedded? || m.abstract_model.cyclic?)

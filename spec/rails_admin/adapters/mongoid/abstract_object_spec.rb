@@ -23,7 +23,7 @@ describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', :mongoid => true do
     end
 
     it 'skips invalid id on assignment through foo_ids=' do
-      @team.player_ids = @players.map{|item| item.id.to_s }.unshift('4f431021dcf2310db7000006')
+      @team.player_ids = @players.map { |item| item.id.to_s }.unshift('4f431021dcf2310db7000006')
       @team.reload
       @players.each &:reload
       expect(@team.players.map(&:id)).to match_array @players.map(&:id)

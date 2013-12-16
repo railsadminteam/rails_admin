@@ -45,7 +45,7 @@ describe 'RailsAdmin Config DSL List Section' do
 
     it 'shows all by default' do
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Created at', 'Updated at', 'Their Name', 'Teams']
     end
 
@@ -58,7 +58,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Their Name', 'Teams']
     end
 
@@ -69,7 +69,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Their Name', 'Teams']
     end
 
@@ -82,7 +82,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Their Name', 'Teams']
     end
 
@@ -97,7 +97,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Modified Id', 'Modified Their Name']
     end
 
@@ -110,7 +110,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Created at', 'Updated at', 'Their Name', 'Teams']
     end
 
@@ -124,7 +124,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to eq(['Updated at', 'Their Name', 'Id', 'Created at'])
     end
 
@@ -136,7 +136,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to eq(['Id', 'Their Name'])
       should have_no_selector('th:nth-child(4).header')
     end
@@ -174,7 +174,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Created at (datetime)', 'Updated at (datetime)', 'Their Name', 'Teams']
     end
 
@@ -187,7 +187,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Created at (datetime)', 'Updated at (datetime)', 'Their Name', 'Teams']
     end
 
@@ -260,7 +260,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Their Name', 'Teams']
     end
 
@@ -273,7 +273,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(:model_name => 'fan')
-      expect(all('th').map(&:text).delete_if{|t| /^\n*$/ =~ t }).
+      expect(all('th').map(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to match_array ['Id', 'Their Name', 'Teams']
     end
 
@@ -364,7 +364,7 @@ describe 'RailsAdmin Config DSL List Section' do
 
   # sort_by and sort_reverse options
   describe 'default sorting' do
-    let(:today){ Date.today }
+    let(:today) { Date.today }
     let(:players) do
       [{:name => 'Jackie Robinson',  :created_at => today,            :team_id => rand(99999), :number => 42},
        {:name => 'Deibinson Romero', :created_at => (today - 2.days), :team_id => rand(99999), :number => 13},
@@ -375,10 +375,10 @@ describe 'RailsAdmin Config DSL List Section' do
        {:name => 'Florida State', :created_at => (today - 2.days)},
        {:name => 'National',      :created_at => today}]
     end
-    let(:player_names_by_date){ players.sort_by{|p| p[:created_at]}.map{|p| p[:name]} }
-    let(:league_names_by_date){ leagues.sort_by{|l| l[:created_at]}.map{|l| l[:name]} }
+    let(:player_names_by_date) { players.sort_by { |p| p[:created_at] }.map { |p| p[:name] } }
+    let(:league_names_by_date) { leagues.sort_by { |l| l[:created_at] }.map { |l| l[:name] } }
 
-    before(:each) { @players = players.map{|h| Player.create(h) }}
+    before(:each) { @players = players.map { |h| Player.create(h) } }
 
     context 'should be configurable' do
       it 'per model' do
@@ -432,7 +432,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       @record = FactoryGirl.create :field_test
-      2.times.each{|i| @record.embeds.create :name => "embed #{i}"}
+      2.times.each { |i| @record.embeds.create :name => "embed #{i}"}
       visit index_path(:model_name => 'field_test')
       should_not have_link('embed 0')
       should_not have_link('embed 1')

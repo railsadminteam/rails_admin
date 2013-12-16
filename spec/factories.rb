@@ -12,7 +12,7 @@ FactoryGirl.define do
     sequence(:round)
     sequence(:pick)
     sequence(:overall)
-    sequence(:college) {|n| "College #{n}"}
+    sequence(:college) { |n| "College #{n}" }
     association :team
     association :player
   end

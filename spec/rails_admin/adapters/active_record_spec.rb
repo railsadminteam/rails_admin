@@ -54,16 +54,16 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'lists associations' do
-      expect(@post.associations.map{|a|a[:name].to_s}).to match_array ['a_r_blog', 'a_r_categories', 'a_r_comments']
+      expect(@post.associations.map { |a|a[:name].to_s }).to match_array ['a_r_blog', 'a_r_categories', 'a_r_comments']
     end
 
     it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      expect((@post.associations + @blog.associations + @user.associations).map{|a|a[:type]}.uniq.map(&:to_s)).to match_array ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
+      expect((@post.associations + @blog.associations + @user.associations).map { |a|a[:type] }.uniq.map(&:to_s)).to match_array ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
 
     it 'has correct parameter of belongs_to association' do
-      param = @post.associations.select{|a| a[:name] == :a_r_blog}.first
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @post.associations.select { |a| a[:name] == :a_r_blog }.first
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :a_r_blog,
         :pretty_name => 'A r blog',
         :type => :belongs_to,
@@ -80,8 +80,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'has correct parameter of has_many association' do
-      param = @blog.associations.select{|a| a[:name] == :a_r_posts}.first
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @blog.associations.select { |a| a[:name] == :a_r_posts }.first
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :a_r_posts,
         :pretty_name => 'A r posts',
         :type => :has_many,
@@ -98,8 +98,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'has correct parameter of has_and_belongs_to_many association' do
-      param = @post.associations.select{|a| a[:name] == :a_r_categories}.first
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @post.associations.select { |a| a[:name] == :a_r_categories }.first
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :a_r_categories,
         :pretty_name => 'A r categories',
         :type => :has_and_belongs_to_many,
@@ -117,8 +117,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it 'has correct parameter of polymorphic belongs_to association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['ARBlog', 'ARPost', 'ARCategory', 'ARUser', 'ARProfile', 'ARComment'])
-      param = @comment.associations.select{|a| a[:name] == :commentable}.first
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @comment.associations.select { |a| a[:name] == :commentable }.first
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :commentable,
         :pretty_name => 'Commentable',
         :type => :belongs_to,
@@ -137,8 +137,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'has correct parameter of polymorphic inverse has_many association' do
-      param = @blog.associations.select{|a| a[:name] == :a_r_comments}.first
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @blog.associations.select { |a| a[:name] == :a_r_comments }.first
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :a_r_comments,
         :pretty_name => 'A r comments',
         :type => :has_many,
@@ -157,18 +157,18 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it 'has correct opposite model lookup for polymorphic associations' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['ARBlog', 'ARPost', 'ARCategory', 'ARUser', 'ARProfile', 'ARComment'])
-      expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARUser]
-      expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [ARProfile]
+      expect(@category.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARUser]
+      expect(@blog.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARProfile]
     end
   end
 
   describe '#properties' do
     it 'returns parameters of string-type field' do
-      expect(RailsAdmin::AbstractModel.new('Player').properties.select{|f| f[:name] == :name}).to eq([{:name => :name, :pretty_name => 'Name', :type => :string, :length => 100, :nullable? => false, :serial? => false}])
+      expect(RailsAdmin::AbstractModel.new('Player').properties.select { |f| f[:name] == :name }).to eq([{:name => :name, :pretty_name => 'Name', :type => :string, :length => 100, :nullable? => false, :serial? => false}])
     end
 
     it 'maps serialized attribute to :serialized field type' do
-      expect(RailsAdmin::AbstractModel.new('User').properties.find{|f| f[:name] == :roles}).to eq({:name => :roles, :pretty_name => 'Roles', :length => 255, :nullable? => true, :serial? => false, :type => :serialized})
+      expect(RailsAdmin::AbstractModel.new('User').properties.find { |f| f[:name] == :roles }).to eq({:name => :roles, :pretty_name => 'Roles', :length => 255, :nullable? => true, :serial? => false, :type => :serialized})
     end
   end
 
@@ -247,7 +247,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Team')
       @teams = [{}, {:name => 'somewhere foos'}, {:manager => 'foo junior'}].
-        map{|h| FactoryGirl.create :team, h}
+        map { |h| FactoryGirl.create :team, h }
     end
 
     it 'makes correct query' do
@@ -260,7 +260,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       @abstract_model = RailsAdmin::AbstractModel.new('Team')
       @division = FactoryGirl.create :division, :name => 'bar division'
       @teams = [{}, {:division => @division}, {:name => 'somewhere foos', :division => @division}, {:name => 'nowhere foos'}].
-        map{|h| FactoryGirl.create :team, h}
+        map { |h| FactoryGirl.create :team, h }
     end
 
     it 'makes conrrect query' do

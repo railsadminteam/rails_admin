@@ -49,27 +49,27 @@ describe RailsAdmin::Config do
 
     context 'given an extension with an authorization adapter' do
       it 'registers the adapter' do
-        RailsAdmin.add_extension(:example, ExampleModule, {
-          :authorization => true
-        })
+        RailsAdmin.add_extension(:example, ExampleModule,
+                                 :authorization => true
+        )
         expect(RailsAdmin::AUTHORIZATION_ADAPTERS[:example]).to eq(ExampleModule::AuthorizationAdapter)
       end
     end
 
     context 'given an extension with an auditing adapter' do
       it 'registers the adapter' do
-        RailsAdmin.add_extension(:example, ExampleModule, {
-          :auditing => true
-        })
+        RailsAdmin.add_extension(:example, ExampleModule,
+                                 :auditing => true
+        )
         expect(RailsAdmin::AUDITING_ADAPTERS[:example]).to eq(ExampleModule::AuditingAdapter)
       end
     end
 
     context 'given an extension with a configuration adapter' do
       it 'registers the adapter' do
-        RailsAdmin.add_extension(:example, ExampleModule, {
-          :configuration => true
-        })
+        RailsAdmin.add_extension(:example, ExampleModule,
+                                 :configuration => true
+        )
         expect(RailsAdmin::CONFIGURATION_ADAPTERS[:example]).to eq(ExampleModule::ConfigurationAdapter)
       end
     end
@@ -83,18 +83,18 @@ describe RailsAdmin::Config do
 
     it 'can be configured' do
       RailsAdmin.config do |config|
-        config.main_app_name = ['static','value']
+        config.main_app_name = %w(static value)
       end
-      expect(RailsAdmin.config.main_app_name).to eq(['static','value'])
+      expect(RailsAdmin.config.main_app_name).to eq(%w(static value))
     end
   end
 
   describe '.authorize_with' do
     context 'given a key for a extension with authorization' do
       before do
-        RailsAdmin.add_extension(:example, ExampleModule, {
-          :authorization => true
-        })
+        RailsAdmin.add_extension(:example, ExampleModule,
+                                 :authorization => true
+        )
       end
 
       it 'initializes the authorization adapter' do
@@ -119,9 +119,9 @@ describe RailsAdmin::Config do
   describe '.audit_with' do
     context 'given a key for a extension with auditing' do
       before do
-        RailsAdmin.add_extension(:example, ExampleModule, {
-          :auditing => true
-        })
+        RailsAdmin.add_extension(:example, ExampleModule,
+                                 :auditing => true
+        )
       end
 
       it 'initializes the auditing adapter' do
@@ -146,27 +146,26 @@ describe RailsAdmin::Config do
       before do
         module PaperTrail; end
         class Version; end
-        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, {
-          :auditing => true
-        })
+        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail,
+                                 :auditing => true
+        )
       end
 
       it 'initializes the auditing adapter' do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect{ RailsAdmin.config.audit_with.call }.not_to raise_error
+        expect { RailsAdmin.config.audit_with.call }.not_to raise_error
       end
     end
   end
 
-
   describe '.configure_with' do
     context 'given a key for a extension with configuration' do
       before do
-        RailsAdmin.add_extension(:example, ExampleModule, {
-          :configuration => true
-        })
+        RailsAdmin.add_extension(:example, ExampleModule,
+                                 :configuration => true
+        )
       end
 
       it 'initializes configuration adapter' do
@@ -220,7 +219,7 @@ describe RailsAdmin::Config do
           hide
         end
         config.model Fan do
-          weight -1
+          weight(-1)
           show
         end
         config.model Comment do
@@ -252,7 +251,7 @@ describe RailsAdmin::Config do
       end
 
       expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [FieldTest, Comment]
-     end
+    end
 
     it 'basically does not contain embedded model except model using recursively_embeds_many or recursively_embeds_one', :mongoid => true do
       class RecursivelyEmbedsOne
@@ -272,7 +271,7 @@ describe RailsAdmin::Config do
 
   describe '.models_pool' do
     it 'should not include classnames start with Concerns::' do
-      expect(RailsAdmin::Config.models_pool.select{|m| m.match(/^Concerns::/)}).to be_empty
+      expect(RailsAdmin::Config.models_pool.select { |m| m.match(/^Concerns::/) }).to be_empty
     end
   end
 end

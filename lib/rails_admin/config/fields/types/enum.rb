@@ -21,9 +21,9 @@ module RailsAdmin
 
           register_instance_option :pretty_value do
             if enum.is_a?(::Hash)
-              enum.reject{|k,v| v.to_s != value.to_s}.keys.first.to_s.presence || value.presence || ' - '
+              enum.reject { |k,v| v.to_s != value.to_s }.keys.first.to_s.presence || value.presence || ' - '
             elsif enum.is_a?(::Array) && enum.first.is_a?(::Array)
-              enum.find{|e|e[1].to_s == value.to_s}.try(:first).to_s.presence || value.presence || ' - '
+              enum.find { |e|e[1].to_s == value.to_s }.try(:first).to_s.presence || value.presence || ' - '
             else
               value.presence || ' - '
             end

@@ -88,13 +88,13 @@ module RailsAdmin
                 am = f.keys.first.is_a?(Class) && AbstractModel.new(f.keys.first)
                 table_name = am && am.table_name || f.keys.first
                 column = f.values.first
-                property = am && am.properties.find{ |p| p[:name] == f.values.first.to_sym }
+                property = am && am.properties.find { |p| p[:name] == f.values.first.to_sym }
                 type = property && property[:type]
               else                                                             #  <attribute|column>
                 am = (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
                 table_name = am.table_name
                 column = f
-                property = am.properties.find{ |p| p[:name] == f.to_sym }
+                property = am.properties.find { |p| p[:name] == f.to_sym }
                 type = property && property[:type]
               end
 
@@ -152,8 +152,8 @@ module RailsAdmin
         # Accessor for field's length restrictions per validations
         #
         register_instance_option :valid_length do
-          @valid_length ||= abstract_model.model.validators_on(name).find{|v|
-            v.kind == :length }.try{|v| v.options} || {}
+          @valid_length ||= abstract_model.model.validators_on(name).find { |v|
+            v.kind == :length }.try { |v| v.options } || {}
         end
 
         register_instance_option :partial do

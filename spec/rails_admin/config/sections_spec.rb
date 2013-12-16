@@ -12,7 +12,7 @@ describe RailsAdmin::Config::Sections do
         end
       end
       fields = RailsAdmin.config(Team).edit.fields
-      expect(fields.find{|f| f.name == :name }.label).to eq('Renamed')
+      expect(fields.detect { |f| f.name == :name }.label).to eq('Renamed')
       expect(fields.count).to be >= 19 # not 1
     end
 
@@ -112,12 +112,12 @@ describe RailsAdmin::Config::Sections do
         end
       end
 
-      expect(RailsAdmin.config(Team).list.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:founded], [:name, :wins]])
-      expect(RailsAdmin.config(Team).edit.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded, :wins]])
-      expect(RailsAdmin.config(Team).create.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded, :wins]])
-      expect(RailsAdmin.config(Team).update.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded], [:wins], [:losses]])
-      expect(RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count).to eq(19)
-      expect(RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count).to eq(19)
+      expect(RailsAdmin.config(Team).list.visible_groups.map { |g| g.visible_fields.map(&:name) }).to eq([[:founded], [:name, :wins]])
+      expect(RailsAdmin.config(Team).edit.visible_groups.map { |g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded, :wins]])
+      expect(RailsAdmin.config(Team).create.visible_groups.map { |g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded, :wins]])
+      expect(RailsAdmin.config(Team).update.visible_groups.map { |g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded], [:wins], [:losses]])
+      expect(RailsAdmin.config(Team).visible_groups.map { |g| g.visible_fields.map(&:name) }.flatten.count).to eq(19)
+      expect(RailsAdmin.config(Team).export.visible_groups.map { |g| g.visible_fields.map(&:name) }.flatten.count).to eq(19)
     end
   end
 end

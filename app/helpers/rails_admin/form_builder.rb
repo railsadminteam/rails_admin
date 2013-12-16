@@ -24,7 +24,7 @@ module RailsAdmin
           contents = []
           contents << @template.content_tag(:legend, %{<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}}.html_safe, :style => "#{fieldset.name == :default ? 'display:none' : ''}")
           contents << @template.content_tag(:p, fieldset.help) if fieldset.help.present?
-          contents << fields.map{ |field| field_wrapper_for(field, nested_in) }.join
+          contents << fields.map { |field| field_wrapper_for(field, nested_in) }.join
           contents.join.html_safe
         end
       end

@@ -757,7 +757,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
   describe 'embedded model', :mongoid => true do
     it 'works' do
       @record = FactoryGirl.create :field_test
-      2.times.each{|i| @record.embeds.create :name => "embed #{i}"}
+      2.times.each { |i| @record.embeds.create :name => "embed #{i}"}
       visit edit_path(:model_name => 'field_test', :id => @record.id)
       fill_in 'field_test_embeds_attributes_0_name', :with => 'embed 1 edited'
       page.find('#field_test_embeds_attributes_1__destroy').set('true')
@@ -773,25 +773,25 @@ describe 'RailsAdmin Config DSL Edit Section' do
 
     it 'is required' do
       # draft.notes is nullable and has no validation
-      field = RailsAdmin::config('Draft').edit.fields.find{|f| f.name == :notes}
+      field = RailsAdmin::config('Draft').edit.fields.find { |f| f.name == :notes }
       expect(field.properties[:nullable?]).to be_true
       expect(field.required?).to be_false
 
       # draft.date is nullable in the schema but has an AR
       # validates_presence_of validation that makes it required
-      field = RailsAdmin::config('Draft').edit.fields.find{|f| f.name == :date}
+      field = RailsAdmin::config('Draft').edit.fields.find { |f| f.name == :date }
       expect(field.properties[:nullable?]).to be_true
       expect(field.required?).to be_true
 
       # draft.round is nullable in the schema but has an AR
       # validates_numericality_of validation that makes it required
-      field = RailsAdmin::config('Draft').edit.fields.find{|f| f.name == :round}
+      field = RailsAdmin::config('Draft').edit.fields.find { |f| f.name == :round }
       expect(field.properties[:nullable?]).to be_true
       expect(field.required?).to be_true
 
       # team.revenue is nullable in the schema but has an AR
       # validates_numericality_of validation that allows nil
-      field = RailsAdmin::config('Team').edit.fields.find{|f| f.name == :revenue}
+      field = RailsAdmin::config('Team').edit.fields.find { |f| f.name == :revenue }
       expect(field.properties[:nullable?]).to be_true
       expect(field.required?).to be_false
     end

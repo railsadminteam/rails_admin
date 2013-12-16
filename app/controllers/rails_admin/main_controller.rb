@@ -51,12 +51,12 @@ module RailsAdmin
 
     def get_sort_hash(model_config)
       abstract_model = model_config.abstract_model
-      params[:sort] = params[:sort_reverse] = nil unless model_config.list.fields.map {|f| f.name.to_s}.include? params[:sort]
+      params[:sort] = params[:sort_reverse] = nil unless model_config.list.fields.map { |f| f.name.to_s }.include? params[:sort]
 
       params[:sort] ||= model_config.list.sort_by.to_s
       params[:sort_reverse] ||= 'false'
 
-      field = model_config.list.fields.find{ |f| f.name.to_s == params[:sort] }
+      field = model_config.list.fields.find { |f| f.name.to_s == params[:sort] }
 
       column = if field.nil? || field.sortable == true # use params[:sort] on the base table
         "#{abstract_model.table_name}.#{params[:sort]}"
@@ -96,10 +96,10 @@ module RailsAdmin
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
       return unless _params.present?
       fields = model_config.send(action).with(:controller => self, :view => self.view_context, :object => @object).visible_fields
-      allowed_methods = fields.map{|f|
+      allowed_methods = fields.map { |f|
         f.allowed_methods
       }.flatten.uniq.map(&:to_s) << 'id' << '_destroy'
-      fields.each {|f| f.parse_input(_params) }
+      fields.each { |f| f.parse_input(_params) }
       _params.slice!(*allowed_methods)
       fields.select(&:nested_form).each do |association|
         children_params = association.multiple? ? _params[association.method_name].try(:values) : [_params[association.method_name]].compact
@@ -128,7 +128,7 @@ module RailsAdmin
     end
 
     def get_collection(model_config, scope, pagination)
-      associations = model_config.list.fields.select {|f| f.type == :belongs_to_association && !f.polymorphic? }.map {|f| f.association[:name] }
+      associations = model_config.list.fields.select { |f| f.type == :belongs_to_association && !f.polymorphic? }.map { |f| f.association[:name] }
       options = {}
       options = options.merge(:page => (params[Kaminari.config.param_name] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if pagination
       options = options.merge(:include => associations) unless associations.blank?
@@ -146,7 +146,7 @@ module RailsAdmin
       source_model_config = source_abstract_model.config
       source_object = source_abstract_model.get(params[:source_object_id])
       action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
-      @association = source_model_config.send(action).fields.find{|f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
+      @association = source_model_config.send(action).fields.find { |f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
       @association.associated_collection_scope
     end
   end

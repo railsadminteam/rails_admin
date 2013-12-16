@@ -57,7 +57,7 @@ module RailsAdmin
         columns = model.columns.reject do |c|
           c.type.blank? ||
             DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
-            DISABLED_COLUMN_MATCHERS.any? {|matcher| matcher.match(c.type.to_s)}
+            DISABLED_COLUMN_MATCHERS.any? { |matcher| matcher.match(c.type.to_s) }
         end
         columns.map do |property|
           {
@@ -130,7 +130,7 @@ module RailsAdmin
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
             wb = WhereBuilder.new(scope)
-            wb.add(fields.find{|f| f.name.to_s == field_name}, filter_dump[:v], (filter_dump[:o] || 'default'))
+            wb.add(fields.find { |f| f.name.to_s == field_name }, filter_dump[:v], (filter_dump[:o] || 'default'))
             # AND current filter statements to other filter statements
             scope = wb.build
           end

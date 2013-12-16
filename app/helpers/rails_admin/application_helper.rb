@@ -52,11 +52,11 @@ module RailsAdmin
 
     def main_navigation
       nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller)
-      node_model_names = nodes_stack.map{ |c| c.abstract_model.model_name }
+      node_model_names = nodes_stack.map { |c| c.abstract_model.model_name }
 
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|
 
-        nodes = nodes.select{ |n| n.parent.nil? || !n.parent.to_s.in?(node_model_names) }
+        nodes = nodes.select { |n| n.parent.nil? || !n.parent.to_s.in?(node_model_names) }
         li_stack = navigation nodes_stack, nodes
 
         label = navigation_label || t('admin.misc.navigation')
@@ -84,7 +84,7 @@ module RailsAdmin
         li = content_tag :li, 'data-model'=>model_param do
           link_to nav_icon + node.label_plural, url, :class => "pjax#{level_class}"
         end
-        li + navigation(nodes_stack, nodes_stack.select{ |n| n.parent.to_s == node.abstract_model.model_name}, level+1)
+        li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level+1)
       end.join.html_safe
     end
 
@@ -114,7 +114,7 @@ module RailsAdmin
 
     # parent => :root, :collection, :member
     def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
-      actions = actions(parent, abstract_model, object).select{ |a| a.http_methods.include?(:get) }
+      actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
       actions.map do |action|
         wording = wording_for(:menu, action)
         %{

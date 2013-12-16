@@ -4,7 +4,7 @@ module RailsAdmin
     module HasFields
       # Defines a configuration for a field.
       def field(name, type = nil, add_to_section = true, &block)
-        field = _fields.find {|f| name == f.name }
+        field = _fields.find { |f| name == f.name }
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
         # unhide them if config specifically defines them
@@ -20,7 +20,7 @@ module RailsAdmin
         # one found in default stack
         elsif !type.nil? && type != (field.nil? ? nil : field.type)
           _fields.delete(field) unless field.nil?
-          properties = abstract_model.properties.find {|p| name == p[:name] }
+          properties = abstract_model.properties.find { |p| name == p[:name] }
           field = (_fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
 
@@ -46,7 +46,7 @@ module RailsAdmin
       # or include fields by conditions if no field names
       def include_fields(*field_names, &block)
         if field_names.empty?
-          _fields.select {|f| f.instance_eval &block }.each do |f|
+          _fields.select { |f| f.instance_eval &block }.each do |f|
             unless f.defined
               f.defined = true
               f.order = _fields.select(&:defined).length
@@ -60,8 +60,8 @@ module RailsAdmin
       # exclude fields by name or by condition (block)
       def exclude_fields(*field_names, &block)
         block ||= lambda { |f| field_names.include?(f.name) }
-        _fields.each {|f| f.defined = true } if _fields.select(&:defined).empty?
-        _fields.select {|f| f.instance_eval &block }.each {|f| f.defined = false }
+        _fields.each { |f| f.defined = true } if _fields.select(&:defined).empty?
+        _fields.select { |f| f.instance_eval &block }.each { |f| f.defined = false }
       end
 
       # API candy
@@ -83,10 +83,10 @@ module RailsAdmin
         return all_fields if field_names.empty? && !block
 
         if field_names.empty?
-          defined = _fields.select {|f| f.defined }
+          defined = _fields.select { |f| f.defined }
           defined = _fields if defined.empty?
         else
-          defined = field_names.map{|field_name| _fields.find {|f| f.name == field_name } }
+          defined = field_names.map { |field_name| _fields.find { |f| f.name == field_name } }
         end
         defined.map do |f|
           unless f.defined
@@ -100,18 +100,18 @@ module RailsAdmin
 
       # Defines configuration for fields by their type.
       def fields_of_type(type, &block)
-        _fields.select {|f| type == f.type }.map! {|f| f.instance_eval &block } if block
+        _fields.select { |f| type == f.type }.map! { |f| f.instance_eval &block } if block
       end
 
       # Accessor for all fields
       def all_fields
-        ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).map{|f| f.section = self; f }
+        ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).map { |f| f.section = self; f }
       end
 
       # Get all fields defined as visible, in the correct order.
       def visible_fields
         i = 0
-        all_fields.map {|f| f.with(bindings) }.select(&:visible?).sort_by{|f| [f.order, i += 1] } # stable sort, damn
+        all_fields.map { |f| f.with(bindings) }.select(&:visible?).sort_by { |f| [f.order, i += 1] } # stable sort, damn
       end
 
       protected

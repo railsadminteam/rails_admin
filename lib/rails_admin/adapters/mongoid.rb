@@ -68,7 +68,7 @@ module RailsAdmin
       end
 
       def properties
-        fields = model.fields.reject{|name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
+        fields = model.fields.reject { |name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
         fields.map do |name,field|
           {
             :name => field.name.to_sym,
@@ -89,7 +89,7 @@ module RailsAdmin
       end
 
       def embedded?
-        @embedded ||= !!model.associations.values.find{|a| a.macro.to_sym == :embedded_in }
+        @embedded ||= !!model.associations.values.find { |a| a.macro.to_sym == :embedded_in }
       end
 
       def cyclic?
@@ -141,7 +141,7 @@ module RailsAdmin
 
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
-            field = fields.find{|f| f.name.to_s == field_name}
+            field = fields.find { |f| f.name.to_s == field_name }
             next unless field
             conditions_per_collection = make_field_conditions(field, filter_dump[:v], (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
@@ -176,7 +176,7 @@ module RailsAdmin
           'Money'          => {:type => :serialized},
           'Integer'        => {:type => :integer},
           'Object'         => (
-            if associations.find{|a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym}
+            if associations.find { |a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym }
               {:type => :bson_object_id}
             else
               {:type => :string, :length => 255}
@@ -202,7 +202,7 @@ module RailsAdmin
             validator.attributes.include?(name.to_sym) &&
             validator.kind == :length &&
             validator.options[:maximum]
-        end.min{|a, b| a.options[:maximum] <=> b.options[:maximum] }
+        end.min { |a, b| a.options[:maximum] <=> b.options[:maximum] }
 
         shortest && shortest.options[:maximum]
       end
@@ -231,14 +231,14 @@ module RailsAdmin
       end
 
       def perform_search_on_associated_collection(field_name, conditions)
-        target_association = associations.find{|a| a[:name] == field_name }
+        target_association = associations.find { |a| a[:name] == field_name }
         return [] unless target_association
         model = target_association[:model_proc].call
         case target_association[:type]
         when :belongs_to, :has_and_belongs_to_many
-          [{target_association[:foreign_key].to_s => {'$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:primary_key_proc].call)}}}]
+          [{target_association[:foreign_key].to_s => {'$in' => model.where('$or' => conditions).all.map { |r| r.send(target_association[:primary_key_proc].call) }}}]
         when :has_many
-          [{target_association[:primary_key_proc].call.to_s => {'$in' => model.where('$or' => conditions).all.map{|r| r.send(target_association[:foreign_key])}}}]
+          [{target_association[:primary_key_proc].call.to_s => {'$in' => model.where('$or' => conditions).all.map { |r| r.send(target_association[:foreign_key]) }}}]
         end
       end
 

@@ -15,7 +15,7 @@ module RailsAdmin
 
           register_instance_option :thumb_method do
             @styles ||= bindings[:object].send(name).styles.map(&:first)
-            @thumb_method ||= @styles.find{|s| [:thumb, 'thumb', :thumbnail, 'thumbnail'].include?(s)} || @styles.first || :original
+            @thumb_method ||= @styles.find { |s| [:thumb, 'thumb', :thumbnail, 'thumbnail'].include?(s) } || @styles.first || :original
           end
 
           def resource_url(thumb = false)

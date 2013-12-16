@@ -73,16 +73,16 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'lists associations' do
-      expect(@post.associations.map{|a| a[:name]}).to match_array [:mongo_blog, :mongo_categories, :mongo_comments, :mongo_note]
+      expect(@post.associations.map { |a| a[:name] }).to match_array [:mongo_blog, :mongo_categories, :mongo_comments, :mongo_note]
     end
 
     it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      expect((@post.associations + @blog.associations + @user.associations).map{|a|a[:type].to_s}.uniq).to match_array ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
+      expect((@post.associations + @blog.associations + @user.associations).map { |a|a[:type].to_s }.uniq).to match_array ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
     end
 
     it 'has correct parameter of belongs_to association' do
-      param = @post.associations.find{|a| a[:name] == :mongo_blog}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @post.associations.find { |a| a[:name] == :mongo_blog }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_blog,
         :pretty_name => 'Mongo blog',
         :type => :belongs_to,
@@ -100,8 +100,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of has_many association' do
-      param = @blog.associations.find{|a| a[:name] == :mongo_posts}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @blog.associations.find { |a| a[:name] == :mongo_posts }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_posts,
         :pretty_name => 'Mongo posts',
         :type => :has_many,
@@ -116,16 +116,16 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       })
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoPost)
-      expect(@post.properties.find{|f| f[:name] == :mongo_blog_id}[:type]).to eq(:bson_object_id)
+      expect(@post.properties.find { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:bson_object_id)
     end
 
     it 'does not confuse foreign_key column which belongs to associated model' do
-      expect(@blog.properties.find{|f| f[:name] == :mongo_blog_id}[:type]).to eq(:string)
+      expect(@blog.properties.find { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:string)
     end
 
     it 'has correct parameter of has_and_belongs_to_many association' do
-      param = @post.associations.find{|a| a[:name] == :mongo_categories}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @post.associations.find { |a| a[:name] == :mongo_categories }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_categories,
         :pretty_name => 'Mongo categories',
         :type => :has_and_belongs_to_many,
@@ -144,8 +144,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of polymorphic belongs_to association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
-      param = @comment.associations.find{|a| a[:name] == :commentable}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @comment.associations.find { |a| a[:name] == :commentable }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :commentable,
         :pretty_name => 'Commentable',
         :type => :belongs_to,
@@ -164,8 +164,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of polymorphic inverse has_many association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
-      param = @blog.associations.find{|a| a[:name] == :mongo_comments}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @blog.associations.find { |a| a[:name] == :mongo_comments }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_comments,
         :pretty_name => 'Mongo comments',
         :type => :has_many,
@@ -184,13 +184,13 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct opposite model lookup for polymorphic associations' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
-      expect(@category.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoUser]
-      expect(@blog.associations.find{|a| a[:name] == :librarian}[:model_proc].call).to eq [MongoProfile]
+      expect(@category.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoUser]
+      expect(@blog.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoProfile]
     end
 
     it 'has correct parameter of embeds_one association' do
-      param = @post.associations.find{|a| a[:name] == :mongo_note}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @post.associations.find { |a| a[:name] == :mongo_note }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_note,
         :pretty_name => 'Mongo note',
         :type => :has_one,
@@ -208,8 +208,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of embeds_many association' do
-      param = @user.associations.find{|a| a[:name] == :mongo_notes}
-      expect(param.reject{|k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      param = @user.associations.find { |a| a[:name] == :mongo_notes }
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
         :name => :mongo_notes,
         :pretty_name => 'Mongo notes',
         :type => :has_many,
@@ -253,14 +253,14 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         recursively_embeds_many
       end
 
-      expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }).to raise_error(RuntimeError,
+      expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }).to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
       )
-      expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }).to raise_error(RuntimeError,
+      expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }).to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
       )
-      expect(lambda{ RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations }).not_to raise_error
-      expect(lambda{ RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations }).not_to raise_error
+      expect(lambda { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations }).not_to raise_error
+      expect(lambda { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations }).not_to raise_error
     end
 
     it 'works with inherited embeds_many model' do
@@ -277,7 +277,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
       class MongoEmbedsChild < MongoEmbedsParent; end
 
-      expect(lambda{ RailsAdmin::AbstractModel.new(MongoEmbedsChild).associations }).not_to raise_error
+      expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsChild).associations }).not_to raise_error
     end
   end
 
@@ -287,11 +287,11 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'maps Mongoid column types to RA types' do
-      expect(@abstract_model.properties.select{|p| %w(_id array_field big_decimal_field
+      expect(@abstract_model.properties.select { |p| %w(_id array_field big_decimal_field
         boolean_field bson_object_id_field bson_binary_field date_field datetime_field
         time_with_zone_field default_field float_field hash_field integer_field name
         object_field range_field short_text string_field subject symbol_field text_field
-        time_field title).include? p[:name].to_s}).to match_array [
+        time_field title).include? p[:name].to_s }).to match_array [
         {:name => :_id,
           :pretty_name => 'Id',
           :nullable? => true,
@@ -439,7 +439,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         field :text, :type => String
         validates_with MyCustomValidator
       end
-      expect(lambda{ RailsAdmin::AbstractModel.new('CustomValiated').send(:length_validation_lookup, :text) }).not_to raise_error
+      expect(lambda { RailsAdmin::AbstractModel.new('CustomValiated').send(:length_validation_lookup, :text) }).not_to raise_error
     end
   end
 
@@ -484,7 +484,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       it 'supports eager loading' do
-        expect(@abstract_model.all(:include => :team).inclusions.map{|i| i.class_name}).to eq(['Team'])
+        expect(@abstract_model.all(:include => :team).inclusions.map { |i| i.class_name }).to eq(['Team'])
       end
 
       it 'supports limiting' do
@@ -492,7 +492,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       it 'supports retrieval by bulk_ids' do
-        expect(@abstract_model.all(:bulk_ids => @players[0..1].map{|player| player.id.to_s }).to_a).to match_array @players[0..1]
+        expect(@abstract_model.all(:bulk_ids => @players[0..1].map { |player| player.id.to_s }).to_a).to match_array @players[0..1]
       end
 
       it 'supports pagination' do
@@ -516,7 +516,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       it 'ignores non-existent field name on filtering' do
-        expect(lambda{ @abstract_model.all(:filters => {'dummy' => {'0000' => {:o => 'is', :v => @players[1].name}}}) }).not_to raise_error
+        expect(lambda { @abstract_model.all(:filters => {'dummy' => {'0000' => {:o => 'is', :v => @players[1].name}}}) }).not_to raise_error
       end
     end
   end
@@ -555,7 +555,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         @teams = FactoryGirl.create_list(:team, 3)
         @players = [{:team => @teams[1]},
                      {:team => @teams[1], :name => 'foobar'},
-                     {:team => @teams[2]}].map{|h| FactoryGirl.create :player, h}
+                     {:team => @teams[2]}].map { |h| FactoryGirl.create :player, h }
         @abstract_model = RailsAdmin::AbstractModel.new('Team')
       end
 
@@ -577,7 +577,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
           end
         end
         @teams = FactoryGirl.create_list(:team, 3)
-        @fans = [{}, {:name => 'foobar'}, {}].map{|h| FactoryGirl.create :fan, h}
+        @fans = [{}, {:name => 'foobar'}, {}].map { |h| FactoryGirl.create :fan, h }
         @teams[1].fans = [@fans[0], @fans[1]]
         @teams[2].fans << @fans[2]
         @abstract_model = RailsAdmin::AbstractModel.new('Team')
@@ -620,7 +620,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @players = [{}, {:name => 'Many foos'}, {:position => 'foo shortage'}].
-        map{|h| FactoryGirl.create :player, h}
+        map { |h| FactoryGirl.create :player, h }
     end
 
     it 'makes correct query' do
@@ -633,7 +633,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @team = FactoryGirl.create :team, :name => 'king of bar'
       @players = [{}, {:team => @team}, {:name => 'Many foos', :team => @team}, {:name => 'Great foo'}].
-        map{|h| FactoryGirl.create :player, h}
+        map { |h| FactoryGirl.create :player, h }
     end
 
     it 'makes correct query' do
