@@ -16,7 +16,7 @@ module RailsAdmin
            end
 
           def generic_help
-            text = (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
+            text = (required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')) + '. '
             if valid_length.present? && valid_length[:is].present?
               text += "#{I18n.translate("admin.form.char_length_of").capitalize} #{valid_length[:is]}."
             else

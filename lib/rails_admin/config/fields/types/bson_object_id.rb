@@ -10,12 +10,12 @@ module RailsAdmin
 
           register_instance_option :label do
             label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
-            label = "Id" if label == ''
+            label = 'Id' if label == ''
             label
           end
 
           def generic_help
-            "BSON::ObjectId"
+            'BSON::ObjectId'
           end
 
           register_instance_option :read_only do

@@ -36,7 +36,7 @@ module RailsAdmin
             RailsAdmin::AbstractModel.new(entity.class)
           end
         end
-        @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default).tap { |g| g.label { I18n.translate("admin.form.basic_info") } } ]
+        @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default).tap { |g| g.label { I18n.translate('admin.form.basic_info') } } ]
       end
 
       def excluded?

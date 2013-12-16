@@ -11,7 +11,7 @@ module RailsAdmin
           @format = :long
           @i18n_scope = [:date, :formats]
           @js_plugin_options = {
-            "showTime" => false,
+            'showTime' => false,
           }
 
           def parse_input(params)

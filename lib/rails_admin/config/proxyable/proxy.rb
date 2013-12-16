@@ -25,12 +25,12 @@ module RailsAdmin
 
         def method_missing(name, *args, &block)
           if @object.respond_to?(name)
-            reset = @object.instance_variable_get("@bindings")
+            reset = @object.instance_variable_get('@bindings')
             begin
-              @object.instance_variable_set("@bindings", @bindings)
+              @object.instance_variable_set('@bindings', @bindings)
               response = @object.__send__(name, *args, &block)
             ensure
-              @object.instance_variable_set("@bindings", reset)
+              @object.instance_variable_set('@bindings', reset)
             end
             response
           else

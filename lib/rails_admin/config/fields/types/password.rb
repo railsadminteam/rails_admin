@@ -17,12 +17,12 @@ module RailsAdmin
           end
 
           register_instance_option :formatted_value do
-            "".html_safe
+            ''.html_safe
           end
 
           # Password field's value does not need to be read
           def value
-            ""
+            ''
           end
 
           register_instance_option :visible do

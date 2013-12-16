@@ -20,7 +20,7 @@ module RailsAdmin
             attr_reader :format, :i18n_scope, :js_plugin_options
 
             def normalize(date_string, format)
-              unless I18n.locale == "en"
+              unless I18n.locale == 'en'
                 format.to_s.scan(/%[AaBbp]/) do |match|
                   case match
                   when '%A'
@@ -36,8 +36,8 @@ module RailsAdmin
                     english = I18n.t('date.abbr_month_names', :locale => :en)[1..-1]
                     abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
                   when '%p'
-                    date_string = date_string.gsub(/#{I18n.t('date.time.am', :default => "am")}/, "am")
-                    date_string = date_string.gsub(/#{I18n.t('date.time.pm', :default => "pm")}/, "pm")
+                    date_string = date_string.gsub(/#{I18n.t('date.time.am', :default => "am")}/, 'am')
+                    date_string = date_string.gsub(/#{I18n.t('date.time.pm', :default => "pm")}/, 'pm')
                   end
                 end
               end
@@ -53,11 +53,11 @@ module RailsAdmin
 
           def formatted_date_value
             value = bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : self.value
-            value.nil? ? "" : I18n.l(value, :format => localized_date_format).strip
+            value.nil? ? '' : I18n.l(value, :format => localized_date_format).strip
           end
 
           def formatted_time_value
-            value.nil? ? "" : I18n.l(value, :format => localized_time_format)
+            value.nil? ? '' : I18n.l(value, :format => localized_time_format)
           end
 
           # Ruby to javascript formatting options translator
@@ -65,45 +65,45 @@ module RailsAdmin
             # Ruby format options as a key and javascript format options
             # as a value
             translations = {
-              "%a" => "D",          # The abbreviated weekday name ("Sun")
-              "%A" => "DD",         # The  full  weekday  name ("Sunday")
-              "%b" => "M",          # The abbreviated month name ("Jan")
-              "%B" => "MM",         # The  full  month  name ("January")
-              "%d" => "dd",         # Day of the month (01..31)
-              "%D" => "mm/dd/y",    # American date format mm/dd/yy
-              "%e" => "d",          # Day of the month (1..31)
-              "%F" => "yy-mm-dd",   # ISO 8601 date format
+              '%a' => 'D',          # The abbreviated weekday name ("Sun")
+              '%A' => 'DD',         # The  full  weekday  name ("Sunday")
+              '%b' => 'M',          # The abbreviated month name ("Jan")
+              '%B' => 'MM',         # The  full  month  name ("January")
+              '%d' => 'dd',         # Day of the month (01..31)
+              '%D' => 'mm/dd/y',    # American date format mm/dd/yy
+              '%e' => 'd',          # Day of the month (1..31)
+              '%F' => 'yy-mm-dd',   # ISO 8601 date format
               # "%H" => "??",         # Hour of the day, 24-hour clock (00..23)
               # "%I" => "??",         # Hour of the day, 12-hour clock (01..12)
-              "%m" => "mm",         # Month of the year (01..12)
-              "%-m" => "m",         # Month of the year (1..12)
+              '%m' => 'mm',         # Month of the year (01..12)
+              '%-m' => 'm',         # Month of the year (1..12)
               # "%M" => "??",         # Minute of the hour (00..59)
               # "%p" => "??",         # Meridian indicator ("AM" or "PM")
               # "%S" => "??",         # Second of the minute (00..60)
-              "%Y" => "yy",         # Year with century
-              "%y" => "y",          # Year without a century (00..99)
+              '%Y' => 'yy',         # Year with century
+              '%y' => 'y',          # Year without a century (00..99)
             }
             localized_date_format.gsub(/%\w/) { |match| translations[match] }
           end
 
           def js_plugin_options
             options = {
-              "datepicker" => {
-                "dateFormat" => js_date_format,
-                "dayNames" => self.class.day_names,
-                "dayNamesShort" => self.class.abbr_day_names,
-                "dayNamesMin" => self.class.abbr_day_names,
-                "firstDay" => 1,
-                "monthNames" => self.class.month_names,
-                "monthNamesShort" => self.class.abbr_month_names,
-                "value" => formatted_date_value,
+              'datepicker' => {
+                'dateFormat' => js_date_format,
+                'dayNames' => self.class.day_names,
+                'dayNamesShort' => self.class.abbr_day_names,
+                'dayNamesMin' => self.class.abbr_day_names,
+                'firstDay' => 1,
+                'monthNames' => self.class.month_names,
+                'monthNamesShort' => self.class.abbr_month_names,
+                'value' => formatted_date_value,
               },
-              "timepicker" => {
-                "amPmText" => meridian_indicator? ? ["Am", "Pm"] : ["", ""],
-                "hourText" => I18n.t("datetime.prompts.hour", :default => I18n.t("datetime.prompts.hour", :locale => :en)),
-                "minuteText" => I18n.t("datetime.prompts.minute", :default => I18n.t("datetime.prompts.minute", :locale => :en)),
-                "showPeriod" => meridian_indicator?,
-                "value" => formatted_time_value,
+              'timepicker' => {
+                'amPmText' => meridian_indicator? ? ['Am', 'Pm'] : ['', ''],
+                'hourText' => I18n.t('datetime.prompts.hour', :default => I18n.t('datetime.prompts.hour', :locale => :en)),
+                'minuteText' => I18n.t('datetime.prompts.minute', :default => I18n.t('datetime.prompts.minute', :locale => :en)),
+                'showPeriod' => meridian_indicator?,
+                'value' => formatted_time_value,
               }
             }
 
@@ -123,11 +123,11 @@ module RailsAdmin
           end
 
           def localized_time_format
-            meridian_indicator? ? "%I:%M %p" : "%H:%M"
+            meridian_indicator? ? '%I:%M %p' : '%H:%M'
           end
 
           def meridian_indicator?
-            strftime_format.include? "%p"
+            strftime_format.include? '%p'
           end
 
           def parse_input(params)
@@ -146,7 +146,7 @@ module RailsAdmin
             unless (time = value).nil?
               I18n.l(time, :format => strftime_format)
             else
-              "".html_safe
+              ''.html_safe
             end
           end
 

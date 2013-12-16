@@ -33,7 +33,7 @@ module RailsAdmin
           field = section.field(name, type, &block)
           # Directly manipulate the variable instead of using the accessor
           # as group probably is not yet registered to the parent object.
-          field.instance_variable_set("@group", self)
+          field.instance_variable_set('@group', self)
           field
         end
 

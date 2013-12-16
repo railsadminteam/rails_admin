@@ -11,7 +11,7 @@ module RailsAdmin
           @format = :short
           @i18n_scope = [:time, :formats]
           @js_plugin_options = {
-            "showDate" => false,
+            'showDate' => false,
           }
 
           # Register field type for the type loader
@@ -27,7 +27,7 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            (localized_format.include? "%p") ? "%I:%M %p" : "%H:%M"
+            (localized_format.include? '%p') ? '%I:%M %p' : '%H:%M'
           end
         end
       end

@@ -139,7 +139,7 @@ module RailsAdmin
         end
 
         register_instance_option :hint do
-          (@hint ||= "")
+          (@hint ||= '')
         end
 
         # Accessor for field's maximum length per database.
@@ -275,7 +275,7 @@ module RailsAdmin
         end
 
         def generic_help
-          (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
+          (required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')) + '. '
         end
 
         def generic_field_help
