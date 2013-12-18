@@ -81,10 +81,10 @@ module RailsAdmin
         level_class = " nav-level-#{level}" if level > 0
         nav_icon = node.navigation_icon ? %{<i class="#{node.navigation_icon}"></i>}.html_safe : ''
 
-        li = content_tag :li, 'data-model'=>model_param do
+        li = content_tag :li, 'data-model' => model_param do
           link_to nav_icon + node.label_plural, url, :class => "pjax#{level_class}"
         end
-        li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level+1)
+        li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level + 1)
       end.join.html_safe
     end
 
@@ -105,7 +105,7 @@ module RailsAdmin
             else
               content_tag(:span, wording_for(:breadcrumb, a, am, o))
             end
-            crumb+= content_tag(:span, '/', :class => 'divider') unless current_action?(a, am, o)
+            crumb += content_tag(:span, '/', :class => 'divider') unless current_action?(a, am, o)
             crumb
           end
         end.reverse.join().html_safe

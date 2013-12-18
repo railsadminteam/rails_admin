@@ -183,7 +183,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable League => :name
           end
         end
-        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{:column=>'leagues.name', :type=>:string}])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{:column => 'leagues.name', :type => :string}])
       end
 
       it 'searches on asked table with table name' do
@@ -192,15 +192,15 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :leagues => :name
           end
         end
-        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{:column=>'leagues.name', :type=>:string}])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{:column => 'leagues.name', :type => :string}])
       end
     end
 
     describe 'for basic type fields' do
 
       it 'uses base table and find correct column type' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{:column=>'field_tests.text_field', :type=>:text}])
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{:column=>'field_tests.integer_field', :type=>:integer}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{:column => 'field_tests.text_field', :type => :text}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{:column => 'field_tests.integer_field', :type => :integer}])
       end
 
       it 'is customizable to another field on the same table' do
@@ -209,7 +209,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :date_field
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :time_field }.searchable_columns).to eq([{:column=>'field_tests.date_field', :type=>:date}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :time_field }.searchable_columns).to eq([{:column => 'field_tests.date_field', :type => :date}])
       end
 
       it 'is customizable to another field on another table with :table_name' do
@@ -218,7 +218,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :nested_field_tests => :title
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :string_field }.searchable_columns).to eq([{:column=>'nested_field_tests.title', :type=>:string}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :string_field }.searchable_columns).to eq([{:column => 'nested_field_tests.title', :type => :string}])
       end
 
       it 'is customizable to another field on another model with ModelClass' do
@@ -227,7 +227,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable NestedFieldTest => :title
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :string_field }.searchable_columns).to eq([{:column=>'nested_field_tests.title', :type=>:string}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :string_field }.searchable_columns).to eq([{:column => 'nested_field_tests.title', :type => :string}])
       end
     end
 

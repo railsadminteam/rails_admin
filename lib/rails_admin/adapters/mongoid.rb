@@ -217,7 +217,7 @@ module RailsAdmin
       end
 
       def make_condition_for_current_collection(target_field, conditions_per_collection)
-        result =[]
+        result = []
         conditions_per_collection.each do |collection_name, conditions|
           if collection_name == table_name
             # conditions referring current model column are passed directly
