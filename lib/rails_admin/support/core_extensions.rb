@@ -9,31 +9,31 @@ class Hash
     when Array
       obj.reduce([]) { |res, val|
         res << case val
-        when Hash, Array
-          symbolize_hash(val)
-        when String
-          val.to_sym
-        else
-          val
-        end
+               when Hash, Array
+                 symbolize_hash(val)
+               when String
+                 val.to_sym
+               else
+                 val
+               end
         res
       }
     when Hash
       obj.reduce({}) { |res, (key, val)|
         nkey = case key
-        when String
-          key.to_sym
-        else
-          key
-        end
+               when String
+                 key.to_sym
+               else
+                 key
+               end
         nval = case val
-        when Hash, Array
-          symbolize_hash(val)
-        when String
-          val.to_sym
-        else
-          val
-        end
+               when Hash, Array
+                 symbolize_hash(val)
+               when String
+                 val.to_sym
+               else
+                 val
+               end
         res[nkey] = nval
         res
       }

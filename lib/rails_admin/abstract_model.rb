@@ -132,9 +132,9 @@ module RailsAdmin
 
       def build_statement_for_type_generic
         build_statement_for_type || case @type
-          when :date                  then build_statement_for_date
-          when :datetime, :timestamp  then build_statement_for_datetime_or_timestamp
-          end
+                                    when :date                  then build_statement_for_date
+                                    when :datetime, :timestamp  then build_statement_for_datetime_or_timestamp
+                                    end
       end
 
       def build_statement_for_type
@@ -189,12 +189,12 @@ module RailsAdmin
 
         def get_duration
           case @operator
-            when 'between'   then between
-            when 'today'     then today
-            when 'yesterday' then yesterday
-            when 'this_week' then this_week
-            when 'last_week' then last_week
-            else default
+          when 'between'   then between
+          when 'today'     then today
+          when 'yesterday' then yesterday
+          when 'this_week' then this_week
+          when 'last_week' then last_week
+          else default
           end
         end
 

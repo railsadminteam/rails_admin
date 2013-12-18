@@ -250,11 +250,11 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-            when :boolean                   then build_statement_for_boolean
-            when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-            when :string, :text             then build_statement_for_string_or_text
-            when :enum                      then build_statement_for_enum
-            when :belongs_to_association    then build_statement_for_belongs_to_association
+          when :boolean                   then build_statement_for_boolean
+          when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
+          when :string, :text             then build_statement_for_string_or_text
+          when :enum                      then build_statement_for_enum
+          when :belongs_to_association    then build_statement_for_belongs_to_association
           end
         end
 
@@ -275,17 +275,17 @@ module RailsAdmin
         def build_statement_for_string_or_text
           return if @value.blank?
           @value = case @operator
-          when 'default', 'like'
-            "%#{@value.downcase}%"
-          when 'starts_with'
-            "#{@value.downcase}%"
-          when 'ends_with'
-            "%#{@value.downcase}"
-          when 'is', '='
-            "#{@value.downcase}"
-          else
-            return
-          end
+                   when 'default', 'like'
+                     "%#{@value.downcase}%"
+                   when 'starts_with'
+                     "#{@value.downcase}%"
+                   when 'ends_with'
+                     "%#{@value.downcase}"
+                   when 'is', '='
+                     "#{@value.downcase}"
+                   else
+                     return
+                   end
           ["(LOWER(#{@column}) #{like_operator} ?)", @value]
         end
 

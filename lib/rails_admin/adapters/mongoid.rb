@@ -392,11 +392,11 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-            when :boolean                   then build_statement_for_boolean
-            when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-            when :string, :text             then build_statement_for_string_or_text
-            when :enum                      then build_statement_for_enum
-            when :belongs_to_association, :bson_object_id then build_statement_for_belongs_to_association_or_bson_object_id
+          when :boolean                   then build_statement_for_boolean
+          when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
+          when :string, :text             then build_statement_for_string_or_text
+          when :enum                      then build_statement_for_enum
+          when :belongs_to_association, :bson_object_id then build_statement_for_belongs_to_association_or_bson_object_id
           end
         end
 
@@ -412,17 +412,17 @@ module RailsAdmin
         def build_statement_for_string_or_text
           return if @value.blank?
           @value = case @operator
-          when 'default', 'like'
-            Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
-          when 'starts_with'
-            Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
-          when 'ends_with'
-            Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
-          when 'is', '='
-            @value.to_s
-          else
-            return
-          end
+                   when 'default', 'like'
+                     Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
+                   when 'starts_with'
+                     Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
+                   when 'ends_with'
+                     Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
+                   when 'is', '='
+                     @value.to_s
+                   else
+                     return
+                   end
           {@column => @value}
         end
 

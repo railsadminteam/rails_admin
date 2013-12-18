@@ -50,20 +50,20 @@ module RailsAdmin
               # Invocation without args nor block --> It's the use of the option, i.e. getter
               value = instance_variable_get("@#{option_name}_registered")
               case value
-                when Proc
-                  # Track recursive invocation with an instance variable. This prevents run-away recursion
-                  # and allows configurations such as
-                  # label { "#{label}".upcase }
-                  # This will use the default definition when called recursively.
-                  if instance_variable_get("@#{option_name}_recurring")
-                    value = instance_eval &default
-                  else
-                    instance_variable_set("@#{option_name}_recurring", true)
-                    value = instance_eval &value
-                    instance_variable_set("@#{option_name}_recurring", false)
-                  end
-                when nil
+              when Proc
+                # Track recursive invocation with an instance variable. This prevents run-away recursion
+                # and allows configurations such as
+                # label { "#{label}".upcase }
+                # This will use the default definition when called recursively.
+                if instance_variable_get("@#{option_name}_recurring")
                   value = instance_eval &default
+                else
+                  instance_variable_set("@#{option_name}_recurring", true)
+                  value = instance_eval &value
+                  instance_variable_set("@#{option_name}_recurring", false)
+                end
+              when nil
+                value = instance_eval &default
               end
               value
             end
