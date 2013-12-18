@@ -160,7 +160,7 @@ describe 'RailsAdmin Basic Update' do
     end
 
     it 'saves the serialized data' do
-      expect(@user.roles).to eq(['admin', 'user'])
+      expect(@user.roles).to eq(%w(admin user))
     end
   end
 
@@ -225,5 +225,5 @@ describe 'RailsAdmin Basic Update' do
       expect(@hardball.color).to eq('cyan')
     end
   end
-
 end
+

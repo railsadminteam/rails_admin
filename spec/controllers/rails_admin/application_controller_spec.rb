@@ -14,9 +14,9 @@ describe RailsAdmin::ApplicationController do
 
     it 'works for static names' do
       RailsAdmin.config do |config|
-        config.main_app_name = ['static', 'value']
+        config.main_app_name = [%w(static value)]
       end
-      expect(controller.send(:_get_plugin_name)).to eq(['static', 'value'])
+      expect(controller.send(:_get_plugin_name)).to eq(%w(static value))
     end
 
     it 'works for dynamic names in the controller context' do

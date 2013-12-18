@@ -54,11 +54,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'lists associations' do
-      expect(@post.associations.map { |a|a[:name].to_s }).to match_array ['a_r_blog', 'a_r_categories', 'a_r_comments']
+      expect(@post.associations.map { |a|a[:name].to_s }).to match_array %w(a_r_blog a_r_categories a_r_comments)
     end
 
     it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      expect((@post.associations + @blog.associations + @user.associations).map { |a|a[:type] }.uniq.map(&:to_s)).to match_array ['belongs_to', 'has_and_belongs_to_many', 'has_many', 'has_one']
+      expect((@post.associations + @blog.associations + @user.associations).map { |a|a[:type] }.uniq.map(&:to_s)).to match_array %w(belongs_to has_and_belongs_to_many has_many has_one)
     end
 
     it 'has correct parameter of belongs_to association' do
@@ -116,7 +116,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'has correct parameter of polymorphic belongs_to association' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(['ARBlog', 'ARPost', 'ARCategory', 'ARUser', 'ARProfile', 'ARComment'])
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(ARBlog ARPost ARCategory ARUser ARProfile ARComment))
       param = @comment.associations.select { |a| a[:name] == :commentable }.first
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :commentable,
@@ -156,7 +156,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
 
     it 'has correct opposite model lookup for polymorphic associations' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(['ARBlog', 'ARPost', 'ARCategory', 'ARUser', 'ARProfile', 'ARComment'])
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(ARBlog ARPost ARCategory ARUser ARProfile ARComment))
       expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARUser]
       expect(@blog.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARProfile]
     end
@@ -320,10 +320,10 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'supports boolean type query' do
-      ['false', 'f', '0'].each do |value|
+      %w(false f 0).each do |value|
         expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(['(field IS NULL OR field = ?)', false])
       end
-      ['true', 't', '1'].each do |value|
+      %w(true t 1).each do |value|
         expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(['(field = ?)', true])
       end
       expect(@abstract_model.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
@@ -339,7 +339,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['6', ''  , ''  ], 'default')).to eq(['(field = ?)', 6])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['7', '10', ''  ], 'default')).to eq(['(field = ?)', 7])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['8', ''  , '20'], 'default')).to eq(['(field = ?)', 8])
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['9', '10', '20'], 'default')).to eq(['(field = ?)', 9])
+      expect(@abstract_model.send(:build_statement, :field, :integer, %w(9 10 20), 'default')).to eq(['(field = ?)', 9])
     end
 
     it 'supports integer type range query' do
@@ -348,7 +348,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(['(field >= ?)', 3])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(['(field <= ?)', 5])
       expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['15', '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
+      expect(@abstract_model.send(:build_statement, :field, :integer, %w(15 10 20), 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''     ], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
