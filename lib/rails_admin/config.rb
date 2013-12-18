@@ -12,15 +12,15 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.authenticate_with
     # @see RailsAdmin::Config.authorize_with
-    DEFAULT_AUTHENTICATION = Proc.new do
+    DEFAULT_AUTHENTICATION = proc do
       request.env['warden'].try(:authenticate!)
     end
 
-    DEFAULT_AUTHORIZE = Proc.new {}
+    DEFAULT_AUTHORIZE = proc {}
 
-    DEFAULT_AUDIT = Proc.new {}
+    DEFAULT_AUDIT = proc {}
 
-    DEFAULT_CURRENT_USER = Proc.new do
+    DEFAULT_CURRENT_USER = proc do
       request.env['warden'].try(:user) || respond_to?(:current_user) && current_user
     end
 
@@ -103,7 +103,7 @@ module RailsAdmin
       def audit_with(*args, &block)
         extension = args.shift
         if(extension)
-          @audit = Proc.new {
+          @audit = proc {
             @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
           }
         else
@@ -138,7 +138,7 @@ module RailsAdmin
       def authorize_with(*args, &block)
         extension = args.shift
         if(extension)
-          @authorize = Proc.new {
+          @authorize = proc {
             @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
           }
         else
@@ -272,7 +272,7 @@ module RailsAdmin
         @included_models = []
         @total_columns_width = 697
         @label_methods = [:name, :title]
-        @main_app_name = Proc.new { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
+        @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
         @navigation_static_links = {}
         @navigation_static_label = nil

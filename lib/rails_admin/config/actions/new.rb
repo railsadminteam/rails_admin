@@ -14,7 +14,7 @@ module RailsAdmin
 
         register_instance_option :controller do
 
-          Proc.new do
+          proc do
 
             if request.get? # NEW
 

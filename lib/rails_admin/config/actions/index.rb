@@ -26,7 +26,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
             @objects ||= list_entries
 
             respond_to do |format|

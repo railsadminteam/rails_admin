@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::LazyModel do
   describe '#store' do
-    let(:block) { Proc.new { register_instance_option('parameter') } } # an arbitrary instance method we can spy on
-    let(:other_block) { Proc.new { register_instance_option('other parameter') } }
+    let(:block) { proc { register_instance_option('parameter') } } # an arbitrary instance method we can spy on
+    let(:other_block) { proc { register_instance_option('other parameter') } }
 
     it "doesn't evaluate the block immediately" do
       expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option)

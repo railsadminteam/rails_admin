@@ -21,7 +21,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
             if request.get? # DELETE
 
               respond_to do |format|

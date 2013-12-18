@@ -21,7 +21,7 @@ describe RailsAdmin::ApplicationController do
 
     it 'works for dynamic names in the controller context' do
       RailsAdmin.config do |config|
-        config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.try(:titleize), controller.params[:action].titleize] }
+        config.main_app_name = proc { |controller| [Rails.application.engine_name.try(:titleize), controller.params[:action].titleize] }
       end
       controller.params[:action] = 'dashboard'
       expect(controller.send(:_get_plugin_name)).to eq(['Dummy App Application', 'Dashboard'])

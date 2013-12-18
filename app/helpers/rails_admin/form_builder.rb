@@ -120,7 +120,7 @@ module RailsAdmin
     def without_field_error_proc_added_div
       default_field_error_proc = ::ActionView::Base.field_error_proc
       begin
-        ::ActionView::Base.field_error_proc = Proc.new { |html_tag, instance| html_tag }
+        ::ActionView::Base.field_error_proc = proc { |html_tag, instance| html_tag }
         yield
       ensure
         ::ActionView::Base.field_error_proc = default_field_error_proc

@@ -42,7 +42,7 @@ module RailsAdmin
         register_instance_option :associated_collection_scope do
           # bindings[:object] & bindings[:controller] available
           associated_collection_scope_limit = (associated_collection_cache_all ? nil : 30)
-          Proc.new do |scope|
+          proc do |scope|
             scope.limit(associated_collection_scope_limit)
           end
         end

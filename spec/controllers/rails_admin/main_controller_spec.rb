@@ -145,7 +145,7 @@ describe RailsAdmin::MainController do
       RailsAdmin.config Team do
         field :players do
           associated_collection_scope do
-            Proc.new { |scope| scope.limit(3) }
+            proc { |scope| scope.limit(3) }
           end
         end
       end
@@ -165,7 +165,7 @@ describe RailsAdmin::MainController do
         field :players do
           associated_collection_scope do
             team = bindings[:object]
-            Proc.new { |scope|
+            proc { |scope|
               scope.limit(team.revenue)
             }
           end
