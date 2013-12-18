@@ -182,7 +182,7 @@ module RailsAdmin
               {:type => :string, :length => 255}
             end
           ),
-            'String'         => (
+          'String'         => (
               if (length = length_validation_lookup(name)) && length < 256
                 {:type => :string, :length => length}
               elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
@@ -191,8 +191,8 @@ module RailsAdmin
                 {:type => :text}
               end
           ),
-            'Symbol'         => {:type => :string, :length => 255},
-            'Time'           => {:type => :datetime},
+          'Symbol'         => {:type => :string, :length => 255},
+          'Time'           => {:type => :datetime},
         }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
       end
 

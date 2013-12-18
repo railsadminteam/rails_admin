@@ -13,7 +13,7 @@ module RailsAdmin
     extend Generators::Utils::ClassMethods
 
     class_option :skip_devise, :type => :boolean, :aliases => '-D',
-      :desc => 'Skip installation and setup of devise gem.'
+                               :desc => 'Skip installation and setup of devise gem.'
     argument :_model_name, :type => :string, :required => false, :desc => 'Devise user model name'
     argument :_namespace, :type => :string, :required => false, :desc => 'RailsAdmin url namespace'
     desc 'RailsAdmin installation generator'
