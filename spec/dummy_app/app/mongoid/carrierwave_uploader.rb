@@ -18,7 +18,7 @@ class CarrierwaveUploader < CarrierWave::Uploader::Base
   end
 
   version :thumb do
-    process :resize_to_fill => [100,100]
+    process :resize_to_fill => [100, 100]
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:

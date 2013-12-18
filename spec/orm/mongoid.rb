@@ -15,7 +15,7 @@ class Tableless
         :text => String,
         :date => Date,
         :datetime => DateTime,
-      }[sql_type],:default => default
+      }[sql_type], :default => default
     end
   end
 end

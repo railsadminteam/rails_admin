@@ -79,7 +79,7 @@ module RailsAdmin
       # were defined.
       #
       # If a block is passed it will be evaluated in the context of each field
-      def fields(*field_names,&block)
+      def fields(*field_names, &block)
         return all_fields if field_names.empty? && !block
 
         if field_names.empty?

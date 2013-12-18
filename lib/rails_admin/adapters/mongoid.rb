@@ -31,11 +31,11 @@ module RailsAdmin
         model.scoped
       end
 
-      def first(options = {},scope=nil)
+      def first(options = {}, scope=nil)
         all(options, scope).first
       end
 
-      def all(options = {},scope=nil)
+      def all(options = {}, scope=nil)
         scope ||= scoped
         scope = scope.includes(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
@@ -49,7 +49,7 @@ module RailsAdmin
         scope
       end
 
-      def count(options = {},scope=nil)
+      def count(options = {}, scope=nil)
         all(options.merge(:limit => false, :page => false), scope).count
       end
 
@@ -69,7 +69,7 @@ module RailsAdmin
 
       def properties
         fields = model.fields.reject { |name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
-        fields.map do |name,field|
+        fields.map do |name, field|
           {
             :name => field.name.to_sym,
             :length => nil,

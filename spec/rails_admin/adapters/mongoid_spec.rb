@@ -771,17 +771,17 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'supports date type query' do
-      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}})).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012,1,2), '$lte' => Date.new(2012,1,3)}}])
-      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} )).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012,1,3)}}])
-      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} )).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012,1,2)}}])
-      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} )).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012,1,2), '$lte' => Date.new(2012,1,2)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}})).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 3)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} )).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 3)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} )).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012, 1, 2)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} )).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 2)}}])
     end
 
     it 'supports datetime type query' do
-      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,2), '$lte' => Time.local(2012,1,3).end_of_day}}])
-      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,3)}}])
-      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$lte' => Time.local(2012,1,2).end_of_day}}])
-      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,2), '$lte' => Time.local(2012,1,2).end_of_day}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012, 1, 2), '$lte' => Time.local(2012, 1, 3).end_of_day}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012, 1, 3)}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$lte' => Time.local(2012, 1, 2).end_of_day}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012, 1, 2), '$lte' => Time.local(2012, 1, 2).end_of_day}}])
     end
 
     it 'supports enum type query' do
