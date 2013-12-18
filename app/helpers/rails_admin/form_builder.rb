@@ -4,11 +4,11 @@ module RailsAdmin
 
     def generate(options = {})
       without_field_error_proc_added_div do
-        options.reverse_merge!({
+        options.reverse_merge!(
           :action => @template.controller.params[:action],
           :model_config => @template.instance_variable_get(:@model_config),
           :nested_in => false
-        })
+        )
 
         object_infos +
         visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).map do |fieldset|

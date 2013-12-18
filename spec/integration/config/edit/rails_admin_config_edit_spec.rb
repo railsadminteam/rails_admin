@@ -720,12 +720,12 @@ describe 'RailsAdmin Config DSL Edit Section' do
     describe 'with nested_attributes_options given' do
       before do
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args()).
-          and_return({:allow_destroy=>true, :update_only=>false})
+          and_return(:allow_destroy=>true, :update_only=>false)
       end
 
       it 'does not show add button when :update_only is true' do
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return({:allow_destroy=>true, :update_only=>true})
+          and_return(:allow_destroy=>true, :update_only=>true)
         visit new_path(:model_name => 'field_test')
         should have_selector('.toggler')
         should_not have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
@@ -735,7 +735,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         @record = FieldTest.create
         @record.nested_field_tests << NestedFieldTest.create!(:title => 'nested title 1')
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return({:allow_destroy=>false, :update_only=>false})
+          and_return(:allow_destroy=>false, :update_only=>false)
         visit edit_path(:model_name => 'field_test', :id => @record.id)
         expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
         should_not have_selector('form .remove_nested_fields')

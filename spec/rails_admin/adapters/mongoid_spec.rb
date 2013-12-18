@@ -82,7 +82,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of belongs_to association' do
       param = @post.associations.find { |a| a[:name] == :mongo_blog }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_blog,
         :pretty_name => 'Mongo blog',
         :type => :belongs_to,
@@ -94,14 +94,14 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoBlog)
     end
 
     it 'has correct parameter of has_many association' do
       param = @blog.associations.find { |a| a[:name] == :mongo_posts }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_posts,
         :pretty_name => 'Mongo posts',
         :type => :has_many,
@@ -113,7 +113,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoPost)
       expect(@post.properties.find { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:bson_object_id)
@@ -125,7 +125,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of has_and_belongs_to_many association' do
       param = @post.associations.find { |a| a[:name] == :mongo_categories }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_categories,
         :pretty_name => 'Mongo categories',
         :type => :has_and_belongs_to_many,
@@ -137,7 +137,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoCategory)
     end
@@ -145,7 +145,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     it 'has correct parameter of polymorphic belongs_to association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
       param = @comment.associations.find { |a| a[:name] == :commentable }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :commentable,
         :pretty_name => 'Commentable',
         :type => :belongs_to,
@@ -157,7 +157,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq([MongoBlog, MongoPost])
     end
@@ -165,7 +165,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     it 'has correct parameter of polymorphic inverse has_many association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
       param = @blog.associations.find { |a| a[:name] == :mongo_comments }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_comments,
         :pretty_name => 'Mongo comments',
         :type => :has_many,
@@ -177,7 +177,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoComment)
     end
@@ -190,7 +190,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of embeds_one association' do
       param = @post.associations.find { |a| a[:name] == :mongo_note }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_note,
         :pretty_name => 'Mongo note',
         :type => :has_one,
@@ -202,14 +202,14 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => {:allow_destroy => false, :update_only => false}
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoNote)
     end
 
     it 'has correct parameter of embeds_many association' do
       param = @user.associations.find { |a| a[:name] == :mongo_notes }
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_notes,
         :pretty_name => 'Mongo notes',
         :type => :has_many,
@@ -221,7 +221,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => {:allow_destroy => false, :update_only => false}
-      })
+      )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoNote)
     end
@@ -657,104 +657,104 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it "supports '_blank' operator" do
       [['_blank', ''], ['', '_blank']].each do |value, operator|
-        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq({:name => {'$in' => [nil, '']}})
+        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(:name => {'$in' => [nil, '']})
       end
     end
 
     it "supports '_present' operator" do
       [['_present', ''], ['', '_present']].each do |value, operator|
-        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq({:name => {'$nin' => [nil, '']}})
+        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(:name => {'$nin' => [nil, '']})
       end
     end
 
     it "supports '_null' operator" do
       [['_null', ''], ['', '_null']].each do |value, operator|
-        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq({:name => nil})
+        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(:name => nil)
       end
     end
 
     it "supports '_not_null' operator" do
       [['_not_null', ''], ['', '_not_null']].each do |value, operator|
-        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq({:name => {'$ne' => nil}})
+        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(:name => {'$ne' => nil})
       end
     end
 
     it "supports '_empty' operator" do
       [['_empty', ''], ['', '_empty']].each do |value, operator|
-        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq({:name => ''})
+        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(:name => '')
       end
     end
 
     it "supports '_not_empty' operator" do
       [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
-        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq({:name => {'$ne' => ''}})
+        expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(:name => {'$ne' => ''})
       end
     end
 
     it 'supports boolean type query' do
       ['false', 'f', '0'].each do |value|
-        expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq({:field => false})
+        expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(:field => false)
       end
       ['true', 't', '1'].each do |value|
-        expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq({:field => true})
+        expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(:field => true)
       end
       expect(@abstract_model.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
     end
 
     it 'supports integer type query' do
-      expect(@abstract_model.send(:build_statement, :field, :integer, '1', nil)).to eq({:field => 1})
+      expect(@abstract_model.send(:build_statement, :field, :integer, '1', nil)).to eq(:field => 1)
       expect(@abstract_model.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
     end
 
     it 'supports integer type range query' do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq({:field => {'$gte' => 3}})
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq({:field => {'$lte' => 5}})
-      expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq({:field => {'$gte' => 10, '$lte' => 20}})
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['15', '10', '20'], 'between')).to eq({:field => {'$gte' => 10, '$lte' => 20}})
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(:field => {'$gte' => 3})
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(:field => {'$lte' => 5})
+      expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['15', '10', '20'], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''     ], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
     end
 
     it 'supports both decimal and float type queries' do
-      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1', nil)).to eq({:field => 1.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1', nil)).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', nil)).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'default')).to eq({:field => 1.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'default')).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', 'default')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'between')).to eq({:field => 1.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'between')).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['6.1', ''  , ''  ], 'default')).to eq({:field => 6.1})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''  ], 'default')).to eq({:field => 7.1})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['8.1', ''  , '20.1'], 'default')).to eq({:field => 8.1})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq({:field => 9.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['6.1', ''  , ''  ], 'default')).to eq(:field => 6.1)
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''  ], 'default')).to eq(:field => 7.1)
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['8.1', ''  , '20.1'], 'default')).to eq(:field => 8.1)
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(:field => 9.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['2.1', '', ''], 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '3.1', ''], 'between')).to eq({:field => {'$gte' => 3.1}})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq({:field => {'$lte' => 5.1}})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, [''  , '10.1', '20.1'], 'between')).to eq({:field => {'$gte' => 10.1, '$lte' => 20.1}})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq({:field => {'$gte' => 10.1, '$lte' => 20.1}})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '3.1', ''], 'between')).to eq(:field => {'$gte' => 3.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq(:field => {'$lte' => 5.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, [''  , '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word1', ''     ], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word3', 'word4'], 'between')).to be_nil
 
-      expect(@abstract_model.send(:build_statement, :field, :float, '1.1', nil)).to eq({:field => 1.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, '1.1', nil)).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', nil)).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'default')).to eq({:field => 1.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'default')).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', 'default')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'between')).to eq({:field => 1.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'between')).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, ['6.1', ''  , ''  ], 'default')).to eq({:field => 6.1})
-      expect(@abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''  ], 'default')).to eq({:field => 7.1})
-      expect(@abstract_model.send(:build_statement, :field, :float, ['8.1', ''  , '20.1'], 'default')).to eq({:field => 8.1})
-      expect(@abstract_model.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq({:field => 9.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, ['6.1', ''  , ''  ], 'default')).to eq(:field => 6.1)
+      expect(@abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''  ], 'default')).to eq(:field => 7.1)
+      expect(@abstract_model.send(:build_statement, :field, :float, ['8.1', ''  , '20.1'], 'default')).to eq(:field => 8.1)
+      expect(@abstract_model.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq(:field => 9.1)
       expect(@abstract_model.send(:build_statement, :field, :float, ['', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['2.1', '', ''], 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, ['', '3.1', ''], 'between')).to eq({:field => {'$gte' => 3.1}})
-      expect(@abstract_model.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq({:field => {'$lte' => 5.1}})
-      expect(@abstract_model.send(:build_statement, :field, :float, [''  , '10.1', '20.1'], 'between')).to eq({:field => {'$gte' => 10.1, '$lte' => 20.1}})
-      expect(@abstract_model.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq({:field => {'$gte' => 10.1, '$lte' => 20.1}})
+      expect(@abstract_model.send(:build_statement, :field, :float, ['', '3.1', ''], 'between')).to eq(:field => {'$gte' => 3.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq(:field => {'$lte' => 5.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, [''  , '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
+      expect(@abstract_model.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
       expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word1', ''     ], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word3', 'word4'], 'between')).to be_nil
@@ -763,29 +763,29 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     it 'supports string type query' do
       expect(@abstract_model.send(:build_statement, :field, :string, '', nil)).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'was')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq({:field => /foo/i})
-      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq({:field => /foo/i})
-      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq({:field => /^foo/i})
-      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq({:field => /foo$/i})
-      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq({:field => 'foo'})
+      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq(:field => /foo/i)
+      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq(:field => /foo/i)
+      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq(:field => /^foo/i)
+      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq(:field => /foo$/i)
+      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq(:field => 'foo')
     end
 
     it 'supports date type query' do
-      expect(@abstract_model.send(:filter_conditions, {'date_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}}})).to eq({'$and' => [{'date_field' => {'$gte' => Date.new(2012,1,2), '$lte' => Date.new(2012,1,3)}}]})
-      expect(@abstract_model.send(:filter_conditions, {'date_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}}} )).to eq({'$and' => [{'date_field' => {'$gte' => Date.new(2012,1,3)}}]})
-      expect(@abstract_model.send(:filter_conditions, {'date_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}}} )).to eq({'$and' => [{'date_field' => {'$lte' => Date.new(2012,1,2)}}]})
-      expect(@abstract_model.send(:filter_conditions, {'date_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}}} )).to eq({'$and' => [{'date_field' => {'$gte' => Date.new(2012,1,2), '$lte' => Date.new(2012,1,2)}}]})
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}})).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012,1,2), '$lte' => Date.new(2012,1,3)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} )).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012,1,3)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} )).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012,1,2)}}])
+      expect(@abstract_model.send(:filter_conditions, 'date_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} )).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012,1,2), '$lte' => Date.new(2012,1,2)}}])
     end
 
     it 'supports datetime type query' do
-      expect(@abstract_model.send(:filter_conditions, {'datetime_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}}} )).to eq({'$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,2), '$lte' => Time.local(2012,1,3).end_of_day}}]})
-      expect(@abstract_model.send(:filter_conditions, {'datetime_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}}} )).to eq({'$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,3)}}]})
-      expect(@abstract_model.send(:filter_conditions, {'datetime_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}}} )).to eq({'$and' => [{'datetime_field' => {'$lte' => Time.local(2012,1,2).end_of_day}}]})
-      expect(@abstract_model.send(:filter_conditions, {'datetime_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}}} )).to eq({'$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,2), '$lte' => Time.local(2012,1,2).end_of_day}}]})
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,2), '$lte' => Time.local(2012,1,3).end_of_day}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,3)}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} )).to eq('$and' => [{'datetime_field' => {'$lte' => Time.local(2012,1,2).end_of_day}}])
+      expect(@abstract_model.send(:filter_conditions, 'datetime_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} )).to eq('$and' => [{'datetime_field' => {'$gte' => Time.local(2012,1,2), '$lte' => Time.local(2012,1,2).end_of_day}}])
     end
 
     it 'supports enum type query' do
-      expect(@abstract_model.send(:build_statement, :field, :enum, '1', nil)).to eq({:field => {'$in' => ['1']}})
+      expect(@abstract_model.send(:build_statement, :field, :enum, '1', nil)).to eq(:field => {'$in' => ['1']})
     end
   end
 
@@ -810,15 +810,15 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'accepts array value' do
-      params = HashWithIndifferentAccess.new({:array_field => '[1, 3]'})
+      params = HashWithIndifferentAccess.new(:array_field => '[1, 3]')
       @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
       expect(params[:array_field]).to eq([1, 3])
     end
 
     it 'accepts hash value' do
-      params = HashWithIndifferentAccess.new({:hash_field => '{a: 1, b: 3}'})
+      params = HashWithIndifferentAccess.new(:hash_field => '{a: 1, b: 3}')
       @controller.send(:sanitize_params_for!, 'create', @abstract_model.config, params)
-      expect(params[:hash_field]).to eq({'a' => 1, 'b' => 3})
+      expect(params[:hash_field]).to eq('a' => 1, 'b' => 3)
     end
   end
 end

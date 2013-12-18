@@ -32,8 +32,8 @@ describe RailsAdmin::MainController do
 
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
       allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
-      expect { get :bulk_delete, {:model_name => 'player', :bulk_action =>'bulk_delete'} }.to raise_error('redirected back')
-      expect { get :bulk_delete, {:model_name => 'player', :bulk_action =>'bulk_delete', :bulk_ids => []} }.not_to raise_error
+      expect { get :bulk_delete, :model_name => 'player', :bulk_action =>'bulk_delete' }.to raise_error('redirected back')
+      expect { get :bulk_delete, :model_name => 'player', :bulk_action =>'bulk_delete', :bulk_ids => [] }.not_to raise_error
     end
   end
 
@@ -51,27 +51,27 @@ describe RailsAdmin::MainController do
 
       it 'returns the option with no changes' do
         controller.params = {:sort => 'team', :model_name =>'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>:"team.name", :sort_reverse=>true})
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(:sort=>:"team.name", :sort_reverse=>true)
       end
     end
 
 
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {:sort => 'parent_category', :model_name =>'categories'}
-      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq({:sort=>'categories.parent_category_id', :sort_reverse=>true})
+      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(:sort=>'categories.parent_category_id', :sort_reverse=>true)
     end
 
     context 'using mongoid, not supporting joins', :mongoid => true do
       it 'gives back the remote table with label name' do
         controller.params = {:sort => 'team', :model_name =>'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>'players.team_id', :sort_reverse=>true})
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(:sort=>'players.team_id', :sort_reverse=>true)
       end
     end
 
     context 'using active_record, supporting joins', :active_record => true do
       it 'gives back the local column'  do
         controller.params = {:sort => 'team', :model_name =>'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq({:sort=>'teams.name', :sort_reverse=>true})
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(:sort=>'teams.name', :sort_reverse=>true)
       end
     end
   end
@@ -218,14 +218,14 @@ describe RailsAdmin::MainController do
       end
       FactoryGirl.create :team
       TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, :number => 123)]
-      get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json}
+      get :index, :model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team_with_numbered_players', :associated_collection => 'numbered_players', :current_action => :create, :compact => true, :format => :json
       expect(response.body).to match /\"id\":\"123\"/
     end
 
     context 'as JSON' do
       it 'returns strings' do
         FactoryGirl.create :player, :team => (FactoryGirl.create :team)
-        get :index, {:model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team', :associated_collection => 'players', :current_action => :create, :compact => true, :format => :json}
+        get :index, :model_name => 'player', :source_object_id => Team.first.id, :source_abstract_model => 'team', :associated_collection => 'players', :current_action => :create, :compact => true, :format => :json
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
       end
     end
@@ -253,7 +253,7 @@ describe RailsAdmin::MainController do
           end
         end
 
-        controller.params = HashWithIndifferentAccess.new({
+        controller.params = HashWithIndifferentAccess.new(
           'field_test'=>{
             'unallowed_field' => "I shouldn't be here",
             'datetime_field'=>'1 août 2010',
@@ -271,11 +271,11 @@ describe RailsAdmin::MainController do
               'created_at'=>'4 août 2010'
             }
           }
-        })
+        )
 
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
 
-        expect(controller.params).to eq({
+        expect(controller.params).to eq(
           'field_test'=>{
             'datetime_field'=>'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
             'nested_field_tests_attributes'=>{
@@ -290,7 +290,7 @@ describe RailsAdmin::MainController do
               'created_at'=>'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
             }
           }
-        })
+        )
       end
     end
 
@@ -304,10 +304,10 @@ describe RailsAdmin::MainController do
       end
 
       it 'enforces permit!' do
-        controller.params = HashWithIndifferentAccess.new({
+        controller.params = HashWithIndifferentAccess.new(
           'model_name'=>'player',
           'player'=>{'name' => 'foo'}
-        })
+        )
         controller.send(:get_model)
         expect(controller.params['player'].permitted?).to be_false
         controller.send(:satisfy_strong_params!)
@@ -324,7 +324,7 @@ describe RailsAdmin::MainController do
           delete_method :delete_paperclip_asset
         end
       end
-      controller.params = HashWithIndifferentAccess.new({
+      controller.params = HashWithIndifferentAccess.new(
         'field_test'=>{
           'carrierwave_asset' => 'test',
           'carrierwave_asset_cache' => 'test',
@@ -336,7 +336,7 @@ describe RailsAdmin::MainController do
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test'
         }
-      })
+      )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
       expect(controller.params).to eq(
@@ -357,12 +357,12 @@ describe RailsAdmin::MainController do
         field :commentable
       end
 
-      controller.params = HashWithIndifferentAccess.new({
+      controller.params = HashWithIndifferentAccess.new(
         'comment'=>{
           'commentable_id' => 'test',
           'commentable_type' => 'test'
         }
-      })
+      )
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
       expect(controller.params).to eq(
         'comment'=>{

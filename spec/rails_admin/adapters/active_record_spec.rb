@@ -63,7 +63,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it 'has correct parameter of belongs_to association' do
       param = @post.associations.select { |a| a[:name] == :a_r_blog }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :a_r_blog,
         :pretty_name => 'A r blog',
         :type => :belongs_to,
@@ -74,14 +74,14 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil,
-      })
+      )
       expect(param[:primary_key_proc].call).to eq('id')
       expect(param[:model_proc].call).to eq(ARBlog)
     end
 
     it 'has correct parameter of has_many association' do
       param = @blog.associations.select { |a| a[:name] == :a_r_posts }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :a_r_posts,
         :pretty_name => 'A r posts',
         :type => :has_many,
@@ -92,14 +92,14 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil,
-      })
+      )
       expect(param[:primary_key_proc].call).to eq('id')
       expect(param[:model_proc].call).to eq(ARPost)
     end
 
     it 'has correct parameter of has_and_belongs_to_many association' do
       param = @post.associations.select { |a| a[:name] == :a_r_categories }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :a_r_categories,
         :pretty_name => 'A r categories',
         :type => :has_and_belongs_to_many,
@@ -110,7 +110,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq('id')
       expect(param[:model_proc].call).to eq(ARCategory)
     end
@@ -118,7 +118,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     it 'has correct parameter of polymorphic belongs_to association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['ARBlog', 'ARPost', 'ARCategory', 'ARUser', 'ARProfile', 'ARComment'])
       param = @comment.associations.select { |a| a[:name] == :commentable }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :commentable,
         :pretty_name => 'Commentable',
         :type => :belongs_to,
@@ -129,7 +129,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       # Should not be called for polymorphic relations.
       # TODO: Handle this case
       # expect(param[:primary_key_proc].call).to eq('id')
@@ -138,7 +138,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it 'has correct parameter of polymorphic inverse has_many association' do
       param = @blog.associations.select { |a| a[:name] == :a_r_comments }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq({
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :a_r_comments,
         :pretty_name => 'A r comments',
         :type => :has_many,
@@ -149,7 +149,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
         :inverse_of => nil,
         :read_only => nil,
         :nested_form => nil
-      })
+      )
       expect(param[:primary_key_proc].call).to eq('id')
       expect(param[:model_proc].call).to eq(ARComment)
     end
@@ -168,7 +168,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'maps serialized attribute to :serialized field type' do
-      expect(RailsAdmin::AbstractModel.new('User').properties.find { |f| f[:name] == :roles }).to eq({:name => :roles, :pretty_name => 'Roles', :length => 255, :nullable? => true, :serial? => false, :type => :serialized})
+      expect(RailsAdmin::AbstractModel.new('User').properties.find { |f| f[:name] == :roles }).to eq(:name => :roles, :pretty_name => 'Roles', :length => 255, :nullable? => true, :serial? => false, :type => :serialized)
     end
   end
 
@@ -413,18 +413,18 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it 'supports date type query' do
       scope = FieldTest.all
-      expect(@abstract_model.send(:filter_scope, scope, {'date_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}}}).where_values).to eq(["(field_tests.date_field BETWEEN '2012-01-02' AND '2012-01-03')"])
-      expect(@abstract_model.send(:filter_scope, scope, {'date_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}}} ).where_values).to eq(["(field_tests.date_field >= '2012-01-03')"])
-      expect(@abstract_model.send(:filter_scope, scope, {'date_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}}} ).where_values).to eq(["(field_tests.date_field <= '2012-01-02')"])
-      expect(@abstract_model.send(:filter_scope, scope, {'date_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}}} ).where_values).to eq(["(field_tests.date_field BETWEEN '2012-01-02' AND '2012-01-02')"])
+      expect(@abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}}).where_values).to eq(["(field_tests.date_field BETWEEN '2012-01-02' AND '2012-01-03')"])
+      expect(@abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} ).where_values).to eq(["(field_tests.date_field >= '2012-01-03')"])
+      expect(@abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} ).where_values).to eq(["(field_tests.date_field <= '2012-01-02')"])
+      expect(@abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} ).where_values).to eq(["(field_tests.date_field BETWEEN '2012-01-02' AND '2012-01-02')"])
     end
 
     it 'supports datetime type query' do
       scope = FieldTest.all
-      expect(@abstract_model.send(:filter_scope, scope,  {'datetime_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}}} ).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012,1,2), Time.local(2012,1,3).end_of_day]).where_values)
-      expect(@abstract_model.send(:filter_scope, scope, {'datetime_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}}} ).where_values).to eq(scope.where(['(field_tests.datetime_field >= ?)', Time.local(2012,1,3)]).where_values)
-      expect(@abstract_model.send(:filter_scope, scope, {'datetime_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}}} ).where_values).to eq(scope.where(['(field_tests.datetime_field <= ?)', Time.local(2012,1,2).end_of_day]).where_values)
-      expect(@abstract_model.send(:filter_scope, scope, {'datetime_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}}} ).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012,1,2), Time.local(2012,1,2).end_of_day]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope,  'datetime_field' => {'1' => {:v => ['', '01/02/2012', '01/03/2012'], :o => 'between'}} ).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012,1,2), Time.local(2012,1,3).end_of_day]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {:v => ['', '01/03/2012', ''], :o => 'between'}} ).where_values).to eq(scope.where(['(field_tests.datetime_field >= ?)', Time.local(2012,1,3)]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {:v => ['', '', '01/02/2012'], :o => 'between'}} ).where_values).to eq(scope.where(['(field_tests.datetime_field <= ?)', Time.local(2012,1,2).end_of_day]).where_values)
+      expect(@abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {:v => ['01/02/2012'], :o => 'default'}} ).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012,1,2), Time.local(2012,1,2).end_of_day]).where_values)
     end
 
     it 'supports enum type query' do

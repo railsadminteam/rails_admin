@@ -178,7 +178,7 @@ describe 'RailsAdmin Basic Update' do
 
       @field_test.reload
       expect(@field_test.array_field).to eq([4, 2])
-      expect(@field_test.hash_field).to eq({'a' => 6, 'b' => 2})
+      expect(@field_test.hash_field).to eq('a' => 6, 'b' => 2)
     end
 
     it 'clears data when empty string is passed' do

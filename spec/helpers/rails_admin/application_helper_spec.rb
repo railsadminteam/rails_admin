@@ -145,7 +145,7 @@ describe RailsAdmin::ApplicationHelper do
 
     describe '#breadcrumb' do
       it 'gives us a breadcrumb' do
-        @action = RailsAdmin::Config::Actions.find(:edit, {:abstract_model => RailsAdmin::AbstractModel.new(Team), :object => Team.new(:name => 'the avengers')})
+        @action = RailsAdmin::Config::Actions.find(:edit, :abstract_model => RailsAdmin::AbstractModel.new(Team), :object => Team.new(:name => 'the avengers'))
         bc = helper.breadcrumb
         expect(bc).to match /Dashboard/ # dashboard
         expect(bc).to match /Teams/ # list
