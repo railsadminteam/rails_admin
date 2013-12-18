@@ -1,6 +1,6 @@
 require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'
-require 'active_support/core_ext/class/attribute_accessors'
+require 'active_support/core_ext/module/attribute_accessors'
 
 module RailsAdmin
   module Config
