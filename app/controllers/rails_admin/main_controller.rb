@@ -56,7 +56,7 @@ module RailsAdmin
       params[:sort] ||= model_config.list.sort_by.to_s
       params[:sort_reverse] ||= 'false'
 
-      field = model_config.list.fields.find { |f| f.name.to_s == params[:sort] }
+      field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
 
       column = if field.nil? || field.sortable == true # use params[:sort] on the base table
         "#{abstract_model.table_name}.#{params[:sort]}"
@@ -146,7 +146,7 @@ module RailsAdmin
       source_model_config = source_abstract_model.config
       source_object = source_abstract_model.get(params[:source_object_id])
       action = params[:current_action].in?(['create', 'update']) ? params[:current_action] : 'edit'
-      @association = source_model_config.send(action).fields.find { |f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
+      @association = source_model_config.send(action).fields.detect { |f| f.name == params[:associated_collection].to_sym }.with(:controller => self, :object => source_object)
       @association.associated_collection_scope
     end
   end

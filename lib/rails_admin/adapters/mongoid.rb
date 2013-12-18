@@ -89,7 +89,7 @@ module RailsAdmin
       end
 
       def embedded?
-        @embedded ||= !!model.associations.values.find { |a| a.macro.to_sym == :embedded_in }
+        @embedded ||= !!model.associations.values.detect { |a| a.macro.to_sym == :embedded_in }
       end
 
       def cyclic?
@@ -141,7 +141,7 @@ module RailsAdmin
 
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
-            field = fields.find { |f| f.name.to_s == field_name }
+            field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
             conditions_per_collection = make_field_conditions(field, filter_dump[:v], (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
@@ -176,7 +176,7 @@ module RailsAdmin
           'Money'          => {:type => :serialized},
           'Integer'        => {:type => :integer},
           'Object'         => (
-            if associations.find { |a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym }
+            if associations.detect { |a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym }
               {:type => :bson_object_id}
             else
               {:type => :string, :length => 255}
@@ -231,7 +231,7 @@ module RailsAdmin
       end
 
       def perform_search_on_associated_collection(field_name, conditions)
-        target_association = associations.find { |a| a[:name] == field_name }
+        target_association = associations.detect { |a| a[:name] == field_name }
         return [] unless target_association
         model = target_association[:model_proc].call
         case target_association[:type]

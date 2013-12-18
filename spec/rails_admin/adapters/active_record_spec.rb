@@ -157,8 +157,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
 
     it 'has correct opposite model lookup for polymorphic associations' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['ARBlog', 'ARPost', 'ARCategory', 'ARUser', 'ARProfile', 'ARComment'])
-      expect(@category.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARUser]
-      expect(@blog.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARProfile]
+      expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARUser]
+      expect(@blog.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARProfile]
     end
   end
 
@@ -168,7 +168,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
     end
 
     it 'maps serialized attribute to :serialized field type' do
-      expect(RailsAdmin::AbstractModel.new('User').properties.find { |f| f[:name] == :roles }).to eq(:name => :roles, :pretty_name => 'Roles', :length => 255, :nullable? => true, :serial? => false, :type => :serialized)
+      expect(RailsAdmin::AbstractModel.new('User').properties.detect { |f| f[:name] == :roles }).to eq(:name => :roles, :pretty_name => 'Roles', :length => 255, :nullable? => true, :serial? => false, :type => :serialized)
     end
   end
 

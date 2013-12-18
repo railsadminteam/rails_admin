@@ -9,7 +9,7 @@ module RailsAdmin
       @@default_factory = lambda do |parent, properties, fields|
         # If it's an association
         if properties.has_key?(:model_proc)
-          association = parent.abstract_model.associations.find { |a| a[:name].to_s == properties[:name].to_s }
+          association = parent.abstract_model.associations.detect { |a| a[:name].to_s == properties[:name].to_s }
           field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
         else
           field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties)
@@ -49,17 +49,17 @@ module RailsAdmin
 
         parent.abstract_model.properties.each do |properties|
           # Unless a previous factory has already loaded current field as well
-          unless fields.find { |f| f.name == properties[:name] }
+          unless fields.detect { |f| f.name == properties[:name] }
             # Loop through factories until one returns true
-            @@registry.find { |factory| factory.call(parent, properties, fields) }
+            @@registry.detect { |factory| factory.call(parent, properties, fields) }
           end
         end
         # Load fields for all associations (relations)
         parent.abstract_model.associations.select { |a| a[:type] != :belongs_to }.each do |association| # :belongs_to are created by factory for belongs_to fields
           # Unless a previous factory has already loaded current field as well
-          unless fields.find { |f| f.name == association[:name] }
+          unless fields.detect { |f| f.name == association[:name] }
             # Loop through factories until one returns true
-            @@registry.find { |factory| factory.call(parent, association, fields) }
+            @@registry.detect { |factory| factory.call(parent, association, fields) }
           end
         end
         fields

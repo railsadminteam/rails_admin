@@ -81,7 +81,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of belongs_to association' do
-      param = @post.associations.find { |a| a[:name] == :mongo_blog }
+      param = @post.associations.detect { |a| a[:name] == :mongo_blog }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_blog,
         :pretty_name => 'Mongo blog',
@@ -100,7 +100,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of has_many association' do
-      param = @blog.associations.find { |a| a[:name] == :mongo_posts }
+      param = @blog.associations.detect { |a| a[:name] == :mongo_posts }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_posts,
         :pretty_name => 'Mongo posts',
@@ -116,15 +116,15 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       )
       expect(param[:primary_key_proc].call).to eq(:_id)
       expect(param[:model_proc].call).to eq(MongoPost)
-      expect(@post.properties.find { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:bson_object_id)
+      expect(@post.properties.detect { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:bson_object_id)
     end
 
     it 'does not confuse foreign_key column which belongs to associated model' do
-      expect(@blog.properties.find { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:string)
+      expect(@blog.properties.detect { |f| f[:name] == :mongo_blog_id }[:type]).to eq(:string)
     end
 
     it 'has correct parameter of has_and_belongs_to_many association' do
-      param = @post.associations.find { |a| a[:name] == :mongo_categories }
+      param = @post.associations.detect { |a| a[:name] == :mongo_categories }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_categories,
         :pretty_name => 'Mongo categories',
@@ -144,7 +144,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of polymorphic belongs_to association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
-      param = @comment.associations.find { |a| a[:name] == :commentable }
+      param = @comment.associations.detect { |a| a[:name] == :commentable }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :commentable,
         :pretty_name => 'Commentable',
@@ -164,7 +164,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct parameter of polymorphic inverse has_many association' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
-      param = @blog.associations.find { |a| a[:name] == :mongo_comments }
+      param = @blog.associations.detect { |a| a[:name] == :mongo_comments }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_comments,
         :pretty_name => 'Mongo comments',
@@ -184,12 +184,12 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'has correct opposite model lookup for polymorphic associations' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(['MongoBlog', 'MongoPost', 'MongoCategory', 'MongoUser', 'MongoProfile', 'MongoComment'])
-      expect(@category.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoUser]
-      expect(@blog.associations.find { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoProfile]
+      expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoUser]
+      expect(@blog.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoProfile]
     end
 
     it 'has correct parameter of embeds_one association' do
-      param = @post.associations.find { |a| a[:name] == :mongo_note }
+      param = @post.associations.detect { |a| a[:name] == :mongo_note }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_note,
         :pretty_name => 'Mongo note',
@@ -208,7 +208,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of embeds_many association' do
-      param = @user.associations.find { |a| a[:name] == :mongo_notes }
+      param = @user.associations.detect { |a| a[:name] == :mongo_notes }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_notes,
         :pretty_name => 'Mongo notes',

@@ -11,9 +11,9 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << RailsAdmin::Config::Fields::Types.load(:password).new(parent, :password, properties)
     fields << RailsAdmin::Config::Fields::Types.load(:password).new(parent, :password_confirmation, properties)
     extensions.each do |ext|
-      properties = parent.abstract_model.properties.find { |p| ext == p[:name] }
+      properties = parent.abstract_model.properties.detect { |p| ext == p[:name] }
       if properties
-        unless field = fields.find { |f| f.name == ext }
+        unless field = fields.detect { |f| f.name == ext }
           RailsAdmin::Config::Fields.default_factory.call(parent, properties, fields)
           field = fields.last
         end

@@ -8,7 +8,7 @@ module RailsAdmin
       # If group with given name does not yet exist it will be created. If a
       # block is passed it will be evaluated in the context of the group
       def group(name, &block)
-        group = parent.groups.find { |g| name == g.name }
+        group = parent.groups.detect { |g| name == g.name }
         group ||= (parent.groups << RailsAdmin::Config::Fields::Group.new(self, name)).last
         group.tap { |g| g.section = self }.instance_eval &block if block
         group

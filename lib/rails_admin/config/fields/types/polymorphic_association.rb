@@ -64,7 +64,7 @@ module RailsAdmin
               [config.abstract_model.model.name, config.abstract_model.to_param]
             end
 
-            ::Hash[*types.collect { |v|
+            ::Hash[*types.map { |v|
                   [v[0], bindings[:view].index_path(v[1])]
                 }.flatten]
           end

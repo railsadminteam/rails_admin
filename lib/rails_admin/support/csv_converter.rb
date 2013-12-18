@@ -71,7 +71,7 @@ module RailsAdmin
     private
 
     def association_for(key)
-      export_fields_for(key).find(&:association?)
+      export_fields_for(key).detect(&:association?)
     end
 
     def export_fields_for(method, model_config = @model_config)

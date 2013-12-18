@@ -4,7 +4,7 @@ module RailsAdmin
     module HasFields
       # Defines a configuration for a field.
       def field(name, type = nil, add_to_section = true, &block)
-        field = _fields.find { |f| name == f.name }
+        field = _fields.detect { |f| name == f.name }
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
         # unhide them if config specifically defines them
@@ -20,7 +20,7 @@ module RailsAdmin
         # one found in default stack
         elsif !type.nil? && type != (field.nil? ? nil : field.type)
           _fields.delete(field) unless field.nil?
-          properties = abstract_model.properties.find { |p| name == p[:name] }
+          properties = abstract_model.properties.detect { |p| name == p[:name] }
           field = (_fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
 
@@ -86,7 +86,7 @@ module RailsAdmin
           defined = _fields.select { |f| f.defined }
           defined = _fields if defined.empty?
         else
-          defined = field_names.map { |field_name| _fields.find { |f| f.name == field_name } }
+          defined = field_names.map { |field_name| _fields.detect { |f| f.name == field_name } }
         end
         defined.map do |f|
           unless f.defined

@@ -100,7 +100,7 @@ describe 'RailsAdmin Basic Update' do
       expect(@league.divisions).not_to include(@divisions[1])
       expect(@league.divisions).not_to include(@divisions[2])
 
-      expect(RailsAdmin::History.where(:item => @league.id).collect(&:message)).to include("name: \"#{old_name}\" -> \"National League\"")
+      expect(RailsAdmin::History.where(:item => @league.id).map(&:message)).to include("name: \"#{old_name}\" -> \"National League\"")
 
       put edit_path(:model_name => 'league', :id => @league.id, :league => {:division_ids => ['']})
 

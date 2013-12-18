@@ -20,7 +20,7 @@ module RailsAdmin
         end
 
         def safe_send(value)
-          if self.attributes.find { |k,v| k.to_s == value.to_s }
+          if self.attributes.detect { |k,v| k.to_s == value.to_s }
             self.read_attribute(value)
           else
             self.send(value)

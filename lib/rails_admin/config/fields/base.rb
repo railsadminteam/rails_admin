@@ -88,13 +88,13 @@ module RailsAdmin
                 am = f.keys.first.is_a?(Class) && AbstractModel.new(f.keys.first)
                 table_name = am && am.table_name || f.keys.first
                 column = f.values.first
-                property = am && am.properties.find { |p| p[:name] == f.values.first.to_sym }
+                property = am && am.properties.detect { |p| p[:name] == f.values.first.to_sym }
                 type = property && property[:type]
               else                                                             #  <attribute|column>
                 am = (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
                 table_name = am.table_name
                 column = f
-                property = am.properties.find { |p| p[:name] == f.to_sym }
+                property = am.properties.detect { |p| p[:name] == f.to_sym }
                 type = property && property[:type]
               end
 
@@ -152,7 +152,7 @@ module RailsAdmin
         # Accessor for field's length restrictions per validations
         #
         register_instance_option :valid_length do
-          @valid_length ||= abstract_model.model.validators_on(name).find { |v|
+          @valid_length ||= abstract_model.model.validators_on(name).detect { |v|
             v.kind == :length }.try { |v| v.options } || {}
         end
 
@@ -165,8 +165,8 @@ module RailsAdmin
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
           context = (bindings && bindings[:object] ? (bindings[:object].persisted? ? :update : :create) : :nil)
-          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.find do |column_name|
-            !!abstract_model.model.validators_on(column_name).find do |v|
+          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
+            !!abstract_model.model.validators_on(column_name).detect do |v|
               !v.options[:allow_nil] and
               [:presence, :numericality, :attachment_presence].include?(v.kind) and
               (v.options[:on] == context or v.options[:on].blank?)

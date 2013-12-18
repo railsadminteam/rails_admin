@@ -14,7 +14,7 @@ describe RailsAdmin::Config::Fields::Base do
 
     context 'on a Paperclip installation' do
       it 'should detect required fields' do
-        expect(RailsAdmin.config('Image').fields.find { |f| f.name == :file }.with(:object => Image.new)).to be_required
+        expect(RailsAdmin.config('Image').fields.detect { |f| f.name == :file }.with(:object => Image.new)).to be_required
       end
     end
   end
@@ -32,15 +32,15 @@ describe RailsAdmin::Config::Fields::Base do
     POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type]
 
     it 'is empty by default' do
-      expect(RailsAdmin.config(Team).fields.find { |f| f.name == :name }.children_fields).to eq([])
+      expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :name }.children_fields).to eq([])
     end
 
     it 'contains child key for belongs to associations' do
-      expect(RailsAdmin.config(Team).fields.find { |f| f.name == :division }.children_fields).to eq([:division_id])
+      expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.children_fields).to eq([:division_id])
     end
 
     it 'contains child keys for polymorphic belongs to associations' do
-      expect(RailsAdmin.config(Comment).fields.find { |f| f.name == :commentable }.children_fields).to match_array POLYMORPHIC_CHILDREN
+      expect(RailsAdmin.config(Comment).fields.detect { |f| f.name == :commentable }.children_fields).to match_array POLYMORPHIC_CHILDREN
     end
 
     it 'has correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column' do
@@ -54,11 +54,11 @@ describe RailsAdmin::Config::Fields::Base do
 
     context 'of a Paperclip installation' do
       it 'is a _file_name field' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :paperclip_asset }.children_fields.include?(:paperclip_asset_file_name)).to be_true
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset }.children_fields.include?(:paperclip_asset_file_name)).to be_true
       end
 
       it 'is hidden, not filterable' do
-        f = RailsAdmin.config(FieldTest).fields.find { |f| f.name == :paperclip_asset_file_name }
+        f = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset_file_name }
         expect(f.hidden?).to be_true
         expect(f.filterable?).to be_false
       end
@@ -66,14 +66,14 @@ describe RailsAdmin::Config::Fields::Base do
 
     context 'of a Dragonfly installation' do
       it 'is a _name field and _uid field' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :dragonfly_asset }.children_fields).to eq([:dragonfly_asset_name, :dragonfly_asset_uid])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.children_fields).to eq([:dragonfly_asset_name, :dragonfly_asset_uid])
       end
     end
 
     context 'of a Carrierwave installation' do
       it 'is the parent field itself' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :carrierwave_asset }.children_fields).to eq([:carrierwave_asset])
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :carrierwave_asset }.hidden?).to be_false
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.children_fields).to eq([:carrierwave_asset])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.hidden?).to be_false
       end
     end
   end
@@ -88,18 +88,18 @@ describe RailsAdmin::Config::Fields::Base do
         end
       end
       @team = Team.new
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }.with(:object => @team).form_default_value).to eq('default value')
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.with(:object => @team).form_default_value).to eq('default value')
       @team.name = 'set value'
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }.with(:object => @team).form_default_value).to be_nil
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.with(:object => @team).form_default_value).to be_nil
       @team = FactoryGirl.create :team
       @team.name = nil
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }.with(:object => @team).form_default_value).to be_nil
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.with(:object => @team).form_default_value).to be_nil
     end
   end
 
   describe '#default_value' do
     it 'is nil by default' do
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }.default_value).to be_nil
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.default_value).to be_nil
     end
   end
 
@@ -113,8 +113,8 @@ describe RailsAdmin::Config::Fields::Base do
           field :name
         end
       end
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :division }.hint).to eq('Great Division') # custom
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }.hint).to eq('') # default
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }.hint).to eq('Great Division') # custom
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.hint).to eq('') # default
     end
   end
 
@@ -126,9 +126,9 @@ describe RailsAdmin::Config::Fields::Base do
           field :name
         end
       end
-      field_specific_i18n = RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }
+      field_specific_i18n = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }
       expect(field_specific_i18n.help).to eq(I18n.translate('admin.help.team.name')) # custom via locales yml
-      field_no_specific_i18n = RailsAdmin.config('Team').list.fields.find { |f| f.name == :division }
+      field_no_specific_i18n = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }
       expect(field_no_specific_i18n.help).to eq(field_no_specific_i18n.generic_help) # rails_admin generic fallback
     end
   end
@@ -143,29 +143,29 @@ describe RailsAdmin::Config::Fields::Base do
           field :name
         end
       end
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :division }.css_class).to eq('custom') # custom
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :division }.type_css_class).to eq('belongs_to_association_type') # type css class, non-customizable
-      expect(RailsAdmin.config('Team').list.fields.find { |f| f.name == :name }.css_class).to eq('name_field') # default
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }.css_class).to eq('custom') # custom
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }.type_css_class).to eq('belongs_to_association_type') # type css class, non-customizable
+      expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.css_class).to eq('name_field') # default
     end
   end
 
   describe '#associated_collection_cache_all' do
     it 'defaults to true if associated collection count < 100' do
-      expect(RailsAdmin.config(Team).edit.fields.find { |f| f.name == :players }.associated_collection_cache_all).to be_true
+      expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_true
     end
 
     it 'defaults to false if associated collection count >= 100' do
       @players = 100.times.map do
         FactoryGirl.create :player
       end
-      expect(RailsAdmin.config(Team).edit.fields.find { |f| f.name == :players }.associated_collection_cache_all).to be_false
+      expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_false
     end
   end
 
   describe '#searchable_columns' do
     describe 'for belongs_to fields' do
       it 'finds label method on the opposite side for belongs_to associations by default' do
-        expect(RailsAdmin.config(Team).fields.find { |f| f.name == :division }.searchable_columns.map { |c| c[:column] }).to eq(['divisions.name', 'teams.division_id'])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns.map { |c| c[:column] }).to eq(['divisions.name', 'teams.division_id'])
       end
 
       it 'searches on opposite table for belongs_to' do
@@ -174,7 +174,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :custom_id
           end
         end
-        expect(RailsAdmin.config(Team).fields.find { |f| f.name == :division }.searchable_columns.map { |c| c[:column] }).to eq(['divisions.custom_id'])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns.map { |c| c[:column] }).to eq(['divisions.custom_id'])
       end
 
       it 'searches on asked table with model name' do
@@ -183,7 +183,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable League => :name
           end
         end
-        expect(RailsAdmin.config(Team).fields.find { |f| f.name == :division }.searchable_columns).to eq([{:column=>'leagues.name', :type=>:string}])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{:column=>'leagues.name', :type=>:string}])
       end
 
       it 'searches on asked table with table name' do
@@ -192,15 +192,15 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :leagues => :name
           end
         end
-        expect(RailsAdmin.config(Team).fields.find { |f| f.name == :division }.searchable_columns).to eq([{:column=>'leagues.name', :type=>:string}])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{:column=>'leagues.name', :type=>:string}])
       end
     end
 
     describe 'for basic type fields' do
 
       it 'uses base table and find correct column type' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :text_field }.searchable_columns).to eq([{:column=>'field_tests.text_field', :type=>:text}])
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :integer_field }.searchable_columns).to eq([{:column=>'field_tests.integer_field', :type=>:integer}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{:column=>'field_tests.text_field', :type=>:text}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{:column=>'field_tests.integer_field', :type=>:integer}])
       end
 
       it 'is customizable to another field on the same table' do
@@ -209,7 +209,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :date_field
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :time_field }.searchable_columns).to eq([{:column=>'field_tests.date_field', :type=>:date}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :time_field }.searchable_columns).to eq([{:column=>'field_tests.date_field', :type=>:date}])
       end
 
       it 'is customizable to another field on another table with :table_name' do
@@ -218,7 +218,7 @@ describe RailsAdmin::Config::Fields::Base do
             searchable :nested_field_tests => :title
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :string_field }.searchable_columns).to eq([{:column=>'nested_field_tests.title', :type=>:string}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :string_field }.searchable_columns).to eq([{:column=>'nested_field_tests.title', :type=>:string}])
       end
 
       it 'is customizable to another field on another model with ModelClass' do
@@ -227,21 +227,21 @@ describe RailsAdmin::Config::Fields::Base do
             searchable NestedFieldTest => :title
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :string_field }.searchable_columns).to eq([{:column=>'nested_field_tests.title', :type=>:string}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :string_field }.searchable_columns).to eq([{:column=>'nested_field_tests.title', :type=>:string}])
       end
     end
 
     describe 'for mapped fields' do
       it 'of paperclip should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :paperclip_asset }.searchable_columns.map { |c| c[:column] }).to eq(['field_tests.paperclip_asset_file_name'])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset }.searchable_columns.map { |c| c[:column] }).to eq(['field_tests.paperclip_asset_file_name'])
       end
 
       it 'of dragonfly should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :dragonfly_asset }.searchable_columns.map { |c| c[:column] }).to eq(['field_tests.dragonfly_asset_name'])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.searchable_columns.map { |c| c[:column] }).to eq(['field_tests.dragonfly_asset_name'])
       end
 
       it 'of carrierwave should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :carrierwave_asset }.searchable_columns.map { |c| c[:column] }).to eq(['field_tests.carrierwave_asset'])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable_columns.map { |c| c[:column] }).to eq(['field_tests.carrierwave_asset'])
       end
     end
   end
@@ -254,26 +254,26 @@ describe RailsAdmin::Config::Fields::Base do
         field :name
       end
       @league = FactoryGirl.create :league
-      expect(RailsAdmin.config('League').export.fields.find { |f| f.name == :virtual_column }.sortable).to be_false
-      expect(RailsAdmin.config('League').export.fields.find { |f| f.name == :virtual_column }.searchable).to be_false
-      expect(RailsAdmin.config('League').export.fields.find { |f| f.name == :name }.sortable).to be_true
-      expect(RailsAdmin.config('League').export.fields.find { |f| f.name == :name }.searchable).to be_true
+      expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :virtual_column }.sortable).to be_false
+      expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :virtual_column }.searchable).to be_false
+      expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :name }.sortable).to be_true
+      expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :name }.searchable).to be_true
     end
 
     context 'of a virtual field with children fields' do
       it 'of paperclip should target the first children field' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :paperclip_asset }.searchable).to eq(:paperclip_asset_file_name)
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :paperclip_asset }.sortable).to eq(:paperclip_asset_file_name)
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset }.searchable).to eq(:paperclip_asset_file_name)
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset }.sortable).to eq(:paperclip_asset_file_name)
       end
 
       it 'of dragonfly should target the first children field' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :dragonfly_asset }.searchable).to eq(:dragonfly_asset_name)
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :dragonfly_asset }.sortable).to eq(:dragonfly_asset_name)
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.searchable).to eq(:dragonfly_asset_name)
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.sortable).to eq(:dragonfly_asset_name)
       end
 
       it 'of carrierwave should target the first children field' do
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :carrierwave_asset }.searchable).to eq(:carrierwave_asset)
-        expect(RailsAdmin.config(FieldTest).fields.find { |f| f.name == :carrierwave_asset }.sortable).to eq(:carrierwave_asset)
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable).to eq(:carrierwave_asset)
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.sortable).to eq(:carrierwave_asset)
       end
     end
   end
@@ -285,8 +285,8 @@ describe RailsAdmin::Config::Fields::Base do
         field :name
       end
       @league = FactoryGirl.create :league
-      expect(RailsAdmin.config('League').export.fields.find { |f| f.name == :virtual_column }.virtual?).to be_true
-      expect(RailsAdmin.config('League').export.fields.find { |f| f.name == :name }.virtual?).to be_false
+      expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :virtual_column }.virtual?).to be_true
+      expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :name }.virtual?).to be_false
     end
   end
 
@@ -362,7 +362,7 @@ describe RailsAdmin::Config::Fields::Base do
 
   describe '#associated_collection' do
     it 'returns [] when type is blank?' do
-      expect(RailsAdmin.config(Comment).fields.find { |f|f.name == :commentable }.associated_collection('')).to be_empty
+      expect(RailsAdmin.config(Comment).fields.detect { |f|f.name == :commentable }.associated_collection('')).to be_empty
     end
   end
 
