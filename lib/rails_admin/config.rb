@@ -333,6 +333,6 @@ module RailsAdmin
     end
 
     # Set default values for configuration options on load
-    self.reset
+    reset
   end
 end

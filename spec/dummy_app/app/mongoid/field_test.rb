@@ -43,7 +43,7 @@ class FieldTest
   accepts_nested_attributes_for :embeds, :allow_destroy => true
 
   attr_accessor :delete_paperclip_asset
-  before_validation { self.paperclip_asset = nil if self.delete_paperclip_asset == '1' }
+  before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
   field :dragonfly_asset_name
   field :dragonfly_asset_uid

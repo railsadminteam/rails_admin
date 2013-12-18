@@ -15,7 +15,7 @@ class Player < ActiveRecord::Base
   def destroy_hook; end
 
   def draft_id
-    self.draft.try :id
+    draft.try :id
   end
 
   def draft_id=(id)

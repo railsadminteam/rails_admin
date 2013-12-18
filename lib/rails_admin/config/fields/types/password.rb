@@ -26,7 +26,7 @@ module RailsAdmin
           end
 
           register_instance_option :visible do
-            self.section.is_a?(RailsAdmin::Config::Sections::Edit)
+            section.is_a?(RailsAdmin::Config::Sections::Edit)
           end
 
           register_instance_option :pretty_value do

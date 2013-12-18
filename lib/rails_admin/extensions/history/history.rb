@@ -10,7 +10,7 @@ class RailsAdmin::History < ActiveRecord::Base
   default_scope { order('id DESC') }
 
   def self.latest
-    self.limit(100)
+    limit(100)
   end
 
   def self.create_history_item(message, object, abstract_model, user)

@@ -93,7 +93,7 @@ module RailsAdmin
       # Act as a proxy for the base section configuration that actually
       # store the configurations.
       def method_missing(m, *args, &block)
-        self.send(:base).send(m, *args, &block)
+        send(:base).send(m, *args, &block)
       end
 
       def inspect

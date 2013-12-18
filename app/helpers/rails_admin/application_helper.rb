@@ -17,17 +17,17 @@ module RailsAdmin
     end
 
     def action(key, abstract_model = nil, object = nil)
-      RailsAdmin::Config::Actions.find(key, :controller => self.controller, :abstract_model => abstract_model, :object => object)
+      RailsAdmin::Config::Actions.find(key, :controller => controller, :abstract_model => abstract_model, :object => object)
     end
 
     def actions(scope = :all, abstract_model = nil, object = nil)
-      RailsAdmin::Config::Actions.all(scope, :controller => self.controller, :abstract_model => abstract_model, :object => object)
+      RailsAdmin::Config::Actions.all(scope, :controller => controller, :abstract_model => abstract_model, :object => object)
     end
 
     def edit_user_link
       return nil unless authorized?(:edit, _current_user.class, _current_user) && _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
-      return nil unless edit_action = RailsAdmin::Config::Actions.find(:edit, :controller => self.controller, :abstract_model => abstract_model, :object => _current_user)
+      return nil unless edit_action = RailsAdmin::Config::Actions.find(:edit, :controller => controller, :abstract_model => abstract_model, :object => _current_user)
       link_to _current_user.email, url_for(:action => edit_action.action_name, :model_name => abstract_model.to_param, :id => _current_user.id, :controller => 'rails_admin/main')
     end
 
@@ -51,7 +51,7 @@ module RailsAdmin
     end
 
     def main_navigation
-      nodes_stack = RailsAdmin::Config.visible_models(:controller => self.controller)
+      nodes_stack = RailsAdmin::Config.visible_models(:controller => controller)
       node_model_names = nodes_stack.map { |c| c.abstract_model.model_name }
 
       nodes_stack.group_by(&:navigation_label).map do |navigation_label, nodes|

@@ -26,7 +26,7 @@ module RailsAdmin
     end
 
     def bulk_action
-      self.send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(:controller => self, :abstract_model => @abstract_model).select(&:bulkable?).map(&:route_fragment))
+      send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(:controller => self, :abstract_model => @abstract_model).select(&:bulkable?).map(&:route_fragment))
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
@@ -95,7 +95,7 @@ module RailsAdmin
 
     def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
       return unless _params.present?
-      fields = model_config.send(action).with(:controller => self, :view => self.view_context, :object => @object).visible_fields
+      fields = model_config.send(action).with(:controller => self, :view => view_context, :object => @object).visible_fields
       allowed_methods = fields.map { |f|
         f.allowed_methods
       }.flatten.uniq.map(&:to_s) << 'id' << '_destroy'

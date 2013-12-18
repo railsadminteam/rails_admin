@@ -56,5 +56,5 @@ class User
   end
 
   attr_accessor :delete_avatar
-  before_validation { self.avatar = nil if self.delete_avatar == '1' }
+  before_validation { self.avatar = nil if delete_avatar == '1' }
 end

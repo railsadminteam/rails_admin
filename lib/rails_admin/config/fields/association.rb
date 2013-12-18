@@ -30,7 +30,7 @@ module RailsAdmin
         # association checks whether the child model is excluded in
         # configuration or not.
         register_instance_option :visible? do
-          @visible ||= !self.associated_model_config.excluded?
+          @visible ||= !associated_model_config.excluded?
         end
 
         # use the association name as a key, not the association key anymore!
@@ -41,7 +41,7 @@ module RailsAdmin
         # scope for possible associable records
         register_instance_option :associated_collection_scope do
           # bindings[:object] & bindings[:controller] available
-          associated_collection_scope_limit = (self.associated_collection_cache_all ? nil : 30)
+          associated_collection_scope_limit = (associated_collection_cache_all ? nil : 30)
           Proc.new do |scope|
             scope.limit(associated_collection_scope_limit)
           end

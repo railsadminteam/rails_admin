@@ -71,16 +71,16 @@ module RailsAdmin
 
         # list of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
         register_instance_option :searchable_columns do
-          @searchable_columns ||= case self.searchable
+          @searchable_columns ||= case searchable
           when true
-            [{:column => "#{self.abstract_model.table_name}.#{self.name}", :type => self.type}]
+            [{:column => "#{abstract_model.table_name}.#{name}", :type => type}]
           when false
             []
           when :all # valid only for associations
-            table_name = self.associated_model_config.abstract_model.table_name
-            self.associated_model_config.list.fields.map { |f| {:column => "#{table_name}.#{f.name}", :type => f.type} }
+            table_name = associated_model_config.abstract_model.table_name
+            associated_model_config.list.fields.map { |f| {:column => "#{table_name}.#{f.name}", :type => f.type} }
           else
-            [self.searchable].flatten.map do |f|
+            [searchable].flatten.map do |f|
               if f.is_a?(String) && f.include?('.')                            #  table_name.column
                 table_name, column = f.split '.'
                 type = nil
@@ -91,7 +91,7 @@ module RailsAdmin
                 property = am && am.properties.detect { |p| p[:name] == f.values.first.to_sym }
                 type = property && property[:type]
               else                                                             #  <attribute|column>
-                am = (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
+                am = (self.association? ? associated_model_config.abstract_model : abstract_model)
                 table_name = am.table_name
                 column = f
                 property = am.properties.detect { |p| p[:name] == f.to_sym }
@@ -198,7 +198,7 @@ module RailsAdmin
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
             if self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
-              returned = false if fields.include?(self.name)
+              returned = false if fields.include?(name)
             end
           end
           returned
@@ -298,11 +298,11 @@ module RailsAdmin
         end
 
         def form_default_value
-          (self.default_value if bindings[:object].new_record? && self.value.nil? && !self.default_value.nil?)
+          (default_value if bindings[:object].new_record? && value.nil? && !default_value.nil?)
         end
 
         def form_value
-          self.form_default_value.nil? ? self.formatted_value : self.form_default_value
+          form_default_value.nil? ? formatted_value : form_default_value
         end
 
         def inspect

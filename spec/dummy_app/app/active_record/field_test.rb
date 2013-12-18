@@ -7,7 +7,7 @@ class FieldTest < ActiveRecord::Base
 
   has_attached_file :paperclip_asset, :styles => {:thumb => '100x100>'}
   attr_accessor :delete_paperclip_asset
-  before_validation { self.paperclip_asset = nil if self.delete_paperclip_asset == '1' }
+  before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
   image_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader

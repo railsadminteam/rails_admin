@@ -30,7 +30,7 @@ module RailsAdmin
 
         register_instance_option :authorized? do
           (
-            bindings[:controller].nil? or bindings[:controller].authorized?(self.authorization_key, bindings[:abstract_model], bindings[:object])
+            bindings[:controller].nil? or bindings[:controller].authorized?(authorization_key, bindings[:abstract_model], bindings[:object])
           ) and (
             bindings[:abstract_model].nil? or (
               (only.nil? or [only].flatten.map(&:to_s).include?(bindings[:abstract_model].to_s)) and
@@ -129,7 +129,7 @@ module RailsAdmin
         end
 
         def self.key
-          self.name.to_s.demodulize.underscore.to_sym
+          name.to_s.demodulize.underscore.to_sym
         end
       end
     end

@@ -90,7 +90,7 @@ module RailsAdmin
         # and is accessed by a class method. Both go by the name of the option.
         def register_class_option(option_name, &default)
           scope = class << self; self; end;
-          self.register_instance_option(option_name, scope, &default)
+          register_instance_option(option_name, scope, &default)
         end
       end
     end
