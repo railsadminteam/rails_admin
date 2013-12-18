@@ -310,7 +310,7 @@ module RailsAdmin
       def viable_models
         included_models.map(&:to_s).presence || (
           @@system_models ||= # memoization for tests
-            ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
+            ([Rails.application] + Rails::Engine.subclasses.map(&:instance)).map do |app|
               (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
                 Dir.glob(app.root.join(load_path)).map do |load_dir|
                   Dir.glob(load_dir + "/**/*.rb").map do |filename|
