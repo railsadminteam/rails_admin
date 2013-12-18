@@ -6,7 +6,7 @@ module RailsAdmin
       module Types
         class Password < RailsAdmin::Config::Fields::Types::String
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :view_helper do
             :password_field

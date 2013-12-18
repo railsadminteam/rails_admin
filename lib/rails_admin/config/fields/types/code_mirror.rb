@@ -6,7 +6,7 @@ module RailsAdmin
       module Types
         class CodeMirror < RailsAdmin::Config::Fields::Types::Text
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           #Pass the theme and mode for Codemirror
           register_instance_option :config do

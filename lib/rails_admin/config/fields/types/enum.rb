@@ -5,7 +5,7 @@ module RailsAdmin
     module Fields
       module Types
         class Enum < RailsAdmin::Config::Fields::Base
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :partial do
             :form_enumeration

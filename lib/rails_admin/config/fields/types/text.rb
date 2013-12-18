@@ -6,7 +6,7 @@ module RailsAdmin
       module Types
         class Text < RailsAdmin::Config::Fields::Base
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           [:ckeditor, :ckeditor_base_location, :ckeditor_config_js, :ckeditor_location].each do |key|
             register_deprecated_instance_option key do

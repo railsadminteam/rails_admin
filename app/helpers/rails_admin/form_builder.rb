@@ -77,7 +77,7 @@ module RailsAdmin
       else
         object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
       end
-      %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI::escapeHTML(object_label)}"></span>}.html_safe
+      %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label)}"></span>}.html_safe
     end
 
     def jquery_namespace field
