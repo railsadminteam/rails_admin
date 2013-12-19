@@ -1002,7 +1002,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         Team.instance_eval do
           serialize :color
           def color_enum
-            [%w(blue green red)]
+            %w(blue green red)
           end
         end
         visit new_path(:model_name => 'team')
@@ -1023,7 +1023,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         Team.instance_eval do
           field :color, :type => Array
           def color_enum
-            [%w(blue green red)]
+            %w(blue green red)
           end
         end
         visit new_path(:model_name => 'team')
