@@ -14,7 +14,6 @@ module RailsAdmin
           @js_plugin_options = {}
 
           class << self
-
             include RailsAdmin::I18nSupport
 
             attr_reader :format, :i18n_scope, :js_plugin_options
@@ -48,7 +47,6 @@ module RailsAdmin
             def parse_date_string(date_string)
               ::Time.zone.parse(date_string)
             end
-
           end
 
           def formatted_date_value

@@ -1,7 +1,6 @@
 module RailsAdmin
   module Config
     module Actions
-
       class << self
         def all(scope = nil, bindings = {})
           if scope.is_a?(Hash)
@@ -100,7 +99,6 @@ module RailsAdmin
             raise "Action #{action.custom_key} already exists. Please change its custom key."
           end
         end
-
       end
     end
   end

@@ -1,7 +1,5 @@
 module RailsAdmin
-
   class MainController < RailsAdmin::ApplicationController
-
     include ActionView::Helpers::TextHelper
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper

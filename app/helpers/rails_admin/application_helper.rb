@@ -2,7 +2,6 @@ require 'rails_admin/i18n_support'
 
 module RailsAdmin
   module ApplicationHelper
-
     include RailsAdmin::I18nSupport
 
     def authorized?(action, abstract_model = nil, object = nil)
@@ -142,7 +141,6 @@ module RailsAdmin
         end
       end.html_safe
     end
-
   end
 end
 

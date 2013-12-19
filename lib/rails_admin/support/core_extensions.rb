@@ -1,5 +1,4 @@
 class Hash
-
   def symbolize
     Hash.symbolize_hash(self)
   end

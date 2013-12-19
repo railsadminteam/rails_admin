@@ -2,13 +2,11 @@
 require RUBY_VERSION < '1.9' ? 'fastercsv' : 'csv'
 
 module RailsAdmin
-
   CSVClass = RUBY_VERSION < '1.9' ? ::FasterCSV : ::CSV
   NON_ASCII_ENCODINGS = /(UTF\-16)|(UTF\-32)|(ISO\-2022\-JP)|(Big5\-HKSCS)|(UTF\-7)/
   UTF8_ENCODINGS = [nil, '', 'utf8', 'utf-8', 'unicode', 'UTF8', 'UTF-8', 'UNICODE']
 
   class CSVConverter
-
     def initialize(objects = [], schema = {})
       return self if (@objects = objects).blank?
 

@@ -91,7 +91,6 @@ module RailsAdmin
       private
 
       class WhereBuilder
-
         def initialize(scope)
           @statements = []
           @values = []

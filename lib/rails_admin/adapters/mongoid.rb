@@ -449,7 +449,6 @@ module RailsAdmin
         def object_id_from_string(str)
           ObjectId.from_string(str)
         end
-
       end
     end
   end

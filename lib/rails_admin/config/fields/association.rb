@@ -5,7 +5,6 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
-
         def self.inherited(klass)
           super(klass)
         end
