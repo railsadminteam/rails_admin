@@ -288,10 +288,10 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
     it 'maps Mongoid column types to RA types' do
       expect(@abstract_model.properties.select { |p| %w(_id array_field big_decimal_field
-        boolean_field bson_object_id_field bson_binary_field date_field datetime_field
-        time_with_zone_field default_field float_field hash_field integer_field name
-        object_field range_field short_text string_field subject symbol_field text_field
-        time_field title).include? p[:name].to_s }).to match_array [
+                                                        boolean_field bson_object_id_field bson_binary_field date_field datetime_field
+                                                        time_with_zone_field default_field float_field hash_field integer_field name
+                                                        object_field range_field short_text string_field subject symbol_field text_field
+                                                        time_field title).include? p[:name].to_s }).to match_array [
         {:name => :_id,
          :pretty_name => 'Id',
          :nullable? => true,
@@ -554,8 +554,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         end
         @teams = FactoryGirl.create_list(:team, 3)
         @players = [{:team => @teams[1]},
-                     {:team => @teams[1], :name => 'foobar'},
-                     {:team => @teams[2]}].map { |h| FactoryGirl.create :player, h }
+                    {:team => @teams[1], :name => 'foobar'},
+                    {:team => @teams[2]}].map { |h| FactoryGirl.create :player, h }
         @abstract_model = RailsAdmin::AbstractModel.new('Team')
       end
 

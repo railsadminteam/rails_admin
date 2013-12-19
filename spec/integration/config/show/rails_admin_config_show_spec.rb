@@ -90,8 +90,8 @@ describe 'RailsAdmin Config DSL Show Section' do
       should_not have_selector('h4', :text => 'Basic info')
 
       %w[division name logo_url manager
-        ballpark mascot founded wins
-        losses win_percentage revenue
+         ballpark mascot founded wins
+         losses win_percentage revenue
       ].each do |field|
         should_not have_selector(".#{field}_field")
       end
@@ -183,8 +183,8 @@ describe 'RailsAdmin Config DSL Show Section' do
       do_request
 
       %w[division name logo_url manager
-        ballpark mascot founded wins
-        losses win_percentage revenue players fans
+         ballpark mascot founded wins
+         losses win_percentage revenue players fans
       ].each do |field|
         should have_selector(".#{field}_field")
       end
@@ -250,8 +250,8 @@ describe 'RailsAdmin Config DSL Show Section' do
       do_request
 
       ['Division', 'Name (STRING)', 'Logo url (STRING)', 'Manager (STRING)',
-        'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
-        'Win percentage', 'Revenue', 'Players', 'Fans'
+       'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
+       'Win percentage', 'Revenue', 'Players', 'Fans'
       ].each do |text|
         should have_selector('.label', :text => text)
       end
@@ -269,8 +269,8 @@ describe 'RailsAdmin Config DSL Show Section' do
       do_request
 
       ['Division', 'Name (STRING)', 'Logo url (STRING)', 'Manager (STRING)',
-        'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
-        'Win percentage', 'Revenue', 'Players', 'Fans'
+       'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
+       'Win percentage', 'Revenue', 'Players', 'Fans'
       ].each do |text|
         should have_selector('.label', :text => text)
       end

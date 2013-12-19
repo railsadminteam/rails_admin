@@ -212,7 +212,7 @@ module RailsAdmin
 
     def last_week
       [1.week.ago.to_date.beginning_of_week,
-        1.week.ago.to_date.end_of_week]
+       1.week.ago.to_date.end_of_week]
     end
 
     def between
