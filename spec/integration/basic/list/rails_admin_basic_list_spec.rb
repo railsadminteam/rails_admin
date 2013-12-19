@@ -165,7 +165,6 @@ describe 'RailsAdmin Basic List' do
       should have_no_content(@players[3].name)
     end
 
-
     it 'allows to search a belongs_to attribute over the target table' do
       RailsAdmin.config Player do
         list do

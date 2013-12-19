@@ -768,7 +768,6 @@ describe 'RailsAdmin Config DSL Edit Section' do
     end
   end
 
-
   describe 'fields which are nullable and have AR validations', :active_record => true do
 
     it 'is required' do

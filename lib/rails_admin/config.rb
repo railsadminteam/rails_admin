@@ -24,7 +24,6 @@ module RailsAdmin
       request.env['warden'].try(:user) || respond_to?(:current_user) && current_user
     end
 
-
     class << self
       # Application title, can be an array of two elements
       attr_accessor :main_app_name

@@ -18,7 +18,6 @@ describe 'RailsAdmin Config DSL List Section' do
     end
   end
 
-
   describe 'number of items per page' do
 
     before(:each) do

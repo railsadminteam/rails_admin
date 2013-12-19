@@ -25,7 +25,6 @@ module RailsAdmin
             true
           end
 
-
           def editable?
             (nested_form || abstract_model.model.new.respond_to?("#{name}_id=")) && super
           end

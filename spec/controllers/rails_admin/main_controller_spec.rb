@@ -55,7 +55,6 @@ describe RailsAdmin::MainController do
       end
     end
 
-
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {:sort => 'parent_category', :model_name => 'categories'}
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(:sort => 'categories.parent_category_id', :sort_reverse => true)
@@ -174,7 +173,6 @@ describe RailsAdmin::MainController do
 
       expect(controller.list_entries.to_a.length).to eq(@team.revenue.to_i)
     end
-
 
     it 'limits associated collection records number to 30 if cache_all is false' do
       @players = 40.times.map do
@@ -371,6 +369,5 @@ describe RailsAdmin::MainController do
         })
     end
   end
-
 
 end

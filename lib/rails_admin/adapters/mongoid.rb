@@ -9,7 +9,6 @@ module RailsAdmin
       DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary', 'BSON::Binary']
       ObjectId = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId
 
-
       def new(params = {})
         AbstractObject.new(model.new)
       end

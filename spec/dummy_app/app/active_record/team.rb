@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 class Team < ActiveRecord::Base
   has_many :players, -> { order :id }, :inverse_of => :team
   has_and_belongs_to_many :fans

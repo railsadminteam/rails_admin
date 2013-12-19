@@ -19,7 +19,6 @@ class Ability
       can :manage, :all
       can :show_in_app, :all
 
-
       # fix for buggy and inconsistent behaviour in Cancan 1.6.8 => https://github.com/ryanb/cancan/issues/721
       if CI_ORM != :mongoid
         cannot [:update, :destroy], Player

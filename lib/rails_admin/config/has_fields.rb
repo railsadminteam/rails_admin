@@ -72,7 +72,6 @@ module RailsAdmin
         include_fields_if() { true }
       end
 
-
       # Returns all field configurations for the model configuration instance. If no fields
       # have been defined returns all fields. Defined fields are sorted to match their
       # order property. If order was not specified it will match the order in which fields

@@ -154,7 +154,6 @@ describe 'RailsAdmin::Adapters::ActiveRecord', :active_record => true do
       expect(param[:model_proc].call).to eq(ARComment)
     end
 
-
     it 'has correct opposite model lookup for polymorphic associations' do
       allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(ARBlog ARPost ARCategory ARUser ARProfile ARComment))
       expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARUser]

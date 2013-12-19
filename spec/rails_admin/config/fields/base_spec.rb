@@ -246,7 +246,6 @@ describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-
   describe '#searchable and #sortable' do
     it 'is false if column is virtual, true otherwise' do
       RailsAdmin.config League do

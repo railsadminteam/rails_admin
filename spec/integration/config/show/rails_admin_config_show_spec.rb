@@ -39,7 +39,6 @@ describe 'RailsAdmin Config DSL Show Section' do
       should_not have_css('.born_on_field')
     end
 
-
     it 'is disactivable' do
       RailsAdmin.config do |c|
         c.compact_show_view = false
@@ -206,7 +205,6 @@ describe 'RailsAdmin Config DSL Show Section' do
       should have_selector('.division_field')
       should have_selector('.name_field')
     end
-
 
     it 'delegates the label option to the ActiveModel API' do
       RailsAdmin.config Team do

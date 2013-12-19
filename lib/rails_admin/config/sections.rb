@@ -9,7 +9,6 @@ require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/export'
 require 'rails_admin/config/sections/show'
 
-
 module RailsAdmin
   module Config
     # Sections describe different views in the RailsAdmin engine. Configurable sections are
