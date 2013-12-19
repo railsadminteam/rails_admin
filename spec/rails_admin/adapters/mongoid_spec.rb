@@ -713,7 +713,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(:field => {'$lte' => 5})
       expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
       expect(@abstract_model.send(:build_statement, :field, :integer, [%w(15, 10, 20)], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''     ], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
     end
@@ -725,8 +725,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', 'default')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'between')).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['6.1', ''  , ''  ], 'default')).to eq(:field => 6.1)
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''  ], 'default')).to eq(:field => 7.1)
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['6.1', ''  , ''], 'default')).to eq(:field => 6.1)
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''], 'default')).to eq(:field => 7.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['8.1', ''  , '20.1'], 'default')).to eq(:field => 8.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(:field => 9.1)
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', ''], 'between')).to be_nil
@@ -735,7 +735,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq(:field => {'$lte' => 5.1})
       expect(@abstract_model.send(:build_statement, :field, :decimal, [''  , '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word1', ''     ], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word1', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word3', 'word4'], 'between')).to be_nil
 
@@ -745,8 +745,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', 'default')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'between')).to eq(:field => 1.1)
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, ['6.1', ''  , ''  ], 'default')).to eq(:field => 6.1)
-      expect(@abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''  ], 'default')).to eq(:field => 7.1)
+      expect(@abstract_model.send(:build_statement, :field, :float, ['6.1', ''  , ''], 'default')).to eq(:field => 6.1)
+      expect(@abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''], 'default')).to eq(:field => 7.1)
       expect(@abstract_model.send(:build_statement, :field, :float, ['8.1', ''  , '20.1'], 'default')).to eq(:field => 8.1)
       expect(@abstract_model.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq(:field => 9.1)
       expect(@abstract_model.send(:build_statement, :field, :float, ['', '', ''], 'between')).to be_nil
@@ -755,7 +755,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq(:field => {'$lte' => 5.1})
       expect(@abstract_model.send(:build_statement, :field, :float, [''  , '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
       expect(@abstract_model.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq(:field => {'$gte' => 10.1, '$lte' => 20.1})
-      expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word1', ''     ], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word1', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word3', 'word4'], 'between')).to be_nil
     end
