@@ -32,7 +32,7 @@ module RailsAdmin
 
         # If a block has been given evaluate it and sort fields after that
         if block
-          field.instance_eval &block
+          field.instance_eval(&block)
         end
         field
       end
@@ -46,7 +46,7 @@ module RailsAdmin
       # or include fields by conditions if no field names
       def include_fields(*field_names, &block)
         if field_names.empty?
-          _fields.select { |f| f.instance_eval &block }.each do |f|
+          _fields.select { |f| f.instance_eval(&block) }.each do |f|
             unless f.defined
               f.defined = true
               f.order = _fields.select(&:defined).length
@@ -61,7 +61,7 @@ module RailsAdmin
       def exclude_fields(*field_names, &block)
         block ||= lambda { |f| field_names.include?(f.name) }
         _fields.each { |f| f.defined = true } if _fields.select(&:defined).empty?
-        _fields.select { |f| f.instance_eval &block }.each { |f| f.defined = false }
+        _fields.select { |f| f.instance_eval(&block) }.each { |f| f.defined = false }
       end
 
       # API candy
@@ -99,7 +99,7 @@ module RailsAdmin
 
       # Defines configuration for fields by their type.
       def fields_of_type(type, &block)
-        _fields.select { |f| type == f.type }.map! { |f| f.instance_eval &block } if block
+        _fields.select { |f| type == f.type }.map! { |f| f.instance_eval(&block) } if block
       end
 
       # Accessor for all fields

@@ -40,19 +40,19 @@ module RailsAdmin
   end
 
   def _authenticate!
-    instance_eval &RailsAdmin::Config.authenticate_with
+    instance_eval(&RailsAdmin::Config.authenticate_with)
   end
 
   def _authorize!
-    instance_eval &RailsAdmin::Config.authorize_with
+    instance_eval(&RailsAdmin::Config.authorize_with)
   end
 
   def _audit!
-    instance_eval &RailsAdmin::Config.audit_with
+    instance_eval(&RailsAdmin::Config.audit_with)
   end
 
   def _current_user
-    instance_eval &RailsAdmin::Config.current_user_method
+    instance_eval(&RailsAdmin::Config.current_user_method)
   end
 
   alias_method :user_for_paper_trail, :_current_user

@@ -6,7 +6,7 @@ describe 'RailsAdmin Export' do
   subject { page }
 
   before(:each) do
-    Comment.all.map &:destroy # rspec bug => doesn't get destroyed with transaction
+    Comment.all.map(&:destroy) # rspec bug => doesn't get destroyed with transaction
 
     @players = 4.times.map { FactoryGirl.create :player }
     @player = @players.first

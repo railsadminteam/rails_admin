@@ -48,7 +48,7 @@ module RailsAdmin
         def fields_of_type(type, &block)
           selected = section.fields.select { |f| type == f.type }
           if block
-            selected.each { |f| f.instance_eval &block }
+            selected.each { |f| f.instance_eval(&block) }
           end
           selected
         end
