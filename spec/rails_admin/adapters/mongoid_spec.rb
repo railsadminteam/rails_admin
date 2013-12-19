@@ -183,7 +183,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct opposite model lookup for polymorphic associations' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return([%w(MongoBlog, MongoPost, MongoCategory, MongoUser, MongoProfile, MongoComment)])
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return([%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment)])
       expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoUser]
       expect(@blog.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoProfile]
     end
@@ -712,7 +712,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(:field => {'$gte' => 3})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(:field => {'$lte' => 5})
       expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
-      expect(@abstract_model.send(:build_statement, :field, :integer, [%w(15, 10, 20)], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
+      expect(@abstract_model.send(:build_statement, :field, :integer, [%w(15 10 20)], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
