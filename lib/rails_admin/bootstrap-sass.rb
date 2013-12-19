@@ -22,25 +22,25 @@ module RailsAdmin::Bootstrap
     ::Sass.load_paths << stylesheets
   end
 
-  private
-  def self.asset_pipeline?
-    defined?(::Sprockets)
-  end
+private
+def self.asset_pipeline?
+  defined?(::Sprockets)
+end
 
-  def self.compass?
-    defined?(::Compass)
-  end
+def self.compass?
+  defined?(::Compass)
+end
 
-  def self.rails?
-    defined?(::Rails)
-  end
+def self.rails?
+  defined?(::Rails)
+end
 
-  def self.register_compass_extension
-    base = File.join(File.dirname(__FILE__), '..')
-    styles = File.join(base, 'vendor', 'assets', 'stylesheets')
-    templates = File.join(base, 'templates')
-    ::Compass::Frameworks.register('bootstrap', :path => base, :stylesheets_directory => styles, :templates_directory => templates)
-  end
+def self.register_compass_extension
+  base = File.join(File.dirname(__FILE__), '..')
+  styles = File.join(base, 'vendor', 'assets', 'stylesheets')
+  templates = File.join(base, 'templates')
+  ::Compass::Frameworks.register('bootstrap', :path => base, :stylesheets_directory => styles, :templates_directory => templates)
+end
 end
 
 RailsAdmin::Bootstrap.load!

@@ -66,57 +66,57 @@ module RailsAdmin
       [!options[:skip_header], @encoding_to, csv_string]
     end
 
-    private
+  private
 
-    def association_for(key)
-      export_fields_for(key).detect(&:association?)
-    end
+  def association_for(key)
+    export_fields_for(key).detect(&:association?)
+  end
 
-    def export_fields_for(method, model_config = @model_config)
-      model_config.export.fields.select { |f| f.name == method }
-    end
+  def export_fields_for(method, model_config = @model_config)
+    model_config.export.fields.select { |f| f.name == method }
+  end
 
-    def generate_csv_string(options)
-      generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
-      CSVClass.generate(generator_options) do |csv|
-        csv << generate_csv_header unless options[:skip_header]
+  def generate_csv_string(options)
+    generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
+    CSVClass.generate(generator_options) do |csv|
+      csv << generate_csv_header unless options[:skip_header]
 
-        method = @objects.respond_to?(:find_each) ? :find_each : :each
-        @objects.send(method) do |object|
-          csv << generate_csv_row(object)
-        end
+      method = @objects.respond_to?(:find_each) ? :find_each : :each
+      @objects.send(method) do |object|
+        csv << generate_csv_row(object)
       end
-    end
-
-    def generate_csv_header
-      @fields.map do |field|
-        output(::I18n.t('admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
-      end +
-      @associations.flat_map do |association_name, option_hash|
-        option_hash[:fields].map do |field|
-          output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
-        end
-      end
-    end
-
-    def generate_csv_row(object)
-      @fields.map do |field|
-        output(field.with(:object => object).export_value)
-      end +
-      @associations.flat_map do |association_name, option_hash|
-        associated_objects = [object.send(association_name)].flatten.compact
-        option_hash[:fields].map do |field|
-          output(associated_objects.map { |ao| field.with(:object => ao).export_value.presence || @empty }.join(','))
-        end
-      end
-    end
-
-    def output(str)
-      # Can't use the CSV generator with encodings that are not supersets of ASCII-7
-      return str.to_s if @encoding_to =~ NON_ASCII_ENCODINGS || !@iconv
-
-      # Convert piece by piece
-      @iconv.iconv(str.to_s) rescue str.to_s
     end
   end
+
+  def generate_csv_header
+    @fields.map do |field|
+      output(::I18n.t('admin.export.csv.header_for_root_methods', :name => field.label, :model => @abstract_model.pretty_name))
+    end +
+    @associations.flat_map do |association_name, option_hash|
+      option_hash[:fields].map do |field|
+        output(::I18n.t('admin.export.csv.header_for_association_methods', :name => field.label, :association => option_hash[:association].label))
+      end
+    end
+  end
+
+  def generate_csv_row(object)
+    @fields.map do |field|
+      output(field.with(:object => object).export_value)
+    end +
+    @associations.flat_map do |association_name, option_hash|
+      associated_objects = [object.send(association_name)].flatten.compact
+      option_hash[:fields].map do |field|
+        output(associated_objects.map { |ao| field.with(:object => ao).export_value.presence || @empty }.join(','))
+      end
+    end
+  end
+
+  def output(str)
+    # Can't use the CSV generator with encodings that are not supersets of ASCII-7
+    return str.to_s if @encoding_to =~ NON_ASCII_ENCODINGS || !@iconv
+
+    # Convert piece by piece
+    @iconv.iconv(str.to_s) rescue str.to_s
+  end
+end
 end

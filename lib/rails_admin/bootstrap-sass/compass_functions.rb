@@ -12,13 +12,13 @@ module Sass::Script::Functions
     end
   end
 
-  protected
-  def sprockets_context # :nodoc:
-    if options.key?(:sprockets)
-      options[:sprockets][:context]
-    else
-      # Compatibility with sprockets pre 2.10.0
-      options[:importer].context
-    end
+protected
+def sprockets_context # :nodoc:
+  if options.key?(:sprockets)
+    options[:sprockets][:context]
+  else
+    # Compatibility with sprockets pre 2.10.0
+    options[:importer].context
   end
+end
 end

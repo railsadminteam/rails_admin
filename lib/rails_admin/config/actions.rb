@@ -72,36 +72,36 @@ module RailsAdmin
           }
         end
 
-        private
+      private
 
-        def init_actions!
-          @@actions ||= [
-            Dashboard.new,
-            Index.new,
-            Show.new,
-            New.new,
-            Edit.new,
-            Export.new,
-            Delete.new,
-            BulkDelete.new,
-            HistoryShow.new,
-            HistoryIndex.new,
-            ShowInApp.new,
-          ]
-        end
+      def init_actions!
+        @@actions ||= [
+          Dashboard.new,
+          Index.new,
+          Show.new,
+          New.new,
+          Edit.new,
+          Export.new,
+          Delete.new,
+          BulkDelete.new,
+          HistoryShow.new,
+          HistoryIndex.new,
+          ShowInApp.new,
+        ]
+      end
 
-        def add_action_custom_key(action, &block)
-          action.instance_eval(&block) if block
-          @@actions ||= []
-          unless action.custom_key.in?(@@actions.map(&:custom_key))
-            @@actions << action
-          else
-            raise "Action #{action.custom_key} already exists. Please change its custom key."
-          end
+      def add_action_custom_key(action, &block)
+        action.instance_eval(&block) if block
+        @@actions ||= []
+        unless action.custom_key.in?(@@actions.map(&:custom_key))
+          @@actions << action
+        else
+          raise "Action #{action.custom_key} already exists. Please change its custom key."
         end
       end
     end
   end
+end
 end
 
 require 'rails_admin/config/actions/base'

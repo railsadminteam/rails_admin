@@ -95,150 +95,150 @@ module RailsAdmin
       end
     end
 
-    private
+  private
 
-    def initialize_active_record
-      @adapter = :active_record
-      require 'rails_admin/adapters/active_record'
-      extend Adapters::ActiveRecord
+  def initialize_active_record
+    @adapter = :active_record
+    require 'rails_admin/adapters/active_record'
+    extend Adapters::ActiveRecord
+  end
+
+  def initialize_mongoid
+    @adapter = :mongoid
+    require 'rails_admin/adapters/mongoid'
+    extend Adapters::Mongoid
+  end
+
+  class StatementBuilder
+    def initialize(column, type, value, operator)
+      @column = column
+      @type = type
+      @value = value
+      @operator = operator
     end
 
-    def initialize_mongoid
-      @adapter = :mongoid
-      require 'rails_admin/adapters/mongoid'
-      extend Adapters::Mongoid
+    def to_statement
+      return if [@operator, @value].any? { |v| v == '_discard' }
+
+      unary_operators[@operator] || unary_operators[@value] ||
+        build_statement_for_type_generic
     end
 
-    class StatementBuilder
-      def initialize(column, type, value, operator)
-        @column = column
-        @type = type
-        @value = value
-        @operator = operator
-      end
+  protected
 
-      def to_statement
-        return if [@operator, @value].any? { |v| v == '_discard' }
+  def get_filtering_duration
+    FilteringDuration.new(@operator, @value).get_duration
+  end
 
-        unary_operators[@operator] || unary_operators[@value] ||
-          build_statement_for_type_generic
-      end
+  def build_statement_for_type_generic
+    build_statement_for_type || case @type
+                                when :date                  then build_statement_for_date
+                                when :datetime, :timestamp  then build_statement_for_datetime_or_timestamp
+                                end
+  end
 
-      protected
+  def build_statement_for_type
+    raise 'You must override build_statement_for_type in your StatementBuilder'
+  end
 
-      def get_filtering_duration
-        FilteringDuration.new(@operator, @value).get_duration
-      end
-
-      def build_statement_for_type_generic
-        build_statement_for_type || case @type
-                                    when :date                  then build_statement_for_date
-                                    when :datetime, :timestamp  then build_statement_for_datetime_or_timestamp
-                                    end
-      end
-
-      def build_statement_for_type
-        raise 'You must override build_statement_for_type in your StatementBuilder'
-      end
-
-      def build_statement_for_integer_decimal_or_float
-        case @value
-        when Array then
-          val, range_begin, range_end = *@value.map do |v|
-            if (v.to_i.to_s == v || v.to_f.to_s == v)
-              @type == :integer ? v.to_i : v.to_f
-            end
-          end
-          case @operator
-          when 'between'
-            range_filter(range_begin, range_end)
-          else
-            column_for_value(val) if val
-          end
-        else
-          if @value.to_i.to_s == @value || @value.to_f.to_s == @value
-            @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
-          end
+  def build_statement_for_integer_decimal_or_float
+    case @value
+    when Array then
+      val, range_begin, range_end = *@value.map do |v|
+        if (v.to_i.to_s == v || v.to_f.to_s == v)
+          @type == :integer ? v.to_i : v.to_f
         end
       end
-
-      def build_statement_for_date
-        range_filter(*get_filtering_duration)
+      case @operator
+      when 'between'
+        range_filter(range_begin, range_end)
+      else
+        column_for_value(val) if val
       end
-
-      def build_statement_for_datetime_or_timestamp
-        start_date, end_date = get_filtering_duration
-        start_date = start_date.to_time.beginning_of_day if start_date
-        end_date = end_date.to_time.end_of_day if end_date
-        range_filter(start_date, end_date)
-      end
-
-      def unary_operators
-        raise 'You must override unary_operators in your StatementBuilder'
-      end
-
-      def range_filter(min, max)
-        raise 'You must override range_filter in your StatementBuilder'
-      end
-
-      class FilteringDuration
-        def initialize(operator, value)
-          @value = value
-          @operator = operator
-        end
-
-        def get_duration
-          case @operator
-          when 'between'   then between
-          when 'today'     then today
-          when 'yesterday' then yesterday
-          when 'this_week' then this_week
-          when 'last_week' then last_week
-          else default
-          end
-        end
-
-        def today
-          [Date.today, Date.today]
-        end
-
-        def yesterday
-          [Date.yesterday, Date.yesterday]
-        end
-
-        def this_week
-          [Date.today.beginning_of_week, Date.today.end_of_week]
-        end
-
-        def last_week
-          [1.week.ago.to_date.beginning_of_week,
-            1.week.ago.to_date.end_of_week]
-        end
-
-        def between
-          [convert_to_date(@value[1]), convert_to_date(@value[2])]
-        end
-
-        def default
-          [default_date, default_date]
-        end
-
-        private
-
-        def date_format
-          I18n.t('admin.misc.filter_date_format',
-          :default => I18n.t('admin.misc.filter_date_format', :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-        end
-
-        def convert_to_date(value)
-          value.present? && Date.strptime(value, date_format)
-        end
-
-        def default_date
-          default_date_value = Array.wrap(@value).first
-          convert_to_date(default_date_value) rescue false
-        end
+    else
+      if @value.to_i.to_s == @value || @value.to_f.to_s == @value
+        @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
       end
     end
   end
+
+  def build_statement_for_date
+    range_filter(*get_filtering_duration)
+  end
+
+  def build_statement_for_datetime_or_timestamp
+    start_date, end_date = get_filtering_duration
+    start_date = start_date.to_time.beginning_of_day if start_date
+    end_date = end_date.to_time.end_of_day if end_date
+    range_filter(start_date, end_date)
+  end
+
+  def unary_operators
+    raise 'You must override unary_operators in your StatementBuilder'
+  end
+
+  def range_filter(min, max)
+    raise 'You must override range_filter in your StatementBuilder'
+  end
+
+  class FilteringDuration
+    def initialize(operator, value)
+      @value = value
+      @operator = operator
+    end
+
+    def get_duration
+      case @operator
+      when 'between'   then between
+      when 'today'     then today
+      when 'yesterday' then yesterday
+      when 'this_week' then this_week
+      when 'last_week' then last_week
+      else default
+      end
+    end
+
+    def today
+      [Date.today, Date.today]
+    end
+
+    def yesterday
+      [Date.yesterday, Date.yesterday]
+    end
+
+    def this_week
+      [Date.today.beginning_of_week, Date.today.end_of_week]
+    end
+
+    def last_week
+      [1.week.ago.to_date.beginning_of_week,
+        1.week.ago.to_date.end_of_week]
+    end
+
+    def between
+      [convert_to_date(@value[1]), convert_to_date(@value[2])]
+    end
+
+    def default
+      [default_date, default_date]
+    end
+
+  private
+
+  def date_format
+    I18n.t('admin.misc.filter_date_format',
+    :default => I18n.t('admin.misc.filter_date_format', :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+  end
+
+  def convert_to_date(value)
+    value.present? && Date.strptime(value, date_format)
+  end
+
+  def default_date
+    default_date_value = Array.wrap(@value).first
+    convert_to_date(default_date_value) rescue false
+  end
+end
+end
+end
 end

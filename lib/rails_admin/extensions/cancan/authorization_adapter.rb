@@ -44,16 +44,16 @@ module RailsAdmin
           @controller.current_ability.attributes_for(action, abstract_model && abstract_model.model)
         end
 
-        private
+      private
 
-        module ControllerExtension
-          def current_ability
-            # use _current_user instead of default current_user so it works with
-            # whatever current user method is defined with RailsAdmin
-            @current_ability ||= @ability.new(_current_user)
-          end
+      module ControllerExtension
+        def current_ability
+          # use _current_user instead of default current_user so it works with
+          # whatever current user method is defined with RailsAdmin
+          @current_ability ||= @ability.new(_current_user)
         end
       end
     end
   end
+end
 end
