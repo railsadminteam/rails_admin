@@ -96,7 +96,7 @@ module RailsAdmin
         unless action.custom_key.in?(@@actions.map(&:custom_key))
           @@actions << action
         else
-          raise "Action #{action.custom_key} already exists. Please change its custom key."
+          fail "Action #{action.custom_key} already exists. Please change its custom key."
         end
       end
     end

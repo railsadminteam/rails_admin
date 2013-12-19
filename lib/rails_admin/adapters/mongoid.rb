@@ -192,7 +192,7 @@ module RailsAdmin
         ),
         'Symbol'         => {:type => :string, :length => 255},
         'Time'           => {:type => :datetime},
-      }[field.type.to_s] or raise "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
+      }[field.type.to_s] or fail "Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported"
     end
 
     def length_validation_lookup(name)
@@ -248,7 +248,7 @@ module RailsAdmin
       when String
         field_name, collection_name = options[:sort].split('.').reverse
         if collection_name && collection_name != table_name
-          raise 'sorting by associated model column is not supported in Non-Relational databases'
+          fail 'sorting by associated model column is not supported in Non-Relational databases'
         end
       when Symbol
         field_name = options[:sort].to_s
@@ -316,7 +316,7 @@ module RailsAdmin
     def nested_attributes_options_lookup
       nested = model_nested_attributes_options.try { |o| o[name.to_sym] }
       if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !association.cyclic
-        raise <<-MSG.gsub(/^\s+/, '')
+        fail <<-MSG.gsub(/^\s+/, '')
         Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
         because embedded model doesn't have top-level access.
         Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
@@ -362,7 +362,7 @@ module RailsAdmin
       when :has_and_belongs_to_many, :references_and_referenced_in_many
         :has_and_belongs_to_many
       else
-        raise "Unknown association type: #{macro.inspect}"
+        fail "Unknown association type: #{macro.inspect}"
       end
     end
 

@@ -39,7 +39,7 @@ module RailsAdmin
         }
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
-          raise 'PaperTrail not found' unless defined?(PaperTrail)
+          fail 'PaperTrail not found' unless defined?(PaperTrail)
           @controller = controller
           begin
             @user_class = user_class.to_s.constantize
