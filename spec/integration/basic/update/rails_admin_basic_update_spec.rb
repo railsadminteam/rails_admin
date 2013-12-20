@@ -160,7 +160,7 @@ describe 'RailsAdmin Basic Update' do
     end
 
     it 'saves the serialized data' do
-      expect(@user.roles).to eq(%w(admin user))
+      expect(@user.roles).to eq(%w[admin user])
     end
   end
 

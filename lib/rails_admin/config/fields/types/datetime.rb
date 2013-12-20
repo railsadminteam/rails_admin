@@ -97,7 +97,7 @@ module RailsAdmin
                 'value' => formatted_date_value,
               },
               'timepicker' => {
-                'amPmText' => meridian_indicator? ? %w(Am Pm) : ['', ''],
+                'amPmText' => meridian_indicator? ? %w[Am Pm] : ['', ''],
                 'hourText' => I18n.t('datetime.prompts.hour', :default => I18n.t('datetime.prompts.hour', :locale => :en)),
                 'minuteText' => I18n.t('datetime.prompts.minute', :default => I18n.t('datetime.prompts.minute', :locale => :en)),
                 'showPeriod' => meridian_indicator?,

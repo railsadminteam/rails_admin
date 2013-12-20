@@ -77,7 +77,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      expect((@post.associations + @blog.associations + @user.associations).map { |a|a[:type].to_s }.uniq).to match_array %w(belongs_to has_and_belongs_to_many has_many has_one)
+      expect((@post.associations + @blog.associations + @user.associations).map { |a|a[:type].to_s }.uniq).to match_array %w[belongs_to has_and_belongs_to_many has_many has_one]
     end
 
     it 'has correct parameter of belongs_to association' do
@@ -143,7 +143,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of polymorphic belongs_to association' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment))
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment])
       param = @comment.associations.detect { |a| a[:name] == :commentable }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :commentable,
@@ -163,7 +163,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct parameter of polymorphic inverse has_many association' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment))
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment])
       param = @blog.associations.detect { |a| a[:name] == :mongo_comments }
       expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
         :name => :mongo_comments,
@@ -183,7 +183,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'has correct opposite model lookup for polymorphic associations' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment))
+      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment])
       expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoUser]
       expect(@blog.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [MongoProfile]
     end
@@ -287,138 +287,8 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'maps Mongoid column types to RA types' do
-      expect(@abstract_model.properties.select { |p| %w(_id array_field big_decimal_field
-                                                        boolean_field bson_object_id_field bson_binary_field date_field datetime_field
-                                                        time_with_zone_field default_field float_field hash_field integer_field name
-                                                        object_field range_field short_text string_field subject symbol_field text_field
-                                                        time_field title).include? p[:name].to_s }).to match_array [
-        {:name => :_id,
-         :pretty_name => 'Id',
-         :nullable? => true,
-         :serial? => true,
-         :type => :bson_object_id,
-         :length => nil},
-        {:name => :array_field,
-         :pretty_name => 'Array field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :serialized,
-         :length => nil},
-        {:name => :big_decimal_field,
-         :pretty_name => 'Big decimal field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :decimal,
-         :length => nil},
-        {:name => :boolean_field,
-         :pretty_name => 'Boolean field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :boolean,
-         :length => nil},
-        {:name => :bson_object_id_field,
-         :pretty_name => 'Bson object id field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :bson_object_id,
-         :length => nil},
-        {:name => :date_field,
-         :pretty_name => 'Date field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :date,
-         :length => nil},
-        {:name => :datetime_field,
-         :pretty_name => 'Datetime field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :datetime,
-         :length => nil},
-        {:name => :time_with_zone_field,
-         :pretty_name => 'Time with zone field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :datetime,
-         :length => nil},
-        {:name => :default_field,
-         :pretty_name => 'Default field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255},
-        {:name => :float_field,
-         :pretty_name => 'Float field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :float,
-         :length => nil},
-        {:name => :hash_field,
-         :pretty_name => 'Hash field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :serialized,
-         :length => nil},
-        {:name => :integer_field,
-         :pretty_name => 'Integer field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :integer,
-         :length => nil},
-        {:name => :name,
-         :pretty_name => 'Name',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255},
-        {:name => :object_field,
-         :pretty_name => 'Object field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255},
-        {:name => :short_text,
-         :pretty_name => 'Short text',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255},
-        {:name => :string_field,
-         :pretty_name => 'String field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :text,
-         :length => nil},
-        {:name => :subject,
-         :pretty_name => 'Subject',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255},
-        {:name => :symbol_field,
-         :pretty_name => 'Symbol field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255},
-        {:name => :text_field,
-         :pretty_name => 'Text field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :text,
-         :length => nil},
-        {:name => :time_field,
-         :pretty_name => 'Time field',
-         :nullable? => true,
-         :serial? => false,
-         :type => :datetime,
-         :length => nil},
-        {:name => :title,
-         :pretty_name => 'Title',
-         :nullable? => true,
-         :serial? => false,
-         :type => :string,
-         :length => 255}
-      ]
+      property_names = %w[_id array_field big_decimal_field boolean_field bson_object_id_field bson_binary_field date_field datetime_field time_with_zone_field default_field float_field hash_field integer_field name object_field range_field short_text string_field subject symbol_field text_field time_field title]
+      expect(@abstract_model.properties.select { |p| property_names.include? p[:name].to_s }).to match_array [{:name => :_id, :pretty_name => 'Id', :nullable? => true, :serial? => true, :type => :bson_object_id, :length => nil}, {:name => :array_field, :pretty_name => 'Array field', :nullable? => true, :serial? => false, :type => :serialized, :length => nil}, {:name => :big_decimal_field, :pretty_name => 'Big decimal field', :nullable? => true, :serial? => false, :type => :decimal, :length => nil}, {:name => :boolean_field, :pretty_name => 'Boolean field', :nullable? => true, :serial? => false, :type => :boolean, :length => nil}, {:name => :bson_object_id_field, :pretty_name => 'Bson object id field', :nullable? => true, :serial? => false, :type => :bson_object_id, :length => nil}, {:name => :date_field, :pretty_name => 'Date field', :nullable? => true, :serial? => false, :type => :date, :length => nil}, {:name => :datetime_field, :pretty_name => 'Datetime field', :nullable? => true, :serial? => false, :type => :datetime, :length => nil}, {:name => :time_with_zone_field, :pretty_name => 'Time with zone field', :nullable? => true, :serial? => false, :type => :datetime, :length => nil}, {:name => :default_field, :pretty_name => 'Default field', :nullable? => true, :serial? => false, :type => :string, :length => 255}, {:name => :float_field, :pretty_name => 'Float field', :nullable? => true, :serial? => false, :type => :float, :length => nil}, {:name => :hash_field, :pretty_name => 'Hash field', :nullable? => true, :serial? => false, :type => :serialized, :length => nil}, {:name => :integer_field, :pretty_name => 'Integer field', :nullable? => true, :serial? => false, :type => :integer, :length => nil}, {:name => :name, :pretty_name => 'Name', :nullable? => true, :serial? => false, :type => :string, :length => 255}, {:name => :object_field, :pretty_name => 'Object field', :nullable? => true, :serial? => false, :type => :string, :length => 255}, {:name => :short_text, :pretty_name => 'Short text', :nullable? => true, :serial? => false, :type => :string, :length => 255}, {:name => :string_field, :pretty_name => 'String field', :nullable? => true, :serial? => false, :type => :text, :length => nil}, {:name => :subject, :pretty_name => 'Subject', :nullable? => true, :serial? => false, :type => :string, :length => 255}, {:name => :symbol_field, :pretty_name => 'Symbol field', :nullable? => true, :serial? => false, :type => :string, :length => 255}, {:name => :text_field, :pretty_name => 'Text field', :nullable? => true, :serial? => false, :type => :text, :length => nil}, {:name => :time_field, :pretty_name => 'Time field', :nullable? => true, :serial? => false, :type => :datetime, :length => nil}, {:name => :title, :pretty_name => 'Title', :nullable? => true, :serial? => false, :type => :string, :length => 255}]
     end
 
     it 'detects validation length properly' do
@@ -692,10 +562,10 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
     end
 
     it 'supports boolean type query' do
-      %w(false f 0).each do |value|
+      %w[false f 0].each do |value|
         expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(:field => false)
       end
-      %w(true t 1).each do |value|
+      %w[true t 1].each do |value|
         expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(:field => true)
       end
       expect(@abstract_model.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
@@ -712,7 +582,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(:field => {'$gte' => 3})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(:field => {'$lte' => 5})
       expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
-      expect(@abstract_model.send(:build_statement, :field, :integer, %w(15 10 20), 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
+      expect(@abstract_model.send(:build_statement, :field, :integer, %w[15 10 20], 'between')).to eq(:field => {'$gte' => 10, '$lte' => 20})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
