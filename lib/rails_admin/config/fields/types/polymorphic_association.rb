@@ -27,12 +27,12 @@ module RailsAdmin
             false
           end
 
-          # TODO not supported yet
+          # TODO: not supported yet
           register_instance_option :associated_collection_cache_all do
             false
           end
 
-          # TODO not supported yet
+          # TODO: not supported yet
           register_instance_option :associated_collection_scope do
             nil
           end
