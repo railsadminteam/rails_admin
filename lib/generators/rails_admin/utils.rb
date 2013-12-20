@@ -20,7 +20,7 @@ module RailsAdmin
             migration_number += 1
             migration_number.to_s
           else
-            '%.3d' % (current_migration_number(dirname) + 1)
+            format('%.3d', current_migration_number(dirname) + 1)
           end
         end
       end
