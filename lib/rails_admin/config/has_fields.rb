@@ -106,7 +106,10 @@ module RailsAdmin
 
       # Accessor for all fields
       def all_fields
-        ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).map { |f| f.section = self; f }
+        ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).map do |field|
+          field.section = self
+          field
+        end
       end
 
       # Get all fields defined as visible, in the correct order.

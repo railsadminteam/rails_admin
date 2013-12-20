@@ -14,12 +14,12 @@ module RailsAdmin
 
       # Register an instance option for this object only
       def register_instance_option(option_name, &default)
-        scope = class << self; self; end;
+        scope = class << self; self; end
         self.class.register_instance_option(option_name, scope, &default)
       end
 
       def register_deprecated_instance_option(option_name, replacement_option_name = nil, &custom_error)
-        scope = class << self; self; end;
+        scope = class << self; self; end
         self.class.register_deprecated_instance_option(option_name, replacement_option_name, scope, &custom_error)
       end
 
@@ -89,7 +89,7 @@ module RailsAdmin
         # option that stores it's value within a class object's instance variable
         # and is accessed by a class method. Both go by the name of the option.
         def register_class_option(option_name, &default)
-          scope = class << self; self; end;
+          scope = class << self; self; end
           register_instance_option(option_name, scope, &default)
         end
       end

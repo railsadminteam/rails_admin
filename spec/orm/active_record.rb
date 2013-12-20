@@ -14,7 +14,7 @@ end
 class Tableless < ActiveRecord::Base
   class <<self
     def columns
-      @columns ||= [];
+      @columns ||= []
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
@@ -31,7 +31,10 @@ class Tableless < ActiveRecord::Base
     end
 
     def column_defaults
-      @column_defaults ||= columns.map { |column| [column.name, nil] }.reduce({}) { |a, e| a[e[0]] = e[1]; a }
+      @column_defaults ||= columns.map { |column| [column.name, nil] }.reduce({}) do |a, e|
+        a[e[0]] = e[1]
+        a
+      end
     end
   end
 
