@@ -44,7 +44,7 @@ describe RailsAdmin do
 
   describe 'hidden fields with default values' do
 
-    before (:each) do
+    before(:each) do
       RailsAdmin.config Player do
         include_all_fields
         edit do
