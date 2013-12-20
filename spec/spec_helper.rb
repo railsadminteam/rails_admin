@@ -39,8 +39,9 @@ module Devise
     module DatabaseAuthenticatable
       protected
 
-    def password_digest(password)
-      password
+      def password_digest(password)
+        password
+      end
     end
   end
 end
@@ -57,37 +58,37 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-config.include RSpec::Matchers
-config.include RailsAdmin::Engine.routes.url_helpers
+  config.include RSpec::Matchers
+  config.include RailsAdmin::Engine.routes.url_helpers
 
-config.include Warden::Test::Helpers
+  config.include Warden::Test::Helpers
 
-config.include Capybara::DSL, :type => :request
+  config.include Capybara::DSL, :type => :request
 
-config.before(:each) do
-  DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
+  config.before(:each) do
+    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
 
-  DatabaseCleaner.start
-  RailsAdmin::Config.reset
-  RailsAdmin::AbstractModel.reset
-  RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
-  RailsAdmin::Config.yell_for_non_accessible_fields = false
-  login_as User.create(
-    :email => 'username@example.com',
-    :password => 'password'
-  )
-end
-
-config.after(:each) do
-  Warden.test_reset!
-  DatabaseCleaner.clean
-end
-
-CI_TARGET_ORMS.each do |orm|
-  if orm == CI_ORM
-    config.filter_run_excluding "skip_#{orm}".to_sym => true
-  else
-    config.filter_run_excluding orm => true
+    DatabaseCleaner.start
+    RailsAdmin::Config.reset
+    RailsAdmin::AbstractModel.reset
+    RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
+    RailsAdmin::Config.yell_for_non_accessible_fields = false
+    login_as User.create(
+      :email => 'username@example.com',
+      :password => 'password'
+    )
   end
-end
+
+  config.after(:each) do
+    Warden.test_reset!
+    DatabaseCleaner.clean
+  end
+
+  CI_TARGET_ORMS.each do |orm|
+    if orm == CI_ORM
+      config.filter_run_excluding "skip_#{orm}".to_sym => true
+    else
+      config.filter_run_excluding orm => true
+    end
+  end
 end

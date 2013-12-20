@@ -98,33 +98,33 @@ module RailsAdmin
     end
 
   protected
-  def generator_action(action, nested)
-    if nested
-      action = :nested
-    elsif @template.request.format == 'text/javascript'
-      action = :modal
+
+    def generator_action(action, nested)
+      if nested
+        action = :nested
+      elsif @template.request.format == 'text/javascript'
+        action = :modal
+      end
+      action
     end
 
-    action
-  end
-
-  def visible_groups(model_config, action)
-    model_config.send(action).with(
-      :form => self,
-      :object => @object,
-      :view => @template,
-      :controller => @template.controller
-    ).visible_groups
-  end
-
-  def without_field_error_proc_added_div
-    default_field_error_proc = ::ActionView::Base.field_error_proc
-    begin
-      ::ActionView::Base.field_error_proc = proc { |html_tag, instance| html_tag }
-      yield
-    ensure
-      ::ActionView::Base.field_error_proc = default_field_error_proc
+    def visible_groups(model_config, action)
+      model_config.send(action).with(
+        :form => self,
+        :object => @object,
+        :view => @template,
+        :controller => @template.controller
+      ).visible_groups
     end
-  end
+
+    def without_field_error_proc_added_div
+      default_field_error_proc = ::ActionView::Base.field_error_proc
+      begin
+        ::ActionView::Base.field_error_proc = proc { |html_tag, instance| html_tag }
+        yield
+      ensure
+        ::ActionView::Base.field_error_proc = default_field_error_proc
+      end
+    end
   end
 end

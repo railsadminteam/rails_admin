@@ -120,20 +120,21 @@ module RailsAdmin
 
     protected
 
-    # Raw fields.
-    # Recursively returns parent section's raw fields
-    # Duping it if accessed for modification.
-    def _fields(readonly = false)
-      return @_fields if @_fields
-      return @_ro_fields if readonly && @_ro_fields
+      # Raw fields.
+      # Recursively returns parent section's raw fields
+      # Duping it if accessed for modification.
+      def _fields(readonly = false)
+        return @_fields if @_fields
+        return @_ro_fields if readonly && @_ro_fields
 
-      unless self.class == RailsAdmin::Config::Sections::Base
-        # parent is RailsAdmin::Config::Model, recursion is on Section's classes
-        @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
-      else # recursion tail
-        @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
+        if self.class == RailsAdmin::Config::Sections::Base
+          @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
+        else # recursion tail
+          # parent is RailsAdmin::Config::Model, recursion is on Section's classes
+          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
+        end
+        readonly ? @_ro_fields : (@_fields ||= @_ro_fields.map(&:clone))
       end
-      readonly ? @_ro_fields : (@_fields ||= @_ro_fields.map(&:clone))
     end
   end
 end

@@ -74,29 +74,30 @@ module RailsAdmin
 
       private
 
-      def init_actions!
-        @@actions ||= [
-          Dashboard.new,
-          Index.new,
-          Show.new,
-          New.new,
-          Edit.new,
-          Export.new,
-          Delete.new,
-          BulkDelete.new,
-          HistoryShow.new,
-          HistoryIndex.new,
-          ShowInApp.new,
-        ]
-      end
+        def init_actions!
+          @@actions ||= [
+            Dashboard.new,
+            Index.new,
+            Show.new,
+            New.new,
+            Edit.new,
+            Export.new,
+            Delete.new,
+            BulkDelete.new,
+            HistoryShow.new,
+            HistoryIndex.new,
+            ShowInApp.new,
+          ]
+        end
 
-      def add_action_custom_key(action, &block)
-        action.instance_eval(&block) if block
-        @@actions ||= []
-        unless action.custom_key.in?(@@actions.map(&:custom_key))
-          @@actions << action
-        else
-          fail "Action #{action.custom_key} already exists. Please change its custom key."
+        def add_action_custom_key(action, &block)
+          action.instance_eval(&block) if block
+          @@actions ||= []
+          if action.custom_key.in?(@@actions.map(&:custom_key))
+            fail "Action #{action.custom_key} already exists. Please change its custom key."
+          else
+            @@actions << action
+          end
         end
       end
     end

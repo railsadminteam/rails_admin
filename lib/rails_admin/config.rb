@@ -302,36 +302,35 @@ module RailsAdmin
 
     private
 
-    def lchomp(base, arg)
-      base.to_s.reverse.chomp(arg.to_s.reverse).reverse
-    end
+      def lchomp(base, arg)
+        base.to_s.reverse.chomp(arg.to_s.reverse).reverse
+      end
 
-    def viable_models
-      included_models.map(&:to_s).presence || (
-        @@system_models ||= # memoization for tests
-          ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
-            (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
-              Dir.glob(app.root.join(load_path)).map do |load_dir|
-                Dir.glob(load_dir + '/**/*.rb').map do |filename|
-                  # app/models/module/class.rb => module/class.rb => module/class => Module::Class
-                  lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+      def viable_models
+        included_models.map(&:to_s).presence || (
+          @@system_models ||= # memoization for tests
+            ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
+              (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
+                Dir.glob(app.root.join(load_path)).map do |load_dir|
+                  Dir.glob(load_dir + '/**/*.rb').map do |filename|
+                    # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+                    lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+                  end
                 end
               end
-            end
-          end.flatten.reject { |m| m.starts_with?('Concerns::') }
-        )
-    end
+            end.flatten.reject { |m| m.starts_with?('Concerns::') }
+          )
+      end
 
-    def visible_models_with_bindings(bindings)
-      models.map { |m| m.with(bindings) }.select do |m|
-        m.visible? &&
-          bindings[:controller].authorized?(:index, m.abstract_model) &&
-          (!m.abstract_model.embedded? || m.abstract_model.cyclic?)
+      def visible_models_with_bindings(bindings)
+        models.map { |m| m.with(bindings) }.select do |m|
+          m.visible? &&
+            bindings[:controller].authorized?(:index, m.abstract_model) &&
+            (!m.abstract_model.embedded? || m.abstract_model.cyclic?)
+        end
       end
     end
-  end
-
-  # Set default values for configuration options on load
-  reset
+    # Set default values for configuration options on load
+    reset
   end
 end
