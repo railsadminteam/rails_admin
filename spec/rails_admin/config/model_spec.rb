@@ -50,13 +50,13 @@ describe RailsAdmin::Config::Model do
       around do |example|
         I18n.backend.class.send(:include, I18n::Backend::Pluralization)
         I18n.backend.store_translations :xx,
-          :activerecord => {
-            :models => {
-              :comment => {
-                :one => 'one', :two => 'two', :other => 'other'
-              }
-            }
-          }
+                                        :activerecord => {
+                                          :models => {
+                                            :comment => {
+                                              :one => 'one', :two => 'two', :other => 'other'
+                                            }
+                                          }
+                                        }
         I18n.locale = :xx
 
         example.run
@@ -67,21 +67,21 @@ describe RailsAdmin::Config::Model do
       context 'and the locale uses a specific pluralization rule' do
         before do
           I18n.backend.store_translations :xx,
-            :i18n => {
-              :plural => {
-                :rule => lambda do |count|
-                  if count == 0
-                    :zero
-                  elsif count == 1
-                    :one
-                  elsif count == 2
-                    :two
-                  else
-                    :other
-                  end
-                end
-              }
-            }
+                                          :i18n => {
+                                            :plural => {
+                                              :rule => lambda do |count|
+                                                if count == 0
+                                                  :zero
+                                                elsif count == 1
+                                                  :one
+                                                elsif count == 2
+                                                  :two
+                                                else
+                                                  :other
+                                                end
+                                              end
+                                            }
+                                          }
         end
 
         it 'always uses :other as pluralization key' do
