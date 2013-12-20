@@ -226,4 +226,3 @@ describe 'RailsAdmin Basic Update' do
     end
   end
 end
-

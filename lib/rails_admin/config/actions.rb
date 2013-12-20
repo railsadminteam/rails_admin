@@ -115,4 +115,3 @@ require 'rails_admin/config/actions/edit'
 require 'rails_admin/config/actions/export'
 require 'rails_admin/config/actions/delete'
 require 'rails_admin/config/actions/bulk_delete'
-

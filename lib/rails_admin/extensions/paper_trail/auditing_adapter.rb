@@ -48,7 +48,7 @@ module RailsAdmin
           end
 
           begin
-            @version_class = version_class.to_s.constantize 
+            @version_class = version_class.to_s.constantize
           rescue NameError
             raise "Please set up Papertrail's version model explicitely. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
           end

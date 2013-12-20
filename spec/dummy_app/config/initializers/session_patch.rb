@@ -13,4 +13,3 @@ ActionDispatch::Session::StaleSessionCheck.module_eval do
     {}
   end
 end
-

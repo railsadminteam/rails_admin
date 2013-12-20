@@ -18,4 +18,3 @@ describe RailsAdmin::Config::Fields::Types::FileUpload do
     end
   end
 end
-
