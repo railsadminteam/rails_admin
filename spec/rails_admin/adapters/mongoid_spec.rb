@@ -253,14 +253,14 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         recursively_embeds_many
       end
 
-      expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }).to raise_error(RuntimeError,
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations }.to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
       )
-      expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }).to raise_error(RuntimeError,
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations }.to raise_error(RuntimeError,
         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
       )
-      expect(lambda { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations }).not_to raise_error
-      expect(lambda { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations }).not_to raise_error
+      expect { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations }.not_to raise_error
+      expect { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations }.not_to raise_error
     end
 
     it 'works with inherited embeds_many model' do
@@ -277,7 +277,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
 
       class MongoEmbedsChild < MongoEmbedsParent; end
 
-      expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsChild).associations }).not_to raise_error
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsChild).associations }.not_to raise_error
     end
   end
 
@@ -309,7 +309,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
         field :text, :type => String
         validates_with MyCustomValidator
       end
-      expect(lambda { RailsAdmin::AbstractModel.new('CustomValiated').send(:length_validation_lookup, :text) }).not_to raise_error
+      expect { RailsAdmin::AbstractModel.new('CustomValiated').send(:length_validation_lookup, :text) }.not_to raise_error
     end
   end
 
@@ -386,7 +386,7 @@ describe 'RailsAdmin::Adapters::Mongoid', :mongoid => true do
       end
 
       it 'ignores non-existent field name on filtering' do
-        expect(lambda { @abstract_model.all(:filters => {'dummy' => {'0000' => {:o => 'is', :v => @players[1].name}}}) }).not_to raise_error
+        expect { @abstract_model.all(:filters => {'dummy' => {'0000' => {:o => 'is', :v => @players[1].name}}}) }.not_to raise_error
       end
     end
   end

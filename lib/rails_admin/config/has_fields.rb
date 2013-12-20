@@ -59,7 +59,9 @@ module RailsAdmin
 
       # exclude fields by name or by condition (block)
       def exclude_fields(*field_names, &block)
-        block ||= lambda { |f| field_names.include?(f.name) }
+        block ||= lambda do |f|
+          field_names.include?(f.name)
+        end
         _fields.each { |f| f.defined = true } if _fields.select(&:defined).empty?
         _fields.select { |f| f.instance_eval(&block) }.each { |f| f.defined = false }
       end
