@@ -11,7 +11,7 @@ module RailsAdmin
         )
 
         object_infos +
-        visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).map do |fieldset|
+          visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).map do |fieldset|
           fieldset_for fieldset, options[:nested_in]
         end.join.html_safe +
         (options[:nested_in] ? '' : @template.render(:partial => 'rails_admin/main/submit_buttons'))
@@ -37,7 +37,7 @@ module RailsAdmin
           @template.instance_variable_get(:@model_config).abstract_model == field.associated_model_config.abstract_model
           @template.content_tag(:div, :class => "control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
             label(field.method_name, field.label, :class => 'control-label') +
-            (field.nested_form ? field_for(field) : input_for(field))
+              (field.nested_form ? field_for(field) : input_for(field))
           end
         end
       else
@@ -48,8 +48,8 @@ module RailsAdmin
     def input_for(field)
       @template.content_tag(:div, :class => 'controls') do
         field_for(field) +
-        errors_for(field) +
-        help_for(field)
+          errors_for(field) +
+          help_for(field)
       end
     end
 
@@ -73,10 +73,10 @@ module RailsAdmin
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
       object_label = if object.new_record?
-        I18n.t('admin.form.new_model', :name => model_label)
-      else
-        object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
-      end
+                       I18n.t('admin.form.new_model', :name => model_label)
+                     else
+                       object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
+                     end
       %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label)}"></span>}.html_safe
     end
 
@@ -90,7 +90,7 @@ module RailsAdmin
           @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').sub(/_$/, ''),
           options[:index],
           field.method_name
-        ].reject(&:blank?).join('_')
+      ].reject(&:blank?).join('_')
     end
 
     def dom_name(field)
@@ -126,5 +126,5 @@ module RailsAdmin
       ::ActionView::Base.field_error_proc = default_field_error_proc
     end
   end
-end
+  end
 end

@@ -130,6 +130,6 @@ module RailsAdmin
       end
       readonly ? @_ro_fields : (@_fields ||= @_ro_fields.map(&:clone))
     end
+    end
   end
-end
 end

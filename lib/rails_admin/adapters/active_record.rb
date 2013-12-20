@@ -219,7 +219,7 @@ module RailsAdmin
              :to => :association, :prefix => false
     delegate :name, :to => :model, :prefix => true
     delegate :polymorphic_parents, :to => RailsAdmin::AbstractModel
-  end
+    end
 
     class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
     protected
@@ -300,7 +300,7 @@ module RailsAdmin
     def like_operator
       ar_adapter == 'postgresql' ? 'ILIKE' : 'LIKE'
     end
+    end
+    end
   end
-end
-end
 end

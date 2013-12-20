@@ -238,7 +238,7 @@ module RailsAdmin
     default_date_value = Array.wrap(@value).first
     convert_to_date(default_date_value) rescue false
   end
-end
-end
-end
+  end
+  end
+  end
 end

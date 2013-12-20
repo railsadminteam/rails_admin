@@ -1,5 +1,5 @@
 class DropRailsAdminHistoriesTable < ActiveRecord::Migration
-   def self.up
+  def self.up
     drop_table :rails_admin_histories
   end
 

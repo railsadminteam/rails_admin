@@ -11,8 +11,8 @@ module RailsAdmin
 
     def current_action?(action, abstract_model = @abstract_model, object = @object)
       @action.custom_key == action.custom_key &&
-      abstract_model.try(:to_param) == @abstract_model.try(:to_param) &&
-      (@object.try(:persisted?) ? @object.id == object.try(:id) : !object.try(:persisted?))
+        abstract_model.try(:to_param) == @abstract_model.try(:to_param) &&
+        (@object.try(:persisted?) ? @object.id == object.try(:id) : !object.try(:persisted?))
     end
 
     def action(key, abstract_model = nil, object = nil)
@@ -43,10 +43,10 @@ module RailsAdmin
       action = RailsAdmin::Config::Actions.find(action.to_sym) if (action.is_a?(Symbol) || action.is_a?(String))
 
       I18n.t("admin.actions.#{action.i18n_key}.#{label}",
-        :model_label => model_config && model_config.label,
-        :model_label_plural => model_config && model_config.label_plural,
-        :object_label => model_config && object.try(model_config.object_label_method)
-      )
+             :model_label => model_config && model_config.label,
+               :model_label_plural => model_config && model_config.label_plural,
+               :object_label => model_config && object.try(model_config.object_label_method)
+            )
     end
 
     def main_navigation
@@ -98,12 +98,12 @@ module RailsAdmin
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, :class => current_action?(a, am, o) && 'active') do
             crumb = if a.http_methods.include?(:get)
-              link_to url_for(:action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil)), :class => 'pjax' do
-                wording_for(:breadcrumb, a, am, o)
-              end
-            else
-              content_tag(:span, wording_for(:breadcrumb, a, am, o))
-            end
+                      link_to url_for(:action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil)), :class => 'pjax' do
+                        wording_for(:breadcrumb, a, am, o)
+                      end
+                    else
+                      content_tag(:span, wording_for(:breadcrumb, a, am, o))
+                    end
             crumb += content_tag(:span, '/', :class => 'divider') unless current_action?(a, am, o)
             crumb
           end
@@ -132,7 +132,7 @@ module RailsAdmin
       return '' if actions.empty?
       content_tag :li, :class => 'dropdown', :style => 'float:right' do
         content_tag(:a, :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :href => '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
-        content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
+          content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
           actions.map do |action|
             content_tag :li do
               link_to wording_for(:bulk_link, action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"

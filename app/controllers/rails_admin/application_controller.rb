@@ -76,5 +76,5 @@ module RailsAdmin
   def rails_admin_controller?
     true
   end
-end
+  end
 end

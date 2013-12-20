@@ -42,8 +42,8 @@ module Devise
     def password_digest(password)
       password
     end
+    end
   end
-end
 end
 
 Devise.setup do |config|

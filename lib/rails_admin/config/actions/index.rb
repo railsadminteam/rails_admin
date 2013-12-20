@@ -37,12 +37,12 @@ module RailsAdmin
 
               format.json do
                 output = if params[:compact]
-                  primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
-                  label_method = @model_config.object_label_method
-                  @objects.map { |o| {:id => o.send(primary_key_method).to_s, :label => o.send(label_method).to_s} }
-                else
-                  @objects.to_json(@schema)
-                end
+                           primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
+                           label_method = @model_config.object_label_method
+                           @objects.map { |o| {:id => o.send(primary_key_method).to_s, :label => o.send(label_method).to_s} }
+                         else
+                           @objects.to_json(@schema)
+                         end
                 if params[:send_data]
                   send_data output, :filename => "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.json"
                 else
@@ -64,7 +64,7 @@ module RailsAdmin
                 if params[:send_data]
                   send_data output,
                     :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
-                    :disposition => "attachment; filename=#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.csv"
+                  :disposition => "attachment; filename=#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.csv"
                 else
                   render :text => output
                 end

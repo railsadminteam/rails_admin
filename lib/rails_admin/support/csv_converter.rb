@@ -118,5 +118,5 @@ module RailsAdmin
     # Convert piece by piece
     @iconv.iconv(str.to_s) rescue str.to_s
   end
-end
+  end
 end

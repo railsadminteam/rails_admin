@@ -99,9 +99,9 @@ module RailsAdmin
           fail "Action #{action.custom_key} already exists. Please change its custom key."
         end
       end
+      end
     end
   end
-end
 end
 
 require 'rails_admin/config/actions/base'

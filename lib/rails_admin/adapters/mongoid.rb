@@ -371,7 +371,7 @@ module RailsAdmin
              :to => :association, :prefix => false
     delegate :name, :nested_attributes_options, :to => :model, :prefix => true
     delegate :polymorphic_parents, :to => RailsAdmin::AbstractModel
-  end
+    end
 
   class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
   protected
@@ -448,7 +448,7 @@ module RailsAdmin
   def object_id_from_string(str)
     ObjectId.from_string(str)
   end
-end
-end
-end
+  end
+    end
+  end
 end
