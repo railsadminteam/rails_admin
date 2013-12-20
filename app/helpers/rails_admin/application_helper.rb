@@ -107,7 +107,7 @@ module RailsAdmin
             crumb += content_tag(:span, '/', :class => 'divider') unless current_action?(a, am, o)
             crumb
           end
-        end.reverse.join().html_safe
+        end.reverse.join.html_safe
       end
     end
 

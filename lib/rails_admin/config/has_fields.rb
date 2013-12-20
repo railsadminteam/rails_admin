@@ -71,7 +71,7 @@ module RailsAdmin
       alias_method :include_fields_if, :include_fields
 
       def include_all_fields
-        include_fields_if() { true }
+        include_fields_if { true }
       end
 
       # Returns all field configurations for the model configuration instance. If no fields

@@ -666,7 +666,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
       @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
       visit edit_path(:model_name => 'field_test', :id => @record.id)
 
-      find('#field_test_comment_attributes_field .add_nested_fields').click()
+      find('#field_test_comment_attributes_field .add_nested_fields').click
       fill_in 'field_test_comment_attributes_content', :with => 'nested comment content'
 
       fill_in 'field_test_nested_field_tests_attributes_0_title', :with => 'nested field test title 1 edited', :visible => false
@@ -719,7 +719,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
 
     describe 'with nested_attributes_options given' do
       before do
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args()).
+        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
           and_return(:allow_destroy => true, :update_only => false)
       end
 
