@@ -32,7 +32,7 @@ describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', :mongoid => true do
     describe "model's custom setter" do
       before do
         Team.class_eval do
-          def player_ids= players_ids
+          def player_ids=(players_ids)
             self.custom_field = players_ids * ', '
           end
         end
@@ -56,7 +56,7 @@ describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', :mongoid => true do
     describe "model's custom setter" do
       before do
         Team.class_eval do
-          def draft_id= draft_id
+          def draft_id=(draft_id)
             self.custom_field = draft_id.to_s
           end
         end

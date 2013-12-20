@@ -73,7 +73,7 @@ module RailsAdmin
       li_stack
     end
 
-    def navigation nodes_stack, nodes, level=0
+    def navigation(nodes_stack, nodes, level = 0)
       nodes.map do |node|
         model_param = node.abstract_model.to_param
         url         = url_for(:action => :index, :controller => 'rails_admin/main', :model_name => model_param)
@@ -87,7 +87,7 @@ module RailsAdmin
       end.join.html_safe
     end
 
-    def breadcrumb action = @action, acc = []
+    def breadcrumb(action = @action, acc = [])
       begin
         (parent_actions ||= []) << action
       end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent))
@@ -127,7 +127,7 @@ module RailsAdmin
       end.join.html_safe
     end
 
-    def bulk_menu abstract_model = @abstract_model
+    def bulk_menu(abstract_model = @abstract_model)
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, :class => 'dropdown', :style => 'float:right' do

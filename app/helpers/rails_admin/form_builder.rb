@@ -80,7 +80,7 @@ module RailsAdmin
       %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label)}"></span>}.html_safe
     end
 
-    def jquery_namespace field
+    def jquery_namespace(field)
       %{#{'#modal ' if @template.controller.params[:modal]}##{dom_id(field)}_field}
     end
 

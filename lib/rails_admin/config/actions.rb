@@ -25,25 +25,25 @@ module RailsAdmin
           bindings[:controller] ? actions.select(&:visible?) : actions
         end
 
-        def find custom_key, bindings = {}
+        def find(custom_key, bindings = {})
           init_actions!
           action = @@actions.detect { |a| a.custom_key == custom_key }.try(:with, bindings)
           bindings[:controller] ? (action.try(:visible?) && action || nil) : action
         end
 
-        def collection key, parent_class = :base, &block
+        def collection(key, parent_class = :base, &block)
           add_action key, parent_class, :collection, &block
         end
 
-        def member key, parent_class = :base, &block
+        def member(key, parent_class = :base, &block)
           add_action key, parent_class, :member, &block
         end
 
-        def root key, parent_class = :base, &block
+        def root(key, parent_class = :base, &block)
           add_action key, parent_class, :root, &block
         end
 
-        def add_action key, parent_class, parent, &block
+        def add_action(key, parent_class, parent, &block)
           a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
           a.instance_eval(%{
             #{parent} true
