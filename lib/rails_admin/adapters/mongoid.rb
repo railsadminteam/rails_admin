@@ -30,11 +30,11 @@ module RailsAdmin
         model.scoped
       end
 
-      def first(options = {}, scope=nil)
+      def first(options = {}, scope = nil)
         all(options, scope).first
       end
 
-      def all(options = {}, scope=nil)
+      def all(options = {}, scope = nil)
         scope ||= scoped
         scope = scope.includes(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
@@ -48,7 +48,7 @@ module RailsAdmin
         scope
       end
 
-      def count(options = {}, scope=nil)
+      def count(options = {}, scope = nil)
         all(options.merge(:limit => false, :page => false), scope).count
       end
 
