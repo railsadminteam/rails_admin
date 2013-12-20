@@ -141,7 +141,7 @@ module RailsAdmin
           end
 
           register_instance_option :formatted_value do
-            unless (time = value).nil?
+            if time = value
               I18n.l(time, :format => strftime_format)
             else
               ''.html_safe

@@ -28,21 +28,21 @@ module RailsAdmin
         display 'Skipping devise installation...'
       else
         display 'Checking for a current installation of devise...'
-        unless defined?(Devise)
+        if defined?(Devise)
+          display 'Found it!'
+        else
           display 'Adding devise gem to your Gemfile:'
           append_file 'Gemfile', "\n", :force => true
           gem 'devise'
           Bundler.with_clean_env do
             run 'bundle install'
           end
-        else
-          display 'Found it!'
         end
-        unless File.exists?(Rails.root.join('config/initializers/devise.rb'))
+        if File.exists?(Rails.root.join('config/initializers/devise.rb'))
+          display "Looks like you've already installed it, good!"
+        else
           display "Looks like you don't have devise installed! We'll install it for you:"
           generate 'devise:install'
-        else
-          display "Looks like you've already installed it, good!"
         end
       end
 
@@ -51,29 +51,27 @@ module RailsAdmin
       route("mount RailsAdmin::Engine => '/#{namespace}', :as => 'rails_admin'")
 
       unless options[:skip_devise]
-        unless routes.index('devise_for')
-          model_name = ask_for('What would you like the user model to be called?', 'user', _model_name)
-          display "Now setting up devise with user model name '#{model_name}':"
-          generate 'devise', model_name
-        else
+        if routes.index('devise_for')
           display 'And you already set it up, good! We just need to know about your user model name...'
           guess = routes.match(/devise_for +:(\w+)/)[1].try(:singularize)
           display("We found '#{guess}' (should be one of 'user', 'admin', etc.)")
           model_name = ask_for('Correct Devise model name if needed.', guess, _model_name)
-          unless guess == model_name
+          if guess == model_name
+            display "Ok, Devise looks already set up with user model name '#{model_name}':"
+          else
             display "Now setting up devise with user model name '#{model_name}':"
             generate 'devise', model_name
-          else
-            display "Ok, Devise looks already set up with user model name '#{model_name}':"
           end
+        else
+          model_name = ask_for('What would you like the user model to be called?', 'user', _model_name)
+          display "Now setting up devise with user model name '#{model_name}':"
+          generate 'devise', model_name
         end
       end
       display "Now you'll need an initializer..."
       @current_user_method = model_name ? "current_#{model_name.to_s.underscore}" : ''
       @model_name = model_name || '<your user class>'
-      unless initializer
-        template 'initializer.erb', 'config/initializers/rails_admin.rb'
-      else
+      if initializer
         display "You already have a config file. You're updating, heh? I'm generating a new 'rails_admin.rb.example' that you can review."
         template 'initializer.erb', 'config/initializers/rails_admin.rb.example'
         config_tag = initializer.match(/RailsAdmin\.config.+\|(.+)\|/)[1] rescue nil
@@ -88,6 +86,8 @@ module RailsAdmin
         else
           display "Couldn't parse your config file: current_user_method couldn't be updated", :red
         end
+      else
+        template 'initializer.erb', 'config/initializers/rails_admin.rb'
       end
       display 'Adding a migration...'
       migration_template 'migration.rb', 'db/migrate/create_rails_admin_histories_table.rb' rescue display $!.message

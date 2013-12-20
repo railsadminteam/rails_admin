@@ -4,16 +4,7 @@ class Ability
   include CanCan::Ability
   def initialize(user)
     can :access, :rails_admin if user.roles.include? :admin
-    unless user.roles.include? :test_exception
-      can :dashboard
-      can :manage, Player if user.roles.include? :manage_player
-      can :read, Player, :retired => false if user.roles.include? :read_player
-      can :create, Player, :suspended => true if user.roles.include? :create_player
-      can :update, Player, :retired => false if user.roles.include? :update_player
-      can :destroy, Player, :retired => false if user.roles.include? :destroy_player
-      can :history, Player, :retired => false if user.roles.include? :history_player
-      can :show_in_app, Player, :retired => false if user.roles.include? :show_in_app_player
-    else
+    if user.roles.include? :test_exception
       can :dashboard
       can :access, :rails_admin
       can :manage, :all
@@ -26,6 +17,15 @@ class Ability
       else
         cannot [:update, :destroy], Player, :retired => true
       end
+    else
+      can :dashboard
+      can :manage, Player if user.roles.include? :manage_player
+      can :read, Player, :retired => false if user.roles.include? :read_player
+      can :create, Player, :suspended => true if user.roles.include? :create_player
+      can :update, Player, :retired => false if user.roles.include? :update_player
+      can :destroy, Player, :retired => false if user.roles.include? :destroy_player
+      can :history, Player, :retired => false if user.roles.include? :history_player
+      can :show_in_app, Player, :retired => false if user.roles.include? :show_in_app_player
     end
   end
 end
