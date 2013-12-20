@@ -90,7 +90,7 @@ module RailsAdmin
         template 'initializer.erb', 'config/initializers/rails_admin.rb'
       end
       display 'Adding a migration...'
-      migration_template 'migration.rb', 'db/migrate/create_rails_admin_histories_table.rb' rescue display $!.message
+      migration_template 'migration.rb', 'db/migrate/create_rails_admin_histories_table.rb' rescue display $ERROR_INFO.message
       display "Job's done: migrate, start your server and visit '/#{namespace}'!", :blue
     end
   end

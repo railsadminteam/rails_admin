@@ -60,7 +60,7 @@ module RailsAdmin
             csv_string = @iconv.iconv(csv_string) rescue csv_string
           end
         rescue
-          Rails.logger.error("Iconv cannot convert to #{@encoding_to}: #{$!}\nNo conversion will take place")
+          Rails.logger.error("Iconv cannot convert to #{@encoding_to}: #{$ERROR_INFO}\nNo conversion will take place")
         end
       end
       [!options[:skip_header], @encoding_to, csv_string]

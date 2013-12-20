@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.name = 'rails_admin'
   spec.require_paths = ['lib']
   spec.required_rubygems_version = '>= 1.3.5'
-  spec.signing_key = File.expand_path('~/.gem/private_key.pem') if $0 =~ /gem\z/
+  spec.signing_key = File.expand_path('~/.gem/private_key.pem') if $PROGRAM_NAME =~ /gem\z/
   spec.summary = %q{Admin for Rails}
   spec.test_files = Dir['spec/**/*'].reject { |f| f.end_with? 'log' }
   spec.version = RailsAdmin::Version
