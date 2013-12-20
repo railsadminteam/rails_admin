@@ -43,13 +43,13 @@ module RailsAdmin
           @controller = controller
           begin
             @user_class = user_class.to_s.constantize
-          rescue NameError => e
+          rescue NameError
             raise "Please set up Papertrail's user model explicitely. Ex: config.audit_with :paper_trail, 'User'"
           end
 
           begin
             @version_class = version_class.to_s.constantize 
-          rescue NameError => e
+          rescue NameError
             raise "Please set up Papertrail's version model explicitely. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
           end
         end
@@ -71,7 +71,7 @@ module RailsAdmin
         end
 
         def listing_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
-          listing_for_model_or_object(model, object = nil, query, sort, sort_reverse, all, page, per_page)
+          listing_for_model_or_object(model, nil, query, sort, sort_reverse, all, page, per_page)
         end
 
         def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))

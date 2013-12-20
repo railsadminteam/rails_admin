@@ -105,7 +105,7 @@ module RailsAdmin
               }
             }
 
-            options = options.merge self.class.js_plugin_options
+            options.merge self.class.js_plugin_options
           end
 
           def localized_format(scope = [:time, :formats])

@@ -108,7 +108,7 @@ module RailsAdmin
   end
 
   def handle_save_error whereto = :new
-    action = params[:action]
+    params[:action]
 
     flash.now[:error] = t('admin.flash.error', :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
     flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
@@ -135,7 +135,7 @@ module RailsAdmin
     options = options.merge(:filters => params[:f]) if params[:f].present?
     options = options.merge(:bulk_ids => params[:bulk_ids]) if params[:bulk_ids]
 
-    objects = model_config.abstract_model.all(options, scope)
+    model_config.abstract_model.all(options, scope)
   end
 
   def get_association_scope_from_params
