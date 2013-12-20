@@ -11,7 +11,7 @@ module RailsAdmin
 
       # Reader whether object is hidden.
       def hidden?
-        not visible
+        !visible
       end
 
       # Writer to hide object.

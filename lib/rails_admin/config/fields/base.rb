@@ -184,7 +184,7 @@ module RailsAdmin
         end
 
         register_instance_option :read_only? do
-          not editable?
+          !editable?
         end
 
         # init status in the view
@@ -231,7 +231,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional?
-          not required?
+          !required?
         end
 
         # Inverse accessor whether this field is required.
