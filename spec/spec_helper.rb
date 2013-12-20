@@ -37,7 +37,7 @@ Rails.backtrace_cleaner.remove_silencers!
 module Devise
   module Models
     module DatabaseAuthenticatable
-    protected
+      protected
 
     def password_digest(password)
       password
@@ -47,16 +47,16 @@ module Devise
 end
 
 Devise.setup do |config|
-config.stretches = 0
+  config.stretches = 0
 end
 
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
-config.expect_with :rspec do |c|
-  c.syntax = :expect
-end
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
 
 config.include RSpec::Matchers
 config.include RailsAdmin::Engine.routes.url_helpers

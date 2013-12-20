@@ -12,7 +12,7 @@ module RailsAdmin
               :maxlength => length,
               :size => [50, length.to_i].min
             }
-           end
+          end
 
           def generic_help
             text = (required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')) + '. '

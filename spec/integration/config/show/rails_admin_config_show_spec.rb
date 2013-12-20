@@ -62,9 +62,10 @@ describe 'RailsAdmin Config DSL Show Section' do
         end
       end
 
-    do_request
+      do_request
 
-    should have_selector('dt .name_field.string_type')    end
+      should have_selector('dt .name_field.string_type')
+    end
   end
 
   describe 'css hooks' do

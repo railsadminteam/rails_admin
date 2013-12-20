@@ -222,7 +222,7 @@ module RailsAdmin
     end
 
     class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
-    protected
+      protected
 
     def unary_operators
       {
