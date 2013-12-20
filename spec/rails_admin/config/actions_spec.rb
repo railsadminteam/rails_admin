@@ -51,7 +51,7 @@ describe RailsAdmin::Config::Actions do
         hide
       end
 
-      expect(RailsAdmin::Config::Actions.find(:index, :controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) #decoy
+      expect(RailsAdmin::Config::Actions.find(:index, :controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
       expect(RailsAdmin::Config::Actions.find(:index, :controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Team))).to be_nil
     end
 
@@ -59,7 +59,7 @@ describe RailsAdmin::Config::Actions do
       RailsAdmin.config do |config|
         config.excluded_models << Team
       end
-      expect(RailsAdmin::Config::Actions.find(:index, :controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) #decoy
+      expect(RailsAdmin::Config::Actions.find(:index, :controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
       expect(RailsAdmin::Config::Actions.find(:index, :controller => double(:authorized? => true), :abstract_model => RailsAdmin::AbstractModel.new(Team))).to be_nil
     end
   end
