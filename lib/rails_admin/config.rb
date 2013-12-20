@@ -101,7 +101,7 @@ module RailsAdmin
       # Setup auditing/history/versioning provider that observe objects lifecycle
       def audit_with(*args, &block)
         extension = args.shift
-        if(extension)
+        if extension
           @audit = proc do
             @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
           end
@@ -136,7 +136,7 @@ module RailsAdmin
       # @see RailsAdmin::Config::DEFAULT_AUTHORIZE
       def authorize_with(*args, &block)
         extension = args.shift
-        if(extension)
+        if extension
           @authorize = proc do
             @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
           end

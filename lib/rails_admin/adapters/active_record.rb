@@ -300,7 +300,5 @@ module RailsAdmin
     def like_operator
       ar_adapter == 'postgresql' ? 'ILIKE' : 'LIKE'
     end
-    end
-    end
   end
 end

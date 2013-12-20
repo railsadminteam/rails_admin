@@ -53,7 +53,6 @@ module RailsAdmin
           @current_ability ||= @ability.new(_current_user)
         end
       end
-      end
     end
   end
 end

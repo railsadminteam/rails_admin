@@ -42,7 +42,6 @@ module Devise
     def password_digest(password)
       password
     end
-    end
   end
 end
 

@@ -93,7 +93,6 @@ module RailsAdmin
         versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || '1').per(per_page)
         versions.map { |version| VersionProxy.new(version, @user_class) }
       end
-      end
     end
   end
 end
