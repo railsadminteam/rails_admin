@@ -9,7 +9,7 @@ module RailsAdmin
 
       def has_option?(name)
         options = self.class.instance_variable_get('@config_options')
-        options && options.has_key?(name)
+        options && options.key?(name)
       end
 
       # Register an instance option for this object only
