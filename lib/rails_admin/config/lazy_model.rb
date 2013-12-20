@@ -9,7 +9,7 @@ module RailsAdmin
       end
 
       def method_missing(method, *args, &block)
-        if !@model
+        unless @model
           @model = RailsAdmin::Config::Model.new(@entity)
           @model.instance_eval(&@deferred_block) if @deferred_block
         end
