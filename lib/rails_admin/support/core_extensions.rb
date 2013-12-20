@@ -6,7 +6,7 @@ class Hash
   def self.symbolize_hash(obj)
     case obj
     when Array
-      obj.reduce([]) { |res, val|
+      obj.reduce([]) do |res, val|
         res << case val
                when Hash, Array
                  symbolize_hash(val)
@@ -16,9 +16,9 @@ class Hash
                  val
                end
         res
-      }
+      end
     when Hash
-      obj.reduce({}) { |res, (key, val)|
+      obj.reduce({}) do |res, (key, val)|
         nkey = case key
                when String
                  key.to_sym
@@ -35,7 +35,7 @@ class Hash
                end
         res[nkey] = nval
         res
-      }
+      end
     else
       obj
     end

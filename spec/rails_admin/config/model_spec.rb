@@ -69,7 +69,7 @@ describe RailsAdmin::Config::Model do
           I18n.backend.store_translations :xx,
             :i18n => {
               :plural => {
-                :rule => lambda { |count|
+                :rule => lambda do |count|
                   if count == 0
                     :zero
                   elsif count == 1
@@ -79,7 +79,7 @@ describe RailsAdmin::Config::Model do
                   else
                     :other
                   end
-                }
+                end
               }
             }
         end

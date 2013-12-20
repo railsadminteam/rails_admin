@@ -164,9 +164,9 @@ describe RailsAdmin::MainController do
         field :players do
           associated_collection_scope do
             team = bindings[:object]
-            proc { |scope|
+            proc do |scope|
               scope.limit(team.revenue)
-            }
+            end
           end
         end
       end

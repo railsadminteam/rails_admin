@@ -9,8 +9,6 @@ describe 'RailsAdmin Namespaced Model Create' do
 
     fill_in 'cms_basic_page[title]', :with => 'Hello'
     fill_in 'cms_basic_page[content]', :with => 'World'
-    expect {
-      click_button 'Save' # first(:button, "Save").click
-    }.to change(Cms::BasicPage, :count).by(1)
+    expect { click_button 'Save' }.to change(Cms::BasicPage, :count).by(1)
   end
 end
