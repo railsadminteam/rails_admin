@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         def self.register(type, klass = nil)
-          if klass == nil && type.kind_of?(Class)
+          if klass.nil? && type.kind_of?(Class)
             klass = type
             type = klass.name.to_s.demodulize.underscore
           end

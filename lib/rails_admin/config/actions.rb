@@ -59,7 +59,7 @@ module RailsAdmin
         end
 
         def register(name, klass = nil)
-          if klass == nil && name.kind_of?(Class)
+          if klass.nil? && name.kind_of?(Class)
             klass = name
             name = klass.to_s.demodulize.underscore.to_sym
           end
