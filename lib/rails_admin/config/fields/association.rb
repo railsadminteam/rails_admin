@@ -5,13 +5,10 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
+        attr_reader :properties
+        alias_method :association, :properties
         def self.inherited(klass)
           super(klass)
-        end
-
-        # Reader for the association information hash
-        def association
-          @properties
         end
 
         register_instance_option :pretty_value do

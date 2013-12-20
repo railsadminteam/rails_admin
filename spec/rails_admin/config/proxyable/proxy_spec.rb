@@ -2,12 +2,9 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Proxyable::Proxy do
   class ProxyTest
+    attr_accessor :bindings
     def initialize
       @bindings = {:foo => 'bar'}
-    end
-
-    def get_bindings
-      @bindings
     end
   end
 
@@ -15,11 +12,11 @@ describe RailsAdmin::Config::Proxyable::Proxy do
   subject { RailsAdmin::Config::Proxyable::Proxy.new proxy_test, :foo => 'baz' }
 
   it 'proxies method calls to @object' do
-    expect(subject.get_bindings).to eq :foo => 'baz'
+    expect(subject.bindings).to eq :foo => 'baz'
   end
 
   it 'preserves initially set @bindings' do
-    subject.get_bindings
-    expect(proxy_test.get_bindings).to eq :foo => 'bar'
+    subject.bindings
+    expect(proxy_test.bindings).to eq :foo => 'bar'
   end
 end

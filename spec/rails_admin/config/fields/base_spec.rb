@@ -58,9 +58,9 @@ describe RailsAdmin::Config::Fields::Base do
       end
 
       it 'is hidden, not filterable' do
-        f = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset_file_name }
-        expect(f.hidden?).to be_true
-        expect(f.filterable?).to be_false
+        field = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset_file_name }
+        expect(field.hidden?).to be_true
+        expect(field.filterable?).to be_false
       end
     end
 
