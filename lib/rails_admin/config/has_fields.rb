@@ -67,8 +67,8 @@ module RailsAdmin
       end
 
       # API candy
-      alias :exclude_fields_if :exclude_fields
-      alias :include_fields_if :include_fields
+      alias_method :exclude_fields_if, :exclude_fields
+      alias_method :include_fields_if, :include_fields
 
       def include_all_fields
         include_fields_if() { true }
