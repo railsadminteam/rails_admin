@@ -31,7 +31,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def column_defaults
-      @column_defaults ||= columns.map { |column| [column.name, nil] }.reduce({}) { |m, e| m[e[0]] = e[1]; m }
+      @column_defaults ||= columns.map { |column| [column.name, nil] }.reduce({}) { |a, e| a[e[0]] = e[1]; a }
     end
   end
 
