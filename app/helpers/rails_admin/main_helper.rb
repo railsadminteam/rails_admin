@@ -8,11 +8,13 @@ module RailsAdmin
     end
 
     def get_indicator(percent)
-      return '' if percent < 0          # none
-      return 'info' if percent < 34   # < 1/100 of max
-      return 'success' if percent < 67  # < 1/10 of max
-      return 'warning' if percent < 84  # < 1/3 of max
-      return 'danger'                # > 1/3 of max
+      case percent
+      when  0...34 then 'info'
+      when 34...67 then 'success'
+      when 67...84 then 'warning'
+      when 84..100 then 'danger'
+      else ''
+      end
     end
 
     def get_column_sets(properties)
