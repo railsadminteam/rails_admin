@@ -22,12 +22,13 @@ module RailsAdmin
 
       while property_index < properties.length
         current_set_width = 0
-        begin
+        loop do
           sets[set_index] ||= []
           sets[set_index] << properties[property_index]
           current_set_width += (properties[property_index].column_width || 120)
           property_index += 1
-        end while (current_set_width < RailsAdmin::Config.total_columns_width) && (property_index < properties.length)
+          break unless current_set_width < RailsAdmin::Config.total_columns_width && property_index < properties.length
+        end
         set_index += 1
       end
       sets
