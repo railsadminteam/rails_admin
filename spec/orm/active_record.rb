@@ -12,7 +12,7 @@ silence_stream(STDOUT) do
 end
 
 class Tableless < ActiveRecord::Base
-  class <<self
+  class << self
     def columns
       @columns ||= []
     end

@@ -16,12 +16,7 @@ module RailsAdmin
 
       # Reader for groups that are marked as visible
       def visible_groups
-        parent.groups.map do |group|
-          group.section = self
-          group.with(bindings)
-        end.select(&:visible?).select do |group|
-          group.visible_fields.present?
-        end
+        parent.groups.map { |group| group.section = self; group.with(bindings) }.select(&:visible?).select { |group| group.visible_fields.present? }
       end
     end
   end

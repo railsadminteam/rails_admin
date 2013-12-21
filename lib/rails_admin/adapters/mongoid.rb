@@ -194,13 +194,7 @@ module RailsAdmin
       end
 
       def length_validation_lookup(name)
-        shortest = model.validators.select do |validator|
-          validator.respond_to?(:attributes) &&
-            validator.attributes.include?(name.to_sym) &&
-            validator.kind == :length &&
-            validator.options[:maximum]
-        end.min { |a, b| a.options[:maximum] <=> b.options[:maximum] }
-
+        shortest = model.validators.select { |validator| validator.respond_to?(:attributes) && validator.attributes.include?(name.to_sym) && validator.kind == :length && validator.options[:maximum] }.min { |a, b| a.options[:maximum] <=> b.options[:maximum] }
         shortest && shortest.options[:maximum]
       end
 
@@ -373,7 +367,7 @@ module RailsAdmin
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
-        protected
+      protected
 
         def unary_operators
           {

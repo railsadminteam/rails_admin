@@ -319,7 +319,7 @@ module RailsAdmin
                 end
               end
             end.flatten.reject { |m| m.starts_with?('Concerns::') }
-          )
+        )
       end
 
       def visible_models_with_bindings(bindings)

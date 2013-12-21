@@ -10,11 +10,9 @@ module RailsAdmin
           :nested_in => false
         )
 
-        object_infos +
-          visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).map do |fieldset|
+        object_infos + visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).map do |fieldset|
           fieldset_for fieldset, options[:nested_in]
-        end.join.html_safe +
-        (options[:nested_in] ? '' : @template.render(:partial => 'rails_admin/main/submit_buttons'))
+        end.join.html_safe + (options[:nested_in] ? '' : @template.render(:partial => 'rails_admin/main/submit_buttons'))
       end
     end
 
