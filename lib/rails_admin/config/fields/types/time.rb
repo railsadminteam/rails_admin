@@ -27,7 +27,7 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            (localized_format.include? '%p') ? '%I:%M %p' : '%H:%M'
+            localized_format.include?('%p') ? '%I:%M %p' : '%H:%M'
           end
         end
       end

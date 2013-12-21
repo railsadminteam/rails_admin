@@ -145,7 +145,7 @@ module RailsAdmin
         case @value
         when Array then
           val, range_begin, range_end = *@value.map do |v|
-            if (v.to_i.to_s == v || v.to_f.to_s == v)
+            if v.to_i.to_s == v || v.to_f.to_s == v
               @type == :integer ? v.to_i : v.to_f
             end
           end

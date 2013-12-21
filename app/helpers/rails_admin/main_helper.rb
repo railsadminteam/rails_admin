@@ -20,7 +20,7 @@ module RailsAdmin
       property_index = 0
       set_index = 0
 
-      while (property_index < properties.length)
+      while property_index < properties.length
         current_set_width = 0
         begin
           sets[set_index] ||= []
