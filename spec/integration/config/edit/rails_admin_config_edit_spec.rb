@@ -739,8 +739,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         visit edit_path(:model_name => 'field_test', :id => @record.id)
         expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
         should_not have_selector('form .remove_nested_fields')
-        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(
-          /<a[^>]* class="remove_nested_fields"[^>]*>/)
+        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(/<a[^>]* class="remove_nested_fields"[^>]*>/) # rubocop:disable SymbolName
       end
     end
 
@@ -748,8 +747,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
       it "does not hide fields which are not associated with nesting parent field's model" do
         visit new_path(:model_name => 'field_test')
         should_not have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(
-          /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/)
+        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(/<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/) # rubocop:disable SymbolName
       end
     end
   end

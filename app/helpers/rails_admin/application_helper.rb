@@ -90,7 +90,7 @@ module RailsAdmin
     def breadcrumb(action = @action, acc = [])
       begin
         (parent_actions ||= []) << action
-      end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent))
+      end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent)) # rubocop:disable Loop
 
       content_tag(:ul, :class => 'breadcrumb') do
         parent_actions.map do |a|
@@ -131,7 +131,7 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag(:li, :class => 'dropdown', :style => 'float:right') do
-        content_tag(:a, :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :href => '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } + content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do
+        content_tag(:a, :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :href => '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } + content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do # rubocop:disable SymbolName
           actions.map do |action|
             content_tag :li do
               link_to wording_for(:bulk_link, action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"

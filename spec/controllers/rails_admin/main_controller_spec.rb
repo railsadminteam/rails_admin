@@ -43,7 +43,7 @@ describe RailsAdmin::MainController do
         RailsAdmin.config('Player') do
           configure :team do
             sortable do
-              :'team.name'
+              :'team.name' # rubocop:disable SymbolName
             end
           end
         end
@@ -51,7 +51,7 @@ describe RailsAdmin::MainController do
 
       it 'returns the option with no changes' do
         controller.params = {:sort => 'team', :model_name => 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(:sort => :"team.name", :sort_reverse => true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(:sort => :"team.name", :sort_reverse => true) # rubocop:disable SymbolName
       end
     end
 

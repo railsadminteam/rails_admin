@@ -223,7 +223,7 @@ module RailsAdmin
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
-      protected
+      protected # rubocop:disable IndentationWidth
 
         def unary_operators
           {

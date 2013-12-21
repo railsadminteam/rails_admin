@@ -16,7 +16,7 @@ module RailsAdmin
 
       # Reader for groups that are marked as visible
       def visible_groups
-        parent.groups.map { |group| group.section = self; group.with(bindings) }.select(&:visible?).select { |group| group.visible_fields.present? }
+        parent.groups.map { |group| group.section = self; group.with(bindings) }.select(&:visible?).select { |group| group.visible_fields.present? } # rubocop:disable Semicolon
       end
     end
   end

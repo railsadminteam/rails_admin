@@ -10,7 +10,7 @@ module RailsAdmin::Bootstrap
       require 'rails_admin/bootstrap-sass/sass_functions'
     end
 
-    if rails?
+    if rails? # rubocop:disable IfUnlessModifier
       require 'sass-rails'
     end
 

@@ -31,7 +31,7 @@ module RailsAdmin
         end
 
         # If a block has been given evaluate it and sort fields after that
-        if block
+        if block # rubocop:disable IfUnlessModifier
           field.instance_eval(&block)
         end
         field

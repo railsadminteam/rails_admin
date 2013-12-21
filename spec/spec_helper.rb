@@ -37,7 +37,7 @@ Rails.backtrace_cleaner.remove_silencers!
 module Devise
   module Models
     module DatabaseAuthenticatable
-    protected
+    protected # rubocop:disable IndentationWidth
 
       def password_digest(password)
         password
