@@ -1,6 +1,4 @@
-unless defined?(CI_ORM)
-  CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-end
+CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym unless defined?(CI_ORM)
 require 'rubygems'
 
 # Set up gems listed in the Gemfile.
