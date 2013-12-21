@@ -2,7 +2,7 @@
 require RUBY_VERSION < '1.9' ? 'fastercsv' : 'csv'
 
 module RailsAdmin
-  CSVClass = RUBY_VERSION < '1.9' ? ::FasterCSV : ::CSV
+  CSV_CLASS = RUBY_VERSION < '1.9' ? ::FasterCSV : ::CSV
   NON_ASCII_ENCODINGS = /(UTF\-16)|(UTF\-32)|(ISO\-2022\-JP)|(Big5\-HKSCS)|(UTF\-7)/
   UTF8_ENCODINGS = [nil, '', 'utf8', 'utf-8', 'unicode', 'UTF8', 'UTF-8', 'UNICODE']
 
@@ -78,7 +78,7 @@ module RailsAdmin
 
     def generate_csv_string(options)
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
-      CSVClass.generate(generator_options) do |csv|
+      CSV_CLASS.generate(generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
         method = @objects.respond_to?(:find_each) ? :find_each : :each
