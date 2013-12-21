@@ -34,7 +34,7 @@ module RailsAdmin
           ) && (
             bindings[:abstract_model].nil? || (
               (only.nil? || [only].flatten.map(&:to_s).include?(bindings[:abstract_model].to_s)) &&
-              ![except].flatten.map(&:to_s).include?(bindings[:abstract_model].to_s) and
+              ![except].flatten.map(&:to_s).include?(bindings[:abstract_model].to_s) &&
               bindings[:abstract_model].config.with(bindings).visible?
           ))
         end

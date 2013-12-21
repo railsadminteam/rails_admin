@@ -209,7 +209,7 @@ module RailsAdmin
         end
 
         def read_only_lookup
-          klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc
+          klass.all.instance_eval(&scope).readonly_value if scope.is_a?(Proc)
         end
 
         def display_name

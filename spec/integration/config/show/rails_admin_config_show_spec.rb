@@ -56,7 +56,7 @@ describe 'RailsAdmin Config DSL Show Section' do
         show do
           field :name do
             show do
-              bindings[:object] && bindings[:view] and bindings[:controller]
+              bindings[:object] && bindings[:view] && bindings[:controller]
             end
           end
         end

@@ -169,9 +169,7 @@ module RailsAdmin
                     end
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
             !!abstract_model.model.validators_on(column_name).detect do |v|
-              !v.options[:allow_nil] and
-              [:presence, :numericality, :attachment_presence].include?(v.kind) and
-              (v.options[:on] == context or v.options[:on].blank?)
+              !v.options[:allow_nil] && [:presence, :numericality, :attachment_presence].include?(v.kind) && (v.options[:on] == context || v.options[:on].blank?)
             end
           end
         end
