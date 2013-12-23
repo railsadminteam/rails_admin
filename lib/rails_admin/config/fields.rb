@@ -6,7 +6,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Fields.registry
       mattr_reader :default_factory
-      @@default_factory = lambda do |parent, properties, fields|
+      @@default_factory = lambda do |parent, properties, fields| #rubocop:disable ClassVars
         # If it's an association
         if properties.key?(:model_proc)
           association = parent.abstract_model.associations.detect { |a| a[:name].to_s == properties[:name].to_s }
@@ -35,7 +35,7 @@ module RailsAdmin
       # @see RailsAdmin::Config::Fields.register_factory
       # @see rails_admin/config/fields/factories/password.rb
       # @see rails_admin/config/fields/factories/devise.rb
-      @@registry = [@@default_factory]
+      @registry = [@@default_factory]
 
       # Build an array of fields by the provided parent object's abstract_model's
       # property and association information. Each property and association is
@@ -51,7 +51,7 @@ module RailsAdmin
           # Unless a previous factory has already loaded current field as well
           unless fields.detect { |f| f.name == properties[:name] }
             # Loop through factories until one returns true
-            @@registry.detect { |factory| factory.call(parent, properties, fields) }
+            @registry.detect { |factory| factory.call(parent, properties, fields) }
           end
         end
         # Load fields for all associations (relations)
@@ -59,7 +59,7 @@ module RailsAdmin
           # Unless a previous factory has already loaded current field as well
           unless fields.detect { |f| f.name == association[:name] }
             # Loop through factories until one returns true
-            @@registry.detect { |factory| factory.call(parent, association, fields) }
+            @registry.detect { |factory| factory.call(parent, association, fields) }
           end
         end
         fields
@@ -71,7 +71,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Fields.registry
       def self.register_factory(&block)
-        @@registry.unshift(block)
+        @registry.unshift(block)
       end
     end
   end

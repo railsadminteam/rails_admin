@@ -5,12 +5,12 @@ module RailsAdmin
 
     class << self
       def reset
-        @@all = nil
+        @all = nil
       end
 
       def all(adapter = nil)
-        @@all ||= Config.models_pool.map { |m| new(m) }.compact
-        adapter ? @@all.select { |m| m.adapter == adapter } : @@all
+        @all ||= Config.models_pool.map { |m| new(m) }.compact
+        adapter ? @all.select { |m| m.adapter == adapter } : @all
       end
 
       alias_method :old_new, :new
@@ -22,22 +22,21 @@ module RailsAdmin
         nil
       end
 
-      @@polymorphic_parents = {}
-
       def polymorphic_parents(adapter, model_name, name)
-        @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
+        @polymorphic_parents = {}
+        @polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
           all(adapter).each do |am|
             am.associations.select { |r| r[:as] }.each do |association|
               (hash[[association[:model_proc].call.to_s.underscore, association[:as]].join('_').to_sym] ||= []) << am.model
             end
           end
         end
-        @@polymorphic_parents[adapter.to_sym][[model_name.to_s.underscore, name].join('_').to_sym]
+        @polymorphic_parents[adapter.to_sym][[model_name.to_s.underscore, name].join('_').to_sym]
       end
 
       # For testing
       def reset_polymorphic_parents
-        @@polymorphic_parents = {}
+        @polymorphic_parents = {}
       end
     end
 

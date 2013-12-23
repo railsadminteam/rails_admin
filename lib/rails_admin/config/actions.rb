@@ -11,15 +11,15 @@ module RailsAdmin
           init_actions!
           actions = case scope
                     when :all
-                      @@actions
+                      @actions
                     when :root
-                      @@actions.select(&:root?)
+                      @actions.select(&:root?)
                     when :collection
-                      @@actions.select(&:collection?)
+                      @actions.select(&:collection?)
                     when :bulkable
-                      @@actions.select(&:bulkable?)
+                      @actions.select(&:bulkable?)
                     when :member
-                      @@actions.select(&:member?)
+                      @actions.select(&:member?)
                     end
           actions = actions.map { |action| action.with(bindings) }
           bindings[:controller] ? actions.select(&:visible?) : actions
@@ -27,7 +27,7 @@ module RailsAdmin
 
         def find(custom_key, bindings = {})
           init_actions!
-          action = @@actions.detect { |a| a.custom_key == custom_key }.try(:with, bindings)
+          action = @actions.detect { |a| a.custom_key == custom_key }.try(:with, bindings)
           bindings[:controller] ? (action.try(:visible?) && action || nil) : action
         end
 
@@ -55,7 +55,7 @@ module RailsAdmin
         end
 
         def reset
-          @@actions = nil
+          @actions = nil
         end
 
         def register(name, klass = nil)
@@ -75,7 +75,7 @@ module RailsAdmin
       private
 
         def init_actions!
-          @@actions ||= [
+          @actions ||= [
             Dashboard.new,
             Index.new,
             Show.new,
@@ -92,11 +92,11 @@ module RailsAdmin
 
         def add_action_custom_key(action, &block)
           action.instance_eval(&block) if block
-          @@actions ||= []
-          if action.custom_key.in?(@@actions.map(&:custom_key))
+          @actions ||= []
+          if action.custom_key.in?(@actions.map(&:custom_key))
             fail "Action #{action.custom_key} already exists. Please change its custom key."
           else
-            @@actions << action
+            @actions << action
           end
         end
       end
