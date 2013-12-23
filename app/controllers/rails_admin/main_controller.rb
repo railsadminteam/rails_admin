@@ -47,33 +47,6 @@ module RailsAdmin
       params[:return_to].presence && params[:return_to].include?(request.host) && (params[:return_to] != request.fullpath) ? params[:return_to] : index_path
     end
 
-    def get_sort_hash(model_config)
-      abstract_model = model_config.abstract_model
-      params[:sort] = params[:sort_reverse] = nil unless model_config.list.fields.map { |f| f.name.to_s }.include? params[:sort]
-
-      params[:sort] ||= model_config.list.sort_by.to_s
-      params[:sort_reverse] ||= 'false'
-
-      field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
-
-      column = if field.nil? || field.sortable == true # use params[:sort] on the base table
-                 "#{abstract_model.table_name}.#{params[:sort]}"
-               elsif field.sortable == false # use default sort, asked field is not sortable
-                 "#{abstract_model.table_name}.#{model_config.list.sort_by}"
-               elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
-                 field.sortable
-               elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
-                 "#{field.sortable.keys.first}.#{field.sortable.values.first}"
-               elsif field.association? # use column on target table
-                 "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
-               else # use described column in the field conf.
-                 "#{abstract_model.table_name}.#{field.sortable}"
-               end
-
-      reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
-      {:sort => column, :sort_reverse => (params[:sort_reverse] == reversed_sort.to_s)}
-    end
-
     def redirect_to_on_success
       notice = t('admin.flash.successful', :name => @model_config.label, :action => t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]

@@ -5,7 +5,7 @@ module RailsAdmin
   module Config
     module Fields
       module Types
-        class Datetime < RailsAdmin::Config::Fields::Base
+        class Datetime < RailsAdmin::Config::Fields::Base #rubocop:disable ClassLength
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
