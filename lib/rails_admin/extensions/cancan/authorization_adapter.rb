@@ -44,7 +44,7 @@ module RailsAdmin
           @controller.current_ability.attributes_for(action, abstract_model && abstract_model.model)
         end
 
-        private
+      private
 
         module ControllerExtension
           def current_ability

@@ -12,18 +12,17 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.authenticate_with
     # @see RailsAdmin::Config.authorize_with
-    DEFAULT_AUTHENTICATION = Proc.new do
+    DEFAULT_AUTHENTICATION = proc do
       request.env['warden'].try(:authenticate!)
     end
 
-    DEFAULT_AUTHORIZE = Proc.new {}
+    DEFAULT_AUTHORIZE = proc {}
 
-    DEFAULT_AUDIT = Proc.new {}
+    DEFAULT_AUDIT = proc {}
 
-    DEFAULT_CURRENT_USER = Proc.new do
-      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
+    DEFAULT_CURRENT_USER = proc do
+      request.env['warden'].try(:user) || respond_to?(:current_user) && current_user
     end
-
 
     class << self
       # Application title, can be an array of two elements
@@ -102,10 +101,10 @@ module RailsAdmin
       # Setup auditing/history/versioning provider that observe objects lifecycle
       def audit_with(*args, &block)
         extension = args.shift
-        if(extension)
-          @audit = Proc.new {
+        if extension
+          @audit = proc do
             @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
-          }
+          end
         else
           @audit = block if block
         end
@@ -137,10 +136,10 @@ module RailsAdmin
       # @see RailsAdmin::Config::DEFAULT_AUTHORIZE
       def authorize_with(*args, &block)
         extension = args.shift
-        if(extension)
-          @authorize = Proc.new {
+        if extension
+          @authorize = proc do
             @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
-          }
+          end
         else
           @authorize = block if block
         end
@@ -186,7 +185,7 @@ module RailsAdmin
         if %w{ default like starts_with ends_with is = }.include? operator
           @default_search_operator = operator
         else
-          raise ArgumentError, "Search operator '#{operator}' not supported"
+          fail(ArgumentError, "Search operator '#{operator}' not supported")
         end
       end
 
@@ -248,7 +247,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def models
-        RailsAdmin::AbstractModel.all.map{|m| model(m)}
+        RailsAdmin::AbstractModel.all.map { |m| model(m) }
       end
 
       # Reset all configurations to defaults.
@@ -272,7 +271,7 @@ module RailsAdmin
         @included_models = []
         @total_columns_width = 697
         @label_methods = [:name, :title]
-        @main_app_name = Proc.new { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
+        @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
         @navigation_static_links = {}
         @navigation_static_label = nil
@@ -301,7 +300,7 @@ module RailsAdmin
         end
       end
 
-      private
+    private
 
       def lchomp(base, arg)
         base.to_s.reverse.chomp(arg.to_s.reverse).reverse
@@ -309,30 +308,29 @@ module RailsAdmin
 
       def viable_models
         included_models.map(&:to_s).presence || (
-          @@system_models ||= # memoization for tests
+          @system_models ||= # memoization for tests
             ([Rails.application] + Rails::Engine::Railties.engines).map do |app|
               (app.paths['app/models'].to_a + app.config.autoload_paths).map do |load_path|
                 Dir.glob(app.root.join(load_path)).map do |load_dir|
-                  Dir.glob(load_dir + "/**/*.rb").map do |filename|
+                  Dir.glob(load_dir + '/**/*.rb').map do |filename|
                     # app/models/module/class.rb => module/class.rb => module/class => Module::Class
                     lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
                   end
                 end
               end
-            end.flatten.reject {|m| m.starts_with?('Concerns::') }
-          )
+            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
+        )
       end
 
       def visible_models_with_bindings(bindings)
-        models.map {|m| m.with(bindings)}.select do |m|
+        models.map { |m| m.with(bindings) }.select do |m|
           m.visible? &&
             bindings[:controller].authorized?(:index, m.abstract_model) &&
             (!m.abstract_model.embedded? || m.abstract_model.cyclic?)
         end
       end
     end
-
     # Set default values for configuration options on load
-    self.reset
+    reset
   end
 end

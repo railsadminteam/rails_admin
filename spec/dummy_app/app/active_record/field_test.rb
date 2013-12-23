@@ -5,9 +5,9 @@ class FieldTest < ActiveRecord::Base
   has_one :comment, :as => :commentable
   accepts_nested_attributes_for :comment, :allow_destroy => true
 
-  has_attached_file :paperclip_asset, :styles => { :thumb => "100x100>" }
+  has_attached_file :paperclip_asset, :styles => {:thumb => '100x100>'}
   attr_accessor :delete_paperclip_asset
-  before_validation { self.paperclip_asset = nil if self.delete_paperclip_asset == '1' }
+  before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
   image_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader

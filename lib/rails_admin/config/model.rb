@@ -9,7 +9,6 @@ require 'rails_admin/config/has_fields'
 require 'rails_admin/config/sections'
 require 'rails_admin/config/actions'
 
-
 module RailsAdmin
   module Config
     # Model specific configuration object.
@@ -28,15 +27,15 @@ module RailsAdmin
         @root = self
 
         @abstract_model = begin
-          if entity.kind_of?(RailsAdmin::AbstractModel)
-            entity
-          elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
-            RailsAdmin::AbstractModel.new(entity)
-          else
-            RailsAdmin::AbstractModel.new(entity.class)
-          end
-        end
-        @groups = [ RailsAdmin::Config::Fields::Group.new(self, :default).tap {|g| g.label{I18n.translate("admin.form.basic_info")} } ]
+                            if entity.kind_of?(RailsAdmin::AbstractModel)
+                              entity
+                            elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+                              RailsAdmin::AbstractModel.new(entity)
+                            else
+                              RailsAdmin::AbstractModel.new(entity.class)
+                            end
+                          end
+        @groups = [RailsAdmin::Config::Fields::Group.new(self, :default).tap { |g| g.label { I18n.translate('admin.form.basic_info') } }]
       end
 
       def excluded?
@@ -52,7 +51,7 @@ module RailsAdmin
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
       register_instance_option :object_label_method do
-        @object_label_method ||= Config.label_methods.find { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
+        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
       end
 
       register_instance_option :label do
@@ -74,16 +73,16 @@ module RailsAdmin
       # parent node in navigation/breadcrumb
       register_instance_option :parent do
         @parent_model ||= begin
-          klass = abstract_model.model.superclass
-          klass = nil if klass.to_s.in?(%w[Object BasicObject ActiveRecord::Base])
-          klass
-        end
+                            klass = abstract_model.model.superclass
+                            klass = nil if klass.to_s.in?(%w[Object BasicObject ActiveRecord::Base])
+                            klass
+                          end
       end
 
       register_instance_option :navigation_label do
         @navigation_label ||= if (parent_module = abstract_model.model.parent) != Object
-          parent_module.to_s
-        end
+                                parent_module.to_s
+                              end
       end
 
       register_instance_option :navigation_icon do
@@ -93,7 +92,7 @@ module RailsAdmin
       # Act as a proxy for the base section configuration that actually
       # store the configurations.
       def method_missing(m, *args, &block)
-        self.send(:base).send(m, *args, &block)
+        send(:base).send(m, *args, &block)
       end
 
       def inspect

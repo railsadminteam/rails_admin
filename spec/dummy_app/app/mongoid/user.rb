@@ -47,7 +47,7 @@ class User
   include Mongoid::Timestamps
 
   # Add Paperclip support for avatars
-  has_mongoid_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  has_mongoid_attached_file :avatar, :styles => {:medium => '300x300>', :thumb => '100x100>'}
 
   field :roles, :type => Array
 
@@ -56,5 +56,5 @@ class User
   end
 
   attr_accessor :delete_avatar
-  before_validation { self.avatar = nil if self.delete_avatar == '1' }
+  before_validation { self.avatar = nil if delete_avatar == '1' }
 end

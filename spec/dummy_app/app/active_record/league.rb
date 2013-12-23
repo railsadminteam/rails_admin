@@ -5,6 +5,6 @@ class League < ActiveRecord::Base
   validates_presence_of(:name)
 
   def custom_name
-    "League '#{self.name}'"
+    "League '#{name}'"
   end
 end

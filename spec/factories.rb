@@ -12,7 +12,7 @@ FactoryGirl.define do
     sequence(:round)
     sequence(:pick)
     sequence(:overall)
-    sequence(:college) {|n| "College #{n}"}
+    sequence(:college) { |n| "College #{n}" }
     association :team
     association :player
   end
@@ -42,12 +42,11 @@ FactoryGirl.define do
 
   factory :user do
     sequence(:email) { |n| "username_#{n}@example.com" }
-    sequence(:password) { |n| "password" }
+    sequence(:password) { |n| 'password' }
   end
 
   factory :field_test do
   end
-
 
   factory :comment do
     sequence(:content) do |n| <<-EOF
@@ -62,7 +61,7 @@ FactoryGirl.define do
   end
 
   factory :ball do
-    color(%W(red blue green yellow purple brown black white).sample)
+    color(%w[red blue green yellow purple brown black white].sample)
   end
 
   factory :hardball do

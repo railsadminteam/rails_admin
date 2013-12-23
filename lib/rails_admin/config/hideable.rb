@@ -11,12 +11,12 @@ module RailsAdmin
 
       # Reader whether object is hidden.
       def hidden?
-        not visible
+        !visible
       end
 
       # Writer to hide object.
       def hide(&block)
-        visible block ? proc { false == (instance_eval &block) } : false
+        visible block ? proc { false == (instance_eval(&block)) } : false
       end
 
       # Writer to show field.

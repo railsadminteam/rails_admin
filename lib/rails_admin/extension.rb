@@ -1,4 +1,3 @@
-
 module RailsAdmin
   EXTENSIONS = []
   AUTHORIZATION_ADAPTERS = {}
@@ -14,15 +13,15 @@ module RailsAdmin
 
     EXTENSIONS << extension_key
 
-    if(authorization = options[:authorization])
+    if options[:authorization]
       AUTHORIZATION_ADAPTERS[extension_key] = extension_definition::AuthorizationAdapter
     end
 
-    if(configuration = options[:configuration])
+    if options[:configuration]
       CONFIGURATION_ADAPTERS[extension_key] = extension_definition::ConfigurationAdapter
     end
 
-    if(configuration = options[:auditing])
+    if options[:auditing]
       AUDITING_ADAPTERS[extension_key] = extension_definition::AuditingAdapter
     end
   end

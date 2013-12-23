@@ -30,7 +30,7 @@ class FieldTest
   field :format, :type => String
   field :restricted_field, :type => String
   field :protected_field, :type => String
-  has_mongoid_attached_file :paperclip_asset, :styles => { :thumb => "100x100>" }
+  has_mongoid_attached_file :paperclip_asset, :styles => {:thumb => '100x100>'}
 
   has_many :nested_field_tests, :dependent => :destroy, :inverse_of => :field_test, :autosave => true
   accepts_nested_attributes_for :nested_field_tests, :allow_destroy => true
@@ -43,7 +43,7 @@ class FieldTest
   accepts_nested_attributes_for :embeds, :allow_destroy => true
 
   attr_accessor :delete_paperclip_asset
-  before_validation { self.paperclip_asset = nil if self.delete_paperclip_asset == '1' }
+  before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
   field :dragonfly_asset_name
   field :dragonfly_asset_uid

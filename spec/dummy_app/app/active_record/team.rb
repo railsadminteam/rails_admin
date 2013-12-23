@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 class Team < ActiveRecord::Base
   has_many :players, -> { order :id }, :inverse_of => :team
   has_and_belongs_to_many :fans
@@ -16,7 +15,7 @@ class Team < ActiveRecord::Base
   belongs_to :division
 
   def player_names_truncated
-    players.map{|p| p.name}.join(", ")[0..32]
+    players.map { |p| p.name }.join(', ')[0..32]
   end
 
   def color_enum

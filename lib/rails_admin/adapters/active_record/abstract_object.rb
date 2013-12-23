@@ -19,12 +19,12 @@ module RailsAdmin
           object.assign_attributes(attributes)
         end
 
-        def save(options = { :validate => true })
+        def save(options = {:validate => true})
           object.save(options)
         end
 
         def method_missing(name, *args, &block)
-          self.object.send(name, *args, &block)
+          object.send(name, *args, &block)
         end
       end
     end

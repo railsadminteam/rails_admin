@@ -12,9 +12,9 @@ silence_stream(STDOUT) do
 end
 
 class Tableless < ActiveRecord::Base
-  class <<self
+  class << self
     def columns
-      @columns ||= [];
+      @columns ||= []
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
@@ -31,7 +31,10 @@ class Tableless < ActiveRecord::Base
     end
 
     def column_defaults
-      @column_defaults ||= columns.map { |column| [column.name, nil] }.inject({}) { |m, e| m[e[0]] = e[1]; m }
+      @column_defaults ||= columns.map { |column| [column.name, nil] }.reduce({}) do |a, e|
+        a[e[0]] = e[1]
+        a
+      end
     end
   end
 

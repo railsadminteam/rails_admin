@@ -1,5 +1,5 @@
 class DropRailsAdminHistoriesTable < ActiveRecord::Migration
-   def self.up
+  def self.up
     drop_table :rails_admin_histories
   end
 
@@ -13,6 +13,6 @@ class DropRailsAdminHistoriesTable < ActiveRecord::Migration
       t.integer :year, :limit => 5
       t.timestamps
     end
-    add_index(:rails_admin_histories, [:item, :table, :month, :year], :name => 'index_rails_admin_histories' )
+    add_index(:rails_admin_histories, [:item, :table, :month, :year], :name => 'index_rails_admin_histories')
   end
 end

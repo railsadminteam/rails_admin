@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
             @history = @auditing_adapter && @auditing_adapter.latest || []
             if @action.statistics?
               @abstract_models = RailsAdmin::Config.visible_models(:controller => self).map(&:abstract_model)
@@ -26,7 +26,7 @@ module RailsAdmin
                 current_count = t.count({}, scope)
                 @max = current_count > @max ? current_count : @max
                 @count[t.pretty_name] = current_count
-                if t.properties.find{|c| c[:name] == :updated_at }
+                if t.properties.detect { |c| c[:name] == :updated_at }
                   @most_recent_changes[t.pretty_name] = t.first(:sort => "#{t.table_name}.updated_at").try(:updated_at)
                 end
               end

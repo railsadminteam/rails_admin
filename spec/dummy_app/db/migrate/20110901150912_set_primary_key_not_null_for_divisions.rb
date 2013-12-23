@@ -7,7 +7,6 @@ class SetPrimaryKeyNotNullForDivisions < ActiveRecord::Migration
       t.integer :custom_league_id
       t.string :name, :limit => 50, :null => false
     end
-
   end
 
   def down

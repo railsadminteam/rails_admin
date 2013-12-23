@@ -5,7 +5,7 @@ module RailsAdmin
     module Fields
       module Types
         class Color < RailsAdmin::Config::Fields::Base
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :pretty_value do
             bindings[:view].content_tag :strong, (value.presence || ' - '), :style => "color: #{color}"

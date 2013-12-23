@@ -5,14 +5,10 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
-
+        attr_reader :properties
+        alias_method :association, :properties
         def self.inherited(klass)
           super(klass)
-        end
-
-        # Reader for the association information hash
-        def association
-          @properties
         end
 
         register_instance_option :pretty_value do
@@ -30,7 +26,7 @@ module RailsAdmin
         # association checks whether the child model is excluded in
         # configuration or not.
         register_instance_option :visible? do
-          @visible ||= !self.associated_model_config.excluded?
+          @visible ||= !associated_model_config.excluded?
         end
 
         # use the association name as a key, not the association key anymore!
@@ -41,8 +37,8 @@ module RailsAdmin
         # scope for possible associable records
         register_instance_option :associated_collection_scope do
           # bindings[:object] & bindings[:controller] available
-          associated_collection_scope_limit = (self.associated_collection_cache_all ? nil : 30)
-          Proc.new do |scope|
+          associated_collection_scope_limit = (associated_collection_cache_all ? nil : 30)
+          proc do |scope|
             scope.limit(associated_collection_scope_limit)
           end
         end

@@ -36,7 +36,7 @@ class Team
   validates_length_of :mascot, :maximum => 100
 
   def player_names_truncated
-    players.map{|p| p.name}.join(", ")[0..32]
+    players.map { |p| p.name }.join(', ')[0..32]
   end
 
   def color_enum
