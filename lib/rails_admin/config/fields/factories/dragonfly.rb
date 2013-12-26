@@ -6,12 +6,13 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   extensions = [:name, :uid]
   parent.abstract_model.model
 
-  if (properties[:name].to_s =~ /^(.+)_uid$/) && defined?(::Dragonfly) && parent.abstract_model.model.dragonfly_attachment_classes.map(&:attribute).include?(attachment_name = Regexp.last_match[1].to_sym)
+  if (properties[:name].to_s =~ /^(.+)_uid$/) && defined?(::Dragonfly) && parent.abstract_model.model.dragonfly_attachment_classes.map(&:attribute).include?((attachment_name = Regexp.last_match[1].to_sym))
     field = RailsAdmin::Config::Fields::Types.load(:dragonfly).new(parent, attachment_name, properties)
     children_fields = []
     extensions.each do |ext|
       children_column_name = "#{attachment_name}_#{ext}".to_sym
-      if child_properties = parent.abstract_model.properties.detect { |p| p[:name].to_s == children_column_name.to_s }
+      child_properties = parent.abstract_model.properties.detect { |p| p[:name].to_s == children_column_name.to_s }
+      if child_properties
         children_field = fields.detect { |f| f.name == children_column_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_properties, fields)
         children_field.hide
         children_field.filterable(false)

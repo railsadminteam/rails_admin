@@ -12,7 +12,8 @@ module RailsAdmin
       end
 
       def get(id)
-        if object = model.where(primary_key => id).first
+        object = model.where(primary_key => id).first
+        if object
           AbstractObject.new object
         end
       end

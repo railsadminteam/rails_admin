@@ -56,7 +56,7 @@ module RailsAdmin
       if @encoding_to =~ NON_ASCII_ENCODINGS && @encoding_to != @encoding_from
         require 'iconv'
         begin
-          if @iconv = Iconv.new("#{@encoding_to}//TRANSLIT//IGNORE", @encoding_from)
+          if Iconv.new("#{@encoding_to}//TRANSLIT//IGNORE", @encoding_from)
             csv_string = @iconv.iconv(csv_string)
           end
         rescue

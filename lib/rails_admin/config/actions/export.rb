@@ -15,7 +15,8 @@ module RailsAdmin
         register_instance_option :controller do
           proc do
 
-            if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
+            format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
+            if format
               request.format = format
               @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
               @objects = list_entries(@model_config, :export)
