@@ -20,7 +20,11 @@ module RailsAdmin
 
     def install
       routes = File.open(Rails.root.join('config/routes.rb')).try :read
-      initializer = (File.open(Rails.root.join('config/initializers/rails_admin.rb')) rescue nil).try :read
+      begin
+        initializer = File.open(Rails.root.join('config/initializers/rails_admin.rb'))
+      rescue
+        nil.try :read
+      end
 
       display 'Hello, RailsAdmin installer will help you set things up!', :blue
       display "I need to work with Devise, let's look at a few things first:"
@@ -74,7 +78,11 @@ module RailsAdmin
       if initializer
         display "You already have a config file. You're updating, heh? I'm generating a new 'rails_admin.rb.example' that you can review."
         template 'initializer.erb', 'config/initializers/rails_admin.rb.example'
-        config_tag = initializer.match(/RailsAdmin\.config.+\|(.+)\|/)[1] rescue nil
+        config_tag = begin
+                       initializer.match(/RailsAdmin\.config.+\|(.+)\|/)[1]
+                     rescue
+                       nil
+                     end
         if config_tag
           if initializer.index(::Regexp.new("#{config_tag}\.current_user_method.?\{.+?\}"))
             display "current_user_method found and updated with '#{@current_user_method}'", :green
@@ -90,7 +98,11 @@ module RailsAdmin
         template 'initializer.erb', 'config/initializers/rails_admin.rb'
       end
       display 'Adding a migration...'
-      migration_template 'migration.rb', 'db/migrate/create_rails_admin_histories_table.rb' rescue display $ERROR_INFO.message
+      begin
+        migration_template 'migration.rb', 'db/migrate/create_rails_admin_histories_table.rb'
+      rescue
+        display $ERROR_INFO.message
+      end
       display "Job's done: migrate, start your server and visit '/#{namespace}'!", :blue
     end
   end

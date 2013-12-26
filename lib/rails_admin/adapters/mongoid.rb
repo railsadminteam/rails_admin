@@ -340,7 +340,11 @@ module RailsAdmin
 
         def foreign_key_lookup
           if [:embeds_one, :embeds_many].exclude?(macro.to_sym)
-            foreign_key.to_sym rescue nil
+            begin
+              foreign_key.to_sym
+            rescue
+              nil
+            end
           end
         end
 
@@ -424,7 +428,11 @@ module RailsAdmin
         end
 
         def build_statement_for_belongs_to_association_or_bson_object_id
-          object_id = (object_id_from_string(@value) rescue nil)
+          begin
+            object_id = object_id_from_string(@value)
+          rescue
+            nil
+          end
           {@column => object_id} if object_id
         end
 

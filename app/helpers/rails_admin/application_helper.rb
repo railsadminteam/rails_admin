@@ -33,7 +33,11 @@ module RailsAdmin
     def logout_path
       if defined?(Devise)
         scope = Devise::Mapping.find_scope!(_current_user)
-        main_app.send("destroy_#{scope}_session_path") rescue false
+        begin
+          main_app.send("destroy_#{scope}_session_path")
+        rescue
+          false
+        end
       end
     end
 

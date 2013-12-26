@@ -57,7 +57,7 @@ module RailsAdmin
         require 'iconv'
         begin
           if @iconv = Iconv.new("#{@encoding_to}//TRANSLIT//IGNORE", @encoding_from)
-            csv_string = @iconv.iconv(csv_string) rescue csv_string
+            csv_string = @iconv.iconv(csv_string)
           end
         rescue
           Rails.logger.error("Iconv cannot convert to #{@encoding_to}: #{$ERROR_INFO}\nNo conversion will take place")
@@ -116,7 +116,11 @@ module RailsAdmin
       return str.to_s if @encoding_to =~ NON_ASCII_ENCODINGS || !@iconv
 
       # Convert piece by piece
-      @iconv.iconv(str.to_s) rescue str.to_s
+      begin
+        @iconv.iconv(str.to_s)
+      rescue
+        str.to_s
+      end
     end
   end
 end
