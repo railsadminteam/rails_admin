@@ -2,6 +2,7 @@ bundler_args: --without development
 rvm:
   - 1.9.3
   - 2.0.0
+  - 2.1.0
   - rbx
   - ruby-head
 env:
@@ -10,9 +11,9 @@ env:
 language: ruby
 matrix:
   include:
-    - rvm: 2.0.0
+    - rvm: 2.1.0
       env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
-    - rvm: 2.0.0
+    - rvm: 2.1.0
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
     - rvm: jruby-19mode
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
@@ -21,6 +22,10 @@ matrix:
     - rvm: jruby-20mode
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
     - rvm: jruby-20mode
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
+    - rvm: jruby-21mode
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
+    - rvm: jruby-21mode
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
