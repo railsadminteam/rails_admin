@@ -17,13 +17,13 @@ module RailsAdmin
 
             if request.post? # BULK DELETE
 
-              @objects = list_entries(@model_config, :destroy)
+              @objects = list_entries(auth_scope_key: :destroy)
 
               render @action.template_name
 
             elsif request.delete? # BULK DESTROY
 
-              @objects = list_entries(@model_config, :destroy)
+              @objects = list_entries(auth_scope_key: :destroy)
               processed_objects = @abstract_model.destroy(@objects)
 
               destroyed = processed_objects.select(&:destroyed?)
