@@ -27,7 +27,7 @@ $(document).ready ->
         editor.updateElement();
     return true;
 ```
-Add this code to assets/rails_admin/custom/ckeditor_ajax.js.coffee and create a file assets/rails_admin/custom/ui.js that loads this coffee file into asset pipeline:
+Add this code to assets/javascripts/rails_admin/custom/ckeditor_ajax.js.coffee and create a file assets/javascripts/rails_admin/custom/ui.js that loads this coffee file into asset pipeline:
 ```
 //= require rails_admin/custom/ckeditor_ajax
 ```
