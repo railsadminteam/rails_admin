@@ -147,3 +147,4 @@
 * [Manage state_machine states with rails_admin](https://github.com/rs-pro/rails_admin_state)
 * [Clone records](https://github.com/dalpo/rails_admin_clone)
 * [Tabbed interface and custom field type for globalize3 translations](https://github.com/scarfaceDeb/rails_admin_globalize_field)
+* [Support for mongoid localized fields](https://github.com/sudosu/rails_admin_mongoid_localize_filed)
