@@ -122,7 +122,14 @@ module RailsAdmin
     end
 
     # parent => :root, :collection, :member
-    def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
+    def menu_for(parent, options = {})
+      abstract_model = options[:abstract_model]
+      object = options[:object]
+      only_icon = if options.has_key?(:only_icon)
+                    options[:only_icon]
+                  else
+                    false
+                  end
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
       actions.map do |action|
         wording = wording_for(:menu, action: action)

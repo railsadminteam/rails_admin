@@ -176,13 +176,13 @@ describe RailsAdmin::ApplicationHelper do
         @object = Team.new(:name => 'the avengers')
 
         expect(helper.menu_for(:root)).to match /Dashboard/
-        expect(helper.menu_for(:collection, @abstract_model)).to match /List/
-        expect(helper.menu_for(:member, @abstract_model, @object)).to match /Show/
+        expect(helper.menu_for(:collection, abstract_model: @abstract_model)).to match /List/
+        expect(helper.menu_for(:member, abstract_model: @abstract_model, object: @object)).to match /Show/
 
         @abstract_model = RailsAdmin::AbstractModel.new(Player)
         @object = Player.new
-        expect(helper.menu_for(:collection, @abstract_model)).not_to match /List/
-        expect(helper.menu_for(:member, @abstract_model, @object)).not_to match /Show/
+        expect(helper.menu_for(:collection, abstract_model: @abstract_model)).not_to match /List/
+        expect(helper.menu_for(:member, abstract_model: @abstract_model, object: @object)).not_to match /Show/
       end
 
       it 'excludes non-get actions' do

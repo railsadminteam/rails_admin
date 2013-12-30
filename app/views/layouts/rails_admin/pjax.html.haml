@@ -11,6 +11,6 @@
     = value
 = breadcrumb
 %ul.nav.nav-tabs
-  = menu_for((@abstract_model ? (@object.try(:persisted?) ? :member : :collection) : :root), @abstract_model, @object)
+  = menu_for((@abstract_model ? (@object.try(:persisted?) ? :member : :collection) : :root), abstract_model: @abstract_model, object: @object)
   = content_for :contextual_tabs
 = yield

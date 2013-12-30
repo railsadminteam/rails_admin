@@ -27,7 +27,7 @@
                 .bar.animate-width-to{:'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent].max.to_i}%", :style => "width:2%"}
                   = @count[abstract_model.pretty_name]
             %td.links
-              %ul.inline= menu_for :collection, abstract_model, nil, true
+              %ul.inline= menu_for :collection, abstract_model: abstract_model, only_icon: true
 - if @auditing_adapter && authorized?(:history)
   #block-tables.block
     .content
