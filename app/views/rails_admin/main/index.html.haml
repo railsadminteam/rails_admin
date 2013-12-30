@@ -97,7 +97,7 @@
         %i.icon-white.icon-refresh
         = t("admin.misc.refresh")
       - if export_action
-        %span{:style => 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
+        %span{:style => 'float:right'}= link_to wording_for(:link, action: export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
 
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action

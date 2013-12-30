@@ -116,11 +116,11 @@ describe RailsAdmin::ApplicationHelper do
           end
         end
 
-        expect(helper.wording_for(:menu, :index)).to eq('List')
+        expect(helper.wording_for(:menu, action: :index)).to eq('List')
       end
 
       it 'passes correct bindings' do
-        expect(helper.wording_for(:title, :edit, RailsAdmin::AbstractModel.new(Team), Team.new(:name => 'the avengers'))).to eq("Edit Team 'the avengers'")
+        expect(helper.wording_for(:title, action: :edit, abstract_model: RailsAdmin::AbstractModel.new(Team), object: Team.new(:name => 'the avengers'))).to eq("Edit Team 'the avengers'")
       end
 
       it 'defaults correct bindings' do
@@ -134,7 +134,7 @@ describe RailsAdmin::ApplicationHelper do
         @abstract_model = RailsAdmin::AbstractModel.new(Draft)
         @object = Draft.new
 
-        expect(helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team))).to eq('Add a new Team')
+        expect(helper.wording_for(:link, action: :new, abstract_model: RailsAdmin::AbstractModel.new(Team))).to eq('Add a new Team')
       end
 
     end
