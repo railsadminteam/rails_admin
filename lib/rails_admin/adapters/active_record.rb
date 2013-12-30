@@ -138,7 +138,7 @@ module RailsAdmin
         scope
       end
 
-      def build_statement(column, type, value, operator)
+      def build_statement(column, type, value, operator) #rubocop:disable ParameterLists
         StatementBuilder.new(column, type, value, operator).to_statement
       end
 

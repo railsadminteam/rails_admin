@@ -62,7 +62,7 @@ module RailsAdmin
           # do nothing
         end
 
-        def update_object(object, model, user, changes)
+        def update_object(object, model, user, changes) #rubocop:disable ParameterLists
           # do nothing
         end
 
@@ -70,17 +70,17 @@ module RailsAdmin
           # do nothing
         end
 
-        def listing_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+        def listing_for_model(model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20)) #rubocop:disable ParameterLists
           listing_for_model_or_object(model, nil, query, sort, sort_reverse, all, page, per_page)
         end
 
-        def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
+        def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20)) #rubocop:disable ParameterLists
           listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page)
         end
 
       protected
 
-        def listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page)
+        def listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page) #rubocop:disable ParameterLists
           if sort.present?
             sort = COLUMN_MAPPING[sort.to_sym]
           else

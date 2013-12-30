@@ -43,7 +43,7 @@ module RailsAdmin
           add_action key, parent_class, :root, &block
         end
 
-        def add_action(key, parent_class, parent, &block)
+        def add_action(key, parent_class, parent, &block) #rubocop:disable ParameterLists
           a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
           a.instance_eval(%{
             #{parent} true
