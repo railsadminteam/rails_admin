@@ -20,14 +20,6 @@ matrix:
       env: CI_ORM=mongoid JRUBY_OPTS="$JRUBY_OPTS --debug"
     - rvm: jruby-19mode
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
-    - rvm: jruby-20mode
-      env: CI_ORM=mongoid JRUBY_OPTS="$JRUBY_OPTS --debug"
-    - rvm: jruby-20mode
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
-    - rvm: jruby-21mode
-      env: CI_ORM=mongoid JRUBY_OPTS="$JRUBY_OPTS --debug"
-    - rvm: jruby-21mode
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
     - rvm: jruby-head
       env: CI_ORM=mongoid JRUBY_OPTS="$JRUBY_OPTS --debug"
     - rvm: jruby-head
