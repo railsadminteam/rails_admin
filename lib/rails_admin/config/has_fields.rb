@@ -3,7 +3,7 @@ module RailsAdmin
     # Provides accessors and autoregistering of model's fields.
     module HasFields
       # Defines a configuration for a field.
-      def field(name, type = nil, add_to_section = true, &block)
+      def field(name, type = nil, add_to_section = true, &block) #rubocop:disable ParameterLists
         field = _fields.detect { |f| name == f.name }
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
