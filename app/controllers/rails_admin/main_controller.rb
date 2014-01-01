@@ -31,11 +31,11 @@ module RailsAdmin
       model_config = options[:model_config] || @model_config
       auth_scope_key = options[:auth_scope_key] || :index
       additional_scope = options[:additional_scope] || get_association_scope_from_params
-      pagination =  if options.has_key?(:pagination)
-                      options[:pagination]
-                    else
-                      !(params[:associated_collection] || params[:all] || params[:bulk_ids])
-                    end
+      pagination = if options.has_key?(:pagination)
+        options[:pagination]
+      else
+        !(params[:associated_collection] || params[:all] || params[:bulk_ids])
+      end
 
       scope = model_config.abstract_model.scoped
       if (auth_scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model))

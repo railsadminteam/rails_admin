@@ -108,12 +108,12 @@ module RailsAdmin
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, :class => current_action?(a, am, o) && 'active') do
             crumb = if a.http_methods.include?(:get)
-                      link_to url_for(:action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil)), :class => 'pjax' do
-                        wording_for(:breadcrumb, action: a, abstract_model: am, object: o)
-                      end
-                    else
-                      content_tag(:span, wording_for(:breadcrumb, action: a, abstract_model: am, object: o))
-                    end
+              link_to(url_for(:action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil)), :class => 'pjax') do
+                wording_for(:breadcrumb, action: a, abstract_model: am, object: o)
+              end
+            else
+              content_tag(:span, wording_for(:breadcrumb, action: a, abstract_model: am, object: o))
+            end
             crumb += content_tag(:span, '/', :class => 'divider') unless current_action?(a, am, o)
             crumb
           end
@@ -126,10 +126,10 @@ module RailsAdmin
       abstract_model = options[:abstract_model]
       object = options[:object]
       only_icon = if options.has_key?(:only_icon)
-                    options[:only_icon]
-                  else
-                    false
-                  end
+        options[:only_icon]
+      else
+        false
+      end
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
       actions.map do |action|
         wording = wording_for(:menu, action: action)
