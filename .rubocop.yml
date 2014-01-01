@@ -73,3 +73,7 @@ EndAlignment:
 CaseIndentation:
   IndentWhenRelativeTo: end
   IndentOneStep: false
+
+# Use the old lambda literal syntax
+Lambda:
+  Enabled: false
