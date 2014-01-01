@@ -15,113 +15,66 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-## Announcements
-### Support for ActiveModel::MassAssignmentSecurity has been dropped
-
-RailsAdmin no longer controls field visibility regarding attr_accessible status, nor uses role on mass assignment.
-See discussion [here](https://github.com/sferik/rails_admin/issues/1443#issuecomment-17132073).
-
-### Richtext editor DSL(for CKEditor, CodeMirror, bootstrap-wysihtml5) has been changed
-
-They are configured by field type, not through Text field's extra options. For detail, see [CKEditor](https://github.com/sferik/rails_admin/wiki/CKEditor), [CodeMirror](https://github.com/sferik/rails_admin/wiki/CodeMirror), [Wysihtml5](https://github.com/sferik/rails_admin/wiki/Wysihtml5) in Wiki.
-
-### [Action required] Security issue
-`RailsAdmin::Config::Fields::Types::Serialized#parse_input` was unsafe, because it was using the infamous `YAML#load`.
-
-To fix this, RailsAdmin now uses [safe_yaml](https://github.com/dtao/safe_yaml), with `enable_arbitrary_object_deserialization` and `suppress_warnings` on, for maximum compatibity with all existing apps.
-
-Incidentally, if you want to safely load YAML in your own app, you can use `YAML.load(something, safe: true)`, since RailsAdmin does not force safe load by default (you might be parsing objects in YAML coming from a safe source).
-
-If you use Serialized with RailsAdmin with non-totally-trusted users, your server is at risk. Update your gem to `> 0.4.3` (should be released any time soon) or to at least this [patched commit](https://github.com/sferik/rails_admin/commit/3cc862d061f541200b93531122f7dac4b1c7a68b) if you use `master~HEAD`
-
-Rails3.0 and other non-maintained branches may be at risk too, I strongly advise against using those any longer.
-
-More information about the whole drama [here](https://github.com/tenderlove/psych/issues/119).
-
 ## Features
-* Display database tables
-* Create new data
-* Easily update data
-* Safely delete data
+* CRUD any data with ease
 * Custom actions
 * Automatic form validation
 * Search and filtering
 * Export data to CSV/JSON/XML
-* Authentication (via [Devise](https://github.com/plataformatec/devise))
+* Authentication (via [Devise](https://github.com/plataformatec/devise) or other)
 * Authorization (via [Cancan](https://github.com/ryanb/cancan))
 * User action history (internally or via [PaperTrail](https://github.com/airblade/paper_trail))
 * Supported ORMs
   * ActiveRecord
-  * Mongoid [new]
+  * Mongoid
+
+## Installation
+After you bundled the gem, mount RailsAdmin gem in `config/routes.rb`:
+
+```ruby
+mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Change '/admin' to any namespace you like.
+```
+
+Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin).
+
+## Configuration
+### Global
+In `config/initializers/rails_admin`:
+
+```ruby
+RailsAdmin.config do |config|
+  config.current_user_method &:current_user                      # Block yielding a current user in ApplicationController's context. Optional.
+  config.authorize_with :Cancan, Ability                         # Cancan setup, optional.
+  config.audit_with :paper_trail, 'User', 'PaperTrail::Version'  # PaperTrail setup, optional.
+end
+```
+
+Full documentation in the [Wiki](https://github.com/sferik/rails_admin/wiki/Base-configuration)
+
+### Per model
+```ruby
+class Ball < ActiveRecord::Base
+  validates :name, presence: true
+  belongs_to :player
+
+  rails_admin do
+    configure :player do
+      label 'Owner of this ball: '
+    end
+  end
+end
+```
+
+Full documentation in the [Wiki](https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL)
+
+## Documentation
+https://github.com/sferik/rails_admin/wiki
 
 ## Demo
 Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy_app])
 
 [demo]: http://rails-admin-tb.herokuapp.com/
 [dummy_app]: https://github.com/bbenezech/dummy_app
-
-## Installation
-In your `Gemfile`, add the following dependencies:
-
-    gem 'fastercsv' # Only required on Ruby 1.8 and below
-    gem 'rails_admin'
-
-Run:
-
-    bundle install
-
-And then run:
-
-    rails g rails_admin:install
-
-This generator will install RailsAdmin and [Devise](https://github.com/plataformatec/devise) if you
-don't already have it installed. [Devise](https://github.com/plataformatec/devise) is strongly
-recommended to protect your data from anonymous users. Note: If you do not already have [Devise](https://github.com/plataformatec/devise)
-installed, make sure you remove the registerable module from the generated user model.
-
-It will modify your `config/routes.rb`, adding:
-
-```ruby
-mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Feel free to change '/admin' to any namespace you need.
-```
-
-Note: The `devise_for` route must be placed before the mounted engine. The following will generate infinite redirects.
-
-```ruby
-mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-devise_for :admins
-```
-
-This will resolve the infinite redirect error:
-
-```ruby
-devise_for :admins
-mount RailsAdmin::Engine => '/rails_admin', :as => 'rails_admin'
-```
-
-See [#715](https://github.com/sferik/rails_admin/issues/715) for more details.
-
-It will also add an intializer that will help you getting started. (head for config/initializers/rails_admin.rb)
-
-Finally run:
-
-    bundle exec rake db:migrate
-
-Optionally, you may wish to set up [Cancan](https://github.com/ryanb/cancan),
-[PaperTrail](https://github.com/airblade/paper_trail), [CKeditor](https://github.com/galetahub/ckeditor), [CodeMirror](https://github.com/fixlr/codemirror-rails)
-
-More on that in the [Wiki](https://github.com/sferik/rails_admin/wiki)
-
-## Usage
-Start the server:
-
-    rails server
-
-You should now be able to administer your site at
-[http://localhost:3000/admin](http://localhost:3000/admin).
-
-## Configuration
-All configuration documentation has moved to the wiki: https://github.com/sferik/rails_admin/wiki
 
 ## Screenshots
 ![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "dashboard view")
