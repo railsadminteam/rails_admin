@@ -408,17 +408,17 @@ module RailsAdmin
         def build_statement_for_string_or_text
           return if @value.blank?
           @value = case @operator
-                   when 'default', 'like'
-                     Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
-                   when 'starts_with'
-                     Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
-                   when 'ends_with'
-                     Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
-                   when 'is', '='
-                     @value.to_s
-                   else
-                     return
-                   end
+          when 'default', 'like'
+            Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
+          when 'starts_with'
+            Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
+          when 'ends_with'
+            Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
+          when 'is', '='
+            @value.to_s
+          else
+            return
+          end
           {@column => @value}
         end
 

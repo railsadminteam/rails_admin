@@ -276,17 +276,17 @@ module RailsAdmin
         def build_statement_for_string_or_text
           return if @value.blank?
           @value = case @operator
-                   when 'default', 'like'
-                     "%#{@value.downcase}%"
-                   when 'starts_with'
-                     "#{@value.downcase}%"
-                   when 'ends_with'
-                     "%#{@value.downcase}"
-                   when 'is', '='
-                     "#{@value.downcase}"
-                   else
-                     return
-                   end
+          when 'default', 'like'
+            "%#{@value.downcase}%"
+          when 'starts_with'
+            "#{@value.downcase}%"
+          when 'ends_with'
+            "%#{@value.downcase}"
+          when 'is', '='
+            "#{@value.downcase}"
+          else
+            return
+          end
           ["(LOWER(#{@column}) #{like_operator} ?)", @value]
         end
 
