@@ -91,7 +91,7 @@
 ### User integration
 
 * [[Authentication]]
-* [[Authorization setup]]
+* [[Authorization]]
 * [[Mass-assignments protection]]
 * Auditing (change history)
   * [[History (internal)|History]]
