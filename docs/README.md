@@ -91,7 +91,7 @@
 ### User integration
 
 * [[Authentication]]
-  * [[Devise|https://github.com/plataformatec/devise]]
+  * [[Devise]]
   * [[Sorcery]]
   * [[Manually]]
 * [[Authorization setup]]
