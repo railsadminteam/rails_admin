@@ -91,9 +91,9 @@
 ### User integration
 
 * [[Authentication]]
-  * With [[Devise|https://github.com/plataformatec/devise]] (installed by default)
+  * [[Devise|https://github.com/plataformatec/devise]]
   * [[Sorcery]]
-  * [[Manually (without Devise)]]
+  * [[Manually]]
 * [[Authorization setup]]
   * [[CanCan (recommended)|CanCan]]
   * [[CanCan with relation to current Model|CanCan:-remove-associated-action-buttons-in-forms]]
