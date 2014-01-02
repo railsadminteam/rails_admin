@@ -6,7 +6,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Fields.registry
       mattr_reader :default_factory
-      @@default_factory = lambda do |parent, properties, fields| #rubocop:disable ClassVars
+      @@default_factory = lambda do |parent, properties, fields| # rubocop:disable ClassVars
         # If it's an association
         if properties.key?(:model_proc)
           association = parent.abstract_model.associations.detect { |a| a[:name].to_s == properties[:name].to_s }

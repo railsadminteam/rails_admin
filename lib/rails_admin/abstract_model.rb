@@ -110,7 +110,7 @@ module RailsAdmin
     end
 
     class StatementBuilder
-      def initialize(column, type, value, operator) #rubocop:disable ParameterLists
+      def initialize(column, type, value, operator) # rubocop:disable ParameterLists
         @column = column
         @type = type
         @value = value

@@ -16,7 +16,7 @@ module RailsAdmin
           ::RailsAdmin::History.create_history_item('delete', object, model, user)
         end
 
-        def update_object(object, model, user, changes) #rubocop:disable ParameterLists
+        def update_object(object, model, user, changes) # rubocop:disable ParameterLists
           ::RailsAdmin::History.create_history_item(changes.map { |k, v| "#{k}: #{v.map(&:inspect).join(' -> ')}" }, object, model, user)
         end
 

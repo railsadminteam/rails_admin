@@ -6,7 +6,7 @@ require 'rails_admin/config/groupable'
 module RailsAdmin
   module Config
     module Fields
-      class Base #rubocop:disable ClassLength
+      class Base # rubocop:disable ClassLength
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable

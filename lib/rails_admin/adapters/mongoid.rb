@@ -99,7 +99,7 @@ module RailsAdmin
 
     private
 
-      def build_statement(column, type, value, operator) #rubocop:disable ParameterLists
+      def build_statement(column, type, value, operator) # rubocop:disable ParameterLists
         StatementBuilder.new(column, type, value, operator).to_statement
       end
 
