@@ -48,7 +48,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-Documentation in the [Wiki](https://github.com/sferik/rails_admin/wiki/Base-configuration)
+[Details](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
 ### Per model
 ```ruby
@@ -64,7 +64,7 @@ class Ball < ActiveRecord::Base
 end
 ```
 
-Full documentation in the [Wiki](https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL)
+[Details](https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL)
 
 ## Documentation
 https://github.com/sferik/rails_admin/wiki
