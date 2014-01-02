@@ -183,16 +183,16 @@ describe 'RailsAdmin CanCan Authorization' do
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => 'player')
-        should have_css('.show_member_link')
-        should_not have_css('.edit_member_link')
-        should_not have_css('.delete_member_link')
-        should have_css('.history_show_member_link')
+      should have_css('.show_member_link')
+      should_not have_css('.edit_member_link')
+      should_not have_css('.delete_member_link')
+      should have_css('.history_show_member_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
-        should have_content('Show')
-        should_not have_content('Edit')
-        should_not have_content('Delete')
-        should have_content('History')
+      should have_content('Show')
+      should_not have_content('Edit')
+      should_not have_content('Delete')
+      should have_content('History')
 
     end
   end
@@ -204,18 +204,18 @@ describe 'RailsAdmin CanCan Authorization' do
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => 'player')
-        should have_css('.show_member_link')
-        should_not have_css('.edit_member_link')
-        should_not have_css('.delete_member_link')
-        should_not have_css('.history_show_member_link')
-        should have_css('.show_in_app_member_link')
+      should have_css('.show_member_link')
+      should_not have_css('.edit_member_link')
+      should_not have_css('.delete_member_link')
+      should_not have_css('.history_show_member_link')
+      should have_css('.show_in_app_member_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
-        should have_content('Show')
-        should_not have_content('Edit')
-        should_not have_content('Delete')
-        should_not have_content('History')
-        should have_content('Show in app')
+      should have_content('Show')
+      should_not have_content('Edit')
+      should_not have_content('Delete')
+      should_not have_content('History')
+      should have_content('Show in app')
 
     end
   end
@@ -227,18 +227,18 @@ describe 'RailsAdmin CanCan Authorization' do
       @player = FactoryGirl.create :player
 
       visit index_path(:model_name => 'player')
-        should have_css('.show_member_link')
-        should have_css('.edit_member_link')
-        should have_css('.delete_member_link')
-        should have_css('.history_show_member_link')
-        should have_css('.show_in_app_member_link')
+      should have_css('.show_member_link')
+      should have_css('.edit_member_link')
+      should have_css('.delete_member_link')
+      should have_css('.history_show_member_link')
+      should have_css('.show_in_app_member_link')
 
       visit show_path(:model_name => 'player', :id => @player.id)
-        should have_content('Show')
-        should have_content('Edit')
-        should have_content('Delete')
-        should have_content('History')
-        should have_content('Show in app')
+      should have_content('Show')
+      should have_content('Edit')
+      should have_content('Delete')
+      should have_content('History')
+      should have_content('Show in app')
 
     end
   end

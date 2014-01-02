@@ -16,7 +16,7 @@ describe 'RailsAdmin Config DSL Show Section' do
   describe 'JSON show view' do
     before do
       @player = FactoryGirl.create :player
-       visit uri
+      visit uri
     end
 
     let(:uri) { show_path(:model_name => 'player', :id => @player.id, :format => :json) }
