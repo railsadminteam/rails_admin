@@ -73,10 +73,6 @@ RSpec.configure do |config|
     RailsAdmin::AbstractModel.reset
     RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
     RailsAdmin::Config.yell_for_non_accessible_fields = false
-    login_as User.create(
-      :email => "username@example.com",
-      :password => "password"
-    )
   end
 
   config.after(:each) do

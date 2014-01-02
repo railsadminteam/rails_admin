@@ -43,13 +43,12 @@ In `config/initializers/rails_admin`:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.current_user_method &:current_user                      # Block yielding a current user in ApplicationController's context. Optional.
-  config.authorize_with :Cancan, Ability                         # Cancan setup, optional.
-  config.audit_with :paper_trail, 'User', 'PaperTrail::Version'  # PaperTrail setup, optional.
+  config.main_app_name = ["Cool app", "BackOffice"]
+  # ...
 end
 ```
 
-Full documentation in the [Wiki](https://github.com/sferik/rails_admin/wiki/Base-configuration)
+Documentation in the [Wiki](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
 ### Per model
 ```ruby
@@ -75,13 +74,6 @@ Take RailsAdmin for a [test drive][demo] with sample data. ([Source code.][dummy
 
 [demo]: http://rails-admin-tb.herokuapp.com/
 [dummy_app]: https://github.com/bbenezech/dummy_app
-
-## Screenshots
-![Dashboard view](https://github.com/sferik/rails_admin/raw/master/screenshots/dashboard.png "dashboard view")
-![Delete view](https://github.com/sferik/rails_admin/raw/master/screenshots/delete.png "delete view")
-![List view](https://github.com/sferik/rails_admin/raw/master/screenshots/list.png "list view")
-![Nested view](https://github.com/sferik/rails_admin/raw/master/screenshots/nested.png "nested view")
-![Polymorphic edit view](https://github.com/sferik/rails_admin/raw/master/screenshots/polymorphic.png "polymorphic view")
 
 ## Support
 If you have a question, please check this README, the wiki, and the [list of

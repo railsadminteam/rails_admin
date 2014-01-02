@@ -12,18 +12,13 @@ module RailsAdmin
     #
     # @see RailsAdmin::Config.authenticate_with
     # @see RailsAdmin::Config.authorize_with
-    DEFAULT_AUTHENTICATION = Proc.new do
-      request.env['warden'].try(:authenticate!)
-    end
+    DEFAULT_AUTHENTICATION = Proc.new {}
 
     DEFAULT_AUTHORIZE = Proc.new {}
 
     DEFAULT_AUDIT = Proc.new {}
 
-    DEFAULT_CURRENT_USER = Proc.new do
-      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
-    end
-
+    DEFAULT_CURRENT_USER = Proc.new {}
 
     class << self
       # Application title, can be an array of two elements

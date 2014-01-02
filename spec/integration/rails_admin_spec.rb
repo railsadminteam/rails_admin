@@ -4,15 +4,13 @@ describe RailsAdmin do
 
   subject { page }
 
-  describe "authentication" do
-    it "is disableable" do
-      logout
-      RailsAdmin.config do |config|
-        config.included_models = []
-        config.authenticate_with {}
-      end
-      visit dashboard_path
-    end
+  before do
+    RailsAdmin::Config.authenticate_with { warden.authenticate! scope: :user }
+    RailsAdmin::Config.current_user_method &:current_user
+    login_as User.create(
+      :email => "username@example.com",
+      :password => "password"
+    )
   end
 
   # A common mistake for translators is to forget to change the YAML file's
@@ -75,6 +73,7 @@ describe RailsAdmin do
   describe "_current_user" do # https://github.com/sferik/rails_admin/issues/549
 
     it "is accessible from the list view" do
+
       RailsAdmin.config Player do
         list do
           field :name do
