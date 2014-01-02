@@ -2,6 +2,19 @@ require 'builder'
 
 module RailsAdmin
   module MainHelper
+    def get_collection(model_config, scope, pagination)
+      associations = model_config.list.fields.select { |f| f.type == :belongs_to_association && !f.polymorphic? }.map { |f| f.association[:name] }
+      options = {}
+      options = options.merge(:page => (params[Kaminari.config.param_name] || 1).to_i, :per => (params[:per] || model_config.list.items_per_page)) if pagination
+      options = options.merge(:include => associations) unless associations.blank?
+      options = options.merge(get_sort_hash(model_config))
+      options = options.merge(:query => params[:query]) if params[:query].present?
+      options = options.merge(:filters => params[:f]) if params[:f].present?
+      options = options.merge(:bulk_ids => params[:bulk_ids]) if params[:bulk_ids]
+
+      model_config.abstract_model.all(options, scope)
+    end
+
     def rails_admin_form_for(*args, &block)
       options = args.extract_options!.reverse_merge(:builder => RailsAdmin::FormBuilder)
       form_for(*(args << options), &block) << after_nested_form_callbacks
