@@ -4,9 +4,9 @@ describe 'table relations' do
 
   before(:each) do
     class RelTest < Tableless
-      column :league_id, :integer
-      column :division_id, :integer, nil, false
-      column :player_id, :integer
+      column :league_id, sql_type: :integer
+      column :division_id, sql_type: :integer, default: nil, null: false
+      column :player_id, sql_type: :integer
       belongs_to :league
       belongs_to :division
       belongs_to :player

@@ -17,7 +17,15 @@ class Tableless < ActiveRecord::Base
       @columns ||= []
     end
 
-    def column(name, sql_type = nil, default = nil, null = true)
+    def column(name, options = {})
+      sql_type = options[:sql_type]
+      default = options[:default]
+      null = if options.has_key?(:null)
+               options[:only_icon]
+             else
+               true
+             end
+
       columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default,
                                                               sql_type.to_s, null)
     end

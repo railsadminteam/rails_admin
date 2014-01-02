@@ -45,8 +45,8 @@ describe RailsAdmin::Config::Fields::Base do
 
     it 'has correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column' do
       class CommentReversed < Tableless
-        column :commentable_type, :string
-        column :commentable_id, :integer
+        column :commentable_type, sql_type: :string
+        column :commentable_id, sql_type: :integer
         belongs_to :commentable, :polymorphic => true
       end
       expect(RailsAdmin.config(CommentReversed).fields.map { |f| f.name.to_s }.select { |f| /^comment/ =~ f }).to match_array ['commentable'].concat(POLYMORPHIC_CHILDREN.map(&:to_s))
@@ -368,16 +368,16 @@ describe RailsAdmin::Config::Fields::Base do
   describe '#visible?' do
     it 'is false when fields have specific name ' do
       class FieldVisibilityTest < Tableless
-        column :id, :integer
-        column :_id, :integer
-        column :_type, :string
-        column :name, :string
-        column :created_at, :datetime
-        column :updated_at, :datetime
-        column :deleted_at, :datetime
-        column :created_on, :datetime
-        column :updated_on, :datetime
-        column :deleted_on, :datetime
+        column :id, sql_type: :integer
+        column :_id, sql_type: :integer
+        column :_type, sql_type: :string
+        column :name, sql_type: :string
+        column :created_at, sql_type: :datetime
+        column :updated_at, sql_type: :datetime
+        column :deleted_at, sql_type: :datetime
+        column :created_on, sql_type: :datetime
+        column :updated_on, sql_type: :datetime
+        column :deleted_on, sql_type: :datetime
       end
       expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select { |f| f.visible? }.map(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
       expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select { |f| f.visible? }.map(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
