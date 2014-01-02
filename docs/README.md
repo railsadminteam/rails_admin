@@ -91,14 +91,7 @@
 ### User integration
 
 * [[Authentication]]
-  * [[Devise]]
-  * [[Sorcery]]
-  * [[Manually]]
 * [[Authorization setup]]
-  * [[CanCan (recommended)|CanCan]]
-  * [[CanCan with relation to current Model|CanCan:-remove-associated-action-buttons-in-forms]]
-  * [[Declarative Authorization (possible)|Declarative Authorization]]
-  * [[Manually|Customized authorization]]
 * [[Mass-assignments protection]]
 * Auditing (change history)
   * [[History (internal)|History]]
