@@ -7,7 +7,7 @@ module RailsAdmin
         base.send :extend, ClassMethods
       end
 
-      def has_option?(name)
+      def option?(name)
         options = self.class.instance_variable_get('@config_options')
         options && options.key?(name)
       end
