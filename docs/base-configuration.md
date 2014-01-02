@@ -2,16 +2,6 @@ RailsAdmin provides its out of the box administrative interface by inspecting yo
 models and following some Rails conventions. For a more tailored experience, it also provides a
 configuration DSL which allows you to customize many aspects of the interface.
 
-A customized configuration guide is generated at installation in `config/initializers/rails_admin.rb`
-This initializer in `config/initializer/rails_admin.rb` is executed at startup time, once.
-
-Rake tasks that load environment don't execute RailsAdmin initializer's block, for performance and DB migration status compatibility.
-You can force it if needed:
-
-`SKIP_RAILS_ADMIN_INITIALIZER=false rake mytask`
-
-The configurations explained here (and more) are defined as `attr_accessor` in https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config.rb. Make sure to also check that source file out to see all available configuration options.
-
 **Set the application name:**
 
 ```ruby
@@ -31,63 +21,13 @@ require 'i18n'
 I18n.default_locale = :de
 ```
 
-**current_user method**
+**Authentication integration (Devise, Sorcery, Manual) **
 
-The current_user is usually inferred from your Devise settings and added to your initializer file automatically.
+[[Authentication]]
 
-If needed, it can be customized as such:
+**Authorization (Cancan)**
 
-```ruby
-config.current_user_method { current_admin }
-```
-
- **Authentication (before_filter)**
-
-This is run inside the controller instance so you can setup any authentication you need to.
-
-By default, the authentication will run via warden if available, and will run on the default user scope.
-
-If you use devise, this will authenticate the same as `authenticate_user!`
-
-Example Devise admin:
-
-```ruby
-config.authenticate_with do
-  authenticate_admin!
-end
-```
-
-Example Custom Warden:
-
-```ruby
-config.authenticate_with do
-  warden.authenticate! :scope => :paranoid
-end
-```
-
-To disable authentication, pass an empty block:
-
-```ruby
-RailsAdmin.config do |config|
-  config.authenticate_with {}
-end
-```
-
-**Authorization (before_filter)**
-
-Use cancan https://github.com/ryanb/cancan for authorization:
-
-```ruby
-config.authorize_with :cancan
-```
-
-Or use simple custom authorization rule:
-
-```ruby
-config.authorize_with do
-  redirect_to main_app.root_path unless warden.user.is_admin?
-end
-```
+[[Authorization setup]]
 
 **ActiveModel's :attr_acessible :attr_protected**
 
