@@ -125,7 +125,7 @@ module RailsAdmin
     def menu_for(parent, options = {})
       abstract_model = options[:abstract_model]
       object = options[:object]
-      only_icon = if options.has_key?(:only_icon)
+      only_icon = if options.key?(:only_icon)
         options[:only_icon]
       else
         false

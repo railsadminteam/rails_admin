@@ -20,7 +20,7 @@ class Tableless < ActiveRecord::Base
     def column(name, options = {})
       sql_type = options[:sql_type]
       default = options[:default]
-      null = if options.has_key?(:null)
+      null = if options.key?(:null)
                options[:only_icon]
              else
                true
