@@ -50,6 +50,8 @@ end
 
 [Details](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
+To begin with, you may be interested in setting up [[Devise]], [[Cancan]] or [[Papertrail]]!
+
 ### Per model
 ```ruby
 class Ball < ActiveRecord::Base
