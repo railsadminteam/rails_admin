@@ -119,7 +119,7 @@ describe RailsAdmin::MainController do
     before do
       @team = FactoryGirl.create :team
       controller.params = {:associated_collection => 'players', :current_action => 'update', :source_abstract_model => 'team', :source_object_id => @team.id, :model_name => 'player', :action => 'index'}
-      controller.get_model # set @model_config for Team
+      controller.model # set @model_config for Team
     end
 
     it "doesn't scope associated collection records when associated_collection_scope is nil" do
@@ -306,7 +306,7 @@ describe RailsAdmin::MainController do
           'model_name' => 'player',
           'player' => {'name' => 'foo'}
         )
-        controller.send(:get_model)
+        controller.send(:model)
         expect(controller.params['player'].permitted?).to be_false
         controller.send(:satisfy_strong_params!)
         expect(controller.params['player'].permitted?).to be_true

@@ -4,10 +4,10 @@ module RailsAdmin
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper
 
-    layout :get_layout
+    layout :layout
 
-    before_filter :get_model, :except => RailsAdmin::Config::Actions.all(:root).map(&:action_name)
-    before_filter :get_object, :only => RailsAdmin::Config::Actions.all(:member).map(&:action_name)
+    before_filter :model, :except => RailsAdmin::Config::Actions.all(:root).map(&:action_name)
+    before_filter :object, :only => RailsAdmin::Config::Actions.all(:member).map(&:action_name)
     before_filter :check_for_cancel
 
     RailsAdmin::Config::Actions.all.each do |action|
@@ -30,7 +30,7 @@ module RailsAdmin
     def list_entries(options = {})
       model_config = options[:model_config] || @model_config
       auth_scope_key = options[:auth_scope_key] || :index
-      additional_scope = options[:additional_scope] || get_association_scope_from_params
+      additional_scope = options[:additional_scope] || association_scope_from_params
       pagination = if options.has_key?(:pagination)
         options[:pagination]
       else
@@ -48,7 +48,7 @@ module RailsAdmin
 
   private
 
-    def get_layout
+    def layout
       "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
     end
 
@@ -116,7 +116,7 @@ module RailsAdmin
       model_config.abstract_model.all(options, scope)
     end
 
-    def get_association_scope_from_params
+    def association_scope_from_params
       return nil unless params[:associated_collection].present?
       source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
       source_model_config = source_abstract_model.config

@@ -126,8 +126,8 @@ module RailsAdmin
 
     protected
 
-      def get_filtering_duration
-        FilteringDuration.new(@operator, @value).get_duration
+      def filtering_duration
+        FilteringDuration.new(@operator, @value).duration
       end
 
       def build_statement_for_type_generic
@@ -163,11 +163,11 @@ module RailsAdmin
       end
 
       def build_statement_for_date
-        range_filter(*get_filtering_duration)
+        range_filter(*filtering_duration)
       end
 
       def build_statement_for_datetime_or_timestamp
-        start_date, end_date = get_filtering_duration
+        start_date, end_date = filtering_duration
         start_date = start_date.to_time.beginning_of_day if start_date
         end_date = end_date.to_time.end_of_day if end_date
         range_filter(start_date, end_date)
@@ -187,7 +187,7 @@ module RailsAdmin
           @operator = operator
         end
 
-        def get_duration
+        def duration
           case @operator
           when 'between'   then between
           when 'today'     then today

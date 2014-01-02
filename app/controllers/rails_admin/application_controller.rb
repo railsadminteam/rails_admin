@@ -18,14 +18,14 @@ module RailsAdmin
 
     attr_reader :object, :model_config, :abstract_model
 
-    def get_model
+    def model
       @model_name = to_model_name(params[:model_name])
       fail(RailsAdmin::ModelNotFound) unless (@abstract_model = RailsAdmin::AbstractModel.new(@model_name))
       fail(RailsAdmin::ModelNotFound) if (@model_config = @abstract_model.config).excluded?
       @properties = @abstract_model.properties
     end
 
-    def get_object
+    def object
       fail(RailsAdmin::ObjectNotFound) unless (@object = @abstract_model.get(params[:id]))
     end
 
