@@ -3,6 +3,7 @@ You can (each is optional) provide 2 things:
 1. An `authenticate_with` block that will trigger your authentication logic before any action in RailsAdmin.
 2. A `current_user_method` block that will yield a user model (for UI purposes)
 
+Here is an example for default Devise installation:
 ```ruby
 RailsAdmin.config do |config|
   config.authenticate_with { warden.authenticate! scope: :user }
