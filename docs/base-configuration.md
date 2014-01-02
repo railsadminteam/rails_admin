@@ -21,7 +21,7 @@ require 'i18n'
 I18n.default_locale = :de
 ```
 
-**Authentication integration (Devise, Sorcery, Manual) **
+**Authentication integration (Devise, Sorcery, Manual)**
 
 [[Authentication]]
 
