@@ -19,7 +19,7 @@ module RailsAdmin
             if format
               request.format = format
               @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
-              @objects = list_entries(auth_scope_key: :export)
+              @objects = list_entries(:auth_scope_key => :export)
               index
             else
               render @action.template_name

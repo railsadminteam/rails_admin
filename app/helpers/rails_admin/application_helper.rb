@@ -109,10 +109,10 @@ module RailsAdmin
           content_tag(:li, :class => current_action?(a, am, o) && 'active') do
             crumb = if a.http_methods.include?(:get)
               link_to(url_for(:action => a.action_name, :controller => 'rails_admin/main', :model_name => am.try(:to_param), :id => (o.try(:persisted?) && o.try(:id) || nil)), :class => 'pjax') do
-                wording_for(:breadcrumb, action: a, abstract_model: am, object: o)
+                wording_for(:breadcrumb, :action => a, :abstract_model => am, :object => o)
               end
             else
-              content_tag(:span, wording_for(:breadcrumb, action: a, abstract_model: am, object: o))
+              content_tag(:span, wording_for(:breadcrumb, :action => a, :abstract_model => am, :object => o))
             end
             crumb += content_tag(:span, '/', :class => 'divider') unless current_action?(a, am, o)
             crumb
@@ -132,7 +132,7 @@ module RailsAdmin
       end
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
       actions.map do |action|
-        wording = wording_for(:menu, action: action)
+        wording = wording_for(:menu, :action => action)
         %{
           <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
             <a class="#{action.pjax? ? 'pjax' : ''}" href="#{url_for(:action => action.action_name, :controller => 'rails_admin/main', :model_name => abstract_model.try(:to_param), :id => (object.try(:persisted?) && object.try(:id) || nil))}">
@@ -151,7 +151,7 @@ module RailsAdmin
         content_tag(:a, :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :href => '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } + content_tag(:ul, :class => 'dropdown-menu', :style => 'left:auto; right:0;') do # rubocop:disable SymbolName
           actions.map do |action|
             content_tag :li do
-              link_to wording_for(:bulk_link, action: action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"
+              link_to wording_for(:bulk_link, :action => action), '#', :onclick => "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"
             end
           end.join.html_safe
         end

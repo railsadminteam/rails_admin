@@ -82,8 +82,8 @@ describe RailsAdmin::MainController do
     end
 
     it 'paginates' do
-      expect(controller.list_entries(model_config: RailsAdmin.config(Team), pagination: false).to_a.length).to eq(21)
-      expect(controller.list_entries(model_config: RailsAdmin.config(Team), pagination: true).to_a.length).to eq(20)
+      expect(controller.list_entries(:model_config => RailsAdmin.config(Team), :pagination => false).to_a.length).to eq(21)
+      expect(controller.list_entries(:model_config => RailsAdmin.config(Team), :pagination => true).to_a.length).to eq(20)
     end
   end
 
@@ -99,8 +99,8 @@ describe RailsAdmin::MainController do
     end
 
     it 'paginates' do
-      expect(controller.list_entries(model_config: RailsAdmin.config(Team), pagination: false).to_a.length).to eq(21)
-      expect(controller.list_entries(model_config: RailsAdmin.config(Team), pagination: true).to_a.length).to eq(20)
+      expect(controller.list_entries(:model_config => RailsAdmin.config(Team), :pagination => false).to_a.length).to eq(21)
+      expect(controller.list_entries(:model_config => RailsAdmin.config(Team), :pagination => true).to_a.length).to eq(20)
     end
   end
 
@@ -111,7 +111,7 @@ describe RailsAdmin::MainController do
     end
 
     it 'does not paginate' do
-      expect(controller.list_entries(model_config: RailsAdmin.config(Team), auth_scope_key: :bulk_delete).to_a.length).to eq(21)
+      expect(controller.list_entries(:model_config => RailsAdmin.config(Team), :auth_scope_key => :bulk_delete).to_a.length).to eq(21)
     end
   end
 
