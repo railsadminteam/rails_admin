@@ -93,10 +93,7 @@
 * [[Authentication]]
 * [[Authorization]]
 * [[Mass-assignments protection]]
-* Auditing (change history)
-  * [[PaperTrail]]
-  * [mongoid_audit](https://github.com/rs-pro/mongoid-audit)
-  * None. (Default)
+* [[Auditing changes|Auditing]]
 
 ### Extend RailsAdmin (RailsAdmin API)
 
