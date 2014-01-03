@@ -18,4 +18,4 @@ config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.
 config.audit_with :paper_trail, 'User', 'Version' # PaperTrail < 3.0.0
 ```
 
-User should be your 'user' model.
+User should be your 'whodunnit' model.
