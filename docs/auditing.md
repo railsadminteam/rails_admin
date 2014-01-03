@@ -1,6 +1,6 @@
 The old history internal plugin installer has been removed. Papertrail integration (link below) is recommended instead.
 
-While old history is moved to its own gem, you can still install it manually with this migration:
+Until old history plugin get moved to its own gem, you can still install it manually with this migration:
 
 ```ruby
 class CreateRailsAdminHistoriesTable < ActiveRecord::Migration
