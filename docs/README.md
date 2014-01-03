@@ -94,8 +94,7 @@
 * [[Authorization]]
 * [[Mass-assignments protection]]
 * Auditing (change history)
-  * [[History (internal)|History]]
-  * [[PaperTrail (recommended)|PaperTrail]]
+  * [[PaperTrail]]
   * [mongoid_audit](https://github.com/rs-pro/mongoid-audit)
   * None. (Default)
 
