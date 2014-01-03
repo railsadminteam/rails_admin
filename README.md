@@ -28,25 +28,18 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
   * ActiveRecord
   * Mongoid
 
+
+
 ## Installation
-After you bundled the gem, mount RailsAdmin gem in `config/routes.rb`:
 
-```ruby
-mount RailsAdmin::Engine => '/admin', :as => 'rails_admin' # Change '/admin' to any namespace you like.
-```
-
-Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin).
+1. Bundle the gem
+2. Run `rails g rails_admin:install`
+3. Provide a namespace for the routes when asked
+4. Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin). (if you chose default namespace: /admin)
 
 ## Configuration
 ### Global
 In `config/initializers/rails_admin`:
-
-```ruby
-RailsAdmin.config do |config|
-  config.main_app_name = ["Cool app", "BackOffice"]
-  # ...
-end
-```
 
 [Details](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
