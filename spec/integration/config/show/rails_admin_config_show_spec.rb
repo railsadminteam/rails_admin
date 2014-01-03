@@ -338,7 +338,7 @@ describe 'RailsAdmin Config DSL Show Section' do
   describe 'embedded model', :mongoid => true do
     it "does not show link to individual object's page" do
       @record = FactoryGirl.create :field_test
-      2.times.each { |i| @record.embeds.create :name => "embed #{i}"}
+      2.times.each { |i| @record.embeds.create :name => "embed #{i}" }
       visit show_path(:model_name => 'field_test', :id => @record.id)
       should_not have_link('embed 0')
       should_not have_link('embed 1')

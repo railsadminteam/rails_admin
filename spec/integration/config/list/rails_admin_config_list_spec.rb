@@ -431,7 +431,7 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       @record = FactoryGirl.create :field_test
-      2.times.each { |i| @record.embeds.create :name => "embed #{i}"}
+      2.times.each { |i| @record.embeds.create :name => "embed #{i}" }
       visit index_path(:model_name => 'field_test')
       should_not have_link('embed 0')
       should_not have_link('embed 1')
