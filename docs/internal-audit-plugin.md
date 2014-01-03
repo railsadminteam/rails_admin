@@ -1,4 +1,6 @@
-The old history internal plugin installer has been removed. Papertrail integration (link below) is recommended instead.
+The old history internal plugin installer has been removed. Papertrail integration is recommended instead.
+
+Please note this is ActiveRecord only.
 
 Until old history plugin get moved to its own gem, you can still install it manually with this migration:
 
