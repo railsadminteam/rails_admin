@@ -503,6 +503,7 @@ describe "RailsAdmin Basic List" do
         } }}
         I18n.backend.store_translations(:en, en)
       end
+      after{ I18n.reload! }
       context 'global' do
         it "displays configured scopes" do
           visit index_path(:model_name => "team")
@@ -521,6 +522,7 @@ describe "RailsAdmin Basic List" do
           }}}}
           I18n.backend.store_translations(:en, en)
         end
+        after{ I18n.reload! }
         it "displays configured scopes" do
           visit index_path(:model_name => "team")
           expect(find('#scope_selector li:first')).to have_content("any")
