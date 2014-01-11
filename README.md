@@ -4,14 +4,14 @@
 [![Dependency Status](https://gemnasium.com/sferik/rails_admin.png?travis)][gemnasium]
 [![Code Climate](https://codeclimate.com/github/sferik/rails_admin.png)][codeclimate]
 [![Coverage Status](https://coveralls.io/repos/sferik/rails_admin/badge.png?branch=master)][coveralls]
-[![Gittip](http://img.shields.io/gittip/sferik.png)][gittip]
+[![Gittip](http://img.shields.io/gittip/gems.png)][gittip]
 
 [gem]: https://rubygems.org/gems/rails_admin
 [travis]: http://travis-ci.org/sferik/rails_admin
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
 [codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [coveralls]: https://coveralls.io/r/sferik/rails_admin
-[gittip]: https://www.gittip.com/sferik/
+[gittip]: https://www.gittip.com/gems/
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
