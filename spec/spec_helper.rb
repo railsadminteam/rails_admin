@@ -14,7 +14,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 
 SimpleCov.start do
   add_filter '/spec/'
-  minimum_coverage(91.71)
+  minimum_coverage(91.71) unless defined? JRUBY_VERSION
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
