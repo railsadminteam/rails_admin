@@ -1,17 +1,19 @@
 Synopsys:
 
+For a multiselect widget: (natural choice for n-n associations)
 ```ruby
 class Team < ActiveRecord::Base
   has_and_belongs_to_many :fans
 
-  # for a multiselect widget: (natural choice for n-n associations)
+  attr_accessible :fan_ids
+```
+Or for a nested form: 
+```ruby
+class Team < ActiveRecord::Base
+  has_and_belongs_to_many :fans
 
-    attr_accessible :fan_ids
-
-  # for a nested form: 
-   
-    accepts_nested_attributes_for :fans, :allow_destroy => true
-    attr_accessible :fans_attributes
+  accepts_nested_attributes_for :fans, :allow_destroy => true
+  attr_accessible :fans_attributes
 
   rails_admin do
     configure :fans do
