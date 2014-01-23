@@ -6,6 +6,7 @@ class Team < ActiveRecord::Base
   has_and_belongs_to_many :fans
 
   attr_accessible :fan_ids
+end
 ```
 Or for a nested form: 
 ```ruby
@@ -22,11 +23,14 @@ class Team < ActiveRecord::Base
     end
   end
 end
-
+```
+The other side of the association is as usual:
+```ruby
 # for info
 class Fan < ActiveRecord::Base
   has_and_belongs_to_many :teams
 end
 ```
+This will work for regular many-to-many relationships and self-referential many-to-manys.
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_and_belongs_to_many_association.rb]]
