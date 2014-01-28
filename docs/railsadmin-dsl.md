@@ -4,7 +4,7 @@ Each model configuration can alternatively be in two places:
 
 * Inside the RailsAdmin initializer
 
-_config/initializers/rails_admin.rb_
+`config/initializers/rails_admin.rb`
 ```ruby
 RailsAdmin.config do |config|
   ...
