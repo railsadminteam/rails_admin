@@ -134,6 +134,19 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
 
     # polymorphic-association
 
+    content.find('[data-polymorphic-cached]').each ->
+      type_select = $(this)
+      field = type_select.parents('.control-group').first()
+      object_select = field.find('select').last()
+      type_select.on 'change', (e) ->
+        if $(this).val() is ''
+          object_select.html('<option value=""></option>')
+        else
+          html = '<option></option>'
+          $(type_select.data('collections')[type_select.val()]).each (i, el) ->
+            html += '<option value="' + el[1] + '">' + el[0] + '</option>'
+          object_select.html(html)
+
     content.find('[data-polymorphic]').each ->
       type_select = $(this)
       field = type_select.parents('.control-group').first()

@@ -174,7 +174,6 @@ describe RailsAdmin::MainController do
       expect(controller.list_entries.to_a.length).to eq(@team.revenue.to_i)
     end
 
-
     it "limits associated collection records number to 30 if cache_all is false" do
       @players = 40.times.map do
         FactoryGirl.create :player
@@ -207,6 +206,34 @@ describe RailsAdmin::MainController do
       end
 
       expect(controller.list_entries.to_a.first).to eq(@players.last)
+    end
+  end
+
+  describe "#list_entries for polymorphic associated_collection" do
+    before do
+      @comment = FactoryGirl.create :comment
+      controller.params = { :associated_collection => "commentable", :current_action => "update", :source_abstract_model => 'comment', :source_object_id => @comment.id, :model_name => "player", :action => 'index' }
+      controller.get_model # set @model_config for Team
+
+      RailsAdmin.config Comment do
+        field :commentable do
+          associated_collection_scope do
+            commentable = bindings[:object]
+            Proc.new { |scope|
+              scope.where(:injured => true)
+            }
+          end
+        end
+      end
+    end
+
+    it "scopes polymorphic associated records" do
+      @player = FactoryGirl.create :player, :injured => true
+      @player.comments << FactoryGirl.create(:comment)
+      @player2 = FactoryGirl.create :player, :injured => false
+      @player2.comments << FactoryGirl.create(:comment) # comment for another player
+
+      expect(controller.list_entries.to_a).to eq([@player])
     end
   end
 

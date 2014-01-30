@@ -660,6 +660,24 @@ describe "RailsAdmin Config DSL Edit Section" do
     end
   end
 
+  describe "scoped polymorphic form" do
+    its(:status_code) do
+      RailsAdmin.config Comment do
+        field :commentable do
+          associated_collection_scope do
+            commentable = bindings[:object]
+            Proc.new { |scope|
+              scope
+            }
+          end
+        end
+      end
+      comment = FactoryGirl.create :comment, :commentable => nil
+      visit edit_path(:model_name => "comment", :id => comment.id)
+      should == 200
+    end
+  end
+
   describe "nested form" do
     it "works", :js => true do
       @record = FactoryGirl.create :field_test
