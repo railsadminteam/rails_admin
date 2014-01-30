@@ -1,7 +1,7 @@
 * First install [[PaperTrail|https://github.com/airblade/paper_trail]]  
 
-_Note: you should use the `--with-changes` option when creating the version table  
-to ensure that history messages are recorded in a `object_changes` column._
+*Note: you should use the `--with-changes` option when creating the version table  
+to ensure that history messages are recorded in a `object_changes` column.*
 
 ```bash
 $ bundle exec rails generate paper_trail:install --with-changes  
