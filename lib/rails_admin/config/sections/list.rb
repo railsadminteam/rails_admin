@@ -21,6 +21,10 @@ module RailsAdmin
         register_instance_option :sort_reverse? do
           true # By default show latest first
         end
+
+        register_instance_option :scopes do
+          []
+        end
       end
     end
   end

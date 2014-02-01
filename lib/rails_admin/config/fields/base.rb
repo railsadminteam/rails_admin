@@ -120,7 +120,7 @@ module RailsAdmin
 
         # Accessor for field's help text displayed below input field.
         register_instance_option :help do
-          (@help ||= {})[::I18n.locale] ||= (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
+          (@help ||= {})[::I18n.locale] ||= generic_field_help
         end
 
         register_instance_option :html_attributes do
@@ -274,6 +274,17 @@ module RailsAdmin
           [method_name]
         end
 
+        def generic_help
+          (required? ? I18n.translate("admin.form.required") : I18n.translate("admin.form.optional")) + '. '
+        end
+
+        def generic_field_help
+          model = abstract_model.model_name.underscore
+          model_lookup = "admin.help.#{model}.#{name}".to_sym
+          translated = I18n.translate(model_lookup, :help => generic_help, :default => [generic_help])
+          (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
+        end
+
         def parse_input(params)
           # overriden
         end
@@ -287,7 +298,7 @@ module RailsAdmin
         end
 
         def form_default_value
-          bindings[:object].new_record? && self.value.nil? && !self.default_value.nil? ? self.default_value : nil
+          (self.default_value if bindings[:object].new_record? && self.value.nil? && !self.default_value.nil?)
         end
 
         def form_value

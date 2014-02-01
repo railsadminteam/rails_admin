@@ -47,6 +47,8 @@ describe "RailsAdmin CanCan Authorization" do
   before(:each) do
     RailsAdmin.config do |c|
       c.authorize_with(:cancan)
+      c.authenticate_with { warden.authenticate! scope: :user }
+      c.current_user_method &:current_user
     end
     @player_model = RailsAdmin::AbstractModel.new(Player)
     @user = FactoryGirl.create :user

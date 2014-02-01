@@ -65,12 +65,12 @@ describe RailsAdmin::Config::Sections do
 
       end
       expect(RailsAdmin.config(Fan).visible_fields.count).to eq(1)
-      expect(RailsAdmin.config(Fan).visible_fields.first.label).to eq('modified base His Name')
-      expect(RailsAdmin.config(Fan).list.visible_fields.first.label).to eq('modified list His Name')
-      expect(RailsAdmin.config(Fan).export.visible_fields.first.label).to eq('modified base His Name')
-      expect(RailsAdmin.config(Fan).edit.visible_fields.first.label).to eq('modified edit His Name')
-      expect(RailsAdmin.config(Fan).create.visible_fields.first.label).to eq('modified create His Name')
-      expect(RailsAdmin.config(Fan).update.visible_fields.first.label).to eq('modified edit His Name')
+      expect(RailsAdmin.config(Fan).visible_fields.first.label).to eq('modified base Their Name')
+      expect(RailsAdmin.config(Fan).list.visible_fields.first.label).to eq('modified list Their Name')
+      expect(RailsAdmin.config(Fan).export.visible_fields.first.label).to eq('modified base Their Name')
+      expect(RailsAdmin.config(Fan).edit.visible_fields.first.label).to eq('modified edit Their Name')
+      expect(RailsAdmin.config(Fan).create.visible_fields.first.label).to eq('modified create Their Name')
+      expect(RailsAdmin.config(Fan).update.visible_fields.first.label).to eq('modified edit Their Name')
     end
   end
 

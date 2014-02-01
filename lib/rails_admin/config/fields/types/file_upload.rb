@@ -37,8 +37,6 @@ module RailsAdmin
               else
                 v.link_to(nil, url, :target => 'blank')
               end
-            else
-              nil
             end
           end
 

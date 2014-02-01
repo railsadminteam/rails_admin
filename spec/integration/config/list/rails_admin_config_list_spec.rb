@@ -46,7 +46,7 @@ describe "RailsAdmin Config DSL List Section" do
     it "shows all by default" do
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "Created at", "Updated at", "His Name", "Teams"]
+        to match_array ["Id", "Created at", "Updated at", "Their Name", "Teams"]
     end
 
     it "hides some fields on demand with a block" do
@@ -59,7 +59,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "His Name", "Teams"]
+        to match_array ["Id", "Their Name", "Teams"]
     end
 
     it "hides some fields on demand with fields list" do
@@ -70,7 +70,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "His Name", "Teams"]
+        to match_array ["Id", "Their Name", "Teams"]
     end
 
     it "adds some fields on demand with a block" do
@@ -83,7 +83,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "His Name", "Teams"]
+        to match_array ["Id", "Their Name", "Teams"]
     end
 
     it "shows some fields on demand with fields list, respect ordering and configure them" do
@@ -98,7 +98,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Modified Id", "Modified His Name"]
+        to match_array ["Modified Id", "Modified Their Name"]
     end
 
     it "shows all fields if asked" do
@@ -111,7 +111,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "Created at", "Updated at", "His Name", "Teams"]
+        to match_array ["Id", "Created at", "Updated at", "Their Name", "Teams"]
     end
 
     it "appears in order defined" do
@@ -125,7 +125,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to eq(["Updated at", "His Name", "Id", "Created at"])
+        to eq(["Updated at", "Their Name", "Id", "Created at"])
     end
 
     it "only lists the defined fields if some fields are defined" do
@@ -137,7 +137,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to eq(["Id", "His Name"])
+        to eq(["Id", "Their Name"])
       should have_no_selector("th:nth-child(4).header")
     end
 
@@ -148,7 +148,7 @@ describe "RailsAdmin Config DSL List Section" do
         end
       end
       visit index_path(:model_name => "fan")
-      expect(find("th:nth-child(2)")).to have_content("His Name")
+      expect(find("th:nth-child(2)")).to have_content("Their Name")
     end
 
     it "is renameable" do
@@ -162,7 +162,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(find("th:nth-child(2)")).to have_content("Identifier")
-      expect(find("th:nth-child(3)")).to have_content("His Name")
+      expect(find("th:nth-child(3)")).to have_content("Their Name")
     end
 
     it "is renameable by type" do
@@ -175,7 +175,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
+        to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "Their Name", "Teams"]
     end
 
     it "is globally renameable by type" do
@@ -188,7 +188,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "His Name", "Teams"]
+        to match_array ["Id", "Created at (datetime)", "Updated at (datetime)", "Their Name", "Teams"]
     end
 
     it "is sortable by default" do
@@ -261,7 +261,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "His Name", "Teams"]
+        to match_array ["Id", "Their Name", "Teams"]
     end
 
     it "has option to hide fields by type globally" do
@@ -274,7 +274,7 @@ describe "RailsAdmin Config DSL List Section" do
       end
       visit index_path(:model_name => "fan")
       expect(all("th").map(&:text).delete_if{|t| /^\n*$/ =~ t }).
-        to match_array ["Id", "His Name", "Teams"]
+        to match_array ["Id", "Their Name", "Teams"]
     end
 
     it "has option to customize column width" do

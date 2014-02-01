@@ -560,7 +560,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       visit new_path(:model_name => "team")
       expect(find("#team_manager_field .help-block")).to have_content("Optional")
       expect(find("#team_division_id_field .help-block")).to have_content("Optional")
-      expect(find("#team_name_field .help-block")).to have_content("Required")
+      expect(find("#team_name_field .help-block")).to have_content(I18n.translate("admin.help.team.name"))
     end
 
     it "can hide the add button on an associated field" do
@@ -661,18 +661,32 @@ describe "RailsAdmin Config DSL Edit Section" do
   end
 
   describe "nested form" do
-    it "works" do
+    it "works", :js => true do
       @record = FactoryGirl.create :field_test
       @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
       visit edit_path(:model_name => "field_test", :id => @record.id)
+
+      find('#field_test_comment_attributes_field .add_nested_fields').click()
       fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
-      fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
-      page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
+
+      fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited', :visible => false
+      find('#field_test_nested_field_tests_attributes_1__destroy', :visible => false).set('true')
+
       click_button "Save" # first(:button, "Save").click
+
       @record.reload
-      expect(@record.comment.content).to eq('nested comment content')
+
+      expect(@record.comment.content.strip).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
+    end
+
+    it "is optional for has_one" do
+      @record = FactoryGirl.create :field_test
+      visit edit_path(:model_name => "field_test", :id => @record.id)
+      click_button "Save"
+      @record.reload
+      expect(@record.comment).to be_nil
     end
 
     it "sets bindings[:object] to nested object" do

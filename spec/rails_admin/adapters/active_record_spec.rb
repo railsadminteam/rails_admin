@@ -250,7 +250,7 @@ describe "RailsAdmin::Adapters::ActiveRecord", :active_record => true do
         map{|h| FactoryGirl.create :team, h}
     end
 
-    it "makes conrrect query" do
+    it "makes correct query" do
       expect(@abstract_model.all(:query => "foo")).to match_array @teams[1..2]
     end
   end

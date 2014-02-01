@@ -2,7 +2,7 @@ en:
   activerecord: &en_attributes
     attributes:
       fan:
-        name: His Name
+        name: Their Name
       team:
         manager: Team Manager
         fans: Some Fans

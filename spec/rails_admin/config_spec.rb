@@ -142,8 +142,10 @@ describe RailsAdmin::Config do
       end
     end
 
-    context "given paper_trail as the extension for auditing" do
+    context "given paper_trail as the extension for auditing", :active_record => true do
       before do
+        module PaperTrail; end
+        class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, {
           :auditing => true
         })
@@ -153,7 +155,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect(RailsAdmin.config.audit_with.call).not_to raise_error
+        expect{ RailsAdmin.config.audit_with.call }.not_to raise_error
       end
     end
   end
@@ -265,6 +267,12 @@ describe RailsAdmin::Config do
         config.included_models = [FieldTest, Comment, Embed, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
       end
       expect(RailsAdmin.config.visible_models(:controller => double(:_current_user => double(:role => :admin), :authorized? => true)).map(&:abstract_model).map(&:model)).to match_array [FieldTest, Comment, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
+    end
+  end
+
+  describe '.models_pool' do
+    it "should not include classnames start with Concerns::" do
+      expect(RailsAdmin::Config.models_pool.select{|m| m.match(/^Concerns::/)}).to be_empty
     end
   end
 end

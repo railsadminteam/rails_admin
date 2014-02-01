@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController do
-
   describe "#dashboard" do
     before do
       allow(controller).to receive(:render).and_return(true) # no rendering

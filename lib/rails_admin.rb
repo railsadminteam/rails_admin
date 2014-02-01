@@ -25,10 +25,12 @@ module RailsAdmin
   def self.config(entity = nil, &block)
     if entity
       RailsAdmin::Config.model(entity, &block)
-    elsif block_given? && ENV['SKIP_RAILS_ADMIN_INITIALIZER'] != "true"
+    elsif block_given?
       block.call(RailsAdmin::Config)
     else
       RailsAdmin::Config
     end
   end
 end
+
+require 'rails_admin/bootstrap-sass' unless defined? Bootstrap

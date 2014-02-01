@@ -30,7 +30,7 @@ module RailsAdmin
               @object.instance_variable_set("@bindings", @bindings)
               response = @object.__send__(name, *args, &block)
             ensure
-              @object.instance_variable_set("@bindings", @reset)
+              @object.instance_variable_set("@bindings", reset)
             end
             response
           else

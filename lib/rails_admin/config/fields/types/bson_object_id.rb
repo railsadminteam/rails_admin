@@ -14,7 +14,7 @@ module RailsAdmin
             label
           end
 
-          register_instance_option :help do
+          def generic_help
             "BSON::ObjectId"
           end
 

@@ -9,7 +9,7 @@
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
 
   export_action = RailsAdmin::Config::Actions.find(:export, { :controller => self.controller, :abstract_model => @abstract_model })
-  export_action = export_action && authorized?(export_action.authorization_key, @abstract_model) ? export_action : nil
+  export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
 
   properties = @model_config.list.with(:controller => self.controller, :view => self, :object => @abstract_model.model.new).visible_fields
   # columns paginate
@@ -99,6 +99,13 @@
       - if export_action
         %span{:style => 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
 
+  - unless @model_config.list.scopes.empty?
+    %ul.nav.nav-tabs#scope_selector
+      - @model_config.list.scopes.each_with_index do |scope, index|
+        - scope = '_all' if scope.nil?
+        %li{class: "#{'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0)}"}
+          %a{href: index_path(params.merge(:scope => scope, :page => nil))}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", :default => I18n.t("admin.scopes.#{scope}", :default => scope.to_s.titleize))
+
   = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
     = hidden_field_tag :bulk_action
     %table.table.table-condensed.table-striped
@@ -112,8 +119,8 @@
             - selected = (sort == property.name.to_s)
             - if property.sortable
               - sort_location = index_path params.except('sort_reverse').except('page').merge(:sort => property.name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
-              - sort_direction = selected ? (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown") : nil
-            %th{:class => "#{property.sortable && "header pjax" || nil} #{property.sortable && sort_direction ? sort_direction : nil} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), :rel => "tooltip", :title => "#{property.hint}"}= property.label
+              - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
+            %th{:class => "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), :rel => "tooltip", :title => "#{property.hint}"}= property.label
           - if other_right
             %th.other.right.shrink= "..."
           %th.last.shrink

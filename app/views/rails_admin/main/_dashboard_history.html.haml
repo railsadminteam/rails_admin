@@ -2,11 +2,11 @@
   %thead
     %tr
       %th.shrink.user= t("admin.table_headers.username")
-      %th.shrink.items= t("admin.table_headers.items")
+      %th.shrink.items= t("admin.table_headers.item")
       %th.changes= t("admin.table_headers.changes")
   %tbody
     - @history.each do |t|
-      - abstract_model = RailsAdmin.config(t.table).try(:abstract_model)
+      - abstract_model = RailsAdmin.config(t.table).abstract_model
       %tr
         %td= t.try :username
         - if o = abstract_model.try(:get, t.item)
@@ -16,5 +16,6 @@
           - else
             %td= label
         - else
-          %td= "#{t.table} ##{t.item}"
-        %td= t.message.in?(['delete', 'new']) ? t("admin.actions.#{t.message}.done").capitalize : t.message
+          - label = Object.const_defined?(t.table) ? t.table.constantize.model_name.human : t.table
+          %td= "#{label} ##{t.item}"
+        %td= t.message

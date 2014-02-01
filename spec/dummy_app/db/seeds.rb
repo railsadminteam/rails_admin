@@ -22,7 +22,7 @@ MLB::Team.all.each do |mlb_team|
     team.save!
   end
   mlb_team.players.reject{|player| player.number.nil?}.each do |player|
-    player_model.model.new(:name => player.name, :number => player.number, :position => player.position, :team => team).save
+    player_model.model.new(:name => player.name, :number => player.number, :position => player.positions.first, :team => team).save
   end
 end
 
