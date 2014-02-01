@@ -14,7 +14,7 @@ end
 class Tableless < ActiveRecord::Base
   class <<self
     def columns
-      @columns ||= [];
+      @columns ||= []
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
@@ -23,15 +23,18 @@ class Tableless < ActiveRecord::Base
     end
 
     def columns_hash
-      @columns_hash ||= Hash[columns.map { |column| [column.name, column] }]
+      @columns_hash ||= Hash[columns.collect { |column| [column.name, column] }]
     end
 
     def column_names
-      @column_names ||= columns.map { |column| column.name }
+      @column_names ||= columns.collect { |column| column.name }
     end
 
     def column_defaults
-      @column_defaults ||= columns.map { |column| [column.name, nil] }.inject({}) { |m, e| m[e[0]] = e[1]; m }
+      @column_defaults ||= columns.collect { |column| [column.name, nil] }.inject({}) do |a, e|
+        a[e[0]] = e[1]
+        a
+      end
     end
   end
 

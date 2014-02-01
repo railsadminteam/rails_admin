@@ -1,8 +1,8 @@
 # Configure Rails Envinronment
-ENV["RAILS_ENV"] = "test"
+ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = [:active_record, :mongoid]
-PK_COLUMN = {:active_record=>:id, :mongoid=>:_id}[CI_ORM]
+PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 require 'simplecov'
 require 'coveralls'
@@ -27,7 +27,7 @@ require "orm/#{CI_ORM}"
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.default_url_options[:host] = "example.com"
+ActionMailer::Base.default_url_options[:host] = 'example.com'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -37,7 +37,7 @@ Rails.backtrace_cleaner.remove_silencers!
 module Devise
   module Models
     module DatabaseAuthenticatable
-      protected
+    protected
 
       def password_digest(password)
         password
@@ -63,9 +63,9 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers
 
-  config.include Capybara::DSL, :type => :request
+  config.include Capybara::DSL, type: :request
 
-  config.before(:each) do
+  config.before do
     DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
 
     DatabaseCleaner.start

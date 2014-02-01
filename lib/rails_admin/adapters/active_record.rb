@@ -26,7 +26,7 @@ module RailsAdmin
       end
 
       def all(options = {}, scope = nil)
-        scope ||= self.scoped
+        scope ||= scoped
         scope = scope.includes(options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
@@ -40,15 +40,15 @@ module RailsAdmin
       end
 
       def count(options = {}, scope = nil)
-        all(options.merge({:limit => false, :page => false}), scope).count
+        all(options.merge(limit: false, page: false), scope).count
       end
 
       def destroy(objects)
-        Array.wrap(objects).each &:destroy
+        Array.wrap(objects).each(&:destroy)
       end
 
       def associations
-        model.reflect_on_all_associations.map do |association|
+        model.reflect_on_all_associations.collect do |association|
           Association.new(association, model).to_options_hash
         end
       end
@@ -57,9 +57,9 @@ module RailsAdmin
         columns = model.columns.reject do |c|
           c.type.blank? ||
             DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
-            DISABLED_COLUMN_MATCHERS.any? {|matcher| matcher.match(c.type.to_s)}
+            DISABLED_COLUMN_MATCHERS.any? { |matcher| matcher.match(c.type.to_s) }
         end
-        columns.map do |property|
+        columns.collect do |property|
           {
             :name => property.name.to_sym,
             :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
@@ -70,7 +70,7 @@ module RailsAdmin
         end
       end
 
-      delegate :primary_key, :table_name, :to => :model, :prefix => false
+      delegate :primary_key, :table_name, to: :model, prefix: false
 
       def encoding
         Rails.configuration.database_configuration[Rails.env]['encoding']
@@ -88,10 +88,9 @@ module RailsAdmin
         true
       end
 
-      private
+    private
 
       class WhereBuilder
-
         def initialize(scope)
           @statements = []
           @values = []
@@ -130,7 +129,7 @@ module RailsAdmin
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
             wb = WhereBuilder.new(scope)
-            wb.add(fields.find{|f| f.name.to_s == field_name}, filter_dump[:v], (filter_dump[:o] || 'default'))
+            wb.add(fields.detect { |f| f.name.to_s == field_name }, filter_dump[:v], (filter_dump[:o] || 'default'))
             # AND current filter statements to other filter statements
             scope = wb.build
           end
@@ -144,9 +143,9 @@ module RailsAdmin
 
       def type_lookup(property)
         if model.serialized_attributes[property.name.to_s]
-          {:type => :serialized}
+          {type: :serialized}
         else
-          {:type => property.type}
+          {type: property.type}
         end
       end
 
@@ -160,22 +159,23 @@ module RailsAdmin
 
         def to_options_hash
           {
-            :name => name.to_sym,
-            :pretty_name => display_name,
-            :type => macro,
-            :model_proc => Proc.new { model_lookup },
-            :primary_key_proc => Proc.new { primary_key_lookup },
-            :foreign_key => foreign_key.to_sym,
-            :foreign_type => foreign_type_lookup,
-            :as => as_lookup,
-            :polymorphic => polymorphic_lookup,
-            :inverse_of => inverse_of_lookup,
-            :read_only => read_only_lookup,
-            :nested_form => nested_attributes_options_lookup
+            name: name.to_sym,
+            pretty_name: display_name,
+            type: macro,
+            model_proc: proc { model_lookup },
+            primary_key_proc: proc { primary_key_lookup },
+            foreign_key: foreign_key.to_sym,
+            foreign_type: foreign_type_lookup,
+            as: as_lookup,
+            polymorphic: polymorphic_lookup,
+            inverse_of: inverse_of_lookup,
+            read_only: read_only_lookup,
+            nested_form: nested_attributes_options_lookup
           }
         end
 
-        private
+      private
+
         def model_lookup
           if options[:polymorphic]
             polymorphic_parents(:active_record, model_name.to_s, name) || []
@@ -217,13 +217,13 @@ module RailsAdmin
         end
 
         delegate :klass, :macro, :name, :options, :scope, :foreign_key,
-                 :to => :association, :prefix => false
-        delegate :name, :to => :model, :prefix => true
-        delegate :polymorphic_parents, :to => RailsAdmin::AbstractModel
+                 to: :association, prefix: false
+        delegate :name, to: :model, prefix: true
+        delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
-        protected
+      protected
 
         def unary_operators
           {
@@ -236,7 +236,7 @@ module RailsAdmin
           }
         end
 
-        private
+      private
 
         def range_filter(min, max)
           if min && max
@@ -250,11 +250,11 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-            when :boolean                   then build_statement_for_boolean
-            when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-            when :string, :text             then build_statement_for_string_or_text
-            when :enum                      then build_statement_for_enum
-            when :belongs_to_association    then build_statement_for_belongs_to_association
+          when :boolean                   then build_statement_for_boolean
+          when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
+          when :string, :text             then build_statement_for_string_or_text
+          when :enum                      then build_statement_for_enum
+          when :belongs_to_association    then build_statement_for_belongs_to_association
           end
         end
 
@@ -299,7 +299,7 @@ module RailsAdmin
         end
 
         def like_operator
-          ar_adapter == "postgresql" ? 'ILIKE' : 'LIKE'
+          ar_adapter == 'postgresql' ? 'ILIKE' : 'LIKE'
         end
       end
     end

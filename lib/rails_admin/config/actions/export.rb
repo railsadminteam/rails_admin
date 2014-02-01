@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
 
             if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
               request.format = format

@@ -26,7 +26,7 @@ module RailsAdmin
 
         def inspect
           "#<#{self.class.name} #{
-            instance_variables.map do |v|
+            instance_variables.collect do |v|
               value = instance_variable_get(v)
               if [:@parent, :@root, :@abstract_model].include? v
                 if value.respond_to? :name

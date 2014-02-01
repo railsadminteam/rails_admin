@@ -26,7 +26,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
             @objects ||= list_entries
 
             unless @model_config.list.scopes.empty?
@@ -34,7 +34,7 @@ module RailsAdmin
                 unless @model_config.list.scopes.first.nil?
                   @objects = @objects.send(@model_config.list.scopes.first)
                 end
-              elsif @model_config.list.scopes.map(&:to_s).include?(params[:scope])
+              elsif @model_config.list.scopes.collect(&:to_s).include?(params[:scope])
                 @objects = @objects.send(params[:scope].to_sym)
               end
             end
@@ -42,30 +42,30 @@ module RailsAdmin
             respond_to do |format|
 
               format.html do
-                render @action.template_name, :status => (flash[:error].present? ? :not_found : 200)
+                render @action.template_name, status: (flash[:error].present? ? :not_found : 200)
               end
 
               format.json do
                 output = if params[:compact]
                   primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
                   label_method = @model_config.object_label_method
-                  @objects.map{ |o| { :id => o.send(primary_key_method).to_s, :label => o.send(label_method).to_s } }
+                  @objects.collect { |o| {id: o.send(primary_key_method).to_s, label: o.send(label_method).to_s} }
                 else
                   @objects.to_json(@schema)
                 end
                 if params[:send_data]
-                  send_data output, :filename => "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.json"
+                  send_data output, filename: "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.json"
                 else
-                  render :json => output, :root => false
+                  render json: output, root: false
                 end
               end
 
               format.xml do
                 output = @objects.to_xml(@schema)
                 if params[:send_data]
-                  send_data output, :filename => "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.xml"
+                  send_data output, filename: "#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.xml"
                 else
-                  render :xml => output
+                  render xml: output
                 end
               end
 
@@ -73,10 +73,10 @@ module RailsAdmin
                 header, encoding, output = CSVConverter.new(@objects, @schema).to_csv(params[:csv_options])
                 if params[:send_data]
                   send_data output,
-                    :type => "text/csv; charset=#{encoding}; #{"header=present" if header}",
-                    :disposition => "attachment; filename=#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.csv"
+                            type: "text/csv; charset=#{encoding}; #{"header=present" if header}",
+                            disposition: "attachment; filename=#{params[:model_name]}_#{DateTime.now.strftime("%Y-%m-%d_%Hh%Mm%S")}.csv"
                 else
-                  render :text => output
+                  render text: output
                 end
               end
 
@@ -84,7 +84,6 @@ module RailsAdmin
 
           end
         end
-
 
         register_instance_option :link_icon do
           'icon-th-list'

@@ -9,8 +9,8 @@ module RailsAdmin
       end
 
       def all(adapter = nil)
-        @@all ||= Config.models_pool.map{ |m| new(m) }.compact
-        adapter ? @@all.select{|m| m.adapter == adapter} : @@all
+        @@all ||= Config.models_pool.collect { |m| new(m) }.compact
+        adapter ? @@all.select { |m| m.adapter == adapter } : @@all
       end
 
       alias_method :old_new, :new
@@ -18,7 +18,7 @@ module RailsAdmin
         m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
       rescue LoadError, NameError
-        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$!})" unless Rails.env.test?
+        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
       end
 
@@ -27,7 +27,7 @@ module RailsAdmin
       def polymorphic_parents(adapter, model_name, name)
         @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
           all(adapter).each do |am|
-            am.associations.select{|r| r[:as] }.each do |association|
+            am.associations.select { |r| r[:as] }.each do |association|
               (hash[[association[:model_proc].call.to_s.underscore, association[:as]].join('_').to_sym] ||= []) << am.model
             end
           end
@@ -43,7 +43,7 @@ module RailsAdmin
 
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
-      ancestors = model.ancestors.map(&:to_s)
+      ancestors = model.ancestors.collect(&:to_s)
       if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
         initialize_active_record
       elsif ancestors.include?('Mongoid::Document')
@@ -65,11 +65,11 @@ module RailsAdmin
     end
 
     def to_param
-      @model_name.split("::").map(&:underscore).join("~")
+      @model_name.split('::').collect(&:underscore).join('~')
     end
 
     def param_key
-      @model_name.split("::").map(&:underscore).join("_")
+      @model_name.split('::').collect(&:underscore).join('_')
     end
 
     def pretty_name
@@ -95,7 +95,7 @@ module RailsAdmin
       end
     end
 
-    private
+  private
 
     def initialize_active_record
       @adapter = :active_record
@@ -124,7 +124,7 @@ module RailsAdmin
           build_statement_for_type_generic
       end
 
-      protected
+    protected
 
       def get_filtering_duration
         FilteringDuration.new(@operator, @value).get_duration
@@ -132,20 +132,22 @@ module RailsAdmin
 
       def build_statement_for_type_generic
         build_statement_for_type || case @type
-          when :date                  then build_statement_for_date
-          when :datetime, :timestamp  then build_statement_for_datetime_or_timestamp
-          end
+        when :date
+          build_statement_for_date
+        when :datetime, :timestamp
+          build_statement_for_datetime_or_timestamp
+        end
       end
 
       def build_statement_for_type
-        raise "You must override build_statement_for_type in your StatementBuilder"
+        fail('You must override build_statement_for_type in your StatementBuilder')
       end
 
       def build_statement_for_integer_decimal_or_float
         case @value
         when Array then
-          val, range_begin, range_end = *@value.map do |v|
-            if (v.to_i.to_s == v || v.to_f.to_s == v)
+          val, range_begin, range_end = *@value.collect do |v|
+            if v.to_i.to_s == v || v.to_f.to_s == v
               @type == :integer ? v.to_i : v.to_f
             end
           end
@@ -174,11 +176,11 @@ module RailsAdmin
       end
 
       def unary_operators
-        raise "You must override unary_operators in your StatementBuilder"
+        fail('You must override unary_operators in your StatementBuilder')
       end
 
       def range_filter(min, max)
-        raise "You must override range_filter in your StatementBuilder"
+        fail('You must override range_filter in your StatementBuilder')
       end
 
       class FilteringDuration
@@ -189,12 +191,12 @@ module RailsAdmin
 
         def get_duration
           case @operator
-            when 'between'   then between
-            when 'today'     then today
-            when 'yesterday' then yesterday
-            when 'this_week' then this_week
-            when 'last_week' then last_week
-            else default
+          when 'between'   then between
+          when 'today'     then today
+          when 'yesterday' then yesterday
+          when 'this_week' then this_week
+          when 'last_week' then last_week
+          else default
           end
         end
 
@@ -212,7 +214,7 @@ module RailsAdmin
 
         def last_week
           [1.week.ago.to_date.beginning_of_week,
-            1.week.ago.to_date.end_of_week]
+           1.week.ago.to_date.end_of_week]
         end
 
         def between
@@ -223,11 +225,11 @@ module RailsAdmin
           [default_date, default_date]
         end
 
-        private
+      private
 
         def date_format
-          I18n.t("admin.misc.filter_date_format",
-          :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+          I18n.t('admin.misc.filter_date_format',
+                 default: I18n.t('admin.misc.filter_date_format', locale: :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
         end
 
         def convert_to_date(value)

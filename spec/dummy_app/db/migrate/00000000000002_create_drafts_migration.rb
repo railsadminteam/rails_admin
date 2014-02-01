@@ -8,7 +8,7 @@ class CreateDraftsMigration < ActiveRecord::Migration
       t.integer :round
       t.integer :pick
       t.integer :overall
-      t.string :college, :limit => 100
+      t.string :college, limit: 100
       t.text :notes
     end
   end

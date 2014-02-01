@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
 
             if request.post? # BULK DELETE
 
@@ -33,8 +33,8 @@ module RailsAdmin
                 @auditing_adapter && @auditing_adapter.delete_object(object, @abstract_model, _current_user)
               end
 
-              flash[:success] = t("admin.flash.successful", :name => pluralize(destroyed.count, @model_config.label), :action => t("admin.actions.delete.done")) unless destroyed.empty?
-              flash[:error] = t("admin.flash.error", :name => pluralize(not_destroyed.count, @model_config.label), :action => t("admin.actions.delete.done")) unless not_destroyed.empty?
+              flash[:success] = t('admin.flash.successful', name: pluralize(destroyed.count, @model_config.label), action: t('admin.actions.delete.done')) unless destroyed.empty?
+              flash[:error] = t('admin.flash.error', name: pluralize(not_destroyed.count, @model_config.label), action: t('admin.actions.delete.done')) unless not_destroyed.empty?
 
               redirect_to back_or_index
 

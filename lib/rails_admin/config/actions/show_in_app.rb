@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
+          proc do
             redirect_to main_app.url_for(@object)
           end
         end

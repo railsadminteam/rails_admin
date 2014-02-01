@@ -12,7 +12,8 @@ module Sass::Script::Functions
     end
   end
 
-  protected
+protected
+
   def sprockets_context # :nodoc:
     if options.key?(:sprockets)
       options[:sprockets][:context]

@@ -4,7 +4,7 @@ module RailsAdmin
       module Types
         class Boolean < RailsAdmin::Config::Fields::Base
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :view_helper do
             :check_box
@@ -27,7 +27,7 @@ module RailsAdmin
 
           # Accessor for field's help text displayed below input field.
           def generic_help
-            ""
+            ''
           end
         end
       end

@@ -28,10 +28,10 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'mongoid', :github => 'mongoid/mongoid'
-  gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
-  gem 'mongoid-grid_fs', :github => 'ahoward/mongoid-grid_fs'
-  gem 'carrierwave-mongoid', '>= 0.6.3', :require => 'carrierwave/mongoid'
+  gem 'mongoid', github: 'mongoid/mongoid'
+  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+  gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+  gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
 end
 
 group :development, :test do
@@ -47,7 +47,7 @@ group :test do
   gem 'cancan', '>= 1.6'
   gem 'capybara', '>= 2.1'
   gem 'carrierwave', '>= 0.8'
-  gem 'coveralls', :require => false
+  gem 'coveralls', require: false
   gem 'database_cleaner', '>= 1.2'
   gem 'devise', '>= 3.2'
   gem 'dragonfly', '~> 0.9.0'
@@ -56,11 +56,11 @@ group :test do
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', '>= 3.4'
-  gem 'poltergeist', :github => 'jonleighton/poltergeist'
-  gem 'rack-cache', :require => 'rack/cache'
+  gem 'poltergeist', github: 'jonleighton/poltergeist'
+  gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
   gem 'rubocop', '>= 0.15'
-  gem 'simplecov', :require => false
+  gem 'simplecov', require: false
   gem 'timecop', '>= 0.5'
 end
 
