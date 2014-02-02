@@ -5,6 +5,8 @@ AllCops:
     - 'Gemfile'
     - 'Rakefile'
     - 'rails_admin.gemspec'
+  Excludes:
+    - 'spec/dummy_app/db/schema.rb'
 
 # Avoid long parameter lists
 ParameterLists:
