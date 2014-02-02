@@ -90,7 +90,7 @@ module RailsAdmin
     def breadcrumb(action = @action, acc = [])
       begin
         (parent_actions ||= []) << action
-      end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent))
+      end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent)) # rubocop:disable Loop
 
       content_tag(:ul, class: 'breadcrumb') do
         parent_actions.collect do |a|

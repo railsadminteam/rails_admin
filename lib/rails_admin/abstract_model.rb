@@ -88,7 +88,7 @@ module RailsAdmin
             yield(association, child)
           end
         when :has_many
-          object.send(association[:name]).each do |child|
+          object.send(association[:name]).each do |child| # rubocop:disable ShadowingOuterLocalVariable
             yield(association, child)
           end
         end

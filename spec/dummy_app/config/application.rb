@@ -6,7 +6,7 @@ require 'sprockets/railtie'
 
 begin
   require "#{CI_ORM}/railtie"
-rescue LoadError
+rescue LoadError # rubocop:disable HandleExceptions
 end
 
 # Require the gems listed in Gemfile, including any gems

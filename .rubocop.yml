@@ -1,3 +1,5 @@
+inherit_from: rubocop-todo.yml
+
 AllCops:
   Includes:
     - 'Gemfile'
@@ -6,12 +8,19 @@ AllCops:
 
 # Avoid long parameter lists
 ParameterLists:
-  Max: 3
+  Max: 8 # TODO: Lower to 4
   CountKeywordArgs: true
 
 MethodLength:
   CountComments: false
-  Max: 15
+  Max: 35 # TODO: Lower to 15
+
+ClassLength:
+  CountComments: false
+  Max: 228 # TODO: Lower to 100
+
+CyclomaticComplexity:
+  Max: 12 # TODO: Lower to 6
 
 # Avoid more than `Max` levels of nesting.
 BlockNesting:
