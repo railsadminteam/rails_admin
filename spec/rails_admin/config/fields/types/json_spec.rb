@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Types::Json do
-  describe '#parse_input', active_record: true do
+  describe '#parse_input' do
     let(:field) { RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :json_field } }
     before :each do
       RailsAdmin.config do |config|
