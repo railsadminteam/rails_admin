@@ -19,7 +19,7 @@ module RailsAdmin
                       item.update_attribute('#{association.foreign_key}', id)
                     end
                   end
-                  super __items__.map &:id
+                  super __items__.map(&:id)
                 end
 RUBY
             elsif [:has_one, :references_one].include? association.macro

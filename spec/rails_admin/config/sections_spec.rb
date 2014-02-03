@@ -2,26 +2,26 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Sections do
 
-  describe "configure" do
-    it "configures without changing the section default list" do
+  describe 'configure' do
+    it 'configures without changing the section default list' do
       RailsAdmin.config Team do
         edit do
           configure :name do
-            label "Renamed"
+            label 'Renamed'
           end
         end
       end
       fields = RailsAdmin.config(Team).edit.fields
-      expect(fields.find{|f| f.name == :name }.label).to eq("Renamed")
+      expect(fields.detect { |f| f.name == :name }.label).to eq('Renamed')
       expect(fields.count).to be >= 19 # not 1
     end
 
-    it "does not change the section list if set" do
+    it 'does not change the section list if set' do
       RailsAdmin.config Team do
         edit do
           field :manager
           configure :name do
-            label "Renamed"
+            label 'Renamed'
           end
         end
       end
@@ -31,8 +31,8 @@ describe RailsAdmin::Config::Sections do
     end
   end
 
-  describe "DSL field inheritance" do
-    it "is tested" do
+  describe 'DSL field inheritance' do
+    it 'is tested' do
       RailsAdmin.config do |config|
         config.model Fan do
           field :name do
@@ -74,50 +74,50 @@ describe RailsAdmin::Config::Sections do
     end
   end
 
-  describe "DSL group inheritance" do
-    it "is tested" do
+  describe 'DSL group inheritance' do
+    it 'is tested' do
       RailsAdmin.config do |config|
         config.model Team do
           list do
-            group "a" do
+            group 'a' do
               field :founded
             end
 
-            group "b" do
+            group 'b' do
               field :name
               field :wins
             end
           end
 
           edit do
-            group "a" do
+            group 'a' do
               field :name
             end
 
-            group "c" do
+            group 'c' do
               field :founded
               field :wins
             end
           end
 
           update do
-            group "d" do
+            group 'd' do
               field :wins
             end
 
-            group "e" do
+            group 'e' do
               field :losses
             end
           end
         end
       end
 
-      expect(RailsAdmin.config(Team).list.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:founded], [:name, :wins]])
-      expect(RailsAdmin.config(Team).edit.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded, :wins]])
-      expect(RailsAdmin.config(Team).create.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded, :wins]])
-      expect(RailsAdmin.config(Team).update.visible_groups.map{|g| g.visible_fields.map(&:name) }).to eq([[:name], [:founded], [:wins], [:losses]])
-      expect(RailsAdmin.config(Team).visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count).to eq(19)
-      expect(RailsAdmin.config(Team).export.visible_groups.map{|g| g.visible_fields.map(&:name) }.flatten.count).to eq(19)
+      expect(RailsAdmin.config(Team).list.visible_groups.collect { |g| g.visible_fields.collect(&:name) }).to eq([[:founded], [:name, :wins]])
+      expect(RailsAdmin.config(Team).edit.visible_groups.collect { |g| g.visible_fields.collect(&:name) }).to eq([[:name], [:founded, :wins]])
+      expect(RailsAdmin.config(Team).create.visible_groups.collect { |g| g.visible_fields.collect(&:name) }).to eq([[:name], [:founded, :wins]])
+      expect(RailsAdmin.config(Team).update.visible_groups.collect { |g| g.visible_fields.collect(&:name) }).to eq([[:name], [:founded], [:wins], [:losses]])
+      expect(RailsAdmin.config(Team).visible_groups.collect { |g| g.visible_fields.collect(&:name) }.flatten.count).to eq(19)
+      expect(RailsAdmin.config(Team).export.visible_groups.collect { |g| g.visible_fields.collect(&:name) }.flatten.count).to eq(19)
     end
   end
 end

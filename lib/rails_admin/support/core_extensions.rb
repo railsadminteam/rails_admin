@@ -1,5 +1,4 @@
 class Hash
-
   def symbolize
     Hash.symbolize_hash(self)
   end
@@ -7,7 +6,7 @@ class Hash
   def self.symbolize_hash(obj)
     case obj
     when Array
-      obj.inject([]){|res, val|
+      obj.inject([])do|res, val|
         res << case val
         when Hash, Array
           symbolize_hash(val)
@@ -17,9 +16,9 @@ class Hash
           val
         end
         res
-      }
+      end
     when Hash
-      obj.inject({}){|res, (key, val)|
+      obj.inject({})do|res, (key, val)|
         nkey = case key
         when String
           key.to_sym
@@ -36,7 +35,7 @@ class Hash
         end
         res[nkey] = nval
         res
-      }
+      end
     else
       obj
     end

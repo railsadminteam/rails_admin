@@ -1,0 +1,11 @@
+AccessorMethodName:
+  Enabled: false
+
+AssignmentInCondition:
+  Enabled: false
+
+ClassVars:
+  Enabled: false
+
+RescueModifier:
+  Enabled: false

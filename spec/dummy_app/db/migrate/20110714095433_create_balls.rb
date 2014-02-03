@@ -1,6 +1,6 @@
 class CreateBalls < ActiveRecord::Migration
   def self.up
-    create_table :balls, :force => true do |t|
+    create_table :balls, force: true do |t|
       t.string :color
       t.timestamps
     end

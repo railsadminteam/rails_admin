@@ -14,7 +14,7 @@ module RailsAdmin
 
         register_instance_option :controller do
 
-          Proc.new do
+          proc do
 
             if request.get? # NEW
 
@@ -27,7 +27,7 @@ module RailsAdmin
               end
               respond_to do |format|
                 format.html { render @action.template_name }
-                format.js   { render @action.template_name, :layout => false }
+                format.js   { render @action.template_name, layout: false }
               end
 
             elsif request.post? # CREATE
@@ -46,7 +46,7 @@ module RailsAdmin
                 @auditing_adapter && @auditing_adapter.create_object(@object, @abstract_model, _current_user)
                 respond_to do |format|
                   format.html { redirect_to_on_success }
-                  format.js   { render :json => { :id => @object.id.to_s, :label => @model_config.with(:object => @object).object_label } }
+                  format.js   { render json: {id: @object.id.to_s, label: @model_config.with(object: @object).object_label} }
                 end
               else
                 handle_save_error

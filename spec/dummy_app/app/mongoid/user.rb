@@ -7,22 +7,22 @@ class User
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
   ## Database authenticatable
-  field :email,              :type => String
-  field :encrypted_password, :type => String
+  field :email,              type: String
+  field :encrypted_password, type: String
 
   ## Recoverable
-  field :reset_password_token,   :type => String
-  field :reset_password_sent_at, :type => Time
+  field :reset_password_token,   type: String
+  field :reset_password_sent_at, type: Time
 
   ## Rememberable
-  field :remember_created_at, :type => Time
+  field :remember_created_at, type: Time
 
   ## Trackable
-  field :sign_in_count,      :type => Integer
-  field :current_sign_in_at, :type => Time
-  field :last_sign_in_at,    :type => Time
-  field :current_sign_in_ip, :type => String
-  field :last_sign_in_ip,    :type => String
+  field :sign_in_count,      type: Integer
+  field :current_sign_in_at, type: Time
+  field :last_sign_in_at,    type: Time
+  field :current_sign_in_ip, type: String
+  field :last_sign_in_ip,    type: String
 
   ## Encryptable
   # field :password_salt, :type => String
@@ -47,14 +47,14 @@ class User
   include Mongoid::Timestamps
 
   # Add Paperclip support for avatars
-  has_mongoid_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  has_mongoid_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100>'}
 
-  field :roles, :type => Array
+  field :roles, type: Array
 
   def attr_accessible_role
     :custom_role
   end
 
   attr_accessor :delete_avatar
-  before_validation { self.avatar = nil if self.delete_avatar == '1' }
+  before_validation { self.avatar = nil if delete_avatar == '1' }
 end
