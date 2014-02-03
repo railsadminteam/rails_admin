@@ -6,7 +6,7 @@ module RailsAdmin
       module Types
         class Json < RailsAdmin::Config::Fields::Types::Text
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :formatted_value do
             value.present? ? JSON.pretty_generate(value) : nil
@@ -14,10 +14,9 @@ module RailsAdmin
 
           def parse_input(params)
             if params[name].is_a?(::String)
-              params[name] = (params[name].blank? ? nil : JSON.parse(params[name]) )
+              params[name] = (params[name].blank? ? nil : JSON.parse(params[name]))
             end
           end
-
         end
       end
     end
