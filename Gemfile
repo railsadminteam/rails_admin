@@ -50,7 +50,7 @@ group :test do
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
-  gem 'paperclip', '>= 3.4'
+  gem 'paperclip', '3.5.2'
   gem 'poltergeist'
   gem 'rspec-rails', '>= 2.14'
   gem 'simplecov', :require => false
