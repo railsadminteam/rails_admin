@@ -2,6 +2,7 @@ class FieldTest
   include Mongoid::Document
   include Mongoid::Paperclip
   include ActiveModel::ForbiddenAttributesProtection
+  extend Dragonfly::Model
 
   field :name, type: String
   field :title, type: String
@@ -47,7 +48,7 @@ class FieldTest
 
   field :dragonfly_asset_name
   field :dragonfly_asset_uid
-  image_accessor :dragonfly_asset
+  dragonfly_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader
 
   validates :short_text, length: {maximum: 255}
