@@ -4,7 +4,7 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
-  - rbx
+  - rbx-2
   - ruby-head
 env:
   - CI_ORM=mongoid
@@ -26,7 +26,7 @@ matrix:
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
   allow_failures:
     - rvm: jruby-head
-    - rvm: rbx
+    - rvm: rbx-2
     - rvm: ruby-head
   fast_finish: true
 notifications:

@@ -56,9 +56,3 @@ group :assets do
 
   gem 'uglifier', '>= 1.3'
 end
-
-platforms :rbx do
-  gem 'racc'
-  gem 'rubysl'
-  gem 'rubysl-test-unit'
-end
