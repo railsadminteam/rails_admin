@@ -1,6 +1,6 @@
 Install and read https://github.com/thoughtbot/paperclip and https://github.com/thoughtbot/paperclip/wiki/Thumbnail-Generation first.
 
-```
+```bash
 $ rails generate paperclip product asset
 ```
 
