@@ -8,7 +8,7 @@ See the #image option in [[File Upload]] if you need to override this behavior.
 
 ```ruby
 class Article < ActiveRecord::Base
-  image_accessor :asset
+  dragonfly_accessor :asset
   # don't forget those if you use :attr_accessible (delete method and form caching method are provided by Dragonfly and used by RailsAdmin)
   attr_accessible :asset, :remove_asset, :retained_asset
 end
