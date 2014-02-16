@@ -234,6 +234,7 @@ batch accessor which configures both create and update views. For consistency,
 these examples only include the batch accessor `edit`, but if you need differing
 create and update views just replace `edit` with `create` or `update`. If you need
 to configure the form when it is displayed as a modal, replace `edit` with `modal`.
+Attention: If you loose some fileds after using `groupings`, add `include_all_fields` to your configuration.
 
 **Field groupings - visibility**
 
