@@ -18,5 +18,14 @@ RailsAdmin.config do |config|
   end
 end
 ```
+This code that you see upper hide all other columns and left only description.
+Ruby 2.1.0 Rails 4.0.2 - this configuration helped me.
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    configure :code, :code_mirror
+  end
+end
+```
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/code_mirror.rb]]
