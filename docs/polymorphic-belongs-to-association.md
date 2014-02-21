@@ -1,4 +1,4 @@
-Synopsys:
+Synopsis:
 
 ```ruby
 class Comment < ActiveRecord::Base
