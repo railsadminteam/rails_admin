@@ -84,7 +84,7 @@ module RailsAdmin
       # @example Custom Warden
       #   RailsAdmin.config do |config|
       #     config.authenticate_with do
-      #       warden.authenticate! :scope => :paranoid
+      #       warden.authenticate! scope: :paranoid
       #     end
       #   end
       #

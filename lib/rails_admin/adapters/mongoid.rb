@@ -68,9 +68,9 @@ module RailsAdmin
         fields = model.fields.reject { |name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
         fields.collect do |name, field|
           {
-            :name => field.name.to_sym,
-            :length => nil,
-            :pretty_name => field.name.to_s.gsub('_', ' ').strip.capitalize,
+            name: field.name.to_sym,
+            length: nil,
+            pretty_name: field.name.to_s.gsub('_', ' ').strip.capitalize,
             :nullable? => true,
             :serial? => false,
           }.merge(type_lookup(name, field))
@@ -163,8 +163,8 @@ module RailsAdmin
           'BigDecimal'     => {type: :decimal},
           'Mongoid::Boolean'        => {type: :boolean},
           'Boolean'        => {type: :boolean},
-          'BSON::ObjectId' => {:type => :bson_object_id, :serial? => (name == primary_key)},
-          'Moped::BSON::ObjectId' => {:type => :bson_object_id, :serial? => (name == primary_key)},
+          'BSON::ObjectId' => {type: :bson_object_id, :serial? => (name == primary_key)},
+          'Moped::BSON::ObjectId' => {type: :bson_object_id, :serial? => (name == primary_key)},
           'Date'           => {type: :date},
           'DateTime'       => {type: :datetime},
           'ActiveSupport::TimeWithZone' => {type: :datetime},

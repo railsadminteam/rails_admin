@@ -36,7 +36,7 @@ class FieldTest
   has_many :nested_field_tests, dependent: :destroy, inverse_of: :field_test, autosave: true
   accepts_nested_attributes_for :nested_field_tests, allow_destroy: true
 
-  # on creation, comment is not saved without :autosave => true
+  # on creation, comment is not saved without autosave: true
   has_one :comment, as: :commentable, autosave: true
   accepts_nested_attributes_for :comment, allow_destroy: true
 
