@@ -15,7 +15,7 @@ config.model Team do
         # scoping all Players currently, let's limit them to the team's league
         # Be sure to limit if there are a lot of Players and order them by position
         scope = scope.where(league_id: team.league_id) if team.present?
-        scope = scope.limit(30).reorder('players.position DESC') # REorder, not ORDER
+        scope = scope.limit(30) # 'order' does not work here
       }
     end
   end
