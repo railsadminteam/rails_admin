@@ -69,7 +69,7 @@ module RailsAdmin
           false
         end
 
-        # list of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
+        # list of columns I should search for that field [{ column: 'table_name.column', type: field.type }, {..}]
         register_instance_option :searchable_columns do
           @searchable_columns ||= case searchable
           when true
