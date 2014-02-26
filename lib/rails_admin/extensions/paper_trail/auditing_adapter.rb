@@ -87,12 +87,23 @@ module RailsAdmin
             sort = :created_at
             sort_reverse = 'true'
           end
-          versions = @version_class.where item_type: model.model.name
+
+          model_name = model.model.name
+
+          versions = version_class_for(model_name).where item_type: model_name
           versions = versions.where item_id: object.id if object
           versions = versions.where('event LIKE ?', "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == 'true' ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, page.presence || '1').per(per_page)
           versions.collect { |version| VersionProxy.new(version, @user_class) }
+        end
+
+        def version_class_for(model_name)
+          klass = model_name.constantize
+            .try(:version_class_name)
+            .try(:constantize)
+
+          klass || @version_class
         end
       end
     end
