@@ -6,8 +6,8 @@
 .page-header
   %h1= @page_name
 - flash && flash.each do |key, value|
-  .alert{:class => "alert-#{key}"}
-    %a.close{:href => '#', :'data-dismiss' => "alert"}×
+  .alert{class: "alert-#{key}"}
+    %a.close{href: '#', :'data-dismiss' => "alert"}×
     = value
 = breadcrumb
 %ul.nav.nav-tabs
