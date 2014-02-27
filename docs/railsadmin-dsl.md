@@ -640,5 +640,20 @@ RailsAdmin.config do |config|
 end
 ```
 
+**List, Edit or something else for all models**
+
+If you want to use `config.model` for all models, you may find it in `ActiveRecord::Base.descendants`
+
+```ruby
+RailsAdmin.config do |config|
+  ActiveRecord::Base.descendants.each do |imodel|
+    config.model "#{imodel}" do
+      list do
+        exclude_fields :created_at, :updated_at
+      end
+    end
+  end
+end
+```
 ### Examples
 [[Select and Multi-Select using Enumeration field type approach|https://github.com/sferik/rails_admin/wiki/Enumeration]]
