@@ -18,7 +18,7 @@
 
   xhr = !field.associated_collection_cache_all
 
-  collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(field.associated_object_label_method), o.send(field.associated_primary_key)] }
+  collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [CGI.escapeHTML(o.send(field.associated_object_label_method)||''), o.send(field.associated_primary_key)] }
 
   js_data = {
     :xhr => xhr,
