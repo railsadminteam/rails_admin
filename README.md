@@ -1,11 +1,11 @@
 # RailsAdmin
 
-[![Gem Version](http://img.shields.io/gem/v/rails_admin.svg)][gem]
-[![Build Status](http://img.shields.io/travis/sferik/rails_admin.svg)][travis]
-[![Dependency Status](http://img.shields.io/gemnasium/sferik/rails_admin.svg)][gemnasium]
-[![Code Climate](http://img.shields.io/codeclimate/github/sferik/rails_admin.svg)][codeclimate]
-[![Coverage Status](http://img.shields.io/coveralls/sferik/rails_admin.svg)][coveralls]
-[![Gittip](http://img.shields.io/gittip/gems.svg)][gittip]
+[![Gem Version](https://img.shields.io/gem/v/rails_admin.svg)][gem]
+[![Build Status](https://img.shields.io/travis/sferik/rails_admin.svg)][travis]
+[![Dependency Status](https://img.shields.io/gemnasium/sferik/rails_admin.svg)][gemnasium]
+[![Code Climate](https://img.shields.io/codeclimate/github/sferik/rails_admin.svg)][codeclimate]
+[![Coverage Status](https://img.shields.io/coveralls/sferik/rails_admin.svg)][coveralls]
+[![Gittip](https://img.shields.io/gittip/gems.svg)][gittip]
 
 [gem]: https://rubygems.org/gems/rails_admin
 [travis]: http://travis-ci.org/sferik/rails_admin
