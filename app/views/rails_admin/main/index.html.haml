@@ -8,10 +8,10 @@
   sort = params[:sort]
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
 
-  export_action = RailsAdmin::Config::Actions.find(:export, { :controller => self.controller, :abstract_model => @abstract_model })
+  export_action = RailsAdmin::Config::Actions.find(:export, { controller: self.controller, abstract_model: @abstract_model })
   export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
 
-  properties = @model_config.list.with(:controller => self.controller, :view => self, :object => @abstract_model.model.new).visible_fields
+  properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).visible_fields
   # columns paginate
   @filterable_fields = @model_config.list.fields.select(&:filterable?)
   sets = get_column_sets(properties)
@@ -39,7 +39,7 @@
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
     field_options = case field.type
     when :enum
-      options_for_select(field.with(:object => @abstract_model.model.new).enum, filter_hash['v'])
+      options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
     else
       ''
     end
@@ -52,26 +52,26 @@
 = content_for :contextual_tabs do
   = bulk_menu
   - if @filterable_fields.present?
-    %li.dropdown{:style => 'float:right'}
-      %a.dropdown-toggle{:href => '#', :'data-toggle' => "dropdown"}
+    %li.dropdown{style: 'float:right'}
+      %a.dropdown-toggle{href: '#', :'data-toggle' => "dropdown"}
         = t('admin.misc.add_filter')
         %b.caret
-      %ul.dropdown-menu#filters{:style => 'left:auto; right:0;'}
+      %ul.dropdown-menu#filters{style: 'left:auto; right:0;'}
         - @filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
-            - options_for_select(field.with(:object => @abstract_model.model.new).enum)
+            - options_for_select(field.with(object: @abstract_model.model.new).enum)
           - else
             - ''
           %li
-            %a{:href => '#', :"data-field-label" => field.label, :"data-field-name" => field.name, :"data-field-options" => field_options.html_safe, :"data-field-type" => field.type, :"data-field-value" => ""}= field.label
+            %a{href: '#', :"data-field-label" => field.label, :"data-field-name" => field.name, :"data-field-options" => field_options.html_safe, :"data-field-type" => field.type, :"data-field-value" => ""}= field.label
 
 #list
   %script
     jQuery(function($) {
     $.filters.options.regional = {
     datePicker: {
-    dateFormat: #{raw I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).to_json},
+    dateFormat: #{raw I18n.t("admin.misc.filter_date_format", default: I18n.t("admin.misc.filter_date_format", locale: :en)).to_json},
     dayNames: #{raw RailsAdmin::Config::Fields::Types::Datetime.day_names.to_json},
     dayNamesShort: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_day_names.to_json},
     dayNamesMin: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_day_names.to_json},
@@ -88,60 +88,60 @@
     - properties.select{ |p| p.column_width.present? }.each do |property|
       = "#list th.#{property.css_class} { width: #{property.column_width}px; min-width: #{property.column_width}px; }"
       = "#list td.#{property.css_class} { max-width: #{property.column_width}px; }"
-  = form_tag(index_path(params.except(*%w[page f query])), :method => :get, :class => "pjax-form form-inline") do
+  = form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form form-inline") do
     .well
       %span#filters_box
-      %hr.filters_box{:style => "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
-      %input.input-small{:name => "query", :type => "search", :value => query, :placeholder => t("admin.misc.filter")}
-      %button.btn.btn-primary{:type => "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+      %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
+      %input.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
+      %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
         %i.icon-white.icon-refresh
         = t("admin.misc.refresh")
       - if export_action
-        %span{:style => 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), :class => 'btn btn-info'
+        %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'btn btn-info'
 
   - unless @model_config.list.scopes.empty?
     %ul.nav.nav-tabs#scope_selector
       - @model_config.list.scopes.each_with_index do |scope, index|
         - scope = '_all' if scope.nil?
         %li{class: "#{'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0)}"}
-          %a{href: index_path(params.merge(:scope => scope, :page => nil))}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", :default => I18n.t("admin.scopes.#{scope}", :default => scope.to_s.titleize))
+          %a{href: index_path(params.merge(scope: scope, page: nil))}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
 
-  = form_tag bulk_action_path(:model_name => @abstract_model.to_param), :method => :post, :id => "bulk_form", :class => "form" do
+  = form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: "form" do
     = hidden_field_tag :bulk_action
     %table.table.table-condensed.table-striped
       %thead
         %tr
           %th.shrink
-            %input.toggle{:type => "checkbox"}
+            %input.toggle{type: "checkbox"}
           - if other_left
             %th.other.left.shrink= "..."
           - properties.each do |property|
             - selected = (sort == property.name.to_s)
             - if property.sortable
-              - sort_location = index_path params.except('sort_reverse').except('page').merge(:sort => property.name).merge(selected && sort_reverse != "true" ? {:sort_reverse => "true"} : {})
+              - sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})
               - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
-            %th{:class => "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), :rel => "tooltip", :title => "#{property.hint}"}= property.label
+            %th{class: "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), rel: "tooltip", title: "#{property.hint}"}= property.label
           - if other_right
             %th.other.right.shrink= "..."
           %th.last.shrink
       %tbody
         - @objects.each do |object|
-          %tr{:class => "#{@abstract_model.param_key}_row"}
+          %tr{class: "#{@abstract_model.param_key}_row"}
             %td
               = check_box_tag "bulk_ids[]", object.id, false
-            - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {:set => (params[:set].to_i - 1)} : {}))
-              %td.other.left= link_to "...", @other_left_link, :class => 'pjax'
+            - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
+              %td.other.left= link_to "...", @other_left_link, class: 'pjax'
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
-              %td{:class => "#{property.css_class} #{property.type_css_class}", :title => strip_tags(value.to_s)}= value
-            - if @other_right_link ||= other_right && index_path(params.merge(:set => (params[:set].to_i + 1)))
-              %td.other.right= link_to "...", @other_right_link, :class => 'pjax'
+              %td{class: "#{property.css_class} #{property.type_css_class}", title: strip_tags(value.to_s)}= value
+            - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
+              %td.other.right= link_to "...", @other_right_link, class: 'pjax'
             %td.last.links
               %ul.inline= menu_for :member, @abstract_model, object, true
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
-      = paginate(@objects, :theme => 'twitter-bootstrap', :remote => true)
-      = link_to(t("admin.misc.show_all"), index_path(params.merge(:all => true)), :class => "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
+      = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
+      = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
     - else
       .clearfix.total-count= "#{@objects.size} #{@model_config.pluralize(@objects.size).downcase}"

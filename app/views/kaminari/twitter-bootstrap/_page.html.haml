@@ -1,4 +1,4 @@
 - if page.current?
-  %li.active= link_to page, url, :class => (remote ? 'pjax' : '')
+  %li.active= link_to page, url, class: (remote ? 'pjax' : '')
 - else
-  %li= link_to page, url, :class => (remote ? 'pjax' : '')
+  %li= link_to page, url, class: (remote ? 'pjax' : '')

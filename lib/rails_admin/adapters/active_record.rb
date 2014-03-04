@@ -61,9 +61,9 @@ module RailsAdmin
         end
         columns.collect do |property|
           {
-            :name => property.name.to_sym,
-            :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
-            :length => property.limit,
+            name: property.name.to_sym,
+            pretty_name: property.name.to_s.tr('_', ' ').capitalize,
+            length: property.limit,
             :nullable? => property.null,
             :serial? => property.primary,
           }.merge(type_lookup(property))

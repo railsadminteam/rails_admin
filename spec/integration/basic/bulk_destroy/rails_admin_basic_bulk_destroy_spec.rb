@@ -15,7 +15,7 @@ describe 'RailsAdmin Basic Bulk Destroy' do
       # requests via visit) or B) just uses Rack::Test (and doesn't use capybara for browser
       # interaction like click_button).
       page.driver.browser.reset_host!
-      page.driver.browser.process :post, bulk_action_path(:bulk_action => 'bulk_delete', :model_name => 'player', :bulk_ids => @delete_ids, '_method' => 'post')
+      page.driver.browser.process :post, bulk_action_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: @delete_ids, '_method' => 'post')
       click_button "Yes, I'm sure"
     end
 
@@ -42,7 +42,7 @@ describe 'RailsAdmin Basic Bulk Destroy' do
       # requests via visit) or B) just uses Rack::Test (and doesn't use capybara for browser
       # interaction like click_button).
       page.driver.browser.reset_host!
-      page.driver.browser.process :post, bulk_action_path(:bulk_action => 'bulk_delete', :model_name => 'player', :bulk_ids => @delete_ids, '_method' => 'post')
+      page.driver.browser.process :post, bulk_action_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: @delete_ids, '_method' => 'post')
       click_button 'Cancel'
     end
 

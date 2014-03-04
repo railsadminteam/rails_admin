@@ -25,24 +25,24 @@ class User
   field :last_sign_in_ip,    type: String
 
   ## Encryptable
-  # field :password_salt, :type => String
+  # field :password_salt, type: String
 
   ## Confirmable
-  # field :confirmation_token,   :type => String
-  # field :confirmed_at,         :type => Time
-  # field :confirmation_sent_at, :type => Time
-  # field :unconfirmed_email,    :type => String # Only if using reconfirmable
+  # field :confirmation_token,   type: String
+  # field :confirmed_at,         type: Time
+  # field :confirmation_sent_at, type: Time
+  # field :unconfirmed_email,    type: String # Only if using reconfirmable
 
   ## Lockable
-  # field :failed_attempts, :type => Integer # Only if lock strategy is :failed_attempts
-  # field :unlock_token,    :type => String # Only if unlock strategy is :email or :both
-  # field :locked_at,       :type => Time
+  # field :failed_attempts, type: Integer # Only if lock strategy is :failed_attempts
+  # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
+  # field :locked_at,       type: Time
 
   # Token authenticatable
-  # field :authentication_token, :type => String
+  # field :authentication_token, type: String
 
   ## Invitable
-  # field :invitation_token, :type => String
+  # field :invitation_token, type: String
 
   include Mongoid::Timestamps
 
