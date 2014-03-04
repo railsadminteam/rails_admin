@@ -49,7 +49,7 @@ module RailsAdmin
                 output = if params[:compact]
                   primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
                   label_method = @model_config.object_label_method
-                  @objects.collect { |o| {id: o.send(primary_key_method).to_s, label: o.send(label_method).to_s} }
+                  @objects.collect { |o| {id: o.send(primary_key_method).to_s, label: CGI.escapeHTML(o.send(label_method).to_s)} }
                 else
                   @objects.to_json(@schema)
                 end
