@@ -163,14 +163,15 @@
     _queryFilter: function(val) {
       var widget = this;
       widget._query(val, function(matches) {
-        var i, html = "";
+        var i;
+        widget.collection.html('');
         for (i in matches) {
           if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
-            html += '<option value="' + matches[i].id + '" title="' + matches[i].label + '">' + matches[i].label + '</option>';
+            widget.collection.append(
+              $('<option></option>').attr('value', matches[i].id).attr('title', matches[i].label).text(matches[i].label)
+            );
           }
         }
-
-        widget.collection.html(html);
       });
     },
 
@@ -247,7 +248,7 @@
         if (el.length) {
           el.attr("selected", "selected");
         } else {
-          widget.element.append($('<option value="' + option.value + '" selected="selected"></option>'));
+          widget.element.append($('<option></option>').attr('value', option.value).attr('selected', "selected"));
         }
       });
       $(options).appendTo(this.selection).attr('selected', false);
