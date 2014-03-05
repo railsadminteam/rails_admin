@@ -110,7 +110,9 @@ module RailsAdmin
         end
 
         def build
-          @scope.where(@statements.join(' OR '), *@values).references(*(@tables.uniq))
+          scope = @scope.where(@statements.join(' OR '), *@values)
+          scope = scope.references(*(@tables.uniq)) if @tables.any?
+          scope
         end
       end
 

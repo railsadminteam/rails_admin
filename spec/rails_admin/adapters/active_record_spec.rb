@@ -252,6 +252,20 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     it 'makes correct query' do
       expect(@abstract_model.all(query: 'foo')).to match_array @teams[1..2]
     end
+
+    context "when field's searchable_columns is empty" do
+      before do
+        RailsAdmin.config do |c|
+          c.model Team do
+            field :players
+          end
+        end
+      end
+
+      it 'does not break' do
+        expect{ @abstract_model.all(query: 'foo') }.not_to raise_error
+      end
+    end
   end
 
   describe '#filter_conditions' do
