@@ -263,7 +263,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'does not break' do
-        expect{ @abstract_model.all(query: 'foo') }.not_to raise_error
+        expect { @abstract_model.all(query: 'foo') }.not_to raise_error
       end
     end
   end
