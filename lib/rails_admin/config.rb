@@ -305,7 +305,7 @@ module RailsAdmin
       def viable_models
         included_models.collect(&:to_s).presence || (
           @@system_models ||= # memoization for tests
-            ([Rails.application] + Rails::Engine.subclasses.collect(&:instance)).collect do |app|
+            ([Rails.application] + Rails::Engine.subclasses.collect(&:instance)).flat_map do |app|
               (app.paths['app/models'].to_a + app.config.autoload_paths).collect do |load_path|
                 Dir.glob(app.root.join(load_path)).collect do |load_dir|
                   Dir.glob(load_dir + '/**/*.rb').collect do |filename|
@@ -314,7 +314,7 @@ module RailsAdmin
                   end
                 end
               end
-            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
+            end.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
           )
       end
 
