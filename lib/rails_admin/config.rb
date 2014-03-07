@@ -314,7 +314,7 @@ module RailsAdmin
                   end
                 end
               end
-            end.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
+            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
           )
       end
 
