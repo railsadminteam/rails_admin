@@ -110,9 +110,13 @@ module RailsAdmin
         end
 
         def build
-          scope = @scope.where(@statements.join(' OR '), *@values)
-          scope = scope.references(*(@tables.uniq)) if @tables.any?
-          scope
+          join_tables = @tables.uniq
+          join_tables.delete(@scope.name.tableize) # exclude the scope table itself
+          if join_tables.any?
+            @scope.includes(*join_tables).where(@statements.join(' OR '), *@values).references(*join_tables)
+          else
+            @scope.where(@statements.join(' OR '), *@values)
+          end
         end
       end
 
