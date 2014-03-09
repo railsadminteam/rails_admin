@@ -172,6 +172,7 @@ module RailsAdmin
           'Hash'           => {type: :serialized},
           'Money'          => {type: :serialized},
           'Integer'        => {type: :integer},
+          'Country'        => {type: :country},
           'Object'         => (
             if associations.detect { |a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym }
               {type: :bson_object_id}
