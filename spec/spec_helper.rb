@@ -66,7 +66,7 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :request
 
   config.before do
-    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
+    DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :truncation : :transaction
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
