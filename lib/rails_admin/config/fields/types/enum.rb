@@ -12,7 +12,7 @@ module RailsAdmin
           end
 
           register_instance_option :enum_method do
-            @enum_method ||= (bindings[:object].class.respond_to?("#{name}_enum") || bindings[:object].respond_to?("#{name}_enum")) ? "#{name}_enum" : name
+            @enum_method ||= bindings[:object].class.respond_to?("#{name}_enum") || bindings[:object].respond_to?("#{name}_enum") ? "#{name}_enum" : name
           end
 
           register_instance_option :enum do
