@@ -17,6 +17,11 @@ RailsAdmin.config do |config|
     end
   end
 end
-```
 
+# To configure the editor bar pass a hash of options:
+# For RailsAdmin >= 0.5.0
+field :description, :wysihtml5 do
+  config_options :html => true
+end   
+```
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/wysihtml5.rb]]
