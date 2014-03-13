@@ -21,7 +21,7 @@ module RailsAdmin
         end
 
         def username
-          @user_class.find_by_id(@version.whodunnit).try(:email) || @version.whodunnit
+          @user_class.find(@version.whodunnit).try(:email) rescue nil || @version.whodunnit
         end
 
         def item
