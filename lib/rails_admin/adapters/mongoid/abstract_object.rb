@@ -24,7 +24,7 @@ module RailsAdmin
 RUBY
             elsif [:has_one, :references_one].include? association.macro
               instance_eval <<-RUBY, __FILE__, __LINE__ + 1
-                def #{name.to_s}_id=(item_id)
+                def #{name}_id=(item_id)
                   item = (#{association.klass}.find(item_id) rescue nil)
                   return unless item
                   unless persisted?

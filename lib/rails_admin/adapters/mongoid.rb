@@ -190,7 +190,7 @@ module RailsAdmin
           ),
           'Symbol'         => {type: :string, length: 255},
           'Time'           => {type: :datetime},
-        }[field.type.to_s] || fail("Type #{field.type.to_s} for field :#{name} in #{model.inspect} not supported")
+        }[field.type.to_s] || fail("Type #{field.type} for field :#{name} in #{model.inspect} not supported")
       end
 
       def length_validation_lookup(name)
@@ -315,7 +315,7 @@ module RailsAdmin
             fail <<-MSG.gsub(/^\s+/, '')
             Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
             because embedded model doesn't have top-level access.
-            Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model.to_s}' model.
+            Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
             MSG
           end
           nested

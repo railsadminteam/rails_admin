@@ -6,7 +6,7 @@ if defined?(::ActiveRecord)
       end
 
       def rails_admin_default_object_label_method
-        self.new_record? ? "new #{self.class.to_s}" : "#{self.class.to_s} ##{id}"
+        self.new_record? ? "new #{self.class}" : "#{self.class} ##{id}"
       end
 
       def safe_send(value)
