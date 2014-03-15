@@ -86,11 +86,11 @@ module RailsAdmin
       end
 
       def embedded?
-        @embedded ||= !!model.relations.values.detect { |a| a.macro.to_sym == :embedded_in }
+        model.relations.values.detect { |a| a.macro.to_sym == :embedded_in }
       end
 
       def cyclic?
-        @cyclic ||= !!model.cyclic?
+        model.cyclic?
       end
 
       def adapter_supports_joins?
@@ -326,7 +326,7 @@ module RailsAdmin
         end
 
         def polymorphic_lookup
-          !!polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          polymorphic? && [:referenced_in, :belongs_to].include?(macro)
         end
 
         def primary_key_lookup

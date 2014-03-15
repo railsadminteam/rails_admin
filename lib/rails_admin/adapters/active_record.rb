@@ -199,7 +199,7 @@ module RailsAdmin
         end
 
         def polymorphic_lookup
-          !!options[:polymorphic]
+          !!options[:polymorphic] # rubocop:disable DoubleNegation
         end
 
         def primary_key_lookup
