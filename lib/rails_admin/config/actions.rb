@@ -45,12 +45,12 @@ module RailsAdmin
 
         def add_action(key, parent_class, parent, &block)
           a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
-          a.instance_eval(%{
+          a.instance_eval(%(
             #{parent} true
             def key
               :#{key}
             end
-          })
+          ))
           add_action_custom_key(a, &block)
         end
 

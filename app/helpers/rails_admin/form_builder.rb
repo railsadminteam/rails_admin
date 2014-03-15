@@ -22,7 +22,7 @@ module RailsAdmin
       if (fields = fieldset.with(form: self, object: @object, view: @template, controller: @template.controller).visible_fields).length > 0
         @template.content_tag :fieldset do
           contents = []
-          contents << @template.content_tag(:legend, %{<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}}.html_safe, style: "#{fieldset.name == :default ? 'display:none' : ''}")
+          contents << @template.content_tag(:legend, %(<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}).html_safe, style: "#{fieldset.name == :default ? 'display:none' : ''}")
           contents << @template.content_tag(:p, fieldset.help) if fieldset.help.present?
           contents << fields.collect { |field| field_wrapper_for(field, nested_in) }.join
           contents.join.html_safe
@@ -77,11 +77,11 @@ module RailsAdmin
       else
         object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
       end
-      %{<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label.to_s)}"></span>}.html_safe
+      %(<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label.to_s)}"></span>).html_safe
     end
 
     def jquery_namespace(field)
-      %{#{'#modal ' if @template.controller.params[:modal]}##{dom_id(field)}_field}
+      %(#{'#modal ' if @template.controller.params[:modal]}##{dom_id(field)}_field)
     end
 
     def dom_id(field)
@@ -94,7 +94,7 @@ module RailsAdmin
     end
 
     def dom_name(field)
-      (@dom_name ||= {})[field.name] ||= %{#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''}}
+      (@dom_name ||= {})[field.name] ||= %(#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''})
     end
 
   protected

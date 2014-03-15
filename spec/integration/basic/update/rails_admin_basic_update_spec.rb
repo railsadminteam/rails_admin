@@ -153,14 +153,14 @@ describe 'RailsAdmin Basic Update' do
 
       visit edit_path(model_name: 'user', id: @user.id)
 
-      fill_in 'user[roles]', with: %{['admin', 'user']}
+      fill_in 'user[roles]', with: %(['admin', 'user'])
       click_button 'Save' # first(:button, "Save").click
 
       @user.reload
     end
 
     it 'saves the serialized data' do
-      expect(@user.roles).to eq(%w(admin user))
+      expect(@user.roles).to eq(%w[admin user])
     end
   end
 

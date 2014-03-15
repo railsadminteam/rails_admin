@@ -89,3 +89,19 @@ RaiseArgs:
 
 TrailingComma:
   Enabled: false
+
+PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  ()
+    '%i': ()
+    '%q': ()
+    '%Q': ()
+    '%r': '{}'
+    '%s': ()
+    '%w': '[]'
+    '%W': '[]'
+    '%x': ()
+
+FileName:
+  Exclude:
+    - 'lib/rails_admin/bootstrap-sass.rb'

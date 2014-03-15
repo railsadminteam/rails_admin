@@ -59,7 +59,7 @@ group :test do
   gem 'poltergeist', '~> 1.5'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
-  gem 'rubocop', '>= 0.15'
+  gem 'rubocop', '>= 0.19.0'
   gem 'simplecov', require: false
   gem 'timecop', '>= 0.5'
 end

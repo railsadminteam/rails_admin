@@ -59,7 +59,7 @@ module RailsAdmin
         li_stack = navigation nodes_stack, nodes
 
         label = navigation_label || t('admin.misc.navigation')
-        %{<li class='nav-header'>#{label}</li>#{li_stack}} if li_stack.present?
+        %(<li class='nav-header'>#{label}</li>#{li_stack}) if li_stack.present?
       end.join.html_safe
     end
 
@@ -69,7 +69,7 @@ module RailsAdmin
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
-      li_stack = %{<li class='nav-header'>#{label}</li>#{li_stack}}.html_safe if li_stack.present?
+      li_stack = %(<li class='nav-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
       li_stack
     end
 
@@ -78,7 +78,7 @@ module RailsAdmin
         model_param = node.abstract_model.to_param
         url         = url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
         level_class = " nav-level-#{level}" if level > 0
-        nav_icon = node.navigation_icon ? %{<i class="#{node.navigation_icon}"></i>}.html_safe : ''
+        nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
 
         li = content_tag :li, 'data-model' => model_param do
           link_to nav_icon + node.label_plural, url, class: "pjax#{level_class}"
@@ -116,14 +116,14 @@ module RailsAdmin
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
       actions.collect do |action|
         wording = wording_for(:menu, action)
-        %{
+        %(
           <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
             <a class="#{action.pjax? ? 'pjax' : ''}" href="#{url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))}">
               <i class="#{action.link_icon}"></i>
               <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
             </a>
           </li>
-        }
+        )
       end.join.html_safe
     end
 
