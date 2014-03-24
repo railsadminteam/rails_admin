@@ -234,15 +234,15 @@ describe RailsAdmin::Config do
         end
       end
 
-      expect(RailsAdmin.config.visible_models(controller: double(_current_user: double(role: :admin), :authorized? => true)).collect(&:abstract_model).collect(&:model)).to match_array [Fan, Comment]
+      expect(RailsAdmin.config.visible_models(controller: double(_current_user: double(role: :admin), authorized?: true)).collect(&:abstract_model).collect(&:model)).to match_array [Fan, Comment]
     end
 
     it 'hides unallowed models' do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
       end
-      expect(RailsAdmin.config.visible_models(controller: double(:authorized? => true)).collect(&:abstract_model).collect(&:model)).to eq([Comment])
-      expect(RailsAdmin.config.visible_models(controller: double(:authorized? => false)).collect(&:abstract_model).collect(&:model)).to eq([])
+      expect(RailsAdmin.config.visible_models(controller: double(authorized?: true)).collect(&:abstract_model).collect(&:model)).to eq([Comment])
+      expect(RailsAdmin.config.visible_models(controller: double(authorized?: false)).collect(&:abstract_model).collect(&:model)).to eq([])
     end
 
     it 'does not contain embedded model', mongoid: true do
@@ -250,7 +250,7 @@ describe RailsAdmin::Config do
         config.included_models = [FieldTest, Comment, Embed]
       end
 
-      expect(RailsAdmin.config.visible_models(controller: double(_current_user: double(role: :admin), :authorized? => true)).collect(&:abstract_model).collect(&:model)).to match_array [FieldTest, Comment]
+      expect(RailsAdmin.config.visible_models(controller: double(_current_user: double(role: :admin), authorized?: true)).collect(&:abstract_model).collect(&:model)).to match_array [FieldTest, Comment]
     end
 
     it 'basically does not contain embedded model except model using recursively_embeds_many or recursively_embeds_one', mongoid: true do
@@ -265,7 +265,7 @@ describe RailsAdmin::Config do
       RailsAdmin.config do |config|
         config.included_models = [FieldTest, Comment, Embed, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
       end
-      expect(RailsAdmin.config.visible_models(controller: double(_current_user: double(role: :admin), :authorized? => true)).collect(&:abstract_model).collect(&:model)).to match_array [FieldTest, Comment, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
+      expect(RailsAdmin.config.visible_models(controller: double(_current_user: double(role: :admin), authorized?: true)).collect(&:abstract_model).collect(&:model)).to match_array [FieldTest, Comment, RecursivelyEmbedsMany, RecursivelyEmbedsOne]
     end
   end
 

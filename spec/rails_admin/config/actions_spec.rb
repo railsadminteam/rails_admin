@@ -51,16 +51,16 @@ describe RailsAdmin::Config::Actions do
         hide
       end
 
-      expect(RailsAdmin::Config::Actions.find(:index, controller: double(:authorized? => true), abstract_model: RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
-      expect(RailsAdmin::Config::Actions.find(:index, controller: double(:authorized? => true), abstract_model: RailsAdmin::AbstractModel.new(Team))).to be_nil
+      expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
+      expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Team))).to be_nil
     end
 
     it "checks bindings[:abstract_model] presence while checking action\'s visibility" do
       RailsAdmin.config do |config|
         config.excluded_models << Team
       end
-      expect(RailsAdmin::Config::Actions.find(:index, controller: double(:authorized? => true), abstract_model: RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
-      expect(RailsAdmin::Config::Actions.find(:index, controller: double(:authorized? => true), abstract_model: RailsAdmin::AbstractModel.new(Team))).to be_nil
+      expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
+      expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Team))).to be_nil
     end
   end
 

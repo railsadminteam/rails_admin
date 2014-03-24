@@ -64,8 +64,8 @@ module RailsAdmin
             name: property.name.to_sym,
             pretty_name: property.name.to_s.tr('_', ' ').capitalize,
             length: property.limit,
-            :nullable? => property.null,
-            :serial? => property.primary,
+            nullable?: property.null,
+            serial?: property.primary,
           }.merge(type_lookup(property))
         end
       end

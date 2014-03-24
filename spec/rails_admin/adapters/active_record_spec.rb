@@ -163,11 +163,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
   describe '#properties' do
     it 'returns parameters of string-type field' do
-      expect(RailsAdmin::AbstractModel.new('Player').properties.select { |f| f[:name] == :name }).to eq([{name: :name, pretty_name: 'Name', type: :string, length: 100, :nullable? => false, :serial? => false}])
+      expect(RailsAdmin::AbstractModel.new('Player').properties.select { |f| f[:name] == :name }).to eq([{name: :name, pretty_name: 'Name', type: :string, length: 100, nullable?: false, serial?: false}])
     end
 
     it 'maps serialized attribute to :serialized field type' do
-      expect(RailsAdmin::AbstractModel.new('User').properties.detect { |f| f[:name] == :roles }).to eq(name: :roles, pretty_name: 'Roles', length: 255, :nullable? => true, :serial? => false, type: :serialized)
+      expect(RailsAdmin::AbstractModel.new('User').properties.detect { |f| f[:name] == :roles }).to eq(name: :roles, pretty_name: 'Roles', length: 255, nullable?: true, serial?: false, type: :serialized)
     end
   end
 
