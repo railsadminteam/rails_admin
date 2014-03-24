@@ -35,7 +35,6 @@ end
 
 group :development, :test do
   gem 'pry', '>= 0.9'
-  gem 'pry-rescue', '>= 1.2'
   platforms :mri_19, :mri_20 do
     gem 'pry-debugger', '>= 0.2'
     gem 'pry-stack_explorer', '>= 0.4.9.1'
