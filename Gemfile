@@ -33,6 +33,10 @@ group :mongoid do
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
 end
 
+group :development do
+  gem 'appraisal', '~> 1.0.0.beta3'
+end
+
 group :development, :test do
   gem 'pry', '>= 0.9'
   platforms :mri_19, :mri_20 do

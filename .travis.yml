@@ -3,27 +3,41 @@ bundler_args: --without development
 rvm:
   - 1.9.3
   - 2.0.0
-  - 2.1.0
+  - 2.1.1
   - rbx-2
   - ruby-head
+gemfile:
+  - gemfiles/rails_4_1.gemfile
 env:
   - CI_ORM=mongoid
   - CI_ORM=active_record CI_DB_ADAPTER=sqlite3
 language: ruby
 matrix:
   include:
-    - rvm: 2.1.0
+    - rvm: 2.1.1
       env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
-    - rvm: 2.1.0
+      gemfile: gemfiles/rails_4_1.gemfile
+    - rvm: 2.1.1
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
+      gemfile: gemfiles/rails_4_1.gemfile
+    - rvm: 2.1.1
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_4_0.gemfile
+    - rvm: 2.1.1
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_4_0.gemfile
     - rvm: jruby-19mode
       env: CI_ORM=mongoid JRUBY_OPTS="$JRUBY_OPTS --debug"
+      gemfile: gemfiles/rails_4_1.gemfile
     - rvm: jruby-19mode
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
+      gemfile: gemfiles/rails_4_1.gemfile
     - rvm: jruby-head
       env: CI_ORM=mongoid JRUBY_OPTS="$JRUBY_OPTS --debug"
+      gemfile: gemfiles/rails_4_1.gemfile
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3 JRUBY_OPTS="$JRUBY_OPTS --debug"
+      gemfile: gemfiles/rails_4_1.gemfile
   allow_failures:
     - rvm: jruby-head
     - rvm: rbx-2
