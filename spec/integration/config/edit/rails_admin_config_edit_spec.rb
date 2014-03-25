@@ -139,8 +139,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
     describe 'help' do
       before do
         class HelpTest < Tableless
-          column :name, 'string(50)'
-          column :division, :string
+          column :name, 'varchar(50)'
+          column :division, :varchar
         end
         RailsAdmin.config.included_models = [HelpTest, Team]
       end

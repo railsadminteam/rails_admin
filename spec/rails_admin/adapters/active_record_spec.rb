@@ -54,11 +54,12 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
 
     it 'lists associations' do
-      expect(@post.associations.collect { |a|a[:name].to_s }).to match_array %w[a_r_blog a_r_categories a_r_comments]
+      expect(@post.associations.collect { |a|a[:name].to_s }).to include(*%w[a_r_blog a_r_categories a_r_comments])
     end
 
     it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      expect((@post.associations + @blog.associations + @user.associations).collect { |a|a[:type] }.uniq.collect(&:to_s)).to match_array %w[belongs_to has_and_belongs_to_many has_many has_one]
+      # ActiveRecord 4.1 converts has_and_belongs_to_many association to has_many
+      expect((@post.associations + @blog.associations + @user.associations).collect { |a|a[:type] }.uniq.collect(&:to_s)).to include(*%w[belongs_to has_many has_one])
     end
 
     it 'has correct parameter of belongs_to association' do
@@ -99,11 +100,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     it 'has correct parameter of has_and_belongs_to_many association' do
       param = @post.associations.select { |a| a[:name] == :a_r_categories }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
+      expect(param.reject { |k, v| [:primary_key_proc, :model_proc, :foreign_key, :type].include? k }).to eq(
         name: :a_r_categories,
         pretty_name: 'A r categories',
-        type: :has_and_belongs_to_many,
-        foreign_key: :ar_post_id,
         foreign_type: nil,
         as: nil,
         polymorphic: false,

@@ -45,7 +45,7 @@ describe RailsAdmin::Config::Fields::Base do
 
     it 'has correct fields when polymorphic_type column comes ahead of polymorphic foreign_key column' do
       class CommentReversed < Tableless
-        column :commentable_type, :string
+        column :commentable_type, :varchar
         column :commentable_id, :integer
         belongs_to :commentable, polymorphic: true
       end
@@ -370,8 +370,8 @@ describe RailsAdmin::Config::Fields::Base do
       class FieldVisibilityTest < Tableless
         column :id, :integer
         column :_id, :integer
-        column :_type, :string
-        column :name, :string
+        column :_type, :varchar
+        column :name, :varchar
         column :created_at, :datetime
         column :updated_at, :datetime
         column :deleted_at, :datetime

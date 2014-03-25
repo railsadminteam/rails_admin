@@ -5,7 +5,7 @@ describe 'RailsAdmin::FormBuilder' do
     before do
       allow(helper).to receive(:authorized?).and_return(true)
       (@object = Player.new).save
-      @builder = RailsAdmin::FormBuilder.new(:player, @object, helper, {}, nil)
+      @builder = RailsAdmin::FormBuilder.new(:player, @object, helper, {})
       allow(@builder).to receive(:field_for).and_return('field')
     end
 
@@ -19,7 +19,7 @@ describe 'RailsAdmin::FormBuilder' do
     before do
       allow(helper).to receive(:authorized?).and_return(true)
       @object = Fan.create!(name: 'foo')
-      @builder = RailsAdmin::FormBuilder.new(:fan, @object, helper, {}, nil)
+      @builder = RailsAdmin::FormBuilder.new(:fan, @object, helper, {})
     end
 
     it 'returns a tag with infos' do
