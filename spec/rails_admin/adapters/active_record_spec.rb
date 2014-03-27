@@ -275,7 +275,21 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         collect { |h| FactoryGirl.create :team, h }
     end
 
-    it 'makes conrrect query' do
+    context 'without configuration' do
+      before do
+        Rails.configuration.stub(:database_configuration) { nil }
+      end
+
+      after do
+        Rails.configuration.unstub(:database_configuration)
+      end
+
+      it 'does not raise error' do
+        expect { @abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}}) }.to_not raise_error
+      end
+    end
+
+    it 'makes correct query' do
       expect(@abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq([@teams[2]])
     end
   end

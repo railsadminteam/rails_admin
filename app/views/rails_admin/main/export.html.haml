@@ -47,7 +47,7 @@
       %i.icon-chevron-down
       = t('admin.export.options_for', name: 'csv')
     .control-group
-      - guessed_encoding = (Rails.configuration.database_configuration[Rails.env]['encoding'].presence rescue 'UTF-8') || 'UTF-8'
+      - guessed_encoding = @abstract_model.encoding
       %label.control-label{for: "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
       .controls
         -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :

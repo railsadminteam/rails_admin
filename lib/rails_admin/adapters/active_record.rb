@@ -73,7 +73,9 @@ module RailsAdmin
       delegate :primary_key, :table_name, to: :model, prefix: false
 
       def encoding
-        Rails.configuration.database_configuration[Rails.env]['encoding']
+        encoding = ::ActiveRecord::Base.connection.try(:encoding)
+        encoding ||= ::ActiveRecord::Base.connection.try(:charset) # mysql2
+        encoding || 'UTF-8'
       end
 
       def embedded?
@@ -297,7 +299,7 @@ module RailsAdmin
         end
 
         def ar_adapter
-          Rails.configuration.database_configuration[Rails.env]['adapter']
+          ::ActiveRecord::Base.connection.adapter_name.downcase
         end
 
         def like_operator
