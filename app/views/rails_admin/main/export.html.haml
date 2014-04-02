@@ -16,13 +16,13 @@
     .control-group
       %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
       .controls
-        - visible_fields.select{ |f| !f.association? || f.association[:polymorphic] }.each do |field|
+        - visible_fields.select{ |f| !f.association? || f.association.polymorphic? }.each do |field|
           - list = field.virtual? ? 'methods' : 'only'
-          - if field.association? && field.association[:polymorphic]
+          - if field.association? && field.association.polymorphic?
             %label.checkbox{for: "schema_#{list}_#{field.method_name}"}
               = check_box_tag "schema[#{list}][]", field.method_name, true, { id: "schema_#{list}_#{field.method_name}" }
               = field.label + " [id]"
-            - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association[:foreign_type] == p[:name] }[:name]
+            - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association.foreign_type == p.name }.name
             %label.checkbox{for: "schema_#{list}_#{polymorphic_type_column_name}"}
               = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { id: "schema_#{list}_#{polymorphic_type_column_name}" }
               = field.label + " [type]"
@@ -31,7 +31,7 @@
               = check_box_tag "schema[#{list}][]", field.name, true, { id: "schema_#{list}_#{field.name}" }
               = field.label
 
-    - visible_fields.select{ |f| f.association? && !f.association[:polymorphic] }.each do |field|
+    - visible_fields.select{ |f| f.association? && !f.association.polymorphic? }.each do |field|
       - fields = field.associated_model_config.export.with(controller: self.controller, view: self, object: (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
       .control-group
         %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)

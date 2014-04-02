@@ -7,170 +7,20 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   end
 
   describe '#associations' do
-    before :all do
-      RailsAdmin::AbstractModel.reset_polymorphic_parents
-
-      class ARBlog < ActiveRecord::Base
-        has_many :a_r_posts
-        has_many :a_r_comments, as: :commentable
-        belongs_to :librarian, polymorphic: true
-      end
-
-      class ARPost < ActiveRecord::Base
-        belongs_to :a_r_blog
-        has_and_belongs_to_many :a_r_categories
-        has_many :a_r_comments, as: :commentable
-      end
-
-      class ARCategory < ActiveRecord::Base
-        has_and_belongs_to_many :a_r_posts
-        belongs_to :librarian, polymorphic: true
-      end
-
-      class ARUser < ActiveRecord::Base
-        has_one :a_r_profile
-        has_many :a_r_categories, as: :librarian
-      end
-
-      class ARProfile < ActiveRecord::Base
-        belongs_to :a_r_user
-        has_many :a_r_blogs, as: :librarian
-      end
-
-      class ARComment < ActiveRecord::Base
-        belongs_to :commentable, polymorphic: true
-      end
-
-      @blog = RailsAdmin::AbstractModel.new(ARBlog)
-      @post = RailsAdmin::AbstractModel.new(ARPost)
-      @category = RailsAdmin::AbstractModel.new(ARCategory)
-      @user = RailsAdmin::AbstractModel.new(ARUser)
-      @profile = RailsAdmin::AbstractModel.new(ARProfile)
-      @comment = RailsAdmin::AbstractModel.new(ARComment)
-    end
-
-    after :all do
-      RailsAdmin::AbstractModel.reset_polymorphic_parents
-    end
-
-    it 'lists associations' do
-      expect(@post.associations.collect { |a|a[:name].to_s }).to include(*%w[a_r_blog a_r_categories a_r_comments])
-    end
-
-    it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-      # ActiveRecord 4.1 converts has_and_belongs_to_many association to has_many
-      expect((@post.associations + @blog.associations + @user.associations).collect { |a|a[:type] }.uniq.collect(&:to_s)).to include(*%w[belongs_to has_many has_one])
-    end
-
-    it 'has correct parameter of belongs_to association' do
-      param = @post.associations.select { |a| a[:name] == :a_r_blog }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
-        name: :a_r_blog,
-        pretty_name: 'A r blog',
-        type: :belongs_to,
-        foreign_key: :a_r_blog_id,
-        foreign_type: nil,
-        as: nil,
-        polymorphic: false,
-        inverse_of: nil,
-        read_only: nil,
-        nested_form: nil
-      )
-      expect(param[:primary_key_proc].call).to eq('id')
-      expect(param[:model_proc].call).to eq(ARBlog)
-    end
-
-    it 'has correct parameter of has_many association' do
-      param = @blog.associations.select { |a| a[:name] == :a_r_posts }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
-        name: :a_r_posts,
-        pretty_name: 'A r posts',
-        type: :has_many,
-        foreign_key: :ar_blog_id,
-        foreign_type: nil,
-        as: nil,
-        polymorphic: false,
-        inverse_of: nil,
-        read_only: nil,
-        nested_form: nil
-      )
-      expect(param[:primary_key_proc].call).to eq('id')
-      expect(param[:model_proc].call).to eq(ARPost)
-    end
-
-    it 'has correct parameter of has_and_belongs_to_many association' do
-      param = @post.associations.select { |a| a[:name] == :a_r_categories }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc, :foreign_key, :type].include? k }).to eq(
-        name: :a_r_categories,
-        pretty_name: 'A r categories',
-        foreign_type: nil,
-        as: nil,
-        polymorphic: false,
-        inverse_of: nil,
-        read_only: nil,
-        nested_form: nil
-      )
-      expect(param[:primary_key_proc].call).to eq('id')
-      expect(param[:model_proc].call).to eq(ARCategory)
-    end
-
-    it 'has correct parameter of polymorphic belongs_to association' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[ARBlog ARPost ARCategory ARUser ARProfile ARComment])
-      param = @comment.associations.select { |a| a[:name] == :commentable }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
-        name: :commentable,
-        pretty_name: 'Commentable',
-        type: :belongs_to,
-        foreign_key: :commentable_id,
-        foreign_type: :commentable_type,
-        as: nil,
-        polymorphic: true,
-        inverse_of: nil,
-        read_only: nil,
-        nested_form: nil
-      )
-      # Should not be called for polymorphic relations.
-      # TODO: Handle this case
-      # expect(param[:primary_key_proc].call).to eq('id')
-      expect(param[:model_proc].call).to eq([ARBlog, ARPost])
-    end
-
-    it 'has correct parameter of polymorphic inverse has_many association' do
-      param = @blog.associations.select { |a| a[:name] == :a_r_comments }.first
-      expect(param.reject { |k, v| [:primary_key_proc, :model_proc].include? k }).to eq(
-        name: :a_r_comments,
-        pretty_name: 'A r comments',
-        type: :has_many,
-        foreign_key: :commentable_id,
-        foreign_type: nil,
-        as: :commentable,
-        polymorphic: false,
-        inverse_of: nil,
-        read_only: nil,
-        nested_form: nil
-      )
-      expect(param[:primary_key_proc].call).to eq('id')
-      expect(param[:model_proc].call).to eq(ARComment)
-    end
-
-    it 'has correct opposite model lookup for polymorphic associations' do
-      allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[ARBlog ARPost ARCategory ARUser ARProfile ARComment])
-      expect(@category.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARUser]
-      expect(@blog.associations.detect { |a| a[:name] == :librarian }[:model_proc].call).to eq [ARProfile]
+    it 'returns Association class' do
+      expect(RailsAdmin::AbstractModel.new(Player).associations.first).
+        to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Association
     end
   end
 
   describe '#properties' do
-    it 'returns parameters of string-type field' do
-      expect(RailsAdmin::AbstractModel.new('Player').properties.select { |f| f[:name] == :name }).to eq([{name: :name, pretty_name: 'Name', type: :string, length: 100, nullable?: false, serial?: false}])
-    end
-
-    it 'maps serialized attribute to :serialized field type' do
-      expect(RailsAdmin::AbstractModel.new('User').properties.detect { |f| f[:name] == :roles }).to eq(name: :roles, pretty_name: 'Roles', length: 255, nullable?: true, serial?: false, type: :serialized)
+    it 'returns Property class' do
+      expect(RailsAdmin::AbstractModel.new(Player).properties.first).
+        to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Property
     end
   end
 
-  describe 'data access method' do
+  describe 'data access methods' do
     before do
       @players = FactoryGirl.create_list(:player, 3)
       @abstract_model = RailsAdmin::AbstractModel.new('Player')

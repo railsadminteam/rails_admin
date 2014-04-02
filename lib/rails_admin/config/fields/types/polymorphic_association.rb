@@ -50,7 +50,7 @@ module RailsAdmin
           end
 
           def associated_model_config
-            @associated_model_config ||= association[:model_proc].call.collect { |type| RailsAdmin.config(type) }.select { |config| !config.excluded? }
+            @associated_model_config ||= association.klass.collect { |type| RailsAdmin.config(type) }.select { |config| !config.excluded? }
           end
 
           def polymorphic_type_collection
@@ -68,7 +68,7 @@ module RailsAdmin
 
           # Reader for field's value
           def value
-            bindings[:object].send(association[:name])
+            bindings[:object].send(association.name)
           end
         end
       end

@@ -60,20 +60,14 @@ module RailsAdmin
 
       def associations
         model.relations.values.collect do |association|
-          Association.new(association, model).to_options_hash
+          Association.new(association, model)
         end
       end
 
       def properties
         fields = model.fields.reject { |name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
         fields.collect do |name, field|
-          {
-            name: field.name.to_sym,
-            length: nil,
-            pretty_name: field.name.to_s.gsub('_', ' ').strip.capitalize,
-            nullable?: true,
-            serial?: false,
-          }.merge(type_lookup(name, field))
+          Property.new(field, model)
         end
       end
 
@@ -157,50 +151,6 @@ module RailsAdmin
         end
       end
 
-      def type_lookup(name, field)
-        {
-          'Array'          => {type: :serialized},
-          'BigDecimal'     => {type: :decimal},
-          'Mongoid::Boolean'        => {type: :boolean},
-          'Boolean'        => {type: :boolean},
-          'BSON::ObjectId' => {type: :bson_object_id, serial?: (name == primary_key)},
-          'Moped::BSON::ObjectId' => {type: :bson_object_id, serial?: (name == primary_key)},
-          'Date'           => {type: :date},
-          'DateTime'       => {type: :datetime},
-          'ActiveSupport::TimeWithZone' => {type: :datetime},
-          'Float'          => {type: :float},
-          'Hash'           => {type: :serialized},
-          'Money'          => {type: :serialized},
-          'Integer'        => {type: :integer},
-          'Object'         => (
-            if associations.detect { |a| a[:type] == :belongs_to && a[:foreign_key] == name.to_sym }
-              {type: :bson_object_id}
-            else
-              {type: :string, length: 255}
-            end
-          ),
-          'String'         => (
-              if (length = length_validation_lookup(name)) && length < 256
-                {type: :string, length: length}
-              elsif STRING_TYPE_COLUMN_NAMES.include?(name.to_sym)
-                {type: :string, length: 255}
-              else
-                {type: :text}
-              end
-          ),
-          'Symbol'         => {type: :string, length: 255},
-          'Time'           => {type: :datetime},
-        }[field.type.to_s] || fail("Type #{field.type} for field :#{name} in #{model.inspect} not supported")
-      end
-
-      def length_validation_lookup(name)
-        shortest = model.validators.select { |validator| validator.respond_to?(:attributes) && validator.attributes.include?(name.to_sym) && validator.kind == :length && validator.options[:maximum] }.min do |a, b|
-          a.options[:maximum] <=> b.options[:maximum]
-        end
-
-        shortest && shortest.options[:maximum]
-      end
-
       def parse_collection_name(column)
         collection_name, column_name = column.split('.')
         if [:embeds_one, :embeds_many].include?(model.relations[collection_name].try(:macro).try(:to_sym))
@@ -225,14 +175,14 @@ module RailsAdmin
       end
 
       def perform_search_on_associated_collection(field_name, conditions)
-        target_association = associations.detect { |a| a[:name] == field_name }
+        target_association = associations.detect { |a| a.name == field_name }
         return [] unless target_association
-        model = target_association[:model_proc].call
-        case target_association[:type]
+        model = target_association.klass
+        case target_association.type
         when :belongs_to, :has_and_belongs_to_many
-          [{target_association[:foreign_key].to_s => {'$in' => model.where('$or' => conditions).all.collect { |r| r.send(target_association[:primary_key_proc].call) }}}]
+          [{target_association.foreign_key.to_s => {'$in' => model.where('$or' => conditions).all.collect { |r| r.send(target_association.primary_key) }}}]
         when :has_many
-          [{target_association[:primary_key_proc].call.to_s => {'$in' => model.where('$or' => conditions).all.collect { |r| r.send(target_association[:foreign_key]) }}}]
+          [{target_association.primary_key.to_s => {'$in' => model.where('$or' => conditions).all.collect { |r| r.send(target_association.foreign_key) }}}]
         end
       end
 
@@ -257,97 +207,115 @@ module RailsAdmin
 
     private
 
+      class Property
+        attr_reader :property, :model
+
+        def initialize(property, model)
+          @property = property
+          @model = model
+        end
+
+        def name
+          property.name.to_sym
+        end
+
+        def pretty_name
+          property.name.to_s.tr('_', ' ').capitalize
+        end
+
+        def type
+          case property.type.to_s
+          when 'Array', 'Hash', 'Money'
+            :serialized
+          when 'BigDecimal'
+            :decimal
+          when 'Boolean', 'Mongoid::Boolean'
+            :boolean
+          when 'BSON::ObjectId', 'Moped::BSON::ObjectId'
+            :bson_object_id
+          when 'Date'
+            :date
+          when 'ActiveSupport::TimeWithZone', 'DateTime', 'Time'
+            :datetime
+          when 'Float'
+            :float
+          when 'Integer'
+            :integer
+          when 'Object'
+            object_field_type
+          when 'String'
+            string_field_type
+          when 'Symbol'
+            :string
+          else
+            :string
+          end
+        end
+
+        def length
+          (length_validation_lookup || 255) if type == :string
+        end
+
+        def nullable?
+          true
+        end
+
+        def serial?
+          name == :_id
+        end
+
+        def association?
+          false
+        end
+
+        def read_only?
+          false
+        end
+
+      private
+
+        def object_field_type
+          if [:belongs_to, :referenced_in, :embedded_in].
+            include?(model.relations.values.detect { |r| r.foreign_key.try(:to_sym) == name }.try(:macro).try(:to_sym))
+            :bson_object_id
+          else
+            :string
+          end
+        end
+
+        def string_field_type
+          if ((length = length_validation_lookup) && length < 256) || STRING_TYPE_COLUMN_NAMES.include?(name)
+            :string
+          else
+            :text
+          end
+        end
+
+        def length_validation_lookup
+          shortest = model.validators.select { |validator| validator.respond_to?(:attributes) && validator.attributes.include?(name.to_sym) && validator.kind == :length && validator.options[:maximum] }.min do |a, b|
+            a.options[:maximum] <=> b.options[:maximum]
+          end
+
+          shortest && shortest.options[:maximum]
+        end
+      end
+
       class Association
         attr_reader :association, :model
         def initialize(association, model)
           @association = association
           @model = model
-          @options = association.options
         end
 
-        def to_options_hash
-          {
-            name: name.to_sym,
-            pretty_name: display_name,
-            type: type_lookup,
-            model_proc: proc { model_proc_lookup },
-            primary_key_proc: proc { primary_key_lookup },
-            foreign_key: foreign_key_lookup,
-            foreign_type: foreign_type_lookup,
-            foreign_inverse_of: foreign_inverse_of_lookup,
-            as: as_lookup,
-            polymorphic: polymorphic_lookup,
-            inverse_of: inverse_of_lookup,
-            read_only: nil,
-            nested_form: nested_attributes_options_lookup
-          }
+        def name
+          association.name.to_sym
         end
 
-      private
-
-        def display_name
+        def pretty_name
           name.to_s.tr('_', ' ').capitalize
         end
 
-        def model_proc_lookup
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-            polymorphic_parents(:mongoid, model_name, name) || []
-          else
-            klass
-          end
-        end
-
-        def foreign_type_lookup
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-            inverse_type.try(:to_sym) || :"#{name}_type"
-          end
-        end
-
-        def foreign_inverse_of_lookup
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-            inverse_of_field.try(:to_sym)
-          end
-        end
-
-        def nested_attributes_options_lookup
-          nested = model_nested_attributes_options.try { |o| o[name.to_sym] }
-          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !association.cyclic
-            fail <<-MSG.gsub(/^\s+/, '')
-            Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
-            because embedded model doesn't have top-level access.
-            Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
-            MSG
-          end
-          nested
-        end
-
-        def as_lookup
-          as.try :to_sym
-        end
-
-        def polymorphic_lookup
-          polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-        end
-
-        def primary_key_lookup
-          :_id # todo
-        end
-
-        def inverse_of_field
-          association.respond_to?(:inverse_of_field) && association.inverse_of_field
-        end
-
-        def inverse_of_lookup
-          inverse_of.try :to_sym
-        end
-
-        def foreign_key_lookup
-          if [:embeds_one, :embeds_many].exclude?(macro.to_sym)
-            foreign_key.to_sym rescue nil
-          end
-        end
-
-        def type_lookup
+        def type
           case macro.to_sym
           when :belongs_to, :referenced_in, :embedded_in
             :belongs_to
@@ -362,10 +330,76 @@ module RailsAdmin
           end
         end
 
-        delegate :foreign_key, :macro, :name, :options, :scope, :polymorphic?,
-                 :klass, :inverse_of, :inverse_type, :as,
-                 to: :association, prefix: false
-        delegate :name, :nested_attributes_options, to: :model, prefix: true
+        def klass
+          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+            polymorphic_parents(:mongoid, model.name, name) || []
+          else
+            association.klass
+          end
+        end
+
+        def primary_key
+          :_id
+        end
+
+        def foreign_key
+          if [:embeds_one, :embeds_many].exclude?(macro.to_sym)
+            association.foreign_key.to_sym rescue nil
+          end
+        end
+
+        def foreign_type
+          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+            association.inverse_type.try(:to_sym) || :"#{name}_type"
+          end
+        end
+
+        def foreign_inverse_of
+          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+            inverse_of_field.try(:to_sym)
+          end
+        end
+
+        def as
+          association.as.try :to_sym
+        end
+
+        def polymorphic?
+          association.polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+        end
+
+        def inverse_of
+          association.inverse_of.try :to_sym
+        end
+
+        def read_only?
+          false
+        end
+
+        def nested_options
+          nested = nested_attributes_options.try { |o| o[name] }
+          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !association.cyclic
+            fail <<-MSG.gsub(/^\s+/, '')
+            Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
+            because embedded model doesn't have top-level access.
+            Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
+            MSG
+          end
+          nested
+        end
+
+        def association?
+          true
+        end
+
+      private
+
+        def inverse_of_field
+          association.respond_to?(:inverse_of_field) && association.inverse_of_field
+        end
+
+        delegate :macro, :options, to: :association, prefix: false
+        delegate :nested_attributes_options, to: :model, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end
 

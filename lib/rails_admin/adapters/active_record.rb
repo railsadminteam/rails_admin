@@ -49,7 +49,7 @@ module RailsAdmin
 
       def associations
         model.reflect_on_all_associations.collect do |association|
-          Association.new(association, model).to_options_hash
+          Association.new(association, model)
         end
       end
 
@@ -60,13 +60,7 @@ module RailsAdmin
             DISABLED_COLUMN_MATCHERS.any? { |matcher| matcher.match(c.type.to_s) }
         end
         columns.collect do |property|
-          {
-            name: property.name.to_sym,
-            pretty_name: property.name.to_s.tr('_', ' ').capitalize,
-            length: property.limit,
-            nullable?: property.null,
-            serial?: property.primary,
-          }.merge(type_lookup(property))
+          Property.new(property, model)
         end
       end
 
@@ -145,11 +139,48 @@ module RailsAdmin
         StatementBuilder.new(column, type, value, operator).to_statement
       end
 
-      def type_lookup(property)
-        if model.serialized_attributes[property.name.to_s]
-          {type: :serialized}
-        else
-          {type: property.type}
+      class Property
+        attr_reader :property, :model
+
+        def initialize(property, model)
+          @property = property
+          @model = model
+        end
+
+        def name
+          property.name.to_sym
+        end
+
+        def pretty_name
+          property.name.to_s.tr('_', ' ').capitalize
+        end
+
+        def type
+          if model.serialized_attributes[property.name.to_s]
+            :serialized
+          else
+            property.type
+          end
+        end
+
+        def length
+          property.limit
+        end
+
+        def nullable?
+          property.null
+        end
+
+        def serial?
+          property.primary
+        end
+
+        def association?
+          false
+        end
+
+        def read_only?
+          false
         end
       end
 
@@ -161,68 +192,69 @@ module RailsAdmin
           @model = model
         end
 
-        def to_options_hash
-          {
-            name: name.to_sym,
-            pretty_name: display_name,
-            type: macro,
-            model_proc: proc { model_lookup },
-            primary_key_proc: proc { primary_key_lookup },
-            foreign_key: foreign_key.to_sym,
-            foreign_type: foreign_type_lookup,
-            as: as_lookup,
-            polymorphic: polymorphic_lookup,
-            inverse_of: inverse_of_lookup,
-            read_only: read_only_lookup,
-            nested_form: nested_attributes_options_lookup
-          }
+        def name
+          association.name.to_sym
+        end
+
+        def pretty_name
+          name.to_s.tr('_', ' ').capitalize
+        end
+
+        def type
+          association.macro
+        end
+
+        def klass
+          if options[:polymorphic]
+            polymorphic_parents(:active_record, model.name.to_s, name) || []
+          else
+            association.klass
+          end
+        end
+
+        def primary_key
+          (options[:primary_key] || association.klass.primary_key).try(:to_sym) unless polymorphic?
+        end
+
+        def foreign_key
+          association.foreign_key.to_sym
+        end
+
+        def foreign_type
+          options[:foreign_type].try(:to_sym) || :"#{name}_type" if options[:polymorphic]
+        end
+
+        def foreign_inverse_of
+          nil
+        end
+
+        def as
+          options[:as].try :to_sym
+        end
+
+        def polymorphic?
+          options[:polymorphic] || false
+        end
+
+        def inverse_of
+          options[:inverse_of].try :to_sym
+        end
+
+        def read_only?
+          (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) || false
+        end
+
+        def nested_options
+          model.nested_attributes_options.try { |o| o[name.to_sym] }
+        end
+
+        def association?
+          true
         end
 
       private
 
-        def model_lookup
-          if options[:polymorphic]
-            polymorphic_parents(:active_record, model_name.to_s, name) || []
-          else
-            klass
-          end
-        end
-
-        def foreign_type_lookup
-          options[:foreign_type].try(:to_sym) || :"#{name}_type" if options[:polymorphic]
-        end
-
-        def nested_attributes_options_lookup
-          model.nested_attributes_options.try { |o| o[name.to_sym] }
-        end
-
-        def as_lookup
-          options[:as].try :to_sym
-        end
-
-        def polymorphic_lookup
-          !!options[:polymorphic] # rubocop:disable DoubleNegation
-        end
-
-        def primary_key_lookup
-          options[:primary_key] || klass.primary_key
-        end
-
-        def inverse_of_lookup
-          options[:inverse_of].try :to_sym
-        end
-
-        def read_only_lookup
-          klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc
-        end
-
-        def display_name
-          name.to_s.tr('_', ' ').capitalize
-        end
-
-        delegate :klass, :macro, :name, :options, :scope, :foreign_key,
-                 to: :association, prefix: false
-        delegate :name, to: :model, prefix: true
+        delegate :options, :scope, to: :association, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end
 

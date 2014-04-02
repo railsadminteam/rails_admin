@@ -27,8 +27,8 @@ module RailsAdmin
       def polymorphic_parents(adapter, model_name, name)
         @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
           all(adapter).each do |am|
-            am.associations.select { |r| r[:as] }.each do |association|
-              (hash[[association[:model_proc].call.to_s.underscore, association[:as]].join('_').to_sym] ||= []) << am.model
+            am.associations.select { |r| r.as }.each do |association|
+              (hash[[association.klass.to_s.underscore, association.as].join('_').to_sym] ||= []) << am.model
             end
           end
         end
@@ -82,13 +82,13 @@ module RailsAdmin
 
     def each_associated_children(object)
       associations.each do |association|
-        case association[:type]
+        case association.type
         when :has_one
-          if child = object.send(association[:name])
+          if child = object.send(association.name)
             yield(association, child)
           end
         when :has_many
-          object.send(association[:name]).each do |child| # rubocop:disable ShadowingOuterLocalVariable
+          object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
             yield(association, child)
           end
         end

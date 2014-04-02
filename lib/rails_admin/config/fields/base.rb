@@ -88,14 +88,14 @@ module RailsAdmin
                 am = f.keys.first.is_a?(Class) && AbstractModel.new(f.keys.first)
                 table_name = am && am.table_name || f.keys.first
                 column = f.values.first
-                property = am && am.properties.detect { |p| p[:name] == f.values.first.to_sym }
-                type = property && property[:type]
+                property = am && am.properties.detect { |p| p.name == f.values.first.to_sym }
+                type = property && property.type
               else                                                             #  <attribute|column>
                 am = (self.association? ? associated_model_config.abstract_model : abstract_model)
                 table_name = am.table_name
                 column = f
-                property = am.properties.detect { |p| p[:name] == f.to_sym }
-                type = property && property[:type]
+                property = am.properties.detect { |p| p.name == f.to_sym }
+                type = property && property.type
               end
 
               {column: "#{table_name}.#{column}", type: (type || :string)}
@@ -145,7 +145,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :length do
-          @length ||= properties && properties[:length]
+          @length ||= properties && properties.length
         end
 
         # Accessor for field's length restrictions per validations
@@ -180,7 +180,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :serial? do
-          properties && properties[:serial?]
+          properties && properties.serial?
         end
 
         register_instance_option :view_helper do
@@ -216,7 +216,7 @@ module RailsAdmin
         end
 
         def editable?
-          !(@properties && @properties[:read_only])
+          !(@properties && @properties.read_only?)
         end
 
         # Is this an association
