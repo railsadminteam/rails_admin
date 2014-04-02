@@ -44,13 +44,13 @@ module RailsAdmin
           begin
             @user_class = user_class.to_s.constantize
           rescue NameError
-            raise "Please set up Papertrail's user model explicitely. Ex: config.audit_with :paper_trail, 'User'"
+            raise "Please set up Papertrail's user model explicitly. Ex: config.audit_with :paper_trail, 'User'"
           end
 
           begin
             @version_class = version_class.to_s.constantize
           rescue NameError
-            raise "Please set up Papertrail's version model explicitely. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
+            raise "Please set up Papertrail's version model explicitly. Ex: config.audit_with :paper_trail, 'User', 'PaperTrail::Version'"
           end
         end
 
