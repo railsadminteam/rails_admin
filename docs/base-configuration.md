@@ -29,7 +29,7 @@ I18n.default_locale = :de
 
 [[Authorization]]
 
-**ActiveModel's :attr_acessible :attr_protected**
+**ActiveModel's :attr_accessible :attr_protected**
 
 Default is :default (default for ActiveModel)
 
