@@ -7,7 +7,7 @@ PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 require 'simplecov'
 require 'coveralls'
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[ # rubocop:disable SpaceBeforeFirstArg
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]

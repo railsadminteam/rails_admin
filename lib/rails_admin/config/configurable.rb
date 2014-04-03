@@ -43,7 +43,7 @@ module RailsAdmin
 
           # Define getter/setter by the option name
           scope.send(:define_method, option_name) do |*args, &block|
-            if !args[0].nil? || block
+            if !args[0].nil? || block # rubocop:disable NonNilCheck
               # Invocation with args --> This is the declaration of the option, i.e. setter
               instance_variable_set("@#{option_name}_registered", args[0].nil? ? block : args[0])
             else

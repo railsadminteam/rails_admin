@@ -84,8 +84,6 @@ module RailsAdmin
         true
       end
 
-    private
-
       class WhereBuilder
         def initialize(scope)
           @statements = []
@@ -251,8 +249,6 @@ module RailsAdmin
         def association?
           true
         end
-
-      private
 
         delegate :options, :scope, to: :association, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel

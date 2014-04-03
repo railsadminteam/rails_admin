@@ -242,7 +242,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
-          if !state.nil? || block
+          if !state.nil? || block # rubocop:disable NonNilCheck
             required state.nil? ? proc { false == (instance_eval(&block)) } : false == state
           else
             optional?
@@ -300,7 +300,7 @@ module RailsAdmin
         end
 
         def form_default_value
-          (default_value if bindings[:object].new_record? && value.nil? && !default_value.nil?)
+          (default_value if bindings[:object].new_record? && value.nil?)
         end
 
         def form_value

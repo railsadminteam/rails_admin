@@ -1,11 +1,11 @@
 inherit_from: rubocop-todo.yml
 
 AllCops:
-  Includes:
+  Include:
     - 'Gemfile'
     - 'Rakefile'
     - 'rails_admin.gemspec'
-  Excludes:
+  Exclude:
     - 'spec/dummy_app/db/schema.rb'
 
 # Avoid long parameter lists
