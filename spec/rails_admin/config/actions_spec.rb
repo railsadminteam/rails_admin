@@ -151,7 +151,7 @@ describe RailsAdmin::Config::Actions do
             dashboard
           end
         end
-      end.to raise_error("Action dashboard already exist. Please change its custom key")
+      end.to raise_error("Action dashboard already exists. Please change its custom key.")
 
       expect do
         RailsAdmin.config do |config|
@@ -160,7 +160,7 @@ describe RailsAdmin::Config::Actions do
             collection :index
           end
         end
-      end.to raise_error("Action index already exist. Please change its custom key")
+      end.to raise_error("Action index already exists. Please change its custom key.")
     end
 
     it "adds the same key with different custom key" do
