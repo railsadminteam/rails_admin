@@ -160,6 +160,7 @@ describe RailsAdmin::Config do
 
     context "given paper_trail as the extension for auditing" do
       before do
+        class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, {
           :auditing => true
         })
@@ -169,7 +170,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect(RailsAdmin.config.audit_with.call).not_to raise_exception ArgumentError
+        expect{ RailsAdmin.config.audit_with.call }.not_to raise_error
       end
     end
   end
