@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'rails', '~> 3.2.17'
+
 group :active_record do
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
@@ -31,6 +33,7 @@ group :mongoid do
   gem 'mongoid', '>= 3.0'
   gem 'mongoid-paperclip', '>= 0.0.8', :require => 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.4', :require => 'carrierwave/mongoid'
+  gem 'mongoid-grid_fs', '1.9.1' # workaround for mime-types version issue
 end
 
 group :development do
