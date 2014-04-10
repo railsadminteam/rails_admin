@@ -81,7 +81,7 @@ module RailsAdmin
               '%Y' => 'yy',         # Year with century
               '%y' => 'y',          # Year without a century (00..99)
             }
-            localized_date_format.gsub(/%\w/) { |match| translations[match] }
+            localized_date_format.gsub(/%[-]?\w/) { |match| translations[match] }
           end
 
           def js_plugin_options
