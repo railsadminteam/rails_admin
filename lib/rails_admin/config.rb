@@ -262,7 +262,6 @@ module RailsAdmin
         @default_hidden_fields[:show] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
         @default_items_per_page = 20
         @default_search_operator = 'default'
-        @attr_accessible_role = nil
         @excluded_models = []
         @included_models = []
         @total_columns_width = 697
