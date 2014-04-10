@@ -5,7 +5,6 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry]
-      DISABLED_COLUMN_MATCHERS = [/_array$/]
 
       def new(params = {})
         AbstractObject.new(model.new(params))
@@ -57,7 +56,7 @@ module RailsAdmin
         columns = model.columns.reject do |c|
           c.type.blank? ||
             DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
-            DISABLED_COLUMN_MATCHERS.any? { |matcher| matcher.match(c.type.to_s) }
+            c.try(:array)
         end
         columns.collect do |property|
           Property.new(property, model)
