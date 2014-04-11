@@ -1,5 +1,7 @@
 require 'active_record'
 require 'rails_admin/adapters/active_record/abstract_object'
+require 'rails_admin/adapters/active_record/association'
+require 'rails_admin/adapters/active_record/property'
 
 module RailsAdmin
   module Adapters
@@ -135,123 +137,6 @@ module RailsAdmin
 
       def build_statement(column, type, value, operator)
         StatementBuilder.new(column, type, value, operator).to_statement
-      end
-
-      class Property
-        attr_reader :property, :model
-
-        def initialize(property, model)
-          @property = property
-          @model = model
-        end
-
-        def name
-          property.name.to_sym
-        end
-
-        def pretty_name
-          property.name.to_s.tr('_', ' ').capitalize
-        end
-
-        def type
-          if model.serialized_attributes[property.name.to_s]
-            :serialized
-          else
-            property.type
-          end
-        end
-
-        def length
-          property.limit
-        end
-
-        def nullable?
-          property.null
-        end
-
-        def serial?
-          property.primary
-        end
-
-        def association?
-          false
-        end
-
-        def read_only?
-          false
-        end
-      end
-
-      class Association
-        attr_reader :association, :model
-
-        def initialize(association, model)
-          @association = association
-          @model = model
-        end
-
-        def name
-          association.name.to_sym
-        end
-
-        def pretty_name
-          name.to_s.tr('_', ' ').capitalize
-        end
-
-        def type
-          association.macro
-        end
-
-        def klass
-          if options[:polymorphic]
-            polymorphic_parents(:active_record, model.name.to_s, name) || []
-          else
-            association.klass
-          end
-        end
-
-        def primary_key
-          (options[:primary_key] || association.klass.primary_key).try(:to_sym) unless polymorphic?
-        end
-
-        def foreign_key
-          association.foreign_key.to_sym
-        end
-
-        def foreign_type
-          options[:foreign_type].try(:to_sym) || :"#{name}_type" if options[:polymorphic]
-        end
-
-        def foreign_inverse_of
-          nil
-        end
-
-        def as
-          options[:as].try :to_sym
-        end
-
-        def polymorphic?
-          options[:polymorphic] || false
-        end
-
-        def inverse_of
-          options[:inverse_of].try :to_sym
-        end
-
-        def read_only?
-          (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) || false
-        end
-
-        def nested_options
-          model.nested_attributes_options.try { |o| o[name.to_sym] }
-        end
-
-        def association?
-          true
-        end
-
-        delegate :options, :scope, to: :association, prefix: false
-        delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
