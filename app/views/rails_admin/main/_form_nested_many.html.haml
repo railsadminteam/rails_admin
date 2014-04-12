@@ -11,4 +11,4 @@
   = form.fields_for field.name do |nested_form|
     - if field.nested_form[:allow_destroy] || nested_form.options[:child_index] == "new_#{field.name}"
       = nested_form.link_to_remove '<span class="btn btn-small btn-danger"><i class="icon-trash icon-white"></i></span>'.html_safe
-    = nested_form.generate({action: :nested, model_config: field.associated_model_config, nested_in: field.name })
+    = nested_form.generate({action: :nested, model_config: field.associated_model_config, nested_in: field })
