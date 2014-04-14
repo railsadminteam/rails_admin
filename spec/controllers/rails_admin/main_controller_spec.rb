@@ -204,7 +204,7 @@ describe RailsAdmin::MainController do
         FactoryGirl.create :player
       end
 
-      expect(controller.list_entries.to_a.first).to eq(@players.last)
+      expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
     end
   end
 
