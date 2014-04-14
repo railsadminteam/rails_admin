@@ -751,6 +751,13 @@ describe 'RailsAdmin Config DSL Edit Section' do
         expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
           /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/)
       end
+
+      it 'hides fields that are deeply nested with inverse_of' do
+        visit new_path(model_name: 'field_test')
+        expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
+        expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
+      end
+
     end
   end
 
