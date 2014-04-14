@@ -9,7 +9,7 @@ describe 'RailsAdmin Basic Create' do
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
-      click_button 'Save' # first(:button, "Save").click
+      click_button 'Save'
       @player = RailsAdmin::AbstractModel.new('Player').first
     end
 
@@ -64,7 +64,7 @@ describe 'RailsAdmin Basic Create' do
 
       post new_path(model_name: 'player', player: {name: 'Jackie Robinson', number: 42, position: 'Second baseman', draft_id: @draft.id})
 
-      @player = RailsAdmin::AbstractModel.new('Player').all.to_a.last # first is created by FactoryGirl
+      @player = RailsAdmin::AbstractModel.new('Player').all.to_a.detect { |player| player.name == 'Jackie Robinson' }
     end
 
     it 'creates an object with correct associations' do
