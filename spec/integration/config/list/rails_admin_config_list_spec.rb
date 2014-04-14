@@ -357,7 +357,7 @@ describe 'RailsAdmin Config DSL List Section' do
       @team = FactoryGirl.create :team
       @players = 2.times.collect { FactoryGirl.create :player, team: @team }
       visit index_path(model_name: 'team')
-      expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.collect(&:name).join(', '))
+      expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
     end
   end
 
