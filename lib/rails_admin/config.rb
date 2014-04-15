@@ -63,6 +63,9 @@ module RailsAdmin
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
 
+      # disables static label when true
+      attr_accessor :disable_navigation_static_label
+
       # yell about fields that are not marked as accessible
       attr_accessor :yell_for_non_accessible_fields
 

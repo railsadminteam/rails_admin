@@ -304,7 +304,7 @@ describe RailsAdmin::ApplicationHelper do
         expect(helper.static_navigation).to match(/Test Link/)
       end
 
-      it 'shows default header if navigation_static_label not defined in config' do
+      it 'shows default header' do
         RailsAdmin.config do |config|
           config.navigation_static_links = {
             'Test Link' => 'http://www.google.com'
@@ -313,7 +313,7 @@ describe RailsAdmin::ApplicationHelper do
         expect(helper.static_navigation).to match(I18n.t('admin.misc.navigation_static_label'))
       end
 
-      it 'shows custom header if defined' do
+      it 'shows custom header' do
         RailsAdmin.config do |config|
           config.navigation_static_label = 'Test Header'
           config.navigation_static_links = {
@@ -321,6 +321,19 @@ describe RailsAdmin::ApplicationHelper do
           }
         end
         expect(helper.static_navigation).to match(/Test Header/)
+      end
+
+      context 'when disable_navigation_static_label is true' do
+        it 'does not renders navigation_static_label' do
+          RailsAdmin.config do |config|
+            config.disable_navigation_static_label = true
+            config.navigation_static_label = 'Test Header'
+            config.navigation_static_links = {
+              'Test Link' => 'http://www.google.com'
+            }
+          end
+          expect(helper.static_navigation).not_to match(/Test Header/)
+        end
       end
     end
 
