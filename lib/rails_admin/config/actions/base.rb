@@ -18,6 +18,11 @@ module RailsAdmin
           []
         end
 
+        # Should the action show a confirmation (using jquery_ujs) before performing this action
+        register_instance_option :confirmation_required do
+          false
+        end
+
         # http://getbootstrap.com/2.3.2/base-css.html#icons
         register_instance_option :link_icon do
           'icon-question-sign'

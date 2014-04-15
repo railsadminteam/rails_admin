@@ -58,6 +58,7 @@ en:
       item: "Item"
       message: "Message"
     actions:
+      confirm_prompt: "Are you sure?"
       dashboard:
         title: "Site Administration"
         menu: "Dashboard"
