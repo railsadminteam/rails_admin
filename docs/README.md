@@ -137,3 +137,4 @@
 * [Clone records](https://github.com/dalpo/rails_admin_clone)
 * [Tabbed interface and custom field type for globalize3 translations](https://github.com/scarfaceDeb/rails_admin_globalize_field)
 * [Support for mongoid localized fields](https://github.com/sudosu/rails_admin_mongoid_localize_field)
+* [Integration with Pundit authorization system](https://github.com/sudosu/rails_admin_pundit)
