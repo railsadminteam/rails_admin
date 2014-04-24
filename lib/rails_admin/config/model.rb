@@ -6,6 +6,7 @@ require 'rails_admin/config/has_groups'
 require 'rails_admin/config/fields/group'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
+require 'rails_admin/config/has_description'
 require 'rails_admin/config/sections'
 require 'rails_admin/config/actions'
 
