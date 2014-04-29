@@ -8,6 +8,6 @@ describe RailsAdmin::Config::HasDescription do
       end
     end
 
-    expect(RailsAdmin.config(Team).description).to eq("Description of Team model")
+    expect(RailsAdmin.config(Team).description).to eq('Description of Team model')
   end
 end
