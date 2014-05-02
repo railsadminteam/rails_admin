@@ -23,7 +23,7 @@ Community sourced translations:
 * [[Danish: da|https://gist.github.com/1780778]]
 * [[Dutch: nl|https://gist.github.com/1909240]]
 * [[English: en|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]]
-* [[French: fr|https://gist.github.com/1632279]]
+* [[French: fr|https://gist.github.com/simonc/3a21074223d2f36a7232]]
 * [[German: de|https://gist.github.com/3188219#file_rails_admin.de.yml]]
 * [[Italian (Italy): it|https://gist.github.com/1700678#file_rails_admin.it.yml]]
 * [[Japanese: ja|https://gist.github.com/1662352#file_rails_admin.ja.yml]]
