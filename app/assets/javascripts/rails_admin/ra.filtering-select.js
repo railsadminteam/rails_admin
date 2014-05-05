@@ -114,7 +114,16 @@
 
       filtering_select.append(input).append(button).insertAfter(select);
 
+      if (this.options.dependent_field_selector) {
+        self.options.dependent_field_value = $(this.options.dependent_field_selector).val();
+        $(this.options.dependent_field_selector).on('change', function () {
+          self.options.dependent_field_value = $(this).val();
 
+          input.val('');
+          select.html($('<option value="" selected="selected"></option>'));
+          select.trigger("change");
+        })
+      }
     },
 
     _getResultSet: function(request, data, xhr) {
@@ -156,9 +165,12 @@
             this.xhr.abort();
           }
 
+          data = self.options.createQuery(request.term)
+          data.dependent_field_value = self.options.dependent_field_value
+
           this.xhr = $.ajax({
             url: source,
-            data: self.options.createQuery(request.term),
+            data: data,
             dataType: "json",
             autocompleteRequest: ++requestIndex,
             success: function(data, status) {
