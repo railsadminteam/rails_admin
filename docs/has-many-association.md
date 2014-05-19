@@ -8,11 +8,11 @@ class Team < ActiveRecord::Base
    
     accepts_nested_attributes_for :players, :allow_destroy => true
     
-    # uncomment if you use strong parameters
+    # uncomment if you don't use strong parameters
     # attr_accessible :players_attributes, :allow_destroy => true
 
   # for a multiselect widget:
-    # uncomment if you use strong parameters
+    # uncomment if you don't use strong parameters
     # attr_accessible :player_ids
 
   rails_admin do
