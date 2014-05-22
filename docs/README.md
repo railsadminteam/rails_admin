@@ -139,3 +139,4 @@
 * [Support for mongoid localized fields](https://github.com/sudosu/rails_admin_mongoid_localize_field)
 * [Integration with Pundit authorization system](https://github.com/sudosu/rails_admin_pundit)
 * [Support for setting geospatial information with Google Maps into Mongoid's GEO2D field](https://github.com/sudosu/rails_admin_mongoid_geospatial_field)
+* [Simplified authorization rules for models' fields in rails_admin](https://github.com/xronos-i-am/rails_admin_authorized_fields)
