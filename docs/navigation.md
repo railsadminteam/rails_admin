@@ -61,7 +61,7 @@ config.model 'Box' do
 end
 ```
 
-But again, this is **way better** to it in `config/locale/en.yml`:
+But again, this is **way better** to do it in `config/locale/en.yml`:
 
 ```yml
 en:
