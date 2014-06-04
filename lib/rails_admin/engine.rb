@@ -21,6 +21,7 @@ module RailsAdmin
         rails_admin/rails_admin.css
         rails_admin/jquery.colorpicker.js
         rails_admin/jquery.colorpicker.css
+        rails_admin/plugins.js
       ]
     end
 
