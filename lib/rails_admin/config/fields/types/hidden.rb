@@ -15,6 +15,10 @@ module RailsAdmin
             false
           end
 
+          register_instance_option :help do
+            false
+          end
+          
           def generic_help
             false
           end
