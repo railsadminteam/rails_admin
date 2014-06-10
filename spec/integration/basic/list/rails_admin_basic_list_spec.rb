@@ -315,9 +315,9 @@ describe 'RailsAdmin Basic List' do
     end
 
     it 'paginates correctly' do
-      expect(find('.pagination ul li:first')).to have_content('« Prev')
-      expect(find('.pagination ul li:last')).to have_content('Next »')
-      expect(find('.pagination ul li.active')).to have_content('2')
+      expect(find('.pagination ul span:first')).to have_content('‹ Prev')
+      expect(find('.pagination ul span:last')).to have_content('Next ›')
+      expect(find('.pagination ul span.current')).to have_content('2')
     end
   end
 
@@ -329,9 +329,9 @@ describe 'RailsAdmin Basic List' do
     end
 
     it 'paginates correctly and contain the right item' do
-      expect(find('.pagination ul li:first')).to have_content('« Prev')
-      expect(find('.pagination ul li:last')).to have_content('Next »')
-      expect(find('.pagination ul li.active')).to have_content('3')
+      expect(find('.pagination ul span:first')).to have_content('‹ Prev')
+      expect(find('.pagination ul span:last')).to have_content('Next ›')
+      expect(find('.pagination ul span.current')).to have_content('3')
     end
   end
 
