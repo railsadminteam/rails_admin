@@ -39,7 +39,7 @@ class AdminAbility
   end
 end
 
-describe 'RailsAdmin CanCan Authorization' do
+describe 'RailsAdmin CanCan Authorization', :type => :request do
 
   subject { page }
 
@@ -75,9 +75,9 @@ describe 'RailsAdmin CanCan Authorization' do
 
     it 'GET /admin should show Player but not League' do
       visit dashboard_path
-      should have_content('Player')
-      should_not have_content('League')
-      should_not have_content('Add new')
+      is_expected.to have_content('Player')
+      is_expected.not_to have_content('League')
+      is_expected.not_to have_content('Add new')
     end
 
     it 'GET /admin/player should render successfully but not list retired players and not show new, edit, or delete actions' do
@@ -94,14 +94,14 @@ describe 'RailsAdmin CanCan Authorization' do
 
       visit index_path(model_name: 'player')
 
-      should have_content(@players[0].name)
-      should_not have_content(@players[1].name)
-      should_not have_content('Add new')
-      should have_css('.show_member_link')
-      should_not have_css('.edit_member_link')
-      should_not have_css('.delete_member_link')
-      should_not have_css('.history_show_member_link')
-      should_not have_css('.show_in_app_member_link')
+      is_expected.to have_content(@players[0].name)
+      is_expected.not_to have_content(@players[1].name)
+      is_expected.not_to have_content('Add new')
+      is_expected.to have_css('.show_member_link')
+      is_expected.not_to have_css('.edit_member_link')
+      is_expected.not_to have_css('.delete_member_link')
+      is_expected.not_to have_css('.history_show_member_link')
+      is_expected.not_to have_css('.show_in_app_member_link')
     end
 
     it 'GET /admin/team should raise CanCan::AccessDenied' do
@@ -122,15 +122,15 @@ describe 'RailsAdmin CanCan Authorization' do
     it 'GET /admin/player/new should render and create record upon submission' do
       visit new_path(model_name: 'player')
 
-      should_not have_content('Save and edit')
-      should_not have_content('Delete')
+      is_expected.not_to have_content('Save and edit')
+      is_expected.not_to have_content('Delete')
 
-      should have_content('Save and add another')
+      is_expected.to have_content('Save and add another')
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
       click_button 'Save' # first(:button, "Save").click
-      should_not have_content('Edit')
+      is_expected.not_to have_content('Edit')
 
       @player = RailsAdmin::AbstractModel.new('Player').first
       expect(@player.name).to eq('Jackie Robinson')
@@ -154,12 +154,12 @@ describe 'RailsAdmin CanCan Authorization' do
     it 'GET /admin/player/1/edit should render and update record upon submission' do
       @player = FactoryGirl.create :player
       visit edit_path(model_name: 'player', id: @player.id)
-      should have_content('Save and edit')
-      should_not have_content('Save and add another')
-      should_not have_content('Add new')
-      should_not have_content('Delete')
-      should_not have_content('History')
-      should_not have_content('Show in app')
+      is_expected.to have_content('Save and edit')
+      is_expected.not_to have_content('Save and add another')
+      is_expected.not_to have_content('Add new')
+      is_expected.not_to have_content('Delete')
+      is_expected.not_to have_content('History')
+      is_expected.not_to have_content('Show in app')
       fill_in 'player[name]', with: 'Jackie Robinson'
       click_button 'Save' # click_button "Save" # first(:button, "Save").click
       @player.reload
@@ -185,16 +185,16 @@ describe 'RailsAdmin CanCan Authorization' do
       @player = FactoryGirl.create :player
 
       visit index_path(model_name: 'player')
-      should have_css('.show_member_link')
-      should_not have_css('.edit_member_link')
-      should_not have_css('.delete_member_link')
-      should have_css('.history_show_member_link')
+      is_expected.to have_css('.show_member_link')
+      is_expected.not_to have_css('.edit_member_link')
+      is_expected.not_to have_css('.delete_member_link')
+      is_expected.to have_css('.history_show_member_link')
 
       visit show_path(model_name: 'player', id: @player.id)
-      should have_content('Show')
-      should_not have_content('Edit')
-      should_not have_content('Delete')
-      should have_content('History')
+      is_expected.to have_content('Show')
+      is_expected.not_to have_content('Edit')
+      is_expected.not_to have_content('Delete')
+      is_expected.to have_content('History')
     end
   end
 
@@ -204,18 +204,18 @@ describe 'RailsAdmin CanCan Authorization' do
       @player = FactoryGirl.create :player
 
       visit index_path(model_name: 'player')
-      should have_css('.show_member_link')
-      should_not have_css('.edit_member_link')
-      should_not have_css('.delete_member_link')
-      should_not have_css('.history_show_member_link')
-      should have_css('.show_in_app_member_link')
+      is_expected.to have_css('.show_member_link')
+      is_expected.not_to have_css('.edit_member_link')
+      is_expected.not_to have_css('.delete_member_link')
+      is_expected.not_to have_css('.history_show_member_link')
+      is_expected.to have_css('.show_in_app_member_link')
 
       visit show_path(model_name: 'player', id: @player.id)
-      should have_content('Show')
-      should_not have_content('Edit')
-      should_not have_content('Delete')
-      should_not have_content('History')
-      should have_content('Show in app')
+      is_expected.to have_content('Show')
+      is_expected.not_to have_content('Edit')
+      is_expected.not_to have_content('Delete')
+      is_expected.not_to have_content('History')
+      is_expected.to have_content('Show in app')
     end
   end
 
@@ -225,18 +225,18 @@ describe 'RailsAdmin CanCan Authorization' do
       @player = FactoryGirl.create :player
 
       visit index_path(model_name: 'player')
-      should have_css('.show_member_link')
-      should have_css('.edit_member_link')
-      should have_css('.delete_member_link')
-      should have_css('.history_show_member_link')
-      should have_css('.show_in_app_member_link')
+      is_expected.to have_css('.show_member_link')
+      is_expected.to have_css('.edit_member_link')
+      is_expected.to have_css('.delete_member_link')
+      is_expected.to have_css('.history_show_member_link')
+      is_expected.to have_css('.show_in_app_member_link')
 
       visit show_path(model_name: 'player', id: @player.id)
-      should have_content('Show')
-      should have_content('Edit')
-      should have_content('Delete')
-      should have_content('History')
-      should have_content('Show in app')
+      is_expected.to have_content('Show')
+      is_expected.to have_content('Edit')
+      is_expected.to have_content('Delete')
+      is_expected.to have_content('History')
+      is_expected.to have_content('Show in app')
     end
   end
 

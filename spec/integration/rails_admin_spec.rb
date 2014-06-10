@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin do
+describe RailsAdmin, :type => :request do
 
   subject { page }
 
@@ -21,8 +21,8 @@ describe RailsAdmin do
       RailsAdmin.config.included_models = []
       visit dashboard_path
 
-      should have_content('Site Administration')
-      should have_content('Dashboard')
+      is_expected.to have_content('Site Administration')
+      is_expected.to have_content('Dashboard')
     end
   end
 
@@ -32,11 +32,11 @@ describe RailsAdmin do
     # Note: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it 'loads stylesheets in header' do
-      should have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]', visible: false)
+      is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]', visible: false)
     end
 
     it 'loads javascript files in body' do
-      should have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]', visible: false)
+      is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]', visible: false)
     end
   end
 
@@ -57,16 +57,16 @@ describe RailsAdmin do
 
     it 'shows up with default value, hidden' do
       visit new_path(model_name: 'player')
-      should have_selector("#player_name[type=hidden][value='username@example.com']")
-      should_not have_selector("#player_name[type=hidden][value='toto@example.com']")
+      is_expected.to have_selector("#player_name[type=hidden][value='username@example.com']")
+      is_expected.not_to have_selector("#player_name[type=hidden][value='toto@example.com']")
     end
 
     it 'does not show label' do
-      should_not have_selector('label', text: 'Name')
+      is_expected.not_to have_selector('label', text: 'Name')
     end
 
     it 'does not show help block' do
-      should_not have_xpath("id('player_name')/../p[@class='help-block']")
+      is_expected.not_to have_xpath("id('player_name')/../p[@class='help-block']")
     end
   end
 
@@ -91,8 +91,8 @@ describe RailsAdmin do
       end
 
       visit index_path(model_name: 'player')
-      should have_selector('.header.name_field')
-      should_not have_selector('.header.team_field')
+      is_expected.to have_selector('.header.name_field')
+      is_expected.not_to have_selector('.header.team_field')
     end
   end
 
@@ -105,46 +105,46 @@ describe RailsAdmin do
     it 'works like belongs to associations in the list view' do
       visit index_path(model_name: 'comment')
 
-      should have_content(@team.name)
+      is_expected.to have_content(@team.name)
     end
 
     it 'is editable' do
       visit edit_path(model_name: 'comment', id: @comment.id)
 
-      should have_selector('select#comment_commentable_type')
-      should have_selector('select#comment_commentable_id')
+      is_expected.to have_selector('select#comment_commentable_type')
+      is_expected.to have_selector('select#comment_commentable_id')
     end
 
     it 'is visible in the owning end' do
       visit edit_path(model_name: 'team', id: @team.id)
 
-      should have_selector('select#team_comment_ids')
+      is_expected.to have_selector('select#team_comment_ids')
     end
   end
 
   describe 'secondary navigation' do
     it 'has Gravatar image' do
       visit dashboard_path
-      should have_selector('ul.nav.pull-right li img')
+      is_expected.to have_selector('ul.nav.pull-right li img')
     end
 
     it "does not show Gravatar when user doesn't have email method" do
       allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
       allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(false)
       visit dashboard_path
-      should_not have_selector('ul.nav.pull-right li img')
+      is_expected.not_to have_selector('ul.nav.pull-right li img')
     end
 
     it 'does not cause error when email is nil' do
       allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
       allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(nil)
       visit dashboard_path
-      should have_selector('body.rails_admin')
+      is_expected.to have_selector('body.rails_admin')
     end
 
     it 'shows a log out link' do
       visit dashboard_path
-      should have_content 'Log out'
+      is_expected.to have_content 'Log out'
     end
   end
 end

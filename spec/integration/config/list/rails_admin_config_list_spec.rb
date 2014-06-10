@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Config DSL List Section' do
+describe 'RailsAdmin Config DSL List Section', :type => :request do
 
   subject { page }
 
@@ -13,8 +13,8 @@ describe 'RailsAdmin Config DSL List Section' do
       end
       FactoryGirl.create :team
       visit index_path(model_name: 'team')
-      should have_selector('th.header.string_type.name_field')
-      should have_selector('td.string_type.name_field')
+      is_expected.to have_selector('th.header.string_type.name_field')
+      is_expected.to have_selector('td.string_type.name_field')
     end
   end
 
@@ -34,9 +34,9 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(model_name: 'league')
-      should have_selector('tbody tr', count: 1)
+      is_expected.to have_selector('tbody tr', count: 1)
       visit index_path(model_name: 'player')
-      should have_selector('tbody tr', count: 2)
+      is_expected.to have_selector('tbody tr', count: 2)
     end
   end
 
@@ -137,7 +137,7 @@ describe 'RailsAdmin Config DSL List Section' do
       visit index_path(model_name: 'fan')
       expect(all('th').collect(&:text).delete_if { |t| /^\n*$/ =~ t }).
         to eq(['Id', 'Their Name'])
-      should have_no_selector('th:nth-child(4).header')
+      is_expected.to have_no_selector('th:nth-child(4).header')
     end
 
     it 'delegates the label option to the ActiveModel API' do
@@ -192,10 +192,10 @@ describe 'RailsAdmin Config DSL List Section' do
 
     it 'is sortable by default' do
       visit index_path(model_name: 'fan')
-      should have_selector('th:nth-child(2).header')
-      should have_selector('th:nth-child(3).header')
-      should have_selector('th:nth-child(4).header')
-      should have_selector('th:nth-child(5).header')
+      is_expected.to have_selector('th:nth-child(2).header')
+      is_expected.to have_selector('th:nth-child(3).header')
+      is_expected.to have_selector('th:nth-child(4).header')
+      is_expected.to have_selector('th:nth-child(5).header')
     end
 
     it 'has option to disable sortability' do
@@ -208,8 +208,8 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(model_name: 'fan')
-      should have_no_selector('th:nth-child(2).header')
-      should have_selector('th:nth-child(3).header')
+      is_expected.to have_no_selector('th:nth-child(2).header')
+      is_expected.to have_selector('th:nth-child(3).header')
     end
 
     it 'has option to disable sortability by type' do
@@ -225,10 +225,10 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(model_name: 'fan')
-      should have_selector('th:nth-child(2).header')
-      should have_selector('th:nth-child(3).header')
-      should have_no_selector('th:nth-child(4).header')
-      should have_no_selector('th:nth-child(5).header')
+      is_expected.to have_selector('th:nth-child(2).header')
+      is_expected.to have_selector('th:nth-child(3).header')
+      is_expected.to have_no_selector('th:nth-child(4).header')
+      is_expected.to have_no_selector('th:nth-child(5).header')
     end
 
     it 'has option to disable sortability by type globally' do
@@ -244,10 +244,10 @@ describe 'RailsAdmin Config DSL List Section' do
         end
       end
       visit index_path(model_name: 'fan')
-      should have_selector('th:nth-child(2).header')
-      should have_selector('th:nth-child(3).header')
-      should have_no_selector('th:nth-child(4).header')
-      should have_no_selector('th:nth-child(5).header')
+      is_expected.to have_selector('th:nth-child(2).header')
+      is_expected.to have_selector('th:nth-child(3).header')
+      is_expected.to have_no_selector('th:nth-child(4).header')
+      is_expected.to have_no_selector('th:nth-child(5).header')
     end
 
     it 'has option to hide fields by type' do
@@ -327,7 +327,7 @@ describe 'RailsAdmin Config DSL List Section' do
       end
       @fans = 2.times.collect { FactoryGirl.create :fan }
       visit index_path(model_name: 'fan')
-      should have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{2} \w{3} \d{1,2}:\d{1,2}/)
+      is_expected.to have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{2} \w{3} \d{1,2}:\d{1,2}/)
     end
 
     it 'has option to customize output formatting of date fields' do
@@ -343,7 +343,7 @@ describe 'RailsAdmin Config DSL List Section' do
       end
       @fans = 2.times.collect { FactoryGirl.create :fan }
       visit index_path(model_name: 'fan')
-      should have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{4}-\d{2}-\d{2}/)
+      is_expected.to have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{4}-\d{2}-\d{2}/)
     end
 
     it 'allows addition of virtual fields (object methods)' do
@@ -433,8 +433,8 @@ describe 'RailsAdmin Config DSL List Section' do
       @record = FactoryGirl.create :field_test
       2.times.each { |i| @record.embeds.create name: "embed #{i}" }
       visit index_path(model_name: 'field_test')
-      should_not have_link('embed 0')
-      should_not have_link('embed 1')
+      is_expected.not_to have_link('embed 0')
+      is_expected.not_to have_link('embed 1')
     end
   end
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'csv'
 
-describe 'RailsAdmin Export' do
+describe 'RailsAdmin Export', :type => :request do
 
   subject { page }
 
@@ -43,7 +43,7 @@ describe 'RailsAdmin Export' do
       end
 
       visit export_path(model_name: 'player')
-      should have_content 'Select fields to export'
+      is_expected.to have_content 'Select fields to export'
       select "<comma> ','", from: 'csv_options_generator_col_sep'
       click_button 'Export to csv'
       csv = CSV.parse page.driver.response.body.force_encoding('utf-8') # comes through as us-ascii on some platforms
@@ -66,7 +66,7 @@ describe 'RailsAdmin Export' do
     it 'allows to export to JSON' do
       visit export_path(model_name: 'player')
       click_button 'Export to json'
-      should have_content @player.team.name
+      is_expected.to have_content @player.team.name
     end
 
     it 'allows to export to XML' do
@@ -79,7 +79,7 @@ describe 'RailsAdmin Export' do
       # (due change of implementation in ActiveModel::Serializers between 3.1 and 3.2)
       if RUBY_VERSION =~ /1\.9/ &&
           (CI_ORM != :mongoid || (CI_ORM == :mongoid && ActiveModel::VERSION::STRING >= '3.2'))
-        should have_content @player.team.name
+        is_expected.to have_content @player.team.name
       end
     end
 

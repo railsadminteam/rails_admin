@@ -10,8 +10,8 @@ describe RailsAdmin::Config::Model do
     end
 
     it 'returns false when included, true otherwise' do
-      expect(RailsAdmin.config(Player).excluded?).to be_true
-      expect(RailsAdmin.config(Comment).excluded?).to be_false
+      expect(RailsAdmin.config(Player).excluded?).to be_truthy
+      expect(RailsAdmin.config(Comment).excluded?).to be_falsey
     end
   end
 

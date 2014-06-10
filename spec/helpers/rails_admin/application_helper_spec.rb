@@ -10,7 +10,7 @@ class TestAbility
   end
 end
 
-describe RailsAdmin::ApplicationHelper do
+describe RailsAdmin::ApplicationHelper, :type => :helper do
   describe '#authorized?' do
     before do
       allow(RailsAdmin.config).to receive(:_current_user).and_return(FactoryGirl.create(:user))
@@ -19,9 +19,9 @@ describe RailsAdmin::ApplicationHelper do
 
     it 'doesn\'t test unpersisted objects' do
       am = RailsAdmin.config(FieldTest).abstract_model
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'dangerous'))).to be_false
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'not-dangerous'))).to be_true
-      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, string_field: 'dangerous'))).to be_true
+      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'dangerous'))).to be_falsey
+      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'not-dangerous'))).to be_truthy
+      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, string_field: 'dangerous'))).to be_truthy
     end
   end
 
@@ -34,8 +34,8 @@ describe RailsAdmin::ApplicationHelper do
       it 'returns true if current_action, false otherwise' do
         @action = RailsAdmin::Config::Actions.find(:index)
 
-        expect(helper.current_action?(RailsAdmin::Config::Actions.find(:index))).to be_true
-        expect(helper.current_action?(RailsAdmin::Config::Actions.find(:show))).not_to be_true
+        expect(helper.current_action?(RailsAdmin::Config::Actions.find(:index))).to be_truthy
+        expect(helper.current_action?(RailsAdmin::Config::Actions.find(:show))).not_to be_truthy
       end
     end
 

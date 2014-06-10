@@ -60,7 +60,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
 
       it 'supports limiting' do
-        expect(@abstract_model.all(limit: 2).to_a).to have(2).items
+        expect(@abstract_model.all(limit: 2).to_a.size).to eq(2)
       end
 
       it 'supports retrieval by bulk_ids' do

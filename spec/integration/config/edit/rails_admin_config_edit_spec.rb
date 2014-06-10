@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'RailsAdmin Config DSL Edit Section' do
+describe 'RailsAdmin Config DSL Edit Section', :type => :request do
 
   subject { page }
 
@@ -52,7 +52,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
       expect(find_field('field_test[string_field]').value.gsub(/^\n/, '')).to eq('string_field default_value')
       expect(find_field('field_test[text_field]').value.gsub(/^\n/, '')).to eq('string_field text_field')
       expect(find_field('field_test[date_field]').value).to eq(Date.today.to_s)
-      expect(has_checked_field?('field_test[boolean_field]')).to be_true
+      expect(has_checked_field?('field_test[boolean_field]')).to be_truthy
     end
 
     it 'sets default value for selects' do
@@ -72,7 +72,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
   describe 'css hooks' do
     it 'is present' do
       visit new_path(model_name: 'team')
-      should have_selector('#team_division_id_field.belongs_to_association_type.division_field')
+      is_expected.to have_selector('#team_division_id_field.belongs_to_association_type.division_field')
     end
   end
 
@@ -89,19 +89,19 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
       visit new_path(model_name: 'team')
       # Should not have the group header
-      should have_no_selector('legend', text: 'Hidden Group')
+      is_expected.to have_no_selector('legend', text: 'Hidden Group')
       # Should not have any of the group's fields either
-      should have_no_selector('select#team_division')
-      should have_no_selector('input#team_name')
-      should have_no_selector('input#team_logo_url')
-      should have_no_selector('input#team_manager')
-      should have_no_selector('input#team_ballpark')
-      should have_no_selector('input#team_mascot')
-      should have_no_selector('input#team_founded')
-      should have_no_selector('input#team_wins')
-      should have_no_selector('input#team_losses')
-      should have_no_selector('input#team_win_percentage')
-      should have_no_selector('input#team_revenue')
+      is_expected.to have_no_selector('select#team_division')
+      is_expected.to have_no_selector('input#team_name')
+      is_expected.to have_no_selector('input#team_logo_url')
+      is_expected.to have_no_selector('input#team_manager')
+      is_expected.to have_no_selector('input#team_ballpark')
+      is_expected.to have_no_selector('input#team_mascot')
+      is_expected.to have_no_selector('input#team_founded')
+      is_expected.to have_no_selector('input#team_wins')
+      is_expected.to have_no_selector('input#team_losses')
+      is_expected.to have_no_selector('input#team_win_percentage')
+      is_expected.to have_no_selector('input#team_revenue')
     end
 
     it 'hides association groupings' do
@@ -116,9 +116,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
       visit new_path(model_name: 'team')
       # Should not have the group header
-      should have_no_selector('legend', text: 'Players')
+      is_expected.to have_no_selector('legend', text: 'Players')
       # Should not have any of the group's fields either
-      should have_no_selector('select#team_player_ids')
+      is_expected.to have_no_selector('select#team_player_ids')
     end
 
     it 'is renameable' do
@@ -195,7 +195,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
           end
         end
         visit new_path(model_name: 'help_test')
-        should have_selector('fieldset>p', text: 'help paragraph to display')
+        is_expected.to have_selector('fieldset>p', text: 'help paragraph to display')
       end
 
       it 'does not show help if not present' do
@@ -207,7 +207,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
           end
         end
         visit new_path(model_name: 'help_test')
-        should_not have_selector('fieldset>p')
+        is_expected.not_to have_selector('fieldset>p')
       end
 
       it 'is able to display multiple help if there are multiple sections' do
@@ -225,9 +225,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
           end
         end
         visit new_path(model_name: 'help_test')
-        should have_selector('fieldset>p', text: 'help for default')
-        should have_selector('fieldset>p', text: 'help for other section')
-        should have_selector('fieldset>p', count: 2)
+        is_expected.to have_selector('fieldset>p', text: 'help for default')
+        is_expected.to have_selector('fieldset>p', text: 'help for other section')
+        is_expected.to have_selector('fieldset>p', count: 2)
       end
 
       it 'uses the :is setting from the validation' do
@@ -281,13 +281,13 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('legend', text: 'Basic info', visible: false)
-      should have_selector('legend', text: 'Basic info', visible: true)
-      should have_selector('legend', text: "Belong's to associations")
-      should have_selector('label', text: 'Name')
-      should have_selector('label', text: 'Logo url')
-      should have_selector('label', text: 'Division')
-      should have_selector('.control-group', count: 4)
+      is_expected.to have_selector('legend', text: 'Basic info', visible: false)
+      is_expected.to have_selector('legend', text: 'Basic info', visible: true)
+      is_expected.to have_selector('legend', text: "Belong's to associations")
+      is_expected.to have_selector('label', text: 'Name')
+      is_expected.to have_selector('label', text: 'Logo url')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('.control-group', count: 4)
     end
 
     it 'has accessor for its fields by type' do
@@ -308,11 +308,11 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Name')
-      should have_selector('label', text: 'Logo url')
-      should have_selector('label', text: 'Division')
-      should have_selector('label', text: 'Manager (STRING)')
-      should have_selector('label', text: 'Ballpark (STRING)')
+      is_expected.to have_selector('label', text: 'Name')
+      is_expected.to have_selector('label', text: 'Logo url')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Manager (STRING)')
+      is_expected.to have_selector('label', text: 'Ballpark (STRING)')
     end
   end
 
@@ -320,19 +320,19 @@ describe 'RailsAdmin Config DSL Edit Section' do
 
     it 'shows all by default' do
       visit new_path(model_name: 'team')
-      should have_selector('select#team_division_id')
-      should have_selector('input#team_name')
-      should have_selector('input#team_logo_url')
-      should have_selector('input#team_manager')
-      should have_selector('input#team_ballpark')
-      should have_selector('input#team_mascot')
-      should have_selector('input#team_founded')
-      should have_selector('input#team_wins')
-      should have_selector('input#team_losses')
-      should have_selector('input#team_win_percentage')
-      should have_selector('input#team_revenue')
-      should have_selector('select#team_player_ids')
-      should have_selector('select#team_fan_ids')
+      is_expected.to have_selector('select#team_division_id')
+      is_expected.to have_selector('input#team_name')
+      is_expected.to have_selector('input#team_logo_url')
+      is_expected.to have_selector('input#team_manager')
+      is_expected.to have_selector('input#team_ballpark')
+      is_expected.to have_selector('input#team_mascot')
+      is_expected.to have_selector('input#team_founded')
+      is_expected.to have_selector('input#team_wins')
+      is_expected.to have_selector('input#team_losses')
+      is_expected.to have_selector('input#team_win_percentage')
+      is_expected.to have_selector('input#team_revenue')
+      is_expected.to have_selector('select#team_player_ids')
+      is_expected.to have_selector('select#team_fan_ids')
     end
 
     it 'appears in order defined' do
@@ -344,9 +344,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector(:xpath, "//*[contains(@class, 'field')][1]//*[@id='team_manager']")
-      should have_selector(:xpath, "//*[contains(@class, 'field')][2]//*[@id='team_division_id']")
-      should have_selector(:xpath, "//*[contains(@class, 'field')][3]//*[@id='team_name']")
+      is_expected.to have_selector(:xpath, "//*[contains(@class, 'field')][1]//*[@id='team_manager']")
+      is_expected.to have_selector(:xpath, "//*[contains(@class, 'field')][2]//*[@id='team_division_id']")
+      is_expected.to have_selector(:xpath, "//*[contains(@class, 'field')][3]//*[@id='team_name']")
     end
 
     it 'only shows the defined fields if some fields are defined' do
@@ -357,9 +357,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Division')
-      should have_selector('label', text: 'Name')
-      should have_selector('.control-group', count: 2)
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name')
+      is_expected.to have_selector('.control-group', count: 2)
     end
 
     describe 'I18n awarly' do
@@ -375,12 +375,12 @@ describe 'RailsAdmin Config DSL Edit Section' do
           end
         end
         visit new_path(model_name: 'team')
-        should have_selector('label', text: 'Team Manager')
-        should have_selector('label', text: 'Some Fans')
+        is_expected.to have_selector('label', text: 'Team Manager')
+        is_expected.to have_selector('label', text: 'Some Fans')
         I18n.locale = :fr
         visit new_path(model_name: 'team')
-        should have_selector('label', text: "Manager de l'équipe")
-        should have_selector('label', text: 'Quelques fans')
+        is_expected.to have_selector('label', text: "Manager de l'équipe")
+        is_expected.to have_selector('label', text: 'Quelques fans')
       end
     end
 
@@ -395,9 +395,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Renamed field')
-      should have_selector('label', text: 'Division')
-      should have_selector('label', text: 'Name')
+      is_expected.to have_selector('label', text: 'Renamed field')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name')
     end
 
     it 'is renameable by type' do
@@ -409,19 +409,19 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Division')
-      should have_selector('label', text: 'Name (STRING)')
-      should have_selector('label', text: 'Logo url (STRING)')
-      should have_selector('label', text: 'Manager (STRING)')
-      should have_selector('label', text: 'Ballpark (STRING)')
-      should have_selector('label', text: 'Mascot (STRING)')
-      should have_selector('label', text: 'Founded')
-      should have_selector('label', text: 'Wins')
-      should have_selector('label', text: 'Losses')
-      should have_selector('label', text: 'Win percentage')
-      should have_selector('label', text: 'Revenue')
-      should have_selector('label', text: 'Players')
-      should have_selector('label', text: 'Fans')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name (STRING)')
+      is_expected.to have_selector('label', text: 'Logo url (STRING)')
+      is_expected.to have_selector('label', text: 'Manager (STRING)')
+      is_expected.to have_selector('label', text: 'Ballpark (STRING)')
+      is_expected.to have_selector('label', text: 'Mascot (STRING)')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
     it 'is globally renameable by type' do
@@ -433,19 +433,19 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Division')
-      should have_selector('label', text: 'Name (STRING)')
-      should have_selector('label', text: 'Logo url (STRING)')
-      should have_selector('label', text: 'Manager (STRING)')
-      should have_selector('label', text: 'Ballpark (STRING)')
-      should have_selector('label', text: 'Mascot (STRING)')
-      should have_selector('label', text: 'Founded')
-      should have_selector('label', text: 'Wins')
-      should have_selector('label', text: 'Losses')
-      should have_selector('label', text: 'Win percentage')
-      should have_selector('label', text: 'Revenue')
-      should have_selector('label', text: 'Players')
-      should have_selector('label', text: 'Fans')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name (STRING)')
+      is_expected.to have_selector('label', text: 'Logo url (STRING)')
+      is_expected.to have_selector('label', text: 'Manager (STRING)')
+      is_expected.to have_selector('label', text: 'Ballpark (STRING)')
+      is_expected.to have_selector('label', text: 'Mascot (STRING)')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
     it 'is flaggable as read only and be configurable with formatted_value' do
@@ -460,7 +460,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_content("I'm outputed in the form")
+      is_expected.to have_content("I'm outputed in the form")
     end
 
     it 'is hideable' do
@@ -474,9 +474,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_no_selector('#team_manager')
-      should have_selector('#team_division_id')
-      should have_selector('#team_name')
+      is_expected.to have_no_selector('#team_manager')
+      is_expected.to have_selector('#team_division_id')
+      is_expected.to have_selector('#team_name')
     end
 
     it 'is hideable by type' do
@@ -488,19 +488,19 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Division')
-      should have_no_selector('label', text: 'Name')
-      should have_no_selector('label', text: 'Logo url')
-      should have_no_selector('label', text: 'Manager')
-      should have_no_selector('label', text: 'Ballpark')
-      should have_no_selector('label', text: 'Mascot')
-      should have_selector('label', text: 'Founded')
-      should have_selector('label', text: 'Wins')
-      should have_selector('label', text: 'Losses')
-      should have_selector('label', text: 'Win percentage')
-      should have_selector('label', text: 'Revenue')
-      should have_selector('label', text: 'Players')
-      should have_selector('label', text: 'Fans')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_no_selector('label', text: 'Name')
+      is_expected.to have_no_selector('label', text: 'Logo url')
+      is_expected.to have_no_selector('label', text: 'Manager')
+      is_expected.to have_no_selector('label', text: 'Ballpark')
+      is_expected.to have_no_selector('label', text: 'Mascot')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
     it 'is globally hideable by type' do
@@ -512,19 +512,19 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('label', text: 'Division')
-      should have_no_selector('label', text: 'Name')
-      should have_no_selector('label', text: 'Logo url')
-      should have_no_selector('label', text: 'Manager')
-      should have_no_selector('label', text: 'Ballpark')
-      should have_no_selector('label', text: 'Mascot')
-      should have_selector('label', text: 'Founded')
-      should have_selector('label', text: 'Wins')
-      should have_selector('label', text: 'Losses')
-      should have_selector('label', text: 'Win percentage')
-      should have_selector('label', text: 'Revenue')
-      should have_selector('label', text: 'Players')
-      should have_selector('label', text: 'Fans')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_no_selector('label', text: 'Name')
+      is_expected.to have_no_selector('label', text: 'Logo url')
+      is_expected.to have_no_selector('label', text: 'Manager')
+      is_expected.to have_no_selector('label', text: 'Ballpark')
+      is_expected.to have_no_selector('label', text: 'Mascot')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
     it 'has option to customize the help text' do
@@ -578,9 +578,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'player')
-      should have_no_selector('a', text: 'Add a new Team')
-      should have_no_selector('a', text: 'Add a new Draft')
-      should have_no_selector('a', text: 'Add a new Comment')
+      is_expected.to have_no_selector('a', text: 'Add a new Team')
+      is_expected.to have_no_selector('a', text: 'Add a new Draft')
+      is_expected.to have_no_selector('a', text: 'Add a new Comment')
     end
 
     it 'can show the add button on an associated field' do
@@ -598,9 +598,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'player')
-      should have_selector('a', text: 'Add a new Team')
-      should have_selector('a', text: 'Add a new Draft')
-      should have_selector('a', text: 'Add a new Comment')
+      is_expected.to have_selector('a', text: 'Add a new Team')
+      is_expected.to have_selector('a', text: 'Add a new Draft')
+      is_expected.to have_selector('a', text: 'Add a new Comment')
     end
 
     it 'can hide the edit button on an associated field' do
@@ -615,8 +615,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'player')
-      should have_no_selector('a', text: 'Edit this Team')
-      should have_no_selector('a', text: 'Edit this Draft')
+      is_expected.to have_no_selector('a', text: 'Edit this Team')
+      is_expected.to have_no_selector('a', text: 'Edit this Draft')
     end
 
     it 'can show the edit button on an associated field' do
@@ -631,8 +631,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'player')
-      should have_selector('a', text: 'Edit this Team')
-      should have_selector('a', text: 'Edit this Draft')
+      is_expected.to have_selector('a', text: 'Edit this Team')
+      is_expected.to have_selector('a', text: 'Edit this Draft')
     end
 
   end
@@ -651,12 +651,12 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       visit new_path(model_name: 'category')
-      should have_no_css('#category_parent_category_id')
+      is_expected.to have_no_css('#category_parent_category_id')
       click_button 'Save' # first(:button, "Save").click
       visit edit_path(model_name: 'category', id: Category.first)
-      should have_css('#category_parent_category_id')
+      is_expected.to have_css('#category_parent_category_id')
       click_button 'Save' # first(:button, "Save").click
-      should have_content('Category successfully updated')
+      is_expected.to have_content('Category successfully updated')
     end
   end
 
@@ -707,14 +707,14 @@ describe 'RailsAdmin Config DSL Edit Section' do
 
     it 'is desactivable' do
       visit new_path(model_name: 'field_test')
-      should have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+      is_expected.to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       RailsAdmin.config(FieldTest) do
         configure :nested_field_tests do
           nested_form false
         end
       end
       visit new_path(model_name: 'field_test')
-      should have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+      is_expected.to have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
     end
 
     describe 'with nested_attributes_options given' do
@@ -727,8 +727,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
           and_return(allow_destroy: true, update_only: true)
         visit new_path(model_name: 'field_test')
-        should have_selector('.toggler')
-        should_not have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+        is_expected.to have_selector('.toggler')
+        is_expected.not_to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       end
 
       it 'does not show destroy button except for newly created when :allow_destroy is false' do
@@ -738,7 +738,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
           and_return(allow_destroy: false, update_only: false)
         visit edit_path(model_name: 'field_test', id: @record.id)
         expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
-        should_not have_selector('form .remove_nested_fields')
+        is_expected.not_to have_selector('form .remove_nested_fields')
         expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
           /<a[^>]* class="remove_nested_fields"[^>]*>/)
       end
@@ -747,7 +747,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
     describe "when a field which have the same name of nested_in field's" do
       it "does not hide fields which are not associated with nesting parent field's model" do
         visit new_path(model_name: 'field_test')
-        should_not have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
+        is_expected.not_to have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
         expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
           /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/)
       end
@@ -780,26 +780,26 @@ describe 'RailsAdmin Config DSL Edit Section' do
     it 'is required' do
       # draft.notes is nullable and has no validation
       field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :notes }
-      expect(field.properties.nullable?).to be_true
-      expect(field.required?).to be_false
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_falsey
 
       # draft.date is nullable in the schema but has an AR
       # validates_presence_of validation that makes it required
       field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :date }
-      expect(field.properties.nullable?).to be_true
-      expect(field.required?).to be_true
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_truthy
 
       # draft.round is nullable in the schema but has an AR
       # validates_numericality_of validation that makes it required
       field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :round }
-      expect(field.properties.nullable?).to be_true
-      expect(field.required?).to be_true
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_truthy
 
       # team.revenue is nullable in the schema but has an AR
       # validates_numericality_of validation that allows nil
       field = RailsAdmin.config('Team').edit.fields.detect { |f| f.name == :revenue }
-      expect(field.properties.nullable?).to be_true
-      expect(field.required?).to be_false
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_falsey
     end
   end
 
@@ -811,7 +811,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'draft')
-      should have_selector('textarea#draft_notes[data-richtext="ckeditor"]')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="ckeditor"]')
     end
   end
 
@@ -823,7 +823,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'draft')
-      should have_selector('textarea#draft_notes[data-richtext="codemirror"]')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="codemirror"]')
     end
   end
 
@@ -835,7 +835,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'draft')
-      should have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
     end
 
     it 'should include custom wysihtml5 configuration' do
@@ -850,7 +850,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       visit new_path(model_name: 'draft')
-      should have_selector("textarea#draft_notes[data-richtext=\"bootstrap-wysihtml5\"][data-options]")
+      is_expected.to have_selector("textarea#draft_notes[data-richtext=\"bootstrap-wysihtml5\"][data-options]")
     end
   end
 
@@ -863,7 +863,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'user')
-      should have_selector('input#user_avatar')
+      is_expected.to have_selector('input#user_avatar')
     end
   end
 
@@ -888,9 +888,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'auto-detects enumeration' do
-        should have_selector('.enum_type select')
-        should_not have_selector('.enum_type select[multiple]')
-        should have_content('green')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.not_to have_selector('.enum_type select[multiple]')
+        is_expected.to have_content('green')
       end
     end
 
@@ -914,8 +914,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'auto-detects enumeration' do
-        should have_selector('.enum_type select')
-        should have_content('green')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_content('green')
       end
     end
 
@@ -941,8 +941,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'allows configuration' do
-        should have_selector('.enum_type select')
-        should have_content('green')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_content('green')
       end
     end
 
@@ -968,8 +968,8 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'allows configuration' do
-        should have_selector('.enum_type select')
-        should have_content('green')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_content('green')
       end
     end
 
@@ -998,9 +998,9 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'allows direct listing of enumeration options and override enum method' do
-        should have_selector('.enum_type select')
-        should have_no_content('green')
-        should have_content('yellow')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_no_content('green')
+        is_expected.to have_content('yellow')
       end
     end
 
@@ -1021,7 +1021,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'makes enumeration multi-selectable' do
-        should have_selector('.enum_type select[multiple]')
+        is_expected.to have_selector('.enum_type select[multiple]')
       end
     end
 
@@ -1044,7 +1044,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
       end
 
       it 'makes enumeration multi-selectable' do
-        should have_selector('.enum_type select[multiple]')
+        is_expected.to have_selector('.enum_type select[multiple]')
       end
     end
   end
@@ -1057,7 +1057,7 @@ describe 'RailsAdmin Config DSL Edit Section' do
         end
       end
       visit new_path(model_name: 'team')
-      should have_selector('.color_type input')
+      is_expected.to have_selector('.color_type input')
     end
   end
 

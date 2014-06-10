@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Namespaced Model New' do
+describe 'RailsAdmin Namespaced Model New', :type => :request do
 
   subject { page }
 
@@ -22,10 +22,10 @@ describe 'RailsAdmin Namespaced Model New' do
     end
 
     it 'has correct input field names' do
-      should have_selector('label[for=cms_basic_page_title]')
-      should have_selector("input#cms_basic_page_title[name='cms_basic_page[title]']")
-      should have_selector('label[for=cms_basic_page_content]')
-      should have_selector("textarea#cms_basic_page_content[name='cms_basic_page[content]']")
+      is_expected.to have_selector('label[for=cms_basic_page_title]')
+      is_expected.to have_selector("input#cms_basic_page_title[name='cms_basic_page[title]']")
+      is_expected.to have_selector('label[for=cms_basic_page_content]')
+      is_expected.to have_selector("textarea#cms_basic_page_content[name='cms_basic_page[content]']")
     end
   end
 end

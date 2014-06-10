@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Delete' do
+describe 'RailsAdmin Basic Delete', :type => :request do
 
   subject { page }
 
@@ -10,10 +10,10 @@ describe 'RailsAdmin Basic Delete' do
       @player = @draft.player
       @comment = @player.comments.create
       visit delete_path(model_name: 'player', id: @player.id)
-      should have_content('delete this player')
-      should have_link(@player.name, href: "/admin/player/#{@player.id}")
-      should have_link("Draft ##{@draft.id}", href: "/admin/draft/#{@draft.id}")
-      should have_link("Comment ##{@comment.id}", href: "/admin/comment/#{@comment.id}")
+      is_expected.to have_content('delete this player')
+      is_expected.to have_link(@player.name, href: "/admin/player/#{@player.id}")
+      is_expected.to have_link("Draft ##{@draft.id}", href: "/admin/draft/#{@draft.id}")
+      is_expected.to have_link("Comment ##{@comment.id}", href: "/admin/comment/#{@comment.id}")
     end
   end
 
@@ -41,10 +41,10 @@ describe 'RailsAdmin Basic Delete' do
     end
 
     it "shows \"Delete model\"" do
-      should have_content('delete this player')
-      should_not have_selector("a[href=\"/admin/player/#{@player.id}\"]")
-      should_not have_selector("a[href=\"/admin/draft/#{@draft.id}\"]")
-      should_not have_selector("a[href=\"/admin/comment/#{@comment.id}\"]")
+      is_expected.to have_content('delete this player')
+      is_expected.not_to have_selector("a[href=\"/admin/player/#{@player.id}\"]")
+      is_expected.not_to have_selector("a[href=\"/admin/draft/#{@draft.id}\"]")
+      is_expected.not_to have_selector("a[href=\"/admin/comment/#{@comment.id}\"]")
     end
   end
 
@@ -56,9 +56,9 @@ describe 'RailsAdmin Basic Delete' do
     end
 
     it "shows \"Delete model\"" do
-      should_not have_content('Routing Error')
-      should have_content('delete this player')
-      should have_link(@player.name, href: "/admin/player/#{@player.id}")
+      is_expected.not_to have_content('Routing Error')
+      is_expected.to have_content('delete this player')
+      is_expected.to have_link(@player.name, href: "/admin/player/#{@player.id}")
     end
   end
 end

@@ -65,7 +65,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'supports limiting' do
-        expect(@abstract_model.all(limit: 2)).to have(2).items
+        expect(@abstract_model.all(limit: 2).size).to eq(2)
       end
 
       it 'supports retrieval by bulk_ids' do
@@ -127,11 +127,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     context 'without configuration' do
       before do
-        Rails.configuration.stub(:database_configuration) { nil }
+        allow(Rails.configuration).to receive(:database_configuration) { nil }
       end
 
       after do
-        Rails.configuration.unstub(:database_configuration)
+        allow(Rails.configuration).to receive(:database_configuration).and_call_original
       end
 
       it 'does not raise error' do

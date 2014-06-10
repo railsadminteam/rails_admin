@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Bulk Action' do
+describe 'RailsAdmin Basic Bulk Action', :type => :request do
 
   subject { page }
 
@@ -19,7 +19,7 @@ describe 'RailsAdmin Basic Bulk Action' do
     it 'shows form for export' do
       visit index_path(model_name: 'player')
       click_link 'Export found Players'
-      @players.each { |player| should have_content('Select fields to export') }
+      @players.each { |player| is_expected.to have_content('Select fields to export') }
     end
   end
 end

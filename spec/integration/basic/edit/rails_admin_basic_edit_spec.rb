@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Edit' do
+describe 'RailsAdmin Basic Edit', :type => :request do
 
   subject { page }
 
@@ -11,12 +11,12 @@ describe 'RailsAdmin Basic Edit' do
     end
 
     it "shows \"Edit model\"" do
-      should have_content('Edit Player')
+      is_expected.to have_content('Edit Player')
     end
 
     it "shows required fields as \"Required\"" do
-      should have_selector('div', text: /Name\s*Required/)
-      should have_selector('div', text: /Number\s*Required/)
+      is_expected.to have_selector('div', text: /Name\s*Required/)
+      is_expected.to have_selector('div', text: /Number\s*Required/)
     end
 
     it "shows non-required fields as \"Optional\"" do
@@ -30,13 +30,13 @@ describe 'RailsAdmin Basic Edit' do
     it 'adds a related id to the belongs_to create team link' do
       @player = FactoryGirl.create :player
       visit edit_path(model_name: 'player', id: @player.id)
-      should have_selector("a[data-link='/admin/team/new?associations%5Bplayers%5D=#{@player.id}&modal=true']")
+      is_expected.to have_selector("a[data-link='/admin/team/new?associations%5Bplayers%5D=#{@player.id}&modal=true']")
     end
 
     it 'adds a related id to the has_many create team link' do
       @team = FactoryGirl.create :team
       visit edit_path(model_name: 'team', id: @team.id)
-      should have_selector("a[data-link='/admin/player/new?associations%5Bteam%5D=#{@team.id}&modal=true']")
+      is_expected.to have_selector("a[data-link='/admin/player/new?associations%5Bteam%5D=#{@team.id}&modal=true']")
     end
   end
 
@@ -45,8 +45,8 @@ describe 'RailsAdmin Basic Edit' do
     it 'is not editable' do
       @league = FactoryGirl.create :league
       visit edit_path(model_name: 'league', id: @league.id)
-      should_not have_selector('select#league_team_ids')
-      should have_selector('select#league_division_ids') # decoy, fails if naming scheme changes
+      is_expected.not_to have_selector('select#league_team_ids')
+      is_expected.to have_selector('select#league_division_ids') # decoy, fails if naming scheme changes
     end
   end
 
@@ -58,7 +58,7 @@ describe 'RailsAdmin Basic Edit' do
     end
 
     it 'shows associated objects' do
-      should have_selector '#fan_team_ids' do |select|
+      is_expected.to have_selector '#fan_team_ids' do |select|
         expect(select[0]).to have_selector 'option[selected="selected"]'
         expect(select[1]).not_to have_selector 'option[selected="selected"]'
         expect(select[2]).not_to have_selector 'option[selected="selected"]'
@@ -91,7 +91,7 @@ describe 'RailsAdmin Basic Edit' do
     end
 
     it 'displays a link to the delete page' do
-      should have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
+      is_expected.to have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
     end
 
   end

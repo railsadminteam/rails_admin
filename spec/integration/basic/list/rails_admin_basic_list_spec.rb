@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'RailsAdmin Basic List' do
+describe 'RailsAdmin Basic List', :type => :request do
 
   subject { page }
 
@@ -33,24 +33,24 @@ describe 'RailsAdmin Basic List' do
       RailsAdmin.config.default_items_per_page = 1
       2.times { FactoryGirl.create :player } # two pages of players
       visit index_path(model_name: 'player')
-      should have_content('List of Players')
-      should have_content('Created at')
-      should have_content('Updated at')
+      is_expected.to have_content('List of Players')
+      is_expected.to have_content('Created at')
+      is_expected.to have_content('Updated at')
 
       # it "shows the show, edit and delete links" do
-      should have_selector("li[title='Show'] a")
-      should have_selector("li[title='Edit'] a")
-      should have_selector("li[title='Delete'] a")
+      is_expected.to have_selector("li[title='Show'] a")
+      is_expected.to have_selector("li[title='Edit'] a")
+      is_expected.to have_selector("li[title='Delete'] a")
 
       # it "has the search box with some prompt text" do
-      should have_selector("input[placeholder='Filter']")
+      is_expected.to have_selector("input[placeholder='Filter']")
 
       # https://github.com/sferik/rails_admin/issues/362
       # test that no link uses the "wildcard route" with the main
       # controller and list method
       # it "does not use the 'wildcard route'" do
-      should have_selector("a[href*='all=true']") # make sure we're fully testing pagination
-      should have_no_selector("a[href^='/rails_admin/main/list']")
+      is_expected.to have_selector("a[href*='all=true']") # make sure we're fully testing pagination
+      is_expected.to have_no_selector("a[href^='/rails_admin/main/list']")
     end
   end
 
@@ -78,9 +78,9 @@ describe 'RailsAdmin Basic List' do
       end
 
       visit index_path(model_name: 'player', query: @players[0].name)
-      should have_content(@players[0].name)
+      is_expected.to have_content(@players[0].name)
       (1..3).each do |i|
-        should have_no_content(@players[i].name)
+        is_expected.to have_no_content(@players[i].name)
       end
     end
 
@@ -95,10 +95,10 @@ describe 'RailsAdmin Basic List' do
       end
 
       visit index_path(model_name: 'player', f: {injured: {'1' => {v: 'true'}}})
-      should have_content(@players[0].name)
-      should have_no_content(@players[1].name)
-      should have_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_no_content(@players[1].name)
+      is_expected.to have_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to combine filters on two different attributes' do
@@ -112,9 +112,9 @@ describe 'RailsAdmin Basic List' do
       end
 
       visit index_path(model_name: 'player', f: {retired: {'1' => {v: 'true'}}, injured: {'1' => {v: 'true'}}})
-      should have_content(@players[0].name)
+      is_expected.to have_content(@players[0].name)
       (1..3).each do |i|
-        should have_no_content(@players[i].name)
+        is_expected.to have_no_content(@players[i].name)
       end
     end
 
@@ -129,10 +129,10 @@ describe 'RailsAdmin Basic List' do
       end
 
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams[0].name}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to disable search on attributes' do
@@ -145,7 +145,7 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', query: @players[0].name)
-      should have_no_content(@players[0].name)
+      is_expected.to have_no_content(@players[0].name)
     end
 
     it 'allows to search a belongs_to attribute over the base table' do
@@ -159,10 +159,10 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.id}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to search a belongs_to attribute over the target table' do
@@ -176,10 +176,10 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to search a belongs_to attribute over the target table with a table name specified as a hash' do
@@ -193,10 +193,10 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to search a belongs_to attribute over the target table with a table name specified as a string' do
@@ -210,10 +210,10 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to search a belongs_to attribute over the label method by default' do
@@ -225,10 +225,10 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to search a belongs_to attribute over the target table when an attribute is specified' do
@@ -242,10 +242,10 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'allows to search over more than one attribute' do
@@ -259,16 +259,16 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}, '2' => {v: @teams.first.id, o: 'is'}}})
-      should have_content(@players[0].name)
-      should have_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
       # same with a different id
       visit index_path(model_name: 'player', f: {team: {'1' => {v: @teams.first.name}, '2' => {v: @teams.last.id, o: 'is'}}})
-      should have_no_content(@players[0].name)
-      should have_no_content(@players[1].name)
-      should have_no_content(@players[2].name)
-      should have_no_content(@players[3].name)
+      is_expected.to have_no_content(@players[0].name)
+      is_expected.to have_no_content(@players[1].name)
+      is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
     end
 
     it 'displays base filters when no filters are present in the params' do
@@ -291,7 +291,7 @@ describe 'RailsAdmin Basic List' do
     end
 
     it "shows \"2 results\"" do
-      should have_content('2 players')
+      is_expected.to have_content('2 players')
     end
   end
 
@@ -302,7 +302,7 @@ describe 'RailsAdmin Basic List' do
     end
 
     it "shows \"2 results\"" do
-      should have_content('2 players')
+      is_expected.to have_content('2 players')
     end
   end
 
@@ -386,7 +386,7 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', query: player.name[2, -1])
-      should have_content(player.name)
+      is_expected.to have_content(player.name)
     end
 
     it 'does not find the player if the query does not match the default search opeartor' do
@@ -397,7 +397,7 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', query: player.name[0, 2])
-      should have_no_content(player.name)
+      is_expected.to have_no_content(player.name)
     end
 
     it 'finds the player if the query matches the specified search operator' do
@@ -409,7 +409,7 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', query: player.name[0, 2])
-      should have_content(player.name)
+      is_expected.to have_content(player.name)
     end
 
     it 'does not find the player if the query does not match the specified search operator' do
@@ -421,7 +421,7 @@ describe 'RailsAdmin Basic List' do
         end
       end
       visit index_path(model_name: 'player', query: player.name[1..-1])
-      should have_no_content(player.name)
+      is_expected.to have_no_content(player.name)
     end
   end
 
@@ -433,9 +433,9 @@ describe 'RailsAdmin Basic List' do
     end
 
     it 'shows the show, edit and delete links with valid url' do
-      should have_selector("td a[href='/admin/ball/#{@ball.id}']")
-      should have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
-      should have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
+      is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}']")
+      is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
+      is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
     end
 
   end
@@ -468,31 +468,31 @@ describe 'RailsAdmin Basic List' do
 
     it 'shows only scoped records' do
       visit index_path(model_name: 'team')
-      should have_content(@teams[0].name)
-      should have_content(@teams[1].name)
-      should have_content(@teams[2].name)
-      should have_content(@teams[3].name)
+      is_expected.to have_content(@teams[0].name)
+      is_expected.to have_content(@teams[1].name)
+      is_expected.to have_content(@teams[2].name)
+      is_expected.to have_content(@teams[3].name)
 
       visit index_path(model_name: 'team', scope: 'red')
       expect(find('#scope_selector li.active')).to have_content('Red')
-      should have_content(@teams[0].name)
-      should have_content(@teams[1].name)
-      should have_no_content(@teams[2].name)
-      should have_no_content(@teams[3].name)
+      is_expected.to have_content(@teams[0].name)
+      is_expected.to have_content(@teams[1].name)
+      is_expected.to have_no_content(@teams[2].name)
+      is_expected.to have_no_content(@teams[3].name)
 
       visit index_path(model_name: 'team', scope: 'white')
       expect(find('#scope_selector li.active')).to have_content('White')
-      should have_no_content(@teams[0].name)
-      should have_no_content(@teams[1].name)
-      should have_content(@teams[2].name)
-      should have_no_content(@teams[3].name)
+      is_expected.to have_no_content(@teams[0].name)
+      is_expected.to have_no_content(@teams[1].name)
+      is_expected.to have_content(@teams[2].name)
+      is_expected.to have_no_content(@teams[3].name)
     end
     it 'shows all records instead when scope not in list' do
       visit index_path(model_name: 'team', scope: 'green')
-      should have_content(@teams[0].name)
-      should have_content(@teams[1].name)
-      should have_content(@teams[2].name)
-      should have_content(@teams[3].name)
+      is_expected.to have_content(@teams[0].name)
+      is_expected.to have_content(@teams[1].name)
+      is_expected.to have_content(@teams[2].name)
+      is_expected.to have_content(@teams[3].name)
     end
     describe 'i18n' do
       before :each do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Create' do
+describe 'RailsAdmin Basic Create', :type => :request do
   subject { page }
 
   describe 'create' do
@@ -134,7 +134,7 @@ describe 'RailsAdmin Basic Create' do
     end
 
     it 'shows error base error message in flash' do
-      should have_content('Player failed to be created. Player is cheating')
+      is_expected.to have_content('Player failed to be created. Player is cheating')
     end
   end
 end

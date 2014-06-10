@@ -68,9 +68,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.foreign_key).to eq :a_r_blog_id
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end
@@ -86,9 +86,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.foreign_key).to eq :ar_blog_id
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end
@@ -102,9 +102,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.primary_key).to eq :id
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end
@@ -121,9 +121,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.foreign_key).to eq :commentable_id
       expect(subject.foreign_type).to eq :commentable_type
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_true
+      expect(subject.polymorphic?).to be_truthy
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
 
@@ -144,9 +144,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.foreign_key).to eq :commentable_id
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to eq :commentable
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end

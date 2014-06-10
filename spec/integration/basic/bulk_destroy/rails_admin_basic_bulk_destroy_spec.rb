@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Bulk Destroy' do
+describe 'RailsAdmin Basic Bulk Destroy', :type => :request do
   subject { page }
 
   describe 'successful bulk delete of records', active_record: true do
