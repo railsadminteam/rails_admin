@@ -13,9 +13,8 @@ module RailsAdmin
           end
 
           def parse_input(params)
-            if params[name].is_a?(::String)
-              params[name] = (params[name].blank? ? nil : JSON.parse(params[name]))
-            end
+            return unless params[name].is_a?(::String)
+            params[name] = (params[name].blank? ? nil : JSON.parse(params[name]))
           end
         end
       end

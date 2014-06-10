@@ -39,7 +39,7 @@ class AdminAbility
   end
 end
 
-describe 'RailsAdmin CanCan Authorization', :type => :request do
+describe 'RailsAdmin CanCan Authorization', type: :request do
 
   subject { page }
 

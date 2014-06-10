@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'RailsAdmin Basic List', :type => :request do
+describe 'RailsAdmin Basic List', type: :request do
 
   subject { page }
 

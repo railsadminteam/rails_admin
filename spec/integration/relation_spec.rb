@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'table relations', :type => :request do
+describe 'table relations', type: :request do
 
   before do
     class RelTest < Tableless

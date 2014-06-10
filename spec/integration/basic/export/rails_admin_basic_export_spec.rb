@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'csv'
 
-describe 'RailsAdmin Export', :type => :request do
+describe 'RailsAdmin Export', type: :request do
 
   subject { page }
 

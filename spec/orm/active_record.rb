@@ -31,7 +31,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def column_defaults
-      @column_defaults ||= columns.collect { |column| [column.name, nil] }.inject({}) do |a, e|
+      @column_defaults ||= columns.collect { |column| [column.name, nil] }.each_with_object({}) do |e, a|
         a[e[0]] = e[1]
         a
       end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Show', :type => :request do
+describe 'RailsAdmin Basic Show', type: :request do
   subject { page }
 
   describe 'show' do

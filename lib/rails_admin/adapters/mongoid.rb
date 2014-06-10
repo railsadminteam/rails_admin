@@ -11,7 +11,7 @@ module RailsAdmin
       ObjectId = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId # rubocop:disable ConstantName
 
       def new(params = {})
-        AbstractObject.new(model.new)
+        AbstractObject.new(model.new(params))
       end
 
       def get(id)
@@ -66,8 +66,8 @@ module RailsAdmin
       end
 
       def properties
-        fields = model.fields.reject { |name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
-        fields.collect do |name, field|
+        fields = model.fields.reject { |_name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
+        fields.collect do |_name, field|
           Property.new(field, model)
         end
       end
@@ -103,10 +103,9 @@ module RailsAdmin
         field.searchable_columns.each do |column_infos|
           collection_name, column_name = parse_collection_name(column_infos[:column])
           statement = build_statement(column_name, column_infos[:type], value, operator)
-          if statement
-            conditions_per_collection[collection_name] ||= []
-            conditions_per_collection[collection_name] << statement
-          end
+          next unless statement
+          conditions_per_collection[collection_name] ||= []
+          conditions_per_collection[collection_name] << statement
         end
         conditions_per_collection
       end

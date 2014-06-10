@@ -3,14 +3,14 @@ require 'cancan'
 
 class TestAbility
   include CanCan::Ability
-  def initialize(user)
+  def initialize(_user)
     can :access, :rails_admin
     can :edit, FieldTest
     cannot :edit, FieldTest, string_field: 'dangerous'
   end
 end
 
-describe RailsAdmin::ApplicationHelper, :type => :helper do
+describe RailsAdmin::ApplicationHelper, type: :helper do
   describe '#authorized?' do
     before do
       allow(RailsAdmin.config).to receive(:_current_user).and_return(FactoryGirl.create(:user))

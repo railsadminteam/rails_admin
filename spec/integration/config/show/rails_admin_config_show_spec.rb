@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Config DSL Show Section', :type => :request do
+describe 'RailsAdmin Config DSL Show Section', type: :request do
   subject { page }
   let(:team) { FactoryGirl.create :team }
 
@@ -52,7 +52,7 @@ describe 'RailsAdmin Config DSL Show Section', :type => :request do
 
   describe 'bindings' do
     it 'should be present' do
-      RailsAdmin.config Team do |c|
+      RailsAdmin.config Team do |_c|
         show do
           field :name do
             show do

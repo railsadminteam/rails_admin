@@ -108,7 +108,7 @@ module RailsAdmin
             else
               "#{v}=#{value.inspect}"
             end
-          end.join(", ")
+          end.join(', ')
         }>"
       end
     end

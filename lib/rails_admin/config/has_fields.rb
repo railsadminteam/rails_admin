@@ -45,10 +45,9 @@ module RailsAdmin
       def include_fields(*field_names, &block)
         if field_names.empty?
           _fields.select { |f| f.instance_eval(&block) }.each do |f|
-            unless f.defined
-              f.defined = true
-              f.order = _fields.select(&:defined).length
-            end
+            next if f.defined
+            f.defined = true
+            f.order = _fields.select(&:defined).length
           end
         else
           fields(*field_names, &block)

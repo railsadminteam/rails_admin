@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Delete', :type => :request do
+describe 'RailsAdmin Basic Delete', type: :request do
 
   subject { page }
 

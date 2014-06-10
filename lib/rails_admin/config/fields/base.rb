@@ -199,9 +199,8 @@ module RailsAdmin
         register_instance_option :visible? do
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
-            if self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
-              returned = false if fields.include?(name)
-            end
+            next unless self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+            returned = false if fields.include?(name)
           end
           returned
         end
@@ -287,7 +286,7 @@ module RailsAdmin
           (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
         end
 
-        def parse_input(params)
+        def parse_input(_params)
           # overriden
         end
 
@@ -321,7 +320,7 @@ module RailsAdmin
               else
                 "#{v}=#{value.inspect}"
               end
-            end.join(", ")
+            end.join(', ')
           }>"
         end
       end

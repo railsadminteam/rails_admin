@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'RailsAdmin Config DSL Edit Section', :type => :request do
+describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
   subject { page }
 

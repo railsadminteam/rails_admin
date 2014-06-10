@@ -44,21 +44,18 @@ module RailsAdmin
         end
 
         def foreign_key
-          if [:embeds_one, :embeds_many].exclude?(macro.to_sym)
-            association.foreign_key.to_sym rescue nil
-          end
+          return unless [:embeds_one, :embeds_many].exclude?(macro.to_sym)
+          association.foreign_key.to_sym rescue nil
         end
 
         def foreign_type
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-            association.inverse_type.try(:to_sym) || :"#{name}_type"
-          end
+          return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          association.inverse_type.try(:to_sym) || :"#{name}_type"
         end
 
         def foreign_inverse_of
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-            inverse_of_field.try(:to_sym)
-          end
+          return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          inverse_of_field.try(:to_sym)
         end
 
         def as

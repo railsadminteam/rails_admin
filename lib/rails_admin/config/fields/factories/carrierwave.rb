@@ -10,12 +10,11 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << field
     children_fields = []
     columns.each do |children_column_name|
-      if child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
-        children_field = fields.detect { |f| f.name == children_column_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_properties, fields)
-        children_field.hide unless field == children_field
-        children_field.filterable(false) unless field == children_field
-        children_fields << children_field.name
-      end
+      next unless child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
+      children_field = fields.detect { |f| f.name == children_column_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_properties, fields)
+      children_field.hide unless field == children_field
+      children_field.filterable(false) unless field == children_field
+      children_fields << children_field.name
     end
     field.children_fields(children_fields)
     true

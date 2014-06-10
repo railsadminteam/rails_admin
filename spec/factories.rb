@@ -42,7 +42,7 @@ FactoryGirl.define do
 
   factory :user do
     sequence(:email) { |n| "username_#{n}@example.com" }
-    sequence(:password) { |n| 'password' }
+    sequence(:password) { |_n| 'password' }
   end
 
   factory :field_test do
@@ -61,7 +61,7 @@ FactoryGirl.define do
   end
 
   factory :ball do
-    color(%W[red blue green yellow purple brown black white].sample)
+    color(%w[red blue green yellow purple brown black white].sample)
   end
 
   factory :hardball do
