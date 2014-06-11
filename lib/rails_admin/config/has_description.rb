@@ -4,7 +4,7 @@ module RailsAdmin
     module HasDescription
       attr_reader :description
 
-      def desc(description, &block)
+      def desc(description, &_block)
         @description ||= description
       end
     end
