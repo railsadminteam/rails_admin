@@ -34,6 +34,6 @@ describe RailsAdmin::Config::HasFields do
         field :players, :has_and_belongs_to_many_association
       end
     end
-    expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :players }.properties).to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Association
+    expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :players }.properties).not_to be_nil
   end
 end
