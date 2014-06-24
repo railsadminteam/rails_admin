@@ -18,7 +18,7 @@ module RailsAdmin
           register_instance_option :help do
             false
           end
-          
+
           def generic_help
             false
           end
