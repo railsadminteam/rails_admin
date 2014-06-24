@@ -262,6 +262,15 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
       end
 
+      it 'does not show help for hidden fields' do
+        RailsAdmin.config HelpTest do
+          edit do
+            field :name, :hidden
+          end
+        end
+        visit new_path(model_name: 'help_test')
+        expect(page).not_to have_css('.help-block')
+      end
     end
 
     it 'has accessor for its fields' do
