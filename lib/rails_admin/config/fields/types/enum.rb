@@ -24,6 +24,8 @@ module RailsAdmin
               enum.reject { |_k, v| v.to_s != value.to_s }.keys.first.to_s.presence || value.presence || ' - '
             elsif enum.is_a?(::Array) && enum.first.is_a?(::Array)
               enum.detect { |e|e[1].to_s == value.to_s }.try(:first).to_s.presence || value.presence || ' - '
+            elsif enum.is_a?(::Array) && value.is_a?(::Integer)
+              enum[value] || value.presence || ' - '
             else
               value.presence || ' - '
             end
