@@ -28,9 +28,9 @@ module RailsAdmin
         @root = self
 
         @abstract_model = begin
-          if entity.kind_of?(RailsAdmin::AbstractModel)
+          if entity.is_a?(RailsAdmin::AbstractModel)
             entity
-          elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+          elsif entity.is_a?(Class) || entity.is_a?(String) || entity.is_a?(Symbol)
             RailsAdmin::AbstractModel.new(entity)
           else
             RailsAdmin::AbstractModel.new(entity.class)

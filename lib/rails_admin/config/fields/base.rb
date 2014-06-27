@@ -220,7 +220,7 @@ module RailsAdmin
 
         # Is this an association
         def association?
-          kind_of?(RailsAdmin::Config::Fields::Association)
+          is_a?(RailsAdmin::Config::Fields::Association)
         end
 
         # Reader for validation errors of the bound object

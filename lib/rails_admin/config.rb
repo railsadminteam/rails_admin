@@ -206,11 +206,11 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def model(entity, &block)
         key = begin
-          if entity.kind_of?(RailsAdmin::AbstractModel)
+          if entity.is_a?(RailsAdmin::AbstractModel)
             entity.model.try(:name).try :to_sym
-          elsif entity.kind_of?(Class)
+          elsif entity.is_a?(Class)
             entity.name.to_sym
-          elsif entity.kind_of?(String) || entity.kind_of?(Symbol)
+          elsif entity.is_a?(String) || entity.is_a?(Symbol)
             entity.to_sym
           else
             entity.class.name.to_sym
@@ -277,7 +277,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset_model(model)
-        key = model.kind_of?(Class) ? model.name.to_sym : model.to_sym
+        key = model.is_a?(Class) ? model.name.to_sym : model.to_sym
         @registry.delete(key)
       end
 

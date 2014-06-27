@@ -277,7 +277,7 @@ describe RailsAdmin::Config do
 end
 
 module ExampleModule
-  class AuthorizationAdapter ; end
-  class ConfigurationAdapter ; end
-  class AuditingAdapter ; end
+  class AuthorizationAdapter; end
+  class ConfigurationAdapter; end
+  class AuditingAdapter; end
 end

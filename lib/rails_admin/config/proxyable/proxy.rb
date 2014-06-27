@@ -13,7 +13,7 @@ module RailsAdmin
 
         # Bind variables to be used by the configuration options
         def bind(key, value = nil)
-          if key.kind_of?(Hash)
+          if key.is_a?(Hash)
             @bindings = key
           else
             @bindings[key] = value
