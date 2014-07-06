@@ -18,7 +18,7 @@ class Player
   validates_numericality_of(:number, only_integer: true)
   validates_uniqueness_of(:number, scope: :team_id, message: 'There is already a player with that number on this team')
 
-  validates_each :name do |record, attr, value|
+  validates_each :name do |record, _attr, value|
     record.errors.add(:base, 'Player is cheating') if value.to_s =~ /on steroids/
   end
 

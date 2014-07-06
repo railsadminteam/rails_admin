@@ -18,7 +18,7 @@ module RailsAdmin
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       schema_include = schema.delete(:include) || {}
 
-      @associations = schema_include.inject({}) do |hash, (key, values)|
+      @associations = schema_include.each_with_object({}) do |(key, values), hash|
         association = association_for(key)
         model_config = association.associated_model_config
         abstract_model = model_config.abstract_model
@@ -92,7 +92,7 @@ module RailsAdmin
       @fields.collect do |field|
         output(::I18n.t('admin.export.csv.header_for_root_methods', name: field.label, model: @abstract_model.pretty_name))
       end +
-      @associations.flat_map do |association_name, option_hash|
+      @associations.flat_map do |_association_name, option_hash|
         option_hash[:fields].collect do |field|
           output(::I18n.t('admin.export.csv.header_for_association_methods', name: field.label, association: option_hash[:association].label))
         end

@@ -6,6 +6,7 @@ require 'rails_admin/config/has_groups'
 require 'rails_admin/config/fields/group'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/has_fields'
+require 'rails_admin/config/has_description'
 require 'rails_admin/config/sections'
 require 'rails_admin/config/actions'
 
@@ -27,9 +28,9 @@ module RailsAdmin
         @root = self
 
         @abstract_model = begin
-          if entity.kind_of?(RailsAdmin::AbstractModel)
+          if entity.is_a?(RailsAdmin::AbstractModel)
             entity
-          elsif entity.kind_of?(Class) || entity.kind_of?(String) || entity.kind_of?(Symbol)
+          elsif entity.is_a?(Class) || entity.is_a?(String) || entity.is_a?(Symbol)
             RailsAdmin::AbstractModel.new(entity)
           else
             RailsAdmin::AbstractModel.new(entity.class)
@@ -108,7 +109,7 @@ module RailsAdmin
             else
               "#{v}=#{value.inspect}"
             end
-          end.join(", ")
+          end.join(', ')
         }>"
       end
     end

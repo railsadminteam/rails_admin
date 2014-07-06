@@ -8,8 +8,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq ' id'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_true
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_truthy
       expect(subject.type).to eq :bson_object_id
       expect(subject.length).to be_nil
     end
@@ -20,8 +20,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Array field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :serialized
       expect(subject.length).to be_nil
     end
@@ -32,8 +32,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Big decimal field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :decimal
       expect(subject.length).to be_nil
     end
@@ -44,8 +44,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Boolean field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :boolean
       expect(subject.length).to be_nil
     end
@@ -56,8 +56,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Bson object id field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :bson_object_id
       expect(subject.length).to be_nil
     end
@@ -68,8 +68,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Date field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :date
       expect(subject.length).to be_nil
     end
@@ -80,8 +80,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Datetime field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :datetime
       expect(subject.length).to be_nil
     end
@@ -92,8 +92,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Time with zone field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :datetime
       expect(subject.length).to be_nil
     end
@@ -104,8 +104,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Default field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :string
       expect(subject.length).to eq 255
     end
@@ -116,8 +116,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Float field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :float
       expect(subject.length).to be_nil
     end
@@ -128,8 +128,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Hash field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :serialized
       expect(subject.length).to be_nil
     end
@@ -140,8 +140,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Integer field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :integer
       expect(subject.length).to be_nil
     end
@@ -152,8 +152,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Object field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :string
       expect(subject.length).to eq 255
     end
@@ -164,8 +164,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'String field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :text
       expect(subject.length).to be_nil
     end
@@ -176,8 +176,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Symbol field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :string
       expect(subject.length).to eq 255
     end
@@ -188,8 +188,8 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'has correct values' do
       expect(subject.pretty_name).to eq 'Time field'
-      expect(subject.nullable?).to be_true
-      expect(subject.serial?).to be_false
+      expect(subject.nullable?).to be_truthy
+      expect(subject.serial?).to be_falsey
       expect(subject.type).to eq :datetime
       expect(subject.length).to be_nil
     end
@@ -207,7 +207,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'does not cause problem with custom validators' do
       class MyCustomValidator < ActiveModel::Validator
-        def validate(r); end
+        def validate(_r); end
       end
       class CustomValiated
         include Mongoid::Document

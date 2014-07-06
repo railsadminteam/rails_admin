@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe RailsAdmin::MainController do
+describe RailsAdmin::MainController, type: :controller do
   describe '#dashboard' do
     before do
       allow(controller).to receive(:render).and_return(true) # no rendering
@@ -306,9 +306,9 @@ describe RailsAdmin::MainController do
           'player' => {'name' => 'foo'}
         )
         controller.send(:get_model)
-        expect(controller.params['player'].permitted?).to be_false
+        expect(controller.params['player'].permitted?).to be_falsey
         controller.send(:satisfy_strong_params!)
-        expect(controller.params['player'].permitted?).to be_true
+        expect(controller.params['player'].permitted?).to be_truthy
       end
     end
 

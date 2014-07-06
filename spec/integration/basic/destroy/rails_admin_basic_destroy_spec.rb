@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Destroy' do
+describe 'RailsAdmin Basic Destroy', type: :request do
 
   subject { page }
 
@@ -17,7 +17,7 @@ describe 'RailsAdmin Basic Destroy' do
     end
 
     it 'shows success message' do
-      should have_content('Player successfully deleted')
+      is_expected.to have_content('Player successfully deleted')
     end
   end
 
@@ -34,7 +34,7 @@ describe 'RailsAdmin Basic Destroy' do
     end
 
     it 'shows error message' do
-      should have_content('Player failed to be deleted')
+      is_expected.to have_content('Player failed to be deleted')
     end
   end
 

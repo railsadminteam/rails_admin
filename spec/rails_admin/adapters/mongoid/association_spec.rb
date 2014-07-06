@@ -90,9 +90,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
 
@@ -114,9 +114,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end
@@ -133,9 +133,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end
@@ -153,9 +153,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_type).to eq :commentable_type
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_true
+      expect(subject.polymorphic?).to be_truthy
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
   end
@@ -173,9 +173,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to eq :commentable
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
 
@@ -197,9 +197,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to eq(allow_destroy: false, update_only: false)
     end
   end
@@ -215,9 +215,9 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key).to be_nil
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to be_nil
-      expect(subject.polymorphic?).to be_false
+      expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
-      expect(subject.read_only?).to be_false
+      expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to eq(allow_destroy: false, update_only: false)
     end
 

@@ -25,13 +25,13 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
       end
 
       it 'creates a Player with given attributes' do
-        expect(object.save).to be_true
+        expect(object.save).to be_truthy
 
         player.reload
         expect(player.name).to eq(name)
         expect(player.number).to eq(number)
         expect(player.position).to eq(position)
-        expect(player.suspended).to be_true
+        expect(player.suspended).to be_truthy
         expect(player.draft).to be_nil
         expect(player.team).to be_nil
       end
@@ -46,13 +46,13 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
       end
 
       it 'creates a Player with given attributes' do
-        expect(object.save).to be_true
+        expect(object.save).to be_truthy
 
         player.reload
         expect(player.name).to eq(name)
         expect(player.number).to eq(number)
         expect(player.position).to eq(position)
-        expect(player.suspended).to be_true
+        expect(player.suspended).to be_truthy
         expect(player.draft).to eq(draft.reload)
         expect(player.team).to be_nil
       end
@@ -70,7 +70,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
       end
 
       it 'creates a League with given attributes and associations' do
-        expect(object.save).to be_true
+        expect(object.save).to be_truthy
         league.reload
         expect(league.name).to eq(name)
         expect(league.divisions).to eq(divisions)
@@ -99,7 +99,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
         expect(object.number).to eq(new_number)
         expect(object.name).to eq(name)
         expect(object.draft).to be_nil
-        expect(object.suspended).to be_false
+        expect(object.suspended).to be_falsey
         expect(object.team).to eq(new_team)
       end
     end
@@ -114,7 +114,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
     end
 
     it 'deletes the record' do
-      expect(Player.exists?(player.id)).to be_false
+      expect(Player.exists?(player.id)).to be_falsey
     end
   end
 

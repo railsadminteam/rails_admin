@@ -147,9 +147,8 @@ module RailsAdmin
         case @value
         when Array then
           val, range_begin, range_end = *@value.collect do |v|
-            if v.to_i.to_s == v || v.to_f.to_s == v
-              @type == :integer ? v.to_i : v.to_f
-            end
+            next unless v.to_i.to_s == v || v.to_f.to_s == v
+            @type == :integer ? v.to_i : v.to_f
           end
           case @operator
           when 'between'
@@ -179,7 +178,7 @@ module RailsAdmin
         fail('You must override unary_operators in your StatementBuilder')
       end
 
-      def range_filter(min, max)
+      def range_filter(_min, _max)
         fail('You must override range_filter in your StatementBuilder')
       end
 

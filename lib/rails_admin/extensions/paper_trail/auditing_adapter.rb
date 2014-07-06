@@ -58,15 +58,15 @@ module RailsAdmin
           @version_class.order('id DESC').limit(100).collect { |version| VersionProxy.new(version, @user_class) }
         end
 
-        def delete_object(object, model, user)
+        def delete_object(_object, _model, _user)
           # do nothing
         end
 
-        def update_object(object, model, user, changes)
+        def update_object(_object, _model, _user, _changes)
           # do nothing
         end
 
-        def create_object(object, abstract_model, user)
+        def create_object(_object, _abstract_model, _user)
           # do nothing
         end
 

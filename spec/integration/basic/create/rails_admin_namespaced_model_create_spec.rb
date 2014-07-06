@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Namespaced Model Create' do
+describe 'RailsAdmin Namespaced Model Create', type: :request do
 
   subject { page }
 

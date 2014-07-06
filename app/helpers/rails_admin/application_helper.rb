@@ -31,10 +31,9 @@ module RailsAdmin
     end
 
     def logout_path
-      if defined?(Devise)
-        scope = Devise::Mapping.find_scope!(_current_user)
-        main_app.send("destroy_#{scope}_session_path") rescue false
-      end
+      return unless defined?(Devise)
+      scope = Devise::Mapping.find_scope!(_current_user)
+      main_app.send("destroy_#{scope}_session_path") rescue false
     end
 
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
@@ -87,7 +86,7 @@ module RailsAdmin
       end.join.html_safe
     end
 
-    def breadcrumb(action = @action, acc = [])
+    def breadcrumb(action = @action, _acc = [])
       begin
         (parent_actions ||= []) << action
       end while action.breadcrumb_parent && (action = action(*action.breadcrumb_parent)) # rubocop:disable Loop
@@ -120,7 +119,7 @@ module RailsAdmin
           <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
             <a class="#{action.pjax? ? 'pjax' : ''}" href="#{url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))}">
               <i class="#{action.link_icon}"></i>
-              <span#{only_icon ? " style='display:none'" : ""}>#{wording}</span>
+              <span#{only_icon ? " style='display:none'" : ''}>#{wording}</span>
             </a>
           </li>
         )

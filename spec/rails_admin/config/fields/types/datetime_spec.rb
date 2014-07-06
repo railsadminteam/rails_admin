@@ -7,7 +7,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
     end
 
     it 'gets default value for new objects if value is nil' do
-      RailsAdmin.config(FieldTest) do |config|
+      RailsAdmin.config(FieldTest) do |_config|
         field :datetime_field do
           default_value DateTime.parse('01/01/2012')
         end

@@ -1,7 +1,7 @@
 module Sass
   module Script
     module Functions
-      def image_path(source, options = {})
+      def image_path(source, _options = {})
         if defined?(::Sprockets)
           ::Sass::Script::String.new sprockets_context.image_path(source.value).to_s, :string
         elsif defined?(::Compass)

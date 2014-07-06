@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Basic Show' do
+describe 'RailsAdmin Basic Show', type: :request do
   subject { page }
 
   describe 'show' do
@@ -8,14 +8,14 @@ describe 'RailsAdmin Basic Show' do
       @player = FactoryGirl.create :player
       visit show_path(model_name: 'player', id: @player.id)
 
-      should have_selector('a', text: 'History')
-      should have_selector('a', text: 'Edit')
-      should have_selector('a', text: 'Delete')
-      should have_content('Details')
-      should have_content('Name')
-      should have_content(@player.name)
-      should have_content('Number')
-      should have_content(@player.number)
+      is_expected.to have_selector('a', text: 'History')
+      is_expected.to have_selector('a', text: 'Edit')
+      is_expected.to have_selector('a', text: 'Delete')
+      is_expected.to have_content('Details')
+      is_expected.to have_content('Name')
+      is_expected.to have_content(@player.name)
+      is_expected.to have_content('Number')
+      is_expected.to have_content(@player.number)
     end
   end
 
@@ -35,7 +35,7 @@ describe 'RailsAdmin Basic Show' do
     end
 
     it 'shows associated objects' do
-      should have_css("a[href='/admin/team/#{@team.id}']")
+      is_expected.to have_css("a[href='/admin/team/#{@team.id}']")
     end
   end
 
@@ -47,7 +47,7 @@ describe 'RailsAdmin Basic Show' do
     end
 
     it 'shows associated objects' do
-      should have_css("a[href='/admin/draft/#{@draft.id}']")
+      is_expected.to have_css("a[href='/admin/draft/#{@draft.id}']")
     end
   end
 
@@ -62,9 +62,9 @@ describe 'RailsAdmin Basic Show' do
     end
 
     it 'shows associated objects' do
-      should have_css("a[href='/admin/comment/#{@comment1.id}']")
-      should have_css("a[href='/admin/comment/#{@comment2.id}']")
-      should_not have_css("a[href='/admin/comment/#{@comment3.id}']")
+      is_expected.to have_css("a[href='/admin/comment/#{@comment1.id}']")
+      is_expected.to have_css("a[href='/admin/comment/#{@comment2.id}']")
+      is_expected.not_to have_css("a[href='/admin/comment/#{@comment3.id}']")
     end
   end
 
@@ -76,7 +76,7 @@ describe 'RailsAdmin Basic Show' do
     end
 
     it 'shows associated object' do
-      should have_css("a[href='/admin/player/#{@player.id}']")
+      is_expected.to have_css("a[href='/admin/player/#{@player.id}']")
     end
   end
 end

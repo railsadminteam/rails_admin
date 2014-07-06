@@ -36,7 +36,7 @@ module RailsAdmin
 
     protected
 
-      def history_for_model_or_object(history, abstract_model, query, sort, sort_reverse, all, page, per_page)
+      def history_for_model_or_object(history, _abstract_model, query, sort, sort_reverse, all, page, per_page)
         history = history.where('message LIKE ? OR username LIKE ?', "%#{query}%", "%#{query}%") if query
         history = history.order(sort_reverse == 'true' ? "#{sort} DESC" : sort) if sort
         all ? history : history.send(Kaminari.config.page_method_name, page.presence || '1').per(per_page)

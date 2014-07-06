@@ -86,21 +86,20 @@ module RailsAdmin
     end
 
     def satisfy_strong_params!
-      if @abstract_model.model.ancestors.collect(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')
-        params[@abstract_model.param_key].try :permit!
-      end
+      return unless @abstract_model.model.ancestors.collect(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')
+      params[@abstract_model.param_key].try :permit!
     end
 
-    def sanitize_params_for!(action, model_config = @model_config, _params = params[@abstract_model.param_key])
-      return unless _params.present?
+    def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
+      return unless target_params.present?
       fields = model_config.send(action).with(controller: self, view: view_context, object: @object).visible_fields
       allowed_methods = fields.collect do|f|
         f.allowed_methods
       end.flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
-      fields.each { |f| f.parse_input(_params) }
-      _params.slice!(*allowed_methods)
+      fields.each { |f| f.parse_input(target_params) }
+      target_params.slice!(*allowed_methods)
       fields.select(&:nested_form).each do |association|
-        children_params = association.multiple? ? _params[association.method_name].try(:values) : [_params[association.method_name]].compact
+        children_params = association.multiple? ? target_params[association.method_name].try(:values) : [target_params[association.method_name]].compact
         (children_params || []).each do |children_param|
           sanitize_params_for!(:nested, association.associated_model_config, children_param)
         end
@@ -118,9 +117,8 @@ module RailsAdmin
     end
 
     def check_for_cancel
-      if params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
-        redirect_to(back_or_index, flash: {info: t('admin.flash.noaction')})
-      end
+      return unless params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
+      redirect_to(back_or_index, flash: {info: t('admin.flash.noaction')})
     end
 
     def get_collection(model_config, scope, pagination)

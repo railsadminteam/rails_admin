@@ -65,7 +65,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'supports limiting' do
-        expect(@abstract_model.all(limit: 2)).to have(2).items
+        expect(@abstract_model.all(limit: 2).size).to eq(2)
       end
 
       it 'supports retrieval by bulk_ids' do
@@ -127,11 +127,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     context 'without configuration' do
       before do
-        Rails.configuration.stub(:database_configuration) { nil }
+        allow(Rails.configuration).to receive(:database_configuration) { nil }
       end
 
       after do
-        Rails.configuration.unstub(:database_configuration)
+        allow(Rails.configuration).to receive(:database_configuration).and_call_original
       end
 
       it 'does not raise error' do
@@ -202,15 +202,15 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
 
     it 'supports integer type query' do
-      expect(@abstract_model.send(:build_statement, :field, :integer, '1'   , nil)).to eq(['(field = ?)', 1])
+      expect(@abstract_model.send(:build_statement, :field, :integer, '1', nil)).to eq(['(field = ?)', 1])
       expect(@abstract_model.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :integer, '1'   , 'default')).to eq(['(field = ?)', 1])
+      expect(@abstract_model.send(:build_statement, :field, :integer, '1', 'default')).to eq(['(field = ?)', 1])
       expect(@abstract_model.send(:build_statement, :field, :integer, 'word', 'default')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :integer, '1'   , 'between')).to eq(['(field = ?)', 1])
+      expect(@abstract_model.send(:build_statement, :field, :integer, '1', 'between')).to eq(['(field = ?)', 1])
       expect(@abstract_model.send(:build_statement, :field, :integer, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['6', ''  , ''], 'default')).to eq(['(field = ?)', 6])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['6', '', ''], 'default')).to eq(['(field = ?)', 6])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['7', '10', ''], 'default')).to eq(['(field = ?)', 7])
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['8', ''  , '20'], 'default')).to eq(['(field = ?)', 8])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['8', '', '20'], 'default')).to eq(['(field = ?)', 8])
       expect(@abstract_model.send(:build_statement, :field, :integer, %w[9 10 20], 'default')).to eq(['(field = ?)', 9])
     end
 
@@ -219,52 +219,52 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(['(field >= ?)', 3])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(['(field <= ?)', 5])
-      expect(@abstract_model.send(:build_statement, :field, :integer, [''  , '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
       expect(@abstract_model.send(:build_statement, :field, :integer, %w[15 10 20], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :integer, ['', ''     , 'word2'], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
     end
 
     it 'supports both decimal and float type queries' do
       expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1', nil)).to eq(['(field = ?)', 1.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', nil)).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'default')).to eq(['(field = ?)', 1.1])
+      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1', 'default')).to eq(['(field = ?)', 1.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', 'default')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1'   , 'between')).to eq(['(field = ?)', 1.1])
+      expect(@abstract_model.send(:build_statement, :field, :decimal, '1.1', 'between')).to eq(['(field = ?)', 1.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['6.1', ''  , ''], 'default')).to eq(['(field = ?)', 6.1])
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['6.1', '', ''], 'default')).to eq(['(field = ?)', 6.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''], 'default')).to eq(['(field = ?)', 7.1])
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['8.1', ''  , '20.1'], 'default')).to eq(['(field = ?)', 8.1])
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['8.1', '', '20.1'], 'default')).to eq(['(field = ?)', 8.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(['(field = ?)', 9.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['2.1', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '3.1', ''], 'between')).to eq(['(field >= ?)', 3.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq(['(field <= ?)', 5.1])
-      expect(@abstract_model.send(:build_statement, :field, :decimal, [''  , '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word1', ''], 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', ''     , 'word2'], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :decimal, ['', '', 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :decimal, ['', 'word3', 'word4'], 'between')).to be_nil
 
       expect(@abstract_model.send(:build_statement, :field, :float, '1.1', nil)).to eq(['(field = ?)', 1.1])
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', nil)).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'default')).to eq(['(field = ?)', 1.1])
+      expect(@abstract_model.send(:build_statement, :field, :float, '1.1', 'default')).to eq(['(field = ?)', 1.1])
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', 'default')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, '1.1'   , 'between')).to eq(['(field = ?)', 1.1])
+      expect(@abstract_model.send(:build_statement, :field, :float, '1.1', 'between')).to eq(['(field = ?)', 1.1])
       expect(@abstract_model.send(:build_statement, :field, :float, 'word', 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, ['6.1', ''  , ''], 'default')).to eq(['(field = ?)', 6.1])
+      expect(@abstract_model.send(:build_statement, :field, :float, ['6.1', '', ''], 'default')).to eq(['(field = ?)', 6.1])
       expect(@abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''], 'default')).to eq(['(field = ?)', 7.1])
-      expect(@abstract_model.send(:build_statement, :field, :float, ['8.1', ''  , '20.1'], 'default')).to eq(['(field = ?)', 8.1])
+      expect(@abstract_model.send(:build_statement, :field, :float, ['8.1', '', '20.1'], 'default')).to eq(['(field = ?)', 8.1])
       expect(@abstract_model.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq(['(field = ?)', 9.1])
       expect(@abstract_model.send(:build_statement, :field, :float, ['', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['2.1', '', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['', '3.1', ''], 'between')).to eq(['(field >= ?)', 3.1])
       expect(@abstract_model.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq(['(field <= ?)', 5.1])
-      expect(@abstract_model.send(:build_statement, :field, :float, [''  , '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
+      expect(@abstract_model.send(:build_statement, :field, :float, ['', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
       expect(@abstract_model.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
       expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word1', ''], 'between')).to be_nil
-      expect(@abstract_model.send(:build_statement, :field, :float, ['', ''     , 'word2'], 'between')).to be_nil
+      expect(@abstract_model.send(:build_statement, :field, :float, ['', '', 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :float, ['', 'word3', 'word4'], 'between')).to be_nil
     end
 
