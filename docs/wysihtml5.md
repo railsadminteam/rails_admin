@@ -1,6 +1,8 @@
 http://jhollingworth.github.com/bootstrap-wysihtml5/
 
-Add `gem 'bootstrap-wysihtml5-rails'` to your Gemfile
+Add `gem 'bootstrap-wysihtml5-rails', '0.3.1.24'` to your Gemfile.
+
+Note: The last version of `bootstrap-wysihtml5-rails` that will work out of the box with `rails_admin` is `0.3.1.24` as that is the last version that supports Bootstrap 2.
 
 Then update config file `config/initializers/rails_admin.rb`
 
