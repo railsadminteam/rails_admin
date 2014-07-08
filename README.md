@@ -1,20 +1,6 @@
-# RailsAdmin
+# ExpressRailsAdmin
 
-[![Gem Version](https://img.shields.io/gem/v/rails_admin.svg)][gem]
-[![Build Status](https://img.shields.io/travis/sferik/rails_admin.svg)][travis]
-[![Dependency Status](https://img.shields.io/gemnasium/sferik/rails_admin.svg)][gemnasium]
-[![Code Climate](https://img.shields.io/codeclimate/github/sferik/rails_admin.svg)][codeclimate]
-[![Coverage Status](https://img.shields.io/coveralls/sferik/rails_admin.svg)][coveralls]
-[![Inline docs](http://inch-ci.org/github/sferik/rails_admin.svg)][inch]
-
-[gem]: https://rubygems.org/gems/rails_admin
-[travis]: http://travis-ci.org/sferik/rails_admin
-[gemnasium]: https://gemnasium.com/sferik/rails_admin
-[codeclimate]: https://codeclimate.com/github/sferik/rails_admin
-[coveralls]: https://coveralls.io/r/sferik/rails_admin
-[inch]: http://inch-ci.org/github/sferik/rails_admin
-
-RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
+ExpressRailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.  It is a fork of the execellent [RailsAdmin](https://github.com/sferik/rails_admin) which we have changed to use Foundation instead of Bootstrap due to our requirements.
 
 ## Features
 * CRUD any data with ease

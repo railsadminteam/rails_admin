@@ -19,17 +19,17 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'safe_yaml', '~> 1.0'
   spec.add_dependency 'sass-rails', '~> 4.0'
   spec.add_development_dependency 'bundler', '~> 1.0'
-  spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech']
-  spec.description = %q(RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.)
-  spec.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
+  spec.authors = ['Steven Talcott Smith']
+  spec.description = %q(Express RailsAdmin is a Rails engine that provides ExpressAdmin apps with an easy interface for managing data.)
+  spec.email = ['steve@aelogica.com']
   spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
   spec.licenses = %w[MIT]
-  spec.homepage = 'https://github.com/sferik/rails_admin'
+  spec.homepage = 'https://github.com/aelogica/express_rails_admin'
   spec.name = 'rails_admin'
   spec.require_paths = %w[lib]
   spec.required_ruby_version     = '>= 1.9.3'
   spec.required_rubygems_version = '>= 1.8.11'
-  spec.summary = %q(Admin for Rails)
+  spec.summary = %q(Admin for appexpress.io apps)
   spec.test_files = Dir['spec/**/*'].reject { |f| f.end_with? 'log' }
   spec.version = RailsAdmin::Version
 end

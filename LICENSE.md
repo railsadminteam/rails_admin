@@ -1,3 +1,6 @@
+Portions Copyright (c) 2014 Steven Talcott Smith
+
+RailsAdmin:
 Copyright (c) 2010-2014 Erik Michaels-Ober
 
 Permission is hereby granted, free of charge, to any person obtaining

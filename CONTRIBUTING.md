@@ -19,7 +19,7 @@ Here are some ways *you* can contribute:
 * by suggesting new features
 * [financially][gittip]
 
-[issues]: https://github.com/sferik/rails_admin/issues
+[issues]: https://github.com/aelogica/express_rails_admin/issues
 [gittip]: https://www.gittip.com/sferik/
 
 ## Getting Help
