@@ -7,6 +7,7 @@ require 'rails_admin/extensions/paper_trail'
 require 'rails_admin/extensions/history'
 require 'rails_admin/support/csv_converter'
 require 'rails_admin/support/core_extensions'
+require 'foundation/rails'
 
 module RailsAdmin
   # Setup RailsAdmin

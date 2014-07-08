@@ -1,30 +1,39 @@
-!!! 5
+!!!
 %html
   %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
     %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{content: "NONE,NOARCHIVE", name: "robots"}
     = csrf_meta_tag
-    = stylesheet_link_tag "rails_admin/rails_admin.css", media: :all
+    = stylesheet_link_tag "rails_admin/rails_admin", media: :all
     = javascript_include_tag "rails_admin/rails_admin.js"
     -# Initialize JS simple i18n
     :javascript
       RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
-  %body.rails_admin
-    #loading.label.label-warning{style: 'display:none; position:fixed; right:20px; bottom:20px; z-index:100000'}= t('admin.loading')
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container-fluid
-          %a.brand.pjax{href: dashboard_path}
-            = _get_plugin_name[0] || 'Rails'
-            %small= _get_plugin_name[1] || 'Admin'
-          .nav-collapse
-            = render partial: 'layouts/rails_admin/secondary_navigation'
-    .container-fluid
-      .row-fluid
-        .span3
-          .well.sidebar-nav
-            %ul.nav.nav-list= main_navigation
-            %ul.nav.nav-list= static_navigation
-        .span9
-          .row-fluid
-            .content{:'data-pjax-container' => true}= render template: 'layouts/rails_admin/pjax'
+  %body
+    %nav.top-bar{data: {topbar: true}}
+      %ul.title-area
+        %li.name
+          %h1
+            %a.brand.pjax{href: dashboard_path}
+              = _get_plugin_name[0] || 'Rails'
+              %small= _get_plugin_name[1] || 'Admin'
+      %section.top-bar-section{style: 'float: right; margin-right: 3em;'}
+        %ul.right
+          - actions(:root).each do |action|
+            %li{class: "#{action.action_name}_root_link"}= link_to wording_for(:menu, action), { action: action.action_name, controller: 'rails_admin/main' }, class: "pjax"
+          - if main_app_root_path = (main_app.root_path rescue false)
+            %li= link_to t('admin.home.name').capitalize, main_app_root_path
+          - if _current_user
+            - if user_link = edit_user_link
+              %li= user_link
+            - if logout_path.present?
+              %li= link_to content_tag('span', t('admin.misc.log_out'), class: 'label label-important'), logout_path, method: Devise.sign_out_via
+            - if _current_user.respond_to?(:email) && _current_user.email.present?
+              %li= image_tag "#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", style: 'padding-top:5px'
+    .row
+      .small-9.push-3.columns
+        .content{:'data-pjax-container' => true}= render template: 'layouts/rails_admin/pjax'
+      .small-3.pull-9.columns
+        %ul.nav.nav-list= main_navigation
+        %ul.nav.nav-list= static_navigation

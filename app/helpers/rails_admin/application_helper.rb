@@ -58,7 +58,7 @@ module RailsAdmin
         li_stack = navigation nodes_stack, nodes
 
         label = navigation_label || t('admin.misc.navigation')
-        %(<li class='nav-header'>#{label}</li>#{li_stack}) if li_stack.present?
+        %(<strong>#{label}</strong>#{li_stack}) if li_stack.present?
       end.join.html_safe
     end
 
