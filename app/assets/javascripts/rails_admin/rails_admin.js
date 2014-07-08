@@ -12,7 +12,6 @@
 //=  require 'rails_admin/ra.filtering-multiselect'
 //=  require 'rails_admin/ra.filtering-select'
 //=  require 'rails_admin/ra.remote-form'
-//=  require 'rails_admin/jquery.pjax'
 //=  require 'jquery_nested_form'
 //=  require 'rails_admin/ra.nested-form-hooks'
 //=  require 'rails_admin/ra.i18n'

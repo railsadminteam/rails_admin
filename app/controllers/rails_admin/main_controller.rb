@@ -40,7 +40,7 @@ module RailsAdmin
   private
 
     def get_layout
-      "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
+      'rails_admin/application'
     end
 
     def back_or_index

@@ -3,31 +3,11 @@ $ = jQuery
 $(document).on "click", "#list input.toggle", ->
   $("#list [name='bulk_ids[]']").prop "checked", $(this).is(":checked")
 
-$(document).on 'click', '.pjax', (event) ->
+$(document).on 'click', (event) ->
   if event.which > 1 || event.metaKey || event.ctrlKey
     return
-  else if $.support.pjax
-    event.preventDefault()
-    $.pjax
-      container: $(this).data('pjax-container') || '[data-pjax-container]'
-      url: $(this).data('href') || $(this).attr('href')
-      timeout: 2000
   else if $(this).data('href') # not a native #href, need some help
     window.location = $(this).data('href')
-
-$(document).on 'submit', '.pjax-form', (event) ->
-  if $.support.pjax
-    event.preventDefault()
-    $.pjax
-      container: $(this).data('pjax-container') || '[data-pjax-container]'
-      url: this.action + (if (this.action.indexOf('?') != -1) then '&' else '?') + $(this).serialize()
-      timeout: 2000
-
-$(document)
-  .on 'pjax:start', ->
-    $('#loading').show()
-  .on 'pjax:end', ->
-    $('#loading').hide()
 
 $(document).on 'click', '[data-target]', ->
   if !$(this).hasClass('disabled')
@@ -55,9 +35,6 @@ $(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields'
 $(document).ready ->
   $(document).trigger('rails_admin.dom_ready')
 
-$(document).on 'pjax:end', ->
-  $(document).trigger('rails_admin.dom_ready')
-
 $(document).on 'rails_admin.dom_ready', ->
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
@@ -75,15 +52,3 @@ $(document).on 'click', '#fields_to_export label input#check_all', () ->
     $(elems).prop('checked', true)
   else
     $(elems).prop('checked',false)
-
-# when the user hits the back button, the inline JS <script> that
-# highlights the current model in the left menu doesn't get run by
-# pjax, so this code runs it:
-# https://github.com/defunkt/jquery-pjax/issues/241#issuecomment-13251065
-$(document).on 'pjax:popstate', () ->
-  $(document).one 'pjax:end', (event) ->
-    $(event.target).find('script').each () ->
-      $.globalEval(this.text || this.textContent || this.innerHTML || '')
-      return
-    return
-  return

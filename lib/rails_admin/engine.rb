@@ -3,7 +3,6 @@ require 'jquery-rails'
 require 'jquery-ui-rails'
 require 'kaminari'
 require 'nested_form'
-require 'rack-pjax'
 require 'rails'
 require 'rails_admin'
 require 'remotipart'
@@ -22,10 +21,6 @@ module RailsAdmin
         rails_admin/jquery.colorpicker.js
         rails_admin/jquery.colorpicker.css
       ]
-    end
-
-    initializer 'RailsAdmin pjax hook' do |app|
-      app.config.middleware.use Rack::Pjax
     end
 
     rake_tasks do

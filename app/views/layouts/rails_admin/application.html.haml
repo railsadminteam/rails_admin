@@ -15,13 +15,13 @@
       %ul.title-area
         %li.name
           %h1
-            %a.brand.pjax{href: dashboard_path}
+            %a.brand{href: dashboard_path}
               = _get_plugin_name[0] || 'Rails'
               %small= _get_plugin_name[1] || 'Admin'
       %section.top-bar-section{style: 'float: right; margin-right: 3em;'}
         %ul.right
           - actions(:root).each do |action|
-            %li{class: "#{action.action_name}_root_link"}= link_to wording_for(:menu, action), { action: action.action_name, controller: 'rails_admin/main' }, class: "pjax"
+            %li{class: "#{action.action_name}_root_link"}= link_to wording_for(:menu, action), { action: action.action_name, controller: 'rails_admin/main' }
           - if main_app_root_path = (main_app.root_path rescue false)
             %li= link_to t('admin.home.name').capitalize, main_app_root_path
           - if _current_user
@@ -33,7 +33,7 @@
               %li= image_tag "#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", style: 'padding-top:5px'
     .row
       .small-9.push-3.columns
-        .content{:'data-pjax-container' => true}= render template: 'layouts/rails_admin/pjax'
+        .content= render template: 'layouts/rails_admin/pjax'
       .small-3.pull-9.columns
         %ul.nav.nav-list= main_navigation
         %ul.nav.nav-list= static_navigation
