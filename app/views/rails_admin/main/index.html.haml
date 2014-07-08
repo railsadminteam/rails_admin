@@ -1,7 +1,7 @@
 :ruby
   require 'rails_admin/config/fields/types/datetime.rb'
   query = params[:query]
-  params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export, :_pjax)
+  params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export)
   params.delete(:query) if params[:query].blank?
   params.delete(:sort_reverse) unless params[:sort_reverse] == 'true'
   sort_reverse = params[:sort_reverse]
@@ -89,7 +89,7 @@
     - properties.select{ |p| p.column_width.present? }.each do |property|
       = "#list th.#{property.css_class} { width: #{property.column_width}px; min-width: #{property.column_width}px; }"
       = "#list td.#{property.css_class} { max-width: #{property.column_width}px; }"
-  = form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form form-inline") do
+  = form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "form-inline") do
     .well
       %span#filters_box
       %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
@@ -123,7 +123,7 @@
             - if property.sortable
               - sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})
               - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
-            %th{class: "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), rel: "tooltip", title: "#{property.hint}"}= property.label
+            %th{class: "#{property.sortable && "header" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), rel: "tooltip", title: "#{property.hint}"}= property.label
           - if other_right
             %th.other.right.shrink= "..."
           %th.last.shrink
@@ -133,18 +133,18 @@
             %td
               = check_box_tag "bulk_ids[]", object.id, false
             - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
-              %td.other.left= link_to "...", @other_left_link, class: 'pjax'
+              %td.other.left= link_to "...", @other_left_link
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
               %td{class: "#{property.css_class} #{property.type_css_class}", title: strip_tags(value.to_s)}= value
             - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
-              %td.other.right= link_to "...", @other_right_link, class: 'pjax'
+              %td.other.right= link_to "...", @other_right_link
             %td.last.links
               %ul.inline= menu_for :member, @abstract_model, object, true
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
-      = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
+      = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
     - else
       .clearfix.total-count= "#{@objects.size} #{@model_config.pluralize(@objects.size).downcase}"

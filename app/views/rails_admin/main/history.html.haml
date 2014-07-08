@@ -5,7 +5,7 @@
 - sort_reverse = params[:sort_reverse]
 - path_method = params[:id] ? "history_show_path" : "history_index_path"
 
-= form_tag("", method: "get", class: "search pjax-form form-inline") do
+= form_tag("", method: "get", class: "search form-inline") do
   .well
     %input{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
     %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
@@ -25,7 +25,7 @@
         - selected = (sort == property_name)
         - sort_direction = (sort_reverse ? "headerSortUp" : "headerSortDown" if selected)
         - sort_location = send(path_method, params.except("sort_reverse").merge(model_name: @abstract_model.to_param, sort: property_name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}))
-        %th{class: "header pjax #{column[:css_class]} #{sort_direction if selected}", :'data-href' => sort_location}= column[:link_text]
+        %th{class: "header #{column[:css_class]} #{sort_direction if selected}", :'data-href' => sort_location}= column[:link_text]
   %tbody
     - @history.each_with_index do |object, index|
       %tr
@@ -36,7 +36,7 @@
           - if o = @abstract_model.get(object.item)
             - label = o.send(@abstract_model.config.object_label_method)
             - if show_action = action(:show, @abstract_model, o)
-              %td= link_to(label, url_for(action: show_action.action_name, model_name: @abstract_model.to_param, id: o.id), class: 'pjax')
+              %td= link_to(label, url_for(action: show_action.action_name, model_name: @abstract_model.to_param, id: o.id))
             - else
               %td= label
           - else
@@ -45,5 +45,5 @@
 
 - unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, theme: 'twitter-bootstrap', remote: true)
-  = link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn pjax") unless (tc = @history.total_count) <= @history.size || tc > 100
+  = link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn") unless (tc = @history.total_count) <= @history.size || tc > 100
 
