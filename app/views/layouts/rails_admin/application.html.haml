@@ -10,7 +10,7 @@
     -# Initialize JS simple i18n
     :javascript
       RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
-  %body
+  %body.rails_admin
     %nav.top-bar{data: {topbar: true}}
       %ul.title-area
         %li.name

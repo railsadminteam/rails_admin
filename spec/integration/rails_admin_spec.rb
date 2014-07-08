@@ -125,14 +125,14 @@ describe RailsAdmin, type: :request do
   describe 'secondary navigation' do
     it 'has Gravatar image' do
       visit dashboard_path
-      is_expected.to have_selector('ul.nav.pull-right li img')
+      is_expected.to have_selector('section.top-bar-section ul.right li img')
     end
 
     it "does not show Gravatar when user doesn't have email method" do
       allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
       allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(false)
       visit dashboard_path
-      is_expected.not_to have_selector('ul.nav.pull-right li img')
+      is_expected.not_to have_selector('section.top-bar-section ul.right li img')
     end
 
     it 'does not cause error when email is nil' do
