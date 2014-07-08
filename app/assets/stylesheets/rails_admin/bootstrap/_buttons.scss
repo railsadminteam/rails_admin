@@ -7,11 +7,11 @@
 // --------------------------------------------------
 
 // Core
-.btn {
+.button {
   display: inline-block;
   @include ie7-inline-block();
   padding: 4px 12px;
-  margin-bottom: 0; // For input.btn
+  margin-bottom: 0; // For input.button
   font-size: $baseFontSize;
   line-height: $baseLineHeight;
   text-align: center;
@@ -170,8 +170,8 @@ input[type="button"] {
 // Cross-browser Jank
 // --------------------------------------------------
 
-button.btn,
-input[type="submit"].btn {
+button.button,
+input[type="submit"].button {
 
   // Firefox 3.6 only I believe
   &::-moz-focus-inner {

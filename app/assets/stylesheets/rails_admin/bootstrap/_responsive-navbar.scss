@@ -72,7 +72,7 @@
     @include border-radius(3px);
   }
   // Buttons
-  .nav-collapse .btn {
+  .nav-collapse .button {
     padding: 4px 10px 4px;
     font-weight: normal;
     @include border-radius($baseBorderRadius);

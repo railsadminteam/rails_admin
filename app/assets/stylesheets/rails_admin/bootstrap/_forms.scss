@@ -464,7 +464,7 @@ select:focus:invalid {
     border: 1px solid #ccc;
   }
   .add-on,
-  .btn,
+  .button,
   .btn-group > .dropdown-toggle {
     vertical-align: top;
     @include border-radius(0);
@@ -477,12 +477,12 @@ select:focus:invalid {
 
 .input-prepend {
   .add-on,
-  .btn {
+  .button {
     margin-right: -1px;
   }
   .add-on:first-child,
-  .btn:first-child {
-    // FYI, `.btn:first-child` accounts for a button group that's prepended
+  .button:first-child {
+    // FYI, `.button:first-child` accounts for a button group that's prepended
     @include border-radius($inputBorderRadius 0 0 $inputBorderRadius);
   }
 }
@@ -492,17 +492,17 @@ select:focus:invalid {
   select,
   .uneditable-input {
     @include border-radius($inputBorderRadius 0 0 $inputBorderRadius);
-    + .btn-group .btn:last-child {
+    + .btn-group .button:last-child {
       @include border-radius(0 $inputBorderRadius $inputBorderRadius 0);
     }
   }
   .add-on,
-  .btn,
+  .button,
   .btn-group {
     margin-left: -1px;
   }
   .add-on:last-child,
-  .btn:last-child,
+  .button:last-child,
   .btn-group:last-child > .dropdown-toggle {
     @include border-radius(0 $inputBorderRadius $inputBorderRadius 0);
   }
@@ -514,17 +514,17 @@ select:focus:invalid {
   select,
   .uneditable-input {
     @include border-radius(0);
-    + .btn-group .btn {
+    + .btn-group .button {
       @include border-radius(0 $inputBorderRadius $inputBorderRadius 0);
     }
   }
   .add-on:first-child,
-  .btn:first-child {
+  .button:first-child {
     margin-right: -1px;
     @include border-radius($inputBorderRadius 0 0 $inputBorderRadius);
   }
   .add-on:last-child,
-  .btn:last-child {
+  .button:last-child {
     margin-left: -1px;
     @include border-radius(0 $inputBorderRadius $inputBorderRadius 0);
   }
@@ -556,13 +556,13 @@ input.search-query {
 .form-search .input-append .search-query {
   @include border-radius(14px 0 0 14px);
 }
-.form-search .input-append .btn {
+.form-search .input-append .button {
   @include border-radius(0 14px 14px 0);
 }
 .form-search .input-prepend .search-query {
   @include border-radius(0 14px 14px 0);
 }
-.form-search .input-prepend .btn {
+.form-search .input-prepend .button {
   @include border-radius(14px 0 0 14px);
 }
 

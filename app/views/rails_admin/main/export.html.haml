@@ -68,13 +68,13 @@
 
   .form-actions
     %input{type: :hidden, name: 'return_to', value: (params[:return_to].presence || request.referer)}
-    %button.btn.btn-primary{type: "submit", name: 'csv'}
+    %button.button.btn-primary{type: "submit", name: 'csv'}
       %i.icon-white.icon-ok
       = t("admin.export.confirmation", name: 'csv')
-    %button.btn.btn-info{type: "submit", name: 'json'}
+    %button.button.btn-info{type: "submit", name: 'json'}
       = t("admin.export.confirmation", name: 'json')
-    %button.btn.btn-info{type: "submit", name: 'xml'}
+    %button.button.btn-info{type: "submit", name: 'xml'}
       = t("admin.export.confirmation", name: 'xml')
-    %button.btn{type: "submit", name: "_continue"}
+    %button.button{type: "submit", name: "_continue"}
       %i.icon-remove
       = t("admin.form.cancel")
