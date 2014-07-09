@@ -7,6 +7,7 @@ require 'rails'
 require 'rails_admin'
 require 'remotipart'
 require 'safe_yaml'
+require 'foundation-rails'
 
 SafeYAML::OPTIONS[:suppress_warnings] = true
 SafeYAML::OPTIONS[:default_mode] = :unsafe
