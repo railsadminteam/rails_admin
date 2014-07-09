@@ -75,7 +75,7 @@
       form.attr("data-remote", true);
       dialog.find('.modal-header-title').text(form.data('title'));
       dialog.find('.cancel-action').unbind().click(function(){
-        dialog.modal('hide');
+        dialog.foundation('reveal', 'close');
         return false;
       }).html(cancelButtonText);
 
@@ -114,7 +114,7 @@
             }
           }
           widget._trigger("success");
-          dialog.modal("hide");
+          dialog.foundation('reveal', 'close');
         }
       });
     },
@@ -122,24 +122,20 @@
     _getModal: function() {
       var widget = this;
       if (!widget.dialog) {
-        widget.dialog = $('<div id="modal" class="modal fade">\
+        widget.dialog = $('<div id="modal" class="reveal-modal" data-reveal>\
             <div class="modal-header">\
-              <a href="#" class="close" data-dismiss="modal">&times;</a>\
+              <a href="#" class="close-reveal-modal">&times;</a>\
               <h3 class="modal-header-title">...</h3>\
             </div>\
             <div class="modal-body">\
               ...\
             </div>\
             <div class="modal-footer">\
-              <a href="#" class="btn cancel-action">...</a>\
-              <a href="#" class="btn btn-primary save-action">...</a>\
+              <a href="#" class="button cancel-action">...</a>\
+              <a href="#" class="button save-action">...</a>\
             </div>\
           </div>')
-          .modal({
-            keyboard: true,
-            backdrop: true,
-            show: true
-          })
+          .foundation('reveal', 'open')
           .on('hidden', function(){
             widget.dialog.remove();   // We don't want to reuse closed modals
             widget.dialog = null;
