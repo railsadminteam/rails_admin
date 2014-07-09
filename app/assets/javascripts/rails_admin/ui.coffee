@@ -44,8 +44,6 @@ $(document).on 'rails_admin.dom_ready', ->
   $('.form-horizontal legend').has('i.icon-chevron-right').each ->
     $(this).siblings('.control-group').hide()
 
-  $(".table").tooltip selector: "th[rel=tooltip]"
-
 $(document).on 'click', '#fields_to_export label input#check_all', () ->
   elems = $('#fields_to_export label input')
   if $('#fields_to_export label input#check_all').is ':checked'
