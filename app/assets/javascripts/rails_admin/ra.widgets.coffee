@@ -88,9 +88,6 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         $(this).attr('id', 'unique-id-' + (new Date().getTime()) + Math.floor(Math.random()*100000)) # some elements are created on the same ms
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       # only if no tab is set to active
-      if nav.find("> li.active").length == 0
-        # init first tab, toggler and tab_content/tabs visibility
-        nav.find("> li > a[data-toggle='tab']:first").tab('show')
       if nav.children().length == 0
         nav.hide()
         tab_content.hide()
@@ -117,7 +114,6 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').html( $(this).children('.object-infos').data('object-label') )
         nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
-      first_tab.tab('show')
       field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html())
       nav.hide()
       if nav.children().length == 0

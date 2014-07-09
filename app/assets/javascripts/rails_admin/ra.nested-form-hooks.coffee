@@ -17,7 +17,6 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
   toggler = controls.find('.toggler')
   nav.append(new_tab)
   $(window.document).trigger('rails_admin.dom_ready', [field, parent_group]) # fire dom_ready for new player in town
-  new_tab.children('a').tab('show') # activate added tab
   nav.select(':hidden').show('slow') unless one_to_one # show nav if hidden
   content.select(':hidden').show('slow') # show tabs content if hidden
   # toggler 'on' if inactive
@@ -34,9 +33,6 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
   controls = parent_group.children('.controls')
   one_to_one = controls.data('nestedone') != undefined
   toggler = controls.find('.toggler')
-
-  # try to activate another tab
-  (if current_li.next().length then current_li.next() else current_li.prev()).children('a:first').tab('show')
 
   current_li.remove()
 
