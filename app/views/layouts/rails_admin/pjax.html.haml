@@ -10,7 +10,7 @@
     %a.close{href: '#', :'data-dismiss' => "alert"}×
     = value
 = breadcrumb
-%ul.nav.nav-tabs
+%ul.tabs{data: {tab: ''}}
   = menu_for((@abstract_model ? (@object.try(:persisted?) ? :member : :collection) : :root), @abstract_model, @object)
   = content_for :contextual_tabs
 = yield

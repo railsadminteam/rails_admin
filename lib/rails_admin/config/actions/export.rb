@@ -32,7 +32,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-share'
+          'fa-share-square-o'
         end
       end
     end

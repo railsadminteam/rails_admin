@@ -86,7 +86,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-th-list'
+          'fa-list'
         end
       end
     end
