@@ -98,7 +98,7 @@
         %i.icon-white.icon-refresh
         = t("admin.misc.refresh")
       - if export_action
-        %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'btn btn-info'
+        %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'button radius small gray'
 
   - unless @model_config.list.scopes.empty?
     %ul.nav.nav-tabs#scope_selector
@@ -144,7 +144,7 @@
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
-      = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix") unless total_count > 100 || total_count <= @objects.to_a.size
+      = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all button small radius gray clearfix") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
     - else
       .clearfix.total-count= "#{@objects.size} #{@model_config.pluralize(@objects.size).downcase}"

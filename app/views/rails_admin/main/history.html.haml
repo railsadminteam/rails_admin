@@ -8,7 +8,7 @@
 = form_tag("", method: "get", class: "search form-inline") do
   .well
     %input{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
-    %button.button.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+    %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
       %i.icon-white.icon-refresh
       = t("admin.misc.refresh")
 %table#history.table.table-striped.table-condensed
@@ -45,5 +45,5 @@
 
 - unless params[:all] || !@history.respond_to?(:current_page)
   = paginate(@history, theme: 'twitter-bootstrap', remote: true)
-  = link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn") unless (tc = @history.total_count) <= @history.size || tc > 100
+  = link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all button small gray radius") unless (tc = @history.total_count) <= @history.size || tc > 100
 

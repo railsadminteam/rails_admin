@@ -5,7 +5,7 @@
     = value
   = form.file_field(field.name, field.html_attributes.reverse_merge({ data: { fileupload: true }}))
 - if field.optional? && field.errors.blank? && file && field.delete_method
-  %a.button.btn-info{href: '#', :'data-toggle' => 'button', onclick: "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false"}
+  %a.button.gray.small{href: '#', :'data-toggle' => 'button', onclick: "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('alert gray'); return false"}
     %i.icon-white.icon-trash
     = I18n.t('admin.actions.delete.menu').capitalize + " #{field.label.downcase}"
   = form.check_box(field.delete_method, style: 'display:none;' )
