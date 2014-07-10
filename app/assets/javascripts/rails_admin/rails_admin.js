@@ -1,5 +1,3 @@
-//=  require 'jquery'
-//=  require 'jquery_ujs'
 //=  require 'rails_admin/jquery.remotipart.fixed'
 //=  require 'jquery.ui.effect'
 //=  require 'jquery.ui.sortable'
@@ -18,4 +16,3 @@
 //=  require 'rails_admin/ra.widgets'
 //=  require 'rails_admin/ui'
 //=  require 'rails_admin/custom/ui'
-//=  require 'foundation'
