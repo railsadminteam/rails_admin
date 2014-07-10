@@ -3,7 +3,7 @@ DummyApp::Application.routes.draw do
   resources :players, only: [:show]
 
   devise_for :users
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
   root to: 'rails_admin/main#dashboard'
   # https://github.com/sferik/rails_admin/issues/362
   get ':controller(/:action(/:id(.:format)))'

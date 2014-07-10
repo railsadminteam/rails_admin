@@ -8,6 +8,7 @@ module RailsAdmin
   end
 
   class ApplicationController < ::ApplicationController
+    helper ::ExpressAdmin::AdminHelper
     newrelic_ignore if defined?(NewRelic)
 
     before_filter :_authenticate!

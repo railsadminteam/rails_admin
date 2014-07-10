@@ -1,28 +1,20 @@
-!!!
-%html
-  %head
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
-    %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
-    %meta{content: "NONE,NOARCHIVE", name: "robots"}
-    = csrf_meta_tag
-    = stylesheet_link_tag "rails_admin/rails_admin", media: :all
-    = javascript_include_tag "rails_admin/rails_admin.js"
-    -# Initialize JS simple i18n
-    :javascript
-      RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
-  %body.rails_admin
-    %nav.top-bar{data: {topbar: true}}
-      %ul.title-area
-        %li.name
-          %h1
-            %a.brand{href: dashboard_path}
-              = _get_plugin_name[0] || 'Rails'
-              %small= _get_plugin_name[1] || 'Admin'
-      %section.top-bar-section{style: 'float: right; margin-right: 3em;'}
-        = render 'layouts/rails_admin/secondary_navigation'
-    .row
-      .small-9.push-3.columns
-        .content= render template: 'layouts/rails_admin/pjax'
-      .small-3.pull-9.columns
-        %ul.side-nav= main_navigation
-        %ul.side-nav= static_navigation
+- content_for :content do
+  %main.main-container{role: "main"}
+    = render 'shared/rails_admin/sidebar'
+    .content-body
+      = render 'shared/express_admin/messages'
+      - if content_for?(:page_header)
+        .page-header
+          .row
+            .small-12.columns
+              = yield :page_header
+      .row
+        .small-12.columns
+          = render template: 'layouts/rails_admin/pjax'
+
+- content_for :page_javascript do
+  = javascript_include_tag 'rails_admin/rails_admin'
+  :javascript
+    RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
+
+= render template: 'layouts/express_admin/admin'
