@@ -53,11 +53,10 @@
 = content_for :contextual_tabs do
   = bulk_menu
   - if @filterable_fields.present?
-    %li.dropdown{style: 'float:right'}
-      %a.dropdown-toggle{href: '#', :'data-toggle' => "dropdown"}
+    %li.inline-list.right
+      %a.button.small.radius.gray{href: '#', 'data-dropdown' => "filters"}
         = t('admin.misc.add_filter')
-        %b.caret
-      %ul.dropdown-menu#filters{style: 'left:auto; right:0;'}
+      %ul.f-dropdown#filters{"data-dropdown-content" => true}
         - @filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
