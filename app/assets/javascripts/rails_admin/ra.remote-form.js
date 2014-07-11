@@ -131,16 +131,17 @@
               ...\
             </div>\
             <div class="modal-footer">\
-              <a href="#" class="button cancel-action">...</a>\
-              <a href="#" class="button save-action">...</a>\
+              <a href="#" class="button gray small radius cancel-action">...</a>\
+              <a href="#" class="button small radius save-action">...</a>\
             </div>\
           </div>')
-          .foundation('reveal', 'open')
-          .on('hidden', function(){
-            widget.dialog.remove();   // We don't want to reuse closed modals
-            widget.dialog = null;
-          });
-        }
+          .foundation('reveal', 'open');
+
+        $(document).on('closed.fndtn.reveal', '[data-reveal]', function(){
+          widget.dialog.remove();   // We don't want to reuse closed modals
+          widget.dialog = null;
+        });
+      }
       return this.dialog;
     }
   });
