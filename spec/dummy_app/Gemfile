@@ -60,7 +60,7 @@ group :development, :test do
   gem 'pry'
 end
 
-group :app_express do
+group :express_admin do
   gem 'express_admin', path: '../../../express_admin'
   gem 'rails_admin', path: '../..'
 end
