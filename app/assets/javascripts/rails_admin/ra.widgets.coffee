@@ -199,7 +199,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     goBootstrapWysihtml5s = (array, config_options) =>
       array.each ->
         $(@).addClass('bootstrap-wysihtml5ed')
-        $(@).closest('.controls').addClass('well')
+        $(@).closest('.controls').addClass('panel')
         $(@).wysihtml5(config_options)
 
     array = content.find('[data-richtext=bootstrap-wysihtml5]').not('.bootstrap-wysihtml5ed')

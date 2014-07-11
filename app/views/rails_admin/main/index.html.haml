@@ -89,7 +89,7 @@
       = "#list th.#{property.css_class} { width: #{property.column_width}px; min-width: #{property.column_width}px; }"
       = "#list td.#{property.css_class} { max-width: #{property.column_width}px; }"
   = form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "form-inline") do
-    .well
+    .panel
       %span#filters_box
       %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
       %input.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}

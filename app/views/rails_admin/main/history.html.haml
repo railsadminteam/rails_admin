@@ -6,7 +6,7 @@
 - path_method = params[:id] ? "history_show_path" : "history_index_path"
 
 = form_tag("", method: "get", class: "search form-inline") do
-  .well
+  .panel
     %input{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
     %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
       %i.icon-white.icon-refresh
