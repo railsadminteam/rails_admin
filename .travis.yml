@@ -14,6 +14,8 @@ bundler_args: --without development --jobs=3 --retry=3
 
 sudo: false
 
+cache: bundler
+
 before_script:
   - cd spec/dummy_app
   - bundle install
