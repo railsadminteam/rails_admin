@@ -11,8 +11,6 @@
   %input{type: :hidden, name: 'return_to', value: (params[:return_to].presence || request.referer)}
   .form-actions
     %button.button.small.radius.alert{type: "submit", :'data-disable-with' => t("admin.form.confirmation")}
-      %i.icon-white.icon-ok
       = t("admin.form.confirmation")
     %button.button.small.radius.gray{type: "submit", name: "_continue", :'data-disable-with' => t("admin.form.cancel")}
-      %i.icon-remove
       = t("admin.form.cancel")

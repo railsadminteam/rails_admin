@@ -93,9 +93,9 @@
       %span#filters_box
       %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
       %input.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
-      %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
-        %i.icon-white.icon-refresh
+      %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon ion-refresh'></i> ".html_safe + t("admin.misc.refresh")}
         = t("admin.misc.refresh")
+        %i.icon.ion-refresh
       - if export_action
         %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'button radius small gray'
 
@@ -139,7 +139,7 @@
             - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link
             %td.last.links
-              %ul.inline= menu_for :member, @abstract_model, object, true
+              %ul.inline-list= menu_for :member, @abstract_model, object, true
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       = paginate(@objects, theme: 'twitter-bootstrap', remote: true)

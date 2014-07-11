@@ -26,7 +26,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-info-sign'
+          'ios-android-information'
         end
       end
     end

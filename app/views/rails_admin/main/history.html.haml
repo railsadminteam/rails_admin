@@ -8,8 +8,8 @@
 = form_tag("", method: "get", class: "search form-inline") do
   .panel
     %input{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
-    %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
-      %i.icon-white.icon-refresh
+    %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon ion-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+      %i.icon.ion-refresh
       = t("admin.misc.refresh")
 %table#history.table.table-striped.table-condensed
   %thead

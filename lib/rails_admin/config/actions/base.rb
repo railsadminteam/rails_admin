@@ -20,7 +20,7 @@ module RailsAdmin
 
         # http://getbootstrap.com/2.3.2/base-css.html#icons
         register_instance_option :link_icon do
-          'icon-question-sign'
+          'ion-help'
         end
 
         # Should the action be visible

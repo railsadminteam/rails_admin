@@ -48,7 +48,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-remove'
+          'ion-trash-a'
         end
       end
     end

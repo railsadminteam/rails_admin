@@ -86,7 +86,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'fa-list'
+          'ion-ios7-paper'
         end
       end
     end

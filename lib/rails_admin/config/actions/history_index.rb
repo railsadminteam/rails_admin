@@ -30,7 +30,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'fa-book'
+          'ion-folder'
         end
       end
     end
