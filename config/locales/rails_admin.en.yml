@@ -38,7 +38,7 @@ en:
       clear_all: "Clear all"
       up: "Up"
       down: "Down"
-      navigation: "Navigation"
+      navigation: "Application"
       navigation_static_label: "Links"
       log_out: "Log out"
       ago: "ago"
