@@ -11,26 +11,26 @@ $(document).on 'click', (event) ->
 
 $(document).on 'click', '[data-target]', ->
   if !$(this).hasClass('disabled')
-    if $(this).has('i.icon-chevron-down').length
-      $(this).removeClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
+    if $(this).has('i.ion-chevron-down').length
+      $(this).removeClass('active').children('i').toggleClass('ion-chevron-down ion-chevron-right')
       $($(this).data('target')).select(':visible').hide('slow')
     else
-      if $(this).has('i.icon-chevron-right').length
-        $(this).addClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
+      if $(this).has('i.ion-chevron-right').length
+        $(this).addClass('active').children('i').toggleClass('ion-chevron-down ion-chevron-right')
         $($(this).data('target')).select(':hidden').show('slow')
 
 $(document).on 'click', '.form-horizontal legend', ->
-  if $(this).has('i.icon-chevron-down').length
+  if $(this).has('i.ion-chevron-down').length
     $(this).siblings('.control-group:visible').hide('slow')
-    $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
+    $(this).children('i').toggleClass('ion-chevron-down ion-chevron-right')
   else
-    if $(this).has('i.icon-chevron-right').length
+    if $(this).has('i.ion-chevron-right').length
       $(this).siblings('.control-group:hidden').show('slow')
-      $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right')
+      $(this).children('i').toggleClass('ion-chevron-down ion-chevron-right')
 
 $(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields', ->
   $(this).children('input[type="hidden"]').val($(this).hasClass('active')).
-    siblings('i').toggleClass('icon-check icon-trash')
+    siblings('i').toggleClass('ion-checkmark ion-trash-a')
 
 $(document).ready ->
   $(document).trigger('rails_admin.dom_ready')
@@ -41,7 +41,7 @@ $(document).on 'rails_admin.dom_ready', ->
     width = $(this).data("animate-width-to")
     $(this).animate(width: width, length, 'easeOutQuad')
 
-  $('.form-horizontal legend').has('i.icon-chevron-right').each ->
+  $('.form-horizontal legend').has('i.ion-chevron-right').each ->
     $(this).siblings('.control-group').hide()
 
 $(document).on 'click', '#fields_to_export label input#check_all', () ->

@@ -22,7 +22,7 @@ module RailsAdmin
       return unless (fields = fieldset.with(form: self, object: @object, view: @template, controller: @template.controller).visible_fields).length > 0
       @template.content_tag :fieldset do
         contents = []
-        contents << @template.content_tag(:legend, %(<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}).html_safe, style: "#{fieldset.name == :default ? 'display:none' : ''}")
+        contents << @template.content_tag(:legend, %(<i class="icon ion-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}).html_safe, style: "#{fieldset.name == :default ? 'display:none' : ''}")
         contents << @template.content_tag(:p, fieldset.help) if fieldset.help.present?
         contents << fields.collect { |field| field_wrapper_for(field, nested_in) }.join
         contents.join.html_safe

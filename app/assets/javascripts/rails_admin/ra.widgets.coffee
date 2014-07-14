@@ -91,16 +91,16 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       if nav.children().length == 0
         nav.hide()
         tab_content.hide()
-        toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
+        toggler.addClass('disabled').removeClass('active').children('i').addClass('ion-chevron-right')
       else
         if toggler.hasClass('active')
           nav.show()
           tab_content.show()
-          toggler.children('i').addClass('icon-chevron-down')
+          toggler.children('i').addClass('ion-chevron-down')
         else
           nav.hide()
           tab_content.hide()
-          toggler.children('i').addClass('icon-chevron-right')
+          toggler.children('i').addClass('ion-chevron-right')
 
     # nested-one
 
@@ -119,13 +119,13 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       if nav.children().length == 0
         nav.hide()
         tab_content.hide()
-        toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right')
+        toggler.addClass('disabled').removeClass('active').children('i').addClass('ion-chevron-right')
       else
         if toggler.hasClass('active')
-          toggler.children('i').addClass('icon-chevron-down')
+          toggler.children('i').addClass('ion-chevron-down')
           tab_content.show()
         else
-          toggler.children('i').addClass('icon-chevron-right')
+          toggler.children('i').addClass('ion-chevron-right')
           tab_content.hide()
 
     # polymorphic-association

@@ -56,7 +56,7 @@
             '<select multiple="multiple" style="display:' + (multiple_values ? 'inline-block' : 'none') + '" ' + (multiple_values ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="select-multiple input-small">' +
               field_options +
             '</select> ' +
-            '<a href="#" class="switch-select"><i class="icon-' + (multiple_values ? 'minus' : 'plus') + '"></i></a>';
+            '<a href="#" class="switch-select"><i class="icon ion-' + (multiple_values ? 'minus' : 'plus') + '"></i></a>';
         break;
         case 'string':
         case 'text':
@@ -93,7 +93,7 @@
       }
 
       var content = '<p class="filter form-search">' +
-        '<span class="label round form-label"><a href="#" class="delete"><i class="icon-trash icon-white"></i></a> ' + field_label + '</span> ' +
+        '<span class="label round form-label"><a href="#" class="delete"><i class="icon ion-trash-a"></i></a> ' + field_label + '</span> ' +
         control + " " +
         (additional_control || '') +
       '</p> ';
@@ -129,7 +129,7 @@
     var not_selected_select = $(this).siblings('select:hidden');
     not_selected_select.attr('name', not_selected_select.data('name')).show('slow');
     selected_select.attr('name', null).hide('slow');
-    $(this).find('i').toggleClass("icon-plus icon-minus")
+    $(this).find('i').toggleClass("ion-plus ion-minus")
   });
 
   $(document).on('change', "#filters_box .switch-additionnal-fieldsets", function(e) {

@@ -20,7 +20,7 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
   nav.select(':hidden').show('slow') unless one_to_one # show nav if hidden
   content.select(':hidden').show('slow') # show tabs content if hidden
   # toggler 'on' if inactive
-  toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right')
+  toggler.addClass('active').removeClass('disabled').children('i').addClass('ion-chevron-down').removeClass('ion-chevron-right')
 
   # Convert the "add nested field" button to just showing the title of the new model
   controls.find('.add_nested_fields').removeClass('add_nested_fields').html(field.children('.object-infos').data('object-label')) if one_to_one
@@ -39,7 +39,7 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
   if nav.children().length == 0 # removed last tab
     nav.select(':visible').hide('slow') # hide nav. No use anymore.
     # toggler 'off' if active
-    toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right')
+    toggler.removeClass('active').addClass('disabled').children('i').removeClass('ion-chevron-down').addClass('ion-chevron-right')
 
   if one_to_one
     # Converts the title button to an "add nested field" button

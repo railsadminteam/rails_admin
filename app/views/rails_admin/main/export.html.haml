@@ -11,7 +11,7 @@
           = t('admin.export.select_all_fields')
           = check_box_tag 'all', 'all', true, { id: 'check_all' }
     %legend
-      %i.icon-chevron-down
+      %i.icon.ion-chevron-down
       = t('admin.export.select')
     .control-group
       %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
@@ -44,7 +44,7 @@
 
   %fieldset
     %legend
-      %i.icon-chevron-down
+      %i.icon.ion-chevron-down
       = t('admin.export.options_for', name: 'csv')
     .control-group
       - guessed_encoding = @abstract_model.encoding
