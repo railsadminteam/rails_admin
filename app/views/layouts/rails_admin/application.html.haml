@@ -2,10 +2,7 @@
   %main.main-container{role: "main"}
     = render 'shared/rails_admin/sidebar'
     .content-body
-      - if File.exists?(Rails.root.join("app", "views", "shared", "express_admin", "_messages.html.haml"))
-        = render 'shared/express_admin/messages'
-      - else
-        = render 'shared/rails_admin/messages'
+      = render 'shared/express_admin/messages' rescue render 'shared/rails/messages'
       - unless params[:action].eql?('dashboard')
         .page-header
           .row
@@ -25,7 +22,4 @@
 - content_for :page_css do
   = stylesheet_link_tag 'rails_admin/rails_admin'
 
-- if File.exists?(Rails.root.join("app", "views", "layouts", "express_admin", "admin.html.haml"))
-  = render template: 'layouts/express_admin/admin'
-- else
-  = render template: 'layouts/rails_admin/admin'
+= render template: 'layouts/express_admin/admin' rescue render template: 'layouts/rails_admin/admin'
