@@ -34,7 +34,7 @@ module RailsAdmin
         # do not show nested field if the target is the origin
         unless nested_field_association?(field, nested_in)
           @template.content_tag(:div, class: "form-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, class: 'control-label') +
+            label(field.method_name, field.label, class: 'control-label large-2 columns small-12') +
             (field.nested_form ? field_for(field) : input_for(field))
           end
         end
@@ -44,7 +44,7 @@ module RailsAdmin
     end
 
     def input_for(field)
-      @template.content_tag(:div, class: 'controls') do
+      @template.content_tag(:div, class: 'small-12 large-10 columns controls end') do
         field_for(field) +
         errors_for(field) +
         help_for(field)

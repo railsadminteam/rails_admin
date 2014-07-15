@@ -1,1 +1,7 @@
-= form.send field.view_helper, field.method_name, field.html_attributes.reverse_merge({ value: field.form_value, checked: field.form_value.in?([true, '1'])})
+- if field.view_helper == :check_box
+  %label.checkbox
+    = form.send field.view_helper, field.method_name, field.html_attributes.reverse_merge({ value: field.form_value, checked: field.form_value.in?([true, '1'])})
+    = field.label
+
+- else
+  = form.send field.view_helper, field.method_name, field.html_attributes.reverse_merge({ value: field.form_value, checked: field.form_value.in?([true, '1'])})

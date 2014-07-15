@@ -6,16 +6,17 @@
   %input{name: "send_data", type: "hidden", value: "true"}/
   %fieldset{id: 'fields_to_export'}
     .form-group
-      %div.controls
+      %div.controls.small-12.large-9.large-offset-3.columns
         %label.checkbox{for: 'check_all'}
-          = t('admin.export.select_all_fields')
           = check_box_tag 'all', 'all', true, { id: 'check_all' }
+          = t('admin.export.select_all_fields')
+    %hr
     %legend
       %i.icon.ion-chevron-down
       = t('admin.export.select')
     .form-group
-      %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
-      .controls
+      %label.control-label.small-12.large-3.columns{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
+      .controls.small-12.large-9.columns
         - visible_fields.select{ |f| !f.association? || f.association.polymorphic? }.each do |field|
           - list = field.virtual? ? 'methods' : 'only'
           - if field.association? && field.association.polymorphic?
@@ -34,8 +35,8 @@
     - visible_fields.select{ |f| f.association? && !f.association.polymorphic? }.each do |field|
       - fields = field.associated_model_config.export.with(controller: self.controller, view: self, object: (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
       .form-group
-        %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)
-        .controls
+        %label.control-label.small-12.large-3.columns.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)
+        .controls.small-12.large-9.columns
           - fields.each do |associated_model_field|
             - list = associated_model_field.virtual? ? 'methods' : 'only'
             %label.checkbox{for: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
@@ -48,21 +49,23 @@
       = t('admin.export.options_for', name: 'csv')
     .form-group
       - guessed_encoding = @abstract_model.encoding
-      %label.control-label{for: "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
-      .controls
+      %label.control-label.small-12.large-3.columns{for: "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
+      .controls.small-12.large-9.columns
         -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
         = select_tag 'csv_options[encoding_to]', options_for_select(["", "UTF-8", "UTF-16LE", "UTF-16BE", "UTF-32LE", "UTF-32BE", "UTF-7", "ISO-8859-1", "ISO-8859-15", "IBM-850", "MacRoman", "Windows-1252", "ISO-8859-3", "IBM-852", "ISO-8859-2", "MacCE", "Windows-1250", "IBM-855", "ISO-8859-5", "ISO-IR-111", "KOI8-R", "MacCyrillic", "Windows-1251", "CP-866", "KOI-U", "MacUkranian", "GB2312", "GBK", "GB18030", "HZ", "ISO-2022-CN", "Big5", "Big5-HKSCS", "EUC-TW", "EUC-JP", "ISO-2022-JP", "Shift_JIS", "EUC-KR", "UHC", "JOHAB", "ISO-2022-KR"])
         %p.help-block= t('admin.export.csv.encoding_to_help', name: guessed_encoding)
 
     .form-group
-      %label.control-label{for: "csv_options_skip_header"}= t('admin.export.csv.skip_header')
-      .controls
-        = check_box_tag 'csv_options[skip_header]', 'true'
+      %label.control-label.small-12.large-3.columns{for: "csv_options_skip_header"}
+      .controls.small-12.large-9.columns
+        %label.checkbox
+          = check_box_tag 'csv_options[skip_header]', 'true'
+          = t('admin.export.csv.skip_header')
         %p.help-block= t('admin.export.csv.skip_header_help')
 
     .form-group
-      %label.control-label{for: "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
-      .controls
+      %label.control-label.small-12.large-3.columns{for: "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
+      .controls.small-12.large-9.columns
         = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" })
         %p.help-block= t('admin.export.csv.col_sep_help', value: t('admin.export.csv.default_col_sep'))
 
