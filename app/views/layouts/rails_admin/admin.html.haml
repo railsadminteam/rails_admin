@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+    %title= content_for?(:title) ? yield(:title) : Rails.application.class.parent_name.underscore.titleize
+    %meta{:name => "description", :content => "#{content_for?(:description) ? yield(:description) : 'Testapp'}"}
+    %meta{:name => "viewport", :content => "width=device-width", "initial-scale" => 1.0}
+    = stylesheet_link_tag 'rails_admin/rails_admin', media: 'all', 'data-turbolinks-track' => true
+    -# Modernizr is required for Zurb Foundation
+    = javascript_include_tag 'rails_admin/rails_admin', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    = content_for?(:content) ? yield(:content) : yield
+    = yield(:page_javascript)
+

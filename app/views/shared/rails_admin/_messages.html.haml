@@ -1,0 +1,6 @@
+- unless flash.empty?
+  - flash.each do |name, message|
+    .flash.nav-alert.alert-box
+      = message
+      %a.close{:href => "#"} &times;
+
