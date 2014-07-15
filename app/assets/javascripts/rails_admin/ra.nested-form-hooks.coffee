@@ -9,7 +9,7 @@ $(document).ready ->
 $(document).on 'nested:fieldAdded', 'form', (content) ->
   field = content.field.addClass('tab-pane').attr('id', 'unique-id-' + (new Date().getTime()))
   new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>')
-  parent_group = field.closest('.control-group')
+  parent_group = field.closest('.form-group')
   controls = parent_group.children('.controls')
   one_to_one = controls.data('nestedone') != undefined
   nav = controls.children('.nav')
@@ -27,9 +27,9 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
 
 $(document).on 'nested:fieldRemoved', 'form', (content) ->
   field = content.field
-  nav = field.closest(".control-group").children('.controls').children('.nav')
+  nav = field.closest(".form-group").children('.controls').children('.nav')
   current_li = nav.children('li').has('a[href=#' + field.attr('id') + ']')
-  parent_group = field.closest(".control-group")
+  parent_group = field.closest(".form-group")
   controls = parent_group.children('.controls')
   one_to_one = controls.data('nestedone') != undefined
   toggler = controls.find('.toggler')

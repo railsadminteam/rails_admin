@@ -63,23 +63,23 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     content.find('[data-filteringmultiselect]').each ->
       $(this).filteringMultiselect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-        $(this).parents('.control-group').find('.button').remove()
+        $(this).parents('.form-group').find('.button').remove()
       else
-        $(this).parents('.control-group').first().remoteForm()
+        $(this).parents('.form-group').first().remoteForm()
 
     # filtering-select
 
     content.find('[data-filteringselect]').each ->
       $(this).filteringSelect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-        $(this).parents('.control-group').find('.button').remove()
+        $(this).parents('.form-group').find('.button').remove()
       else
-        $(this).parents('.control-group').first().remoteForm()
+        $(this).parents('.form-group').first().remoteForm()
 
     # nested-many
 
     content.find('[data-nestedmany]').each ->
-      field = $(this).parents('.control-group').first()
+      field = $(this).parents('.form-group').first()
       nav = field.find('> .controls > .nav')
       tab_content = field.find('> .tab-content')
       toggler = field.find('> .controls > .btn-group > .toggler')
@@ -105,7 +105,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     # nested-one
 
     content.find('[data-nestedone]').each ->
-      field = $(this).parents('.control-group').first()
+      field = $(this).parents('.form-group').first()
       nav = field.find("> .controls > .nav")
       tab_content = field.find("> .tab-content")
       toggler = field.find('> .controls > .btn-group > .toggler')
@@ -132,7 +132,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
 
     content.find('[data-polymorphic]').each ->
       type_select = $(this)
-      field = type_select.parents('.control-group').first()
+      field = type_select.parents('.form-group').first()
       object_select = field.find('select').last()
       urls = type_select.data('urls')
       type_select.on 'change', (e) ->

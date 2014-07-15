@@ -21,11 +21,11 @@ $(document).on 'click', '[data-target]', ->
 
 $(document).on 'click', '.form-horizontal legend', ->
   if $(this).has('i.ion-chevron-down').length
-    $(this).siblings('.control-group:visible').hide('slow')
+    $(this).siblings('.form-group:visible').hide('slow')
     $(this).children('i').toggleClass('ion-chevron-down ion-chevron-right')
   else
     if $(this).has('i.ion-chevron-right').length
-      $(this).siblings('.control-group:hidden').show('slow')
+      $(this).siblings('.form-group:hidden').show('slow')
       $(this).children('i').toggleClass('ion-chevron-down ion-chevron-right')
 
 $(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields', ->
@@ -42,7 +42,7 @@ $(document).on 'rails_admin.dom_ready', ->
     $(this).animate(width: width, length, 'easeOutQuad')
 
   $('.form-horizontal legend').has('i.ion-chevron-right').each ->
-    $(this).siblings('.control-group').hide()
+    $(this).siblings('.form-group').hide()
 
 $(document).on 'click', '#fields_to_export label input#check_all', () ->
   elems = $('#fields_to_export label input')
