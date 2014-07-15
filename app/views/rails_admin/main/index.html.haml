@@ -51,9 +51,10 @@
 
 
 = content_for :contextual_tabs do
-  = bulk_menu
+  %ul.button-group.right
+    = bulk_menu
   - if @filterable_fields.present?
-    %li.inline-list.right
+    %ul.button-group.right
       %a.button.small.radius.gray{href: '#', 'data-dropdown' => "filters"}
         = t('admin.misc.add_filter')
       %ul.f-dropdown#filters{"data-dropdown-content" => true}

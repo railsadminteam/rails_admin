@@ -2,7 +2,7 @@
   $('.nav.nav-list li.active').removeClass('active');
   $('.nav.nav-list li[data-model="#{@abstract_model.to_param}"]').addClass('active');
 
-%ul.tabs
+.button-bar
   = menu_for((@abstract_model ? (@object.try(:persisted?) ? :member : :collection) : :root), @abstract_model, @object)
   = content_for :contextual_tabs
 = yield
