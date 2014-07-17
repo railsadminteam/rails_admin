@@ -49,6 +49,21 @@
     }
   end.join.html_safe if @ordered_filters
 
+- content_for :main_menu do
+  - export_action = action(:export, @abstract_model, @object)
+  - history_action = action(:history_index, @abstract_model, @object)
+  - new_action = action(:new, @abstract_model, @object)
+  %ul.button-group.left
+    %li
+      = link_to url_for(action: new_action.action_name, model_name: @abstract_model.to_param), class: 'button small success radius' do
+        %i.icon.ion-plus
+        Add New
+  %ul.button-group.left
+    %li
+      = link_to "Export", url_for(action: export_action.action_name, model_name: @abstract_model.to_param), class: 'button small radius'
+  %ul.button-group.left
+    %li
+      = link_to "History", url_for(action: history_action.action_name, model_name: @abstract_model.to_param), class: 'button small radius'
 
 = content_for :contextual_tabs do
   %ul.button-group.right
@@ -95,8 +110,8 @@
       %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
       %input.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
       %button.button.small.radius{type: "submit", :'data-disable-with' => "<i class='icon ion-refresh'></i> ".html_safe + t("admin.misc.refresh")}
-        = t("admin.misc.refresh")
         %i.icon.ion-refresh
+        = t("admin.misc.refresh")
       - if export_action
         %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'button radius small gray'
 
@@ -129,8 +144,8 @@
           %th.last.shrink
             %tbody
         - @objects.each do |object|
-          - edit_action = action(:edit, @abstract_model, object)
-          %tr{class: "#{@abstract_model.param_key}_row", "data-url" => url_for(action: edit_action.action_name, model_name: @abstract_model.to_param, id: object.id)}
+          - show_action = action(:show, @abstract_model, object)
+          %tr{class: "#{@abstract_model.param_key}_row", "data-url" => url_for(action: show_action.action_name, model_name: @abstract_model.to_param, id: object.id)}
             %td
               = check_box_tag "bulk_ids[]", object.id, false
             - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
