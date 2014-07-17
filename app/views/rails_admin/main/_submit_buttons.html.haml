@@ -7,9 +7,15 @@
     - if authorized? :new, @abstract_model
       %button.button.radius.small{type: "submit", name: "_add_another", :'data-disable-with' => t("admin.form.save_and_add_another")}
         = t("admin.form.save_and_add_another")
-    - if authorized? :edit, @abstract_model
-      %button.button.radius.small{type: "submit", name: "_add_edit", :'data-disable-with' => t("admin.form.save_and_edit")}
-        = t("admin.form.save_and_edit")
+    -# - if authorized? :edit, @abstract_model
+    -#   %button.button.radius.small{type: "submit", name: "_add_edit", :'data-disable-with' => t("admin.form.save_and_edit")}
+    -#     = t("admin.form.save_and_edit")
     %button.button.gray.radius.small{type: "submit", name: "_continue", :'data-disable-with' => t("admin.form.cancel")}
-      %i.icon.ion-trash-a
       = t("admin.form.cancel")
+    - if @object.try(:persisted?)
+      - delete_action = action(:delete, @abstract_model, @object)
+      = link_to url_for(action: delete_action.action_name, model_name: @abstract_model.to_param, id: @object.id), class: 'button small alert radius' do
+        %i.icon.ion-trash-a
+        Delete
+
+

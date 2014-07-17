@@ -18,6 +18,8 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
+            @history = @auditing_adapter && @auditing_adapter.listing_for_object(@abstract_model, @object, params[:query], params[:sort], params[:sort_reverse], params[:all], params[:page]) || []
+
             respond_to do |format|
               format.json { render json: @object }
               format.html { render @action.template_name }
