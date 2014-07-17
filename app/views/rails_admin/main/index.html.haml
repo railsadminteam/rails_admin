@@ -141,7 +141,8 @@
             - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link
             %td.last.links
-              %ul.inline-list= menu_for :member, @abstract_model, object, true
+              - delete_action = action(:delete, @abstract_model, object)
+              %ul.inline-list= link_to "Delete", url_for(action: delete_action.action_name, model_name: @abstract_model.to_param, id: object.id)
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
