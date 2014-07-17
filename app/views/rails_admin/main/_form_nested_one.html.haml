@@ -1,4 +1,4 @@
-.controls{data: { nestedone: true }}
+.controls.small-12.columns.large-9{data: { nestedone: true }}
   %ul.nav{style: 'margin-bottom:0px; display:none'}
   .btn-group
     %a.button.small.radius.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content", class: (field.active? ? 'active' : '') }
@@ -13,5 +13,5 @@
 .tab-content
   = form.fields_for field.name do |nested_form|
     - if field.nested_form[:allow_destroy]
-      = nested_form.link_to_remove '<span class="button small alert"><i class="icon ion-trash-a"></i></span>'.html_safe
+      = nested_form.link_to_remove '<span class="button alert radius"><i class="icon ion-trash-a"></i></span>'.html_safe
     = nested_form.generate({action: :nested, model_config: field.associated_model_config, nested_in: field })
