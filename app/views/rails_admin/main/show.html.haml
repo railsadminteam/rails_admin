@@ -1,6 +1,11 @@
-.row
-  .small-12.large-7.columns
+%ul.tabs{"data-tab" => true}
+  %li.tab-title.active
+    %a{href: '#information'} Information
+  %li.tab-title
+    %a{href: '#history'} History
+
+.tabs-content
+  .content.active#information
     = render template: "rails_admin/main/edit"
-  .small-12.large-5.columns
-    %h4 History
+  .content#history
     = render template: "rails_admin/main/history"
