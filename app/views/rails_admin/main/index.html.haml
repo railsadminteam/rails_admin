@@ -145,6 +145,6 @@
       - total_count = @objects.total_count.to_i
       = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
       = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
-      .clearfix.total-count= pluralize(total_count, model_config)
+      .clearfix.total-count= "#{total_count} #{@model_config.pluralize_label(total_count).downcase}"
     - else
-      .clearfix.total-count= pluralize(@objects.size, model_config)
+      .clearfix.total-count= "#{@objects.size} #{@model_config.pluralize_label(@objects.size).downcase}"
