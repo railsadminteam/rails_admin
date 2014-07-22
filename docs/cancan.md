@@ -23,7 +23,7 @@ To use it with Rails Admin, add this to an initializer.
 
 RailsAdmin.config do |config|
   config.authorize_with :cancan
-  config.current_user_method :current_user
+  config.current_user_method &:current_user
 end
 ```
 
