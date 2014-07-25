@@ -23,7 +23,6 @@ module RailsAdmin
               end
 
             elsif request.put? # UPDATE
-              satisfy_strong_params!
               sanitize_params_for!(request.xhr? ? :modal : :update)
 
               @object.set_attributes(params[@abstract_model.param_key])

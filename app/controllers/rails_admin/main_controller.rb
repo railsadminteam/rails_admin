@@ -85,11 +85,6 @@ module RailsAdmin
       end
     end
 
-    def satisfy_strong_params!
-      return unless @abstract_model.model.ancestors.collect(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')
-      params[@abstract_model.param_key].try :permit!
-    end
-
     def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
       return unless target_params.present?
       fields = model_config.send(action).with(controller: self, view: view_context, object: @object).visible_fields
@@ -98,6 +93,7 @@ module RailsAdmin
       end.flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
       fields.each { |f| f.parse_input(target_params) }
       target_params.slice!(*allowed_methods)
+      target_params.permit!
       fields.select(&:nested_form).each do |association|
         children_params = association.multiple? ? target_params[association.method_name].try(:values) : [target_params[association.method_name]].compact
         (children_params || []).each do |children_param|
