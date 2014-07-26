@@ -7,6 +7,7 @@ AllCops:
     - '/rails_admin.gemspec'
   Exclude:
     - 'spec/dummy_app/db/schema.rb'
+    - 'vendor/bundle/**/*'
 
 # Avoid long parameter lists
 ParameterLists:
