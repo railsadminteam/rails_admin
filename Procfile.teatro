@@ -1,0 +1,1 @@
+web: cd spec/dummy_app && bundle exec rails server
