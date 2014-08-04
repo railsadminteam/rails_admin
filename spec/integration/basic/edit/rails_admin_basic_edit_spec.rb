@@ -50,6 +50,15 @@ describe 'RailsAdmin Basic Edit', type: :request do
     end
   end
 
+  describe 'has many associations through more than one association' do
+    it 'is not editable' do
+      @league = FactoryGirl.create :league
+      visit edit_path(model_name: 'league', id: @league.id)
+      expect(page).to have_selector('select#league_division_ids')
+      expect(page).to_not have_selector('select#league_player_ids')
+    end
+  end
+
   describe 'edit with has-and-belongs-to-many association' do
     before do
       @teams = 3.times.collect { FactoryGirl.create :team }
