@@ -27,4 +27,10 @@ describe RailsAdmin::ApplicationController, type: :controller do
       expect(controller.send(:_get_plugin_name)).to eq(['Dummy App Application', 'Dashboard'])
     end
   end
+
+  describe '#_current_user' do
+    it 'is public' do
+      expect { controller._current_user }.not_to raise_error
+    end
+  end
 end
