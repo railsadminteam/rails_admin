@@ -48,6 +48,7 @@ describe RailsAdmin::Config::Model do
 
     context 'when using i18n as label source', skip_mongoid: true do
       around do |example|
+        I18n.config.available_locales = I18n.config.available_locales + [:xx]
         I18n.backend.class.send(:include, I18n::Backend::Pluralization)
         I18n.backend.store_translations :xx,
                                         activerecord: {
@@ -63,6 +64,7 @@ describe RailsAdmin::Config::Model do
         example.run
 
         I18n.locale = :en
+        I18n.config.available_locales = I18n.config.available_locales - [:xx]
       end
 
       context 'and the locale uses a specific pluralization rule' do

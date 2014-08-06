@@ -232,12 +232,8 @@ describe RailsAdmin::MainController, type: :controller do
     context 'in France' do
       before do
         I18n.locale = :fr
-      end
-      after do
-        I18n.locale = :en
-      end
+        ActionController::Parameters.permit_all_parameters = false
 
-      it 'sanitize params recursively in nested forms' do
         RailsAdmin.config Comment do
           configure :created_at do
             show
@@ -250,7 +246,7 @@ describe RailsAdmin::MainController, type: :controller do
           end
         end
 
-        controller.params = HashWithIndifferentAccess.new(
+        controller.params = ActionController::Parameters.new(
           'field_test' => {
             'unallowed_field' => "I shouldn't be here",
             'datetime_field' => '1 août 2010',
@@ -271,7 +267,13 @@ describe RailsAdmin::MainController, type: :controller do
         )
 
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+      end
+      after do
+        ActionController::Parameters.permit_all_parameters = true
+        I18n.locale = :en
+      end
 
+      it 'sanitize params recursively in nested forms' do
         expect(controller.params).to eq(
           'field_test' => {
             'datetime_field' => 'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
@@ -289,26 +291,11 @@ describe RailsAdmin::MainController, type: :controller do
           }
         )
       end
-    end
-
-    describe 'satisfy_strong_params!' do
-      before do
-        ActionController::Parameters.permit_all_parameters = false
-      end
-
-      after do
-        ActionController::Parameters.permit_all_parameters = true
-      end
 
       it 'enforces permit!' do
-        controller.params = HashWithIndifferentAccess.new(
-          'model_name' => 'player',
-          'player' => {'name' => 'foo'}
-        )
-        controller.send(:get_model)
-        expect(controller.params['player'].permitted?).to be_falsey
-        controller.send(:satisfy_strong_params!)
-        expect(controller.params['player'].permitted?).to be_truthy
+        expect(controller.params['field_test'].permitted?).to be_truthy
+        expect(controller.params['field_test']['nested_field_tests_attributes'].values.first.permitted?).to be_truthy
+        expect(controller.params['field_test']['comment_attributes'].permitted?).to be_truthy
       end
     end
 

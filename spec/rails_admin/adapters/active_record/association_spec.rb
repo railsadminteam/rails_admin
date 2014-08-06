@@ -93,6 +93,40 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
     end
   end
 
+  describe 'has_many association' do
+    let(:league) { RailsAdmin::AbstractModel.new(League) }
+
+    context 'for direct has many' do
+      let(:association) { league.associations.detect { |a| a.name == :divisions } }
+
+      it 'returns correct values' do
+        expect(association.type).to eq :has_many
+        expect(association.klass).to eq Division
+        expect(association.read_only?).to be_falsey
+      end
+    end
+
+    context 'for has many through marked as readonly' do
+      let(:association) { league.associations.detect { |a| a.name == :teams } }
+
+      it 'returns correct values' do
+        expect(association.type).to eq :has_many
+        expect(association.klass).to eq Team
+        expect(association.read_only?).to be_truthy
+      end
+    end
+
+    context 'for has many through multiple associations' do
+      let(:association) { league.associations.detect { |a| a.name == :players } }
+
+      it 'returns correct values' do
+        expect(association.type).to eq :has_many
+        expect(association.klass).to eq Player
+        expect(association.read_only?).to be_truthy
+      end
+    end
+  end
+
   describe 'has_and_belongs_to_many association' do
     subject { @post.associations.select { |a| a.name == :a_r_categories }.first }
 

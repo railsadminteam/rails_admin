@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-case ENV['RAILS_VER']
+case ENV['RAILS_VERSION']
 when '4.0'
   gem 'rails', '~> 4.0.0'
 else
@@ -52,7 +52,7 @@ group :test do
   gem 'cancan', '>= 1.6'
   gem 'capybara', '>= 2.1'
   gem 'carrierwave', '>= 0.8'
-  gem 'coveralls', require: false
+  gem 'coveralls'
   gem 'database_cleaner', '>= 1.2'
   gem 'devise', '>= 3.2'
   gem 'dragonfly', '~> 1.0'
@@ -65,7 +65,7 @@ group :test do
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
   gem 'rubocop', '>= 0.19.0'
-  gem 'simplecov', require: false
+  gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
 end
 

@@ -7,14 +7,12 @@ PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 require 'simplecov'
 require 'coveralls'
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[ # rubocop:disable SpaceBeforeFirstArg
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
+SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
 
 SimpleCov.start do
   add_filter '/spec/'
-  minimum_coverage(91.71) unless defined? JRUBY_VERSION
+  add_filter '/vendor/bundle/'
+  minimum_coverage(91.71)
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
