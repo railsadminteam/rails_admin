@@ -136,7 +136,7 @@
               %td.other.left= link_to "...", @other_left_link, class: 'pjax'
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
-              %td{class: "#{property.css_class} #{property.type_css_class}", title: strip_tags(value.to_s)}= value
+              %td{class: "#{property.css_class} #{property.type_css_class}", :title => property.hide_title_attribute ? "" : strip_tags(value.to_s)}= value
             - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link, class: 'pjax'
             %td.last.links

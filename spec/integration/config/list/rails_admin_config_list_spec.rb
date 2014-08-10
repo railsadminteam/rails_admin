@@ -295,6 +295,21 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       expect(find('style').native.text).to include("#list td.#{PK_COLUMN}_field")
     end
 
+    it "has the option to disable a column's title attribute" do
+      RailsAdmin.config Fan do
+        list do
+          field :name do
+            hide_title_attribute true
+          end
+          field :created_at
+        end
+      end
+      FactoryGirl.create :fan
+      visit index_path(model_name: 'fan')
+      expect(find("#list td.name_field")[:title]).to eq("")
+      expect(find("#list td.created_at_field")[:title]).to_not eq("")
+    end
+
     it 'has option to customize output formatting' do
       RailsAdmin.config Fan do
         list do

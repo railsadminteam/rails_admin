@@ -44,6 +44,10 @@ module RailsAdmin
           nil
         end
 
+        register_instance_option :hide_title_attribute do
+          false
+        end
+
         register_instance_option :sortable do
           !virtual? || children_fields.first || false
         end
