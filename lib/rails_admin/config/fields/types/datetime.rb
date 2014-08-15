@@ -40,7 +40,9 @@ module RailsAdmin
                   end
                 end
               end
-              parse_date_string(date_string)
+
+              offset = self == RailsAdmin::Config::Fields::Types::Time ? ::Time.new.formatted_offset : ''
+              parse_date_string(date_string + offset)
             end
 
             # Parse normalized date strings using time zone
