@@ -14,7 +14,7 @@ end
 
 **Locale**
 
-If your default_local is different from :en, set your default locale at the beginning of the file:
+If your default_locale is different from :en, set your default locale at the beginning of the file:
 
 ```ruby
 require 'i18n'
