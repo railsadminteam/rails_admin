@@ -1,8 +1,11 @@
 require 'active_support/core_ext/string/inflections'
-require 'rails_admin/config/sections/create'
-require 'rails_admin/config/sections/list'
-require 'rails_admin/config/sections/navigation'
+require 'rails_admin/config/sections/base'
+require 'rails_admin/config/sections/edit'
 require 'rails_admin/config/sections/update'
+require 'rails_admin/config/sections/create'
+require 'rails_admin/config/sections/nested'
+require 'rails_admin/config/sections/modal'
+require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/export'
 require 'rails_admin/config/sections/show'
 
@@ -19,30 +22,13 @@ module RailsAdmin
       def self.included(klass)
         # Register accessors for all the sections in this namespace
         constants.each do |name|
-          section = "RailsAdmin::Config::Sections::#{name}".constantize
-          name = name.to_s.downcase.to_sym
+          section = RailsAdmin::Config::Sections.const_get(name)
+          name = name.to_s.underscore.to_sym
           klass.send(:define_method, name) do |&block|
             @sections = {} unless @sections
-            unless @sections[name]
-              @sections[name] = section.new(self)
-            end
-            @sections[name].instance_eval &block if block
+            @sections[name] = section.new(self) unless @sections[name]
+            @sections[name].instance_eval(&block) if block
             @sections[name]
-          end
-          # Register a shortcut to define the model's label for each section.
-          klass.send(:define_method, "label_for_#{name}") do
-            # TODO: Remove this warning in the next release, after people have updated their applications
-            $stderr.puts("WARNING: label_for_#{name} has been removed. This configuration will be ignored. Model names can be configured with 'label' and section-specific names are no longer supported. See README for details.")
-          end
-          # Register a shortcut to hide the model for each section.
-          klass.send(:define_method, "hide_from_#{name}") do |&block|
-            # TODO: Remove this warning in the next release, after people have updated their applications
-            $stderr.puts("WARNING: hide_from_#{name} has been removed. This configuration will be ignored. Model visibility can be configured with 'hide', 'show' and 'visibility'. Section-specific visibility is no longer supported. See README for details.")
-          end
-          # Register a shortcut to show the model for each section.
-          klass.send(:define_method, "show_in_#{name}") do |&block|
-            # TODO: Remove this warning in the next release, after people have updated their applications
-            $stderr.puts("WARNING: show_in_#{name} has been removed. This configuration will be ignored. Model visibility can be configured with 'hide', 'show' and 'visibility'. Section-specific visibility is no longer supported. See README for details.")
           end
         end
       end

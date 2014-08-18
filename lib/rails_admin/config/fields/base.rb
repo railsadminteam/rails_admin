@@ -1,227 +1,248 @@
-require 'active_support/core_ext/string/inflections'
-require 'rails_admin/config/base'
+require 'rails_admin/config/proxyable'
+require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
-require 'rails_admin/config/has_groups'
-require 'rails_admin/config/fields'
-require 'rails_admin/config/fields/groupable'
-require 'rails_admin/config/fields/association'
+require 'rails_admin/config/groupable'
 
 module RailsAdmin
   module Config
     module Fields
-      class Base < RailsAdmin::Config::Base
-        attr_reader :name, :properties
-        attr_accessor :defined, :order
-
-        def self.inherited(klass)
-          klass.instance_variable_set("@view_helper", :text_field)
-        end
-
+      class Base
+        include RailsAdmin::Config::Proxyable
+        include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
+        include RailsAdmin::Config::Groupable
+
+        attr_reader :name, :properties, :abstract_model
+        attr_accessor :defined, :order, :section
+        attr_reader :parent, :root
 
         def initialize(parent, name, properties)
-          super(parent)
+          @parent = parent
+          @root = parent.root
 
+          @abstract_model = parent.abstract_model
           @defined = false
-          @name = name
+          @name = name.to_sym
           @order = 0
           @properties = properties
-
-          # If parent is able to group fields the field should be aware of it
-          if parent.kind_of?(RailsAdmin::Config::HasGroups)
-            extend RailsAdmin::Config::Fields::Groupable
-          end
+          @section = parent
         end
 
-        register_instance_option(:css_class) do
+        register_instance_option :css_class do
           "#{self.name}_field"
         end
-        
+
         def type_css_class
           "#{type}_type"
         end
-        
+
         def virtual?
           properties.blank?
         end
 
-        register_instance_option(:column_width) do
+        register_instance_option :column_width do
           nil
         end
 
-        register_instance_option(:truncated?) do
-          ActiveSupport::Deprecation.warn("'#{self.name}.truncated?' is deprecated, use '#{self.name}.pretty_value' instead", caller)
+        register_instance_option :sortable do
+          !virtual? || children_fields.first || false
         end
-        
-        register_instance_option(:sortable) do
+
+        register_instance_option :searchable do
+          !virtual? || children_fields.first || false
+        end
+
+        register_instance_option :queryable? do
           !virtual?
         end
 
-        register_instance_option(:searchable) do
-          !virtual?
+        register_instance_option :filterable? do
+          !!searchable # rubocop:disable DoubleNegation
         end
 
-        register_instance_option(:queryable?) do
-          !!searchable
-        end
-
-        register_instance_option(:filterable?) do
-          !!searchable
-        end
-
-        register_instance_option(:search_operator) do
+        register_instance_option :search_operator do
           @search_operator ||= RailsAdmin::Config.default_search_operator
         end
 
         # serials and dates are reversed in list, which is more natural (last modified items first).
-        register_instance_option(:sort_reverse?) do
+        register_instance_option :sort_reverse? do
           false
         end
 
-        # list of columns I should search for that field [{ :column => 'table_name.column', :type => field.type }, {..}]
-        register_instance_option(:searchable_columns) do
-          @searchable_columns ||= case self.searchable
+        # list of columns I should search for that field [{ column: 'table_name.column', type: field.type }, {..}]
+        register_instance_option :searchable_columns do
+          @searchable_columns ||= case searchable
           when true
-            [{ :column => "#{self.abstract_model.model.table_name}.#{self.name}", :type => self.type }]
+            [{column: "#{abstract_model.table_name}.#{name}", type: type}]
           when false
             []
           when :all # valid only for associations
-            table_name = self.associated_model_config.abstract_model.model.table_name
-            self.associated_model_config.list.fields.map { |f| { :column => "#{table_name}.#{f.name}", :type => f.type } }
+            table_name = associated_model_config.abstract_model.table_name
+            associated_model_config.list.fields.collect { |f| {column: "#{table_name}.#{f.name}", type: f.type} }
           else
-            [self.searchable].flatten.map do |f|
+            [searchable].flatten.collect do |f|
               if f.is_a?(String) && f.include?('.')                            #  table_name.column
                 table_name, column = f.split '.'
                 type = nil
               elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
-                am = AbstractModel.new(f.keys.first.to_s.classify)
-                table_name = am && am.model.table_name || f.keys.first
+                am = f.keys.first.is_a?(Class) && AbstractModel.new(f.keys.first)
+                table_name = am && am.table_name || f.keys.first
                 column = f.values.first
-                property = am && am.properties.find{ |p| p[:name] == f.values.first.to_sym }
-                type = property && property[:type]
+                property = am && am.properties.detect { |p| p.name == f.values.first.to_sym }
+                type = property && property.type
               else                                                             #  <attribute|column>
-                am = (self.association? ? self.associated_model_config.abstract_model : self.abstract_model)
-                table_name = am.model.table_name
+                am = (self.association? ? associated_model_config.abstract_model : abstract_model)
+                table_name = am.table_name
                 column = f
-                property = am.properties.find{ |p| p[:name] == f.to_sym }
-                type = property && property[:type]
+                property = am.properties.detect { |p| p.name == f.to_sym }
+                type = property && property.type
               end
 
-              { :column => "#{table_name}.#{column}", :type => (type || :string) }
+              {column: "#{table_name}.#{column}", type: (type || :string)}
             end
           end
         end
 
-        register_instance_option(:formatted_value) do
-          value.to_s
+        register_instance_option :formatted_value do
+          value
         end
 
         # output for pretty printing (show, list)
-        register_instance_option(:pretty_value) do
+        register_instance_option :pretty_value do
           formatted_value.presence || ' - '
         end
 
         # output for printing in export view (developers beware: no bindings[:view] and no data!)
-        register_instance_option(:export_value) do
+        register_instance_option :export_value do
           pretty_value
         end
 
-
         # Accessor for field's help text displayed below input field.
-        register_instance_option(:help) do
-          @help ||= (required? ? I18n.translate("admin.new.required") : I18n.translate("admin.new.optional")) + '. '
+        register_instance_option :help do
+          (@help ||= {})[::I18n.locale] ||= generic_field_help
         end
 
-        register_instance_option(:html_attributes) do
+        register_instance_option :html_attributes do
           {}
+        end
+
+        register_instance_option :default_value do
+          nil
         end
 
         # Accessor for field's label.
         #
         # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:label) do
-          @label ||= abstract_model.model.human_attribute_name name
+        register_instance_option :label do
+          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
+        end
+
+        register_instance_option :hint do
+          (@hint ||= '')
         end
 
         # Accessor for field's maximum length per database.
         #
         # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:length) do
-          @length ||= properties && properties[:length]
+        register_instance_option :length do
+          @length ||= properties && properties.length
         end
 
         # Accessor for field's length restrictions per validations
         #
-        register_instance_option(:valid_length) do
-          @valid_length ||= abstract_model.model.validators_on(name).find{|v|
-            v.is_a?(ActiveModel::Validations::LengthValidator)}.try{|v| v.options} || {}
+        register_instance_option :valid_length do
+          @valid_length ||= abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try { |v| v.options } || {}
         end
 
-        register_instance_option(:partial) do
+        register_instance_option :partial do
           :form_field
         end
 
         # Accessor for whether this is field is mandatory.
         #
         # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:required?) do
-          @required ||= !!abstract_model.model.validators_on(name).find do |v|
-            v.is_a?(ActiveModel::Validations::PresenceValidator) && !v.options[:allow_nil] ||
-            v.is_a?(ActiveModel::Validations::NumericalityValidator) && !v.options[:allow_nil]
+        register_instance_option :required? do
+          context = if bindings && bindings[:object]
+            bindings[:object].persisted? ? :update : :create
+          else
+            :nil
+          end
+          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name| # rubocop:disable DoubleNegation
+            abstract_model.model.validators_on(column_name).detect do |v|
+              !v.options[:allow_nil] &&
+              [:presence, :numericality, :attachment_presence].include?(v.kind) &&
+              (v.options[:on] == context || v.options[:on].blank?)
+            end
           end
         end
 
         # Accessor for whether this is a serial field (aka. primary key, identifier).
         #
         # @see RailsAdmin::AbstractModel.properties
-        register_instance_option(:serial?) do
-          properties && properties[:serial?]
+        register_instance_option :serial? do
+          properties && properties.serial?
         end
 
-        register_instance_option(:view_helper) do
-          @view_helper ||= self.class.instance_variable_get("@view_helper")
+        register_instance_option :view_helper do
+          :text_field
         end
-        
-        register_instance_option :read_only do
-          not editable
+
+        register_instance_option :read_only? do
+          !editable?
         end
-        
-        def editable
-          return false if @properties && @properties[:read_only]
-          role = bindings[:view].controller.send(:_attr_accessible_role)
-          klass = bindings[:object].class
-          whitelist = klass.accessible_attributes(role).map(&:to_s)
-          blacklist = klass.protected_attributes(role).map(&:to_s)
-          !self.method_name.to_s.in?(blacklist) && (whitelist.any? ? self.method_name.to_s.in?(whitelist) : true)
+
+        # init status in the view
+        register_instance_option :active? do
+          false
         end
-        
-        def render
-          bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form] }
+
+        register_instance_option :visible? do
+          returned = true
+          (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
+            next unless self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+            returned = false if fields.include?(name)
+          end
+          returned
+        end
+
+        # columns mapped (belongs_to, paperclip, etc.). First one is used for searching/sorting by default
+        register_instance_option :children_fields do
+          []
+        end
+
+        register_instance_option :render do
+          bindings[:view].render partial: "rails_admin/main/#{partial}", locals: {field: self, form: bindings[:form]}
+        end
+
+        def editable?
+          !(@properties && @properties.read_only?)
         end
 
         # Is this an association
         def association?
-          kind_of?(RailsAdmin::Config::Fields::Association)
+          is_a?(RailsAdmin::Config::Fields::Association)
         end
 
         # Reader for validation errors of the bound object
         def errors
-          bindings[:object].errors[name]
+          ([name] + children_fields).uniq.collect do |column_name|
+            bindings[:object].errors[column_name]
+          end.uniq.flatten
         end
 
         # Reader whether field is optional.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional?
-          not required
+          !required?
         end
 
         # Inverse accessor whether this field is required.
         #
-        # @see RailsAdmin::Config::Fields::Base.register_instance_option(:required?)
+        # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
-          if !state.nil? || block
-            required state.nil? ? proc { false == (instance_eval &block) } : false == state
+          if !state.nil? || block # rubocop:disable NonNilCheck
+            required state.nil? ? proc { false == (instance_eval(&block)) } : false == state
           else
             optional?
           end
@@ -243,18 +264,64 @@ module RailsAdmin
         def value
           bindings[:object].safe_send(name)
         end
-        
+
         # Reader for nested attributes
-        def nested_form
+        register_instance_option :nested_form do
           false
         end
-        
+
+        # Allowed methods for the field in forms
+        register_instance_option :allowed_methods do
+          [method_name]
+        end
+
+        def generic_help
+          (required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')) + '. '
+        end
+
+        def generic_field_help
+          model = abstract_model.model_name.underscore
+          model_lookup = "admin.help.#{model}.#{name}".to_sym
+          translated = I18n.translate(model_lookup, help: generic_help, default: [generic_help])
+          (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
+        end
+
+        def parse_input(_params)
+          # overriden
+        end
+
         def inverse_of
           nil
         end
 
         def method_name
           name
+        end
+
+        def form_default_value
+          (default_value if bindings[:object].new_record? && value.nil?)
+        end
+
+        def form_value
+          form_default_value.nil? ? formatted_value : form_default_value
+        end
+
+        def inspect
+          "#<#{self.class.name}[#{name}] #{
+            instance_variables.collect do |v|
+              value = instance_variable_get(v)
+              if [:@parent, :@root, :@section, :@children_fields_registered,
+                  :@associated_model_config, :@group, :@bindings].include? v
+                if value.respond_to? :name
+                  "#{v}=#{value.name.inspect}"
+                else
+                  "#{v}=#{value.class.name}"
+                end
+              else
+                "#{v}=#{value.inspect}"
+              end
+            end.join(', ')
+          }>"
         end
       end
     end

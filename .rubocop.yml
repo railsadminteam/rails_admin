@@ -1,0 +1,108 @@
+inherit_from: rubocop-todo.yml
+
+AllCops:
+  Include:
+    - '/Gemfile'
+    - '/Rakefile'
+    - '/rails_admin.gemspec'
+  Exclude:
+    - 'spec/dummy_app/db/schema.rb'
+    - 'vendor/bundle/**/*'
+
+# Avoid long parameter lists
+ParameterLists:
+  Max: 8 # TODO: Lower to 4
+  CountKeywordArgs: true
+
+MethodLength:
+  CountComments: false
+  Max: 35 # TODO: Lower to 15
+
+ClassLength:
+  CountComments: false
+  Max: 228 # TODO: Lower to 100
+
+CyclomaticComplexity:
+  Max: 12 # TODO: Lower to 6
+
+# Avoid more than `Max` levels of nesting.
+BlockNesting:
+  Max: 3
+
+# Align with the style guide.
+CollectionMethods:
+  PreferredMethods:
+    map:      'collect'
+    reduce:   'inject'
+    find:     'detect'
+    find_all: 'select'
+
+# Do not force public/protected/private keyword to be indented at the same
+# level as the def keyword. My personal preference is to outdent these keywords
+# because I think when scanning code it makes it easier to identify the
+# sections of code and visually separate them. When the keyword is at the same
+# level I think it sort of blends in with the def keywords and makes it harder
+# to scan the code and see where the sections are.
+AccessModifierIndentation:
+  Enabled: false
+
+# Limit line length
+LineLength:
+  Enabled: false
+
+# Disable documentation checking until a class needs to be documented once
+Documentation:
+  Enabled: false
+
+# No spaces inside hash literals
+SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+# Allow dots at the end of lines
+DotPosition:
+  Enabled: false
+
+# Don't require magic comment at the top of every file
+Encoding:
+  Enabled: false
+
+# Enforce outdenting of access modifiers (i.e. public, private, protected)
+AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+EmptyLinesAroundAccessModifier:
+  Enabled: true
+
+# Align ends correctly
+EndAlignment:
+  AlignWith: variable
+
+# Indentation of when/else
+CaseIndentation:
+  IndentWhenRelativeTo: end
+  IndentOneStep: false
+
+Lambda:
+  Enabled: false
+
+RaiseArgs:
+  EnforcedStyle: compact
+
+TrailingComma:
+  Enabled: false
+
+PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  ()
+    '%i': ()
+    '%q': ()
+    '%Q': ()
+    '%r': '{}'
+    '%s': ()
+    '%w': '[]'
+    '%W': '[]'
+    '%x': ()
+
+FileName:
+  Exclude:
+    - 'lib/rails_admin/bootstrap-sass.rb'

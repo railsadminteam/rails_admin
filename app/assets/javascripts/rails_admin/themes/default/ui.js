@@ -1,1 +1,0 @@
-/* Theme's JS behaviour */

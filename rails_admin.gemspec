@@ -1,38 +1,35 @@
-# encoding: utf-8
-require File.expand_path('../lib/rails_admin/version', __FILE__)
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'rails_admin/version'
 
-Gem::Specification.new do |gem|
+Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
-  gem.add_dependency 'bootstrap-sass', '~> 1.4'
-  gem.add_dependency 'builder', '~> 3.0'
-  gem.add_dependency 'coffee-rails', '~> 3.1'
-  gem.add_dependency 'haml', '~> 3.1'
-  gem.add_dependency 'jquery-rails', '~> 1.0.19'
-  gem.add_dependency 'kaminari', '~> 0.12.4'
-  gem.add_dependency 'rails', '~> 3.1'
-  gem.add_dependency 'remotipart', '~> 1.0'
-  gem.add_dependency 'rack-pjax'
-  gem.add_dependency 'bbenezech-nested_form', '~> 0.0.2'
-  gem.add_development_dependency 'capybara'
-  gem.add_development_dependency 'carrierwave'
-  gem.add_development_dependency 'devise'
-  gem.add_development_dependency 'dragonfly'
-  gem.add_development_dependency 'factory_girl'
-  gem.add_development_dependency 'generator_spec'
-  gem.add_development_dependency 'launchy'
-  gem.add_development_dependency 'mini_magick'
-  gem.add_development_dependency 'paperclip'
-  gem.add_development_dependency 'rspec-rails'
-  gem.add_development_dependency 'simplecov'
-  gem.authors = ["Erik Michaels-Ober", "Bogdan Gaza", "Petteri Kaapa", "Benoit Benezech"]
-  gem.description = %q{RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.}
-  gem.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
-  gem.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
-  gem.homepage = 'https://github.com/sferik/rails_admin'
-  gem.name = 'rails_admin'
-  gem.require_paths = ['lib']
-  gem.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
-  gem.summary = %q{Admin for Rails}
-  gem.test_files = Dir['spec/**/*']
-  gem.version = RailsAdmin::VERSION
+  spec.add_dependency 'builder', '~> 3.1'
+  spec.add_dependency 'coffee-rails', '~> 4.0'
+  spec.add_dependency 'font-awesome-rails', '>= 3.0'
+  spec.add_dependency 'haml', '~> 4.0'
+  spec.add_dependency 'jquery-rails', '~> 3.0'
+  spec.add_dependency 'jquery-ui-rails', '~> 4.0'
+  spec.add_dependency 'kaminari', '~> 0.14'
+  spec.add_dependency 'nested_form', '~> 0.3'
+  spec.add_dependency 'rack-pjax', '~> 0.7'
+  spec.add_dependency 'rails', '~> 4.0'
+  spec.add_dependency 'remotipart', '~> 1.0'
+  spec.add_dependency 'safe_yaml', '~> 1.0'
+  spec.add_dependency 'sass-rails', '~> 4.0'
+  spec.add_development_dependency 'bundler', '~> 1.0'
+  spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech']
+  spec.description = %q(RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.)
+  spec.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
+  spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
+  spec.licenses = %w[MIT]
+  spec.homepage = 'https://github.com/sferik/rails_admin'
+  spec.name = 'rails_admin'
+  spec.require_paths = %w[lib]
+  spec.required_ruby_version     = '>= 1.9.3'
+  spec.required_rubygems_version = '>= 1.8.11'
+  spec.summary = %q(Admin for Rails)
+  spec.test_files = Dir['spec/**/*'].reject { |f| f.end_with? 'log' }
+  spec.version = RailsAdmin::Version
 end

@@ -1,9 +1,1 @@
-= form.send field.view_helper, field.method_name, field.html_attributes
-
-- if field.ckeditor
-  = javascript_tag do
-    var CKEDITOR_BASEPATH = '/javascripts/ckeditor/';
-  = javascript_include_tag "/javascripts/ckeditor/ckeditor.js"
-  = form.javascript_for(field, :modal => false) do
-    :plain
-      CKEDITOR.replace('#{form.js_namespace(field)} textarea', { customConfig : '#{field.ckeditor_config_js.html_safe}' });
+= form.text_area field.method_name, field.html_attributes.reverse_merge(data: { richtext: false, options: {}.to_json }).reverse_merge({ value: field.form_value })

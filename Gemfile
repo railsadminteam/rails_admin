@@ -1,54 +1,72 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-group :development, :test do
+case ENV['RAILS_VERSION']
+when '4.0'
+  gem 'rails', '~> 4.0.0'
+else
+  gem 'rails', '~> 4.1'
+end
+
+case ENV['CI_ORM']
+when 'mongoid'
+  gem 'mongoid', '~> 4.0.0.beta1'
+  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+  gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+  gem 'mongoid-grid_fs', '1.9.1' # workaround for mime-types version issue
+else
   platforms :jruby do
-    gem 'jruby-openssl', '~> 0.7'
-    # activerecord-jdbc-adapter does not yet have a rails 3.1 compatible release
-    gem 'activerecord-jdbc-adapter', :git => 'git://github.com/jruby/activerecord-jdbc-adapter.git'
     case ENV['CI_DB_ADAPTER']
     when 'mysql'
-      gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
-      gem 'jdbc-mysql', '~> 5.1'
+      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
+      gem 'jdbc-mysql', '>= 5.1'
     when 'postgresql'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
-      gem 'jdbc-postgres', '~> 9.0'
+      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
+      gem 'jdbc-postgres', '>= 9.2'
     else
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.2'
-      gem 'jdbc-sqlite3', '~> 3.6'
+      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+      gem 'jdbc-sqlite3', '>= 3.7'
     end
   end
 
   platforms :ruby, :mswin, :mingw do
     case ENV['CI_DB_ADAPTER']
-    when 'mysql'
-      gem 'mysql', '~> 2.8'
+    when 'mysql2'
+      gem 'mysql2', '~> 0.3.14'
     when 'postgresql'
-      gem 'pg', '~> 0.10'
+      gem 'pg', '>= 0.14'
     else
-      gem 'sqlite3', '~> 1.3'
+      gem 'sqlite3', '>= 1.3'
     end
   end
-
-  gem 'cancan'
-  gem 'silent-postgres'
 end
 
-group :debug do
-  platform :mri_18 do
-    gem 'ruby-debug'
-    gem 'linecache', '<= 0.45'
-  end
-
-  platform :mri_19 do
-    gem 'ruby-debug19'
+group :development, :test do
+  gem 'pry', '>= 0.9'
+  platforms :mri_19, :mri_20 do
+    gem 'pry-debugger', '>= 0.2'
+    gem 'pry-stack_explorer', '>= 0.4.9.1'
   end
 end
 
-platforms :jruby, :mingw_18, :ruby_18 do
-  gem 'fastercsv', '~> 1.5'
+group :test do
+  gem 'cancan', '>= 1.6'
+  gem 'capybara', '>= 2.1'
+  gem 'carrierwave', '>= 0.8'
+  gem 'coveralls'
+  gem 'database_cleaner', '>= 1.2'
+  gem 'devise', '>= 3.2'
+  gem 'dragonfly', '~> 1.0'
+  gem 'factory_girl', '>= 4.2'
+  gem 'generator_spec', '>= 0.8'
+  gem 'launchy', '>= 2.2'
+  gem 'mini_magick', '>= 3.4'
+  gem 'paperclip', '3.5.2'
+  gem 'poltergeist', '~> 1.5'
+  gem 'rack-cache', require: 'rack/cache'
+  gem 'rspec-rails', '>= 2.14'
+  gem 'rubocop', '>= 0.19.0'
+  gem 'simplecov', '>= 0.9', require: false
+  gem 'timecop', '>= 0.5'
 end
 
 gemspec

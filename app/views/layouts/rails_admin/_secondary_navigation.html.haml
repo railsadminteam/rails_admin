@@ -1,9 +1,12 @@
-%li= link_to t('admin.dashboard.name'), dashboard_path
-- if main_app_root_path = (main_app.root_path rescue false)
-  %li= link_to t('home.name').capitalize, main_app_root_path
-- if _current_user
-  - if authorized?(:edit, _current_user.class, _current_user) && _current_user.respond_to?(:email)
-    %li= link_to _current_user.email, edit_path(_current_user.class.name.underscore.pluralize, _current_user)
-  - if defined?(Devise) && (devise_scope = request.env["warden"].config[:default_scope] rescue false) && (logout_path = main_app.send("destroy_#{devise_scope}_session_path") rescue false)
-    %li= link_to content_tag('span', t('admin.credentials.log_out'), :class => 'label important'), logout_path, :method => Devise.sign_out_via
-  %li= image_tag "#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", :style => 'padding-top:5px'
+%ul.nav.pull-right.root_links
+  - actions(:root).each do |action|
+    %li{class: "#{action.action_name}_root_link"}= link_to wording_for(:menu, action), { action: action.action_name, controller: 'rails_admin/main' }, class: "pjax"
+  - if main_app_root_path = (main_app.root_path rescue false)
+    %li= link_to t('admin.home.name').capitalize, main_app_root_path
+  - if _current_user
+    - if user_link = edit_user_link
+      %li= user_link
+    - if logout_path.present?
+      %li= link_to content_tag('span', t('admin.misc.log_out'), class: 'label label-important'), logout_path, method: Devise.sign_out_via
+    - if _current_user.respond_to?(:email) && _current_user.email.present?
+      %li= image_tag "#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", style: 'padding-top:5px'

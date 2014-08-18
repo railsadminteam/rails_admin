@@ -6,29 +6,34 @@ module RailsAdmin
       module Types
         class Text < RailsAdmin::Config::Fields::Base
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
-          @view_helper = :text_area
-
-          # CKEditor is disabled by default
-          register_instance_option(:ckeditor) do
-            false
+          [:ckeditor, :ckeditor_base_location, :ckeditor_config_js, :ckeditor_location].each do |key|
+            register_deprecated_instance_option key do
+              fail("The 'field(:foo){ ckeditor true }' style DSL is deprecated. Please use 'field :foo, :ck_editor' instead.")
+            end
           end
 
-          # If you want to have a different toolbar configuration for CKEditor
-          # create your own custom config.js and override this configuration
-          register_instance_option(:ckeditor_config_js) do
-            "/javascripts/ckeditor/config.js"
+          [:codemirror, :codemirror_assets, :codemirror_config, :codemirror_css_location, :codemirror_js_location].each do |key|
+            register_deprecated_instance_option key do
+              fail("The 'field(:foo){ codemirror true }' style DSL is deprecated. Please use 'field :foo, :code_mirror' instead.")
+            end
           end
 
-          register_instance_option(:html_attributes) do
+          [:bootstrap_wysihtml5, :bootstrap_wysihtml5_config_options, :bootstrap_wysihtml5_css_location, :bootstrap_wysihtml5_js_location].each do |key|
+            register_deprecated_instance_option key do
+              fail("The 'field(:foo){ bootstrap_wysihtml5 true }' style DSL is deprecated. Please use 'field :foo, :wysihtml5' instead.")
+            end
+          end
+
+          register_instance_option :html_attributes do
             {
-              :cols => "48",
-              :rows => "3"
+              cols: '48',
+              rows: '3'
             }
           end
 
-          register_instance_option(:partial) do
+          register_instance_option :partial do
             :form_text
           end
         end

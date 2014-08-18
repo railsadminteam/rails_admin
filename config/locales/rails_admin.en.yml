@@ -1,78 +1,135 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
-  home:
-    name: "home"
-  views:
+  admin:
+    js:
+      true: True
+      false: False
+      is_present: Is present
+      is_blank: Is blank
+      date: Date ...
+      between_and_: Between ... and ...
+      today: Today
+      yesterday: Yesterday
+      this_week: This week
+      last_week: Last week
+      number: Number ...
+      contains: Contains
+      is_exactly: Is exactly
+      starts_with: Starts with
+      ends_with: Ends with
+    loading: "Loading..."
+    home:
+      name: "Home"
     pagination:
       previous: "&laquo; Prev"
       next: "Next &raquo;"
       truncate: "…"
-  admin:
-    dashboard:
-      pagename: "Site administration"
-      name: "Dashboard"
+    misc:
+      filter_date_format: "mm/dd/yy" # a combination of 'dd', 'mm' and 'yy' with any delimiter. No other interpolation will be done!
+      search: "Search"
+      filter: "Filter"
+      refresh: "Refresh"
+      show_all: "Show all"
+      add_filter: "Add filter"
+      bulk_menu_title: "Selected items"
+      remove: "Remove"
+      add_new: "Add new"
+      chosen: "Chosen %{name}"
+      chose_all: "Choose all"
+      clear_all: "Clear all"
+      up: "Up"
+      down: "Down"
+      navigation: "Navigation"
+      navigation_static_label: "Links"
+      log_out: "Log out"
+      ago: "ago"
+    flash:
+      successful: "%{name} successfully %{action}"
+      error: "%{name} failed to be %{action}"
+      noaction: "No actions were taken"
+      model_not_found: "Model '%{model}' could not be found"
+      object_not_found: "%{model} with id '%{id}' could not be found"
+    table_headers:
       model_name: "Model name"
       last_used: "Last used"
       records: "Records"
-      modify: "Modify"
-      add_new: "Add new"
-      show: "Show"
-      ago: "ago"
-      navigation: "Navigation"
-    history:
-      name: "History"
-      page_name: "History for %{name}"
-      no_activity: "No Activity"
-    show:
-      show_in_app: "Show in app"
-      page_name: "Details for %{name}"
-      no_file_found: "No file found"
-    credentials:
-      log_out: "Log out"
-    index:
-      edit_action: "Edit"
-      delete_action: "Delete"
-      selected: "Selected"
-      select_action: "Select"
-      export_action: 'Export'
-      export_current_action: "Export current view"
-      show_action: "Show"
-      export_selected: "Export"
-      delete_selected: "Delete"
-      add_new: "Add new"
-      search: "Search"
-      refresh: "Refresh"
-      select: "Select %{name} to edit"
-      show_all: "Show all"
-      add_filter: "Add filter"
-    new:
+      username: "User"
+      changes: "Changes"
+      created_at: "Date/Time"
+      item: "Item"
+      message: "Message"
+    actions:
+      dashboard:
+        title: "Site Administration"
+        menu: "Dashboard"
+        breadcrumb: "Dashboard"
+      index:
+        title: "List of %{model_label_plural}"
+        menu: "List"
+        breadcrumb: "%{model_label_plural}"
+      show:
+        title: "Details for %{model_label} '%{object_label}'"
+        menu: "Show"
+        breadcrumb: "%{object_label}"
+      show_in_app:
+        menu: "Show in app"
+      new:
+        title: "New %{model_label}"
+        menu: "Add new"
+        breadcrumb: "New"
+        link: "Add a new %{model_label}"
+        done: "created"
+      edit:
+        title: "Edit %{model_label} '%{object_label}'"
+        menu: "Edit"
+        breadcrumb: "Edit"
+        link: "Edit this %{model_label}"
+        done: "updated"
+      delete:
+        title: "Delete %{model_label} '%{object_label}'"
+        menu: "Delete"
+        breadcrumb: "Delete"
+        link: "Delete '%{object_label}'"
+        done: "deleted"
+      bulk_delete:
+        title: "Delete %{model_label_plural}"
+        menu: "Multiple delete"
+        breadcrumb: "Multiple delete"
+        bulk_link: "Delete selected %{model_label_plural}"
+      export:
+        title: "Export %{model_label_plural}"
+        menu: "Export"
+        breadcrumb: "Export"
+        link: "Export found %{model_label_plural}"
+        bulk_link: "Export selected %{model_label_plural}"
+        done: "exported"
+      history_index:
+        title: "History for %{model_label_plural}"
+        menu: "History"
+        breadcrumb: "History"
+      history_show:
+        title: "History for %{model_label} '%{object_label}'"
+        menu: "History"
+        breadcrumb: "History"
+    form:
+      cancel: "Cancel"
       basic_info: "Basic info"
       required: "Required"
       optional: "Optional"
       one_char: "character"
       char_length_up_to: "length up to"
       char_length_of: "length of"
-      chosen: "Chosen %{name}"
-      select_choice: "Select your choice(s) and click"
-      chose_all: "Choose all"
-      clear_all: "Clear all"
-      up: "Up"
-      down: "Down"
       save: "Save"
       save_and_add_another: "Save and add another"
       save_and_edit: "Save and edit"
-      cancel: "Cancel"
-    delete:
       all_of_the_following_related_items_will_be_deleted: "? The following related items may be deleted or orphaned:"
       are_you_sure_you_want_to_delete_the_object: "Are you sure you want to delete this %{model_name}"
       confirmation: "Yes, I'm sure"
-      delete_confirmation: "Delete confirmation"
       bulk_delete: "The following objects will be deleted, which may delete or orphan some of their related dependencies:"
+      new_model: "%{name} (new)"
     export:
       confirmation: "Export to %{name}"
       select: "Select fields to export"
+      select_all_fields: "Select All Fields"
       fields_from: "Fields from %{name}"
       fields_from_associated: "Fields from associated %{name}"
       display: "Display %{name}: %{type}"
@@ -89,27 +146,3 @@ en:
         default_col_sep: ","
         col_sep: "Column separator"
         col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
-    flash:
-      successful: "%{name} successfully %{action}"
-      error: "%{name} failed to be %{action}"
-      noaction: "No actions were taken"
-    actions:
-      create: "create"
-      created: "created"
-      update: "update"
-      updated: "updated"
-      delete: "delete"
-      deleted: "deleted"
-      export: "export"
-      exported: "exported"
-    breadcrumbs:
-      delete: "delete"
-      for_object: "history"
-      show: "show"
-      edit: "edit"
-      export: "export"
-      bulk_destroy: "delete"
-      new: "new"
-      for_model: "history"
-      index: "list"
-      dashboard: "dashboard"

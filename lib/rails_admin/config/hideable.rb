@@ -4,19 +4,19 @@ module RailsAdmin
     module Hideable
       # Visibility defaults to true.
       def self.included(klass)
-        klass.register_instance_option(:visible?) do
-          !root.excluded?
+        klass.register_instance_option :visible? do
+          !root.try :excluded?
         end
       end
 
-      # Reader whether field is hidden.
+      # Reader whether object is hidden.
       def hidden?
-        not visible
+        !visible
       end
 
-      # Writer to hide field.
+      # Writer to hide object.
       def hide(&block)
-        visible block ? proc { false == (instance_eval &block) } : false
+        visible block ? proc { false == (instance_eval(&block)) } : false
       end
 
       # Writer to show field.

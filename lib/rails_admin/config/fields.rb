@@ -8,24 +8,14 @@ module RailsAdmin
       mattr_reader :default_factory
       @@default_factory = lambda do |parent, properties, fields|
         # If it's an association
-        if properties.has_key?(:parent_model)
-          association = parent.abstract_model.associations.find {|a| a[:name].to_s == properties[:name].to_s}
-          field = RailsAdmin::Config::Fields::Types.load("#{association[:polymorphic] ? :polymorphic : properties[:type]}_association").new(parent, properties[:name], association)
-          fields << field
-
-        # If it's a column
-        elsif !properties.has_key?(:parent_model)
-          fields << (field = RailsAdmin::Config::Fields::Types.load(properties[:type]).new(parent, properties[:name], properties))
-          # hide _type columns (handled as associations)
-          if parent.abstract_model.belongs_to_associations.find {|a| a[:foreign_type] == properties[:name] }
-            field.hide
-          end
-          # hide _id column
-          if parent.abstract_model.belongs_to_associations.find {|a| a[:child_key] == properties[:name] }
-            field.hide
-            field.filterable(false) # filtering is handled on the association itself
-          end
+        if properties.association?
+          association = parent.abstract_model.associations.detect { |a| a.name.to_s == properties.name.to_s }
+          field = RailsAdmin::Config::Fields::Types.load("#{association.polymorphic? ? :polymorphic : properties.type}_association").new(parent, properties.name, association)
+        else
+          field = RailsAdmin::Config::Fields::Types.load(properties.type).new(parent, properties.name, properties)
         end
+        fields << field
+        field
       end
 
       # Registry of field factories.
@@ -55,23 +45,20 @@ module RailsAdmin
       # @see RailsAdmin::Config::Fields.registry
       def self.factory(parent)
         fields = []
-        return fields unless parent.abstract_model.model_store_exists?
         # Load fields for all properties (columns)
 
         parent.abstract_model.properties.each do |properties|
           # Unless a previous factory has already loaded current field as well
-          unless fields.find {|f| f.name == properties[:name] }
-            # Loop through factories until one returns true
-            @@registry.find {|factory| factory.call(parent, properties, fields) }
-          end
+          next if fields.detect { |f| f.name == properties.name }
+          # Loop through factories until one returns true
+          @@registry.detect { |factory| factory.call(parent, properties, fields) }
         end
         # Load fields for all associations (relations)
-        parent.abstract_model.associations.each do |association|
+        parent.abstract_model.associations.select { |a| a.type != :belongs_to }.each do |association| # :belongs_to are created by factory for belongs_to fields
           # Unless a previous factory has already loaded current field as well
-          unless fields.find {|f| f.name == association[:name] }
-            # Loop through factories until one returns true
-            @@registry.find {|factory| factory.call(parent, association, fields) }
-          end
+          next if fields.detect { |f| f.name == association.name }
+          # Loop through factories until one returns true
+          @@registry.detect { |factory| factory.call(parent, association, fields) }
         end
         fields
       end
@@ -95,3 +82,4 @@ require 'rails_admin/config/fields/factories/devise'
 require 'rails_admin/config/fields/factories/paperclip'
 require 'rails_admin/config/fields/factories/dragonfly'
 require 'rails_admin/config/fields/factories/carrierwave'
+require 'rails_admin/config/fields/factories/association'

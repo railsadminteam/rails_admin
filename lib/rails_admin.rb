@@ -3,30 +3,12 @@ require 'rails_admin/abstract_model'
 require 'rails_admin/config'
 require 'rails_admin/extension'
 require 'rails_admin/extensions/cancan'
+require 'rails_admin/extensions/paper_trail'
+require 'rails_admin/extensions/history'
 require 'rails_admin/support/csv_converter'
 require 'rails_admin/support/core_extensions'
 
 module RailsAdmin
-  def self.authenticate_with(&block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.authenticate_with { }' is deprecated, use 'RailsAdmin.config{|c| c.authenticate_with }' instead", caller)
-    self.config {|c| c.authenticate_with(&block) }
-  end
-
-  def self.authorize_with(*args, &block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.authorize_with { }' is deprecated, use 'RailsAdmin.config{|c| c.authorize_with }' instead", caller)
-    self.config {|c| c.authorize_with(*args, &block) }
-  end
-
-  def self.current_user_method(&block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.current_user_method { }' is deprecated, use 'RailsAdmin.config{|c| c.current_user_method }' instead", caller)
-    self.config {|c| c.current_user_method(&block) }
-  end
-
-  def self.configure_with(extension, &block)
-    ActiveSupport::Deprecation.warn("'#{self.name}.configure_with { }' is deprecated, use 'RailsAdmin.config{|c| c.configure_with }' instead", caller)
-    self.config {|c| c.configure_with(extension, &block) }
-  end
-
   # Setup RailsAdmin
   #
   # Given the first argument is a model class, a model class name
@@ -43,15 +25,12 @@ module RailsAdmin
   def self.config(entity = nil, &block)
     if entity
       RailsAdmin::Config.model(entity, &block)
-    elsif block_given? && ENV['SKIP_RAILS_ADMIN_INITIALIZER'] != "true"
+    elsif block_given?
       block.call(RailsAdmin::Config)
     else
       RailsAdmin::Config
     end
   end
-
-  # Reset RailsAdmin configuration to defaults
-  def self.reset
-    RailsAdmin::Config.reset
-  end
 end
+
+require 'rails_admin/bootstrap-sass' unless defined? Bootstrap

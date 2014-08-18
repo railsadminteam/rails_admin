@@ -1,7 +1,6 @@
-require 'rails_admin/config/model'
+require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'
-require 'rails_admin/config/sections/navigation'
-require 'active_support/core_ext/class/attribute_accessors'
+require 'active_support/core_ext/module/attribute_accessors'
 
 module RailsAdmin
   module Config
@@ -11,26 +10,15 @@ module RailsAdmin
     # This is valid for custom warden setups, and also devise
     # If you're using the admin setup for devise, you should set RailsAdmin to use the admin
     #
-    # By default, this will raise in any of the following environments
-    #   * production
-    #   * beta
-    #   * uat
-    #   * staging
-    #
     # @see RailsAdmin::Config.authenticate_with
     # @see RailsAdmin::Config.authorize_with
-    DEFAULT_AUTHENTICATION = Proc.new do
-      request.env['warden'].try(:authenticate!)
-    end
+    DEFAULT_AUTHENTICATION = proc {}
 
-    DEFAULT_ATTR_ACCESSIBLE_ROLE = Proc.new { :default }
+    DEFAULT_AUTHORIZE = proc {}
 
-    DEFAULT_AUTHORIZE = Proc.new {}
+    DEFAULT_AUDIT = proc {}
 
-    DEFAULT_CURRENT_USER = Proc.new do
-      request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
-    end
-
+    DEFAULT_CURRENT_USER = proc {}
 
     class << self
       # Application title, can be an array of two elements
@@ -68,8 +56,15 @@ module RailsAdmin
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #
-      # @see RailsAdmin::Config.model
+      # @see RailsAdmin.config
       attr_reader :registry
+
+      # accepts a hash of static links to be shown below the main navigation
+      attr_accessor :navigation_static_links
+      attr_accessor :navigation_static_label
+
+      # yell about fields that are not marked as accessible
+      attr_accessor :yell_for_non_accessible_fields
 
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
@@ -89,7 +84,7 @@ module RailsAdmin
       # @example Custom Warden
       #   RailsAdmin.config do |config|
       #     config.authenticate_with do
-      #       warden.authenticate! :scope => :paranoid
+      #       warden.authenticate! scope: :paranoid
       #     end
       #   end
       #
@@ -99,10 +94,17 @@ module RailsAdmin
         @authenticate || DEFAULT_AUTHENTICATION
       end
 
-
-      def attr_accessible_role(&blk)
-        @attr_accessible_role = blk if blk
-        @attr_accessible_role || DEFAULT_ATTR_ACCESSIBLE_ROLE
+      # Setup auditing/history/versioning provider that observe objects lifecycle
+      def audit_with(*args, &block)
+        extension = args.shift
+        if extension
+          @audit = proc do
+            @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
+          end
+        else
+          @audit = block if block
+        end
+        @audit || DEFAULT_AUDIT
       end
 
       # Setup authorization to be run as a before filter
@@ -130,10 +132,10 @@ module RailsAdmin
       # @see RailsAdmin::Config::DEFAULT_AUTHORIZE
       def authorize_with(*args, &block)
         extension = args.shift
-        if(extension)
-          @authorize = Proc.new {
+        if extension
+          @authorize = proc do
             @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
-          }
+          end
         else
           @authorize = block if block
         end
@@ -176,24 +178,18 @@ module RailsAdmin
       end
 
       def default_search_operator=(operator)
-        if %w{ default like starts_with ends_with is = }.include? operator
+        if %w[default like starts_with ends_with is =].include? operator
           @default_search_operator = operator
         else
-          raise ArgumentError, "Search operator '#{operator}' not supported"
+          fail(ArgumentError.new("Search operator '#{operator}' not supported"))
         end
       end
 
-      def reload_between_requests=(thingy)
-        ActiveSupport::Deprecation.warn("'#{self.name}.reload_between_requests=' is not in use any longer, please remove it from initialization files", caller)
-      end
+      # pool of all found model names from the whole application
+      def models_pool
+        excluded = (excluded_models.collect(&:to_s) + ['RailsAdmin::History'])
 
-      # Shortcut to access the list section's class configuration
-      # within a config DSL block
-      #
-      # @see RailsAdmin::Config::Sections::List
-      def list
-        ActiveSupport::Deprecation.warn("RailsAdmin::Config.list is deprecated", caller)
-        RailsAdmin::Config::Sections::List
+        (viable_models - excluded).uniq.sort
       end
 
       # Loads a model configuration instance from the registry or registers
@@ -210,38 +206,44 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def model(entity, &block)
         key = begin
-          if entity.kind_of?(RailsAdmin::AbstractModel)
-            entity.model.name.to_sym
-          elsif entity.kind_of?(Class)
+          if entity.is_a?(RailsAdmin::AbstractModel)
+            entity.model.try(:name).try :to_sym
+          elsif entity.is_a?(Class)
             entity.name.to_sym
-          elsif entity.kind_of?(String) || entity.kind_of?(Symbol)
+          elsif entity.is_a?(String) || entity.is_a?(Symbol)
             entity.to_sym
           else
             entity.class.name.to_sym
           end
         end
-        config = @registry[key] ||= RailsAdmin::Config::Model.new(entity)
-        config.instance_eval(&block) if block
-        config
+
+        if block
+          @registry[key] = RailsAdmin::Config::LazyModel.new(entity, &block)
+        else
+          @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        end
+      end
+
+      def default_hidden_fields=(fields)
+        if fields.is_a?(Array)
+          @default_hidden_fields = {}
+          @default_hidden_fields[:edit] = fields
+          @default_hidden_fields[:show] = fields
+        else
+          @default_hidden_fields = fields
+        end
+      end
+
+      # Returns action configuration object
+      def actions(&block)
+        RailsAdmin::Config::Actions.instance_eval(&block) if block
       end
 
       # Returns all model configurations
       #
-      # If a block is given it is evaluated in the context of configuration
-      # instances.
-      #
       # @see RailsAdmin::Config.registry
-      def models(&block)
-        RailsAdmin::AbstractModel.all.map{|m| model(m, &block)}
-      end
-
-      # Shortcut to access the navigation section's class configuration
-      # within a config DSL block
-      #
-      # @see RailsAdmin::Config::Sections::Navigation
-      def navigation
-        ActiveSupport::Deprecation.warn("RailsAdmin::Config.navigation is deprecated", caller)
-        RailsAdmin::Config::Sections::Navigation
+      def models
+        RailsAdmin::AbstractModel.all.collect { |m| model(m) }
       end
 
       # Reset all configurations to defaults.
@@ -249,39 +251,82 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def reset
         @compact_show_view = true
+        @yell_for_non_accessible_fields = true
         @authenticate = nil
         @authorize = nil
+        @audit = nil
         @current_user = nil
-        @default_hidden_fields = [:id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields = {}
+        @default_hidden_fields[:base] = [:_type]
+        @default_hidden_fields[:edit] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:show] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
         @default_items_per_page = 20
         @default_search_operator = 'default'
         @excluded_models = []
         @included_models = []
         @total_columns_width = 697
         @label_methods = [:name, :title]
-        @main_app_name = Proc.new { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
+        @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
+        @navigation_static_links = {}
+        @navigation_static_label = nil
+        RailsAdmin::Config::Actions.reset
       end
 
       # Reset a provided model's configuration.
       #
       # @see RailsAdmin::Config.registry
       def reset_model(model)
-        key = model.kind_of?(Class) ? model.name.to_sym : model.to_sym
+        key = model.is_a?(Class) ? model.name.to_sym : model.to_sym
         @registry.delete(key)
       end
 
       # Get all models that are configured as visible sorted by their weight and label.
       #
       # @see RailsAdmin::Config::Hideable
-      def visible_models
-        self.models.select {|m| m.visible? }.sort do |a, b|
-          (weight_order = a.weight <=> b.weight) == 0 ? a.label.downcase <=> b.label.downcase : weight_order
+
+      def visible_models(bindings)
+        visible_models_with_bindings(bindings).sort do |a, b|
+          if (weight_order = a.weight <=> b.weight) == 0
+            a.label.downcase <=> b.label.downcase
+          else
+            weight_order
+          end
+        end
+      end
+
+    private
+
+      def lchomp(base, arg)
+        base.to_s.reverse.chomp(arg.to_s.reverse).reverse
+      end
+
+      def viable_models
+        included_models.collect(&:to_s).presence || (
+          @@system_models ||= # memoization for tests
+            ([Rails.application] + Rails::Engine.subclasses.collect(&:instance)).flat_map do |app|
+              (app.paths['app/models'].to_a + app.config.autoload_paths).collect do |load_path|
+                Dir.glob(app.root.join(load_path)).collect do |load_dir|
+                  Dir.glob(load_dir + '/**/*.rb').collect do |filename|
+                    # app/models/module/class.rb => module/class.rb => module/class => Module::Class
+                    lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
+                  end
+                end
+              end
+            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
+          )
+      end
+
+      def visible_models_with_bindings(bindings)
+        models.collect { |m| m.with(bindings) }.select do |m|
+          m.visible? &&
+            bindings[:controller].authorized?(:index, m.abstract_model) &&
+            (!m.abstract_model.embedded? || m.abstract_model.cyclic?)
         end
       end
     end
 
     # Set default values for configuration options on load
-    self.reset
+    reset
   end
 end

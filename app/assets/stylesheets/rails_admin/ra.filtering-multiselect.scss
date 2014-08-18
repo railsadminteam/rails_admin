@@ -1,0 +1,88 @@
+.ra-multiselect {
+
+  .ra-multiselect-header {
+    margin-bottom: 5px;
+    clear: right;
+    .help {
+      float: left;
+      font-size: 10px;
+    }
+    .ui-icon {
+      position: relative;
+      top: 10px;
+      left: 3px;
+    }
+  }
+
+  .ra-multiselect-search {
+    width: 180px;
+  }
+
+  .ra-multiselect-column {
+    float: left;
+    .wrapper {
+      overflow-x: auto;
+      select {
+        height: auto;
+        min-height: 120px;
+        margin-bottom: 5px;
+        min-width: 200px;
+      }
+    }
+  }
+
+  .ra-multiselect-center {
+    width: 30px;
+    padding-top: 15px;
+    text-align: center;
+    .ui-icon {
+      margin: 5px auto;
+    }
+  }
+
+  span.ui-icon {
+    margin-right: 4px;
+  }
+  .ui-icon {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    &.ui-icon-circle-triangle-e {
+      background-position: -16px -32px !important;
+      background-image: image-url("rails_admin/multiselect/icon_sprite.png");
+    }
+    &.ui-icon-circle-triangle-e:hover {
+      background-position: -16px -48px !important;
+      background-image: image-url('rails_admin/multiselect/icon_sprite.png');
+    }
+    &.ui-icon-circle-triangle-w {
+      background-position: 0px -32px !important;
+      background-image: image-url('rails_admin/multiselect/icon_sprite.png');
+    }
+    &.ui-icon-circle-triangle-w:hover {
+      background-position: 0px -48px !important;
+      background-image: image-url('rails_admin/multiselect/icon_sprite.png');
+    }
+    &.ui-icon-circle-triangle-n {
+      background-position: 0px 0px !important;
+      margin-left: 1px;
+      background-image: image-url('rails_admin/multiselect/ui-icon-circle-triangle-n-light.png');
+    }
+    &.ui-icon-circle-triangle-n:hover {
+      background-position: 0px 0px !important;
+      margin-left: 1px;
+      background-image: image-url('rails_admin/multiselect/ui-icon-circle-triangle-n-dark.png');
+    }
+    &.ui-icon-circle-triangle-s {
+      background-position: 0px 0px !important;
+      margin-left: 1px;
+      background-image: image-url('rails_admin/multiselect/ui-icon-circle-triangle-s-light.png');
+    }
+    &.ui-icon-circle-triangle-s:hover {
+      background-position: 0px 0px !important;
+      margin-left: 1px;
+      background-image: image-url('rails_admin/multiselect/ui-icon-circle-triangle-s-dark.png');
+    }
+  }
+}
+

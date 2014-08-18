@@ -1,0 +1,24 @@
+fr:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%e %b"
+      compact: "%d/%m/%y"
+      long: "%e %B %Y"
+    day_names: [dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]
+    abbr_day_names: [dim, lun, mar, mer, jeu, ven, sam]
+    month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]
+    abbr_month_names: [~, jan., fév., mar., avr., mai, juin, juil., août, sept., oct., nov., déc.]
+    order:
+      - :day
+      - :month
+      - :year
+  time:
+    formats:
+      default: "%d %B %Y %H:%M:%S"
+      short: "%d %b %H:%M"
+      compact: "%d/%m/%y %H:%M"
+      long: "%A %d %B %Y %H:%M"
+      verb: "%d %B %Y"
+    am: 'am'
+    pm: 'pm'

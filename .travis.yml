@@ -1,15 +1,58 @@
-bundler_args: "--without debug"
-script: spec/ci.sh
-rvm:
-  - 1.8.7
-  - 1.9.2
-  - 1.9.3
-  - rbx
-  - rbx-2.0
-  - ree
+language: ruby
+
+before_script:
+  - cd spec/dummy_app
+  - bundle install
+  - bundle exec rake rails_admin:prepare_ci_env
+  - bundle exec rake db:create db:migrate
+  - cd ../../
+
+bundler_args: --without development --jobs=3 --retry=3
+
+cache: bundler
+
 env:
-  - "CI_DB_ADAPTER=sqlite3"
-  - "CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres"
-  - "CI_DB_ADAPTER=mysql"
+  matrix:
+    - CI_ORM=mongoid
+    - CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+  global:
+    - JRUBY_OPTS="$JRUBY_OPTS --debug"
+
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1
+  - rbx-2
+  - ruby-head
+
+services:
+  - mongodb
+
+sudo: false
+
+matrix:
+  include:
+    - rvm: 2.1
+      env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
+    - rvm: 2.1
+      env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
+    - rvm: 2.1
+      env: RAILS_VERSION=4.0 CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+    - rvm: 2.1
+      env: RAILS_VERSION=4.0 CI_ORM=mongoid
+    - rvm: jruby-19mode
+      env: CI_ORM=mongoid
+    - rvm: jruby-19mode
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+    - rvm: jruby-head
+      env: CI_ORM=mongoid
+    - rvm: jruby-head
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+  allow_failures:
+    - rvm: jruby-head
+    - rvm: rbx-2
+    - rvm: ruby-head
+  fast_finish: true
+
 notifications:
-  irc: "irc.freenode.org#railsadmin"
+  irc: irc.freenode.org#railsadmin

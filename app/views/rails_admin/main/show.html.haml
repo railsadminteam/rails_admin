@@ -1,14 +1,16 @@
-- @model_config.show.with(:object => @object, :view => self).visible_groups.each do |fieldset|
-  - unless (fields = fieldset.with(:object => @object, :view => self).visible_fields).empty?
-    - if !(values = fields.map{ |f| f.pretty_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
+- @model_config.show.with(object: @object, view: self, controller: self.controller).visible_groups.each do |fieldset|
+  - unless (fields = fieldset.with(object: @object, view: self, controller: self.controller).visible_fields).empty?
+    - if !(values = fields.map{ |f| f.value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
       .fieldset
         %h4
           = fieldset.label
-          - if fieldset.help
-            %small= fieldset.help
+        - if fieldset.help
+          %p= fieldset.help
         %dl
           - fields.each_with_index do |field, index|
-            - if (value = values[index]) || !RailsAdmin::config.compact_show_view
-              %dt.label{:class => "#{field.type_css_class} #{field.css_class}"}= field.label
-              %dd
-                %pre.prettyprint= value || ' - '
+            - unless values[index].nil? && RailsAdmin::config.compact_show_view
+              %dt
+                %span.label.label-info{class: "#{field.type_css_class} #{field.css_class}"}
+                  = field.label
+              %dd.well
+                = field.pretty_value

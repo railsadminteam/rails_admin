@@ -1,7 +1,7 @@
 /*
- * jQuery UI Timepicker 0.2.5
+ * jQuery UI Timepicker
  *
- * Copyright 2010-2011, Francois Gelinas
+ * Copyright 2010-2013, Francois Gelinas
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -38,12 +38,12 @@
                              ->T-Rex<-
 */
 
-(function ($, undefined) {
+(function ($) {
 
-    $.extend($.ui, { timepicker: { version: "0.2.5"} });
+    $.extend($.ui, { timepicker: { version: "0.3.2"} });
 
-    var PROP_NAME = 'timepicker';
-    var tpuuid = new Date().getTime();
+    var PROP_NAME = 'timepicker',
+        tpuuid = new Date().getTime();
 
     /* Time picker manager.
     Use the singleton instance of this class, $.timepicker, to interact with the time picker.
@@ -53,7 +53,6 @@
     function Timepicker() {
         this.debug = true; // Change this to true to start debugging
         this._curInst = null; // The current instance in use
-        this._isInline = false; // true if the instance is displayed inline
         this._disabledInputs = []; // List of time picker inputs that have been disabled
         this._timepickerShowing = false; // True if the popup picker is showing , false if not
         this._inDialog = false; // True if showing within a "dialog", false if not
@@ -65,9 +64,12 @@
 
         this.regional = []; // Available regional settings, indexed by language code
         this.regional[''] = { // Default regional settings
-            hourText: 'Hour', // Display text for hours section
-            minuteText: 'Minute', // Display text for minutes link
-            amPmText: ['AM', 'PM'] // Display text for AM PM
+            hourText: 'Hour',           // Display text for hours section
+            minuteText: 'Minute',       // Display text for minutes link
+            amPmText: ['AM', 'PM'],     // Display text for AM PM
+            closeButtonText: 'Done',        // Text for the confirmation button (ok button)
+            nowButtonText: 'Now',           // Text for the now button
+            deselectButtonText: 'Deselect'  // Text for the deselect button
         };
         this._defaults = { // Global defaults for all the time picker instances
             showOn: 'focus',    // 'focus' for popup on focus,
@@ -97,8 +99,6 @@
             //NEW: 2011-02-03
             onHourShow: null,			    // callback for enabling / disabling on selectable hours  ex : function(hour) { return true; }
             onMinuteShow: null,             // callback for enabling / disabling on time selection  ex : function(hour,minute) { return true; }
-            // 2011-03-22 - v 0.0.9
-            zIndex: null,                   // specify zIndex
 
             hours: {
                 starts: 0,                  // first displayed hour
@@ -112,7 +112,13 @@
             rows: 4,                        // number of rows for the input tables, minimum 2, makes more sense if you use multiple of 2
             // 2011-08-05 0.2.4
             showHours: true,                // display the hours section of the dialog
-            showMinutes: true               // display the minute section of the dialog
+            showMinutes: true,              // display the minute section of the dialog
+            optionalMinutes: false,         // optionally parse inputs of whole hours with minutes omitted
+						
+            // buttons
+            showCloseButton: false,         // shows an OK button to confirm the edit
+            showNowButton: false,           // Shows the 'now' button
+            showDeselectButton: false       // Shows the deselect time button
 
         };
         $.extend(this._defaults, this.regional['']);
@@ -130,7 +136,6 @@
                 console.log.apply('', arguments);
         },
 
-        // TODO rename to "widget" when switching to widget factory
         _widgetTimepicker: function () {
             return this.tpDiv;
         },
@@ -261,17 +266,23 @@
                 input[isRTL ? 'before' : 'after'](inst.append);
             }
             input.unbind('focus.timepicker', this._showTimepicker);
+            input.unbind('click.timepicker', this._adjustZIndex);
+
             if (inst.trigger) { inst.trigger.remove(); }
 
             var showOn = this._get(inst, 'showOn');
             if (showOn == 'focus' || showOn == 'both') { // pop-up time picker when in the marked field
                 input.bind("focus.timepicker", this._showTimepicker);
+                input.bind("click.timepicker", this._adjustZIndex);
             }
             if (showOn == 'button' || showOn == 'both') { // pop-up time picker when 'button' element is clicked
                 var button = this._get(inst, 'button');
                 $(button).bind("click.timepicker", function () {
-                    if ($.timepicker._timepickerShowing && $.timepicker._lastInput == input[0]) { $.timepicker._hideTimepicker(); }
-                    else { $.timepicker._showTimepicker(input[0]); }
+                    if ($.timepicker._timepickerShowing && $.timepicker._lastInput == input[0]) {
+                        $.timepicker._hideTimepicker();
+                    } else if (!inst.input.is(':disabled')) {
+                        $.timepicker._showTimepicker(input[0]);
+                    }
                     return false;
                 });
 
@@ -297,12 +308,19 @@
             inst.tpDiv.show();
         },
 
+        _adjustZIndex: function(input) {
+            input = input.target || input;
+            var inst = $.timepicker._getInst(input);
+            inst.tpDiv.css('zIndex', $.timepicker._getZIndex(input) +1);
+        },
+
         /* Pop-up the time picker for a given input field.
         @param  input  element - the input field attached to the time picker or
         event - if triggered by focus */
         _showTimepicker: function (input) {
             input = input.target || input;
             if (input.nodeName.toLowerCase() != 'input') { input = $('input', input.parentNode)[0]; } // find from button/image trigger
+
             if ($.timepicker._isDisabledTimepicker(input) || $.timepicker._lastInput == input) { return; } // already here
 
             // fix v 0.0.8 - close current timepicker before showing another one
@@ -330,10 +348,6 @@
                 isFixed |= $(this).css('position') == 'fixed';
                 return !isFixed;
             });
-            if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
-                $.timepicker._pos[0] -= document.documentElement.scrollLeft;
-                $.timepicker._pos[1] -= document.documentElement.scrollTop;
-            }
 
             var offset = { left: $.timepicker._pos[0], top: $.timepicker._pos[1] };
 
@@ -372,7 +386,7 @@
             if ( ! inst.inline ) {
                 var showAnim = $.timepicker._get(inst, 'showAnim');
                 var duration = $.timepicker._get(inst, 'duration');
-                var zIndex = $.timepicker._get(inst, 'zIndex');
+
                 var postProcess = function () {
                     $.timepicker._timepickerShowing = true;
                     var borders = $.timepicker._getBorders(inst.tpDiv);
@@ -382,24 +396,54 @@
 					});
                 };
 
-                // if not zIndex specified in options, use target zIndex + 1
-                if ( ! zIndex) {
-                    zIndex = $(input).attr('zIndex') + 1;
-                }
-                inst.tpDiv.attr('zIndex', zIndex);
-                inst.tpDiv.css('zIndex', zIndex);
+                // Fixed the zIndex problem for real (I hope) - FG - v 0.2.9
+                $.timepicker._adjustZIndex(input);
+                //inst.tpDiv.css('zIndex', $.timepicker._getZIndex(input) +1);
 
                 if ($.effects && $.effects[showAnim]) {
                     inst.tpDiv.show(showAnim, $.timepicker._get(inst, 'showOptions'), duration, postProcess);
                 }
                 else {
-                    inst.tpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
+                    inst.tpDiv.show((showAnim ? duration : null), postProcess);
                 }
                 if (!showAnim || !duration) { postProcess(); }
                 if (inst.input.is(':visible') && !inst.input.is(':disabled')) { inst.input.focus(); }
                 $.timepicker._curInst = inst;
             }
         },
+
+        // This is an enhanced copy of the zIndex function of UI core 1.8.?? For backward compatibility.
+        // Enhancement returns maximum zindex value discovered while traversing parent elements,
+        // rather than the first zindex value found. Ensures the timepicker popup will be in front,
+        // even in funky scenarios like non-jq dialog containers with large fixed zindex values and
+        // nested zindex-influenced elements of their own.
+        _getZIndex: function (target) {
+            var elem = $(target);
+            var maxValue = 0;
+            var position, value;
+            while (elem.length && elem[0] !== document) {
+                position = elem.css("position");
+                if (position === "absolute" || position === "relative" || position === "fixed") {
+                    value = parseInt(elem.css("zIndex"), 10);
+                    if (!isNaN(value) && value !== 0) {
+                        if (value > maxValue) { maxValue = value; }
+                    }
+                }
+                elem = elem.parent();
+            }
+
+            return maxValue;
+        },
+
+        /* Refresh the time picker
+           @param   target  element - The target input field or inline container element. */
+        _refreshTimepicker: function(target) {
+            var inst = this._getInst(target);
+            if (inst) {
+                this._updateTimepicker(inst);
+            }
+        },
+
 
         /* Generate the time picker content. */
         _updateTimepicker: function (inst) {
@@ -421,14 +465,17 @@
             // then letting the browser interpret the inline events)
             // the binding for the minute cells also exists in _updateMinuteDisplay
             .find('.ui-timepicker-minute-cell')
+                .unbind()
                 .bind("click", { fromDoubleClick:false }, $.proxy($.timepicker.selectMinutes, this))
                 .bind("dblclick", { fromDoubleClick:true }, $.proxy($.timepicker.selectMinutes, this))
             .end()
             .find('.ui-timepicker-hour-cell')
+                .unbind()
                 .bind("click", { fromDoubleClick:false }, $.proxy($.timepicker.selectHours, this))
                 .bind("dblclick", { fromDoubleClick:true }, $.proxy($.timepicker.selectHours, this))
             .end()
 			.find('.ui-timepicker td a')
+                .unbind()
 				.bind('mouseout', function () {
 				    $(this).removeClass('ui-state-hover');
 				    if (this.className.indexOf('ui-timepicker-prev') != -1) $(this).removeClass('ui-timepicker-prev-hover');
@@ -445,10 +492,19 @@
 			.end()
 			.find('.' + this._dayOverClass + ' a')
 				.trigger('mouseover')
-			.end();
+			.end()
+            .find('.ui-timepicker-now').bind("click", function(e) {
+                    $.timepicker.selectNow(e);
+            }).end()
+            .find('.ui-timepicker-deselect').bind("click",function(e) {
+                    $.timepicker.deselectTime(e);
+            }).end()
+            .find('.ui-timepicker-close').bind("click",function(e) {
+                    $.timepicker._hideTimepicker();
+            }).end();
         },
 
-        /* Generate the HTML for the current state of the date picker. */
+        /* Generate the HTML for the current state of the time picker. */
         _generateHTML: function (inst) {
 
             var h, m, row, col, html, hoursHtml, minutesHtml = '',
@@ -469,7 +525,16 @@
                 hours_options = this._get(inst, 'hours'),
                 hoursPerRow = null,
                 hourCounter = 0,
-                hourLabel = this._get(inst, 'hourText');
+                hourLabel = this._get(inst, 'hourText'),
+                showCloseButton = this._get(inst, 'showCloseButton'),
+                closeButtonText = this._get(inst, 'closeButtonText'),
+                showNowButton = this._get(inst, 'showNowButton'),
+                nowButtonText = this._get(inst, 'nowButtonText'),
+                showDeselectButton = this._get(inst, 'showDeselectButton'),
+                deselectButtonText = this._get(inst, 'deselectButtonText'),
+                showButtonPanel = showCloseButton || showNowButton || showDeselectButton;
+            
+
 
             // prepare all hours and minutes, makes it easier to distribute by rows
             for (h = hours_options.starts; h <= hours_options.ends; h++) {
@@ -491,7 +556,7 @@
                 amRows = Math.floor(amItems / hours.length * rows);
                 pmRows = Math.floor(pmItems / hours.length * rows);
 
-                // assign the extra row to the period that is more densly populated
+                // assign the extra row to the period that is more densely populated
                 if (rows != amRows + pmRows) {
                     // Make sure: AM Has Items and either PM Does Not, AM has no rows yet, or AM is more dense
                     if (amItems && (!pmItems || !amRows || (pmRows && amItems / amRows >= pmItems / pmRows))) {
@@ -502,7 +567,14 @@
                 }
                 amFirstRow = Math.min(amRows, 1);
                 pmFirstRow = amRows + 1;
-                hoursPerRow = Math.ceil(Math.max(amItems / amRows, pmItems / pmRows));
+
+                if (amRows == 0) {
+                    hoursPerRow = Math.ceil(pmItems / pmRows);
+                } else if (pmRows == 0) {
+                    hoursPerRow = Math.ceil(amItems / amRows);
+                } else {
+                    hoursPerRow = Math.ceil(Math.max(amItems / amRows, pmItems / pmRows));
+                }
             }
 
 
@@ -536,8 +608,8 @@
                     }
                     html += '</tr>';
                 }
-                html += '</tr></table>' + // Close the hours cells table
-                        '</td>';          // Close the Hour td
+                html += '</table>' + // Close the hours cells table
+                        '</td>'; // Close the Hour td
             }
 
             if (showMinutes) {
@@ -546,11 +618,30 @@
                 html += '</td>';
             }
             
-            html += '</tr></table>';
+            html += '</tr>';
 
-             /* IE6 IFRAME FIX (taken from datepicker 1.5.3, fixed in 0.1.2 */
-            html += ($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ?
-                '<iframe src="javascript:false;" class="ui-timepicker-cover" frameborder="0"></iframe>' : '');
+
+            if (showButtonPanel) {
+                var buttonPanel = '<tr><td colspan="3"><div class="ui-timepicker-buttonpane ui-widget-content">';
+                if (showNowButton) {
+                    buttonPanel += '<button type="button" class="ui-timepicker-now ui-state-default ui-corner-all" '
+                                   + ' data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\") + '" >'
+                                   + nowButtonText + '</button>';
+                }
+                if (showDeselectButton) {
+                    buttonPanel += '<button type="button" class="ui-timepicker-deselect ui-state-default ui-corner-all" '
+                                   + ' data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\") + '" >'
+                                   + deselectButtonText + '</button>';
+                }
+                if (showCloseButton) {
+                    buttonPanel += '<button type="button" class="ui-timepicker-close ui-state-default ui-corner-all" '
+                                   + ' data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\") + '" >'
+                                   + closeButtonText + '</button>';
+                }
+
+                html += buttonPanel + '</div></td></tr>';
+            }
+            html += '</table>';
 
             return html;
         },
@@ -635,7 +726,7 @@
                 }
                 html += '</tr>';
             }
-            
+
             html += '</table>';
 
             return html;
@@ -724,6 +815,26 @@
         },
 
 
+        /* Detach a timepicker from its control.
+           @param  target    element - the target input field or division or span */
+        _destroyTimepicker: function(target) {
+            var $target = $(target);
+            var inst = $.data(target, PROP_NAME);
+            if (!$target.hasClass(this.markerClassName)) {
+                return;
+            }
+            var nodeName = target.nodeName.toLowerCase();
+            $.removeData(target, PROP_NAME);
+            if (nodeName == 'input') {
+                inst.append.remove();
+                inst.trigger.remove();
+                $target.removeClass(this.markerClassName)
+                    .unbind('focus.timepicker', this._showTimepicker)
+                    .unbind('click.timepicker', this._adjustZIndex);
+            } else if (nodeName == 'div' || nodeName == 'span')
+                $target.removeClass(this.markerClassName).empty();
+        },
+
         /* Enable the date picker to a jQuery selection.
            @param  target    element - the target input field or division or span */
         _enableTimepicker: function(target) {
@@ -737,12 +848,17 @@
             var nodeName = target.nodeName.toLowerCase();
             if (nodeName == 'input') {
                 target.disabled = false;
+                var button = this._get(inst, 'button');
+                $(button).removeClass('ui-state-disabled').disabled = false;
                 inst.trigger.filter('button').
                     each(function() { this.disabled = false; }).end();
             }
             else if (nodeName == 'div' || nodeName == 'span') {
                 var inline = $target.children('.' + this._inlineClass);
                 inline.children().removeClass('ui-state-disabled');
+                inline.find('button').each(
+                    function() { this.disabled = false }
+                )
             }
             this._disabledInputs = $.map(this._disabledInputs,
                 function(value) { return (value == target_id ? null : value); }); // delete entry
@@ -758,6 +874,9 @@
             }
             var nodeName = target.nodeName.toLowerCase();
             if (nodeName == 'input') {
+                var button = this._get(inst, 'button');
+
+                $(button).addClass('ui-state-disabled').disabled = true;
                 target.disabled = true;
 
                 inst.trigger.filter('button').
@@ -767,6 +886,10 @@
             else if (nodeName == 'div' || nodeName == 'span') {
                 var inline = $target.children('.' + this._inlineClass);
                 inline.children().addClass('ui-state-disabled');
+                inline.find('button').each(
+                    function() { this.disabled = true }
+                )
+
             }
             this._disabledInputs = $.map(this._disabledInputs,
                 function(value) { return (value == target ? null : value); }); // delete entry
@@ -861,13 +984,9 @@
 					    (showAnim == 'fadeIn' ? 'fadeOut' : 'hide'))]((showAnim ? duration : null), postProcess);
                 }
                 if (!showAnim) { postProcess(); }
-                var onClose = this._get(inst, 'onClose');
-                if (onClose) {
-                    onClose.apply(
-                        (inst.input ? inst.input[0] : null),
-					    [(inst.input ? inst.input.val() : ''), inst]);  // trigger custom callback
-                }
+
                 this._timepickerShowing = false;
+
                 this._lastInput = null;
                 if (this._inDialog) {
                     this._dialogInput.css({ position: 'absolute', left: '0', top: '-100px' });
@@ -877,8 +996,18 @@
                     }
                 }
                 this._inDialog = false;
+
+                var onClose = this._get(inst, 'onClose');
+                 if (onClose) {
+                     onClose.apply(
+                         (inst.input ? inst.input[0] : null),
+ 					    [(inst.input ? inst.input.val() : ''), inst]);  // trigger custom callback
+                 }
+
             }
         },
+
+
 
         /* Tidy up after a dialog display. */
         _tidyDialog: function (inst) {
@@ -912,24 +1041,58 @@
             var timeToParse = defaultTime == 'now' ? this._getCurrentTimeRounded(inst) : defaultTime;
             if ((inst.inline == false) && (inst.input.val() != '')) { timeToParse = inst.input.val() }
 
-            var timeVal = inst.lastVal = timeToParse;
-
-            
-
-            if (timeToParse == '') {
-                inst.hours = -1;
-                inst.minutes = -1;
+            if (timeToParse instanceof Date) {
+                inst.hours = timeToParse.getHours();
+                inst.minutes = timeToParse.getMinutes();
             } else {
-                var time = this.parseTime(inst, timeVal);
-                inst.hours = time.hours;
-                inst.minutes = time.minutes;
+                var timeVal = inst.lastVal = timeToParse;
+                if (timeToParse == '') {
+                    inst.hours = -1;
+                    inst.minutes = -1;
+                } else {
+                    var time = this.parseTime(inst, timeVal);
+                    inst.hours = time.hours;
+                    inst.minutes = time.minutes;
+                }
             }
+
 
             $.timepicker._updateTimepicker(inst);
         },
-        /* Set the dates for a jQuery selection.
-	    @param  target   element - the target input field or division or span
-	    @param  date     Date - the new date */
+
+        /* Update or retrieve the settings for an existing time picker.
+           @param  target  element - the target input field or division or span
+           @param  name    object - the new settings to update or
+                           string - the name of the setting to change or retrieve,
+                           when retrieving also 'all' for all instance settings or
+                           'defaults' for all global defaults
+           @param  value   any - the new value for the setting
+                       (omit if above is an object or to retrieve a value) */
+        _optionTimepicker: function(target, name, value) {
+            var inst = this._getInst(target);
+            if (arguments.length == 2 && typeof name == 'string') {
+                return (name == 'defaults' ? $.extend({}, $.timepicker._defaults) :
+                    (inst ? (name == 'all' ? $.extend({}, inst.settings) :
+                    this._get(inst, name)) : null));
+            }
+            var settings = name || {};
+            if (typeof name == 'string') {
+                settings = {};
+                settings[name] = value;
+            }
+            if (inst) {
+                if (this._curInst == inst) {
+                    this._hideTimepicker();
+                }
+                extendRemove(inst.settings, settings);
+                this._updateTimepicker(inst);
+            }
+        },
+
+
+        /* Set the time for a jQuery selection.
+	    @param  target  element - the target input field or division or span
+	    @param  time    String - the new time */
 	    _setTimeTimepicker: function(target, time) {
 		    var inst = this._getInst(target);
 		    if (inst) {
@@ -943,11 +1106,16 @@
         _setTime: function(inst, time, noChange) {
             var origHours = inst.hours;
             var origMinutes = inst.minutes;
-            var time = this.parseTime(inst, time);
-            inst.hours = time.hours;
-            inst.minutes = time.minutes;
+            if (time instanceof Date) {
+                inst.hours = time.getHours();
+                inst.minutes = time.getMinutes();
+            } else {
+                var time = this.parseTime(inst, time);
+                inst.hours = time.hours;
+                inst.minutes = time.minutes;
+            }
 
-            if ((origHours != inst.hours || origMinutes != inst.minuts) && !noChange) {
+            if ((origHours != inst.hours || origMinutes != inst.minutes) && !noChange) {
                 inst.input.trigger('change');
             }
             this._updateTimepicker(inst);
@@ -956,28 +1124,30 @@
 
         /* Return the current time, ready to be parsed, rounded to the closest 5 minute */
         _getCurrentTimeRounded: function (inst) {
-            var currentTime = new Date();
-            var timeSeparator = this._get(inst, 'timeSeparator');
-            // setting selected time , least priority first
-            var currentMinutes = currentTime.getMinutes()
-            // round to closest 5
-            currentMinutes = Math.round( currentMinutes / 5 ) * 5;
-
-            return currentTime.getHours().toString() + timeSeparator + currentMinutes.toString();
+            var currentTime = new Date(),
+                currentMinutes = currentTime.getMinutes(),
+                // round to closest 5
+                adjustedMinutes = Math.round( currentMinutes / 5 ) * 5;
+            currentTime.setMinutes(adjustedMinutes);
+            return currentTime;
         },
 
         /*
-        * Pase a time string into hours and minutes
+        * Parse a time string into hours and minutes
         */
         parseTime: function (inst, timeVal) {
             var retVal = new Object();
             retVal.hours = -1;
             retVal.minutes = -1;
+            
+            if(!timeVal)
+                return '';
 
             var timeSeparator = this._get(inst, 'timeSeparator'),
                 amPmText = this._get(inst, 'amPmText'),
                 showHours = this._get(inst, 'showHours'),
                 showMinutes = this._get(inst, 'showMinutes'),
+                optionalMinutes = this._get(inst, 'optionalMinutes'),
                 showPeriod = (this._get(inst, 'showPeriod') == true),
                 p = timeVal.indexOf(timeSeparator);
 
@@ -987,7 +1157,7 @@
                 retVal.minutes = parseInt(timeVal.substr(p + 1), 10);
             }
             // check for hours only
-            else if ( (showHours) && ( ! showMinutes) ) {
+            else if ( (showHours) && ( !showMinutes || optionalMinutes ) ) {
                 retVal.hours = parseInt(timeVal, 10);
             }
             // check for minutes only
@@ -1009,12 +1179,34 @@
             return retVal;
         },
 
+        selectNow: function(event) {
+            var id = $(event.target).attr("data-timepicker-instance-id"),
+                $target = $(id),
+                inst = this._getInst($target[0]);
+            //if (!inst || (input && inst != $.data(input, PROP_NAME))) { return; }
+            var currentTime = new Date();
+            inst.hours = currentTime.getHours();
+            inst.minutes = currentTime.getMinutes();
+            this._updateSelectedValue(inst);
+            this._updateTimepicker(inst);
+            this._hideTimepicker();
+        },
+
+        deselectTime: function(event) {
+            var id = $(event.target).attr("data-timepicker-instance-id"),
+                $target = $(id),
+                inst = this._getInst($target[0]);
+            inst.hours = -1;
+            inst.minutes = -1;
+            this._updateSelectedValue(inst);
+            this._hideTimepicker();
+        },
 
 
         selectHours: function (event) {
             var $td = $(event.currentTarget),
                 id = $td.attr("data-timepicker-instance-id"),
-                newHours = $td.attr("data-hour"),
+                newHours = parseInt($td.attr("data-hour")),
                 fromDoubleClick = event.data.fromDoubleClick,
                 $target = $(id),
                 inst = this._getInst($target[0]),
@@ -1047,7 +1239,7 @@
         selectMinutes: function (event) {
             var $td = $(event.currentTarget),
                 id = $td.attr("data-timepicker-instance-id"),
-                newMinutes = $td.attr("data-minute"),
+                newMinutes = parseInt($td.attr("data-minute")),
                 fromDoubleClick = event.data.fromDoubleClick,
                 $target = $(id),
                 inst = this._getInst($target[0]),
@@ -1088,21 +1280,32 @@
         /* this function process selected time and return it parsed according to instance options */
         _getParsedTime: function(inst) {
 
-            if ((inst.hours < 0) || (inst.hours > 23)) { inst.hours = 12; }
-            if ((inst.minutes < 0) || (inst.minutes > 59)) { inst.minutes = 0; }
+            if (inst.hours == -1 && inst.minutes == -1) {
+                return '';
+            }
+
+            // default to 0 AM if hours is not valid
+            if ((inst.hours < inst.hours.starts) || (inst.hours > inst.hours.ends )) { inst.hours = 0; }
+            // default to 0 minutes if minute is not valid
+            if ((inst.minutes < inst.minutes.starts) || (inst.minutes > inst.minutes.ends)) { inst.minutes = 0; }
 
             var period = "",
                 showPeriod = (this._get(inst, 'showPeriod') == true),
                 showLeadingZero = (this._get(inst, 'showLeadingZero') == true),
                 showHours = (this._get(inst, 'showHours') == true),
                 showMinutes = (this._get(inst, 'showMinutes') == true),
+                optionalMinutes = (this._get(inst, 'optionalMinutes') == true),
                 amPmText = this._get(inst, 'amPmText'),
                 selectedHours = inst.hours ? inst.hours : 0,
                 selectedMinutes = inst.minutes ? inst.minutes : 0,
                 displayHours = selectedHours ? selectedHours : 0,
                 parsedTime = '';
 
-            if (showPeriod) {
+            // fix some display problem when hours or minutes are not selected yet
+            if (displayHours == -1) { displayHours = 0 }
+            if (selectedMinutes == -1) { selectedMinutes = 0 }
+
+            if (showPeriod) { 
                 if (inst.hours == 0) {
                     displayHours = 12;
                 }
@@ -1126,10 +1329,10 @@
             if (showHours) {
                 parsedTime += h;
             }
-            if (showHours && showMinutes) {
+            if (showHours && showMinutes && (!optionalMinutes || m != 0)) {
                 parsedTime += this._get(inst, 'timeSeparator');
             }
-            if (showMinutes) {
+            if (showMinutes && (!optionalMinutes || m != 0)) {
                 parsedTime += m;
             }
             if (showHours) {
@@ -1149,6 +1352,19 @@
             }
         },
 
+        _getTimeAsDateTimepicker: function(input) {
+            var inst = this._getInst(input);
+            if (inst.hours == -1 && inst.minutes == -1) {
+                return '';
+            }
+
+            // default to 0 AM if hours is not valid
+            if ((inst.hours < inst.hours.starts) || (inst.hours > inst.hours.ends )) { inst.hours = 0; }
+            // default to 0 minutes if minute is not valid
+            if ((inst.minutes < inst.minutes.starts) || (inst.minutes > inst.minutes.ends)) { inst.minutes = 0; }
+
+            return new Date(0, 0, 0, inst.hours, inst.minutes, 0);
+        },
         /* This might look unused but it's called by the $.fn.timepicker function with param getTime */
         /* added v 0.2.3 - gitHub issue #5 - Thanks edanuff */
         _getTimeTimepicker : function(input) {
@@ -1176,20 +1392,22 @@
     @return  jQuery object */
     $.fn.timepicker = function (options) {
 
-        /* Initialise the date picker. */
+        /* Initialise the time picker. */
         if (!$.timepicker.initialized) {
             $(document).mousedown($.timepicker._checkExternalClick).
 			find('body').append($.timepicker.tpDiv);
             $.timepicker.initialized = true;
         }
 
+
+
         var otherArgs = Array.prototype.slice.call(arguments, 1);
-        if (typeof options == 'string' && (options == 'getTime' || options == 'getHour' || options == 'getMinute' ))
+        if (typeof options == 'string' && (options == 'getTime' || options == 'getTimeAsDate' || options == 'getHour' || options == 'getMinute' ))
             return $.timepicker['_' + options + 'Timepicker'].
-			apply($.timepicker, [this[0]].concat(otherArgs));
+			    apply($.timepicker, [this[0]].concat(otherArgs));
         if (options == 'option' && arguments.length == 2 && typeof arguments[1] == 'string')
             return $.timepicker['_' + options + 'Timepicker'].
-			apply($.timepicker, [this[0]].concat(otherArgs));
+                apply($.timepicker, [this[0]].concat(otherArgs));
         return this.each(function () {
             typeof options == 'string' ?
 			$.timepicker['_' + options + 'Timepicker'].
@@ -1210,7 +1428,7 @@
     $.timepicker = new Timepicker(); // singleton instance
     $.timepicker.initialized = false;
     $.timepicker.uuid = new Date().getTime();
-    $.timepicker.version = "0.2.5";
+    $.timepicker.version = "0.3.2";
 
     // Workaround for #4055
     // Add another global to avoid noConflict issues with inline event handlers

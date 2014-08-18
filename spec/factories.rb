@@ -12,7 +12,7 @@ FactoryGirl.define do
     sequence(:round)
     sequence(:pick)
     sequence(:overall)
-    sequence(:college) {|n| "College #{n}"}
+    sequence(:college) { |n| "College #{n}" }
     association :team
     association :player
   end
@@ -31,18 +31,22 @@ FactoryGirl.define do
     sequence(:name) { |n| "League #{n}" }
   end
 
+  factory :division do
+    sequence(:custom_league_id)
+    sequence(:name) { |n| "Division #{n}" }
+  end
+
   factory :fan do
     sequence(:name) { |n| "Fan #{n}" }
   end
 
   factory :user do
     sequence(:email) { |n| "username_#{n}@example.com" }
-    sequence(:password) { |n| "password" }
+    sequence(:password) { |_n| 'password' }
   end
 
   factory :field_test do
   end
-
 
   factory :comment do
     sequence(:content) do |n| <<-EOF
@@ -57,10 +61,14 @@ FactoryGirl.define do
   end
 
   factory :ball do
-    color(%W(red blue green yellow purple brown black white).sample)
+    color(%w[red blue green yellow purple brown black white].sample)
   end
 
   factory :hardball do
     color('blue')
+  end
+
+  factory :image do
+    file File.open(Rails.root.join('public', 'robots.txt'))
   end
 end

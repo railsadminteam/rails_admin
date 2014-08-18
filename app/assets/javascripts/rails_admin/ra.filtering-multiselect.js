@@ -69,12 +69,15 @@
       this.collection = $('<select multiple="multiple"></select>');
 
       this.collection.addClass("ra-multiselect-collection");
-
+      
       this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
-
-      this.columns.left.append(this.collection)
+      
+      this.columns.left.html(this.collection)
                           .append(this.addAll);
-
+      
+      this.collection.wrap('<div class="wrapper"/>');
+      
+      
       this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
 
       this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
@@ -87,11 +90,15 @@
       }
 
       this.selection = $('<select class="ra-multiselect-selection" multiple="multiple"></select>');
+      
+      
 
       this.removeAll = $('<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
 
       this.columns.right.append(this.selection)
                            .append(this.removeAll);
+      
+      this.selection.wrap('<div class="wrapper"/>');
 
       this.element.css({display: "none"});
     },
@@ -103,24 +110,29 @@
       this.addAll.click(function(e){
         widget._select($('option', widget.collection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       /* Add to selection */
       this.add.click(function(e){
         widget._select($(':selected', widget.collection));
+        
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       /* Remove all from selection */
       this.removeAll.click(function(e){
         widget._deSelect($('option', widget.selection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       /* Remove from selection */
       this.remove.click(function(e){
         widget._deSelect($(':selected', widget.selection));
         e.preventDefault();
+        widget.selection.trigger('change');
       });
 
       var timeout = null;
@@ -151,14 +163,15 @@
     _queryFilter: function(val) {
       var widget = this;
       widget._query(val, function(matches) {
-        var i, html = "";
+        var i;
+        widget.collection.html('');
         for (i in matches) {
           if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
-            html += '<option value="' + matches[i].id + '">' + matches[i].label + '</option>';
+            widget.collection.append(
+              $('<option></option>').attr('value', matches[i].id).attr('title', matches[i].label).text(matches[i].label)
+            );
           }
         }
-
-        widget.collection.html(html);
       });
     },
 
@@ -168,10 +181,10 @@
       this.element.find("option").each(function(i, option) {
         if (option.selected) {
           widget._cache[option.value] = option.innerHTML;
-          $(option).clone().appendTo(widget.selection).attr("selected", false);
+          $(option).clone().appendTo(widget.selection).attr("selected", false).attr("title", $(option).text());
         } else {
           widget._cache[option.value] = option.innerHTML;
-          $(option).clone().appendTo(widget.collection).attr("selected", false);
+          $(option).clone().appendTo(widget.collection).attr("selected", false).attr("title", $(option).text());
         }
       });
     },
@@ -179,7 +192,7 @@
     _deSelect: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        widget.element.find("option[value=" + option.value + "]").removeAttr("selected");
+        widget.element.find('option[value="' + option.value + '"]').removeAttr("selected");
       });
       $(options).appendTo(this.collection).attr('selected', false);
     },
@@ -231,11 +244,11 @@
     _select: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        var el = widget.element.find("option[value=" + option.value + "]");
+        var el = widget.element.find('option[value="' + option.value + '"]');
         if (el.length) {
           el.attr("selected", "selected");
         } else {
-          widget.element.append($('<option value="' + option.value + '" selected="selected"></option>'));
+          widget.element.append($('<option></option>').attr('value', option.value).attr('selected', "selected"));
         }
       });
       $(options).appendTo(this.selection).attr('selected', false);
@@ -247,8 +260,8 @@
         options.each(function(i, option) {
           var prev = $(option).prev();
           if (prev.length > 0) {
-            var el = widget.element.find("option[value=" + option.value + "]");
-            var el_prev = widget.element.find("option[value=" + prev[0].value + "]");
+            var el = widget.element.find('option[value="' + option.value + '"]');
+            var el_prev = widget.element.find('option[value="' + prev[0].value + '"]');
             el_prev.before(el);
             prev.before($(option));
           }
@@ -258,8 +271,8 @@
         options.reverse().each(function(i, option) {
           var next = $(option).next();
           if (next.length > 0) {
-            var el = widget.element.find("option[value=" + option.value + "]");
-            var el_next = widget.element.find("option[value=" + next[0].value + "]");
+            var el = widget.element.find('option[value="' + option.value + '"]');
+            var el_next = widget.element.find('option[value="' + next[0].value + '"]');
             el_next.after(el);
             next.after($(option));
           }
@@ -268,7 +281,7 @@
     },
 
     selected: function(value) {
-      return this.element.find("option[value=" + value + "]").attr("selected");
+      return this.element.find('option[value="' + value + '"]').attr("selected");
     },
 
     destroy: function() {

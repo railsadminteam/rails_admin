@@ -1,0 +1,97 @@
+// Bootswatch.less
+// Swatch: Cerulean
+// Version: 2.0.2
+// -----------------------------------------------------
+
+// TYPOGRAPHY
+// -----------------------------------------------------
+
+@import url(https://fonts.googleapis.com/css?family=Telex);
+
+.navbar, .subnav {
+	font-family: $headingsFontFamily;
+}
+
+// NAVBAR
+// -----------------------------------------------------
+
+.navbar-inner {
+  @include gradient-vertical-three-colors($navbarBackground, $navbarBackground, 0.9, $navbarBackgroundHighlight);
+}
+
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
+  background-color: $navbarBackground;
+  background-color: rgba(0,0,0,.2);
+}
+
+.navbar .search-query {
+	border: 1px solid darken($linkColor, 10%);
+}
+
+// responsive menu colors
+
+.navbar .nav-collapse.in > .nav > li .dropdown-menu a {
+	color: $white;
+
+	&:hover {
+		color: $white;
+	}
+}
+
+.navbar .nav-collapse.in .nav li > a {
+	color: $white;
+
+	&:hover {
+		background-color: #2B7CAC;
+	}
+}
+
+.btn-navbar:hover {
+    background-color: darken($white, 20%);
+}
+
+// BUTTONS
+// -----------------------------------------------------
+
+.btn {
+  @include gradient-vertical-three-colors($white, $white, 0.05, darken($white, 0%));
+  $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  @include box-shadow($shadow);
+  
+  &:hover {
+  	background-position: 0 0;
+  }
+}
+
+.btn-primary {
+  @include buttonBackground(lighten($btnPrimaryBackground, 5%), $btnPrimaryBackground);
+}
+
+.btn-info {
+  @include buttonBackground(lighten($btnInfoBackground, 5%), $btnInfoBackground);
+}
+
+.btn-success {
+  @include buttonBackground(lighten($btnSuccessBackground, 5%), $btnSuccessBackground);
+}
+
+.btn-warning {
+  @include buttonBackground(lighten($btnWarningBackground, 5%), $btnWarningBackground);
+}
+
+.btn-danger {
+  @include buttonBackground(lighten($btnDangerBackground, 5%), $btnDangerBackground);
+}
+
+.btn-inverse {
+  @include buttonBackground(lighten($btnInverseBackground, 5%), $btnInverseBackground);
+}
+
+// ICONS
+// -----------------------------------------------------
+
+// Make icons gray
+i[class^="icon-"]{
+	opacity: 0.8;
+}

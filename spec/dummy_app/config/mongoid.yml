@@ -1,0 +1,22 @@
+defaults: &defaults
+  use_utc: false
+  use_activesupport_time_zone: true
+
+development:
+  <<: *defaults
+  database: dummy_app_development
+  sessions:
+    default:
+      database: dummy_app_development
+      hosts:
+        - localhost:27017
+
+
+test:
+  <<: *defaults
+  database: dummy_app_test
+  sessions:
+    default:
+      database: dummy_app_test
+      hosts:
+        - localhost:27017

@@ -1,0 +1,63 @@
+/*!
+ * Bootstrap v2.3.2
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+
+// Core variables and mixins
+@import "rails_admin/bootstrap/variables"; // Modify this for custom colors, font-sizes, etc
+@import "rails_admin/bootstrap/mixins";
+
+// CSS Reset
+@import "rails_admin/bootstrap/reset";
+
+// Grid system and page structure
+@import "rails_admin/bootstrap/scaffolding";
+@import "rails_admin/bootstrap/grid";
+@import "rails_admin/bootstrap/layouts";
+
+// Base CSS
+@import "rails_admin/bootstrap/type";
+@import "rails_admin/bootstrap/code";
+@import "rails_admin/bootstrap/forms";
+@import "rails_admin/bootstrap/tables";
+
+// Components: common
+@import "rails_admin/bootstrap/sprites";
+@import "rails_admin/bootstrap/dropdowns";
+@import "rails_admin/bootstrap/wells";
+@import "rails_admin/bootstrap/component-animations";
+@import "rails_admin/bootstrap/close";
+
+// Components: Buttons & Alerts
+@import "rails_admin/bootstrap/buttons";
+@import "rails_admin/bootstrap/button-groups";
+@import "rails_admin/bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons
+
+// Components: Nav
+@import "rails_admin/bootstrap/navs";
+@import "rails_admin/bootstrap/navbar";
+@import "rails_admin/bootstrap/breadcrumbs";
+@import "rails_admin/bootstrap/pagination";
+@import "rails_admin/bootstrap/pager";
+
+// Components: Popovers
+@import "rails_admin/bootstrap/modals";
+@import "rails_admin/bootstrap/tooltip";
+@import "rails_admin/bootstrap/popovers";
+
+// Components: Misc
+@import "rails_admin/bootstrap/thumbnails";
+@import "rails_admin/bootstrap/media";
+@import "rails_admin/bootstrap/labels-badges";
+@import "rails_admin/bootstrap/progress-bars";
+@import "rails_admin/bootstrap/accordion";
+@import "rails_admin/bootstrap/carousel";
+@import "rails_admin/bootstrap/hero-unit";
+
+// Utility classes
+@import "rails_admin/bootstrap/utilities"; // Has to be last to override when necessary

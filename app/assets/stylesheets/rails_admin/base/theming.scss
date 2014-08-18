@@ -1,0 +1,275 @@
+/*
+  RailsAdmin main CSS
+  Keep it clean, people
+*/
+
+body.rails_admin {
+
+  .thumbnail {
+    display:inline-block;
+  }
+
+  /* room for upper navbar */
+  padding-top: 60px;
+
+  /* Application name */
+  .navbar .brand {
+    small {
+      color:$red;
+      font-weight:bold;
+      line-height: 1;
+    }
+  }
+
+  .sidebar-nav {
+    padding: 9px 0;
+  }
+
+  /* fat labels in forms */
+  .label.form-label {
+    padding: 7px 7px 8px 7px;
+  }
+
+  /* new/edit/export forms */
+  .form-horizontal {
+    /* hide hidden fields controls by default */
+    .control-group .hidden_type {
+      display:none;
+    }
+
+    legend {
+      cursor:pointer;
+      i {
+        vertical-align: inherit !important;
+      }
+    }
+
+    &.denser {
+      .controls .nav {
+        margin-bottom:5px;
+      }
+      .remove_nested_fields,
+      .remove_nested_one_fields {
+        position:absolute;
+      }
+      margin:0px;
+      p {
+        font-size: 12px;
+        line-height: 16px;
+      }
+      .help-block {
+        margin-top: 0px;
+      }
+      .input-prepend, .input-append {
+        margin-bottom: 0px;
+        label {
+          margin-bottom: 0px;
+        }
+      }
+      .control-group {
+        margin: 0px;
+        padding-top:15px;
+      }
+      .control-label {
+        width:145px;
+      }
+      legend {
+        margin-bottom:0px;
+      }
+    }
+
+    /* We want input size to be used, unfixate input width */
+    input, textarea {
+      width:auto;
+    }
+    .help-block {
+      clear:left;
+    }
+    input[type=file] {
+      display:block;
+    }
+
+    /* nested forms */
+    .tab-content .tab-pane {
+      &>.remove_nested_fields,
+      &>.remove_nested_one_fields {
+        display:none;
+      }
+      &:hover>.remove_nested_fields,
+      &:hover>.remove_nested_one_fields,
+      &>.remove_nested_one_fields.active {
+        display:block;
+      }
+
+      border-left:5px solid $blue;
+      padding-left:5px;
+      fieldset {
+        margin-left:-10px;
+        .control-group > label {
+          padding-left:10px;
+          width:135px;
+        }
+        legend {
+          float:left;
+          margin-left:10px;
+        }
+      }
+    }
+
+    /* double nesting, guys. Easy. */
+    .tab-content .tab-content .tab-pane {
+      border-color:lighten($blue, 20%);
+      margin-left:10px;
+      fieldset {
+        margin-left:-20px;
+        .control-group > label {
+          padding-left:20px;
+          width:125px;
+        }
+        legend {
+          margin-left:20px;
+        }
+      }
+    }
+
+    /* triple nesting!*/
+    .tab-content .tab-content .tab-content .tab-pane {
+      border-color:lighten($blue, 30%);
+      margin-left:20px;
+      fieldset {
+        margin-left:-30px;
+        .control-group > label {
+          padding-left:30px;
+          width:115px;
+        }
+        legend {
+          margin-left:30px;
+        }
+      }
+    }
+
+    /* totally awesome! nesting on 4 levels! */
+    .tab-content .tab-content .tab-content  .tab-content .tab-pane {
+      border-color:lighten($blue, 40%);
+      margin-left:30px;
+      fieldset {
+        margin-left:-40px;
+        .control-group > label {
+          padding-left:40px;
+          width:105px;
+        }
+        legend {
+          margin-left:40px;
+        }
+      }
+    }
+  }
+
+  .modal {
+    width: 750px;
+    margin-left: -375px;
+  }
+
+  /* nested nav */
+  .nav.nav-list {
+    .nav-level-1 {
+      padding-left:30px;
+    }
+    .nav-level-2 {
+      padding-left:60px;
+    }
+    .nav-level-3 {
+      padding-left:90px;
+    }
+  }
+
+  /* tab links should match icon color */
+  .nav.nav-tabs li.icon a {
+    color: $black;
+  }
+
+  /* Table cells behaviour */
+  .table {
+    .thumbnail {
+      float:left;
+      & + * {
+        clear:left;
+      }
+    }
+    /* backport of Bootstrap 1.4 table headers */
+    .header {
+      cursor: pointer;
+      &:after {
+        content: "";
+        float: right;
+        margin-top: 7px;
+        border-width: 0 4px 4px;
+        border-style: solid;
+        border-color: #000 transparent;
+        visibility: hidden;
+      }
+    }
+    .headerSortUp,
+    .headerSortDown {
+      background-color: rgba(141,192,219,.25);
+      text-shadow: 0 1px 1px rgba(255,255,255,.75);
+    }
+    .header:hover {
+      &:after {
+        visibility:visible;
+      }
+    }
+    .headerSortDown,
+    .headerSortDown:hover {
+      &:after {
+        visibility:visible;
+        @include opacity(60);
+      }
+    }
+    .headerSortUp {
+      &:after {
+        border-bottom: none;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #000;
+        visibility:visible;
+        @include box-shadow(none);
+        @include opacity(60);
+      }
+    }
+
+    /* text-overflow when cell content > 150px */
+    td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width:150px;
+    }
+
+    /* icons */
+    td.links {
+      max-width: none;
+      .inline {
+        margin:0px;
+        li { display:inline-block; }
+      }
+    }
+
+    /* Shrink to content width */
+    .shrink {
+      width:1px;
+      white-space:nowrap;
+    }
+
+    /* History */
+    th.created_at {
+      width:160px;
+    }
+    th.username {
+      width:140px;
+    }
+    th.item {
+      width:60px;
+    }
+  }
+}

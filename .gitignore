@@ -2,16 +2,17 @@
 *.log
 *.rbc
 *.swp
-.DS_Store
 .bundle
 .idea/
 .rvmrc
 .yardoc
 /.emacs.desktop
+/gemfiles/*.lock
 /rails_admin.gems
 /spec/generators/tmp
 /spec/lib/tmp
 Gemfile.lock
+Gemfile31.lock
 coverage/*
 db/*.sqlite3
 db/*.sqlite3-journal
@@ -22,6 +23,7 @@ spec/dummy_app/db/*.sqlite3
 spec/dummy_app/db/*.sqlite3-journal
 spec/dummy_app/db/schema.rb
 spec/dummy_app/log/*.log
+spec/dummy_app/public/uploads
 spec/dummy_app/Gemfile.lock
 tmp/**/*
 /.emacs.desktop

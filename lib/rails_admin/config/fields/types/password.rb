@@ -1,5 +1,3 @@
-require 'rails_admin/config/fields'
-require 'rails_admin/config/sections/list'
 require 'rails_admin/config/fields/types/string'
 
 module RailsAdmin
@@ -8,30 +6,30 @@ module RailsAdmin
       module Types
         class Password < RailsAdmin::Config::Fields::Types::String
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
-          @column_names = [:password]
-          @view_helper = :password_field
-
-          def self.column_names
-            @column_names
+          register_instance_option :view_helper do
+            :password_field
           end
 
-          def initialize(parent, name, properties)
-            super(parent, name, properties)
-            hide if parent.kind_of?(RailsAdmin::Config::Sections::List)
+          def parse_input(params)
+            params[name] = params[name].presence
           end
 
-          register_instance_option(:formatted_value) do
-            "".html_safe
+          register_instance_option :formatted_value do
+            ''.html_safe
           end
 
           # Password field's value does not need to be read
           def value
-            ""
+            ''
           end
 
-          register_instance_option(:pretty_value) do
+          register_instance_option :visible do
+            section.is_a?(RailsAdmin::Config::Sections::Edit)
+          end
+
+          register_instance_option :pretty_value do
             '*****'
           end
         end

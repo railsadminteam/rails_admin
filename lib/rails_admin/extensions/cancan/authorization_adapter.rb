@@ -6,8 +6,9 @@ module RailsAdmin
       # responds to each of the public methods here.
       class AuthorizationAdapter
         # See the +authorize_with+ config method for where the initialization happens.
-        def initialize(controller)
+        def initialize(controller, ability = ::Ability)
           @controller = controller
+          @controller.instance_variable_set '@ability', ability
           @controller.extend ControllerExtension
           @controller.current_ability.authorize! :access, :rails_admin
         end
@@ -18,7 +19,6 @@ module RailsAdmin
         # AbstractModel instance that applies. The third argument is the actual model
         # instance if it is available.
         def authorize(action, abstract_model = nil, model_object = nil)
-          action = translate_action(action)
           @controller.current_ability.authorize!(action, model_object || abstract_model && abstract_model.model) if action
         end
 
@@ -27,7 +27,6 @@ module RailsAdmin
         # This takes the same arguments as +authorize+. The difference is that this will
         # return a boolean whereas +authorize+ will raise an exception when not authorized.
         def authorized?(action, abstract_model = nil, model_object = nil)
-          action = translate_action(action)
           @controller.current_ability.can?(action, model_object || abstract_model && abstract_model.model) if action
         end
 
@@ -35,7 +34,6 @@ module RailsAdmin
         # and bulk_delete/destroy actions and should return a scope which limits the records
         # to those which the user can perform the given action on.
         def query(action, abstract_model)
-          action = translate_action(action)
           abstract_model.model.accessible_by(@controller.current_ability, action)
         end
 
@@ -43,26 +41,14 @@ module RailsAdmin
         # records. It should return a hash of attributes which match what the user
         # is authorized to create.
         def attributes_for(action, abstract_model)
-          action = translate_action(action)
           @controller.current_ability.attributes_for(action, abstract_model && abstract_model.model)
-        end
-
-        private
-
-        # Change the action into something that fits better with CanCan's conventions
-        def translate_action(action)
-          case action
-            when :list, :bulk_action then :index
-            when :delete, :bulk_destroy, :bulk_delete then :destroy
-            else action
-          end
         end
 
         module ControllerExtension
           def current_ability
             # use _current_user instead of default current_user so it works with
             # whatever current user method is defined with RailsAdmin
-            @current_ability ||= ::Ability.new(_current_user)
+            @current_ability ||= @ability.new(_current_user)
           end
         end
       end

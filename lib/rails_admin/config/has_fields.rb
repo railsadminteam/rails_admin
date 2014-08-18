@@ -4,39 +4,41 @@ module RailsAdmin
     module HasFields
       # Defines a configuration for a field.
       def field(name, type = nil, add_to_section = true, &block)
-        field = @fields.find {|f| name == f.name }
+        field = _fields.detect { |f| name == f.name }
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
         # unhide them if config specifically defines them
-        field.show if field.try(:hidden?)
-
+        if field
+          field.show unless field.instance_variable_get("@#{field.name}_registered").is_a?(Proc)
+        end
         # Specify field as virtual if type is not specifically set and field was not
         # found in default stack
         if field.nil? && type.nil?
-          field = (@fields << RailsAdmin::Config::Fields::Types.load(:string).new(self, name, {})).last
+          field = (_fields << RailsAdmin::Config::Fields::Types.load(:string).new(self, name, nil)).last
 
         # Register a custom field type if one is provided and it is different from
         # one found in default stack
-        elsif !type.nil? && type != (field.nil? ? nil : field.type)
-          @fields.delete(field) unless field.nil?
-          properties = parent.abstract_model.properties.find {|p| name == p[:name] }
-          field = (@fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
+        elsif type && type != (field.nil? ? nil : field.type)
+          if field
+            properties = field.properties
+            _fields.delete(field)
+          else
+            properties = abstract_model.properties.detect { |p| name == p.name }
+          end
+          field = (_fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
-        
+
         # If field has not been yet defined add some default properties
         if add_to_section && !field.defined
           field.defined = true
-          field.order = @fields.select(&:defined).length
+          field.order = _fields.select(&:defined).length
         end
-        
+
         # If a block has been given evaluate it and sort fields after that
-        if block
-          field.instance_eval &block
-          @fields.sort! {|a, b| a.order <=> b.order }
-        end
+        field.instance_eval(&block) if block
         field
       end
-      
+
       # configure a field without adding it.
       def configure(name, type = nil, &block)
         field(name, type, false, &block)
@@ -46,11 +48,10 @@ module RailsAdmin
       # or include fields by conditions if no field names
       def include_fields(*field_names, &block)
         if field_names.empty?
-          @fields.select {|f| f.instance_eval &block }.each do |f|
-            unless f.defined
-              f.defined = true
-              f.order = @fields.select(&:defined).length
-            end
+          _fields.select { |f| f.instance_eval(&block) }.each do |f|
+            next if f.defined
+            f.defined = true
+            f.order = _fields.select(&:defined).length
           end
         else
           fields(*field_names, &block)
@@ -60,16 +61,16 @@ module RailsAdmin
       # exclude fields by name or by condition (block)
       def exclude_fields(*field_names, &block)
         block ||= lambda { |f| field_names.include?(f.name) }
-        @fields.each {|f| f.defined = true } if @fields.select(&:defined).empty?
-        @fields.select {|f| f.instance_eval &block }.each {|f| f.defined = false }
+        _fields.each { |f| f.defined = true } if _fields.select(&:defined).empty?
+        _fields.select { |f| f.instance_eval(&block) }.each { |f| f.defined = false }
       end
 
       # API candy
-      alias :exclude_fields_if :exclude_fields
-      alias :include_fields_if :include_fields
+      alias_method :exclude_fields_if, :exclude_fields
+      alias_method :include_fields_if, :include_fields
 
       def include_all_fields
-        include_fields_if() { true }
+        include_fields_if { true }
       end
 
       # Returns all field configurations for the model configuration instance. If no fields
@@ -78,40 +79,60 @@ module RailsAdmin
       # were defined.
       #
       # If a block is passed it will be evaluated in the context of each field
-      def fields(*field_names,&block)
+      def fields(*field_names, &block)
+        return all_fields if field_names.empty? && !block
+
         if field_names.empty?
-          defined = @fields.select {|f| f.defined }
-          defined.sort! {|a, b| a.order <=> b.order }
-          defined = @fields if defined.empty?
-          if block
-            defined.each {|f| f.instance_eval &block }
-          end
-          defined
+          defined = _fields.select { |f| f.defined }
+          defined = _fields if defined.empty?
         else
-          defined = field_names.map{|field_name| @fields.find {|f| f.name == field_name } }
-          defined.map do |f|
-            unless f.defined
-              f.defined = true
-              f.order = @fields.select(&:defined).length
-            end
-            f.instance_eval(&block) if block
-            f
+          defined = field_names.collect { |field_name| _fields.detect { |f| f.name == field_name } }
+        end
+        defined.collect do |f|
+          unless f.defined
+            f.defined = true
+            f.order = _fields.select(&:defined).length
           end
+          f.instance_eval(&block) if block
+          f
         end
       end
 
       # Defines configuration for fields by their type.
       def fields_of_type(type, &block)
-        selected = @fields.select {|f| type == f.type }
-        if block
-          selected.each {|f| f.instance_eval &block }
-        end
-        selected
+        _fields.select { |f| type == f.type }.map! { |f| f.instance_eval(&block) } if block
       end
 
-      # Get all fields defined as visible.
+      # Accessor for all fields
+      def all_fields
+        ((ro_fields = _fields(true)).select(&:defined).presence || ro_fields).collect do |f|
+          f.section = self
+          f
+        end
+      end
+
+      # Get all fields defined as visible, in the correct order.
       def visible_fields
-        fields.select {|f| f.with(bindings).visible? }.map{|f| f.with(bindings)}
+        i = 0
+        all_fields.collect { |f| f.with(bindings) }.select(&:visible?).sort_by { |f| [f.order, i += 1] } # stable sort, damn
+      end
+
+    protected
+
+      # Raw fields.
+      # Recursively returns parent section's raw fields
+      # Duping it if accessed for modification.
+      def _fields(readonly = false)
+        return @_fields if @_fields
+        return @_ro_fields if readonly && @_ro_fields
+
+        if self.class == RailsAdmin::Config::Sections::Base
+          @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
+        else
+          # parent is RailsAdmin::Config::Model, recursion is on Section's classes
+          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
+        end
+        readonly ? @_ro_fields : (@_fields ||= @_ro_fields.collect(&:clone))
       end
     end
   end
