@@ -23,8 +23,8 @@ describe 'RailsAdmin Export', type: :request do
       'include' => {
         'team' => {'only' => [PK_COLUMN.to_s, 'created_at', 'updated_at', 'name', 'logo_url', 'manager', 'ballpark', 'mascot', 'founded', 'wins', 'losses', 'win_percentage', 'revenue', 'color']},
         'draft' => {'only' => [PK_COLUMN.to_s, 'created_at', 'updated_at', 'date', 'round', 'pick', 'overall', 'college', 'notes']},
-        'comments' => {'only' => [PK_COLUMN.to_s, 'content', 'created_at', 'updated_at']}
-      }
+        'comments' => {'only' => [PK_COLUMN.to_s, 'content', 'created_at', 'updated_at']},
+      },
     }
   end
 

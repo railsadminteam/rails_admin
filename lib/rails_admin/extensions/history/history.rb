@@ -20,7 +20,7 @@ module RailsAdmin
            message: [message].flatten.join(', '),
            item: object.id,
            table: abstract_model.to_s,
-           username: user.try(:email)
+           username: user.try(:email),
          )
       end
 

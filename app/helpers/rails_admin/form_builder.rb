@@ -7,7 +7,7 @@ module RailsAdmin
         options.reverse_merge!(
           action: @template.controller.params[:action],
           model_config: @template.instance_variable_get(:@model_config),
-          nested_in: false
+          nested_in: false,
         )
 
         object_infos +
@@ -70,10 +70,12 @@ module RailsAdmin
     def object_infos
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
-      object_label = if object.new_record?
-        I18n.t('admin.form.new_model', name: model_label)
-      else
-        object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
+      object_label = begin
+        if object.new_record?
+          I18n.t('admin.form.new_model', name: model_label)
+        else
+          object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
+        end
       end
       %(<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label.to_s)}"></span>).html_safe
     end
@@ -87,7 +89,7 @@ module RailsAdmin
         [
           @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').sub(/_$/, ''),
           options[:index],
-          field.method_name
+          field.method_name,
         ].reject(&:blank?).join('_')
     end
 
@@ -112,7 +114,7 @@ module RailsAdmin
         form: self,
         object: @object,
         view: @template,
-        controller: @template.controller
+        controller: @template.controller,
       ).visible_groups
     end
 

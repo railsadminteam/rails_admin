@@ -90,10 +90,10 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       is_expected.not_to have_selector('h4', text: 'Basic info')
 
-      %w[division name logo_url manager
+      %w(division name logo_url manager
          ballpark mascot founded wins
          losses win_percentage revenue
-      ].each do |field|
+      ).each do |field|
         is_expected.not_to have_selector(".#{field}_field")
       end
     end
@@ -183,10 +183,10 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
     it 'shows all by default' do
       do_request
 
-      %w[division name logo_url manager
+      %w(division name logo_url manager
          ballpark mascot founded wins
          losses win_percentage revenue players fans
-      ].each do |field|
+      ).each do |field|
         is_expected.to have_selector(".#{field}_field")
       end
     end
@@ -305,11 +305,11 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       do_request
 
-      %w[Name Logo\ url Manager Ballpark Mascot].each do |text|
+      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
         is_expected.not_to have_selector('.label', text: text)
       end
 
-      %w[Division Founded Wins Losses Win\ percentage Revenue Players Fans].each do |text|
+      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
         is_expected.to have_selector('.label', text: text)
       end
     end
@@ -325,11 +325,11 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       do_request
 
-      %w[Name Logo\ url Manager Ballpark Mascot].each do |text|
+      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
         is_expected.not_to have_selector('.label', text: text)
       end
 
-      %w[Division Founded Wins Losses Win\ percentage Revenue Players Fans].each do |text|
+      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
         is_expected.to have_selector('.label', text: text)
       end
     end

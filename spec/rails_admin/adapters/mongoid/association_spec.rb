@@ -75,7 +75,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   end
 
   it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-    expect((@post.associations + @blog.associations + @user.associations).collect { |a| a.type.to_s }.uniq).to match_array %w[belongs_to has_and_belongs_to_many has_many has_one]
+    expect((@post.associations + @blog.associations + @user.associations).collect { |a| a.type.to_s }.uniq).to match_array %w(belongs_to has_and_belongs_to_many has_many has_one)
   end
 
   describe 'belongs_to association' do
@@ -141,7 +141,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   end
 
   describe 'polymorphic belongs_to association' do
-    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment]) }
+    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment)) }
     subject { @comment.associations.select { |a| a.name == :commentable }.first }
 
     it 'returns correct values' do
@@ -161,7 +161,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   end
 
   describe 'polymorphic inverse has_many association' do
-    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment]) }
+    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment)) }
     subject { @blog.associations.select { |a| a.name == :mongo_comments }.first }
 
     it 'returns correct values' do
@@ -249,10 +249,10 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       end
 
       expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations.first.nested_options }).to raise_error(RuntimeError,
-                                                                                                                        "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n"
+                                                                                                                        "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n",
       )
       expect(lambda { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations.first.nested_options }).to raise_error(RuntimeError,
-                                                                                                                         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n"
+                                                                                                                         "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n",
       )
       expect(lambda { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations.first.nested_options }).not_to raise_error
       expect(lambda { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations.first.nested_options }).not_to raise_error

@@ -35,7 +35,7 @@ module RailsAdmin
           username: :whodunnit,
           item: :item_id,
           created_at: :created_at,
-          message: :event
+          message: :event,
         }
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
@@ -99,9 +99,9 @@ module RailsAdmin
         end
 
         def version_class_for(model_name)
-          klass = model_name.constantize
-            .try(:version_class_name)
-            .try(:constantize)
+          klass = model_name.constantize.
+            try(:version_class_name).
+            try(:constantize)
 
           klass || @version_class
         end

@@ -12,7 +12,7 @@ module RailsAdmin
           register_instance_option :config do
             {
               mode: 'css',
-              theme: 'night'
+              theme: 'night',
             }
           end
 
@@ -20,7 +20,7 @@ module RailsAdmin
           register_instance_option :assets do
             {
               mode: '/assets/codemirror/modes/css.js',
-              theme: '/assets/codemirror/themes/night.css'
+              theme: '/assets/codemirror/themes/night.css',
             }
           end
 

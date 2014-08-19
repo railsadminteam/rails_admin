@@ -29,7 +29,7 @@ module RailsAdmin
           model: abstract_model.model,
           abstract_model: abstract_model,
           model_config: model_config,
-          fields: methods.collect { |m| export_fields_for(m, model_config).first }
+          fields: methods.collect { |m| export_fields_for(m, model_config).first },
         }
         hash
       end

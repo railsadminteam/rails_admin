@@ -39,7 +39,7 @@ module RailsAdmin
 
         # Reader for fields attached to this group
         def fields
-          section.fields.select { |f| self == f.group }
+          section.fields.select { |f| f.group == self }
         end
 
         # Defines configuration for fields by their type
@@ -53,7 +53,7 @@ module RailsAdmin
 
         # Reader for fields that are marked as visible
         def visible_fields
-          section.with(bindings).visible_fields.select { |f| self == f.group }
+          section.with(bindings).visible_fields.select { |f| f.group == self }
         end
 
         # Should it open by default

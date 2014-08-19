@@ -44,7 +44,7 @@ module RailsAdmin
       I18n.t("admin.actions.#{action.i18n_key}.#{label}",
              model_label: model_config && model_config.label,
              model_label_plural: model_config && model_config.label_plural,
-             object_label: model_config && object.try(model_config.object_label_method)
+             object_label: model_config && object.try(model_config.object_label_method),
       )
     end
 
@@ -96,12 +96,14 @@ module RailsAdmin
           am = a.send(:eval, 'bindings[:abstract_model]')
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, class: current_action?(a, am, o) && 'active') do
-            crumb = if a.http_methods.include?(:get)
-              link_to url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
-                wording_for(:breadcrumb, a, am, o)
+            crumb = begin
+              if a.http_methods.include?(:get)
+                link_to url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
+                  wording_for(:breadcrumb, a, am, o)
+                end
+              else
+                content_tag(:span, wording_for(:breadcrumb, a, am, o))
               end
-            else
-              content_tag(:span, wording_for(:breadcrumb, a, am, o))
             end
             crumb += content_tag(:span, '/', class: 'divider') unless current_action?(a, am, o)
             crumb

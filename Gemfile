@@ -42,10 +42,6 @@ end
 
 group :development, :test do
   gem 'pry', '>= 0.9'
-  platforms :mri_19, :mri_20 do
-    gem 'pry-debugger', '>= 0.2'
-    gem 'pry-stack_explorer', '>= 0.4.9.1'
-  end
 end
 
 group :test do
@@ -64,7 +60,7 @@ group :test do
   gem 'poltergeist', '~> 1.5'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
-  gem 'rubocop', '>= 0.19.0'
+  gem 'rubocop', '>= 0.25'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
 end

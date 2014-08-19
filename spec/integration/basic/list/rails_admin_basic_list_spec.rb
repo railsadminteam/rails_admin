@@ -453,7 +453,7 @@ describe 'RailsAdmin Basic List', type: :request do
         FactoryGirl.create(:team, color: 'red'),
         FactoryGirl.create(:team, color: 'red'),
         FactoryGirl.create(:team, color: 'white'),
-        FactoryGirl.create(:team, color: 'black')
+        FactoryGirl.create(:team, color: 'black'),
       ]
     end
 
@@ -498,7 +498,7 @@ describe 'RailsAdmin Basic List', type: :request do
       before :each do
         en = {admin: {scopes: {
           _all: 'every',
-          red: 'krasnyj'
+          red: 'krasnyj',
         }}}
         I18n.backend.store_translations(:en, en)
       end
@@ -517,7 +517,7 @@ describe 'RailsAdmin Basic List', type: :request do
         before :each do
           en = {admin: {scopes: {team: {
             _all: 'any',
-            red: 'kr'
+            red: 'kr',
           }}}}
           I18n.backend.store_translations(:en, en)
         end

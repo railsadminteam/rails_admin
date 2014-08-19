@@ -131,11 +131,13 @@ module RailsAdmin
       end
 
       def build_statement_for_type_generic
-        build_statement_for_type || case @type
-        when :date
-          build_statement_for_date
-        when :datetime, :timestamp
-          build_statement_for_datetime_or_timestamp
+        build_statement_for_type || begin
+          case @type
+          when :date
+            build_statement_for_date
+          when :datetime, :timestamp
+            build_statement_for_datetime_or_timestamp
+          end
         end
       end
 

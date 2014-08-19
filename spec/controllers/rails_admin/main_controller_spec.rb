@@ -254,16 +254,16 @@ describe RailsAdmin::MainController, type: :controller do
               'new_1330520162002' => {
                 'comment_attributes' => {
                   'unallowed_field' => "I shouldn't be here",
-                  'created_at' => '2 août 2010'
+                  'created_at' => '2 août 2010',
                 },
-                'created_at' => '3 août 2010'
-              }
+                'created_at' => '3 août 2010',
+              },
             },
             'comment_attributes' => {
               'unallowed_field' => "I shouldn't be here",
-              'created_at' => '4 août 2010'
-            }
-          }
+              'created_at' => '4 août 2010',
+            },
+          },
         )
 
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -280,15 +280,15 @@ describe RailsAdmin::MainController, type: :controller do
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
-                  'created_at' => 'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
+                  'created_at' => 'Mon, 02 Aug 2010 00:00:00 UTC +00:00',
                 },
-                'created_at' => 'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
-              }
+                'created_at' => 'Tue, 03 Aug 2010 00:00:00 UTC +00:00',
+              },
             },
             'comment_attributes' => {
-              'created_at' => 'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
-            }
-          }
+              'created_at' => 'Wed, 04 Aug 2010 00:00:00 UTC +00:00',
+            },
+          },
         )
       end
 
@@ -318,8 +318,8 @@ describe RailsAdmin::MainController, type: :controller do
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
-          'should_not_be_here' => 'test'
-        }
+          'should_not_be_here' => 'test',
+        },
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -332,7 +332,7 @@ describe RailsAdmin::MainController, type: :controller do
           'remove_dragonfly_asset' => 'test',
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
-          'delete_paperclip_asset' => 'test'
+          'delete_paperclip_asset' => 'test',
         })
     end
 
@@ -344,14 +344,14 @@ describe RailsAdmin::MainController, type: :controller do
       controller.params = HashWithIndifferentAccess.new(
         'comment' => {
           'commentable_id' => 'test',
-          'commentable_type' => 'test'
-        }
+          'commentable_type' => 'test',
+        },
       )
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
       expect(controller.params).to eq(
         'comment' => {
           'commentable_id' => 'test',
-          'commentable_type' => 'test'
+          'commentable_type' => 'test',
         })
     end
   end

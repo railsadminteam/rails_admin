@@ -147,7 +147,7 @@ module RailsAdmin
             '_null' => ["(#{@column} IS NULL)"],
             '_not_null' => ["(#{@column} IS NOT NULL)"],
             '_empty' => ["(#{@column} = '')"],
-            '_not_empty' => ["(#{@column} != '')"]
+            '_not_empty' => ["(#{@column} != '')"],
           }
         end
 
@@ -174,8 +174,8 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
-          return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w(false f 0).include?(@value)
+          return ["(#{@column} = ?)", true] if %w(true t 1).include?(@value)
         end
 
         def column_for_value(value)
@@ -189,17 +189,19 @@ module RailsAdmin
 
         def build_statement_for_string_or_text
           return if @value.blank?
-          @value = case @operator
-          when 'default', 'like'
-            "%#{@value.downcase}%"
-          when 'starts_with'
-            "#{@value.downcase}%"
-          when 'ends_with'
-            "%#{@value.downcase}"
-          when 'is', '='
-            "#{@value.downcase}"
-          else
-            return
+          @value = begin
+            case @operator
+            when 'default', 'like'
+              "%#{@value.downcase}%"
+            when 'starts_with'
+              "#{@value.downcase}%"
+            when 'ends_with'
+              "%#{@value.downcase}"
+            when 'is', '='
+              "#{@value.downcase}"
+            else
+              return
+            end
           end
           ["(LOWER(#{@column}) #{like_operator} ?)", @value]
         end

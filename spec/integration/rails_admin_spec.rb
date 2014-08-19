@@ -9,7 +9,7 @@ describe RailsAdmin, type: :request do
     RailsAdmin::Config.current_user_method(&:current_user)
     login_as User.create(
       email: 'username@example.com',
-      password: 'password'
+      password: 'password',
     )
   end
 

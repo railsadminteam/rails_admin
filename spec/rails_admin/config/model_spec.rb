@@ -55,8 +55,8 @@ describe RailsAdmin::Config::Model do
                                           models: {
                                             comment: {
                                               one: 'one', two: 'two', other: 'other'
-                                            }
-                                          }
+                                            },
+                                          },
                                         }
 
         I18n.locale = :xx
@@ -82,8 +82,8 @@ describe RailsAdmin::Config::Model do
                                                 else
                                                   :other
                                                 end
-                                              end
-                                            }
+                                              end,
+                                            },
                                           }
 
         end

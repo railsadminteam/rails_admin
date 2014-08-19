@@ -49,7 +49,8 @@ FactoryGirl.define do
   end
 
   factory :comment do
-    sequence(:content) do |n| <<-EOF
+    sequence(:content) do |n|
+      <<-EOF
         Lorém --#{n}-- ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -61,7 +62,7 @@ FactoryGirl.define do
   end
 
   factory :ball do
-    color(%w[red blue green yellow purple brown black white].sample)
+    color(%w(red blue green yellow purple brown black white).sample)
   end
 
   factory :hardball do
