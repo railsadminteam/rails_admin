@@ -11,7 +11,7 @@
       RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
   %body.rails_admin
     #loading.label.label-warning{style: 'display:none; position:fixed; right:20px; bottom:20px; z-index:100000'}= t('admin.loading')
-    .navbar.navbar-fixed-top
+    %nav.navbar.navbar-fixed-top
       = render "layouts/rails_admin/navigation"
     .container-fluid
       .row-fluid
