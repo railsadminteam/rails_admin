@@ -38,6 +38,8 @@ else
       gem 'sqlite3', '>= 1.3'
     end
   end
+
+  gem 'paper_trail', '~> 3.0'
 end
 
 group :development, :test do
@@ -63,7 +65,6 @@ group :test do
   gem 'rubocop', '>= 0.25'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
-  gem 'paper_trail', '~> 3.0.3'
 end
 
 gemspec
