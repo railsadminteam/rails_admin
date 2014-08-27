@@ -15,7 +15,7 @@ body.rails_admin {
   /* Application name */
   .navbar .brand {
     small {
-      color:$red;
+      color:#9d261d;
       font-weight:bold;
       line-height: 1;
     }
@@ -101,7 +101,7 @@ body.rails_admin {
         display:block;
       }
 
-      border-left:5px solid $blue;
+      border-left:5px solid #049cdb;
       padding-left:5px;
       fieldset {
         margin-left:-10px;
@@ -118,7 +118,7 @@ body.rails_admin {
 
     /* double nesting, guys. Easy. */
     .tab-content .tab-content .tab-pane {
-      border-color:lighten($blue, 20%);
+      border-color:lighten(#049cdb, 20%);
       margin-left:10px;
       fieldset {
         margin-left:-20px;
@@ -134,7 +134,7 @@ body.rails_admin {
 
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
-      border-color:lighten($blue, 30%);
+      border-color:lighten(#049cdb, 30%);
       margin-left:20px;
       fieldset {
         margin-left:-30px;
@@ -150,7 +150,7 @@ body.rails_admin {
 
     /* totally awesome! nesting on 4 levels! */
     .tab-content .tab-content .tab-content  .tab-content .tab-pane {
-      border-color:lighten($blue, 40%);
+      border-color:lighten(#049cdb, 40%);
       margin-left:30px;
       fieldset {
         margin-left:-40px;
@@ -185,7 +185,7 @@ body.rails_admin {
 
   /* tab links should match icon color */
   .nav.nav-tabs li.icon a {
-    color: $black;
+    color: #000;
   }
 
   /* Table cells behaviour */
