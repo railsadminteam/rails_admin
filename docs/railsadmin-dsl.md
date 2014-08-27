@@ -221,7 +221,7 @@ and [Rails I18n repository](https://github.com/svenfuchs/rails-i18n/tree/master/
 
 **Form rendering**
 
-RailsAdmin renders these views with is own form builder: `RailsAdmin::FormBuilder`
+RailsAdmin renders these views with his own form builder: `RailsAdmin::FormBuilder`
 You can inherit from it to customize form output.
 
 **Field groupings**
@@ -234,7 +234,7 @@ batch accessor which configures both create and update views. For consistency,
 these examples only include the batch accessor `edit`, but if you need differing
 create and update views just replace `edit` with `create` or `update`. If you need
 to configure the form when it is displayed as a modal, replace `edit` with `modal`.
-Attention: If you loose some fileds after using `groupings`, add `include_all_fields` to your configuration.
+Attention: If you lose some fields after using `groupings`, add `include_all_fields` to your configuration.
 
 **Field groupings - visibility**
 
