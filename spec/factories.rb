@@ -72,4 +72,8 @@ FactoryGirl.define do
   factory :image do
     file File.open(Rails.root.join('public', 'robots.txt'))
   end
+
+  factory :paper_trail_test do
+    sequence(:name) { |n| "name #{n}" }
+  end
 end

@@ -42,6 +42,7 @@ gem 'dragonfly', '~> 1.0'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
 gem 'paperclip', '3.5.4'
+gem 'paper_trail', '~> 3.0.3'
 gem 'rails_admin', path: '../../'
 
 # Gems used only for assets and not required
