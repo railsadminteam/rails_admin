@@ -29,11 +29,7 @@ module RailsAdmin
     end
 
     def self.express_admin_menu
-      rails_admin_menu_items = []
-
-      rails_admin_menu_items << OpenStruct.new(name: 'Dashboard', path: "rails_admin.dashboard_path")
-
-      OpenStruct.new(name: 'Admin', items: rails_admin_menu_items)
+      OpenStruct.new(name: 'Admin', path: 'rails_admin.dashboard_path')
     end
 
   end
