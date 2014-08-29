@@ -48,6 +48,7 @@ end
 
 group :test do
   gem 'cancan', '>= 1.6'
+  gem 'cancancan', '~> 1.9'
   gem 'capybara', '>= 2.1'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
