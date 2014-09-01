@@ -7,15 +7,16 @@
   %fieldset{id: 'fields_to_export'}
     %div.control-group
       %div.controls
-        %label.checkbox{for: 'check_all'}
-          = t('admin.export.select_all_fields')
+        .col-sm-2
+        %label.col-sm-10.checkbox{for: 'check_all'}
           = check_box_tag 'all', 'all', true, { id: 'check_all' }
+          = t('admin.export.select_all_fields')
     %legend
       %i.icon-chevron-down
       = t('admin.export.select')
     .control-group
-      %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
-      .controls
+      %label.col-sm-2.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
+      .col-sm-10.controls
         - visible_fields.select{ |f| !f.association? || f.association.polymorphic? }.each do |field|
           - list = field.virtual? ? 'methods' : 'only'
           - if field.association? && field.association.polymorphic?
@@ -34,8 +35,8 @@
     - visible_fields.select{ |f| f.association? && !f.association.polymorphic? }.each do |field|
       - fields = field.associated_model_config.export.with(controller: self.controller, view: self, object: (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
       .control-group
-        %label.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)
-        .controls
+        %label.col-sm-2.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)
+        .col-sm-10.controls
           - fields.each do |associated_model_field|
             - list = associated_model_field.virtual? ? 'methods' : 'only'
             %label.checkbox{for: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
@@ -48,21 +49,21 @@
       = t('admin.export.options_for', name: 'csv')
     .control-group
       - guessed_encoding = @abstract_model.encoding
-      %label.control-label{for: "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
-      .controls
+      %label.col-sm-2.control-label{for: "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
+      .col-sm-10.controls
         -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
         = select_tag 'csv_options[encoding_to]', options_for_select(RailsAdmin::CSVConverter::TARGET_ENCODINGS), include_blank: true
         %p.help-block= t('admin.export.csv.encoding_to_help', name: guessed_encoding)
 
     .control-group
-      %label.control-label{for: "csv_options_skip_header"}= t('admin.export.csv.skip_header')
-      .controls
+      %label.col-sm-2.control-label{for: "csv_options_skip_header"}= t('admin.export.csv.skip_header')
+      .col-sm-10.controls
         = check_box_tag 'csv_options[skip_header]', 'true'
         %p.help-block= t('admin.export.csv.skip_header_help')
 
     .control-group
-      %label.control-label{for: "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
-      .controls
+      %label.col-sm-2.control-label{for: "csv_options_generator_col_sep"}= t('admin.export.csv.col_sep')
+      .col-sm-10.controls
         = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" })
         %p.help-block= t('admin.export.csv.col_sep_help', value: t('admin.export.csv.default_col_sep'))
 

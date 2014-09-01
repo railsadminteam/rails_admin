@@ -48,7 +48,7 @@
 
       this.header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
 
-      this.filter = $('<input type="search" placeholder="' + this.options.regional.search + '" class="ra-multiselect-search"/>');
+      this.filter = $('<input type="search" placeholder="' + this.options.regional.search + '" class="form-control ra-multiselect-search"/>');
 
       this.header.append(this.filter);
 
@@ -68,7 +68,7 @@
 
       this.collection = $('<select multiple="multiple"></select>');
 
-      this.collection.addClass("ra-multiselect-collection");
+      this.collection.addClass("form-control ra-multiselect-collection");
       
       this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
       
@@ -89,7 +89,7 @@
         this.columns.center.append(this.up).append(this.down);
       }
 
-      this.selection = $('<select class="ra-multiselect-selection" multiple="multiple"></select>');
+      this.selection = $('<select class="form-control ra-multiselect-selection" multiple="multiple"></select>');
       
       
 
