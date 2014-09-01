@@ -22,7 +22,9 @@ body.rails_admin {
   }
 
   .sidebar-nav {
-    padding: 9px 0;
+    padding: 9px 60px 9px 10px;
+    position: fixed;
+    background: #eaf0f1;
   }
 
   /* fat labels in forms */
