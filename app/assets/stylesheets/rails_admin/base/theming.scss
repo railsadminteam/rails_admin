@@ -10,7 +10,11 @@ body.rails_admin {
   }
 
   /* room for upper navbar */
-  padding-top: 60px;
+  padding-top: 43px;
+
+  .reset-left {
+    padding-left: 0px;
+  }
 
   /* Application name */
   .navbar .brand {
@@ -22,8 +26,10 @@ body.rails_admin {
   }
 
   .sidebar-nav {
-    padding: 9px 60px 9px 10px;
+    padding: 9px 9px 9px 9px;
     position: fixed;
+    width: 14%;
+    height: 100%;
     background: #eaf0f1;
   }
 
