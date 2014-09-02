@@ -18,7 +18,7 @@
         .col-sm-3.col-md-2.reset-left
           .sidebar-nav
             %ul.nav.nav-pills.nav-stacked= main_navigation
-            -# %ul.nav.nav-list= static_navigation
+            %ul.nav.nav-pills.nav-stacked= static_navigation
         .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2
           .row
             .content{:'data-pjax-container' => true}= render template: 'layouts/rails_admin/pjax'
