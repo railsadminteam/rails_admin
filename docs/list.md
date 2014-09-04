@@ -198,4 +198,20 @@ field :team do
 end
 ```
 
+**Scopes**
+
+This allows to display a configurable scoped list view.
+
+First will be the default, nil means no scope (also it is possible to disable non-scoped index)
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      scopes [:not_cart, :cart, nil]
+    end
+  end
+end
+```
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
