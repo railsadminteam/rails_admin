@@ -37,6 +37,9 @@ field :color, :enum do
     ['green', 'white']
   end
 
+  # if you need select the default value
+  default_value 'green'
+
   enum do
     # ActiveRecord querys
     except = bindings[:view]._current_user.team_id
