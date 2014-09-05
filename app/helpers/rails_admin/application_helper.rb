@@ -31,9 +31,12 @@ module RailsAdmin
     end
 
     def logout_path
-      return unless defined?(Devise)
-      scope = Devise::Mapping.find_scope!(_current_user)
-      main_app.send("destroy_#{scope}_session_path") rescue false
+      if defined?(Devise)
+        scope = Devise::Mapping.find_scope!(_current_user)
+        main_app.send("destroy_#{scope}_session_path") rescue false
+      else
+        main_app.logout_path if main_app.respond_to?(:logout_path)
+      end
     end
 
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
