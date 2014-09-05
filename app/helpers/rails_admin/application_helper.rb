@@ -39,6 +39,11 @@ module RailsAdmin
       end
     end
 
+    def logout_method
+      return Devise.sign_out_via if defined?(Devise)
+      :delete
+    end
+
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
       model_config = abstract_model.try(:config)
       object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
