@@ -379,10 +379,10 @@ describe RailsAdmin::Config::Fields::Base do
         column :updated_on, :datetime
         column :deleted_on, :datetime
       end
-      expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select { |f| f.visible? }.collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
-      expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select { |f| f.visible? }.collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
-      expect(RailsAdmin.config(FieldVisibilityTest).edit.fields.select { |f| f.visible? }.collect(&:name)).to match_array [:name]
-      expect(RailsAdmin.config(FieldVisibilityTest).show.fields.select { |f| f.visible? }.collect(&:name)).to match_array [:name]
+      expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
+      expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
+      expect(RailsAdmin.config(FieldVisibilityTest).edit.fields.select(&:visible?).collect(&:name)).to match_array [:name]
+      expect(RailsAdmin.config(FieldVisibilityTest).show.fields.select(&:visible?).collect(&:name)).to match_array [:name]
     end
   end
 

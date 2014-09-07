@@ -83,7 +83,7 @@ module RailsAdmin
         return all_fields if field_names.empty? && !block
 
         if field_names.empty?
-          defined = _fields.select { |f| f.defined }
+          defined = _fields.select(&:defined)
           defined = _fields if defined.empty?
         else
           defined = field_names.collect { |field_name| _fields.detect { |f| f.name == field_name } }

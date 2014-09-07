@@ -152,7 +152,7 @@ module RailsAdmin
         # Accessor for field's length restrictions per validations
         #
         register_instance_option :valid_length do
-          @valid_length ||= abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try { |v| v.options } || {}
+          @valid_length ||= abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try(&:options) || {}
         end
 
         register_instance_option :partial do

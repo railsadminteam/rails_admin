@@ -15,7 +15,7 @@ class Team < ActiveRecord::Base
   belongs_to :division
 
   def player_names_truncated
-    players.collect { |p| p.name }.join(', ')[0..32]
+    players.collect(&:name).join(', ')[0..32]
   end
 
   def color_enum

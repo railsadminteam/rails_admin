@@ -27,7 +27,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def column_names
-      @column_names ||= columns.collect { |column| column.name }
+      @column_names ||= columns.collect(&:name)
     end
 
     def column_defaults

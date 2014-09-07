@@ -56,7 +56,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
 
       it 'supports eager loading' do
-        expect(@abstract_model.all(include: :team).inclusions.collect { |i| i.class_name }).to eq(['Team'])
+        expect(@abstract_model.all(include: :team).inclusions.collect(&:class_name)).to eq(['Team'])
       end
 
       it 'supports limiting' do

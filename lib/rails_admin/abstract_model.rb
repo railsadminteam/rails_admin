@@ -27,7 +27,7 @@ module RailsAdmin
       def polymorphic_parents(adapter, model_name, name)
         @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
           all(adapter).each do |am|
-            am.associations.select { |r| r.as }.each do |association|
+            am.associations.select(&:as).each do |association|
               (hash[[association.klass.to_s.underscore, association.as].join('_').to_sym] ||= []) << am.model
             end
           end

@@ -54,7 +54,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
 
   it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
     # ActiveRecord 4.1 converts has_and_belongs_to_many association to has_many
-    expect((@post.associations + @blog.associations + @user.associations).collect { |a| a.type }.uniq.collect(&:to_s)).to include(*%w(belongs_to has_many has_one))
+    expect((@post.associations + @blog.associations + @user.associations).collect(&:type).uniq.collect(&:to_s)).to include(*%w(belongs_to has_many has_one))
   end
 
   describe 'belongs_to association' do
