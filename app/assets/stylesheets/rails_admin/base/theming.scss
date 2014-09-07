@@ -198,6 +198,16 @@ body.rails_admin {
 
   /* Table cells behaviour */
   .table {
+    // Cells
+    > thead,
+    > tbody,
+    > tfoot {
+      > tr {
+        > th {
+          border-bottom: 0px;
+        }
+      }
+    }
     .thumbnail {
       float:left;
       & + * {
