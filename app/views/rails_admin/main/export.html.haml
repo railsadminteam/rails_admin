@@ -67,6 +67,7 @@
         = select_tag 'csv_options[generator][col_sep]', options_for_select({ '' => t('admin.export.csv.default_col_sep'), "<comma> ','" => ',', "<semicolon> ';'" => ';', '<tabs>' => "'\t'" })
         %p.help-block= t('admin.export.csv.col_sep_help', value: t('admin.export.csv.default_col_sep'))
 
+  %br
   .form-actions
     %input{type: :hidden, name: 'return_to', value: (params[:return_to].presence || request.referer)}
     %button.btn.btn-primary{type: "submit", name: 'csv'}
