@@ -123,6 +123,8 @@
       var widget = this;
       if (!widget.dialog) {
         widget.dialog = $('<div id="modal" class="modal fade">\
+            <div class="modal-dialog">\
+            <div class="modal-content">\
             <div class="modal-header">\
               <a href="#" class="close" data-dismiss="modal">&times;</a>\
               <h3 class="modal-header-title">...</h3>\
@@ -134,13 +136,15 @@
               <a href="#" class="btn cancel-action">...</a>\
               <a href="#" class="btn btn-primary save-action">...</a>\
             </div>\
+            </div>\
+            </div>\
           </div>')
           .modal({
             keyboard: true,
             backdrop: true,
             show: true
           })
-          .on('hidden', function(){
+          .on('hidden.bs.modal', function(){
             widget.dialog.remove();   // We don't want to reuse closed modals
             widget.dialog = null;
           });
