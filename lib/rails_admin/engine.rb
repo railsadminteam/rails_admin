@@ -29,7 +29,7 @@ module RailsAdmin
     end
 
     def self.express_admin_menu
-      OpenStruct.new(name: 'Admin', path: 'rails_admin.dashboard_path')
+      RecursiveOpenStruct.new({main: {title: 'Admin', path: 'rails_admin.dashboard_path'}})
     end
 
   end
