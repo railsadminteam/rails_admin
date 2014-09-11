@@ -1,6 +1,7 @@
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::NestedForm::BuilderMixin
+    include ::RailsAdmin::ApplicationHelper
 
     def generate(options = {})
       without_field_error_proc_added_div do
@@ -34,8 +35,7 @@ module RailsAdmin
         # do not show nested field if the target is the origin
         unless nested_field_association?(field, nested_in)
           @template.content_tag(:div, class: "control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, class: 'control-label') +
-            (field.nested_form ? field_for(field) : input_for(field))
+            label(field.method_name, capitalize_first_letter(field.label), class: 'control-label') + (field.nested_form ? field_for(field) : input_for(field))
           end
         end
       else

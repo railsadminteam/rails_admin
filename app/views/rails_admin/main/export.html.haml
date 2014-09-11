@@ -25,11 +25,11 @@
             - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association.foreign_type == p.name }.name
             %label.checkbox{for: "schema_#{list}_#{polymorphic_type_column_name}"}
               = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { id: "schema_#{list}_#{polymorphic_type_column_name}" }
-              = field.label + " [type]"
+              = capitalize_first_letter(field.label) + " [type]"
           - else
             %label.checkbox{for: "schema_#{list}_#{field.name}"}
               = check_box_tag "schema[#{list}][]", field.name, true, { id: "schema_#{list}_#{field.name}" }
-              = field.label
+              = capitalize_first_letter(field.label)
 
     - visible_fields.select{ |f| f.association? && !f.association.polymorphic? }.each do |field|
       - fields = field.associated_model_config.export.with(controller: self.controller, view: self, object: (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
@@ -40,7 +40,7 @@
             - list = associated_model_field.virtual? ? 'methods' : 'only'
             %label.checkbox{for: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
               = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { id: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
-              = associated_model_field.label
+              = capitalize_first_letter(associated_model_field.label)
 
   %fieldset
     %legend

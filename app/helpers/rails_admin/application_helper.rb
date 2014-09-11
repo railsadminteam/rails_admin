@@ -4,6 +4,14 @@ module RailsAdmin
   module ApplicationHelper
     include RailsAdmin::I18nSupport
 
+    def capitalize_first_letter(wording)
+      if wording.present? && wording.is_a?(String)
+        wording = wording.dup
+        wording[0] = wording[0].mb_chars.capitalize.to_s
+        wording
+      end
+    end
+
     def authorized?(action, abstract_model = nil, object = nil)
       object = nil if object.try :new_record?
       @authorization_adapter.nil? || @authorization_adapter.authorized?(action, abstract_model, object)
@@ -49,10 +57,10 @@ module RailsAdmin
       object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
       action = RailsAdmin::Config::Actions.find(action.to_sym) if action.is_a?(Symbol) || action.is_a?(String)
 
-      I18n.t("admin.actions.#{action.i18n_key}.#{label}",
+      capitalize_first_letter I18n.t("admin.actions.#{action.i18n_key}.#{label}",
              model_label: model_config && model_config.label,
              model_label_plural: model_config && model_config.label_plural,
-             object_label: model_config && object.try(model_config.object_label_method),
+             object_label: model_config && object.try(model_config.object_label_method)
       )
     end
 
@@ -66,7 +74,8 @@ module RailsAdmin
         li_stack = navigation nodes_stack, nodes
 
         label = navigation_label || t('admin.misc.navigation')
-        %(<li class='nav-header'>#{label}</li>#{li_stack}) if li_stack.present?
+
+        %(<li class='nav-header'>#{capitalize_first_letter label}</li>#{li_stack}) if li_stack.present?
       end.join.html_safe
     end
 
@@ -88,7 +97,7 @@ module RailsAdmin
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
 
         li = content_tag :li, 'data-model' => model_param do
-          link_to nav_icon + node.label_plural, url, class: "pjax#{level_class}"
+          link_to nav_icon + capitalize_first_letter(node.label_plural), url, class: "pjax#{level_class}"
         end
         li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level + 1)
       end.join.html_safe
