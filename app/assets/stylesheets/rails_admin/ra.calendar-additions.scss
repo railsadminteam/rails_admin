@@ -1,10 +1,12 @@
 .ui-timepicker-table table th.periods {
+  z-index: 3!important;
   padding:0;
 }
 
 .ui-datepicker {
   /* fix glitches */
   border-width:0px;
+  z-index: 3!important;
   table{
     margin:0px;
   }
