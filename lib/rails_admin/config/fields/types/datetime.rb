@@ -19,7 +19,7 @@ module RailsAdmin
             attr_reader :format, :i18n_scope, :js_plugin_options
 
             def normalize(date_string, format)
-              unless I18n.locale == 'en'
+              unless I18n.locale.to_s == 'en'
                 format.to_s.scan(/%[AaBbp]/) do |match|
                   case match
                   when '%A'

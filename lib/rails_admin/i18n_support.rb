@@ -1,7 +1,9 @@
-require 'i18n'
+require 'rails_admin/i18n'
 
 module RailsAdmin
   module I18nSupport
+    include I18n
+
     def abbr_day_names
       I18n.t('date.abbr_day_names', raise: true)
     rescue I18n::ArgumentError
