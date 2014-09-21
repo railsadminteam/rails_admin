@@ -134,7 +134,8 @@ describe 'RailsAdmin Basic Create', type: :request do
     end
 
     it 'shows error base error message in flash' do
-      is_expected.to have_content('Player failed to be created. Player is cheating')
+      is_expected.to have_content('Player failed to be created')
+      is_expected.to have_content('Player is cheating')
     end
   end
 end

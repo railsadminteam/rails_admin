@@ -103,8 +103,8 @@ module RailsAdmin
     end
 
     def handle_save_error(whereto = :new)
-      flash.now[:error] = t('admin.flash.error', name: @model_config.label, action: t("admin.actions.#{@action.key}.done"))
-      flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
+      flash.now[:error] = t('admin.flash.error', name: @model_config.label, action: t("admin.actions.#{@action.key}.done").html_safe).html_safe
+      flash.now[:error] += %{<br>- #{@object.errors.full_messages.join("<br>- ")}}.html_safe
 
       respond_to do |format|
         format.html { render whereto, status: :not_acceptable }

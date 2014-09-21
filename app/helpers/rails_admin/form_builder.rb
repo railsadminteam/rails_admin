@@ -52,7 +52,7 @@ module RailsAdmin
     end
 
     def errors_for(field)
-      field.errors.present? ? @template.content_tag(:span, "#{field.label} #{field.errors.to_sentence}", class: 'help-inline') : ''.html_safe
+      field.errors.present? ? @template.content_tag(:span, field.errors.to_sentence, class: 'help-inline') : ''.html_safe
     end
 
     def help_for(field)
