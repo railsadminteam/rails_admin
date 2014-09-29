@@ -45,7 +45,9 @@ module RailsAdmin
     end
 
     def input_for(field)
-      @template.content_tag(:div, class: 'col-sm-10 controls') do
+      css = 'col-sm-10 controls'
+      css += ' has-error' if field.errors.present?
+      @template.content_tag(:div, class: css) do
         field_for(field) +
         errors_for(field) +
         help_for(field)
@@ -53,7 +55,7 @@ module RailsAdmin
     end
 
     def errors_for(field)
-      field.errors.present? ? @template.content_tag(:span, field.errors.to_sentence, class: 'help-inline') : ''.html_safe
+      field.errors.present? ? @template.content_tag(:span, field.errors.to_sentence, class: 'help-inline text-danger') : ''.html_safe
     end
 
     def help_for(field)
