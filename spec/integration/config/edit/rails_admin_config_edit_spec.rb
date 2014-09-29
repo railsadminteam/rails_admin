@@ -1015,6 +1015,8 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
     describe 'when serialize is enabled in ActiveRecord model', active_record: true do
       before do
+        # ActiveRecord 4.2 momoizes result of serialized_attributes, so we have to clear it.
+        Team.remove_instance_variable(:@serialized_attributes) if Team.instance_variable_defined?(:@serialized_attributes)
         Team.instance_eval do
           serialize :color
           def color_enum

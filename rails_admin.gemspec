@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '~> 4.0'
   spec.add_dependency 'remotipart', '~> 1.0'
   spec.add_dependency 'safe_yaml', '~> 1.0'
-  spec.add_dependency 'sass-rails', '~> 4.0'
+  spec.add_dependency 'sass-rails', '>= 4.0'
   spec.add_development_dependency 'bundler', '~> 1.0'
   spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech']
   spec.description = 'RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.'
