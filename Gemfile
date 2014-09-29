@@ -18,7 +18,6 @@ when 'mongoid'
   gem 'mongoid', '~> 4.0.0.beta1'
   gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-  gem 'mongoid-grid_fs', '1.9.1' # workaround for mime-types version issue
 else
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
