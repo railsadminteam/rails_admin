@@ -110,7 +110,7 @@
               multiselect.find('option[value= ' + json.id + ']').text(json.label);
             } else { // add
               select.prepend(option);
-              multiselect.find('select.ra-multiselect-selection').prepend(option);
+              multiselect.find('select.ra-multiselect-selection').append(option);
             }
           }
           widget._trigger("success");
