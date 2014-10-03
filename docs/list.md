@@ -79,6 +79,13 @@ RailsAdmin.config do |config|
   config.model Team do
     list do
       filters [:name, :manager]
+      # Manually enable/disable per field
+      field :name do
+        filterable true
+      end
+      field :manager do
+        filterable true
+      end
     end
   end
 end
