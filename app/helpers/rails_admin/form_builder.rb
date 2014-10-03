@@ -34,7 +34,7 @@ module RailsAdmin
       if field.label
         # do not show nested field if the target is the origin
         unless nested_field_association?(field, nested_in)
-          @template.content_tag(:div, class: "control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
+          @template.content_tag(:div, class: "form-group control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
             label(field.method_name, capitalize_first_letter(field.label), class: 'col-sm-2 control-label') +
             (field.nested_form ? field_for(field) : input_for(field))
           end
