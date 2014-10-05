@@ -34,7 +34,7 @@ module RailsAdmin
 
         # use the association name as a key, not the association key anymore!
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name association.name
+          (@label ||= {})[I18n.locale] ||= abstract_model.model.human_attribute_name association.name, locale: I18n.locale
         end
 
         # scope for possible associable records
