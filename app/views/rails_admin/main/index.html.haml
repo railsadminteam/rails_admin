@@ -38,6 +38,9 @@
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
+    unless field
+      fail "#{filter_name} is not currently filterable; filterable fields are #{@filterable_fields.map(&:name).join(', ')}"
+    end
     field_options = case field.type
     when :enum
       options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
