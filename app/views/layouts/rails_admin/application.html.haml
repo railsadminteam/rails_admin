@@ -1,17 +1,3 @@
-- content_for :content do
-  %main.main-container{role: "main"}
-    = render 'shared/rails_admin/sidebar'
-    .content-body
-      = render 'shared/express_admin/messages' rescue render 'shared/rails/messages'
-      - unless params[:action].eql?('dashboard')
-        .row.page-header
-          %h1= @page_name
-          - if content_for?(:page_header_lead)
-            %p.lead
-              = yield :page_header_lead
-          = breadcrumb
-        .row.page-body
-          = render template: 'layouts/rails_admin/pjax'
 
 - content_for :page_javascript do
   = javascript_include_tag 'rails_admin/rails_admin'
@@ -22,4 +8,4 @@
   = stylesheet_link_tag 'rails_admin/rails_admin'
   = stylesheet_link_tag 'app_express/application'
 
-= render template: 'layouts/express_admin/admin' rescue render template: 'layouts/rails_admin/admin'
+= render template: 'layouts/express_admin/admin'
