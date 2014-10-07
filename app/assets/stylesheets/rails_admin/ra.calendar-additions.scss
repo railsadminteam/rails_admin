@@ -25,3 +25,20 @@
     }
   }
 }
+/* span for disabled cells */
+.ui-timepicker-table td span {
+    width: auto;
+}
+/* anchors for clickable cells */
+.ui-timepicker-table td a {
+    width: auto;
+}
+.input-group {
+  .hasTimepicker {
+    @extend .form-control;
+    width: 65px !important;
+  }
+  .hasDatepicker {
+    @extend .form-control
+  }
+}
