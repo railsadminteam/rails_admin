@@ -7,7 +7,7 @@
   %h1= @page_name
 - flash && flash.each do |key, value|
   .alert{class: "alert-#{key}"}
-    %a.close{href: '#', :'data-dismiss' => "alert"}×
+    %a.close{href: '#', :'data-dismiss' => "alert"} &times;
     = value
 = breadcrumb
 %ul.nav.nav-tabs
