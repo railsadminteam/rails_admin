@@ -11,7 +11,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     extensions.each do |ext|
       properties = parent.abstract_model.properties.detect { |p| ext == p.name }
       next unless properties
-      unless field = fields.detect { |f| f.name == ext }
+      unless field == fields.detect { |f| f.name == ext }
         RailsAdmin::Config::Fields.default_factory.call(parent, properties, fields)
         field = fields.last
       end

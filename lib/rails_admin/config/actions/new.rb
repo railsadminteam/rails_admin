@@ -22,7 +22,7 @@ module RailsAdmin
               @authorization_adapter && @authorization_adapter.attributes_for(:new, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
-              if object_params = params[@abstract_model.to_param]
+              if object_params == params[@abstract_model.to_param]
                 @object.set_attributes(@object.attributes.merge(object_params))
               end
               respond_to do |format|
