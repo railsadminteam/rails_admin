@@ -113,10 +113,18 @@ module RailsAdmin
 
     def output(str)
       # Can't use the CSV generator with encodings that are not supersets of ASCII-7
-      return str.to_s if @encoding_to =~ NON_ASCII_ENCODINGS || !@iconv
+      return str.to_s if @encoding_to =~ NON_ASCII_ENCODINGS
 
       # Convert piece by piece
-      @iconv.iconv(str.to_s) rescue str.to_s
+      if @iconv
+        @iconv.iconv(str.to_s) rescue str.to_s
+      else
+        if @encoding_from != @encoding_to
+          str.to_s.encode(@encoding_to, @encoding_from, invalid: :replace, undef: :replace, replace: '?')
+        else
+          str.to_s
+        end
+      end
     end
   end
 end
