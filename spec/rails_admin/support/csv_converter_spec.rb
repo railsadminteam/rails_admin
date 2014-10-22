@@ -60,7 +60,7 @@ describe RailsAdmin::CSVConverter do
       it 'encodes to expected byte sequence' do
         expect(subject[1]).to eq 'UTF-16'
         expect(subject[2].encoding).to eq Encoding::UTF_16
-        expect(subject[2].unpack('H*').first).
+        expect(subject[2].unpack('H*').first.force_encoding('US-ASCII')).
           to eq 'feff004e0075006d006200650072002c004e0061006d0065000a0031002c306a307e3048000a'
       end
     end
