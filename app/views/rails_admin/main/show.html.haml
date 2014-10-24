@@ -1,6 +1,6 @@
 - @model_config.show.with(object: @object, view: self, controller: self.controller).visible_groups.each do |fieldset|
   - unless (fields = fieldset.with(object: @object, view: self, controller: self.controller).visible_fields).empty?
-    - if !(values = fields.map{ |f| f.value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
+    - if !(values = fields.map{ |f| f.formatted_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
       .fieldset
         %h4
           = fieldset.label
