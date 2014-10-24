@@ -32,6 +32,10 @@ module RailsAdmin
           register_instance_option :multiple? do
             properties && [:serialized].include?(properties.type)
           end
+          
+          def parse_input(params)
+            params[name] = params[name].presence
+          end
         end
       end
     end
