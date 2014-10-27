@@ -27,7 +27,7 @@ module RailsAdmin
                 @max = current_count > @max ? current_count : @max
                 @count[t.pretty_name] = current_count
                 next unless t.properties.detect { |c| c.name == :updated_at }
-                @most_recent_changes[t.pretty_name] = t.first(sort: "#{t.table_name}.updated_at").try(:updated_at)
+                @most_recent_changes[t.pretty_name] = t.first(sort: "\"#{t.table_name}\".updated_at").try(:updated_at)
               end
             end
             render @action.template_name, status: (flash[:error].present? ? :not_found : 200)
