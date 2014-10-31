@@ -208,7 +208,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         RailsAdmin.config do |config|
           config.included_models = [Ball, Comment]
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Balls).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Balls).*(Comments)/m)
       end
 
       it 'does not draw empty navigation labels' do
@@ -221,8 +221,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             label_plural 'Confirmed'
           end
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m)
-        expect(helper.main_navigation).not_to match(/(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m)
+        expect(helper.main_navigation).not_to match(/(dropdown-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m)
       end
 
       it 'does not show unvisible models' do
@@ -233,7 +233,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
           end
         end
         result = helper.main_navigation
-        expect(result).to match(/(nav\-header).*(Navigation).*(Balls)/m)
+        expect(result).to match(/(dropdown-header).*(Navigation).*(Balls)/m)
         expect(result).not_to match('Comments')
       end
 
@@ -244,14 +244,14 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             hide
           end
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(dropdown\-header).*(Navigation).*(Hardballs)/m)
       end
 
       it 'shows children of excluded models' do
         RailsAdmin.config do |config|
           config.included_models = [Hardball]
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Hardballs)/m)
       end
 
       it 'nests in navigation label' do
@@ -261,7 +261,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             navigation_label 'commentable'
           end
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Commentable).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown\-header).*(Commentable).*(Comments)/m)
       end
 
       it 'nests in parent model' do
