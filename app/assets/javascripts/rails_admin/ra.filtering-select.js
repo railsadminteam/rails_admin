@@ -42,7 +42,7 @@
       var filtering_select = $('<div class="input-append filtering-select" style="float:left"></div>')
       var input = this.input = $('<input type="text">')
         .val(value)
-        .addClass("ra-filtering-select-input")
+        .addClass("form-control ra-filtering-select-input")
         .attr('style', select.attr('style'))
         .show()
         .autocomplete({
