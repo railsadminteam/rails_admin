@@ -192,7 +192,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @players = [{}, {name: 'Many foos'}, {position: 'foo shortage'}].
-        collect { |h| FactoryGirl.create :player, h }
+                 collect { |h| FactoryGirl.create :player, h }
     end
 
     it 'makes correct query' do
@@ -205,7 +205,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @team = FactoryGirl.create :team, name: 'king of bar'
       @players = [{}, {team: @team}, {name: 'Many foos', team: @team}, {name: 'Great foo'}].
-        collect { |h| FactoryGirl.create :player, h }
+                 collect { |h| FactoryGirl.create :player, h }
     end
 
     it 'makes correct query' do

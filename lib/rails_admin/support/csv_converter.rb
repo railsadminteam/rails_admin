@@ -80,23 +80,23 @@ module RailsAdmin
       @fields.collect do |field|
         ::I18n.t('admin.export.csv.header_for_root_methods', name: field.label, model: @abstract_model.pretty_name)
       end +
-      @associations.flat_map do |_association_name, option_hash|
-        option_hash[:fields].collect do |field|
-          ::I18n.t('admin.export.csv.header_for_association_methods', name: field.label, association: option_hash[:association].label)
+        @associations.flat_map do |_association_name, option_hash|
+          option_hash[:fields].collect do |field|
+            ::I18n.t('admin.export.csv.header_for_association_methods', name: field.label, association: option_hash[:association].label)
+          end
         end
-      end
     end
 
     def generate_csv_row(object)
       @fields.collect do |field|
         field.with(object: object).export_value
       end +
-      @associations.flat_map do |association_name, option_hash|
-        associated_objects = [object.send(association_name)].flatten.compact
-        option_hash[:fields].collect do |field|
-          associated_objects.collect { |ao| field.with(object: ao).export_value.presence || @empty }.join(',')
+        @associations.flat_map do |association_name, option_hash|
+          associated_objects = [object.send(association_name)].flatten.compact
+          option_hash[:fields].collect do |field|
+            associated_objects.collect { |ao| field.with(object: ao).export_value.presence || @empty }.join(',')
+          end
         end
-      end
     end
   end
 end

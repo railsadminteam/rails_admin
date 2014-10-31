@@ -69,8 +69,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             member :test_bindings do
               visible do
                 bindings[:controller].is_a?(ActionView::TestCase::TestController) &&
-                bindings[:abstract_model].model == Team &&
-                bindings[:object].is_a?(Team)
+                  bindings[:abstract_model].model == Team &&
+                  bindings[:object].is_a?(Team)
               end
             end
           end
@@ -97,8 +97,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             member :test_bindings do
               visible do
                 bindings[:controller].is_a?(ActionView::TestCase::TestController) &&
-                bindings[:abstract_model].model == Team &&
-                bindings[:object].is_a?(Team)
+                  bindings[:abstract_model].model == Team &&
+                  bindings[:object].is_a?(Team)
               end
             end
           end

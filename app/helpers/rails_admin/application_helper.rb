@@ -19,8 +19,8 @@ module RailsAdmin
 
     def current_action?(action, abstract_model = @abstract_model, object = @object)
       @action.custom_key == action.custom_key &&
-      abstract_model.try(:to_param) == @abstract_model.try(:to_param) &&
-      (@object.try(:persisted?) ? @object.id == object.try(:id) : !object.try(:persisted?))
+        abstract_model.try(:to_param) == @abstract_model.try(:to_param) &&
+        (@object.try(:persisted?) ? @object.id == object.try(:id) : !object.try(:persisted?))
     end
 
     def action(key, abstract_model = nil, object = nil)
@@ -116,7 +116,7 @@ module RailsAdmin
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, class: current_action?(a, am, o) && 'active') do
             crumb = begin
-              if not current_action?(a, am, o)
+              if !current_action?(a, am, o)
                 if a.http_methods.include?(:get)
                   link_to url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
                     wording_for(:breadcrumb, a, am, o)
@@ -155,13 +155,13 @@ module RailsAdmin
       return '' if actions.empty?
       content_tag :li, class: 'dropdown', style: 'float:right' do
         content_tag(:a, class: 'dropdown-toggle', :'data-toggle' => 'dropdown', href: '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
-        content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
-          actions.collect do |action|
-            content_tag :li do
-              link_to wording_for(:bulk_link, action), '#', onclick: "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"
-            end
-          end.join.html_safe
-        end
+          content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
+            actions.collect do |action|
+              content_tag :li do
+                link_to wording_for(:bulk_link, action), '#', onclick: "jQuery('#bulk_action').val('#{action.action_name}'); jQuery('#bulk_form').submit(); return false;"
+              end
+            end.join.html_safe
+          end
       end.html_safe
     end
   end

@@ -29,7 +29,7 @@ module RailsAdmin
         # accessed by an instance method. Both go by the name of the option.
         def register_instance_option(option_name, scope = self, &default)
           options = scope.instance_variable_get('@config_options') ||
-                      scope.instance_variable_set('@config_options', {})
+                    scope.instance_variable_set('@config_options', {})
 
           option_name = option_name.to_s
           options[option_name] = nil

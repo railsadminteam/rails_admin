@@ -56,8 +56,8 @@ module RailsAdmin
       def properties
         columns = model.columns.reject do |c|
           c.type.blank? ||
-            DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
-            c.try(:array)
+          DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
+          c.try(:array)
         end
         columns.collect do |property|
           Property.new(property, model)
