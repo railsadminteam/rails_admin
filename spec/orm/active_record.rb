@@ -38,14 +38,6 @@ class Tableless < ActiveRecord::Base
         a
       end
     end
-
-    def all
-      self
-    end
-
-    def count
-      0
-    end
   end
 
   # Override the save method to prevent exceptions.

@@ -96,10 +96,8 @@ module RailsAdmin
         url         = url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
         level_class = " nav-level-#{level}" if level > 0
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
-        count = node.abstract_model.count
-        badge = %( <span class='badge pull-right'>#{count}</span>).html_safe
         li = content_tag :li, 'data-model' => model_param do
-          link_to badge + nav_icon + capitalize_first_letter(node.label_plural), url, class: "pjax#{level_class}"
+          link_to nav_icon + capitalize_first_letter(node.label_plural), url, class: "pjax#{level_class}"
         end
         li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level + 1)
       end.join.html_safe
