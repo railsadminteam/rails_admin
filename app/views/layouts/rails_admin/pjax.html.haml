@@ -6,7 +6,7 @@
 .page-header
   %h1= @page_name
 - flash && flash.each do |key, value|
-  - key = 'danger' if key == 'error'
+  - key = 'danger' if key.to_s == 'error'
   .alert{class: "alert-#{key}"}
     %a.close{href: '#', :'data-dismiss' => "alert"} &times;
     = value
