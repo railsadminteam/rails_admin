@@ -19,7 +19,9 @@ field :asset, :carrierwave
 Now a file upload field will be added to your model's form.
 
 ## Polymorphic association
-If you have Asset model class as a polymorphic and you want thumbnail in you Article model. For first create association:
+If you have an Asset model class as polymorphic and you want a thumbnail in you Article model. 
+
+Create the association:
 
 ```ruby
 class Article < ActiveRecord::Base
@@ -27,7 +29,7 @@ class Article < ActiveRecord::Base
 end
 ```
 
-For second in rails_admin.rb initializer say :post_thumbnail should be as a file tag.
+In rails_admin.rb initializer indicate :post_thumbnail should be a file tag.
 
 ```ruby
 config.model Asset do
