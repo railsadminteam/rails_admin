@@ -103,7 +103,7 @@ RailsAdmin.config do |config|
       field :created_at
       field :revenue do
         visible do
-          current_user.roles.include?(:accounting) # metacode
+          bindings[:view]._current_user.roles.include(:accounting)
         end
       end
     end
