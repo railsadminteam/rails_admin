@@ -44,7 +44,8 @@ module RailsAdmin
       end
 
       def object_label
-        bindings[:object].send object_label_method
+        bindings[:object].send(object_label_method).presence ||
+          bindings[:object].send(:rails_admin_default_object_label_method)
       end
 
       # The display for a model instance (i.e. a single database record).
