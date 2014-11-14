@@ -26,6 +26,13 @@ describe RailsAdmin::Config::Model do
       c = Comment.new(content: 'test')
       expect(RailsAdmin.config(Comment).with(object: c).object_label).to eq('test')
     end
+
+    context 'when the object_label_method is blank' do
+      it 'uses the rails admin default' do
+        c = Comment.create(content: '', id: '1')
+        expect(RailsAdmin.config(Comment).with(object: c).object_label).to eq('Comment #1')
+      end
+    end
   end
 
   describe '#object_label_method' do
