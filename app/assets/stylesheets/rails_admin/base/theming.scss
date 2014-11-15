@@ -29,7 +29,9 @@ body.rails_admin {
     padding: 9px 9px 9px 9px;
     position: fixed;
     width: 14%;
-    height: 100%;
+    overflow-y: scroll;
+    top: 50px;
+    bottom: 0;
     background: #eaf0f1;
   }
 
