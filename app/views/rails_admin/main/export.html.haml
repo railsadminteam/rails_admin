@@ -5,15 +5,15 @@
 
   %input{name: "send_data", type: "hidden", value: "true"}/
   %fieldset{id: 'fields_to_export'}
-    %div.control-group
-      %div.controls
+    %legend
+      %i.icon-chevron-down
+      = t('admin.export.select')
+    .control-group
+      .controls
         .col-sm-2
         %label.col-sm-10.checkbox{for: 'check_all'}
           = check_box_tag 'all', 'all', true, { id: 'check_all' }
           = t('admin.export.select_all_fields')
-    %legend
-      %i.icon-chevron-down
-      = t('admin.export.select')
     .control-group
       %label.col-sm-2.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
       .col-sm-10.controls
@@ -58,7 +58,8 @@
     .control-group
       %label.col-sm-2.control-label{for: "csv_options_skip_header"}= t('admin.export.csv.skip_header')
       .col-sm-10.controls
-        = check_box_tag 'csv_options[skip_header]', 'true'
+        %label.checkbox
+          = check_box_tag 'csv_options[skip_header]', 'true'
         %p.help-block= t('admin.export.csv.skip_header_help')
 
     .control-group
