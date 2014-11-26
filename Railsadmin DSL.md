@@ -416,7 +416,7 @@ RailsAdmin.config do |config|
   config.model 'Team' do
     edit do
       field :name do
-        def render
+        render do
           bindings[:view].render :partial => partial.to_s, :locals => {:field => self, :form => bindings[:form]}
         end
       end
