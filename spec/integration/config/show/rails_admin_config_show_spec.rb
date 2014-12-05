@@ -22,7 +22,7 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
     end
 
     it 'contains the JSONified object' do
-      expect(JSON.parse(body)).to eq JSON.parse @player.to_json
+      expect(JSON.parse(body)).to eq JSON.parse @player.reload.to_json
     end
   end
 
