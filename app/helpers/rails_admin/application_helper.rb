@@ -48,7 +48,7 @@ module RailsAdmin
     end
 
     def logout_method
-      return Devise.sign_out_via if defined?(Devise)
+      return [Devise.sign_out_via].flatten.first if defined?(Devise)
       :delete
     end
 

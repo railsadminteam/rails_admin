@@ -110,6 +110,21 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
       end
     end
 
+    describe '#logout_method' do
+      it 'defaults to :delete when Devise is not defined' do
+        allow(Object).to receive(:defined?).with(Devise).and_return(false)
+
+        expect(helper.logout_method).to eq(:delete)
+      end
+
+      it 'uses first sign out method from Devise when it is defined' do
+        allow(Object).to receive(:defined?).with(Devise).and_return(true)
+
+        expect(Devise).to receive(:sign_out_via).and_return([:whatever_defined_on_devise, :something_ignored])
+        expect(helper.logout_method).to eq(:whatever_defined_on_devise)
+      end
+    end
+
     describe '#wording_for' do
       it 'gives correct wording even if action is not visible' do
         RailsAdmin.config do |config|
