@@ -13,11 +13,11 @@ module RailsAdmin
           register_instance_option :pretty_value do
             case value
             when nil
-              %(<span class='badge'>-</span>)
+              %(<span class='label label-default'>-</span>)
             when false
-              %(<span class='badge badge-important'>&#x2718;</span>)
+              %(<span class='label label-danger'>&#x2718;</span>)
             when true
-              %(<span class='badge badge-success'>&#x2713;</span>)
+              %(<span class='label label-success'>&#x2713;</span>)
             end.html_safe
           end
 
