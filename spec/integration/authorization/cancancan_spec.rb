@@ -40,7 +40,6 @@ class AdminAbility
 end
 
 describe 'RailsAdmin CanCanCan Authorization', type: :request do
-
   subject { page }
 
   before do
@@ -111,7 +110,6 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
     it 'GET /admin/player/new should raise CanCan::AccessDenied' do
       expect { visit new_path(model_name: 'player') }.to raise_error(CanCan::AccessDenied)
     end
-
   end
 
   describe 'with create and read player role' do
@@ -143,7 +141,6 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       @player = FactoryGirl.create :player
       expect { visit edit_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
     end
-
   end
 
   describe 'with update and read player role' do
@@ -175,12 +172,10 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       @player = FactoryGirl.create :player
       expect { visit delete_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
     end
-
   end
 
   describe 'with history role' do
     it 'shows links to history action' do
-
       @user.update_attributes(roles: [:admin, :read_player, :history_player])
       @player = FactoryGirl.create :player
 

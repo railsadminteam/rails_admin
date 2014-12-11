@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config do
-
   describe '.included_models' do
-
     it 'only uses included models' do
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.collect(&:model)).to eq([League, Team]) # it gets sorted
@@ -76,7 +74,6 @@ describe RailsAdmin::Config do
   end
 
   describe '.main_app_name' do
-
     it 'as a default meaningful dynamic value' do
       expect(RailsAdmin.config.main_app_name.call).to eq(['Dummy App', 'Admin'])
     end

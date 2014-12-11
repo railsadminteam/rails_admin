@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic List', type: :request do
-
   subject { page }
 
   describe 'GET /admin' do
@@ -437,7 +436,6 @@ describe 'RailsAdmin Basic List', type: :request do
       is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
       is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
     end
-
   end
 
   describe 'Scopes' do

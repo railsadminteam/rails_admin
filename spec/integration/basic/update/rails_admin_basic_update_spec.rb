@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic Update', type: :request do
-
   subject { page }
 
   describe 'update with errors' do
@@ -225,5 +224,4 @@ describe 'RailsAdmin Basic Update', type: :request do
       expect(@hardball.color).to eq('cyan')
     end
   end
-
 end

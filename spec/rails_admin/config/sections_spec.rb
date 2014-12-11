@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Sections do
-
   describe 'configure' do
     it 'configures without changing the section default list' do
       RailsAdmin.config Team do
@@ -62,7 +61,6 @@ describe RailsAdmin::Config::Sections do
             end
           end
         end
-
       end
       expect(RailsAdmin.config(Fan).visible_fields.count).to eq(1)
       expect(RailsAdmin.config(Fan).visible_fields.first.label).to eq('modified base Their Name')

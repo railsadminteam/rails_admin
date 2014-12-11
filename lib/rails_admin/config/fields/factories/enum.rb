@@ -2,7 +2,6 @@ require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/types/enum'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-
   model = parent.abstract_model.model
   method_name = "#{properties.name}_enum"
 

@@ -155,7 +155,6 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
         expect(helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team))).to eq('Add a new Team')
       end
-
     end
 
     describe '#breadcrumb' do

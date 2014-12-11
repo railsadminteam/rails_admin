@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'csv'
 
 describe 'RailsAdmin Export', type: :request do
-
   subject { page }
 
   before do
@@ -29,7 +28,6 @@ describe 'RailsAdmin Export', type: :request do
   end
 
   describe 'POST /admin/players/export (prompt)' do
-
     it 'allows to export to CSV with associations and default schema, containing properly translated header and follow configuration' do
       RailsAdmin.config do |c|
         c.model Player do

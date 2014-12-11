@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Model do
-
   describe '#excluded?' do
     before do
       RailsAdmin.config do |config|
@@ -92,7 +91,6 @@ describe RailsAdmin::Config::Model do
                                               end,
                                             },
                                           }
-
         end
 
         it 'always uses :other as pluralization key' do

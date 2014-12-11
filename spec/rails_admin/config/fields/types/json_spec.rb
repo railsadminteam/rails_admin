@@ -19,6 +19,5 @@ describe RailsAdmin::Config::Fields::Types::Json do
     it 'raise JSON::ParserError with invalid json string' do
       expect { field.parse_input(json_field: '{{') }.to raise_error(JSON::ParserError)
     end
-
   end
 end

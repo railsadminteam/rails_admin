@@ -27,7 +27,6 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
   end
 
   describe 'compact_show_view' do
-
     it 'hides empty fields in show view by default' do
       do_request
       is_expected.not_to have_css('.logo_url_field')

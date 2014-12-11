@@ -3,11 +3,9 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Config DSL Edit Section', type: :request do
-
   subject { page }
 
   describe " a field with 'format' as a name (Kernel function)" do
-
     it 'is updatable without any error' do
       RailsAdmin.config FieldTest do
         edit do
@@ -23,12 +21,10 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'default_value' do
-
     it 'is set for all types of input fields' do
       RailsAdmin.config do |config|
         config.excluded_models = []
         config.model(FieldTest) do
-
           field :string_field do
             default_value 'string_field default_value'
           end
@@ -77,7 +73,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'field groupings' do
-
     it 'is hideable' do
       RailsAdmin.config Team do
         edit do
@@ -326,7 +321,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe "items' fields" do
-
     it 'shows all by default' do
       visit new_path(model_name: 'team')
       is_expected.to have_selector('select#team_division_id')
@@ -643,7 +637,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       is_expected.to have_selector('a', text: 'Edit this Team')
       is_expected.to have_selector('a', text: 'Edit this Draft')
     end
-
   end
 
   describe 'bindings' do
@@ -766,7 +759,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
         expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
       end
-
     end
   end
 
@@ -785,7 +777,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'fields which are nullable and have AR validations', active_record: true do
-
     it 'is required' do
       # draft.notes is nullable and has no validation
       field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :notes }
@@ -864,7 +855,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'Paperclip Support' do
-
     it 'shows a file upload field' do
       RailsAdmin.config User do
         edit do
@@ -1071,5 +1061,4 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       is_expected.to have_selector('.color_type input')
     end
   end
-
 end

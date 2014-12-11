@@ -84,5 +84,4 @@ describe 'RailsAdmin History', type: :request, active_record: true do
       end
     end
   end
-
 end

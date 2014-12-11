@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic Destroy', type: :request do
-
   subject { page }
 
   describe 'destroy' do
