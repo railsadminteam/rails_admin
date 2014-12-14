@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Namespaced Model New', type: :request do
-
   subject { page }
 
   describe 'AbstractModel#to_param' do

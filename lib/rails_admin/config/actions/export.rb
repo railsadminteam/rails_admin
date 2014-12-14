@@ -14,7 +14,6 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-
             if format = params[:json] && :json || params[:csv] && :csv || params[:xml] && :xml
               request.format = format
               @schema = params[:schema].symbolize if params[:schema] # to_json and to_xml expect symbols for keys AND values.
@@ -23,7 +22,6 @@ module RailsAdmin
             else
               render @action.template_name
             end
-
           end
         end
 

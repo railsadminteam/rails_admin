@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
-
   describe '#required' do
     it 'reads the on: :create/:update validate option' do
       RailsAdmin.config Ball do
@@ -197,7 +196,6 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     describe 'for basic type fields' do
-
       it 'uses base table and find correct column type' do
         expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{column: 'field_tests.text_field', type: :text}])
         expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{column: 'field_tests.integer_field', type: :integer}])

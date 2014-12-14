@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic List', type: :request do
-
   subject { page }
 
   describe 'GET /admin' do
@@ -16,7 +15,7 @@ describe 'RailsAdmin Basic List', type: :request do
     it "redirects to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'
       expect(page.driver.status_code).to eq(404)
-      expect(find('.alert-error')).to have_content("Model 'Whatever' could not be found")
+      expect(find('.alert-danger')).to have_content("Model 'Whatever' could not be found")
     end
   end
 
@@ -24,7 +23,7 @@ describe 'RailsAdmin Basic List', type: :request do
     it "redirects to balls index and inform the user the id wasn't found" do
       visit '/admin/ball/545-typo'
       expect(page.driver.status_code).to eq(404)
-      expect(find('.alert-error')).to have_content("Ball with id '545-typo' could not be found")
+      expect(find('.alert-danger')).to have_content("Ball with id '545-typo' could not be found")
     end
   end
 
@@ -315,9 +314,9 @@ describe 'RailsAdmin Basic List', type: :request do
     end
 
     it 'paginates correctly' do
-      expect(find('.pagination ul li:first')).to have_content('« Prev')
-      expect(find('.pagination ul li:last')).to have_content('Next »')
-      expect(find('.pagination ul li.active')).to have_content('2')
+      expect(find('ul.pagination li:first')).to have_content('« Prev')
+      expect(find('ul.pagination li:last')).to have_content('Next »')
+      expect(find('ul.pagination li.active')).to have_content('2')
     end
   end
 
@@ -329,9 +328,9 @@ describe 'RailsAdmin Basic List', type: :request do
     end
 
     it 'paginates correctly and contain the right item' do
-      expect(find('.pagination ul li:first')).to have_content('« Prev')
-      expect(find('.pagination ul li:last')).to have_content('Next »')
-      expect(find('.pagination ul li.active')).to have_content('3')
+      expect(find('ul.pagination li:first')).to have_content('« Prev')
+      expect(find('ul.pagination li:last')).to have_content('Next »')
+      expect(find('ul.pagination li.active')).to have_content('3')
     end
   end
 
@@ -437,7 +436,6 @@ describe 'RailsAdmin Basic List', type: :request do
       is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
       is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
     end
-
   end
 
   describe 'Scopes' do

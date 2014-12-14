@@ -5,11 +5,6 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
   let(:team) { FactoryGirl.create :team }
 
   def do_request
-    # tests were done with compact_show_view being false
-    RailsAdmin.config do |c|
-      c.compact_show_view = false
-    end
-
     visit show_path(model_name: 'team', id: team.id)
   end
 
@@ -27,16 +22,14 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
     end
 
     it 'contains the JSONified object' do
-      expect(body).to include(@player.reload.to_json)
+      expect(JSON.parse(body)).to eq JSON.parse @player.reload.to_json
     end
   end
 
   describe 'compact_show_view' do
-
     it 'hides empty fields in show view by default' do
-      @player = FactoryGirl.create :player
-      visit show_path(model_name: 'league', id: @player.id)
-      is_expected.not_to have_css('.born_on_field')
+      do_request
+      is_expected.not_to have_css('.logo_url_field')
     end
 
     it 'is disactivable' do
@@ -44,9 +37,8 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
         c.compact_show_view = false
       end
 
-      @player = FactoryGirl.create :player
-      visit show_path(model_name: 'player', id: @player.id)
-      is_expected.to have_css('.born_on_field')
+      do_request
+      is_expected.to have_css('.logo_url_field')
     end
   end
 
@@ -77,6 +69,12 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
   end
 
   describe 'field groupings' do
+    before do
+      RailsAdmin.config do |c|
+        c.compact_show_view = false
+      end
+    end
+
     it 'is hideable' do
       RailsAdmin.config Team do
         show do
@@ -179,6 +177,11 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
   end
 
   describe "items' fields" do
+    before do
+      RailsAdmin.config do |c|
+        c.compact_show_view = false
+      end
+    end
 
     it 'shows all by default' do
       do_request
@@ -342,6 +345,48 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
       visit show_path(model_name: 'field_test', id: @record.id)
       is_expected.not_to have_link('embed 0')
       is_expected.not_to have_link('embed 1')
+    end
+  end
+
+  describe 'virtual field' do
+    let(:team) { FactoryGirl.create :team, name: 'foobar' }
+    context 'with formatted_value defined' do
+      before do
+        RailsAdmin.config Team do
+          show do
+            field :truncated_name do
+              formatted_value do
+                bindings[:object].name.truncate(5)
+              end
+            end
+          end
+        end
+      end
+
+      it 'shows up correctly' do
+        do_request
+
+        is_expected.to have_selector('.truncated_name_field')
+        is_expected.to have_selector('dd', text: 'fo...')
+      end
+    end
+
+    context 'without formatted_value' do
+      before do
+        RailsAdmin.config Team do
+          show do
+            field :truncated_name do
+              pretty_value do
+                bindings[:object].name.truncate(5)
+              end
+            end
+          end
+        end
+      end
+
+      it 'raises error along with suggestion' do
+        expect { do_request }.to raise_error(/you should declare 'formatted_value'/)
+      end
     end
   end
 end

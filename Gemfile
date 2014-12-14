@@ -1,10 +1,16 @@
 source 'https://rubygems.org'
 
 case ENV['RAILS_VERSION']
+when '4.2'
+  gem 'rails', '~> 4.2.0.beta1'
+  gem 'sass-rails', '~> 5.0.0.beta1'
+  gem 'devise', github: 'plataformatec/devise', branch: 'lm-rails-4-2'
 when '4.0'
   gem 'rails', '~> 4.0.0'
+  gem 'devise', '>= 3.2'
 else
-  gem 'rails', '~> 4.1'
+  gem 'rails', '~> 4.1.0'
+  gem 'devise', '>= 3.2'
 end
 
 case ENV['CI_ORM']
@@ -12,7 +18,6 @@ when 'mongoid'
   gem 'mongoid', '~> 4.0.0.beta1'
   gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-  gem 'mongoid-grid_fs', '1.9.1' # workaround for mime-types version issue
 else
   platforms :jruby do
     case ENV['CI_DB_ADAPTER']
@@ -53,7 +58,6 @@ group :test do
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
   gem 'database_cleaner', '>= 1.2'
-  gem 'devise', '>= 3.2'
   gem 'dragonfly', '~> 1.0'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'

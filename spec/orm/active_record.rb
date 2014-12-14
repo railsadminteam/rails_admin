@@ -18,8 +18,10 @@ class Tableless < ActiveRecord::Base
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
-      columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default,
-                                                              sql_type.to_s, null)
+      columns << ActiveRecord::ConnectionAdapters::Column.new(
+        name.to_s, default,
+        connection.respond_to?(:lookup_cast_type) ? connection.lookup_cast_type(sql_type.to_s) : sql_type.to_s,
+        null)
     end
 
     def columns_hash

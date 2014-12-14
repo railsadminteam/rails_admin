@@ -69,8 +69,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             member :test_bindings do
               visible do
                 bindings[:controller].is_a?(ActionView::TestCase::TestController) &&
-                bindings[:abstract_model].model == Team &&
-                bindings[:object].is_a?(Team)
+                  bindings[:abstract_model].model == Team &&
+                  bindings[:object].is_a?(Team)
               end
             end
           end
@@ -97,8 +97,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             member :test_bindings do
               visible do
                 bindings[:controller].is_a?(ActionView::TestCase::TestController) &&
-                bindings[:abstract_model].model == Team &&
-                bindings[:object].is_a?(Team)
+                  bindings[:abstract_model].model == Team &&
+                  bindings[:object].is_a?(Team)
               end
             end
           end
@@ -107,6 +107,21 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Team.new).collect(&:custom_key)).to eq([:test_bindings])
         expect(helper.actions(:all, RailsAdmin::AbstractModel.new(Team), Player.new).collect(&:custom_key)).to eq([])
         expect(helper.actions(:all, RailsAdmin::AbstractModel.new(Player), Team.new).collect(&:custom_key)).to eq([])
+      end
+    end
+
+    describe '#logout_method' do
+      it 'defaults to :delete when Devise is not defined' do
+        allow(Object).to receive(:defined?).with(Devise).and_return(false)
+
+        expect(helper.logout_method).to eq(:delete)
+      end
+
+      it 'uses first sign out method from Devise when it is defined' do
+        allow(Object).to receive(:defined?).with(Devise).and_return(true)
+
+        expect(Devise).to receive(:sign_out_via).and_return([:whatever_defined_on_devise, :something_ignored])
+        expect(helper.logout_method).to eq(:whatever_defined_on_devise)
       end
     end
 
@@ -140,7 +155,6 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
         expect(helper.wording_for(:link, :new, RailsAdmin::AbstractModel.new(Team))).to eq('Add a new Team')
       end
-
     end
 
     describe '#breadcrumb' do
@@ -208,7 +222,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         RailsAdmin.config do |config|
           config.included_models = [Ball, Comment]
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Balls).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Balls).*(Comments)/m)
       end
 
       it 'does not draw empty navigation labels' do
@@ -221,8 +235,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             label_plural 'Confirmed'
           end
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m)
-        expect(helper.main_navigation).not_to match(/(nav\-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m)
+        expect(helper.main_navigation).not_to match(/(dropdown-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m)
       end
 
       it 'does not show unvisible models' do
@@ -233,7 +247,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
           end
         end
         result = helper.main_navigation
-        expect(result).to match(/(nav\-header).*(Navigation).*(Balls)/m)
+        expect(result).to match(/(dropdown-header).*(Navigation).*(Balls)/m)
         expect(result).not_to match('Comments')
       end
 
@@ -244,14 +258,14 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             hide
           end
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(dropdown\-header).*(Navigation).*(Hardballs)/m)
       end
 
       it 'shows children of excluded models' do
         RailsAdmin.config do |config|
           config.included_models = [Hardball]
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Hardballs)/m)
       end
 
       it 'nests in navigation label' do
@@ -261,7 +275,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             navigation_label 'commentable'
           end
         end
-        expect(helper.main_navigation).to match(/(nav\-header).*(Commentable).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown\-header).*(Commentable).*(Comments)/m)
       end
 
       it 'nests in parent model' do

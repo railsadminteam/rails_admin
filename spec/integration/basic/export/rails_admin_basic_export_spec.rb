@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'csv'
 
 describe 'RailsAdmin Export', type: :request do
-
   subject { page }
 
   before do
@@ -29,7 +28,6 @@ describe 'RailsAdmin Export', type: :request do
   end
 
   describe 'POST /admin/players/export (prompt)' do
-
     it 'allows to export to CSV with associations and default schema, containing properly translated header and follow configuration' do
       RailsAdmin.config do |c|
         c.model Player do
@@ -78,7 +76,7 @@ describe 'RailsAdmin Export', type: :request do
       # and Mongoid with ActiveModel 3.1 does not support to_xml's :include options
       # (due change of implementation in ActiveModel::Serializers between 3.1 and 3.2)
       if RUBY_VERSION =~ /1\.9/ &&
-          (CI_ORM != :mongoid || (CI_ORM == :mongoid && ActiveModel::VERSION::STRING >= '3.2'))
+         (CI_ORM != :mongoid || (CI_ORM == :mongoid && ActiveModel::VERSION::STRING >= '3.2'))
         is_expected.to have_content @player.team.name
       end
     end

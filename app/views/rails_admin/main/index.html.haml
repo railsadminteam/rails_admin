@@ -38,6 +38,9 @@
     filter_name = filter_for_field.keys.first
     filter_hash = filter_for_field.values.first
     field = @filterable_fields.find{ |field| field.name == filter_name.to_sym }
+    unless field
+      fail "#{filter_name} is not currently filterable; filterable fields are #{@filterable_fields.map(&:name).join(', ')}"
+    end
     field_options = case field.type
     when :enum
       options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
@@ -93,10 +96,12 @@
     .well
       %span#filters_box
       %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
-      %input.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
-      %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
-        %i.icon-white.icon-refresh
-        = t("admin.misc.refresh")
+      .input-group
+        %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
+        %span.input-group-btn
+          %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+            %i.icon-white.icon-refresh
+            = t("admin.misc.refresh")
       - if export_action
         %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'btn btn-info'
 
@@ -105,7 +110,7 @@
       - @model_config.list.scopes.each_with_index do |scope, index|
         - scope = '_all' if scope.nil?
         %li{class: "#{'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0)}"}
-          %a{href: index_path(params.merge(scope: scope, page: nil))}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
+          %a{href: index_path(params.merge(scope: scope, page: nil)), class: 'pjax'}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
 
   = form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: "form" do
     = hidden_field_tag :bulk_action
@@ -143,8 +148,10 @@
               %ul.inline= menu_for :member, @abstract_model, object, true
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
-      = paginate(@objects, theme: 'twitter-bootstrap', remote: true)
-      = link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
+      .row
+        .col-md-6= paginate(@objects, theme: 'twitter-bootstrap', remote: true)
+      .row
+        .col-md-6= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-default clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
     - else
       .clearfix.total-count= "#{@objects.size} #{@model_config.pluralize(@objects.size).downcase}"

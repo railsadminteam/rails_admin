@@ -1,4 +1,4 @@
-%ul.nav.pull-right.root_links
+%ul.nav.navbar-nav.navbar-right.root_links
   - actions(:root).each do |action|
     %li{class: "#{action.action_name}_root_link"}= link_to wording_for(:menu, action), { action: action.action_name, controller: 'rails_admin/main' }, class: "pjax"
   - if main_app_root_path = (main_app.root_path rescue false)

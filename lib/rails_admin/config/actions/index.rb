@@ -40,7 +40,6 @@ module RailsAdmin
             end
 
             respond_to do |format|
-
               format.html do
                 render @action.template_name, status: (flash[:error].present? ? :not_found : 200)
               end
@@ -81,9 +80,7 @@ module RailsAdmin
                   render text: output
                 end
               end
-
             end
-
           end
         end
 
