@@ -55,13 +55,13 @@ module RailsAdmin
 
           def polymorphic_type_collection
             associated_model_config.collect do |config|
-              [config.label, config.abstract_model.model.name]
+              [config.label, (config.abstract_model.sti_base_class || config.abstract_model.model).name]
             end
           end
 
           def polymorphic_type_urls
             types = associated_model_config.collect do |config|
-              [config.abstract_model.model.name, config.abstract_model.to_param]
+              [config.label, config.abstract_model.to_param]
             end
             ::Hash[*types.collect { |v| [v[0], bindings[:view].index_path(v[1])] }.flatten]
           end

@@ -144,7 +144,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           object_select.html('<option value=""></option>')
         else
           $.ajax
-            url: urls[type_select.val()]
+            url: urls[type_select.find('option:selected').text()]
             data:
               compact: true
               all: true
