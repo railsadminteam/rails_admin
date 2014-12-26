@@ -1017,7 +1017,12 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       end
 
       after do
-        Team.serialized_attributes.clear if Rails.version < '4.2'
+        if Rails.version >= '4.2'
+          Team.reset_column_information
+          Team.attribute_type_decorations.clear
+        else
+          Team.serialized_attributes.clear
+        end
         Team.instance_eval { undef :color_enum }
       end
 
