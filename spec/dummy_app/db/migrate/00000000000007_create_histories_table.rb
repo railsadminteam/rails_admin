@@ -5,7 +5,7 @@ class CreateHistoriesTable < ActiveRecord::Migration
       t.string :username
       t.integer :item
       t.string :table
-      t.timestamps
+      t.timestamps null: false
     end
     add_index(:histories, [:item, :table])
   end

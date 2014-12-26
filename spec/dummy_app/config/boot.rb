@@ -1,7 +1,4 @@
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym unless defined?(CI_ORM)
-require 'rubygems'
-
-# Set up gems listed in the Gemfile.
 ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
 
-require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE']) && !ENV['TRAVIS']
+require 'bundler/setup' # Set up gems listed in the Gemfile.

@@ -4,7 +4,7 @@ class CreateNestedFieldTests < ActiveRecord::Migration
       t.string :title
       t.integer :field_test_id
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

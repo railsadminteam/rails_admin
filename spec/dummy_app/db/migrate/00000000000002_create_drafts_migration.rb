@@ -1,7 +1,7 @@
 class CreateDraftsMigration < ActiveRecord::Migration
   def self.up
     create_table :drafts do |t|
-      t.timestamps
+      t.timestamps null: false
       t.integer :player_id
       t.integer :team_id
       t.date :date
