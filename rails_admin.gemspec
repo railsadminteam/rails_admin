@@ -6,7 +6,7 @@ require 'rails_admin/version'
 Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
   spec.add_dependency 'builder', '~> 3.1'
-  spec.add_dependency 'coffee-rails', '~> 4.0'
+  spec.add_dependency 'coffee-rails', '~> 4.1.0'
   spec.add_dependency 'font-awesome-rails', '>= 3.0'
   spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency 'jquery-rails', '~> 3.0'
@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '~> 4.0'
   spec.add_dependency 'remotipart', '~> 1.0'
   spec.add_dependency 'safe_yaml', '~> 1.0'
-  spec.add_dependency 'sass-rails', '~> 4.0'
+  spec.add_dependency 'sass-rails', '~> 5.0'
   spec.add_dependency 'express_admin'
   spec.add_development_dependency 'bundler', '~> 1.0'
   spec.authors = ['Steven Talcott Smith']

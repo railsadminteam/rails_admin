@@ -1,11 +1,6 @@
 source 'https://rubygems.org'
 
-case ENV['RAILS_VER']
-when '4.0'
-  gem 'rails', '~> 4.0.0'
-else
-  gem 'rails', '~> 4.1'
-end
+gem 'rails', '4.2.0'
 
 case ENV['CI_ORM']
 when 'mongoid'
