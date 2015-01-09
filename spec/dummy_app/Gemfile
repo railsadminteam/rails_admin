@@ -62,7 +62,7 @@ end
 
 group :express_admin do
   gem 'express_admin', github: "aelogica/express_admin",
-    branch: 'ruby_2_2_and_rails_4_2'
+    branch: 'master'
   gem 'rails_admin', github: 'aelogica/express_rails_admin',
-    branch: 'ruby_2_2_and_rails_4_2'
+    branch: 'master'
 end
