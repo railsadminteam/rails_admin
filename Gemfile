@@ -6,7 +6,7 @@ when '4.2'
   gem 'sass-rails', '~> 5.0.0.beta1'
   gem 'devise', github: 'plataformatec/devise', branch: 'lm-rails-4-2'
 when '4.0'
-  gem 'rails', '~> 4.0.0'
+  gem 'rails', '~> 4.0.1'
   gem 'devise', '>= 3.2'
 else
   gem 'rails', '~> 4.1.0'
@@ -57,7 +57,7 @@ group :test do
   gem 'capybara', '>= 2.1'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
-  gem 'database_cleaner', '>= 1.2'
+  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0']
   gem 'dragonfly', '~> 1.0'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
