@@ -7,10 +7,12 @@
 
 = form_tag("", method: "get", class: "search pjax-form form-inline") do
   .well
-    %input{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
-    %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
-      %i.icon-white.icon-refresh
-      = t("admin.misc.refresh")
+    .input-group
+      %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
+      %span.input-group-btn
+        %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+          %i.icon-white.icon-refresh
+          = t("admin.misc.refresh")
 %table#history.table.table-striped.table-condensed
   %thead
     %tr
