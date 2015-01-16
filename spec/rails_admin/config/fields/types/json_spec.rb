@@ -23,8 +23,6 @@ describe RailsAdmin::Config::Fields::Types::Json do
   end
 
   describe 'aliasing' do
-    let(:field) { RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :json_field } }
-
     before :each do
       RailsAdmin.config do |config|
         config.model FieldTest do
