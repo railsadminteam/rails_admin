@@ -674,10 +674,10 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
       find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
 
-      click_button 'Save' # first(:button, "Save").click
+      click_button 'Save'
+      is_expected.to have_content('Field test successfully updated')
 
       @record.reload
-
       expect(@record.comment.content.strip).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')

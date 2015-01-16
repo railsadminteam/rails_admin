@@ -27,7 +27,7 @@
                 .progress-bar.animate-width-to{:class => "progress-bar-#{get_indicator(percent)}", :'data-animate-length' => ([1.0, percent].max.to_i * 20), :'data-animate-width-to' => "#{[2.0, percent].max.to_i}%", style: "width:2%"}
                   = @count[abstract_model.pretty_name]
             %td.links
-              %ul.inline= menu_for :collection, abstract_model, nil, true
+              %ul.inline.list-inline= menu_for :collection, abstract_model, nil, true
 - if @auditing_adapter && authorized?(:history)
   #block-tables.block
     .content
