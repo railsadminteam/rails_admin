@@ -6,7 +6,7 @@ when '4.2'
   gem 'sass-rails', '~> 5.0.0.beta1'
   gem 'devise', github: 'plataformatec/devise', branch: 'lm-rails-4-2'
 when '4.0'
-  gem 'rails', '~> 4.0.1'
+  gem 'rails', '< 4.1'
   gem 'devise', '>= 3.2'
 else
   gem 'rails', '~> 4.1.0'
