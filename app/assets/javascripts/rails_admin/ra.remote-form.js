@@ -109,7 +109,7 @@
               select.find('option[value=' + json.id + ']').text(json.label);
               multiselect.find('option[value= ' + json.id + ']').text(json.label);
             } else { // add
-              select.prepend(option);
+              select.append(option);
               multiselect.find('select.ra-multiselect-selection').append(option);
             }
           }
