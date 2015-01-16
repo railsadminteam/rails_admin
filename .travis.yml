@@ -22,6 +22,7 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1
+  - 2.2
   - rbx-2
   - ruby-head
 
@@ -32,17 +33,17 @@ sudo: false
 
 matrix:
   include:
-    - rvm: 2.1
+    - rvm: 2.2
       env: RAILS_VERSION=4.2 CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-    - rvm: 2.1
+    - rvm: 2.2
       env: RAILS_VERSION=4.2 CI_ORM=mongoid
-    - rvm: 2.1
+    - rvm: 2.2
       env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
-    - rvm: 2.1
+    - rvm: 2.2
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
-    - rvm: 2.1
+    - rvm: 2.2
       env: RAILS_VERSION=4.0 CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-    - rvm: 2.1
+    - rvm: 2.2
       env: RAILS_VERSION=4.0 CI_ORM=mongoid
     - rvm: jruby-19mode
       env: CI_ORM=mongoid
