@@ -27,6 +27,7 @@ Community sourced translations:
 * [[German: de|https://gist.github.com/3188219#file_rails_admin.de.yml]]
 * [[Italian (Italy): it|https://gist.github.com/1700678#file_rails_admin.it.yml]]
 * [[Japanese: ja|https://gist.github.com/1662352#file_rails_admin.ja.yml]]
+* [[Korean: ko|https://gist.github.com/YoonjaeYoo/787eb279e5d46c7e96dc]]
 * [[Polish (Poland): pl|https://gist.github.com/1717477#file_rails_admin.pl.yml]]
 * [[Portuguese (Brazil): pt-BR|https://gist.github.com/1844723#file_rails_admin.pt_br.yml]]
 * [[Portuguese (Portugal): pt-PT|https://gist.github.com/1751856#file_rails_admin.pt-PT.yml]]
