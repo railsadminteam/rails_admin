@@ -77,7 +77,7 @@ module RailsAdmin
     end
 
     def redirect_to_on_success
-      notice = t('admin.flash.successful', name: @model_config.label, action: t("admin.actions.#{@action.key}.done"))
+      notice = I18n.t('admin.flash.successful', name: @model_config.label, action: I18n.t("admin.actions.#{@action.key}.done"))
       if params[:_add_another]
         redirect_to new_path(return_to: params[:return_to]), flash: {success: notice}
       elsif params[:_add_edit]
@@ -103,7 +103,7 @@ module RailsAdmin
     end
 
     def handle_save_error(whereto = :new)
-      flash.now[:error] = t('admin.flash.error', name: @model_config.label, action: t("admin.actions.#{@action.key}.done").html_safe).html_safe
+      flash.now[:error] = I18n.t('admin.flash.error', name: @model_config.label, action: I18n.t("admin.actions.#{@action.key}.done").html_safe).html_safe
       flash.now[:error] += %(<br>- #{@object.errors.full_messages.join('<br>- ')}).html_safe
 
       respond_to do |format|
@@ -114,7 +114,7 @@ module RailsAdmin
 
     def check_for_cancel
       return unless params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
-      redirect_to(back_or_index, flash: {info: t('admin.flash.noaction')})
+      redirect_to(back_or_index, flash: {info: I18n.t('admin.flash.noaction')})
     end
 
     def get_collection(model_config, scope, pagination)
