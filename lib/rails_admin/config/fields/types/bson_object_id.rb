@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :label do
-            label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
+            label = ((@label ||= {})[I18n.locale] ||= abstract_model.model.human_attribute_name(name, locale: I18n.locale))
             label = 'Id' if label == ''
             label
           end

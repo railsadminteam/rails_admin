@@ -120,7 +120,7 @@ module RailsAdmin
 
         # Accessor for field's help text displayed below input field.
         register_instance_option :help do
-          (@help ||= {})[::I18n.locale] ||= generic_field_help
+          (@help ||= {})[I18n.locale] ||= generic_field_help
         end
 
         register_instance_option :html_attributes do
@@ -135,7 +135,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
+          (@label ||= {})[I18n.locale] ||= abstract_model.model.human_attribute_name name, locale: I18n.locale
         end
 
         register_instance_option :hint do
