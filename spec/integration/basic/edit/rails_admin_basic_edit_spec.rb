@@ -23,14 +23,14 @@ describe 'RailsAdmin Basic Edit', type: :request do
       expect(find('#player_born_on_field .help-block')).to have_content('Optional')
       expect(find('#player_notes_field .help-block')).to have_content('Optional')
     end
-    
-    it "checks required fields to have required attribute set" do
-      expect(find_field("player_name")[:required].nil?).to eq(false)
-      expect(find_field("player_number")[:required].nil?).to eq(false)
+
+    it 'checks required fields to have required attribute set' do
+      expect(find_field('player_name')[:required].nil?).to eq(false)
+      expect(find_field('player_number')[:required].nil?).to eq(false)
     end
 
-    it "checks optional fields to not have required attribute set" do
-      expect(find_field("player_position")[:required].nil?).to eq(true)
+    it 'checks optional fields to not have required attribute set' do
+      expect(find_field('player_position')[:required].nil?).to eq(true)
     end
   end
 
