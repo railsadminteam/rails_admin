@@ -12,9 +12,15 @@ module RailsAdmin
       wording
     end
 
-    def authorized?(action, abstract_model = nil, object = nil)
+    def authorized?(action_name, abstract_model = nil, object = nil)
+      if abstract_model 
+        action = RailsAdmin::Config::Actions.all.find {|a| a.authorization_key == action_name.to_sym }
+        if action && action.except.include?(abstract_model.model_name)
+          return false
+        end
+      end
       object = nil if object.try :new_record?
-      @authorization_adapter.nil? || @authorization_adapter.authorized?(action, abstract_model, object)
+      @authorization_adapter.nil? || @authorization_adapter.authorized?(action_name, abstract_model, object)
     end
 
     def current_action?(action, abstract_model = @abstract_model, object = @object)
