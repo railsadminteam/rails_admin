@@ -9,6 +9,7 @@ module RailsAdmin
     before_filter :get_model, except: RailsAdmin::Config::Actions.all(:root).collect(&:action_name)
     before_filter :get_object, only: RailsAdmin::Config::Actions.all(:member).collect(&:action_name)
     before_filter :check_for_cancel
+    before_filter :prevent_disabled_actions, except: RailsAdmin::Config::Actions.all(:root).collect(&:action_name)
 
     RailsAdmin::Config::Actions.all.each do |action|
       class_eval %{
@@ -137,6 +138,15 @@ module RailsAdmin
       action = params[:current_action].in?(%w(create update)) ? params[:current_action] : 'edit'
       @association = source_model_config.send(action).fields.detect { |f| f.name == params[:associated_collection].to_sym }.with(controller: self, object: source_object)
       @association.associated_collection_scope
+    end
+    
+    def prevent_disabled_actions
+      if @abstract_model
+        action = RailsAdmin::Config::Actions.find(action_name.to_sym)
+        if action && action.except.include?(@abstract_model.model_name)
+          raise ActionController::RoutingError.new('Not Found')
+        end
+      end
     end
   end
 end
