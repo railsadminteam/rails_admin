@@ -238,8 +238,8 @@ describe RailsAdmin::Config do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
       end
-      expect(RailsAdmin.config.visible_models(controller: double(authorized?: true)).collect(&:abstract_model).collect(&:model)).to eq([Comment])
-      expect(RailsAdmin.config.visible_models(controller: double(authorized?: false)).collect(&:abstract_model).collect(&:model)).to eq([])
+      expect(RailsAdmin.config.visible_models(controller: double(authorization_adapter: double(authorized?: true))).collect(&:abstract_model).collect(&:model)).to eq([Comment])
+      expect(RailsAdmin.config.visible_models(controller: double(authorization_adapter: double(authorized?: false))).collect(&:abstract_model).collect(&:model)).to eq([])
     end
 
     it 'does not contain embedded model', mongoid: true do

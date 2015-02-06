@@ -7,6 +7,9 @@ module RailsAdmin
   class ObjectNotFound < ::StandardError
   end
 
+  class ActionNotAllowed < ::StandardError
+  end
+
   class ApplicationController < ::ApplicationController
     newrelic_ignore if defined?(NewRelic)
 
@@ -16,7 +19,7 @@ module RailsAdmin
 
     helper_method :_current_user, :_get_plugin_name
 
-    attr_reader :object, :model_config, :abstract_model
+    attr_reader :object, :model_config, :abstract_model, :authorization_adapter
 
     def get_model
       @model_name = to_model_name(params[:model_name])
@@ -67,14 +70,6 @@ module RailsAdmin
       flash[:error] = I18n.t('admin.flash.model_not_found', model: @model_name)
       params[:action] = 'dashboard'
       dashboard
-    end
-
-    def not_found
-      render file: Rails.root.join('public', '404.html'), layout: false, status: :not_found
-    end
-
-    def rails_admin_controller?
-      true
     end
   end
 end
