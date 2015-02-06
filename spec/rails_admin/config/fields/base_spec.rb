@@ -359,7 +359,7 @@ describe RailsAdmin::Config::Fields::Base do
 
   describe '#associated_collection' do
     it 'returns [] when type is blank?' do
-      expect(RailsAdmin.config(Comment).fields.detect { |f|f.name == :commentable }.associated_collection('')).to be_empty
+      expect(RailsAdmin.config(Comment).fields.detect { |f| f.name == :commentable }.associated_collection('')).to be_empty
     end
   end
 

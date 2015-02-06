@@ -16,12 +16,10 @@ module RailsAdmin
       end
 
       def create_history_item(message, object, abstract_model, user)
-        create(
-           message: [message].flatten.join(', '),
-           item: object.id,
-           table: abstract_model.to_s,
-           username: user.try(:email),
-         )
+        create(message: [message].flatten.join(', '),
+               item: object.id,
+               table: abstract_model.to_s,
+               username: user.try(:email))
       end
 
       def history_for_model(abstract_model, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
