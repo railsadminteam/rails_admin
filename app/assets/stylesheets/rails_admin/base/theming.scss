@@ -183,6 +183,25 @@ body.rails_admin {
 
   /* nested nav */
   .nav {
+    .chevron {
+      &::after {
+        border-style: solid;
+        border-width: 0.25em 0.25em 0 0;
+        content: '';
+        display: inline-block;
+        height: 0.65em;
+        left: 0.5em;
+        position: relative;
+        top: 0.15em;
+        vertical-align: top;
+        width: 0.65em;
+        transform: rotate(135deg);
+      }
+      &.up:after {
+          transform: rotate(-45deg);
+          top: 8px;
+        }
+    }
     .nav-level-1 {
       padding-left:30px;
     }
