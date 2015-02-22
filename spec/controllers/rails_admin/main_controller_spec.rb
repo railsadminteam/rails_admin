@@ -28,7 +28,6 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe '#check_for_cancel' do
-
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
       allow(controller).to receive(:back_or_index) { fail(StandardError.new('redirected back')) }
       expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete' }.to raise_error('redirected back')
@@ -232,12 +231,8 @@ describe RailsAdmin::MainController, type: :controller do
     context 'in France' do
       before do
         I18n.locale = :fr
-      end
-      after do
-        I18n.locale = :en
-      end
+        ActionController::Parameters.permit_all_parameters = false
 
-      it 'sanitize params recursively in nested forms' do
         RailsAdmin.config Comment do
           configure :created_at do
             show
@@ -250,7 +245,7 @@ describe RailsAdmin::MainController, type: :controller do
           end
         end
 
-        controller.params = HashWithIndifferentAccess.new(
+        controller.params = ActionController::Parameters.new(
           'field_test' => {
             'unallowed_field' => "I shouldn't be here",
             'datetime_field' => '1 août 2010',
@@ -258,62 +253,52 @@ describe RailsAdmin::MainController, type: :controller do
               'new_1330520162002' => {
                 'comment_attributes' => {
                   'unallowed_field' => "I shouldn't be here",
-                  'created_at' => '2 août 2010'
+                  'created_at' => '2 août 2010',
                 },
-                'created_at' => '3 août 2010'
-              }
+                'created_at' => '3 août 2010',
+              },
             },
             'comment_attributes' => {
               'unallowed_field' => "I shouldn't be here",
-              'created_at' => '4 août 2010'
-            }
-          }
+              'created_at' => '4 août 2010',
+            },
+          },
         )
 
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
+      end
+      after do
+        ActionController::Parameters.permit_all_parameters = true
+        I18n.locale = :en
+      end
 
+      it 'sanitize params recursively in nested forms' do
         expect(controller.params).to eq(
           'field_test' => {
             'datetime_field' => 'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
-                  'created_at' => 'Mon, 02 Aug 2010 00:00:00 UTC +00:00'
+                  'created_at' => 'Mon, 02 Aug 2010 00:00:00 UTC +00:00',
                 },
-                'created_at' => 'Tue, 03 Aug 2010 00:00:00 UTC +00:00'
-              }
+                'created_at' => 'Tue, 03 Aug 2010 00:00:00 UTC +00:00',
+              },
             },
             'comment_attributes' => {
-              'created_at' => 'Wed, 04 Aug 2010 00:00:00 UTC +00:00'
-            }
-          }
+              'created_at' => 'Wed, 04 Aug 2010 00:00:00 UTC +00:00',
+            },
+          },
         )
-      end
-    end
-
-    describe 'satisfy_strong_params!' do
-      before do
-        ActionController::Parameters.permit_all_parameters = false
-      end
-
-      after do
-        ActionController::Parameters.permit_all_parameters = true
       end
 
       it 'enforces permit!' do
-        controller.params = HashWithIndifferentAccess.new(
-          'model_name' => 'player',
-          'player' => {'name' => 'foo'}
-        )
-        controller.send(:get_model)
-        expect(controller.params['player'].permitted?).to be_falsey
-        controller.send(:satisfy_strong_params!)
-        expect(controller.params['player'].permitted?).to be_truthy
+        expect(controller.params['field_test'].permitted?).to be_truthy
+        expect(controller.params['field_test']['nested_field_tests_attributes'].values.first.permitted?).to be_truthy
+        expect(controller.params['field_test']['comment_attributes'].permitted?).to be_truthy
       end
     end
 
     it 'allows for delete method with Carrierwave' do
-
       RailsAdmin.config FieldTest do
         field :carrierwave_asset
         field :dragonfly_asset
@@ -331,8 +316,8 @@ describe RailsAdmin::MainController, type: :controller do
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
-          'should_not_be_here' => 'test'
-        }
+          'should_not_be_here' => 'test',
+        },
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -345,7 +330,7 @@ describe RailsAdmin::MainController, type: :controller do
           'remove_dragonfly_asset' => 'test',
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
-          'delete_paperclip_asset' => 'test'
+          'delete_paperclip_asset' => 'test',
         })
     end
 
@@ -357,16 +342,15 @@ describe RailsAdmin::MainController, type: :controller do
       controller.params = HashWithIndifferentAccess.new(
         'comment' => {
           'commentable_id' => 'test',
-          'commentable_type' => 'test'
-        }
+          'commentable_type' => 'test',
+        },
       )
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
       expect(controller.params).to eq(
         'comment' => {
           'commentable_id' => 'test',
-          'commentable_type' => 'test'
+          'commentable_type' => 'test',
         })
     end
   end
-
 end

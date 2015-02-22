@@ -3,11 +3,9 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Config DSL Edit Section', type: :request do
-
   subject { page }
 
   describe " a field with 'format' as a name (Kernel function)" do
-
     it 'is updatable without any error' do
       RailsAdmin.config FieldTest do
         edit do
@@ -23,12 +21,10 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'default_value' do
-
     it 'is set for all types of input fields' do
       RailsAdmin.config do |config|
         config.excluded_models = []
         config.model(FieldTest) do
-
           field :string_field do
             default_value 'string_field default_value'
           end
@@ -60,7 +56,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         field :color, :enum do
           default_value 'black'
           enum do
-            %w[black white]
+            %w(black white)
           end
         end
       end
@@ -77,7 +73,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'field groupings' do
-
     it 'is hideable' do
       RailsAdmin.config Team do
         edit do
@@ -326,7 +321,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe "items' fields" do
-
     it 'shows all by default' do
       visit new_path(model_name: 'team')
       is_expected.to have_selector('select#team_division_id')
@@ -643,7 +637,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       is_expected.to have_selector('a', text: 'Edit this Team')
       is_expected.to have_selector('a', text: 'Edit this Draft')
     end
-
   end
 
   describe 'bindings' do
@@ -681,10 +674,10 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
       find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
 
-      click_button 'Save' # first(:button, "Save").click
+      click_button 'Save'
+      is_expected.to have_content('Field test successfully updated')
 
       @record.reload
-
       expect(@record.comment.content.strip).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
@@ -766,7 +759,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
         expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
       end
-
     end
   end
 
@@ -785,7 +777,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'fields which are nullable and have AR validations', active_record: true do
-
     it 'is required' do
       # draft.notes is nullable and has no validation
       field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :notes }
@@ -864,7 +855,6 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'Paperclip Support' do
-
     it 'shows a file upload field' do
       RailsAdmin.config User do
         edit do
@@ -881,7 +871,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       before do
         Team.class_eval do
           def color_enum
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -907,7 +897,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       before do
         Team.instance_eval do
           def color_enum
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -932,7 +922,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       before do
         Team.class_eval do
           def color_list
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -959,7 +949,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       before do
         Team.instance_eval do
           def color_list
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -986,7 +976,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       before do
         Team.class_eval do
           def color_list
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -994,7 +984,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
             field :color, :enum do
               enum_method :color_list
               enum do
-                %w[yellow black]
+                %w(yellow black)
               end
             end
           end
@@ -1015,17 +1005,24 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
     describe 'when serialize is enabled in ActiveRecord model', active_record: true do
       before do
+        # ActiveRecord 4.2 momoizes result of serialized_attributes, so we have to clear it.
+        Team.remove_instance_variable(:@serialized_attributes) if Team.instance_variable_defined?(:@serialized_attributes)
         Team.instance_eval do
           serialize :color
           def color_enum
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         visit new_path(model_name: 'team')
       end
 
       after do
-        Team.serialized_attributes.clear
+        if Rails.version >= '4.2'
+          Team.reset_column_information
+          Team.attribute_type_decorations.clear
+        else
+          Team.serialized_attributes.clear
+        end
         Team.instance_eval { undef :color_enum }
       end
 
@@ -1039,7 +1036,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         Team.instance_eval do
           field :color, type: Array
           def color_enum
-            %w[blue green red]
+            %w(blue green red)
           end
         end
         visit new_path(model_name: 'team')
@@ -1069,5 +1066,4 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       is_expected.to have_selector('.color_type input')
     end
   end
-
 end

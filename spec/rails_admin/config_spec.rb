@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config do
-
   describe '.included_models' do
-
     it 'only uses included models' do
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.collect(&:model)).to eq([League, Team]) # it gets sorted
@@ -76,16 +74,15 @@ describe RailsAdmin::Config do
   end
 
   describe '.main_app_name' do
-
     it 'as a default meaningful dynamic value' do
       expect(RailsAdmin.config.main_app_name.call).to eq(['Dummy App', 'Admin'])
     end
 
     it 'can be configured' do
       RailsAdmin.config do |config|
-        config.main_app_name = %w[stati c value]
+        config.main_app_name = %w(stati c value)
       end
-      expect(RailsAdmin.config.main_app_name).to eq(%w[stati c value])
+      expect(RailsAdmin.config.main_app_name).to eq(%w(stati c value))
     end
   end
 
@@ -241,8 +238,8 @@ describe RailsAdmin::Config do
       RailsAdmin.config do |config|
         config.included_models = [Comment]
       end
-      expect(RailsAdmin.config.visible_models(controller: double(authorized?: true)).collect(&:abstract_model).collect(&:model)).to eq([Comment])
-      expect(RailsAdmin.config.visible_models(controller: double(authorized?: false)).collect(&:abstract_model).collect(&:model)).to eq([])
+      expect(RailsAdmin.config.visible_models(controller: double(authorization_adapter: double(authorized?: true))).collect(&:abstract_model).collect(&:model)).to eq([Comment])
+      expect(RailsAdmin.config.visible_models(controller: double(authorization_adapter: double(authorized?: false))).collect(&:abstract_model).collect(&:model)).to eq([])
     end
 
     it 'does not contain embedded model', mongoid: true do

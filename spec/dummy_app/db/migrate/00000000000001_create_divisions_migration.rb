@@ -1,7 +1,7 @@
 class CreateDivisionsMigration < ActiveRecord::Migration
   def self.up
     create_table :divisions do |t|
-      t.timestamps
+      t.timestamps null: false
       t.integer :league_id
       t.string :name, limit: 50, null: false
     end

@@ -1,10 +1,12 @@
 .ui-timepicker-table table th.periods {
+  z-index: 3!important;
   padding:0;
 }
 
 .ui-datepicker {
   /* fix glitches */
   border-width:0px;
+  z-index: 1051!important;
   table{
     margin:0px;
   }
@@ -21,5 +23,22 @@
       -moz-box-shadow:none;
       box-shadow:none;
     }
+  }
+}
+/* span for disabled cells */
+.ui-timepicker-table td span {
+    width: auto;
+}
+/* anchors for clickable cells */
+.ui-timepicker-table td a {
+    width: auto;
+}
+.input-group {
+  .hasTimepicker {
+    @extend .form-control;
+    width: 65px !important;
+  }
+  .hasDatepicker {
+    @extend .form-control
   }
 }

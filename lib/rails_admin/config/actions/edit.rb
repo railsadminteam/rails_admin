@@ -14,7 +14,6 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-
             if request.get? # EDIT
 
               respond_to do |format|
@@ -23,7 +22,6 @@ module RailsAdmin
               end
 
             elsif request.put? # UPDATE
-              satisfy_strong_params!
               sanitize_params_for!(request.xhr? ? :modal : :update)
 
               @object.set_attributes(params[@abstract_model.param_key])
@@ -42,7 +40,6 @@ module RailsAdmin
               end
 
             end
-
           end
         end
 

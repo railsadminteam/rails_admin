@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Namespaced Model Create', type: :request do
-
   subject { page }
 
   it 'creates object with correct attributes' do

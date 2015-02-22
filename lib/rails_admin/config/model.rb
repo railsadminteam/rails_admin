@@ -44,7 +44,8 @@ module RailsAdmin
       end
 
       def object_label
-        bindings[:object].send object_label_method
+        bindings[:object].send(object_label_method).presence ||
+          bindings[:object].send(:rails_admin_default_object_label_method)
       end
 
       # The display for a model instance (i.e. a single database record).
@@ -75,14 +76,16 @@ module RailsAdmin
       register_instance_option :parent do
         @parent_model ||= begin
           klass = abstract_model.model.superclass
-          klass = nil if klass.to_s.in?(%w[Object BasicObject ActiveRecord::Base])
+          klass = nil if klass.to_s.in?(%w(Object BasicObject ActiveRecord::Base))
           klass
         end
       end
 
       register_instance_option :navigation_label do
-        @navigation_label ||= if (parent_module = abstract_model.model.parent) != Object
-          parent_module.to_s
+        @navigation_label ||= begin
+          if (parent_module = abstract_model.model.parent) != Object
+            parent_module.to_s
+          end
         end
       end
 

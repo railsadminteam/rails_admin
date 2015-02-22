@@ -17,12 +17,12 @@ module RailsAdmin
       def get(id)
         AbstractObject.new(model.find(id))
       rescue => e
-        raise e if %w[
+        raise e if %w(
           BSON::InvalidObjectId
           Mongoid::Errors::DocumentNotFound
           Mongoid::Errors::InvalidFind
           Moped::Errors::InvalidObjectId
-        ].exclude?(e.class.to_s)
+        ).exclude?(e.class.to_s)
       end
 
       def scoped
@@ -215,7 +215,7 @@ module RailsAdmin
             '_null' => {@column => nil},
             '_not_null' => {@column => {'$ne' => nil}},
             '_empty' => {@column => ''},
-            '_not_empty' => {@column => {'$ne' => ''}}
+            '_not_empty' => {@column => {'$ne' => ''}},
           }
         end
 
@@ -232,8 +232,8 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return {@column => false} if %w[false f 0].include?(@value)
-          return {@column => true} if %w[true t 1].include?(@value)
+          return {@column => false} if %w(false f 0).include?(@value)
+          return {@column => true} if %w(true t 1).include?(@value)
         end
 
         def column_for_value(value)
@@ -242,17 +242,19 @@ module RailsAdmin
 
         def build_statement_for_string_or_text
           return if @value.blank?
-          @value = case @operator
-          when 'default', 'like'
-            Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
-          when 'starts_with'
-            Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
-          when 'ends_with'
-            Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
-          when 'is', '='
-            @value.to_s
-          else
-            return
+          @value = begin
+            case @operator
+            when 'default', 'like'
+              Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
+            when 'starts_with'
+              Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
+            when 'ends_with'
+              Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
+            when 'is', '='
+              @value.to_s
+            else
+              return
+            end
           end
           {@column => @value}
         end

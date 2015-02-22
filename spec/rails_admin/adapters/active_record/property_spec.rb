@@ -20,7 +20,6 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Property', active_record: true do
     it 'returns correct values' do
       expect(subject.pretty_name).to eq 'Roles'
       expect(subject.type).to eq :serialized
-      expect(subject.length).to eq 255
       expect(subject.nullable?).to be_truthy
       expect(subject.serial?).to be_falsey
     end

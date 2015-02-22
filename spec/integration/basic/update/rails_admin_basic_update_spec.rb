@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic Update', type: :request do
-
   subject { page }
 
   describe 'update with errors' do
@@ -160,7 +159,7 @@ describe 'RailsAdmin Basic Update', type: :request do
     end
 
     it 'saves the serialized data' do
-      expect(@user.roles).to eq(%w[admin user])
+      expect(@user.roles).to eq(%w(admin user))
     end
   end
 
@@ -225,5 +224,4 @@ describe 'RailsAdmin Basic Update', type: :request do
       expect(@hardball.color).to eq('cyan')
     end
   end
-
 end

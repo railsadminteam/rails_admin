@@ -15,13 +15,16 @@ SafeYAML::OPTIONS[:default_mode] = :unsafe
 module RailsAdmin
   class Engine < Rails::Engine
     isolate_namespace RailsAdmin
+
+    config.action_dispatch.rescue_responses.merge!('RailsAdmin::ActionNotAllowed' => :forbidden)
+
     initializer 'RailsAdmin precompile hook', group: :all do |app|
-      app.config.assets.precompile += %w[
+      app.config.assets.precompile += %w(
         rails_admin/rails_admin.js
         rails_admin/rails_admin.css
         rails_admin/jquery.colorpicker.js
         rails_admin/jquery.colorpicker.css
-      ]
+      )
     end
 
     initializer 'RailsAdmin pjax hook' do |app|

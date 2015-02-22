@@ -14,9 +14,9 @@ describe RailsAdmin::ApplicationController, type: :controller do
 
     it 'works for static names' do
       RailsAdmin.config do |config|
-        config.main_app_name = %w[static value]
+        config.main_app_name = %w(static value)
       end
-      expect(controller.send(:_get_plugin_name)).to eq(%w[static value])
+      expect(controller.send(:_get_plugin_name)).to eq(%w(static value))
     end
 
     it 'works for dynamic names in the controller context' do
@@ -25,6 +25,12 @@ describe RailsAdmin::ApplicationController, type: :controller do
       end
       controller.params[:action] = 'dashboard'
       expect(controller.send(:_get_plugin_name)).to eq(['Dummy App Application', 'Dashboard'])
+    end
+  end
+
+  describe '#_current_user' do
+    it 'is public' do
+      expect { controller._current_user }.not_to raise_error
     end
   end
 end

@@ -11,16 +11,17 @@ module RailsAdmin
     before_filter :check_for_cancel
 
     RailsAdmin::Config::Actions.all.each do |action|
-      class_eval %{
+      class_eval <<-EOS, __FILE__, __LINE__ + 1
         def #{action.action_name}
           action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym)
           @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
           @action = action.with({controller: self, abstract_model: @abstract_model, object: @object})
+          fail(ActionNotAllowed) unless @action.enabled?
           @page_name = wording_for(:title)
 
           instance_eval &@action.controller
         end
-      }
+      EOS
     end
 
     def bulk_action
@@ -56,18 +57,20 @@ module RailsAdmin
 
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
 
-      column = if field.nil? || field.sortable == true # use params[:sort] on the base table
-        "#{abstract_model.table_name}.#{params[:sort]}"
-      elsif field.sortable == false # use default sort, asked field is not sortable
-        "#{abstract_model.table_name}.#{model_config.list.sort_by}"
-      elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
-        field.sortable
-      elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
-        "#{field.sortable.keys.first}.#{field.sortable.values.first}"
-      elsif field.association? # use column on target table
-        "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
-      else # use described column in the field conf.
-        "#{abstract_model.table_name}.#{field.sortable}"
+      column = begin
+        if field.nil? || field.sortable == true # use params[:sort] on the base table
+          "#{abstract_model.table_name}.#{params[:sort]}"
+        elsif field.sortable == false # use default sort, asked field is not sortable
+          "#{abstract_model.table_name}.#{model_config.list.sort_by}"
+        elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
+          field.sortable
+        elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+          "#{field.sortable.keys.first}.#{field.sortable.values.first}"
+        elsif field.association? # use column on target table
+          "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
+        else # use described column in the field conf.
+          "#{abstract_model.table_name}.#{field.sortable}"
+        end
       end
 
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
@@ -85,19 +88,13 @@ module RailsAdmin
       end
     end
 
-    def satisfy_strong_params!
-      return unless @abstract_model.model.ancestors.collect(&:to_s).include?('ActiveModel::ForbiddenAttributesProtection')
-      params[@abstract_model.param_key].try :permit!
-    end
-
     def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
       return unless target_params.present?
       fields = model_config.send(action).with(controller: self, view: view_context, object: @object).visible_fields
-      allowed_methods = fields.collect do|f|
-        f.allowed_methods
-      end.flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
+      allowed_methods = fields.collect(&:allowed_methods).flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
       fields.each { |f| f.parse_input(target_params) }
       target_params.slice!(*allowed_methods)
+      target_params.permit! if target_params.respond_to?(:permit!)
       fields.select(&:nested_form).each do |association|
         children_params = association.multiple? ? target_params[association.method_name].try(:values) : [target_params[association.method_name]].compact
         (children_params || []).each do |children_param|
@@ -107,8 +104,8 @@ module RailsAdmin
     end
 
     def handle_save_error(whereto = :new)
-      flash.now[:error] = t('admin.flash.error', name: @model_config.label, action: t("admin.actions.#{@action.key}.done"))
-      flash.now[:error] += ". #{@object.errors[:base].to_sentence}" unless @object.errors[:base].blank?
+      flash.now[:error] = t('admin.flash.error', name: @model_config.label, action: t("admin.actions.#{@action.key}.done").html_safe).html_safe
+      flash.now[:error] += %(<br>- #{@object.errors.full_messages.join('<br>- ')}).html_safe
 
       respond_to do |format|
         format.html { render whereto, status: :not_acceptable }
@@ -138,7 +135,7 @@ module RailsAdmin
       source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
       source_model_config = source_abstract_model.config
       source_object = source_abstract_model.get(params[:source_object_id])
-      action = params[:current_action].in?(%w[create update]) ? params[:current_action] : 'edit'
+      action = params[:current_action].in?(%w(create update)) ? params[:current_action] : 'edit'
       @association = source_model_config.send(action).fields.detect { |f| f.name == params[:associated_collection].to_sym }.with(controller: self, object: source_object)
       @association.associated_collection_scope
     end

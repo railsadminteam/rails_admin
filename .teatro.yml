@@ -1,0 +1,20 @@
+project:
+  platform: rails
+
+stage:
+  before:
+    - export CI_DB_ADAPTER=postgresql
+    - export CI_ORM=active_record
+    - cp Procfile.teatro Procfile
+    - cd spec/dummy_app
+    - cp ../../config/database.yml config/
+    - bundle install --without development --jobs=3 --retry=3
+    - ln -sf $PWD/public ../../public
+
+  database:
+    - bundle exec rake db:create db:migrate db:seed
+
+config:
+  database: postgresql
+  services:
+    - postgresql

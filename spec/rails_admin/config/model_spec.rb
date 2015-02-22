@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Model do
-
   describe '#excluded?' do
     before do
       RailsAdmin.config do |config|
@@ -26,6 +25,13 @@ describe RailsAdmin::Config::Model do
       c = Comment.new(content: 'test')
       expect(RailsAdmin.config(Comment).with(object: c).object_label).to eq('test')
     end
+
+    context 'when the object_label_method is blank' do
+      it 'uses the rails admin default' do
+        c = Comment.create(content: '', id: '1')
+        expect(RailsAdmin.config(Comment).with(object: c).object_label).to eq('Comment #1')
+      end
+    end
   end
 
   describe '#object_label_method' do
@@ -48,14 +54,15 @@ describe RailsAdmin::Config::Model do
 
     context 'when using i18n as label source', skip_mongoid: true do
       around do |example|
+        I18n.config.available_locales = I18n.config.available_locales + [:xx]
         I18n.backend.class.send(:include, I18n::Backend::Pluralization)
         I18n.backend.store_translations :xx,
                                         activerecord: {
                                           models: {
                                             comment: {
                                               one: 'one', two: 'two', other: 'other'
-                                            }
-                                          }
+                                            },
+                                          },
                                         }
 
         I18n.locale = :xx
@@ -63,6 +70,7 @@ describe RailsAdmin::Config::Model do
         example.run
 
         I18n.locale = :en
+        I18n.config.available_locales = I18n.config.available_locales - [:xx]
       end
 
       context 'and the locale uses a specific pluralization rule' do
@@ -80,10 +88,9 @@ describe RailsAdmin::Config::Model do
                                                 else
                                                   :other
                                                 end
-                                              end
-                                            }
+                                              end,
+                                            },
                                           }
-
         end
 
         it 'always uses :other as pluralization key' do

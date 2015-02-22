@@ -1,7 +1,7 @@
 class CreateTeamsMigration < ActiveRecord::Migration
   def self.up
     create_table :teams do |t|
-      t.timestamps
+      t.timestamps null: false
       t.integer :league_id
       t.integer :division_id
       t.string :name, limit: 50

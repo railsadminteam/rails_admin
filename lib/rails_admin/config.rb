@@ -178,7 +178,7 @@ module RailsAdmin
       end
 
       def default_search_operator=(operator)
-        if %w[default like starts_with ends_with is =].include? operator
+        if %w(default like starts_with ends_with is =).include? operator
           @default_search_operator = operator
         else
           fail(ArgumentError.new("Search operator '#{operator}' not supported"))
@@ -320,7 +320,7 @@ module RailsAdmin
       def visible_models_with_bindings(bindings)
         models.collect { |m| m.with(bindings) }.select do |m|
           m.visible? &&
-            bindings[:controller].authorized?(:index, m.abstract_model) &&
+            RailsAdmin::Config::Actions.find(:index, bindings.merge(abstract_model: m.abstract_model)).try(:authorized?) &&
             (!m.abstract_model.embedded? || m.abstract_model.cyclic?)
         end
       end

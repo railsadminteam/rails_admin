@@ -39,7 +39,7 @@ module RailsAdmin
 
         # Reader for fields attached to this group
         def fields
-          section.fields.select { |f| self == f.group }
+          section.fields.select { |f| f.group == self }
         end
 
         # Defines configuration for fields by their type
@@ -53,7 +53,7 @@ module RailsAdmin
 
         # Reader for fields that are marked as visible
         def visible_fields
-          section.with(bindings).visible_fields.select { |f| self == f.group }
+          section.with(bindings).visible_fields.select { |f| f.group == self }
         end
 
         # Should it open by default
@@ -63,7 +63,7 @@ module RailsAdmin
 
         # Configurable group label which by default is group's name humanized.
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= (parent.fields.detect { |f|f.name == name }.try(:label) || name.to_s.humanize)
+          (@label ||= {})[::I18n.locale] ||= (parent.fields.detect { |f| f.name == name }.try(:label) || name.to_s.humanize)
         end
 
         # Configurable help text

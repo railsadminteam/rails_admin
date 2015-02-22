@@ -29,7 +29,7 @@ module RailsAdmin
           register_instance_option :html_attributes do
             {
               cols: '48',
-              rows: '3'
+              rows: '3',
             }
           end
 

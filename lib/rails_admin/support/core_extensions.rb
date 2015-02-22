@@ -8,33 +8,20 @@ class Hash
     when Array
       obj.each_with_object([]) do |val, res|
         res << case val
-        when Hash, Array
-          symbolize_hash(val)
-        when String
-          val.to_sym
-        else
-          val
-        end
-        res
+               when Hash, Array then symbolize_hash(val)
+               when String      then val.to_sym
+               else val
+               end
       end
     when Hash
       obj.each_with_object({}) do |(key, val), res|
-        nkey = case key
-        when String
-          key.to_sym
-        else
-          key
-        end
+        nkey = key.is_a?(String) ? key.to_sym : key
         nval = case val
-        when Hash, Array
-          symbolize_hash(val)
-        when String
-          val.to_sym
-        else
-          val
-        end
+               when Hash, Array then symbolize_hash(val)
+               when String      then val.to_sym
+               else val
+               end
         res[nkey] = nval
-        res
       end
     else
       obj

@@ -8,11 +8,13 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << field
 
     child_columns = []
-    possible_field_names = if association.polymorphic?
-      [:foreign_key, :foreign_type, :foreign_inverse_of]
-    else
-      [:foreign_key]
-    end.collect { |k| association.send(k) }.compact
+    possible_field_names = begin
+      if association.polymorphic?
+        [:foreign_key, :foreign_type, :foreign_inverse_of]
+      else
+        [:foreign_key]
+      end.collect { |k| association.send(k) }.compact
+    end
 
     parent.abstract_model.properties.select { |p| possible_field_names.include? p.name }.each do |column|
       unless child_field = fields.detect { |f| f.name.to_s == column.name.to_s }

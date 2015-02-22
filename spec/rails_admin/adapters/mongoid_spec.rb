@@ -56,7 +56,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
 
       it 'supports eager loading' do
-        expect(@abstract_model.all(include: :team).inclusions.collect { |i| i.class_name }).to eq(['Team'])
+        expect(@abstract_model.all(include: :team).inclusions.collect(&:class_name)).to eq(['Team'])
       end
 
       it 'supports limiting' do
@@ -192,7 +192,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @players = [{}, {name: 'Many foos'}, {position: 'foo shortage'}].
-        collect { |h| FactoryGirl.create :player, h }
+                 collect { |h| FactoryGirl.create :player, h }
     end
 
     it 'makes correct query' do
@@ -205,7 +205,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @team = FactoryGirl.create :team, name: 'king of bar'
       @players = [{}, {team: @team}, {name: 'Many foos', team: @team}, {name: 'Great foo'}].
-        collect { |h| FactoryGirl.create :player, h }
+                 collect { |h| FactoryGirl.create :player, h }
     end
 
     it 'makes correct query' do
@@ -261,10 +261,10 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     end
 
     it 'supports boolean type query' do
-      %w[false f 0].each do |value|
+      %w(false f 0).each do |value|
         expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(field: false)
       end
-      %w[true t 1].each do |value|
+      %w(true t 1).each do |value|
         expect(@abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(field: true)
       end
       expect(@abstract_model.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
@@ -281,7 +281,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(field: {'$gte' => 3})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(field: {'$lte' => 5})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '10', '20'], 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
-      expect(@abstract_model.send(:build_statement, :field, :integer, %w[15 10 20], 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
+      expect(@abstract_model.send(:build_statement, :field, :integer, %w(15 10 20), 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', '', 'word2'], 'between')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil

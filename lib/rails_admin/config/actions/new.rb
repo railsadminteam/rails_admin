@@ -13,9 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-
           proc do
-
             if request.get? # NEW
 
               @object = @abstract_model.new
@@ -34,7 +32,6 @@ module RailsAdmin
 
               @modified_assoc = []
               @object = @abstract_model.new
-              satisfy_strong_params!
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
               @object.set_attributes(params[@abstract_model.param_key])

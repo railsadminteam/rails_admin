@@ -58,7 +58,9 @@ module RailsAdmin
         end
 
         def read_only?
-          (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) || false
+          (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) ||
+            association.nested? ||
+            false
         end
 
         def nested_options

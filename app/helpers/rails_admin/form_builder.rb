@@ -1,20 +1,21 @@
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::NestedForm::BuilderMixin
+    include ::RailsAdmin::ApplicationHelper
 
     def generate(options = {})
       without_field_error_proc_added_div do
         options.reverse_merge!(
           action: @template.controller.params[:action],
           model_config: @template.instance_variable_get(:@model_config),
-          nested_in: false
+          nested_in: false,
         )
 
         object_infos +
-        visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).collect do |fieldset|
-          fieldset_for fieldset, options[:nested_in]
-        end.join.html_safe +
-        (options[:nested_in] ? '' : @template.render(partial: 'rails_admin/main/submit_buttons'))
+          visible_groups(options[:model_config], generator_action(options[:action], options[:nested_in])).collect do |fieldset|
+            fieldset_for fieldset, options[:nested_in]
+          end.join.html_safe +
+          (options[:nested_in] ? '' : @template.render(partial: 'rails_admin/main/submit_buttons'))
       end
     end
 
@@ -33,9 +34,9 @@ module RailsAdmin
       if field.label
         # do not show nested field if the target is the origin
         unless nested_field_association?(field, nested_in)
-          @template.content_tag(:div, class: "control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, class: 'control-label') +
-            (field.nested_form ? field_for(field) : input_for(field))
+          @template.content_tag(:div, class: "form-group control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
+            label(field.method_name, capitalize_first_letter(field.label), class: 'col-sm-2 control-label') +
+              (field.nested_form ? field_for(field) : input_for(field))
           end
         end
       else
@@ -44,19 +45,21 @@ module RailsAdmin
     end
 
     def input_for(field)
-      @template.content_tag(:div, class: 'controls') do
+      css = 'col-sm-10 controls'
+      css += ' has-error' if field.errors.present?
+      @template.content_tag(:div, class: css) do
         field_for(field) +
-        errors_for(field) +
-        help_for(field)
+          errors_for(field) +
+          help_for(field)
       end
     end
 
     def errors_for(field)
-      field.errors.present? ? @template.content_tag(:span, "#{field.label} #{field.errors.to_sentence}", class: 'help-inline') : ''.html_safe
+      field.errors.present? ? @template.content_tag(:span, field.errors.to_sentence, class: 'help-inline text-danger') : ''.html_safe
     end
 
     def help_for(field)
-      field.help.present? ? @template.content_tag(:p, field.help, class: 'help-block') : ''.html_safe
+      field.help.present? ? @template.content_tag(:span, field.help, class: 'help-block') : ''.html_safe
     end
 
     def field_for(field)
@@ -70,10 +73,12 @@ module RailsAdmin
     def object_infos
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
-      object_label = if object.new_record?
-        I18n.t('admin.form.new_model', name: model_label)
-      else
-        object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
+      object_label = begin
+        if object.new_record?
+          I18n.t('admin.form.new_model', name: model_label)
+        else
+          object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
+        end
       end
       %(<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label.to_s)}"></span>).html_safe
     end
@@ -87,7 +92,7 @@ module RailsAdmin
         [
           @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').sub(/_$/, ''),
           options[:index],
-          field.method_name
+          field.method_name,
         ].reject(&:blank?).join('_')
     end
 
@@ -112,7 +117,7 @@ module RailsAdmin
         form: self,
         object: @object,
         view: @template,
-        controller: @template.controller
+        controller: @template.controller,
       ).visible_groups
     end
 

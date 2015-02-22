@@ -71,7 +71,7 @@ module RailsAdmin
 
         def object_field_type
           if [:belongs_to, :referenced_in, :embedded_in].
-            include?(model.relations.values.detect { |r| r.foreign_key.try(:to_sym) == name }.try(:macro).try(:to_sym))
+             include?(model.relations.values.detect { |r| r.foreign_key.try(:to_sym) == name }.try(:macro).try(:to_sym))
             :bson_object_id
           else
             :string
