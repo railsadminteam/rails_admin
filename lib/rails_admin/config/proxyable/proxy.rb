@@ -1,10 +1,8 @@
 module RailsAdmin
   module Config
     module Proxyable
-
       class Proxy
-
-        instance_methods.each {|m| undef_method m unless m =~ /^(__|instance_eval|object_id)/ }
+        instance_methods.each { |m| undef_method m unless m =~ /^(__|instance_eval|object_id)/ }
 
         attr_reader :bindings
 
@@ -15,7 +13,7 @@ module RailsAdmin
 
         # Bind variables to be used by the configuration options
         def bind(key, value = nil)
-          if key.kind_of?(Hash)
+          if key.is_a?(Hash)
             @bindings = key
           else
             @bindings[key] = value
@@ -25,12 +23,12 @@ module RailsAdmin
 
         def method_missing(name, *args, &block)
           if @object.respond_to?(name)
-            reset = @object.instance_variable_get("@bindings")
+            reset = @object.instance_variable_get('@bindings')
             begin
-              @object.instance_variable_set("@bindings", @bindings)
+              @object.instance_variable_set('@bindings', @bindings)
               response = @object.__send__(name, *args, &block)
             ensure
-              @object.instance_variable_set("@bindings", @reset)
+              @object.instance_variable_set('@bindings', reset)
             end
             response
           else

@@ -1,10 +1,10 @@
 :ruby
   type_collection = field.polymorphic_type_collection
-  type_column = field.association[:foreign_type].to_s
+  type_column = field.association.foreign_type.to_s
   selected_type = field.bindings[:object].send(type_column)
   collection = field.associated_collection(selected_type)
-  selected = field.bindings[:object].send(field.association[:name])
+  selected = field.bindings[:object].send(field.association.name)
   column_type_dom_id = form.dom_id(field).sub(field.method_name.to_s, type_column)
 
-= form.select type_column, type_collection, {:include_blank => true, :selected => selected_type}, :id => column_type_dom_id, :data => { :polymorphic => true, :urls => field.polymorphic_type_urls.to_json }
-= form.select field.method_name, collection, {:include_blank => true, :selected => selected.try(:id)}, :style => "margin-left:10px;"
+= form.select type_column, type_collection, {include_blank: true, selected: selected_type}, id: column_type_dom_id, data: { polymorphic: true, urls: field.polymorphic_type_urls.to_json }
+= form.select field.method_name, collection, {include_blank: true, selected: selected.try(:id)}, style: "margin-left:10px;"

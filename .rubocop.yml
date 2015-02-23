@@ -1,0 +1,77 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - 'spec/dummy_app/bin/**/*'
+    - 'spec/dummy_app/db/schema.rb'
+    - 'spec/dummy_app/tmp/**/*'
+    - 'vendor/bundle/**/*'
+
+Metrics/AbcSize:
+  Max: 69.98 # TODO: Lower to 15
+
+Metrics/BlockNesting:
+  Max: 3
+
+Metrics/ClassLength:
+  CountComments: false
+  Max: 120 # TODO: Lower to 100
+
+Metrics/CyclomaticComplexity:
+  Max: 12 # TODO: Lower to 6
+
+Metrics/LineLength:
+  AllowURI: true
+  Enabled: false
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 29 # TODO: Lower to 15
+
+Metrics/ParameterLists:
+  Max: 8 # TODO: Lower to 4
+  CountKeywordArgs: true
+
+Metrics/PerceivedComplexity:
+  Max: 14 # TODO: Lower to 7
+
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Style/CollectionMethods:
+  PreferredMethods:
+    map:      'collect'
+    reduce:   'inject'
+    find:     'detect'
+    find_all: 'select'
+
+Style/Documentation:
+  Enabled: false
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/Encoding:
+  Enabled: false
+
+Style/FileName:
+  Exclude:
+    - 'lib/rails_admin/bootstrap-sass.rb'
+
+Style/Lambda:
+  Enabled: false
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Style/TrailingComma:
+  EnforcedStyleForMultiline: 'comma'

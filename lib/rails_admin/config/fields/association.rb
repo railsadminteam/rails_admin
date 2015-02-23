@@ -5,24 +5,23 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
-
         def self.inherited(klass)
           super(klass)
         end
 
         # Reader for the association information hash
-        def association
+        def association # rubocop:disable TrivialAccessors
           @properties
         end
 
         register_instance_option :pretty_value do
           v = bindings[:view]
-          [value].flatten.select(&:present?).map do |associated|
+          [value].flatten.select(&:present?).collect do |associated|
             amc = polymorphic? ? RailsAdmin.config(associated) : associated_model_config # perf optimization for non-polymorphic associations
             am = amc.abstract_model
             wording = associated.send(amc.object_label_method)
             can_see = !am.embedded? && (show_action = v.action(:show, am, associated))
-            can_see ? v.link_to(wording, v.url_for(:action => show_action.action_name, :model_name => am.to_param, :id => associated.id), :class => 'pjax') : wording
+            can_see ? v.link_to(wording, v.url_for(action: show_action.action_name, model_name: am.to_param, id: associated.id), class: 'pjax') : wording
           end.to_sentence.html_safe
         end
 
@@ -30,26 +29,26 @@ module RailsAdmin
         # association checks whether the child model is excluded in
         # configuration or not.
         register_instance_option :visible? do
-          @visible ||= !self.associated_model_config.excluded?
+          @visible ||= !associated_model_config.excluded?
         end
 
         # use the association name as a key, not the association key anymore!
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name association[:name]
+          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name association.name
         end
 
         # scope for possible associable records
         register_instance_option :associated_collection_scope do
           # bindings[:object] & bindings[:controller] available
-          associated_collection_scope_limit = (self.associated_collection_cache_all ? nil : 30)
-          Proc.new do |scope|
+          associated_collection_scope_limit = (associated_collection_cache_all ? nil : 30)
+          proc do |scope|
             scope.limit(associated_collection_scope_limit)
           end
         end
 
         # inverse relationship
         register_instance_option :inverse_of do
-          association[:inverse_of]
+          association.inverse_of
         end
 
         # preload entire associated collection (per associated_collection_scope) on load
@@ -60,7 +59,7 @@ module RailsAdmin
 
         # Reader for the association's child model's configuration
         def associated_model_config
-          @associated_model_config ||= RailsAdmin.config(association[:model_proc].call)
+          @associated_model_config ||= RailsAdmin.config(association.klass)
         end
 
         # Reader for the association's child model object's label method
@@ -70,27 +69,27 @@ module RailsAdmin
 
         # Reader for associated primary key
         def associated_primary_key
-          @associated_primary_key ||= association[:primary_key_proc].call
+          @associated_primary_key ||= association.primary_key
         end
 
         # Reader for the association's key
         def foreign_key
-          association[:foreign_key]
+          association.foreign_key
         end
 
         # Reader whether this is a polymorphic association
         def polymorphic?
-          association[:polymorphic]
+          association.polymorphic?
         end
 
         # Reader for nested attributes
         register_instance_option :nested_form do
-          association[:nested_form]
+          association.nested_options
         end
 
         # Reader for the association's value unformatted
         def value
-          bindings[:object].send(association[:name])
+          bindings[:object].send(association.name)
         end
 
         # has many?

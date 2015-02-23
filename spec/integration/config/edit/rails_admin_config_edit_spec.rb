@@ -2,33 +2,29 @@
 
 require 'spec_helper'
 
-describe "RailsAdmin Config DSL Edit Section" do
-
+describe 'RailsAdmin Config DSL Edit Section', type: :request do
   subject { page }
 
   describe " a field with 'format' as a name (Kernel function)" do
-
-    it "is updatable without any error" do
+    it 'is updatable without any error' do
       RailsAdmin.config FieldTest do
         edit do
           field :format
         end
       end
-      visit new_path(:model_name => "field_test")
-      fill_in "field_test[format]", :with => "test for format"
-      click_button "Save" # first(:button, "Save").click
-      @record = RailsAdmin::AbstractModel.new("FieldTest").first
-      expect(@record.format).to eq("test for format")
+      visit new_path(model_name: 'field_test')
+      fill_in 'field_test[format]', with: 'test for format'
+      click_button 'Save' # first(:button, "Save").click
+      @record = RailsAdmin::AbstractModel.new('FieldTest').first
+      expect(@record.format).to eq('test for format')
     end
   end
 
-  describe "default_value" do
-
-    it "is set for all types of input fields" do
+  describe 'default_value' do
+    it 'is set for all types of input fields' do
       RailsAdmin.config do |config|
         config.excluded_models = []
         config.model(FieldTest) do
-
           field :string_field do
             default_value 'string_field default_value'
           end
@@ -44,7 +40,7 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      visit new_path(:model_name => "field_test")
+      visit new_path(model_name: 'field_test')
       # In Rails 3.2.3 behavior of textarea has changed to insert newline after the opening tag,
       # but Capybara's RackTest driver is not up to this behavior change.
       # (https://github.com/jnicklas/capybara/issues/677)
@@ -52,126 +48,94 @@ describe "RailsAdmin Config DSL Edit Section" do
       expect(find_field('field_test[string_field]').value.gsub(/^\n/, '')).to eq('string_field default_value')
       expect(find_field('field_test[text_field]').value.gsub(/^\n/, '')).to eq('string_field text_field')
       expect(find_field('field_test[date_field]').value).to eq(Date.today.to_s)
-      expect(has_checked_field?('field_test[boolean_field]')).to be_true
+      expect(has_checked_field?('field_test[boolean_field]')).to be_truthy
     end
 
-    it "sets default value for selects" do
+    it 'sets default value for selects' do
       RailsAdmin.config(Team) do
         field :color, :enum do
           default_value 'black'
           enum do
-            ['black', 'white']
+            %w(black white)
           end
         end
       end
-      visit new_path(:model_name => "team")
+      visit new_path(model_name: 'team')
       expect(find_field('team[color]').value).to eq('black')
     end
   end
 
-  describe "attr_accessible" do
-
-
-    it "is configurable in the controller scope" do
-
-      RailsAdmin.config do |config|
-        config.excluded_models = []
-        config.attr_accessible_role do
-          _current_user.attr_accessible_role # sould be :custom_role
-        end
-
-        config.model FieldTest do
-          edit do
-            field :string_field
-            field :restricted_field
-            field :protected_field
-          end
-        end
-      end
-
-      visit new_path(:model_name => "field_test")
-      fill_in "field_test[string_field]", :with => "No problem here"
-      fill_in "field_test[restricted_field]", :with => "I'm allowed to do that as :custom_role only"
-      should have_no_selector "field_test[protected_field]"
-      click_button "Save" # first(:button, "Save").click
-      @field_test = FieldTest.first
-      expect(@field_test.string_field).to eq("No problem here")
-      expect(@field_test.restricted_field).to eq("I'm allowed to do that as :custom_role only")
+  describe 'css hooks' do
+    it 'is present' do
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('#team_division_id_field.belongs_to_association_type.division_field')
     end
   end
 
-  describe "css hooks" do
-    it "is present" do
-      visit new_path(:model_name => "team")
-      should have_selector("#team_division_id_field.belongs_to_association_type.division_field")
-    end
-  end
-
-  describe "field groupings" do
-
-    it "is hideable" do
+  describe 'field groupings' do
+    it 'is hideable' do
       RailsAdmin.config Team do
         edit do
           group :default do
-            label "Hidden group"
+            label 'Hidden group'
             hide
           end
         end
       end
-      visit new_path(:model_name => "team")
+      visit new_path(model_name: 'team')
       # Should not have the group header
-      should have_no_selector("legend", :text => "Hidden Group")
+      is_expected.to have_no_selector('legend', text: 'Hidden Group')
       # Should not have any of the group's fields either
-      should have_no_selector("select#team_division")
-      should have_no_selector("input#team_name")
-      should have_no_selector("input#team_logo_url")
-      should have_no_selector("input#team_manager")
-      should have_no_selector("input#team_ballpark")
-      should have_no_selector("input#team_mascot")
-      should have_no_selector("input#team_founded")
-      should have_no_selector("input#team_wins")
-      should have_no_selector("input#team_losses")
-      should have_no_selector("input#team_win_percentage")
-      should have_no_selector("input#team_revenue")
+      is_expected.to have_no_selector('select#team_division')
+      is_expected.to have_no_selector('input#team_name')
+      is_expected.to have_no_selector('input#team_logo_url')
+      is_expected.to have_no_selector('input#team_manager')
+      is_expected.to have_no_selector('input#team_ballpark')
+      is_expected.to have_no_selector('input#team_mascot')
+      is_expected.to have_no_selector('input#team_founded')
+      is_expected.to have_no_selector('input#team_wins')
+      is_expected.to have_no_selector('input#team_losses')
+      is_expected.to have_no_selector('input#team_win_percentage')
+      is_expected.to have_no_selector('input#team_revenue')
     end
 
-    it "hides association groupings" do
+    it 'hides association groupings' do
       RailsAdmin.config Team do
         edit do
           group :players do
-            label "Players"
+            label 'Players'
             field :players
             hide
           end
         end
       end
-      visit new_path(:model_name => "team")
+      visit new_path(model_name: 'team')
       # Should not have the group header
-      should have_no_selector("legend", :text => "Players")
+      is_expected.to have_no_selector('legend', text: 'Players')
       # Should not have any of the group's fields either
-      should have_no_selector("select#team_player_ids")
+      is_expected.to have_no_selector('select#team_player_ids')
     end
 
-    it "is renameable" do
+    it 'is renameable' do
       RailsAdmin.config Team do
         edit do
           group :default do
-            label "Renamed group"
+            label 'Renamed group'
           end
         end
       end
-      visit new_path(:model_name => "team")
+      visit new_path(model_name: 'team')
       # NOTE: capybara 2.0 is exceedingly reluctant to reveal the text of invisible elements. This was
       # the least terrible option I was able to find. It would probably be better to refactor the test
       # so the label we're looking for is displayed.
-      expect(find("legend", :visible => false).native.text).to include("Renamed group")
+      expect(find('legend', visible: false).native.text).to include('Renamed group')
     end
 
-    describe "help" do
-      before(:each) do
+    describe 'help' do
+      before do
         class HelpTest < Tableless
-          column :name, 'string(50)'
-          column :division, :string
+          column :name, 'varchar(50)'
+          column :division, :varchar
         end
         RailsAdmin.config.included_models = [HelpTest, Team]
       end
@@ -182,54 +146,54 @@ describe "RailsAdmin Config DSL Edit Section" do
         HelpTest.reset_callbacks(:validate)
       end
 
-      context "using mongoid", :skip_active_record => true do
-        it "uses the db column size for the maximum length" do
-          visit new_path(:model_name => "help_test")
-          expect(find("#help_test_name_field .help-block")).to have_content("Length up to 255.")
+      context 'using mongoid', skip_active_record: true do
+        it 'uses the db column size for the maximum length' do
+          visit new_path(model_name: 'help_test')
+          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 255.')
         end
 
-        it "returns nil for the maximum length" do
-          visit new_path(:model_name => "team")
-          expect(find("#team_custom_field_field .help-block")).not_to have_content("Length")
-        end
-      end
-
-      context "using active_record", :skip_mongoid => true do
-        it "uses the db column size for the maximum length" do
-          visit new_path(:model_name => "help_test")
-          expect(find("#help_test_name_field .help-block")).to have_content("Length up to 50.")
-        end
-
-        it "uses the :minimum setting from the validation" do
-          HelpTest.class_eval do
-            validates_length_of :name, :minimum => 1
-          end
-          visit new_path(:model_name => "help_test")
-          expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-50.")
-        end
-
-        it "uses the minimum of db column size or :maximum setting from the validation" do
-          HelpTest.class_eval do
-            validates_length_of :name, :maximum => 51
-          end
-          visit new_path(:model_name => "help_test")
-          expect(find("#help_test_name_field .help-block")).to have_content("Length up to 50.")
+        it 'returns nil for the maximum length' do
+          visit new_path(model_name: 'team')
+          expect(find('#team_custom_field_field .help-block')).not_to have_content('Length')
         end
       end
 
-      it "shows help section if present" do
+      context 'using active_record', skip_mongoid: true do
+        it 'uses the db column size for the maximum length' do
+          visit new_path(model_name: 'help_test')
+          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 50.')
+        end
+
+        it 'uses the :minimum setting from the validation' do
+          HelpTest.class_eval do
+            validates_length_of :name, minimum: 1
+          end
+          visit new_path(model_name: 'help_test')
+          expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-50.')
+        end
+
+        it 'uses the minimum of db column size or :maximum setting from the validation' do
+          HelpTest.class_eval do
+            validates_length_of :name, maximum: 51
+          end
+          visit new_path(model_name: 'help_test')
+          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 50.')
+        end
+      end
+
+      it 'shows help section if present' do
         RailsAdmin.config HelpTest do
           edit do
             group :default do
-              help "help paragraph to display"
+              help 'help paragraph to display'
             end
           end
         end
-        visit new_path(:model_name => "help_test")
-        should have_selector('fieldset>p', :text => "help paragraph to display")
+        visit new_path(model_name: 'help_test')
+        is_expected.to have_selector('fieldset>p', text: 'help paragraph to display')
       end
 
-      it "does not show help if not present" do
+      it 'does not show help if not present' do
         RailsAdmin.config HelpTest do
           edit do
             group :default do
@@ -237,11 +201,11 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
           end
         end
-        visit new_path(:model_name => "help_test")
-        should_not have_selector('fieldset>p')
+        visit new_path(model_name: 'help_test')
+        is_expected.not_to have_selector('fieldset>p')
       end
 
-      it "is able to display multiple help if there are multiple sections" do
+      it 'is able to display multiple help if there are multiple sections' do
         RailsAdmin.config HelpTest do
           edit do
             group :default do
@@ -249,53 +213,62 @@ describe "RailsAdmin Config DSL Edit Section" do
               help 'help for default'
             end
             group :other_section do
-              label "Other Section"
+              label 'Other Section'
               field :division
               help 'help for other section'
             end
           end
         end
-        visit new_path(:model_name => "help_test")
-        should have_selector("fieldset>p", :text => 'help for default')
-        should have_selector("fieldset>p", :text => 'help for other section')
-        should have_selector("fieldset>p", :count => 2)
+        visit new_path(model_name: 'help_test')
+        is_expected.to have_selector('fieldset>p', text: 'help for default')
+        is_expected.to have_selector('fieldset>p', text: 'help for other section')
+        is_expected.to have_selector('fieldset>p', count: 2)
       end
 
-      it "uses the :is setting from the validation" do
+      it 'uses the :is setting from the validation' do
         HelpTest.class_eval do
-          validates_length_of :name, :is => 3
+          validates_length_of :name, is: 3
         end
-        visit new_path(:model_name => "help_test")
-        expect(find("#help_test_name_field .help-block")).to have_content("Length of 3.")
+        visit new_path(model_name: 'help_test')
+        expect(find('#help_test_name_field .help-block')).to have_content('Length of 3.')
       end
 
-      it "uses the :maximum setting from the validation" do
+      it 'uses the :maximum setting from the validation' do
         HelpTest.class_eval do
-          validates_length_of :name, :maximum => 49
+          validates_length_of :name, maximum: 49
         end
-        visit new_path(:model_name => "help_test")
-        expect(find("#help_test_name_field .help-block")).to have_content("Length up to 49.")
+        visit new_path(model_name: 'help_test')
+        expect(find('#help_test_name_field .help-block')).to have_content('Length up to 49.')
       end
 
-      it "uses the :minimum and :maximum from the validation" do
+      it 'uses the :minimum and :maximum from the validation' do
         HelpTest.class_eval do
-          validates_length_of :name, :minimum => 1, :maximum => 49
+          validates_length_of :name, minimum: 1, maximum: 49
         end
-        visit new_path(:model_name => "help_test")
-        expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-49.")
+        visit new_path(model_name: 'help_test')
+        expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
       end
 
-      it "uses the range from the validation" do
+      it 'uses the range from the validation' do
         HelpTest.class_eval do
-          validates_length_of :name, :in => 1..49
+          validates_length_of :name, in: 1..49
         end
-        visit new_path(:model_name => "help_test")
-        expect(find("#help_test_name_field .help-block")).to have_content("Length of 1-49.")
+        visit new_path(model_name: 'help_test')
+        expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
       end
 
+      it 'does not show help for hidden fields' do
+        RailsAdmin.config HelpTest do
+          edit do
+            field :name, :hidden
+          end
+        end
+        visit new_path(model_name: 'help_test')
+        expect(page).not_to have_css('.help-block')
+      end
     end
 
-    it "has accessor for its fields" do
+    it 'has accessor for its fields' do
       RailsAdmin.config Team do
         edit do
           group :default do
@@ -311,17 +284,17 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("legend", :text => "Basic info", :visible => false)
-      should have_selector("legend", :text => "Basic info", :visible => true)
-      should have_selector("legend", :text => "Belong's to associations")
-      should have_selector("label", :text => "Name")
-      should have_selector("label", :text => "Logo url")
-      should have_selector("label", :text => "Division")
-      should have_selector(".control-group", :count => 4)
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('legend', text: 'Basic info', visible: false)
+      is_expected.to have_selector('legend', text: 'Basic info', visible: true)
+      is_expected.to have_selector('legend', text: "Belong's to associations")
+      is_expected.to have_selector('label', text: 'Name')
+      is_expected.to have_selector('label', text: 'Logo url')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('.control-group', count: 4)
     end
 
-    it "has accessor for its fields by type" do
+    it 'has accessor for its fields by type' do
       RailsAdmin.config Team do
         edit do
           group :default do
@@ -338,35 +311,34 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Name")
-      should have_selector("label", :text => "Logo url")
-      should have_selector("label", :text => "Division")
-      should have_selector("label", :text => "Manager (STRING)")
-      should have_selector("label", :text => "Ballpark (STRING)")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Name')
+      is_expected.to have_selector('label', text: 'Logo url')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Manager (STRING)')
+      is_expected.to have_selector('label', text: 'Ballpark (STRING)')
     end
   end
 
   describe "items' fields" do
-
-    it "shows all by default" do
-      visit new_path(:model_name => "team")
-      should have_selector("select#team_division_id")
-      should have_selector("input#team_name")
-      should have_selector("input#team_logo_url")
-      should have_selector("input#team_manager")
-      should have_selector("input#team_ballpark")
-      should have_selector("input#team_mascot")
-      should have_selector("input#team_founded")
-      should have_selector("input#team_wins")
-      should have_selector("input#team_losses")
-      should have_selector("input#team_win_percentage")
-      should have_selector("input#team_revenue")
-      should have_selector("select#team_player_ids")
-      should have_selector("select#team_fan_ids")
+    it 'shows all by default' do
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('select#team_division_id')
+      is_expected.to have_selector('input#team_name')
+      is_expected.to have_selector('input#team_logo_url')
+      is_expected.to have_selector('input#team_manager')
+      is_expected.to have_selector('input#team_ballpark')
+      is_expected.to have_selector('input#team_mascot')
+      is_expected.to have_selector('input#team_founded')
+      is_expected.to have_selector('input#team_wins')
+      is_expected.to have_selector('input#team_losses')
+      is_expected.to have_selector('input#team_win_percentage')
+      is_expected.to have_selector('input#team_revenue')
+      is_expected.to have_selector('select#team_player_ids')
+      is_expected.to have_selector('select#team_fan_ids')
     end
 
-    it "appears in order defined" do
+    it 'appears in order defined' do
       RailsAdmin.config Team do
         edit do
           field :manager
@@ -374,64 +346,64 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector(:xpath, "//*[contains(@class, 'field')][1]//*[@id='team_manager']")
-      should have_selector(:xpath, "//*[contains(@class, 'field')][2]//*[@id='team_division_id']")
-      should have_selector(:xpath, "//*[contains(@class, 'field')][3]//*[@id='team_name']")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector(:xpath, "//*[contains(@class, 'field')][1]//*[@id='team_manager']")
+      is_expected.to have_selector(:xpath, "//*[contains(@class, 'field')][2]//*[@id='team_division_id']")
+      is_expected.to have_selector(:xpath, "//*[contains(@class, 'field')][3]//*[@id='team_name']")
     end
 
-    it "only shows the defined fields if some fields are defined" do
+    it 'only shows the defined fields if some fields are defined' do
       RailsAdmin.config Team do
         edit do
           field :division
           field :name
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Division")
-      should have_selector("label", :text => "Name")
-      should have_selector(".control-group", :count => 2)
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name')
+      is_expected.to have_selector('.control-group', count: 2)
     end
 
-    describe "I18n awarly" do
+    describe 'I18n awarly' do
       after :each do
         I18n.locale = :en
       end
 
-      it "delegates the label option to the ActiveModel API and memoizes it" do
+      it 'delegates the label option to the ActiveModel API and memoizes it' do
         RailsAdmin.config Team do
           edit do
             field :manager
             field :fans
           end
         end
-        visit new_path(:model_name => "team")
-        should have_selector("label", :text => "Team Manager")
-        should have_selector("label", :text => "Some Fans")
+        visit new_path(model_name: 'team')
+        is_expected.to have_selector('label', text: 'Team Manager')
+        is_expected.to have_selector('label', text: 'Some Fans')
         I18n.locale = :fr
-        visit new_path(:model_name => "team")
-        should have_selector("label", :text => "Manager de l'équipe")
-        should have_selector("label", :text => "Quelques fans")
+        visit new_path(model_name: 'team')
+        is_expected.to have_selector('label', text: "Manager de l'équipe")
+        is_expected.to have_selector('label', text: 'Quelques fans')
       end
     end
 
-    it "is renameable" do
+    it 'is renameable' do
       RailsAdmin.config Team do
         edit do
           field :manager do
-            label "Renamed field"
+            label 'Renamed field'
           end
           field :division
           field :name
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Renamed field")
-      should have_selector("label", :text => "Division")
-      should have_selector("label", :text => "Name")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Renamed field')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name')
     end
 
-    it "is renameable by type" do
+    it 'is renameable by type' do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -439,23 +411,23 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Division")
-      should have_selector("label", :text => "Name (STRING)")
-      should have_selector("label", :text => "Logo url (STRING)")
-      should have_selector("label", :text => "Manager (STRING)")
-      should have_selector("label", :text => "Ballpark (STRING)")
-      should have_selector("label", :text => "Mascot (STRING)")
-      should have_selector("label", :text => "Founded")
-      should have_selector("label", :text => "Wins")
-      should have_selector("label", :text => "Losses")
-      should have_selector("label", :text => "Win percentage")
-      should have_selector("label", :text => "Revenue")
-      should have_selector("label", :text => "Players")
-      should have_selector("label", :text => "Fans")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name (STRING)')
+      is_expected.to have_selector('label', text: 'Logo url (STRING)')
+      is_expected.to have_selector('label', text: 'Manager (STRING)')
+      is_expected.to have_selector('label', text: 'Ballpark (STRING)')
+      is_expected.to have_selector('label', text: 'Mascot (STRING)')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
-    it "is globally renameable by type" do
+    it 'is globally renameable by type' do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -463,23 +435,23 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Division")
-      should have_selector("label", :text => "Name (STRING)")
-      should have_selector("label", :text => "Logo url (STRING)")
-      should have_selector("label", :text => "Manager (STRING)")
-      should have_selector("label", :text => "Ballpark (STRING)")
-      should have_selector("label", :text => "Mascot (STRING)")
-      should have_selector("label", :text => "Founded")
-      should have_selector("label", :text => "Wins")
-      should have_selector("label", :text => "Losses")
-      should have_selector("label", :text => "Win percentage")
-      should have_selector("label", :text => "Revenue")
-      should have_selector("label", :text => "Players")
-      should have_selector("label", :text => "Fans")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_selector('label', text: 'Name (STRING)')
+      is_expected.to have_selector('label', text: 'Logo url (STRING)')
+      is_expected.to have_selector('label', text: 'Manager (STRING)')
+      is_expected.to have_selector('label', text: 'Ballpark (STRING)')
+      is_expected.to have_selector('label', text: 'Mascot (STRING)')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
-    it "is flaggable as read only and be configurable with formatted_value" do
+    it 'is flaggable as read only and be configurable with formatted_value' do
       RailsAdmin.config Team do
         edit do
           field :name do
@@ -490,11 +462,11 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_content("I'm outputed in the form")
+      visit new_path(model_name: 'team')
+      is_expected.to have_content("I'm outputed in the form")
     end
 
-    it "is hideable" do
+    it 'is hideable' do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -504,13 +476,13 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      visit new_path(:model_name => "team")
-      should have_no_selector("#team_manager")
-      should have_selector("#team_division_id")
-      should have_selector("#team_name")
+      visit new_path(model_name: 'team')
+      is_expected.to have_no_selector('#team_manager')
+      is_expected.to have_selector('#team_division_id')
+      is_expected.to have_selector('#team_name')
     end
 
-    it "is hideable by type" do
+    it 'is hideable by type' do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -518,23 +490,23 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Division")
-      should have_no_selector("label", :text => "Name")
-      should have_no_selector("label", :text => "Logo url")
-      should have_no_selector("label", :text => "Manager")
-      should have_no_selector("label", :text => "Ballpark")
-      should have_no_selector("label", :text => "Mascot")
-      should have_selector("label", :text => "Founded")
-      should have_selector("label", :text => "Wins")
-      should have_selector("label", :text => "Losses")
-      should have_selector("label", :text => "Win percentage")
-      should have_selector("label", :text => "Revenue")
-      should have_selector("label", :text => "Players")
-      should have_selector("label", :text => "Fans")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_no_selector('label', text: 'Name')
+      is_expected.to have_no_selector('label', text: 'Logo url')
+      is_expected.to have_no_selector('label', text: 'Manager')
+      is_expected.to have_no_selector('label', text: 'Ballpark')
+      is_expected.to have_no_selector('label', text: 'Mascot')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
-    it "is globally hideable by type" do
+    it 'is globally hideable by type' do
       RailsAdmin.config Team do
         edit do
           fields_of_type :string do
@@ -542,23 +514,23 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector("label", :text => "Division")
-      should have_no_selector("label", :text => "Name")
-      should have_no_selector("label", :text => "Logo url")
-      should have_no_selector("label", :text => "Manager")
-      should have_no_selector("label", :text => "Ballpark")
-      should have_no_selector("label", :text => "Mascot")
-      should have_selector("label", :text => "Founded")
-      should have_selector("label", :text => "Wins")
-      should have_selector("label", :text => "Losses")
-      should have_selector("label", :text => "Win percentage")
-      should have_selector("label", :text => "Revenue")
-      should have_selector("label", :text => "Players")
-      should have_selector("label", :text => "Fans")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('label', text: 'Division')
+      is_expected.to have_no_selector('label', text: 'Name')
+      is_expected.to have_no_selector('label', text: 'Logo url')
+      is_expected.to have_no_selector('label', text: 'Manager')
+      is_expected.to have_no_selector('label', text: 'Ballpark')
+      is_expected.to have_no_selector('label', text: 'Mascot')
+      is_expected.to have_selector('label', text: 'Founded')
+      is_expected.to have_selector('label', text: 'Wins')
+      is_expected.to have_selector('label', text: 'Losses')
+      is_expected.to have_selector('label', text: 'Win percentage')
+      is_expected.to have_selector('label', text: 'Revenue')
+      is_expected.to have_selector('label', text: 'Players')
+      is_expected.to have_selector('label', text: 'Fans')
     end
 
-    it "has option to customize the help text" do
+    it 'has option to customize the help text' do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -568,13 +540,13 @@ describe "RailsAdmin Config DSL Edit Section" do
           field :name
         end
       end
-      visit new_path(:model_name => "team")
-      expect(find("#team_manager_field .help-block")).to have_content("Required. Length up to 100. Additional help text for manager field.")
-      expect(find("#team_division_id_field .help-block")).to have_content("Required")
-      expect(find("#team_name_field .help-block")).not_to have_content("Additional help text")
+      visit new_path(model_name: 'team')
+      expect(find('#team_manager_field .help-block')).to have_content('Required. Length up to 100. Additional help text for manager field.')
+      expect(find('#team_division_id_field .help-block')).to have_content('Required')
+      expect(find('#team_name_field .help-block')).not_to have_content('Additional help text')
     end
 
-    it "has option to override required status" do
+    it 'has option to override required status' do
       RailsAdmin.config Team do
         edit do
           field :manager do
@@ -588,13 +560,13 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "team")
-      expect(find("#team_manager_field .help-block")).to have_content("Optional")
-      expect(find("#team_division_id_field .help-block")).to have_content("Optional")
-      expect(find("#team_name_field .help-block")).to have_content("Required")
+      visit new_path(model_name: 'team')
+      expect(find('#team_manager_field .help-block')).to have_content('Optional')
+      expect(find('#team_division_id_field .help-block')).to have_content('Optional')
+      expect(find('#team_name_field .help-block')).to have_content(I18n.translate('admin.help.team.name'))
     end
 
-    it "can hide the add button on an associated field" do
+    it 'can hide the add button on an associated field' do
       RailsAdmin.config Player do
         edit do
           field :team do
@@ -608,13 +580,13 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "player")
-      should have_no_selector('a', :text => 'Add a new Team')
-      should have_no_selector('a', :text => 'Add a new Draft')
-      should have_no_selector('a', :text => 'Add a new Comment')
+      visit new_path(model_name: 'player')
+      is_expected.to have_no_selector('a', text: 'Add a new Team')
+      is_expected.to have_no_selector('a', text: 'Add a new Draft')
+      is_expected.to have_no_selector('a', text: 'Add a new Comment')
     end
 
-    it "can show the add button on an associated field" do
+    it 'can show the add button on an associated field' do
       RailsAdmin.config Player do
         edit do
           field :team do
@@ -628,13 +600,13 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "player")
-      should have_selector('a', :text => 'Add a new Team')
-      should have_selector('a', :text => 'Add a new Draft')
-      should have_selector('a', :text => 'Add a new Comment')
+      visit new_path(model_name: 'player')
+      is_expected.to have_selector('a', text: 'Add a new Team')
+      is_expected.to have_selector('a', text: 'Add a new Draft')
+      is_expected.to have_selector('a', text: 'Add a new Comment')
     end
 
-    it "can hide the edit button on an associated field" do
+    it 'can hide the edit button on an associated field' do
       RailsAdmin.config Player do
         edit do
           field :team do
@@ -645,12 +617,12 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "player")
-      should have_no_selector('a', :text => 'Edit this Team')
-      should have_no_selector('a', :text => 'Edit this Draft')
+      visit new_path(model_name: 'player')
+      is_expected.to have_no_selector('a', text: 'Edit this Team')
+      is_expected.to have_no_selector('a', text: 'Edit this Draft')
     end
 
-    it "can show the edit button on an associated field" do
+    it 'can show the edit button on an associated field' do
       RailsAdmin.config Player do
         edit do
           field :team do
@@ -661,15 +633,14 @@ describe "RailsAdmin Config DSL Edit Section" do
           end
         end
       end
-      visit new_path(:model_name => "player")
-      should have_selector('a', :text => 'Edit this Team')
-      should have_selector('a', :text => 'Edit this Draft')
+      visit new_path(model_name: 'player')
+      is_expected.to have_selector('a', text: 'Edit this Team')
+      is_expected.to have_selector('a', text: 'Edit this Draft')
     end
-
   end
 
-  describe "bindings" do
-    it "is present at creation time" do
+  describe 'bindings' do
+    it 'is present at creation time' do
       RailsAdmin.config do |config|
         config.excluded_models = []
       end
@@ -681,32 +652,46 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
 
-      visit new_path(:model_name => 'category')
-      should have_no_css('#category_parent_category_id')
-      click_button "Save" # first(:button, "Save").click
-      visit edit_path(:model_name => 'category', :id => Category.first)
-      should have_css('#category_parent_category_id')
-      click_button "Save" # first(:button, "Save").click
-      should have_content('Category successfully updated')
+      visit new_path(model_name: 'category')
+      is_expected.to have_no_css('#category_parent_category_id')
+      click_button 'Save' # first(:button, "Save").click
+      visit edit_path(model_name: 'category', id: Category.first)
+      is_expected.to have_css('#category_parent_category_id')
+      click_button 'Save' # first(:button, "Save").click
+      is_expected.to have_content('Category successfully updated')
     end
   end
 
-  describe "nested form" do
-    it "works" do
+  describe 'nested form' do
+    it 'works', js: true do
       @record = FactoryGirl.create :field_test
-      @record.nested_field_tests = [NestedFieldTest.create!(:title => 'title 1'), NestedFieldTest.create!(:title => 'title 2')]
-      visit edit_path(:model_name => "field_test", :id => @record.id)
-      fill_in "field_test_comment_attributes_content", :with => 'nested comment content'
-      fill_in "field_test_nested_field_tests_attributes_0_title", :with => 'nested field test title 1 edited'
-      page.find('#field_test_nested_field_tests_attributes_1__destroy').set('true')
-      click_button "Save" # first(:button, "Save").click
+      @record.nested_field_tests = [NestedFieldTest.create!(title: 'title 1'), NestedFieldTest.create!(title: 'title 2')]
+      visit edit_path(model_name: 'field_test', id: @record.id)
+
+      find('#field_test_comment_attributes_field .add_nested_fields').click
+      fill_in 'field_test_comment_attributes_content', with: 'nested comment content'
+
+      fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
+      find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
+
+      click_button 'Save'
+      is_expected.to have_content('Field test successfully updated')
+
       @record.reload
-      expect(@record.comment.content).to eq('nested comment content')
+      expect(@record.comment.content.strip).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
     end
 
-    it "sets bindings[:object] to nested object" do
+    it 'is optional for has_one' do
+      @record = FactoryGirl.create :field_test
+      visit edit_path(model_name: 'field_test', id: @record.id)
+      click_button 'Save'
+      @record.reload
+      expect(@record.comment).to be_nil
+    end
+
+    it 'sets bindings[:object] to nested object' do
       RailsAdmin.config(NestedFieldTest) do
         nested do
           field :title do
@@ -717,173 +702,176 @@ describe "RailsAdmin Config DSL Edit Section" do
         end
       end
       @record = FieldTest.create
-      @record.nested_field_tests << NestedFieldTest.create!(:title => 'title 1')
-      visit edit_path(:model_name => "field_test", :id => @record.id)
+      @record.nested_field_tests << NestedFieldTest.create!(title: 'title 1')
+      visit edit_path(model_name: 'field_test', id: @record.id)
       expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
     end
 
-    it "is desactivable" do
-      visit new_path(:model_name => "field_test")
-      should have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+    it 'is desactivable' do
+      visit new_path(model_name: 'field_test')
+      is_expected.to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       RailsAdmin.config(FieldTest) do
         configure :nested_field_tests do
           nested_form false
         end
       end
-      visit new_path(:model_name => "field_test")
-      should have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+      visit new_path(model_name: 'field_test')
+      is_expected.to have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
     end
 
-    describe "with nested_attributes_options given" do
+    describe 'with nested_attributes_options given' do
       before do
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args()).
-          and_return({:allow_destroy=>true, :update_only=>false})
+        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
+          and_return(allow_destroy: true, update_only: false)
       end
 
-      it "does not show add button when :update_only is true" do
+      it 'does not show add button when :update_only is true' do
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return({:allow_destroy=>true, :update_only=>true})
-        visit new_path(:model_name => "field_test")
-        should have_selector('.toggler')
-        should_not have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+          and_return(allow_destroy: true, update_only: true)
+        visit new_path(model_name: 'field_test')
+        is_expected.to have_selector('.toggler')
+        is_expected.not_to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
       end
 
-      it "does not show destroy button except for newly created when :allow_destroy is false" do
+      it 'does not show destroy button except for newly created when :allow_destroy is false' do
         @record = FieldTest.create
-        @record.nested_field_tests << NestedFieldTest.create!(:title => 'nested title 1')
+        @record.nested_field_tests << NestedFieldTest.create!(title: 'nested title 1')
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return({:allow_destroy=>false, :update_only=>false})
-        visit edit_path(:model_name => "field_test", :id => @record.id)
+          and_return(allow_destroy: false, update_only: false)
+        visit edit_path(model_name: 'field_test', id: @record.id)
         expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
-        should_not have_selector('form .remove_nested_fields')
-        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(
+        is_expected.not_to have_selector('form .remove_nested_fields')
+        expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
           /<a[^>]* class="remove_nested_fields"[^>]*>/)
       end
     end
 
     describe "when a field which have the same name of nested_in field's" do
       it "does not hide fields which are not associated with nesting parent field's model" do
-        visit new_path(:model_name => "field_test")
-        should_not have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-        expect(find('div#nested_field_tests_fields_blueprint', :visible => false)[:'data-blueprint']).to match(
+        visit new_path(model_name: 'field_test')
+        is_expected.not_to have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
+        expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
           /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/)
+      end
+
+      it 'hides fields that are deeply nested with inverse_of' do
+        visit new_path(model_name: 'field_test')
+        expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
+        expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
       end
     end
   end
 
-  describe "embedded model", :mongoid => true do
-    it "works" do
+  describe 'embedded model', mongoid: true do
+    it 'works' do
       @record = FactoryGirl.create :field_test
-      2.times.each{|i| @record.embeds.create :name => "embed #{i}"}
-      visit edit_path(:model_name => "field_test", :id => @record.id)
-      fill_in "field_test_embeds_attributes_0_name", :with => 'embed 1 edited'
+      2.times.each { |i| @record.embeds.create name: "embed #{i}" }
+      visit edit_path(model_name: 'field_test', id: @record.id)
+      fill_in 'field_test_embeds_attributes_0_name', with: 'embed 1 edited'
       page.find('#field_test_embeds_attributes_1__destroy').set('true')
-      click_button "Save" # first(:button, "Save").click
+      click_button 'Save' # first(:button, "Save").click
       @record.reload
       expect(@record.embeds.length).to eq(1)
       expect(@record.embeds[0].name).to eq('embed 1 edited')
     end
   end
 
-
-  describe "fields which are nullable and have AR validations", :active_record => true do
-
-    it "is required" do
+  describe 'fields which are nullable and have AR validations', active_record: true do
+    it 'is required' do
       # draft.notes is nullable and has no validation
-      field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :notes}
-      expect(field.properties[:nullable?]).to be_true
-      expect(field.required?).to be_false
+      field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :notes }
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_falsey
 
       # draft.date is nullable in the schema but has an AR
       # validates_presence_of validation that makes it required
-      field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :date}
-      expect(field.properties[:nullable?]).to be_true
-      expect(field.required?).to be_true
+      field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :date }
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_truthy
 
       # draft.round is nullable in the schema but has an AR
       # validates_numericality_of validation that makes it required
-      field = RailsAdmin::config("Draft").edit.fields.find{|f| f.name == :round}
-      expect(field.properties[:nullable?]).to be_true
-      expect(field.required?).to be_true
+      field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :round }
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_truthy
 
       # team.revenue is nullable in the schema but has an AR
       # validates_numericality_of validation that allows nil
-      field = RailsAdmin::config("Team").edit.fields.find{|f| f.name == :revenue}
-      expect(field.properties[:nullable?]).to be_true
-      expect(field.required?).to be_false
+      field = RailsAdmin.config('Team').edit.fields.detect { |f| f.name == :revenue }
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_falsey
     end
   end
 
-  describe "CKEditor Support" do
-    it "adds Javascript to enable CKEditor" do
+  describe 'CKEditor Support' do
+    it 'adds Javascript to enable CKEditor' do
       RailsAdmin.config Draft do
         edit do
           field :notes, :ck_editor
         end
       end
-      visit new_path(:model_name => "draft")
-      should have_selector('textarea#draft_notes[data-richtext="ckeditor"]')
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="ckeditor"]')
     end
   end
 
-  describe "CodeMirror Support" do
-    it "adds Javascript to enable CodeMirror" do
+  describe 'CodeMirror Support' do
+    it 'adds Javascript to enable CodeMirror' do
       RailsAdmin.config Draft do
         edit do
           field :notes, :code_mirror
         end
       end
-      visit new_path(:model_name => "draft")
-      should have_selector('textarea#draft_notes[data-richtext="codemirror"]')
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="codemirror"]')
     end
   end
 
-  describe "bootstrap_wysihtml5 Support" do
-    it "adds Javascript to enable bootstrap_wysihtml5" do
+  describe 'bootstrap_wysihtml5 Support' do
+    it 'adds Javascript to enable bootstrap_wysihtml5' do
       RailsAdmin.config Draft do
         edit do
           field :notes, :wysihtml5
         end
       end
-      visit new_path(:model_name => "draft")
-      should have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
     end
 
-    it "should include custom wysihtml5 configuration" do
+    it 'should include custom wysihtml5 configuration' do
       RailsAdmin.config Draft do
         edit do
           field :notes, :wysihtml5 do
-            config_options :image => false
+            config_options image: false
             css_location 'stub_css.css'
             js_location 'stub_js.js'
           end
         end
       end
 
-      visit new_path(:model_name => "draft")
-      should have_selector("textarea#draft_notes[data-richtext=\"bootstrap-wysihtml5\"][data-options]")
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector("textarea#draft_notes[data-richtext=\"bootstrap-wysihtml5\"][data-options]")
     end
   end
 
-  describe "Paperclip Support" do
-
-    it "shows a file upload field" do
+  describe 'Paperclip Support' do
+    it 'shows a file upload field' do
       RailsAdmin.config User do
         edit do
           field :avatar
         end
       end
-      visit new_path(:model_name => "user")
-      should have_selector("input#user_avatar")
+      visit new_path(model_name: 'user')
+      is_expected.to have_selector('input#user_avatar')
     end
   end
 
-  describe "Enum field support" do
+  describe 'Enum field support' do
     describe "when object responds to '\#{method}_enum'" do
       before do
         Team.class_eval do
           def color_enum
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -891,17 +879,17 @@ describe "RailsAdmin Config DSL Edit Section" do
             field :color
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
         Team.send(:remove_method, :color_enum)
       end
 
-      it "auto-detects enumeration" do
-        should have_selector(".enum_type select")
-        should_not have_selector(".enum_type select[multiple]")
-        should have_content("green")
+      it 'auto-detects enumeration' do
+        is_expected.to have_selector('.enum_type select')
+        is_expected.not_to have_selector('.enum_type select[multiple]')
+        is_expected.to have_content('green')
       end
     end
 
@@ -909,7 +897,7 @@ describe "RailsAdmin Config DSL Edit Section" do
       before do
         Team.instance_eval do
           def color_enum
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -917,24 +905,24 @@ describe "RailsAdmin Config DSL Edit Section" do
             field :color
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
         Team.instance_eval { undef :color_enum }
       end
 
-      it "auto-detects enumeration" do
-        should have_selector(".enum_type select")
-        should have_content("green")
+      it 'auto-detects enumeration' do
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_content('green')
       end
     end
 
-    describe "the enum instance method" do
+    describe 'the enum instance method' do
       before do
         Team.class_eval do
           def color_list
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -944,24 +932,24 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
         Team.send(:remove_method, :color_list)
       end
 
-      it "allows configuration" do
-        should have_selector(".enum_type select")
-        should have_content("green")
+      it 'allows configuration' do
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_content('green')
       end
     end
 
-    describe "the enum class method" do
+    describe 'the enum class method' do
       before do
         Team.instance_eval do
           def color_list
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -971,24 +959,24 @@ describe "RailsAdmin Config DSL Edit Section" do
             end
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
         Team.instance_eval { undef :color_list }
       end
 
-      it "allows configuration" do
-        should have_selector(".enum_type select")
-        should have_content("green")
+      it 'allows configuration' do
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_content('green')
       end
     end
 
-    describe "when overriding enum configuration" do
+    describe 'when overriding enum configuration' do
       before do
         Team.class_eval do
           def color_list
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
         RailsAdmin.config Team do
@@ -996,80 +984,86 @@ describe "RailsAdmin Config DSL Edit Section" do
             field :color, :enum do
               enum_method :color_list
               enum do
-                ["yellow", "black"]
+                %w(yellow black)
               end
             end
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
         Team.send(:remove_method, :color_list)
       end
 
-      it "allows direct listing of enumeration options and override enum method" do
-        should have_selector(".enum_type select")
-        should have_no_content("green")
-        should have_content("yellow")
+      it 'allows direct listing of enumeration options and override enum method' do
+        is_expected.to have_selector('.enum_type select')
+        is_expected.to have_no_content('green')
+        is_expected.to have_content('yellow')
       end
     end
 
-    describe "when serialize is enabled in ActiveRecord model", :active_record => true do
+    describe 'when serialize is enabled in ActiveRecord model', active_record: true do
       before do
+        # ActiveRecord 4.2 momoizes result of serialized_attributes, so we have to clear it.
+        Team.remove_instance_variable(:@serialized_attributes) if Team.instance_variable_defined?(:@serialized_attributes)
         Team.instance_eval do
           serialize :color
           def color_enum
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
-        Team.serialized_attributes.clear
+        if Rails.version >= '4.2'
+          Team.reset_column_information
+          Team.attribute_type_decorations.clear
+        else
+          Team.serialized_attributes.clear
+        end
         Team.instance_eval { undef :color_enum }
       end
 
-      it "makes enumeration multi-selectable" do
-        should have_selector(".enum_type select[multiple]")
+      it 'makes enumeration multi-selectable' do
+        is_expected.to have_selector('.enum_type select[multiple]')
       end
     end
 
-    describe "when serialize is enabled in Mongoid model", :mongoid => true do
+    describe 'when serialize is enabled in Mongoid model', mongoid: true do
       before do
         Team.instance_eval do
-          field :color, :type => Array
+          field :color, type: Array
           def color_enum
-            ["blue", "green", "red"]
+            %w(blue green red)
           end
         end
-        visit new_path(:model_name => "team")
+        visit new_path(model_name: 'team')
       end
 
       after do
         Team.instance_eval do
-          field :color, :type => String
+          field :color, type: String
           undef :color_enum
         end
       end
 
-      it "makes enumeration multi-selectable" do
-        should have_selector(".enum_type select[multiple]")
+      it 'makes enumeration multi-selectable' do
+        is_expected.to have_selector('.enum_type select[multiple]')
       end
     end
   end
 
-  describe "ColorPicker Support" do
-    it "shows input with class color" do
+  describe 'ColorPicker Support' do
+    it 'shows input with class color' do
       RailsAdmin.config Team do
         edit do
           field :color, :color
         end
       end
-      visit new_path(:model_name => "team")
-      should have_selector(".color_type input")
+      visit new_path(model_name: 'team')
+      is_expected.to have_selector('.color_type input')
     end
   end
-
 end

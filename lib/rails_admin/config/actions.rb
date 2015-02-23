@@ -1,7 +1,6 @@
 module RailsAdmin
   module Config
     module Actions
-
       class << self
         def all(scope = nil, bindings = {})
           if scope.is_a?(Hash)
@@ -10,54 +9,51 @@ module RailsAdmin
           end
           scope ||= :all
           init_actions!
-          actions = case scope
-          when :all
-            @@actions
-          when :root
-            @@actions.select(&:root?)
-          when :collection
-            @@actions.select(&:collection?)
-          when :bulkable
-            @@actions.select(&:bulkable?)
-          when :member
-            @@actions.select(&:member?)
+          actions = begin
+            case scope
+            when :all
+              @@actions
+            when :root
+              @@actions.select(&:root?)
+            when :collection
+              @@actions.select(&:collection?)
+            when :bulkable
+              @@actions.select(&:bulkable?)
+            when :member
+              @@actions.select(&:member?)
+            end
           end
-          actions = actions.map{ |action| action.with(bindings) }
+          actions = actions.collect { |action| action.with(bindings) }
           bindings[:controller] ? actions.select(&:visible?) : actions
         end
 
-        def find custom_key, bindings = {}
+        def find(custom_key, bindings = {})
           init_actions!
-          action = @@actions.find{ |a| a.custom_key == custom_key }.try(:with, bindings)
+          action = @@actions.detect { |a| a.custom_key == custom_key }.try(:with, bindings)
           bindings[:controller] ? (action.try(:visible?) && action || nil) : action
         end
 
-        def collection key, parent_class = :base, &block
+        def collection(key, parent_class = :base, &block)
           add_action key, parent_class, :collection, &block
         end
 
-        def member key, parent_class = :base, &block
+        def member(key, parent_class = :base, &block)
           add_action key, parent_class, :member, &block
         end
 
-        def root key, parent_class = :base, &block
+        def root(key, parent_class = :base, &block)
           add_action key, parent_class, :root, &block
         end
 
-        def add_action key, parent_class, parent, &block
+        def add_action(key, parent_class, parent, &block)
           a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
-          a.instance_eval(%{
+          a.instance_eval(%(
             #{parent} true
             def key
               :#{key}
             end
-          })
-          a.instance_eval(&block) if block
-          unless a.custom_key.in?((@@actions || []).map(&:custom_key))
-            (@@actions ||= []) << a
-          else
-            raise "Action #{a.custom_key} already exist. Please change its custom key"
-          end
+          ))
+          add_action_custom_key(a, &block)
         end
 
         def reset
@@ -65,7 +61,7 @@ module RailsAdmin
         end
 
         def register(name, klass = nil)
-          if klass == nil && name.kind_of?(Class)
+          if klass.nil? && name.is_a?(Class)
             klass = name
             name = klass.to_s.demodulize.underscore.to_sym
           end
@@ -73,17 +69,12 @@ module RailsAdmin
           instance_eval %{
             def #{name}(&block)
               action = #{klass}.new
-              action.instance_eval &block if block
-              unless action.custom_key.in?((@@actions || []).map(&:custom_key))
-                (@@actions ||= []) << action
-              else
-                raise "Action \#{action.custom_key} already exist. Please change its custom key"
-              end
+              add_action_custom_key(action, &block)
             end
           }
         end
 
-        private
+      private
 
         def init_actions!
           @@actions ||= [
@@ -101,6 +92,15 @@ module RailsAdmin
           ]
         end
 
+        def add_action_custom_key(action, &block)
+          action.instance_eval(&block) if block
+          @@actions ||= []
+          if action.custom_key.in?(@@actions.collect(&:custom_key))
+            fail "Action #{action.custom_key} already exists. Please change its custom key."
+          else
+            @@actions << action
+          end
+        end
       end
     end
   end
@@ -118,4 +118,3 @@ require 'rails_admin/config/actions/edit'
 require 'rails_admin/config/actions/export'
 require 'rails_admin/config/actions/delete'
 require 'rails_admin/config/actions/bulk_delete'
-

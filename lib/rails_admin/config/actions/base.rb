@@ -18,7 +18,7 @@ module RailsAdmin
           []
         end
 
-        # http://twitter.github.com/bootstrap/base-css.html#icons
+        # http://getbootstrap.com/2.3.2/base-css.html#icons
         register_instance_option :link_icon do
           'icon-question-sign'
         end
@@ -28,15 +28,18 @@ module RailsAdmin
           authorized?
         end
 
+        register_instance_option :enabled? do
+          bindings[:abstract_model].nil? || (
+            (only.nil? || [only].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s)) &&
+            ![except].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s) &&
+            bindings[:abstract_model].config.with(bindings).visible?
+          )
+        end
+
         register_instance_option :authorized? do
-          (
-            bindings[:controller].nil? or bindings[:controller].authorized?(self.authorization_key, bindings[:abstract_model], bindings[:object])
-          ) and (
-            bindings[:abstract_model].nil? or (
-              (only.nil? or [only].flatten.map(&:to_s).include?(bindings[:abstract_model].to_s)) and
-              ![except].flatten.map(&:to_s).include?(bindings[:abstract_model].to_s) and
-              bindings[:abstract_model].config.with(bindings).visible?
-          ))
+          enabled? && (
+            bindings[:controller].try(:authorization_adapter).nil? || bindings[:controller].authorization_adapter.authorized?(authorization_key, bindings[:abstract_model], bindings[:object])
+          )
         end
 
         # Is the action acting on the root level (Example: /admin/contact)
@@ -65,8 +68,8 @@ module RailsAdmin
         # - @abstract_model & @model_config if you're on a model or object scope
         # - @object if you're on an object scope
         register_instance_option :controller do
-          Proc.new do
-            render :action => @action.template_name
+          proc do
+            render action: @action.template_name
           end
         end
 
@@ -129,7 +132,7 @@ module RailsAdmin
         end
 
         def self.key
-          self.name.to_s.demodulize.underscore.to_sym
+          name.to_s.demodulize.underscore.to_sym
         end
       end
     end

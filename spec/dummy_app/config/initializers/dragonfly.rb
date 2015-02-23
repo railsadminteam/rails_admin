@@ -1,11 +1,27 @@
-if defined?(Mongoid::Document)
-  require 'dragonfly'
+require 'dragonfly'
 
-  app = Dragonfly[:images]
+# Configure
+Dragonfly.app.configure do
+  plugin :imagemagick
 
-  # Configure to use ImageMagick, Rails defaults
-  app.configure_with(:imagemagick)
+  protect_from_dos_attacks true
+  secret '904547b2be647f0e11a76933b3220d6bd2fb83f380ac760125e4daa3b9504b4e'
 
-  # Allow all mongoid models to use the macro 'image_accessor'
-  app.define_macro_on_include(Mongoid::Document, :image_accessor)
+  url_format '/media/:job/:name'
+
+  datastore(:file,
+            root_path: Rails.root.join('public/system/dragonfly', Rails.env),
+            server_root: Rails.root.join('public'))
+end
+
+# Logger
+Dragonfly.logger = Rails.logger
+
+# Mount as middleware
+Rails.application.middleware.use Dragonfly::Middleware
+
+# Add model functionality
+if defined?(ActiveRecord::Base)
+  ActiveRecord::Base.extend Dragonfly::Model
+  ActiveRecord::Base.extend Dragonfly::Model::Validations
 end

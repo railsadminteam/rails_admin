@@ -1,0 +1,13 @@
+//= require rails_admin/bootstrap/bootstrap-transition
+//= require rails_admin/bootstrap/bootstrap-affix
+//= require rails_admin/bootstrap/bootstrap-alert
+//= require rails_admin/bootstrap/bootstrap-button
+//= require rails_admin/bootstrap/bootstrap-carousel
+//= require rails_admin/bootstrap/bootstrap-collapse
+//= require rails_admin/bootstrap/bootstrap-dropdown
+//= require rails_admin/bootstrap/bootstrap-modal
+//= require rails_admin/bootstrap/bootstrap-scrollspy
+//= require rails_admin/bootstrap/bootstrap-tab
+//= require rails_admin/bootstrap/bootstrap-tooltip
+//= require rails_admin/bootstrap/bootstrap-popover
+//= require rails_admin/bootstrap/bootstrap-typeahead

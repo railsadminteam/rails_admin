@@ -5,7 +5,7 @@ module RailsAdmin
     module Fields
       module Types
         class FileUpload < RailsAdmin::Config::Fields::Base
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :partial do
             :form_file_upload
@@ -31,14 +31,12 @@ module RailsAdmin
             if value.presence
               v = bindings[:view]
               url = resource_url
-              if self.image
+              if image
                 thumb_url = resource_url(thumb_method)
-                (url != thumb_url) ? v.link_to(v.image_tag(thumb_url, :class => 'img-polaroid'), url, :target => 'blank') : v.image_tag(thumb_url)
+                url != thumb_url ? v.link_to(v.image_tag(thumb_url, class: 'img-polaroid'), url, target: 'blank') : v.image_tag(thumb_url)
               else
-                v.link_to(nil, url, :target => 'blank')
+                v.link_to(nil, url, target: 'blank')
               end
-            else
-              nil
             end
           end
 
@@ -52,7 +50,7 @@ module RailsAdmin
 
           # virtual class
           def resource_url
-            raise 'not implemented'
+            fail('not implemented')
           end
 
           def virtual?

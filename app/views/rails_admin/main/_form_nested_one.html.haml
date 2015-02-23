@@ -1,14 +1,17 @@
-.controls{:data => { :nestedone => true }}
-  %ul.nav{:style => 'margin-bottom:0px; display:none'}
-  %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content", :class => (field.active? ? 'active' : '') }
+.controls{data: { nestedone: true }}
+  %ul.nav{style: 'margin-bottom:0px; display:none'}
+  .btn-group
+    %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content", class: (field.active? ? 'active' : '') }
+      %i.icon-white
+    - unless field.nested_form[:update_only] || !field.inline_add
+      = form.link_to_add "<i class=\"icon-plus icon-white\"></i> #{wording_for(:link, :new, field.associated_model_config.abstract_model)}".html_safe,
+        field.name,
+        { class: 'btn btn-info', :'data-add-label' => "<i class=\"icon-plus icon-white\"></i> #{wording_for(:link, :new, field.associated_model_config.abstract_model)}".gsub("\n", "") }
   = form.errors_for(field)
   = form.help_for(field)
 
-- form.object.send("build_#{field.name}") unless form.object.send(field.name)
 .tab-content
   = form.fields_for field.name do |nested_form|
-    - if field.nested_form[:allow_destroy] && nested_form.object.persisted?
-      = link_to "javascript:void(0)", :class => 'remove_nested_one_fields btn btn-small btn-danger', :'data-toggle' => 'button', :title => I18n.t('admin.misc.remove') do
-        = content_tag :i, nil, :class => 'icon-white icon-trash'
-        = nested_form.hidden_field :_destroy, :id => nil
-    = nested_form.generate({:action => :nested, :model_config => field.associated_model_config, :nested_in => field.name })
+    - if field.nested_form[:allow_destroy]
+      = nested_form.link_to_remove '<span class="btn btn-small btn-danger"><i class="icon-trash icon-white"></i></span>'.html_safe
+    = nested_form.generate({action: :nested, model_config: field.associated_model_config, nested_in: field })

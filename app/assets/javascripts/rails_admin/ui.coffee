@@ -75,3 +75,15 @@ $(document).on 'click', '#fields_to_export label input#check_all', () ->
     $(elems).prop('checked', true)
   else
     $(elems).prop('checked',false)
+
+# when the user hits the back button, the inline JS <script> that
+# highlights the current model in the left menu doesn't get run by
+# pjax, so this code runs it:
+# https://github.com/defunkt/jquery-pjax/issues/241#issuecomment-13251065
+$(document).on 'pjax:popstate', () ->
+  $(document).one 'pjax:end', (event) ->
+    $(event.target).find('script').each () ->
+      $.globalEval(this.text || this.textContent || this.innerHTML || '')
+      return
+    return
+  return

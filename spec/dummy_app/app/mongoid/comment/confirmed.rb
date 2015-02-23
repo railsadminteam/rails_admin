@@ -1,3 +1,5 @@
-class Comment::Confirmed < Comment
-  default_scope where(:content => 'something')
+class Comment
+  class Confirmed < Comment
+    default_scope -> { where(content: 'something') }
+  end
 end

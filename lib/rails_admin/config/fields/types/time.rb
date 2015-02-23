@@ -6,16 +6,16 @@ module RailsAdmin
       module Types
         class Time < RailsAdmin::Config::Fields::Types::Datetime
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           @format = :short
           @i18n_scope = [:time, :formats]
           @js_plugin_options = {
-            "showDate" => false,
+            'showDate' => false,
           }
 
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           def parse_input(params)
             params[name] = self.class.normalize(params[name], localized_time_format) if params[name].present?
@@ -27,7 +27,7 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            (localized_format.include? "%p") ? "%I:%M %p" : "%H:%M"
+            (localized_format.include? '%p') ? '%I:%M %p' : '%H:%M' # rubocop:disable ParenthesesAroundCondition
           end
         end
       end

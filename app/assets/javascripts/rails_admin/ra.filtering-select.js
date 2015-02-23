@@ -42,7 +42,7 @@
       var filtering_select = $('<div class="input-append filtering-select" style="float:left"></div>')
       var input = this.input = $('<input type="text">')
         .val(value)
-        .addClass("ra-filtering-select-input")
+        .addClass("form-control ra-filtering-select-input")
         .attr('style', select.attr('style'))
         .show()
         .autocomplete({
@@ -50,7 +50,7 @@
           minLength: this.options.minLength,
           source: this._getSourceFunction(this.options.source),
           select: function(event, ui) {
-            var option = $('<option value="' + ui.item.id + '" selected="selected">' + ui.item.value + '</option>');
+            var option = $('<option></option>').attr('value', ui.item.id).attr('selected', 'selected').text(ui.item.value);
             select.html(option);
             select.trigger("change", ui.item.id);
             self._trigger("selected", event, {

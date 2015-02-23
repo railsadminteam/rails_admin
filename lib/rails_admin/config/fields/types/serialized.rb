@@ -6,16 +6,15 @@ module RailsAdmin
       module Types
         class Serialized < RailsAdmin::Config::Fields::Types::Text
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :formatted_value do
             YAML.dump(value) unless value.nil?
           end
 
           def parse_input(params)
-            if params[name].is_a?(::String)
-              params[name] = (params[name].blank? ? nil : (YAML.safe_load(params[name]) || nil))
-            end
+            return unless params[name].is_a?(::String)
+            params[name] = (params[name].blank? ? nil : (YAML.safe_load(params[name]) || nil))
           end
         end
       end

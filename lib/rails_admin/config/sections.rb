@@ -9,7 +9,6 @@ require 'rails_admin/config/sections/list'
 require 'rails_admin/config/sections/export'
 require 'rails_admin/config/sections/show'
 
-
 module RailsAdmin
   module Config
     # Sections describe different views in the RailsAdmin engine. Configurable sections are
@@ -23,12 +22,12 @@ module RailsAdmin
       def self.included(klass)
         # Register accessors for all the sections in this namespace
         constants.each do |name|
-          section = "RailsAdmin::Config::Sections::#{name}".constantize
+          section = RailsAdmin::Config::Sections.const_get(name)
           name = name.to_s.underscore.to_sym
           klass.send(:define_method, name) do |&block|
             @sections = {} unless @sections
             @sections[name] = section.new(self) unless @sections[name]
-            @sections[name].instance_eval &block if block
+            @sections[name].instance_eval(&block) if block
             @sections[name]
           end
         end
@@ -36,4 +35,3 @@ module RailsAdmin
     end
   end
 end
-

@@ -14,24 +14,29 @@ end
 class Tableless < ActiveRecord::Base
   class <<self
     def columns
-      @columns ||= [];
+      @columns ||= []
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
-      columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default,
-                                                              sql_type.to_s, null)
+      columns << ActiveRecord::ConnectionAdapters::Column.new(
+        name.to_s, default,
+        connection.respond_to?(:lookup_cast_type) ? connection.lookup_cast_type(sql_type.to_s) : sql_type.to_s,
+        null)
     end
 
     def columns_hash
-      @columns_hash ||= Hash[columns.map { |column| [column.name, column] }]
+      @columns_hash ||= Hash[columns.collect { |column| [column.name, column] }]
     end
 
     def column_names
-      @column_names ||= columns.map { |column| column.name }
+      @column_names ||= columns.collect(&:name)
     end
 
     def column_defaults
-      @column_defaults ||= columns.map { |column| [column.name, nil] }.inject({}) { |m, e| m[e[0]] = e[1]; m }
+      @column_defaults ||= columns.collect { |column| [column.name, nil] }.each_with_object({}) do |e, a|
+        a[e[0]] = e[1]
+        a
+      end
     end
   end
 

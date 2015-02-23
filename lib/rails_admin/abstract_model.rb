@@ -9,16 +9,16 @@ module RailsAdmin
       end
 
       def all(adapter = nil)
-        @@all ||= Config.models_pool.map{ |m| new(m) }.compact
-        adapter ? @@all.select{|m| m.adapter == adapter} : @@all
+        @@all ||= Config.models_pool.collect { |m| new(m) }.compact
+        adapter ? @@all.select { |m| m.adapter == adapter } : @@all
       end
 
       alias_method :old_new, :new
       def new(m)
-        m = m.is_a?(Class) ? m : m.constantize
+        m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
       rescue LoadError, NameError
-        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$!})" unless Rails.env.test?
+        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
       end
 
@@ -27,8 +27,8 @@ module RailsAdmin
       def polymorphic_parents(adapter, model_name, name)
         @@polymorphic_parents[adapter.to_sym] ||= {}.tap do |hash|
           all(adapter).each do |am|
-            am.associations.select{|r| r[:as] }.each do |association|
-              (hash[[association[:model_proc].call.to_s.underscore, association[:as]].join('_').to_sym] ||= []) << am.model
+            am.associations.select(&:as).each do |association|
+              (hash[[association.klass.to_s.underscore, association.as].join('_').to_sym] ||= []) << am.model
             end
           end
         end
@@ -43,16 +43,11 @@ module RailsAdmin
 
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
-      if model.ancestors.map(&:to_s).include?('ActiveRecord::Base') && !model.abstract_class?
-        # ActiveRecord
-        @adapter = :active_record
-        require 'rails_admin/adapters/active_record'
-        extend Adapters::ActiveRecord
-      elsif model.ancestors.map(&:to_s).include?('Mongoid::Document')
-        # Mongoid
-        @adapter = :mongoid
-        require 'rails_admin/adapters/mongoid'
-        extend Adapters::Mongoid
+      ancestors = model.ancestors.collect(&:to_s)
+      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
+        initialize_active_record
+      elsif ancestors.include?('Mongoid::Document')
+        initialize_mongoid
       end
     end
 
@@ -70,11 +65,11 @@ module RailsAdmin
     end
 
     def to_param
-      @model_name.split("::").map(&:underscore).join("~")
+      @model_name.split('::').collect(&:underscore).join('~')
     end
 
     def param_key
-      @model_name.split("::").map(&:underscore).join("_")
+      @model_name.split('::').collect(&:underscore).join('_')
     end
 
     def pretty_name
@@ -87,42 +82,166 @@ module RailsAdmin
 
     def each_associated_children(object)
       associations.each do |association|
-        case association[:type]
+        case association.type
         when :has_one
-          if child = object.send(association[:name])
+          if child = object.send(association.name)
             yield(association, child)
           end
         when :has_many
-          object.send(association[:name]).each do |child|
+          object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
             yield(association, child)
           end
         end
       end
     end
 
-    private
+  private
 
-    def get_filtering_duration(operator, value)
-      date_format = I18n.t("admin.misc.filter_date_format", :default => I18n.t("admin.misc.filter_date_format", :locale => :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-      case operator
-      when 'between'
-        start_date = value[1].present? ? (Date.strptime(value[1], date_format) rescue false) : false
-        end_date   = value[2].present? ? (Date.strptime(value[2], date_format) rescue false) : false
-      when 'today'
-        start_date = end_date = Date.today
-      when 'yesterday'
-        start_date = end_date = Date.yesterday
-      when 'this_week'
-        start_date = Date.today.beginning_of_week
-        end_date   = Date.today.end_of_week
-      when 'last_week'
-        start_date = 1.week.ago.to_date.beginning_of_week
-        end_date   = 1.week.ago.to_date.end_of_week
-      else # default
-        start_date = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
-        end_date   = (Date.strptime(Array.wrap(value).first, date_format) rescue false)
+    def initialize_active_record
+      @adapter = :active_record
+      require 'rails_admin/adapters/active_record'
+      extend Adapters::ActiveRecord
+    end
+
+    def initialize_mongoid
+      @adapter = :mongoid
+      require 'rails_admin/adapters/mongoid'
+      extend Adapters::Mongoid
+    end
+
+    class StatementBuilder
+      def initialize(column, type, value, operator)
+        @column = column
+        @type = type
+        @value = value
+        @operator = operator
       end
-      [start_date, end_date]
+
+      def to_statement
+        return if [@operator, @value].any? { |v| v == '_discard' }
+
+        unary_operators[@operator] || unary_operators[@value] ||
+          build_statement_for_type_generic
+      end
+
+    protected
+
+      def get_filtering_duration
+        FilteringDuration.new(@operator, @value).get_duration
+      end
+
+      def build_statement_for_type_generic
+        build_statement_for_type || begin
+          case @type
+          when :date
+            build_statement_for_date
+          when :datetime, :timestamp
+            build_statement_for_datetime_or_timestamp
+          end
+        end
+      end
+
+      def build_statement_for_type
+        fail('You must override build_statement_for_type in your StatementBuilder')
+      end
+
+      def build_statement_for_integer_decimal_or_float
+        case @value
+        when Array then
+          val, range_begin, range_end = *@value.collect do |v|
+            next unless v.to_i.to_s == v || v.to_f.to_s == v
+            @type == :integer ? v.to_i : v.to_f
+          end
+          case @operator
+          when 'between'
+            range_filter(range_begin, range_end)
+          else
+            column_for_value(val) if val
+          end
+        else
+          if @value.to_i.to_s == @value || @value.to_f.to_s == @value
+            @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
+          end
+        end
+      end
+
+      def build_statement_for_date
+        range_filter(*get_filtering_duration)
+      end
+
+      def build_statement_for_datetime_or_timestamp
+        start_date, end_date = get_filtering_duration
+        start_date = start_date.to_time.beginning_of_day if start_date
+        end_date = end_date.to_time.end_of_day if end_date
+        range_filter(start_date, end_date)
+      end
+
+      def unary_operators
+        fail('You must override unary_operators in your StatementBuilder')
+      end
+
+      def range_filter(_min, _max)
+        fail('You must override range_filter in your StatementBuilder')
+      end
+
+      class FilteringDuration
+        def initialize(operator, value)
+          @value = value
+          @operator = operator
+        end
+
+        def get_duration
+          case @operator
+          when 'between'   then between
+          when 'today'     then today
+          when 'yesterday' then yesterday
+          when 'this_week' then this_week
+          when 'last_week' then last_week
+          else default
+          end
+        end
+
+        def today
+          [Date.today, Date.today]
+        end
+
+        def yesterday
+          [Date.yesterday, Date.yesterday]
+        end
+
+        def this_week
+          [Date.today.beginning_of_week, Date.today.end_of_week]
+        end
+
+        def last_week
+          [1.week.ago.to_date.beginning_of_week,
+           1.week.ago.to_date.end_of_week]
+        end
+
+        def between
+          [convert_to_date(@value[1]), convert_to_date(@value[2])]
+        end
+
+        def default
+          [default_date, default_date]
+        end
+
+      private
+
+        def date_format
+          I18n.t('admin.misc.filter_date_format',
+                 default: I18n.t('admin.misc.filter_date_format', locale: :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+        end
+
+        def convert_to_date(value)
+          value.present? && Date.strptime(value, date_format)
+        end
+
+        def default_date
+          default_date_value = Array.wrap(@value).first
+          convert_to_date(default_date_value) rescue false
+        end
+      end
     end
   end
 end

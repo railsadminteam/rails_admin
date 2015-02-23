@@ -27,10 +27,10 @@ module RailsAdmin
           end
 
           register_instance_option :thumb_method do
-            "100x100>"
+            '100x100>'
           end
 
-          def resource_url thumb = false
+          def resource_url(thumb = false)
             return nil unless (v = value)
             thumb ? v.thumb(thumb).try(:url) : v.url
           end

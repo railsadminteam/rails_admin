@@ -1,3 +1,32 @@
+// Issue 1956 (https://github.com/sferik/rails_admin/issues/1956)
+//= depend_on_asset "rails_admin/bootstrap/glyphicons-halflings.png"
+//= depend_on_asset "rails_admin/bootstrap/glyphicons-halflings-white.png"
+//= depend_on_asset "rails_admin/aristo/images/bg_fallback.png"
+//= depend_on_asset "rails_admin/aristo/images/ui-icons_222222_256x240.png"
+//= depend_on_asset "rails_admin/aristo/images/ui-icons_454545_256x240.png"
+//= depend_on_asset "rails_admin/aristo/images/icon_sprite.png"
+//= depend_on_asset "rails_admin/aristo/images/slider_handles.png"
+//= depend_on_asset "rails_admin/aristo/images/progress_bar.gif"
+//= depend_on_asset "rails_admin/multiselect/icon_sprite.png"
+//= depend_on_asset "rails_admin/multiselect/ui-icon-circle-triangle-n-light.png"
+//= depend_on_asset "rails_admin/multiselect/ui-icon-circle-triangle-n-dark.png"
+//= depend_on_asset "rails_admin/multiselect/ui-icon-circle-triangle-s-light.png"
+//= depend_on_asset "rails_admin/multiselect/ui-icon-circle-triangle-s-dark.png"
+//= depend_on_asset "rails_admin/colorpicker/select2.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_background.png"
+//= depend_on_asset "rails_admin/colorpicker/colorpicker_overlay.png"
+//= depend_on_asset "rails_admin/colorpicker/colorpicker_select.gif"
+//= depend_on_asset "rails_admin/colorpicker/custom_indic.gif"
+//= depend_on_asset "rails_admin/colorpicker/custom_hex.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_rgb_r.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_rgb_g.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_rgb_b.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_hsb_h.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_hsb_s.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_hsb_b.png"
+//= depend_on_asset "rails_admin/colorpicker/custom_submit.png"
+
+
 @charset "UTF-8";
 
 <%
@@ -6,20 +35,20 @@
 
 /***  Variables  ***/
 
-@import "bootstrap/variables";
+@import "rails_admin/bootstrap/variables";
 @import "rails_admin/base/variables";
 @import "rails_admin/themes/<%= theme %>/variables";
 @import "rails_admin/custom/variables";
 
 /***  Mixins  ***/
 
-@import "bootstrap/mixins";
+@import "rails_admin/bootstrap/mixins";
 @import "rails_admin/base/mixins";
 @import "rails_admin/themes/<%= theme %>/mixins";
 @import "rails_admin/custom/mixins";
 
 /*** Reset ***/
-@import "bootstrap/reset";
+<%# @import "rails_admin/bootstrap/reset"; %>
 /***  Libraries  ***/
 
 @import "rails_admin/aristo/jquery-ui-1.8.7.custom";
@@ -32,37 +61,42 @@
 /*** Font-awesome ***/
 
 @import 'font-awesome';
+@import 'rails_admin/base/font-awesome-4-compability';
 
 /***  Bootstrap Theming  ***/
 
-@import "bootstrap/scaffolding";
-@import "bootstrap/grid";
-@import "bootstrap/layouts";
-@import "bootstrap/type";
-@import "bootstrap/forms";
-@import "bootstrap/tables";
-@import "bootstrap/dropdowns";
-@import "bootstrap/wells";
-@import "bootstrap/component-animations";
-@import "bootstrap/close";
-@import "bootstrap/buttons";
-@import "bootstrap/button-groups";
-@import "bootstrap/alerts";
-@import "bootstrap/navs";
-@import "bootstrap/navbar";
-@import "bootstrap/breadcrumbs";
-@import "bootstrap/pagination";
-@import "bootstrap/pager";
-@import "bootstrap/modals";
-@import "bootstrap/tooltip";
-@import "bootstrap/popovers";
-@import "bootstrap/thumbnails";
-@import "bootstrap/labels-badges";
-@import "bootstrap/progress-bars";
-@import "bootstrap/accordion";
-@import "bootstrap/carousel";
-@import "bootstrap/hero-unit";
-@import "bootstrap/utilities";
+@import "rails_admin/bootstrap/normalize";
+@import "rails_admin/bootstrap/scaffolding";
+@import "rails_admin/bootstrap/grid";
+<%# @import "rails_admin/bootstrap/layouts"; %>
+@import "rails_admin/bootstrap/type";
+@import "rails_admin/bootstrap/forms";
+@import "rails_admin/bootstrap/tables";
+@import "rails_admin/bootstrap/dropdowns";
+@import "rails_admin/bootstrap/wells";
+@import "rails_admin/bootstrap/component-animations";
+@import "rails_admin/bootstrap/close";
+@import "rails_admin/bootstrap/buttons";
+@import "rails_admin/bootstrap/button-groups";
+@import "rails_admin/bootstrap/input-groups";
+@import "rails_admin/bootstrap/alerts";
+@import "rails_admin/bootstrap/navs";
+@import "rails_admin/bootstrap/navbar";
+@import "rails_admin/bootstrap/breadcrumbs";
+@import "rails_admin/bootstrap/pagination";
+@import "rails_admin/bootstrap/pager";
+@import "rails_admin/bootstrap/modals";
+@import "rails_admin/bootstrap/tooltip";
+@import "rails_admin/bootstrap/popovers";
+@import "rails_admin/bootstrap/thumbnails";
+@import "rails_admin/bootstrap/labels";
+@import "rails_admin/bootstrap/badges";
+@import "rails_admin/bootstrap/progress-bars";
+<%# @import "rails_admin/bootstrap/accordion"; %>
+@import "rails_admin/bootstrap/carousel";
+<%# @import "rails_admin/bootstrap/hero-unit"; %>
+@import "rails_admin/bootstrap/utilities";
+@import "rails_admin/bootstrap/responsive-utilities";
 
 /***  RailsAdmin Theming  ***/
 

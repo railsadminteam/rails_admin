@@ -1,5 +1,21 @@
 en:
   admin:
+    js:
+      true: True
+      false: False
+      is_present: Is present
+      is_blank: Is blank
+      date: Date ...
+      between_and_: Between ... and ...
+      today: Today
+      yesterday: Yesterday
+      this_week: This week
+      last_week: Last week
+      number: Number ...
+      contains: Contains
+      is_exactly: Is exactly
+      starts_with: Starts with
+      ends_with: Ends with
     loading: "Loading..."
     home:
       name: "Home"
@@ -43,7 +59,7 @@ en:
       message: "Message"
     actions:
       dashboard:
-        title: "Site administration"
+        title: "Site Administration"
         menu: "Dashboard"
         breadcrumb: "Dashboard"
       index:

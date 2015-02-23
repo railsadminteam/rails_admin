@@ -21,13 +21,11 @@
   .ra-multiselect-column {
     float: left;
     .wrapper {
-      width: 200px;
       overflow-x: auto;
       select {
         height: auto;
         min-height: 120px;
         margin-bottom: 5px;
-        width: auto;
         min-width: 200px;
       }
     }

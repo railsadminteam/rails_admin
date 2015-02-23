@@ -6,7 +6,7 @@ module RailsAdmin
       module Types
         class HasOneAssociation < RailsAdmin::Config::Fields::Association
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :partial do
             nested_form ? :form_nested_one : :form_filtering_select
@@ -25,9 +25,8 @@ module RailsAdmin
             true
           end
 
-
           def editable?
-            (nested_form || abstract_model.model.new.respond_to?("#{self.name}_id=")) && super
+            (nested_form || abstract_model.model.new.respond_to?("#{name}_id=")) && super
           end
 
           def selected_id
@@ -35,7 +34,7 @@ module RailsAdmin
           end
 
           def method_name
-            nested_form ? "#{self.name}_attributes".to_sym  : "#{self.name}_id".to_sym
+            nested_form ? "#{name}_attributes".to_sym  : "#{name}_id".to_sym
           end
 
           def multiple?

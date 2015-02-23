@@ -7,6 +7,7 @@
 .rvmrc
 .yardoc
 /.emacs.desktop
+/gemfiles/*.lock
 /rails_admin.gems
 /spec/generators/tmp
 /spec/lib/tmp

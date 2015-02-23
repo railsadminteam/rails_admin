@@ -9,8 +9,7 @@ require 'action_dispatch/middleware/session/abstract_store'
 ActionDispatch::Session::StaleSessionCheck.module_eval do
   def stale_session_check!
     yield
-  rescue ArgumentError => argument_error
+  rescue ArgumentError
     {}
   end
 end
-

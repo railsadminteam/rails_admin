@@ -6,7 +6,7 @@ module RailsAdmin
       module Types
         class Wysihtml5 < RailsAdmin::Config::Fields::Types::Text
           # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types::register(self)
+          RailsAdmin::Config::Fields::Types.register(self)
 
           # If you want to have a different toolbar configuration for wysihtml5
           # you can use a Ruby hash to configure these options:
@@ -22,7 +22,6 @@ module RailsAdmin
           register_instance_option :js_location do
             ActionController::Base.helpers.asset_path('bootstrap-wysihtml5.js')
           end
-
 
           register_instance_option :partial do
             :form_wysihtml5

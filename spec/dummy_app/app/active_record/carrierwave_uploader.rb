@@ -1,7 +1,6 @@
 # encoding: utf-8
 require 'mini_magick'
 class CarrierwaveUploader < CarrierWave::Uploader::Base
-
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
@@ -18,7 +17,7 @@ class CarrierwaveUploader < CarrierWave::Uploader::Base
   end
 
   version :thumb do
-    process :resize_to_fill => [100,100]
+    process resize_to_fill: [100, 100]
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -27,7 +26,7 @@ class CarrierwaveUploader < CarrierWave::Uploader::Base
   # end
 
   # Process files as they are uploaded:
-  # process :scale => [200, 300]
+  # process scale: [200, 300]
   #
   # def scale(width, height)
   #   # do something
@@ -35,7 +34,7 @@ class CarrierwaveUploader < CarrierWave::Uploader::Base
 
   # Create different versions of your uploaded files:
   # version :thumb do
-  #   process :scale => [50, 50]
+  #   process scale: [50, 50]
   # end
 
   # Add a white list of extensions which are allowed to be uploaded.
@@ -49,5 +48,4 @@ class CarrierwaveUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
-
 end

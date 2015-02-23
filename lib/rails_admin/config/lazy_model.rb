@@ -8,13 +8,20 @@ module RailsAdmin
         @deferred_block = block
       end
 
-      def method_missing(method, *args, &block)
-        if !@model
+      def target
+        unless @model
           @model = RailsAdmin::Config::Model.new(@entity)
           @model.instance_eval(&@deferred_block) if @deferred_block
         end
+        @model
+      end
 
-        @model.send(method, *args, &block)
+      def method_missing(method, *args, &block)
+        target.send(method, *args, &block)
+      end
+
+      def respond_to?(method, include_private = false)
+        super || target.respond_to?(method, include_private)
       end
     end
   end
