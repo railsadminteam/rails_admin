@@ -16,6 +16,6 @@
           - else
             %td= label
         - else
-          - label = Object.const_defined?(t.table) ? t.table.constantize.model_name.human : t.table
+          - label = t.table.constantize.model_name.human rescue t.table
           %td= "#{label} ##{t.item}"
         %td= t.message
