@@ -69,6 +69,8 @@ $(document).on 'rails_admin.dom_ready', ->
 
   $(".table").tooltip selector: "th[rel=tooltip]"
 
+  $('#history').history()
+
 $(document).on 'click', '#fields_to_export label input#check_all', () ->
   elems = $('#fields_to_export label input')
   if $('#fields_to_export label input#check_all').is ':checked'

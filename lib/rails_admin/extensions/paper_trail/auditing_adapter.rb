@@ -9,7 +9,6 @@ module RailsAdmin
 
         def message
           @message = @version.event
-          @version.respond_to?(:changeset) && @version.changeset.present? ? @message + ' [' + @version.changeset.to_a.collect { |c| c[0] + ' = ' + c[1][1].to_s }.join(', ') + ']' : @message
         end
 
         def created_at
@@ -27,6 +26,10 @@ module RailsAdmin
         def item
           @version.item_id
         end
+
+        def version_id
+          @version.id
+        end
       end
 
       class AuditingAdapter
@@ -36,6 +39,7 @@ module RailsAdmin
           item: :item_id,
           created_at: :created_at,
           message: :event,
+          rollback: :id,
         }
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
