@@ -57,6 +57,7 @@ en:
       created_at: "Date/Time"
       item: "Item"
       message: "Message"
+      rollback: "Rollback"
     actions:
       dashboard:
         title: "Site Administration"

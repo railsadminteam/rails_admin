@@ -1,9 +1,10 @@
-%table.table.table-condensed.table-striped
+%table#history.table.table-condensed.table-striped
   %thead
     %tr
       %th.shrink.user= t("admin.table_headers.username")
       %th.shrink.items= t("admin.table_headers.item")
       %th.changes= t("admin.table_headers.changes")
+      %th.rollback= t("admin.table_headers.rollback")
   %tbody
     - @history.each do |t|
       - abstract_model = RailsAdmin.config(t.table).abstract_model
@@ -19,3 +20,4 @@
           - label = Object.const_defined?(t.table) ? t.table.constantize.model_name.human : t.table
           %td= "#{label} ##{t.item}"
         %td= t.message
+        %td= link_to("View changes", "#", class: "changeset", :data => {:url => url_for(action: action(:history_index, abstract_model).action_name, model_name: abstract_model.to_param, version_id: t.version_id)})
