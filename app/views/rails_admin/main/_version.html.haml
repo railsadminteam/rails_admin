@@ -1,0 +1,12 @@
+%table#version.table.table-striped{:data => { :title => "#{@abstract_model} version ##{@version.index + 1} <small>[#{@version.event}]</small>", :rollbackurl => url_for(action: action(:history_index, @abstract_model).action_name, model_name: @abstract_model.to_param, version_id: @version.id)}}
+  %thead
+    %tr
+      %th Field
+      %th{:colspan => 3} Changes
+  %tbody
+    - @version.changeset.sort.each do |changes|
+      %tr
+        %td= changes[0]
+        %td.original.hide= changes[1][0]
+        %td.changed.hide= changes[1][1]
+        %td.diff
