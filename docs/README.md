@@ -118,6 +118,7 @@
 
 ### Plugins
 
+* [PaperTrail history rollback](https://github.com/rikkipitt/rails_admin_history_rollback)
 * [Coordinates with Google Maps](https://github.com/trademobile/rails_admin_map_field)
 * [Google Maps with Places and Foursquare Venues](https://github.com/thinkclay/rails_admin_place_field)
 * [ActsAsTaggableOn tag_list field](https://github.com/kryzhovnik/rails_admin_tag_list)
