@@ -144,9 +144,9 @@ See [[rails_admin.en.yml|https://github.com/sferik/rails_admin/blob/master/confi
 Actions can provide specific option configuration, check their respective wiki page.
 
 
-## Action visibility and bindings
+## Controlling visibility
 
-### Authorization
+### Through authorization
 
 Authorization is done automatically before any link is displayed, any page accessed, etc.
 Check [[Cancan]] for the list of key used by RailsAdmin default actions.
@@ -159,6 +159,19 @@ config.actions do
     authorization_key :customized
   end
   ...
+end
+```
+
+### Per-model basis
+
+```ruby
+config.actions do
+  edit do
+    only ['Player']
+  end
+  delete do
+    except ['Team', 'Ball']
+  end
 end
 ```
 
