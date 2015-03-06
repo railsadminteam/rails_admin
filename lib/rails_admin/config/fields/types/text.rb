@@ -26,6 +26,12 @@ module RailsAdmin
             end
           end
 
+          [:froala, :froala_config_options, :froala_css_location, :froala_js_location].each do |key|
+            register_deprecated_instance_option key do
+              fail("The 'field(:foo){ froala true }' style DSL is deprecated. Please use 'field :foo, :froala' instead.")
+            end
+          end
+
           register_instance_option :html_attributes do
             {
               cols: '48',

@@ -901,6 +901,18 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
   end
 
+  describe 'Froala Support' do
+    it 'adds Javascript to enable Froala' do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes, :froala
+        end
+      end
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="froala-wysiwyg"]')
+    end
+  end
+
   describe 'Paperclip Support' do
     it 'shows a file upload field' do
       RailsAdmin.config User do

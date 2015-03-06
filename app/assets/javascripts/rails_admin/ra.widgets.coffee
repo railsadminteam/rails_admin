@@ -217,3 +217,22 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           goBootstrapWysihtml5s(@array, config_options)
       else
         goBootstrapWysihtml5s(@array, config_options)
+
+    # froala_wysiwyg
+
+    goFroalaWysiwygs = (array, config_options) =>
+      array.each ->
+        $(@).addClass('froala-wysiwyged')
+        $(@).editable({inlineMode: false})
+
+    array = content.find('[data-richtext=froala-wysiwyg]').not('.froala-wysiwyged')
+    if array.length
+      @array = array
+      options = $(array[0]).data('options')
+      config_options = $.parseJSON(options['config_options'])
+      if not $.isFunction($.fn.editable)
+        $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
+        $.getScript options['jspath'], (script, textStatus, jqXHR) =>
+          goFroalaWysiwygs(@array, config_options)
+      else
+        goFroalaWysiwygs(@array, config_options)
