@@ -18,7 +18,7 @@ Community sourced translations:
 * [[Arabic: ar|https://gist.github.com/yamanaltereh/6874413]]
 * [[Catalan: ca|https://gist.github.com/1764593]]
 * [[Chinese (Traditional): zh-TW|https://gist.github.com/2001808]]
-* [[Chinese (Simplified): zh-CN|https://gist.github.com/3262623]]
+* [[Chinese (Simplified): zh-CN|https://gist.github.com/x-ji/d3be402de194a152a859]]
 * [[Czech: cs|https://gist.github.com/4618569]]
 * [[Danish: da|https://gist.github.com/1780778]]
 * [[Dutch: nl|https://gist.github.com/1909240]]
