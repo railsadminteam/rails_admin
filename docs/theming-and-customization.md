@@ -15,7 +15,7 @@ RailsAdmin uses jquery-pjax (https://github.com/defunkt/jquery-pjax) to load pag
 ### To create a distributable theme
 
 ```
-rails plugin new rails_admin_<__THEME_NAME__> -m https://raw.github.com/gist/1523639 --skip-gemfile --skip-bundle -T -O --full
+rails plugin new rails_admin_<__THEME_NAME__> -m https://gist.githubusercontent.com/bbenezech/1523639/raw/42579a263c219d111c03936f93ff25a7d8999bda/rails_admin_theme_creator --skip-gemfile --skip-bundle -T -O --full
 ```
 
 Then add to your application `Gemfile` (before RailsAdmin):
