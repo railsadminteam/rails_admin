@@ -172,7 +172,7 @@ module RailsAdmin
           end
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name| # rubocop:disable DoubleNegation
             abstract_model.model.validators_on(column_name).detect do |v|
-              !v.options[:allow_nil] &&
+              !(v.options[:allow_nil] || v.options[:allow_blank]) &&
               [:presence, :numericality, :attachment_presence].include?(v.kind) &&
               (v.options[:on] == context || v.options[:on].blank?)
             end
