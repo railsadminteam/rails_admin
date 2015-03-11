@@ -1,17 +1,17 @@
 source 'https://rubygems.org'
 
 case ENV['RAILS_VERSION']
-when '4.2'
-  gem 'rails', '~> 4.2.0.beta1'
-  gem 'sass-rails', '~> 5.0.0.beta1'
-  gem 'devise', github: 'plataformatec/devise', branch: 'lm-rails-4-2'
 when '4.0'
-  gem 'rails', '< 4.1'
+  gem 'rails', '~> 4.0.0'
   gem 'devise', '>= 3.2'
   gem 'test-unit'
-else
+when '4.1'
   gem 'rails', '~> 4.1.0'
   gem 'devise', '>= 3.2'
+else
+  gem 'rails', '~> 4.2.0'
+  gem 'sass-rails', '~> 5.0'
+  gem 'devise', github: 'plataformatec/devise', branch: 'lm-rails-4-2'
 end
 
 case ENV['CI_ORM']
