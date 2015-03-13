@@ -370,12 +370,12 @@ describe RailsAdmin::Config::Fields::Base do
         column :_id, :integer
         column :_type, :varchar
         column :name, :varchar
-        column :created_at, :datetime
-        column :updated_at, :datetime
-        column :deleted_at, :datetime
-        column :created_on, :datetime
-        column :updated_on, :datetime
-        column :deleted_on, :datetime
+        column :created_at, :timestamp
+        column :updated_at, :timestamp
+        column :deleted_at, :timestamp
+        column :created_on, :timestamp
+        column :updated_on, :timestamp
+        column :deleted_on, :timestamp
       end
       expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
       expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
