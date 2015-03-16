@@ -53,8 +53,9 @@ module RailsAdmin
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
 
-			# set parent controller
-			attr_accessor :parent_controller
+      # set parent controller
+      attr_accessor :parent_controller
+      @parent_controller = '::ApplicationController'
 
       # Stores model configuration objects in a hash identified by model's class
       # name.
