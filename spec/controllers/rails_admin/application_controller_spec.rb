@@ -7,6 +7,12 @@ describe RailsAdmin::ApplicationController, type: :controller do
     end
   end
 
+  describe "#parent_controller" do
+    it 'use default model' do
+      expect(controller.superclass.to_s).to eq '::ApplicationController'
+    end
+  end
+
   describe 'helper method _get_plugin_name' do
     it 'works by default' do
       expect(controller.send(:_get_plugin_name)).to eq(['Dummy App', 'Admin'])
