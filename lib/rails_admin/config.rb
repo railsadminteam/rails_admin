@@ -55,7 +55,6 @@ module RailsAdmin
 
       # set parent controller
       attr_accessor :parent_controller
-      @parent_controller = '::ApplicationController'
 
       # Stores model configuration objects in a hash identified by model's class
       # name.
@@ -274,6 +273,7 @@ module RailsAdmin
         @registry = {}
         @navigation_static_links = {}
         @navigation_static_label = nil
+        @parent_controller = '::ApplicationController'
         RailsAdmin::Config::Actions.reset
       end
 

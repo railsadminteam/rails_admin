@@ -8,8 +8,15 @@ describe RailsAdmin::ApplicationController, type: :controller do
   end
 
   describe "#parent_controller" do
-    it 'use default model' do
-      expect(controller.superclass.to_s).to eq '::ApplicationController'
+    it 'use default class' do
+      expect(RailsAdmin.config.parent_controller).to eq '::ApplicationController'
+    end
+
+    it 'use other class' do
+      RailsAdmin.config do |config|
+        config.parent_controller = 'TestController'
+      end
+      expect(RailsAdmin.config.parent_controller).to eq 'TestController'
     end
   end
 
