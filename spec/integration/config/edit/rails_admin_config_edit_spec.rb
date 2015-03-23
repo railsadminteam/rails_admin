@@ -800,6 +800,12 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       field = RailsAdmin.config('Team').edit.fields.detect { |f| f.name == :revenue }
       expect(field.properties.nullable?).to be_truthy
       expect(field.required?).to be_falsey
+
+      # team.founded is nullable in the schema but has an AR
+      # validates_numericality_of validation that allows blank
+      field = RailsAdmin.config('Team').edit.fields.detect { |f| f.name == :founded }
+      expect(field.properties.nullable?).to be_truthy
+      expect(field.required?).to be_falsey
     end
   end
 

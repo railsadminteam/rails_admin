@@ -28,7 +28,7 @@
                   = @count[abstract_model.pretty_name]
             %td.links
               %ul.inline.list-inline= menu_for :collection, abstract_model, nil, true
-- if @auditing_adapter && authorized?(:history)
+- if @auditing_adapter && authorized?(:history_index)
   #block-tables.block
     .content
       %h2= t("admin.actions.history_index.menu")

@@ -271,6 +271,19 @@ describe RailsAdmin::Config do
       expect(RailsAdmin::Config.models_pool.select { |m| m.match(/^Concerns::/) }).to be_empty
     end
   end
+
+  describe '.parent_controller' do
+    it 'uses default class' do
+      expect(RailsAdmin.config.parent_controller).to eq '::ApplicationController'
+    end
+
+    it 'uses other class' do
+      RailsAdmin.config do |config|
+        config.parent_controller = 'TestController'
+      end
+      expect(RailsAdmin.config.parent_controller).to eq 'TestController'
+    end
+  end
 end
 
 module ExampleModule
