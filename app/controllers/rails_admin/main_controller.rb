@@ -11,16 +11,17 @@ module RailsAdmin
     before_filter :check_for_cancel
 
     RailsAdmin::Config::Actions.all.each do |action|
-      class_eval %{
+      class_eval <<-EOS, __FILE__, __LINE__ + 1
         def #{action.action_name}
           action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym)
           @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
           @action = action.with({controller: self, abstract_model: @abstract_model, object: @object})
+          fail(ActionNotAllowed) unless @action.enabled?
           @page_name = wording_for(:title)
 
           instance_eval &@action.controller
         end
-      }
+      EOS
     end
 
     def bulk_action

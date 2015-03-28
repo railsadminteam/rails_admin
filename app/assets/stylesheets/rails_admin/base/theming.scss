@@ -10,19 +10,30 @@ body.rails_admin {
   }
 
   /* room for upper navbar */
-  padding-top: 60px;
+  padding-top: 43px;
+
+  .reset-left {
+    padding-left: 0px;
+  }
 
   /* Application name */
   .navbar .brand {
     small {
-      color:$red;
+      color:#9d261d;
       font-weight:bold;
       line-height: 1;
     }
   }
 
   .sidebar-nav {
-    padding: 9px 0;
+    padding: 9px 9px 9px 9px;
+    position: fixed;
+    width: 14%;
+    overflow-y: scroll;
+    top: 50px;
+    bottom: 0;
+    background: #eaf0f1;
+    z-index: 100;
   }
 
   /* fat labels in forms */
@@ -58,7 +69,7 @@ body.rails_admin {
         line-height: 16px;
       }
       .help-block {
-        margin-top: 0px;
+        // margin-top: 0px;
       }
       .input-prepend, .input-append {
         margin-bottom: 0px;
@@ -71,7 +82,7 @@ body.rails_admin {
         padding-top:15px;
       }
       .control-label {
-        width:145px;
+        // width:145px;
       }
       legend {
         margin-bottom:0px;
@@ -101,13 +112,11 @@ body.rails_admin {
         display:block;
       }
 
-      border-left:5px solid $blue;
+      border-left:5px solid #049cdb;
       padding-left:5px;
       fieldset {
         margin-left:-10px;
         .control-group > label {
-          padding-left:10px;
-          width:135px;
         }
         legend {
           float:left;
@@ -118,13 +127,11 @@ body.rails_admin {
 
     /* double nesting, guys. Easy. */
     .tab-content .tab-content .tab-pane {
-      border-color:lighten($blue, 20%);
+      border-color:lighten(#049cdb, 20%);
       margin-left:10px;
       fieldset {
         margin-left:-20px;
         .control-group > label {
-          padding-left:20px;
-          width:125px;
         }
         legend {
           margin-left:20px;
@@ -134,7 +141,7 @@ body.rails_admin {
 
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
-      border-color:lighten($blue, 30%);
+      border-color:lighten(#049cdb, 30%);
       margin-left:20px;
       fieldset {
         margin-left:-30px;
@@ -150,7 +157,7 @@ body.rails_admin {
 
     /* totally awesome! nesting on 4 levels! */
     .tab-content .tab-content .tab-content  .tab-content .tab-pane {
-      border-color:lighten($blue, 40%);
+      border-color:lighten(#049cdb, 40%);
       margin-left:30px;
       fieldset {
         margin-left:-40px;
@@ -165,13 +172,13 @@ body.rails_admin {
     }
   }
 
-  .modal {
-    width: 750px;
-    margin-left: -375px;
-  }
+  // .modal {
+  //   width: 750px;
+  //   margin-left: -375px;
+  // }
 
   /* nested nav */
-  .nav.nav-list {
+  .nav {
     .nav-level-1 {
       padding-left:30px;
     }
@@ -185,11 +192,21 @@ body.rails_admin {
 
   /* tab links should match icon color */
   .nav.nav-tabs li.icon a {
-    color: $black;
+    color: #000;
   }
 
   /* Table cells behaviour */
   .table {
+    // Cells
+    > thead,
+    > tbody,
+    > tfoot {
+      > tr {
+        > th {
+          border-bottom: 0px;
+        }
+      }
+    }
     .thumbnail {
       float:left;
       & + * {
@@ -249,7 +266,7 @@ body.rails_admin {
     /* icons */
     td.links {
       max-width: none;
-      .inline {
+      .list-inline {
         margin:0px;
         li { display:inline-block; }
       }

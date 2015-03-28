@@ -13,9 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-
           proc do
-
             if request.get? # NEW
 
               @object = @abstract_model.new

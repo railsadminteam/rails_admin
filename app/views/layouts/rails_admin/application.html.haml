@@ -1,6 +1,7 @@
 !!! 5
 %html
   %head
+    %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}
     %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{content: "NONE,NOARCHIVE", name: "robots"}
     = csrf_meta_tag
@@ -11,13 +12,13 @@
       RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
   %body.rails_admin
     #loading.label.label-warning{style: 'display:none; position:fixed; right:20px; bottom:20px; z-index:100000'}= t('admin.loading')
-    .navbar.navbar-fixed-top
+    %nav.navbar.navbar-default.navbar-fixed-top
       = render "layouts/rails_admin/navigation"
     .container-fluid
-      .row-fluid
-        .span3
-          .well.sidebar-nav
+      .row
+        .col-sm-3.col-md-2.reset-left
+          .sidebar-nav
             = render "layouts/rails_admin/sidebar_navigation"
-        .span9
-          .row-fluid
+        .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2
+          .row
             .content{:'data-pjax-container' => true}= render template: 'layouts/rails_admin/pjax'

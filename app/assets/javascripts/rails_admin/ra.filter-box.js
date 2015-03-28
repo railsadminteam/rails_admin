@@ -76,7 +76,7 @@
         case 'decimal':
         case 'float':
           var control = '<select class="switch-additionnal-fieldsets input-small" name="' + operator_name + '">' +
-            '<option ' + (field_operator == "default"   ? 'selected="selected"' : '') + ' data-additional-fieldset="default" value="default">' + RailsAdmin.I18n.t("Number ...") + '</option>' +
+            '<option ' + (field_operator == "default"   ? 'selected="selected"' : '') + ' data-additional-fieldset="default" value="default">' + RailsAdmin.I18n.t("number") + '</option>' +
             '<option ' + (field_operator == "between"   ? 'selected="selected"' : '') + ' data-additional-fieldset="between" value="between">' + RailsAdmin.I18n.t("between_and_") + '</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null" ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") +'</option>' +

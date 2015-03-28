@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Base do
-
   describe '#required' do
     it 'reads the on: :create/:update validate option' do
       RailsAdmin.config Ball do
@@ -197,7 +196,6 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     describe 'for basic type fields' do
-
       it 'uses base table and find correct column type' do
         expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{column: 'field_tests.text_field', type: :text}])
         expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{column: 'field_tests.integer_field', type: :integer}])
@@ -361,7 +359,7 @@ describe RailsAdmin::Config::Fields::Base do
 
   describe '#associated_collection' do
     it 'returns [] when type is blank?' do
-      expect(RailsAdmin.config(Comment).fields.detect { |f|f.name == :commentable }.associated_collection('')).to be_empty
+      expect(RailsAdmin.config(Comment).fields.detect { |f| f.name == :commentable }.associated_collection('')).to be_empty
     end
   end
 
@@ -372,12 +370,12 @@ describe RailsAdmin::Config::Fields::Base do
         column :_id, :integer
         column :_type, :varchar
         column :name, :varchar
-        column :created_at, :datetime
-        column :updated_at, :datetime
-        column :deleted_at, :datetime
-        column :created_on, :datetime
-        column :updated_on, :datetime
-        column :deleted_on, :datetime
+        column :created_at, :timestamp
+        column :updated_at, :timestamp
+        column :deleted_at, :timestamp
+        column :created_on, :timestamp
+        column :updated_on, :timestamp
+        column :deleted_on, :timestamp
       end
       expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
       expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]

@@ -14,7 +14,6 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-
             if request.get? # EDIT
 
               respond_to do |format|
@@ -41,7 +40,6 @@ module RailsAdmin
               end
 
             end
-
           end
         end
 

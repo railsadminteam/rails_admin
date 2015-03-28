@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic New', type: :request do
-
   subject { page }
 
   describe 'GET /admin/player/new' do

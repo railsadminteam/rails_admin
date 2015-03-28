@@ -2,8 +2,13 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   Exclude:
+    - 'spec/dummy_app/bin/**/*'
     - 'spec/dummy_app/db/schema.rb'
+    - 'spec/dummy_app/tmp/**/*'
     - 'vendor/bundle/**/*'
+
+Metrics/AbcSize:
+  Max: 69.98 # TODO: Lower to 15
 
 Metrics/BlockNesting:
   Max: 3

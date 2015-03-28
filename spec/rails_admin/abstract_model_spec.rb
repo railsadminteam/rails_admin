@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::AbstractModel do
-
   describe '#to_s' do
     it 'returns model\'s name' do
       expect(RailsAdmin::AbstractModel.new(Cms::BasicPage).to_s).to eq Cms::BasicPage.to_s
@@ -31,7 +30,6 @@ describe RailsAdmin::AbstractModel do
         expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '01/03/2012', ''], o: 'between'}}}).count).to eq(2)
         expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '', '01/02/2012'], o: 'between'}}}).count).to eq(2)
         expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['01/02/2012'], o: 'default'}}}).count).to eq(1)
-
       end
     end
 

@@ -49,7 +49,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
   end
 
   it 'lists associations' do
-    expect(@post.associations.collect { |a|a.name.to_s }).to include(*%w(a_r_blog a_r_categories a_r_comments))
+    expect(@post.associations.collect { |a| a.name.to_s }).to include(*%w(a_r_blog a_r_categories a_r_comments))
   end
 
   it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do

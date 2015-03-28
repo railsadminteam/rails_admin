@@ -19,6 +19,10 @@ module RailsAdmin
             associated_model_config.length > 0
           end
 
+          register_instance_option :formatted_value do
+            (o = value) && o.send(RailsAdmin.config(o).object_label_method)
+          end
+
           register_instance_option :sortable do
             false
           end

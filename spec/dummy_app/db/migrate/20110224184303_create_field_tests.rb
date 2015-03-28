@@ -12,7 +12,7 @@ class CreateFieldTests < ActiveRecord::Migration
       t.date :date_field
       t.boolean :boolean_field
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 

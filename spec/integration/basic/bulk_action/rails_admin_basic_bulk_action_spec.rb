@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Basic Bulk Action', type: :request do
-
   subject { page }
 
   before do

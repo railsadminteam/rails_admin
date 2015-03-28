@@ -107,8 +107,8 @@ module RailsAdmin
 
         def version_class_for(model_name)
           klass = model_name.constantize.
-            try(:version_class_name).
-            try(:constantize)
+                  try(:version_class_name).
+                  try(:constantize)
 
           klass || @version_class
         end

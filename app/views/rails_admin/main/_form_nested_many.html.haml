@@ -1,4 +1,4 @@
-.controls{data: { nestedmany: true }}
+.controls.col-md-offset-2{data: { nestedmany: true }}
   .btn-group
     %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content, #{form.jquery_namespace(field)} > .controls > .nav", class: (field.active? ? 'active' : '')}
       %i.icon-white

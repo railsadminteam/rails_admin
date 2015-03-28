@@ -28,7 +28,6 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe '#check_for_cancel' do
-
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
       allow(controller).to receive(:back_or_index) { fail(StandardError.new('redirected back')) }
       expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete' }.to raise_error('redirected back')
@@ -300,7 +299,6 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'allows for delete method with Carrierwave' do
-
       RailsAdmin.config FieldTest do
         field :carrierwave_asset
         field :dragonfly_asset
@@ -355,5 +353,4 @@ describe RailsAdmin::MainController, type: :controller do
         })
     end
   end
-
 end

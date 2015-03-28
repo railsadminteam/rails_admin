@@ -95,7 +95,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Team')
       @teams = [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
-        collect { |h| FactoryGirl.create :team, h }
+               collect { |h| FactoryGirl.create :team, h }
     end
 
     it 'makes correct query' do
@@ -122,7 +122,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       @abstract_model = RailsAdmin::AbstractModel.new('Team')
       @division = FactoryGirl.create :division, name: 'bar division'
       @teams = [{}, {division: @division}, {name: 'somewhere foos', division: @division}, {name: 'nowhere foos'}].
-        collect { |h| FactoryGirl.create :team, h }
+               collect { |h| FactoryGirl.create :team, h }
     end
 
     context 'without configuration' do

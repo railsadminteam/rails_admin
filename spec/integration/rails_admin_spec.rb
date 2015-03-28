@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin, type: :request do
-
   subject { page }
 
   before do
@@ -41,7 +40,6 @@ describe RailsAdmin, type: :request do
   end
 
   describe 'hidden fields with default values' do
-
     before do
       RailsAdmin.config Player do
         include_all_fields
@@ -71,9 +69,7 @@ describe RailsAdmin, type: :request do
   end
 
   describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
-
     it 'is accessible from the list view' do
-
       RailsAdmin.config Player do
         list do
           field :name do
@@ -125,7 +121,7 @@ describe RailsAdmin, type: :request do
   describe 'secondary navigation' do
     it 'has Gravatar image' do
       visit dashboard_path
-      is_expected.to have_selector('ul.nav.pull-right li img')
+      is_expected.to have_selector('ul.navbar-right img[src*="gravatar.com"]')
     end
 
     it "does not show Gravatar when user doesn't have email method" do
@@ -145,6 +141,11 @@ describe RailsAdmin, type: :request do
     it 'shows a log out link' do
       visit dashboard_path
       is_expected.to have_content 'Log out'
+    end
+
+    it 'has label-danger class on log out link' do
+      visit dashboard_path
+      is_expected.to have_selector('.label-danger')
     end
   end
 end

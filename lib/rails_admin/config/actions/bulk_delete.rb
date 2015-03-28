@@ -14,7 +14,6 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-
             if request.post? # BULK DELETE
 
               @objects = list_entries(@model_config, :destroy)

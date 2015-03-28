@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Model do
-
   describe '#excluded?' do
     before do
       RailsAdmin.config do |config|
@@ -25,6 +24,13 @@ describe RailsAdmin::Config::Model do
     it 'sends object_label_method to binding[:object]' do
       c = Comment.new(content: 'test')
       expect(RailsAdmin.config(Comment).with(object: c).object_label).to eq('test')
+    end
+
+    context 'when the object_label_method is blank' do
+      it 'uses the rails admin default' do
+        c = Comment.create(content: '', id: '1')
+        expect(RailsAdmin.config(Comment).with(object: c).object_label).to eq('Comment #1')
+      end
     end
   end
 
@@ -85,7 +91,6 @@ describe RailsAdmin::Config::Model do
                                               end,
                                             },
                                           }
-
         end
 
         it 'always uses :other as pluralization key' do

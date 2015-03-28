@@ -172,7 +172,7 @@ module RailsAdmin
           end
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name| # rubocop:disable DoubleNegation
             abstract_model.model.validators_on(column_name).detect do |v|
-              !v.options[:allow_nil] &&
+              !(v.options[:allow_nil] || v.options[:allow_blank]) &&
               [:presence, :numericality, :attachment_presence].include?(v.kind) &&
               (v.options[:on] == context || v.options[:on].blank?)
             end
@@ -266,6 +266,15 @@ module RailsAdmin
         # Reader for field's value
         def value
           bindings[:object].safe_send(name)
+        rescue NoMethodError => e
+          raise e.exception <<-EOM.gsub(/^\s{10}/, '')
+          #{e.message}
+          If you want to use a RailsAdmin virtual field(= a field without corresponding instance method),
+          you should declare 'formatted_value' in the field definition.
+            field :#{name} do
+              formatted_value{ bindings[:object].call_some_method }
+            end
+          EOM
         end
 
         # Reader for nested attributes

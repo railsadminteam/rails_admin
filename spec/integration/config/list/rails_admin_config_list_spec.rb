@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'RailsAdmin Config DSL List Section', type: :request do
-
   subject { page }
 
   describe 'css hooks' do
@@ -19,7 +18,6 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
   end
 
   describe 'number of items per page' do
-
     before do
       2.times.each do
         FactoryGirl.create :league
@@ -41,7 +39,6 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
   end
 
   describe "items' fields" do
-
     it 'shows all by default' do
       visit index_path(model_name: 'fan')
       expect(all('th').collect(&:text).delete_if { |t| /^\n*$/ =~ t }).
