@@ -128,9 +128,11 @@
 * [Enumerize](https://github.com/brainspec/enumerize): Enumerated attributes with I18n and ActiveRecord/Mongoid support
 * [RailsAdminCharts](https://github.com/pgeraghty/rails_admin_charts): Charts using Highcharts
 * [RailsAdminDynamicCharts](https://github.com/openjaf/rails_admin_dynamic_charts): Dynamic Charts
+* [RailsAdminGlobalizeField](https://github.com/scarfaceDeb/rails_admin_globalize_field): Tabbed interface and custom field type for globalize3 translations
 * [RailsAdminJcrop](https://github.com/janx/rails_admin_jcrop): Image cropping with rails_admin_jcrop
 * [RailsAdminMapField](https://github.com/trademobile/rails_admin_map_field): Coordinates with Google Maps
 * [RailsAdminMongoidGeospatialField](https://github.com/sudosu/rails_admin_mongoid_geospatial_field): Support for setting geospatial information with Google Maps into Mongoid's GEO2D field
+* [RailsAdminMongoidLocalizeField](https://github.com/sudosu/rails_admin_mongoid_localize_field): Support for mongoid localized fields
 * [RailsAdminNestable](https://github.com/dalpo/rails_admin_nestable): Drag and drop tree view for Ancestry gem
 * [RailsAdminNestedSet](https://github.com/rs-pro/rails_admin_nested_set): Drag and drop tree view for Awesome Nested Set / mongoid nested set
 * [RailsAdminPlaceField](https://github.com/thinkclay/rails_admin_place_field): Google Maps with Places and Foursquare Venues
@@ -146,7 +148,4 @@
 * [RailsAdminToggleable](https://github.com/rs-pro/rails_admin_toggleable): Toggle boolean fields in index view
 
 #### Misc.
-
-* [RailsAdminGlobalizedField](https://github.com/scarfaceDeb/rails_admin_globalize_field): Tabbed interface and custom field type for globalize3 translations
-* [RailsAdminMongoidLocalizedField](https://github.com/sudosu/rails_admin_mongoid_localize_field): Support for mongoid localized fields
-* [RailsAdminSetting](https://github.com/rs-pro/rails_admin_settings): Application setting for rails_admin and mongoid
+* [RailsAdminSettings](https://github.com/rs-pro/rails_admin_settings): Application setting for rails_admin and mongoid
