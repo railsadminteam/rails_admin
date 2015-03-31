@@ -16,6 +16,22 @@ describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config('Image').fields.detect { |f| f.name == :file }.with(object: Image.new)).to be_required
       end
     end
+
+    context 'when the validation is conditional' do
+      before do
+        class ConditionalValidationTest < Tableless
+          column :foo, :varchar
+          column :bar, :varchar
+          validates :foo, presence: true, if: :presisted?
+          validates :bar, presence: true, unless: :presisted?
+        end
+      end
+
+      it 'is false' do
+        expect(RailsAdmin.config('ConditionalValidationTest').fields.detect { |f| f.name == :foo }).not_to be_required
+        expect(RailsAdmin.config('ConditionalValidationTest').fields.detect { |f| f.name == :bar }).not_to be_required
+      end
+    end
   end
 
   describe '#name' do
