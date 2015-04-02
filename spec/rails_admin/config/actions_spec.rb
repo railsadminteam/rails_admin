@@ -45,13 +45,13 @@ describe RailsAdmin::Config::Actions do
       expect(RailsAdmin::Config::Actions.find(:custom_root, controller: 'controller')).to be_a(RailsAdmin::Config::Actions::Base)
     end
 
-    it "checks bindings[:abstract_model] visibility while checking action\'s visibility" do
+    it "ignores bindings[:abstract_model] visibility while checking action\'s visibility" do
       RailsAdmin.config Team do
         hide
       end
 
       expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Comment))).to be_a(RailsAdmin::Config::Actions::Index) # decoy
-      expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Team))).to be_nil
+      expect(RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Team))).to be_a(RailsAdmin::Config::Actions::Index)
     end
 
     it "checks bindings[:abstract_model] presence while checking action\'s visibility" do

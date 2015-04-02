@@ -566,76 +566,117 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       expect(find('#team_name_field .help-block')).to have_content(I18n.translate('admin.help.team.name'))
     end
 
-    it 'can hide the add button on an associated field' do
-      RailsAdmin.config Player do
-        edit do
-          field :team do
-            inline_add false
-          end
-          field :draft do
-            inline_add false
-          end
-          field :comments do
-            inline_add false
+    describe 'inline_add' do
+      it 'can hide the add button on an associated field' do
+        RailsAdmin.config Player do
+          edit do
+            field :team do
+              inline_add false
+            end
+            field :draft do
+              inline_add false
+            end
+            field :comments do
+              inline_add false
+            end
           end
         end
+        visit new_path(model_name: 'player')
+        is_expected.to have_no_selector('a', text: 'Add a new Team')
+        is_expected.to have_no_selector('a', text: 'Add a new Draft')
+        is_expected.to have_no_selector('a', text: 'Add a new Comment')
       end
-      visit new_path(model_name: 'player')
-      is_expected.to have_no_selector('a', text: 'Add a new Team')
-      is_expected.to have_no_selector('a', text: 'Add a new Draft')
-      is_expected.to have_no_selector('a', text: 'Add a new Comment')
+
+      it 'can show the add button on an associated field' do
+        RailsAdmin.config Player do
+          edit do
+            field :team do
+              inline_add true
+            end
+            field :draft do
+              inline_add true
+            end
+            field :comments do
+              inline_add true
+            end
+          end
+        end
+        visit new_path(model_name: 'player')
+        is_expected.to have_selector('a', text: 'Add a new Team')
+        is_expected.to have_selector('a', text: 'Add a new Draft')
+        is_expected.to have_selector('a', text: 'Add a new Comment')
+      end
+
+      context 'when the associated model is invisible' do
+        before do
+          RailsAdmin.config do |config|
+            [Team, Draft, Comment].each do |model|
+              config.model model do
+                visible false
+              end
+            end
+          end
+        end
+
+        it 'does not prevent showing the add button' do
+          visit new_path(model_name: 'player')
+          is_expected.to have_selector('a', text: 'Add a new Team')
+          is_expected.to have_selector('a', text: 'Add a new Draft')
+          is_expected.to have_selector('a', text: 'Add a new Comment')
+        end
+      end
     end
 
-    it 'can show the add button on an associated field' do
-      RailsAdmin.config Player do
-        edit do
-          field :team do
-            inline_add true
-          end
-          field :draft do
-            inline_add true
-          end
-          field :comments do
-            inline_add true
+    describe 'inline_edit' do
+      it 'can hide the edit button on an associated field' do
+        RailsAdmin.config Player do
+          edit do
+            field :team do
+              inline_edit false
+            end
+            field :draft do
+              inline_edit false
+            end
           end
         end
+        visit new_path(model_name: 'player')
+        is_expected.to have_no_selector('a', text: 'Edit this Team')
+        is_expected.to have_no_selector('a', text: 'Edit this Draft')
       end
-      visit new_path(model_name: 'player')
-      is_expected.to have_selector('a', text: 'Add a new Team')
-      is_expected.to have_selector('a', text: 'Add a new Draft')
-      is_expected.to have_selector('a', text: 'Add a new Comment')
-    end
 
-    it 'can hide the edit button on an associated field' do
-      RailsAdmin.config Player do
-        edit do
-          field :team do
-            inline_edit false
-          end
-          field :draft do
-            inline_edit false
+      it 'can show the edit button on an associated field' do
+        RailsAdmin.config Player do
+          edit do
+            field :team do
+              inline_edit true
+            end
+            field :draft do
+              inline_edit true
+            end
           end
         end
+        visit new_path(model_name: 'player')
+        is_expected.to have_selector('a', text: 'Edit this Team')
+        is_expected.to have_selector('a', text: 'Edit this Draft')
       end
-      visit new_path(model_name: 'player')
-      is_expected.to have_no_selector('a', text: 'Edit this Team')
-      is_expected.to have_no_selector('a', text: 'Edit this Draft')
-    end
 
-    it 'can show the edit button on an associated field' do
-      RailsAdmin.config Player do
-        edit do
-          field :team do
-            inline_edit true
-          end
-          field :draft do
-            inline_edit true
+      context 'when the associated model is invisible' do
+        before do
+          RailsAdmin.config do |config|
+            [Team, Draft].each do |model|
+              config.model model do
+                visible false
+              end
+            end
           end
         end
+
+        it 'does not prevent showing the edit button' do
+          visit new_path(model_name: 'player')
+          is_expected.to have_selector('a', text: 'Edit this Team')
+          is_expected.to have_selector('a', text: 'Edit this Draft')
+        end
       end
-      visit new_path(model_name: 'player')
-      is_expected.to have_selector('a', text: 'Edit this Team')
-      is_expected.to have_selector('a', text: 'Edit this Draft')
     end
   end
 
