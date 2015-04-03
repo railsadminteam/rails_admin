@@ -133,7 +133,8 @@
             %th.other.right.shrink= "..."
           %th.last.shrink
       %tbody
-        - @objects.each do |object|
+        - @objects.each_with_index do |object,index|
+          - @loop_index = index
           %tr{class: "#{@abstract_model.param_key}_row"}
             %td
               = check_box_tag "bulk_ids[]", object.id, false

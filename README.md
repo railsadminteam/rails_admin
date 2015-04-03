@@ -16,6 +16,11 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+
+## In this fork
+* Collapsing of parent sections in the sidebar navigation
+* addex @loop_index to the list index
+
 ## Features
 * CRUD any data with ease
 * Custom actions
