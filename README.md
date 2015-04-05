@@ -20,6 +20,19 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 ## In this fork
 * Collapsing of parent sections in the sidebar navigation
 * addex @loop_index to the list index
+* Added search_scope to list for custom scopes use it like so
+
+```ruby
+  list do
+    search_scope do
+      Proc.new do |scope, query|
+        scope.merge(status: 'paid').merge(datetime: Date.today).joins(:user).where('users.first_name = ?', query)
+      end
+    end
+  end
+  # Note, this won't work with existing filterable, searchable fields as merge will create an AND condition with the scope's WHERE s
+  # see https://gist.github.com/j-mcnally/250eaaceef234dd8971b if you want OR conditions
+```
 
 ## Features
 * CRUD any data with ease

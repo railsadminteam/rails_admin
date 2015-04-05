@@ -36,6 +36,7 @@ module RailsAdmin
           scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
         scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
+        scope = search_scope(scope, options[:query]) if options[:query]
         scope
       end
 
@@ -117,6 +118,11 @@ module RailsAdmin
         end
         # OR all query statements
         wb.build
+      end
+
+      def search_scope(scope, query, filter = config.list.search_scope)
+        scope = filter.call(scope,query)
+        scope
       end
 
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}

@@ -25,6 +25,12 @@ module RailsAdmin
         register_instance_option :scopes do
           []
         end
+
+        register_instance_option :search_scope do 
+          Proc.new do |scope, query|
+            scope
+          end
+        end
       end
     end
   end
