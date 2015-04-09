@@ -12,7 +12,7 @@ describe RailsAdmin::InstallGenerator, type: :generator do
   it 'mounts RailsAdmin as Engine and generates RailsAdmin Initializer' do
     expect_any_instance_of(generator_class).to receive(:route).
       with("mount RailsAdmin::Engine => '/admin', as: 'rails_admin'")
-    capture(:stdout) do
+    silence_stream(STDOUT) do
       generator.invoke('install')
     end
     expect(destination_root).to have_structure{
