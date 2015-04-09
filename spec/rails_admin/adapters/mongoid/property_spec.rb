@@ -214,7 +214,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
         field :text, type: String
         validates_with MyCustomValidator
       end
-      expect(lambda { RailsAdmin::AbstractModel.new('CustomValiated').properties.last.send(:length_validation_lookup) }).not_to raise_error
+      expect { RailsAdmin::AbstractModel.new('CustomValiated').properties.last.send(:length_validation_lookup) }.not_to raise_error
     end
   end
 end

@@ -25,7 +25,7 @@ module RailsAdmin
           else
             properties = abstract_model.properties.detect { |p| name == p.name }
           end
-          field = (_fields <<  RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
+          field = (_fields << RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
 
         # If field has not been yet defined add some default properties
@@ -60,7 +60,7 @@ module RailsAdmin
 
       # exclude fields by name or by condition (block)
       def exclude_fields(*field_names, &block)
-        block ||= lambda { |f| field_names.include?(f.name) }
+        block ||= proc { |f| field_names.include?(f.name) }
         _fields.each { |f| f.defined = true } if _fields.select(&:defined).empty?
         _fields.select { |f| f.instance_eval(&block) }.each { |f| f.defined = false }
       end

@@ -88,7 +88,7 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
 
       it 'ignores non-existent field name on filtering' do
-        expect(lambda { @abstract_model.all(filters: {'dummy' => {'0000' => {o: 'is', v: @players[1].name}}}) }).not_to raise_error
+        expect { @abstract_model.all(filters: {'dummy' => {'0000' => {o: 'is', v: @players[1].name}}}) }.not_to raise_error
       end
     end
   end

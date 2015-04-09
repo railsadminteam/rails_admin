@@ -34,7 +34,7 @@ module RailsAdmin
           end
 
           def method_name
-            nested_form ? "#{name}_attributes".to_sym  : "#{name}_id".to_sym
+            nested_form ? "#{name}_attributes".to_sym : "#{name}_id".to_sym
           end
 
           def multiple?

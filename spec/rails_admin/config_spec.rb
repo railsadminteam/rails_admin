@@ -47,27 +47,21 @@ describe RailsAdmin::Config do
 
     context 'given an extension with an authorization adapter' do
       it 'registers the adapter' do
-        RailsAdmin.add_extension(:example, ExampleModule,
-                                 authorization: true
-        )
+        RailsAdmin.add_extension(:example, ExampleModule, authorization: true)
         expect(RailsAdmin::AUTHORIZATION_ADAPTERS[:example]).to eq(ExampleModule::AuthorizationAdapter)
       end
     end
 
     context 'given an extension with an auditing adapter' do
       it 'registers the adapter' do
-        RailsAdmin.add_extension(:example, ExampleModule,
-                                 auditing: true
-        )
+        RailsAdmin.add_extension(:example, ExampleModule, auditing: true)
         expect(RailsAdmin::AUDITING_ADAPTERS[:example]).to eq(ExampleModule::AuditingAdapter)
       end
     end
 
     context 'given an extension with a configuration adapter' do
       it 'registers the adapter' do
-        RailsAdmin.add_extension(:example, ExampleModule,
-                                 configuration: true
-        )
+        RailsAdmin.add_extension(:example, ExampleModule, configuration: true)
         expect(RailsAdmin::CONFIGURATION_ADAPTERS[:example]).to eq(ExampleModule::ConfigurationAdapter)
       end
     end
@@ -89,9 +83,7 @@ describe RailsAdmin::Config do
   describe '.authorize_with' do
     context 'given a key for a extension with authorization' do
       before do
-        RailsAdmin.add_extension(:example, ExampleModule,
-                                 authorization: true
-        )
+        RailsAdmin.add_extension(:example, ExampleModule, authorization: true)
       end
 
       it 'initializes the authorization adapter' do
@@ -116,9 +108,7 @@ describe RailsAdmin::Config do
   describe '.audit_with' do
     context 'given a key for a extension with auditing' do
       before do
-        RailsAdmin.add_extension(:example, ExampleModule,
-                                 auditing: true
-        )
+        RailsAdmin.add_extension(:example, ExampleModule, auditing: true)
       end
 
       it 'initializes the auditing adapter' do
@@ -143,9 +133,7 @@ describe RailsAdmin::Config do
       before do
         module PaperTrail; end
         class Version; end
-        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail,
-                                 auditing: true
-        )
+        RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, auditing: true)
       end
 
       it 'initializes the auditing adapter' do
@@ -160,9 +148,7 @@ describe RailsAdmin::Config do
   describe '.configure_with' do
     context 'given a key for a extension with configuration' do
       before do
-        RailsAdmin.add_extension(:example, ExampleModule,
-                                 configuration: true
-        )
+        RailsAdmin.add_extension(:example, ExampleModule, configuration: true)
       end
 
       it 'initializes configuration adapter' do

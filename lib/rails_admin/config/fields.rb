@@ -6,7 +6,7 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config::Fields.registry
       mattr_reader :default_factory
-      @@default_factory = lambda do |parent, properties, fields|
+      @@default_factory = proc do |parent, properties, fields|
         # If it's an association
         if properties.association?
           association = parent.abstract_model.associations.detect { |a| a.name.to_s == properties.name.to_s }
