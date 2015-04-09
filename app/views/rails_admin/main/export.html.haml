@@ -23,7 +23,7 @@
             %label.checkbox{for: "schema_#{list}_#{field.method_name}"}
               = check_box_tag "schema[#{list}][]", field.method_name, true, { id: "schema_#{list}_#{field.method_name}" }
               = field.label + " [id]"
-            - polymorphic_type_column_name = @abstract_model.properties.find {|p| field.association.foreign_type == p.name }.name
+            - polymorphic_type_column_name = @abstract_model.properties.detect {|p| field.association.foreign_type == p.name }.name
             %label.checkbox{for: "schema_#{list}_#{polymorphic_type_column_name}"}
               = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { id: "schema_#{list}_#{polymorphic_type_column_name}" }
               = capitalize_first_letter(field.label) + " [type]"

@@ -58,7 +58,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
   end
 
   describe 'belongs_to association' do
-    subject { @post.associations.select { |a| a.name == :a_r_blog }.first }
+    subject { @post.associations.detect { |a| a.name == :a_r_blog } }
 
     it 'returns correct values' do
       expect(subject.pretty_name).to eq 'A r blog'
@@ -76,7 +76,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
   end
 
   describe 'has_many association' do
-    subject { @blog.associations.select { |a| a.name == :a_r_posts }.first }
+    subject { @blog.associations.detect { |a| a.name == :a_r_posts } }
 
     it 'returns correct values' do
       expect(subject.pretty_name).to eq 'A r posts'
@@ -128,7 +128,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
   end
 
   describe 'has_and_belongs_to_many association' do
-    subject { @post.associations.select { |a| a.name == :a_r_categories }.first }
+    subject { @post.associations.detect { |a| a.name == :a_r_categories } }
 
     it 'returns correct values' do
       expect(subject.pretty_name).to eq 'A r categories'
@@ -145,7 +145,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
 
   describe 'polymorphic belongs_to association' do
     before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(ARBlog ARPost ARCategory ARUser ARProfile ARComment)) }
-    subject { @comment.associations.select { |a| a.name == :commentable }.first }
+    subject { @comment.associations.detect { |a| a.name == :commentable } }
 
     it 'returns correct values' do
       expect(subject.pretty_name).to eq 'Commentable'
@@ -168,7 +168,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
   end
 
   describe 'polymorphic inverse has_many association' do
-    subject { @blog.associations.select { |a| a.name == :a_r_comments }.first }
+    subject { @blog.associations.detect { |a| a.name == :a_r_comments } }
 
     it 'returns correct values' do
       expect(subject.pretty_name).to eq 'A r comments'
