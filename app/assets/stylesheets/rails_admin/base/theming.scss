@@ -28,7 +28,7 @@ body.rails_admin {
   .sidebar-nav {
     padding: 9px 9px 9px 9px;
     position: fixed;
-    width: 14%;
+    width: percentage(3 / $grid-columns); /* 3 sm columns */
     overflow-y: scroll;
     top: 50px;
     bottom: 0;
@@ -287,6 +287,14 @@ body.rails_admin {
     }
     th.item {
       width:60px;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-md-min) {
+  body.rails_admin {
+    .sidebar-nav {
+      width: percentage(2 / $grid-columns); /* 2 md columns */
     }
   }
 }
