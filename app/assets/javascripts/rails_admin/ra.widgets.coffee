@@ -230,13 +230,55 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         else
           config_options = { inlineMode: false }
 
+        uploadEnabled =
         if config_options['imageUploadURL']
-          config_options['imageUploadParams'] = {
+          config_options['imageUploadParams'] =
             authenticity_token: $('meta[name=csrf-token]').attr('content')
-          }
 
         $(@).addClass('froala-wysiwyged')
         $(@).editable(config_options)
+        if uploadEnabled
+          $(@).on 'editable.imageError', (e, editor, error) ->
+            # Custom error message returned from the server.
+            if error.code == 0
+
+            # Bad link.
+            else if error.code == 1
+
+            # No link in upload response.
+            else if error.code == 2
+
+            # Error during image upload.
+            else if error.code == 3
+
+            # Parsing response failed.
+            else if error.code == 4
+
+            # Image too large.
+            else if error.code == 5
+
+            # Invalid image type.
+            else if error.code == 6
+
+            # Image can be uploaded only to same domain in IE 8 and IE 9.
+            else if error.code == 7
+
+            else
+
+            return
+
+          .on('editable.afterRemoveImage', (e, editor, $img) ->
+            # Set the image source to the image delete params.
+            editor.options.imageDeleteParams =
+              src: $img.attr('src')
+              authenticity_token: $('meta[name=csrf-token]').attr('content')
+            # Make the delete request.
+            editor.deleteImage $img
+            return
+          ).on('editable.imageDeleteSuccess', (e, editor, data) ->
+            # handle success
+          ).on 'editable.imageDeleteError', (e, editor, error) ->
+            # handle error
 
     array = content.find('[data-richtext=froala-wysiwyg]').not('.froala-wysiwyged')
     if array.length
