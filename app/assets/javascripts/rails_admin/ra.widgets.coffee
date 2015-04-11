@@ -220,19 +220,30 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
 
     # froala_wysiwyg
 
-    goFroalaWysiwygs = (array, config_options) =>
+    goFroalaWysiwygs = (array) =>
       array.each ->
+        options = $(@).data('options')
+        config_options = $.parseJSON(options['config_options'])
+        if config_options
+          if !config_options['inlineMode']
+            config_options['inlineMode'] = false
+        else
+          config_options = { inlineMode: false }
+
+        if config_options['imageUploadURL']
+          config_options['imageUploadParams'] = {
+            authenticity_token: $('meta[name=csrf-token]').attr('content')
+          }
+
         $(@).addClass('froala-wysiwyged')
-        $(@).editable({inlineMode: false})
+        $(@).editable(config_options)
 
     array = content.find('[data-richtext=froala-wysiwyg]').not('.froala-wysiwyged')
     if array.length
-      @array = array
       options = $(array[0]).data('options')
-      config_options = $.parseJSON(options['config_options'])
       if not $.isFunction($.fn.editable)
         $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
         $.getScript options['jspath'], (script, textStatus, jqXHR) =>
-          goFroalaWysiwygs(@array, config_options)
+          goFroalaWysiwygs(array)
       else
-        goFroalaWysiwygs(@array, config_options)
+        goFroalaWysiwygs(array)
