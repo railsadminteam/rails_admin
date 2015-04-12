@@ -1,4 +1,4 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string'
 
 module RailsAdmin
   module Config
