@@ -284,7 +284,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = 2.times.collect { FactoryGirl.create :fan }
+      @fans = FactoryGirl.create_list(:fan, 2)
       visit index_path(model_name: 'fan')
       # NOTE: Capybara really doesn't want us to look at invisible text. This test
       # could break at any moment.
@@ -305,7 +305,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = 2.times.collect { FactoryGirl.create :fan }
+      @fans = FactoryGirl.create_list(:fan, 2).sort_by(&:id)
       visit index_path(model_name: 'fan')
       expect(find('tbody tr:nth-child(1) td:nth-child(3)')).to have_content(@fans[1].name.upcase)
       expect(find('tbody tr:nth-child(2) td:nth-child(3)')).to have_content(@fans[0].name.upcase)
@@ -322,7 +322,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = 2.times.collect { FactoryGirl.create :fan }
+      @fans = FactoryGirl.create_list(:fan, 2)
       visit index_path(model_name: 'fan')
       is_expected.to have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{2} \w{3} \d{1,2}:\d{1,2}/)
     end
@@ -338,7 +338,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = 2.times.collect { FactoryGirl.create :fan }
+      @fans = FactoryGirl.create_list(:fan, 2)
       visit index_path(model_name: 'fan')
       is_expected.to have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{4}-\d{2}-\d{2}/)
     end
@@ -352,7 +352,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
         end
       end
       @team = FactoryGirl.create :team
-      @players = 2.times.collect { FactoryGirl.create :player, team: @team }
+      @players = FactoryGirl.create_list :player, 2, team: @team
       visit index_path(model_name: 'team')
       expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
     end
