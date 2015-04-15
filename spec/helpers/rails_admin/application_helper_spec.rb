@@ -363,5 +363,19 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(helper.bulk_menu(RailsAdmin::AbstractModel.new(Player))).not_to match('blub')
       end
     end
+
+    describe '#edit_user_link' do
+      it "don't include email column" do
+        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:player))
+        result = helper.edit_user_link
+        expect(result).to eq nil
+      end
+
+      it 'include email column' do
+        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        result = helper.edit_user_link
+        expect(result).to match('href')
+      end
+    end
   end
 end
