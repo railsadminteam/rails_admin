@@ -63,11 +63,7 @@ module RailsAdmin
     end
 
     def field_for(field)
-      if field.read_only?
-        field.pretty_value.to_s.html_safe
-      else
-        field.render
-      end
+      field.read_only? ? @template.content_tag(:div, field.pretty_value, class: 'form-control-static') : field.render
     end
 
     def object_infos
