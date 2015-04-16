@@ -239,6 +239,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         $(@).editable(config_options)
         if uploadEnabled
           $(@).on 'editable.imageError', (e, editor, error) ->
+            alert("error uploading image: " + error.message);
             # Custom error message returned from the server.
             if error.code == 0
 
@@ -279,6 +280,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
             # handle success
           ).on 'editable.imageDeleteError', (e, editor, error) ->
             # handle error
+            alert("error deleting image: " + error.message);
 
     array = content.find('[data-richtext=froala-wysiwyg]').not('.froala-wysiwyged')
     if array.length
