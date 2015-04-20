@@ -15,10 +15,14 @@ module RailsAdmin
         register_instance_option :controller do
           proc do
             if request.post? # BULK DELETE
-
               @objects = list_entries(@model_config, :destroy)
 
-              render @action.template_name
+              if @objects.blank?
+                flash[:error] = t('admin.flash.error', name: pluralize(0, @model_config.label), action: t('admin.actions.delete.done'))
+                redirect_to index_path
+              else
+                render @action.template_name
+              end
 
             elsif request.delete? # BULK DESTROY
 
