@@ -28,6 +28,16 @@ describe 'RailsAdmin Basic Bulk Action', type: :request do
       is_expected.to have_no_content(@players.first.name)
       is_expected.to have_content(@players.last.name)
     end
+
+    it 'returns 404 error for DELETE request if the records are already deleted' do
+      expect(Player.count).to eq @players.length
+      player_ids = [@players.first.id]
+      @players.first.destroy # delete selected object before send request to delete it.
+
+      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: player_ids))
+      expect(response.response_code).to eq 404
+      expect(response.body).to match /0 players failed to be deleted/i
+    end
   end
 
   describe 'bulk_export' do
