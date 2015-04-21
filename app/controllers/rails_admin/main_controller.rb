@@ -57,21 +57,24 @@ module RailsAdmin
 
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
 
-      column = begin
+      column_parts = begin
         if field.nil? || field.sortable == true # use params[:sort] on the base table
-          "#{abstract_model.table_name}.#{params[:sort]}"
+          [abstract_model.table_name, params[:sort]]
         elsif field.sortable == false # use default sort, asked field is not sortable
-          "#{abstract_model.table_name}.#{model_config.list.sort_by}"
+          [abstract_model.table_name, model_config.list.sort_by]
         elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
-          field.sortable
+          [field.sortable]
         elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
-          "#{field.sortable.keys.first}.#{field.sortable.values.first}"
+          [field.sortable.keys.first, field.sortable.values.first]
         elsif field.association? # use column on target table
-          "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
+          [field.associated_model_config.abstract_model.table_name, field.sortable]
         else # use described column in the field conf.
-          "#{abstract_model.table_name}.#{field.sortable}"
+          [abstract_model.table_name, field.sortable]
         end
       end
+
+      connection = ::ActiveRecord::Base.connection
+      column = column_parts.map {|p| connection.quote_column_name(p)}.join('.')
 
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {sort: column, sort_reverse: (params[:sort_reverse] == reversed_sort.to_s)}
