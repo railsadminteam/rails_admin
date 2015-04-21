@@ -36,14 +36,14 @@ describe 'RailsAdmin Basic Bulk Action', type: :request do
 
       delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: player_ids))
       expect(response.response_code).to eq 404
-      expect(response.body).to match /0 players failed to be deleted/i
+      expect(response.body).to match(/0 players failed to be deleted/i)
     end
 
     it 'returns 404 error for DELETE request without bulk_ids' do
       expect(Player.count).to eq @players.length
-      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: ""))
+      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: ''))
       expect(response.response_code).to eq 404
-      expect(response.body).to match /0 players failed to be deleted/i
+      expect(response.body).to match(/0 players failed to be deleted/i)
     end
   end
 
