@@ -13,7 +13,7 @@ describe RailsAdmin::Config::Fields::Types::Uuid do
     @object = FactoryGirl.create(:field_test)
     @object.stub(:uuid_field).and_return uuid
 
-    @field = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :uuid_field}
+    @field = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :uuid_field }
     @field.bindings = {object: @object}
   end
 
