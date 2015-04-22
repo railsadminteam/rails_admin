@@ -44,7 +44,7 @@ FactoryGirl.define do
     sequence(:email) { |n| "username_#{n}@example.com" }
     sequence(:password) { |_n| 'password' }
 
-    factory :user_confirmed, :class => User::Confirmed
+    factory :user_confirmed, class: User::Confirmed
   end
 
   factory :field_test do
@@ -62,7 +62,7 @@ FactoryGirl.define do
       EOF
     end
 
-    factory :comment_confirmed, :class => Comment::Confirmed do
+    factory :comment_confirmed, class: Comment::Confirmed do
       content('something')
     end
   end
