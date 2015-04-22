@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Types::Uuid do
-  let(:field) do
-  end
-
   let(:uuid) { SecureRandom.uuid }
 
   before do
@@ -12,10 +9,9 @@ describe RailsAdmin::Config::Fields::Types::Uuid do
         field :uuid_field, :uuid
       end
     end
-    @object = FactoryGirl.create(:field_test)
-    @object.uuid_field = uuid
+
     @field = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :uuid_field}
-    @field.bindings = {object: @object}
+    @field.bindings = {object: uuid}
   end
 
   it 'field is a Uuid fieldtype' do
