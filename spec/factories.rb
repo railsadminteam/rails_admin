@@ -43,6 +43,8 @@ FactoryGirl.define do
   factory :user do
     sequence(:email) { |n| "username_#{n}@example.com" }
     sequence(:password) { |_n| 'password' }
+
+    factory :user_confirmed, class: User::Confirmed
   end
 
   factory :field_test do
@@ -58,6 +60,10 @@ FactoryGirl.define do
         cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
         proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
       EOF
+    end
+
+    factory :comment_confirmed, class: Comment::Confirmed do
+      content('something')
     end
   end
 
