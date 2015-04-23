@@ -95,7 +95,7 @@ module RailsAdmin
         url         = url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
         level_class = " nav-level-#{level}" if level > 0
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
-        li = content_tag :li, 'data-model' => model_param do
+        li = content_tag :li, data: {model: model_param} do
           link_to nav_icon + capitalize_first_letter(node.label_plural), url, class: "pjax#{level_class}"
         end
         li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level + 1)
@@ -151,7 +151,7 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, class: 'dropdown', style: 'float:right' do
-        content_tag(:a, class: 'dropdown-toggle', :'data-toggle' => 'dropdown', href: '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
+        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
             actions.collect do |action|
               content_tag :li do
