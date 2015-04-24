@@ -35,7 +35,7 @@ describe RailsAdmin::CSVConverter do
     context 'when encoding to UTF-8' do
       let(:encoding) { 'UTF-8' }
 
-      it 'exports to UTR-8 with BOM' do
+      it 'exports to UTF-8 with BOM' do
         expect(subject[1]).to eq 'UTF-8'
         expect(subject[2].encoding).to eq Encoding::UTF_8
         expect(subject[2].unpack('H*').first).
