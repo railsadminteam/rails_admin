@@ -105,6 +105,7 @@
 ### Styling
 
 * [[List view table styling]]
+* [[Horizontally scrolling table with frozen columns in list view]]
 
 ### Routing
 
