@@ -1,4 +1,4 @@
-.controls.col-md-offset-2{data: { nestedone: true }}
+.controls.col-sm-10{data: { nestedone: true }}
   %ul.nav{style: 'margin-bottom:0px; display:none'}
   .btn-group
     %a.btn.btn-info.toggler{:'data-toggle' => "button", :'data-target' => "#{form.jquery_namespace(field)} > .tab-content", class: (field.active? ? 'active' : '') }
@@ -10,7 +10,7 @@
   = form.errors_for(field)
   = form.help_for(field)
 
-.tab-content
+.tab-content.clearfix
   = form.fields_for field.name do |nested_form|
     - if field.nested_form[:allow_destroy]
       = nested_form.link_to_remove '<span class="btn btn-small btn-danger"><i class="icon-trash icon-white"></i></span>'.html_safe
