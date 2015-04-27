@@ -19,6 +19,7 @@ module RailsAdmin
 
       stylesheets = File.expand_path(File.join('..', 'vendor', 'assets', 'stylesheets'))
       ::Sass.load_paths << stylesheets
+      ::Sass::Script::Value::Number.precision = [8, ::Sass::Script::Value::Number.precision].max
     end
 
   private
