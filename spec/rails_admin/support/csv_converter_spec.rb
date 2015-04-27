@@ -77,5 +77,13 @@ describe RailsAdmin::CSVConverter do
           to eq 'feff004e0075006d006200650072002c004e0061006d0065000a0031002c306a307e3048000a'
       end
     end
+
+    context 'when encoding from utf8mb4 to UTF-8' do
+      let(:encoding) { 'UTF-8' }
+      it 'exports to UTF-8' do
+        allow_any_instance_of(RailsAdmin::Adapters::ActiveRecord).to receive(:encoding).and_return('utf8mb4')
+        expect(subject[1]).to eq 'UTF-8'
+      end
+    end
   end
 end
