@@ -25,6 +25,10 @@ module RailsAdmin
             value.inspect
           end
 
+          register_instance_option :partial do
+            :form_boolean
+          end
+
           # Accessor for field's help text displayed below input field.
           def generic_help
             ''
