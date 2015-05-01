@@ -2,11 +2,14 @@ This assume you want to use the FREE version of Froala Editor (which shows their
 
 ### How to use:
 
-1. Add Froala's assets gem. **Note: ** For now we'll need to use codynguyen's fork, where the assets are precompiled (which is needed for rails_admin).
+1. Add Froala's assets gem.
 
-  ```
-    gem "wysiwyg-rails", github: "codynguyen/wysiwyg-rails"
-  ```
+*Note:* This functionality is currently available in the master branches of both `rails_admin` and `froala/wysiwyg-rails`, but neither gem has released a version with these features. For now, we'll need to use specific revisions of these gems from GitHub:
+
+```
+gem "rails_admin", github: "sferik/rails_admin", ref: "43f368a" # pending release of > 0.6.7
+gem "wysiwyg-rails", github: "froala/wysiwyg-rails", ref: "8daf0c3" # pending release of > 1.2.6
+```
 
 2. Enabling froala editor for your field is easy
 
