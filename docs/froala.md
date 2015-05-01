@@ -30,3 +30,37 @@ This assume you want to use the FREE version of Froala Editor (which shows their
 ```
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/froala.rb]] and [[here|https://github.com/sferik/rails_admin/blob/master/app/assets/javascripts/rails_admin/ra.widgets.coffee]]
+
+### Using Plugins
+
+Some additional configuration is necessary in order to use [Froala plugins]:
+
+1. In `app/assets/javascripts/rails_admin/custom/ui.js`:
+
+    ```
+    //= require froala_editor.min
+    // Include the plugins you want:
+    //= require plugins/block_styles.min
+    //= require plugins/colors.min
+    //= require plugins/media_manager.min
+    //= require plugins/tables.min
+    //= require plugins/video.min
+    //= require plugins/font_family.min
+    //= require plugins/font_size.min
+    //= require plugins/file_upload.min
+    //= require plugins/lists.min
+    //= require plugins/char_counter.min
+    //= require plugins/fullscreen.min
+    //= require plugins/urls.min
+    //= require plugins/inline_styles.min
+    ```
+
+2. In `app/assets/stylesheets/rails_admin/custom/theming.scss`:
+
+    ```
+    @import "froala_editor.min";
+    @import "froala_style.min";
+    @import "font-awesome";
+    ```
+
+[Froala plugins]: https://www.froala.com/wysiwyg-editor/docs/plugins
