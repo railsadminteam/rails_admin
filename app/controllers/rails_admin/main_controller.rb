@@ -115,7 +115,7 @@ module RailsAdmin
 
     def check_for_cancel
       return unless params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
-      redirect_to(back_or_index, flash: {info: t('admin.flash.noaction')})
+      redirect_to(back_or_index, notice: t('admin.flash.noaction'))
     end
 
     def get_collection(model_config, scope, pagination)
