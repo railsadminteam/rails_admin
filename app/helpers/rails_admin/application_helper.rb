@@ -164,9 +164,9 @@ module RailsAdmin
 
     def flash_alert_class(flash_key)
       case flash_key.to_s
-      when 'error'; 'alert-danger'
-      when 'alert'; 'alert-warning'
-      when 'notice'; 'alert-info'
+      when 'error'  then 'alert-danger'
+      when 'alert'  then 'alert-warning'
+      when 'notice' then 'alert-info'
       else "alert-#{flash_key}"
       end
     end
