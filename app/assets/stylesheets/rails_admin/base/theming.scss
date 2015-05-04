@@ -56,14 +56,14 @@ body.rails_admin {
     }
 
     &.denser {
+      margin-top: 30px;
       .controls .nav {
-        margin-bottom:5px;
+        margin: 30px 0 0;
       }
       .remove_nested_fields,
       .remove_nested_one_fields {
         position:absolute;
       }
-      margin:0px;
       p {
         font-size: 12px;
         line-height: 16px;
@@ -77,15 +77,8 @@ body.rails_admin {
           margin-bottom: 0px;
         }
       }
-      .control-group {
-        margin: 0px;
-        padding-top:15px;
-      }
-      .control-label {
-        // width:145px;
-      }
       legend {
-        margin-bottom:0px;
+        margin-bottom: 30px;
       }
     }
 
@@ -101,73 +94,59 @@ body.rails_admin {
     }
 
     /* nested forms */
-    .tab-content .tab-pane {
-      &>.remove_nested_fields,
-      &>.remove_nested_one_fields {
-        display:none;
-      }
-      &:hover>.remove_nested_fields,
-      &:hover>.remove_nested_one_fields,
-      &>.remove_nested_one_fields.active {
-        display:block;
-      }
+    .tab-content {
+      .tab-pane {
+        @include clearfix;
+        border-left: 5px solid #049cdb;
 
-      border-left:5px solid #049cdb;
-      padding-left:5px;
-      fieldset {
-        margin-left:-10px;
-        .control-group > label {
+        fieldset {
+          padding-top: 30px;
         }
-        legend {
-          float:left;
-          margin-left:10px;
+
+        .form-group {
+          margin-right: 0;
+          margin-left: -5px; /* Balance border-left */
+        }
+
+        & > .remove_nested_fields,
+        & > .remove_nested_one_fields {
+          display:none;
+        }
+        &:hover > .remove_nested_fields,
+        &:hover > .remove_nested_one_fields,
+        & > .remove_nested_one_fields.active {
+          display:block;
         }
       }
     }
 
     /* double nesting, guys. Easy. */
     .tab-content .tab-content .tab-pane {
-      border-color:lighten(#049cdb, 20%);
-      margin-left:10px;
-      fieldset {
-        margin-left:-20px;
-        .control-group > label {
-        }
-        legend {
-          margin-left:20px;
-        }
+      border-color: lighten(#049cdb, 20%);
+      margin-left: 10px;
+
+      .form-group {
+        margin-left: -15px; /* Balance border-left */
       }
     }
 
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
       border-color:lighten(#049cdb, 30%);
-      margin-left:20px;
-      fieldset {
-        margin-left:-30px;
-        .control-group > label {
-          padding-left:30px;
-          width:115px;
-        }
-        legend {
-          margin-left:30px;
-        }
+      margin-left: 20px;
+
+      .form-group {
+        margin-left: -25px; /* Balance border-left */
       }
     }
 
     /* totally awesome! nesting on 4 levels! */
     .tab-content .tab-content .tab-content  .tab-content .tab-pane {
       border-color:lighten(#049cdb, 40%);
-      margin-left:30px;
-      fieldset {
-        margin-left:-40px;
-        .control-group > label {
-          padding-left:40px;
-          width:105px;
-        }
-        legend {
-          margin-left:40px;
-        }
+      margin-left: 30px;
+
+      .form-group {
+        margin-left: -35px; /* Balance border-left */
       }
     }
   }
