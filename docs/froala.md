@@ -68,7 +68,7 @@ Some additional configuration is necessary in order to use [Froala plugins]:
     In `config/initializers/assets.rb`:
 
     ```
-    Rails.application.config.assets.precompile += %w(rails_admin/custom/theming.scss rails_admin/custom/ui.js)
+    Rails.application.config.assets.precompile += %w(rails_admin/custom/theming.css rails_admin/custom/ui.js)
     ```
 
 [Froala plugins]: https://www.froala.com/wysiwyg-editor/docs/plugins
