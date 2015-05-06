@@ -63,4 +63,12 @@ Some additional configuration is necessary in order to use [Froala plugins]:
     @import "font-awesome";
     ```
 
+3. If you're deploying to Heroku, you may need to add these files to Rails' asset precompilation list.
+
+    In `config/initializers/assets.rb`:
+
+    ```
+    Rails.application.config.assets.precompile += %w(rails_admin/custom/theming.scss rails_admin/custom/ui.js)
+    ```
+
 [Froala plugins]: https://www.froala.com/wysiwyg-editor/docs/plugins
