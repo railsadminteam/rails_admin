@@ -78,6 +78,6 @@ $(document).on('rails_admin.dom_ready', function(){
 
 Now be sure to do whatever else might be required in order to get the custom javascript included in your compiled assets, such as bumping your `Rails.application.config.assets.version` - https://github.com/sferik/rails_admin/issues/738#issuecomment-68483204 - or other things mentioned in that issue.
 
-Some parts of the above could be achieved by customizing `app/views/rails_admin/main/index.html.haml` and/or adding custom CSS instead of javascript, but that approach would require overriding a rather substantial file, which doesn't lend itself to easily upgrading your gems.
+Some parts of the above could be achieved by customizing `app/views/rails_admin/main/index.html.haml` and/or adding custom CSS instead of javascript, but that approach would require overriding a rather substantial file, which doesn't lend itself to easily upgrading your gems. Comment at https://github.com/sferik/rails_admin/issues/2272 if you think this should be made into a pull request.
 
 Enjoy!
