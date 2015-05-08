@@ -31,7 +31,7 @@ module RailsAdmin
         # If field has not been yet defined add some default properties
         if add_to_section && !field.defined
           field.defined = true
-          field.order = _fields.select(&:defined).length
+          field.order = _fields.count(&:defined)
         end
 
         # If a block has been given evaluate it and sort fields after that
@@ -51,7 +51,7 @@ module RailsAdmin
           _fields.select { |f| f.instance_eval(&block) }.each do |f|
             next if f.defined
             f.defined = true
-            f.order = _fields.select(&:defined).length
+            f.order = _fields.count(&:defined)
           end
         else
           fields(*field_names, &block)
@@ -91,7 +91,7 @@ module RailsAdmin
         defined.collect do |f|
           unless f.defined
             f.defined = true
-            f.order = _fields.select(&:defined).length
+            f.order = _fields.count(&:defined)
           end
           f.instance_eval(&block) if block
           f
