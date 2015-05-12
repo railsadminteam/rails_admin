@@ -56,6 +56,7 @@ module RailsAdmin
       params[:sort_reverse] ||= 'false'
 
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
+      quoteless = false
 
       column_parts = begin
         if field.nil? || field.sortable == true # use params[:sort] on the base table
@@ -64,6 +65,9 @@ module RailsAdmin
           [abstract_model.table_name, model_config.list.sort_by]
         elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
           [field.sortable]
+        elsif field.sortable.is_a?(Hash) && field.sortable.keys.first == :quoteless
+          quoteless = true
+          [field.sortable.values.first]
         elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
           [field.sortable.keys.first, field.sortable.values.first]
         elsif field.association? # use column on target table
@@ -74,7 +78,8 @@ module RailsAdmin
       end
 
       connection = ::ActiveRecord::Base.connection
-      column = column_parts.map {|p| connection.quote_column_name(p)}.join('.')
+      column_parts = column_parts.map {|p| connection.quote_column_name(p)} unless quoteless
+      column = column_parts.join('.')
 
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {sort: column, sort_reverse: (params[:sort_reverse] == reversed_sort.to_s)}
