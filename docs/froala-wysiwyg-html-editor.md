@@ -1,4 +1,4 @@
-This assume you want to use the FREE version of Froala Editor (which shows their badge in the editor). For more information, please see: http://www.froala.com/wysiwyg-editor
+This assume you want to use the FREE version of Froala WYSIWYG HTML Editor (which shows their badge in the editor). For more information, please see: http://www.froala.com/wysiwyg-editor
 
 ### How to use:
 
