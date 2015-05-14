@@ -55,7 +55,7 @@
   * [[CKEditor]]
   * [[CodeMirror]]
   * [[Wysihtml5]]
-  * [[Froala]]
+  * [[Froala WYSIWYG HTML Editor]]
 * [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
 
 
