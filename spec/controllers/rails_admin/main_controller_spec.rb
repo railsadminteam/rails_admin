@@ -218,7 +218,7 @@ describe RailsAdmin::MainController, type: :controller do
       expect(controller.list_entries.length).to eq(@players.size)
     end
 
-    it 'orders associated collection records by desc' do
+    it 'orders associated collection records by id, descending' do
       @players = 3.times.collect do
         FactoryGirl.create :player
       end
