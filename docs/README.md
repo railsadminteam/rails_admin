@@ -9,8 +9,10 @@
 1. [[Base RailsAdmin configuration|Base configuration]]
 2. [[Actions]]
 3. [[Navigation]]
-4. [[Fields configuration|Railsadmin-DSL]]
-5. [[Translations]]
+4. [[Models]]
+5. [[Groups]]
+6. [[Fields]]
+7. [[Translations]]
 
 ### Integration Testing
 
