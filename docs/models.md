@@ -69,3 +69,19 @@ end
 `label` and `object_label` are both model configuration options. `label` is used
 whenever Rails Admin refers to a model class, while `object_label` is used whenever
 Rails Admin refers to an instance of a model class (representing a single database record).
+
+## Configuring models all at once
+
+If you want to use `config.model` for all models, you may find it in `ActiveRecord::Base.descendants`
+
+```ruby
+RailsAdmin.config do |config|
+  ActiveRecord::Base.descendants.each do |imodel|
+    config.model "#{imodel}" do
+      list do
+        exclude_fields :created_at, :updated_at
+      end
+    end
+  end
+end
+```
