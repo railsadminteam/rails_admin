@@ -378,4 +378,19 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe '#flash_alert_class' do
+    it 'makes errors red with alert-danger' do
+      expect(helper.flash_alert_class('error')).to eq('alert-danger')
+    end
+    it 'makes alerts yellow with alert-warning' do
+      expect(helper.flash_alert_class('alert')).to eq('alert-warning')
+    end
+    it 'makes notices blue with alert-info' do
+      expect(helper.flash_alert_class('notice')).to eq('alert-info')
+    end
+    it 'prefixes others with "alert-"' do
+      expect(helper.flash_alert_class('foo')).to eq('alert-foo')
+    end
+  end
 end
