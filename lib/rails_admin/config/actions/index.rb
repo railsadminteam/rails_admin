@@ -27,7 +27,14 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-            @objects ||= list_entries
+            if params[:additional_scope]
+              associated_model = RailsAdmin::AbstractModel.new(params[:additional_scope][:model])
+              associated_config = associated_model.config
+              field = associated_config.field(params[:additional_scope][:association].to_sym).with(object: associated_model.model.find(params[:additional_scope][:model_id]))
+              @objects ||= list_entries(@model_config, :index, field.associated_collection_scope)
+            else
+              @objects ||= list_entries
+            end
 
             unless @model_config.list.scopes.empty?
               if params[:scope].blank?
