@@ -10,11 +10,7 @@ body.rails_admin {
   }
 
   /* room for upper navbar */
-  padding-top: 43px;
-
-  .reset-left {
-    padding-left: 0px;
-  }
+  padding-top: $navbar-height;
 
   /* Application name */
   .navbar .brand {
@@ -26,14 +22,32 @@ body.rails_admin {
   }
 
   .sidebar-nav {
-    padding: 9px 9px 9px 9px;
-    position: fixed;
-    width: percentage(3 / $grid-columns); /* 3 sm columns */
-    overflow-y: scroll;
-    top: 50px;
-    bottom: 0;
-    background: #eaf0f1;
-    z-index: 100;
+    padding: 0;
+    background-color: $navbar-default-bg;
+
+    .dropdown-header {
+      padding: ($grid-gutter-width / 2) ($grid-gutter-width / 2) 3px;
+      font-weight: bold;
+      color: $gray;
+      text-transform: uppercase;
+    }
+
+    > .nav-stacked > li > a {
+      padding: $padding-base-vertical ($grid-gutter-width / 2);
+      border-radius: 0;
+
+      &.nav-level-1 {
+        padding-left: $grid-gutter-width;
+      }
+
+      &.nav-level-2 {
+        padding-left: ($grid-gutter-width * 1.5);
+      }
+
+      &.nav-level-3 {
+        padding-left: ($grid-gutter-width * 2);
+      }
+    }
   }
 
   /* fat labels in forms */
@@ -291,10 +305,13 @@ body.rails_admin {
   }
 }
 
-@media screen and (min-width: $screen-md-min) {
+@media screen and (min-width: $screen-sm-min) {
   body.rails_admin {
     .sidebar-nav {
-      width: percentage(2 / $grid-columns); /* 2 md columns */
+      position: fixed;
+      top: $navbar-height;
+      bottom: 0;
+      overflow-y: scroll;
     }
   }
 }
