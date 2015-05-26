@@ -28,14 +28,14 @@
   * [[Index|Index Action]]
   * [[New|New Action]]
   * [[Export|Export Action]]
-  * [[HistoryIndex|HistoryIndex Action]]
-  * [[BulkDelete|BulkDelete Action]]
+  * [[HistoryIndex|History Index Action]]
+  * [[BulkDelete|Bulk Delete Action]]
 * Member actions
   * [[Show|Show Action]]
   * [[Edit|Edit Action]]
   * [[Delete|Delete Action]]
-  * [[HistoryShow|HistoryShow Action]]
-  * [[ShowInApp|ShowInApp Action]]
+  * [[HistoryShow|History Show Action]]
+  * [[ShowInApp|Show In App Action]]
 
 ### Field types
 
