@@ -3,6 +3,8 @@
   Keep it clean, people
 */
 
+$avatar-size: 30px;
+
 body.rails_admin {
 
   .thumbnail {
@@ -12,12 +14,18 @@ body.rails_admin {
   /* room for upper navbar */
   padding-top: $navbar-height;
 
-  /* Application name */
-  .navbar .brand {
-    small {
-      color:#9d261d;
-      font-weight:bold;
-      line-height: 1;
+  .navbar {
+    .edit_user_root_link {
+      position: relative;
+
+      img {
+        position: absolute;
+        top: ((40px - $avatar-size) / 2);
+
+        & + span {
+          margin-left: ($avatar-size + 5px);
+        }
+      }
     }
   }
 
@@ -284,8 +292,16 @@ body.rails_admin {
   }
 }
 
-@media screen and (min-width: $screen-sm-min) {
+@media screen and (min-width: $grid-float-breakpoint) {
   body.rails_admin {
+    .navbar {
+      .edit_user_root_link {
+        img {
+          top: (($navbar-height - $avatar-size) / 2);
+        }
+      }
+    }
+
     .sidebar-nav {
       position: fixed;
       top: $navbar-height;
