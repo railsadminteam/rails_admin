@@ -1,4 +1,4 @@
-You have access to the controller though `self` or with a block variable, you can decide wether the user should or should not be allowed to continue with something like:
+You have access to the controller though `self` or with a block variable. You can decide whether the user should or should not be allowed to continue with something like:
 
 ```ruby
 # in config/initializer/rails_admin.rb
