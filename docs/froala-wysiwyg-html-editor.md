@@ -21,10 +21,12 @@ This assume you want to use the FREE version of Froala WYSIWYG HTML Editor (whic
   # Optionally providing froala options (see https://editor.froala.com/options)
   edit do
     field :content, :froala do
-      config_options {
-        inlineMode: false,
-        paragraphy: false
-      }
+      config_options do
+        {
+          inlineMode: false,
+          paragraphy: false
+        }
+      end
     end
   end
 ```
