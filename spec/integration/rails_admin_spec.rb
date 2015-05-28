@@ -127,13 +127,13 @@ describe RailsAdmin, type: :request do
     it "does not show Gravatar when user doesn't have email method" do
       allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
       allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(false)
+      allow_any_instance_of(User).to receive(:respond_to?).with(:devise_scope).and_return(false)
       visit dashboard_path
       is_expected.not_to have_selector('ul.nav.pull-right li img')
     end
 
     it 'does not cause error when email is nil' do
-      allow_any_instance_of(User).to receive(:respond_to?).and_return(true)
-      allow_any_instance_of(User).to receive(:respond_to?).with(:email).and_return(nil)
+      allow_any_instance_of(User).to receive(:email).and_return(nil)
       visit dashboard_path
       is_expected.to have_selector('body.rails_admin')
     end
