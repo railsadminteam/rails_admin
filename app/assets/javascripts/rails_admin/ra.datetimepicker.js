@@ -26,11 +26,19 @@
       this.element.hide();
 
       if (this.options.showTime) {
+        var $wrap = $('<div class="input-group"/>');
+
         this.timepicker = $('<input class="TIMEPICKER" type="text" value="' + this.options.timepicker.value + '" />');
 
-        this.timepicker.css("width", "60px");
+        this.timepicker.css("width", "65px");
 
-        this.timepicker.insertAfter(this.element);
+        this.timepicker.addClass('form-control');
+
+        $wrap.append(this.timepicker);
+
+        $wrap.append($('<div class="input-group-addon"><i class="icon-time"></i></div>'));
+
+        $wrap.insertAfter(this.element);
 
         this.timepicker.bind("change", function() { widget._onChange(); });
 
@@ -38,11 +46,19 @@
       }
 
       if (this.options.showDate) {
+        var $wrap = $('<div class="input-group"/>');
+
         this.datepicker = $('<input type="text" value="' + this.options.datepicker.value + '" />');
 
-        this.datepicker.css("margin-right", "10px");
+        this.datepicker.addClass('form-control');
 
-        this.datepicker.insertAfter(this.element);
+        $wrap.css("margin-right", "15px");
+
+        $wrap.append(this.datepicker);
+
+        $wrap.append($('<div class="input-group-addon"><i class="icon-calendar"></i></div>'));
+
+        $wrap.insertAfter(this.element);
 
         this.datepicker.bind("change", function() { widget._onChange(); });
 

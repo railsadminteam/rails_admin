@@ -33,12 +33,13 @@
 .ui-timepicker-table td a {
     width: auto;
 }
-.input-group {
-  .hasTimepicker {
-    @extend .form-control;
-    width: 65px !important;
-  }
-  .hasDatepicker {
-    @extend .form-control
-  }
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+  background-color: transparent;
+  cursor: pointer;
 }
