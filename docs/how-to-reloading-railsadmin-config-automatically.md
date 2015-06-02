@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :reload_rails_admin, :if => :rails_admin_path?
+  before_filter :reload_rails_admin, if: :rails_admin_path?
 
 private
 
@@ -19,7 +19,7 @@ private
   end
 
   def rails_admin_path?
-    controller_path =~ /rails_admin/ && Rails.env == "development"
+    controller_path =~ /rails_admin/ && Rails.env.development?
   end
 
 end
