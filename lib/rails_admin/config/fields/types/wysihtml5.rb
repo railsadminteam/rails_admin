@@ -16,11 +16,11 @@ module RailsAdmin
           end
 
           register_instance_option :css_location do
-            ActionController::Base.helpers.asset_path('bootstrap-wysihtml5.css')
+            ActionController::Base.helpers.asset_path('bootstrap-wysihtml5/index.css')
           end
 
           register_instance_option :js_location do
-            ActionController::Base.helpers.asset_path('bootstrap-wysihtml5.js')
+            ActionController::Base.helpers.asset_path('bootstrap-wysihtml5/index.js')
           end
 
           register_instance_option :partial do
