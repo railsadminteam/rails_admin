@@ -107,6 +107,11 @@ body.rails_admin {
       display:block;
     }
 
+    /* Put form controls above siblings to make them accessible */
++    .controls {
++      z-index: 1;
++    }
+
     /* nested forms */
     .tab-content {
       .tab-pane {
