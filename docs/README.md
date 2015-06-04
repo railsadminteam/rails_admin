@@ -143,6 +143,7 @@
 * [RailsAdminTagList](https://github.com/kryzhovnik/rails_admin_tag_list): ActsAsTaggableOn tag_list field
 * [RailsUploader](https://github.com/glebtv/rails-uploader): Nice mass file uploads with jQuery File Upload for rails_admin and mongoid
 * [Rich](https://github.com/bastiaanterhorst/rich): an opinionated CKEditor implementation with file uploads
+* [RailsAdminCountries](https://github.com/xronos-i-am/rails_admin_countries): Add [countries](https://github.com/hexorx/countries) gem support
 
 #### Custom action
 * [RailsAdminClone](https://github.com/dalpo/rails_admin_clone): Clone records
