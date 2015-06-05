@@ -16,7 +16,7 @@ See [this](http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelp
 def Team < ActiveRecord::Base
   def color_enum
     # Do not select any value, or add any blank field. RailsAdmin will do it for you.
-    ['green', 'white']
+    { green: 0, white: 1 }
   end
 end
 ```
@@ -33,8 +33,9 @@ field :color, :enum do
 
   # or doing it directly inline
   enum do
-    # simple array
-    ['green', 'white']
+    { green: 0, white: 1 }
+    # alternatively
+    [ %w(Green 0), %w(White 1)]
   end
 
   # if you need select the default value
