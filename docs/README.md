@@ -147,8 +147,7 @@
 
 #### Custom action
 * [RailsAdminClone](https://github.com/dalpo/rails_admin_clone): Clone records
-* [RailsAdminImport](https://github.com/stephskardal/rails_admin_import): Import data from a csv file
-* [RailsAdminImport++](https://github.com/adamwong246/rails_admin_import): Extends import plugin. Allows the user to set a key field to lookup records, updating if the record exists and creating a new records otherwise. Also allows user to immigrate records from an rss feed. Experimental.
+* [RailsAdminImport](https://github.com/stephskardal/rails_admin_import): Import data from a CSV or JSON file
 * [RailsAdminState](https://github.com/rs-pro/rails_admin_state): Manage state_machine states with rails_admin
 * [RailsAdminToggleable](https://github.com/rs-pro/rails_admin_toggleable): Toggle boolean fields in index view
 
