@@ -196,8 +196,12 @@ body.rails_admin {
   }
 
   /* tab links should match icon color */
-  .nav.nav-tabs li.icon a {
-    color: #000;
+  .nav.nav-tabs {
+    margin-bottom: 20px;
+
+    li.icon a {
+      color: #000;
+    }
   }
 
   /* Table cells behaviour */
