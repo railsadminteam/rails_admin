@@ -4,10 +4,8 @@ This assume you want to use the FREE version of Froala WYSIWYG HTML Editor (whic
 
 1. Add Froala's assets gem.
 
-    *Note:* This functionality is currently available in the master branch of `rails_admin`, but there is not a released a version with these features. For now, we'll need to use a specific revisions of `rails_admin` from GitHub:
-
     ```
-    gem "rails_admin", github: "sferik/rails_admin", ref: "43f368a" # pending release of > 0.6.7
+    gem "rails_admin", "~> 0.6.8"
     gem "wysiwyg-rails", "~> 1.2.7"
     ```
 
