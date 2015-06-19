@@ -7,10 +7,7 @@ require 'rack-pjax'
 require 'rails'
 require 'rails_admin'
 require 'remotipart'
-require 'safe_yaml'
-
-SafeYAML::OPTIONS[:suppress_warnings] = true
-SafeYAML::OPTIONS[:default_mode] = :unsafe
+require 'safe_yaml/load'
 
 module RailsAdmin
   class Engine < Rails::Engine
