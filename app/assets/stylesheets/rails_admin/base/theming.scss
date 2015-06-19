@@ -62,6 +62,18 @@ body.rails_admin {
       display:none;
     }
 
+    .control-group.image_field {
+      .img-thumbnail {
+        margin-bottom: 10px;
+      }
+
+      .btn-remove-image {
+        &.btn-info {
+          margin-top: 10px;
+        }
+      }
+    }
+
     legend {
       cursor:pointer;
       i {
