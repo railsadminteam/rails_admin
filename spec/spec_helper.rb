@@ -23,6 +23,8 @@ require 'factories'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
 
+Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.default_url_options[:host] = 'example.com'

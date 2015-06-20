@@ -5,6 +5,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit' do
     before do
+      RailsAdmin::Config.browser_validations = true
       @player = FactoryGirl.create :player
       visit edit_path(model_name: 'player', id: @player.id)
     end
@@ -25,12 +26,12 @@ describe 'RailsAdmin Basic Edit', type: :request do
     end
 
     it 'checks required fields to have required attribute set' do
-      expect(find_field('player_name')[:required].nil?).to eq(false)
-      expect(find_field('player_number')[:required].nil?).to eq(false)
+      expect(find_field('player_name')[:required]).to be_present
+      expect(find_field('player_number')[:required]).to be_present
     end
 
     it 'checks optional fields to not have required attribute set' do
-      expect(find_field('player_position')[:required].nil?).to eq(true)
+      expect(find_field('player_position')[:required]).to be_blank
     end
   end
 

@@ -50,6 +50,9 @@ module RailsAdmin
       # hide blank fields in show view if true
       attr_accessor :compact_show_view
 
+      #  Enable HTML5 browser validation
+      attr_accessor :browser_validations
+
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
 
@@ -254,6 +257,7 @@ module RailsAdmin
       # @see RailsAdmin::Config.registry
       def reset
         @compact_show_view = true
+        @browser_validations = true
         @yell_for_non_accessible_fields = true
         @authenticate = nil
         @authorize = nil

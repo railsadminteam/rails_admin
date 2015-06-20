@@ -123,8 +123,14 @@ module RailsAdmin
           (@help ||= {})[::I18n.locale] ||= generic_field_help
         end
 
+        def html_required?
+          RailsAdmin::Config.browser_validations && required
+        end
+
         register_instance_option :html_attributes do
-          {}
+          {
+            required: html_required?,
+          }
         end
 
         register_instance_option :default_value do
