@@ -15,4 +15,6 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :datetime_field }.with(object: FieldTest.new).formatted_date_value).to eq 'January 01, 2012'
     end
   end
+
+  it_behaves_like 'a generic field type', :datetime_field, :datetime
 end
