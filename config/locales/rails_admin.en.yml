@@ -17,6 +17,7 @@ en:
       starts_with: Starts with
       ends_with: Ends with
     loading: "Loading..."
+    toggle_navigation: Toggle navigation
     home:
       name: "Home"
     pagination:
