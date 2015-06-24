@@ -46,7 +46,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       input = this
       image_container = $("#" + input.id).parent().children(".preview")
       unless image_container.length
-        image_container = $("#" + input.id).parent().prepend($('<img />').addClass('preview')).find('img.preview')
+        image_container = $("#" + input.id).parent().prepend($('<img />').addClass('preview').addClass('img-thumbnail')).find('img.preview')
         image_container.parent().find('img:not(.preview)').hide()
       ext = $("#" + input.id).val().split('.').pop().toLowerCase()
       if input.files and input.files[0] and $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) != -1
