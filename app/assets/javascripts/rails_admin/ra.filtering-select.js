@@ -39,7 +39,7 @@
           return { label: $(this).text(), value: this.value };
         }).toArray();
       }
-      var filtering_select = $('<div class="input-append filtering-select" style="float:left"></div>')
+      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float:left"></div>')
       var input = this.input = $('<input type="text">')
         .val(value)
         .addClass("form-control ra-filtering-select-input")
@@ -98,8 +98,7 @@
           .appendTo(ul);
       };
 
-      // replace with dropdown button once ready in twitter-bootstrap
-      var button = this.button = $('<label class="add-on ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="Show All Items" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span><span class="ui-button-text">&nbsp;</span></label>')
+      var button = this.button = $('<span class="input-group-btn"><label class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Show All Items" role="button"><span class="caret"></span><span class="ui-button-text">&nbsp;</span></label></span>')
         .click(function() {
           // close if already visible
           if (input.autocomplete("widget").is(":visible")) {
