@@ -9,6 +9,10 @@ group :mongoid do
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
 end
 
+group :neo4j do
+  gem 'neo4j', '~> 5.0.1'
+end
+
 group :active_record do
   platforms :jruby do
     gem 'activerecord-jdbcmysql-adapter', '>= 1.2'

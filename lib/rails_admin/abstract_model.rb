@@ -48,6 +48,8 @@ module RailsAdmin
         initialize_active_record
       elsif ancestors.include?('Mongoid::Document')
         initialize_mongoid
+      elsif ancestors.include?('Neo4j::ActiveNode')
+        initialize_neo4j
       end
     end
 
@@ -107,6 +109,12 @@ module RailsAdmin
       @adapter = :mongoid
       require 'rails_admin/adapters/mongoid'
       extend Adapters::Mongoid
+    end
+
+    def initialize_neo4j
+      @adapter = :neo4j
+      require 'rails_admin/adapters/neo4j'
+      extend Adapters::Neo4j
     end
 
     class StatementBuilder
