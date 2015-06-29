@@ -28,11 +28,11 @@ module RailsAdmin
         end
 
         def klass
-          #if polymorphic? && [:referenced_in, :belongs_to].include?(type)
+          # if polymorphic? && [:referenced_in, :belongs_to].include?(type)
           #  polymorphic_parents(:mongoid, model.name, name) || []
-          #else
-            association.model_class.to_s
-          #end
+          # else
+          association.model_class.to_s
+          # end
         end
 
         def primary_key

@@ -9,7 +9,7 @@ module RailsAdmin
   module Adapters
     module Neo4j
       DISABLED_COLUMN_TYPES = []
-      #ObjectId = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId # rubocop:disable ConstantName
+      # ObjectId = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId # rubocop:disable ConstantName
 
       def new(params = {})
         AbstractObject.new(model.new(params))
@@ -89,7 +89,7 @@ module RailsAdmin
       end
 
       def cyclic?
-        #model.cyclic?
+        # model.cyclic?
         false
       end
 
@@ -158,11 +158,11 @@ module RailsAdmin
 
       def parse_column_name(column)
         label, property_name = column.split('.')
-        #if [:embeds_one, :embeds_many].include?(model.relations[label].try(:macro).try(:to_sym))
-          [label, property_name]
-        #else
+        # if [:embeds_one, :embeds_many].include?(model.relations[label].try(:macro).try(:to_sym))
+        [label, property_name]
+        # else
         #  [label, property_name]
-        #end
+        # end
       end
 
       def make_condition_for_current_collection(target_field, conditions_per_collection)
@@ -203,11 +203,8 @@ module RailsAdmin
         when Symbol
           property_name = options[:sort].to_s
         end
-        if options[:sort_reverse]
-          scope = scope.order(property_name => :asc)
-        else
-          scope = scope.order(property_name => :desc)
-        end
+
+        scope.order(property_name => options[:sort_reverse] ? :asc : :desc)
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
@@ -232,7 +229,7 @@ module RailsAdmin
           when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
           when :string, :text             then build_statement_for_string_or_text
           when :enum                      then build_statement_for_enum
-          #when :belongs_to_association, :bson_object_id then build_statement_for_belongs_to_association_or_bson_object_id
+            # when :belongs_to_association, :bson_object_id then build_statement_for_belongs_to_association_or_bson_object_id
           end
         end
 

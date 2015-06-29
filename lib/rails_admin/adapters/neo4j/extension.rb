@@ -1,6 +1,8 @@
-class ActiveAttr::AttributeDefinition
-  def type
-    options[:type]
+module ActiveAtr
+  class AttributeDefinition
+    def type
+      options[:type]
+    end
   end
 end
 
@@ -17,7 +19,7 @@ module RailsAdmin
             def rails_admin(&block)
               RailsAdmin.config(self, &block)
             end
-            #alias_method_chain :accepts_nested_attributes_for, :rails_admin
+            # alias_method_chain :accepts_nested_attributes_for, :rails_admin
           end
         end
 
