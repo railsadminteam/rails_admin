@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'jquery-rails', ['>= 3.0', '< 5']
   spec.add_dependency 'jquery-ui-rails', '~> 5.0'
   spec.add_dependency 'kaminari', '~> 0.14'
+  spec.add_dependency 'kaminari-neo4j', '~> 0.0.2' # TODO: How to include this only for neo4j?
   spec.add_dependency 'nested_form', '~> 0.3'
   spec.add_dependency 'rack-pjax', '~> 0.7'
   spec.add_dependency 'rails', '~> 4.0'

@@ -10,7 +10,8 @@ group :mongoid do
 end
 
 group :neo4j do
-  gem 'neo4j', '~> 5.0.1'
+  gem 'neo4j', github: 'neo4jrb/neo4j'
+  gem 'neo4j-core', github: 'neo4jrb/neo4j-core'
 end
 
 group :active_record do

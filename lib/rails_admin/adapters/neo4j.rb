@@ -1,4 +1,5 @@
 require 'neo4j'
+require 'kaminari/neo4j'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/adapters/neo4j/abstract_object'
 require 'rails_admin/adapters/neo4j/association'
@@ -37,7 +38,7 @@ module RailsAdmin
         scope ||= scoped
         scope = scope.with_associations(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
-        scope = scope.where(id: options[:bulk_ids]) if options[:bulk_ids]
+        scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(query_conditions(options[:query])) if options[:query]
         if options[:filters]
           filter_conditions(options[:filters]).each do |condition|
@@ -46,9 +47,7 @@ module RailsAdmin
         end
         scope = sort_by(options, scope) if options[:sort]
         if options[:page] && options[:per]
-          scope = scope.order(:uuid) unless scope.query.clause?(:order)
-          scope = scope.offset((options[:page] - 1) * options[:per]).limit(options[:per])
-          #scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
+          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
         scope
       end
@@ -62,7 +61,7 @@ module RailsAdmin
       end
 
       def primary_key
-        '_id'
+        'uuid'
       end
 
       def associations
@@ -277,11 +276,11 @@ module RailsAdmin
 
         def range_filter(min, max)
           if min && max
-            {@column => {'$gte' => min, '$lte' => max}}
+            {@column => (min..max)}
           elsif min
-            {@column => {'$gte' => min}}
+            "n.#{@column} >= #{min}" # Params???
           elsif max
-            {@column => {'$lte' => max}}
+            "n.#{@column} <= #{max}" # Params???
           end
         end
 
