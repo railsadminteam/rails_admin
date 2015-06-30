@@ -9,7 +9,7 @@ By default, to keep existing installation safe, all actions are added as they us
 Default is equivalent to:
 
 ```ruby
-# config/initilizers/rails_admin.rb
+# config/initializers/rails_admin.rb
 RailsAdmin.config do |config|
   config.actions do
     # root actions
