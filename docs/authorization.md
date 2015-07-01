@@ -1,10 +1,12 @@
 Authorization can be added using the `authorize_with` method. If you pass a block
 it will be triggered through a before filter on every action in Rails Admin.
 
+For example:
+
 ```ruby
 RailsAdmin.config do |config|
   config.authorize_with do
-    redirect_to main_app.root_path unless warden.user.is_admin?
+    redirect_to main_app.root_path unless current_user.is_admin?
   end
 end
 ```
