@@ -1,6 +1,7 @@
 require 'neo4j'
 require 'kaminari/neo4j'
 require 'rails_admin/config/sections/list'
+require 'rails_admin/adapters/neo4j/active_rel_ext'
 require 'rails_admin/adapters/neo4j/abstract_object'
 require 'rails_admin/adapters/neo4j/association'
 require 'rails_admin/adapters/neo4j/property'
@@ -27,7 +28,11 @@ module RailsAdmin
       end
 
       def scoped
-        model.all
+        if model.ancestors.include?(::Neo4j::ActiveRel)
+          ::Neo4j::ActiveRel::ActiveRelQueryProxy.new(model, model.send(:all_query))
+        else
+          model.all
+        end
       end
 
       def first(options = {}, scope = nil)
@@ -36,6 +41,8 @@ module RailsAdmin
 
       def all(options = {}, scope = nil)
         scope ||= scoped
+        #require 'pry'
+        #binding.pry
         scope = scope.with_associations(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
@@ -45,9 +52,10 @@ module RailsAdmin
             scope = scope.where(condition)
           end
         end
-        scope = sort_by(options, scope) if options[:sort]
+        # TODO: How important are sorting and paging in ActiveRel?
+        #scope = sort_by(options, scope) if options[:sort]
         if options[:page] && options[:per]
-          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
+          #scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
         scope
       end
@@ -65,6 +73,8 @@ module RailsAdmin
       end
 
       def associations
+        return [] if model.ancestors.include?(::Neo4j::ActiveRel)
+
         model.associations.values.collect do |association|
           Association.new(association, model)
         end
@@ -77,7 +87,11 @@ module RailsAdmin
       end
 
       def table_name
-        model.mapped_label_names[0].to_s
+        if model.ancestors.include?(::Neo4j::ActiveNode)
+          model.mapped_label_names[0].to_s
+        else
+          model.class.to_s
+        end
       end
 
       def encoding

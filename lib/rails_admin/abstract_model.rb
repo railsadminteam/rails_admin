@@ -48,7 +48,7 @@ module RailsAdmin
         initialize_active_record
       elsif ancestors.include?('Mongoid::Document')
         initialize_mongoid
-      elsif ancestors.include?('Neo4j::ActiveNode')
+      elsif ancestors.include?('Neo4j::ActiveNode') || ancestors.include?('Neo4j::ActiveRel')
         initialize_neo4j
       end
     end
