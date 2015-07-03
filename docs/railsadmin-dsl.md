@@ -1,3 +1,4 @@
+```ruby
 class Ball < ActiveRecord::Base
   validates :name, presence: true
   belongs_to :player
@@ -8,3 +9,4 @@ class Ball < ActiveRecord::Base
     end
   end
 end
+```
