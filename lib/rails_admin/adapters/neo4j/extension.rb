@@ -1,4 +1,4 @@
-module ActiveAtr
+module ActiveAttr
   class AttributeDefinition
     def type
       options[:type]
