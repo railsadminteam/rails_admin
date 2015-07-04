@@ -53,7 +53,7 @@ module RailsAdmin
           end
         end
         # TODO: How important are sorting and paging in ActiveRel?
-        #scope = sort_by(options, scope) if options[:sort]
+        scope = sort_by(options, scope) if options[:sort]
         if options[:page] && options[:per]
           #scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
