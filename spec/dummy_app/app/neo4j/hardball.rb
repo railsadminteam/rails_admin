@@ -1,0 +1,2 @@
+class Hardball < Ball
+end

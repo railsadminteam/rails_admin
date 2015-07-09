@@ -1,9 +1,11 @@
 require 'rails_admin/adapters/neo4j'
 
 Paperclip.logger = Logger.new(nil)
+DatabaseCleaner.strategy = :transaction
+
 
 class Tableless
-  include Mongoid::Document
+  include Neo4j::ActiveNode
 
   class <<self
     def column(name, sql_type = 'string', default = nil, _null = true)
