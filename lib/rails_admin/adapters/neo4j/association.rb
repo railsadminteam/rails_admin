@@ -31,7 +31,7 @@ module RailsAdmin
           # if polymorphic? && [:referenced_in, :belongs_to].include?(type)
           #  polymorphic_parents(:mongoid, model.name, name) || []
           # else
-          association.model_class.to_s
+          association.target_class_names[0].constantize.to_s
           # end
         end
 

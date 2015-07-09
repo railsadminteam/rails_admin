@@ -23,7 +23,7 @@ module Neo4j
         query_as(rel_var)
       end
 
-      NON_PREFIXED_CLAUSES = [:limit]
+      NON_PREFIXED_CLAUSES = [:limit, :skip]
       def query_as(var)
         @chain.inject(@starting_query || _session.query) do |query, (clause, args)|
           args.inject(query) do |query2, arg|
@@ -55,7 +55,7 @@ module Neo4j
 
       def build_deeper_query_proxy(method, args)
         self.clone.tap do |new_query_proxy|
-          new_query_proxy.instance_variable_set('@chain', [])
+          new_query_proxy.instance_variable_set('@chain', @chain.dup)
           new_query_proxy._add_link(method, args)
         end
       end
@@ -71,3 +71,8 @@ module Neo4j
     end
   end
 end
+
+
+
+::Neo4j::ActiveRel::ActiveRelQueryProxy.send :include, ::Kaminari::Neo4j::Extension::InstanceMethods
+::Neo4j::ActiveRel.send :include, ::Kaminari::Neo4j::Extension::ClassMethods

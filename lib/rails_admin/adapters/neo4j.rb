@@ -1,7 +1,9 @@
 require 'neo4j'
+
 require 'kaminari/neo4j'
-require 'rails_admin/config/sections/list'
 require 'rails_admin/adapters/neo4j/active_rel_ext'
+
+require 'rails_admin/config/sections/list'
 require 'rails_admin/adapters/neo4j/abstract_object'
 require 'rails_admin/adapters/neo4j/association'
 require 'rails_admin/adapters/neo4j/property'
@@ -18,13 +20,6 @@ module RailsAdmin
 
       def get(id)
         AbstractObject.new(model.find(id))
-      rescue => e
-        raise e if %w(
-          BSON::InvalidObjectId
-          Mongoid::Errors::DocumentNotFound
-          Mongoid::Errors::InvalidFind
-          Moped::Errors::InvalidObjectId
-        ).exclude?(e.class.to_s)
       end
 
       def scoped
@@ -54,8 +49,8 @@ module RailsAdmin
         end
         # TODO: How important are sorting and paging in ActiveRel?
         scope = sort_by(options, scope) if options[:sort]
-        if options[:page] && options[:per]
-          #scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
+        if options[:page] && options[:per] && !scope.is_a?(Array)
+          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
         scope
       end
@@ -218,7 +213,13 @@ module RailsAdmin
           property_name = options[:sort].to_s
         end
 
-        scope.order(property_name => options[:sort_reverse] ? :asc : :desc)
+        if scope.is_a?(Array)
+          result = scope.sort_by(&property_name.to_sym)
+          result = result.reverse if options[:sort_reverse]
+          result
+        else
+          scope.order(property_name => options[:sort_reverse] ? :asc : :desc)
+        end
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
