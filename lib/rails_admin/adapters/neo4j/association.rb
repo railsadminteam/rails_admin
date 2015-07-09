@@ -18,11 +18,8 @@ module RailsAdmin
 
         def type
           case type.to_sym
-          when :has_one
-            :has_one
-          when :has_many
-            :has_many
-          else
+          when :has_one, :has_many
+            type.to_sym
             fail("Unknown association type: #{type.inspect}")
           end
         end
@@ -83,6 +80,10 @@ module RailsAdmin
         end
 
         def association?
+          true
+        end
+
+        def eager_loadable?
           true
         end
 

@@ -90,6 +90,10 @@ module RailsAdmin
           true
         end
 
+        def eager_loadable?
+          type == :has_one && !polymorphic?
+        end
+
       private
 
         def inverse_of_field

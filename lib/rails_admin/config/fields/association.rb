@@ -102,6 +102,10 @@ module RailsAdmin
         def virtual?
           true
         end
+
+        def eager_loadable?
+          association.eager_loadable?
+        end
       end
     end
   end
