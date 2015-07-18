@@ -1,5 +1,6 @@
 // Cerulean 3.3.1
 // Variables
+//
 // --------------------------------------------------
 
 
@@ -14,9 +15,9 @@ $gray:                   lighten($gray-base, 33.5%); // #555
 $gray-light:             lighten($gray-base, 60%);   // #999
 $gray-lighter:           lighten($gray-base, 93.5%); // #eee
 
-$brand-primary:         #2FA4E7;
+$brand-info:            #2FA4E7;  // default $brand-primary
 $brand-success:         #73A839;
-$brand-info:            #033C73;
+$brand-primary:         #033C73;  // default $brand-info
 $brand-warning:         #DD5600;
 $brand-danger:          #C71C22;
 
