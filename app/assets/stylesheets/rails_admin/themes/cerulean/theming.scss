@@ -1,6 +1,7 @@
 // Cerulean 3.3.1
 // Bootswatch
-// -----------------------------------------------------
+// .rails_admin .sidebar-nav added to prevent same link color
+// ------------------------------------------------------------------
 
 @mixin btn-shadow($color){
   @include gradient-vertical-three-colors(lighten($color, 8%), $color, 60%, darken($color, 4%));
@@ -14,31 +15,30 @@
   @include btn-shadow($navbar-default-bg);
   filter: none;
   @include box-shadow(0 1px 10px rgba(0, 0, 0, 0.1));
+}
 
-  &-default {
-
-    .badge {
+.navbar.navbar-default .badge {
       background-color: #fff;
       color: $navbar-default-bg;
-    }
   }
 
-  &-inverse {
+.navbar.navbar-inverse , .rails_admin .sidebar-nav  {
     @include gradient-vertical-three-colors(lighten($navbar-inverse-bg, 8%), lighten($navbar-inverse-bg, 4%), 60%, darken($navbar-inverse-bg, 2%));
     filter: none;
     border-bottom: 1px solid darken($navbar-inverse-bg, 10%);
-
-    .badge {
-      background-color: #fff;
-      color: $navbar-inverse-bg;
-    }
   }
 
-  .navbar-nav > li > a,
-  &-brand {
+
+.navbar.navbar-inverse .badge {
+  background-color: #fff;
+  color: $navbar-inverse-bg;
+}
+
+.navbar .navbar-nav > li > a,
+.navbar .navbar-brand {
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
   }
-}
+
 
 @media (max-width: $grid-float-breakpoint-max) {
 
@@ -103,9 +103,6 @@
 // Tables =====================================================================
 table,
 .table {
-
-
-
   > thead > tr > th {
 
     color: $headings-color;
