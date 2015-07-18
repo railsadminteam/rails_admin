@@ -94,7 +94,7 @@ $(document).on 'pjax:popstate', () ->
   return
 
 #Remove all filter and then refresh
-$("#remove_filter").click (event) ->
+$(document).on 'click',  "#remove_filter",(event) ->
   event.preventDefault()
   $("#filters_box").html("")
   $("hr.filters_box").hide()
