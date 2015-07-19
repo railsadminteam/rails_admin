@@ -92,9 +92,10 @@
         input.attr('placeholder', select.attr('placeholder'))
 
       input.data("ui-autocomplete")._renderItem = function(ul, item) {
+        item_label_not_highlighted = item.label.replace(/(<([^>]+)>)/ig, "");
         return $("<li></li>")
           .data("ui-autocomplete-item", item)
-          .append( $( "<a></a>" ).text( item.label || item.id ) )
+          .append( $( "<a></a>" ).text( item_label_not_highlighted || item.id ) )
           .appendTo(ul);
       };
 
