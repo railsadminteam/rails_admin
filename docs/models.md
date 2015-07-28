@@ -74,10 +74,13 @@ Rails Admin refers to an instance of a model class (representing a single databa
 
 If you want to use `config.model` for all models, you may find it in `ActiveRecord::Base.descendants`
 
+If `cache_classes` is off (by default it's off in development, but on in production):
+Call `Rails.application.eager_load!` before the following:
+
 ```ruby
 RailsAdmin.config do |config|
   ActiveRecord::Base.descendants.each do |imodel|
-    config.model "#{imodel}" do
+    config.model "#{imodel.name}" do
       list do
         exclude_fields :created_at, :updated_at
       end
