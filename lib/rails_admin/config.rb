@@ -192,7 +192,9 @@ module RailsAdmin
       def models_pool
         excluded = (excluded_models.collect(&:to_s) + ['RailsAdmin::History'])
 
-        (viable_models - excluded).uniq.sort
+        db_backed_models = viable_models.select { |m| eval "#{m}.try(:columns).try(:any?)"}
+
+        (db_backed_models - excluded).uniq.sort
       end
 
       # Loads a model configuration instance from the registry or registers
