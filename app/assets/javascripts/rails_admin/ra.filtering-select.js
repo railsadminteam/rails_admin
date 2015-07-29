@@ -128,7 +128,7 @@
                 "(?![^&;]+;)(?!<[^<>]*)(" +
                 $.ui.autocomplete.escapeRegex(request.term) +
                 ")(?![^<>]*>)(?![^&;]+;)", "gi"
-             ), "<strong>$1</strong>") : el.id,
+             ), "$1") : el.id,
             value: el.label || el.id,
             id: el.id || el.value
           };
