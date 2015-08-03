@@ -94,7 +94,7 @@
       input.data("ui-autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
           .data("ui-autocomplete-item", item)
-          .append( $( "<a></a>" ).html( item.label || item.id ) )
+          .append( $( "<a></a>" ).html( item.html || item.id ) )
           .appendTo(ul);
       };
 
@@ -118,17 +118,21 @@
 
     _getResultSet: function(request, data, xhr) {
       var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+      var highlighter = function(label, word){
+        if(word.length > 0){
+          return $.map(label.split(word), function(el, i){
+            return $('<span></span>').text(el).html();
+          }).join($('<strong></strong>').text(word)[0].outerHTML);
+        }else{
+          return $('<span></span>').text(label).html();
+        }
+      };
 
       return $.map(data, function(el, i) {
         // match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
         if ((el.id || el.value) && (xhr || matcher.test(el.label))) {
           return {
-            label: el.label ? el.label.replace(
-              new RegExp(
-                "(?![^&;]+;)(?!<[^<>]*)(" +
-                $.ui.autocomplete.escapeRegex(request.term) +
-                ")(?![^<>]*>)(?![^&;]+;)", "gi"
-             ), "<strong>$1</strong>") : el.id,
+            html: highlighter(el.label || el.id, request.term),
             value: el.label || el.id,
             id: el.id || el.value
           };

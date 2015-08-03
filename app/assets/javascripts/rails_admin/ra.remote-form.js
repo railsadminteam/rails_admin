@@ -19,7 +19,7 @@
 
       var edit_url = dom_widget.find('select').first().data('options') && dom_widget.find('select').first().data('options')['edit-url'];
       if(typeof(edit_url) != 'undefined' && edit_url.length) {
-        dom_widget.on('dblclick', '.ra-multiselect option', function(e){
+        dom_widget.on('dblclick', '.ra-multiselect option:not(:disabled)', function(e){
           widget._bindModalOpening(e, edit_url.replace('__ID__', this.value))
         });
       }

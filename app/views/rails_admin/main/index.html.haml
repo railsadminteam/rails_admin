@@ -102,6 +102,8 @@
           %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
             %i.icon-white.icon-refresh
             = t("admin.misc.refresh")
+          %button#remove_filter.btn.btn-info{title: "Reset filters"}
+            %i.icon-white.icon-remove  
       - if export_action
         %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'btn btn-info'
 

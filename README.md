@@ -60,7 +60,7 @@ class Ball < ActiveRecord::Base
 end
 ```
 
-[Details](https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL)
+Details: [Models](https://github.com/sferik/rails_admin/wiki/Models), [Groups](https://github.com/sferik/rails_admin/wiki/Groups), [Fields](https://github.com/sferik/rails_admin/wiki/Fields)
 
 ## Documentation
 https://github.com/sferik/rails_admin/wiki
