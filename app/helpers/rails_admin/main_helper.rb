@@ -3,7 +3,11 @@ require 'builder'
 module RailsAdmin
   module MainHelper
     def rails_admin_form_for(*args, &block)
-      options = args.extract_options!.reverse_merge(builder: RailsAdmin::FormBuilder)
+      options = args.extract_options!.reverse_merge(
+        html: {novalidate: !RailsAdmin::Config.browser_validations},
+        builder: RailsAdmin::FormBuilder,
+      )
+
       form_for(*(args << options), &block) << after_nested_form_callbacks
     end
 
