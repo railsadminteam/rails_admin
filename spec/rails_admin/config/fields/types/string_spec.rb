@@ -22,4 +22,6 @@ describe RailsAdmin::Config::Fields::Types::String do
       expect(string_field.html_attributes[:size]).to_not be_zero
     end
   end
+
+  it_behaves_like 'a generic field type', :string_field, :string
 end
