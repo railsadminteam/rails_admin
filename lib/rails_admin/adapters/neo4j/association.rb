@@ -33,7 +33,7 @@ module RailsAdmin
         end
 
         def primary_key
-          :_id
+          :uuid
         end
 
         def foreign_key
@@ -60,7 +60,8 @@ module RailsAdmin
         end
 
         def inverse_of
-          association.inverse_of.try :to_sym
+          #association.inverse_of.try :to_sym
+          nil
         end
 
         def read_only?

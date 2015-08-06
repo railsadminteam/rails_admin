@@ -90,7 +90,7 @@ module RailsAdmin
         # Reader for the association's value unformatted
         def value
           result = bindings[:object].send(association.name)
-          result = result.to_a if result.respond_to?(:to_a)
+          result = result.to_a if result && result.respond_to?(:to_a)
           result
         end
 
