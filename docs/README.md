@@ -153,3 +153,4 @@
 
 #### Misc.
 * [RailsAdminSettings](https://github.com/rs-pro/rails_admin_settings): Application setting for rails_admin and mongoid
+* [RailsAdminGrid](https://github.com/colavitam/rails_admin_grid): Custom collection (index) action that displays objects in a grid with thumbnails
