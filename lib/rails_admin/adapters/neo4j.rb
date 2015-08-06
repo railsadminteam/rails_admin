@@ -36,9 +36,7 @@ module RailsAdmin
 
       def all(options = {}, scope = nil)
         scope ||= scoped
-        #require 'pry'
-        #binding.pry
-        scope = scope.with_associations(*options[:include]) if options[:include]
+        #scope = scope.with_associations(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
         scope = scope.where(query_conditions(options[:query])) if options[:query]
@@ -47,7 +45,6 @@ module RailsAdmin
             scope = scope.where(condition)
           end
         end
-        # TODO: How important are sorting and paging in ActiveRel?
         scope = sort_by(options, scope) if options[:sort]
         if options[:page] && options[:per] && !scope.is_a?(Array)
           scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
