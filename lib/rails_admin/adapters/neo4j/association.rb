@@ -25,11 +25,15 @@ module RailsAdmin
         end
 
         def klass
-          # if polymorphic? && [:referenced_in, :belongs_to].include?(type)
-          #  polymorphic_parents(:mongoid, model.name, name) || []
-          # else
-          association.target_class_names[0].constantize.to_s
-          # end
+          if polymorphic? #&& [:referenced_in, :belongs_to].include?(type)
+            if association.model_class.is_a?(Array)
+              association.model_class
+            elsif association.model_class == false
+              []
+            end
+          else
+            association.target_class_names[0].constantize.to_s
+          end
         end
 
         def primary_key
@@ -52,7 +56,7 @@ module RailsAdmin
         end
 
         def as
-          association.as.try :to_sym
+          true
         end
 
         def polymorphic?
