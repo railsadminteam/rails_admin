@@ -72,6 +72,7 @@ module RailsAdmin
         0
       end
       
+      # make model filterable or not / show or hide filter form in list
       register_instance_option :filterable do
         true
       end  
