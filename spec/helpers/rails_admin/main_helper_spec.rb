@@ -6,6 +6,10 @@ describe RailsAdmin::MainHelper, type: :helper do
       helper.rails_admin_form_for(FieldTest.new, url: new_path(model_name: 'field_test')) {}
     end
 
+    let(:html_form_with_attrs) do
+      helper.rails_admin_form_for(FieldTest.new, url: new_path(model_name: 'field_test'), html: {class: 'example'}) {}
+    end
+
     context 'with html5 browser_validations enabled' do
       before do
         RailsAdmin.config.browser_validations = true
@@ -33,6 +37,10 @@ describe RailsAdmin::MainHelper, type: :helper do
 
       it 'should add novalidate attribute to the html form tag' do
         expect(html_form).to include "novalidate=\"novalidate\""
+      end
+
+      it 'should add novalidate attribute to the html form tag with html attributes' do
+        expect(html_form_with_attrs).to include "novalidate=\"novalidate\""
       end
     end
   end
