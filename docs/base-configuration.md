@@ -50,6 +50,13 @@ config.attr_accessible_role { _current_user.role.to_sym }
 config.label_methods << :description # Default is [:name, :title]
 ```
 
+
+**Browser validations**
+
+```ruby
+config.browser_validations = false # Default is true
+```
+
 **Next**
 
 Then you can start adding [[actions|Actions]], configuring [[models|Navigation]], [[sections|Base]] and [[fields|Railsadmin-DSL]].
