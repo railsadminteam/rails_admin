@@ -1,8 +1,8 @@
-require 'rails_admin/i18n_support'
+require 'rails_admin/support/i18n'
 
 module RailsAdmin
   module ApplicationHelper
-    include RailsAdmin::I18nSupport
+    include RailsAdmin::Support::I18n
 
     def capitalize_first_letter(wording)
       return nil unless wording.present? && wording.is_a?(String)
