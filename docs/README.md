@@ -149,6 +149,7 @@
 * [RailsAdminClone](https://github.com/dalpo/rails_admin_clone): Clone records
 * [RailsAdminImport](https://github.com/stephskardal/rails_admin_import): Import data from a CSV or JSON file
 * [RailsAdminState](https://github.com/rs-pro/rails_admin_state): Manage state_machine states with rails_admin
+* [RailsAdminAasm](https://github.com/zcpdog/rails_admin_aasm): Manage aasm states with rails_admin
 * [RailsAdminToggleable](https://github.com/rs-pro/rails_admin_toggleable): Toggle boolean fields in index view
 
 #### Misc.
