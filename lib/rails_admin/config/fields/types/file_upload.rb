@@ -51,7 +51,7 @@ module RailsAdmin
 
           register_instance_option :html_attributes do
             {
-              required: required? && !value.present?
+              required: required? && !value.present?,
             }
           end
 
