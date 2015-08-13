@@ -26,6 +26,11 @@
     position: relative;
     top: -1px;
   }
+
+  a {
+    color: $label-color;
+    text-decoration: underline;
+  }
 }
 
 // Add hover effects, but only for links

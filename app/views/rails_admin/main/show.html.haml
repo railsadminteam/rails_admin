@@ -12,5 +12,7 @@
               %dt
                 %span.label.label-info{class: "#{field.type_css_class} #{field.css_class}"}
                   = field.label
+                  - if field.try(:view_url)
+                    %a{href: field.view_url} (#{t('admin.actions.show.view')})
               %dd.well
                 = field.pretty_value

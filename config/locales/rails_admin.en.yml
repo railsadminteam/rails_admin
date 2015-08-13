@@ -73,6 +73,7 @@ en:
         title: "Details for %{model_label} '%{object_label}'"
         menu: "Show"
         breadcrumb: "%{object_label}"
+        view: "View"
       show_in_app:
         menu: "Show in app"
       new:

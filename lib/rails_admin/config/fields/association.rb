@@ -14,6 +14,25 @@ module RailsAdmin
           @properties
         end
 
+        register_instance_option :view_url do
+          current_model = RailsAdmin.config(bindings[:object]).abstract_model.to_param
+          associated_model = associated_model_config.abstract_model.to_param
+
+          # Make sure the appropriate field is available on the associated model,
+          # and that there is more than one value available (if not this view
+          # isn't very helpful)
+          if associated_model_config.fields.map(&:name).include?(current_model.to_sym) &&
+              [value].flatten.size > 1
+            bindings[:view].url_for(
+              action: :index,
+              model_name: associated_model,
+              "f[#{current_model}][1318][o]" => "is",
+              "f[#{current_model}][1318][v]" => bindings[:object].id)
+          else
+            nil
+          end
+        end
+
         register_instance_option :pretty_value do
           v = bindings[:view]
           [value].flatten.select(&:present?).collect do |associated|
