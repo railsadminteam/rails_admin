@@ -39,7 +39,7 @@ config.attr_accessible_role { :default }
 
 `_current_user` is accessible in the block if you need to make it user specific:
 
-```rubyhjkhjk
+```ruby
 config.attr_accessible_role { _current_user.role.to_sym }
 ```
 
