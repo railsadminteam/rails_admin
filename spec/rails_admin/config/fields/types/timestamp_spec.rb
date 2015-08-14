@@ -1,7 +1,9 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Timestamp do
-  describe '#parse_input', active_record: true do
+describe RailsAdmin::Config::Fields::Types::Timestamp, active_record: true do
+  it_behaves_like 'a generic field type', :timestamp_field, :timestamp
+
+  describe '#parse_input' do
     before :each do
       @object = FactoryGirl.create(:field_test)
       @time = ::Time.now.getutc
