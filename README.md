@@ -44,7 +44,7 @@ In `config/initializers/rails_admin`:
 
 [Details](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
-To begin with, you may be interested in setting up [Devise](https://github.com/sferik/rails_admin/wiki/Devise), [Cancan](https://github.com/sferik/rails_admin/wiki/Cancan) or [Papertrail](https://github.com/sferik/rails_admin/wiki/Papertrail)!
+To begin with, you may be interested in setting up [Devise](https://github.com/sferik/rails_admin/wiki/Devise), [Cancan](https://github.com/sferik/rails_admin/wiki/Cancancan) or [Papertrail](https://github.com/sferik/rails_admin/wiki/Papertrail)!
 
 ### Per model
 ```ruby
