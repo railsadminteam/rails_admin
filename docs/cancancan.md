@@ -1,11 +1,11 @@
-Rails Admin is fully compatible with [[CanCan|https://github.com/ryanb/cancan]], an authorization framework to limit which actions a user can perform on each model.
+Rails Admin is fully compatible with [[CanCanCan|https://github.com/CanCanCommunity/cancancan]], an authorization framework to limit which actions a user can perform on each model.
 
-### Setup CanCan
+### Setup CanCanCan
 
-If you haven't already, setup CanCan by adding it to your Gemfile and running the `bundle` command.
+If you haven't already, setup CanCanCan by adding it to your Gemfile and running the `bundle` command.
 
 ```ruby
-gem "cancan"
+gem "cancancan"
 ```
 
 Next, run the generator to create an Ability class. This is where authorization rules are defined.
@@ -22,7 +22,7 @@ To use it with Rails Admin, add this to an initializer.
 # in config/initializers/rails_admin.rb
 
 RailsAdmin.config do |config|
-  config.authorize_with :cancan
+  config.authorize_with :cancan #TODO add cancancan to rails_admin config
 end
 ```
 
