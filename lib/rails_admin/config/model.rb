@@ -71,6 +71,11 @@ module RailsAdmin
       register_instance_option :weight do
         0
       end
+      
+      # make model filterable or not / show or hide filter form in list
+      register_instance_option :filterable do
+        true
+      end  
 
       # parent node in navigation/breadcrumb
       register_instance_option :parent do
