@@ -1,6 +1,8 @@
 class @RailsAdmin
 @RailsAdmin.I18n = class Locale
-  @init: (@locale)->
+  @init: (@locale, @translations)->
+    moment.locale(@locale)
+
   @t:(key) ->
     humanize = key.charAt(0).toUpperCase() + key.replace(/_/g, " ").slice(1)
-    @locale[key] || humanize
+    @translations[key] || humanize
