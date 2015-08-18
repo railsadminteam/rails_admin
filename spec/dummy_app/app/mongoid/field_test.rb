@@ -3,7 +3,6 @@ class FieldTest
   include Mongoid::Paperclip
   include ActiveModel::ForbiddenAttributesProtection
   extend Dragonfly::Model
-  extend Refile::Mongoid::Attachment
 
   field :name, type: String
   field :title, type: String
@@ -51,10 +50,15 @@ class FieldTest
   field :dragonfly_asset_uid
   dragonfly_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader
-  field :refile_asset_filename
-  field :refile_asset_size
-  field :refile_asset_content_type
-  attachment :refile_asset
+
+  if RUBY_VERSION >= '2.1.0'
+    extend Refile::Mongoid::Attachment
+
+    field :refile_asset_filename
+    field :refile_asset_size
+    field :refile_asset_content_type
+    attachment :refile_asset
+  end
 
   validates :short_text, length: {maximum: 255}
 end
