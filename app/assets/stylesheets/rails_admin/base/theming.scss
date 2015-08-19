@@ -8,7 +8,7 @@ $avatar-size: 30px;
 body.rails_admin {
 
   .thumbnail {
-    display:inline-block;
+    display: inline-block;
   }
 
   /* room for upper navbar */
@@ -56,6 +56,10 @@ body.rails_admin {
         padding-left: ($grid-gutter-width * 2);
       }
     }
+  }
+
+  label.input-group-addon {
+    cursor: pointer;
   }
 
   /* fat labels in forms */

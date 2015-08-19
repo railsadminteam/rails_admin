@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require 'spec_helper'
 
 describe RailsAdmin::MainController, type: :controller do
@@ -284,9 +283,9 @@ describe RailsAdmin::MainController, type: :controller do
             },
           },
         )
-
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
       end
+
       after do
         ActionController::Parameters.permit_all_parameters = true
         I18n.locale = :en
