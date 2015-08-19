@@ -21,7 +21,6 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           $(that).css('backgroundColor', '#' + hex)
 
     # datetime picker
-    # TODO: SETUP moment.locale()
     $.fn.datetimepicker.defaults.icons =
       time:     'fa fa-clock-o'
       date:     'fa fa-calendar'
@@ -34,7 +33,9 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       close:    'fa fa-times'
 
     content.find('[data-datetimepicker]').each ->
-      $(this).datetimepicker $(this).data('options')
+      options = $(this).data('options')
+      $.extend(options, {locale: RailsAdmin.I18n.locale})
+      $(this).datetimepicker options
 
     # enumeration
 
