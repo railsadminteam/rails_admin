@@ -5,29 +5,28 @@ module RailsAdmin
     module Fields
       module Types
         class Time < RailsAdmin::Config::Fields::Types::Datetime
-          # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
-          @format = :short
-          @i18n_scope = [:time, :formats]
-          @js_plugin_options = {
-            'showDate' => false,
-          }
-
-          # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types.register(self)
-
-          def parse_input(params)
-            params[name] = self.class.normalize(params[name], localized_time_format) if params[name].present?
+          register_instance_option :date_format do
+            :short
           end
 
-          # Parse normalized date (time) strings using UTC
-          def self.parse_date_string(date_string)
-            ::DateTime.parse(date_string)
+          register_instance_option :i18n_scope do
+            [:admin, :time, :formats]
           end
 
-          register_instance_option :strftime_format do
-            (localized_format.include? '%p') ? '%I:%M %p' : '%H:%M' # rubocop:disable ParenthesesAroundCondition
+          register_instance_option :datepicker_options do
+            {
+              showTodayButton: true,
+              format: parser.to_momentjs,
+            }
+          end
+
+          register_instance_option :html_attributes do
+            {
+              required: required?,
+              size: 10,
+            }
           end
         end
       end
