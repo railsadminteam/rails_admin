@@ -3,15 +3,14 @@
 require 'spec_helper'
 
 describe RailsAdmin::HashHelper do
-  let(:hash) {
-    { 'subject' => 'Test',
-      'user' => { name: 'Dirk',
-                  'title' => 'Holistic Detective',
-                  'clients' => [
-                    { name: 'Zaphod' },
-                    { 'name' => 'Arthur' }
-                  ]
-  }}}
+  let(:hash) do
+    {'subject' => 'Test',
+     'user' => {name: 'Dirk',
+                'title' => 'Holistic Detective',
+                'clients' => [
+                  {name: 'Zaphod'},
+                  {'name' => 'Arthur'}]}}
+  end
 
   describe 'symbolize' do
     let(:symbolized_hash) { RailsAdmin::HashHelper.symbolize(hash) }
