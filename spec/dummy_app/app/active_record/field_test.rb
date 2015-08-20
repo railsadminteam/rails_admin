@@ -12,5 +12,5 @@ class FieldTest < ActiveRecord::Base
   dragonfly_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader
 
-  attachment :refile_asset if RUBY_VERSION >= '2.1.0'
+  attachment :refile_asset if defined?(Refile)
 end

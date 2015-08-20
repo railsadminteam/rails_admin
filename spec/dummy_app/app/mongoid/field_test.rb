@@ -51,7 +51,7 @@ class FieldTest
   dragonfly_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader
 
-  if RUBY_VERSION >= '2.1.0'
+  if defined?(Refile)
     extend Refile::Mongoid::Attachment
 
     field :refile_asset_filename
