@@ -1,4 +1,4 @@
-You can customise list view fields as HTML tags, to replace their defaults with links or images.
+You can customise list view fields as HTML tags, to replace their defaults with links or images. This saves having to create an entire partial just for a single field.
 
 ```ruby
 field :name do
