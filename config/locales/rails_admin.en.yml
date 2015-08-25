@@ -149,7 +149,3 @@ en:
         default_col_sep: ","
         col_sep: "Column separator"
         col_sep_help: "Leave blank for default ('%{value}')" # value is default_col_sep
-    time:
-      formats:
-        long: "%I:%M %p"
-        short: "%H:%M"

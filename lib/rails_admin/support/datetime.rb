@@ -12,8 +12,7 @@ module RailsAdmin
               case match
               when '%A'
                 english = ::I18n.t('date.day_names', locale: :en)
-                day_names.each_with_index { |d, i|
-                  date_string = date_string.gsub(/#{d}/, english[i]) }
+                day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
               when '%a'
                 english = ::I18n.t('date.abbr_day_names', locale: :en)
                 abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
@@ -60,13 +59,13 @@ module RailsAdmin
           '%D' => 'MM/DD/YY',   # American date format mm/dd/yy
           '%e' => 'D',          # Day of the month (1..31)
           '%F' => 'YY-MM-DD',   # ISO 8601 date format
-          "%H" => "HH",         # Hour of the day, 24-hour clock (00..23)
-          "%I" => "hh",         # Hour of the day, 12-hour clock (01..12)
+          '%H' => 'HH',         # Hour of the day, 24-hour clock (00..23)
+          '%I' => 'hh',         # Hour of the day, 12-hour clock (01..12)
           '%m' => 'MM',         # Month of the year (01..12)
           '%-m' => 'M',         # Month of the year (1..12)
-          "%M" => "mm",         # Minute of the hour (00..59)
-          "%p" => "A",          # Meridian indicator ("AM" or "PM")
-          "%S" => "ss",         # Second of the minute (00..60)
+          '%M' => 'mm',         # Minute of the hour (00..59)
+          '%p' => 'A',          # Meridian indicator ('AM' or 'PM')
+          '%S' => 'ss',         # Second of the minute (00..60)
           '%Y' => 'YYYY',       # Year with century
           '%y' => 'YY',         # Year without a century (00..99)
         }
@@ -75,13 +74,11 @@ module RailsAdmin
       end
 
       def localized_format(scope = i18n_scope)
-        ::I18n.t(format, scope: scope, default: [
-          ::I18n.t(format, scope: scope, locale: :en)
-        ]).to_s
+        fallback = ::I18n.t(format, scope: scope, locale: :en)
+        ::I18n.t(format, scope: scope, default: fallback).to_s
       end
 
       def parse_string(value)
-        # params[name] = self.class.normalize(params[name], "#{localized_date_format} #{localized_time_format}") if params[name].present?
         self.class.normalize(value, localized_format)
       end
     end

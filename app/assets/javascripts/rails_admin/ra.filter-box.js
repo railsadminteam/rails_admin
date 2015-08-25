@@ -111,7 +111,7 @@
       $content.find('.datetime').datetimepicker({
         locale: RailsAdmin.I18n.locale,
         showTodayButton: true,
-        format: "DD MMMM YYYY HH:mm"
+        format: "DD MMMM YYYY"
       });
 
       $("hr.filters_box:hidden").show('slow');

@@ -1,3 +1,5 @@
+require 'rails_admin/support/datetime'
+
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
@@ -228,13 +230,12 @@ module RailsAdmin
 
       private
 
-        def date_format
-          I18n.t('admin.misc.filter_date_format',
-                 default: I18n.t('admin.misc.filter_date_format', locale: :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
+        def date_delocalizer
+          @datetime_delocalizer ||= RailsAdmin::Support::Datetime.new(:long, [:time, :formats])
         end
 
         def convert_to_date(value)
-          value.present? && Date.strptime(value, date_format)
+          value.present? && date_delocalizer.parse_string(value).to_date
         end
 
         def default_date
