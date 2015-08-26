@@ -66,9 +66,6 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :request
 
   config.before do |example|
-    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
-
-    DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
     RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
@@ -77,7 +74,6 @@ RSpec.configure do |config|
 
   config.after(:each) do
     Warden.test_reset!
-    DatabaseCleaner.clean
   end
 
   CI_TARGET_ORMS.each do |orm|
@@ -86,5 +82,21 @@ RSpec.configure do |config|
     else
       config.filter_run_excluding orm => true
     end
+  end
+
+  # Configure Database Cleaner
+  config.use_transactional_fixtures = false
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do |example|
+    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 end
