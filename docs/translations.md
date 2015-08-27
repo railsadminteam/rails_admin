@@ -12,6 +12,8 @@ Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_ad
 
 ## Translation Missing?
 
+**You can pick your locales or contribute in translation here: https://www.localeapp.com/projects/905**
+
 Make sure your existing locales do not have admin: key under :en, :es, :de etc. You will get translation missing warning then
 
 Community sourced translations:
