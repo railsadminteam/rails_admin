@@ -20,7 +20,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-* [[CanCan (recommended)|CanCan]]
+* [[CanCanCan (recommended)|CanCanCan]]
 * [[CanCan with relation to current Model|CanCan:-remove-associated-action-buttons-in-forms]]
 * [[Declarative Authorization (possible)|Declarative Authorization]]
 * [[Manually|Customized authorization]]
