@@ -18,5 +18,6 @@
 //=  require 'rails_admin/ra.i18n'
 //=  require 'rails_admin/bootstrap/bootstrap'
 //=  require 'rails_admin/ra.widgets'
+//=  require 'rails_admin/ra.redactor'
 //=  require 'rails_admin/ui'
 //=  require 'rails_admin/custom/ui'
