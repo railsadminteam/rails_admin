@@ -24,7 +24,7 @@
       var options = null;
 
       try {
-        options = JSON.parse($readactorTextarea.data('options'));
+        options = JSON.parse($redactorTextarea.data('options'));
       }catch(e){}
 
       $redactorTextarea.redactor(options);
