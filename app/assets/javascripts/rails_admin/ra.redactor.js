@@ -1,23 +1,33 @@
-$(function() {
-  var $redactorTextareas = $('textarea[data-richtext=redactor]');
+(function() {
+  $(document).on('rails_admin.dom_ready', function() {
+    var $redactorTextareas = $('textarea[data-richtext=redactor]');
 
-  if($redactorTextareas.length > 0) {
-    var jsPath = $redactorTextareas.data('js-path');
-    var cssPath = $redactorTextareas.data('css-path');
+    if($redactorTextareas.length > 0) {
+      var jsPath = $redactorTextareas.data('js-path');
+      var cssPath = $redactorTextareas.data('css-path');
 
-    $('head').append('<link href="' + cssPath + '" rel="stylesheet" media="all" type="text/css">');
+      if($('link[href="' + cssPath + '"]').length === 0) {
+        $('head').append('<link href="' + cssPath + '" rel="stylesheet" media="all" type="text/css">');
+      }
 
-    $.getScript(jsPath, function() {
-      $redactorTextareas.each(function() {
-        var $readactorTextarea = $(this);
-        var options = null;
+      if($.fn.redactor) {
+        onRedactorReady();
+      }else{
+        $.getScript(jsPath, onRedactorReady);
+      }
+    }
+  });
 
-        try {
-          options = JSON.parse($readactorTextarea.data('options'));
-        }catch(e){}
+  var onRedactorReady = function() {
+    $('textarea[data-richtext=redactor]').each(function() {
+      var $redactorTextarea = $(this);
+      var options = null;
 
-        $readactorTextarea.redactor(options);
-      });
+      try {
+        options = JSON.parse($readactorTextarea.data('options'));
+      }catch(e){}
+
+      $redactorTextarea.redactor(options);
     });
-  }
-});
+  };
+})();
