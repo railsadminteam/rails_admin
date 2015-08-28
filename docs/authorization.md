@@ -12,7 +12,7 @@ end
 ```
 
 To use an authorization adapter, pass the name of the adapter. For example, to use
-with [CanCan](https://github.com/ryanb/cancan), pass it like this.
+with [CanCanCan](https://github.com/CanCanCommunity/cancancan), pass it like this.
 
 ```ruby
 RailsAdmin.config do |config|
