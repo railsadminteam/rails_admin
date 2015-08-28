@@ -21,11 +21,7 @@
   var onRedactorReady = function() {
     $('textarea[data-richtext=redactor]').each(function() {
       var $redactorTextarea = $(this);
-      var options = null;
-
-      try {
-        options = JSON.parse($redactorTextarea.data('options'));
-      }catch(e){}
+      var options = $redactorTextarea.data('options');
 
       $redactorTextarea.redactor(options);
     });
