@@ -26,12 +26,16 @@ module RailsAdmin
             serial?
           end
 
-          def parse_input(params)
-            params[name] = (params[name].blank? ? nil : abstract_model.object_id_from_string(params[name])) if params[name].is_a?(::String)
+          def parse_value(value)
+            value.present?? abstract_model.object_id_from_string(value) : nil
           rescue => e
             unless ['BSON::InvalidObjectId', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
-              raise e
+              fail e
             end
+          end
+
+          def parse_input(params)
+            params[name] = parse_value(params[name]) if params[name].is_a?(::String)
           end
         end
       end

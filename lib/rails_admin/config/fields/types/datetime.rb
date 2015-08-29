@@ -12,8 +12,12 @@ module RailsAdmin
             @parser ||= RailsAdmin::Support::Datetime.new(date_format, i18n_scope)
           end
 
+          def parse_value(value)
+            parser.parse_string(value)
+          end
+
           def parse_input(params)
-            params[name] = parser.parse_string(params[name]) if params[name]
+            params[name] = parse_value(params[name]) if params[name]
           end
 
           register_instance_option :date_format do

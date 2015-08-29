@@ -27,12 +27,12 @@ module RailsAdmin
             false
           end
 
+          def parse_value(value)
+            value.present?? enum.invert[value.to_i] : nil
+          end
+
           def parse_input(params)
-            if params[name].present?
-              params[name] = enum.invert[params[name].to_i]
-            elsif params[name]
-              params[name] = nil
-            end
+            params[name] = parse_value(params[name]) if params[name]
           end
         end
       end
