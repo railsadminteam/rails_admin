@@ -8,38 +8,38 @@
     %legend
       %i.icon-chevron-down
       = t('admin.export.select')
-    .form-group.control-group
+    .form-group.control-group.col-sm-12
       .controls
-        .col-sm-2
-        %label.col-sm-10.checkbox{for: 'check_all'}
+        .col-sm-12
+        %label.col-sm-12.checkbox{for: 'check_all'}
           = check_box_tag 'all', 'all', true, { id: 'check_all' }
           = t('admin.export.select_all_fields')
-    .form-group.control-group
-      %label.col-sm-2.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
-      .col-sm-10.controls
+    .form-group.control-group.col-sm-12
+      %label.col-sm-12.well.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
+      .col-sm-11.col-sm-offset-1.controls
         - visible_fields.select{ |f| !f.association? || f.association.polymorphic? }.each do |field|
           - list = field.virtual? ? 'methods' : 'only'
           - if field.association? && field.association.polymorphic?
-            %label.checkbox{for: "schema_#{list}_#{field.method_name}"}
+            %label.checkbox.col-sm-3{for: "schema_#{list}_#{field.method_name}"}
               = check_box_tag "schema[#{list}][]", field.method_name, true, { id: "schema_#{list}_#{field.method_name}" }
               = field.label + " [id]"
             - polymorphic_type_column_name = @abstract_model.properties.detect {|p| field.association.foreign_type == p.name }.name
-            %label.checkbox{for: "schema_#{list}_#{polymorphic_type_column_name}"}
+            %label.checkbox.col-sm-3{for: "schema_#{list}_#{polymorphic_type_column_name}"}
               = check_box_tag "schema[#{list}][]", polymorphic_type_column_name, true, { id: "schema_#{list}_#{polymorphic_type_column_name}" }
               = capitalize_first_letter(field.label) + " [type]"
           - else
-            %label.checkbox{for: "schema_#{list}_#{field.name}"}
+            %label.checkbox.col-sm-3{for: "schema_#{list}_#{field.name}"}
               = check_box_tag "schema[#{list}][]", field.name, true, { id: "schema_#{list}_#{field.name}" }
               = capitalize_first_letter(field.label)
 
     - visible_fields.select{ |f| f.association? && !f.association.polymorphic? }.each do |field|
       - fields = field.associated_model_config.export.with(controller: self.controller, view: self, object: (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
-      .form-group.control-group
-        %label.col-sm-2.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)
-        .col-sm-10.controls
+      .form-group.control-group.col-sm-12
+        %label.col-sm-12.well.control-label{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).siblings(".controls").find("input").click()'}= t('admin.export.fields_from_associated', name: field.label.downcase)
+        .col-sm-11.col-sm-offset-1.controls
           - fields.each do |associated_model_field|
             - list = associated_model_field.virtual? ? 'methods' : 'only'
-            %label.checkbox{for: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
+            %label.checkbox.col-sm-3{for: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}"}
               = check_box_tag "schema[include][#{field.name}][#{list}][]", associated_model_field.name, true, { id: "schema_include_#{field.name}_#{list}_#{associated_model_field.name}" }
               = capitalize_first_letter(associated_model_field.label)
 
