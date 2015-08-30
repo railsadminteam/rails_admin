@@ -14,7 +14,9 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
   describe '#authorized?' do
     before do
       allow(RailsAdmin.config).to receive(:_current_user).and_return(FactoryGirl.create(:user))
-      helper.controller.stub(:authorization_adapter).and_return(RailsAdmin::AUTHORIZATION_ADAPTERS[:cancan].new(RailsAdmin.config, TestAbility))
+      allow(helper.controller).to receive_message_chain(:authorization_adapter
+        ).and_return(RailsAdmin::AUTHORIZATION_ADAPTERS[:cancan].new(
+        RailsAdmin.config, TestAbility))
     end
 
     it 'doesn\'t test unpersisted objects' do
