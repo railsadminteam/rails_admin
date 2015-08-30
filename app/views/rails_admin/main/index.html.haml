@@ -6,63 +6,25 @@
   sort_reverse = params[:sort_reverse]
   sort = params[:sort]
   params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
-
   export_action = RailsAdmin::Config::Actions.find(:export, { controller: self.controller, abstract_model: @abstract_model })
   export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
-
   description = RailsAdmin.config(@abstract_model.model_name).description
   properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).visible_fields
   # columns paginate
-  @filterable_fields = @model_config.list.fields.select(&:filterable?)
   sets = get_column_sets(properties)
   properties = sets[params[:set].to_i] || []
   other_left = ((params[:set].to_i - 1) >= 0) && sets[params[:set].to_i - 1].present?
   other_right = sets[params[:set].to_i + 1].present?
-  @index = 0
-  @ordered_filters = (params[:f] || @model_config.list.filters).inject({}) { |memo, filter|
-    field_name = filter.is_a?(Array) ? filter.first : filter
-    (filter.is_a?(Array) ? filter.last : { (@index += 1) => { "v" => '' } }) .each do |index, filter_hash|
-      unless filter_hash['disabled']
-        memo[index] = { field_name => filter_hash }
-      else
-        params[:f].delete(field_name)
-      end
-    end
-    memo
-  }.to_a.sort_by(&:first)
-
-  @ordered_filter_string = @ordered_filters.map do |duplet|
-    options = { :index => duplet[0] }
-    filter_for_field = duplet[1]
-    filter_name = filter_for_field.keys.first
-    filter_hash = filter_for_field.values.first
-    unless (field = @filterable_fields.find{ |field| field.name == filter_name.to_sym })
-      fail "#{filter_name} is not currently filterable; filterable fields are #{@filterable_fields.map(&:name).join(', ')}"
-    end
-    case field.type
-    when :enum
-      options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
-    when :date, :datetime, :time
-      options[:datetimepicker_format] = field.parser.to_momentjs
-    end
-    options[:label] = field.label
-    options[:name]  = field.name
-    options[:type]  = field.type
-    options[:value] = filter_hash['v']
-    options[:label] = field.label
-    options[:operator] = filter_hash['o']
-    %{$.filters.append(#{options.to_json});}
-  end.join("\n").html_safe if @ordered_filters
 
 - content_for :contextual_tabs do
   = bulk_menu
-  - if @filterable_fields.present?
+  - if filterable_fields.present?
     %li.dropdown{style: 'float:right'}
       %a.dropdown-toggle{href: '#', :'data-toggle' => "dropdown"}
         = t('admin.misc.add_filter')
         %b.caret
       %ul.dropdown-menu#filters{style: 'left:auto; right:0;'}
-        - @filterable_fields.each do |field|
+        - filterable_fields.each do |field|
           - field_options = case field.type
           - when :enum
             - options_for_select(field.with(object: @abstract_model.model.new).enum)
@@ -73,7 +35,7 @@
 
 :javascript
   jQuery(function($) {
-  #{@ordered_filter_string}
+  #{ordered_filter_string}
   });
 
 %style
@@ -85,7 +47,7 @@
   = form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form form-inline") do
     .well
       %span#filters_box
-      %hr.filters_box{style: "display:#{@ordered_filters.empty? ? 'none' : 'block'}"}
+      %hr.filters_box{style: "display:#{ordered_filters.empty? ? 'none' : 'block'}"}
       .input-group
         %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
         %span.input-group-btn
