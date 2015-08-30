@@ -1,4 +1,4 @@
-class @RailsAdmin
+@RailsAdmin ||= {}
 @RailsAdmin.I18n = class Locale
   @init: (@locale, @translations)->
     moment.locale(@locale)

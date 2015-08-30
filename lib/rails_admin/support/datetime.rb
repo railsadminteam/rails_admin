@@ -6,29 +6,33 @@ module RailsAdmin
       class << self
         include RailsAdmin::Support::I18n
 
-        def normalize(date_string, format)
-          unless ::I18n.locale == 'en'
-            format.to_s.scan(/%[AaBbp]/) do |match|
-              case match
-              when '%A'
-                english = ::I18n.t('date.day_names', locale: :en)
-                day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
-              when '%a'
-                english = ::I18n.t('date.abbr_day_names', locale: :en)
-                abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
-              when '%B'
-                english = ::I18n.t('date.month_names', locale: :en)[1..-1]
-                month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
-              when '%b'
-                english = ::I18n.t('date.abbr_month_names', locale: :en)[1..-1]
-                abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
-              when '%p'
-                date_string = date_string.gsub(/#{::I18n.t('date.time.am', default: "am")}/, 'am')
-                date_string = date_string.gsub(/#{::I18n.t('date.time.pm', default: "pm")}/, 'pm')
-              end
+        def delocalize(date_string, format)
+          return date_string if ::I18n.locale.to_s == 'en'
+          format.to_s.scan(/%[AaBbp]/) do |match|
+            case match
+            when '%A'
+              english = ::I18n.t('date.day_names', locale: :en)
+              day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
+            when '%a'
+              english = ::I18n.t('date.abbr_day_names', locale: :en)
+              abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
+            when '%B'
+              english = ::I18n.t('date.month_names', locale: :en)[1..-1]
+              month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
+            when '%b'
+              english = ::I18n.t('date.abbr_month_names', locale: :en)[1..-1]
+              abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
+            when '%p'
+              date_string = date_string.gsub(/#{::I18n.t('date.time.am', default: "am")}/, 'am')
+              date_string = date_string.gsub(/#{::I18n.t('date.time.pm', default: "pm")}/, 'pm')
             end
           end
+          date_string
+        end
 
+        def normalize(date_string, format)
+          return unless date_string
+          delocalize(date_string, format)
           parse_date_string(date_string)
         end
 
@@ -38,17 +42,15 @@ module RailsAdmin
         end
       end
 
-      attr_reader :format, :i18n_scope
+      attr_reader :strftime_format
 
-      def initialize(format, i18n_scope = nil)
-        @format = format
-        @i18n_scope = i18n_scope
+      def initialize(strftime_format)
+        @strftime_format = strftime_format
       end
 
       # Ruby to javascript formatting options translator
-      # def js_date_format
       def to_momentjs
-        # Ruby format options as a key and javascript format options
+        # Ruby format options as a key and momentjs format options
         # as a value
         translations = {
           '%a' => 'ddd',        # The abbreviated weekday name ("Sun")
@@ -70,16 +72,21 @@ module RailsAdmin
           '%y' => 'YY',         # Year without a century (00..99)
         }
 
-        localized_format.gsub(/%\w/) { |match| translations[match] }
-      end
-
-      def localized_format(scope = i18n_scope)
-        fallback = ::I18n.t(format, scope: scope, locale: :en)
-        ::I18n.t(format, scope: scope, default: fallback).to_s
+        strftime_format.gsub(/%\w/) { |match| translations[match] }
       end
 
       def parse_string(value)
-        self.class.normalize(value, localized_format)
+        return if value.blank?
+        return value if %w(DateTime Date Time).include?(value.class.name)
+
+        delocalized_value = self.class.delocalize(value, strftime_format)
+        return if delocalized_value.blank?
+
+        begin
+          ::DateTime.strptime(delocalized_value, strftime_format)
+        rescue ArgumentError
+          nil
+        end
       end
     end
   end

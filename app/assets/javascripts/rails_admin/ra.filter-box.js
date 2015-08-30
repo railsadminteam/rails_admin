@@ -3,12 +3,16 @@
   var filters;
 
   $.filters = filters = {
-    options: {
-      regional: {}
-    },
-
-    append: function(field_label, field_name, field_type, field_value, field_operator, field_options, index) {
-      var value_name = 'f[' +  field_name + '][' + index + '][v]';
+    append: function(options) {
+      options = options || {};
+      var field_label = options['label'];
+      var field_name  = options['name'];
+      var field_type  = options['type'];
+      var field_value = options['value'];
+      var field_operator = options['operator'];
+      var select_options = options['select_options'];
+      var index = options['index'];
+      var value_name    = 'f[' +  field_name + '][' + index + '][v]';
       var operator_name = 'f[' +  field_name + '][' + index + '][o]';
       var control = null;
       var additional_control = null;
@@ -54,10 +58,10 @@
               '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">' + RailsAdmin.I18n.t("is_present") + '</option>' +
               '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
               '<option disabled="disabled">---------</option>' +
-              field_options +
+              select_options +
             '</select>' +
             '<select multiple="multiple" style="display:' + (multiple_values ? 'inline-block' : 'none') + '" ' + (multiple_values ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="select-multiple input-sm form-control">' +
-              field_options +
+              select_options +
             '</select> ' +
             '<a href="#" class="switch-select"><i class="icon-' + (multiple_values ? 'minus' : 'plus') + '"></i></a>';
         break;
@@ -102,16 +106,10 @@
 
       $('#filters_box').append($content);
 
-      $content.find('.date').datetimepicker({
+      $content.find('.date, .datetime').datetimepicker({
         locale: RailsAdmin.I18n.locale,
         showTodayButton: true,
-        format: "DD MMMM YYYY"
-      });
-
-      $content.find('.datetime').datetimepicker({
-        locale: RailsAdmin.I18n.locale,
-        showTodayButton: true,
-        format: "DD MMMM YYYY"
+        format: options['datetimepicker_format']
       });
 
       $("hr.filters_box:hidden").show('slow');

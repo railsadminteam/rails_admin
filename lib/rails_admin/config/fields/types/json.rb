@@ -14,7 +14,7 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            value.present?? JSON.parse(value) : nil
+            value.present? ? JSON.parse(value) : nil
           end
 
           def parse_input(params)

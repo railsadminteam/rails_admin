@@ -27,10 +27,10 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            value.present?? abstract_model.object_id_from_string(value) : nil
+            value.present? ? abstract_model.object_id_from_string(value) : nil
           rescue => e
             unless ['BSON::InvalidObjectId', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
-              fail e
+              raise e
             end
           end
 

@@ -168,7 +168,10 @@ module RailsAdmin
       end
 
       def build_statement_for_date
-        range_filter(*get_filtering_duration)
+        start_date, end_date = get_filtering_duration
+        start_date = start_date.to_date if start_date
+        end_date = end_date.to_date if end_date
+        range_filter(start_date, end_date)
       end
 
       def build_statement_for_datetime_or_timestamp
@@ -221,7 +224,7 @@ module RailsAdmin
         end
 
         def between
-          [convert_to_date(@value[1]), convert_to_date(@value[2])]
+          [@value[1], @value[2]]
         end
 
         def default
@@ -230,17 +233,8 @@ module RailsAdmin
 
       private
 
-        def date_delocalizer
-          @datetime_delocalizer ||= RailsAdmin::Support::Datetime.new(:long, [:time, :formats])
-        end
-
-        def convert_to_date(value)
-          value.present? && date_delocalizer.parse_string(value).to_date
-        end
-
         def default_date
-          default_date_value = Array.wrap(@value).first
-          convert_to_date(default_date_value) rescue false
+          Array.wrap(@value).first
         end
       end
     end

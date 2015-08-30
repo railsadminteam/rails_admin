@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           def parser
-            @parser ||= RailsAdmin::Support::Datetime.new(date_format, i18n_scope)
+            @parser ||= RailsAdmin::Support::Datetime.new(strftime_format)
           end
 
           def parse_value(value)
@@ -26,6 +26,11 @@ module RailsAdmin
 
           register_instance_option :i18n_scope do
             [:time, :formats]
+          end
+
+          register_instance_option :strftime_format do
+            fallback = ::I18n.t(date_format, scope: i18n_scope, locale: :en)
+            ::I18n.t(date_format, scope: i18n_scope, default: fallback).to_s
           end
 
           register_instance_option :datepicker_options do
@@ -56,10 +61,6 @@ module RailsAdmin
 
           register_instance_option :partial do
             :form_datetime
-          end
-
-          register_instance_option :strftime_format do
-            parser.localized_format i18n_scope
           end
         end
       end
