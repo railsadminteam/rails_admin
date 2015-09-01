@@ -71,6 +71,7 @@ group :test do
   gem 'rubocop', '>= 0.25'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
+  gem 'pundit'
 end
 
 gemspec
