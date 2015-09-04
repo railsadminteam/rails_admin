@@ -1,5 +1,9 @@
 require 'rails_admin/config/fields/types/string'
-require 'moped'
+begin
+  require 'mongoid' rescue nil
+rescue Exception => e
+  # puts "[RailsAdmin] #{e.message}"
+end
 
 module RailsAdmin
   module Config
@@ -8,7 +12,14 @@ module RailsAdmin
         class BsonObjectId < RailsAdmin::Config::Fields::Types::String
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
-          OBJECT_ID = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId
+
+          OBJECT_ID ||= begin
+            if defined?(Moped::BSON)
+              Moped::BSON::ObjectId
+            elsif defined?(BSON::ObjectId)
+              BSON::ObjectId
+            end
+          end
 
           register_instance_option :label do
             label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
