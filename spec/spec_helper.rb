@@ -12,7 +12,7 @@ SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCo
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
-  minimum_coverage(92.20)
+  minimum_coverage(91.38)
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
@@ -67,8 +67,8 @@ RSpec.configure do |config|
 
   config.before do |example|
     DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
-    DatabaseCleaner.start
 
+    DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
     RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
