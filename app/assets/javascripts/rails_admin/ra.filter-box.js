@@ -30,9 +30,9 @@
           break;
         case 'date':
           additional_control =
-          '<input class="date additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input placeholder="-∞" class="date additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input placeholder="∞" class="date additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input size="20" class="date additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="20" placeholder="-∞" class="date additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="20" placeholder="∞" class="date additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
         case 'datetime':
         case 'timestamp':
           control = control || '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
@@ -47,9 +47,9 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control = additional_control ||
-          '<input class="datetime additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input placeholder="-∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input placeholder="∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input size="25" class="datetime additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
         case 'enum':
           var multiple_values = ((field_value instanceof Array) ? true : false)
@@ -118,15 +118,16 @@
 
   $(document).on('click', "#filters a", function(e) {
     e.preventDefault();
-    $.filters.append(
-      $(this).data('field-label'),
-      $(this).data('field-name'),
-      $(this).data('field-type'),
-      $(this).data('field-value'),
-      $(this).data('field-operator'),
-      $(this).data('field-options'),
-      $.now().toString().slice(6,11)
-    );
+    $.filters.append({
+      label: $(this).data('field-label'),
+      name:  $(this).data('field-name'),
+      type:  $(this).data('field-type'),
+      value: $(this).data('field-value'),
+      operator: $(this).data('field-operator'),
+      select_options: $(this).data('field-options'),
+      index: $.now().toString().slice(6,11),
+      datetimepicker_format: $(this).data('field-datetimepicker-format')
+    });
   });
 
   $(document).on('click', "#filters_box .delete", function(e) {
