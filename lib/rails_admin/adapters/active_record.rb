@@ -131,11 +131,8 @@ module RailsAdmin
           filters_dump.each do |_, filter_dump|
             wb = WhereBuilder.new(scope)
             field = fields.detect { |f| f.name.to_s == field_name }
-            if filter_dump[:v].is_a?(Array)
-              value = filter_dump[:v].map { |v| field.parse_value(v) }
-            else
-              value = field.parse_value(filter_dump[:v])
-            end
+            value = parse_field_value(field, filter_dump[:v])
+
             wb.add(field, value, (filter_dump[:o] || 'default'))
             # AND current filter statements to other filter statements
             scope = wb.build

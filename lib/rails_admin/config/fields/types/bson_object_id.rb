@@ -1,4 +1,5 @@
 require 'rails_admin/config/fields/types/string'
+require 'moped'
 
 module RailsAdmin
   module Config
@@ -7,6 +8,7 @@ module RailsAdmin
         class BsonObjectId < RailsAdmin::Config::Fields::Types::String
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
+          OBJECT_ID = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId
 
           register_instance_option :label do
             label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
@@ -27,7 +29,9 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            value.present? ? abstract_model.object_id_from_string(value) : nil
+            value.present? ? OBJECT_ID.from_string(value) : nil
+          rescue BSON::ObjectId::Invalid
+            nil
           rescue => e
             unless ['BSON::InvalidObjectId', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
               raise e

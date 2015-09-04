@@ -7,6 +7,10 @@ module RailsAdmin
         class Time < RailsAdmin::Config::Fields::Types::Datetime
           RailsAdmin::Config::Fields::Types.register(self)
 
+          def parse_value(value)
+            super(value).try(:utc)
+          end
+
           register_instance_option :strftime_format do
             '%H:%M'
           end
