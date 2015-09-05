@@ -152,6 +152,7 @@
 * [RailsAdminState](https://github.com/rs-pro/rails_admin_state): Manage state_machine states with rails_admin
 * [RailsAdminAasm](https://github.com/zcpdog/rails_admin_aasm): Manage aasm states with rails_admin
 * [RailsAdminToggleable](https://github.com/rs-pro/rails_admin_toggleable): Toggle boolean fields in index view
+* [RailsAdminSelectable](https://github.com/rs-pro/rails_admin_selectable): Select value in association fields on index view (Beta)
 
 #### Misc.
 * [RailsAdminSettings](https://github.com/rs-pro/rails_admin_settings): Application setting for rails_admin and mongoid
