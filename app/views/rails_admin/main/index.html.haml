@@ -75,7 +75,7 @@
     jQuery(function($) {
     $.filters.options.regional = {
     datePicker: {
-    dateFormat: #{raw I18n.t("admin.misc.filter_date_format", default: I18n.t("admin.misc.filter_date_format", locale: :en)).to_json},
+    dateFormat: #{raw I18n.t("admin.misc.filter_date_format", default: I18n.t("admin.misc.filter_date_format")).to_json},
     dayNames: #{raw RailsAdmin::Config::Fields::Types::Datetime.day_names.to_json},
     dayNamesShort: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_day_names.to_json},
     dayNamesMin: #{raw RailsAdmin::Config::Fields::Types::Datetime.abbr_day_names.to_json},
