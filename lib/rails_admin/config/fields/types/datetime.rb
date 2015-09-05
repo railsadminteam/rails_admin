@@ -70,6 +70,7 @@ module RailsAdmin
               '%d' => 'dd',         # Day of the month (01..31)
               '%D' => 'mm/dd/y',    # American date format mm/dd/yy
               '%e' => 'd',          # Day of the month (1..31)
+              '%-d' => 'd',         # Day of the month (1..31)
               '%F' => 'yy-mm-dd',   # ISO 8601 date format
               # "%H" => "??",         # Hour of the day, 24-hour clock (00..23)
               # "%I" => "??",         # Hour of the day, 12-hour clock (01..12)
@@ -81,7 +82,7 @@ module RailsAdmin
               '%Y' => 'yy',         # Year with century
               '%y' => 'y',          # Year without a century (00..99)
             }
-            localized_date_format.gsub(/%\w/) { |match| translations[match] }
+            localized_date_format.gsub(/%-?\w/) { |match| translations[match] }
           end
 
           def js_plugin_options
