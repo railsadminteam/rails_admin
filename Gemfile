@@ -39,7 +39,7 @@ group :test do
   gem 'capybara', '>= 2.1'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
-  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0']
+  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
   gem 'dragonfly', '~> 1.0'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
