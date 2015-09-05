@@ -171,8 +171,8 @@ module RailsAdmin
 
       def build_statement_for_datetime_or_timestamp
         start_date, end_date = get_filtering_duration
-        start_date = start_date.to_time.beginning_of_day if start_date
-        end_date = end_date.to_time.end_of_day if end_date
+        start_date = start_date.beginning_of_day if start_date
+        end_date = end_date.end_of_day if end_date
         range_filter(start_date, end_date)
       end
 
@@ -202,15 +202,15 @@ module RailsAdmin
         end
 
         def today
-          [Date.today, Date.today]
+          [Time.now.utc, Time.now.utc]
         end
 
         def yesterday
-          [Date.yesterday, Date.yesterday]
+          [Time.now.utc - 1.day, Time.now.utc - 1.day]
         end
 
         def this_week
-          [Date.today.beginning_of_week, Date.today.end_of_week]
+          [Time.now.utc.beginning_of_week, Time.now.utc.end_of_week]
         end
 
         def last_week
