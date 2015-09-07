@@ -1,9 +1,4 @@
 require 'rails_admin/config/fields/types/string'
-begin
-  require 'mongoid'
-rescue LoadError => e
-  puts "[RailsAdmin] #{e.message}"
-end
 
 module RailsAdmin
   module Config
