@@ -114,3 +114,13 @@ In `config/routes.rb` switch lines for devise and RA so they are in this order:
 devise_for :admins
 mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 ```
+
+***
+**No route matches [POST] for delete and update**
+
+The problem was in missing middleware. I have added
+
+```
+config.middleware.use Rack::MethodOverride
+```
+to ```/config/application.rb```
