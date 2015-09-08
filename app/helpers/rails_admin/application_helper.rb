@@ -90,7 +90,7 @@ module RailsAdmin
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
-      li_stack = %(<li class='nav-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
+      li_stack = %(<li class='dropdown-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
       li_stack
     end
 

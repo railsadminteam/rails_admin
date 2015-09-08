@@ -24,4 +24,6 @@ describe RailsAdmin::Config::Fields::Types::Uuid do
   it 'handles uuid string' do
     expect(@field.value).to eq uuid
   end
+
+  it_behaves_like 'a generic field type', :string_field, :uuid
 end

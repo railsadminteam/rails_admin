@@ -49,6 +49,12 @@ module RailsAdmin
             [method_name, delete_method, cache_method].compact
           end
 
+          register_instance_option :html_attributes do
+            {
+              required: required? && !value.present?,
+            }
+          end
+
           # virtual class
           def resource_url
             fail('not implemented')

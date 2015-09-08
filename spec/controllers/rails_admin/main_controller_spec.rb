@@ -325,6 +325,7 @@ describe RailsAdmin::MainController, type: :controller do
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
         end
+        field :refile_asset if defined?(Refile)
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
@@ -337,7 +338,7 @@ describe RailsAdmin::MainController, type: :controller do
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
-        },
+        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -351,7 +352,7 @@ describe RailsAdmin::MainController, type: :controller do
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
-        })
+        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do

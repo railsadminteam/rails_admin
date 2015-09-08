@@ -1,5 +1,6 @@
 appraise "rails-4.0" do
   gem 'rails', '~> 4.0.0'
+  gem 'sass-rails', '~> 4.0.3'
   gem 'devise', '>= 3.2'
   gem 'test-unit'
 end

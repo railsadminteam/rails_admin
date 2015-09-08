@@ -51,5 +51,14 @@ class FieldTest
   dragonfly_accessor :dragonfly_asset
   mount_uploader :carrierwave_asset, CarrierwaveUploader
 
+  if defined?(Refile)
+    extend Refile::Mongoid::Attachment
+
+    field :refile_asset_filename
+    field :refile_asset_size
+    field :refile_asset_content_type
+    attachment :refile_asset
+  end
+
   validates :short_text, length: {maximum: 255}
 end

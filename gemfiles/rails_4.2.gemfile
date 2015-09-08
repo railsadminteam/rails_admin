@@ -11,6 +11,7 @@ group :mongoid do
   gem "mongoid", "~> 4.0.0"
   gem "mongoid-paperclip", ">= 0.0.8", :require => "mongoid_paperclip"
   gem "carrierwave-mongoid", ">= 0.6.3", :require => "carrierwave/mongoid"
+  gem "refile-mongoid", ">= 0.0.1", :platforms => [:ruby_21, :ruby_22]
 end
 
 group :active_record do
@@ -42,7 +43,7 @@ group :test do
   gem "capybara", ">= 2.1"
   gem "carrierwave", ">= 0.8"
   gem "coveralls"
-  gem "database_cleaner", [">= 1.2", "!= 1.4.0"]
+  gem "database_cleaner", [">= 1.2", "!= 1.4.0", "!= 1.5.0"]
   gem "dragonfly", "~> 1.0"
   gem "factory_girl", ">= 4.2"
   gem "generator_spec", ">= 0.8"
@@ -55,6 +56,11 @@ group :test do
   gem "rubocop", "~> 0.31.0"
   gem "simplecov", ">= 0.9", :require => false
   gem "timecop", ">= 0.5"
+
+  platforms :ruby_21, :ruby_22 do
+    gem "refile", "~> 0.5", :require => "refile/rails"
+    gem "refile-mini_magick", ">= 0.1.0"
+  end
 end
 
 gemspec :path => "../"

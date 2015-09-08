@@ -1,9 +1,9 @@
 module RailsAdmin
   class Version
-    MAJOR = 1
-    MINOR = 0
+    MAJOR = 0
+    MINOR = 7
     PATCH = 0
-    PRE = 'beta'
+    PRE = nil
 
     class << self
       # @return [String]
