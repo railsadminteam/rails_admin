@@ -13,7 +13,7 @@ SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCo
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
-  minimum_coverage(91.65)
+  minimum_coverage(91.38)
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
@@ -24,6 +24,8 @@ require 'factories'
 require 'database_cleaner'
 require 'support/pundit_matcher.rb'
 require "orm/#{CI_ORM}"
+
+Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true

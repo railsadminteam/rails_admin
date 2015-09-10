@@ -7,10 +7,15 @@ module RailsAdmin
         class String < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types.register(self)
 
+          def input_size
+            [50, length.to_i].reject(&:zero?).min
+          end
+
           register_instance_option :html_attributes do
             {
+              required: required?,
               maxlength: length,
-              size: [50, length.to_i].min,
+              size: input_size,
             }
           end
 

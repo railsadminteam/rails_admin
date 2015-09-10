@@ -16,7 +16,10 @@ en:
       is_exactly: Is exactly
       starts_with: Starts with
       ends_with: Ends with
+      too_many_objects: "Too many objects, use search box above"
+      no_objects: "No objects found"
     loading: "Loading..."
+    toggle_navigation: Toggle navigation
     home:
       name: "Home"
     pagination:

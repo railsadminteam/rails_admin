@@ -124,7 +124,9 @@ module RailsAdmin
         end
 
         register_instance_option :html_attributes do
-          {}
+          {
+            required: required?,
+          }
         end
 
         register_instance_option :default_value do

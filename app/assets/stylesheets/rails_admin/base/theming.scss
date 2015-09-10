@@ -3,6 +3,8 @@
   Keep it clean, people
 */
 
+$avatar-size: 30px;
+
 body.rails_admin {
 
   .thumbnail {
@@ -12,12 +14,18 @@ body.rails_admin {
   /* room for upper navbar */
   padding-top: $navbar-height;
 
-  /* Application name */
-  .navbar .brand {
-    small {
-      color:#9d261d;
-      font-weight:bold;
-      line-height: 1;
+  .navbar {
+    .edit_user_root_link {
+      position: relative;
+
+      img {
+        position: absolute;
+        top: ((40px - $avatar-size) / 2);
+
+        & + span {
+          margin-left: ($avatar-size + 5px);
+        }
+      }
     }
   }
 
@@ -60,6 +68,18 @@ body.rails_admin {
     /* hide hidden fields controls by default */
     .control-group .hidden_type {
       display:none;
+    }
+
+    .control-group {
+      .img-thumbnail {
+        margin-bottom: 10px;
+      }
+
+      .btn-remove-image {
+        &.btn-info {
+          margin-top: 10px;
+        }
+      }
     }
 
     legend {
@@ -107,11 +127,19 @@ body.rails_admin {
       display:block;
     }
 
+    /* Put form controls above siblings to make them accessible */
+    .controls {
+      z-index: 1;
+    }
+
     /* nested forms */
     .tab-content {
+      clear: both;
+
       .tab-pane {
         @include clearfix;
         border-left: 5px solid #049cdb;
+        position: relative;
 
         fieldset {
           padding-top: 30px;
@@ -124,12 +152,18 @@ body.rails_admin {
 
         & > .remove_nested_fields,
         & > .remove_nested_one_fields {
-          display:none;
+          display:block;
+          opacity: 0;
+          position: absolute;
+          top: 0px;
+          left: 5px;
+          -webkit-transition: opacity .15s ease;
+          transition: opacity .15s ease;
         }
         &:hover > .remove_nested_fields,
         &:hover > .remove_nested_one_fields,
         & > .remove_nested_one_fields.active {
-          display:block;
+          opacity: 1;
         }
       }
     }
@@ -184,8 +218,12 @@ body.rails_admin {
   }
 
   /* tab links should match icon color */
-  .nav.nav-tabs li.icon a {
-    color: #000;
+  .nav.nav-tabs {
+    margin-bottom: 20px;
+
+    li.icon a {
+      color: #000;
+    }
   }
 
   /* Table cells behaviour */
@@ -284,8 +322,16 @@ body.rails_admin {
   }
 }
 
-@media screen and (min-width: $screen-sm-min) {
+@media screen and (min-width: $grid-float-breakpoint) {
   body.rails_admin {
+    .navbar {
+      .edit_user_root_link {
+        img {
+          top: (($navbar-height - $avatar-size) / 2);
+        }
+      }
+    }
+
     .sidebar-nav {
       position: fixed;
       top: $navbar-height;

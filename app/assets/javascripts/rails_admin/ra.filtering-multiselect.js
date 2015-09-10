@@ -24,8 +24,7 @@
         chooseAll: "Choose all",
         chosen: "Chosen records",
         clearAll: "Clear all",
-        remove: "Remove",
-        selectChoice: "Select your choice(s) and click"
+        remove: "Remove"
       },
       searchDelay: 400,
       remote_source: null,
@@ -101,6 +100,13 @@
       this.selection.wrap('<div class="wrapper"/>');
 
       this.element.css({display: "none"});
+
+      this.tooManyObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("too_many_objects"));
+      this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("no_objects"))
+
+      if(this.options.xhr){
+        this.collection.append(this.tooManyObjectsPlaceholder);
+      }
     },
 
     _bindEvents: function() {
@@ -164,13 +170,21 @@
       var widget = this;
       widget._query(val, function(matches) {
         var i;
-        widget.collection.html('');
+        var filtered = [];
         for (i in matches) {
           if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
+            filtered.push(i);
+          }
+        }
+        if (filtered.length > 0) {
+          widget.collection.html('');
+          for (i in filtered) {
             widget.collection.append(
               $('<option></option>').attr('value', matches[i].id).attr('title', matches[i].label).text(matches[i].label)
             );
           }
+        } else {
+          widget.collection.html(widget.noObjectsPlaceholder);
         }
       });
     },
@@ -209,9 +223,10 @@
               matches.push({id: i, label: this._cache[i]});
             }
           }
+          success.apply(this, [matches]);
+        } else {
+          this.collection.html(this.tooManyObjectsPlaceholder);
         }
-
-        success.apply(this, [matches]);
 
       } else {
 

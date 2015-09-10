@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Types::Date do
+  it_behaves_like 'a generic field type', :date_field, :date
+
   describe '#parse_input' do
     before :each do
       @object = FactoryGirl.create(:field_test)
@@ -50,6 +52,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
       expect(@object.date_field).to eq(::Date.parse(@time.to_s))
     end
   end
+
   describe 'default value' do
     before :each do
       RailsAdmin.config FieldTest do

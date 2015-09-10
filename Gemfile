@@ -1,48 +1,29 @@
 source 'https://rubygems.org'
 
-case ENV['RAILS_VERSION']
-when '4.0'
-  gem 'rails', '~> 4.0.0'
-  gem 'devise', '>= 3.2'
-  gem 'test-unit'
-when '4.1'
-  gem 'rails', '~> 4.1.0'
-  gem 'devise', '>= 3.2'
-else
-  gem 'rails', '~> 4.2.0'
-  gem 'sass-rails', '~> 5.0'
-  gem 'devise', '>= 3.4'
-end
+gem 'appraisal', '>= 2.0'
+gem 'devise'
 
-case ENV['CI_ORM']
-when 'mongoid'
-  gem 'mongoid', '~> 4.0.0.beta1'
+group :mongoid do
+  gem 'mongoid', '~> 4.0.0'
   gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-else
+  gem 'refile-mongoid', '>= 0.0.1', platforms: [:ruby_21, :ruby_22]
+end
+
+group :active_record do
   platforms :jruby do
-    case ENV['CI_DB_ADAPTER']
-    when 'mysql'
-      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-      gem 'jdbc-mysql', '>= 5.1'
-    when 'postgresql'
-      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-      gem 'jdbc-postgres', '>= 9.2'
-    else
-      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
-      gem 'jdbc-sqlite3', '>= 3.7'
-    end
+    gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
+    gem 'jdbc-mysql', '>= 5.1'
+    gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
+    gem 'jdbc-postgres', '>= 9.2'
+    gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+    gem 'jdbc-sqlite3', '>= 3.7'
   end
 
   platforms :ruby, :mswin, :mingw do
-    case ENV['CI_DB_ADAPTER']
-    when 'mysql2'
-      gem 'mysql2', '~> 0.3.14'
-    when 'postgresql'
-      gem 'pg', '>= 0.14'
-    else
-      gem 'sqlite3', '>= 1.3'
-    end
+    gem 'mysql2', '~> 0.3.14'
+    gem 'pg', '>= 0.14'
+    gem 'sqlite3', '>= 1.3'
   end
 
   gem 'paper_trail', '~> 3.0'
@@ -58,20 +39,24 @@ group :test do
   gem 'capybara', '>= 2.1'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
-  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0']
+  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
   gem 'dragonfly', '~> 1.0'
   gem 'factory_girl', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
-  gem 'paperclip', '>= 3.4'
+  gem 'paperclip', ['>= 3.4', '!= 4.3.0']
   gem 'poltergeist', '~> 1.5'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
-  gem 'rubocop', '>= 0.25'
+  gem 'rubocop', '~> 0.31.0'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
   gem 'pundit'
+  platforms :ruby_21, :ruby_22 do
+    gem 'refile', '~> 0.5', require: 'refile/rails'
+    gem 'refile-mini_magick', '>= 0.1.0'
+  end
 end
 
 gemspec

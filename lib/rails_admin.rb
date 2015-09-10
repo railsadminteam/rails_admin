@@ -8,7 +8,7 @@ require 'rails_admin/extensions/pundit'
 require 'rails_admin/extensions/paper_trail'
 require 'rails_admin/extensions/history'
 require 'rails_admin/support/csv_converter'
-require 'rails_admin/support/core_extensions'
+require 'rails_admin/support/hash_helper'
 
 module RailsAdmin
   # Setup RailsAdmin

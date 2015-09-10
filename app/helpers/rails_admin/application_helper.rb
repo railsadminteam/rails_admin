@@ -35,7 +35,12 @@ module RailsAdmin
       return nil unless _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
       return nil unless (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
-      link_to _current_user.email, url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main')
+      link_to url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main') do
+        html = []
+        html << image_tag("#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: '') if _current_user.email.present?
+        html << content_tag(:span, _current_user.email)
+        html.join.html_safe
+      end
     end
 
     def logout_path
@@ -85,7 +90,7 @@ module RailsAdmin
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
-      li_stack = %(<li class='nav-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
+      li_stack = %(<li class='dropdown-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
       li_stack
     end
 

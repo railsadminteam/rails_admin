@@ -35,4 +35,6 @@ describe RailsAdmin::Config::Fields::Types::Json do
       expect(field.class).to eq RailsAdmin::Config::Fields::Types::Json
     end
   end
+
+  it_behaves_like 'a generic field type', :text, :json
 end

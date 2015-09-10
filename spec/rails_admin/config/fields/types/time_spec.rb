@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Types::Time do
+  it_behaves_like 'a generic field type', :time_field, :time
+
   describe '#parse_input' do
     before :each do
       @object = FactoryGirl.create(:field_test)

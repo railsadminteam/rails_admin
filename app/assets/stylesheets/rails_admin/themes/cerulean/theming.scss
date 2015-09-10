@@ -1,97 +1,133 @@
-// Bootswatch.less
-// Swatch: Cerulean
-// Version: 2.0.2
-// -----------------------------------------------------
+// Cerulean 3.3.1
+// Bootswatch
+// .rails_admin .sidebar-nav added to prevent same link color
+// ------------------------------------------------------------------
 
-// TYPOGRAPHY
-// -----------------------------------------------------
-
-@import url(https://fonts.googleapis.com/css?family=Telex);
-
-.navbar, .subnav {
-	font-family: $headingsFontFamily;
+@mixin btn-shadow($color){
+  @include gradient-vertical-three-colors(lighten($color, 8%), $color, 60%, darken($color, 4%));
+  filter: none;
+  border-bottom: 1px solid darken($color, 10%);
 }
 
-// NAVBAR
-// -----------------------------------------------------
+// Navbar =====================================================================
 
-.navbar-inner {
-  @include gradient-vertical-three-colors($navbarBackground, $navbarBackground, 0.9, $navbarBackgroundHighlight);
+.navbar {
+  @include btn-shadow($navbar-default-bg);
+  filter: none;
+  @include box-shadow(0 1px 10px rgba(0, 0, 0, 0.1));
 }
 
-.navbar .nav .active > a,
-.navbar .nav .active > a:hover {
-  background-color: $navbarBackground;
-  background-color: rgba(0,0,0,.2);
+.navbar.navbar-default .badge {
+      background-color: #fff;
+      color: $navbar-default-bg;
+  }
+
+.navbar.navbar-inverse , .rails_admin .sidebar-nav  {
+    @include gradient-vertical-three-colors(lighten($navbar-inverse-bg, 8%), lighten($navbar-inverse-bg, 4%), 60%, darken($navbar-inverse-bg, 2%));
+    filter: none;
+    border-bottom: 1px solid darken($navbar-inverse-bg, 10%);
+  }
+
+
+.navbar.navbar-inverse .badge {
+  background-color: #fff;
+  color: $navbar-inverse-bg;
 }
 
-.navbar .search-query {
-	border: 1px solid darken($linkColor, 10%);
-}
+.navbar .navbar-nav > li > a,
+.navbar .navbar-brand {
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  }
 
-// responsive menu colors
 
-.navbar .nav-collapse.in > .nav > li .dropdown-menu a {
-	color: $white;
+@media (max-width: $grid-float-breakpoint-max) {
 
-	&:hover {
-		color: $white;
-	}
-}
+  .navbar {
 
-.navbar .nav-collapse.in .nav li > a {
-	color: $white;
-
-	&:hover {
-		background-color: #2B7CAC;
-	}
-}
-
-.btn-navbar:hover {
-    background-color: darken($white, 20%);
-}
-
-// BUTTONS
-// -----------------------------------------------------
-
-.btn {
-  @include gradient-vertical-three-colors($white, $white, 0.05, darken($white, 0%));
-  $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-  @include box-shadow($shadow);
-  
-  &:hover {
-  	background-position: 0 0;
+    .dropdown-header {
+      color: #fff;
+    }
   }
 }
 
-.btn-primary {
-  @include buttonBackground(lighten($btnPrimaryBackground, 5%), $btnPrimaryBackground);
+// Buttons ====================================================================
+
+.btn {
+
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+
+  .caret {
+    border-top-color: #fff;
+  }
 }
 
-.btn-info {
-  @include buttonBackground(lighten($btnInfoBackground, 5%), $btnInfoBackground);
+.btn-default {
+
+  @include btn-shadow($btn-default-bg);
+
+  &:hover {
+    color: $btn-default-color;
+  }
+
+  .caret {
+    border-top-color: $text-color;
+  }
+}
+
+.btn-default {
+  @include btn-shadow($btn-default-bg);
+}
+
+.btn-primary {
+  @include btn-shadow($btn-primary-bg);
 }
 
 .btn-success {
-  @include buttonBackground(lighten($btnSuccessBackground, 5%), $btnSuccessBackground);
+  @include btn-shadow($btn-success-bg);
+}
+
+.btn-info {
+  @include btn-shadow($btn-info-bg);
 }
 
 .btn-warning {
-  @include buttonBackground(lighten($btnWarningBackground, 5%), $btnWarningBackground);
+  @include btn-shadow($btn-warning-bg);
 }
 
 .btn-danger {
-  @include buttonBackground(lighten($btnDangerBackground, 5%), $btnDangerBackground);
+  @include btn-shadow($btn-danger-bg);
 }
 
-.btn-inverse {
-  @include buttonBackground(lighten($btnInverseBackground, 5%), $btnInverseBackground);
+// Typography =================================================================
+
+// Tables =====================================================================
+table,
+.table {
+  > thead > tr > th {
+
+    color: $headings-color;
+  }
+
 }
 
-// ICONS
-// -----------------------------------------------------
+// Forms ======================================================================
 
-// Make icons gray
-i[class^="icon-"]{
-	opacity: 0.8;
+// Navs =======================================================================
+
+// Indicators =================================================================
+
+// Progress bars ==============================================================
+
+// Containers =================================================================
+
+.panel-primary,
+.panel-success,
+.panel-warning,
+.panel-danger,
+.panel-info {
+
+  .panel-heading,
+  .panel-title {
+    color: #fff;
+  }
 }

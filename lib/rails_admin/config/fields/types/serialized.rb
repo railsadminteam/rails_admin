@@ -14,7 +14,7 @@ module RailsAdmin
 
           def parse_input(params)
             return unless params[name].is_a?(::String)
-            params[name] = (params[name].blank? ? nil : (YAML.safe_load(params[name]) || nil))
+            params[name] = (params[name].blank? ? nil : (SafeYAML.load(params[name]) || nil))
           end
         end
       end
