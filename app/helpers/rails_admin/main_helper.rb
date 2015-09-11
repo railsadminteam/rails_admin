@@ -35,5 +35,50 @@ module RailsAdmin
       end
       sets
     end
+
+    def filterable_fields
+      @filterable_fields ||= @model_config.list.fields.select(&:filterable?)
+    end
+
+    def ordered_filters
+      return @ordered_filters if @ordered_filters.present?
+      @index = 0
+      @ordered_filters = (params[:f] || @model_config.list.filters).inject({}) do |memo, filter|
+        field_name = filter.is_a?(Array) ? filter.first : filter
+        (filter.is_a?(Array) ? filter.last : {(@index += 1) => {'v' => ''}}).each do |index, filter_hash|
+          if filter_hash['disabled'].blank?
+            memo[index] = {field_name => filter_hash}
+          else
+            params[:f].delete(field_name)
+          end
+        end
+        memo
+      end.to_a.sort_by(&:first)
+    end
+
+    def ordered_filter_string
+      @ordered_filter_string ||= ordered_filters.map do |duplet|
+        options = {index: duplet[0]}
+        filter_for_field = duplet[1]
+        filter_name = filter_for_field.keys.first
+        filter_hash = filter_for_field.values.first
+        unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
+          fail "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
+        end
+        case field.type
+        when :enum
+          options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
+        when :date, :datetime, :time
+          options[:datetimepicker_format] = field.parser.to_momentjs
+        end
+        options[:label] = field.label
+        options[:name]  = field.name
+        options[:type]  = field.type
+        options[:value] = filter_hash['v']
+        options[:label] = field.label
+        options[:operator] = filter_hash['o']
+        %{$.filters.append(#{options.to_json});}
+      end.join("\n").html_safe if ordered_filters
+    end
   end
 end

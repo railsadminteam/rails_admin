@@ -301,6 +301,10 @@ module RailsAdmin
           (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
         end
 
+        def parse_value(value)
+          value
+        end
+
         def parse_input(_params)
           # overriden
         end

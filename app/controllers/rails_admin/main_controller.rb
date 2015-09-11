@@ -34,7 +34,6 @@ module RailsAdmin
         scope = scope.merge(auth_scope)
       end
       scope = scope.instance_eval(&additional_scope) if additional_scope
-
       get_collection(model_config, scope, pagination)
     end
 
@@ -51,12 +50,10 @@ module RailsAdmin
     def get_sort_hash(model_config)
       abstract_model = model_config.abstract_model
       params[:sort] = params[:sort_reverse] = nil unless model_config.list.fields.collect { |f| f.name.to_s }.include? params[:sort]
-
       params[:sort] ||= model_config.list.sort_by.to_s
       params[:sort_reverse] ||= 'false'
 
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
-
       column = begin
         if field.nil? || field.sortable == true # use params[:sort] on the base table
           "#{abstract_model.table_name}.#{params[:sort]}"
@@ -88,11 +85,15 @@ module RailsAdmin
       end
     end
 
+    def visible_fields(action, model_config = @model_config)
+      model_config.send(action).with(controller: self, view: view_context, object: @object).visible_fields
+    end
+
     def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
       return unless target_params.present?
-      fields = model_config.send(action).with(controller: self, view: view_context, object: @object).visible_fields
+      fields = visible_fields(action, model_config)
       allowed_methods = fields.collect(&:allowed_methods).flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
-      fields.each { |f| f.parse_input(target_params) }
+      fields.each { |field|  field.parse_input(target_params) }
       target_params.slice!(*allowed_methods)
       target_params.permit! if target_params.respond_to?(:permit!)
       fields.select(&:nested_form).each do |association|

@@ -1,5 +1,13 @@
 # RailsAdmin Changelog
 
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v0.7.0...HEAD)
+
+## [Master](https://github.com/sferik/rails_admin/tree/master)
+
+### Changed
+- Replace old jQueryUI datepicker with jQuery Bootstrap datetimepicker ([#2391](https://github.com/sferik/rails_admin/pull/2391))
+- The L10n translation `admin.misc.filter_date_format` datepicker search filters, has been dropped in favor of field oriented configuration ([#2391](https://github.com/sferik/rails_admin/pull/2391))
+
 ## [0.7.0](https://github.com/sferik/rails_admin/tree/v0.7.0) - 2015-08-16
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v0.6.8...v0.7.0)
