@@ -1,4 +1,5 @@
 require 'spec_helper'
+include Pundit
 
 class ApplicationPolicy
   attr_reader :user, :record
@@ -6,30 +7,6 @@ class ApplicationPolicy
   def initialize(user, record)
     @user = user
     @record = record
-  end
-
-  def new?
-    user.roles.include? :admin
-  end
-
-  def show?
-    true
-  end
-
-  def update?
-    user.roles.include? :admin
-  end
-
-  def create?
-    user.roles.include? :admin
-  end
-
-  def edit?
-    user.roles.include? :admin
-  end
-
-  def destroy?
-    user.roles.include? :admin
   end
 
   def rails_admin?(action)
@@ -80,48 +57,6 @@ class PlayerPolicy < ApplicationPolicy
     else
       fail ::Pundit::NotDefinedError.new("unable to find policy #{action} for #{record}.")
     end
-  end
-end
-
-describe PlayerPolicy do
-  before do
-    RailsAdmin.config do |c|
-      c.authorize_with(:pundit)
-      c.authenticate_with { warden.authenticate! scope: :user }
-      c.current_user_method(&:current_user)
-    end
-    @user = FactoryGirl.create :user
-    @player_model = RailsAdmin::AbstractModel.new(Player)
-    login_as @user
-  end
-
-  subject { PlayerPolicy.new(user, player) }
-
-  let(:player) { @player_model }
-
-  describe 'for a user with no roles' do
-    let(:user) { @user }
-
-    it { should permit(:show)    }
-    it { should_not permit(:create)  }
-    it { should_not permit(:new)     }
-    it { should_not permit(:update)  }
-    it { should_not permit(:edit)    }
-    it { should_not permit(:destroy) }
-  end
-
-  describe 'for an admin' do
-    before do
-      @user.update_attributes(roles: [:admin, :read_player])
-    end
-
-    let(:user) { @user }
-    it { should permit(:show)    }
-    it { should permit(:create)  }
-    it { should permit(:new)     }
-    it { should permit(:update)  }
-    it { should permit(:edit)    }
-    it { should permit(:destroy) }
   end
 end
 
@@ -195,7 +130,7 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
-      click_button 'Save' # first(:button, "Save").click
+      click_button 'Save'
       is_expected.not_to have_content('Edit')
 
       @player = RailsAdmin::AbstractModel.new('Player').first
