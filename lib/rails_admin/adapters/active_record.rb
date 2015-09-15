@@ -211,7 +211,12 @@ module RailsAdmin
               return
             end
           end
-          ["(LOWER(#{@column}) #{like_operator} ?)", @value]
+
+          if ar_adapter == 'postgresql'
+            ["(#{@column} ILIKE ?)", @value]
+          else
+            ["(LOWER(#{@column}) LIKE ?)", @value]
+          end
         end
 
         def build_statement_for_enum
@@ -221,10 +226,6 @@ module RailsAdmin
 
         def ar_adapter
           ::ActiveRecord::Base.connection.adapter_name.downcase
-        end
-
-        def like_operator
-          ar_adapter == 'postgresql' ? 'ILIKE' : 'LIKE'
         end
       end
     end

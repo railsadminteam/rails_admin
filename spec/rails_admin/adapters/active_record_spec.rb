@@ -3,7 +3,11 @@ require 'timecop'
 
 describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   before do
-    @like = ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'postgresql' ? 'ILIKE' : 'LIKE'
+    @like = if ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'postgresql'
+              '(field ILIKE ?)'
+            else
+              '(LOWER(field) LIKE ?)'
+            end
   end
 
   describe '#associations' do
@@ -273,16 +277,16 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     it 'supports string type query' do
       expect(abstract_model.send(:build_statement, :field, :string, '', nil)).to be_nil
       expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'was')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq(["(LOWER(field) #{@like} ?)", '%foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq(["(LOWER(field) #{@like} ?)", '%foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq(["(LOWER(field) #{@like} ?)", 'foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq(["(LOWER(field) #{@like} ?)", '%foo'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq(["(LOWER(field) #{@like} ?)", 'foo'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq([@like, '%foo%'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq([@like, '%foo%'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq([@like, 'foo%'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq([@like, '%foo'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq([@like, 'foo'])
     end
 
     it 'performs case-insensitive searches' do
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq(["(LOWER(field) #{@like} ?)", '%foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'FOO', 'default')).to eq(["(LOWER(field) #{@like} ?)", '%foo%'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq([@like, '%foo%'])
+      expect(abstract_model.send(:build_statement, :field, :string, 'FOO', 'default')).to eq([@like, '%foo%'])
     end
 
     it 'supports date type query' do
