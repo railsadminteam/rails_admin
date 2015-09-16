@@ -9,54 +9,58 @@ class ApplicationPolicy
     @record = record
   end
 
-  def rails_admin?(action)
-    case action
-    when :dashboard
-      user.roles.include? :admin
-    when :index
-      false
-    when :show
-      user.roles.include? :admin
-    when :new
-      user.roles.include? :admin
-    when :edit
-      user.roles.include? :admin
-    when :destroy
-      false
-    when :export
-      user.roles.include? :admin
-    when :history
-      user.roles.include? :admin
-    when :show_in_app
-      user.roles.include? :admin
-    else
-      fail ::Pundit::NotDefinedError.new("unable to find policy #{action} for #{record}.")
-    end
+  def show
+    user.roles.include? :admin
+  end
+
+  def destroy
+    false
+  end
+
+  def history
+    user.roles.include? :admin
+  end
+
+  def show_in_app
+    user.roles.include? :admin
+  end
+
+  def dashboard
+    user.roles.include? :admin
+  end
+
+  def index
+    false
+  end
+
+  def new
+    user.roles.include? :admin
+  end
+
+  def edit
+    user.roles.include? :admin
+  end
+
+  def export
+    user.roles.include? :admin
   end
 end
 
 class PlayerPolicy < ApplicationPolicy
-  def rails_admin?(action)
-    case action
-    when :index
-      user.roles.include? :admin
-    when :show
-      true
-    when :new
-      (user.roles.include?(:create_player) || user.roles.include?(:admin) || user.roles.include?(:manage_player))
-    when :edit
-      (user.roles.include? :manage_player)
-    when :destroy
-      (user.roles.include? :manage_player)
-    when :export
-      user.roles.include? :admin
-    when :history
-      user.roles.include? :admin
-    when :show_in_app
-      (user.roles.include?(:admin) || user.roles.include?(:manage_player))
-    else
-      fail ::Pundit::NotDefinedError.new("unable to find policy #{action} for #{record}.")
-    end
+  def new
+    (user.roles.include?(:create_player) || user.roles.include?(:admin) || user.roles.include?(:manage_player))
+  end
+
+  def edit
+    (user.roles.include? :manage_player)
+  end
+
+  def destroy
+    (user.roles.include? :manage_player)
+  end
+
+  def index
+    user.roles.include? :admin
   end
 end
 
