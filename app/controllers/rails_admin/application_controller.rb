@@ -11,8 +11,6 @@ module RailsAdmin
   end
 
   class ApplicationController < Config.parent_controller.constantize
-    newrelic_ignore if defined?(NewRelic)
-
     before_filter :_authenticate!
     before_filter :_authorize!
     before_filter :_audit!
