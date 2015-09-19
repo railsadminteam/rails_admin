@@ -1,12 +1,24 @@
 # RailsAdmin Changelog
 
+## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
+
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v0.7.0...HEAD)
 
-## [Master](https://github.com/sferik/rails_admin/tree/master)
+### Added
+- Pundit integration([#2399](https://github.com/sferik/rails_admin/pull/2399) by Team CodeBenders, RGSoC'15)
+- Refile support([#2385](https://github.com/sferik/rails_admin/pull/2385))
 
 ### Changed
+- Improve efficiency of filter query in Postgres([#2401](https://github.com/sferik/rails_admin/pull/2401))
 - Replace old jQueryUI datepicker with jQuery Bootstrap datetimepicker ([#2391](https://github.com/sferik/rails_admin/pull/2391))
+- Turn Hash#symbolize into a helper to prevent namespace conflict([#2388](https://github.com/sferik/rails_admin/pull/2388))
+
+### Deprecated
 - The L10n translation `admin.misc.filter_date_format` datepicker search filters, has been dropped in favor of field oriented configuration ([#2391](https://github.com/sferik/rails_admin/pull/2391))
+
+### Fixed
+- Add button for nested-many form in modal disappeared on click([#2372](https://github.com/sferik/rails_admin/issues/2372), [#2383](https://github.com/sferik/rails_admin/pull/2383))
+
 
 ## [0.7.0](https://github.com/sferik/rails_admin/tree/v0.7.0) - 2015-08-16
 
