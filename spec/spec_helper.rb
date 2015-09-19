@@ -6,7 +6,6 @@ PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 require 'simplecov'
 require 'coveralls'
-require 'pundit/rspec'
 
 SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
 
@@ -22,7 +21,6 @@ require 'rspec/rails'
 require 'factory_girl'
 require 'factories'
 require 'database_cleaner'
-require 'support/pundit_matcher.rb'
 require "orm/#{CI_ORM}"
 
 Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }

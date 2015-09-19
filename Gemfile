@@ -47,12 +47,13 @@ group :test do
   gem 'mini_magick', '>= 3.4'
   gem 'paperclip', ['>= 3.4', '!= 4.3.0']
   gem 'poltergeist', '~> 1.5'
+  gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
   gem 'rubocop', '~> 0.31.0'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
-  gem 'pundit'
+
   platforms :ruby_21, :ruby_22 do
     gem 'refile', '~> 0.5', require: 'refile/rails'
     gem 'refile-mini_magick', '>= 0.1.0'
