@@ -64,17 +64,17 @@ The code above didn't work for me. There were some join models created with the 
 
 ```ruby
 def block_ids=(ids)
-    unless (ids = ids.map(&:to_i).select { |i| i>0 }) == (current_ids = block_grid_associations.map(&:block_id))
-      (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
-      ids.each_with_index do |id, index|
-        if current_ids.include? (id)
-          block_grid_associations.select { |b| b.block_id == id }.first.position = (index+1)
-        else
-          block_grid_associations.build({:block_id => id, :position => (index+1)})
-        end
+  unless (ids = ids.map(&:to_i).select { |i| i>0 }) == (current_ids = block_grid_associations.map(&:block_id))
+    (current_ids - ids).each { |id| block_grid_associations.select{|b|b.block_id == id}.first.mark_for_destruction }
+    ids.each_with_index do |id, index|
+      if current_ids.include? (id)
+        block_grid_associations.select { |b| b.block_id == id }.first.position = (index+1)
+      else
+        block_grid_associations.build({:block_id => id, :position => (index+1)})
       end
     end
   end
+end
 ```
 
 [[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
