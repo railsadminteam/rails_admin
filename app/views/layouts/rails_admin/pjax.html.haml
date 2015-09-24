@@ -7,7 +7,7 @@
   %h1= @page_name
 - flash && flash.each do |key, value|
   .alert.alert-dismissible{class: flash_alert_class(key)}
-+   %button.close{type: 'button', :'data-dismiss' => "alert"} &times;
+    %button.close{type: 'button', :'data-dismiss' => "alert"} &times;
     = value
 = breadcrumb
 %ul.nav.nav-tabs
