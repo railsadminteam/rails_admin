@@ -26,6 +26,20 @@ class ModelName < ActiveRecord::Base
 end
 ```
 
+* Or in concern separate files:
+
+_app/models/concerns/model_name_admin.rb_
+```ruby
+module ModelNameAdmin
+  extend ActiveSupport::Concern
+  included do
+    rails_admin do
+      ...
+    end
+  end
+end
+```
+Don't forget to include it in model file: ```include ModelNameAdmin```
 This is your choice to make:
 * The initializer is loaded once at startup (modifications will show up when restarting the application) and may slow down your application startup, but all RailsAdmin configuration will stay in one place.
 * Models are reloaded at each request in development mode (when modified), which may smooth your RailsAdmin development workflow.
