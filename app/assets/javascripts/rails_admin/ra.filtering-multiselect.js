@@ -180,10 +180,10 @@
 
       this.element.find("option").each(function(i, option) {
         if (option.selected) {
-          widget._cache[option.value] = option.innerHTML;
+          widget._cache['o_' + option.value] = {id: option.value, value: option.innerHTML};
           $(option).clone().appendTo(widget.selection).attr("selected", false).attr("title", $(option).text());
         } else {
-          widget._cache[option.value] = option.innerHTML;
+          widget._cache['o_' + option.value] = {id: option.value, value: option.innerHTML};
           $(option).clone().appendTo(widget.collection).attr("selected", false).attr("title", $(option).text());
         }
       });
@@ -206,7 +206,8 @@
         if (!this.options.xhr) {
           for (i in this._cache) {
             if (this._cache.hasOwnProperty(i)) {
-              matches.push({id: i, label: this._cache[i]});
+              option = this._cache[i];
+              matches.push({id: option.id, label: option.value});
             }
           }
         }
@@ -231,8 +232,9 @@
           query = new RegExp(query + '.*', 'i');
 
           for (i in this._cache) {
-            if (this._cache.hasOwnProperty(i) && query.test(this._cache[i])) {
-              matches.push({id: i, label: this._cache[i]});
+            if (this._cache.hasOwnProperty(i) && query.test(this._cache[i]['value'])) {
+              option = this._cache[i];
+              matches.push({id: option.id, label: option.value});
             }
           }
 
