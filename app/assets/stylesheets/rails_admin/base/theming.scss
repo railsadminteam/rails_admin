@@ -335,7 +335,7 @@ body.rails_admin {
       position: fixed;
       top: $navbar-height;
       bottom: 0;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
   }
 }
