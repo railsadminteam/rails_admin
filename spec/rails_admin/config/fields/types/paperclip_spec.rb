@@ -12,7 +12,7 @@ describe RailsAdmin::Config::Fields::Types::Paperclip do
     end
 
     it 'does not break' do
-      expect{ RailsAdmin.config(PaperclipTest).fields }.not_to raise_error
+      expect { RailsAdmin.config(PaperclipTest).fields }.not_to raise_error
     end
   end
 end
