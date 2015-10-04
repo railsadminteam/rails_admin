@@ -189,6 +189,16 @@
       });
     },
 
+    /*
+     * Cache key is stored in the format `o_<option value>` to avoid JS
+     * engine coercing string keys to int keys, and thereby preserving
+     * the insertion order. The value for each key is in turn an object
+     * that stores the option tag's HTML text and the value. Example:
+     * cache = {
+     *    'o_271': { id: 271, value: 'CartItem #271'},
+     *    'o_270': { id: 270, value: 'CartItem #270'}
+     * }
+     */
     _buildCache: function(options) {
       var widget = this;
 
