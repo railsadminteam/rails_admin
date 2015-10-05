@@ -118,7 +118,7 @@
 ### Recipes
 
 * [[How to set default values]]
-
+* [[Excluding RailsAdmin from NewRelic]] For when you don't want timing and performance information about RailsAdmin to show up in your NewRelic dashboards.
 
 ### Plugins
 
@@ -157,4 +157,3 @@
 #### Misc.
 * [RailsAdminSettings](https://github.com/rs-pro/rails_admin_settings): Application setting for rails_admin and mongoid
 * [RailsAdminGrid](https://github.com/colavitam/rails_admin_grid): Custom collection (index) action that displays objects in a grid with thumbnails
-* [Excluding RailsAdmin from NewRelic](https://github.com/sferik/rails_admin/wiki/Excluding-RailsAdmin-from-NewRelic): For when you don't want timing and performance information about RailsAdmin to show up in your NewRelic dashboards.
