@@ -93,7 +93,7 @@ module RailsAdmin
       return unless target_params.present?
       fields = visible_fields(action, model_config)
       allowed_methods = fields.collect(&:allowed_methods).flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
-      fields.each { |field|  field.parse_input(target_params) }
+      fields.each { |field| field.parse_input(target_params) }
       target_params.slice!(*allowed_methods)
       target_params.permit! if target_params.respond_to?(:permit!)
       fields.select(&:nested_form).each do |association|
