@@ -7,6 +7,7 @@
 ### Added
 - Pundit integration([#2399](https://github.com/sferik/rails_admin/pull/2399) by Team CodeBenders, RGSoC'15)
 - Refile support([#2385](https://github.com/sferik/rails_admin/pull/2385))
+- Array fields support([#2421](https://github.com/sferik/rails_admin/pull/2421))
 
 ### Changed
 - Improve efficiency of filter query in Postgres([#2401](https://github.com/sferik/rails_admin/pull/2401))
