@@ -11,8 +11,6 @@ module RailsAdmin
   end
 
   class ApplicationController < Config.parent_controller.constantize
-    newrelic_ignore if defined?(NewRelic)
-
     before_filter :_authenticate!
     before_filter :_authorize!
     before_filter :_audit!
@@ -58,7 +56,9 @@ module RailsAdmin
       instance_eval(&RailsAdmin::Config.audit_with)
     end
 
-    alias_method :user_for_paper_trail, :_current_user
+    def user_for_paper_trail
+      _current_user.try(:id) || _current_user
+    end
 
     rescue_from RailsAdmin::ObjectNotFound do
       flash[:error] = I18n.t('admin.flash.object_not_found', model: @model_name, id: params[:id])

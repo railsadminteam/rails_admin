@@ -8,7 +8,6 @@ module RailsAdmin
   module Adapters
     module Mongoid
       DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary', 'BSON::Binary', 'Mongoid::Geospatial::Point']
-      ObjectId = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId # rubocop:disable ConstantName
 
       def new(params = {})
         AbstractObject.new(model.new(params))
@@ -67,9 +66,7 @@ module RailsAdmin
 
       def properties
         fields = model.fields.reject { |_name, field| DISABLED_COLUMN_TYPES.include?(field.type.to_s) }
-        fields.collect do |_name, field|
-          Property.new(field, model)
-        end
+        fields.collect { |_name, field| Property.new(field, model) }
       end
 
       def table_name
@@ -102,6 +99,7 @@ module RailsAdmin
         conditions_per_collection = {}
         field.searchable_columns.each do |column_infos|
           collection_name, column_name = parse_collection_name(column_infos[:column])
+          value = parse_field_value(field, value)
           statement = build_statement(column_name, column_infos[:type], value, operator)
           next unless statement
           conditions_per_collection[collection_name] ||= []
@@ -114,7 +112,8 @@ module RailsAdmin
         statements = []
 
         fields.each do |field|
-          conditions_per_collection = make_field_conditions(field, query, field.search_operator)
+          value = parse_field_value(field, query)
+          conditions_per_collection = make_field_conditions(field, value, field.search_operator)
           statements.concat make_condition_for_current_collection(field, conditions_per_collection)
         end
 
@@ -134,7 +133,8 @@ module RailsAdmin
           filters_dump.each do |_, filter_dump|
             field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
-            conditions_per_collection = make_field_conditions(field, filter_dump[:v], (filter_dump[:o] || 'default'))
+            value = parse_field_value(field, filter_dump[:v])
+            conditions_per_collection = make_field_conditions(field, value, (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
             if field_statements.many?
               statements << {'$or' => field_statements}
@@ -265,8 +265,7 @@ module RailsAdmin
         end
 
         def build_statement_for_belongs_to_association_or_bson_object_id
-          object_id = (object_id_from_string(@value) rescue nil)
-          {@column => object_id} if object_id
+          {@column => @value} if @value
         end
 
         def range_filter(min, max)
@@ -277,10 +276,6 @@ module RailsAdmin
           elsif max
             {@column => {'$lte' => max}}
           end
-        end
-
-        def object_id_from_string(str)
-          ObjectId.from_string(str)
         end
       end
     end

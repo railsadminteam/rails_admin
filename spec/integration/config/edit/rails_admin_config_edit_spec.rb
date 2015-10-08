@@ -963,7 +963,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       it 'auto-detects enumeration' do
         is_expected.to have_selector('.enum_type select')
         is_expected.not_to have_selector('.enum_type select[multiple]')
-        is_expected.to have_content('green')
+        expect(all('.enum_type option').map(&:text).select(&:present?)).to eq %w(blue green red)
       end
     end
 
@@ -1125,6 +1125,39 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
       it 'makes enumeration multi-selectable' do
         is_expected.to have_selector('.enum_type select[multiple]')
+      end
+    end
+  end
+
+  if defined?(ActiveRecord) && ActiveRecord::VERSION::STRING >= '4.1'
+    describe 'ActiveRecord::Enum support', active_record: true do
+      before do
+        class FieldTestWithEnum < FieldTest
+          self.table_name = 'field_tests'
+          enum integer_field: %w(foo bar)
+        end
+        RailsAdmin.config.included_models = [FieldTestWithEnum]
+        RailsAdmin.config FieldTestWithEnum do
+          edit do
+            field :integer_field
+          end
+        end
+      end
+
+      after do
+        Object.send :remove_const, :FieldTestWithEnum
+      end
+
+      it 'auto-detects enumeration' do
+        visit new_path(model_name: 'field_test_with_enum')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.not_to have_selector('.enum_type select[multiple]')
+        expect(all('.enum_type option').map(&:text).select(&:present?)).to eq %w(foo bar)
+      end
+
+      it 'shows current value as selected' do
+        visit edit_path(model_name: 'field_test_with_enum', id: FieldTestWithEnum.create(integer_field: 'bar'))
+        expect(find('.enum_type select').value).to eq '1'
       end
     end
   end

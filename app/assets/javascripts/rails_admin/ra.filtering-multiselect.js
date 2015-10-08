@@ -24,8 +24,7 @@
         chooseAll: "Choose all",
         chosen: "Chosen records",
         clearAll: "Clear all",
-        remove: "Remove",
-        selectChoice: "Select your choice(s) and click"
+        remove: "Remove"
       },
       searchDelay: 400,
       remote_source: null,
@@ -101,6 +100,13 @@
       this.selection.wrap('<div class="wrapper"/>');
 
       this.element.css({display: "none"});
+
+      this.tooManyObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("too_many_objects"));
+      this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("no_objects"))
+
+      if(this.options.xhr){
+        this.collection.append(this.tooManyObjectsPlaceholder);
+      }
     },
 
     _bindEvents: function() {
@@ -164,26 +170,44 @@
       var widget = this;
       widget._query(val, function(matches) {
         var i;
-        widget.collection.html('');
+        var filtered = [];
         for (i in matches) {
           if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
+            filtered.push(i);
+          }
+        }
+        if (filtered.length > 0) {
+          widget.collection.html('');
+          for (i in filtered) {
             widget.collection.append(
               $('<option></option>').attr('value', matches[i].id).attr('title', matches[i].label).text(matches[i].label)
             );
           }
+        } else {
+          widget.collection.html(widget.noObjectsPlaceholder);
         }
       });
     },
 
+    /*
+     * Cache key is stored in the format `o_<option value>` to avoid JS
+     * engine coercing string keys to int keys, and thereby preserving
+     * the insertion order. The value for each key is in turn an object
+     * that stores the option tag's HTML text and the value. Example:
+     * cache = {
+     *    'o_271': { id: 271, value: 'CartItem #271'},
+     *    'o_270': { id: 270, value: 'CartItem #270'}
+     * }
+     */
     _buildCache: function(options) {
       var widget = this;
 
       this.element.find("option").each(function(i, option) {
         if (option.selected) {
-          widget._cache[option.value] = option.innerHTML;
+          widget._cache['o_' + option.value] = {id: option.value, value: option.innerHTML};
           $(option).clone().appendTo(widget.selection).attr("selected", false).attr("title", $(option).text());
         } else {
-          widget._cache[option.value] = option.innerHTML;
+          widget._cache['o_' + option.value] = {id: option.value, value: option.innerHTML};
           $(option).clone().appendTo(widget.collection).attr("selected", false).attr("title", $(option).text());
         }
       });
@@ -206,12 +230,14 @@
         if (!this.options.xhr) {
           for (i in this._cache) {
             if (this._cache.hasOwnProperty(i)) {
-              matches.push({id: i, label: this._cache[i]});
+              option = this._cache[i];
+              matches.push({id: option.id, label: option.value});
             }
           }
+          success.apply(this, [matches]);
+        } else {
+          this.collection.html(this.tooManyObjectsPlaceholder);
         }
-
-        success.apply(this, [matches]);
 
       } else {
 
@@ -231,8 +257,9 @@
           query = new RegExp(query + '.*', 'i');
 
           for (i in this._cache) {
-            if (this._cache.hasOwnProperty(i) && query.test(this._cache[i])) {
-              matches.push({id: i, label: this._cache[i]});
+            if (this._cache.hasOwnProperty(i) && query.test(this._cache[i]['value'])) {
+              option = this._cache[i];
+              matches.push({id: option.id, label: option.value});
             }
           }
 

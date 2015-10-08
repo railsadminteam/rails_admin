@@ -12,9 +12,12 @@ module RailsAdmin
             YAML.dump(value) unless value.nil?
           end
 
+          def parse_value(value)
+            value.present? ? (SafeYAML.load(value) || nil) : nil
+          end
+
           def parse_input(params)
-            return unless params[name].is_a?(::String)
-            params[name] = (params[name].blank? ? nil : (YAML.safe_load(params[name]) || nil))
+            params[name] = parse_value(params[name]) if params[name].is_a?(::String)
           end
         end
       end

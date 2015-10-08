@@ -16,7 +16,10 @@ en:
       is_exactly: Is exactly
       starts_with: Starts with
       ends_with: Ends with
+      too_many_objects: "Too many objects, use search box above"
+      no_objects: "No objects found"
     loading: "Loading..."
+    toggle_navigation: Toggle navigation
     home:
       name: "Home"
     pagination:
@@ -24,7 +27,6 @@ en:
       next: "Next &raquo;"
       truncate: "…"
     misc:
-      filter_date_format: "mm/dd/yy" # a combination of 'dd', 'mm' and 'yy' with any delimiter. No other interpolation will be done!
       search: "Search"
       filter: "Filter"
       refresh: "Refresh"

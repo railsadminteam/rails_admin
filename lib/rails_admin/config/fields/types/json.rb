@@ -13,9 +13,12 @@ module RailsAdmin
             value.present? ? JSON.pretty_generate(value) : nil
           end
 
+          def parse_value(value)
+            value.present? ? JSON.parse(value) : nil
+          end
+
           def parse_input(params)
-            return unless params[name].is_a?(::String)
-            params[name] = (params[name].blank? ? nil : JSON.parse(params[name]))
+            params[name] = parse_value(params[name]) if params[name].is_a?(::String)
           end
         end
       end

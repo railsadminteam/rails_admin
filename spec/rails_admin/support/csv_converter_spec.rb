@@ -32,10 +32,23 @@ describe RailsAdmin::CSVConverter do
 
     subject { RailsAdmin::CSVConverter.new(objects, schema).to_csv(encoding_to: encoding) }
 
+    context 'when encoding FROM MySQL utf8mb4' do
+      let(:encoding) { 'UTF-8' }  # default
+
+      it 'exports to UTF-8 with BOM', active_record: true do
+        # MySQL connection may report its encoding as 'utf8mb4'
+        expect(::ActiveRecord::Base.connection).to receive(:encoding) { 'utf8mb4' }
+        expect(subject[1]).to eq 'UTF-8'
+        expect(subject[2].encoding).to eq Encoding::UTF_8
+        expect(subject[2].unpack('H*').first).
+          to eq 'efbbbf4e756d6265722c4e616d650a312ce381aae381bee381880a'  # have BOM
+      end
+    end
+
     context 'when encoding to UTF-8' do
       let(:encoding) { 'UTF-8' }
 
-      it 'exports to UTR-8 with BOM' do
+      it 'exports to UTF-8 with BOM' do
         expect(subject[1]).to eq 'UTF-8'
         expect(subject[2].encoding).to eq Encoding::UTF_8
         expect(subject[2].unpack('H*').first).

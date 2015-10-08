@@ -42,7 +42,7 @@ describe RailsAdmin::Config do
 
     it 'registers the extension with RailsAdmin' do
       RailsAdmin.add_extension(:example, ExampleModule)
-      expect(RailsAdmin::EXTENSIONS.select { |name| name == :example }.length).to eq(1)
+      expect(RailsAdmin::EXTENSIONS.count { |name| name == :example }).to eq(1)
     end
 
     context 'given an extension with an authorization adapter' do

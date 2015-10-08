@@ -124,7 +124,9 @@ module RailsAdmin
         end
 
         register_instance_option :html_attributes do
-          {}
+          {
+            required: required?,
+          }
         end
 
         register_instance_option :default_value do
@@ -297,6 +299,10 @@ module RailsAdmin
           model_lookup = "admin.help.#{model}.#{name}".to_sym
           translated = I18n.translate(model_lookup, help: generic_help, default: [generic_help])
           (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
+        end
+
+        def parse_value(value)
+          value
         end
 
         def parse_input(_params)

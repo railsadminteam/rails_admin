@@ -33,7 +33,8 @@ module RailsAdmin
               url = resource_url
               if image
                 thumb_url = resource_url(thumb_method)
-                url != thumb_url ? v.link_to(v.image_tag(thumb_url, class: 'img-polaroid'), url, target: '_blank') : v.image_tag(thumb_url)
+                image_html = v.image_tag(thumb_url, class: 'img-thumbnail')
+                url != thumb_url ? v.link_to(image_html, url, target: '_blank') : image_html
               else
                 v.link_to(nil, url, target: '_blank')
               end
@@ -46,6 +47,12 @@ module RailsAdmin
 
           register_instance_option :allowed_methods do
             [method_name, delete_method, cache_method].compact
+          end
+
+          register_instance_option :html_attributes do
+            {
+              required: required? && !value.present?,
+            }
           end
 
           # virtual class

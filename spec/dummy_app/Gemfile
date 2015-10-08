@@ -36,6 +36,7 @@ group :mongoid do
   gem 'mongoid', '~> 4.0.0.beta1'
   gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+  gem 'refile-mongoid', '>= 0.0.1', platforms: [:ruby_21, :ruby_22]
 end
 
 gem 'carrierwave', '>= 0.8'
@@ -46,11 +47,16 @@ gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
 
+platforms :ruby_21, :ruby_22 do
+  gem 'refile', '~> 0.5', require: 'refile/rails'
+  gem 'refile-mini_magick', '>= 0.1.0'
+end
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', '~> 4.0.0'
-  gem 'coffee-rails', '~> 4.0.0'
+  gem 'sass-rails', '~> 4.0.3'
+  gem 'coffee-rails', '~> 4.0'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'

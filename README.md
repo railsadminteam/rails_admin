@@ -23,7 +23,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 * Search and filtering
 * Export data to CSV/JSON/XML
 * Authentication (via [Devise](https://github.com/plataformatec/devise) or other)
-* Authorization (via [Cancan](https://github.com/ryanb/cancan))
+* Authorization (via [CanCanCan](https://github.com/CanCanCommunity/cancancan) or [Pundit](https://github.com/elabs/pundit))
 * User action history (via [PaperTrail](https://github.com/airblade/paper_trail))
 * Supported ORMs
   * ActiveRecord
@@ -44,7 +44,7 @@ In `config/initializers/rails_admin`:
 
 [Details](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
-To begin with, you may be interested in setting up [Devise](https://github.com/sferik/rails_admin/wiki/Devise), [Cancan](https://github.com/sferik/rails_admin/wiki/Cancan) or [Papertrail](https://github.com/sferik/rails_admin/wiki/Papertrail)!
+To begin with, you may be interested in setting up [Devise](https://github.com/sferik/rails_admin/wiki/Devise), [CanCanCan](https://github.com/sferik/rails_admin/wiki/Cancancan) or [Papertrail](https://github.com/sferik/rails_admin/wiki/Papertrail)!
 
 ### Per model
 ```ruby
@@ -60,7 +60,7 @@ class Ball < ActiveRecord::Base
 end
 ```
 
-[Details](https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL)
+Details: [Models](https://github.com/sferik/rails_admin/wiki/Models), [Groups](https://github.com/sferik/rails_admin/wiki/Groups), [Fields](https://github.com/sferik/rails_admin/wiki/Fields)
 
 ## Documentation
 https://github.com/sferik/rails_admin/wiki

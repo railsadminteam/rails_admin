@@ -92,3 +92,11 @@ $(document).on 'pjax:popstate', () ->
       return
     return
   return
+
+#Remove all filter and then refresh
+$(document).on 'click',  "#remove_filter",(event) ->
+  event.preventDefault()
+  $("#filters_box").html("")
+  $("hr.filters_box").hide()
+  $(this).parent().siblings("input[type='search']").val("")
+  $(this).parents("form").submit()  

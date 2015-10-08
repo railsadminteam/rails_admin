@@ -20,10 +20,22 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           $(that).val(hex)
           $(that).css('backgroundColor', '#' + hex)
 
-    # datetime
+    # datetime picker
+    $.fn.datetimepicker.defaults.icons =
+      time:     'fa fa-clock-o'
+      date:     'fa fa-calendar'
+      up:       'fa fa-chevron-up'
+      down:     'fa fa-chevron-down'
+      previous: 'fa fa-angle-double-left'
+      next:     'fa fa-angle-double-right'
+      today:    'fa fa-dot-circle-o'
+      clear:    'fa fa-trash'
+      close:    'fa fa-times'
 
     content.find('[data-datetimepicker]').each ->
-      $(this).datetimepicker $(this).data('options')
+      options = $(this).data('options')
+      $.extend(options, {locale: RailsAdmin.I18n.locale})
+      $(this).datetimepicker options
 
     # enumeration
 
@@ -46,7 +58,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       input = this
       image_container = $("#" + input.id).parent().children(".preview")
       unless image_container.length
-        image_container = $("#" + input.id).parent().prepend($('<img />').addClass('preview')).find('img.preview')
+        image_container = $("#" + input.id).parent().prepend($('<img />').addClass('preview').addClass('img-thumbnail')).find('img.preview')
         image_container.parent().find('img:not(.preview)').hide()
       ext = $("#" + input.id).val().split('.').pop().toLowerCase()
       if input.files and input.files[0] and $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) != -1
@@ -63,7 +75,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     content.find('[data-filteringmultiselect]').each ->
       $(this).filteringMultiselect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-        $(this).parents('.control-group').find('.btn').remove()
+        $(this).siblings('.btn').remove()
       else
         $(this).parents('.control-group').first().remoteForm()
 
@@ -72,7 +84,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     content.find('[data-filteringselect]').each ->
       $(this).filteringSelect $(this).data('options')
       if $(this).parents("#modal").length # hide link if we already are inside a dialog (endless issues on nested dialogs with JS)
-        $(this).parents('.control-group').find('.btn').remove()
+        $(this).siblings('.btn').remove()
       else
         $(this).parents('.control-group').first().remoteForm()
 

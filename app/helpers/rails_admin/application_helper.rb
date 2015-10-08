@@ -1,8 +1,8 @@
-require 'rails_admin/i18n_support'
+require 'rails_admin/support/i18n'
 
 module RailsAdmin
   module ApplicationHelper
-    include RailsAdmin::I18nSupport
+    include RailsAdmin::Support::I18n
 
     def capitalize_first_letter(wording)
       return nil unless wording.present? && wording.is_a?(String)
@@ -35,7 +35,12 @@ module RailsAdmin
       return nil unless _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
       return nil unless (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
-      link_to _current_user.email, url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main')
+      link_to url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main') do
+        html = []
+        html << image_tag("#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: '') if _current_user.email.present?
+        html << content_tag(:span, _current_user.email)
+        html.join.html_safe
+      end
     end
 
     def logout_path
@@ -85,7 +90,7 @@ module RailsAdmin
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
-      li_stack = %(<li class='nav-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
+      li_stack = %(<li class='dropdown-header'>#{label}</li>#{li_stack}).html_safe if li_stack.present?
       li_stack
     end
 
@@ -151,7 +156,7 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, class: 'dropdown', style: 'float:right' do
-        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
+        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
             actions.collect do |action|
               content_tag :li do
@@ -160,6 +165,15 @@ module RailsAdmin
             end.join.html_safe
           end
       end.html_safe
+    end
+
+    def flash_alert_class(flash_key)
+      case flash_key.to_s
+      when 'error'  then 'alert-danger'
+      when 'alert'  then 'alert-warning'
+      when 'notice' then 'alert-info'
+      else "alert-#{flash_key}"
+      end
     end
   end
 end
