@@ -14,7 +14,7 @@ module RailsAdmin
       end
 
       def get(id)
-        AbstractObject.new(model.find(id))
+        AbstractObject.new(model.scoped.find(id))
       rescue => e
         raise e if %w(
           BSON::InvalidObjectId
@@ -25,7 +25,11 @@ module RailsAdmin
       end
 
       def scoped
-        model.scoped
+        if RailsAdmin::Config.global_default_scope
+          RailsAdmin::Config.global_default_scope.to_proc.call(model)
+        else
+          model.scoped
+        end
       end
 
       def first(options = {}, scope = nil)
