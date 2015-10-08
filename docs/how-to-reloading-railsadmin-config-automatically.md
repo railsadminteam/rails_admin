@@ -25,6 +25,8 @@ private
 end
 ```
 
+[rails_admin_import](https://github.com/stephskardal/rails_admin_import) gem will not work if you add the above code.
+
 ## Automatic Model List
 
 #### To avoid having to maintain a list of models manually you can extend your ORM to collect them upon initialization.
