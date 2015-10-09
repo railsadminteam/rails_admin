@@ -264,6 +264,7 @@ module RailsAdmin
         @compact_show_view = true
         @browser_validations = true
         @yell_for_non_accessible_fields = true
+        @global_default_scope = nil
         @authenticate = nil
         @authorize = nil
         @audit = nil
