@@ -14,7 +14,7 @@ module RailsAdmin
       end
 
       def get(id)
-        AbstractObject.new(model.scoped.find(id))
+        AbstractObject.new(scoped.find(id))
       rescue => e
         raise e if %w(
           BSON::InvalidObjectId

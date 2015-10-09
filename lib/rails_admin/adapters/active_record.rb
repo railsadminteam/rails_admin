@@ -13,7 +13,7 @@ module RailsAdmin
       end
 
       def get(id)
-        return unless object = model.scoped.where(primary_key => id).first
+        return unless object = scoped.where(primary_key => id).first
         AbstractObject.new object
       end
 
