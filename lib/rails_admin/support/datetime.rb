@@ -83,7 +83,7 @@ module RailsAdmin
         return if delocalized_value.blank?
 
         begin
-          ::DateTime.strptime(delocalized_value, strftime_format)
+          Time.zone.local_to_utc(::DateTime.strptime(delocalized_value, strftime_format))
         rescue ArgumentError
           nil
         end
