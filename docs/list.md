@@ -221,4 +221,15 @@ RailsAdmin.config do |config|
 end
 ```
 
+This can also be used for achieving `unscoped` list view(i.e. ignoring `default_scope`):
+```ruby
+RailsAdmin.config do |config|
+  config.model Player do
+    list do
+      scopes [:unscoped]
+    end
+  end
+end
+```
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
