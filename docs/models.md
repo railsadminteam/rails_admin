@@ -1,46 +1,50 @@
 ## Configuration location
 
-Each model configuration can alternatively be in two places:
+A model configuration can be done in any of the places below:
 
-* Inside the RailsAdmin initializer
+* inside the RailsAdmin initializer:
 
-`config/initializers/rails_admin.rb`
-```ruby
-RailsAdmin.config do |config|
-  ...
-  config.model 'ModelName' do 
-    ...
-  end
-end
-```
+  ```ruby
+  # config/initializers/rails_admin.rb
 
-* In the model definition file:
-
-_app/models/model_name.rb_
-```ruby
-class ModelName < ActiveRecord::Base
-  ...
-  rails_admin do 
-    ...
-  end
-end
-```
-
-* Or in concern separate files:
-
-_app/models/concerns/model_name_admin.rb_
-```ruby
-module ModelNameAdmin
-  extend ActiveSupport::Concern
-  included do
-    rails_admin do
-      ...
+  RailsAdmin.config do |config|
+    config.model 'ModelName' do 
+      # ...
     end
   end
-end
-```
-Don't forget to include it in model file: ```include ModelNameAdmin```
+  ```
 
+* in the model definition file:
+
+  ```ruby
+  # app/models/model_name.rb
+
+  class ModelName < ActiveRecord::Base
+    rails_admin do 
+      # ...
+    end
+  end
+  ```
+
+* in a separate concern file:
+
+  ```ruby
+  module ModelNameAdmin
+    extend ActiveSupport::Concern
+
+    included do
+      rails_admin do
+        # ...
+      end
+    end
+  end
+  ```
+
+  Don't forget to include the concern module in the model file itself by doing:
+
+  ```ruby
+  include ModelNameAdmin`
+  ```
 
 This is your choice to make:
 * The initializer is loaded once at startup (modifications will show up when restarting the application) and may slow down your application startup, but all RailsAdmin configuration will stay in one place.
