@@ -43,7 +43,7 @@ A model configuration can be done in any of the places below:
   Don't forget to include the concern module in the model file itself by doing:
 
   ```ruby
-  include ModelNameAdmin`
+  include ModelNameAdmin
   ```
 
 This is your choice to make:
