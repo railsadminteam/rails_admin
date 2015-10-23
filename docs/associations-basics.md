@@ -71,3 +71,16 @@ end
 ```
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
+
+#### Disabling inline creation and edition
+
+In some cases you may want to disable the addition or edition of an association, the simplest way to do so is by using the `inline_add` and `inline_edit` options:
+
+```ruby
+config.model Player do
+  field :team do
+    inline_add false
+    inline_edit false
+  end
+end
+```
