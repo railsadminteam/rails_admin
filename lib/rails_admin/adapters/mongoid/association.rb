@@ -48,6 +48,11 @@ module RailsAdmin
           association.foreign_key.to_sym rescue nil
         end
 
+        def foreign_key_nullable?
+          return if foreign_key.nil?
+          true
+        end
+
         def foreign_type
           return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
           association.inverse_type.try(:to_sym) || :"#{name}_type"
