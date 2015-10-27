@@ -26,6 +26,7 @@
     :'edit-url' => (authorized?(:edit, config.abstract_model) ? edit_path(model_name: config.abstract_model.to_param, id: '__ID__') : ''),
     remote_source: index_path(config.abstract_model, source_object_id: form.object.id, source_abstract_model: source_abstract_model.to_param, associated_collection: field.name, current_action: current_action, compact: true),
     sortable: !!field.orderable,
+    removable: !!field.removable,
     cacheAll: !!field.associated_collection_cache_all,
     regional: {
       chooseAll: t("admin.misc.chose_all"),

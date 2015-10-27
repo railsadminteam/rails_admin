@@ -818,6 +818,44 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
   end
 
+  describe 'has_many', active_record: true do
+    context 'with not nullable foreign key' do
+      before do
+        RailsAdmin.config FieldTest do
+          edit do
+            field :nested_field_tests do
+              nested_form false
+            end
+          end
+        end
+        @field_test = FactoryGirl.create :field_test
+      end
+
+      it 'don\'t allow to remove element', js: true do
+        visit edit_path(model_name: 'FieldTest', id: @field_test.id)
+        is_expected.not_to have_selector('a.ra-multiselect-item-remove')
+        is_expected.not_to have_selector('a.ra-multiselect-item-remove-all')
+      end
+    end
+
+    context 'with nullable foreign key' do
+      before do
+        RailsAdmin.config Team do
+          edit do
+            field :players
+          end
+        end
+        @team = FactoryGirl.create :team
+      end
+
+      it 'allow to remove element', js: true do
+        visit edit_path(model_name: 'Team', id: @team.id)
+        is_expected.to have_selector('a.ra-multiselect-item-remove')
+        is_expected.to have_selector('a.ra-multiselect-item-remove-all')
+      end
+    end
+  end
+
   describe 'fields which are nullable and have AR validations', active_record: true do
     it 'is required' do
       # draft.notes is nullable and has no validation
