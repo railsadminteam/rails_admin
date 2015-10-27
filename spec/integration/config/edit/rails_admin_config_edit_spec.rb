@@ -706,7 +706,8 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   describe 'nested form' do
     it 'works', js: true do
       @record = FactoryGirl.create :field_test
-      @record.nested_field_tests = [NestedFieldTest.create!(title: 'title 1'), NestedFieldTest.create!(title: 'title 2')]
+      NestedFieldTest.create! title: 'title 1', field_test: @record
+      NestedFieldTest.create! title: 'title 2', field_test: @record
       visit edit_path(model_name: 'field_test', id: @record.id)
 
       find('#field_test_comment_attributes_field .add_nested_fields').click
@@ -743,7 +744,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         end
       end
       @record = FieldTest.create
-      @record.nested_field_tests << NestedFieldTest.create!(title: 'title 1')
+      NestedFieldTest.create! title: 'title 1', field_test: @record
       visit edit_path(model_name: 'field_test', id: @record.id)
       expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
     end
@@ -776,7 +777,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
       it 'does not show destroy button except for newly created when :allow_destroy is false' do
         @record = FieldTest.create
-        @record.nested_field_tests << NestedFieldTest.create!(title: 'nested title 1')
+        NestedFieldTest.create! title: 'nested title 1', field_test: @record
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
           and_return(allow_destroy: false, update_only: false)
         visit edit_path(model_name: 'field_test', id: @record.id)
