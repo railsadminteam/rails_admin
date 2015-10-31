@@ -8,7 +8,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           def parse_value(value)
-            super(value).try(:utc)
+            value
           end
 
           register_instance_option :strftime_format do

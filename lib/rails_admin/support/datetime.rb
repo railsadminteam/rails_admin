@@ -3,6 +3,27 @@ require 'rails_admin/support/i18n'
 module RailsAdmin
   module Support
     class Datetime
+      # Ruby format options as a key and momentjs format options as a value
+      MOMENTJS_TRANSLATIONS = {
+        '%a' => 'ddd',        # The abbreviated weekday name ("Sun")
+        '%A' => 'dddd',       # The  full  weekday  name ("Sunday")
+        '%b' => 'MMM',        # The abbreviated month name ("Jan")
+        '%B' => 'MMMM',       # The  full  month  name ("January")
+        '%d' => 'DD',         # Day of the month (01..31)
+        '%D' => 'MM/DD/YY',   # American date format mm/dd/yy
+        '%e' => 'D',          # Day of the month (1..31)
+        '%F' => 'YY-MM-DD',   # ISO 8601 date format
+        '%H' => 'HH',         # Hour of the day, 24-hour clock (00..23)
+        '%I' => 'hh',         # Hour of the day, 12-hour clock (01..12)
+        '%m' => 'MM',         # Month of the year (01..12)
+        '%-m' => 'M',         # Month of the year (1..12)
+        '%M' => 'mm',         # Minute of the hour (00..59)
+        '%p' => 'A',          # Meridian indicator ('AM' or 'PM')
+        '%S' => 'ss',         # Second of the minute (00..60)
+        '%Y' => 'YYYY',       # Year with century
+        '%y' => 'YY',         # Year without a century (00..99)
+      }
+
       class << self
         include RailsAdmin::Support::I18n
 
@@ -50,40 +71,23 @@ module RailsAdmin
 
       # Ruby to javascript formatting options translator
       def to_momentjs
-        # Ruby format options as a key and momentjs format options
-        # as a value
-        translations = {
-          '%a' => 'ddd',        # The abbreviated weekday name ("Sun")
-          '%A' => 'dddd',       # The  full  weekday  name ("Sunday")
-          '%b' => 'MMM',        # The abbreviated month name ("Jan")
-          '%B' => 'MMMM',       # The  full  month  name ("January")
-          '%d' => 'DD',         # Day of the month (01..31)
-          '%D' => 'MM/DD/YY',   # American date format mm/dd/yy
-          '%e' => 'D',          # Day of the month (1..31)
-          '%F' => 'YY-MM-DD',   # ISO 8601 date format
-          '%H' => 'HH',         # Hour of the day, 24-hour clock (00..23)
-          '%I' => 'hh',         # Hour of the day, 12-hour clock (01..12)
-          '%m' => 'MM',         # Month of the year (01..12)
-          '%-m' => 'M',         # Month of the year (1..12)
-          '%M' => 'mm',         # Minute of the hour (00..59)
-          '%p' => 'A',          # Meridian indicator ('AM' or 'PM')
-          '%S' => 'ss',         # Second of the minute (00..60)
-          '%Y' => 'YYYY',       # Year with century
-          '%y' => 'YY',         # Year without a century (00..99)
-        }
-
-        strftime_format.gsub(/\w[^.(!?%)\W]{1,}/, '[\0]').gsub(/%(\w|\-\w)/) { |match| translations[match] }
+        strftime_format.gsub(/\w[^.(!?%)\W]{1,}/, '[\0]').gsub(/%(\w|\-\w)/) do |match|
+          MOMENTJS_TRANSLATIONS[match]
+        end
       end
 
       def parse_string(value)
         return if value.blank?
         return value if %w(DateTime Date Time).include?(value.class.name)
 
-        delocalized_value = self.class.delocalize(value, strftime_format)
+        # Normalize l10n datetime strings
+        delocalized_value  = self.class.delocalize(value, self.strftime_format)
         return if delocalized_value.blank?
 
         begin
-          Time.zone.local_to_utc(::DateTime.strptime(delocalized_value, strftime_format))
+          # Adjust with the correct timezone and daylight savint time
+          datetime_with_wrong_tz = ::DateTime.strptime(delocalized_value, self.strftime_format)
+          Time.zone.parse(datetime_with_wrong_tz.strftime('%Y-%m-%d %H:%M:%S'))
         rescue ArgumentError
           nil
         end

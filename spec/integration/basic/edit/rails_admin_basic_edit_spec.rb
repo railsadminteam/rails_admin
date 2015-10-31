@@ -132,8 +132,14 @@ describe 'RailsAdmin Basic Edit', type: :request do
     before { @datetime = 'October 08, 2015 06:45' }
     context 'when config.time_zone set' do
       before do
-        allow(Time).to receive(:zone){  ActiveSupport::TimeZone.new('Central Time (US & Canada)') } # tantamount to setting config.time_zone = 'Central Time (US & Canada)'
+        @old_timezone = Time.zone
+        Time.zone = ActiveSupport::TimeZone.new('Central Time (US & Canada)')
       end
+
+      after do
+        Time.zone = @old_timezone
+      end
+
       it 'does not alter datetime fields' do
         visit new_path(model_name: 'field_test')
         find('#field_test_datetime_field').set(@datetime)
@@ -151,5 +157,4 @@ describe 'RailsAdmin Basic Edit', type: :request do
       end
     end
   end
-
 end
