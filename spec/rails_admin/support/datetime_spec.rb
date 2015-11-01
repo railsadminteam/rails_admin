@@ -7,7 +7,7 @@ describe RailsAdmin::Support::Datetime do
     {
       '%D de %M de %Y, %H:%M:%S' => 'MM/DD/YY [de] mm [de] YYYY, HH:mm:ss',
       '%d/%-m/%Y, %H:%M:%S' => 'DD/M/YYYY, HH:mm:ss',
-      '%d de %B de %Y' => 'DD [de] MMMM [de] YYYY'
+      '%d de %B de %Y' => 'DD [de] MMMM [de] YYYY',
     }.each do |strftime_format, momentjs_format|
       it "convert strftime_format to momentjs_format - example #{strftime_format}" do
         strftime_format = RailsAdmin::Support::Datetime.new(strftime_format)
