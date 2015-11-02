@@ -72,7 +72,7 @@ module RailsAdmin
           '%y' => 'YY',         # Year without a century (00..99)
         }
 
-        strftime_format.gsub(/%\w/) { |match| translations[match] }
+        strftime_format.gsub(/\w[^.(!?%)\W]{1,}/, '[\0]').gsub(/%(\w|\-\w)/) { |match| translations[match] }
       end
 
       def parse_string(value)
