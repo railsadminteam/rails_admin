@@ -13,7 +13,7 @@ The result call will be sent to `FormOptionsHelper#options_for_select` to fill t
 See [this](http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select) for possible output (hash, array)
 
 ```ruby
-def Team < ActiveRecord::Base
+class Team < ActiveRecord::Base
   def color_enum
     # Do not select any value, or add any blank field. RailsAdmin will do it for you.
     ['green', 'white']
