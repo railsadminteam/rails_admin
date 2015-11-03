@@ -23,16 +23,16 @@ module RailsAdmin
                 format.to_s.scan(/%[AaBbp]/) do |match|
                   case match
                   when '%A'
-                    english = I18n.t('date.day_names', locale: :en)
+                    english = I18n.t('date.day_names')
                     day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
                   when '%a'
-                    english = I18n.t('date.abbr_day_names', locale: :en)
+                    english = I18n.t('date.abbr_day_names')
                     abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
                   when '%B'
-                    english = I18n.t('date.month_names', locale: :en)[1..-1]
+                    english = I18n.t('date.month_names')[1..-1]
                     month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
                   when '%b'
-                    english = I18n.t('date.abbr_month_names', locale: :en)[1..-1]
+                    english = I18n.t('date.abbr_month_names')[1..-1]
                     abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
                   when '%p'
                     date_string = date_string.gsub(/#{I18n.t('date.time.am', default: "am")}/, 'am')
@@ -98,8 +98,8 @@ module RailsAdmin
               },
               'timepicker' => {
                 'amPmText' => meridian_indicator? ? %w(Am Pm) : ['', ''],
-                'hourText' => I18n.t('datetime.prompts.hour', default: I18n.t('datetime.prompts.hour', locale: :en)),
-                'minuteText' => I18n.t('datetime.prompts.minute', default: I18n.t('datetime.prompts.minute', locale: :en)),
+                'hourText' => I18n.t('datetime.prompts.hour', default: I18n.t('datetime.prompts.hour')),
+                'minuteText' => I18n.t('datetime.prompts.minute', default: I18n.t('datetime.prompts.minute')),
                 'showPeriod' => meridian_indicator?,
                 'value' => formatted_time_value,
               },
@@ -111,8 +111,8 @@ module RailsAdmin
           def localized_format(scope = [:time, :formats])
             format = date_format.to_sym
             I18n.t(format, scope: scope, default: [
-              I18n.t(format, scope: scope, locale: :en),
-              I18n.t(self.class.format, scope: scope, locale: :en),
+              I18n.t(format, scope: scope),
+              I18n.t(self.class.format, scope: scope),
             ]).to_s
           end
 
