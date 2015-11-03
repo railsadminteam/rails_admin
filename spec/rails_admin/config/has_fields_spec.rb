@@ -35,4 +35,20 @@ describe RailsAdmin::Config::HasFields do
     end
     expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :players }.properties).not_to be_nil
   end
+
+  it 'does not change the order of existing fields, if some field types of them are changed' do
+    original_fields_order = RailsAdmin.config(Team).fields.map(&:name)
+
+    RailsAdmin.config do |config|
+      config.model Team do
+        configure :players, :enum do
+          enum { [] }
+        end
+
+        configure :revenue, :integer
+      end
+    end
+
+    expect(RailsAdmin.config(Team).fields.map(&:name)).to eql(original_fields_order)
+  end
 end

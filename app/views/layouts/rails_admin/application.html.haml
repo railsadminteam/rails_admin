@@ -1,5 +1,5 @@
 !!! 5
-%html
+%html{lang: I18n.locale}
   %head
     %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}
     %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
@@ -9,7 +9,7 @@
     = javascript_include_tag "rails_admin/rails_admin.js"
     -# Initialize JS simple i18n
     :javascript
-      RailsAdmin.I18n.init(JSON.parse("#{j I18n.t("admin.js").to_json}"))
+      RailsAdmin.I18n.init('#{I18n.locale}', JSON.parse("#{j I18n.t("admin.js").to_json}"))
   %body.rails_admin
     #loading.label.label-warning{style: 'display:none; position:fixed; right:20px; bottom:20px; z-index:100000'}= t('admin.loading')
     %nav.navbar.navbar-default.navbar-fixed-top

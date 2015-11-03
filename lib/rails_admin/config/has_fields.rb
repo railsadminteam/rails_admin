@@ -21,11 +21,11 @@ module RailsAdmin
         elsif type && type != (field.nil? ? nil : field.type)
           if field
             properties = field.properties
-            _fields.delete(field)
+            field = _fields[_fields.index(field)] = RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)
           else
             properties = abstract_model.properties.detect { |p| name == p.name }
+            field = (_fields << RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
           end
-          field = (_fields << RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
 
         # If field has not been yet defined add some default properties

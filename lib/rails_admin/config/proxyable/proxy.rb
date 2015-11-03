@@ -1,9 +1,7 @@
 module RailsAdmin
   module Config
     module Proxyable
-      class Proxy
-        instance_methods.each { |m| undef_method m unless m =~ /^(__|instance_eval|object_id)/ }
-
+      class Proxy < BasicObject
         attr_reader :bindings
 
         def initialize(object, bindings = {})
@@ -13,7 +11,7 @@ module RailsAdmin
 
         # Bind variables to be used by the configuration options
         def bind(key, value = nil)
-          if key.is_a?(Hash)
+          if key.is_a?(::Hash)
             @bindings = key
           else
             @bindings[key] = value

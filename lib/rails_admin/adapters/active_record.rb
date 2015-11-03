@@ -94,6 +94,11 @@ module RailsAdmin
 
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
+            if value.is_a?(Array)
+              value = value.map { |v| field.parse_value(v) }
+            else
+              value = field.parse_value(value)
+            end
             statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator).to_statement
             @statements << statement if statement.present?
             @values << value1 unless value1.nil?
@@ -113,7 +118,7 @@ module RailsAdmin
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
         wb = WhereBuilder.new(scope)
         fields.each do |field|
-          wb.add(field, query, field.search_operator)
+          wb.add(field, field.parse_value(query), field.search_operator)
         end
         # OR all query statements
         wb.build
@@ -125,7 +130,10 @@ module RailsAdmin
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each do |_, filter_dump|
             wb = WhereBuilder.new(scope)
-            wb.add(fields.detect { |f| f.name.to_s == field_name }, filter_dump[:v], (filter_dump[:o] || 'default'))
+            field = fields.detect { |f| f.name.to_s == field_name }
+            value = parse_field_value(field, filter_dump[:v])
+
+            wb.add(field, value, (filter_dump[:o] || 'default'))
             # AND current filter statements to other filter statements
             scope = wb.build
           end
@@ -203,7 +211,12 @@ module RailsAdmin
               return
             end
           end
-          ["(LOWER(#{@column}) #{like_operator} ?)", @value]
+
+          if ar_adapter == 'postgresql'
+            ["(#{@column} ILIKE ?)", @value]
+          else
+            ["(LOWER(#{@column}) LIKE ?)", @value]
+          end
         end
 
         def build_statement_for_enum
@@ -213,10 +226,6 @@ module RailsAdmin
 
         def ar_adapter
           ::ActiveRecord::Base.connection.adapter_name.downcase
-        end
-
-        def like_operator
-          ar_adapter == 'postgresql' ? 'ILIKE' : 'LIKE'
         end
       end
     end

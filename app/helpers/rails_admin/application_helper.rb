@@ -1,8 +1,8 @@
-require 'rails_admin/i18n_support'
+require 'rails_admin/support/i18n'
 
 module RailsAdmin
   module ApplicationHelper
-    include RailsAdmin::I18nSupport
+    include RailsAdmin::Support::I18n
 
     def capitalize_first_letter(wording)
       return nil unless wording.present? && wording.is_a?(String)
@@ -156,7 +156,7 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
       content_tag :li, class: 'dropdown', style: 'float:right' do
-        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + '<b class="caret"></b>'.html_safe } +
+        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
             actions.collect do |action|
               content_tag :li do

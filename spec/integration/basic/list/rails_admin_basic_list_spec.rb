@@ -272,14 +272,29 @@ describe 'RailsAdmin Basic List', type: :request do
 
     it 'displays base filters when no filters are present in the params' do
       RailsAdmin.config Player do
-        list do
-          filters [:name, :team]
-        end
+        list { filters([:name, :team]) }
       end
-
       get index_path(model_name: 'player')
-      expect(response.body).to include(%{$.filters.append("Name", "name", "string", "", null, "", 1);}) # rubocop:disable StringLiterals
-      expect(response.body).to include(%{$.filters.append("Team", "team", "belongs_to_association", "", null, "", 2);}) # rubocop:diasble StringLiterals
+
+      options = {
+        index: 1,
+        label: 'Name',
+        name: 'name',
+        type: 'string',
+        value: '',
+        operator: nil,
+      }
+      expect(response.body).to include("$.filters.append(#{options.to_json});")
+
+      options = {
+        index: 2,
+        label: 'Team',
+        name: 'team',
+        type: 'belongs_to_association',
+        value: '',
+        operator: nil,
+      }
+      expect(response.body).to include("$.filters.append(#{options.to_json});")
     end
   end
 
@@ -377,7 +392,7 @@ describe 'RailsAdmin Basic List', type: :request do
       expect(Player.count).to eq(0)
     end
 
-    it 'finds the player if the query matches the default search opeartor' do
+    it 'finds the player if the query matches the default search operator' do
       RailsAdmin.config do |config|
         config.default_search_operator = 'ends_with'
         config.model Player do
@@ -388,7 +403,7 @@ describe 'RailsAdmin Basic List', type: :request do
       is_expected.to have_content(player.name)
     end
 
-    it 'does not find the player if the query does not match the default search opeartor' do
+    it 'does not find the player if the query does not match the default search operator' do
       RailsAdmin.config do |config|
         config.default_search_operator = 'ends_with'
         config.model Player do
