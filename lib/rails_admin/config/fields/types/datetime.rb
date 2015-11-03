@@ -20,6 +20,15 @@ module RailsAdmin
             params[name] = parse_value(params[name]) if params[name]
           end
 
+          def value
+            parent_value = super
+            if %w(DateTime Date Time).include?(parent_value.class.name)
+              parent_value.in_time_zone
+            else
+              parent_value
+            end
+          end
+
           register_instance_option :date_format do
             :long
           end

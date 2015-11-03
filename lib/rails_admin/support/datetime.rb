@@ -76,17 +76,19 @@ module RailsAdmin
         end
       end
 
+      # Delocalize a l10n datetime strings
+      def delocalize(value)
+        self.class.delocalize(value, strftime_format)
+      end
+
       def parse_string(value)
         return if value.blank?
         return value if %w(DateTime Date Time).include?(value.class.name)
-
-        # Normalize l10n datetime strings
-        delocalized_value  = self.class.delocalize(value, self.strftime_format)
-        return if delocalized_value.blank?
+        return if (delocalized_value = delocalize(value)).blank?
 
         begin
           # Adjust with the correct timezone and daylight savint time
-          datetime_with_wrong_tz = ::DateTime.strptime(delocalized_value, self.strftime_format)
+          datetime_with_wrong_tz = ::DateTime.strptime(delocalized_value, strftime_format)
           Time.zone.parse(datetime_with_wrong_tz.strftime('%Y-%m-%d %H:%M:%S'))
         rescue ArgumentError
           nil

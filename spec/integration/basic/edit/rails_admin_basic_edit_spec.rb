@@ -132,6 +132,9 @@ describe 'RailsAdmin Basic Edit', type: :request do
     before { @datetime = 'October 08, 2015 06:45' }
     context 'when config.time_zone set' do
       before do
+        RailsAdmin.config Player do
+          field :datetime_field
+        end
         @old_timezone = Time.zone
         Time.zone = ActiveSupport::TimeZone.new('Central Time (US & Canada)')
       end
