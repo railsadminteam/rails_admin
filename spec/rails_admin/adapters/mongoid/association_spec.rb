@@ -199,7 +199,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoNote
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to be_nil
-      expect(subject.foreign_key_nullable?).to be_nil
+      expect(subject.foreign_key_nullable?).to be_falsey
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
@@ -219,7 +219,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoNote
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to be_nil
-      expect(subject.foreign_key_nullable?).to be_nil
+      expect(subject.foreign_key_nullable?).to be_falsey
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
