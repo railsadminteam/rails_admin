@@ -29,7 +29,7 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            fallback = ::I18n.t(date_format, scope: i18n_scope, locale: :en)
+            fallback = ::I18n.t(date_format, scope: i18n_scope)
             ::I18n.t(date_format, scope: i18n_scope, default: fallback).to_s
           end
 
