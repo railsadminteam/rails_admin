@@ -706,7 +706,8 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   describe 'nested form' do
     it 'works', js: true do
       @record = FactoryGirl.create :field_test
-      @record.nested_field_tests = [NestedFieldTest.create!(title: 'title 1'), NestedFieldTest.create!(title: 'title 2')]
+      NestedFieldTest.create! title: 'title 1', field_test: @record
+      NestedFieldTest.create! title: 'title 2', field_test: @record
       visit edit_path(model_name: 'field_test', id: @record.id)
 
       find('#field_test_comment_attributes_field .add_nested_fields').click
@@ -743,7 +744,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         end
       end
       @record = FieldTest.create
-      @record.nested_field_tests << NestedFieldTest.create!(title: 'title 1')
+      NestedFieldTest.create! title: 'title 1', field_test: @record
       visit edit_path(model_name: 'field_test', id: @record.id)
       expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
     end
@@ -776,7 +777,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
       it 'does not show destroy button except for newly created when :allow_destroy is false' do
         @record = FieldTest.create
-        @record.nested_field_tests << NestedFieldTest.create!(title: 'nested title 1')
+        NestedFieldTest.create! title: 'nested title 1', field_test: @record
         allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
           and_return(allow_destroy: false, update_only: false)
         visit edit_path(model_name: 'field_test', id: @record.id)
@@ -814,6 +815,44 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       @record.reload
       expect(@record.embeds.length).to eq(1)
       expect(@record.embeds[0].name).to eq('embed 1 edited')
+    end
+  end
+
+  describe 'has_many', active_record: true do
+    context 'with not nullable foreign key' do
+      before do
+        RailsAdmin.config FieldTest do
+          edit do
+            field :nested_field_tests do
+              nested_form false
+            end
+          end
+        end
+        @field_test = FactoryGirl.create :field_test
+      end
+
+      it 'don\'t allow to remove element', js: true do
+        visit edit_path(model_name: 'FieldTest', id: @field_test.id)
+        is_expected.not_to have_selector('a.ra-multiselect-item-remove')
+        is_expected.not_to have_selector('a.ra-multiselect-item-remove-all')
+      end
+    end
+
+    context 'with nullable foreign key' do
+      before do
+        RailsAdmin.config Team do
+          edit do
+            field :players
+          end
+        end
+        @team = FactoryGirl.create :team
+      end
+
+      it 'allow to remove element', js: true do
+        visit edit_path(model_name: 'Team', id: @team.id)
+        is_expected.to have_selector('a.ra-multiselect-item-remove')
+        is_expected.to have_selector('a.ra-multiselect-item-remove-all')
+      end
     end
   end
 

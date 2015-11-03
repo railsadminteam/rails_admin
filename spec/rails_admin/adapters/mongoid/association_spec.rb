@@ -87,6 +87,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoBlog
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to eq :mongo_blog_id
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
@@ -111,6 +112,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoPost
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to eq :mongo_blog_id
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
@@ -130,6 +132,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoCategory
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to eq :mongo_category_ids
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
@@ -150,6 +153,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq [MongoBlog, MongoPost]
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to eq :commentable_id
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to eq :commentable_type
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
@@ -170,6 +174,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoComment
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to eq :commentable_id
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to eq :commentable
@@ -194,6 +199,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoNote
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to be_nil
+      expect(subject.foreign_key_nullable?).to be_nil
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
       expect(subject.as).to be_nil
@@ -213,6 +219,7 @@ describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.klass).to eq MongoNote
       expect(subject.primary_key).to eq :_id
       expect(subject.foreign_key).to be_nil
+      expect(subject.foreign_key_nullable?).to be_nil
       expect(subject.foreign_type).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey

@@ -18,6 +18,7 @@
 
 ### Fixed
 - Add button for nested-many form in modal disappeared on click([#2372](https://github.com/sferik/rails_admin/issues/2372), [#2383](https://github.com/sferik/rails_admin/pull/2383))
+- Prevent users to remove association's element when foreign key is not nullable ([#2446](https://github.com/sferik/rails_admin/issues/2446))
 
 
 ## [0.7.0](https://github.com/sferik/rails_admin/tree/v0.7.0) - 2015-08-16

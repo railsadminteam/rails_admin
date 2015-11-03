@@ -37,6 +37,11 @@ module RailsAdmin
           association.foreign_key.to_sym
         end
 
+        def foreign_key_nullable?
+          return if foreign_key.nil? || type != :has_many
+          klass.columns_hash[association.foreign_key].null
+        end
+
         def foreign_type
           options[:foreign_type].try(:to_sym) || :"#{name}_type" if options[:polymorphic]
         end

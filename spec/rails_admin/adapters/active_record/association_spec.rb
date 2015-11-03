@@ -103,6 +103,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
         expect(association.type).to eq :has_many
         expect(association.klass).to eq Division
         expect(association.read_only?).to be_falsey
+        expect(association.foreign_key_nullable?).to be_truthy
       end
     end
 
@@ -113,6 +114,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
         expect(association.type).to eq :has_many
         expect(association.klass).to eq Team
         expect(association.read_only?).to be_truthy
+        expect(association.foreign_key_nullable?).to be_truthy
       end
     end
 
@@ -127,6 +129,18 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
     end
   end
 
+  describe 'has_many association with not nullable foreign key' do
+    let(:field_test) { RailsAdmin::AbstractModel.new(FieldTest) }
+
+    context 'for direct has many' do
+      let(:association) { field_test.associations.detect { |a| a.name == :nested_field_tests } }
+
+      it 'returns correct values' do
+        expect(association.foreign_key_nullable?).to be_falsey
+      end
+    end
+  end
+
   describe 'has_and_belongs_to_many association' do
     subject { @post.associations.detect { |a| a.name == :a_r_categories } }
 
@@ -135,6 +149,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.klass).to eq ARCategory
       expect(subject.primary_key).to eq :id
       expect(subject.foreign_type).to be_nil
+      expect(subject.foreign_key_nullable?).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
