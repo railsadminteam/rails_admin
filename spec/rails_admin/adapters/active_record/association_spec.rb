@@ -131,11 +131,23 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
 
   describe 'has_many association with not nullable foreign key' do
     let(:field_test) { RailsAdmin::AbstractModel.new(FieldTest) }
+    let(:association) { field_test.associations.detect { |a| a.name == :nested_field_tests } }
 
     context 'for direct has many' do
-      let(:association) { field_test.associations.detect { |a| a.name == :nested_field_tests } }
-
       it 'returns correct values' do
+        expect(association.foreign_key_nullable?).to be_falsey
+      end
+    end
+
+    context 'when foreign_key is passed as Symbol' do
+      before do
+        class FieldTestWithSymbolForeignKey < FieldTest
+          has_many :nested_field_tests, dependent: :destroy, inverse_of: :field_test, foreign_key: :field_test_id
+        end
+      end
+      let(:field_test) { RailsAdmin::AbstractModel.new(FieldTestWithSymbolForeignKey) }
+
+      it 'does not break' do
         expect(association.foreign_key_nullable?).to be_falsey
       end
     end
