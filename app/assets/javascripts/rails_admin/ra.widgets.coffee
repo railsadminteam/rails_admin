@@ -151,7 +151,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
       urls = type_select.data('urls')
+
       type_select.on 'change', (e) ->
+        object_select.data('options', $("##{type_select.val().toLowerCase()}-js-options").data('options'))
+        object_select.filteringSelect("destroy")
+        object_select.filteringSelect object_select.data('options')
+
         if $(this).val() is ''
           object_select.html('<option value=""></option>')
         else
