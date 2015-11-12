@@ -54,6 +54,10 @@ group :test do
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
 
+  platforms :ruby_19 do
+    gem 'tins', '~> 1.6.0'
+  end
+
   platforms :ruby_21, :ruby_22 do
     gem 'refile', '~> 0.5', require: 'refile/rails'
     gem 'refile-mini_magick', '>= 0.1.0'
