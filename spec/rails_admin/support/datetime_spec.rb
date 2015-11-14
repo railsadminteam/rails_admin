@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe RailsAdmin::Support::Datetime do
-  describe 'to_momentjs' do
+  describe '#to_momentjs' do
     {
       '%D de %M de %Y, %H:%M:%S' => 'MM/DD/YY [de] mm [de] YYYY, HH:mm:ss',
       '%d/%-m/%Y, %H:%M:%S' => 'DD/M/YYYY, HH:mm:ss',

@@ -127,4 +127,37 @@ describe 'RailsAdmin Basic Edit', type: :request do
       expect(page.current_url).to eq('http://www.example.com/admin/ball?sort=color')
     end
   end
+
+  describe 'clicking save without changing anything' do
+    before { @datetime = 'October 08, 2015 06:45' }
+    context 'when config.time_zone set' do
+      before do
+        RailsAdmin.config Player do
+          field :datetime_field
+        end
+        @old_timezone = Time.zone
+        Time.zone = ActiveSupport::TimeZone.new('Central Time (US & Canada)')
+      end
+
+      after do
+        Time.zone = @old_timezone
+      end
+
+      it 'does not alter datetime fields' do
+        visit new_path(model_name: 'field_test')
+        find('#field_test_datetime_field').set(@datetime)
+        click_button 'Save and edit'
+        expect(find('#field_test_datetime_field').value).to eq(@datetime)
+      end
+    end
+
+    context 'without config.time_zone set (default)' do
+      it 'does not alter datetime fields' do
+        visit new_path(model_name: 'field_test')
+        find('#field_test_datetime_field').set(@datetime)
+        click_button 'Save and edit'
+        expect(find('#field_test_datetime_field').value).to eq(@datetime)
+      end
+    end
+  end
 end
