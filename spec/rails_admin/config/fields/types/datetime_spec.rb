@@ -25,6 +25,34 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
 
       expect(field.formatted_value).to eq 'January 01, 2012 00:00'
     end
+
+    it 'handles non-English applications' do
+      begin
+        old_available_locales = I18n.available_locales
+        old_default_locale = I18n.default_locale
+        old_locale = I18n.locale
+
+        I18n.available_locales = [:fr]
+        I18n.default_locale = :fr
+        I18n.locale = :fr
+
+        RailsAdmin.config(FieldTest) do |_config|
+          field :datetime_field do
+            default_value DateTime.parse('01/01/2012')
+          end
+        end
+
+        field = RailsAdmin.config(FieldTest).fields.detect do |f|
+          f.name == :datetime_field
+        end.with(object: FieldTest.new)
+
+        expect(field.formatted_value).to eq 'dimanche 01 janvier 2012 00:00'
+      ensure
+        I18n.available_locales = old_available_locales
+        I18n.default_locale = old_default_locale
+        I18n.locale = old_locale
+      end
+    end
   end
 
   describe '#parse_input' do
