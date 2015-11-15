@@ -2,8 +2,8 @@
   type_collection = field.polymorphic_type_collection
   type_column = field.association.foreign_type.to_s
   selected_type = field.bindings[:object].send(type_column)
-  collection = selected ? [[field.formatted_value, selected.id]] : [[]]
   selected = field.bindings[:object].send(field.association.name)
+  collection = selected ? [[field.formatted_value, selected.id]] : [[]]
   column_type_dom_id = form.dom_id(field).sub(field.method_name.to_s, type_column)
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
 
