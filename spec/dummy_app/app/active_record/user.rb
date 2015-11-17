@@ -3,6 +3,9 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
+  has_many :promotion_participations
+  has_many :promotions, through: :promotion_participations
+
   serialize :roles, Array
 
   # Add Paperclip support for avatars

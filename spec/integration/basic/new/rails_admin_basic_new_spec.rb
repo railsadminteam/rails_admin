@@ -44,6 +44,12 @@ describe 'RailsAdmin Basic New', type: :request do
     end
   end
 
+  describe 'GET /admin/user/new with has_many through association' do
+    it 'not fail' do
+      visit new_path(model_name: 'user')
+    end
+  end
+
   describe 'GET /admin/player/new with missing label' do
     before do
       FactoryGirl.create :team, name: ''
