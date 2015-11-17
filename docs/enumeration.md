@@ -83,7 +83,7 @@ end
       end
 
       enum do
-        Hash[abstract_model.model.bitmasks[name].map { |k,v| [k.humanize.titleize, v] }]
+        Hash[abstract_model.model.bitmasks[name].map { |k,v| [k.humanize.titleize, k] }]
       end
 
       pretty_value do
