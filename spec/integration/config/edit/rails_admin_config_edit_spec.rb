@@ -854,6 +854,13 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         is_expected.to have_selector('a.ra-multiselect-item-remove-all')
       end
     end
+
+    it 'allow to remove element with through association', js: true do
+      user = FactoryGirl.create :user
+      visit edit_path(model_name: 'User', id: user.id)
+      is_expected.to have_selector('.promotions_field a.ra-multiselect-item-remove')
+      is_expected.to have_selector('.promotions_field a.ra-multiselect-item-remove-all')
+    end
   end
 
   describe 'fields which are nullable and have AR validations', active_record: true do
