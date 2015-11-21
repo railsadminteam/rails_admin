@@ -161,7 +161,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.klass).to eq ARCategory
       expect(subject.primary_key).to eq :id
       expect(subject.foreign_type).to be_nil
-      expect(subject.foreign_key_nullable?).to be_falsey
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
