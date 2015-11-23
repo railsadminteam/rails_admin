@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech', 'Mitsuhiro Shibuya']
   spec.description = 'RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.'
   spec.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
-  spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*']
+  spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*', 'vendor/**/*']
   spec.licenses = %w(MIT)
   spec.homepage = 'https://github.com/sferik/rails_admin'
   spec.name = 'rails_admin'
