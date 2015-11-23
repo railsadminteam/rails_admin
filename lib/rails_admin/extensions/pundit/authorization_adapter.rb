@@ -17,7 +17,7 @@ module RailsAdmin
         # instance if it is available.
         def authorize(action, abstract_model = nil, model_object = nil)
           record = model_object || abstract_model && abstract_model.model
-          fail ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}") unless policy(record).send(action) if action
+          fail ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}") unless policy(record).send(action_for_pundit(action)) if action
         end
 
         # This method is called primarily from the view to determine whether the given user
@@ -26,7 +26,7 @@ module RailsAdmin
         # return a boolean whereas +authorize+ will raise an exception when not authorized.
         def authorized?(action, abstract_model = nil, model_object = nil)
           record = model_object || abstract_model && abstract_model.model
-          policy(record).send(action) if action
+          policy(record).send(action_for_pundit(action)) if action
         end
 
         # This is called when needing to scope a database query. It is called within the list
@@ -52,6 +52,10 @@ module RailsAdmin
           @controller.policy(record)
         rescue ::Pundit::NotDefinedError
           ::ApplicationPolicy.new(@controller.send(:pundit_user), record)
+        end
+
+        def action_for_pundit(action)
+          action[-1, 1] == '?' ? action : "#{action}?"
         end
       end
     end
