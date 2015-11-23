@@ -1,5 +1,4 @@
 require 'spec_helper'
-include Pundit
 
 class ApplicationPolicy
   attr_reader :user, :record
@@ -65,6 +64,10 @@ class PlayerPolicy < ApplicationPolicy
 end
 
 describe 'RailsAdmin Pundit Authorization', type: :request do
+  before(:all) do
+    ApplicationController.send :include, ::Pundit
+  end
+
   subject { page }
 
   before do
@@ -162,6 +165,17 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
       is_expected.to have_content('Delete')
       is_expected.to have_content('History')
       is_expected.to have_content('Show in app')
+    end
+  end
+
+  context 'when ApplicationController already has pundit_user' do
+    let(:admin) { FactoryGirl.create :user, roles: [:admin] }
+    before do
+      allow_any_instance_of(ApplicationController).to receive(:pundit_user).and_return(admin)
+    end
+
+    it 'uses original pundit_user' do
+      expect { visit dashboard_path }.not_to raise_error
     end
   end
 end

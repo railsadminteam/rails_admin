@@ -8,7 +8,6 @@ module RailsAdmin
         # See the +authorize_with+ config method for where the initialization happens.
         def initialize(controller)
           @controller = controller
-          @controller.class.send(:alias_method, :pundit_user, :_current_user)
         end
 
         # This method is called in every controller action and should raise an exception
@@ -52,7 +51,7 @@ module RailsAdmin
         def policy(record)
           @controller.policy(record)
         rescue ::Pundit::NotDefinedError
-          ::ApplicationPolicy.new(@controller.send(:_current_user), record)
+          ::ApplicationPolicy.new(@controller.send(:pundit_user), record)
         end
       end
     end
