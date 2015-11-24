@@ -84,3 +84,7 @@ Now be sure to do whatever else might be required in order to get the custom jav
 Some parts of the above could be achieved by customizing `app/views/rails_admin/main/index.html.haml` and/or adding custom CSS instead of javascript, but that approach would require overriding a rather substantial file, which doesn't lend itself to easily upgrading your gems. Comment at https://github.com/sferik/rails_admin/issues/2272 if you think this should be made into a pull request.
 
 Enjoy!
+
+
+Here's what you'll get (rails_admin 0.6.8, Chrome 46.0):
+![railsadminhorizscroll](https://cloud.githubusercontent.com/assets/1115369/11372389/cf7cd36a-9292-11e5-9e00-ea7e3374c090.jpg)
