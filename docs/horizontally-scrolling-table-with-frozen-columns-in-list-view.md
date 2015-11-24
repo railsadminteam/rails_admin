@@ -47,20 +47,23 @@ $(document).on('rails_admin.dom_ready', function(){
   var $headerTr = $trs.first();
   var $headerTds = $headerTr.children('th,td');
   var i, $td, pos;
-  var margin = 0;
   var offsets = [];
+  var widths = [];
   for (i = 0; i < 3; i++) {
     $td = $($headerTds[i]);
     pos = $td.position();
     offsets.push(pos.left);
-    margin = pos.left + $td.outerWidth();
+    widths.push($td.outerWidth());
   }
   $trs.each(function(index, tr){
     for (i = 0; i < 3; i++) {
       tr.children[i].style.position = 'absolute';
       tr.children[i].style.left = offsets[i]+'px';
+      tr.children[i].style.width = widths[i]+'px';
     }
   });
+  $td = $($headerTds[2]);
+  var margin = $td.position().left + $td.outerWidth() - $(tableWrapper).position().left;
   tableWrapper.style.marginLeft = margin+'px';
   tableWrapper.style.borderLeft = '1px solid black';
 
