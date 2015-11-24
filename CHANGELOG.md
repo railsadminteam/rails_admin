@@ -5,6 +5,14 @@
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v0.8.0...HEAD)
 
 
+## [0.8.1](https://github.com/sferik/rails_admin/tree/v0.8.1) - 2015-11-24
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v0.8.0...v0.8.1)
+
+### Fixed
+- `vendor/` directory was missing from gemspec([#2481](https://github.com/sferik/rails_admin/issues/2481), [#2482](https://github.com/sferik/rails_admin/pull/2482))
+
+
 ## [0.8.0](https://github.com/sferik/rails_admin/tree/v0.8.0) - 2015-11-23
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v0.7.0...v0.8.0)
