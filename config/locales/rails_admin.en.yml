@@ -44,6 +44,7 @@ en:
       navigation_static_label: "Links"
       log_out: "Log out"
       ago: "ago"
+      more: "Plus %{count} more %{models_name}"
     flash:
       successful: "%{name} successfully %{action}"
       error: "%{name} failed to be %{action}"

@@ -75,4 +75,24 @@ describe RailsAdmin::AbstractModel do
       @abstract_model.all(sort: PK_COLUMN, page: 1, per: 2)
     end
   end
+
+  describe 'each_associated_children' do
+    before do
+      @abstract_model = RailsAdmin::AbstractModel.new('Player')
+      @draft = FactoryGirl.build :draft
+      @comments = FactoryGirl.build_list :comment, 2
+      @player = FactoryGirl.build :player, draft: @draft, comments: @comments
+    end
+
+    it 'should return has_one and has_many associations with its children' do
+      @abstract_model.each_associated_children(@player) do |association, children|
+        expect(children).to eq case association.name
+                               when :draft
+                                 [@draft]
+                               when :comments
+                                 @comments
+                               end
+      end
+    end
+  end
 end
