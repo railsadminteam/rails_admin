@@ -91,7 +91,7 @@ module RailsAdmin
           end
         when :has_many
           children = object.send(association.name)
-          yield(association, children)
+          yield(association, Array.new(children))
         end
       end
     end
