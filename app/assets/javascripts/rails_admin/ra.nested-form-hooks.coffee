@@ -50,3 +50,6 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
     add_button = toggler.next()
     add_button.addClass('add_nested_fields').html(add_button.data('add-label'))
 
+  # Removing all required attributes from deleted child form to bypass browser validations.
+  field.find('[required]').each ->
+    $(this).removeAttr('required')
