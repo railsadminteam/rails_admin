@@ -1,4 +1,5 @@
 require 'rails_admin/adapters/active_record/abstract_object'
+
 module RailsAdmin
   module Adapters
     module Mongoid

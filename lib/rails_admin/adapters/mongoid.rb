@@ -8,6 +8,19 @@ module RailsAdmin
   module Adapters
     module Mongoid
       DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary', 'BSON::Binary', 'Mongoid::Geospatial::Point']
+      OBJECT_ID ||= begin
+        if defined?(Moped::BSON)
+          Moped::BSON::ObjectId
+        elsif defined?(BSON::ObjectId)
+          BSON::ObjectId
+        end
+      end
+
+      def parse_object_id(value)
+        OBJECT_ID.from_string(value)
+      rescue BSON::ObjectId::Invalid, BSON::InvalidObjectId, Moped::Errors::InvalidObjectId
+        nil
+      end
 
       def new(params = {})
         AbstractObject.new(model.new(params))

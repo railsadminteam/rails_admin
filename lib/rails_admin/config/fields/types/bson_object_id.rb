@@ -8,14 +8,6 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
-          OBJECT_ID ||= begin
-            if defined?(Moped::BSON)
-              Moped::BSON::ObjectId
-            elsif defined?(BSON::ObjectId)
-              BSON::ObjectId
-            end
-          end
-
           register_instance_option :label do
             label = ((@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name)
             label = 'Id' if label == ''
@@ -35,13 +27,7 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            value.present? ? OBJECT_ID.from_string(value) : nil
-          rescue BSON::ObjectId::Invalid
-            nil
-          rescue => e
-            unless ['BSON::InvalidObjectId', 'Moped::Errors::InvalidObjectId'].include? e.class.to_s
-              raise e
-            end
+            value.present? ? abstract_model.parse_object_id(value) : nil
           end
 
           def parse_input(params)
