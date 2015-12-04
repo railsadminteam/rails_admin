@@ -3,6 +3,7 @@ module RailsAdmin
     module Mongoid
       class Association
         attr_reader :association, :model
+
         def initialize(association, model)
           @association = association
           @model = model

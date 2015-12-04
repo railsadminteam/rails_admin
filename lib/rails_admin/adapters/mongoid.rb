@@ -3,23 +3,15 @@ require 'rails_admin/config/sections/list'
 require 'rails_admin/adapters/mongoid/abstract_object'
 require 'rails_admin/adapters/mongoid/association'
 require 'rails_admin/adapters/mongoid/property'
+require 'rails_admin/adapters/mongoid/bson'
 
 module RailsAdmin
   module Adapters
     module Mongoid
-      DISABLED_COLUMN_TYPES = ['Range', 'Moped::BSON::Binary', 'BSON::Binary', 'Mongoid::Geospatial::Point']
-      OBJECT_ID ||= begin
-        if defined?(Moped::BSON)
-          Moped::BSON::ObjectId
-        elsif defined?(BSON::ObjectId)
-          BSON::ObjectId
-        end
-      end
+      DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point)
 
       def parse_object_id(value)
-        OBJECT_ID.from_string(value)
-      rescue BSON::ObjectId::Invalid, BSON::InvalidObjectId, Moped::Errors::InvalidObjectId
-        nil
+        Bson.parse_object_id(value)
       end
 
       def new(params = {})
@@ -30,10 +22,10 @@ module RailsAdmin
         AbstractObject.new(model.find(id))
       rescue => e
         raise e if %w(
-          BSON::InvalidObjectId
           Mongoid::Errors::DocumentNotFound
           Mongoid::Errors::InvalidFind
           Moped::Errors::InvalidObjectId
+          BSON::InvalidObjectId
         ).exclude?(e.class.to_s)
       end
 
@@ -130,11 +122,7 @@ module RailsAdmin
           statements.concat make_condition_for_current_collection(field, conditions_per_collection)
         end
 
-        if statements.any?
-          {'$or' => statements}
-        else
-          {}
-        end
+        statements.any? ? {'$or' => statements} : {}
       end
 
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
@@ -157,11 +145,7 @@ module RailsAdmin
           end
         end
 
-        if statements.any?
-          {'$and' => statements}
-        else
-          {}
-        end
+        statements.any? ? {'$and' => statements} : {}
       end
 
       def parse_collection_name(column)
