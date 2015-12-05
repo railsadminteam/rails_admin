@@ -2,7 +2,10 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v0.8.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v0.8.1...HEAD)
+
+### Fixed
+- Fixed Mongoid BSON object field ([#2495](https://github.com/sferik/rails_admin/issues/2495))
 
 
 ## [0.8.1](https://github.com/sferik/rails_admin/tree/v0.8.1) - 2015-11-24
