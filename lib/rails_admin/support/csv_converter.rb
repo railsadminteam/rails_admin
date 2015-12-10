@@ -3,8 +3,104 @@ require 'csv'
 
 module RailsAdmin
   class CSVConverter
-    UTF8_ENCODINGS = [nil, '', 'utf8', 'utf-8', 'unicode', 'UTF8', 'UTF-8', 'UNICODE', 'utf8mb4']
-    TARGET_ENCODINGS = %w(UTF-8 UTF-16LE UTF-16BE UTF-32LE UTF-32BE UTF-7 ISO-8859-1 ISO-8859-15 IBM850 MacRoman Windows-1252 ISO-8859-3 IBM852 ISO-8859-2 Windows-1250 IBM855 ISO-8859-5 KOI8-R MacCyrillic Windows-1251 IBM866 GB2312 GBK GB18030 Big5 Big5-HKSCS EUC-TW EUC-JP ISO-2022-JP Shift_JIS EUC-KR)
+    class DbEncodingMap
+      # The mapping from canonical encoding names in PostgreSQL to ones in Ruby.
+      # Taken from here:
+      #   https://bitbucket.org/ged/ruby-pg/src/master/ext/pg.c
+      PG_ENCODINGS = {
+        'BIG5'           => Encoding::Big5,
+        'EUC_CN'         => Encoding::GB2312,
+        'EUC_JP'         => Encoding::EUC_JP,
+        'EUC_JIS_2004'   => Encoding::EUC_JP,
+        'EUC_KR'         => Encoding::EUC_KR,
+        'EUC_TW'         => Encoding::EUC_TW,
+        'GB18030'        => Encoding::GB18030,
+        'GBK'            => Encoding::GBK,
+        'ISO_8859_5'     => Encoding::ISO_8859_5,
+        'ISO_8859_6'     => Encoding::ISO_8859_6,
+        'ISO_8859_7'     => Encoding::ISO_8859_7,
+        'ISO_8859_8'     => Encoding::ISO_8859_8,
+        'KOI8'           => Encoding::KOI8_R,
+        'KOI8R'          => Encoding::KOI8_R,
+        'KOI8U'          => Encoding::KOI8_U,
+        'LATIN1'         => Encoding::ISO_8859_1,
+        'LATIN2'         => Encoding::ISO_8859_2,
+        'LATIN3'         => Encoding::ISO_8859_3,
+        'LATIN4'         => Encoding::ISO_8859_4,
+        'LATIN5'         => Encoding::ISO_8859_9,
+        'LATIN6'         => Encoding::ISO_8859_10,
+        'LATIN7'         => Encoding::ISO_8859_13,
+        'LATIN8'         => Encoding::ISO_8859_14,
+        'LATIN9'         => Encoding::ISO_8859_15,
+        'LATIN10'        => Encoding::ISO_8859_16,
+        'MULE_INTERNAL'  => Encoding::Emacs_Mule,
+        'SJIS'           => Encoding::Windows_31J,
+        'SHIFT_JIS_2004' => Encoding::Windows_31J,
+        'SQL_ASCII'      => nil,
+        'UHC'            => Encoding::CP949,
+        'UTF8'           => Encoding::UTF_8,
+        'WIN866'         => Encoding::IBM866,
+        'WIN874'         => Encoding::Windows_874,
+        'WIN1250'        => Encoding::Windows_1250,
+        'WIN1251'        => Encoding::Windows_1251,
+        'WIN1252'        => Encoding::Windows_1252,
+        'WIN1253'        => Encoding::Windows_1253,
+        'WIN1254'        => Encoding::Windows_1254,
+        'WIN1255'        => Encoding::Windows_1255,
+        'WIN1256'        => Encoding::Windows_1256,
+        'WIN1257'        => Encoding::Windows_1257,
+        'WIN1258'        => Encoding::Windows_1258,
+      }
+
+      # The mapping from canonical encoding names in MySQL to ones in Ruby.
+      # Taken from here:
+      #   https://github.com/tmtm/ruby-mysql/blob/master/lib/mysql/charset.rb
+      # Author: TOMITA Masahiro <tommy@tmtm.org>
+      MYSQL_ENCODINGS = {
+        'armscii8' => nil,
+        'ascii'    => Encoding::US_ASCII,
+        'big5'     => Encoding::Big5,
+        'binary'   => Encoding::ASCII_8BIT,
+        'cp1250'   => Encoding::Windows_1250,
+        'cp1251'   => Encoding::Windows_1251,
+        'cp1256'   => Encoding::Windows_1256,
+        'cp1257'   => Encoding::Windows_1257,
+        'cp850'    => Encoding::CP850,
+        'cp852'    => Encoding::CP852,
+        'cp866'    => Encoding::IBM866,
+        'cp932'    => Encoding::Windows_31J,
+        'dec8'     => nil,
+        'eucjpms'  => Encoding::EucJP_ms,
+        'euckr'    => Encoding::EUC_KR,
+        'gb2312'   => Encoding::EUC_CN,
+        'gbk'      => Encoding::GBK,
+        'geostd8'  => nil,
+        'greek'    => Encoding::ISO_8859_7,
+        'hebrew'   => Encoding::ISO_8859_8,
+        'hp8'      => nil,
+        'keybcs2'  => nil,
+        'koi8r'    => Encoding::KOI8_R,
+        'koi8u'    => Encoding::KOI8_U,
+        'latin1'   => Encoding::ISO_8859_1,
+        'latin2'   => Encoding::ISO_8859_2,
+        'latin5'   => Encoding::ISO_8859_9,
+        'latin7'   => Encoding::ISO_8859_13,
+        'macce'    => Encoding::MacCentEuro,
+        'macroman' => Encoding::MacRoman,
+        'sjis'     => Encoding::SHIFT_JIS,
+        'swe7'     => nil,
+        'tis620'   => Encoding::TIS_620,
+        'ucs2'     => Encoding::UTF_16BE,
+        'ujis'     => Encoding::EucJP_ms,
+        'utf8'     => Encoding::UTF_8,
+        'utf8mb4'  => Encoding::UTF_8,
+      }
+
+      def self.encodings
+        @_encodings ||= PG_ENCODINGS.merge MYSQL_ENCODINGS
+      end
+    end
+
     def initialize(objects = [], schema = {})
       return self if (@objects = objects).blank?
 
@@ -35,23 +131,28 @@ module RailsAdmin
 
     def to_csv(options = {})
       # encoding shenanigans first
-      @encoding_from = Encoding.find(UTF8_ENCODINGS.include?(@abstract_model.encoding) ? 'UTF-8' : @abstract_model.encoding)
-      @encoding_to = Encoding.find(options[:encoding_to].presence || @encoding_from)
+      encoding_from = DbEncodingMap.encodings[@abstract_model.encoding] || Encoding::UTF_8
+      encoding_to =
+        if options[:encoding_to].present?
+          Encoding.find(options[:encoding_to])
+        else
+          encoding_from
+        end
 
       csv_string = generate_csv_string(options)
 
-      if @encoding_to != @encoding_from
-        csv_string = csv_string.encode(@encoding_to, @encoding_from, invalid: :replace, undef: :replace, replace: '?')
+      if encoding_to != encoding_from
+        csv_string = csv_string.encode(encoding_to, encoding_from, invalid: :replace, undef: :replace, replace: '?')
       end
       # Add a BOM for utf8 encodings, helps with utf8 auto-detect for some versions of Excel.
       # Don't add if utf8 but user don't want to touch input encoding:
       # If user chooses utf8, they will open it in utf8 and BOM will disappear at reading.
       # But that way "English" users who don't bother and chooses to let utf8 by default won't get BOM added
       # and will not see it if Excel opens the file with a different encoding.
-      if options[:encoding_to].present? && @encoding_to == Encoding::UTF_8
+      if options[:encoding_to].present? && encoding_to == Encoding::UTF_8
         csv_string = "\xEF\xBB\xBF#{csv_string}"
       end
-      [!options[:skip_header], @encoding_to.to_s, csv_string]
+      [!options[:skip_header], encoding_to.to_s, csv_string]
     end
 
   private
@@ -66,10 +167,11 @@ module RailsAdmin
 
     def generate_csv_string(options)
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
+      method = @objects.respond_to?(:find_each) ? :find_each : :each
+
       CSV.generate(generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
-        method = @objects.respond_to?(:find_each) ? :find_each : :each
         @objects.send(method) do |object|
           csv << generate_csv_row(object)
         end

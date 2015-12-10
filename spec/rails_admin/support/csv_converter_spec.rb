@@ -45,6 +45,19 @@ describe RailsAdmin::CSVConverter do
       end
     end
 
+    context 'when encoding FROM MySQL latin1' do
+      let(:encoding) { '' }
+      let(:objects) { FactoryGirl.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
+
+      it 'exports to ISO-8859-1', active_record: true do
+        expect(::ActiveRecord::Base.connection).to receive(:encoding) { 'latin1' }
+        expect(subject[1]).to eq 'ISO-8859-1'
+        expect(subject[2].encoding).to eq Encoding::ISO_8859_1
+        expect(subject[2].unpack('H*').first).
+          to eq '4e756d6265722c4e616d650a312c4a6f73e80a'
+      end
+    end
+
     context 'when encoding to UTF-8' do
       let(:encoding) { 'UTF-8' }
 
