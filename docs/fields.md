@@ -421,6 +421,28 @@ RailsAdmin.config do |config|
 end
 ```
 
+### Existing custom field type (color picker field)
+
+Did you know Rails Admin comes with useful custom color picker field type? You can use it for editing but also for listing.
+
+```ruby
+rails_admin do
+    field :color, :color
+end
+RailsAdmin.config do |config|
+  config.model 'Team' do
+    edit do
+      field :name, :color
+    end
+    list do
+      field :name, :color
+    end
+    # Or simply as follow if you want to use it everywhere
+    field :name, :color
+  end
+end
+```
+
 ## Creating a custom field factory
 
 Type guessing can be overridden by registering a custom field "factory", but
