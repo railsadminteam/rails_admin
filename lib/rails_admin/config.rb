@@ -72,6 +72,9 @@ module RailsAdmin
       # yell about fields that are not marked as accessible
       attr_accessor :yell_for_non_accessible_fields
 
+      # This method will set limit of models that will be uploaded in association fields
+      attr_accessor :association_select_models_number_limit
+
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
       #
@@ -278,6 +281,7 @@ module RailsAdmin
         @navigation_static_links = {}
         @navigation_static_label = nil
         @parent_controller = '::ApplicationController'
+        @association_select_models_number_limit = 100
         RailsAdmin::Config::Actions.reset
       end
 

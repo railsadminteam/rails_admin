@@ -54,7 +54,7 @@ module RailsAdmin
         # preload entire associated collection (per associated_collection_scope) on load
         # Be sure to set limit in associated_collection_scope if set is large
         register_instance_option :associated_collection_cache_all do
-          @associated_collection_cache_all ||= (associated_model_config.abstract_model.count < 100)
+          @associated_collection_cache_all ||= (associated_model_config.abstract_model.count < RailsAdmin::Config.association_select_models_number_limit)
         end
 
         # determines whether association's elements can be removed
