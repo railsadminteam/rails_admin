@@ -85,9 +85,8 @@ module RailsAdmin
         @navigation_label ||= begin
           # Use source method object in case it's overwritten in the model
           parent_module = Class.method(:parent).unbind.bind(abstract_model.model).call
-          if parent_module != Object
-            parent_module.to_s
-          end
+
+          parent_module.to_s if parent_module != Object
         end
       end
 
