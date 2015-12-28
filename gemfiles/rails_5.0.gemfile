@@ -3,9 +3,12 @@
 source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
-gem "devise", ">= 3.2"
-gem "rails", "~> 4.1.0"
-gem "capybara", ">= 0.8", :group => :test
+gem "devise", :github => "plataformatec/devise"
+gem "rails", "~> 5.0.0.beta1"
+gem "sass-rails", "~> 5.0"
+gem "rack-pjax", :github => "afcapel/rack-pjax"
+gem "remotipart", :github => "mshibuya/remotipart"
+gem "capybara", :github => "jnicklas/capybara", :group => :test
 
 group :active_record do
   gem "paper_trail", "~> 3.0"
@@ -53,18 +56,6 @@ group :test do
   platforms :ruby_19 do
     gem "tins", "~> 1.6.0", :require => false
   end
-end
-
-group :mongoid do
-  gem "mongoid", "~> 4.0.0"
-  gem "mongoid-paperclip", ">= 0.0.8", :require => "mongoid_paperclip"
-  gem "carrierwave-mongoid", ">= 0.6.3", :require => "carrierwave/mongoid"
-  gem "refile-mongoid", ">= 0.0.1", :platforms => [:ruby_21, :ruby_22, :ruby_23]
-end
-
-platforms :ruby_21, :ruby_22, :ruby_23 do
-  gem "refile", "~> 0.5", :require => "refile/rails"
-  gem "refile-mini_magick", ">= 0.1.0"
 end
 
 gemspec :path => "../"
