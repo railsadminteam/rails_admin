@@ -21,4 +21,11 @@ class Player < ActiveRecord::Base
   def draft_id=(id)
     self.draft = Draft.find_by_id(id)
   end
+
+  # This method doesn't do anything other that make sure that a
+  # particular bug fails the test suite if exposed
+  # See: https://github.com/sferik/rails_admin/pull/2512
+  def self.parent
+    nil
+  end
 end
