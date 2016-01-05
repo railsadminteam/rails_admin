@@ -7,6 +7,16 @@ ActiveRecord::Base.connection.tables.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
 end
 
+def silence_stream(stream)
+  old_stream = stream.dup
+  stream.reopen(RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
+  stream.sync = true
+  yield
+ensure
+  stream.reopen(old_stream)
+  old_stream.close
+end
+
 silence_stream(STDOUT) do
   ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
 end
