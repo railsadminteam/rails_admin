@@ -8,7 +8,7 @@
 [![Inline docs](http://inch-ci.org/github/sferik/rails_admin.svg)][inch]
 
 [gem]: https://rubygems.org/gems/rails_admin
-[travis]: http://travis-ci.org/sferik/rails_admin
+[travis]: https://travis-ci.org/sferik/rails_admin
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
 [codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [coveralls]: https://coveralls.io/r/sferik/rails_admin
@@ -95,5 +95,5 @@ This library aims to support and is [tested against][travis] the following Ruby 
 * [Rubinius][]
 * [JRuby][]
 
-[rubinius]: http://rubini.us/
+[rubinius]: http://rubinius.com
 [jruby]: http://jruby.org/
