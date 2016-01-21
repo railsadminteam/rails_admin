@@ -82,7 +82,7 @@ end
 The code above didn't destroy the outdated associations for me. I've refactored the code to fix the bugs and make it easier to read here.
 
 ```ruby
- This is used to order tiles from the page_tiles
+ This is used to order blocks from the grids
   def block_ids=(ids)
     ids = ids.reject{|i| i == "" || i == nil}.map{|i| i.to_i}
     current_ids = block_grid_associations.map(&:block_id)
@@ -92,7 +92,7 @@ The code above didn't destroy the outdated associations for me. I've refactored 
         if current_ids.include? (id)
           update_block_association_position(id, index+1)
         else
-          page_block_associations.build({:block_id => id, :position => (index+1)})
+          grid_block_associations.build({:block_id => id, :position => (index+1)})
         end
       end
     end
