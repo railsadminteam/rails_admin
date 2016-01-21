@@ -77,4 +77,37 @@ def block_ids=(ids)
 end
 ```
 
+### Cleaner Alternative
+
+The code above didn't destroy the outdated associations for me. I've refactored the code to fix the bugs and make it easier to read here.
+
+```ruby
+ This is used to order tiles from the page_tiles
+  def block_ids=(ids)
+    ids = ids.reject{|i| i == "" || i == nil}.map{|i| i.to_i}
+    current_ids = block_grid_associations.map(&:block_id)
+    if current_ids != ids
+      destroy_outdated_block_associations(current_ids, ids)
+      ids.each_with_index do |id, index|
+        if current_ids.include? (id)
+          update_block_association_position(id, index+1)
+        else
+          page_block_associations.build({:block_id => id, :position => (index+1)})
+        end
+      end
+    end
+  end
+
+  private
+
+  def destroy_outdated_block_associations(current_ids, ids)
+    (current_ids - ids).each { |id| block_grid_associations.select{|b| b.block_id == id}.first.destroy }
+  end
+
+  def update_block_association_position(id, position)
+    block_grid_associations.select { |b| b.block_id == id }.first.update_attributes(position: position)
+  end
+
+```
+
 [[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
