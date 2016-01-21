@@ -82,7 +82,7 @@ end
 The code above didn't destroy the outdated associations for me. I've refactored the code to fix the bugs and make it easier to read here.
 
 ```ruby
- This is used to order blocks from the grids
+ #This is used to order blocks from the grids
   def block_ids=(ids)
     ids = ids.reject{|i| i == "" || i == nil}.map{|i| i.to_i}
     current_ids = block_grid_associations.map(&:block_id)
