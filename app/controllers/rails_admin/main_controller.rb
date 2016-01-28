@@ -143,7 +143,8 @@ module RailsAdmin
 
     def get_collection(model_config, scope, pagination)
       associations = model_config.list.fields.select { |f| f.type == :belongs_to_association && !f.polymorphic? }.collect { |f| f.association.name }
-      if model_config.abstract_model.model.try(:translates?)
+      model = model_config.abstract_model.model
+      if model.try(:translates?)
         associations << model.translation_options[:table_name]
       end
       options = {}
