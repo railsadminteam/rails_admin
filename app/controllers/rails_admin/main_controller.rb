@@ -56,17 +56,39 @@ module RailsAdmin
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
       column = begin
         if field.nil? || field.sortable == true # use params[:sort] on the base table
+          sorting_model = abstract_model.model_name.constantize
+          sorting_attr = params[:sort]
           "#{abstract_model.table_name}.#{params[:sort]}"
         elsif field.sortable == false # use default sort, asked field is not sortable
+          sorting_model = abstract_model.model_name.constantize
+          sorting_attr = model_config.list.sort_by
           "#{abstract_model.table_name}.#{model_config.list.sort_by}"
         elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
+          sorting_model = begin
+            field.sortable.to_s.split('.').first.camelize.pluralize(1).constantize
+          rescue
+            nil
+          end
+          sorting_attr = field.sortable.to_s.split('.').last
           field.sortable
         elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+          sorting_model = field.abstract_model.model_name.constantize
+          sorting_attr = field.sortable.values.first
           "#{field.sortable.keys.first}.#{field.sortable.values.first}"
         elsif field.association? # use column on target table
+          sorting_model = field.associated_model_config.abstract_model.model_name.constantize
+          sorting_attr = field.sortable
           "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
         else # use described column in the field conf.
+          sorting_model = abstract_model.model_name.constantize
+          sorting_attr = field.sortable
           "#{abstract_model.table_name}.#{field.sortable}"
+        end
+      end
+
+      if sorting_model.try(:translates?)
+        if sorting_model.translated_attribute_names.include? sorting_attr.to_sym
+          column = "#{sorting_model.translation_options[:table_name]}.#{sorting_attr}"
         end
       end
 
