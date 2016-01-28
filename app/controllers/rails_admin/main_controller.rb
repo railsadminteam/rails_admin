@@ -145,7 +145,7 @@ module RailsAdmin
       associations = model_config.list.fields.select { |f| f.type == :belongs_to_association && !f.polymorphic? }.collect { |f| f.association.name }
       model = model_config.abstract_model.model
       if model.try(:translates?)
-        associations << model.translation_options[:table_name]
+        associations << :translations
       end
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
