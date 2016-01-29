@@ -89,6 +89,8 @@ module RailsAdmin
       if sorting_model.try(:translates?)
         if sorting_model.translated_attribute_names.include? sorting_attr.to_sym
           column = "#{sorting_model.translation_options[:table_name]}.#{sorting_attr}"
+        elsif sorting_attr == sorting_model.primary_key
+          column = "#{sorting_model.table_name}.#{sorting_attr}"
         end
       end
 
