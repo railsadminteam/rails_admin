@@ -77,7 +77,7 @@ module RailsAdmin
           "#{field.sortable.keys.first}.#{field.sortable.values.first}"
         elsif field.association? # use column on target table
           sorting_model = field.associated_model_config.abstract_model.model_name.constantize
-          sorting_attr = field.sortable
+          sorting_attr = sorting_model.primary_key
           "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
         else # use described column in the field conf.
           sorting_model = abstract_model.model_name.constantize
