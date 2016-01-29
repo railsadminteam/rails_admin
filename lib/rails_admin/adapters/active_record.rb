@@ -33,7 +33,7 @@ module RailsAdmin
 
         if options[:sort] && model.try(:translates?) &&
            options[:sort].split('.').first == model.translation_options[:table_name]
-          scope = scope.where("#{model.translation_options[:table_name]}.locale = #{I18n.locale}")
+          scope = scope.where("#{model.translation_options[:table_name]}.locale = ?", I18n.locale)
         end
 
         scope = query_scope(scope, options[:query]) if options[:query]
