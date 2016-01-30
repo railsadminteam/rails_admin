@@ -10,6 +10,7 @@ module RailsAdmin
         '%b' => 'MMM',        # The abbreviated month name ("Jan")
         '%B' => 'MMMM',       # The  full  month  name ("January")
         '%d' => 'DD',         # Day of the month (01..31)
+        '%-d' => 'D',         # Day of the month (1..31)
         '%D' => 'MM/DD/YY',   # American date format mm/dd/yy
         '%e' => 'D',          # Day of the month (1..31)
         '%F' => 'YY-MM-DD',   # ISO 8601 date format
