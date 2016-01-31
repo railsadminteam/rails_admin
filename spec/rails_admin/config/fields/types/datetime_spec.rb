@@ -39,9 +39,9 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       Time.zone = 'UTC'
     end
 
-    it 'is able to read %B %d, %Y %H:%M' do
+    it 'is able to read %B %-d, %Y %H:%M' do
       @object = FactoryGirl.create(:field_test)
-      @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%B %d, %Y %H:%M'))
+      @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%B %-d, %Y %H:%M'))
       expect(@object.datetime_field.strftime('%Y-%m-%d %H:%M')).to eq(@time.strftime('%Y-%m-%d %H:%M'))
     end
 
