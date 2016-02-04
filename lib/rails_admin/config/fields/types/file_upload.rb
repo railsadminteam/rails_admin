@@ -42,7 +42,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif/i
+            (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif|svg/i
           end
 
           register_instance_option :allowed_methods do
