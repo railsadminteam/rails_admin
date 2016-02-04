@@ -1,8 +1,4 @@
-//= require jquery.iframe-transport.js
 //= require_self
-
-
-// This file is frozen in RailsAdmin to cope with https://github.com/JangoSteve/remotipart/pull/50
 
 (function($) {
 
@@ -20,14 +16,13 @@
           // delete settings.beforeSend;
           delete settings.beforeSend;
 
-          settings.iframe      = true;
-          settings.files       = $($.rails.fileInputSelector, form);
-          settings.data        = form.serializeArray();
+          settings.data        = new FormData( this );
+          settings.type        = 'POST';
+          settings.contentType = false;
           settings.processData = false;
 
           // Modify some settings to integrate JS request with rails helpers and middleware
           if (settings.dataType === undefined) { settings.dataType = 'script *'; }
-          settings.data.push({name: 'remotipart_submitted', value: true});
 
           // Allow remotipartSubmit to be cancelled if needed
           if ($.rails.fire(form, 'ajax:remotipartSubmit', [xhr, settings])) {
