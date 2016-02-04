@@ -184,7 +184,7 @@ describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
     end
 
-    context "with custom configuration" do
+    context 'with custom configuration' do
       before do
         RailsAdmin.config.default_associated_collection_limit = 5
       end
