@@ -89,7 +89,7 @@ module RailsAdmin
 
         begin
           # Adjust with the correct timezone and daylight savint time
-          datetime_with_wrong_tz = ::DateTime.strptime(delocalized_value, strftime_format)
+          datetime_with_wrong_tz = ::DateTime.strptime(delocalized_value, strftime_format.gsub('%-d', '%d'))
           Time.zone.parse(datetime_with_wrong_tz.strftime('%Y-%m-%d %H:%M:%S'))
         rescue ArgumentError
           nil
