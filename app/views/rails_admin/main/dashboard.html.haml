@@ -3,7 +3,7 @@
     %thead
       %tr
         %th.shrink.model-name= t "admin.table_headers.model_name"
-        %th.shrink.last-used= t "admin.table_headers.last_used"
+        %th.shrink.last-created= t "admin.table_headers.last_created"
         %th.records= t "admin.table_headers.records"
         %th.shrink.controls
     %tbody
@@ -12,13 +12,13 @@
           - index_path = index_path(model_name: abstract_model.to_param)
           - row_class = "#{cycle("odd", "even")}#{" link" if index_path} #{abstract_model.param_key}_links"
           %tr{class: row_class, :"data-link" => index_path}
-            - last_used = @most_recent_changes[abstract_model.model.name]
-            - active = last_used.try(:today?)
+            - last_created = @most_recent_created[abstract_model.model.name]
+            - active = last_created.try(:today?)
             %td
               %span.show= link_to capitalize_first_letter(abstract_model.config.label_plural), index_path, class: 'pjax'
             %td
-              - if last_used
-                = time_ago_in_words last_used
+              - if last_created
+                = time_ago_in_words last_created
                 = t "admin.misc.ago"
             %td
               - count = @count[abstract_model.model.name]
