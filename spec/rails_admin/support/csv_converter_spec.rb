@@ -46,17 +46,19 @@ describe RailsAdmin::CSVConverter do
     end
 
     context 'when encoding FROM MySQL latin1' do
-      # postgresql cannot load invalid data: invalid byte sequence for encoding "UTF8": 0xe8
-      unless ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
-        let(:encoding) { '' }
-        let(:objects) { FactoryGirl.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
+      let(:encoding) { '' }
+      let(:objects) { FactoryGirl.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
 
-        it 'exports to ISO-8859-1', active_record: true do
+      it 'exports to ISO-8859-1', active_record: true do
+        # postgresql cannot load invalid data: invalid byte sequence for encoding "UTF8": 0xe8
+        if ActiveRecord::Base.connection_config[:adapter] != 'postgresql'
           expect(::ActiveRecord::Base.connection).to receive(:encoding) { 'latin1' }
           expect(subject[1]).to eq 'ISO-8859-1'
           expect(subject[2].encoding).to eq Encoding::ISO_8859_1
           expect(subject[2].unpack('H*').first).
             to eq '4e756d6265722c4e616d650a312c4a6f73e80a'
+        else
+          expect(true).to eq(true)
         end
       end
     end
