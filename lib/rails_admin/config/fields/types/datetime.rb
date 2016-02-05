@@ -38,8 +38,11 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            fallback = ::I18n.t(date_format, scope: i18n_scope, locale: :en)
-            ::I18n.t(date_format, scope: i18n_scope, default: fallback).to_s
+            begin
+              ::I18n.t(date_format, scope: i18n_scope, raise: true)
+            rescue ::I18n::ArgumentError
+              ::I18n.t(date_format, scope: i18n_scope, locale: :en)
+            end
           end
 
           register_instance_option :datepicker_options do
