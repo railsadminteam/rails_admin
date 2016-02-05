@@ -33,16 +33,16 @@ module RailsAdmin
           format.to_s.scan(/%[AaBbp]/) do |match|
             case match
             when '%A'
-              english = ::I18n.t('date.day_names', locale: :en)
+              english = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
               day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
             when '%a'
-              english = ::I18n.t('date.abbr_day_names', locale: :en)
+              english = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
               abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
             when '%B'
-              english = ::I18n.t('date.month_names', locale: :en)[1..-1]
+              english = [nil, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][1..-1]
               month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
             when '%b'
-              english = ::I18n.t('date.abbr_month_names', locale: :en)[1..-1]
+              english = [nil, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][1..-1]
               abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
             when '%p'
               date_string = date_string.gsub(/#{::I18n.t('date.time.am', default: "am")}/, 'am')

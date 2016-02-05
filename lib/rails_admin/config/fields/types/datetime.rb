@@ -41,7 +41,7 @@ module RailsAdmin
             begin
               ::I18n.t(date_format, scope: i18n_scope, raise: true)
             rescue ::I18n::ArgumentError
-              ::I18n.t(date_format, scope: i18n_scope, locale: :en)
+              "%B %d, %Y %H:%M"
             end
           end
 

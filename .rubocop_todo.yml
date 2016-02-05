@@ -21,3 +21,13 @@ Style/ClassVars:
 # Offense count: 7
 Style/RescueModifier:
   Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
