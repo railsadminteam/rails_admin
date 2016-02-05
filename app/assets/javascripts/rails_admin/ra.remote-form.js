@@ -8,7 +8,6 @@
  * Depends:
  *   jquery.ui.core.js
  *   jquery.ui.widget.js
- *   jquery.ui.dialog.js
  */
 (function($) {
   $.widget("ra.remoteForm", {

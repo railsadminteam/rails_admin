@@ -1,6 +1,5 @@
 require 'font-awesome-rails'
 require 'jquery-rails'
-require 'jquery-ui-rails'
 require 'kaminari'
 require 'nested_form'
 require 'rack-pjax'
