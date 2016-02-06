@@ -50,6 +50,17 @@ class Tableless < ActiveRecord::Base
         a
       end
     end
+
+    def attribute_types
+      @attribute_types ||=
+        Hash[columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }]
+    end
+
+  private
+
+    def lookup_attribute_type(type)
+      ActiveRecord::Type.lookup({datetime: :time}[type] || type)
+    end
   end
 
   # Override the save method to prevent exceptions.
