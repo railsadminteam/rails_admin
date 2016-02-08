@@ -12,8 +12,9 @@ RailsAdmin.config do |config|
     # Use sorcery's before filter to auth users
     require_login
   end
+  config.current_user_method(&:current_user)
 end
-config.current_user_method(&:current_user)
+
 ```
 
 You will also need to update the `not_authenticated` in your `application_controller.rb`:
