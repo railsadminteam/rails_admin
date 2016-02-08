@@ -13,6 +13,7 @@ RailsAdmin.config do |config|
     require_login
   end
 end
+config.current_user_method(&:current_user)
 ```
 
 You will also need to update the `not_authenticated` in your `application_controller.rb`:
