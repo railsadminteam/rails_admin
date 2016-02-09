@@ -71,8 +71,21 @@ then delete `config/initializer/active_record.rb` and replace the model loading 
 
     models = ActiveRecord::Base.descendants
 
-***
 
+When using Rails 3/4:
+
+If `config.cache_classes = false` (by default it's off in development, but on in production) enable your applications eager loading.
+    
+```ruby
+Rails.application.configure do
+  config.eager_load = true
+```
+
+or
+ 
+```
+Rails.application.eager_load!
+```
 ## Less Desirable Method ("Dirty" just sounds so... dirty.)
 
 #### Move your RailsAdmin.config block into the app controller for dynamic reloading of changes in dev, etc
