@@ -79,7 +79,7 @@ module RailsAdmin
       end
 
       def encoding
-        'UTF-8'
+        Encoding::UTF_8
       end
 
       def embedded?
