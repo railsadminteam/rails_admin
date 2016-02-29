@@ -385,7 +385,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
       it "don't show gravatar" do
         RailsAdmin.config do |config|
-          config.show_gravatar false
+          config.show_gravatar = false
         end
 
         allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
