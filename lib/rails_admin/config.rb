@@ -68,6 +68,9 @@ module RailsAdmin
       # @see RailsAdmin.config
       attr_reader :registry
 
+      # show Gravatar in Navigation bar
+      attr_accessor :show_gravatar
+
       # accepts a hash of static links to be shown below the main navigation
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
@@ -279,6 +282,7 @@ module RailsAdmin
         @label_methods = [:name, :title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
+        @show_gravatar = true
         @navigation_static_links = {}
         @navigation_static_label = nil
         @parent_controller = '::ApplicationController'
