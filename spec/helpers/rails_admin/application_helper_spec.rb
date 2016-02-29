@@ -391,7 +391,6 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
         result = helper.edit_user_link
         expect(result).not_to include('gravatar')
-
       end
     end
   end
