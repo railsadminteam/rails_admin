@@ -101,7 +101,7 @@
 
       var $content = $('<p>')
         .addClass('filter form-search')
-        .append('<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i></a> ' + field_label + '</span>')
+        .append('<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>')
         .append('&nbsp;' + control + '&nbsp;' + (additional_control || ''));
 
       $('#filters_box').append($content);
