@@ -287,6 +287,8 @@ end
 The partial should be placed in your applications template folder, such as
 `app/views/rails_admin/main/_my_awesome_partial.html.erb`.
 
+The object is available from the partial with `form.object`.
+
 One can also completely override the rendering logic:
 
 ```ruby
