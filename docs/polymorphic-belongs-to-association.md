@@ -3,7 +3,6 @@ Synopsis:
 ```ruby
 class Comment < ActiveRecord::Base
   belongs_to :commentable, :polymorphic => true, :inverse_of => :comments
-  attr_accessible :commentable_id, :commentable_type
 
   rails_admin do
     configure :commentable do
