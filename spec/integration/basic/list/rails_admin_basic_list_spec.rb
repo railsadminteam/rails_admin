@@ -507,6 +507,18 @@ describe 'RailsAdmin Basic List', type: :request do
       is_expected.to have_content(@teams[2].name)
       is_expected.to have_content(@teams[3].name)
     end
+    it 'shows records from overridden scope when set in config' do
+      # default behaviour is to honour models' default_scope
+      # Comment has a default_scope excluding non-confirmed comments
+      Comment.create! content: "not a confirmed comment"
+      begin
+        RailsAdmin::Config.global_default_scope :unscoped
+        visit index_path(model_name: 'comment/confirmed')
+        is_expected.to have_content(Comment.first.content)
+      rescue
+        RailsAdmin::Config.global_default_scope nil  # reset to default
+      end
+    end
     describe 'i18n' do
       before :each do
         en = {admin: {scopes: {

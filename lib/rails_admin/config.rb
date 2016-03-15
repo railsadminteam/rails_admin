@@ -75,6 +75,25 @@ module RailsAdmin
       # yell about fields that are not marked as accessible
       attr_accessor :yell_for_non_accessible_fields
 
+      # Override default_scope globally
+      #
+      # @example Override default_scope
+      #   RailsAdmin.config do |config|
+      #     config.global_default_scope :unscoped
+      #     config.global_default_scope &:unscoped  # equivalent
+      #     config.global_default_scope { |model| model == User ? User.admins : model.all }
+      #     config.global_default_scope nil  # default = respect models' scopes
+      #   end
+      def global_default_scope(scope = :not_given, &blk)
+        if blk
+          @global_default_scope = blk
+        elsif scope == :not_given  # get/return value, don't set
+          @global_default_scope
+        else
+          @global_default_scope = scope.to_proc
+        end
+      end
+
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
       #
@@ -262,6 +281,7 @@ module RailsAdmin
         @compact_show_view = true
         @browser_validations = true
         @yell_for_non_accessible_fields = true
+        @global_default_scope = nil
         @authenticate = nil
         @authorize = nil
         @audit = nil

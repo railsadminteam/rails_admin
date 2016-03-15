@@ -19,7 +19,7 @@ module RailsAdmin
       end
 
       def get(id)
-        AbstractObject.new(model.find(id))
+        AbstractObject.new(scoped.find(id))
       rescue => e
         raise e if %w(
           Mongoid::Errors::DocumentNotFound
@@ -30,7 +30,11 @@ module RailsAdmin
       end
 
       def scoped
-        model.scoped
+        if RailsAdmin::Config.global_default_scope
+          RailsAdmin::Config.global_default_scope.call(model)
+        else
+          model.scoped
+        end
       end
 
       def first(options = {}, scope = nil)
