@@ -20,6 +20,15 @@ module RailsAdmin
             params[name] = parse_value(params[name]) if params[name]
           end
 
+          def value
+            parent_value = super
+            if %w(DateTime Date Time).include?(parent_value.class.name)
+              parent_value.in_time_zone
+            else
+              parent_value
+            end
+          end
+
           register_instance_option :date_format do
             :long
           end
@@ -29,8 +38,11 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            fallback = ::I18n.t(date_format, scope: i18n_scope, locale: :en)
-            ::I18n.t(date_format, scope: i18n_scope, default: fallback).to_s
+            begin
+              ::I18n.t(date_format, scope: i18n_scope, raise: true)
+            rescue ::I18n::ArgumentError
+              "%B %d, %Y %H:%M"
+            end
           end
 
           register_instance_option :datepicker_options do

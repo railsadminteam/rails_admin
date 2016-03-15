@@ -163,9 +163,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
             beforeSend: (xhr) ->
               xhr.setRequestHeader("Accept", "application/json")
             success: (data, status, xhr) ->
-              html = '<option></option>'
+              html = $('<option></option>')
               $(data).each (i, el) ->
-                html += '<option value="' + el.id + '">' + el.label + '</option>'
+                option = $('<option></option>')
+                option.attr('value', el.id)
+                option.text(el.label)
+                html = html.add(option)
               object_select.html(html)
 
     # ckeditor

@@ -35,14 +35,14 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'most recent change dates are different for same-named models in different modules' do
-      user_update = 10.days.ago.to_date
-      comment_update = 20.days.ago.to_date
-      FactoryGirl.create(:user_confirmed, updated_at: user_update)
-      FactoryGirl.create(:comment_confirmed, updated_at: comment_update)
+      user_create = 10.days.ago.to_date
+      comment_create = 20.days.ago.to_date
+      FactoryGirl.create(:user_confirmed, created_at: user_create)
+      FactoryGirl.create(:comment_confirmed, created_at: comment_create)
 
       controller.dashboard
-      expect(controller.instance_variable_get('@most_recent_changes')['User::Confirmed']).to eq user_update
-      expect(controller.instance_variable_get('@most_recent_changes')['Comment::Confirmed']).to eq comment_update
+      expect(controller.instance_variable_get('@most_recent_created')['User::Confirmed']).to eq user_create
+      expect(controller.instance_variable_get('@most_recent_created')['Comment::Confirmed']).to eq comment_create
     end
   end
 

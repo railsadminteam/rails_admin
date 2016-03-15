@@ -3,6 +3,7 @@ module RailsAdmin
     module Mongoid
       class Association
         attr_reader :association, :model
+
         def initialize(association, model)
           @association = association
           @model = model
@@ -46,6 +47,11 @@ module RailsAdmin
         def foreign_key
           return unless [:embeds_one, :embeds_many].exclude?(macro.to_sym)
           association.foreign_key.to_sym rescue nil
+        end
+
+        def foreign_key_nullable?
+          return if foreign_key.nil?
+          true
         end
 
         def foreign_type

@@ -2,7 +2,7 @@ require 'rails_admin/config/model'
 
 module RailsAdmin
   module Config
-    class LazyModel
+    class LazyModel < BasicObject
       def initialize(entity, &block)
         @entity = entity
         @deferred_block = block
@@ -10,7 +10,7 @@ module RailsAdmin
 
       def target
         unless @model
-          @model = RailsAdmin::Config::Model.new(@entity)
+          @model = ::RailsAdmin::Config::Model.new(@entity)
           @model.instance_eval(&@deferred_block) if @deferred_block
         end
         @model

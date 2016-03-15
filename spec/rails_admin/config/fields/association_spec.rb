@@ -14,4 +14,40 @@ describe RailsAdmin::Config::Fields::Association do
       end
     end
   end
+
+  describe '#removable?', active_record: true do
+    context 'with non-nullable foreign key' do
+      let(:field) { RailsAdmin.config('FieldTest').fields.detect { |f| f.name == :nested_field_tests } }
+      it 'is false' do
+        expect(field.removable?).to be false
+      end
+    end
+
+    context 'with nullable foreign key' do
+      let(:field) { RailsAdmin.config('Team').fields.detect { |f| f.name == :players } }
+      it 'is true' do
+        expect(field.removable?).to be true
+      end
+    end
+
+    context 'with polymorphic has_many' do
+      let(:field) { RailsAdmin.config('Player').fields.detect { |f| f.name == :comments } }
+      it 'does not break' do
+        expect(field.removable?).to be true
+      end
+    end
+
+    context 'with has_many through' do
+      before do
+        class TeamWithHasManyThrough < Team
+          has_many :drafts
+          has_many :draft_players, through: :drafts, source: :player
+        end
+      end
+      let(:field) { RailsAdmin.config('TeamWithHasManyThrough').fields.detect { |f| f.name == :draft_players } }
+      it 'does not break' do
+        expect(field.removable?).to be true
+      end
+    end
+  end
 end

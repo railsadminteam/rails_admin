@@ -8,7 +8,7 @@
 [![Inline docs](http://inch-ci.org/github/sferik/rails_admin.svg)][inch]
 
 [gem]: https://rubygems.org/gems/rails_admin
-[travis]: http://travis-ci.org/sferik/rails_admin
+[travis]: https://travis-ci.org/sferik/rails_admin
 [gemnasium]: https://gemnasium.com/sferik/rails_admin
 [codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [coveralls]: https://coveralls.io/r/sferik/rails_admin
@@ -33,10 +33,11 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 ## Installation
 
-1. Bundle the gem
-2. Run `rails g rails_admin:install`
-3. Provide a namespace for the routes when asked
-4. Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin). (if you chose default namespace: /admin)
+1. On your gemfile: `gem 'rails_admin'`
+2. Run `bundle install`
+3. Run `rails g rails_admin:install`
+4. Provide a namespace for the routes when asked
+5. Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin). (if you chose default namespace: /admin)
 
 ## Configuration
 ### Global
@@ -94,5 +95,5 @@ This library aims to support and is [tested against][travis] the following Ruby 
 * [Rubinius][]
 * [JRuby][]
 
-[rubinius]: http://rubini.us/
+[rubinius]: http://rubinius.com
 [jruby]: http://jruby.org/

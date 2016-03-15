@@ -12,7 +12,7 @@ class FieldTest
   field :array_field, type: Array
   field :big_decimal_field, type: BigDecimal
   field :boolean_field, type: Boolean
-  field :bson_object_id_field, type: RailsAdmin::Config::Fields::Types::BsonObjectId::OBJECT_ID
+  field :bson_object_id_field, type: RailsAdmin::Adapters::Mongoid::Bson::OBJECT_ID
   field :bson_binary_field, type: BSON::Binary
   field :date_field, type: Date
   field :datetime_field, type: DateTime

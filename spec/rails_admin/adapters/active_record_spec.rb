@@ -47,8 +47,24 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       expect(@players).to include abstract_model.first
     end
 
-    it '#count returns count of items' do
-      expect(abstract_model.count).to eq(@players.count)
+    describe '#count' do
+      it 'returns count of items' do
+        expect(abstract_model.count).to eq(@players.count)
+      end
+
+      context 'when default-scoped with select' do
+        before do
+          class PlayerWithDefaultScope < Player
+            self.table_name = 'players'
+            default_scope { select(:id, :name) }
+          end
+        end
+        let(:abstract_model) { RailsAdmin::AbstractModel.new('PlayerWithDefaultScope') }
+
+        it 'does not break' do
+          expect(abstract_model.count).to eq(@players.count)
+        end
+      end
     end
 
     it '#destroy destroys multiple items' do
