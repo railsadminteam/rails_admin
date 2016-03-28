@@ -195,6 +195,11 @@ module RailsAdmin
           ["(#{@column} = ?)", value]
         end
 
+        def column_for_multiple_values(values)
+          return if values.blank?
+          ["(#{@column} IN (?))", Array.wrap(values)]
+        end
+
         def build_statement_for_belongs_to_association
           return if @value.blank?
           ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value

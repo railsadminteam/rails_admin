@@ -237,6 +237,11 @@ module RailsAdmin
           {@column => value}
         end
 
+        def column_for_multiple_values(values)
+          return if values.blank?
+          {@column => {'$in' => Array.wrap(values)}}
+        end
+
         def build_statement_for_string_or_text
           return if @value.blank?
           @value = begin

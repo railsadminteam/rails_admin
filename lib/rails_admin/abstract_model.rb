@@ -153,13 +153,17 @@ module RailsAdmin
       def build_statement_for_integer_decimal_or_float
         case @value
         when Array then
-          val, range_begin, range_end = *@value.collect do |v|
+          collect_proc = Proc.new do |v|
             next unless v.to_i.to_s == v || v.to_f.to_s == v
             @type == :integer ? v.to_i : v.to_f
           end
+          multiple_vals = (@value.shift || '').split(/[\s,]/).collect(&collect_proc).compact
+          val, range_begin, range_end = *@value.collect(&collect_proc)
           case @operator
           when 'between'
             range_filter(range_begin, range_end)
+          when 'in'
+            column_for_multiple_values(multiple_vals)
           else
             column_for_value(val) if val
           end
