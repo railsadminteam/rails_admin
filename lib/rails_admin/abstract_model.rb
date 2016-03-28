@@ -153,13 +153,17 @@ module RailsAdmin
       def build_statement_for_integer_decimal_or_float
         case @value
         when Array then
-          val, range_begin, range_end = *@value.collect do |v|
+          collect_proc = Proc.new do |v|
             next unless v.to_i.to_s == v || v.to_f.to_s == v
             @type == :integer ? v.to_i : v.to_f
           end
+          multiple_vals = (@value.shift || '').split(/[\s,]/).collect(&collect_proc).compact
+          val, range_begin, range_end = *@value.collect(&collect_proc)
           case @operator
           when 'between'
             range_filter(range_begin, range_end)
+          when 'in'
+            column_for_multiple_values(multiple_vals)
           else
             column_for_value(val) if val
           end
@@ -167,6 +171,22 @@ module RailsAdmin
           if @value.to_i.to_s == @value || @value.to_f.to_s == @value
             @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
           end
+        end
+      end
+
+      def build_statement_for_string_or_text
+        multiple_value, value = *case @value
+                                 when Array
+                                   @value[0..1]
+                                 else
+                                   [@value, @value]
+                                 end
+        case @operator
+        when 'default', 'in'
+          values = multiple_value.split(/[\n,]/).map { |s| s.strip }.select { |s| s.size > 0 }.compact.map(&:downcase)
+          column_for_multiple_string_or_text(values)
+        else
+          column_for_single_string_or_text(value)
         end
       end
 
