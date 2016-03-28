@@ -69,15 +69,18 @@
         case 'text':
         case 'belongs_to_association':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
+            '<option data-additional-fieldset="in"'           + (field_operator == "in"          ? 'selected="selected"' : '') + ' value="in">' + RailsAdmin.I18n.t("in") + '</option>' +
+            '<option data-additional-fieldset="like"'         + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
+            '<option data-additional-fieldset="is"'           + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
+            '<option data-additional-fieldset="starts_with"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
+            '<option data-additional-fieldset="ends_with"'    + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null"    ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
             '<option ' + (field_operator == "_null"      ? 'selected="selected"' : '') + ' value="_null">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
-          additional_control = '<input class="additional-fieldset input-sm form-control" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          additional_control =
+          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + (!field_operator || field_operator == "in" ? 'inline-block' : 'none') + ';" name="' + value_name + '[]">' + field_value[0] + '</textarea> ' +
+          '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + field_value[1] + '" /> ';
           break;
         case 'integer':
         case 'decimal':
@@ -91,7 +94,7 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control =
-          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + ((!field_operator || field_operator == "in") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]">' + (field_value[0] || '') + '</textarea> ' +
+          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + ((!field_operator || field_operator == "in") ? 'inline-block' : 'none') + ';" name="' + value_name + '[]">' + (field_value[0] || '') + '</textarea> ' +
           '<input class="additional-fieldset default input-sm form-control" style="display:' + ((field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
           '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" /> ' +
           '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[3] || '') + '" />';
