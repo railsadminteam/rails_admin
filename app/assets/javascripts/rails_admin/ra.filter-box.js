@@ -79,8 +79,8 @@
             '<option ' + (field_operator == "_null"      ? 'selected="selected"' : '') + ' value="_null">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control =
-          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + (!field_operator || field_operator == "in" ? 'inline-block' : 'none') + ';" name="' + value_name + '[]">' + field_value[0] + '</textarea> ' +
-          '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + field_value[1] + '" /> ';
+          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + (!field_operator || field_operator == "in" ? 'inline-block' : 'none') + ';" name="' + value_name + '[]">' + (field_value[0] || '') + '</textarea> ' +
+          '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ';
           break;
         case 'integer':
         case 'decimal':
