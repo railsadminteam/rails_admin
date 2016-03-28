@@ -205,28 +205,33 @@ module RailsAdmin
           ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value
         end
 
-        def build_statement_for_string_or_text
-          return if @value.blank?
-          @value = begin
+        def column_for_single_string_or_text(value)
+          return if value.blank?
+          value = begin
             case @operator
-            when 'default', 'like'
-              "%#{@value.downcase}%"
+            when 'like'
+              "%#{value.downcase}%"
             when 'starts_with'
-              "#{@value.downcase}%"
+              "#{value.downcase}%"
             when 'ends_with'
-              "%#{@value.downcase}"
+              "%#{value.downcase}"
             when 'is', '='
-              "#{@value.downcase}"
+              "#{value.downcase}"
             else
               return
             end
           end
 
           if ar_adapter == 'postgresql'
-            ["(#{@column} ILIKE ?)", @value]
+            ["(#{@column} ILIKE ?)", value]
           else
-            ["(LOWER(#{@column}) LIKE ?)", @value]
+            ["(LOWER(#{@column}) LIKE ?)", value]
           end
+        end
+
+        def column_for_multiple_string_or_text(values)
+          return if values.blank?
+          ["(LOWER(#{@column}) IN (?))", Array.wrap(values)]
         end
 
         def build_statement_for_enum

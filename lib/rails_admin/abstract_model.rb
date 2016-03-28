@@ -174,6 +174,22 @@ module RailsAdmin
         end
       end
 
+      def build_statement_for_string_or_text
+        multiple_value, value = *case @value
+                                 when Array
+                                   @value[0..1]
+                                 else
+                                   [@value, @value]
+                                 end
+        case @operator
+        when 'default', 'in'
+          values = multiple_value.split(/[\n,]/).map { |s| s.strip }.select { |s| s.size > 0 }.compact.map(&:downcase)
+          column_for_multiple_string_or_text(values)
+        else
+          column_for_single_string_or_text(value)
+        end
+      end
+
       def build_statement_for_date
         start_date, end_date = get_filtering_duration
         start_date = (start_date.to_date rescue nil) if start_date
