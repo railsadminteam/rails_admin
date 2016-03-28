@@ -157,7 +157,7 @@ module RailsAdmin
             next unless v.to_i.to_s == v || v.to_f.to_s == v
             @type == :integer ? v.to_i : v.to_f
           end
-          multiple_vals = (@value.shift || '').split(',').collect(&collect_proc)
+          multiple_vals = (@value.shift || '').split(/[\s,]/).collect(&collect_proc).compact
           val, range_begin, range_end = *@value.collect(&collect_proc)
           case @operator
           when 'between'
