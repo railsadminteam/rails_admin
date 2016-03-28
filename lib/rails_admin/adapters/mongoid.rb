@@ -237,23 +237,34 @@ module RailsAdmin
           {@column => value}
         end
 
-        def build_statement_for_string_or_text
-          return if @value.blank?
-          @value = begin
+        def column_for_multiple_values(values)
+          return if values.blank?
+          {@column => {'$in' => Array.wrap(values)}}
+        end
+
+        def column_for_single_string_or_text(value)
+          return if value.blank?
+          value = begin
             case @operator
             when 'default', 'like'
-              Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
+              Regexp.compile(Regexp.escape(value), Regexp::IGNORECASE)
             when 'starts_with'
-              Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
+              Regexp.compile("^#{Regexp.escape(value)}", Regexp::IGNORECASE)
             when 'ends_with'
-              Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
+              Regexp.compile("#{Regexp.escape(value)}$", Regexp::IGNORECASE)
             when 'is', '='
-              @value.to_s
+              value.to_s
             else
               return
             end
           end
-          {@column => @value}
+          {@column => value}
+        end
+
+        def column_for_multiple_string_or_text(values)
+          return if values.blank?
+          i_values = values.map { |v| Regexp.compile(Regexp.escape(v), Regexp::IGNORECASE) }
+          {@column => {'$in' => Array.wrap(i_values)}}
         end
 
         def build_statement_for_enum
