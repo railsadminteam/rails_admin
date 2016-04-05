@@ -11,3 +11,8 @@
 
   body{ background-color: $linkColor; }
 */
+
+iframe.wysihtml5-sandbox, .wysihtml5-editor{
+  border: 1px solid #ccc !important;
+  width: 99.7% !important;
+}
