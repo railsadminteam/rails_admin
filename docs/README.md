@@ -145,6 +145,7 @@
 * [RailsUploader](https://github.com/glebtv/rails-uploader): Nice mass file uploads with jQuery File Upload for rails_admin and mongoid
 * [Rich](https://github.com/bastiaanterhorst/rich): an opinionated CKEditor implementation with file uploads
 * [RailsAdminCountries](https://github.com/xronos-i-am/rails_admin_countries): Add [countries](https://github.com/hexorx/countries) gem support
+* [RailsAdminDropzone](https://github.com/luizpicolo/rails_admin_dropzone): Easy to use integration of drag and drop files upload via [dropzone.js](http://www.dropzonejs.com) for rails_admin
 
 #### Custom action
 * [RailsAdminClone](https://github.com/dalpo/rails_admin_clone): Clone records
