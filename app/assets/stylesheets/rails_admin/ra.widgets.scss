@@ -1,6 +1,10 @@
 iframe.wysihtml5-sandbox{
   height: 250px !important;
-  width: 75% !important;
+  width: 99.7% !important;
+}
+
+iframe.wysihtml5-sandbox, .wysihtml5-editor{
+  border: 1px solid #ccc !important;
 }
 
 .controls img.preview{
