@@ -25,6 +25,10 @@ module RailsAdmin
         register_instance_option :scopes do
           []
         end
+
+        register_instance_option :row_css_class do
+          ''
+        end
       end
     end
   end
