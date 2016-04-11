@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require 'spec_helper'
 
 describe RailsAdmin::MainController, type: :controller do
@@ -36,14 +35,14 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'most recent change dates are different for same-named models in different modules' do
-      user_update = 10.days.ago.to_date
-      comment_update = 20.days.ago.to_date
-      FactoryGirl.create(:user_confirmed, updated_at: user_update)
-      FactoryGirl.create(:comment_confirmed, updated_at: comment_update)
+      user_create = 10.days.ago.to_date
+      comment_create = 20.days.ago.to_date
+      FactoryGirl.create(:user_confirmed, created_at: user_create)
+      FactoryGirl.create(:comment_confirmed, created_at: comment_create)
 
       controller.dashboard
-      expect(controller.instance_variable_get('@most_recent_changes')['User::Confirmed']).to eq user_update
-      expect(controller.instance_variable_get('@most_recent_changes')['Comment::Confirmed']).to eq comment_update
+      expect(controller.instance_variable_get('@most_recent_created')['User::Confirmed']).to eq user_create
+      expect(controller.instance_variable_get('@most_recent_created')['Comment::Confirmed']).to eq comment_create
     end
   end
 
@@ -253,14 +252,22 @@ describe RailsAdmin::MainController, type: :controller do
         I18n.locale = :fr
         ActionController::Parameters.permit_all_parameters = false
 
+        RailsAdmin.config FieldTest do
+          configure :datetime_field do
+            date_format { :default }
+          end
+        end
+
         RailsAdmin.config Comment do
           configure :created_at do
+            date_format { :default }
             show
           end
         end
 
         RailsAdmin.config NestedFieldTest do
           configure :created_at do
+            date_format { :default }
             show
           end
         end
@@ -268,25 +275,25 @@ describe RailsAdmin::MainController, type: :controller do
         controller.params = ActionController::Parameters.new(
           'field_test' => {
             'unallowed_field' => "I shouldn't be here",
-            'datetime_field' => '1 août 2010',
+            'datetime_field' => '1 août 2010 00:00:00',
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
                   'unallowed_field' => "I shouldn't be here",
-                  'created_at' => '2 août 2010',
+                  'created_at' => '2 août 2010 00:00:00',
                 },
-                'created_at' => '3 août 2010',
+                'created_at' => '3 août 2010 00:00:00',
               },
             },
             'comment_attributes' => {
               'unallowed_field' => "I shouldn't be here",
-              'created_at' => '4 août 2010',
+              'created_at' => '4 août 2010 00:00:00',
             },
           },
         )
-
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
       end
+
       after do
         ActionController::Parameters.permit_all_parameters = true
         I18n.locale = :en
@@ -295,17 +302,17 @@ describe RailsAdmin::MainController, type: :controller do
       it 'sanitize params recursively in nested forms' do
         expect(controller.params).to eq(
           'field_test' => {
-            'datetime_field' => 'Sun, 01 Aug 2010 00:00:00 UTC +00:00',
+            'datetime_field' => ::Time.zone.parse('Sun, 01 Aug 2010 00:00:00 UTC +00:00'),
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
-                  'created_at' => 'Mon, 02 Aug 2010 00:00:00 UTC +00:00',
+                  'created_at' => ::Time.zone.parse('Mon, 02 Aug 2010 00:00:00 UTC +00:00'),
                 },
-                'created_at' => 'Tue, 03 Aug 2010 00:00:00 UTC +00:00',
+                'created_at' => ::Time.zone.parse('Tue, 03 Aug 2010 00:00:00 UTC +00:00'),
               },
             },
             'comment_attributes' => {
-              'created_at' => 'Wed, 04 Aug 2010 00:00:00 UTC +00:00',
+              'created_at' => ::Time.zone.parse('Wed, 04 Aug 2010 00:00:00 UTC +00:00'),
             },
           },
         )

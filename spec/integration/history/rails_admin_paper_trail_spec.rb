@@ -48,6 +48,12 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
         expect(versions.next_page).to eq(3)
       end
 
+      it 'can fetch all history' do
+        versions = @adapter.listing_for_model @model, nil, false, false, true, nil, 20
+        expect(versions.total_count).to eq(30)
+        expect(versions.count).to eq(30)
+      end
+
       describe 'returned version objects' do
         before(:each) do
           @padinated_listing = @adapter.listing_for_model @model, nil, false, false, false, nil

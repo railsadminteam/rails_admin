@@ -6,6 +6,10 @@ describe RailsAdmin::Config::Proxyable::Proxy do
     def initialize
       @bindings = {foo: 'bar'}
     end
+
+    def qux
+      'foobar'
+    end
   end
 
   let(:proxy_test) { ProxyTest.new }
@@ -18,5 +22,25 @@ describe RailsAdmin::Config::Proxyable::Proxy do
   it 'preserves initially set @bindings' do
     subject.bindings
     expect(proxy_test.bindings).to eq foo: 'bar'
+  end
+
+  context 'when a method is defined in Kernel' do
+    before do
+      Kernel.module_eval do
+        def qux
+          'quux'
+        end
+      end
+    end
+
+    after do
+      Kernel.module_eval do
+        undef qux
+      end
+    end
+
+    it 'proxies calls for the method to @object' do
+      expect(subject.qux).to eq 'foobar'
+    end
   end
 end

@@ -20,10 +20,22 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           $(that).val(hex)
           $(that).css('backgroundColor', '#' + hex)
 
-    # datetime
+    # datetime picker
+    $.fn.datetimepicker.defaults.icons =
+      time:     'fa fa-clock-o'
+      date:     'fa fa-calendar'
+      up:       'fa fa-chevron-up'
+      down:     'fa fa-chevron-down'
+      previous: 'fa fa-angle-double-left'
+      next:     'fa fa-angle-double-right'
+      today:    'fa fa-dot-circle-o'
+      clear:    'fa fa-trash'
+      close:    'fa fa-times'
 
     content.find('[data-datetimepicker]').each ->
-      $(this).datetimepicker $(this).data('options')
+      options = $(this).data('options')
+      $.extend(options, {locale: RailsAdmin.I18n.locale})
+      $(this).datetimepicker options
 
     # enumeration
 
@@ -151,9 +163,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
             beforeSend: (xhr) ->
               xhr.setRequestHeader("Accept", "application/json")
             success: (data, status, xhr) ->
-              html = '<option></option>'
+              html = $('<option></option>')
               $(data).each (i, el) ->
-                html += '<option value="' + el.id + '">' + el.label + '</option>'
+                option = $('<option></option>')
+                option.attr('value', el.id)
+                option.text(el.label)
+                html = html.add(option)
               object_select.html(html)
 
     # ckeditor

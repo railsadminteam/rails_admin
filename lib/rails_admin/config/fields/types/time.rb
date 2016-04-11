@@ -5,29 +5,17 @@ module RailsAdmin
     module Fields
       module Types
         class Time < RailsAdmin::Config::Fields::Types::Datetime
-          # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
-          @format = :short
-          @i18n_scope = [:time, :formats]
-          @js_plugin_options = {
-            'showDate' => false,
-          }
-
-          # Register field type for the type loader
-          RailsAdmin::Config::Fields::Types.register(self)
-
-          def parse_input(params)
-            params[name] = self.class.normalize(params[name], localized_time_format) if params[name].present?
-          end
-
-          # Parse normalized date (time) strings using UTC
-          def self.parse_date_string(date_string)
-            ::DateTime.parse(date_string)
+          def parse_value(value)
+            parent_value = super(value)
+            return unless parent_value
+            value_with_tz = parent_value.in_time_zone
+            ::DateTime.parse(value_with_tz.strftime('%Y-%m-%d %H:%M:%S'))
           end
 
           register_instance_option :strftime_format do
-            (localized_format.include? '%p') ? '%I:%M %p' : '%H:%M' # rubocop:disable ParenthesesAroundCondition
+            '%H:%M'
           end
         end
       end

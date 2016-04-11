@@ -32,7 +32,7 @@
     - @history.each_with_index do |object, index|
       %tr
         - unless object.created_at.nil?
-          %td= l(object.created_at, format: :long, default: l(object.created_at, format: :long, locale: :en))
+          %td= l(object.created_at, format: :long, default: l(object.created_at, format: :long))
         %td= object.username
         - if @general
           - if o = @abstract_model.get(object.item)
