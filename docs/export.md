@@ -14,4 +14,20 @@ RailsAdmin.config do |config|
 end
 ```
 
+**Specify field Value to export with 'export_value'**
+
+```ruby
+  RailsAdmin.config do |config|
+    config.model 'Lesson' do 
+      export do
+        field :teacher, :string do
+          export_value do
+            value.name if value #value is an instance of Teacher
+          end
+        end
+      end
+    end
+  end
+```
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/export.rb]]
