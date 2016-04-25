@@ -9,6 +9,10 @@
       var field_name  = options['name'];
       var field_type  = options['type'];
       var field_value = options['value'];
+
+      var json_field_name = field_value.json_field_name || "";
+      var json_field_value = field_value.json_field_value || [];
+
       var field_operator = options['operator'];
       var select_options = options['select_options'];
       var index = options['index'];
@@ -101,12 +105,12 @@
           break;
         case 'json':
         case 'jsonb':
-          control = '<input class="input-sm form-control" type="text" style="display: inline-block;" name="' + value_name + '[json_field_name]"/>' +
+          control = '<input class="input-sm form-control" type="text" style="display: inline-block;" name="' + value_name + '[json_field_name]" value="' + (json_field_name || '') + '"/>' +
               '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
                 '<optgroup label="All types">'+
                   '<option data-additional-fieldset="is"'           + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
-                  '<option ' + (field_operator == "is_present"    ? 'selected="selected"' : '') + ' value="has">' + RailsAdmin.I18n.t("is_present") + '</option>' +
-                  '<option ' + (field_operator == "is_blank"      ? 'selected="selected"' : '') + ' value="has_not">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
+                  '<option ' + (field_operator == "is_present"    ? 'selected="selected"' : '') + ' value="is_present">' + RailsAdmin.I18n.t("is_present") + '</option>' +
+                  '<option ' + (field_operator == "is_blank"      ? 'selected="selected"' : '') + ' value="is_blank">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
                   '<option data-additional-fieldset="in"'           + (field_operator == "in"          ? 'selected="selected"' : '') + ' value="in">' + RailsAdmin.I18n.t("in") + '</option>' +
                 '</optgroup>'+
                 '<optgroup label="Numbers only">'+
@@ -130,10 +134,10 @@
                 '</optgroup>'+
               '</select>'
           additional_control =
-              '<textarea class="additional-fieldset in includes input-sm form-control" style="display:' + (!field_operator || field_operator == "in" ? 'inline-block' : 'none') + ';" name="' + value_name + '[json_field_value][]">' + (field_value[0] || '') + '</textarea> ' +
-              '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (field_value[1] || '') + '" /> ' +
-              '<input size="25" placeholder="-∞" class="datetime additional-fieldset between over input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (field_value[1] || '') + '" /> ' +
-              '<input size="25" placeholder="∞" class="datetime additional-fieldset between under input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (field_value[2] || '') + '" />';
+              '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (json_field_value[0] || '') + '" /> ' +
+              '<textarea class="additional-fieldset in includes input-sm form-control" style="display:' + (!field_operator || field_operator == "in" || field_operator == "includes" ? 'inline-block' : 'none') + ';" name="' + value_name + '[json_field_value][]">' + (json_field_value[1] || '') + '</textarea> ' +
+              '<input size="25" placeholder="-∞" class="datetime additional-fieldset between over input-sm form-control" style="display:' + ((field_operator == "between" || field_operator == "over") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (json_field_value[2] || '') + '" /> ' +
+              '<input size="25" placeholder="∞" class="datetime additional-fieldset between under input-sm form-control" style="display:' + ((field_operator == "between" || field_operator == "under") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (json_field_value[3] || '') + '" />';
           break;
         default:
           control = '<input type="text" class="input-sm form-control" name="' + value_name + '" value="' + field_value + '"/> ';
