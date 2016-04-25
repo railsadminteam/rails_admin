@@ -56,8 +56,8 @@ module RailsAdmin
       def properties
         columns = model.columns.reject do |c|
           c.type.blank? ||
-          DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
-          c.try(:array)
+            DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
+            c.try(:array)
         end
         columns.collect do |property|
           Property.new(property, model)
@@ -68,12 +68,12 @@ module RailsAdmin
 
       def encoding
         case ::ActiveRecord::Base.connection_config[:adapter]
-        when 'postgresql'
-          ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
-        when 'mysql2'
-          ::ActiveRecord::Base.connection.instance_variable_get(:@connection).encoding
-        else
-          ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
+          when 'postgresql'
+            ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
+          when 'mysql2'
+            ::ActiveRecord::Base.connection.instance_variable_get(:@connection).encoding
+          else
+            ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
         end
       end
 
@@ -151,7 +151,7 @@ module RailsAdmin
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
-      protected
+        protected
 
         def unary_operators
           {
@@ -164,7 +164,7 @@ module RailsAdmin
           }
         end
 
-      private
+        private
 
         def range_filter(min, max)
           if min && max
@@ -178,11 +178,78 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-          when :boolean                   then build_statement_for_boolean
-          when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-          when :string, :text             then build_statement_for_string_or_text
-          when :enum                      then build_statement_for_enum
-          when :belongs_to_association    then build_statement_for_belongs_to_association
+            when :jsonb, :json then
+              build_statement_for_jsonb
+            when :boolean then
+              build_statement_for_boolean
+            when :integer, :decimal, :float then
+              build_statement_for_integer_decimal_or_float
+            when :string, :text then
+              build_statement_for_string_or_text
+            when :enum then
+              build_statement_for_enum
+            when :belongs_to_association then
+              build_statement_for_belongs_to_association
+          end
+        end
+
+        def build_statement_for_jsonb
+          return unless ar_adapter == 'postgresql'
+          return unless @value
+
+          extract_operator_as_text = '#>>' #get path as text
+          extract_operator_as_jsonb = '#>' #get path
+          json_path = Array.wrap(@value[:json_field_name].split('.')).reject(&:blank?)
+          return if json_path.blank?
+
+          selection_as_text = "(#{@column}#{extract_operator_as_text}'{#{json_path.join(',')}}')"
+          selection_as_jsonb = "(#{@column}#{extract_operator_as_jsonb}'{#{json_path.join(',')}}')"
+          json_value = Array.wrap(@value[:json_field_value])
+
+          case @operator
+            when 'is', '=' then
+              return ["(#{selection_as_text}::boolean IS NOT NULL AND #{selection_as_text}::boolean = ?::boolean)", json_value.first] if %w{true false}.include?(json_value.first.downcase)
+              return ["(#{selection_as_text}::numeric IS NOT NULL AND #{selection_as_text}::numeric = ?)", json_value.first.to_f] if (!!Float(json_value.first) rescue false)
+              return ["(#{selection_as_text}::numeric IS NOT NULL AND #{selection_as_text}::numeric = ?)", json_value.first.to_i] if (!!Integer(json_value.first) rescue false)
+              return ["(#{selection_as_text} = ?)", json_value.first]
+            when 'is_present' then
+              ["(#{selection_as_text} IS NOT NULL)"]
+            when 'is_blank' then
+              ["(#{selection_as_text} IS NULL)"]
+            when 'like', 'contains' then
+              ["(#{selection_as_text} ILIKE ?)", '%'+json_value.first+'%']
+            when 'starts_with' then
+              ["(#{selection_as_text} ILIKE ?)", json_value.first+'%']
+            when 'ends_with' then
+              ["(#{selection_as_text} ILIKE ?)", '%'+json_value.first]
+            when 'in' then
+              ["(#{selection_as_text} IN (?))", json_value.first.split(',').map(&:strip).reject(&:blank?)]
+            when 'is_true' then
+              ["(#{selection_as_text}::boolean)", true]
+            when 'is_false' then
+              ["(NOT #{selection_as_text}::boolean)", false]
+            when 'between' then
+              json_value = json_value.map { |n| Float(n) rescue nil }.compact.uniq
+              return if json_value.size < 2
+              min = json_value.min
+              max = json_value.max
+              ["(#{selection_as_text}::float BETWEEN ? AND ?)", min, max]
+            when 'over' then
+              num = json_value.first.try { |n| Float(n) }
+              return unless num
+              ["(#{selection_as_text}::float >= ?)", num]
+            when 'under' then
+              num = json_value.first.try { |n| Float(n) }
+              return unless num
+              ["(#{selection_as_text}::float <= ?)", num]
+            when 'includes' then
+              vals = json_value.first.split(',').map(&:strip).reject(&:blank?)
+              ["(CASE jsonb_typeof(#{selection_as_jsonb}::jsonb) WHEN 'array' THEN #{selection_as_jsonb} @> jsonb_build_array(?) ELSE false END)", json_value.first.split(',').map(&:strip).reject(&:blank?)]
+            when 'empty' then
+              ["(CASE jsonb_typeof(#{selection_as_jsonb}::jsonb) WHEN 'array' THEN jsonb_array_length(#{selection_as_jsonb}::jsonb) <= ? ELSE false END)", 0]
+            when 'not_empty' then
+              ["(CASE jsonb_typeof(#{selection_as_jsonb}::jsonb) WHEN 'array' THEN jsonb_array_length(#{selection_as_jsonb}::jsonb) > ? ELSE false END)", 0]
+            else
           end
         end
 
@@ -209,16 +276,16 @@ module RailsAdmin
           return if value.blank?
           value = begin
             case @operator
-            when 'like'
-              "%#{value.downcase}%"
-            when 'starts_with'
-              "#{value.downcase}%"
-            when 'ends_with'
-              "%#{value.downcase}"
-            when 'is', '='
-              "#{value.downcase}"
-            else
-              return
+              when 'like'
+                "%#{value.downcase}%"
+              when 'starts_with'
+                "#{value.downcase}%"
+              when 'ends_with'
+                "%#{value.downcase}"
+              when 'is', '='
+                "#{value.downcase}"
+              else
+                return
             end
           end
 
