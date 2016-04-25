@@ -30,3 +30,8 @@ tmp/**/*
 .idea/*.xml
 .sass-cache
 nbproject
+
+/vendor/bundle
+/spec/dummy_app/vendor/bundle
+*.iml
+

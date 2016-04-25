@@ -13,14 +13,14 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   describe '#associations' do
     it 'returns Association class' do
       expect(RailsAdmin::AbstractModel.new(Player).associations.first).
-        to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Association
+          to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Association
     end
   end
 
   describe '#properties' do
     it 'returns Property class' do
       expect(RailsAdmin::AbstractModel.new(Player).properties.first).
-        to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Property
+          to be_a_kind_of RailsAdmin::Adapters::ActiveRecord::Property
     end
   end
 
@@ -118,7 +118,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     before do
       @teams = [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
-               collect { |h| FactoryGirl.create :team, h }
+          collect { |h| FactoryGirl.create :team, h }
     end
 
     it 'makes correct query' do
@@ -146,7 +146,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     before do
       @division = FactoryGirl.create :division, name: 'bar division'
       @teams = [{}, {division: @division}, {name: 'somewhere foos', division: @division}, {name: 'nowhere foos'}].
-               collect { |h| FactoryGirl.create :team, h }
+          collect { |h| FactoryGirl.create :team, h }
     end
 
     context 'without configuration' do
@@ -315,7 +315,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     it 'supports datetime type query' do
       scope = FieldTest.all
-      expect(abstract_model.send(:filter_scope, scope,  'datetime_field' => {'1' => {v: ['', 'February 01, 2012 00:00', 'March 01, 2012 00:00'], o: 'between'}}).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 3, 1).end_of_day]).where_values)
+      expect(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'February 01, 2012 00:00', 'March 01, 2012 00:00'], o: 'between'}}).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 3, 1).end_of_day]).where_values)
       expect(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'March 01, 2012 00:00', ''], o: 'between'}}).where_values).to eq(scope.where(['(field_tests.datetime_field >= ?)', Time.local(2012, 3, 1)]).where_values)
       expect(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', 'February 01, 2012 00:00'], o: 'between'}}).where_values).to eq(scope.where(['(field_tests.datetime_field <= ?)', Time.local(2012, 2, 1).end_of_day]).where_values)
       expect(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['February 01, 2012 00:00'], o: 'default'}}).where_values).to eq(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 2, 1).end_of_day]).where_values)

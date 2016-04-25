@@ -9,6 +9,10 @@
       var field_name  = options['name'];
       var field_type  = options['type'];
       var field_value = options['value'];
+
+      var json_field_name = field_value.json_field_name || "";
+      var json_field_value = field_value.json_field_value || [];
+
       var field_operator = options['operator'];
       var select_options = options['select_options'];
       var index = options['index'];
@@ -69,20 +73,24 @@
         case 'text':
         case 'belongs_to_association':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
+            '<option data-additional-fieldset="in"'           + (field_operator == "in"          ? 'selected="selected"' : '') + ' value="in">' + RailsAdmin.I18n.t("in") + '</option>' +
+            '<option data-additional-fieldset="like"'         + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
+            '<option data-additional-fieldset="is"'           + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
+            '<option data-additional-fieldset="starts_with"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
+            '<option data-additional-fieldset="ends_with"'    + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null"    ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
             '<option ' + (field_operator == "_null"      ? 'selected="selected"' : '') + ' value="_null">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
-          additional_control = '<input class="additional-fieldset input-sm form-control" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          additional_control =
+          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + (!field_operator || field_operator == "in" ? 'inline-block' : 'none') + ';" name="' + value_name + '[]">' + (field_value[0] || '') + '</textarea> ' +
+          '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ';
           break;
         case 'integer':
         case 'decimal':
         case 'float':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
+            '<option ' + (field_operator == "in"        ? 'selected="selected"' : '') + ' data-additional-fieldset="in" value="in">' + RailsAdmin.I18n.t("in") + '</option>' +
             '<option ' + (field_operator == "default"   ? 'selected="selected"' : '') + ' data-additional-fieldset="default" value="default">' + RailsAdmin.I18n.t("number") + '</option>' +
             '<option ' + (field_operator == "between"   ? 'selected="selected"' : '') + ' data-additional-fieldset="between" value="between">' + RailsAdmin.I18n.t("between_and_") + '</option>' +
             '<option disabled="disabled">---------</option>' +
@@ -90,9 +98,46 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control =
-          '<input class="additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + ((!field_operator || field_operator == "in") ? 'inline-block' : 'none') + ';" name="' + value_name + '[]">' + (field_value[0] || '') + '</textarea> ' +
+          '<input class="additional-fieldset default input-sm form-control" style="display:' + ((field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" /> ' +
+          '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[3] || '') + '" />';
+          break;
+        case 'json':
+        case 'jsonb':
+          control = '<input class="input-sm form-control" type="text" style="display: inline-block;" name="' + value_name + '[json_field_name]" value="' + (json_field_name || '') + '"/>' +
+              '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
+                '<optgroup label="All types">'+
+                  '<option data-additional-fieldset="is"'           + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
+                  '<option ' + (field_operator == "is_present"    ? 'selected="selected"' : '') + ' value="is_present">' + RailsAdmin.I18n.t("is_present") + '</option>' +
+                  '<option ' + (field_operator == "is_blank"      ? 'selected="selected"' : '') + ' value="is_blank">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
+                  '<option data-additional-fieldset="in"'           + (field_operator == "in"          ? 'selected="selected"' : '') + ' value="in">' + RailsAdmin.I18n.t("in") + '</option>' +
+                '</optgroup>'+
+                '<optgroup label="Numbers only">'+
+                  '<option data-additional-fieldset="between"'    + (field_operator == "between"   ? 'selected="selected"' : '') + ' value="between">' + RailsAdmin.I18n.t("between") + '</option>' +
+                  '<option data-additional-fieldset="over"'    + (field_operator == "over"   ? 'selected="selected"' : '') + ' value="over">' + RailsAdmin.I18n.t("over") + '</option>' +
+                  '<option data-additional-fieldset="under"'    + (field_operator == "under"   ? 'selected="selected"' : '') + ' value="under">' + RailsAdmin.I18n.t("under") + '</option>' +
+                '</optgroup>'+
+                '<optgroup label="String only">'+
+                  '<option data-additional-fieldset="like"'         + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
+                  '<option data-additional-fieldset="starts_with"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
+                  '<option data-additional-fieldset="ends_with"'    + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
+                '</optgroup>'+
+                '<optgroup label="Array only">'+
+                  '<option data-additional-fieldset="includes"'    + (field_operator == "includes"   ? 'selected="selected"' : '') + ' value="includes">' + RailsAdmin.I18n.t("includes") + '</option>' +
+                  '<option data-additional-fieldset="empty"'    + (field_operator == "empty"   ? 'selected="selected"' : '') + ' value="empty">' + RailsAdmin.I18n.t("empty") + '</option>' +
+                  '<option data-additional-fieldset="not_empty"'    + (field_operator == "not_empty"   ? 'selected="selected"' : '') + ' value="not_empty">' + RailsAdmin.I18n.t("not_empty") + '</option>' +
+                '</optgroup>'+
+                '<optgroup label="Boolean only">'+
+                  '<option data-additional-fieldset="is_true"'    + (field_operator == "is_true"   ? 'selected="selected"' : '') + ' value="is_true">' + RailsAdmin.I18n.t("is_true") + '</option>' +
+                  '<option data-additional-fieldset="is_false"'    + (field_operator == "is_false"   ? 'selected="selected"' : '') + ' value="is_false">' + RailsAdmin.I18n.t("is_false") + '</option>' +
+                '</optgroup>'+
+              '</select>'
+          additional_control =
+              '<input class="additional-fieldset like is starts_with ends_with input-sm form-control" style="display:' + (field_operator == "like" || field_operator == "is" || field_operator == "starts_with" || field_operator == "ends_with" ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (json_field_value[0] || '') + '" /> ' +
+              '<textarea class="additional-fieldset in includes input-sm form-control" style="display:' + (!field_operator || field_operator == "in" || field_operator == "includes" ? 'inline-block' : 'none') + ';" name="' + value_name + '[json_field_value][]">' + (json_field_value[1] || '') + '</textarea> ' +
+              '<input size="25" placeholder="-∞" class="datetime additional-fieldset between over input-sm form-control" style="display:' + ((field_operator == "between" || field_operator == "over") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (json_field_value[2] || '') + '" /> ' +
+              '<input size="25" placeholder="∞" class="datetime additional-fieldset between under input-sm form-control" style="display:' + ((field_operator == "between" || field_operator == "under") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[json_field_value][]" value="' + (json_field_value[3] || '') + '" />';
           break;
         default:
           control = '<input type="text" class="input-sm form-control" name="' + value_name + '" value="' + field_value + '"/> ';
