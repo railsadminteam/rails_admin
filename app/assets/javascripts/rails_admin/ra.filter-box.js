@@ -3,6 +3,10 @@
   var filters;
 
   $.filters = filters = {
+    container: function() {
+      return $('#filters_box');
+    },
+
     append: function(options) {
       options = options || {};
       var field_label = options['label'];
@@ -104,7 +108,7 @@
         .append('<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>')
         .append('&nbsp;' + control + '&nbsp;' + (additional_control || ''));
 
-      $('#filters_box').append($content);
+      filters.container().append($content);
 
       $content.find('.date, .datetime').datetimepicker({
         locale: RailsAdmin.I18n.locale,
@@ -113,6 +117,14 @@
       });
 
       $("hr.filters_box:hidden").show('slow');
+    },
+
+    init: function(filterOptionSets) {
+      if(filters.container().html().length == 0){
+        for( var i = 0; i < filterOptionSets.length; i++ ){
+          filters.append(filterOptionSets[i]);
+        }
+      }
     }
   }
 
