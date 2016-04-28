@@ -19,7 +19,7 @@ module RailsAdmin
       end
 
       def get(id)
-        AbstractObject.new(model.find(id))
+        AbstractObject.new(model.find(id) || Mongoid::Errors::DocumentNotFound.new)
       rescue => e
         raise e if %w(
           Mongoid::Errors::DocumentNotFound
