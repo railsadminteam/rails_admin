@@ -276,7 +276,7 @@ describe 'RailsAdmin Basic List', type: :request do
       end
       get index_path(model_name: 'player')
 
-      options = {
+      options1 = {
         index: 1,
         label: 'Name',
         name: 'name',
@@ -284,9 +284,8 @@ describe 'RailsAdmin Basic List', type: :request do
         value: '',
         operator: nil,
       }
-      expect(response.body).to include("$.filters.append(#{options.to_json});")
 
-      options = {
+      options2 = {
         index: 2,
         label: 'Team',
         name: 'team',
@@ -294,7 +293,7 @@ describe 'RailsAdmin Basic List', type: :request do
         value: '',
         operator: nil,
       }
-      expect(response.body).to include("$.filters.append(#{options.to_json});")
+      expect(response.body).to include("$.filters.init([#{options1.to_json}, #{options2.to_json}]);")
     end
   end
 
