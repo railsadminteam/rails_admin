@@ -33,4 +33,6 @@ end
 ```
 This will work for regular many-to-many relationships and self-referential many-to-manys.
 
+For Rails 4+ don't need to use `attr_accessible`
+
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_and_belongs_to_many_association.rb]]
