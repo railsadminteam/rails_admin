@@ -8,3 +8,5 @@
       %li.edit_user_root_link= user_link
     - if logout_path.present?
       %li= link_to content_tag('span', t('admin.misc.log_out'), class: 'label label-danger'), logout_path, method: logout_method
+  - else
+    %li= link_to content_tag('span', t('admin.misc.log_out'), class: 'label label-danger'), main_app_root_path
