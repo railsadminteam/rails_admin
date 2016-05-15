@@ -66,6 +66,12 @@
         %li{class: "#{'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0)}"}
           %a{href: index_path(params.merge(scope: scope, page: nil)), class: 'pjax'}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
 
+  - unless @model_config.list.group_by.nil?
+    %ul.nav.nav-tabs#group_selector
+      - @groups.each_with_index do |group, index|
+        %li{class: "#{'active' if group.send(@group_primary_key).to_s == params[:group_id] || (params[:group_id].blank? && index == 0)}"}
+          %a{href: index_path(params.merge(group_id: group.send(@group_primary_key), page: nil)), class: 'pjax'}= I18n.t("admin.groups.#{@abstract_model.to_param}.#{group.send(@group_model_config.object_label_method)}", default: I18n.t("admin.groups.#{group.send(@group_model_config.object_label_method)}", default: group.send(@group_model_config.object_label_method).titleize))
+
   = form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: "form" do
     = hidden_field_tag :bulk_action
     - if description.present?

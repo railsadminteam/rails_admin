@@ -39,6 +39,15 @@ module RailsAdmin
               end
             end
 
+            unless @model_config.list.group_by.nil?
+              @group_model_config = RailsAdmin.config(@model_config.list.group_by[:model])
+              @group_primary_key = @group_model_config.abstract_model.primary_key
+              @groups = list_entries(@group_model_config, :index, nil, nil)
+              group_id = params[:group_id].blank? ? @groups.first.try(@group_primary_key) : params[:group_id]
+
+              @objects = @objects.where(@model_config.list.group_by[:key] => group_id)
+            end
+
             respond_to do |format|
               format.html do
                 render @action.template_name, status: (flash[:error].present? ? :not_found : 200)
