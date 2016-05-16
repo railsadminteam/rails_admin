@@ -88,8 +88,6 @@ If you think you found a bug in RailsAdmin, you can [submit an issue](https://gi
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby implementations:
 
-* Ruby 1.9.3
-* Ruby 2.0.0
 * Ruby 2.1
 * Ruby 2.2
 * [Rubinius][]
