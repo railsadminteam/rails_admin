@@ -3,12 +3,11 @@
 source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
-gem "devise", :github => "plataformatec/devise"
-gem "rails", "~> 5.0.0.beta1"
+gem "devise", "~> 4.0"
+gem "rails", "~> 5.0.0.rc1"
 gem "sass-rails", "~> 5.0"
 gem "rack-pjax", :github => "afcapel/rack-pjax"
 gem "remotipart", :github => "mshibuya/remotipart"
-gem "capybara", :github => "jnicklas/capybara", :group => :test
 
 group :active_record do
   gem "paper_trail", "~> 3.0"
@@ -48,10 +47,11 @@ group :test do
   gem "poltergeist", "~> 1.5"
   gem "pundit"
   gem "rack-cache", :require => "rack/cache"
-  gem "rspec-rails", ">= 2.14"
+  gem "rspec-rails", ">= 3.5.0.beta3"
   gem "rubocop", "~> 0.31.0"
   gem "simplecov", ">= 0.9", :require => false
   gem "timecop", ">= 0.5"
+  gem "capybara", "~> 2.7"
 
   platforms :ruby_19 do
     gem "tins", "~> 1.6.0", :require => false

@@ -56,10 +56,14 @@ appraise "rails-4.2" do
 end
 
 appraise "rails-5.0" do
-  gem 'rails', '~> 5.0.0.beta1'
+  gem 'rails', '~> 5.0.0.rc1'
   gem 'sass-rails', '~> 5.0'
-  gem 'devise', github: 'plataformatec/devise'
+  gem 'devise', '~> 4.0'
   gem 'rack-pjax', github: 'afcapel/rack-pjax'
   gem 'remotipart', github: 'mshibuya/remotipart'
-  gem 'capybara', github: 'jnicklas/capybara', group: :test
+
+  group :test do
+    gem 'capybara', '~> 2.7'
+    gem 'rspec-rails', '>= 3.5.0.beta3'
+  end
 end
