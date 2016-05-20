@@ -2,6 +2,14 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController, type: :controller do
+  def get(action, params)
+    if Rails.version >= '5.0'
+      super action, params: params
+    else
+      super action, params
+    end
+  end
+
   describe '#dashboard' do
     before do
       allow(controller).to receive(:render).and_return(true) # no rendering
@@ -47,10 +55,16 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe '#check_for_cancel' do
-    it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
+    before do
       allow(controller).to receive(:back_or_index) { fail(StandardError.new('redirected back')) }
-      expect { get :bulk_delete, params: {model_name: 'player', bulk_action: 'bulk_delete'} }.to raise_error('redirected back')
-      expect { get :bulk_delete, params: {model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: []} }.not_to raise_error
+    end
+
+    it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
+      expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete' }.to raise_error('redirected back')
+    end
+
+    it 'does not redirect to back if params[:bulk_ids] and params[:bulk_action] is present' do
+      expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: [1] }.not_to raise_error
     end
   end
 
@@ -233,14 +247,14 @@ describe RailsAdmin::MainController, type: :controller do
       end
       FactoryGirl.create :team
       TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, number: 123)]
-      get :index, params: {model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json}
+      get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json
       expect(response.body).to match(/\"id\":\"123\"/)
     end
 
     context 'as JSON' do
       it 'returns strings' do
         FactoryGirl.create :player, team: (FactoryGirl.create :team)
-        get :index, params: {model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json}
+        get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
       end
     end
@@ -300,20 +314,18 @@ describe RailsAdmin::MainController, type: :controller do
       end
 
       it 'sanitize params recursively in nested forms' do
-        expect(controller.params).to eq(
-          'field_test' => {
-            'datetime_field' => ::Time.zone.parse('Sun, 01 Aug 2010 00:00:00 UTC +00:00'),
-            'nested_field_tests_attributes' => {
-              'new_1330520162002' => {
-                'comment_attributes' => {
-                  'created_at' => ::Time.zone.parse('Mon, 02 Aug 2010 00:00:00 UTC +00:00'),
-                },
-                'created_at' => ::Time.zone.parse('Tue, 03 Aug 2010 00:00:00 UTC +00:00'),
+        expect(controller.params[:field_test].to_h).to eq(
+          'datetime_field' => ::Time.zone.parse('Sun, 01 Aug 2010 00:00:00 UTC +00:00'),
+          'nested_field_tests_attributes' => {
+            'new_1330520162002' => {
+              'comment_attributes' => {
+                'created_at' => ::Time.zone.parse('Mon, 02 Aug 2010 00:00:00 UTC +00:00'),
               },
+              'created_at' => ::Time.zone.parse('Tue, 03 Aug 2010 00:00:00 UTC +00:00'),
             },
-            'comment_attributes' => {
-              'created_at' => ::Time.zone.parse('Wed, 04 Aug 2010 00:00:00 UTC +00:00'),
-            },
+          },
+          'comment_attributes' => {
+            'created_at' => ::Time.zone.parse('Wed, 04 Aug 2010 00:00:00 UTC +00:00'),
           },
         )
       end
@@ -349,17 +361,16 @@ describe RailsAdmin::MainController, type: :controller do
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
-      expect(controller.params).to eq(
-        'field_test' => {
-          'carrierwave_asset' => 'test',
-          'remove_carrierwave_asset' => 'test',
-          'carrierwave_asset_cache' => 'test',
-          'dragonfly_asset' => 'test',
-          'remove_dragonfly_asset' => 'test',
-          'retained_dragonfly_asset' => 'test',
-          'paperclip_asset' => 'test',
-          'delete_paperclip_asset' => 'test',
-        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
+      expect(controller.params[:field_test].to_h).to eq({
+        'carrierwave_asset' => 'test',
+        'remove_carrierwave_asset' => 'test',
+        'carrierwave_asset_cache' => 'test',
+        'dragonfly_asset' => 'test',
+        'remove_dragonfly_asset' => 'test',
+        'retained_dragonfly_asset' => 'test',
+        'paperclip_asset' => 'test',
+        'delete_paperclip_asset' => 'test',
+      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do
@@ -374,11 +385,10 @@ describe RailsAdmin::MainController, type: :controller do
         },
       )
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
-      expect(controller.params).to eq(
-        'comment' => {
-          'commentable_id' => 'test',
-          'commentable_type' => 'test',
-        })
+      expect(controller.params[:comment].to_h).to eq(
+        'commentable_id' => 'test',
+        'commentable_type' => 'test',
+      )
     end
   end
 end
