@@ -49,8 +49,8 @@ describe RailsAdmin::MainController, type: :controller do
   describe '#check_for_cancel' do
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
       allow(controller).to receive(:back_or_index) { fail(StandardError.new('redirected back')) }
-      expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete' }.to raise_error('redirected back')
-      expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: [] }.not_to raise_error
+      expect { get :bulk_delete, params: {model_name: 'player', bulk_action: 'bulk_delete'} }.to raise_error('redirected back')
+      expect { get :bulk_delete, params: {model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: []} }.not_to raise_error
     end
   end
 
@@ -233,14 +233,14 @@ describe RailsAdmin::MainController, type: :controller do
       end
       FactoryGirl.create :team
       TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, number: 123)]
-      get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json
+      get :index, params: {model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json}
       expect(response.body).to match(/\"id\":\"123\"/)
     end
 
     context 'as JSON' do
       it 'returns strings' do
         FactoryGirl.create :player, team: (FactoryGirl.create :team)
-        get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json
+        get :index, params: {model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json}
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
       end
     end

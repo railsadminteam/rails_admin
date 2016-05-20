@@ -6,9 +6,9 @@ module RailsAdmin
 
     layout :get_layout
 
-    before_filter :get_model, except: RailsAdmin::Config::Actions.all(:root).collect(&:action_name)
-    before_filter :get_object, only: RailsAdmin::Config::Actions.all(:member).collect(&:action_name)
-    before_filter :check_for_cancel
+    before_action :get_model, except: RailsAdmin::Config::Actions.all(:root).collect(&:action_name)
+    before_action :get_object, only: RailsAdmin::Config::Actions.all(:member).collect(&:action_name)
+    before_action :check_for_cancel
 
     RailsAdmin::Config::Actions.all.each do |action|
       class_eval <<-EOS, __FILE__, __LINE__ + 1
