@@ -1,4 +1,4 @@
-class CreateDeeplyNestedFieldTests < ActiveRecord::Migration
+class CreateDeeplyNestedFieldTests < MigrationBase
   def change
     create_table :deeply_nested_field_tests do |t|
       t.belongs_to :nested_field_test

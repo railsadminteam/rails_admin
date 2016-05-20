@@ -1,4 +1,4 @@
-class CreateAnotherFieldTests < ActiveRecord::Migration
+class CreateAnotherFieldTests < MigrationBase
   def change
     create_table :another_field_tests do |t|
       t.timestamps null: false

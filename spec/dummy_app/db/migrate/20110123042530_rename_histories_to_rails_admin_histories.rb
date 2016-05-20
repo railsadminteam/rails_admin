@@ -1,4 +1,4 @@
-class RenameHistoriesToRailsAdminHistories < ActiveRecord::Migration
+class RenameHistoriesToRailsAdminHistories < MigrationBase
   def self.up
     rename_table :histories, :rails_admin_histories
   end
