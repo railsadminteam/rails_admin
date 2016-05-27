@@ -59,7 +59,6 @@ appraise "rails-5.0" do
   gem 'rails', '~> 5.0.0.rc1'
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.0'
-  gem 'rack-pjax', github: 'afcapel/rack-pjax'
   gem 'remotipart', github: 'mshibuya/remotipart'
 
   group :test do
