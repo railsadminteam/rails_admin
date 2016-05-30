@@ -55,8 +55,8 @@ describe RailsAdmin, type: :request do
 
     it 'shows up with default value, hidden' do
       visit new_path(model_name: 'player')
-      is_expected.to have_selector("#player_name[type=hidden][value='username@example.com']")
-      is_expected.not_to have_selector("#player_name[type=hidden][value='toto@example.com']")
+      is_expected.to have_selector("#player_name[type=hidden][value='username@example.com']", visible: false)
+      is_expected.not_to have_selector("#player_name[type=hidden][value='toto@example.com']", visible: false)
     end
 
     it 'does not show label' do

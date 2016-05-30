@@ -810,7 +810,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       2.times.each { |i| @record.embeds.create name: "embed #{i}" }
       visit edit_path(model_name: 'field_test', id: @record.id)
       fill_in 'field_test_embeds_attributes_0_name', with: 'embed 1 edited'
-      page.find('#field_test_embeds_attributes_1__destroy').set('true')
+      page.find('#field_test_embeds_attributes_1__destroy', visible: false).set('true')
       click_button 'Save' # first(:button, "Save").click
       @record.reload
       expect(@record.embeds.length).to eq(1)

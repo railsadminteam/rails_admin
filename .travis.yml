@@ -19,11 +19,9 @@ env:
     - JRUBY_OPTS="$JRUBY_OPTS --debug"
 
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.8
-  - 2.2.4
-  - 2.3.0
+  - 2.1.9
+  - 2.2.5
+  - 2.3.1
   - rbx-2
   - ruby-head
 
@@ -58,12 +56,6 @@ matrix:
     - rvm: 2.3.0
       env: CI_ORM=active_record
       gemfile: gemfiles/rails_5.0.gemfile
-    - rvm: jruby-19mode
-      env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: jruby-19mode
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_4.2.gemfile
     - rvm: jruby-head
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
