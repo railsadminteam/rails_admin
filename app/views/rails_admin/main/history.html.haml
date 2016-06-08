@@ -46,6 +46,6 @@
         %td= object.message.in?(['delete', 'new']) ? t("admin.actions.#{object.message}.done").capitalize : object.message
 
 - unless params[:all] || !@history.respond_to?(:current_page)
-  = paginate(@history, theme: 'twitter-bootstrap', remote: true)
+  = paginate(@history, theme: 'ra-twitter-bootstrap', remote: true)
   = link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn pjax") unless (tc = @history.total_count) <= @history.size || tc > 100
 
