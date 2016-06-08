@@ -106,7 +106,7 @@
     - if @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       .row
-        .col-md-6= paginate(@objects, theme: 'twitter-bootstrap', remote: true)
+        .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap', remote: true)
       .row
         .col-md-6= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-default clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
