@@ -34,6 +34,14 @@ module RailsAdmin
           def parse_input(params)
             params[name] = parse_value(params[name]) if params[name]
           end
+
+          def form_default_value
+            enum[super]
+          end
+
+          def form_value
+            enum[super]
+          end
         end
       end
     end
