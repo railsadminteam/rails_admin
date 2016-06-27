@@ -56,7 +56,7 @@ module RailsAdmin
     end
 
     def export_fields_for(method, model_config = @model_config)
-      model_config.export.fields.select { |f| f.name == method }
+      model_config.export.fields.select { |f| f.name == method.to_sym }
     end
 
     def generate_csv_string(options)
