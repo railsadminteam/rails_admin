@@ -287,7 +287,7 @@ describe RailsAdmin::Config do
         end
       end
       it 'execute all passed blocks' do
-        expect(fields.map(&:name)).to eq %i(players fans)
+        expect(fields.map(&:name)).to match_array %i(players fans)
       end
     end
     context 'when expand redefine behavior' do
