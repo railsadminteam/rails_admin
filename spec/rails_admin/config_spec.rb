@@ -303,8 +303,7 @@ describe RailsAdmin::Config do
     context 'when model expanded in config' do
       let(:block) { proc { field :players } }
       before do
-        allow(block).to receive(:source_location)
-          .and_return(['config/initializers/rails_admin.rb'])
+        allow(block).to receive(:source_location).and_return(['config/initializers/rails_admin.rb'])
         described_class.model(Team, &block)
       end
       it 'executes first' do

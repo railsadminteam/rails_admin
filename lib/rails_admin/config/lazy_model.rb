@@ -47,8 +47,10 @@ module RailsAdmin
         # blocks defined within a model class.
         unless @deferred_blocks.empty?
           @existing_blocks += @deferred_blocks
-          @existing_blocks.partition { |block| block.source_location.first =~ /config\/initializers/ }
-                          .flatten.each { |block| @model.instance_eval(&block) }
+          @existing_blocks.
+            partition { |block| block.source_location.first =~ %r{config\/initializers} }.
+            flatten.
+            each { |block| @model.instance_eval(&block) }
           @deferred_blocks = []
         end
         @model
