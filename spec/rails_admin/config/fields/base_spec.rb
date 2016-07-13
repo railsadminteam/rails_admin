@@ -183,6 +183,25 @@ describe RailsAdmin::Config::Fields::Base do
       end
       expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
     end
+
+    context 'with custom configuration' do
+      before do
+        RailsAdmin.config.default_associated_collection_limit = 5
+      end
+      it 'defaults to true if associated collection count less than than limit' do
+        @players = 4.times.collect do
+          FactoryGirl.create :player
+        end
+        expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_truthy
+      end
+
+      it 'defaults to false if associated collection count >= that limit' do
+        @players = 5.times.collect do
+          FactoryGirl.create :player
+        end
+        expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
+      end
+    end
   end
 
   describe '#searchable_columns' do

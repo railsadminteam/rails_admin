@@ -67,9 +67,14 @@ module RailsAdmin
       delegate :primary_key, :table_name, to: :model, prefix: false
 
       def encoding
-        encoding = ::ActiveRecord::Base.connection.try(:encoding)
-        encoding ||= ::ActiveRecord::Base.connection.try(:charset) # mysql2
-        encoding || 'UTF-8'
+        case ::ActiveRecord::Base.connection_config[:adapter]
+        when 'postgresql'
+          ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
+        when 'mysql2'
+          ::ActiveRecord::Base.connection.instance_variable_get(:@connection).encoding
+        else
+          ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
+        end
       end
 
       def embedded?

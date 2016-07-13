@@ -376,6 +376,22 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         result = helper.edit_user_link
         expect(result).to match('href')
       end
+
+      it 'show gravatar' do
+        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        result = helper.edit_user_link
+        expect(result).to include('gravatar')
+      end
+
+      it "don't show gravatar" do
+        RailsAdmin.config do |config|
+          config.show_gravatar = false
+        end
+
+        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        result = helper.edit_user_link
+        expect(result).not_to include('gravatar')
+      end
     end
   end
 

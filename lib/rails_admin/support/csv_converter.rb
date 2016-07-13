@@ -3,8 +3,6 @@ require 'csv'
 
 module RailsAdmin
   class CSVConverter
-    UTF8_ENCODINGS = [nil, '', 'utf8', 'utf-8', 'unicode', 'UTF8', 'UTF-8', 'UNICODE', 'utf8mb4']
-    TARGET_ENCODINGS = %w(UTF-8 UTF-16LE UTF-16BE UTF-32LE UTF-32BE UTF-7 ISO-8859-1 ISO-8859-15 IBM850 MacRoman Windows-1252 ISO-8859-3 IBM852 ISO-8859-2 Windows-1250 IBM855 ISO-8859-5 KOI8-R MacCyrillic Windows-1251 IBM866 GB2312 GBK GB18030 Big5 Big5-HKSCS EUC-TW EUC-JP ISO-2022-JP Shift_JIS EUC-KR)
     def initialize(objects = [], schema = {})
       return self if (@objects = objects).blank?
 
@@ -34,24 +32,21 @@ module RailsAdmin
     end
 
     def to_csv(options = {})
-      # encoding shenanigans first
-      @encoding_from = Encoding.find(UTF8_ENCODINGS.include?(@abstract_model.encoding) ? 'UTF-8' : @abstract_model.encoding)
-      @encoding_to = Encoding.find(options[:encoding_to].presence || @encoding_from)
+      encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 
       csv_string = generate_csv_string(options)
-
-      if @encoding_to != @encoding_from
-        csv_string = csv_string.encode(@encoding_to, @encoding_from, invalid: :replace, undef: :replace, replace: '?')
+      if encoding_to
+        csv_string = csv_string.encode(encoding_to, invalid: :replace, undef: :replace, replace: '?')
       end
+
       # Add a BOM for utf8 encodings, helps with utf8 auto-detect for some versions of Excel.
       # Don't add if utf8 but user don't want to touch input encoding:
       # If user chooses utf8, they will open it in utf8 and BOM will disappear at reading.
       # But that way "English" users who don't bother and chooses to let utf8 by default won't get BOM added
       # and will not see it if Excel opens the file with a different encoding.
-      if options[:encoding_to].present? && @encoding_to == Encoding::UTF_8
-        csv_string = "\xEF\xBB\xBF#{csv_string}"
-      end
-      [!options[:skip_header], @encoding_to.to_s, csv_string]
+      csv_string = "\xEF\xBB\xBF#{csv_string}" if encoding_to == Encoding::UTF_8
+
+      [!options[:skip_header], (encoding_to || csv_string.encoding).to_s, csv_string]
     end
 
   private
@@ -66,10 +61,11 @@ module RailsAdmin
 
     def generate_csv_string(options)
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
+      method = @objects.respond_to?(:find_each) ? :find_each : :each
+
       CSV.generate(generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
-        method = @objects.respond_to?(:find_each) ? :find_each : :each
         @objects.send(method) do |object|
           csv << generate_csv_row(object)
         end

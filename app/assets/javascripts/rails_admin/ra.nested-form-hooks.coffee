@@ -29,7 +29,7 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
 $(document).on 'nested:fieldRemoved', 'form', (content) ->
   field = content.field
   nav = field.closest(".control-group").children('.controls').children('.nav')
-  current_li = nav.children('li').has('a[href=#' + field.attr('id') + ']')
+  current_li = nav.children('li').has('a[href="#' + field.attr('id') + '"]')
   parent_group = field.closest(".control-group")
   controls = parent_group.children('.controls')
   one_to_one = controls.data('nestedone') != undefined
@@ -50,3 +50,6 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
     add_button = toggler.next()
     add_button.addClass('add_nested_fields').html(add_button.data('add-label'))
 
+  # Removing all required attributes from deleted child form to bypass browser validations.
+  field.find('[required]').each ->
+    $(this).removeAttr('required')

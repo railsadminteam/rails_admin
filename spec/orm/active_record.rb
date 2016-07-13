@@ -7,6 +7,16 @@ ActiveRecord::Base.connection.tables.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
 end
 
+def silence_stream(stream)
+  old_stream = stream.dup
+  stream.reopen(RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
+  stream.sync = true
+  yield
+ensure
+  stream.reopen(old_stream)
+  old_stream.close
+end
+
 silence_stream(STDOUT) do
   ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
 end
@@ -18,6 +28,8 @@ class Tableless < ActiveRecord::Base
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
+      define_attribute(name.to_s,
+                       connection.lookup_cast_type(sql_type.to_s)) if ActiveRecord::VERSION::MAJOR >= 5
       columns <<
         if connection.respond_to?(:lookup_cast_type)
           ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, connection.lookup_cast_type(sql_type.to_s), sql_type.to_s, null)
@@ -39,6 +51,17 @@ class Tableless < ActiveRecord::Base
         a[e[0]] = e[1]
         a
       end
+    end
+
+    def attribute_types
+      @attribute_types ||=
+        Hash[columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }]
+    end
+
+  private
+
+    def lookup_attribute_type(type)
+      ActiveRecord::Type.lookup({datetime: :time}[type] || type)
     end
   end
 

@@ -1,5 +1,4 @@
 require 'spec_helper'
-include Pundit
 
 class ApplicationPolicy
   attr_reader :user, :record
@@ -9,62 +8,70 @@ class ApplicationPolicy
     @record = record
   end
 
-  def show
+  def show?
     user.roles.include? :admin
   end
 
-  def destroy
+  def destroy?
     false
   end
 
-  def history
+  def history?
     user.roles.include? :admin
   end
 
-  def show_in_app
+  def show_in_app?
     user.roles.include? :admin
   end
 
-  def dashboard
+  def dashboard?
     user.roles.include? :admin
   end
 
-  def index
+  def index?
     false
   end
 
-  def new
+  def new?
     user.roles.include? :admin
   end
 
-  def edit
+  def edit?
     user.roles.include? :admin
   end
 
-  def export
+  def export?
     user.roles.include? :admin
+  end
+
+  def rails_admin_index?
+    true
   end
 end
 
 class PlayerPolicy < ApplicationPolicy
-  def new
+  def new?
     (user.roles.include?(:create_player) || user.roles.include?(:admin) || user.roles.include?(:manage_player))
   end
 
-  def edit
+  def edit?
     (user.roles.include? :manage_player)
   end
 
-  def destroy
+  def destroy?
     (user.roles.include? :manage_player)
   end
 
-  def index
+  def index?
     user.roles.include? :admin
   end
 end
 
 describe 'RailsAdmin Pundit Authorization', type: :request do
+  before(:all) do
+    ApplicationController.send :include, ::Pundit
+  end
+
   subject { page }
 
   before do
@@ -74,15 +81,11 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
       c.current_user_method(&:current_user)
     end
     @player_model = RailsAdmin::AbstractModel.new(Player)
-    @user = FactoryGirl.create :user
+    @user = FactoryGirl.create :user, roles: []
     login_as @user
   end
 
   describe 'with no roles' do
-    before do
-      @user.update_attributes(roles: [])
-    end
-
     it 'GET /admin should raise Pundit::NotAuthorizedError' do
       expect { visit dashboard_path }.to raise_error(Pundit::NotAuthorizedError)
     end
@@ -162,6 +165,52 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
       is_expected.to have_content('Delete')
       is_expected.to have_content('History')
       is_expected.to have_content('Show in app')
+    end
+  end
+
+  context 'when ApplicationController already has pundit_user' do
+    let(:admin) { FactoryGirl.create :user, roles: [:admin] }
+    before do
+      allow_any_instance_of(ApplicationController).to receive(:pundit_user).and_return(admin)
+    end
+
+    it 'uses original pundit_user' do
+      expect { visit dashboard_path }.not_to raise_error
+    end
+  end
+
+  context 'when custom authorization key is set' do
+    before do
+      RailsAdmin.config do |c|
+        c.actions do
+          dashboard
+          index do
+            authorization_key :rails_admin_index
+          end
+        end
+      end
+    end
+
+    it 'uses the custom key' do
+      expect { visit index_path(model_name: 'team') }.not_to raise_error
+    end
+  end
+
+  context 'when custom authorization key is suffixed with ?' do
+    before do
+      @user.update_attributes(roles: [:admin])
+      RailsAdmin.config do |c|
+        c.actions do
+          dashboard do
+            authorization_key :dashboard?
+          end
+        end
+      end
+    end
+
+    it 'does not append ? on policy check' do
+      expect_any_instance_of(ApplicationPolicy).not_to receive(:'dashboard??')
+      visit dashboard_path
     end
   end
 end

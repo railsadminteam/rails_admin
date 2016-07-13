@@ -7,7 +7,6 @@ require 'rack-pjax'
 require 'rails'
 require 'rails_admin'
 require 'remotipart'
-require 'safe_yaml/load'
 
 module RailsAdmin
   class Engine < Rails::Engine
