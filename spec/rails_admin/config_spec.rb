@@ -270,6 +270,47 @@ describe RailsAdmin::Config do
       expect(RailsAdmin.config.parent_controller).to eq 'TestController'
     end
   end
+
+  describe '.model' do
+    let(:fields) { described_class.model(Team).fields }
+    before do
+      described_class.model Team do
+        field :players do
+          visible false
+        end
+      end
+    end
+    context 'when model expanded' do
+      before do
+        described_class.model(Team) do
+          field :fans
+        end
+      end
+      it 'execute all passed blocks' do
+        expect(fields.map(&:name)).to match_array %i(players fans)
+      end
+    end
+    context 'when expand redefine behavior' do
+      before do
+        described_class.model Team do
+          field :players
+        end
+      end
+      it 'execute all passed blocks' do
+        expect(fields.find { |f| f.name == :players }.visible).to be true
+      end
+    end
+    context 'when model expanded in config' do
+      let(:block) { proc { field :players } }
+      before do
+        allow(block).to receive(:source_location).and_return(['config/initializers/rails_admin.rb'])
+        described_class.model(Team, &block)
+      end
+      it 'executes first' do
+        expect(fields.find { |f| f.name == :players }.visible).to be false
+      end
+    end
+  end
 end
 
 module ExampleModule
