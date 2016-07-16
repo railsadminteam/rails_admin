@@ -91,7 +91,10 @@
           dialog.find('.modal-body').html(data.responseText);
           widget._bindFormEvents();
         } else {
-          var json = $.parseJSON(data.responseText);
+          // responseText may contain redundant try-catch clause added by remotipart
+          // https://github.com/JangoSteve/remotipart/blob/c08d61137ee18e0e78eb3cd9ca3030479fd101f1/lib/remotipart/render_overrides.rb#L17
+          var responseText = data.responseText.replace(/^try{[^}]+}catch\(err\){[^}]+}/, '');
+          var json = $.parseJSON(responseText);
           var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
           var select = widget.element.find('select').filter(":hidden");
 
