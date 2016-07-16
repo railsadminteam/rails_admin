@@ -22,7 +22,11 @@ describe 'RailsAdmin Basic Destroy', type: :request do
 
   describe 'handle destroy errors' do
     before do
-      allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
+      if Rails.version >= '5.0'
+        allow_any_instance_of(Player).to receive(:destroy_hook) { throw :abort }
+      else
+        allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
+      end
       @player = FactoryGirl.create :player
       visit delete_path(model_name: 'player', id: @player.id)
       click_button "Yes, I'm sure"
@@ -71,7 +75,11 @@ describe 'RailsAdmin Basic Destroy', type: :request do
     end
 
     it 'redirects back to the object on error' do
-      allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
+      if Rails.version >= '5.0'
+        allow_any_instance_of(Player).to receive(:destroy_hook) { throw :abort }
+      else
+        allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
+      end
       @player = FactoryGirl.create :player
       visit show_path(model_name: 'player', id: @player.id)
       click_link 'Delete'

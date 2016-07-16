@@ -3,15 +3,13 @@
 source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
-gem "devise", :github => "plataformatec/devise"
-gem "rails", "~> 5.0.0.beta1"
-gem "sass-rails", "~> 5.0"
-gem "rack-pjax", :github => "afcapel/rack-pjax"
+gem "devise", "~> 4.0"
 gem "remotipart", :github => "mshibuya/remotipart"
-gem "capybara", :github => "jnicklas/capybara", :group => :test
+gem "rails", "~> 5.0.0"
+gem "sass-rails", "~> 5.0"
 
 group :active_record do
-  gem "paper_trail", "~> 3.0"
+  gem "paper_trail", ">= 5.0"
 
   platforms :jruby do
     gem "activerecord-jdbcmysql-adapter", ">= 1.2"

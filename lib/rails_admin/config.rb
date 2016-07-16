@@ -199,7 +199,7 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
-        excluded = (excluded_models.collect(&:to_s) + ['RailsAdmin::History'])
+        excluded = (excluded_models.collect(&:to_s) + %w(RailsAdmin::History PaperTrail::Version PaperTrail::VersionAssociation))
 
         (viable_models - excluded).uniq.sort
       end
@@ -229,11 +229,9 @@ module RailsAdmin
           end
         end
 
-        if block
-          @registry[key] = RailsAdmin::Config::LazyModel.new(entity, &block)
-        else
-          @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
-        end
+        @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        @registry[key].add_deferred_block(&block) if block
+        @registry[key]
       end
 
       def default_hidden_fields=(fields)

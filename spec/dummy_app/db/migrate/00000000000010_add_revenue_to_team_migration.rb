@@ -1,4 +1,4 @@
-class AddRevenueToTeamMigration < ActiveRecord::Migration
+class AddRevenueToTeamMigration < MigrationBase
   def self.up
     add_column :teams, :revenue, :decimal, precision: 18, scale: 2
   end

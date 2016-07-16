@@ -11,9 +11,9 @@ module RailsAdmin
   end
 
   class ApplicationController < Config.parent_controller.constantize
-    before_filter :_authenticate!
-    before_filter :_authorize!
-    before_filter :_audit!
+    before_action :_authenticate!
+    before_action :_authorize!
+    before_action :_audit!
 
     helper_method :_current_user, :_get_plugin_name
 
