@@ -196,7 +196,7 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
-        excluded = (excluded_models.collect(&:to_s) + ['RailsAdmin::History'])
+        excluded = (excluded_models.collect(&:to_s) + %w(RailsAdmin::History PaperTrail::Version PaperTrail::VersionAssociation))
 
         (viable_models - excluded).uniq.sort
       end

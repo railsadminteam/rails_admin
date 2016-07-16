@@ -131,6 +131,9 @@ describe RailsAdmin::Config do
 
     context 'given paper_trail as the extension for auditing', active_record: true do
       before do
+        class ControllerMock
+          def set_paper_trail_whodunnit; end
+        end
         module PaperTrail; end
         class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, auditing: true)
@@ -140,7 +143,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect { RailsAdmin.config.audit_with.call }.not_to raise_error
+        expect { ControllerMock.new.instance_eval(&RailsAdmin.config.audit_with) }.not_to raise_error
       end
     end
   end
