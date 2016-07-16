@@ -19,14 +19,13 @@ env:
     - JRUBY_OPTS="$JRUBY_OPTS --debug"
 
 rvm:
-  - 2.1.9
-  - 2.2.5
   - 2.3.1
-  - rbx-2
-  - ruby-head
 
 gemfile:
+  - gemfiles/rails_4.0.gemfile
+  - gemfiles/rails_4.1.gemfile
   - gemfiles/rails_4.2.gemfile
+  - gemfiles/rails_5.0.gemfile
 
 services:
   - mongodb
@@ -35,38 +34,50 @@ sudo: false
 
 matrix:
   include:
-    - rvm: 2.3.0
+    - rvm: 2.1.9
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_4.0.gemfile
-    - rvm: 2.3.0
+      gemfile: gemfiles/rails_4.2.gemfile
+    - rvm: 2.1.9
       env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_4.0.gemfile
-    - rvm: 2.3.0
+      gemfile: gemfiles/rails_4.2.gemfile
+    - rvm: 2.2.5
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_4.1.gemfile
-    - rvm: 2.3.0
+      gemfile: gemfiles/rails_5.0.gemfile
+    - rvm: 2.2.5
       env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_4.1.gemfile
-    - rvm: 2.3.0
+      gemfile: gemfiles/rails_4.2.gemfile
+    - rvm: 2.3.1
       env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.3.0
+      gemfile: gemfiles/rails_5.0.gemfile
+    - rvm: 2.3.1
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
+      gemfile: gemfiles/rails_5.0.gemfile
+    - rvm: ruby-head
+      env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.3.0
-      env: CI_ORM=active_record
+    - rvm: ruby-head
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.0.gemfile
+    - rvm: rbx-2
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_4.2.gemfile
+    - rvm: rbx-2
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.0.gemfile
     - rvm: jruby-head
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_4.2.gemfile
+      gemfile: gemfiles/rails_5.0.gemfile
+  exclude:
+    - rvm: 2.3.1
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.0.gemfile
   allow_failures:
     - rvm: jruby-head
     - rvm: rbx-2
     - rvm: ruby-head
-    - gemfile: gemfiles/rails_5.0.gemfile
   fast_finish: true
 
 notifications:
