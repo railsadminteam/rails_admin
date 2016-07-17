@@ -22,5 +22,6 @@ module DummyApp
     config.autoload_paths += %W(#{config.root}/app/#{CI_ORM} #{config.root}/app/#{CI_ORM}/concerns)
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
     config.active_record.raise_in_transactional_callbacks = true if Rails::VERSION::MAJOR == 4 && Rails::VERSION::MINOR == 2 && CI_ORM == :active_record
+    config.active_record.time_zone_aware_types = [:datetime, :time] if Rails::VERSION::MAJOR >= 5 && CI_ORM == :active_record
   end
 end
