@@ -107,7 +107,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
     end
 
     it 'displays a link to the delete page' do
-      is_expected.to have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
+      is_expected.to have_selector "a[href$='/admin/ball/#{@ball.id}/delete']"
     end
   end
 

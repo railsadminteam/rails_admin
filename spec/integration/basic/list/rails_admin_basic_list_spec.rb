@@ -447,9 +447,9 @@ describe 'RailsAdmin Basic List', type: :request do
     end
 
     it 'shows the show, edit and delete links with valid url' do
-      is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}']")
-      is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/edit']")
-      is_expected.to have_selector("td a[href='/admin/ball/#{@ball.id}/delete']")
+      is_expected.to have_selector("td a[href$='/admin/ball/#{@ball.id}']")
+      is_expected.to have_selector("td a[href$='/admin/ball/#{@ball.id}/edit']")
+      is_expected.to have_selector("td a[href$='/admin/ball/#{@ball.id}/delete']")
     end
   end
 

@@ -2,6 +2,8 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController, type: :controller do
+  routes { RailsAdmin::Engine.routes }
+
   def get(action, params)
     if Rails.version >= '5.0'
       super action, params: params
