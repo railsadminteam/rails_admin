@@ -2,10 +2,47 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v0.8.1...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0.rc...HEAD)
+
+
+## [1.0.0.rc](https://github.com/sferik/rails_admin/tree/v1.0.0.rc) - 2016-07-18
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v0.8.1...v1.0.0.rc)
+
+### Added
+- Rails 5 support
+- PaperTrail 5 support([9c42783a](https://github.com/sferik/rails_admin/commit/9c42783aa65b704f4a5d467608c49b746c47b81b))
+- Support for multiple configuration blocks([#1781](https://github.com/sferik/rails_admin/pull/1781), [#2670](https://github.com/sferik/rails_admin/pull/2670))
+- Default association limit is now configurable([#2508](https://github.com/sferik/rails_admin/pull/2058))
+
+### Changed
+- Prefix kaminari bootstrap views with `ra-` to avoid name conflict([#2283](https://github.com/sferik/rails_admin/issues/2283), [#2651](https://github.com/sferik/rails_admin/pull/2651))
+- Gravatar icon is now optional([#2570](https://github.com/sferik/rails_admin/pull/2570))
+- Improve bootstrap-wysihtml5-rails support([#2650](https://github.com/sferik/rails_admin/pull/2650))
+- Explicitly call the #t method on I18n([#2564](https://github.com/sferik/rails_admin/pull/2564))
+- Improve dashboard performance by querying with id instead of updated_at([#2514](https://github.com/sferik/rails_admin/issues/2514), [#2551](https://github.com/sferik/rails_admin/pull/2551))
+- Improve encoding support in CSV converter([#2508](https://github.com/sferik/rails_admin/pull/2508), [dca8911f](https://github.com/sferik/rails_admin/commit/dca8911f240ea11ebb186c33573188aa9e1b031d))
+- Add SVG file extension to the image detection method([#2533](https://github.com/sferik/rails_admin/pull/2533))
+- Update linear gradient syntax to make autoprefixer happy([#2531](https://github.com/sferik/rails_admin/pull/2531))
+- Improve export layout ([#2505](https://github.com/sferik/rails_admin/pull/2505))
+
+### Removed
+- Remove safe_yaml dependency([#2397](https://github.com/sferik/rails_admin/pull/2397))
+- Drop support for Ruby < 2.1.0
 
 ### Fixed
-- Fixed Mongoid BSON object field ([#2495](https://github.com/sferik/rails_admin/issues/2495))
+- Pagination did not work when showing all history([#2553](https://github.com/sferik/rails_admin/pull/2553))
+- Make filter-box label clickable([#2573](https://github.com/sferik/rails_admin/pull/2573))
+- Colorpicker form did not have the default css class `form-control`([#2571](https://github.com/sferik/rails_admin/pull/2571))
+- Stop assuming locale en is available([#2155](https://github.com/sferik/rails_admin/issues/2155))
+- Fix undefined method error with nested polymorphics([#1338](https://github.com/sferik/rails_admin/issues/1338), [#2110](https://github.com/sferik/rails_admin/pull/2110))
+- Fix issue with nav does not check pjax config from an action([#2309](https://github.com/sferik/rails_admin/pull/2309))
+- Model label should be pluralized with locale([#1983](https://github.com/sferik/rails_admin/pull/1983))
+- Fix delocalize strftime_format for DateTime.strptime to support minus([#2547](https://github.com/sferik/rails_admin/pull/2547))
+- Fix Syntax Error in removal of new nested entity([#2539](https://github.com/sferik/rails_admin/pull/2539))
+- Fix momentjs translations for '%-d' format day of the month([#2540](https://github.com/sferik/rails_admin/pull/2540))
+- Fix Mongoid BSON object field ([#2495](https://github.com/sferik/rails_admin/issues/2495))
+- Make browser ignore validaitons of removed nested child models([#2443](https://github.com/sferik/rails_admin/issues/2443), [#2490](https://github.com/sferik/rails_admin/pull/2490))
 
 
 ## [0.8.1](https://github.com/sferik/rails_admin/tree/v0.8.1) - 2015-11-24
