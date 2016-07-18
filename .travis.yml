@@ -70,14 +70,12 @@ matrix:
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.0.gemfile
-  exclude:
-    - rvm: 2.3.1
-      env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_5.0.gemfile
   allow_failures:
     - rvm: jruby-head
     - rvm: rbx-2
     - rvm: ruby-head
+    - env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.0.gemfile
   fast_finish: true
 
 notifications:

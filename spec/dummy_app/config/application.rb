@@ -5,6 +5,7 @@ require 'action_mailer/railtie'
 require 'sprockets/railtie'
 
 begin
+  require "#{CI_ORM}"
   require "#{CI_ORM}/railtie"
 rescue LoadError # rubocop:disable HandleExceptions
 end
