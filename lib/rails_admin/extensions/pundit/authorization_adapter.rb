@@ -17,6 +17,7 @@ module RailsAdmin
         # instance if it is available.
         def authorize(action, abstract_model = nil, model_object = nil)
           record = model_object || abstract_model && abstract_model.model
+          @controller.instance_variable_set(:@_pundit_policy_authorized, true)
           fail ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}") unless policy(record).send(action_for_pundit(action)) if action
         end
 
