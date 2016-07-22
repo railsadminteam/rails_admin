@@ -18,16 +18,19 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'shows statistics by default' do
-      expect(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
+      allow(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
+      expect(RailsAdmin.config(Player).abstract_model).to receive(:count)
       controller.dashboard
     end
 
     it 'does not show statistics if turned off' do
       RailsAdmin.config do |c|
+        c.included_models = [Player]
         c.actions do
           dashboard do
             statistics false
           end
+          index # mandatory
         end
       end
 
