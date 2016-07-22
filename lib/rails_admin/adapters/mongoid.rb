@@ -8,6 +8,9 @@ require 'rails_admin/adapters/mongoid/bson'
 module RailsAdmin
   module Adapters
     module Mongoid
+
+      class RaiseNotErrorFalse < StandardError;end
+
       DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point)
 
       def parse_object_id(value)
@@ -19,9 +22,12 @@ module RailsAdmin
       end
 
       def get(id)
-        AbstractObject.new(model.find(id))
+        model_instance = model.find(id)
+        raise RaiseNotErrorFalse if model_instance.nil?
+        AbstractObject.new(model_instance)
       rescue => e
         raise e if %w(
+          RailsAdmin::Adapters::Mongoid::RaiseNotErrorFalse
           Mongoid::Errors::DocumentNotFound
           Mongoid::Errors::InvalidFind
           Moped::Errors::InvalidObjectId
