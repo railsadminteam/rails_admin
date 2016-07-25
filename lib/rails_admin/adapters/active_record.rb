@@ -152,22 +152,40 @@ module RailsAdmin
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
-      protected
+        protected
 
-        def unary_operators
-          {
-            '_blank' => ["(#{@column} IS NULL OR #{@column} = '')"],
-            '_present' => ["(#{@column} IS NOT NULL AND #{@column} != '')"],
-            '_null' => ["(#{@column} IS NULL)"],
-            '_not_null' => ["(#{@column} IS NOT NULL)"],
-            '_empty' => ["(#{@column} = '')"],
-            '_not_empty' => ["(#{@column} != '')"],
-          }
-        end
+          def unary_operators
+            case @type
+            when :boolean
+              boolean_unary_operators
+            else
+              generic_unary_operators
+            end
+          end
 
-      private
+        private
 
-        def range_filter(min, max)
+          def generic_unary_operators
+            {
+              '_blank' => ["(#{@column} IS NULL OR #{@column} = '')"],
+              '_present' => ["(#{@column} IS NOT NULL AND #{@column} != '')"],
+              '_null' => ["(#{@column} IS NULL)"],
+              '_not_null' => ["(#{@column} IS NOT NULL)"],
+              '_empty' => ["(#{@column} = '')"],
+              '_not_empty' => ["(#{@column} != '')"]
+            }
+          end
+
+          def boolean_unary_operators
+            generic_unary_operators.merge(
+              {
+                '_blank' => ["(#{@column} IS NULL)"],
+                '_present' => ["(#{@column} IS NOT NULL)"]
+              }
+            )
+          end
+
+          def range_filter(min, max)
           if min && max
             ["(#{@column} BETWEEN ? AND ?)", min, max]
           elsif min
