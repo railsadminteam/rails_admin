@@ -18,7 +18,7 @@ MLB::Team.all.each do |mlb_team|
     division.save!
   end
   unless team = team_model.where(name: mlb_team.name).first
-    team = team_model.model.new(name: mlb_team.name, logo_url: mlb_team.logo_url, manager: mlb_team.manager || 'None', ballpark: mlb_team.ballpark, mascot: mlb_team.mascot, founded: mlb_team.founded, wins: mlb_team.wins, losses: mlb_team.losses, win_percentage: (format('%.3f', (mlb_team.wins.to_f / (mlb_team.wins + mlb_team.losses)))).to_f, division: division)
+    team = team_model.model.new(name: mlb_team.name, logo_url: mlb_team.logo_url, manager: mlb_team.manager || 'None', ballpark: mlb_team.ballpark, mascot: mlb_team.mascot, founded: mlb_team.founded, wins: mlb_team.wins, losses: mlb_team.losses, win_percentage: format('%.3f', (mlb_team.wins.to_f / (mlb_team.wins + mlb_team.losses))).to_f, division: division)
     team.save!
   end
   mlb_team.players.reject { |player| player.number.nil? }.each do |player|
