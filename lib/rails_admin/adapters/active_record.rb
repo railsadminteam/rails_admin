@@ -178,10 +178,8 @@ module RailsAdmin
 
         def boolean_unary_operators
           generic_unary_operators.merge(
-            {
-              '_blank' => ["(#{@column} IS NULL)"],
-              '_present' => ["(#{@column} IS NOT NULL)"]
-            }
+            '_blank' => ["(#{@column} IS NULL)"],
+            '_present' => ["(#{@column} IS NOT NULL)"]
           )
         end
 
