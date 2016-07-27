@@ -1,5 +1,5 @@
 if defined?(ActiveRecord)
-  MigrationBase =
+  MigrationBase = # rubocop:disable ConstantName
     if Rails.version >= '5.0'
       ActiveRecord::Migration[5.0]
     else
