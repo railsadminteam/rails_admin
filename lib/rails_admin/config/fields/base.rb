@@ -2,6 +2,7 @@ require 'rails_admin/config/proxyable'
 require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
 require 'rails_admin/config/groupable'
+require 'rails_admin/config/inspectable'
 
 module RailsAdmin
   module Config
@@ -11,10 +12,16 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Groupable
+        include RailsAdmin::Config::Inspectable
 
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
+
+        NAMED_INSTANCE_VARIABLES = [
+          :@parent, :@root, :@section, :@children_fields_registered,
+          :@associated_model_config, :@group, :@bindings
+        ].freeze
 
         def initialize(parent, name, properties)
           @parent = parent
@@ -323,24 +330,6 @@ module RailsAdmin
 
         def form_value
           form_default_value.nil? ? formatted_value : form_default_value
-        end
-
-        def inspect
-          "#<#{self.class.name}[#{name}] #{
-            instance_variables.collect do |v|
-              value = instance_variable_get(v)
-              if [:@parent, :@root, :@section, :@children_fields_registered,
-                  :@associated_model_config, :@group, :@bindings].include? v
-                if value.respond_to? :name
-                  "#{v}=#{value.name.inspect}"
-                else
-                  "#{v}=#{value.class.name}"
-                end
-              else
-                "#{v}=#{value.inspect}"
-              end
-            end.join(', ')
-          }>"
         end
       end
     end

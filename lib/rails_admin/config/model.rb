@@ -9,6 +9,7 @@ require 'rails_admin/config/has_fields'
 require 'rails_admin/config/has_description'
 require 'rails_admin/config/sections'
 require 'rails_admin/config/actions'
+require 'rails_admin/config/inspectable'
 
 module RailsAdmin
   module Config
@@ -18,10 +19,13 @@ module RailsAdmin
       include RailsAdmin::Config::Configurable
       include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
+      include RailsAdmin::Config::Inspectable
 
       attr_reader :abstract_model
       attr_accessor :groups
       attr_reader :parent, :root
+
+      NAMED_INSTANCE_VARIABLES = [:@parent, :@root].freeze
 
       def initialize(entity)
         @parent = nil
@@ -97,23 +101,6 @@ module RailsAdmin
       # store the configurations.
       def method_missing(m, *args, &block)
         send(:base).send(m, *args, &block)
-      end
-
-      def inspect
-        "#<#{self.class.name}[#{abstract_model.model.name}] #{
-          instance_variables.collect do |v|
-            value = instance_variable_get(v)
-            if [:@parent, :@root].include? v
-              if value.respond_to? :name
-                "#{v}=#{value.name.inspect}"
-              else
-                "#{v}=#{value.class.name}"
-              end
-            else
-              "#{v}=#{value.inspect}"
-            end
-          end.join(', ')
-        }>"
       end
     end
   end
