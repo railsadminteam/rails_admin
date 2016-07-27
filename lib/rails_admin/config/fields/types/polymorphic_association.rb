@@ -16,7 +16,7 @@ module RailsAdmin
           # association checks that any of the child models are included in
           # configuration.
           register_instance_option :visible? do
-            associated_model_config.length > 0
+            !associated_model_config.empty?
           end
 
           register_instance_option :formatted_value do
