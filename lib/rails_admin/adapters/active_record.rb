@@ -211,7 +211,7 @@ module RailsAdmin
             when 'ends_with'
               "%#{@value.downcase}"
             when 'is', '='
-              "#{@value.downcase}"
+              @value.downcase
             else
               return
             end
