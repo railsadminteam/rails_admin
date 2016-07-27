@@ -92,7 +92,7 @@ module RailsAdmin
                   property = am && am.properties.detect { |p| p.name == f.values.first.to_sym }
                   type = property && property.type
                 else                                                             #  <attribute|column>
-                  am = (self.association? ? associated_model_config.abstract_model : abstract_model)
+                  am = (association? ? associated_model_config.abstract_model : abstract_model)
                   table_name = am.table_name
                   column = f
                   property = am.properties.detect { |p| p.name == f.to_sym }
