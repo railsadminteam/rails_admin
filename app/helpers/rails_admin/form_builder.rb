@@ -24,7 +24,7 @@ module RailsAdmin
         form: self,
         object: @object,
         view: @template,
-        controller: @template.controller
+        controller: @template.controller,
       ).visible_fields
       return if fields.empty?
 
