@@ -43,13 +43,11 @@ module RailsAdmin
 
               if destroyed.nil?
                 flash[:error] = t('admin.flash.error', name: pluralize(0, @model_config.label), action: t('admin.actions.delete.done'))
-                redirect_to back_or_index
               else
                 flash[:success] = t('admin.flash.successful', name: pluralize(destroyed.count, @model_config.label), action: t('admin.actions.delete.done')) unless destroyed.empty?
                 flash[:error] = t('admin.flash.error', name: pluralize(not_destroyed.count, @model_config.label), action: t('admin.actions.delete.done')) unless not_destroyed.empty?
-                redirect_to back_or_index
               end
-
+              redirect_to back_or_index
             end
           end
         end
