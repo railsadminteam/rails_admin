@@ -44,7 +44,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe '#children_fields' do
-    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type]
+    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type].freeze
 
     it 'is empty by default' do
       expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :name }.children_fields).to eq([])

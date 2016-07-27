@@ -1,9 +1,9 @@
 
 module RailsAdmin
-  EXTENSIONS = []
-  AUTHORIZATION_ADAPTERS = {}
-  AUDITING_ADAPTERS = {}
-  CONFIGURATION_ADAPTERS = {}
+  EXTENSIONS = [].freeze
+  AUTHORIZATION_ADAPTERS = {}.freeze
+  AUDITING_ADAPTERS = {}.freeze
+  CONFIGURATION_ADAPTERS = {}.freeze
 
   # Extend RailsAdmin
   #

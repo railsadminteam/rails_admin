@@ -6,7 +6,7 @@ require 'rails_admin/adapters/active_record/property'
 module RailsAdmin
   module Adapters
     module ActiveRecord
-      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry]
+      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry].freeze
 
       def new(params = {})
         AbstractObject.new(model.new(params))

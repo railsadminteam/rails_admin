@@ -36,7 +36,7 @@ module RailsAdmin
           item: :item_id,
           created_at: :created_at,
           message: :event,
-        }
+        }.freeze
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
           raise('PaperTrail not found') unless defined?(PaperTrail)

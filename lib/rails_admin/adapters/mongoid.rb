@@ -8,7 +8,7 @@ require 'rails_admin/adapters/mongoid/bson'
 module RailsAdmin
   module Adapters
     module Mongoid
-      DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point)
+      DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point).freeze
 
       def parse_object_id(value)
         Bson.parse_object_id(value)
