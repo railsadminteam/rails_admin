@@ -21,8 +21,6 @@ module RailsAdmin
       ::Sass.load_paths << stylesheets
     end
 
-  private
-
     def self.asset_pipeline?
       defined?(::Sprockets)
     end
