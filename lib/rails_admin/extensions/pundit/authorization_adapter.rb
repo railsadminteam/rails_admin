@@ -17,7 +17,9 @@ module RailsAdmin
         # instance if it is available.
         def authorize(action, abstract_model = nil, model_object = nil)
           record = model_object || abstract_model && abstract_model.model
-          raise ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}") unless policy(record).send(action_for_pundit(action)) if action
+          if action && !policy(record).send(action_for_pundit(action))
+            raise ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}")
+          end
         end
 
         # This method is called primarily from the view to determine whether the given user
