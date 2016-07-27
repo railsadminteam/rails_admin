@@ -104,7 +104,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     context 'using active_record, supporting joins', active_record: true do
-      it 'gives back the local column'  do
+      it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
         expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
       end

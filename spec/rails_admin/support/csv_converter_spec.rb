@@ -68,7 +68,7 @@ describe RailsAdmin::CSVConverter do
         expect(subject[1]).to eq 'UTF-8'
         expect(subject[2].encoding).to eq Encoding::UTF_8
         expect(subject[2].unpack('H*').first).
-          to eq 'efbbbf4e756d6265722c4e616d650a312ce381aae381bee381880a'  # have BOM
+          to eq 'efbbbf4e756d6265722c4e616d650a312ce381aae381bee381880a' # have BOM
       end
     end
 
