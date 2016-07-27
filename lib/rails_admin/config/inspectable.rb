@@ -14,7 +14,7 @@ module RailsAdmin
         "#<#{self.class.name}#{instance_name} #{instance_vars}>"
       end
 
-      private
+    private
 
       def instance_variable_name(variable)
         value = instance_variable_get(variable)
