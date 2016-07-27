@@ -75,12 +75,10 @@ module RailsAdmin
             if replacement_option_name
               ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{replacement_option_name}.")
               send(replacement_option_name, *args, &block)
+            elsif block_given?
+              yield
             else
-              if block_given?
-                yield
-              else
-                raise("The #{option_name} configuration option is removed without replacement.")
-              end
+              raise("The #{option_name} configuration option is removed without replacement.")
             end
           end
         end
