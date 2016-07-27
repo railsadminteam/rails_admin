@@ -76,7 +76,6 @@ Style/RaiseArgs:
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-Style/TrailingComma:
+
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: 'comma'
-
-
