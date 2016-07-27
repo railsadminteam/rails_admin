@@ -10,7 +10,7 @@ module RailsAdmin
         end
 
         # Reader for the association information hash
-        def association # rubocop:disable TrivialAccessors
+        def association
           @properties
         end
 

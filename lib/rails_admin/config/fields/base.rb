@@ -57,7 +57,7 @@ module RailsAdmin
         end
 
         register_instance_option :filterable? do
-          !!searchable # rubocop:disable DoubleNegation
+          !!searchable
         end
 
         register_instance_option :search_operator do
@@ -172,7 +172,7 @@ module RailsAdmin
               :nil
             end
           end
-          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name| # rubocop:disable DoubleNegation
+          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
             abstract_model.model.validators_on(column_name).detect do |v|
               !(v.options[:allow_nil] || v.options[:allow_blank]) &&
                 [:presence, :numericality, :attachment_presence].include?(v.kind) &&
@@ -247,7 +247,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
-          if !state.nil? || block # rubocop:disable NonNilCheck
+          if !state.nil? || block
             required state.nil? ? proc { false == (instance_eval(&block)) } : false == state
           else
             optional?
