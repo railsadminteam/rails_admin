@@ -53,7 +53,7 @@
 
       this._setOptionsSource();
       this._initAutocomplete();
-      this._initKeyEvent()
+      this._initKeyEvent();
       this._overloadRenderItem();
       this._autocompleteDropdownEvent(this.button);
 
@@ -64,43 +64,54 @@
 
     _getResultSet: function(request, data, xhr) {
       var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), 'i');
+
+      var spannedContent = function(content) {
+        return $('<span>').text(content).html();
+      };
+
       var highlighter = function(label, word) {
-        if(word.length > 0) {
-          return $.map(label.split(word), function(el, i){
-            return $('<span></span>').text(el).html();
-          }).join($('<strong></strong>').text(word)[0].outerHTML);
-        }else{
-          return $('<span></span>').text(label).html();
+        if(word.length) {
+          return $.map(
+            label.split(word),
+            function(el) {
+              return spannedContent(el);
+            })
+            .join($('<strong>')
+            .text(word)[0]
+            .outerHTML
+          );
+        } else {
+          return spannedContent(label);
         }
       };
 
-      return $.map(data, function(el, i) {
-        // match regexp only for local requests, remote ones are already filtered, and label may not contain filtered term.
-        if ((el.id || el.value) && (xhr || matcher.test(el.label))) {
-          return {
-            html: highlighter(el.label || el.id, request.term),
-            value: el.label || el.id,
-            id: el.id || el.value
-          };
-        }
+      return $.map(
+        data,
+        function(el) {
+          var id = el.id || el.value;
+          var value = el.label || el.id;
+          // match regexp only for local requests, remote ones are already
+          // filtered, and label may not contain filtered term.
+          if (id && (xhr || matcher.test(el.label))) {
+            return {
+              html: highlighter(value, request.term),
+              value: value,
+              id: id
+            };
+          }
       });
     },
 
     _getSourceFunction: function(source) {
-
-      var self = this,
-          requestIndex = 0;
+      var self = this;
+      var requestIndex = 0;
 
       if ($.isArray(source)) {
-
         return function(request, response) {
           response(self._getResultSet(request, source, false));
         };
-
       } else if (typeof source === 'string') {
-
         return function(request, response) {
-
           if (this.xhr) {
             this.xhr.abort();
           }
@@ -122,9 +133,7 @@
             }
           });
         };
-
       } else {
-
         return source;
       }
     },
@@ -188,7 +197,7 @@
       return $('<div>')
         .addClass('input-group filtering-select col-sm-2')
         .attr('data-input-for', inputFor)
-        .css('float', 'left')
+        .css('float', 'left');
     },
 
     _initAutocomplete: function() {
@@ -199,33 +208,46 @@
         minLength: this.options.minLength,
         source: this._getSourceFunction(this.options.source),
         select: function(event, ui) {
-          var option = $('<option></option>').attr('value', ui.item.id).attr('selected', 'selected').text(ui.item.value);
-          self.element.html(option);
-          self.element.trigger('change', ui.item.id);
+          var option = $('<option>')
+            .attr('value', ui.item.id)
+            .attr('selected', 'selected')
+            .text(ui.item.value);
+          self.element.html(option)
+            .trigger('change', ui.item.id);
           self._trigger('selected', event, {
             item: option
           });
-          $(self.element.parents('.controls')[0]).find('.update').removeClass('disabled');
+          $(self.element.parents('.controls')[0])
+            .find('.update')
+            .removeClass('disabled');
         },
         change: function(event, ui) {
-          if (ui.item) return;
+          if (ui.item) {
+            return;
+          }
 
-          var matcher = new RegExp('^' + $.ui.autocomplete.escapeRegex($(this).val()) + '$', 'i'),
-              valid = false;
-          self.element.children('option').each(function() {
-            if ($(this).text().match(matcher)) {
-              this.elemented = valid = true;
-              return false;
-            }
-          });
+          var matcher = new RegExp('^' + $.ui.autocomplete.escapeRegex($(this).val()) + '$', 'i');
+          var valid = false;
 
-          if (valid || $(this).val() != '') return;
+          self.element.children('option')
+            .each(function() {
+              if ($(this).text().match(matcher)) {
+                valid = true;
+                return false;
+              }
+            });
+
+          if (valid || $(this).val() !== '') {
+            return;
+          }
 
           // remove invalid value, as it didn't match anything
           $(this).val(null);
           self.element.html($('<option value="" selected="selected"></option>'));
           self.input.data('ui-autocomplete').term = '';
-          $(self.element.parents('.controls')[0]).find('.update').addClass('disabled');
+          $(self.element.parents('.controls')[0])
+            .find('.update')
+            .addClass('disabled');
           return false;
         }
       });
@@ -235,7 +257,9 @@
       var self = this;
 
       return this.input.keyup(function() {
-        if ($(this).val().length) return;
+        if ($(this).val().length) {
+          return;
+        }
 
         /* Clear select options and trigger change if selected item is deleted */
         return self.element
@@ -245,7 +269,7 @@
     },
 
     _overloadRenderItem: function() {
-      return this.input.data('ui-autocomplete')._renderItem = function(ul, item) {
+      this.input.data('ui-autocomplete')._renderItem = function(ul, item) {
         return $('<li></li>')
           .data('ui-autocomplete-item', item)
           .append($('<a></a>')
