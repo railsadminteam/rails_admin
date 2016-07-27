@@ -1,9 +1,9 @@
 
 module RailsAdmin
-  EXTENSIONS = [].freeze
-  AUTHORIZATION_ADAPTERS = {}.freeze
-  AUDITING_ADAPTERS = {}.freeze
-  CONFIGURATION_ADAPTERS = {}.freeze
+  EXTENSIONS = [] # rubocop:disable MutableConstant
+  AUTHORIZATION_ADAPTERS = {} # rubocop:disable MutableConstant
+  AUDITING_ADAPTERS = {} # rubocop:disable MutableConstant
+  CONFIGURATION_ADAPTERS = {} # rubocop:disable MutableConstant
 
   # Extend RailsAdmin
   #
