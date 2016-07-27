@@ -79,7 +79,7 @@ module RailsAdmin
               if block_given?
                 yield
               else
-                fail("The #{option_name} configuration option is removed without replacement.")
+                raise("The #{option_name} configuration option is removed without replacement.")
               end
             end
           end

@@ -61,7 +61,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#check_for_cancel' do
     before do
-      allow(controller).to receive(:back_or_index) { fail(StandardError.new('redirected back')) }
+      allow(controller).to receive(:back_or_index) { raise(StandardError.new('redirected back')) }
     end
 
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do

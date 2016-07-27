@@ -9,7 +9,7 @@ module RailsAdmin
         @@registry = {}
 
         def self.load(type)
-          @@registry[type.to_sym] || fail("Unsupported field datatype: #{type}")
+          @@registry[type.to_sym] || raise("Unsupported field datatype: #{type}")
         end
 
         def self.register(type, klass = nil)

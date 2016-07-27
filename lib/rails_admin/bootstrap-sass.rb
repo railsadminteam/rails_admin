@@ -14,7 +14,7 @@ module RailsAdmin
       require 'sass-rails' if rails?
 
       unless rails? || compass?
-        fail(Bootstrap::FrameworkNotFound.new('bootstrap-sass requires either Rails > 3.1 or Compass, neither of which are loaded'))
+        raise(Bootstrap::FrameworkNotFound.new('bootstrap-sass requires either Rails > 3.1 or Compass, neither of which are loaded'))
       end
 
       stylesheets = File.expand_path(File.join('..', 'vendor', 'assets', 'stylesheets'))

@@ -39,7 +39,7 @@ module RailsAdmin
         }
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
-          fail('PaperTrail not found') unless defined?(PaperTrail)
+          raise('PaperTrail not found') unless defined?(PaperTrail)
           @controller = controller
           @controller.send(:set_paper_trail_whodunnit) if @controller
           begin
