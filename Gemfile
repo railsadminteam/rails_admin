@@ -43,7 +43,7 @@ group :test do
   gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
-  gem 'rubocop', '~> 0.40.0'
+  gem 'rubocop', '~> 0.41.2'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
 
