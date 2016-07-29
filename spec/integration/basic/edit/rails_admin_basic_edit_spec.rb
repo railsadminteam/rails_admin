@@ -68,7 +68,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit with has-and-belongs-to-many association' do
     before do
-      @teams = Array.new(3) { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 3)
       @fan = FactoryGirl.create :fan, teams: [@teams[0]]
       visit edit_path(model_name: 'fan', id: @fan.id)
     end

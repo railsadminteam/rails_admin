@@ -113,7 +113,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view' do
     before do
-      @teams = Array.new(21) { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
     end
 
@@ -125,7 +125,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view with kaminari custom param_name' do
     before do
-      @teams = Array.new(21) { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
       Kaminari.config.param_name = :pagina
     end
@@ -142,7 +142,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called with bulk_ids' do
     before do
-      @teams = Array.new(21) { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 21)
       controller.params = {model_name: 'teams', bulk_action: 'bulk_delete', bulk_ids: @teams.collect(&:id)}
     end
 
@@ -159,9 +159,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it "doesn't scope associated collection records when associated_collection_scope is nil" do
-      @players = Array.new(2) do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 2)
 
       RailsAdmin.config Team do
         field :players do
@@ -173,9 +171,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'scopes associated collection records according to associated_collection_scope' do
-      @players = Array.new(4) do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 4)
 
       RailsAdmin.config Team do
         field :players do
@@ -192,9 +188,7 @@ describe RailsAdmin::MainController, type: :controller do
       @team.revenue = BigDecimal.new('3')
       @team.save
 
-      @players = Array.new(5) do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 5)
 
       RailsAdmin.config Team do
         field :players do
@@ -211,9 +205,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'limits associated collection records number to 30 if cache_all is false' do
-      @players = Array.new(40) do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -224,9 +216,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it "doesn't limit associated collection records number to 30 if cache_all is true" do
-      @players = Array.new(40) do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -237,9 +227,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'orders associated collection records by id, descending' do
-      @players = Array.new(3) do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 3)
 
       expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
     end

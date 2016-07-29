@@ -300,7 +300,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'GET /admin/player with 2 objects' do
     before do
-      @players = Array.new(2) { FactoryGirl.create :player }
+      @players = FactoryGirl.create_list(:player, 2)
       visit index_path(model_name: 'player')
     end
 
@@ -311,7 +311,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'GET /admin/player with 2 objects' do
     before do
-      @players = Array.new(2) { FactoryGirl.create :player }
+      @players = FactoryGirl.create_list(:player, 2)
       visit index_path(model_name: 'player')
     end
 
@@ -358,7 +358,7 @@ describe 'RailsAdmin Basic List', type: :request do
     end
 
     it 'responds successfully with multiple models' do
-      Array.new(2) { FactoryGirl.create :player }
+      FactoryGirl.create_list(:player, 2)
       visit index_path(model_name: 'player', all: true)
       expect(find('div.total-count')).to have_content('2 players')
     end
@@ -375,7 +375,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'list as compact json' do
     it 'has_content an array with 2 elements and contain an array of elements with keys id and label' do
-      Array.new(2) { FactoryGirl.create :player }
+      FactoryGirl.create_list(:player, 2)
       get index_path(model_name: 'player', compact: true, format: :json)
       expect(ActiveSupport::JSON.decode(response.body).length).to eq(2)
       ActiveSupport::JSON.decode(response.body).each do |object|

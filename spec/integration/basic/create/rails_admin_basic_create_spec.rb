@@ -90,7 +90,7 @@ describe 'RailsAdmin Basic Create', type: :request do
 
   describe 'create with has-and-belongs-to-many association' do
     before do
-      @teams = Array.new(3) { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 3)
       post new_path(model_name: 'fan', fan: {name: 'John Doe', team_ids: [@teams[0].id]})
       @fan = RailsAdmin::AbstractModel.new('Fan').first
     end
