@@ -63,7 +63,7 @@ module RailsAdmin
         filter_name = filter_for_field.keys.first
         filter_hash = filter_for_field.values.first
         unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
-          fail "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
+          raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
         end
         case field.type
         when :enum

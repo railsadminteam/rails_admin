@@ -27,11 +27,12 @@ module RailsAdmin
               max_length = [length, valid_length[:maximum] || nil].compact.min
               min_length = [0, valid_length[:minimum] || nil].compact.max
               if max_length
-                if min_length == 0
-                  text += "#{I18n.translate('admin.form.char_length_up_to').capitalize} #{max_length}."
-                else
-                  text += "#{I18n.translate('admin.form.char_length_of').capitalize} #{min_length}-#{max_length}."
-                end
+                text +=
+                  if min_length == 0
+                    "#{I18n.translate('admin.form.char_length_up_to').capitalize} #{max_length}."
+                  else
+                    "#{I18n.translate('admin.form.char_length_of').capitalize} #{min_length}-#{max_length}."
+                  end
               end
             end
             text

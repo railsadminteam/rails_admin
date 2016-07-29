@@ -41,6 +41,9 @@ Metrics/PerceivedComplexity:
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
+Style/Alias:
+  Enabled: false
+
 Style/CollectionMethods:
   PreferredMethods:
     map:      'collect'
@@ -76,7 +79,8 @@ Style/RaiseArgs:
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: 'comma'
 
-
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: 'comma'

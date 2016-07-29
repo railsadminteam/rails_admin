@@ -23,7 +23,7 @@ module RailsAdmin
         '%S' => 'ss',         # Second of the minute (00..60)
         '%Y' => 'YYYY',       # Year with century
         '%y' => 'YY',         # Year without a century (00..99)
-      }
+      }.freeze
 
       class << self
         include RailsAdmin::Support::I18n

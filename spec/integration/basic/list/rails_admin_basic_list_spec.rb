@@ -55,7 +55,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'GET /admin/player' do
     before do
-      @teams = 2.times.collect do
+      @teams = Array.new(2) do
         FactoryGirl.create(:team)
       end
       @players = [
@@ -300,7 +300,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'GET /admin/player with 2 objects' do
     before do
-      @players = 2.times.collect { FactoryGirl.create :player }
+      @players = FactoryGirl.create_list(:player, 2)
       visit index_path(model_name: 'player')
     end
 
@@ -311,7 +311,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'GET /admin/player with 2 objects' do
     before do
-      @players = 2.times.collect { FactoryGirl.create :player }
+      @players = FactoryGirl.create_list(:player, 2)
       visit index_path(model_name: 'player')
     end
 
@@ -338,7 +338,7 @@ describe 'RailsAdmin Basic List', type: :request do
   describe 'list with 3 pages, page 3' do
     before do
       items_per_page = RailsAdmin.config.default_items_per_page
-      @players = (items_per_page * 3).times.collect { FactoryGirl.create(:player) }
+      @players = Array.new((items_per_page * 3)) { FactoryGirl.create(:player) }
       visit index_path(model_name: 'player', page: 3)
     end
 
@@ -358,7 +358,7 @@ describe 'RailsAdmin Basic List', type: :request do
     end
 
     it 'responds successfully with multiple models' do
-      2.times.collect { FactoryGirl.create :player }
+      FactoryGirl.create_list(:player, 2)
       visit index_path(model_name: 'player', all: true)
       expect(find('div.total-count')).to have_content('2 players')
     end
@@ -367,7 +367,7 @@ describe 'RailsAdmin Basic List', type: :request do
   describe 'GET /admin/player show with pagination disabled by :associated_collection' do
     it 'responds successfully' do
       @team = FactoryGirl.create :team
-      2.times.collect { FactoryGirl.create :player, team: @team }
+      Array.new(2) { FactoryGirl.create :player, team: @team }
       visit index_path(model_name: 'player', associated_collection: 'players', compact: true, current_action: 'update', source_abstract_model: 'team', source_object_id: @team.id)
       expect(find('div.total-count')).to have_content('2 players')
     end
@@ -375,7 +375,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'list as compact json' do
     it 'has_content an array with 2 elements and contain an array of elements with keys id and label' do
-      2.times.collect { FactoryGirl.create :player }
+      FactoryGirl.create_list(:player, 2)
       get index_path(model_name: 'player', compact: true, format: :json)
       expect(ActiveSupport::JSON.decode(response.body).length).to eq(2)
       ActiveSupport::JSON.decode(response.body).each do |object|

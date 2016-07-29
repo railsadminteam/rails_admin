@@ -36,7 +36,7 @@ describe RailsAdmin::Config do
   describe '.add_extension' do
     before do
       silence_warnings do
-        RailsAdmin::EXTENSIONS = []
+        RailsAdmin::EXTENSIONS = [] # rubocop:disable MutableConstant
       end
     end
 

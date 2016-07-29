@@ -68,7 +68,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit with has-and-belongs-to-many association' do
     before do
-      @teams = 3.times.collect { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 3)
       @fan = FactoryGirl.create :fan, teams: [@teams[0]]
       visit edit_path(model_name: 'fan', id: @fan.id)
     end
@@ -95,7 +95,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
   describe 'edit with missing label', given: ['a player exists', 'three teams with no name exist'] do
     before do
       @player = FactoryGirl.create :player
-      @teams = 3.times.collect { FactoryGirl.create :team, name: '' }
+      @teams = Array.new(3) { FactoryGirl.create :team, name: '' }
       visit edit_path(model_name: 'player', id: @player.id)
     end
   end

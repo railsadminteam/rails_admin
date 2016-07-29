@@ -113,8 +113,8 @@ module RailsAdmin
           @audit = proc do
             @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
           end
-        else
-          @audit = block if block
+        elsif block
+          @audit = block
         end
         @audit || DEFAULT_AUDIT
       end
@@ -148,8 +148,8 @@ module RailsAdmin
           @authorize = proc do
             @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
           end
-        else
-          @authorize = block if block
+        elsif block
+          @authorize = block
         end
         @authorize || DEFAULT_AUTHORIZE
       end
@@ -193,7 +193,7 @@ module RailsAdmin
         if %w(default like starts_with ends_with is =).include? operator
           @default_search_operator = operator
         else
-          fail(ArgumentError.new("Search operator '#{operator}' not supported"))
+          raise(ArgumentError.new("Search operator '#{operator}' not supported"))
         end
       end
 
