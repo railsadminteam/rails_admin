@@ -251,6 +251,30 @@ describe RailsAdmin::MainController, type: :controller do
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
       end
     end
+
+    context 'when authorizing requests with pundit' do
+      if defined?(Devise::Test)
+        include Devise::Test::ControllerHelpers
+      else
+        include Devise::TestHelpers
+      end
+
+      controller(RailsAdmin::MainController) do
+        include ::Pundit
+        after_action :verify_authorized
+      end
+
+      it 'performs authorization' do
+        RailsAdmin.config do |c|
+          c.authorize_with(:pundit)
+          c.authenticate_with { warden.authenticate! scope: :user }
+          c.current_user_method(&:current_user)
+        end
+        login_as FactoryGirl.create :user, roles: [:admin]
+        player = FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        expect { get :show, model_name: 'player', id: player.id }.not_to raise_error
+      end
+    end
   end
 
   describe 'sanitize_params_for!' do
