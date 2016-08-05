@@ -20,6 +20,7 @@ require File.expand_path('../dummy_app/config/environment', __FILE__)
 require 'rspec/rails'
 require 'factory_girl'
 require 'factories'
+require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
 
