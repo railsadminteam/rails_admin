@@ -283,7 +283,7 @@ module RailsAdmin
         @show_gravatar = true
         @navigation_static_links = {}
         @navigation_static_label = nil
-        @parent_controller = '::ApplicationController'
+        @parent_controller = '::ActionController::Base'
         RailsAdmin::Config::Actions.reset
       end
 

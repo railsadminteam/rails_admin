@@ -4,6 +4,9 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0.rc...HEAD)
 
+### Changed
+- Change parent controller to ActionController::Base for out-of-box support of Rails 5 API mode([#2688](https://github.com/sferik/rails_admin/issues/2688))
+  - To keep old behavior, add `config.parent_controller = '::ApplicationController'` in your RailsAdmin initializer.
 
 ## [1.0.0.rc](https://github.com/sferik/rails_admin/tree/v1.0.0.rc) - 2016-07-18
 
