@@ -296,6 +296,33 @@ describe 'RailsAdmin Basic List', type: :request do
       }
       expect(response.body).to include("$.filters.append(#{options.to_json});")
     end
+
+    it 'not displays option "Add filter" when option filterable_fields is false' do
+      RailsAdmin.config Player do
+        add_filter false
+      end
+      get index_path(model_name: 'player')
+
+      expect(response.body).not_to include("Add filter")
+    end
+
+    it 'displays option "Add filter" when option filterable_fields is true' do
+      RailsAdmin.config Player do
+        add_filter true
+      end
+      get index_path(model_name: 'player')
+
+      expect(response.body).to include("Add filter")
+    end
+
+    it 'displays option "Add filter" when option filterable_fields not present' do
+      RailsAdmin.config Player do
+        add_filter true
+      end
+      get index_path(model_name: 'player')
+      
+      expect(response.body).to include("Add filter")
+    end
   end
 
   describe 'GET /admin/player with 2 objects' do

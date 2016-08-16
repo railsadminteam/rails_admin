@@ -37,7 +37,7 @@ module RailsAdmin
     end
 
     def filterable_fields
-      @filterable_fields ||= @model_config.list.fields.select(&:filterable?)
+      @filterable_fields ||= @model_config.list.fields.select(&:filterable?) if @model_config.add_filter
     end
 
     def ordered_filters
