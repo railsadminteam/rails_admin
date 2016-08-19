@@ -33,5 +33,5 @@ devise_for :admin
 ```
 
 
-Currently there is a bug in devise https://github.com/plataformatec/devise/issues/3321
-It is recommended to copy the devise view and modify as the issue said.
+~~Currently there is a bug in devise https://github.com/plataformatec/devise/issues/3321
+It is recommended to copy the devise view and modify as the issue said.~~ Fixed here: https://github.com/ryanmccarthypdx/retain_me/commit/b7534807c477f94c8d9a78d262513ad8c00d3623
