@@ -110,8 +110,10 @@ module RailsAdmin
       def audit_with(*args, &block)
         extension = args.shift
         if extension
+          klass = RailsAdmin::AUDITING_ADAPTERS[extension]
+          klass.setup if klass.respond_to? :setup
           @audit = proc do
-            @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
+            @auditing_adapter = klass.new(*([self] + args).compact)
           end
         elsif block
           @audit = block
@@ -145,8 +147,10 @@ module RailsAdmin
       def authorize_with(*args, &block)
         extension = args.shift
         if extension
+          klass = RailsAdmin::AUTHORIZATION_ADAPTERS[extension]
+          klass.setup if klass.respond_to? :setup
           @authorize = proc do
-            @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
+            @authorization_adapter = klass.new(*([self] + args).compact)
           end
         elsif block
           @authorize = block
