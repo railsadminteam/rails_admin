@@ -172,14 +172,16 @@ module RailsAdmin
             '_null' => ["(#{@column} IS NULL)"],
             '_not_null' => ["(#{@column} IS NOT NULL)"],
             '_empty' => ["(#{@column} = '')"],
-            '_not_empty' => ["(#{@column} != '')"]
+            '_not_empty' => ["(#{@column} != '')"],
           }
         end
 
         def boolean_unary_operators
           generic_unary_operators.merge(
             '_blank' => ["(#{@column} IS NULL)"],
-            '_present' => ["(#{@column} IS NOT NULL)"]
+            '_empty' => ["(#{@column} IS NULL)"],
+            '_present' => ["(#{@column} IS NOT NULL)"],
+            '_not_empty' => ["(#{@column} IS NOT NULL)"],
           )
         end
 
