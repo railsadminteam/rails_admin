@@ -155,6 +155,17 @@ module RailsAdmin
       protected
 
         def unary_operators
+          case @type
+          when :boolean
+            boolean_unary_operators
+          else
+            generic_unary_operators
+          end
+        end
+
+      private
+
+        def generic_unary_operators
           {
             '_blank' => ["(#{@column} IS NULL OR #{@column} = '')"],
             '_present' => ["(#{@column} IS NOT NULL AND #{@column} != '')"],
@@ -165,7 +176,14 @@ module RailsAdmin
           }
         end
 
-      private
+        def boolean_unary_operators
+          generic_unary_operators.merge(
+            '_blank' => ["(#{@column} IS NULL)"],
+            '_empty' => ["(#{@column} IS NULL)"],
+            '_present' => ["(#{@column} IS NOT NULL)"],
+            '_not_empty' => ["(#{@column} IS NOT NULL)"],
+          )
+        end
 
         def range_filter(min, max)
           if min && max

@@ -8,6 +8,13 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
     end
   end
 
+  after(:each) do
+    # if #user_for_paper_trail is left unused, PaperTrail complains about it
+    RailsAdmin::ApplicationController.class_eval do
+      undef user_for_paper_trail
+    end
+  end
+
   describe 'on object creation', type: :request do
     subject { page }
     before do

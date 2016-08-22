@@ -5,6 +5,13 @@ module RailsAdmin
       # You can create another adapter for different authorization behavior, just be certain it
       # responds to each of the public methods here.
       class AuthorizationAdapter
+        # This method is called first time only and used for setup
+        def self.setup
+          RailsAdmin::ApplicationController.class_eval do
+            include ::Pundit
+          end unless RailsAdmin::ApplicationController.ancestors.include? 'Pundit'
+        end
+
         # See the +authorize_with+ config method for where the initialization happens.
         def initialize(controller)
           @controller = controller
