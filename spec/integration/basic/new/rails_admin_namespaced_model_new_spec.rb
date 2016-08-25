@@ -33,6 +33,5 @@ describe 'RailsAdmin Namespaced Model New', type: :request do
       visit new_path(model_name: 'cms~basic_page', cms_basic_page: {title: 'Hello'})
       expect(page).to have_css('input[value=Hello]')
     end
-
   end
 end
