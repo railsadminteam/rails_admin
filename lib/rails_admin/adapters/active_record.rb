@@ -30,6 +30,12 @@ module RailsAdmin
         scope = scope.includes(options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
+
+        if options[:sort] && model.try(:translates?) &&
+           options[:sort].split('.').first == model.translation_options[:table_name]
+          scope = scope.where("#{model.translation_options[:table_name]}.locale = ?", I18n.locale)
+        end
+
         scope = query_scope(scope, options[:query]) if options[:query]
         scope = filter_scope(scope, options[:filters]) if options[:filters]
         if options[:page] && options[:per]
