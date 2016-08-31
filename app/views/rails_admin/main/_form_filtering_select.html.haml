@@ -20,9 +20,15 @@
 
   collection = xhr ? [[selected_name, selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(field.associated_object_label_method), o.send(field.associated_primary_key)] }
 
+  if field.dependent_field
+    dependent_field = field.parent.fields.select {|f| f.name == field.dependent_field}.first
+    dependent_field_selector = "##{source_abstract_model.to_param}_#{dependent_field.method_name}"
+  end
+
   js_data = {
     xhr: xhr,
-    remote_source: index_path(config.abstract_model.to_param, source_object_id: form.object.id, source_abstract_model: source_abstract_model.to_param, associated_collection: field.name, current_action: current_action, compact: true)
+    remote_source: index_path(config.abstract_model.to_param, source_object_id: form.object.id, source_abstract_model: source_abstract_model.to_param, associated_collection: field.name, current_action: current_action, compact: true),
+    dependent_field_selector: dependent_field_selector
   }
 
 - selected_id = (hdv = field.form_default_value).nil? ? selected_id : hdv

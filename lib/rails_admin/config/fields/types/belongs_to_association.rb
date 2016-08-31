@@ -31,6 +31,10 @@ module RailsAdmin
             true
           end
 
+          register_instance_option :dependent_field do
+            false
+          end
+
           def selected_id
             bindings[:object].send(foreign_key)
           end
