@@ -56,6 +56,10 @@ module RailsAdmin
       instance_eval(&RailsAdmin::Config.audit_with)
     end
 
+    def rails_admin_controller?
+      true
+    end
+
     rescue_from RailsAdmin::ObjectNotFound do
       flash[:error] = I18n.t('admin.flash.object_not_found', model: @model_name, id: params[:id])
       params[:action] = 'index'
