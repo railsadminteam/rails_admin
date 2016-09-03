@@ -12,7 +12,7 @@
       - humanized_association = @abstract_model.model.human_attribute_name association.name
       - limit = children.count > 12 ? 10 : children.count
       - children.first(limit).each do |child|
-        = content_tag_for :li, child do
+        = content_tag :li, class: dom_class(child) do
           - child_config = RailsAdmin.config(child)
           = humanized_association.singularize
           - wording = child.send(child_config.object_label_method)
