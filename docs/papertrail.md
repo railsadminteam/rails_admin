@@ -23,6 +23,7 @@ User should be your 'whodunnit' model.
 
 To show the history:
 ```ruby
+PAPER_TRAIL_AUDIT_MODEL = ['Order', 'Payment']
 config.actions do
   history_index do
     only PAPER_TRAIL_AUDIT_MODEL
