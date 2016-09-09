@@ -21,6 +21,18 @@ config.audit_with :paper_trail, 'User', 'Version' # PaperTrail < 3.0.0
 
 User should be your 'whodunnit' model.
 
+To show the history:
+```ruby
+config.actions do
+  history_index do
+    only PAPER_TRAIL_AUDIT_MODEL
+  end
+  history_show do
+    only PAPER_TRAIL_AUDIT_MODEL
+  end
+end
+```
+
 To hide the Papertrail links from the side navigation add this to your `rails_admin.rb` initializer:
 
 ```ruby
