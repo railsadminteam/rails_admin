@@ -23,7 +23,7 @@ Now twitter-bootstrap-rails works with rails_admin.
 
 ## Other issues:
 
-**Locale is being forced to `:en`** whereas config.i18n.default_locale = `:de`
+### Locale is being forced to `:en` whereas config.i18n.default_locale = `:de`
 
 Reason: RailsAdmin DSL needs access to locale before default_locale being set by application.rb
 
@@ -33,7 +33,7 @@ Workaround: add `I18n.default_locale = :de` inside RailsAdmin's initializer (bef
 
 ***
 
-**Asset pipeline**
+### Asset pipeline
 
 The master branch currently targets Rails 3.1. Older branch with 3.0 compatibility is present, but is no longer maintained.
 
@@ -76,7 +76,7 @@ If you still have issue with the asset pipeline:
 
 ***
 
-**Using model name AdminUser results in infinite redirection**
+### Using model name AdminUser results in infinite redirection
 
 This happens because Rails engine router is greedy. It matches `/admin_users/sign_in` with `RailsAdmin::Engine`'s `_users/sign_in` which one is not authorized to see.
 
@@ -84,14 +84,14 @@ You can use a different URL scope for `RailsAdmin` by changing `mount RailsAdmin
 
 ***
 
-**Double insertion of NestedFields**
+### Double insertion of NestedFields
 
 jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See [[#924|https://github.com/sferik/rails_admin/issues/924]]
 
 
 ***
 
-**Conflict between will_paginate and kaminari**
+### Conflict between will_paginate and kaminari
 
 will_paginate is known to cause problem when used with kaminari, to which rails_admin has dependency.
 To work around this issue, create `config/initializers/kaminari.rb` with following content:
@@ -107,7 +107,7 @@ to make kaminari to use different paginating method from will_paginate's.
 
 ***
 
-**Redirect loop when visiting /admin**
+### Redirect loop when visiting /admin
 
 In `config/routes.rb` switch lines for devise and RA so they are in this order:
 ```
@@ -116,7 +116,7 @@ mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 ```
 
 ***
-**No route matches [POST] for delete and update**
+### No route matches [POST] for delete and update
 
 The problem was in missing middleware. I have added
 
