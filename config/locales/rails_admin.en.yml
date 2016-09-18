@@ -54,7 +54,7 @@ en:
     table_headers:
       model_name: "Nome do model"
       last_created: "Ultima criação"
-      records: "Regsitros"
+      records: "Registros"
       username: "Utilizadores"
       changes: "Mudanças"
       created_at: "Data/Hora"
