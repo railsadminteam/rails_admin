@@ -175,22 +175,25 @@
     _queryFilter: function(val) {
       var widget = this;
       widget._query(val, function(matches) {
-        var i;
+
         var filtered = [];
-        for (i in matches) {
-          if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
+        var i;
+
+        for (i = 0; i < matches.length; i++) {
+          if (!widget.selected(matches[i].id)) {
             filtered.push(i);
           }
         }
         if (filtered.length > 0) {
-          widget.collection.html('');
-          for (i in filtered) {
-            widget.collection.append(
-              $('<option></option>').attr('value', matches[filtered[i]].id).attr('title', matches[filtered[i]].label).text(matches[filtered[i]].label)
-            );
+          widget.collection[0].innerHTML = '';
+          var filteredContainer = [];
+          for (i = 0; i < filtered.length; i++) {
+            var newOptions = '<option value="'+matches[filtered[i]].id+'" title="'+matches[filtered[i]].label+'">'+matches[filtered[i]].label+'</option>';
+            filteredContainer.push(newOptions);
           }
+          widget.collection[0].innerHTML = filteredContainer.join("");
         } else {
-          widget.collection.html(widget.noObjectsPlaceholder);
+          widget.collection[0].innerHTML = widget.noObjectsPlaceholder;
         }
       });
     },
@@ -314,7 +317,9 @@
     },
 
     selected: function(value) {
-      return this.element.find('option[value="' + value + '"]').attr("selected");
+      if (this.selection[0].querySelectorAll('option[value="' + value + '"]')[0]) {
+        return true;
+      }
     },
 
     destroy: function() {
