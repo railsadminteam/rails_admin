@@ -102,8 +102,8 @@ en:
         title: "Exportar %{model_label_plural}"
         menu: "Exportar"
         breadcrumb: "Exportar"
-        link: "Exportar encontrado %{model_label_plural}"
-        bulk_link: "Exportar selecionado %{model_label_plural}"
+        link: "Exportar de %{model_label_plural}"
+        bulk_link: "Exportar selecionados de %{model_label_plural}"
         done: "Exportado"
       history_index:
         title: "Histórico para %{model_label_plural}"
