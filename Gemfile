@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'appraisal', '>= 2.0'
 gem 'devise'
-gem 'remotipart', github: 'mshibuya/remotipart'
 
 group :active_record do
   platforms :jruby do

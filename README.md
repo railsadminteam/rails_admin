@@ -37,7 +37,6 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
   - For Rails 5 project:
 
     ```
-    gem 'remotipart', github: 'mshibuya/remotipart'
     gem 'rails_admin', '>= 1.0.0.rc'
     ```
 
