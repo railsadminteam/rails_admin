@@ -28,7 +28,12 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            value.present? ? enum.invert[type_cast_value(value)] : nil
+            return unless value.present?
+            if ::Rails.version >= '5'
+              abstract_model.model.attribute_types[name.to_s].deserialize(value)
+            else
+              enum.invert[type_cast_value(value)]
+            end
           end
 
           def parse_input(params)
@@ -36,16 +41,14 @@ module RailsAdmin
           end
 
           def form_value
-            ::Rails.version >= '5' ? enum[super] : super
+            enum[super] || super
           end
 
         private
 
           def type_cast_value(value)
-            if ::Rails.version >= '5'
-              abstract_model.model.attribute_types[name].cast(value)
-            elsif ::Rails.version >= '4.2'
-              abstract_model.model.column_types[name].type_cast_from_user(value)
+            if ::Rails.version >= '4.2'
+              abstract_model.model.column_types[name.to_s].type_cast_from_user(value)
             else
               abstract_model.model.column_types[name.to_s].type_cast(value)
             end
