@@ -4,6 +4,9 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0...HEAD)
 
+### Added
+- DSL for association eager-loading([#1325](https://github.com/sferik/rails_admin/issues/1325), [#1342](https://github.com/sferik/rails_admin/issues/1342))
+
 
 ## [1.0.0](https://github.com/sferik/rails_admin/tree/v1.0.0) - 2016-09-19
 
