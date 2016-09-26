@@ -16,6 +16,7 @@ module RailsAdmin
       end
 
       alias_method :old_new, :new
+
       def new(m)
         m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
@@ -85,19 +86,19 @@ module RailsAdmin
     def each_associated_children(object)
       associations.each do |association|
         case association.type
-        when :has_one
-          if child = object.send(association.name)
-            yield(association, child)
-          end
-        when :has_many
-          object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
-            yield(association, child)
-          end
+          when :has_one
+            if child = object.send(association.name)
+              yield(association, child)
+            end
+          when :has_many
+            object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
+              yield(association, child)
+            end
         end
       end
     end
 
-  private
+    private
 
     def initialize_active_record
       @adapter = :active_record
@@ -129,7 +130,7 @@ module RailsAdmin
           build_statement_for_type_generic
       end
 
-    protected
+      protected
 
       def get_filtering_duration
         FilteringDuration.new(@operator, @value).get_duration
@@ -138,10 +139,10 @@ module RailsAdmin
       def build_statement_for_type_generic
         build_statement_for_type || begin
           case @type
-          when :date
-            build_statement_for_date
-          when :datetime, :timestamp
-            build_statement_for_datetime_or_timestamp
+            when :date
+              build_statement_for_date
+            when :datetime, :timestamp
+              build_statement_for_datetime_or_timestamp
           end
         end
       end
@@ -152,21 +153,21 @@ module RailsAdmin
 
       def build_statement_for_integer_decimal_or_float
         case @value
-        when Array then
-          val, range_begin, range_end = *@value.collect do |v|
-            next unless v.to_i.to_s == v || v.to_f.to_s == v
-            @type == :integer ? v.to_i : v.to_f
-          end
-          case @operator
-          when 'between'
-            range_filter(range_begin, range_end)
+          when Array then
+            val, range_begin, range_end = *@value.collect do |v|
+              next unless v.to_i.to_s == v || v.to_f.to_s == v
+              @type == :integer ? v.to_i : v.to_f
+            end
+            case @operator
+              when 'between'
+                range_filter(range_begin, range_end)
+              else
+                column_for_value(val) if val
+            end
           else
-            column_for_value(val) if val
-          end
-        else
-          if @value.to_i.to_s == @value || @value.to_f.to_s == @value
-            @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
-          end
+            if @value.to_i.to_s == @value || @value.to_f.to_s == @value
+              @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
+            end
         end
       end
 
@@ -200,12 +201,18 @@ module RailsAdmin
 
         def get_duration
           case @operator
-          when 'between'   then between
-          when 'today'     then today
-          when 'yesterday' then yesterday
-          when 'this_week' then this_week
-          when 'last_week' then last_week
-          else default
+            when 'between' then
+              between
+            when 'today' then
+              today
+            when 'yesterday' then
+              yesterday
+            when 'this_week' then
+              this_week
+            when 'last_week' then
+              last_week
+            else
+              default
           end
         end
 
@@ -234,7 +241,7 @@ module RailsAdmin
           [default_date, default_date]
         end
 
-      private
+        private
 
         def default_date
           Array.wrap(@value).first

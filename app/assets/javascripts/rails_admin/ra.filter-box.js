@@ -2,6 +2,10 @@
 
   var filters;
 
+  var checked = function (value, applied_filters) {
+    return $.inArray(value[1], applied_filters) !== -1 ? 'checked="checked"' : '';
+  };
+
   $.filters = filters = {
     append: function(options) {
       options = options || {};
@@ -11,6 +15,10 @@
       var field_value = options['value'];
       var field_operator = options['operator'];
       var select_options = options['select_options'];
+      var multi_select = options['multiple'];
+      var check_boxes = options['check_boxes'];
+      var checkbox_values = options['checkbox_values'];
+      var applied_filters = options['applied_filters'];
       var index = options['index'];
       var value_name    = 'f[' +  field_name + '][' + index + '][v]';
       var operator_name = 'f[' +  field_name + '][' + index + '][o]';
@@ -79,6 +87,30 @@
           '</select>'
           additional_control = '<input class="additional-fieldset input-sm form-control" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
+        case 'has_and_belongs_to_many_association':
+          multiple_values = multi_select;
+          if(check_boxes){
+            var new_checkbox = function(value) {
+               return '<input style="display:inline-block" name="' + value_name + '[]" data-name="' + value_name + '[]" class="checkbox input-sm form-control" type="checkbox" value="'+ value[1] +'" ' + checked(value, applied_filters) + ' />' +
+                      '<label for="' + value_name + '[]">' + value[0] + '</label>';
+            };
+            control = checkbox_values.map(function(value){
+              return new_checkbox(value)
+            }).join('<br>\n');
+          } else {
+            control = '<select style="display:' + (multiple_values ? 'none' : 'inline-block') + '" ' + (multiple_values ? '' : 'name="' + value_name + '"') + ' data-name="' + value_name + '" class="select-single input-sm form-control">' +
+              '<option value="_discard">...</option>' +
+              '<option ' + (field_value == "_present" ? 'selected="selected"' : '') + ' value="_present">' + RailsAdmin.I18n.t("is_present") + '</option>' +
+              '<option ' + (field_value == "_blank"   ? 'selected="selected"' : '') + ' value="_blank">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
+              '<option disabled="disabled">---------</option>' +
+              select_options +
+              '</select>' +
+              '<select multiple="multiple" style="display:' + (multiple_values ? 'inline-block' : 'none') + '" ' + (multiple_values ? 'name="' + value_name + '[]"' : '') + ' data-name="' + value_name + '[]" class="select-multiple input-sm form-control">' +
+              select_options +
+              '</select>' +
+              '<a href="#" class="switch-select"><i class="icon-' + (multiple_values ? 'minus' : 'plus') + '"></i></a>';
+          }
+          break;
         case 'integer':
         case 'decimal':
         case 'float':
@@ -88,14 +120,14 @@
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null" ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") +'</option>' +
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
-          '</select>'
+          '</select>';
           additional_control =
           '<input class="additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
           '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
           '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
         default:
-          control = '<input type="text" class="input-sm form-control" name="' + value_name + '" value="' + field_value + '"/> ';
+          control = '<input type="text" class="input-sm form-control" name="' + value_name + '" value="' + field_value + '"/>';
           break;
       }
 

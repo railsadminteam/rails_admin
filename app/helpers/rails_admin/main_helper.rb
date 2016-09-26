@@ -10,11 +10,11 @@ module RailsAdmin
     end
 
     def get_indicator(percent)
-      return '' if percent < 0          # none
-      return 'info' if percent < 34     # < 1/100 of max
-      return 'success' if percent < 67  # < 1/10 of max
-      return 'warning' if percent < 84  # < 1/3 of max
-      'danger'                          # > 1/3 of max
+      return '' if percent < 0 # none
+      return 'info' if percent < 34 # < 1/100 of max
+      return 'success' if percent < 67 # < 1/10 of max
+      return 'warning' if percent < 84 # < 1/3 of max
+      'danger' # > 1/3 of max
     end
 
     def get_column_sets(properties)
@@ -66,14 +66,20 @@ module RailsAdmin
           fail "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
         end
         case field.type
-        when :enum
-          options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
-        when :date, :datetime, :time
-          options[:datetimepicker_format] = field.parser.to_momentjs
+          when :enum
+            options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
+          when :has_and_belongs_to_many_association, :has_many_association
+            options[:multiple] = field.with(object: @abstract_model.model.new).multiple
+            options[:check_boxes] = field.with(object: @abstract_model.model.new).check_boxes
+            options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).filter_by, filter_hash['v']) unless options[:check_boxes]
+            options[:checkbox_values] = field.with(object: @abstract_model.model.new).filter_by if options[:check_boxes]
+            options[:applied_filters] = filter_hash['v'].map(&:to_i) if filter_hash['v'].is_a?(Array)
+          when :date, :datetime, :time
+            options[:datetimepicker_format] = field.parser.to_momentjs
         end
         options[:label] = field.label
-        options[:name]  = field.name
-        options[:type]  = field.type
+        options[:name] = field.name
+        options[:type] = field.type
         options[:value] = filter_hash['v']
         options[:label] = field.label
         options[:operator] = filter_hash['o']

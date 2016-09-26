@@ -40,6 +40,10 @@ module RailsAdmin
           properties.blank?
         end
 
+        def many_field?
+          is_a?(RailsAdmin::Config::Fields::Types::HasAndBelongsToManyAssociation) || is_a?(RailsAdmin::Config::Fields::Types::HasManyAssociation)
+        end
+
         register_instance_option :column_width do
           nil
         end

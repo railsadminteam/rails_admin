@@ -28,6 +28,8 @@
           - field_options = case field.type
           - when :enum
             - options_for_select(field.with(object: @abstract_model.model.new).enum)
+          - when :has_and_belongs_to_many_association
+            - options_for_select(field.with(object: @abstract_model.model.new).filter_by)
           - else
             - ''
           %li
