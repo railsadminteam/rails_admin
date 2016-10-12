@@ -35,7 +35,7 @@
     _create: function() {
       var filtering_select = this.element.siblings(
         '[data-input-for="' + this.element.attr('id') + '"]'
-      );;
+      );
 
       // When using the browser back and forward buttons, it is possible that
       // the autocomplete field will be cached which causes duplicate fields
