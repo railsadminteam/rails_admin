@@ -6,4 +6,3 @@ class CreateCase < MigrationBase
     end
   end
 end
-

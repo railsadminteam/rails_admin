@@ -5,4 +5,3 @@ class CreateTests < MigrationBase
     end
   end
 end
-
