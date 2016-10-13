@@ -82,4 +82,12 @@ FactoryGirl.define do
   factory :paper_trail_test do
     sequence(:name) { |n| "name #{n}" }
   end
+
+  factory :test do
+    sequence(:name) { |n| "name #{n}" }
+  end
+
+  factory :case do
+    association :test
+  end
 end

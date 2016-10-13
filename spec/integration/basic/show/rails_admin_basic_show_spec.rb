@@ -79,4 +79,16 @@ describe 'RailsAdmin Basic Show', type: :request do
       is_expected.to have_css("a[href='/admin/player/#{@player.id}']")
     end
   end
+
+  describe 'show for object with test relation' do
+    before do
+      @test = FactoryGirl.create :test
+      @case = FactoryGirl.create :case, test: @test
+      visit show_path(model_name: 'case', id: @case.id)
+    end
+
+    it 'shows associated object' do
+      is_expected.to have_css("a[href='/admin/test/#{@test.id}']")
+    end
+  end
 end
