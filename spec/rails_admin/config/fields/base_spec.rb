@@ -44,7 +44,7 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe '#children_fields' do
-    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type]
+    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type].freeze
 
     it 'is empty by default' do
       expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :name }.children_fields).to eq([])
@@ -178,7 +178,7 @@ describe RailsAdmin::Config::Fields::Base do
     end
 
     it 'defaults to false if associated collection count >= 100' do
-      @players = 100.times.collect do
+      @players = Array.new(100) do
         FactoryGirl.create :player
       end
       expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
@@ -189,14 +189,14 @@ describe RailsAdmin::Config::Fields::Base do
         RailsAdmin.config.default_associated_collection_limit = 5
       end
       it 'defaults to true if associated collection count less than than limit' do
-        @players = 4.times.collect do
+        @players = Array.new(4) do
           FactoryGirl.create :player
         end
         expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_truthy
       end
 
       it 'defaults to false if associated collection count >= that limit' do
-        @players = 5.times.collect do
+        @players = Array.new(5) do
           FactoryGirl.create :player
         end
         expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey

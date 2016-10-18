@@ -36,7 +36,7 @@ describe RailsAdmin::Config do
   describe '.add_extension' do
     before do
       silence_warnings do
-        RailsAdmin::EXTENSIONS = []
+        RailsAdmin::EXTENSIONS = [] # rubocop:disable MutableConstant
       end
     end
 
@@ -263,7 +263,7 @@ describe RailsAdmin::Config do
 
   describe '.parent_controller' do
     it 'uses default class' do
-      expect(RailsAdmin.config.parent_controller).to eq '::ApplicationController'
+      expect(RailsAdmin.config.parent_controller).to eq '::ActionController::Base'
     end
 
     it 'uses other class' do

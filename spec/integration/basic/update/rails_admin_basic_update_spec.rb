@@ -87,7 +87,7 @@ describe 'RailsAdmin Basic Update', type: :request do
       end
 
       @league = FactoryGirl.create :league
-      @divisions = 3.times.collect { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
+      @divisions = Array.new(3) { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
 
       put edit_path(model_name: 'league', id: @league.id, league: {name: 'National League', division_ids: [@divisions[0].id]})
 

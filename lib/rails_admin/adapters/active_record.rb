@@ -6,7 +6,7 @@ require 'rails_admin/adapters/active_record/property'
 module RailsAdmin
   module Adapters
     module ActiveRecord
-      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry]
+      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry].freeze
 
       def new(params = {})
         AbstractObject.new(model.new(params))
@@ -56,8 +56,8 @@ module RailsAdmin
       def properties
         columns = model.columns.reject do |c|
           c.type.blank? ||
-          DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
-          c.try(:array)
+            DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
+            c.try(:array)
         end
         columns.collect do |property|
           Property.new(property, model)
@@ -100,14 +100,14 @@ module RailsAdmin
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
             type = column_infos[:type]
-            if field.many_field?
-              type = :has_and_belongs_to_many_association
-              value = field.parse_value(value)
-            elsif value.is_a?(Array)
-              value = value.map { |v| field.parse_value(v) }
-            else
-              value = field.parse_value(value)
-            end
+			value,type = 
+			  if field.many_field?
+              	field.parse_value(value), type, :has_and_belongs_to_many_association
+              elsif value.is_a?(Array)
+              	value.map { |v| field.parse_value(v) },nil
+              else
+              	field.parse_value(value), nil
+              end
             statement, value1, value2 = StatementBuilder.new(column_infos[:column], type, value, operator).to_statement
             @statements << statement if statement.present?
             @values << value1 unless value1.nil?
@@ -119,7 +119,7 @@ module RailsAdmin
 
         def build
           scope = @scope.where(@statements.join(' OR '), *@values)
-          scope = scope.references(*(@tables.uniq)) if @tables.any?
+          scope = scope.references(*@tables.uniq) if @tables.any?
           scope
         end
       end
@@ -158,6 +158,17 @@ module RailsAdmin
       protected
 
         def unary_operators
+          case @type
+          when :boolean
+            boolean_unary_operators
+          else
+            generic_unary_operators
+          end
+        end
+
+      private
+
+        def generic_unary_operators
           {
             '_blank' => ["(#{@column} IS NULL OR #{@column} = '')"],
             '_present' => ["(#{@column} IS NOT NULL AND #{@column} != '')"],
@@ -168,7 +179,14 @@ module RailsAdmin
           }
         end
 
-      private
+        def boolean_unary_operators
+          generic_unary_operators.merge(
+            '_blank' => ["(#{@column} IS NULL)"],
+            '_empty' => ["(#{@column} IS NULL)"],
+            '_present' => ["(#{@column} IS NOT NULL)"],
+            '_not_empty' => ["(#{@column} IS NOT NULL)"],
+          )
+        end
 
         def range_filter(min, max)
           if min && max
@@ -225,7 +243,7 @@ module RailsAdmin
             when 'ends_with'
               "%#{@value.downcase}"
             when 'is', '='
-              "#{@value.downcase}"
+              @value.downcase
             else
               return
             end

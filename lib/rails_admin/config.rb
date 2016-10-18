@@ -110,11 +110,13 @@ module RailsAdmin
       def audit_with(*args, &block)
         extension = args.shift
         if extension
+          klass = RailsAdmin::AUDITING_ADAPTERS[extension]
+          klass.setup if klass.respond_to? :setup
           @audit = proc do
-            @auditing_adapter = RailsAdmin::AUDITING_ADAPTERS[extension].new(*([self] + args).compact)
+            @auditing_adapter = klass.new(*([self] + args).compact)
           end
-        else
-          @audit = block if block
+        elsif block
+          @audit = block
         end
         @audit || DEFAULT_AUDIT
       end
@@ -145,11 +147,13 @@ module RailsAdmin
       def authorize_with(*args, &block)
         extension = args.shift
         if extension
+          klass = RailsAdmin::AUTHORIZATION_ADAPTERS[extension]
+          klass.setup if klass.respond_to? :setup
           @authorize = proc do
-            @authorization_adapter = RailsAdmin::AUTHORIZATION_ADAPTERS[extension].new(*([self] + args).compact)
+            @authorization_adapter = klass.new(*([self] + args).compact)
           end
-        else
-          @authorize = block if block
+        elsif block
+          @authorize = block
         end
         @authorize || DEFAULT_AUTHORIZE
       end
@@ -193,7 +197,7 @@ module RailsAdmin
         if %w(default like starts_with ends_with is =).include? operator
           @default_search_operator = operator
         else
-          fail(ArgumentError.new("Search operator '#{operator}' not supported"))
+          raise(ArgumentError.new("Search operator '#{operator}' not supported"))
         end
       end
 
@@ -283,7 +287,7 @@ module RailsAdmin
         @show_gravatar = true
         @navigation_static_links = {}
         @navigation_static_label = nil
-        @parent_controller = '::ApplicationController'
+        @parent_controller = '::ActionController::Base'
         RailsAdmin::Config::Actions.reset
       end
 

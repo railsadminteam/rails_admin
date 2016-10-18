@@ -2,7 +2,7 @@ module RailsAdmin
   module Adapters
     module Mongoid
       class Property
-        STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject]
+        STRING_TYPE_COLUMN_NAMES = [:name, :title, :subject].freeze
         attr_reader :property, :model
 
         def initialize(property, model)

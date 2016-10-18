@@ -21,13 +21,13 @@ module RailsAdmin
 
     def get_model
       @model_name = to_model_name(params[:model_name])
-      fail(RailsAdmin::ModelNotFound) unless (@abstract_model = RailsAdmin::AbstractModel.new(@model_name))
-      fail(RailsAdmin::ModelNotFound) if (@model_config = @abstract_model.config).excluded?
+      raise(RailsAdmin::ModelNotFound) unless (@abstract_model = RailsAdmin::AbstractModel.new(@model_name))
+      raise(RailsAdmin::ModelNotFound) if (@model_config = @abstract_model.config).excluded?
       @properties = @abstract_model.properties
     end
 
     def get_object
-      fail(RailsAdmin::ObjectNotFound) unless (@object = @abstract_model.get(params[:id]))
+      raise(RailsAdmin::ObjectNotFound) unless (@object = @abstract_model.get(params[:id]))
     end
 
     def to_model_name(param)
@@ -56,8 +56,8 @@ module RailsAdmin
       instance_eval(&RailsAdmin::Config.audit_with)
     end
 
-    def user_for_paper_trail
-      _current_user.try(:id) || _current_user
+    def rails_admin_controller?
+      true
     end
 
     rescue_from RailsAdmin::ObjectNotFound do

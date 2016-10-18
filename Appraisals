@@ -62,7 +62,6 @@ appraise "rails-5.0" do
   gem 'rails', '~> 5.0.0'
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.0'
-  gem 'remotipart', github: 'mshibuya/remotipart'
 
   group :mongoid do
     gem 'mongoid', '>= 6.0.0.beta'

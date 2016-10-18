@@ -93,7 +93,7 @@ module RailsAdmin
       return unless target_params.present?
       fields = visible_fields(action, model_config)
       allowed_methods = fields.collect(&:allowed_methods).flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
-      fields.each { |field|  field.parse_input(target_params) }
+      fields.each { |field| field.parse_input(target_params) }
       target_params.slice!(*allowed_methods)
       target_params.permit! if target_params.respond_to?(:permit!)
       fields.select(&:nested_form).each do |association|
@@ -110,7 +110,7 @@ module RailsAdmin
 
       respond_to do |format|
         format.html { render whereto, status: :not_acceptable }
-        format.js   { render whereto, layout: false, status: :not_acceptable  }
+        format.js   { render whereto, layout: false, status: :not_acceptable }
       end
     end
 
@@ -120,7 +120,8 @@ module RailsAdmin
     end
 
     def get_collection(model_config, scope, pagination)
-      associations = model_config.list.fields.select { |f| (f.type == :belongs_to_association || f.type == :has_many_association || f.type == :has_and_belongs_to_many_association) && !f.polymorphic? }.collect { |f| f.association.name }
+      associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
+	  raise("change to eager_load?")
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
       options = options.merge(include: associations) unless associations.blank?

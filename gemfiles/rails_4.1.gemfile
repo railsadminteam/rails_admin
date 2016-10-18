@@ -4,7 +4,6 @@ source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
 gem "devise", ">= 3.2"
-gem "remotipart", :github => "mshibuya/remotipart"
 gem "rails", "~> 4.1.0"
 gem "capybara", ">= 0.8", :group => :test
 
@@ -47,7 +46,7 @@ group :test do
   gem "pundit"
   gem "rack-cache", :require => "rack/cache"
   gem "rspec-rails", ">= 2.14"
-  gem "rubocop", "~> 0.31.0"
+  gem "rubocop", "~> 0.41.2"
   gem "simplecov", ">= 0.9", :require => false
   gem "timecop", ">= 0.5"
 

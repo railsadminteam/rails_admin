@@ -96,7 +96,7 @@ module RailsAdmin
           action.instance_eval(&block) if block
           @@actions ||= []
           if action.custom_key.in?(@@actions.collect(&:custom_key))
-            fail "Action #{action.custom_key} already exists. Please change its custom key."
+            raise "Action #{action.custom_key} already exists. Please change its custom key."
           else
             @@actions << action
           end

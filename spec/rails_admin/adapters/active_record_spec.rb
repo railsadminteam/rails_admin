@@ -179,158 +179,206 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   describe '#build_statement' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('FieldTest') }
 
+    def build_statement(type, value, operator)
+      abstract_model.send(:build_statement, :field, type, value, operator)
+    end
+
     it "ignores '_discard' operator or value" do
       [['_discard', ''], ['', '_discard']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to be_nil
+        expect(build_statement(:string, value, operator)).to be_nil
       end
     end
 
-    it "supports '_blank' operator" do
-      [['_blank', ''], ['', '_blank']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(["(name IS NULL OR name = '')"])
+    describe 'string type queries' do
+      it 'supports string type query' do
+        expect(build_statement(:string, '', nil)).to be_nil
+        expect(build_statement(:string, 'foo', 'was')).to be_nil
+        expect(build_statement(:string, 'foo', 'default')).to eq([@like, '%foo%'])
+        expect(build_statement(:string, 'foo', 'like')).to eq([@like, '%foo%'])
+        expect(build_statement(:string, 'foo', 'starts_with')).to eq([@like, 'foo%'])
+        expect(build_statement(:string, 'foo', 'ends_with')).to eq([@like, '%foo'])
+        expect(build_statement(:string, 'foo', 'is')).to eq([@like, 'foo'])
+      end
+
+      it 'performs case-insensitive searches' do
+        expect(build_statement(:string, 'foo', 'default')).to eq([@like, '%foo%'])
+        expect(build_statement(:string, 'FOO', 'default')).to eq([@like, '%foo%'])
+      end
+
+      it "supports '_blank' operator" do
+        [['_blank', ''], ['', '_blank']].each do |value, operator|
+          expect(build_statement(:string, value, operator)).to eq(["(field IS NULL OR field = '')"])
+        end
+      end
+
+      it "supports '_present' operator" do
+        [['_present', ''], ['', '_present']].each do |value, operator|
+          expect(build_statement(:string, value, operator)).to eq(["(field IS NOT NULL AND field != '')"])
+        end
+      end
+
+      it "supports '_null' operator" do
+        [['_null', ''], ['', '_null']].each do |value, operator|
+          expect(build_statement(:string, value, operator)).to eq(['(field IS NULL)'])
+        end
+      end
+
+      it "supports '_not_null' operator" do
+        [['_not_null', ''], ['', '_not_null']].each do |value, operator|
+          expect(build_statement(:string, value, operator)).to eq(['(field IS NOT NULL)'])
+        end
+      end
+
+      it "supports '_empty' operator" do
+        [['_empty', ''], ['', '_empty']].each do |value, operator|
+          expect(build_statement(:string, value, operator)).to eq(["(field = '')"])
+        end
+      end
+
+      it "supports '_not_empty' operator" do
+        [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
+          expect(build_statement(:string, value, operator)).to eq(["(field != '')"])
+        end
       end
     end
 
-    it "supports '_present' operator" do
-      [['_present', ''], ['', '_present']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(["(name IS NOT NULL AND name != '')"])
+    describe 'boolean type queries' do
+      it 'supports boolean type query' do
+        %w(false f 0).each do |value|
+          expect(build_statement(:boolean, value, nil)).to eq(['(field IS NULL OR field = ?)', false])
+        end
+        %w(true t 1).each do |value|
+          expect(build_statement(:boolean, value, nil)).to eq(['(field = ?)', true])
+        end
+        expect(build_statement(:boolean, 'word', nil)).to be_nil
+      end
+
+      it "supports '_blank' operator" do
+        [['_blank', ''], ['', '_blank']].each do |value, operator|
+          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NULL)"])
+        end
+      end
+
+      it "supports '_present' operator" do
+        [['_present', ''], ['', '_present']].each do |value, operator|
+          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NOT NULL)"])
+        end
+      end
+
+      it "supports '_null' operator" do
+        [['_null', ''], ['', '_null']].each do |value, operator|
+          expect(build_statement(:boolean, value, operator)).to eq(['(field IS NULL)'])
+        end
+      end
+
+      it "supports '_not_null' operator" do
+        [['_not_null', ''], ['', '_not_null']].each do |value, operator|
+          expect(build_statement(:boolean, value, operator)).to eq(['(field IS NOT NULL)'])
+        end
+      end
+
+      it "supports '_empty' operator" do
+        [['_empty', ''], ['', '_empty']].each do |value, operator|
+          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NULL)"])
+        end
+      end
+
+      it "supports '_not_empty' operator" do
+        [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
+          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NOT NULL)"])
+        end
       end
     end
 
-    it "supports '_null' operator" do
-      [['_null', ''], ['', '_null']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(['(name IS NULL)'])
+    describe 'numeric type queries' do
+      it 'supports integer type query' do
+        expect(build_statement(:integer, '1', nil)).to eq(['(field = ?)', 1])
+        expect(build_statement(:integer, 'word', nil)).to be_nil
+        expect(build_statement(:integer, '1', 'default')).to eq(['(field = ?)', 1])
+        expect(build_statement(:integer, 'word', 'default')).to be_nil
+        expect(build_statement(:integer, '1', 'between')).to eq(['(field = ?)', 1])
+        expect(build_statement(:integer, 'word', 'between')).to be_nil
+        expect(build_statement(:integer, ['6', '', ''], 'default')).to eq(['(field = ?)', 6])
+        expect(build_statement(:integer, ['7', '10', ''], 'default')).to eq(['(field = ?)', 7])
+        expect(build_statement(:integer, ['8', '', '20'], 'default')).to eq(['(field = ?)', 8])
+        expect(build_statement(:integer, %w(9 10 20), 'default')).to eq(['(field = ?)', 9])
+      end
+
+      it 'supports integer type range query' do
+        expect(build_statement(:integer, ['', '', ''], 'between')).to be_nil
+        expect(build_statement(:integer, ['2', '', ''], 'between')).to be_nil
+        expect(build_statement(:integer, ['', '3', ''], 'between')).to eq(['(field >= ?)', 3])
+        expect(build_statement(:integer, ['', '', '5'], 'between')).to eq(['(field <= ?)', 5])
+        expect(build_statement(:integer, ['', '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
+        expect(build_statement(:integer, %w(15 10 20), 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
+        expect(build_statement(:integer, ['', 'word1', ''], 'between')).to be_nil
+        expect(build_statement(:integer, ['', '', 'word2'], 'between')).to be_nil
+        expect(build_statement(:integer, ['', 'word3', 'word4'], 'between')).to be_nil
+      end
+
+      it 'supports both decimal and float type queries' do
+        expect(build_statement(:decimal, '1.1', nil)).to eq(['(field = ?)', 1.1])
+        expect(build_statement(:decimal, 'word', nil)).to be_nil
+        expect(build_statement(:decimal, '1.1', 'default')).to eq(['(field = ?)', 1.1])
+        expect(build_statement(:decimal, 'word', 'default')).to be_nil
+        expect(build_statement(:decimal, '1.1', 'between')).to eq(['(field = ?)', 1.1])
+        expect(build_statement(:decimal, 'word', 'between')).to be_nil
+        expect(build_statement(:decimal, ['6.1', '', ''], 'default')).to eq(['(field = ?)', 6.1])
+        expect(build_statement(:decimal, ['7.1', '10.1', ''], 'default')).to eq(['(field = ?)', 7.1])
+        expect(build_statement(:decimal, ['8.1', '', '20.1'], 'default')).to eq(['(field = ?)', 8.1])
+        expect(build_statement(:decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(['(field = ?)', 9.1])
+        expect(build_statement(:decimal, ['', '', ''], 'between')).to be_nil
+        expect(build_statement(:decimal, ['2.1', '', ''], 'between')).to be_nil
+        expect(build_statement(:decimal, ['', '3.1', ''], 'between')).to eq(['(field >= ?)', 3.1])
+        expect(build_statement(:decimal, ['', '', '5.1'], 'between')).to eq(['(field <= ?)', 5.1])
+        expect(build_statement(:decimal, ['', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
+        expect(build_statement(:decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
+        expect(build_statement(:decimal, ['', 'word1', ''], 'between')).to be_nil
+        expect(build_statement(:decimal, ['', '', 'word2'], 'between')).to be_nil
+        expect(build_statement(:decimal, ['', 'word3', 'word4'], 'between')).to be_nil
+
+        expect(build_statement(:float, '1.1', nil)).to eq(['(field = ?)', 1.1])
+        expect(build_statement(:float, 'word', nil)).to be_nil
+        expect(build_statement(:float, '1.1', 'default')).to eq(['(field = ?)', 1.1])
+        expect(build_statement(:float, 'word', 'default')).to be_nil
+        expect(build_statement(:float, '1.1', 'between')).to eq(['(field = ?)', 1.1])
+        expect(build_statement(:float, 'word', 'between')).to be_nil
+        expect(build_statement(:float, ['6.1', '', ''], 'default')).to eq(['(field = ?)', 6.1])
+        expect(build_statement(:float, ['7.1', '10.1', ''], 'default')).to eq(['(field = ?)', 7.1])
+        expect(build_statement(:float, ['8.1', '', '20.1'], 'default')).to eq(['(field = ?)', 8.1])
+        expect(build_statement(:float, ['9.1', '10.1', '20.1'], 'default')).to eq(['(field = ?)', 9.1])
+        expect(build_statement(:float, ['', '', ''], 'between')).to be_nil
+        expect(build_statement(:float, ['2.1', '', ''], 'between')).to be_nil
+        expect(build_statement(:float, ['', '3.1', ''], 'between')).to eq(['(field >= ?)', 3.1])
+        expect(build_statement(:float, ['', '', '5.1'], 'between')).to eq(['(field <= ?)', 5.1])
+        expect(build_statement(:float, ['', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
+        expect(build_statement(:float, ['15.1', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
+        expect(build_statement(:float, ['', 'word1', ''], 'between')).to be_nil
+        expect(build_statement(:float, ['', '', 'word2'], 'between')).to be_nil
+        expect(build_statement(:float, ['', 'word3', 'word4'], 'between')).to be_nil
       end
     end
 
-    it "supports '_not_null' operator" do
-      [['_not_null', ''], ['', '_not_null']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(['(name IS NOT NULL)'])
+    describe 'date type queries' do
+      let(:scope) { FieldTest.all }
+
+      it 'supports date type query' do
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', 'February 01, 2012', 'March 01, 2012'], o: 'between'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-03-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', 'March 01, 2012', ''], o: 'between'}}))).to eq(["(field_tests.date_field >= '2012-03-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '', 'February 01, 2012'], o: 'between'}}))).to eq(["(field_tests.date_field <= '2012-02-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['February 01, 2012'], o: 'default'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-02-01')"])
       end
-    end
 
-    it "supports '_empty' operator" do
-      [['_empty', ''], ['', '_empty']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(["(name = '')"])
+      it 'supports datetime type query' do
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'February 01, 2012 12:00', 'March 01, 2012 12:00'], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 3, 1).end_of_day])))
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'March 01, 2012 12:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field >= ?)', Time.local(2012, 3, 1)])))
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', 'February 01, 2012 12:00'], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field <= ?)', Time.local(2012, 2, 1).end_of_day])))
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['February 01, 2012 12:00'], o: 'default'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 2, 1).end_of_day])))
       end
-    end
-
-    it "supports '_not_empty' operator" do
-      [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(["(name != '')"])
-      end
-    end
-
-    it 'supports boolean type query' do
-      %w(false f 0).each do |value|
-        expect(abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(['(field IS NULL OR field = ?)', false])
-      end
-      %w(true t 1).each do |value|
-        expect(abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(['(field = ?)', true])
-      end
-      expect(abstract_model.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
-    end
-
-    it 'supports integer type query' do
-      expect(abstract_model.send(:build_statement, :field, :integer, '1', nil)).to eq(['(field = ?)', 1])
-      expect(abstract_model.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, '1', 'default')).to eq(['(field = ?)', 1])
-      expect(abstract_model.send(:build_statement, :field, :integer, 'word', 'default')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, '1', 'between')).to eq(['(field = ?)', 1])
-      expect(abstract_model.send(:build_statement, :field, :integer, 'word', 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['6', '', ''], 'default')).to eq(['(field = ?)', 6])
-      expect(abstract_model.send(:build_statement, :field, :integer, ['7', '10', ''], 'default')).to eq(['(field = ?)', 7])
-      expect(abstract_model.send(:build_statement, :field, :integer, ['8', '', '20'], 'default')).to eq(['(field = ?)', 8])
-      expect(abstract_model.send(:build_statement, :field, :integer, %w(9 10 20), 'default')).to eq(['(field = ?)', 9])
-    end
-
-    it 'supports integer type range query' do
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(['(field >= ?)', 3])
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(['(field <= ?)', 5])
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
-      expect(abstract_model.send(:build_statement, :field, :integer, %w(15 10 20), 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '', 'word2'], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
-    end
-
-    it 'supports both decimal and float type queries' do
-      expect(abstract_model.send(:build_statement, :field, :decimal, '1.1', nil)).to eq(['(field = ?)', 1.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, 'word', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, '1.1', 'default')).to eq(['(field = ?)', 1.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, 'word', 'default')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, '1.1', 'between')).to eq(['(field = ?)', 1.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, 'word', 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['6.1', '', ''], 'default')).to eq(['(field = ?)', 6.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''], 'default')).to eq(['(field = ?)', 7.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['8.1', '', '20.1'], 'default')).to eq(['(field = ?)', 8.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(['(field = ?)', 9.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['2.1', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '3.1', ''], 'between')).to eq(['(field >= ?)', 3.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq(['(field <= ?)', 5.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', 'word1', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '', 'word2'], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', 'word3', 'word4'], 'between')).to be_nil
-
-      expect(abstract_model.send(:build_statement, :field, :float, '1.1', nil)).to eq(['(field = ?)', 1.1])
-      expect(abstract_model.send(:build_statement, :field, :float, 'word', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, '1.1', 'default')).to eq(['(field = ?)', 1.1])
-      expect(abstract_model.send(:build_statement, :field, :float, 'word', 'default')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, '1.1', 'between')).to eq(['(field = ?)', 1.1])
-      expect(abstract_model.send(:build_statement, :field, :float, 'word', 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['6.1', '', ''], 'default')).to eq(['(field = ?)', 6.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''], 'default')).to eq(['(field = ?)', 7.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['8.1', '', '20.1'], 'default')).to eq(['(field = ?)', 8.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq(['(field = ?)', 9.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['2.1', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '3.1', ''], 'between')).to eq(['(field >= ?)', 3.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq(['(field <= ?)', 5.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10.1, 20.1])
-      expect(abstract_model.send(:build_statement, :field, :float, ['', 'word1', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '', 'word2'], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['', 'word3', 'word4'], 'between')).to be_nil
-    end
-
-    it 'supports string type query' do
-      expect(abstract_model.send(:build_statement, :field, :string, '', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'was')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq([@like, '%foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq([@like, '%foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq([@like, 'foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq([@like, '%foo'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq([@like, 'foo'])
-    end
-
-    it 'performs case-insensitive searches' do
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq([@like, '%foo%'])
-      expect(abstract_model.send(:build_statement, :field, :string, 'FOO', 'default')).to eq([@like, '%foo%'])
-    end
-
-    it 'supports date type query' do
-      scope = FieldTest.all
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', 'February 01, 2012', 'March 01, 2012'], o: 'between'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-03-01')"])
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', 'March 01, 2012', ''], o: 'between'}}))).to eq(["(field_tests.date_field >= '2012-03-01')"])
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '', 'February 01, 2012'], o: 'between'}}))).to eq(["(field_tests.date_field <= '2012-02-01')"])
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['February 01, 2012'], o: 'default'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-02-01')"])
-    end
-
-    it 'supports datetime type query' do
-      scope = FieldTest.all
-      expect(predicates_for(abstract_model.send(:filter_scope, scope,  'datetime_field' => {'1' => {v: ['', 'February 01, 2012 12:00', 'March 01, 2012 12:00'], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 3, 1).end_of_day])))
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'March 01, 2012 12:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field >= ?)', Time.local(2012, 3, 1)])))
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', 'February 01, 2012 12:00'], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field <= ?)', Time.local(2012, 2, 1).end_of_day])))
-      expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['February 01, 2012 12:00'], o: 'default'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.local(2012, 2, 1), Time.local(2012, 2, 1).end_of_day])))
     end
 
     it 'supports enum type query' do
-      expect(abstract_model.send(:build_statement, :field, :enum, '1', nil)).to eq(['(field IN (?))', ['1']])
+      expect(build_statement(:enum, '1', nil)).to eq(['(field IN (?))', ['1']])
     end
   end
 
