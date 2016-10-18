@@ -223,9 +223,9 @@ module RailsAdmin
       def model(entity, &block)
         key = begin
           if entity.is_a?(RailsAdmin::AbstractModel)
-            entity.model.try(:name).try :to_sym
+            entity.model.try(:name).try(:to_sym)
           elsif entity.is_a?(Class)
-            entity.name.try :to_sym
+            entity.name.try(:to_sym)
           elsif entity.is_a?(String) || entity.is_a?(Symbol)
             entity.to_sym
           else
