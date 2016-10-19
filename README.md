@@ -33,20 +33,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 ## Installation
 
-1. On your gemfile:
-  - For Rails 5 project:
-
-    ```
-    gem 'remotipart', github: 'mshibuya/remotipart'
-    gem 'rails_admin', '>= 1.0.0.rc'
-    ```
-
-  - For Rails 4 project:
-
-    ```
-    gem 'rails_admin'
-    ```
-
+1. On your gemfile: `gem 'rails_admin', '~> 1.0'`
 2. Run `bundle install`
 3. Run `rails g rails_admin:install`
 4. Provide a namespace for the routes when asked

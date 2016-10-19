@@ -89,12 +89,11 @@ module RailsAdmin
         case association.type
         when :has_one
           if child = object.send(association.name)
-            yield(association, child)
+            yield(association, [child])
           end
         when :has_many
-          object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
-            yield(association, child)
-          end
+          children = object.send(association.name)
+          yield(association, Array.new(children))
         end
       end
     end

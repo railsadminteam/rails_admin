@@ -233,6 +233,27 @@ describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#get_collection' do
+    before do
+      @team = FactoryGirl.create(:team)
+      controller.params = {model_name: 'teams'}
+      RailsAdmin.config Team do
+        field :players do
+          eager_load true
+        end
+      end
+      @model_config = RailsAdmin.config(Team)
+    end
+
+    it 'performs eager-loading for an association field with `eagar_load true`' do
+      scope = double('scope')
+      abstract_model = @model_config.abstract_model
+      allow(@model_config).to receive(:abstract_model).and_return(abstract_model)
+      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), scope).once
+      controller.send(:get_collection, @model_config, scope, false)
+    end
+  end
+
   describe 'index' do
     it "uses source association's primary key with :compact, not target model's default primary key", skip_mongoid: true do
       class TeamWithNumberedPlayers < Team

@@ -2,11 +2,35 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0.rc...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0...HEAD)
+
+### Added
+- DSL for association eager-loading([#1325](https://github.com/sferik/rails_admin/issues/1325), [#1342](https://github.com/sferik/rails_admin/issues/1342))
+
+
+## [1.0.0](https://github.com/sferik/rails_admin/tree/v1.0.0) - 2016-09-19
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0.rc...v1.0.0)
+
+### Added
+- Introduce setup hook for authorization/auditing adapters([ba2088c6](https://github.com/sferik/rails_admin/commit/ba2088c6ecabd354b4b67c50bb00fccdbd1e6240))
+- Add viewport meta tag for mobile layout adjustment([#2664](https://github.com/sferik/rails_admin/pull/2664))
+- Support for ActiveRecord::Enum using string columns([#2680](https://github.com/sferik/rails_admin/pull/2680))
 
 ### Changed
-- Change parent controller to ActionController::Base for out-of-box support of Rails 5 API mode([#2688](https://github.com/sferik/rails_admin/issues/2688))
+- Limit children for deletion notice([#2491](https://github.com/sferik/rails_admin/pull/2491))
+- [BREAKING CHANGE] Change parent controller to ActionController::Base for out-of-box support of Rails 5 API mode([#2688](https://github.com/sferik/rails_admin/issues/2688))
   - To keep old behavior, add `config.parent_controller = '::ApplicationController'` in your RailsAdmin initializer.
+
+### Fixed
+- ActiveRecord Enum fields could not be updated correctly([#2659](https://github.com/sferik/rails_admin/pull/2659), [#2713](https://github.com/sferik/rails_admin/issues/2713))
+- Fix performance issue with filtering-multiselect widget([#2715](https://github.com/sferik/rails_admin/pull/2715))
+- Restore back rails_admin_controller?([#2268](https://github.com/sferik/rails_admin/issues/2268))
+- Duplication of autocomplete fields when using browser back/forward buttons([#2677](https://github.com/sferik/rails_admin/issues/2677), [#2678](https://github.com/sferik/rails_admin/pull/2678))
+- Filter refresh button was broken([#2705](https://github.com/sferik/rails_admin/issues/2705), [#2706](https://github.com/sferik/rails_admin/pull/2706))
+- Fix presence filtering on boolean columns([#1099](https://github.com/sferik/rails_admin/issues/1099), [#2675](https://github.com/sferik/rails_admin/pull/2675))
+- Pundit::AuthorizationNotPerformedError was raised when used with Pundit([#2683](https://github.com/sferik/rails_admin/pull/2683))
+
 
 ## [1.0.0.rc](https://github.com/sferik/rails_admin/tree/v1.0.0.rc) - 2016-07-18
 

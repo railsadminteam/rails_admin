@@ -64,6 +64,7 @@ describe 'RailsAdmin Basic List', type: :request do
         FactoryGirl.create(:player, retired: false, injured: true, team: @teams[1]),
         FactoryGirl.create(:player, retired: false, injured: false, team: @teams[1]),
       ]
+      @comment = FactoryGirl.create(:comment, commentable: @players[2])
     end
 
     it 'allows to query on any attribute' do
@@ -267,6 +268,23 @@ describe 'RailsAdmin Basic List', type: :request do
       is_expected.to have_no_content(@players[0].name)
       is_expected.to have_no_content(@players[1].name)
       is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
+    end
+
+    it 'allows to search a has_many attribute over the target table' do
+      RailsAdmin.config Player do
+        list do
+          field PK_COLUMN
+          field :name
+          field :comments do
+            searchable :content
+          end
+        end
+      end
+      visit index_path(model_name: 'player', f: {comments: {'1' => {v: @comment.content}}})
+      is_expected.to have_no_content(@players[0].name)
+      is_expected.to have_no_content(@players[1].name)
+      is_expected.to have_content(@players[2].name)
       is_expected.to have_no_content(@players[3].name)
     end
 

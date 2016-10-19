@@ -62,6 +62,10 @@ module RailsAdmin
           association.foreign_key_nullable?
         end
 
+        register_instance_option :eager_load? do
+          !!searchable
+        end
+
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association.klass)

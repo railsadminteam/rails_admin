@@ -4,7 +4,6 @@ source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
 gem "devise", ">= 3.4"
-gem "remotipart", :github => "mshibuya/remotipart"
 gem "rails", "~> 4.2.0"
 gem "sass-rails", "~> 5.0"
 gem "capybara", ">= 0.8", :group => :test
