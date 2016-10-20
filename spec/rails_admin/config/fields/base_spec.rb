@@ -236,6 +236,16 @@ describe RailsAdmin::Config::Fields::Base do
         end
         expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns).to eq([{column: 'leagues.name', type: :string}])
       end
+
+      it 'searches all columns on associated model' do
+        RailsAdmin.config(Team) do
+          field :fans do
+            searchable :all
+          end
+        end
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :fans }.searchable_columns.collect { |c| c[:column] }).to eq(%w(fans.id fans.created_at fans.updated_at fans.name fans.teams))
+      end
+
     end
 
     describe 'for basic type fields' do
