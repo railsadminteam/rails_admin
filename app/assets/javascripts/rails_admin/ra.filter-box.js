@@ -15,7 +15,7 @@
       var field_value = options['value'];
       var field_operator = options['operator'];
       var select_options = options['select_options'];
-      var multi_select = options['multiple'];
+      var multi_select = options['multi_select'];
       var check_boxes = options['check_boxes'];
       var checkbox_values = options['checkbox_values'];
       var applied_filters = options['applied_filters'];
@@ -87,6 +87,7 @@
           '</select>'
           additional_control = '<input class="additional-fieldset input-sm form-control" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
+        case 'has_many_association':
         case 'has_and_belongs_to_many_association':
           multiple_values = multi_select;
           if(check_boxes){

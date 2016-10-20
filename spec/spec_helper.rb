@@ -52,7 +52,11 @@ Devise.setup do |config|
 end
 
 require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, inspector: 'open')
+end
+Capybara.javascript_driver = :poltergeist_debug
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -61,9 +65,7 @@ RSpec.configure do |config|
 
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers
-
   config.include Warden::Test::Helpers
-
   config.include Capybara::DSL, type: :request
 
   config.before do |example|
@@ -88,4 +90,8 @@ RSpec.configure do |config|
       config.filter_run_excluding orm => true
     end
   end
+end
+
+def debugit(*args, &block)
+  it(*args, {driver: :poltergeist_debug, inspector: true}, &block)
 end

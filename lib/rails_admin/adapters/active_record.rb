@@ -100,13 +100,14 @@ module RailsAdmin
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
             type = column_infos[:type]
-			value,type = 
-			  if field.many_field?
-              	field.parse_value(value), type, :has_and_belongs_to_many_association
+            value =
+              if field.many_field?
+                type = :has_and_belongs_to_many_association
+                field.parse_value(value)
               elsif value.is_a?(Array)
-              	value.map { |v| field.parse_value(v) },nil
+                value.map { |v| field.parse_value(v) }
               else
-              	field.parse_value(value), nil
+                field.parse_value(value)
               end
             statement, value1, value2 = StatementBuilder.new(column_infos[:column], type, value, operator).to_statement
             @statements << statement if statement.present?
@@ -200,13 +201,20 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-          when :boolean                             then build_statement_for_boolean
-          when :integer, :decimal, :float           then build_statement_for_integer_decimal_or_float
-          when :string, :text                       then build_statement_for_string_or_text
-          when :enum                                then build_statement_for_enum
-          when :belongs_to_association              then build_statement_for_belongs_to_association
-          when :has_many_association                then build_statement_for_has_many_association
-          when :has_and_belongs_to_many_association then build_statement_for_has_and_belongs_to_many_association
+          when :boolean then
+            build_statement_for_boolean
+          when :integer, :decimal, :float then
+            build_statement_for_integer_decimal_or_float
+          when :string, :text then
+            build_statement_for_string_or_text
+          when :enum then
+            build_statement_for_enum
+          when :belongs_to_association then
+            build_statement_for_belongs_to_association
+          when :has_many_association then
+            build_statement_for_has_many_association
+          when :has_and_belongs_to_many_association then
+            build_statement_for_has_and_belongs_to_many_association
           end
         end
 
@@ -225,11 +233,11 @@ module RailsAdmin
         end
 
         def build_statement_for_has_many_association
-          build_statement_for_enum
+          in_array_statement
         end
 
         def build_statement_for_has_and_belongs_to_many_association
-          build_statement_for_enum
+          in_array_statement
         end
 
         def build_statement_for_string_or_text
@@ -257,6 +265,10 @@ module RailsAdmin
         end
 
         def build_statement_for_enum
+          in_array_statement
+        end
+
+        def in_array_statement
           return if @value.blank?
           ["(#{@column} IN (?))", Array.wrap(@value)]
         end

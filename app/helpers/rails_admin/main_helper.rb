@@ -66,16 +66,16 @@ module RailsAdmin
           raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
         end
         case field.type
-          when :enum
-            options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
-          when :has_and_belongs_to_many_association, :has_many_association
-            options[:multiple] = field.with(object: @abstract_model.model.new).multiple
-            options[:check_boxes] = field.with(object: @abstract_model.model.new).check_boxes
-            options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).filter_by, filter_hash['v']) unless options[:check_boxes]
-            options[:checkbox_values] = field.with(object: @abstract_model.model.new).filter_by if options[:check_boxes]
-            options[:applied_filters] = filter_hash['v'].map(&:to_i) if filter_hash['v'].is_a?(Array)
-          when :date, :datetime, :time
-            options[:datetimepicker_format] = field.parser.to_momentjs
+        when :enum
+          options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
+        when :has_and_belongs_to_many_association, :has_many_association
+          options[:multi_select] = field.with(object: @abstract_model.model.new).multi_select
+          options[:check_boxes] = field.with(object: @abstract_model.model.new).check_boxes
+          options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).filter_by, filter_hash['v']) unless options[:check_boxes]
+          options[:checkbox_values] = field.with(object: @abstract_model.model.new).filter_by if options[:check_boxes]
+          options[:applied_filters] = filter_hash['v'].map(&:to_i) if filter_hash['v'].is_a?(Array)
+        when :date, :datetime, :time
+          options[:datetimepicker_format] = field.parser.to_momentjs
         end
         options[:label] = field.label
         options[:name] = field.name
