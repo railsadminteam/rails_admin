@@ -22,10 +22,6 @@ module RailsAdmin
             bindings[:object].respond_to?(:multi_select) ? bindings[:object].send(:multi_select) : false
           end
 
-          register_instance_option :filter_by do
-            bindings[:object].respond_to?(:filter_by) ? (searchable && bindings[:object].send(:filter_by)) : []
-          end
-
           register_instance_option :check_boxes do
             bindings[:object].respond_to?(:check_boxes) ? bindings[:object].send(:check_boxes) : false
           end

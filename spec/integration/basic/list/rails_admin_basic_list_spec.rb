@@ -2,8 +2,16 @@
 
 require 'spec_helper'
 
-def checkbox_selector(association_name, model)
+def checkbox_filter_selector(association_name, model)
   "input[name='f[#{association_name}][1][v][]'][value='#{model.id}']"
+end
+
+def text_filter_selector(association_name)
+  "input[name='f[#{association_name}][1][v]'][type='text']"
+end
+
+def select_filter_selector(association_name)
+  "select[name='f[#{association_name}][1][v]']"
 end
 
 describe 'RailsAdmin Basic List', type: :request do
@@ -294,7 +302,9 @@ describe 'RailsAdmin Basic List', type: :request do
 
     it 'displays base filters when no filters are present in the params' do
       RailsAdmin.config Player do
-        list { filters([:name, :team]) }
+        list do
+          filters [:name, :team]
+        end
       end
       get index_path(model_name: 'player')
 
@@ -310,6 +320,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
       options = {
         index: 2,
+        select_options: '',
         label: 'Team',
         name: 'team',
         type: 'belongs_to_association',
@@ -569,7 +580,108 @@ describe 'RailsAdmin Basic List', type: :request do
     end
   end
 
-  describe 'filter list for many to many association', js: true do
+  describe 'list filter for belongs to  association', js: true do
+    let!(:players) do
+      [
+        FactoryGirl.create(:player, name: 'Harry Hipster', team: teams.first),
+        FactoryGirl.create(:player, name: 'Micky Mighty', team: teams[1]),
+        FactoryGirl.create(:player, name: 'Colby James', team: teams[2]),
+        FactoryGirl.create(:player, name: 'Johnny Jangle', team: teams.last),
+      ]
+    end
+
+    let!(:teams) do
+      [
+        FactoryGirl.create(:team, name: 'Red Devils', color: 'red'),
+        FactoryGirl.create(:team, name: 'Red Rockets', color: 'red'),
+        FactoryGirl.create(:team, name: 'White Walters', color: 'white'),
+        FactoryGirl.create(:team, name: 'Black Magics', color: 'black'),
+      ]
+    end
+
+    describe 'filter by string' do
+      before do
+        RailsAdmin.config do |config|
+          config.model Player do
+            list do
+              filters [:team]
+              field :name
+              field :team, :belongs_to_association do
+                searchable [:name]
+                filterable true
+              end
+            end
+          end
+        end
+      end
+
+      it 'allows user to enter text to search associated field' do
+        visit index_path(model_name: 'player')
+
+        teams.each do |team|
+          is_expected.to have_selector("td[title='#{team.name}']")
+        end
+
+        within('span#filters_box') do
+          find(text_filter_selector('team')).set('Red')
+        end
+        click_button('Refresh')
+
+        teams.select { |t| t.name =~ /Red/ }.each do |team|
+          is_expected.to have_selector("td[title='#{team.name}']")
+        end
+
+        teams.reject { |t| t.name =~ /Red/ }.each do |team|
+          is_expected.to_not have_selector("td[title='#{team.name}']")
+        end
+      end
+    end
+
+    describe 'filter by collection' do
+      before do
+        RailsAdmin.config do |config|
+          config.model Player do
+            field :name
+            field :team, :belongs_to_association do
+              searchable [:id]
+              filterable true
+
+              filter_by do
+                Team.all.map { |t| [t.name, t.id] }
+              end
+            end
+
+            list do
+              filters [:team]
+            end
+          end
+        end
+      end
+
+      it 'allows user to choose from select list to search associated field' do
+        visit index_path(model_name: 'player')
+        teams.each do |team|
+          is_expected.to have_selector("td[title='#{team.name}']")
+        end
+
+        within('span#filters_box') do
+          team_select = find(select_filter_selector('team'))
+          team_select.select('Red Devils')
+        end
+        click_button('Refresh')
+
+        teams.select { |t| t.name =~ /Red Devils/ }.each do |team|
+          is_expected.to have_selector("td[title='#{team.name}']")
+        end
+
+        teams.reject { |t| t.name =~ /Red Devils/ }.each do |team|
+          is_expected.to_not have_selector("td[title='#{team.name}']")
+        end
+      end
+    end
+  end
+
+  describe 'list filter for many to many association', js: true do
     let!(:teams) do
       [
         FactoryGirl.create(:team, name: 'Red Devils', color: 'red'),
@@ -621,7 +733,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
         within('span#filters_box') do
           fans.each do |fan|
-            find(checkbox_selector('fans', fan)).set(true)
+            find(checkbox_filter_selector('fans', fan)).set(true)
           end
         end
         click_button('Refresh')
@@ -636,12 +748,12 @@ describe 'RailsAdmin Basic List', type: :request do
 
         larry = fans.detect { |fan| fan.name == 'Larry' }
         within('span#filters_box') do
-          find(checkbox_selector('fans', larry)).set(true)
+          find(checkbox_filter_selector('fans', larry)).set(true)
         end
         click_button('Refresh')
 
         within('span#filters_box') do
-          expect(find(checkbox_selector('fans', larry)).checked?).to be_truthy
+          expect(find(checkbox_filter_selector('fans', larry)).checked?).to be_truthy
         end
 
         larry.teams.each do |team|
@@ -707,7 +819,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
         within('span#filters_box') do
           players.each do |player|
-            find(checkbox_selector('players', player)).set(true)
+            find(checkbox_filter_selector('players', player)).set(true)
           end
         end
         click_button('Refresh')
@@ -722,12 +834,12 @@ describe 'RailsAdmin Basic List', type: :request do
 
         harry_hipster = players.detect { |player| player.name == 'Harry Hipster' }
         within('span#filters_box') do
-          find(checkbox_selector('players', harry_hipster)).set(true)
+          find(checkbox_filter_selector('players', harry_hipster)).set(true)
         end
         click_button('Refresh')
 
         within('span#filters_box') do
-          expect(find(checkbox_selector('players', harry_hipster)).checked?).to be_truthy
+          expect(find(checkbox_filter_selector('players', harry_hipster)).checked?).to be_truthy
         end
 
         is_expected.to have_selector("td[title='#{harry_hipster.team.name}']")

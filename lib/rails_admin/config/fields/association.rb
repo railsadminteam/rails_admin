@@ -66,6 +66,18 @@ module RailsAdmin
           !!searchable
         end
 
+        register_instance_option :filter_by do
+          bindings[:object].respond_to?(:filter_by) ? (searchable && bindings[:object].send(:filter_by)) : []
+        end
+
+        register_instance_option :multi_select do
+          false
+        end
+
+        register_instance_option :check_boxes do
+          false
+        end
+
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association.klass)
