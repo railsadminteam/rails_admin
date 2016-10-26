@@ -146,6 +146,10 @@ var FilterComponents = {
   },
   defaultFilterComponent: function (options) {
     return {control: '<input type="text" class="input-sm form-control" name="' + options.value_name + '" value="' + options.field_value + '"/>' }
+  },
+  create: function(filterOptions){
+    var field = filterOptions.field_type.toCamelCase() + 'FilterComponent';
+    return this[field](filterOptions);
   }
 };
 
@@ -171,16 +175,10 @@ var FilterComponents = {
     }
   };
 
-
-  var fieldFactory = function(filterOptions){
-    var field = filterOptions.field_type.toCamelCase() + 'FilterComponent';
-    return componentFactory[field](filterOptions);
-  };
-
   $.filters = filters = {
     append: function (options) {
       var filterOptions = filterOptionsHandeler(options) || {};
-      var component = fieldFactory(filterOptions);
+      var component = componentFactory.create(filterOptions);
       var control = component.control;
       var additional_control = component.additional_control;
 
@@ -199,7 +197,7 @@ var FilterComponents = {
 
       $("hr.filters_box:hidden").show('slow');
     }
-  }
+  };
 
   $(document).on('click', "#filters a", function (e) {
     e.preventDefault();
