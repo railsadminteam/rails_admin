@@ -603,13 +603,14 @@ describe 'RailsAdmin Basic List', type: :request do
       before do
         RailsAdmin.config do |config|
           config.model Player do
+            field :name
+            field :team, :belongs_to_association do
+              searchable [:name]
+              filterable true
+            end
+
             list do
               filters [:team]
-              field :name
-              field :team, :belongs_to_association do
-                searchable [:name]
-                filterable true
-              end
             end
           end
         end
