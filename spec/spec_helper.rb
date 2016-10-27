@@ -23,6 +23,7 @@ require 'factories'
 require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
+require 'support/filter_box_selectors'
 
 Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
 
@@ -67,6 +68,7 @@ RSpec.configure do |config|
   config.include RailsAdmin::Engine.routes.url_helpers
   config.include Warden::Test::Helpers
   config.include Capybara::DSL, type: :request
+  config.include FilterBoxSelectors
 
   config.before do |example|
     DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
