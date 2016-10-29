@@ -33,22 +33,21 @@
     select: null,
 
     _create: function() {
-      var filtering_select;
+      var filtering_select = this.element.siblings(
+        '[data-input-for="' + this.element.attr('id') + '"]'
+      );
 
       // When using the browser back and forward buttons, it is possible that
       // the autocomplete field will be cached which causes duplicate fields
       // to be generated.
-      if (this.element.is(':visible')) {
+      if (filtering_select.size() > 0) {
+        this.input = filtering_select.children('input');
+        this.button = filtering_select.children('.input-group-btn');
+      } else {
         this.element.hide();
         filtering_select = this._inputGroup(this.element.attr('id'));
         this.input = this._inputField();
         this.button = this._buttonField();
-      } else {
-        filtering_select = this.element.siblings(
-          '[data-input-for="' + this.element.attr('id') + '"]'
-        );
-        this.input = filtering_select.children('input');
-        this.button = filtering_select.children('.input-group-btn');
       }
 
       this._setOptionsSource();

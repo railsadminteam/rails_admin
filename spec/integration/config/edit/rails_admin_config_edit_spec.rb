@@ -725,6 +725,15 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
     end
 
+    it 'works with nested has_many', js: true do
+      @record = FactoryGirl.create :field_test
+      visit edit_path(model_name: 'field_test', id: @record.id)
+
+      find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
+
+      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
+    end
+
     it 'is optional for has_one' do
       @record = FactoryGirl.create :field_test
       visit edit_path(model_name: 'field_test', id: @record.id)
