@@ -12,7 +12,7 @@
       '</select>';
     component.additional_control =
       '<input class="additional-fieldset default input-sm form-control" style="display:' + ((!options.field_operator || options.field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + options.field_type + '" name="' + options.value_name + '[]" value="' + (options.field_value[0] || '') + '" /> ' +
-      '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((options.field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + options.field_type + '" name="' + options.value_name + '[]" value="' + (foptions.ield_value[1] || '') + '" /> ' +
+      '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((options.field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + options.field_type + '" name="' + options.value_name + '[]" value="' + (options.field_value[1] || '') + '" /> ' +
       '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((options.field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + options.field_type + '" name="' + options.value_name + '[]" value="' + (options.field_value[2] || '') + '" />';
     return component;
   };
