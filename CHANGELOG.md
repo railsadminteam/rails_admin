@@ -2,10 +2,18 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.0...HEAD)
+
+
+## [1.1.0](https://github.com/sferik/rails_admin/tree/v1.1.0) - 2016-10-30
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.0.0...v1.1.0)
 
 ### Added
 - DSL for association eager-loading([#1325](https://github.com/sferik/rails_admin/issues/1325), [#1342](https://github.com/sferik/rails_admin/issues/1342))
+
+### Fixed
+- Fix nested has_many form failing to add items([#2737](https://github.com/sferik/rails_admin/pull/2737))
 
 
 ## [1.0.0](https://github.com/sferik/rails_admin/tree/v1.0.0) - 2016-09-19
