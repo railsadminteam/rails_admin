@@ -6,7 +6,7 @@
     var component = {};
     if (options.check_boxes) {
       component.control = options.checkbox_values.map(function (value) {
-        return new_checkbox(value)
+        return helpers.new_checkbox(value, options);
       }).join('\n');
     } else {
       component.control = '<select style="display:' + helpers.select_input_display(options) + 'class="select-single input-sm form-control">' +

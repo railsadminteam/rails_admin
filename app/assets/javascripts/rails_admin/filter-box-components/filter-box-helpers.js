@@ -1,58 +1,56 @@
 (function (helpers) {
-
-  helpers.selected = function () {
-    return 'selected="selected"';
-  };
-
+  
+  var selected_state = 'selected="selected"';
+  
   helpers.like_operator_selected = function (options) {
-    return (options.field_operator === "like" ? selected() : '');
+    return (options.field_operator === "like" ? selected_state : '');
   };
   
   helpers.is_operator_selected = function (options) {
-    return (options.field_operator === "is" ? selected() : '');
+    return (options.field_operator === "is" ? selected_state : '');
   };
   
   helpers.starts_with_operstor_selected = function (options) {
-    return (options.field_operator === "starts_with" ? selected() : '');
+    return (options.field_operator === "starts_with" ? selected_state : '');
   };
   
   helpers.ends_with_operator_selected = function (options) {
-    return (options.field_operator === "ends_with" ? selected() : '');
+    return (options.field_operator === "ends_with" ? selected_state : '');
   };
 
   helpers.default_operator_selected = function (options) {
-    return (options.field_operator === "default" ? selected() : '');
+    return (options.field_operator === "default" ? selected_state : '');
   };
 
   helpers.between_operator_selected = function (options) {
-    return (options.field_operator === "between" ? selected() : '');
+    return (options.field_operator === "between" ? selected_state : '');
   };
 
   helpers.not_null_operator_selected = function (options) {
-    return (options.field_operator === "_not_null" ? selected() : '');
+    return (options.field_operator === "_not_null" ? selected_state : '');
   };
 
   helpers.null_operator_selected = function (options) {
-    return (options.field_operator === "_null" ? selected() : '');
+    return (options.field_operator === "_null" ? selected_state : '');
   };
 
   helpers.today_operator_selected = function (options) {
-    return (options.field_operator === "today" ? 'selected="selected"' : '')
+    return (options.field_operator === "today" ? selected_state : '')
   };
   helpers.yesterday_operator_selected = function (options) {
-    return (options.field_operator === "yesterday" ? 'selected="selected"' : '')
+    return (options.field_operator === "yesterday" ? selected_state : '')
   };
   helpers.last_week_operator_selected = function (options) {
-    return (options.field_operator === "last_week" ? 'selected="selected"' : '')
+    return (options.field_operator === "last_week" ? selected_state : '')
   };
   helpers.this_week_operator_selected = function (options) {
-    return (options.field_operator === "this_week" ? 'selected="selected"' : '')
+    return (options.field_operator === "this_week" ? selected_state : '')
   };
   helpers.true_operator_selected = function (options) {
-    return (options.field_value === "true" ? 'selected="selected"' : '');
+    return (options.field_value === "true" ? selected_state : '');
   };
   helpers.false_operator_selected = function (options) {
-    return (options.field_value === "false" ? 'selected="selected"' : '');
+    return (options.field_value === "false" ? selected_state : '');
   };
 
   helpers.default_filter_display = function (options) {
@@ -67,9 +65,9 @@
     return $.inArray(value[1], applied_filters) !== -1 ? 'checked="checked"' : '';
   };
 
-  helpers.new_checkbox = function (value) {
+  helpers.new_checkbox = function (value, options) {
     return '<label class="checkbox-inline" for="' + options.value_name + '[]">' +
-      '<input style="display:inline-block" name="' + options.value_name + '[]" data-name="' + options.value_name + '[]" class="checkbox input-sm form-control" type="checkbox" value="' + value[1] + '" ' + checked(value, options.applied_filters) + ' />' +
+      '<input style="display:inline-block" name="' + options.value_name + '[]" data-name="' + options.value_name + '[]" class="checkbox input-sm form-control" type="checkbox" value="' + value[1] + '" ' + helpers.checked(value, options.applied_filters) + ' />' +
       '' + value[0] +
       '</label>';
   };
