@@ -5,8 +5,7 @@
   components.number_filter_component = function (options) {
     var component = {};
     component.control = '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + options.operator_name + '">' +
-      '<option ' + helpers.default_operator_selected(options) + ' data-additional-fieldset="default" value="default">' + RailsAdmin.I18n.t("number") + '</option>' +
-      '<option ' + helpers.between_operator_selected(options) + ' data-additional-fieldset="between" value="between">' + RailsAdmin.I18n.t("between_and_") + '</option>' +
+      helpers.between_and_default_options() +
       '<option disabled="disabled">---------</option>' +
       '<option ' + helpers.not_null_operator_selected(options) + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
       '<option ' + helpers.null_operator_selected(options) + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
