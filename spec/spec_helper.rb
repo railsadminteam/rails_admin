@@ -23,8 +23,8 @@ require 'factories'
 require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
-require 'support/filter_box_selectors'
 
+Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
@@ -52,13 +52,6 @@ Devise.setup do |config|
   config.stretches = 0
 end
 
-require 'capybara/poltergeist'
-
-Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, inspector: 'open')
-end
-Capybara.javascript_driver = :poltergeist_debug
-
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
@@ -69,6 +62,8 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include Capybara::DSL, type: :request
   config.include FilterBoxSelectors
+  config.include ListSelectors
+  config.include PoltergeistHelper
 
   config.before do |example|
     DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
@@ -92,8 +87,4 @@ RSpec.configure do |config|
       config.filter_run_excluding orm => true
     end
   end
-end
-
-def debugit(*args, &block)
-  it(*args, {driver: :poltergeist_debug, inspector: true}, &block)
 end

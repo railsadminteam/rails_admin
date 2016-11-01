@@ -569,21 +569,21 @@ describe 'RailsAdmin Basic List', type: :request do
   end
 
   describe 'list filter for belongs to  association', js: true do
-    let!(:players) do
-      [
-        FactoryGirl.create(:player, name: 'Harry Hipster', team: teams.first),
-        FactoryGirl.create(:player, name: 'Micky Mighty', team: teams[1]),
-        FactoryGirl.create(:player, name: 'Colby James', team: teams[2]),
-        FactoryGirl.create(:player, name: 'Johnny Jangle', team: teams.last),
-      ]
-    end
-
     let!(:teams) do
       [
         FactoryGirl.create(:team, name: 'Red Devils', color: 'red'),
         FactoryGirl.create(:team, name: 'Red Rockets', color: 'red'),
         FactoryGirl.create(:team, name: 'White Walters', color: 'white'),
         FactoryGirl.create(:team, name: 'Black Magics', color: 'black'),
+      ]
+    end
+
+    let!(:players) do
+      [
+        FactoryGirl.create(:player, name: 'Harry Hipster', team: teams.first),
+        FactoryGirl.create(:player, name: 'Micky Mighty', team: teams[1]),
+        FactoryGirl.create(:player, name: 'Colby James', team: teams[2]),
+        FactoryGirl.create(:player, name: 'Johnny Jangle', team: teams.last),
       ]
     end
 
@@ -608,7 +608,7 @@ describe 'RailsAdmin Basic List', type: :request do
         visit index_path(model_name: 'player')
 
         teams.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
 
         within('span#filters_box') do
@@ -617,11 +617,11 @@ describe 'RailsAdmin Basic List', type: :request do
         click_button('Refresh')
 
         teams.select { |t| t.name =~ /Red/ }.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
 
         teams.reject { |t| t.name =~ /Red/ }.each do |team|
-          is_expected.to_not have_selector("td[title='#{team.name}']")
+          is_expected.to_not have_selector(list_item_with_title(team.name))
         end
       end
     end
@@ -650,7 +650,7 @@ describe 'RailsAdmin Basic List', type: :request do
       it 'allows user to choose from select list to search associated field' do
         visit index_path(model_name: 'player')
         teams.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
 
         within('span#filters_box') do
@@ -660,11 +660,11 @@ describe 'RailsAdmin Basic List', type: :request do
         click_button('Refresh')
 
         teams.select { |t| t.name =~ /Red Devils/ }.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
 
         teams.reject { |t| t.name =~ /Red Devils/ }.each do |team|
-          is_expected.to_not have_selector("td[title='#{team.name}']")
+          is_expected.to_not have_selector(list_item_with_title(team.name))
         end
       end
     end
@@ -728,7 +728,7 @@ describe 'RailsAdmin Basic List', type: :request do
         click_button('Refresh')
 
         teams.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
       end
 
@@ -746,11 +746,11 @@ describe 'RailsAdmin Basic List', type: :request do
         end
 
         larry.teams.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
 
         (teams - larry.teams).each do |team|
-          is_expected.to_not have_selector("td[title='#{team.name}']")
+          is_expected.to_not have_selector(list_item_with_title(team.name))
         end
       end
     end
@@ -814,7 +814,7 @@ describe 'RailsAdmin Basic List', type: :request do
         click_button('Refresh')
 
         teams.each do |team|
-          is_expected.to have_selector("td[title='#{team.name}']")
+          is_expected.to have_selector(list_item_with_title(team.name))
         end
       end
 
@@ -831,10 +831,10 @@ describe 'RailsAdmin Basic List', type: :request do
           expect(find(checkbox_filter_selector('players', harry_hipster)).checked?).to be_truthy
         end
 
-        is_expected.to have_selector("td[title='#{harry_hipster.team.name}']")
+        is_expected.to have_selector(list_item_with_title(harry_hipster.team.name))
 
         (teams - [harry_hipster.team]).each do |team|
-          is_expected.to_not have_selector("td[title='#{team.name}']")
+          is_expected.to_not have_selector(list_item_with_title(team.name))
         end
       end
     end
