@@ -81,4 +81,4 @@
       $(this).siblings('.additional-fieldset').hide('slow');
     }
   });
-})(jQuery, FilterBoxComponents);
+}(jQuery, FilterBoxComponents));

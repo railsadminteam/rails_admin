@@ -1,3 +1,4 @@
+
 /*
  * RailsAdmin filtering multiselect @VERSION
  *

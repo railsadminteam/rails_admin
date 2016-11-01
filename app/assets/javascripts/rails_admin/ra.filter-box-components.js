@@ -1,5 +1,6 @@
 
 var FilterBoxComponents = {
+  helpers: {},
   create: function(options){
     var fieldFactoryName = options.field_type + '_filter_component';
     try {
