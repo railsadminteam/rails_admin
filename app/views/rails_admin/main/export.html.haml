@@ -56,11 +56,11 @@
       %i.icon-chevron-down
       = t('admin.export.options_for', name: 'csv')
     .form-group.control-group
-      - guessed_encoding = @abstract_model.encoding
+      - guessed_encoding = Encoding.name_list.include?(RailsAdmin.config.csv_default_encoding) ? RailsAdmin.config.csv_default_encoding : @abstract_model.encoding
       %label.col-sm-2.control-label{for: "csv_options_encoding_to"}= t('admin.export.csv.encoding_to')
       .col-sm-10.controls
         -# from http://books.google.com/support/partner/bin/answer.py?answer=30990 :
-        = select_tag 'csv_options[encoding_to]', options_for_select(Encoding.name_list.sort), include_blank: true, placeholder: t('admin.misc.search'), :'data-enumeration' => true
+        = select_tag 'csv_options[encoding_to]', options_for_select(Encoding.name_list.sort, guessed_encoding), include_blank: true, placeholder: t('admin.misc.search'), :'data-enumeration' => true
         %p.help-block= t('admin.export.csv.encoding_to_help', name: guessed_encoding)
 
     .form-group.control-group
