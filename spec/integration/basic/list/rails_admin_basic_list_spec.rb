@@ -657,7 +657,11 @@ describe 'RailsAdmin Basic List', type: :request do
           team_select = find(select_filter_selector('team'))
           team_select.select('Red Devils')
         end
+        unfiltered_url =  page.current_url
+
         click_button('Refresh')
+
+        expect(unfiltered_url).to_not eq page.current_url
 
         teams.select { |t| t.name =~ /Red Devils/ }.each do |team|
           is_expected.to have_selector(list_item_with_title(team.name))
@@ -725,7 +729,11 @@ describe 'RailsAdmin Basic List', type: :request do
             find(checkbox_filter_selector('fans', fan)).set(true)
           end
         end
+        unfiltered_url =  page.current_url
+
         click_button('Refresh')
+
+        expect(unfiltered_url).to_not eq page.current_url
 
         teams.each do |team|
           is_expected.to have_selector(list_item_with_title(team.name))
@@ -811,7 +819,11 @@ describe 'RailsAdmin Basic List', type: :request do
             find(checkbox_filter_selector('players', player)).set(true)
           end
         end
+        unfiltered_url =  page.current_url
+
         click_button('Refresh')
+
+        expect(unfiltered_url).to_not eq page.current_url
 
         teams.each do |team|
           is_expected.to have_selector(list_item_with_title(team.name))
