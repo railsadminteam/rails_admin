@@ -7,8 +7,6 @@
 //=  require 'rails_admin/moment-with-locales'
 //=  require 'rails_admin/bootstrap-datetimepicker'
 //=  require 'rails_admin/jquery.colorpicker'
-//=  require 'rails_admin/ra.filter-box-components'
-//=  require_tree './filter-box-components'
 //=  require 'rails_admin/ra.filter-box'
 //=  require 'rails_admin/ra.filtering-multiselect'
 //=  require 'rails_admin/ra.filtering-select'
