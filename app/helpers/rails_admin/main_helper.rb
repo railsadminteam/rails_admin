@@ -57,6 +57,7 @@ module RailsAdmin
     end
 
     def ordered_filter_string
+      return if ordered_filters.blank?
       @ordered_filter_string ||= ordered_filters.map do |duplet|
         options = {index: duplet[0]}
         filter_for_field = duplet[1]
@@ -73,7 +74,7 @@ module RailsAdmin
         options[:label] = field.label
         options[:operator] = filter_hash['o']
         %{$.filters.append(#{options.to_json});}
-      end.join("\n").html_safe if ordered_filters
+      end.join("\n").html_safe
     end
 
     def options_for_field(field, filter_hash, options)
