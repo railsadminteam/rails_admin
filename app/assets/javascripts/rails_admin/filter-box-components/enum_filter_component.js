@@ -13,7 +13,7 @@
       '<option disabled="disabled">---------</option>' +
       options.select_options +
       '</select>' +
-      '<select multiple="multiple" style="display:' + multiple_values_display(multiple_values, options) + ' data-name="' + options.value_name + '[]" class="select-multiple input-sm form-control">' +
+      '<select multiple="multiple" style="display:' + helpers.multiple_values_display(multiple_values, options) + ' data-name="' + options.value_name + '[]" class="select-multiple input-sm form-control">' +
       options.select_options +
       '</select> ' +
       '<a href="#" class="switch-select"><i class="icon-' + helpers.plus_or_minus_icon(multiple_values) + '"></i></a>';
