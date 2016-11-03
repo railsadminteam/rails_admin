@@ -1,5 +1,5 @@
-//=  require 'rails_admin/ra.filter-box-components'
-//=  require_tree './filter-box-components'
+//= require rails_admin/ra.filter-box-components
+//= require_tree ./filter-box-components
 
 (function ($, componentFactory) {
 
