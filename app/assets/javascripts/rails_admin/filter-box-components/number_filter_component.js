@@ -1,11 +1,12 @@
 (function (components) {
 
   var helpers = components.helpers;
+  var shared_elements = components.shared_elements;
 
   components.number_filter_component = function (options) {
     var component = {};
     component.control = '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + options.operator_name + '">' +
-      helpers.between_and_default_options() +
+      shared_elements.between_and_default_options(options) +
       '<option disabled="disabled">---------</option>' +
       '<option ' + helpers.not_null_operator_selected(options) + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
       '<option ' + helpers.null_operator_selected(options) + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
