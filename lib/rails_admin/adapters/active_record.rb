@@ -137,6 +137,7 @@ module RailsAdmin
           filters_dump.each do |_, filter_dump|
             wb = WhereBuilder.new(scope)
             field = fields.detect { |f| f.name.to_s == field_name }
+            next if field.nil?
             value = parse_field_value(field, filter_dump[:v])
 
             wb.add(field, value, (filter_dump[:o] || 'default'))
