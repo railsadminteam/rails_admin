@@ -31,3 +31,4 @@ tmp/**/*
 .sass-cache
 nbproject
 /.DS_Store
+*/**/.DS_Store
