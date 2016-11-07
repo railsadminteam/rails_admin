@@ -13,7 +13,7 @@ module RailsAdmin
           end
 
           def parse_value(value)
-            value.present? ? (RailsAdmin.yaml_load(value) || nil) : nil
+            value.present? ? (RailsAdmin.yaml_load(value.try(:to_s)) || nil) : nil
           end
 
           def parse_input(params)
