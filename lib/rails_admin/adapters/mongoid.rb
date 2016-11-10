@@ -30,7 +30,7 @@ module RailsAdmin
       end
 
       def scoped
-        model.scoped
+        model.unscoped
       end
 
       def first(options = {}, scope = nil)
