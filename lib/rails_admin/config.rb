@@ -323,7 +323,7 @@ module RailsAdmin
         included_models.collect(&:to_s).presence || begin
           @@system_models ||= # memoization for tests
             ([Rails.application] + Rails::Engine.subclasses.collect(&:instance)).flat_map do |app|
-              (app.paths['app/models'].to_a + app.config.autoload_paths).collect do |load_path|
+              (app.paths['app/models'].to_a + app.paths.eager_load).collect do |load_path|
                 Dir.glob(app.root.join(load_path)).collect do |load_dir|
                   Dir.glob(load_dir + '/**/*.rb').collect do |filename|
                     # app/models/module/class.rb => module/class.rb => module/class => Module::Class
