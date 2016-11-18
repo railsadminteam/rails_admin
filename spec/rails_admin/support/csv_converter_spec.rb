@@ -100,7 +100,7 @@ describe RailsAdmin::CSVConverter do
         let(:options) { {encoding_to: 'UTF-8', generator: {col_sep: '___'}} }
         it "uses the column separator specified" do
           expect(subject[2].unpack('H*').first).
-            to eq( "efbbbf4e756d6265725f5f5f4e616d650a315f5f5fe381aae381bee381880a")
+            to eq 'efbbbf4e756d6265725f5f5f4e616d650a315f5f5fe381aae381bee381880a'
         end
       end
 
@@ -108,7 +108,7 @@ describe RailsAdmin::CSVConverter do
         let(:options) { {'encoding_to' => 'UTF-8', 'generator' => {'col_sep' => '___'}} }
         it "uses the column separator specified" do
           expect(subject[2].unpack('H*').first).
-            to eq( "efbbbf4e756d6265725f5f5f4e616d650a315f5f5fe381aae381bee381880a")
+            to eq 'efbbbf4e756d6265725f5f5f4e616d650a315f5f5fe381aae381bee381880a'
         end
       end
     end
