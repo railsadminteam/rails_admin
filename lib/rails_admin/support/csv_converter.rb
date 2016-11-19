@@ -32,6 +32,7 @@ module RailsAdmin
     end
 
     def to_csv(options = {})
+      options = HashWithIndifferentAccess.new(options)
       encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 
       csv_string = generate_csv_string(options)
