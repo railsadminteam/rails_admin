@@ -41,7 +41,7 @@ module RailsAdmin
 
             respond_to do |format|
               format.html do
-                render @action.template_name, status: (flash[:error].present? ? :not_found : 200)
+                render @action.template_name, status: @status_code || :ok
               end
 
               format.json do

@@ -63,6 +63,7 @@ module RailsAdmin
     rescue_from RailsAdmin::ObjectNotFound do
       flash[:error] = I18n.t('admin.flash.object_not_found', model: @model_name, id: params[:id])
       params[:action] = 'index'
+      @status_code = :not_found
       index
     end
 
