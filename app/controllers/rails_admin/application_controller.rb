@@ -70,6 +70,7 @@ module RailsAdmin
     rescue_from RailsAdmin::ModelNotFound do
       flash[:error] = I18n.t('admin.flash.model_not_found', model: @model_name)
       params[:action] = 'dashboard'
+      @status_code = :not_found
       dashboard
     end
   end
