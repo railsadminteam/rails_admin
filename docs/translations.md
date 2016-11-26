@@ -48,6 +48,6 @@ You can find old included translations here:
 [[https://github.com/sferik/rails_admin/tree/df631d6d4ed49a5417d8135000611c37f6a3ed9b/config/locales]]
 
 ## Datepicker
-If your model has a date/datetime attribute and the date string is translated on the frontend, make sure in your translation file there is a key called `month_names`. An good example is provided by the comment here: https://gist.github.com/simonc/3a21074223d2f36a7232#gistcomment-1574237.
+If your model has a date/datetime attribute and the date string is translated on the frontend, make sure in your translation file there is a key called `month_names`. A good example is provided by the comment here: https://gist.github.com/simonc/3a21074223d2f36a7232#gistcomment-1574237.
 
 This is because RailsAdmin uses https://github.com/Eonasdan/bootstrap-datetimepicker as datepicker, which in turn uses momentjs's locale. When RailsAdmin de-localizes a translated date, it needs to translate the string back to English. For more discussion see https://github.com/sferik/rails_admin/issues/982
