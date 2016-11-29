@@ -355,12 +355,25 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             end
           end
         end
-        @action = RailsAdmin::Config::Actions.find :index
-        result = helper.bulk_menu(RailsAdmin::AbstractModel.new(Team))
-        expect(result).to match('zorg_action')
-        expect(result).to match('blub')
+        en = {admin: {actions: {
+          zorg: {bulk_link: 'Zorg all these %{model_label_plural}'},
+          blub: {bulk_link: 'Blub all these %{model_label_plural}'},
+        }}}
+        I18n.backend.store_translations(:en, en)
 
-        expect(helper.bulk_menu(RailsAdmin::AbstractModel.new(Player))).not_to match('blub')
+        @abstract_model = RailsAdmin::AbstractModel.new(Team)
+        result = helper.bulk_menu
+
+        expect(result).to match('zorg_action')
+        expect(result).to match('Zorg all these Teams')
+        expect(result).to match('blub')
+        expect(result).to match('Blub all these Teams')
+
+        result_2 = helper.bulk_menu(RailsAdmin::AbstractModel.new(Player))
+        expect(result_2).to match('zorg_action')
+        expect(result_2).to match('Zorg all these Players')
+        expect(result_2).not_to match('blub')
+        expect(result_2).not_to match('Blub all these Players')
       end
     end
 
