@@ -1,4 +1,4 @@
-if defined?(::ActiveRecord)
+ActiveSupport.on_load(:active_record) do
   module ActiveRecord
     class Base
       def self.rails_admin(&block)
