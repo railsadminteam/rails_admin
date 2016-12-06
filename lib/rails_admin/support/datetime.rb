@@ -39,11 +39,11 @@ module RailsAdmin
               english = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
               abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
             when '%B'
-              english = [nil, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][1..-1]
-              month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
+              english = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].reverse
+              month_names.reverse.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
             when '%b'
-              english = [nil, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][1..-1]
-              abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
+              english = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].reverse
+              abbr_month_names.reverse.each_with_index { |m, i| date_string = date_string.gsub(/#{m}/, english[i]) }
             when '%p'
               date_string = date_string.gsub(/#{::I18n.t('date.time.am', default: "am")}/, 'am')
               date_string = date_string.gsub(/#{::I18n.t('date.time.pm', default: "pm")}/, 'pm')
