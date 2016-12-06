@@ -48,6 +48,9 @@ You can find old included translations here:
 [[https://github.com/sferik/rails_admin/tree/df631d6d4ed49a5417d8135000611c37f6a3ed9b/config/locales]]
 
 ## Datepicker
-If you use the rails-i18n gem and your model has a date/datetime attribute, you may need add a key called `month_names` in your translation file. A good example is provided by the comment here: https://gist.github.com/simonc/3a21074223d2f36a7232#gistcomment-1574237.
+The i18n for datepicker is a little complicated and caused a lot confusions. The frontend depends on momentjs locale and the backend may depend on rails-i18n gem if that's what you use.
 
-This is because rails-i18n gem which you use may specify the long format like `long: "%Y年%b%d日"`. Notice the month field is just a number without translated month name. Then rails_admin uses long format by default for its date and datetime fields (https://github.com/sferik/rails_admin/blob/v1.1.0/lib/rails_admin/config/fields/types/date.rb#L11). As a result you may need to add month_names in your locale file so rails_admin can correctly delocalize it ( https://github.com/sferik/rails_admin/blob/v1.1.0/lib/rails_admin/support/datetime.rb#L31). For more discussion see https://github.com/sferik/rails_admin/issues/982
+Here is some pointers for debugging:
+rails_admin uses long format by default (https://github.com/sferik/rails_admin/blob/v1.1.0/lib/rails_admin/config/fields/types/date.rb#L11). 
+
+rails_admin will delocalize the date string passed in as param ( https://github.com/sferik/rails_admin/blob/v1.1.0/lib/rails_admin/support/datetime.rb#L31)
