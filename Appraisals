@@ -5,6 +5,10 @@ appraise "rails-4.0" do
   gem 'test-unit'
   gem 'capybara', '>= 0.8', group: :test
 
+  group :active_record do
+    gem 'paper_trail', '~> 5.0'
+  end
+
   group :mongoid do
     gem 'mongoid', '~> 4.0'
     gem 'kaminari-mongoid'
@@ -23,6 +27,10 @@ appraise "rails-4.1" do
   gem 'rails', '~> 4.1.0'
   gem 'devise', '>= 3.2'
   gem 'capybara', '>= 0.8', group: :test
+
+  group :active_record do
+    gem 'paper_trail', '>= 5.0'
+  end
 
   group :mongoid do
     gem 'mongoid', '~> 4.0'
@@ -44,6 +52,10 @@ appraise "rails-4.2" do
   gem 'devise', '>= 3.4'
   gem 'capybara', '>= 0.8', group: :test
 
+  group :active_record do
+    gem 'paper_trail', '>= 5.0'
+  end
+
   group :mongoid do
     gem 'mongoid', '~> 4.0'
     gem 'kaminari-mongoid'
@@ -62,6 +74,10 @@ appraise "rails-5.0" do
   gem 'rails', '~> 5.0.0'
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.0'
+
+  group :active_record do
+    gem 'paper_trail', '>= 5.0'
+  end
 
   group :mongoid do
     gem 'mongoid', '>= 6.0.0.beta'

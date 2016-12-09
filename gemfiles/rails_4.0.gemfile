@@ -10,7 +10,7 @@ gem "test-unit"
 gem "capybara", ">= 0.8", :group => :test
 
 group :active_record do
-  gem "paper_trail", ">= 5.0"
+  gem "paper_trail", "~> 5.0"
 
   platforms :jruby do
     gem "activerecord-jdbcmysql-adapter", ">= 1.2"

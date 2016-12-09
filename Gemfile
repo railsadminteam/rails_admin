@@ -18,8 +18,6 @@ group :active_record do
     gem 'pg', '>= 0.14'
     gem 'sqlite3', '>= 1.3'
   end
-
-  gem 'paper_trail', '>= 5.0'
 end
 
 group :development, :test do
