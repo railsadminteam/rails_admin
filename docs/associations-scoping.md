@@ -76,4 +76,4 @@ More on cancan's own page.
 
 ### Restricting fields through roles or some condition
 
-You can also restrict some field through role or some condition, [take a look at this post](http://blog.glaucocustodio.com/2013/11/28/conditional-fields-in-rails-admin/)
+You can also restrict some field through role or some condition, [take a look at this post](https://glaucocustodio.github.io/2013/11/28/conditional-fields-in-rails-admin/)
