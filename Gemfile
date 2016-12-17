@@ -26,7 +26,7 @@ end
 
 group :test do
   gem 'cancan', '>= 1.6'
-  gem 'cancancan', '~> 1.12.0'
+  gem 'cancancan', '~> 1.15.0'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
   gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
