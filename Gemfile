@@ -14,7 +14,7 @@ group :active_record do
   end
 
   platforms :ruby, :mswin, :mingw do
-    gem 'mysql2', '~> 0.3.14'
+    gem 'mysql2', '~> 0.4.5'
     gem 'pg', '>= 0.14'
     gem 'sqlite3', '>= 1.3'
   end
@@ -40,7 +40,7 @@ group :test do
   gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
-  gem 'rubocop', '~> 0.41.2'
+  gem 'rubocop', '~> 0.46.0'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
 
