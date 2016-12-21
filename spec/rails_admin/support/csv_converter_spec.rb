@@ -112,5 +112,14 @@ describe RailsAdmin::CSVConverter do
         end
       end
     end
+
+    context "when objects is empty" do
+      let(:objects) { [] }
+      let(:options) { {} }
+
+      it "generates an empty csv" do
+        expect(subject[2]).to eq("\n")
+      end
+    end
   end
 end
