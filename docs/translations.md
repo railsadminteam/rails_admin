@@ -46,11 +46,3 @@ Community sourced translations:
 You can find old included translations here:
 
 [[https://github.com/sferik/rails_admin/tree/df631d6d4ed49a5417d8135000611c37f6a3ed9b/config/locales]]
-
-## Datepicker
-The i18n for datepicker is a little complicated and caused a lot confusions. The frontend depends on momentjs locale and the backend may depend on rails-i18n gem if that's what you use.
-
-Here is some pointers for debugging:
-rails_admin uses long format by default (https://github.com/sferik/rails_admin/blob/v1.1.0/lib/rails_admin/config/fields/types/date.rb#L11). 
-
-rails_admin will delocalize the date string passed in as param ( https://github.com/sferik/rails_admin/blob/v1.1.0/lib/rails_admin/support/datetime.rb#L31)
