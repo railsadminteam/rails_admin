@@ -4,6 +4,9 @@ require 'csv'
 module RailsAdmin
   class CSVConverter
     def initialize(objects = [], schema = {})
+      @fields = []
+      @associations = []
+
       return self if (@objects = objects).blank?
 
       @model = objects.dup.first.class
