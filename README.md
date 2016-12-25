@@ -16,6 +16,15 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+## Announcements
+
+### [Action required] Security issue
+
+**RailsAdmin 1.0.0 and 1.1.0 have been reported to have CSRF vulnerability with default setup.** We strongly recommend that you upgrade RailsAdmin to 1.1.1 or later as soon as possible, if you are on these versions. See [b13e879e](https://github.com/sferik/rails_admin/commit/b13e879eb93b661204e9fb5e55f7afa4f397537a) for the detail.
+
+This problem was reported by SourceClear, Inc.
+
+
 ## Features
 * CRUD any data with ease
 * Custom actions

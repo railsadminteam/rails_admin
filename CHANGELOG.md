@@ -2,7 +2,22 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.1...HEAD)
+
+
+## [1.1.1](https://github.com/sferik/rails_admin/tree/v1.1.1) - 2016-12-25
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.0...v1.1.1)
+
+### Fixed
+- CSV export broke with empty tables([#2796](https://github.com/sferik/rails_admin/issues/2796), [#2797](https://github.com/sferik/rails_admin/pull/2797))
+- ActiveRecord adapter's #encoding did not work with Oracle enhanced adapter([#2789](https://github.com/sferik/rails_admin/pull/2789))
+- ActiveRecord 5 belongs_to presence validators were unintentionally disabled due to initialization mishandling([#2785](https://github.com/sferik/rails_admin/issues/2785), [#2786](https://github.com/sferik/rails_admin/issues/2786))
+- Destroy failure caused subsequent index action to return 404, instead of 200([#2775](https://github.com/sferik/rails_admin/issues/2775), [#2776](https://github.com/sferik/rails_admin/pull/2776))
+- CSVConverter#to_csv now accepts string-keyed hashes([#2740](https://github.com/sferik/rails_admin/issues/2740), [#2741](https://github.com/sferik/rails_admin/pull/2741))
+
+### Security
+- Fix CSRF vulnerability([b13e879e](https://github.com/sferik/rails_admin/commit/b13e879eb93b661204e9fb5e55f7afa4f397537a))
 
 
 ## [1.1.0](https://github.com/sferik/rails_admin/tree/v1.1.0) - 2016-10-30
