@@ -40,7 +40,7 @@ Community sourced translations:
 * [[Swedish: sv|https://gist.github.com/4433235]]
 * [[Norwegian: no|https://gist.github.com/2844960#file_rails_admin.nb.yml]]
 * [[Turkish: tr|https://gist.github.com/2888924#file_rails_admin.tr.yml]]
-* [[Ukrainian: uk|https://gist.github.com/nazarok/a6bf4186154f27b850350fa79e31f288#file-rails_admin-uk-yml]]
+*[[Ukrainian: uk|https://gist.github.com/nazarok/a6bf4186154f27b850350fa79e31f288#file-rails_admin-uk-yml]]
 
 * Add your own (create a gist first)
 
