@@ -78,6 +78,9 @@ module RailsAdmin
       # yell about fields that are not marked as accessible
       attr_accessor :yell_for_non_accessible_fields
 
+      # set locale for rails_admin
+      attr_accessor :locale
+
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
       #

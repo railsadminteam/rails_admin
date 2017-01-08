@@ -16,6 +16,7 @@ module RailsAdmin
     before_action :_authenticate!
     before_action :_authorize!
     before_action :_audit!
+    before_action :_set_locale!
 
     helper_method :_current_user, :_get_plugin_name
 
@@ -56,6 +57,10 @@ module RailsAdmin
 
     def _audit!
       instance_eval(&RailsAdmin::Config.audit_with)
+    end
+
+    def _set_locale!
+      I18n.locale = RailsAdmin.config.locale if RailsAdmin.config.locale
     end
 
     def rails_admin_controller?

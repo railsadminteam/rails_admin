@@ -39,4 +39,12 @@ describe RailsAdmin::ApplicationController, type: :controller do
       expect(controller.send(:rails_admin_controller?)).to be true
     end
   end
+
+  describe '#_set_locale!' do
+    it 'works with config' do
+      RailsAdmin.config.locale = :fr
+      controller.send(:_set_locale!)
+      expect(I18n.locale).to eq(:fr)
+    end
+  end
 end
