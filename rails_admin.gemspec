@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency 'jquery-rails', ['>= 3.0', '< 5']
   spec.add_dependency 'jquery-ui-rails', '~> 5.0'
-  spec.add_dependency 'kaminari', '~> 0.14'
+  spec.add_dependency 'kaminari', '>= 0.14', '< 2.0'
   spec.add_dependency 'nested_form', '~> 0.3'
   spec.add_dependency 'rack-pjax', '>= 0.7'
   spec.add_dependency 'rails', ['>= 4.0', '< 6']
