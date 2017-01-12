@@ -4,11 +4,11 @@ source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
 gem "devise", ">= 3.2"
-gem "kaminari", "~> 0.14"
 gem "rails", "~> 4.0.0"
 gem "sass-rails", "~> 4.0.3"
 gem "test-unit"
 gem "capybara", ">= 0.8", :group => :test
+gem "kaminari", "~> 0.14"
 
 group :active_record do
   gem "paper_trail", "~> 5.0"
