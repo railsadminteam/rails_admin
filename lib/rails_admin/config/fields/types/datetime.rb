@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           def parser
-            @parser ||= RailsAdmin::Support::Datetime.new(strftime_format)
+            RailsAdmin::Support::Datetime.new(strftime_format)
           end
 
           def parse_value(value)
