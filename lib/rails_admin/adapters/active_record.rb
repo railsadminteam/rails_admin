@@ -202,6 +202,7 @@ module RailsAdmin
           when :string, :text             then build_statement_for_string_or_text
           when :enum                      then build_statement_for_enum
           when :belongs_to_association    then build_statement_for_belongs_to_association
+          when :uuid                      then build_statement_for_uuid
           end
         end
 
@@ -251,6 +252,10 @@ module RailsAdmin
         def build_statement_for_enum
           return if @value.blank?
           ["(#{@column} IN (?))", Array.wrap(@value)]
+        end
+
+        def build_statement_for_uuid
+          column_for_value(@value)
         end
 
         def ar_adapter

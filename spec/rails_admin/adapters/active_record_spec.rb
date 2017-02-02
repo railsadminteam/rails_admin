@@ -393,6 +393,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     it 'supports enum type query' do
       expect(build_statement(:enum, '1', nil)).to eq(['(field IN (?))', ['1']])
     end
+
+    it 'supports uuid type query' do
+      uuid = SecureRandom.uuid
+      expect(build_statement(:uuid, uuid, nil)).to eq(['(field = ?)', uuid])
+    end
   end
 
   describe 'model attribute method' do
