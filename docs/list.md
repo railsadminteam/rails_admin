@@ -233,3 +233,5 @@ end
 ```
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
+
+xref https://github.com/sferik/rails_admin/wiki/List-view-table-styling
