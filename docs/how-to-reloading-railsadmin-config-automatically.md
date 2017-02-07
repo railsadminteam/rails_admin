@@ -25,6 +25,8 @@ private
 end
 ```
 
+This will clear any RailsAdmin configuration in the individual model files. Use it only if you do all your configuration in `rails_admin.rb`.
+
 [rails_admin_import](https://github.com/stephskardal/rails_admin_import) gem will not work if you add the above code.
 
 ## Automatic Model List
