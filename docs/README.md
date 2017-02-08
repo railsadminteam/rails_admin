@@ -159,3 +159,5 @@
 #### Misc.
 * [RailsAdminSettings](https://github.com/rs-pro/rails_admin_settings): Application setting for rails_admin and mongoid
 * [RailsAdminGrid](https://github.com/colavitam/rails_admin_grid): Custom collection (index) action that displays objects in a grid with thumbnails
+* [RailsAdminLiveEdit](https://github.com/blocknotes/rails_admin_live_edit): A plugin which allow to edit site content from the frontend (showing Rails Admin views in dialogs)
+* [RailsAdminMydash](https://github.com/blocknotes/rails_admin_mydash): An alternative version of the dashboard with admin messages and the ability to access to Google Analytics data
