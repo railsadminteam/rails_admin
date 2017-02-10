@@ -99,6 +99,14 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+Also make sure RailsAdmin is inheriting from ApplicationController:
+
+```ruby
+# in config/initializers/rails_admin.rb
+
+config.parent_controller = 'ApplicationController'
+```
+
 ### CanCan::AuthorizationNotPerformed exception
 
 Remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead.
