@@ -13,3 +13,21 @@ Marking associations to large tables as `readonly` has often been the culprit be
 If you're expecting large tables, it could be beneficial to make all fields of all models readonly by default from the start, and then manually set fields to `readonly true` within individual models as needed.
 
 See [[Fields#making-all-fields-readonly-by-default]] for how to do this.
+
+## History Tab performance
+
+I've also managed to speed up loads on index pages and the history tab with the following. (Note: Only do this if you don't use Kaminari in your actual app.)
+
+```rb
+module Kaminari
+  module ActiveRecordRelationMethods
+    def total_count(column_name = :all, _options = nil)
+      limit(5000).count(column_name)
+    end
+  end
+end
+```
+
+This can also help performance if you are using the [`rails_admin_history_rollback`](https://github.com/rikkipitt/rails_admin_history_rollback) gem, as the "View Changes" button also issues a full count on the versions table.
+
+See [#2808](https://github.com/sferik/rails_admin/issues/2808) for further discussion.
