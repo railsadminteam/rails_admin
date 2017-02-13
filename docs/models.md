@@ -109,4 +109,4 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Note**: In versions prior to `v1.0.0.rc`, successive invocations of `config.model` to the same model would _replace_ the configuration block rather than adding to it--meaning that the above block gets ignored for any model that also has a config block in the model class. (This was fixed by [#2670](https://github.com/sferik/rails_admin/pulls/2670).)
+**Note**: In versions prior to `v1.0.0.rc`, successive invocations of `config.model` to the same model would _replace_ the configuration block rather than adding to it--meaning that the above block gets ignored for any model that also has a config block in the model class. (This was fixed by [#2670](https://github.com/sferik/rails_admin/pull/2670).)
