@@ -471,8 +471,8 @@ RailsAdmin.config do |config|
           #  - https://github.com/sferik/rails_admin/blob/v1.1.1/lib/rails_admin/config/has_fields.rb#L93-L94
           #  - https://github.com/sferik/rails_admin/blob/v1.1.1/lib/rails_admin/config/lazy_model.rb#L26-L47
           #
-          defined = false
-          order = nil
+          self.defined = false
+          self.order = nil
         end
       end
     end
