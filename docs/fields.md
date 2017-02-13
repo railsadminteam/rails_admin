@@ -450,3 +450,34 @@ end
 Type guessing can be overridden by registering a custom field "factory", but
 for now you need to study `lib/rails_admin/config/fields/factories/*` for
 examples if you want to use that mechanism.
+
+## Making all fields readonly by default
+
+Per the [Models](https://github.com/sferik/rails_admin/wiki/Models#configuring-models-all-at-once) page under "Configuring models all at once", you can use the following to make fields read-only by default:
+
+```rb
+RailsAdmin.config do |config|
+  ActiveRecord::Base.descendants.each do |imodel|
+    config.model "#{imodel.name}" do
+      base do
+        fields do
+          read_only true
+
+          # If you want rules about inclusion or exclusion of fields to only apply at the model level,
+          # you should include the following two lines. (This code should be in the initializer in order
+          # to run first and not clobber the `order` and `defined` attributes from your model config.)
+          #
+          # See also:
+          #  - https://github.com/sferik/rails_admin/blob/v1.1.1/lib/rails_admin/config/has_fields.rb#L93-L94
+          #  - https://github.com/sferik/rails_admin/blob/v1.1.1/lib/rails_admin/config/lazy_model.rb#L26-L47
+          #
+          defined = false
+          order = nil
+        end
+      end
+    end
+  end
+end
+```
+
+Note: this requires rails_admin >= 1.0.0.rc (depends on [#2670](https://github.com/sferik/rails_admin/pull/2670)).
