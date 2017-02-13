@@ -104,7 +104,7 @@
         .append('<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>')
         .append('&nbsp;' + control + '&nbsp;' + (additional_control || ''));
 
-      if($('#filters_box input[name*="' + field_label.toLowerCase() + '"]').length == 0){
+      if($('#filters_box input[name*="' + field_name + '"]').length == 0){
         $('#filters_box').append($content);
       }
 
