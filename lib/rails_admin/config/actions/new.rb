@@ -20,7 +20,7 @@ module RailsAdmin
               @authorization_adapter && @authorization_adapter.attributes_for(:new, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
-              if object_params = params[@abstract_model.to_param]
+              if object_params = params[@abstract_model.param_key]
                 sanitize_params_for!(request.xhr? ? :modal : :create)
                 @object.set_attributes(@object.attributes.merge(object_params.to_h))
               end
