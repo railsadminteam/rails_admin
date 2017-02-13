@@ -119,6 +119,7 @@
 
 * [[How to set default values]]
 * [[Excluding RailsAdmin from NewRelic]] For when you don't want timing and performance information about RailsAdmin to show up in your NewRelic dashboards.
+* [[Performance]] - how to make Rails Admin snappier with large databases
 
 ### Plugins
 
