@@ -453,7 +453,7 @@ examples if you want to use that mechanism.
 
 ## Making all fields readonly by default
 
-Per the [Models](https://github.com/sferik/rails_admin/wiki/Models#configuring-models-all-at-once) page under "Configuring models all at once", you can use the following to make fields read-only by default:
+Borrowing from [[Models#configuring-models-all-at-once], you can use the following to make fields read-only by default:
 
 ```rb
 RailsAdmin.config do |config|
