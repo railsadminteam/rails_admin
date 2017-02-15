@@ -17,6 +17,7 @@ css:
 - @model_config.show.with(object: @object, view: self, controller: self.controller).visible_groups.each do |fieldset|
   - unless (fields = fieldset.with(object: @object, view: self, controller: self.controller).visible_fields).empty?
     - if !(values = fields.map{ |f| f.formatted_value.presence }).compact.empty? || !RailsAdmin::config.compact_show_view
+      / using the built-in Bootstrap table styles
       table.table.table-striped.table-hover.table-details
         - fields.each_with_index do |field, index|
           - unless values[index].nil? && RailsAdmin::config.compact_show_view
