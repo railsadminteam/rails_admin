@@ -6,7 +6,7 @@ Your model should look like this:
 class Article < ActiveRecord::Base
   mount_uploader :asset, AssetUploader
   # don't forget those if you use :attr_accessible (delete method and form caching method are provided by Carrierwave and used by RailsAdmin)
-  attr_accessible :asset, :asset_cache, :remove_asset
+  attr_accessor :asset, :asset_cache, :remove_asset
 end
 ```
 
