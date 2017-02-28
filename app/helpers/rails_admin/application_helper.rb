@@ -84,6 +84,23 @@ module RailsAdmin
       end.join.html_safe
     end
 
+    def root_navigation
+
+      actions(:root).select(&:show_in_sidebar).group_by(&:sidebar_label).collect do |label, nodes|
+
+        li_stack = nodes.map do |node|
+          url = rails_admin.url_for(action: node.action_name, controller: "rails_admin/main")
+          nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
+          content_tag :li do
+            link_to nav_icon + " " + wording_for(:menu, node), url, class: "pjax"
+          end
+        end.join.html_safe
+        label = label || t('admin.misc.root_navigation')
+
+        %(<li class='dropdown-header'>#{capitalize_first_letter label}</li>#{li_stack}) if li_stack.present?
+      end.join.html_safe
+    end
+
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.collect do |title, url|
         content_tag(:li, link_to(title.to_s, url, target: '_blank'))
@@ -138,7 +155,7 @@ module RailsAdmin
 
     # parent => :root, :collection, :member
     def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
-      actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) }
+      actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) && a.show_in_menu }
       actions.collect do |action|
         wording = wording_for(:menu, action)
         %(
