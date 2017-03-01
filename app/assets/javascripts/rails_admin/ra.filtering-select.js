@@ -40,7 +40,7 @@
       // When using the browser back and forward buttons, it is possible that
       // the autocomplete field will be cached which causes duplicate fields
       // to be generated.
-      if (filtering_select.size() > 0) {
+      if (filtering_select.length > 0) {
         this.input = filtering_select.children('input');
         this.button = filtering_select.children('.input-group-btn');
       } else {
