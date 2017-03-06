@@ -27,7 +27,7 @@ module RailsAdmin
         end
 
         register_instance_option :show_in_menu do
-          !show_in_sidebar
+          true
         end
 
         register_instance_option :sidebar_label do
