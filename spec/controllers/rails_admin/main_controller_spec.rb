@@ -207,16 +207,15 @@ describe RailsAdmin::MainController, type: :controller do
     it 'scopes polymorphic associations' do
       player_one = FactoryGirl.create :player
       player_two = FactoryGirl.create :player
-      2.times.collect do
+      2.times do
         FactoryGirl.create :comment, commentable: player_one
       end
-      4.times.collect do
+      4.times do
         FactoryGirl.create :comment, commentable: player_two
       end
 
       RailsAdmin.config Comment do
         field :commentable do
-
           associated_collection_scope do
             comment = bindings[:object]
             proc { |scope| scope.where(commentable_id: comment.commentable_id) }
@@ -224,7 +223,7 @@ describe RailsAdmin::MainController, type: :controller do
         end
       end
 
-      get :index, model_name: "comment", format: :json, additional_scope: { association: "commentable", model: "Comment", model_id: Comment.last.id}
+      get :index, model_name: 'comment', format: :json, additional_scope: {association: 'commentable', model: 'Comment', model_id: Comment.last.id}
       expect(JSON.parse(response.body).size).to eq(4)
     end
 
