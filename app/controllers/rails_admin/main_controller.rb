@@ -122,7 +122,7 @@ module RailsAdmin
     def get_collection(model_config, scope, pagination)
       associations = model_config.list.fields.select { |f| f.type == :belongs_to_association && !f.polymorphic? }.collect { |f| f.association.name }
 
-      REQUIRED_FILTERS.each do |filter|
+      RailsAdmin.config.required_filters.each do |filter|
         if (associations.include? filter) && (!params.key?(:f) || !params[:f].key?(filter))
           params[:f] ||= {}
           params[:f][filter] = {"1"=>{"o"=>"like", "v"=>""}}
