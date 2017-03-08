@@ -12,6 +12,7 @@
       var field_operator = options['operator'];
       var select_options = options['select_options'];
       var index = options['index'];
+      var required = options['required'];
       var value_name    = 'f[' +  field_name + '][' + index + '][v]';
       var operator_name = 'f[' +  field_name + '][' + index + '][o]';
       var control = null;
@@ -99,9 +100,14 @@
           break;
       }
 
+      var delete_button = null;
+      if (required)
+        delete_button = '<span class="label label-info form-label"><a style="pointer-events: none; cursor:default;">' + field_label + '</a></span>';
+      else
+        delete_button = '<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>';
       var $content = $('<p>')
         .addClass('filter form-search')
-        .append('<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>')
+        .append(delete_button)
         .append('&nbsp;' + control + '&nbsp;' + (additional_control || ''));
 
       $('#filters_box').append($content);
