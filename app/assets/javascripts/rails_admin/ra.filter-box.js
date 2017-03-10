@@ -101,8 +101,8 @@
       }
 
       var delete_button = null;
-      if (required)
-        delete_button = '<span class="label label-info form-label"><a style="pointer-events: none; cursor:default;">' + field_label + '</a></span>';
+      if (required && $('.' + field_label.toLowerCase() + '-filter-field').length == 0)
+        delete_button = '<span class="label label-info form-label ' + field_label.toLowerCase() + '-filter-field"><a style="pointer-events: none; cursor:default;">' + field_label + '</a></span>';
       else
         delete_button = '<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>';
       var $content = $('<p>')
