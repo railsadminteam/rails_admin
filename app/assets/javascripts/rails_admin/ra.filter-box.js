@@ -161,6 +161,7 @@
       }
     }
 
+    $("#filter-alert").hide();
     return false;
   };
 
@@ -169,7 +170,6 @@
       e.preventDefault();
       return
     }
-    $("#filter-alert").hide();
   });
 
   $(document).on('click', "#filters_box .switch-select", function(e) {
