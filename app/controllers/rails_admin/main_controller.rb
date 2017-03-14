@@ -29,6 +29,7 @@ module RailsAdmin
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
+      enforce_required_fields
       scope = model_config.abstract_model.scoped
       if auth_scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
         scope = scope.merge(auth_scope)
@@ -38,6 +39,14 @@ module RailsAdmin
     end
 
   private
+
+    def enforce_required_fields
+      RailsAdmin.config.required_filters.each do |filter|
+        if params.key?(:f) && params[:f][filter]
+          flash.now[:error] = "#{filter} filter required" unless params[:f][filter].map { |k, q| q[:v].blank? }.include? false
+        end
+      end
+    end
 
     def get_layout
       "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
@@ -121,6 +130,7 @@ module RailsAdmin
 
     def get_collection(model_config, scope, pagination)
       associations = model_config.list.fields.select { |f| f.type == :belongs_to_association && !f.polymorphic? }.collect { |f| f.association.name }
+
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
       options = options.merge(include: associations) unless associations.blank?
