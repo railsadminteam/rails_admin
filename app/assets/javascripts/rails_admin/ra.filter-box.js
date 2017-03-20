@@ -149,6 +149,7 @@
     var filter_used;
     for (var i=0; i<required_filters.length; i++) {
       filter = required_filters[i];
+      if ($('.' + filter + '-filter-field.required').length == 0) continue;
       filter_used = $.map($("." + filter + "-filter-field"), function (field) {
         return field.value !== "";
       }).find (function (val) {
