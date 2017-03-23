@@ -145,17 +145,24 @@
     !$("#filters_box").children().length && $("hr.filters_box:visible").hide('slow');
   });
 
+  function isFilterUsed(filter) {
+    appliedFilters = $("." + filter + "-filter-field");
+    if (appliedFilters.length == 0) return true;
+
+    filterUsed = $.map(appliedFilters, function (field) {
+      return field.value !== "";
+    }).find (function (val) {
+      return val;
+    });
+
+    return !!filterUsed;
+  }
+
   function display_filter_alert() {
-    var filter_used;
+    var filtersUsed = [];
     for (var i=0; i<required_filters.length; i++) {
-      filter = required_filters[i];
-      filter_used = $.map($("." + filter + "-filter-field"), function (field) {
-        return field.value !== "";
-      }).find (function (val) {
-        return val;
-      });
-      if (!filter_used) {
-        $("#filter-alert-text").text(filter + " filter required");
+      if (!isFilterUsed(required_filters[i])) {
+        $("#filter-alert-text").text(required_filters[i] + " filter required");
         $("#filter-alert").show();
         return true;
       }

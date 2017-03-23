@@ -117,7 +117,6 @@ module RailsAdmin
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
         statements = []
-
         fields.each do |field|
           value = parse_field_value(field, query)
           conditions_per_collection = make_field_conditions(field, value, field.search_operator)
