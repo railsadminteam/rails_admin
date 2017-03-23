@@ -242,13 +242,13 @@ module RailsAdmin
           return if @value.blank?
           @value = begin
             case @operator
-            when 'default', 'like'
+            when 'like'
               Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
             when 'starts_with'
               Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
             when 'ends_with'
               Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
-            when 'is', '='
+            when 'default', 'is', '='
               @value.to_s
             else
               return
