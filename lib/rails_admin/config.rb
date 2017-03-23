@@ -78,6 +78,9 @@ module RailsAdmin
       # yell about fields that are not marked as accessible
       attr_accessor :yell_for_non_accessible_fields
 
+      # Set the associated_collection_cache_all of every field to false
+      attr_accessor :associated_collection_cache
+
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
       #
@@ -285,6 +288,7 @@ module RailsAdmin
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
         @show_gravatar = true
+        @associated_collection_cache = true
         @navigation_static_links = {}
         @navigation_static_label = nil
         @parent_controller = '::ActionController::Base'

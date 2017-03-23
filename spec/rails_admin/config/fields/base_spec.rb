@@ -173,21 +173,36 @@ describe RailsAdmin::Config::Fields::Base do
   end
 
   describe '#associated_collection_cache_all' do
-    it 'defaults to true if associated collection count < 100' do
-      expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_truthy
-    end
-
-    it 'defaults to false if associated collection count >= 100' do
-      @players = Array.new(100) do
-        FactoryGirl.create :player
+    context 'with default configuration for associated_collection_cache' do
+      it 'defaults to true if associated collection count < 100' do
+        expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_truthy
       end
-      expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
+
+      it 'defaults to false if associated collection count >= 100' do
+        @players = Array.new(100) do
+          FactoryGirl.create :player
+        end
+        expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
+      end
     end
 
     context 'with custom configuration' do
+      it 'defaults to the false if associated_collection_cache is set to false' do
+        RailsAdmin.config.associated_collection_cache = false
+        expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
+      end
+
       before do
         RailsAdmin.config.default_associated_collection_limit = 5
       end
+      it 'defaults to false if associated_collection_cache is set to false' do
+        @players = Array.new(4) do
+          FactoryGirl.create :player
+        end
+        RailsAdmin.config.associated_collection_cache = false
+        expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
+      end
+
       it 'defaults to true if associated collection count less than than limit' do
         @players = Array.new(4) do
           FactoryGirl.create :player
