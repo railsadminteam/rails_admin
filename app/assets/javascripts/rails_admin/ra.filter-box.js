@@ -143,7 +143,7 @@
   });
 
   function isFilterUsed(filter) {
-    appliedFilters = $("." + filter + "-filter-field");
+    appliedFilters = $("." + filter + "-filter-field:visible");
     if (appliedFilters.length == 0) return true;
 
     filterUsed = $.map(appliedFilters, function (field) {
