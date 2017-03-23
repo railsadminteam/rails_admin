@@ -144,7 +144,8 @@
 
   function isFilterUsed(filter) {
     appliedFilters = $("." + filter + "-filter-field:visible");
-    if (appliedFilters.length == 0) return true;
+    hiddenFilters = $("." + filter + "-filter-field:hidden");
+    if (appliedFilters.length == 0 || hiddenFilters.length > 0) return true;
 
     filterUsed = $.map(appliedFilters, function (field) {
       return field.value !== "";
