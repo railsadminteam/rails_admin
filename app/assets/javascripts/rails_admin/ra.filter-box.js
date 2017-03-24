@@ -73,10 +73,7 @@
         case 'text':
         case 'belongs_to_association':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
             '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null"    ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
             '<option ' + (field_operator == "_null"      ? 'selected="selected"' : '') + ' value="_null">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
@@ -145,18 +142,25 @@
     !$("#filters_box").children().length && $("hr.filters_box:visible").hide('slow');
   });
 
+  function isFilterUsed(filter) {
+    appliedFilters = $("." + filter + "-filter-field:visible");
+    hiddenFilters = $("." + filter + "-filter-field:hidden");
+    if (appliedFilters.length == 0 || hiddenFilters.length > 0) return true;
+
+    filterUsed = $.map(appliedFilters, function (field) {
+      return field.value !== "";
+    }).find (function (val) {
+      return val;
+    });
+
+    return !!filterUsed;
+  }
+
   function display_filter_alert() {
-    var filter_used;
+    var filtersUsed = [];
     for (var i=0; i<required_filters.length; i++) {
-      filter = required_filters[i];
-      if ($('.' + filter + '-filter-field.required').length == 0) continue;
-      filter_used = $.map($("." + filter + "-filter-field"), function (field) {
-        return field.value !== "";
-      }).find (function (val) {
-        return val;
-      });
-      if (!filter_used) {
-        $("#filter-alert-text").text(filter + " filter required");
+      if (!isFilterUsed(required_filters[i])) {
+        $("#filter-alert-text").text(required_filters[i] + " filter required");
         $("#filter-alert").show();
         return true;
       }

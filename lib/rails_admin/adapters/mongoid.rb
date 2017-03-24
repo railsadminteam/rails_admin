@@ -117,7 +117,6 @@ module RailsAdmin
 
       def query_conditions(query, fields = config.list.fields.select(&:queryable?))
         statements = []
-
         fields.each do |field|
           value = parse_field_value(field, query)
           conditions_per_collection = make_field_conditions(field, value, field.search_operator)
@@ -243,13 +242,13 @@ module RailsAdmin
           return if @value.blank?
           @value = begin
             case @operator
-            when 'default', 'like'
+            when 'like'
               Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
             when 'starts_with'
               Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
             when 'ends_with'
               Regexp.compile("#{Regexp.escape(@value)}$", Regexp::IGNORECASE)
-            when 'is', '='
+            when 'default', 'is', '='
               @value.to_s
             else
               return

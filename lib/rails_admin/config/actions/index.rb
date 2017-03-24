@@ -32,10 +32,12 @@ module RailsAdmin
               if params[:scope].blank?
                 unless @model_config.list.scopes.first.nil?
                   option = @objects.options
-                  selector = @objects.selector["$and"]
+                  selector_and = @objects.selector["$and"]
+                  selector_or = @objects.selector["$or"]
                   @objects = @objects.send(@model_config.list.scopes.first)
                   @objects.options = option
-                  @objects.selector["$and"] = selector if selector
+                  @objects.selector["$and"] = selector_and if selector_and
+                  @objects.selector["$or"] = selector_or if selector_or
                 end
               elsif @model_config.list.scopes.collect(&:to_s).include?(params[:scope])
                 @objects = @objects.send(params[:scope].to_sym)
