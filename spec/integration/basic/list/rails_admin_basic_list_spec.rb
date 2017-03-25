@@ -564,4 +564,27 @@ describe 'RailsAdmin Basic List', type: :request do
       end
     end
   end
+
+  describe 'Row CSS class' do
+    before do
+      RailsAdmin.config do |config|
+        config.model Team do
+          list do
+            row_css_class { 'my_class' }
+          end
+        end
+      end
+      @teams = [
+        FactoryGirl.create(:team, color: 'red'),
+        FactoryGirl.create(:team, color: 'red'),
+        FactoryGirl.create(:team, color: 'white'),
+        FactoryGirl.create(:team, color: 'black'),
+      ]
+    end
+
+    it 'appends the CSS class to the model row class' do
+      visit index_path(model_name: 'team')
+      expect(page).to have_css('tr.team_row.my_class')
+    end
+  end
 end
