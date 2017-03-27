@@ -32,6 +32,7 @@ gemfile:
 
 services:
   - mongodb
+  - mysql
 
 sudo: false
 
