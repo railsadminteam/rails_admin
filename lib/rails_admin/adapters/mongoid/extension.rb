@@ -11,7 +11,9 @@ module RailsAdmin
             def rails_admin(&block)
               RailsAdmin.config(self, &block)
             end
-            alias_method_chain :accepts_nested_attributes_for, :rails_admin
+
+            alias_method :accepts_nested_attributes_for_without_rails_admin, :accepts_nested_attributes_for
+            alias_method :accepts_nested_attributes_for, :accepts_nested_attributes_for_with_rails_admin
           end
         end
 
