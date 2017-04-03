@@ -41,6 +41,8 @@
 
 :javascript
   jQuery(function($) {
+  $('#filters_box').html('');
+  $('hr.filters_box').hide();
   #{ordered_filter_string}
   });
   var required_filters = JSON.parse("#{escape_javascript required_filters}");
