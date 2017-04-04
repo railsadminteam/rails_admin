@@ -1,5 +1,5 @@
 Authorization can be added using the `authorize_with` method. If you pass a block
-it will be triggered through a `:before_action` on every action in Rails Admin.
+it will be triggered through a `before_action` on every action in Rails Admin.
 
 For example:
 
