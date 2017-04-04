@@ -17,6 +17,17 @@ module RailsAdmin
           register_instance_option :strftime_format do
             '%H:%M'
           end
+
+          register_instance_option :partial do
+            :form_time
+          end
+
+          register_instance_option :html_attributes do
+            {
+              required: required?,
+              size: 8,
+            }
+          end
         end
       end
     end

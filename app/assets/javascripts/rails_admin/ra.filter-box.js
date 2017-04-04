@@ -51,6 +51,19 @@
           '<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
           '<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
+        case 'time':
+          control = control || '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
+            '<option ' + (field_operator == "default"   ? 'selected="selected"' : '') + ' data-additional-fieldset="default" value="default">' + RailsAdmin.I18n.t("time") + '</option>' +
+            '<option ' + (field_operator == "between"   ? 'selected="selected"' : '') + ' data-additional-fieldset="between" value="between">' + RailsAdmin.I18n.t("between_and_") + '</option>' +
+            '<option disabled="disabled">---------</option>' +
+            '<option ' + (field_operator == "_not_null" ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
+            '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
+          '</select>'
+          additional_control =
+          '<input size="8" class="time additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="8" placeholder="-∞" class="time additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="8" placeholder="∞" class="time additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          break;
         case 'enum':
           var multiple_values = ((field_value instanceof Array) ? true : false)
           control = '<select style="display:' + (multiple_values ? 'none' : 'inline-block') + '" ' + (multiple_values ? '' : 'name="' + value_name + '"') + ' data-name="' + value_name + '" class="select-single input-sm form-control">' +
@@ -106,7 +119,7 @@
 
       $('#filters_box').append($content);
 
-      $content.find('.date, .datetime').datetimepicker({
+      $content.find('.date, .datetime, .time').datetimepicker({
         locale: RailsAdmin.I18n.locale,
         showTodayButton: true,
         format: options['datetimepicker_format']
