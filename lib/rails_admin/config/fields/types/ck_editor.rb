@@ -21,7 +21,7 @@ module RailsAdmin
 
           # Use this if you want to point to a cloud instances of the base CKeditor
           register_instance_option :base_location do
-            "#{Rails.application.config.assets.prefix}/ckeditor/"
+            [Rails.application.config.relative_url_root, Rails.application.config.assets.prefix, 'ckeditor/'].compact.join('/')
           end
 
           register_instance_option :partial do
