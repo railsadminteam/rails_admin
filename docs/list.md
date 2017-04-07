@@ -94,12 +94,13 @@ end
 
 **Fields sorting**
 
-You can make a column non-sortable by setting the sortable option to false (1)
-You can change the column that the field will actually sort on (2)
-Belongs_to associations :
-  will be sorted on their label if label is not virtual (:name, :title, etc.)
-  otherwise on the foreign_key (:team_id)
-  you can also specify a column on the targetted table (see example) (3)
+* You can make a column non-sortable by setting the sortable option to false (1)
+* You can change the column that the field will actually sort on (2)
+
+Belongs_to associations:
+* will be sorted on their label if label is not virtual (:name, :title, etc.)
+* otherwise on the foreign_key (:team_id)
+*  you can also specify a column on the targetted table (see example) (3)
 
 ```ruby
 RailsAdmin.config do |config|
@@ -155,13 +156,16 @@ end
 
 **Fields searching**
 
-You can make a column non-searchable by setting the searchable option to false (1)
-You can change the column that the field will actually search on (2)
-You can specify a list of column that will be searched over (3)
-Belongs_to associations :
-  will be searched on their foreign_key (:team_id)
-  or on their label if label is not virtual (:name, :title, etc.)
-  you can also specify columns on the targetted table or the source table (see example) (4)
+* You can make a column non-searchable by setting the searchable option to false (1)
+* You can change the column that the field will actually search on (2)
+* You can specify a list of column that will be searched over (3)
+
+Belongs_to associations:
+
+* will be searched on their foreign_key (:team_id)
+* or on their label if label is not virtual (:name, :title, etc.)
+* you can also specify columns on the targeted table or the source table (see example) (4)
+* will not be searched unless `queryable` is set to `true`
 
 ```ruby
 RailsAdmin.config do |config|
@@ -180,6 +184,7 @@ RailsAdmin.config do |config|
       end
 
       field :team do # (4)
+        queryable true
         searchable [:name, :id]
         # eq. to [Team => :name, Team => :id]
         # or even [:name, Player => :team_id] will search on teams.name and players.team_id
@@ -200,7 +205,7 @@ You can independently deactivate querying (search) or filtering for each field w
 ```ruby
 field :team do
   searchable [:name, :color]
-  queryable true # default
+  queryable true # default except for associations
   filterable false
 end
 ```
