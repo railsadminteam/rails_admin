@@ -30,3 +30,4 @@ tmp/**/*
 .idea/*.xml
 .sass-cache
 nbproject
+.project
