@@ -16,6 +16,6 @@
           - else
             %td= label
         - else
-          - label = Object.const_defined?(t.table) ? t.table.constantize.model_name.human : t.table
+          - label = abstract_model.try(:pretty_name) || t.table
           %td= "#{label} ##{t.item}"
         %td= t.message
