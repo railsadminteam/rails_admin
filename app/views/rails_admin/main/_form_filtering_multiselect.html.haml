@@ -28,13 +28,15 @@
     sortable: !!field.orderable,
     removable: !!field.removable,
     cacheAll: !!field.associated_collection_cache_all,
+    dependent_destroy: field.properties.options[:dependent]==:destroy,
     regional: {
       chooseAll: t("admin.misc.chose_all"),
       chosen: t("admin.misc.chosen", name: config.label_plural),
       clearAll: t("admin.misc.clear_all"),
       search: t("admin.misc.search"),
       up: t("admin.misc.up"),
-      down: t("admin.misc.down")
+      down: t("admin.misc.down"),
+      dependent_destroy_warning: (t("admin.misc.dependent_destroy") if field.properties.options[:dependent]==:destroy)
     }
   }
 

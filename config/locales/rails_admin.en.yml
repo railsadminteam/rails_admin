@@ -45,6 +45,7 @@ en:
       log_out: "Log out"
       ago: "ago"
       more: "Plus %{count} more %{models_name}"
+      dependent_destroy: "Orphan records will be deleted due to 'dependent: :destroy' option!"
     flash:
       successful: "%{name} successfully %{action}"
       error: "%{name} failed to be %{action}"

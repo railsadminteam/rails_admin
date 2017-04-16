@@ -51,6 +51,10 @@
       this.filter = $('<input type="search" placeholder="' + this.options.regional.search + '" class="form-control ra-multiselect-search"/>');
 
       this.header.append(this.filter);
+      if (this.options.dependent_destroy && this.options.removable) {
+        this.dependent_destroy_warning = $('<label class="extra-label">' + this.options.regional.dependent_destroy_warning + '</label>');
+        this.header.append(this.dependent_destroy_warning);
+      }
 
       this.wrapper.append(this.header);
 
