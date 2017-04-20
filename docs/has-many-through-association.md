@@ -110,4 +110,20 @@ The code above didn't destroy the outdated associations for me. I've refactored 
 
 ```
 
+### Another Alternative
+
+I wasn't able to use any of the examples above with a validate_presence_of validation. So I came up with my own version. Take note that the position column must absolutely have a default value in the db.
+
+```ruby
+ #This is used to order blocks from the grids
+  def block_ids=(ids)
+    super(ids)
+    ids = ids.reject(&:blank?).map(&:to_i) # Flush empty id
+    ids.each_with_index do |id, index|
+      block_grid_associations.detect { |b| b.block_id == id }.position = index+1
+    end
+  end
+
+```
+
 [[More here (has_many)|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_many_association.rb]]
