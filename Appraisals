@@ -8,6 +8,12 @@ appraise "rails-4.0" do
 
   group :active_record do
     gem 'paper_trail', '~> 5.0'
+
+    platforms :jruby do
+      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
+      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+    end
   end
 
   group :mongoid do
@@ -31,6 +37,12 @@ appraise "rails-4.1" do
 
   group :active_record do
     gem 'paper_trail', '>= 5.0'
+
+    platforms :jruby do
+      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
+      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+    end
   end
 
   group :mongoid do
@@ -55,6 +67,12 @@ appraise "rails-4.2" do
 
   group :active_record do
     gem 'paper_trail', '>= 5.0'
+
+    platforms :jruby do
+      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
+      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+    end
   end
 
   group :mongoid do
@@ -75,6 +93,31 @@ appraise "rails-5.0" do
   gem 'rails', '~> 5.0.0'
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.0'
+
+  group :active_record do
+    gem 'paper_trail', '>= 5.0'
+
+    platforms :jruby do
+      git 'git://github.com/jruby/activerecord-jdbc-adapter.git', branch: 'rails-5' do
+        gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
+        gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
+        gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+      end
+    end
+  end
+
+  group :mongoid do
+    gem 'mongoid', '>= 6.0.0.beta'
+    gem 'kaminari-mongoid'
+    gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+  end
+end
+
+appraise "rails-5.1" do
+  gem 'rails', '~> 5.1.0'
+  gem 'sass-rails', '~> 5.0'
+  gem 'devise', github: 'plataformatec/devise'
 
   group :active_record do
     gem 'paper_trail', '>= 5.0'

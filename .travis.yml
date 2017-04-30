@@ -19,13 +19,14 @@ env:
     - JRUBY_OPTS="$JRUBY_OPTS --debug"
 
 rvm:
-  - 2.3.1
+  - 2.3.4
 
 gemfile:
   - gemfiles/rails_4.0.gemfile
   - gemfiles/rails_4.1.gemfile
   - gemfiles/rails_4.2.gemfile
   - gemfiles/rails_5.0.gemfile
+  - gemfiles/rails_5.1.gemfile
 
 services:
   - mongodb
@@ -34,48 +35,57 @@ sudo: false
 
 matrix:
   include:
-    - rvm: 2.1.9
+    - rvm: 2.1.10
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.1.9
+    - rvm: 2.1.10
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.2.5
+    - rvm: 2.2.7
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.0.gemfile
-    - rvm: 2.2.5
+    - rvm: 2.2.7
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.3.1
+    - rvm: 2.3.4
       env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
       gemfile: gemfiles/rails_5.0.gemfile
-    - rvm: 2.3.1
+    - rvm: 2.3.4
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
       gemfile: gemfiles/rails_5.0.gemfile
+    - rvm: 2.4.1
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.0.gemfile
+    - rvm: 2.4.1
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.1.gemfile
     - rvm: ruby-head
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
     - rvm: ruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.0.gemfile
-    - rvm: rbx-2
+    - rvm: rbx-2.2.7
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_4.2.gemfile
+    - rvm: jruby-9.1.5.0
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: rbx-2
+    - rvm: jruby-9.1.5.0
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.0.gemfile
-    - rvm: jruby-head
-      env: CI_ORM=mongoid
       gemfile: gemfiles/rails_4.2.gemfile
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.0.gemfile
   allow_failures:
+    - rvm: 2.4.1
     - rvm: jruby-head
-    - rvm: rbx-2
+    - rvm: rbx-2.2.7
     - rvm: ruby-head
     - env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.0.gemfile
+    - env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.1.gemfile
   fast_finish: true
 
 notifications:

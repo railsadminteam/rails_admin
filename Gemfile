@@ -1,18 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'appraisal', '>= 2.0'
+gem 'rails', '~> 5.0.0'
+gem 'haml'
 gem 'devise'
 
 group :active_record do
-  platforms :jruby do
-    gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-    gem 'jdbc-mysql', '>= 5.1'
-    gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-    gem 'jdbc-postgres', '>= 9.2'
-    gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
-    gem 'jdbc-sqlite3', '>= 3.7'
-  end
-
   platforms :ruby, :mswin, :mingw do
     gem 'mysql2', '~> 0.3.14'
     gem 'pg', '>= 0.14'
