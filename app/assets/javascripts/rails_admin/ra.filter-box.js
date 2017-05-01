@@ -83,6 +83,7 @@
         case 'decimal':
         case 'float':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
+            '<option ' + (field_operator == "in"        ? 'selected="selected"' : '') + ' data-additional-fieldset="in" value="in">' + RailsAdmin.I18n.t("in") + '</option>' +
             '<option ' + (field_operator == "default"   ? 'selected="selected"' : '') + ' data-additional-fieldset="default" value="default">' + RailsAdmin.I18n.t("number") + '</option>' +
             '<option ' + (field_operator == "between"   ? 'selected="selected"' : '') + ' data-additional-fieldset="between" value="between">' + RailsAdmin.I18n.t("between_and_") + '</option>' +
             '<option disabled="disabled">---------</option>' +
@@ -90,9 +91,10 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control =
-          '<input class="additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<textarea class="additional-fieldset in input-sm form-control" style="display:' + ((!field_operator || field_operator == "in") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]">' + (field_value[0] || '') + '</textarea> ' +
+          '<input class="additional-fieldset default input-sm form-control" style="display:' + ((field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" /> ' +
+          '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[3] || '') + '" />';
           break;
         default:
           control = '<input type="text" class="input-sm form-control" name="' + value_name + '" value="' + field_value + '"/> ';

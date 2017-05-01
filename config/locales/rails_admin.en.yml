@@ -11,6 +11,7 @@ en:
       yesterday: Yesterday
       this_week: This week
       last_week: Last week
+      in: In ...
       number: Number ...
       contains: Contains
       is_exactly: Is exactly
