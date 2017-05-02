@@ -1,3 +1,5 @@
+dist: trusty
+
 language: ruby
 
 before_install: gem install bundler
