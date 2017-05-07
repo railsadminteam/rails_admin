@@ -716,7 +716,8 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
       find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
 
-      click_button 'Save'
+      # trigger click via JS, workaround for instability in CI
+      execute_script %($('button[name="_save"]').trigger('click');)
       is_expected.to have_content('Field test successfully updated')
 
       @record.reload
