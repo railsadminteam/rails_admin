@@ -34,6 +34,10 @@ end
 This would hide the name field on the team list page, but it would not affect
 any of the other field defaults.
 
+### Virtual Fields
+
+It is possible to configure Rails Admin to display "virtual" fields--fields that are not database attributes on the model. Just define them as methods on your model, then configure a field of the same name. [_needs expansion_]
+
 ### Controlling by logic
 
 If you need to hide fields based on some logic on runtime (for instance
