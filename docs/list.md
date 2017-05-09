@@ -2,7 +2,7 @@ Section used for the index view.
 
 It inherits its configuration from the `base` section.
 
-**Width of the list table**
+### Width of the list table
 
 ```ruby
 RailsAdmin.config do |config|
@@ -10,7 +10,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Width of individual columns**
+### Width of individual columns
 
 By default, columns have a `max-width` of 120px, and no `min-width`. While there does not appear to be fine-grained controls for max-/min-width, you can specify a fixed width in pixels for individual columns:
 
@@ -26,7 +26,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Number of items per page**
+### Number of items per page
 
 You can configure the default number of rows rendered per page:
 
@@ -36,7 +36,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Number of items per page per model**
+### Number of items per page per model
 
 You can also configure it per model:
 
@@ -50,7 +50,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-**Default sorting**
+### Default sorting
 
 By default, rows are sorted by the field `id` in reverse order
 
@@ -70,7 +70,7 @@ end
 ```
 
 
-**Filters**
+### Filters
 
 Default visible filters. Must be a list of fields name.
 
@@ -92,7 +92,7 @@ end
 ```
 
 
-**Fields sorting**
+### Fields sorting
 
 * You can make a column non-sortable by setting the sortable option to false (1)
 * You can change the column that the field will actually sort on (2)
@@ -154,7 +154,7 @@ end
 ```
 
 
-**Fields searching**
+### Fields searching
 
 * You can make a column non-searchable by setting the searchable option to false (1)
 * You can change the column that the field will actually search on (2)
@@ -210,7 +210,7 @@ field :team do
 end
 ```
 
-**Scopes**
+### Scopes
 
 This allows to display a configurable scoped list view.
 
