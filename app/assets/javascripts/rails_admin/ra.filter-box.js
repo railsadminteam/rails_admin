@@ -142,6 +142,12 @@
     !$("#filters_box").children().length && $("hr.filters_box:visible").hide('slow');
   });
 
+  function removeFilter(filter) {
+    // remove the filter so that the filter is not used
+    // this is especially important for ObjectId field type (associations)
+    $(".required." + filter + "-filter-field:visible").parent().remove();
+  };
+
   function isFilterUsed(filter) {
     appliedFilters = $(".required." + filter + "-filter-field:visible");
     filterUsed = $.map(appliedFilters, function (field) {
@@ -154,6 +160,7 @@
 
   function display_filter_alert() {
     var unusedFilter = [];
+    var shouldDisplay = true;
 
     for (var i=0; i<required_filters.length; i++) {
       if ($(".required." + required_filters[i] + "-filter-field:visible").length == 0) {
@@ -162,10 +169,17 @@
         unusedFilter.push(required_filters[i]);
       } else {
         $("#filter-alert").hide();
-        return false;
+        shouldDisplay = false;
       }
     }
 
+    if (!shouldDisplay) {
+      for (var i=0; i<unusedFilter.length; i++) {
+        removeFilter(unusedFilter[i]);
+      }
+      unusedFilter
+      return false;
+    }
     if (unusedFilter.length == 0) return false;
 
     $("#filter-alert-text").text(unusedFilter.join(' or ') + " filter required");
