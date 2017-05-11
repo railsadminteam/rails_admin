@@ -143,12 +143,7 @@
   });
 
   function isFilterUsed(filter) {
-    if ($("." + filter + "-filter-field").length == 0) return false;
-
-    appliedFilters = $("." + filter + "-filter-field:visible");
-    hiddenFilters = $("." + filter + "-filter-field:hidden");
-    if (appliedFilters.length == 0 || hiddenFilters.length > 0) return true;
-
+    appliedFilters = $(".required." + filter + "-filter-field:visible");
     filterUsed = $.map(appliedFilters, function (field) {
       return field.value !== "";
     }).find (function (val) {
@@ -158,18 +153,22 @@
   }
 
   function display_filter_alert() {
-    var unusedFilter = '';
+    var unusedFilter = [];
 
     for (var i=0; i<required_filters.length; i++) {
-      if (!isFilterUsed(required_filters[i])) {
-        unusedFilter = required_filters[i];
+      if ($(".required." + required_filters[i] + "-filter-field:visible").length == 0) {
+        continue;
+      } else if (!isFilterUsed(required_filters[i])) {
+        unusedFilter.push(required_filters[i]);
       } else {
         $("#filter-alert").hide();
         return false;
       }
     }
 
-    $("#filter-alert-text").text(unusedFilter + " filter required");
+    if (unusedFilter.length == 0) return false;
+
+    $("#filter-alert-text").text(unusedFilter.join(' or ') + " filter required");
     $("#filter-alert").show();
     return true;
   };
