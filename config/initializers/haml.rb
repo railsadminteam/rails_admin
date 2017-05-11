@@ -1,5 +1,5 @@
 require 'haml'
-
-if Gem::Version.create(Haml::VERSION) < Gem::Version.create('5.0.0.beta.2')
+require 'haml/template'
+if Haml::Options.buffer_option_keys.include?(:ugly)
   Haml::Template.options[:ugly] = true
 end
