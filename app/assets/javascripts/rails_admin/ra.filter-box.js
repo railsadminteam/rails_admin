@@ -19,7 +19,6 @@
       var control = null;
       var additional_control = null;
       var delete_button = null;
-      var field_label_lower = field_label.toLowerCase();
 
       switch(field_type) {
         case 'boolean':
@@ -34,9 +33,9 @@
           break;
         case 'date':
           additional_control =
-          '<input size="20" class="date additional-fieldset default input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input size="20" placeholder="-∞" class="date additional-fieldset between input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input size="20" placeholder="∞" class="date additional-fieldset between input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input size="20" class="date additional-fieldset default input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="20" placeholder="-∞" class="date additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="20" placeholder="∞" class="date additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
         case 'datetime':
         case 'timestamp':
           control = control || '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
@@ -51,9 +50,9 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control = additional_control ||
-          '<input size="25" class="datetime additional-fieldset default input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input size="25" class="datetime additional-fieldset default input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
         case 'enum':
           var multiple_values = ((field_value instanceof Array) ? true : false)
@@ -79,7 +78,7 @@
             '<option ' + (field_operator == "_not_null"    ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
             '<option ' + (field_operator == "_null"      ? 'selected="selected"' : '') + ' value="_null">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
-          additional_control = '<input class="additional-fieldset input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          additional_control = '<input class="additional-fieldset input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'integer':
         case 'decimal':
@@ -92,19 +91,19 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control =
-          '<input class="additional-fieldset default input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input placeholder="∞" class="additional-fieldset between input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input class="additional-fieldset default input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input placeholder="∞" class="additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
         default:
-          control = '<input type="text" class="input-sm form-control ' + required_label + ' ' + field_label_lower + '-filter-field" name="' + value_name + '" value="' + field_value + '"/> ';
+          control = '<input type="text" class="input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" name="' + value_name + '" value="' + field_value + '"/> ';
           break;
       }
 
-      if (required && $('.' + field_label_lower + '-filter-button.required').length == 0)
-        delete_button = '<span class="label label-info form-label ' + field_label_lower + '-filter-button required"><a style="pointer-events: none; cursor:default;">' + field_label + '</a></span>';
+      if (required && $('.' + field_name + '-filter-button.required').length == 0)
+        delete_button = '<span class="label label-info form-label ' + field_name + '-filter-button required"><a style="pointer-events: none; cursor:default;">' + field_label + '</a></span>';
       else
-        delete_button = '<span class="label label-info form-label ' + field_label_lower + '-filter-button"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>';
+        delete_button = '<span class="label label-info form-label ' + field_name + '-filter-button"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>';
       var $content = $('<p>')
         .addClass('filter form-search')
         .append(delete_button)
@@ -144,31 +143,34 @@
   });
 
   function isFilterUsed(filter) {
-    appliedFilters = $("." + filter + "-filter-field:visible");
-    hiddenFilters = $("." + filter + "-filter-field:hidden");
-    if (appliedFilters.length == 0 || hiddenFilters.length > 0) return true;
-
+    appliedFilters = $(".required." + filter + "-filter-field:visible");
     filterUsed = $.map(appliedFilters, function (field) {
       return field.value !== "";
     }).find (function (val) {
       return val;
     });
-
     return !!filterUsed;
   }
 
   function display_filter_alert() {
-    var filtersUsed = [];
+    var unusedFilter = [];
+
     for (var i=0; i<required_filters.length; i++) {
-      if (!isFilterUsed(required_filters[i])) {
-        $("#filter-alert-text").text(required_filters[i] + " filter required");
-        $("#filter-alert").show();
-        return true;
+      if ($(".required." + required_filters[i] + "-filter-field:visible").length == 0) {
+        continue;
+      } else if (!isFilterUsed(required_filters[i])) {
+        unusedFilter.push(required_filters[i]);
+      } else {
+        $("#filter-alert").hide();
+        return false;
       }
     }
 
-    $("#filter-alert").hide();
-    return false;
+    if (unusedFilter.length == 0) return false;
+
+    $("#filter-alert-text").text(unusedFilter.join(' or ') + " filter required");
+    $("#filter-alert").show();
+    return true;
   };
 
   $(document).on('click', "#submit-filter", function(e) {
