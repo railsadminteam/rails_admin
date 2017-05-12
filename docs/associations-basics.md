@@ -29,15 +29,19 @@ attr_accessible :fan_ids
 ```
 If you fail to do this, the multiselect widget will simply not appear on your page. 
 
-#### Editing records
+### Editing records
 
 You can edit related objects by double-clicking on any visible item in the widget.
 
-#### Limit/filter associated records
+### Querying and searching by association columns
+
+You can configure which columns from associated records show up as available filters or get searched in the general search box. See [[List#fields-searching]] for more details.
+
+### Limit/filter associated records
 
 See [[associations scoping]] for more informations on how to limit and filter proposed associated records.
 
-#### Inverse_of: Avoiding edit association spaghetti issues
+### Inverse_of: Avoiding edit association spaghetti issues
 
 If you set the `:inverse_of` option on your relations, RailsAdmin will automatically populate the inverse relationship
 in the modal creation window. (link next to :belongs\_to and :has\_many multiselect widgets)
@@ -54,11 +58,11 @@ config.model Team do
 end
 ```
 
-#### Readonly
+### Readonly
 
 `:readonly` options are automatically inferred from associations and won't be editable in forms.
 
-#### Nested form
+### Nested form
 
 If you have accepts_nested_attributes set up in your model but don't want the association to be a nested form in your model:
 
@@ -72,7 +76,7 @@ end
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
 
-#### Disabling inline creation and edition
+### Disabling inline creation and edition
 
 In some cases you may want to disable the addition or edition of an association, the simplest way to do so is by using the `inline_add` and `inline_edit` options:
 
