@@ -199,6 +199,8 @@ RailsAdmin.config do |config|
 end
 ```
 
+For associations with multiple filterable columns configured, a record with _any_ filterable column matching the filter string will be returned. There is not currently a way to split out association columns into separate filters. [_needs verification - not written by maintainer_]
+
 Searchable definitions will be used for searches and filters.
 You can independently deactivate querying (search) or filtering for each field with:
 
