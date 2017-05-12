@@ -97,7 +97,7 @@ end
 * You can make a column non-sortable by setting the sortable option to false (1)
 * You can change the column that the field will actually sort on (2)
 
-Belongs_to associations:
+`belongs_to` associations:
 * will be sorted on their label if label is not virtual (:name, :title, etc.)
 * otherwise on the foreign_key (:team_id)
 *  you can also specify a column on the targetted table (see example) (3)
