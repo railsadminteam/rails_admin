@@ -136,6 +136,7 @@
 * [RailsAdminGlobalizeField](https://github.com/scarfaceDeb/rails_admin_globalize_field): Tabbed interface and custom field type for globalize3 translations
 * [RailsAdminJcrop](https://github.com/janx/rails_admin_jcrop): Image cropping with rails_admin_jcrop
 * [RailsAdminMapField](https://github.com/trademobile/rails_admin_map_field): Coordinates with Google Maps
+* [RailsAdminGoogleMap](https://github.com/nicovak/rails_admin_google_map): Google map integration
 * [RailsAdminMongoidGeospatialField](https://github.com/sudosu/rails_admin_mongoid_geospatial_field): Support for setting geospatial information with Google Maps into Mongoid's GEO2D field
 * [RailsAdminMongoidLocalizeField](https://github.com/sudosu/rails_admin_mongoid_localize_field): Support for mongoid localized fields
 * [RailsAdminNestable](https://github.com/dalpo/rails_admin_nestable): Drag and drop tree view for Ancestry gem
