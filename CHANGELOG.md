@@ -111,6 +111,7 @@
 - Feature to deactivate filtering-multiselect widget's remove buttons through `removable?` field option([#2446](https://github.com/sferik/rails_admin/issues/2446))
 - Pundit integration([#2399](https://github.com/sferik/rails_admin/pull/2399) by Team CodeBenders, RGSoC'15)
 - Refile support([#2385](https://github.com/sferik/rails_admin/pull/2385))
+- Array fields support([#2421](https://github.com/sferik/rails_admin/pull/2421))
 
 ### Changed
 - Some UI improvements in export view([#2394](https://github.com/sferik/rails_admin/pull/2394))
