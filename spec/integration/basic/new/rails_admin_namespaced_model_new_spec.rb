@@ -27,4 +27,11 @@ describe 'RailsAdmin Namespaced Model New', type: :request do
       is_expected.to have_selector("textarea#cms_basic_page_content[name='cms_basic_page[content]']")
     end
   end
+
+  describe 'GET /admin/cms_basic_page/new with parameters for pre-population' do
+    it 'populates form field when corresponding parameters are passed in' do
+      visit new_path(model_name: 'cms~basic_page', cms_basic_page: {title: 'Hello'})
+      expect(page).to have_css('input[value=Hello]')
+    end
+  end
 end

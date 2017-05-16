@@ -148,4 +148,17 @@ describe RailsAdmin, type: :request do
       is_expected.to have_selector('.label-danger')
     end
   end
+
+  describe 'CSRF protection' do
+    before do
+      allow_any_instance_of(ActionController::Base).to receive(:protect_against_forgery?).and_return(true)
+    end
+
+    it 'is enforced' do
+      visit new_path(model_name: 'league')
+      fill_in 'league[name]', with: 'National league'
+      find('input[name="authenticity_token"]', visible: false).set("invalid token")
+      expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
+    end
+  end
 end

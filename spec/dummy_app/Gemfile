@@ -35,7 +35,6 @@ gem 'dragonfly', '~> 1.0'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'
-gem 'remotipart', github: 'mshibuya/remotipart'
 gem 'rails_admin', path: '../../'
 
 platforms :ruby_21, :ruby_22 do

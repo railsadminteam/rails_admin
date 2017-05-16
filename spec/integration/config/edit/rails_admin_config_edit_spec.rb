@@ -716,13 +716,23 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
       find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
 
-      click_button 'Save'
+      # trigger click via JS, workaround for instability in CI
+      execute_script %($('button[name="_save"]').trigger('click');)
       is_expected.to have_content('Field test successfully updated')
 
       @record.reload
       expect(@record.comment.content.strip).to eq('nested comment content')
       expect(@record.nested_field_tests.length).to eq(1)
       expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
+    end
+
+    it 'works with nested has_many', js: true do
+      @record = FactoryGirl.create :field_test
+      visit edit_path(model_name: 'field_test', id: @record.id)
+
+      find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
+
+      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
     end
 
     it 'is optional for has_one' do
@@ -1180,7 +1190,9 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         RailsAdmin.config.included_models = [FieldTestWithEnum]
         RailsAdmin.config FieldTestWithEnum do
           edit do
-            field :integer_field
+            field :integer_field do
+              default_value 'foo'
+            end
           end
         end
       end
@@ -1199,6 +1211,18 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       it 'shows current value as selected' do
         visit edit_path(model_name: 'field_test_with_enum', id: FieldTestWithEnum.create(integer_field: 'bar'))
         expect(find('.enum_type select').value).to eq '1'
+      end
+
+      it 'can be updated' do
+        visit edit_path(model_name: 'field_test_with_enum', id: FieldTestWithEnum.create(integer_field: 'bar'))
+        select 'foo'
+        click_button 'Save'
+        expect(FieldTestWithEnum.first.integer_field).to eq 'foo'
+      end
+
+      it 'pre-populates default value' do
+        visit new_path(model_name: 'field_test_with_enum')
+        expect(find('.enum_type select').value).to eq '0'
       end
     end
   end

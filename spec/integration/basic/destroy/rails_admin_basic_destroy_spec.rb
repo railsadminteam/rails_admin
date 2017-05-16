@@ -39,6 +39,10 @@ describe 'RailsAdmin Basic Destroy', type: :request do
     it 'shows error message' do
       is_expected.to have_content('Player failed to be deleted')
     end
+
+    it 'returns status code 200' do
+      expect(page.status_code).to eq(200)
+    end
   end
 
   describe 'destroy' do
@@ -86,6 +90,22 @@ describe 'RailsAdmin Basic Destroy', type: :request do
       click_button "Yes, I'm sure"
 
       expect(URI.parse(page.current_url).path).to eq(show_path(model_name: 'player', id: @player.id))
+    end
+  end
+
+  describe 'destroy from index page' do
+    it 'returns status code 200' do
+      if Rails.version >= '5.0'
+        allow_any_instance_of(Player).to receive(:destroy_hook) { throw :abort }
+      else
+        allow_any_instance_of(Player).to receive(:destroy_hook).and_return false
+      end
+      @player = FactoryGirl.create :player
+      visit index_path(model_name: 'player')
+      click_link 'Delete'
+      click_button "Yes, I'm sure"
+
+      expect(page.status_code).to eq(200)
     end
   end
 end

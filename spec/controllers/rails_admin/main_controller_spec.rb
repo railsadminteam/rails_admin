@@ -233,6 +233,27 @@ describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#get_collection' do
+    before do
+      @team = FactoryGirl.create(:team)
+      controller.params = {model_name: 'teams'}
+      RailsAdmin.config Team do
+        field :players do
+          eager_load true
+        end
+      end
+      @model_config = RailsAdmin.config(Team)
+    end
+
+    it 'performs eager-loading for an association field with `eagar_load true`' do
+      scope = double('scope')
+      abstract_model = @model_config.abstract_model
+      allow(@model_config).to receive(:abstract_model).and_return(abstract_model)
+      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), scope).once
+      controller.send(:get_collection, @model_config, scope, false)
+    end
+  end
+
   describe 'index' do
     it "uses source association's primary key with :compact, not target model's default primary key", skip_mongoid: true do
       class TeamWithNumberedPlayers < Team
@@ -249,6 +270,30 @@ describe RailsAdmin::MainController, type: :controller do
         FactoryGirl.create :player, team: (FactoryGirl.create :team)
         get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
+      end
+    end
+
+    context 'when authorizing requests with pundit' do
+      if defined?(Devise::Test)
+        include Devise::Test::ControllerHelpers
+      else
+        include Devise::TestHelpers
+      end
+
+      controller(RailsAdmin::MainController) do
+        include ::Pundit
+        after_action :verify_authorized
+      end
+
+      it 'performs authorization' do
+        RailsAdmin.config do |c|
+          c.authorize_with(:pundit)
+          c.authenticate_with { warden.authenticate! scope: :user }
+          c.current_user_method(&:current_user)
+        end
+        login_as FactoryGirl.create :user, roles: [:admin]
+        player = FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        expect { get :show, model_name: 'player', id: player.id }.not_to raise_error
       end
     end
   end

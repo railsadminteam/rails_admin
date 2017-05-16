@@ -72,6 +72,8 @@ module RailsAdmin
           ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
         when 'mysql2'
           ::ActiveRecord::Base.connection.instance_variable_get(:@connection).encoding
+        when 'oracle_enhanced'
+          ::ActiveRecord::Base.connection.select_one("SELECT dummy FROM DUAL").values.first.encoding
         else
           ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
         end
@@ -155,6 +157,17 @@ module RailsAdmin
       protected
 
         def unary_operators
+          case @type
+          when :boolean
+            boolean_unary_operators
+          else
+            generic_unary_operators
+          end
+        end
+
+      private
+
+        def generic_unary_operators
           {
             '_blank' => ["(#{@column} IS NULL OR #{@column} = '')"],
             '_present' => ["(#{@column} IS NOT NULL AND #{@column} != '')"],
@@ -165,7 +178,14 @@ module RailsAdmin
           }
         end
 
-      private
+        def boolean_unary_operators
+          generic_unary_operators.merge(
+            '_blank' => ["(#{@column} IS NULL)"],
+            '_empty' => ["(#{@column} IS NULL)"],
+            '_present' => ["(#{@column} IS NOT NULL)"],
+            '_not_empty' => ["(#{@column} IS NOT NULL)"],
+          )
+        end
 
         def range_filter(min, max)
           if min && max

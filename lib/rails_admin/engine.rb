@@ -23,7 +23,8 @@ module RailsAdmin
       )
     end
 
-    initializer 'RailsAdmin pjax hook' do |app|
+    initializer 'RailsAdmin setup middlewares' do |app|
+      app.config.middleware.use ActionDispatch::Flash
       app.config.middleware.use Rack::Pjax
     end
 

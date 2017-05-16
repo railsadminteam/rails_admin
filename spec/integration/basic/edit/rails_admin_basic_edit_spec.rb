@@ -75,9 +75,11 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
     it 'shows associated objects' do
       is_expected.to have_selector '#fan_team_ids' do |select|
-        expect(select[0]).to have_selector 'option[selected="selected"]'
-        expect(select[1]).not_to have_selector 'option[selected="selected"]'
-        expect(select[2]).not_to have_selector 'option[selected="selected"]'
+        options = select.all 'option'
+
+        expect(options[0]['selected']).to eq 'selected'
+        expect(options[1]['selected']).to eq nil
+        expect(options[2]['selected']).to eq nil
       end
     end
   end

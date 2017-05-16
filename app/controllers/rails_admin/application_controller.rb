@@ -11,6 +11,8 @@ module RailsAdmin
   end
 
   class ApplicationController < Config.parent_controller.constantize
+    protect_from_forgery with: :exception
+
     before_action :_authenticate!
     before_action :_authorize!
     before_action :_audit!
@@ -56,19 +58,21 @@ module RailsAdmin
       instance_eval(&RailsAdmin::Config.audit_with)
     end
 
-    def user_for_paper_trail
-      _current_user.try(:id) || _current_user
+    def rails_admin_controller?
+      true
     end
 
     rescue_from RailsAdmin::ObjectNotFound do
       flash[:error] = I18n.t('admin.flash.object_not_found', model: @model_name, id: params[:id])
       params[:action] = 'index'
+      @status_code = :not_found
       index
     end
 
     rescue_from RailsAdmin::ModelNotFound do
       flash[:error] = I18n.t('admin.flash.model_not_found', model: @model_name)
       params[:action] = 'dashboard'
+      @status_code = :not_found
       dashboard
     end
   end

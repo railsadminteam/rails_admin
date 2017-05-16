@@ -5,6 +5,13 @@ module RailsAdmin
       # You can create another adapter for different authorization behavior, just be certain it
       # responds to each of the public methods here.
       class AuthorizationAdapter
+        # This method is called first time only and used for setup
+        def self.setup
+          RailsAdmin::ApplicationController.class_eval do
+            include ::Pundit
+          end unless RailsAdmin::ApplicationController.ancestors.include? 'Pundit'
+        end
+
         # See the +authorize_with+ config method for where the initialization happens.
         def initialize(controller)
           @controller = controller
@@ -20,6 +27,7 @@ module RailsAdmin
           if action && !policy(record).send(action_for_pundit(action))
             raise ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}")
           end
+          @controller.instance_variable_set(:@_pundit_policy_authorized, true)
         end
 
         # This method is called primarily from the view to determine whether the given user

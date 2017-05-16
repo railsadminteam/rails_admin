@@ -64,6 +64,7 @@ describe 'RailsAdmin Basic List', type: :request do
         FactoryGirl.create(:player, retired: false, injured: true, team: @teams[1]),
         FactoryGirl.create(:player, retired: false, injured: false, team: @teams[1]),
       ]
+      @comment = FactoryGirl.create(:comment, commentable: @players[2])
     end
 
     it 'allows to query on any attribute' do
@@ -267,6 +268,23 @@ describe 'RailsAdmin Basic List', type: :request do
       is_expected.to have_no_content(@players[0].name)
       is_expected.to have_no_content(@players[1].name)
       is_expected.to have_no_content(@players[2].name)
+      is_expected.to have_no_content(@players[3].name)
+    end
+
+    it 'allows to search a has_many attribute over the target table' do
+      RailsAdmin.config Player do
+        list do
+          field PK_COLUMN
+          field :name
+          field :comments do
+            searchable :content
+          end
+        end
+      end
+      visit index_path(model_name: 'player', f: {comments: {'1' => {v: @comment.content}}})
+      is_expected.to have_no_content(@players[0].name)
+      is_expected.to have_no_content(@players[1].name)
+      is_expected.to have_content(@players[2].name)
       is_expected.to have_no_content(@players[3].name)
     end
 
@@ -544,6 +562,29 @@ describe 'RailsAdmin Basic List', type: :request do
           expect(find('#scope_selector li.active')).to have_content('any')
         end
       end
+    end
+  end
+
+  describe 'Row CSS class' do
+    before do
+      RailsAdmin.config do |config|
+        config.model Team do
+          list do
+            row_css_class { 'my_class' }
+          end
+        end
+      end
+      @teams = [
+        FactoryGirl.create(:team, color: 'red'),
+        FactoryGirl.create(:team, color: 'red'),
+        FactoryGirl.create(:team, color: 'white'),
+        FactoryGirl.create(:team, color: 'black'),
+      ]
+    end
+
+    it 'appends the CSS class to the model row class' do
+      visit index_path(model_name: 'team')
+      expect(page).to have_css('tr.team_row.my_class')
     end
   end
 end
