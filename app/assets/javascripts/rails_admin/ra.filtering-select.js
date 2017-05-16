@@ -45,13 +45,7 @@
         }).toArray();
       }
 
-      if (this.options.float_left) {
-        var float_style = "left"
-      } else {
-        var float_style = "none"
-      }
-      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float: ' + float_style + ' "></div>')
-
+      var filtering_select = $('<div class="input-group filtering-select col-sm-2"></div>')
       var input = this.input = $('<input type="text">')
         .val(value)
         .addClass("form-control ra-filtering-select-input")
