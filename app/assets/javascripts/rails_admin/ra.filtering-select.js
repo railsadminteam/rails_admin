@@ -17,10 +17,14 @@
   $.widget("ra.filteringSelect", {
     options: {
       createQuery: function(query) {
+        if (location.pathname.startsWith('/admin/terminal')) {
+          return {f: { id: {1: {v: query}}}};
+        }
+
         return { query: query };
       },
       minLength: 0,
-      searchDelay: 200,
+      searchDelay: 600,
       remote_source: null,
       source: null,
       float_left: true,
