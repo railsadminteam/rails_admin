@@ -18,7 +18,7 @@
     options: {
       createQuery: function(query) {
         if (location.pathname.startsWith('/admin/terminal')) {
-          return {f: { id: {1: {v: query}}}};
+          return {f: { id: {1: {o: 'is', v: query}}}};
         }
 
         return { query: query };

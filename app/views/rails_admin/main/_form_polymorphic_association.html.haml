@@ -10,7 +10,7 @@
   default_options = { float_left: false }
 
   js_data = type_collection.inject({}) do |options, model|
-    model_name = model[0].downcase
+    model_name = model[0].downcase.gsub(' ', '_')
     source_abstract_model = RailsAdmin.config(form.object.class).abstract_model
     options.merge(model_name => {
       xhr: true,
@@ -21,6 +21,6 @@
 
 .form-inline
   - js_data.each do |model, value|
-    %div{id: "#{model.gsub(' ', '')}-js-options", data: { options: value.to_json } }
+    %div{id: "#{model.gsub('_', '')}-js-options", data: { options: value.to_json } }
   = form.select type_column, type_collection, {include_blank: true, selected: selected_type}, class: "form-control", id: column_type_dom_id, data: { polymorphic: true, urls: field.polymorphic_type_urls.to_json }
   = form.select field.method_name, collection, {include_blank: true, selected: selected.try(:id)}, class: "form-control", data: { filteringselect: true, options: js_data[selected_type.try(:downcase)] || default_options }, placeholder: 'Search'
