@@ -18,6 +18,7 @@
     options: {
       createQuery: function(query) {
         if (location.pathname.startsWith('/admin/terminal')) {
+          if (query.length == 0) return null;
           return {f: { id: {1: {o: 'is', v: query}}}};
         }
 
@@ -161,9 +162,9 @@
 
         return function(request, response) {
 
-          if (this.xhr) {
-            this.xhr.abort();
-          }
+          data = self.options.createQuery(request.term)
+          if (!data) return response([]);
+          if (this.xhr) this.xhr.abort();
 
           this.xhr = $.ajax({
             url: source,
