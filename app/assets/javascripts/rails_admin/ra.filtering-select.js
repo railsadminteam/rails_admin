@@ -17,12 +17,18 @@
   $.widget("ra.filteringSelect", {
     options: {
       createQuery: function(query) {
+        if (location.pathname.startsWith('/admin/terminal')) {
+          if (query.length == 0) return null;
+          return {f: { id: {1: {o: 'is', v: query}}}};
+        }
+
         return { query: query };
       },
       minLength: 0,
-      searchDelay: 200,
+      searchDelay: 600,
       remote_source: null,
       source: null,
+      float_left: true,
       xhr: false
     },
 
@@ -39,7 +45,8 @@
           return { label: $(this).text(), value: this.value };
         }).toArray();
       }
-      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float:left"></div>')
+
+      var filtering_select = $('<div class="input-group filtering-select col-sm-2"></div>')
       var input = this.input = $('<input type="text">')
         .val(value)
         .addClass("form-control ra-filtering-select-input")
@@ -155,9 +162,9 @@
 
         return function(request, response) {
 
-          if (this.xhr) {
-            this.xhr.abort();
-          }
+          data = self.options.createQuery(request.term)
+          if (!data) return response([]);
+          if (this.xhr) this.xhr.abort();
 
           this.xhr = $.ajax({
             url: source,
