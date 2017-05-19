@@ -126,4 +126,4 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
       end
     end
   end
-end
+end if defined?(PaperTrail)
