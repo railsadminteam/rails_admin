@@ -19,7 +19,7 @@
       createQuery: function(query) {
         if (location.pathname.startsWith('/admin/terminal')) {
           if (query.length == 0) return null;
-          return {f: { id: {1: {o: 'is', v: query}}}};
+          return {f: { auth_code: {1: {o: 'like', v: query}}}};
         }
 
         return { query: query };
