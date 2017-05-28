@@ -204,6 +204,7 @@ module RailsAdmin
           when :string, :text             then build_statement_for_string_or_text
           when :enum                      then build_statement_for_enum
           when :belongs_to_association    then build_statement_for_belongs_to_association
+          when :uuid                      then build_statement_for_uuid
           end
         end
 
@@ -223,22 +224,27 @@ module RailsAdmin
 
         def build_statement_for_string_or_text
           return if @value.blank?
+
+          unless ['postgresql', 'postgis'].include? ar_adapter
+            @value = @value.mb_chars.downcase
+          end
+
           @value = begin
             case @operator
             when 'default', 'like'
-              "%#{@value.downcase}%"
+              "%#{@value}%"
             when 'starts_with'
-              "#{@value.downcase}%"
+              "#{@value}%"
             when 'ends_with'
-              "%#{@value.downcase}"
+              "%#{@value}"
             when 'is', '='
-              @value.downcase
+              @value
             else
               return
             end
           end
 
-          if ar_adapter == 'postgresql'
+          if ['postgresql', 'postgis'].include? ar_adapter
             ["(#{@column} ILIKE ?)", @value]
           else
             ["(LOWER(#{@column}) LIKE ?)", @value]
@@ -248,6 +254,12 @@ module RailsAdmin
         def build_statement_for_enum
           return if @value.blank?
           ["(#{@column} IN (?))", Array.wrap(@value)]
+        end
+
+        def build_statement_for_uuid
+          if @value.to_s =~ /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/
+            column_for_value(@value)
+          end
         end
 
         def ar_adapter

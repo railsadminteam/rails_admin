@@ -3,7 +3,7 @@ require 'timecop'
 
 describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   before do
-    @like = if ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'postgresql'
+    @like = if ['postgresql', 'postgis'].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
               '(field ILIKE ?)'
             else
               '(LOWER(field) LIKE ?)'
@@ -36,7 +36,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
 
     before do
-      @players = FactoryGirl.create_list(:player, 3)
+      @players = FactoryGirl.create_list(:player, 3) + [
+        # Multibyte players
+        FactoryGirl.create(:player, name: 'Антоха'),
+        FactoryGirl.create(:player, name: 'Петруха'),
+      ]
     end
 
     it '#new returns instance of AbstractObject' do
@@ -77,7 +81,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     it '#destroy destroys multiple items' do
       abstract_model.destroy(@players[0..1])
-      expect(Player.all).to eq(@players[2..2])
+      expect(Player.all).to eq(@players[2..-1])
     end
 
     it '#where returns filtered results' do
@@ -102,8 +106,8 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'supports pagination' do
-        expect(abstract_model.all(sort: 'id', page: 2, per: 1)).to eq(@players[1..1])
-        expect(abstract_model.all(sort: 'id', page: 1, per: 2)).to eq(@players[1..2].reverse)
+        expect(abstract_model.all(sort: 'id', page: 2, per: 1)).to eq(@players[-2, 1])
+        expect(abstract_model.all(sort: 'id', page: 1, per: 2)).to eq(@players[-2, 2].reverse)
       end
 
       it 'supports ordering' do
@@ -113,6 +117,13 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it 'supports querying' do
         results = abstract_model.all(query: @players[1].name)
         expect(results).to eq(@players[1..1])
+      end
+
+      it 'supports multibyte querying' do
+        unless ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
+          results = abstract_model.all(query: @players[4].name)
+          expect(results).to eq(@players[4, 1])
+        end
       end
 
       it 'supports filtering' do
@@ -201,8 +212,10 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'performs case-insensitive searches' do
-        expect(build_statement(:string, 'foo', 'default')).to eq([@like, '%foo%'])
-        expect(build_statement(:string, 'FOO', 'default')).to eq([@like, '%foo%'])
+        unless ['postgresql', 'postgis'].include?(::ActiveRecord::Base.configurations[Rails.env]['adapter'])
+          expect(build_statement(:string, 'foo', 'default')).to eq([@like, '%foo%'])
+          expect(build_statement(:string, 'FOO', 'default')).to eq([@like, '%foo%'])
+        end
       end
 
       it "supports '_blank' operator" do
@@ -379,6 +392,11 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     it 'supports enum type query' do
       expect(build_statement(:enum, '1', nil)).to eq(['(field IN (?))', ['1']])
+    end
+
+    it 'supports uuid type query' do
+      uuid = SecureRandom.uuid
+      expect(build_statement(:uuid, uuid, nil)).to eq(['(field = ?)', uuid])
     end
   end
 
