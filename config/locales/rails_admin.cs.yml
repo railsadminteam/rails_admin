@@ -1,0 +1,130 @@
+cs:
+  admin:
+    home:
+      name: "Úvodní stránka"
+    pagination:
+      previous: "&laquo; Předchozí"
+      next: "Další &raquo;"
+      truncate: "…"
+    misc:
+      filter_date_format: "dd. mm. yy" # a combination of 'dd', 'mm' and 'yy' with any delimiter. No other interpolation will be done!
+      search: "Hledat"
+      filter: "Filtrovat"
+      refresh: "Obnovit"
+      show_all: "Zobrazit vše"
+      add_filter: "Přidat filtr"
+      bulk_menu_title: "Vybrané položky"
+      remove: "Odstranit"
+      add_new: "Přidat nový"
+      chosen: "Vybraný %{name}"
+      chose_all: "Vybrat vše"
+      clear_all: "Odebrat vše"
+      up: "Nahoru"
+      down: "Dolu"
+      navigation: "Navigace"
+      navigation_static_label: "Odkazy"
+      log_out: "Odhlásit"
+      ago: "před"
+    flash:
+      successful: "%{name} úspěšně %{action}"
+      error: "%{name} nebylo %{action}"
+      noaction: "Neprovodeny žádné akce"
+      model_not_found: "Model '%{model}' se nepodařilo nalézt"
+      object_not_found: "%{model} s id '%{id}' se nepodařilo nalézt"
+    table_headers:
+      model_name: "Jméno modelu"
+      last_used: "Naposledy použit"
+      records: "Záznamy"
+      username: "Uživatel"
+      changes: "Změny"
+      created_at: "Datum/Čas"
+      item: "Objekt"
+      message: "Zpráva"
+    actions:
+      dashboard:
+        title: "Správa aplikace"
+        menu: "Dashboard"
+        breadcrumb: "Dashboard"
+      index:
+        title: "Seznam %{model_label_plural}"
+        menu: "Seznam"
+        breadcrumb: "%{model_label_plural}"
+      show:
+        title: "Detaily pro %{model_label} '%{object_label}'"
+        menu: "Ukázat"
+        breadcrumb: "%{object_label}"
+      show_in_app:
+        menu: "Ukázat v aplikaci"
+      new:
+        title: "Nový %{model_label}"
+        menu: "Přidat nový"
+        breadcrumb: "Nový"
+        link: "Přidat nový %{model_label}"
+        done: "vytvořeno"
+      edit:
+        title: "Upravit %{model_label} '%{object_label}'"
+        menu: "Upravit"
+        breadcrumb: "Upravit"
+        link: "Upravit tento %{model_label}"
+        done: "upraveno"
+      delete:
+        title: "Odstranit %{model_label} '%{object_label}'"
+        menu: "Odstranit"
+        breadcrumb: "Odstranit"
+        link: "Odstranit '%{object_label}'"
+        done: "odstraněno"
+      bulk_delete:
+        title: "Odstranit %{model_label_plural}"
+        menu: "Hromadně odstranit"
+        breadcrumb: "Hromadně odstranit"
+        bulk_link: "Odstranit vybrané %{model_label_plural}"
+      export:
+        title: "Exportovat %{model_label_plural}"
+        menu: "Exportovat"
+        breadcrumb: "Exportovat"
+        link: "Exportovat nalezené %{model_label_plural}"
+        bulk_link: "Exportovat vybrané %{model_label_plural}"
+        done: "exportované"
+      history_index:
+        title: "Historie pro %{model_label_plural}"
+        menu: "Historie"
+        breadcrumb: "Historie"
+      history_show:
+        title: "Historie pro %{model_label} '%{object_label}'"
+        menu: "Historie"
+        breadcrumb: "Historie"
+    form:
+      cancel: "Zrušit"
+      basic_info: "Základní informace"
+      required: "Povinné"
+      optional: "Nepovinné"
+      one_char: "znak"
+      char_length_up_to: "maximálně znaků"
+      char_length_of: "délka"
+      save: "Uložit"
+      save_and_add_another: "Uložit a přidat další"
+      save_and_edit: "Uložit a upravit"
+      all_of_the_following_related_items_will_be_deleted: "? Tyto propojené objekty mohou být odstraněny, nebo ztrati rodiče:"
+      are_you_sure_you_want_to_delete_the_object: "Jste si jisti, že chcete odstranit tento %{model_name}"
+      confirmation: "Ano, jsem si jist"
+      bulk_delete: "Následující objekty budou odstraněny, což může způsobit odstranění s nimi propojených objektů:"
+      new_model: "%{name} (new)"
+    export:
+      confirmation: "Exportovat do %{name}"
+      select: "Vyberte políčka pro export"
+      fields_from: "Políčka z %{name}"
+      fields_from_associated: "Políčka z přiřazeného %{name}"
+      display: "Zobrazit %{name}: %{type}"
+      options_for: "Možnosti pro %{name}"
+      empty_value_for_associated_objects: "<prázdné>"
+      click_to_reverse_selection: 'Klikněte pro reverzní výběr'
+      csv:
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Enkódovat do"
+        encoding_to_help: "Vyberte výsledné enkódování. Nechte prázdné pro užití aktuálního enkódování: (%{name})"
+        skip_header: "Žádná hlavička"
+        skip_header_help: "Neexportovat hlavičku"
+        default_col_sep: ","
+        col_sep: "Oddělovač sloupců"
+        col_sep_help: "Nechte prázdné pro výchozí ('%{value}')" # value is default_col_sep
