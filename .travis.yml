@@ -31,8 +31,8 @@ gemfile:
 
 services:
   - mongodb
-  - mysql
   - postgresql
+  - mysqld
 
 sudo: false
 
