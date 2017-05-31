@@ -27,7 +27,11 @@ module RailsAdmin
                 @max = current_count > @max ? current_count : @max
                 @count[t.model.name] = current_count
                 next unless t.properties.detect { |c| c.name == :created_at }
-                @most_recent_created[t.model.name] = t.model.last.try(:created_at)
+                begin
+                  @most_recent_created[t.model.name] = t.model.last.try(:created_at)
+                rescue ::ActiveRecord::IrreversibleOrderError => e
+                  @most_recent_created[t.model.name] = nil
+                end
               end
             end
             render @action.template_name, status: @status_code || :ok
