@@ -2,7 +2,24 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.1...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.2.0...HEAD)
+
+
+## [1.2.0](https://github.com/sferik/rails_admin/tree/v1.2.0) - 2017-05-31
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.1...v1.2.0)
+
+#### Added
+- Add ILIKE support for PostgreSQL/PostGIS adapter, multibyte downcase for other adapters([#2766](https://github.com/sferik/rails_admin/pull/2766))
+- Support for UUID query([#2766](https://github.com/sferik/rails_admin/pull/2766))
+- Support for Haml 5([#2840](https://github.com/sferik/rails_admin/pull/2840), [#2870](https://github.com/sferik/rails_admin/pull/2870), [#2877](https://github.com/sferik/rails_admin/pull/2877))
+- Add instance option to append a CSS class for rows([#2860](https://github.com/sferik/rails_admin/pull/2860))
+
+### Fixed
+- Remove usage of alias_method_chain, deprecated in Rails 5.0([#2864](https://github.com/sferik/rails_admin/pull/2864))
+- Load models from eager_load, not autoload_paths([#2771](https://github.com/sferik/rails_admin/pull/2771))
+- jQuery 3.0 doesn't have size(), use length instead([#2841](https://github.com/sferik/rails_admin/pull/2841))
+- Prepopulation of the new form didn't work with namespaced models([#2701](https://github.com/sferik/rails_admin/pull/2701))
 
 
 ## [1.1.1](https://github.com/sferik/rails_admin/tree/v1.1.1) - 2016-12-25
