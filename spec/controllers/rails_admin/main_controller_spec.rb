@@ -57,6 +57,16 @@ describe RailsAdmin::MainController, type: :controller do
       expect(controller.instance_variable_get('@most_recent_created')['User::Confirmed']).to eq user_create
       expect(controller.instance_variable_get('@most_recent_created')['Comment::Confirmed']).to eq comment_create
     end
+
+    it 'finds last created record by created_at field, not primary key' do
+      first_comment_create = 20.days.ago.to_date
+      last_comment_create = 10.days.ago.to_date
+      FactoryGirl.create(:comment_confirmed, created_at: last_comment_create)
+      FactoryGirl.create(:comment_confirmed, created_at: first_comment_create)
+
+      controller.dashboard
+      expect(controller.instance_variable_get('@most_recent_created')['Comment::Confirmed']).to eq last_comment_create
+    end
   end
 
   describe '#check_for_cancel' do
