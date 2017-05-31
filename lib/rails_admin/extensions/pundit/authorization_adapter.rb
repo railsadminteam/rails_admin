@@ -56,6 +56,10 @@ module RailsAdmin
           policy(record).try(:attributes_for, action) || {}
         end
 
+        def is_auditing_association(association)
+          false
+        end
+
       private
 
         def policy(record)

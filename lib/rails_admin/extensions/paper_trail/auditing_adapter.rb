@@ -30,6 +30,7 @@ module RailsAdmin
       end
 
       class AuditingAdapter
+
         COLUMN_MAPPING = {
           table: :item_type,
           username: :whodunnit,
@@ -85,6 +86,10 @@ module RailsAdmin
 
         def listing_for_object(model, object, query, sort, sort_reverse, all, page, per_page = (RailsAdmin::Config.default_items_per_page || 20))
           listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page)
+        end
+
+        def is_auditing_association(association)
+          association.class_name == @version_class.to_s
         end
 
       protected

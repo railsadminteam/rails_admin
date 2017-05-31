@@ -9,6 +9,7 @@
     = wording
   %ul
     - @abstract_model.each_associated_children(object) do |association, children|
+      - next if @auditing_adapter && @auditing_adapter.respond_to?(:is_auditing_association) && @auditing_adapter.is_auditing_association(association.association)
       - humanized_association = @abstract_model.model.human_attribute_name association.name
       - limit = children.count > 12 ? 10 : children.count
       - children.first(limit).each do |child|
