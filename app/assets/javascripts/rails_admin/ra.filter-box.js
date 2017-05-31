@@ -73,6 +73,7 @@
         case 'belongs_to_association':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
             '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
+            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "not_like"        ? 'selected="selected"' : '') + ' value="not_like">' + RailsAdmin.I18n.t("does not contain") + '</option>' +
             '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null"    ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
