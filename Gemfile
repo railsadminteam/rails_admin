@@ -7,7 +7,7 @@ gem 'devise'
 
 group :active_record do
   platforms :ruby, :mswin, :mingw do
-    gem 'mysql2', '~> 0.3.14'
+    gem 'mysql2', '~> 0.4.5'
     gem 'pg', '>= 0.14'
     gem 'sqlite3', '>= 1.3'
   end
@@ -19,7 +19,7 @@ end
 
 group :test do
   gem 'cancan', '>= 1.6'
-  gem 'cancancan', '~> 1.12.0'
+  gem 'cancancan', '~> 1.15.0'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
   gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
@@ -33,7 +33,7 @@ group :test do
   gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
-  gem 'rubocop', '~> 0.41.2'
+  gem 'rubocop', '~> 0.46.0'
   gem 'simplecov', '>= 0.9', require: false
   gem 'timecop', '>= 0.5'
 
