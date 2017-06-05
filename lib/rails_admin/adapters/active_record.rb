@@ -13,12 +13,16 @@ module RailsAdmin
       end
 
       def get(id)
-        return unless object = model.where(primary_key => id).first
+        return unless object = scoped.where(primary_key => id).first
         AbstractObject.new object
       end
 
       def scoped
-        model.all
+        if RailsAdmin::Config.global_default_scope
+          RailsAdmin::Config.global_default_scope.to_proc.call(model)
+        else
+          model.all
+        end
       end
 
       def first(options = {}, scope = nil)
