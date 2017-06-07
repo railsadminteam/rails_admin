@@ -162,3 +162,11 @@ describe RailsAdmin, type: :request do
     end
   end
 end
+
+describe RailsAdmin, type: :request do
+  subject { page }
+  it 'shows a log out link when it has custom authorization' do
+    visit dashboard_path
+    is_expected.to have_content 'Log out'
+  end
+end
