@@ -33,7 +33,7 @@ body.rails_admin {
     padding: 0;
     background-color: $navbar-default-bg;
 
-    .dropdown-header {
+    .dropdown-header, .nav-header {
       padding: ($grid-gutter-width / 2) ($grid-gutter-width / 2) 3px;
       font-weight: bold;
       color: $gray;
