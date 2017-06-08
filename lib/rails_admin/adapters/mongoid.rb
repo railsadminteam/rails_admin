@@ -244,6 +244,8 @@ module RailsAdmin
             case @operator
             when 'like'
               Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
+            when 'not_like'
+              Regexp.compile("^((?!#{Regexp.escape(@value)}).)*$", Regexp::IGNORECASE)
             when 'starts_with'
               Regexp.compile("^#{Regexp.escape(@value)}", Regexp::IGNORECASE)
             when 'ends_with'

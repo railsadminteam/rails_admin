@@ -13,6 +13,7 @@ en:
       last_week: Last week
       number: Number ...
       contains: Contains
+      does_not_contain: Does not contain
       is_exactly: Is exactly
       starts_with: Starts with
       ends_with: Ends with
