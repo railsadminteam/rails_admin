@@ -23,10 +23,14 @@ end
 You'll need to handle ordering in your model with a position column for example. See [[here|Has-many-:through-association]] for a comprehensive ActiveRecord example with a `has_many :through` association.
 
 #### Important
-You must specify attr_accessible for the singular-form _ids setter method of your associated model, e.g.,  a has_one association. This setter method comes automatically with ActiveRecord when you create a has_many association. In the example above, you would specify this at the top of your model. 
+You must specify attr_accessible for the singular-form _ids setter method of your associated model, e.g.,  a `has_one` association. This setter method comes automatically with ActiveRecord when you create a `has_many` association, but not for a `has_one` association. 
+
+For Rails 3, in the example above you would specify this at the top of your model: 
 ```
 attr_accessible :fan_ids
 ```
+For Rails 4 and above you need to [define setters and getters](https://github.com/sferik/rails_admin/wiki/Has-one-association) for `has_one` associations.
+
 If you fail to do this, the multiselect widget will simply not appear on your page. 
 
 ### Editing records
