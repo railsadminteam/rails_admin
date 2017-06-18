@@ -24,7 +24,7 @@ end
 
 Remember to add the routes for the scope you are working with:
 ```ruby
-devise_for :user
+devise_for :users
 ```
 
 Or if you are using on :admin
