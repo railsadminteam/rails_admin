@@ -1,4 +1,4 @@
-class AddRefileToFieldTests < ActiveRecord::Migration
+class AddRefileToFieldTests < MigrationBase
   def change
     add_column :field_tests, :refile_asset_id, :string
     add_column :field_tests, :refile_asset_filename, :string

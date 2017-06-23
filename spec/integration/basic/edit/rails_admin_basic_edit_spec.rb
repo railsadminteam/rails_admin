@@ -68,16 +68,18 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit with has-and-belongs-to-many association' do
     before do
-      @teams = 3.times.collect { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 3)
       @fan = FactoryGirl.create :fan, teams: [@teams[0]]
       visit edit_path(model_name: 'fan', id: @fan.id)
     end
 
     it 'shows associated objects' do
       is_expected.to have_selector '#fan_team_ids' do |select|
-        expect(select[0]).to have_selector 'option[selected="selected"]'
-        expect(select[1]).not_to have_selector 'option[selected="selected"]'
-        expect(select[2]).not_to have_selector 'option[selected="selected"]'
+        options = select.all 'option'
+
+        expect(options[0]['selected']).to eq 'selected'
+        expect(options[1]['selected']).to eq nil
+        expect(options[2]['selected']).to eq nil
       end
     end
   end
@@ -95,7 +97,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
   describe 'edit with missing label', given: ['a player exists', 'three teams with no name exist'] do
     before do
       @player = FactoryGirl.create :player
-      @teams = 3.times.collect { FactoryGirl.create :team, name: '' }
+      @teams = Array.new(3) { FactoryGirl.create :team, name: '' }
       visit edit_path(model_name: 'player', id: @player.id)
     end
   end
@@ -107,7 +109,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
     end
 
     it 'displays a link to the delete page' do
-      is_expected.to have_selector "a[href='/admin/ball/#{@ball.id}/delete']"
+      is_expected.to have_selector "a[href$='/admin/ball/#{@ball.id}/delete']"
     end
   end
 

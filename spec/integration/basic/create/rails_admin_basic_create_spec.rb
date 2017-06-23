@@ -75,7 +75,7 @@ describe 'RailsAdmin Basic Create', type: :request do
 
   describe 'create with has-many association' do
     before do
-      @divisions = 3.times.collect { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
+      @divisions = Array.new(3) { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
       post new_path(model_name: 'league', league: {name: 'National League', division_ids: [@divisions[0].id]})
       @league = RailsAdmin::AbstractModel.new('League').all.to_a.last
     end
@@ -90,7 +90,7 @@ describe 'RailsAdmin Basic Create', type: :request do
 
   describe 'create with has-and-belongs-to-many association' do
     before do
-      @teams = 3.times.collect { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 3)
       post new_path(model_name: 'fan', fan: {name: 'John Doe', team_ids: [@teams[0].id]})
       @fan = RailsAdmin::AbstractModel.new('Fan').first
     end

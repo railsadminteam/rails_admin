@@ -10,7 +10,7 @@ module RailsAdmin
         end
 
         # Reader for the association information hash
-        def association # rubocop:disable TrivialAccessors
+        def association
           @properties
         end
 
@@ -60,6 +60,10 @@ module RailsAdmin
         # determines whether association's elements can be removed
         register_instance_option :removable? do
           association.foreign_key_nullable?
+        end
+
+        register_instance_option :eager_load? do
+          !!searchable
         end
 
         # Reader for the association's child model's configuration

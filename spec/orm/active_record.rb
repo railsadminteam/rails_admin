@@ -3,7 +3,11 @@ require 'rails_admin/adapters/active_record'
 
 DatabaseCleaner.strategy = :transaction
 
-ActiveRecord::Base.connection.tables.each do |table|
+if Rails.version >= '5.0'
+  ActiveRecord::Base.connection.data_sources
+else
+  ActiveRecord::Base.connection.tables
+end.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
 end
 

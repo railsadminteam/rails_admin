@@ -8,7 +8,7 @@ module Sass
           image_url(source, Sass::Script::Bool.new(true))
         else
           # Revert to the old compass-agnostic path determination
-          asset_sans_quotes = source.value.gsub('"', '')
+          asset_sans_quotes = source.value.delete('"')
           Sass::Script::String.new("/images/#{asset_sans_quotes}", :string)
         end
       end

@@ -1,4 +1,4 @@
-class CreatePaperTrailTests < ActiveRecord::Migration
+class CreatePaperTrailTests < MigrationBase
   def change
     create_table :paper_trail_tests do |t|
       t.string :name

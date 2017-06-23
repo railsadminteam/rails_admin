@@ -4,6 +4,9 @@ require 'csv'
 module RailsAdmin
   class CSVConverter
     def initialize(objects = [], schema = {})
+      @fields = []
+      @associations = []
+
       return self if (@objects = objects).blank?
 
       @model = objects.dup.first.class
@@ -32,6 +35,7 @@ module RailsAdmin
     end
 
     def to_csv(options = {})
+      options = HashWithIndifferentAccess.new(options)
       encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 
       csv_string = generate_csv_string(options)

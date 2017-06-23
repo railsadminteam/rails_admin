@@ -1,4 +1,4 @@
-class CreatePlayersMigration < ActiveRecord::Migration
+class CreatePlayersMigration < MigrationBase
   def self.up
     create_table :players do |t|
       t.timestamps null: false

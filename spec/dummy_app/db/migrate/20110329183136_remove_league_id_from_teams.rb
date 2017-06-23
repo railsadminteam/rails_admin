@@ -1,4 +1,4 @@
-class RemoveLeagueIdFromTeams < ActiveRecord::Migration
+class RemoveLeagueIdFromTeams < MigrationBase
   def self.up
     remove_column :teams, :league_id
   end

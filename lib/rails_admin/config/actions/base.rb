@@ -115,12 +115,11 @@ module RailsAdmin
 
         # Breadcrumb parent
         register_instance_option :breadcrumb_parent do
-          case
-          when root?
+          if root?
             [:dashboard]
-          when collection?
+          elsif collection?
             [:index, bindings[:abstract_model]]
-          when member?
+          elsif member?
             [:show, bindings[:abstract_model], bindings[:object]]
           end
         end

@@ -36,7 +36,7 @@ describe RailsAdmin::Config do
   describe '.add_extension' do
     before do
       silence_warnings do
-        RailsAdmin::EXTENSIONS = []
+        RailsAdmin::EXTENSIONS = [] # rubocop:disable MutableConstant
       end
     end
 
@@ -131,6 +131,9 @@ describe RailsAdmin::Config do
 
     context 'given paper_trail as the extension for auditing', active_record: true do
       before do
+        class ControllerMock
+          def set_paper_trail_whodunnit; end
+        end
         module PaperTrail; end
         class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, auditing: true)
@@ -140,7 +143,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect { RailsAdmin.config.audit_with.call }.not_to raise_error
+        expect { ControllerMock.new.instance_eval(&RailsAdmin.config.audit_with) }.not_to raise_error
       end
     end
   end
@@ -260,7 +263,7 @@ describe RailsAdmin::Config do
 
   describe '.parent_controller' do
     it 'uses default class' do
-      expect(RailsAdmin.config.parent_controller).to eq '::ApplicationController'
+      expect(RailsAdmin.config.parent_controller).to eq '::ActionController::Base'
     end
 
     it 'uses other class' do
@@ -268,6 +271,47 @@ describe RailsAdmin::Config do
         config.parent_controller = 'TestController'
       end
       expect(RailsAdmin.config.parent_controller).to eq 'TestController'
+    end
+  end
+
+  describe '.model' do
+    let(:fields) { described_class.model(Team).fields }
+    before do
+      described_class.model Team do
+        field :players do
+          visible false
+        end
+      end
+    end
+    context 'when model expanded' do
+      before do
+        described_class.model(Team) do
+          field :fans
+        end
+      end
+      it 'execute all passed blocks' do
+        expect(fields.map(&:name)).to match_array %i(players fans)
+      end
+    end
+    context 'when expand redefine behavior' do
+      before do
+        described_class.model Team do
+          field :players
+        end
+      end
+      it 'execute all passed blocks' do
+        expect(fields.find { |f| f.name == :players }.visible).to be true
+      end
+    end
+    context 'when model expanded in config' do
+      let(:block) { proc { field :players } }
+      before do
+        allow(block).to receive(:source_location).and_return(['config/initializers/rails_admin.rb'])
+        described_class.model(Team, &block)
+      end
+      it 'executes first' do
+        expect(fields.find { |f| f.name == :players }.visible).to be false
+      end
     end
   end
 end

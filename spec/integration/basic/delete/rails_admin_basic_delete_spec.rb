@@ -60,4 +60,17 @@ describe 'RailsAdmin Basic Delete', type: :request do
       is_expected.to have_link(@player.name, href: "/admin/player/#{@player.id}")
     end
   end
+
+  describe 'delete an object which has many associated item' do
+    before do
+      comments = FactoryGirl.create_list :comment, 20
+      @player = FactoryGirl.create :player, comments: comments
+      visit delete_path(model_name: 'player', id: @player.id)
+    end
+
+    it 'shows only ten first plus x mores', skip_mongoid: true do
+      is_expected.to have_selector('.comment', count: 10)
+      is_expected.to have_content('Plus 10 more Comments')
+    end
+  end
 end

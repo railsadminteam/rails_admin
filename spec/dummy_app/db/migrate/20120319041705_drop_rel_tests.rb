@@ -1,4 +1,4 @@
-class DropRelTests < ActiveRecord::Migration
+class DropRelTests < MigrationBase
   def self.up
     drop_table :rel_tests
   end
