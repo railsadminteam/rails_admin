@@ -30,7 +30,6 @@
       searchDelay: 600,
       remote_source: null,
       source: null,
-      float_left: true,
       xhr: false
     },
 
@@ -47,15 +46,14 @@
       // the autocomplete field will be cached which causes duplicate fields
       // to be generated.
       if (filtering_select.length > 0) {
-        this.input = filtering_select.children('input');
         this.button = filtering_select.children('.input-group-btn');
       } else {
         this.element.hide();
         filtering_select = this._inputGroup(this.element.attr('id'));
-        this.input = this._inputField();
         this.button = this._buttonField();
       }
 
+      this.input = this._inputField();
       this._setOptionsSource();
       this._initAutocomplete();
       this._initKeyEvent();

@@ -151,12 +151,18 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
       urls = type_select.data('urls')
+      object_select.siblings().css('float', 'left')
+      object_select.css('display', 'none')
 
       type_select.on 'change', (e) ->
         object_select.data('options', $("##{type_select.val().toLowerCase()}-js-options").data('options'))
         object_select.filteringSelect("destroy")
+        if object_select.data('options')
+          object_select.data('options').polymorphic = true
         object_select.filteringSelect object_select.data('options')
         object_select.html('<option value=""></option>')
+        object_select.siblings().css('float', 'left').css('display', 'inline-block')
+        object_select.css('display', 'none')
 
     # ckeditor
 
