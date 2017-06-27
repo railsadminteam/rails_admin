@@ -151,8 +151,11 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
       urls = type_select.data('urls')
+
+      # needed these for reusing the single-select without changing too much of the sigle-select code
       object_select.siblings().css('float', 'left')
       object_select.css('display', 'none')
+      field.find('label').last().hide()
 
       type_select.on 'change', (e) ->
         object_select.data('options', $("##{type_select.val().toLowerCase()}-js-options").data('options'))
