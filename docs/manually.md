@@ -1,6 +1,6 @@
 In config/initializers/rails_admin.rb, you can add the following lines of code:
 
-    config.authorize_with do
+    config.authenticate_with do
       authenticate_or_request_with_http_basic('Login required') do |username, password|
         user = User.where(email: username, password: password, admin: true).first
         user
