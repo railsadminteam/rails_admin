@@ -21,6 +21,10 @@
         field_value = field_value.replace('"', '&quot;');
       }
 
+      if (typeof(field_operator) === "string") {
+        field_operator = field_operator.replace('"', '&quot;');
+      }
+
       switch(field_type) {
         case 'boolean':
           var control = '<select class="input-sm form-control" name="' + value_name + '">' +
