@@ -8,7 +8,7 @@
       - if authorized? :new, @abstract_model
         %button.btn.btn-info{type: "submit", name: "_add_another", :'data-disable-with' => t("admin.form.save_and_add_another")}
           = t("admin.form.save_and_add_another")
-      - if authorized? :edit, @abstract_model
+      - if authorized? :edit, @abstract_model, @object
         %button.btn.btn-info{type: "submit", name: "_add_edit", :'data-disable-with' => t("admin.form.save_and_edit")}
           = t("admin.form.save_and_edit")
       %button.btn.btn-default{type: "submit", name: "_continue", :'data-disable-with' => t("admin.form.cancel"), :formnovalidate => true}
