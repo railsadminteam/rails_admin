@@ -19,10 +19,15 @@
   $.widget('ra.filteringSelect', {
     options: {
       createQuery: function(query) {
+        if (location.pathname.startsWith('/admin/terminal')) {
+          if (query.length == 0) return null;
+          return {f: { auth_code: {1: {o: 'like', v: query}}}};
+        }
+
         return { query: query };
       },
       minLength: 0,
-      searchDelay: 200,
+      searchDelay: 600,
       remote_source: null,
       source: null,
       xhr: false
@@ -41,15 +46,14 @@
       // the autocomplete field will be cached which causes duplicate fields
       // to be generated.
       if (filtering_select.length > 0) {
-        this.input = filtering_select.children('input');
         this.button = filtering_select.children('.input-group-btn');
       } else {
         this.element.hide();
         filtering_select = this._inputGroup(this.element.attr('id'));
-        this.input = this._inputField();
         this.button = this._buttonField();
       }
 
+      this.input = this._inputField();
       this._setOptionsSource();
       this._initAutocomplete();
       this._initKeyEvent();
@@ -111,9 +115,8 @@
         };
       } else if (typeof source === 'string') {
         return function(request, response) {
-          if (this.xhr) {
-            this.xhr.abort();
-          }
+          if (this.xhr) this.xhr.abort();
+          if (!self.options.createQuery(request.term)) return response([]);
 
           this.xhr = $.ajax({
             url: source,
