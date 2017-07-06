@@ -29,7 +29,7 @@ devise_for :users
 
 Or if you are using on :admin
 ```ruby
-devise_for :admin
+devise_for :admins
 ```
 
 
