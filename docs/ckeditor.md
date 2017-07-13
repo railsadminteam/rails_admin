@@ -33,3 +33,9 @@ Add this code to assets/javascripts/rails_admin/custom/ckeditor_ajax.js.coffee a
 ```
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb]]
+
+Reminder: It's necessary to configure ckeditor in asset precompile:
+
+```
+Rails.application.config.assets.precompile += ['ckeditor/*']
+```
