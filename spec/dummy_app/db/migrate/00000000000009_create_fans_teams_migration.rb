@@ -1,4 +1,4 @@
-class CreateFansTeamsMigration < ActiveRecord::Migration
+class CreateFansTeamsMigration < MigrationBase
   def self.up
     create_table :fans_teams, id: false do |t|
       t.integer :fan_id, :team_id

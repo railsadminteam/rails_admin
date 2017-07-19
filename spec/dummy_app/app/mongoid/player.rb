@@ -13,6 +13,7 @@ class Player
   field :born_on, type: Date
   field :notes, type: String
   field :suspended, type: Boolean, default: false
+  field :formation, type: String
 
   validates_presence_of(:name)
   validates_numericality_of(:number, only_integer: true)

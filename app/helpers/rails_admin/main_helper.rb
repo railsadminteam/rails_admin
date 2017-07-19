@@ -43,7 +43,7 @@ module RailsAdmin
     def ordered_filters
       return @ordered_filters if @ordered_filters.present?
       @index = 0
-      @ordered_filters = (params[:f] || @model_config.list.filters).inject({}) do |memo, filter|
+      @ordered_filters = (params[:f].try(:permit!).try(:to_h) || @model_config.list.filters).inject({}) do |memo, filter|
         field_name = filter.is_a?(Array) ? filter.first : filter
         (filter.is_a?(Array) ? filter.last : {(@index += 1) => {'v' => ''}}).each do |index, filter_hash|
           if filter_hash['disabled'].blank?
@@ -63,7 +63,7 @@ module RailsAdmin
         filter_name = filter_for_field.keys.first
         filter_hash = filter_for_field.values.first
         unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
-          fail "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
+          raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
         end
         case field.type
         when :enum

@@ -1,13 +1,42 @@
 require 'spec_helper'
+require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
 describe 'RailsAdmin PaperTrail history', active_record: true do
-  describe 'model history fetch' do
-    before(:all) do
-      RailsAdmin.config do |config|
-        config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
+  before(:each) do
+    RailsAdmin.config do |config|
+      config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
+    end
+  end
+
+  after(:each) do
+    # if #user_for_paper_trail is left unused, PaperTrail complains about it
+    RailsAdmin::ApplicationController.class_eval do
+      undef user_for_paper_trail
+    end
+  end
+
+  describe 'on object creation', type: :request do
+    subject { page }
+    before do
+      @user = FactoryGirl.create :user
+      RailsAdmin::Config.authenticate_with { warden.authenticate! scope: :user }
+      RailsAdmin::Config.current_user_method(&:current_user)
+      login_as @user
+      with_versioning do
+        visit new_path(model_name: 'paper_trail_test')
+        fill_in 'paper_trail_test[name]', with: 'Jackie Robinson'
+        click_button 'Save'
+        @object = RailsAdmin::AbstractModel.new('PaperTrailTest').first
       end
     end
 
+    it 'records a version' do
+      expect(@object.versions.size).to eq 1
+      expect(@object.versions.first.whodunnit).to eq @user.id.to_s
+    end
+  end
+
+  describe 'model history fetch' do
     before(:each) do
       PaperTrail::Version.delete_all
       @model = RailsAdmin::AbstractModel.new('PaperTrailTest')

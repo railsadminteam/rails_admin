@@ -1,4 +1,4 @@
-class ChangeLengthForRailsAdminHistories < ActiveRecord::Migration
+class ChangeLengthForRailsAdminHistories < MigrationBase
   def up
     change_column :rails_admin_histories, :message, :text
   end

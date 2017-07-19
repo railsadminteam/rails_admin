@@ -88,9 +88,10 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       is_expected.not_to have_selector('h4', text: 'Basic info')
 
-      %w(division name logo_url manager
-         ballpark mascot founded wins
-         losses win_percentage revenue
+      %w(
+        division name logo_url manager
+        ballpark mascot founded wins
+        losses win_percentage revenue
       ).each do |field|
         is_expected.not_to have_selector(".#{field}_field")
       end
@@ -186,9 +187,10 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
     it 'shows all by default' do
       do_request
 
-      %w(division name logo_url manager
-         ballpark mascot founded wins
-         losses win_percentage revenue players fans
+      %w(
+        division name logo_url manager
+        ballpark mascot founded wins
+        losses win_percentage revenue players fans
       ).each do |field|
         is_expected.to have_selector(".#{field}_field")
       end
@@ -253,9 +255,10 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       do_request
 
-      ['Division', 'Name (STRING)', 'Logo url (STRING)', 'Manager (STRING)',
-       'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
-       'Win percentage', 'Revenue', 'Players', 'Fans'
+      [
+        'Division', 'Name (STRING)', 'Logo url (STRING)', 'Manager (STRING)',
+        'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
+        'Win percentage', 'Revenue', 'Players', 'Fans'
       ].each do |text|
         is_expected.to have_selector('.label', text: text)
       end
@@ -272,9 +275,10 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       do_request
 
-      ['Division', 'Name (STRING)', 'Logo url (STRING)', 'Manager (STRING)',
-       'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
-       'Win percentage', 'Revenue', 'Players', 'Fans'
+      [
+        'Division', 'Name (STRING)', 'Logo url (STRING)', 'Manager (STRING)',
+        'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
+        'Win percentage', 'Revenue', 'Players', 'Fans'
       ].each do |text|
         is_expected.to have_selector('.label', text: text)
       end

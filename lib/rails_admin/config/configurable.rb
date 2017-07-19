@@ -43,7 +43,7 @@ module RailsAdmin
 
           # Define getter/setter by the option name
           scope.send(:define_method, option_name) do |*args, &block|
-            if !args[0].nil? || block # rubocop:disable NonNilCheck
+            if !args[0].nil? || block
               # Invocation with args --> This is the declaration of the option, i.e. setter
               instance_variable_set("@#{option_name}_registered", args[0].nil? ? block : args[0])
             else
@@ -75,12 +75,10 @@ module RailsAdmin
             if replacement_option_name
               ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{replacement_option_name}.")
               send(replacement_option_name, *args, &block)
+            elsif block_given?
+              yield
             else
-              if block_given?
-                yield
-              else
-                fail("The #{option_name} configuration option is removed without replacement.")
-              end
+              raise("The #{option_name} configuration option is removed without replacement.")
             end
           end
         end

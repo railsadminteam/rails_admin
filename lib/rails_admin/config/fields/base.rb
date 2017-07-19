@@ -2,6 +2,7 @@ require 'rails_admin/config/proxyable'
 require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
 require 'rails_admin/config/groupable'
+require 'rails_admin/config/inspectable'
 
 module RailsAdmin
   module Config
@@ -11,10 +12,16 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
         include RailsAdmin::Config::Groupable
+        include RailsAdmin::Config::Inspectable
 
         attr_reader :name, :properties, :abstract_model
         attr_accessor :defined, :order, :section
         attr_reader :parent, :root
+
+        NAMED_INSTANCE_VARIABLES = [
+          :@parent, :@root, :@section, :@children_fields_registered,
+          :@associated_model_config, :@group, :@bindings
+        ].freeze
 
         def initialize(parent, name, properties)
           @parent = parent
@@ -57,7 +64,7 @@ module RailsAdmin
         end
 
         register_instance_option :filterable? do
-          !!searchable # rubocop:disable DoubleNegation
+          !!searchable
         end
 
         register_instance_option :search_operator do
@@ -92,7 +99,7 @@ module RailsAdmin
                   property = am && am.properties.detect { |p| p.name == f.values.first.to_sym }
                   type = property && property.type
                 else                                                             #  <attribute|column>
-                  am = (self.association? ? associated_model_config.abstract_model : abstract_model)
+                  am = (association? ? associated_model_config.abstract_model : abstract_model)
                   table_name = am.table_name
                   column = f
                   property = am.properties.detect { |p| p.name == f.to_sym }
@@ -172,12 +179,12 @@ module RailsAdmin
               :nil
             end
           end
-          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name| # rubocop:disable DoubleNegation
+          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
             abstract_model.model.validators_on(column_name).detect do |v|
               !(v.options[:allow_nil] || v.options[:allow_blank]) &&
-              [:presence, :numericality, :attachment_presence].include?(v.kind) &&
-              (v.options[:on] == context || v.options[:on].blank?) &&
-              (v.options[:if].blank? && v.options[:unless].blank?)
+                [:presence, :numericality, :attachment_presence].include?(v.kind) &&
+                (v.options[:on] == context || v.options[:on].blank?) &&
+                (v.options[:if].blank? && v.options[:unless].blank?)
             end
           end
         end
@@ -247,8 +254,8 @@ module RailsAdmin
         #
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
-          if !state.nil? || block # rubocop:disable NonNilCheck
-            required state.nil? ? proc { false == (instance_eval(&block)) } : false == state
+          if !state.nil? || block
+            required state.nil? ? proc { false == instance_eval(&block) } : false == state
           else
             optional?
           end
@@ -323,24 +330,6 @@ module RailsAdmin
 
         def form_value
           form_default_value.nil? ? formatted_value : form_default_value
-        end
-
-        def inspect
-          "#<#{self.class.name}[#{name}] #{
-            instance_variables.collect do |v|
-              value = instance_variable_get(v)
-              if [:@parent, :@root, :@section, :@children_fields_registered,
-                  :@associated_model_config, :@group, :@bindings].include? v
-                if value.respond_to? :name
-                  "#{v}=#{value.name.inspect}"
-                else
-                  "#{v}=#{value.class.name}"
-                end
-              else
-                "#{v}=#{value.inspect}"
-              end
-            end.join(', ')
-          }>"
         end
       end
     end

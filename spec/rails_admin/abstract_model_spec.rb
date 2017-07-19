@@ -50,11 +50,11 @@ describe RailsAdmin::AbstractModel do
       end
 
       it 'lists elements within outbound limits' do
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 02, 2012 00:00', 'January 03, 2012 00:00'], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 02, 2012 00:00', 'January 02, 2012 00:00'], o: 'between'}}}).count).to eq(1)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 03, 2012 00:00', ''], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '', 'January 02, 2012 00:00'], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['January 02, 2012 00:00'], o: 'default'}}}).count).to eq(1)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 02, 2012 12:00', 'January 03, 2012 12:00'], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 02, 2012 12:00', 'January 02, 2012 12:00'], o: 'between'}}}).count).to eq(1)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 03, 2012 12:00', ''], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '', 'January 02, 2012 12:00'], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['January 02, 2012 12:00'], o: 'default'}}}).count).to eq(1)
       end
     end
   end
@@ -73,6 +73,26 @@ describe RailsAdmin::AbstractModel do
     it "supports pagination when Kaminari's page_method_name is customized" do
       expect(Player).to receive(:per_page_kaminari).once.and_return(@paged)
       @abstract_model.all(sort: PK_COLUMN, page: 1, per: 2)
+    end
+  end
+
+  describe 'each_associated_children' do
+    before do
+      @abstract_model = RailsAdmin::AbstractModel.new('Player')
+      @draft = FactoryGirl.build :draft
+      @comments = FactoryGirl.build_list :comment, 2
+      @player = FactoryGirl.build :player, draft: @draft, comments: @comments
+    end
+
+    it 'should return has_one and has_many associations with its children' do
+      @abstract_model.each_associated_children(@player) do |association, children|
+        expect(children).to eq case association.name
+                               when :draft
+                                 [@draft]
+                               when :comments
+                                 @comments
+                               end
+      end
     end
   end
 end

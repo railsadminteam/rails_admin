@@ -146,17 +146,23 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
 
     # polymorphic-association
 
+    setSourceData = (object_select, type_select_val)->
+      object_select.data('options', $("##{type_select_val.toLowerCase()}-js-options").data('options'))
+      object_select.filteringSelect("destroy")
+      object_select.filteringSelect object_select.data('options')
+      object_select.html('<option value=""></option>')
+      object_select.siblings().css('float', 'left').css('display', 'inline-block')
+      object_select.css('display', 'none')
+
     content.find('[data-polymorphic]').each ->
       type_select = $(this)
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
       urls = type_select.data('urls')
+      setSourceData(object_select, type_select.val())
 
       type_select.on 'change', (e) ->
-        object_select.data('options', $("##{type_select.val().toLowerCase()}-js-options").data('options'))
-        object_select.filteringSelect("destroy")
-        object_select.filteringSelect object_select.data('options')
-        object_select.html('<option value=""></option>')
+        setSourceData(object_select, type_select.val())
 
     # ckeditor
 

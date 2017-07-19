@@ -1,4 +1,4 @@
-class CreateFooBars < ActiveRecord::Migration
+class CreateFooBars < MigrationBase
   def change
     create_table :foo_bars do |t|
       t.string :title
