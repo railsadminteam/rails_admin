@@ -189,6 +189,11 @@
         input.attr('placeholder', this.element.attr('placeholder'));
       }
 
+      if (this.element.attr('required')) {
+        input.attr('required', this.element.attr('required'));
+        this.element.attr('required', false);
+      }
+
       return input;
     },
 
