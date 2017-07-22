@@ -24,6 +24,10 @@ module RailsAdmin
       # Application title, can be an array of two elements
       attr_accessor :main_app_name
 
+      # required filters in belongs_to association
+      # Glooko's addition
+      attr_accessor :required_filters
+
       # Configuration option to specify which models you want to exclude.
       attr_accessor :excluded_models
 

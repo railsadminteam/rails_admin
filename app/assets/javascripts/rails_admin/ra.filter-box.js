@@ -12,10 +12,13 @@
       var field_operator = options['operator'];
       var select_options = options['select_options'];
       var index = options['index'];
+      var required = options['required'];
+      var required_label = required ? 'required' : '';
       var value_name    = 'f[' +  field_name + '][' + index + '][v]';
       var operator_name = 'f[' +  field_name + '][' + index + '][o]';
       var control = null;
       var additional_control = null;
+      var delete_button = null;
 
       switch(field_type) {
         case 'boolean':
@@ -30,9 +33,9 @@
           break;
         case 'date':
           additional_control =
-          '<input size="20" class="date additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input size="20" placeholder="-∞" class="date additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input size="20" placeholder="∞" class="date additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input size="20" class="date additional-fieldset default input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="20" placeholder="-∞" class="date additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="20" placeholder="∞" class="date additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
         case 'datetime':
         case 'timestamp':
           control = control || '<select class="switch-additionnal-fieldsets input-sm form-control" name="' + operator_name + '">' +
@@ -47,9 +50,9 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control = additional_control ||
-          '<input size="25" class="datetime additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input size="25" class="datetime additional-fieldset default input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="text" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
         case 'enum':
           var multiple_values = ((field_value instanceof Array) ? true : false)
@@ -70,14 +73,13 @@
         case 'belongs_to_association':
           control = '<select class="switch-additionnal-fieldsets input-sm form-control" value="' + field_operator + '" name="' + operator_name + '">' +
             '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "like"        ? 'selected="selected"' : '') + ' value="like">' + RailsAdmin.I18n.t("contains") + '</option>' +
+            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "not_like"        ? 'selected="selected"' : '') + ' value="not_like">' + RailsAdmin.I18n.t("does_not_contain") + '</option>' +
             '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "is"          ? 'selected="selected"' : '') + ' value="is">' + RailsAdmin.I18n.t("is_exactly") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "starts_with" ? 'selected="selected"' : '') + ' value="starts_with">' + RailsAdmin.I18n.t("starts_with") + '</option>' +
-            '<option data-additional-fieldset="additional-fieldset"'  + (field_operator == "ends_with"   ? 'selected="selected"' : '') + ' value="ends_with">' + RailsAdmin.I18n.t("ends_with") + '</option>' +
             '<option disabled="disabled">---------</option>' +
             '<option ' + (field_operator == "_not_null"    ? 'selected="selected"' : '') + ' value="_not_null">' + RailsAdmin.I18n.t("is_present") + '</option>' +
             '<option ' + (field_operator == "_null"      ? 'selected="selected"' : '') + ' value="_null">' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
-          additional_control = '<input class="additional-fieldset input-sm form-control" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
+          additional_control = '<input class="additional-fieldset input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + (field_operator == "_blank" || field_operator == "_present" ? 'none' : 'inline-block') + ';" type="text" name="' + value_name + '" value="' + field_value + '" /> ';
           break;
         case 'integer':
         case 'decimal':
@@ -90,18 +92,22 @@
             '<option ' + (field_operator == "_null"     ? 'selected="selected"' : '') + ' value="_null" >' + RailsAdmin.I18n.t("is_blank") + '</option>' +
           '</select>'
           additional_control =
-          '<input class="additional-fieldset default input-sm form-control" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
-          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
-          '<input placeholder="∞" class="additional-fieldset between input-sm form-control" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
+          '<input class="additional-fieldset default input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((!field_operator || field_operator == "default") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[0] || '') + '" /> ' +
+          '<input placeholder="-∞" class="additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[1] || '') + '" /> ' +
+          '<input placeholder="∞" class="additional-fieldset between input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" style="display:' + ((field_operator == "between") ? 'inline-block' : 'none') + ';" type="' + field_type + '" name="' + value_name + '[]" value="' + (field_value[2] || '') + '" />';
           break;
         default:
-          control = '<input type="text" class="input-sm form-control" name="' + value_name + '" value="' + field_value + '"/> ';
+          control = '<input type="text" class="input-sm form-control ' + required_label + ' ' + field_name + '-filter-field" name="' + value_name + '" value="' + field_value + '"/> ';
           break;
       }
 
+      if (required && $('.' + field_name + '-filter-button.required').length == 0)
+        delete_button = '<span class="label label-info form-label ' + field_name + '-filter-button required"><a style="pointer-events: none; cursor:default;">' + field_label + '</a></span>';
+      else
+        delete_button = '<span class="label label-info form-label ' + field_name + '-filter-button"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>';
       var $content = $('<p>')
         .addClass('filter form-search')
-        .append('<span class="label label-info form-label"><a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw icon-white"></i>' + field_label + '</a></span>')
+        .append(delete_button)
         .append('&nbsp;' + control + '&nbsp;' + (additional_control || ''));
 
       $('#filters_box').append($content);
@@ -135,6 +141,58 @@
     form = $(this).parents('form');
     $(this).parents('.filter').remove();
     !$("#filters_box").children().length && $("hr.filters_box:visible").hide('slow');
+  });
+
+  function removeFilter(filter) {
+    // remove the filter so that the filter is not used
+    // this is especially important for ObjectId field type (associations)
+    $(".required." + filter + "-filter-field:visible").parent().remove();
+  };
+
+  function isFilterUsed(filter) {
+    appliedFilters = $(".required." + filter + "-filter-field:visible");
+    filterUsed = $.map(appliedFilters, function (field) {
+      return field.value !== "";
+    }).find (function (val) {
+      return val;
+    });
+    return !!filterUsed;
+  }
+
+  function display_filter_alert() {
+    var unusedFilter = [];
+    var shouldDisplay = true;
+
+    for (var i=0; i<required_filters.length; i++) {
+      if ($(".required." + required_filters[i] + "-filter-field:visible").length == 0) {
+        continue;
+      } else if (!isFilterUsed(required_filters[i])) {
+        unusedFilter.push(required_filters[i]);
+      } else {
+        $("#filter-alert").hide();
+        shouldDisplay = false;
+      }
+    }
+
+    if (!shouldDisplay) {
+      for (var i=0; i<unusedFilter.length; i++) {
+        removeFilter(unusedFilter[i]);
+      }
+      unusedFilter
+      return false;
+    }
+    if (unusedFilter.length == 0) return false;
+
+    $("#filter-alert-text").text(unusedFilter.join(' or ') + " filter required");
+    $("#filter-alert").show();
+    return true;
+  };
+
+  $(document).on('click', "#submit-filter", function(e) {
+    if (display_filter_alert()) {
+      e.preventDefault();
+      return
+    }
   });
 
   $(document).on('click', "#filters_box .switch-select", function(e) {
