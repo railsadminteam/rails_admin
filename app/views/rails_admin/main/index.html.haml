@@ -45,7 +45,7 @@
   $('hr.filters_box').hide();
   #{ordered_filter_string}
   });
-  var required_filters = JSON.parse("#{escape_javascript required_filters}");
+  var required_filters = JSON.parse("#{escape_javascript required_filters}".replace(/(&quot\;)/g,"\""));
 
 %style
   - properties.select{ |p| p.column_width.present? }.each do |property|
@@ -60,7 +60,7 @@
       .input-group
         %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
         %span.input-group-btn
-          %button#submit-filter.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+          %button#submit-filter.btn.btn-primary{type: 'submit', :'data-disable-with' => '<i class="icon-white icon-refresh"></i> '.html_safe + t('admin.misc.refresh')}
             %i.icon-white.icon-refresh
             = t('admin.misc.refresh')
           %button#remove_filter.btn.btn-info{title: "Reset filters"}
