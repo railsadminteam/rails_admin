@@ -59,17 +59,39 @@ module RailsAdmin
       register_instance_option :object_label_method do
         @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
       end
-
       register_instance_option :label do
         (@label ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human
       end
 
+      register_instance_option :label_zero do
+        (@label_zero ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: 0, default: label.pluralize(::I18n.locale))
+      end
+
+      register_instance_option :label_few do
+        (@label_few ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: 2, default: label.pluralize(::I18n.locale))
+      end
+
+      register_instance_option :label_many do
+        (@label_few ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: 5, default: label.pluralize(::I18n.locale))
+      end
+
       register_instance_option :label_plural do
-        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: Float::INFINITY, default: label.pluralize(::I18n.locale))
+        (@label_other ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: Float::INFINITY, default: label.pluralize(::I18n.locale))
       end
 
       def pluralize(count)
-        count == 1 ? label : label_plural
+        bindings.try
+        if count == 0
+          label_zero
+        elsif count % 10 == 1 && count % 100 != 11
+          label
+        elsif ( [2, 3, 4].include?(count % 10) && ![12, 13, 14].include?(count % 100) )
+          label_few
+        elsif ( (count % 10) == 0 || ![5, 6, 7, 8, 9].include?(count % 10) || ![11, 12, 13, 14].include?(count % 100) )
+          label_many
+        else
+          label_plural
+        end
       end
 
       register_instance_option :weight do

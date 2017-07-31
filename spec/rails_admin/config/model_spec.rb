@@ -49,29 +49,10 @@ describe RailsAdmin::Config::Model do
 
   describe '#label_plural' do
     it 'is pretty' do
-      expect(RailsAdmin.config(Comment).label_plural).to eq('Comments')
+      expect(RailsAdmin.config(Comment).label_other).to eq('Comments')
     end
 
     context 'when using i18n as label source', skip_mongoid: true do
-      around do |example|
-        I18n.config.available_locales = I18n.config.available_locales + [:xx]
-        I18n.backend.class.send(:include, I18n::Backend::Pluralization)
-        I18n.backend.store_translations :xx,
-                                        activerecord: {
-                                          models: {
-                                            comment: {
-                                              one: 'one', two: 'two', other: 'other'
-                                            },
-                                          },
-                                        }
-
-        I18n.locale = :xx
-
-        example.run
-
-        I18n.locale = :en
-        I18n.config.available_locales = I18n.config.available_locales - [:xx]
-      end
 
       context 'and the locale uses a specific pluralization rule' do
         before do
@@ -79,27 +60,48 @@ describe RailsAdmin::Config::Model do
                                           i18n: {
                                             plural: {
                                               rule: ->(count) do
-                                                if count == 0
-                                                  :zero
-                                                elsif count == 1
-                                                  :one
-                                                elsif count == 2
-                                                  :two
-                                                else
-                                                  :other
-                                                end
+                                                pluralizecount(count)
                                               end,
                                             },
                                           }
         end
 
         it 'always uses :other as pluralization key' do
-          expect(RailsAdmin.config(Comment).label_plural).to eq('other')
+          expect(RailsAdmin.config(Comment).label_other).to eq('other')
         end
       end
     end
   end
 
+  describe '#label_few' do
+    it 'is pretty' do
+      expect(RailsAdmin.config(Comment).label_few).to eq('few')
+    end
+  end
+  describe '#label_many' do
+    it 'is pretty' do
+      expect(RailsAdmin.config(Comment).label_many).to eq('many')
+    end
+  end
+  describe '#label_zero' do
+    it 'is pretty' do
+      expect(RailsAdmin.config(Comment).label_many).to eq('zero')
+    end
+  end
+
+  def pluralizecount(count)
+    if count == 0
+      :zero
+    elsif count % 10 == 1 && count % 100 != 11
+      :one
+    elsif ( [2, 3, 4].include?(count % 10) && ![12, 13, 14].include?(count % 100) )
+      :few
+    elsif ( (count % 10) == 0 || ![5, 6, 7, 8, 9].include?(count % 10) || ![11, 12, 13, 14].include?(count % 100) )
+      :many
+    else
+      :other
+    end
+  end
   describe '#weight' do
     it 'is 0' do
       expect(RailsAdmin.config(Comment).weight).to eq(0)
