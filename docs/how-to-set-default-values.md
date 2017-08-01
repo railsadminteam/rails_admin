@@ -18,6 +18,22 @@ end
 
 The "after_initialize" hook (or callback) triggers after a model record is instantiated.  It will set the color value to 'red' for a new record and will leave it to its current value for an existing record (in the edit view).
 
+## Url Params
+
+If you want to set a default value based on a URL param you can access the `bindings` object. The following example shows how to add a default message using the "message" URL param. 
+
+```ruby
+config.model Post do
+  edit do
+    field :message do
+      def value
+        bindings[:view].params["message"]
+      end
+    end
+  end
+end
+```
+
 ## current_user
 
 Adding <code>current_user</code> as a default value adds an extra challenge.  The controller layer knows about <code>current_user</code>, this information is not typically available in the model layer for use by <code>after_initialize</code>.  And this is an intentional implication of the MVC architecture.
