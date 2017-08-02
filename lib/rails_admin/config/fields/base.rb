@@ -36,7 +36,7 @@ module RailsAdmin
         end
 
         register_instance_option :css_class do
-          "#{self.name}_field"
+          "#{name}_field"
         end
 
         def type_css_class
@@ -212,7 +212,7 @@ module RailsAdmin
         register_instance_option :visible? do
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
-            next unless self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+            next unless section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
             returned = false if fields.include?(name)
           end
           returned
