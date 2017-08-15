@@ -10,6 +10,9 @@ module RailsAdmin
   class ActionNotAllowed < ::StandardError
   end
 
+  class MissingPrimaryKey < ::StandardError
+  end
+
   class ApplicationController < Config.parent_controller.constantize
     protect_from_forgery with: :exception
 
@@ -25,6 +28,7 @@ module RailsAdmin
       @model_name = to_model_name(params[:model_name])
       raise(RailsAdmin::ModelNotFound) unless (@abstract_model = RailsAdmin::AbstractModel.new(@model_name))
       raise(RailsAdmin::ModelNotFound) if (@model_config = @abstract_model.config).excluded?
+      raise(RailsAdmin::MissingPrimaryKey) unless @abstract_model.primary_key
       @properties = @abstract_model.properties
     end
 
@@ -63,17 +67,34 @@ module RailsAdmin
     end
 
     rescue_from RailsAdmin::ObjectNotFound do
-      flash[:error] = I18n.t('admin.flash.object_not_found', model: @model_name, id: params[:id])
-      params[:action] = 'index'
-      @status_code = :not_found
+      set_error_and_action(
+        ['admin.flash.object_not_found', model: @model_name, id: params[:id]],
+        'index',
+      )
       index
     end
 
     rescue_from RailsAdmin::ModelNotFound do
-      flash[:error] = I18n.t('admin.flash.model_not_found', model: @model_name)
-      params[:action] = 'dashboard'
-      @status_code = :not_found
+      set_error_and_action(
+        ['admin.flash.model_not_found', model: @model_name],
+        'dashboard',
+      )
       dashboard
+    end
+
+    rescue_from RailsAdmin::MissingPrimaryKey do
+      set_error_and_action(
+        ['admin.flash.missing_primary_key', model: @model_name],
+        'dashboard',
+        :method_not_allowed,
+      )
+      dashboard
+    end
+
+    def set_error_and_action(i18n_args, _action, status_code = :not_found)
+      flash[:error] = I18n.t(*i18n_args)
+      params[:action] = 'action'
+      @status_code = status_code
     end
   end
 end

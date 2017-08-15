@@ -19,6 +19,19 @@ describe 'RailsAdmin Basic List', type: :request do
     end
   end
 
+  describe 'GET /admin/model_without_primary_key' do
+    before do
+      RailsAdmin.config do |c|
+        c.included_models = [FansTeam]
+      end
+    end
+    it "redirects to dashboard and inform the user that primary key is missing" do
+      visit '/admin/fans_team'
+      expect(page.driver.status_code).to eq(405)
+      expect(find('.alert-danger')).to have_content("Missing primary key in model 'FansTeam'")
+    end
+  end
+
   describe 'GET /admin/balls/545-typo' do
     it "redirects to balls index and inform the user the id wasn't found" do
       visit '/admin/ball/545-typo'
