@@ -21,6 +21,7 @@ describe 'RailsAdmin Basic List', type: :request do
 
   describe 'GET /admin/model_without_primary_key' do
     before do
+      skip("Not applicable for #{CI_ORM}") unless CI_ORM == :active_record
       RailsAdmin.config do |c|
         c.included_models = [FansTeam]
       end
