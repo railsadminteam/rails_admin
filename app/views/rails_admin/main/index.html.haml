@@ -18,7 +18,8 @@
   other_right = sets[params[:set].to_i + 1].present?
 
 - content_for :contextual_tabs do
-  = bulk_menu
+  - if checkboxes
+    = bulk_menu
   - if filterable_fields.present?
     %li.dropdown{style: 'float:right'}
       %a.dropdown-toggle{href: '#', :'data-toggle' => "dropdown"}

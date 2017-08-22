@@ -449,6 +449,8 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
         visit index_path(model_name: 'field_test')
         checkboxes = all(:xpath, './/form[@id="bulk_form"]//input[@type="checkbox"]')
         expect(checkboxes.length).to be > 0
+
+        expect(page).to have_content('Selected items')
       end
     end
 
@@ -467,6 +469,8 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
         visit index_path(model_name: 'field_test')
         checkboxes = all(:xpath, './/form[@id="bulk_form"]//input[@type="checkbox"]')
         expect(checkboxes.length).to eq 0
+
+        expect(page).not_to have_content('Selected items')
       end
     end
   end
