@@ -84,6 +84,22 @@ RailsAdmin.config do |config|
 end
 ```
 
+_Edit:_ The above has been reported not to work (see https://github.com/sferik/rails_admin/issues/2030). If you're encountering such problems try this workaround:
+
+```ruby
+RailsAdmin.config do |config|
+  config.model 'Team' do
+    object_label_method do
+      :custom_label_method
+    end
+  end
+
+  def custom_label_method
+    "Team #{self.name}"
+  end
+end
+```
+
 ### Difference between `label` and `object_label`
 
 `label` and `object_label` are both model configuration options. `label` is used
