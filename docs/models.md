@@ -84,18 +84,20 @@ RailsAdmin.config do |config|
 end
 ```
 
-_Edit:_ The above has been reported not to work (see https://github.com/sferik/rails_admin/issues/2030). If you're encountering such problems try this workaround:
+_Edit: The above has been reported not to work properly (see https://github.com/sferik/rails_admin/issues/2030). If you're encountering such a problem try this workaround:_
 
 ```ruby
+# config/initializers/rails_admin.rb
 RailsAdmin.config do |config|
   config.model 'Team' do
     object_label_method do
       :custom_label_method
     end
   end
-
-  def custom_label_method
-    "Team #{self.name}"
+  Team.class_eval do
+    def custom_label_method
+      "Team #{self.name}"
+    end
   end
 end
 ```
