@@ -151,7 +151,6 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       object_select.data('options', $("##{type_select_val.toLowerCase()}-js-options").data('options'))
       object_select.filteringSelect("destroy")
       object_select.filteringSelect object_select.data('options')
-      object_select.html('<option value=""></option>')
       object_select.siblings().css('float', 'left').css('display', 'inline-block')
       object_select.css('display', 'none')
 
