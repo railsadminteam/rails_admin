@@ -98,11 +98,9 @@ appraise "rails-5.0" do
     gem 'paper_trail', '>= 5.0'
 
     platforms :jruby do
-      git 'git://github.com/jruby/activerecord-jdbc-adapter.git', branch: 'rails-5' do
-        gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-        gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-        gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
-      end
+      gem 'activerecord-jdbcmysql-adapter', '>= 5.0.pre1'
+      gem 'activerecord-jdbcpostgresql-adapter', '>= 5.0.pre1'
+      gem 'activerecord-jdbcsqlite3-adapter', '>= 5.0.pre1'
     end
   end
 
