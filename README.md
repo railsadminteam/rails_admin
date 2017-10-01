@@ -50,7 +50,7 @@ This problem was reported by SourceClear, Inc.
 
 ## Configuration
 ### Global
-In `config/initializers/rails_admin`:
+In `config/initializers/rails_admin.rb`:
 
 [Details](https://github.com/sferik/rails_admin/wiki/Base-configuration)
 
