@@ -20,7 +20,9 @@ module RailsAdmin
         m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
       rescue LoadError, NameError
-        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
+        unless Rails.env.test? || m.to_s.try(:start_with?, '#<Class:0x')
+          puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})"
+        end
         nil
       end
 
