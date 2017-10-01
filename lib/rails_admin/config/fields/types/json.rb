@@ -9,6 +9,8 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
           RailsAdmin::Config::Fields::Types.register(:jsonb, self)
 
+          PARSABLE_CLASSES = %w(String ActiveSupport::SafeBuffer).freeze
+
           register_instance_option :formatted_value do
             if value.present?
               bindings[:view].content_tag(:pre) { JSON.pretty_generate(value) }.html_safe
@@ -20,7 +22,22 @@ module RailsAdmin
           end
 
           def parse_input(params)
-            params[name] = parse_value(params[name]) if params[name].is_a?(::String)
+            return unless PARSABLE_CLASSES.include?(params[name].class.name)
+            params[name] = parse_value(params[name])
+          end
+
+          register_instance_option :formatted_value do
+            value
+          end
+
+          # output for pretty printing (show, list)
+          register_instance_option :pretty_value do
+            JSON.pretty_generate(parse_value(value)).presence || ' - '
+          end
+
+          # output for printing in export view (developers beware: no bindings[:view] and no data!)
+          register_instance_option :export_value do
+            formatted_value.presence || ' - '
           end
         end
       end

@@ -319,6 +319,13 @@ body.rails_admin {
       width:60px;
     }
   }
+
+  dd.json_type {
+    font-family: monospace;
+    font-size: 1em;
+    overflow: auto;
+    white-space: pre;
+  }
 }
 
 @media screen and (min-width: $grid-float-breakpoint) {
