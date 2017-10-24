@@ -901,6 +901,18 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
   end
 
+  describe 'SimpleMDE Support' do
+    it 'adds Javascript to enable SimpleMDE' do
+      RailsAdmin.config Draft do
+        edit do
+          field :notes, :simple_mde
+        end
+      end
+      visit new_path(model_name: 'draft')
+      is_expected.to have_selector('textarea#draft_notes[data-richtext="simplemde"]')
+    end
+  end
+
   describe 'CKEditor Support' do
     it 'adds Javascript to enable CKEditor' do
       RailsAdmin.config Draft do
