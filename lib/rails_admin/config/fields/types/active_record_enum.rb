@@ -30,14 +30,21 @@ module RailsAdmin
           def parse_value(value)
             return unless value.present?
             if ::Rails.version >= '5'
-              abstract_model.model.attribute_types[name.to_s].deserialize(value)
+              abstract_model.model.attribute_types[name.to_s].serialize(value)
             else
               enum.invert[type_cast_value(value)]
             end
           end
 
           def parse_input(params)
-            params[name] = parse_value(params[name]) if params[name]
+            return unless params[name]
+
+            parsed = if ::Rails.version >= '5'
+              abstract_model.model.attribute_types[name.to_s].deserialize(value)
+            else
+              enum.invert[type_cast_value(value)]
+            end
+            params[name] = parsed
           end
 
           def form_value
