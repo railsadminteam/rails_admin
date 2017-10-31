@@ -32,12 +32,19 @@ module RailsAdmin
             if ::Rails.version >= '5'
               abstract_model.model.attribute_types[name.to_s].serialize(value)
             else
-              enum.invert[type_cast_value(value)]
+              # Depending on the colum type and AR version, we might get a
+              # string or an integer, so we need to handle both cases.
+              if enum.has_key?(value)
+                enum[value]
+              else
+                type_cast_value(value)
+              end
             end
           end
 
           def parse_input(params)
-            return unless params[name]
+            value = params[name]
+            return unless value
             params[name] = parse_input_value(value)
           end
 
