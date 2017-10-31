@@ -53,7 +53,6 @@ describe 'RailsAdmin Basic List', type: :request do
     end
   end
 
-
   describe 'GET /admin/team' do
     let!(:teams) do
       [

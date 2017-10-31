@@ -82,16 +82,15 @@ describe RailsAdmin::AbstractModel do
 
         let!(:teams) do
           [
-            FactoryGirl.create(:team , main_sponsor: 'no_sponsor'),
-            FactoryGirl.create(:team , main_sponsor: 'food_factory'),
+            FactoryGirl.create(:team, main_sponsor: 'no_sponsor'),
+            FactoryGirl.create(:team, main_sponsor: 'food_factory'),
           ]
         end
 
         it "filters by enum values" do
           enum_value = 'food_factory'
-          ENV['STOP_NOW'] = '1'
           scope = @abstract_model.all(filters: {'main_sponsor' => {'1' => {v: [enum_value], o: 'is'}}})
-          expect(scope.count).to eq(1), "Teams (#{teams.map(&:id).join(" ,")}) All Teams #{Team.all.map(&:id).join(", ")} SQL: #{scope.to_sql}"
+          expect(scope.count).to eq(1)
         end
       end
     end
