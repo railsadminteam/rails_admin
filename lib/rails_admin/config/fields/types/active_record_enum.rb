@@ -34,9 +34,7 @@ module RailsAdmin
             else
               # Depending on the colum type and AR version, we might get a
               # string or an integer, so we need to handle both cases.
-              if enum.has_key?(value)
-                enum[value]
-              else
+              enum.fetch(value) do
                 type_cast_value(value)
               end
             end
