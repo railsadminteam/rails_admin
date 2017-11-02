@@ -120,7 +120,8 @@ I wasn't able to use any of the examples above with a validate_presence_of valid
     super(ids)
     ids = ids.reject(&:blank?).map(&:to_i) # Flush empty id
     ids.each_with_index do |id, index|
-      block_grid_associations.detect { |b| b.block_id == id }.position = index+1
+      block = block_grid_associations.detect { |b| b.block_id == id }
+      block.update_column :position, index + 1
     end
   end
 
