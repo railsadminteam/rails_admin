@@ -1,38 +1,60 @@
-Rails Admin is fully compatible with [[CanCanCan (previously cancan)|https://github.com/CanCanCommunity/cancancan]], an authorization framework to limit which actions a user can perform on each model.
+Rails Admin is fully compatible with CanCanCan.
 
-### Setup CanCanCan
-
-If you haven't already, setup CanCanCan by adding it to your Gemfile and running the `bundle` command.
+### Create an extension for CanCanCan
 
 ```ruby
-gem "cancancan"
+module RailsAdmin
+  module Extensions
+    module CanCanCan2
+      class AuthorizationAdapter < RailsAdmin::Extensions::CanCanCan::AuthorizationAdapter
+        def authorize(action, abstract_model = nil, model_object = nil)
+          return unless action
+          reaction, subject = fetch_action_and_subject(action, abstract_model, model_object)
+          @controller.current_ability.authorize!(reaction, subject)
+        end
+
+        def authorized?(action, abstract_model = nil, model_object = nil)
+          return unless action
+          reaction, subject = fetch_action_and_subject(action, abstract_model, model_object)
+          @controller.current_ability.can?(reaction, subject)
+        end
+
+        def fetch_action_and_subject(action, abstract_model, model_object)
+          reaction = action
+          subject = model_object || abstract_model&.model
+          unless subject
+            subject = reaction
+            reaction = :read
+          end
+          return reaction, subject
+        end
+      end
+    end
+  end
+end
+
+RailsAdmin.add_extension(:cancancan2, RailsAdmin::Extensions::CanCanCan2, authorization: true)
+
 ```
-
-Next, run the generator to create an Ability class. This is where authorization rules are defined.
-
-```bash
-rails g cancan:ability
-```
-
 ### Add to Rails Admin
 
-To use it with Rails Admin, add this to an initializer.
+Add this to RailsAdmin initializer.
 
 ```ruby
-# in config/initializers/rails_admin.rb
+# config/initializers/rails_admin.rb
 
 RailsAdmin.config do |config|
-  config.authorize_with :cancan #TODO add cancancan to rails_admin config
+  config.authorize_with :cancancan2
 end
 ```
 
-At this point, all authorization will fail and no one will be able to access the admin pages. To grant access, add this to `Ability#initialize`.  You must also grant access to the `dashboard`, or the login will fail there.
+At this point, all authorization will fail and no one will be able to access the admin pages. To grant access, add this to `Ability#initialize`.
+You must also grant access to the `dashboard`, or the login will fail there.
 
 ```ruby
 can :access, :rails_admin   # grant access to rails_admin
-can :dashboard              # grant access to the dashboard
+can :read, :dashboard       # grant access to the dashboard
 ```
-
 
 Then, you will need to grant access on each of the models. Here's a complete example of an `Ability` class which defines different permissions depending upon the user's role.
 
@@ -40,17 +62,16 @@ Then, you will need to grant access on each of the models. Here's a complete exa
 class Ability
   include CanCan::Ability
   def initialize(user)
-    can :read, :all                   # allow everyone to read everything
-    if user && user.admin?
-      can :access, :rails_admin       # only allow admin users to access Rails Admin
-      can :dashboard                  # allow access to dashboard
-      if user.role? :superadmin
-        can :manage, :all             # allow superadmins to do anything
-      elsif user.role? :manager
-        can :manage, [User, Product]  # allow managers to do anything to products and users
-      elsif user.role? :sales
-        can :update, Product, :hidden => false  # allow sales to only update visible products
-      end
+    can :read, :all                 # allow everyone to read everything
+    return unless user && user.admin?
+    can :access, :rails_admin       # only allow admin users to access Rails Admin
+    can :dashboard                  # allow access to dashboard
+    if user.role? :superadmin
+      can :manage, :all             # allow superadmins to do anything
+    elsif user.role? :manager
+      can :manage, [User, Product]  # allow managers to do anything to products and users
+    elsif user.role? :sales
+      can :update, Product, hidden: false  # allow sales to only update visible products
     end
   end
 end
@@ -60,7 +81,7 @@ How you define the user roles is completely up to you. See the [[CanCanCan Docum
 
 ### Use different Ability classes for front-end and admin
 
-If you use Cancan in your project, there are chances that abilities for RailsAdmin will conflict with your project ones. In that case, you will want to define a specific Ability class for admin section (e.g. ```AdminAbility```).
+If you use CanCanCan in your project, there are chances that abilities for RailsAdmin will conflict with your project ones. In that case, you will want to define a specific Ability class for admin section (e.g. ```AdminAbility```).
 
 You just have to add your admin ability class as a second parameter to `authorize_with`:
 
@@ -68,7 +89,7 @@ You just have to add your admin ability class as a second parameter to `authoriz
 # in config/initializers/rails_admin.rb
 
 RailsAdmin.config do |config|
-  config.authorize_with :cancan, AdminAbility
+  config.authorize_with :cancancan2, AdminAbility
 end
 ```
 
@@ -79,10 +100,9 @@ With ```AdminAbility```:
 class AdminAbility
   include CanCan::Ability
   def initialize(user)
-    if user && user.admin?
-      can :access, :rails_admin
-      can :manage, :all   
-    end
+    return unless user && user.admin?
+    can :access, :rails_admin
+    can :manage, :all       
   end
 end
 ```
@@ -94,7 +114,7 @@ If the user authorization fails, a CanCan::AccessDenied exception will be raised
 ```ruby
 class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to main_app.root_path, :alert => exception.message
+    redirect_to main_app.root_path, alert: exception.message
   end
 end
 ```
@@ -106,12 +126,6 @@ Also make sure RailsAdmin is inheriting from ApplicationController:
 
 config.parent_controller = 'ApplicationController'
 ```
-
-### CanCan::AuthorizationNotPerformed exception
-
-Remove `check_authorization` from app/controllers/application_controller.rb, use `load_and_authorize_resource` on every controllers instead.
-
-Or use the `:unless` option to test against `rails_admin_controller?`.
 
 ### RailsAdmin verbs
 
