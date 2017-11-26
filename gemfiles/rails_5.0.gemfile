@@ -18,9 +18,9 @@ group :active_record do
   end
 
   platforms :jruby do
-    gem "activerecord-jdbcmysql-adapter", ">= 5.0.pre1"
-    gem "activerecord-jdbcpostgresql-adapter", ">= 5.0.pre1"
-    gem "activerecord-jdbcsqlite3-adapter", ">= 5.0.pre1"
+    gem "activerecord-jdbcmysql-adapter", "~> 50.0"
+    gem "activerecord-jdbcpostgresql-adapter", "~> 50.0"
+    gem "activerecord-jdbcsqlite3-adapter", "~> 50.0"
   end
 end
 

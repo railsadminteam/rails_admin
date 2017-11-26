@@ -10,9 +10,9 @@ appraise "rails-4.0" do
     gem 'paper_trail', '~> 5.0'
 
     platforms :jruby do
-      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+      gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.3.0.beta1'
     end
   end
 
@@ -39,9 +39,9 @@ appraise "rails-4.1" do
     gem 'paper_trail', '>= 5.0'
 
     platforms :jruby do
-      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+      gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.3.0.beta1'
     end
   end
 
@@ -69,9 +69,9 @@ appraise "rails-4.2" do
     gem 'paper_trail', '>= 5.0'
 
     platforms :jruby do
-      gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-      gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-      gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta1'
+      gem 'activerecord-jdbcmysql-adapter', '~> 1.2'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 1.2'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 1.3.0.beta1'
     end
   end
 
@@ -98,9 +98,9 @@ appraise "rails-5.0" do
     gem 'paper_trail', '>= 5.0'
 
     platforms :jruby do
-      gem 'activerecord-jdbcmysql-adapter', '>= 5.0.pre1'
-      gem 'activerecord-jdbcpostgresql-adapter', '>= 5.0.pre1'
-      gem 'activerecord-jdbcsqlite3-adapter', '>= 5.0.pre1'
+      gem 'activerecord-jdbcmysql-adapter', '~> 50.0'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 50.0'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 50.0'
     end
   end
 
