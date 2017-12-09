@@ -18,6 +18,12 @@ module RailsAdmin
           RailsAdmin::Config.default_items_per_page
         end
 
+        # Positive value shows only prev, next links in pagination.
+        # This is for avoiding count(*) query.
+        register_instance_option :limited_pagination do
+          false
+        end
+
         register_instance_option :sort_by do
           parent.abstract_model.primary_key
         end
