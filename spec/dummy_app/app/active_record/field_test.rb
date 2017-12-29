@@ -13,4 +13,7 @@ class FieldTest < ActiveRecord::Base
   mount_uploader :carrierwave_asset, CarrierwaveUploader
 
   attachment :refile_asset if defined?(Refile)
+
+  enum size_string_enum: {S: 's', M: 'm', L: 'l'}
+  enum size_integer_enum: [:small, :medium, :large]
 end

@@ -18,6 +18,47 @@ describe RailsAdmin::AbstractModel do
       end
     end
 
+    context 'on enum' do
+
+      shared_examples "filter on enum" do
+      before do
+        ["S", "M", "L"].each do |size|
+          FactoryGirl.create(:field_test, size_string_enum: size)
+        end
+
+        ["small", "medium", "large"].each do |size|
+          FactoryGirl.create(:field_test, size_integer_enum: size)
+        end
+      end
+        let(:model) { RailsAdmin::AbstractModel.new('FieldTest') }
+        let(:filters) { {enum_field => {'1' => {v: filter_value, o: 'is'}}} }
+        subject(:elements) {  model.all(filters: filters) }
+
+        it 'lists elements by value' do
+          expect(elements.count).to eq(expected_elements_count)
+          expect(elements.map(&enum_field.to_sym)).to all(eq(enum_label))
+        end
+      end
+
+      context "when enum is integer enum" do
+        it_behaves_like "filter on enum" do
+          let(:filter_value) { 0 }
+          let(:enum_field) { "size_integer_enum" }
+          let(:enum_label) { 'small' }
+          let(:expected_elements_count) { 1 }
+        end
+      end
+
+      context "when enum is string enum where label <> value" do
+        it_behaves_like "filter on enum" do
+          let(:filter_value) { 's' }
+          let(:enum_field) { "size_string_enum" }
+          let(:enum_label) { 'S' }
+          let(:expected_elements_count) { 1 }
+        end
+      end
+    end
+
     context 'on dates with :en locale' do
       before do
         [Date.new(2012, 1, 1), Date.new(2012, 1, 2), Date.new(2012, 1, 3), Date.new(2012, 1, 4)].each do |date|
