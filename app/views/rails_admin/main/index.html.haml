@@ -16,6 +16,7 @@
   properties = sets[params[:set].to_i] || []
   other_left = ((params[:set].to_i - 1) >= 0) && sets[params[:set].to_i - 1].present?
   other_right = sets[params[:set].to_i + 1].present?
+  index_path = proc { |args| public_send("#{action_name}_path", args) }
 
 - content_for :contextual_tabs do
   - if checkboxes
@@ -46,7 +47,7 @@
     = "#list td.#{property.css_class} { max-width: #{property.column_width}px; }"
 
 #list
-  = form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form form-inline") do
+  = form_tag(index_path[params.except(*%w[page f query])], method: :get, class: "pjax-form form-inline") do
     .well
       %span#filters_box
       %hr.filters_box{style: "display:#{ordered_filters.empty? ? 'none' : 'block'}"}
@@ -66,7 +67,7 @@
       - @model_config.list.scopes.each_with_index do |scope, index|
         - scope = '_all' if scope.nil?
         %li{class: "#{'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0)}"}
-          %a{href: index_path(params.merge(scope: scope, page: nil)), class: 'pjax'}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
+          %a{href: index_path[params.merge(scope: scope, page: nil)], class: 'pjax'}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
 
   = form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: "form" do
     = hidden_field_tag :bulk_action
@@ -85,7 +86,7 @@
           - properties.each do |property|
             - selected = (sort == property.name.to_s)
             - if property.sortable
-              - sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})
+              - sort_location = index_path[params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})]
               - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
             %th{class: "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), rel: "tooltip", title: "#{property.hint}"}= capitalize_first_letter(property.label)
           - if other_right
@@ -96,12 +97,12 @@
           %tr{class: "#{@abstract_model.param_key}_row #{@model_config.list.with(object: object).row_css_class}"}
             - if checkboxes
               %td= check_box_tag "bulk_ids[]", object.id, false
-            - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
+            - if @other_left_link ||= other_left && index_path[params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {})]
               %td.other.left= link_to "...", @other_left_link, class: 'pjax'
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
               %td{class: "#{property.css_class} #{property.type_css_class}", title: strip_tags(value.to_s)}= value
-            - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
+            - if @other_right_link ||= other_right && index_path[params.merge(set: (params[:set].to_i + 1))]
               %td.other.right= link_to "...", @other_right_link, class: 'pjax'
             %td.last.links
               %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
@@ -111,7 +112,7 @@
       .row
         .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap', remote: true)
       .row
-        .col-md-6= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-default clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
+        .col-md-6= link_to(t("admin.misc.show_all"), index_path[params.merge(all: true)], class: "show-all btn btn-default clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size
       .clearfix.total-count= "#{total_count} #{@model_config.pluralize(total_count).downcase}"
 
     - else

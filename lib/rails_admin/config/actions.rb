@@ -109,6 +109,7 @@ end
 require 'rails_admin/config/actions/base'
 require 'rails_admin/config/actions/dashboard'
 require 'rails_admin/config/actions/index'
+require 'rails_admin/config/actions/association_index'
 require 'rails_admin/config/actions/show'
 require 'rails_admin/config/actions/show_in_app'
 require 'rails_admin/config/actions/history_show'

@@ -1,0 +1,11 @@
+:ruby
+  orig_model_config = @model_config
+  orig_abstract_model = @abstract_model
+  @model_config = @assoc_model_config
+  @abstract_model = @assoc_abstract_model
+
+= render template: 'rails_admin/main/index'
+
+:ruby
+  @model_config = orig_model_config
+  @abstract_model = orig_abstract_model
