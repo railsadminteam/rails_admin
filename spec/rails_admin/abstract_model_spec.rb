@@ -19,17 +19,16 @@ describe RailsAdmin::AbstractModel do
     end
 
     context 'on enum' do
-
       shared_examples "filter on enum" do
-      before do
-        ["S", "M", "L"].each do |size|
-          FactoryGirl.create(:field_test, size_string_enum: size)
-        end
+        before do
+          ["S", "M", "L"].each do |size|
+            FactoryGirl.create(:field_test, size_string_enum: size)
+          end
 
-        ["small", "medium", "large"].each do |size|
-          FactoryGirl.create(:field_test, size_integer_enum: size)
+          ["small", "medium", "large"].each do |size|
+            FactoryGirl.create(:field_test, size_integer_enum: size)
+          end
         end
-      end
         let(:model) { RailsAdmin::AbstractModel.new('FieldTest') }
         let(:filters) { {enum_field => {'1' => {v: filter_value, o: 'is'}}} }
         subject(:elements) {  model.all(filters: filters) }
