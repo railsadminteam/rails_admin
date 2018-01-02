@@ -1,4 +1,4 @@
-//=  require 'jquery'
+//=  require 'jquery2'
 //=  require 'jquery_ujs'
 //=  require 'jquery.remotipart'
 //=  require 'jquery-ui/effect'
