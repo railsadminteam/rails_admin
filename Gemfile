@@ -6,6 +6,8 @@ gem 'haml'
 gem 'devise'
 
 group :active_record do
+  gem 'paper_trail'
+
   platforms :ruby, :mswin, :mingw do
     gem 'mysql2', '~> 0.3.14'
     gem 'pg', '>= 0.14'
