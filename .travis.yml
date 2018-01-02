@@ -1,3 +1,5 @@
+dist: trusty
+
 language: ruby
 
 before_install: gem install bundler
@@ -30,6 +32,8 @@ gemfile:
 
 services:
   - mongodb
+  - postgresql
+  - mysqld
 
 dist: trusty
 
