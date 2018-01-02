@@ -338,32 +338,81 @@ describe 'RailsAdmin Basic List', type: :request do
     end
   end
 
-  describe 'GET /admin/player with 3 pages, page 2' do
+  context 'List with 3 pages' do
+    def visit_page(page)
+      visit index_path(model_name: 'player', page: page)
+    end
+
     before do
       RailsAdmin.config.default_items_per_page = 1
-      items_per_page = RailsAdmin.config.default_items_per_page
-      (items_per_page * 3).times { FactoryGirl.create(:player) }
-      visit index_path(model_name: 'player', page: 2)
+      (RailsAdmin.config.default_items_per_page * 3).times { FactoryGirl.create(:player) }
     end
 
-    it 'paginates correctly' do
-      expect(find('ul.pagination li:first')).to have_content('« Prev')
-      expect(find('ul.pagination li:last')).to have_content('Next »')
-      expect(find('ul.pagination li.active')).to have_content('2')
-    end
-  end
+    describe 'with limited_pagination=false' do
+      it 'page 1' do
+        visit_page(1)
 
-  describe 'list with 3 pages, page 3' do
-    before do
-      items_per_page = RailsAdmin.config.default_items_per_page
-      @players = Array.new((items_per_page * 3)) { FactoryGirl.create(:player) }
-      visit index_path(model_name: 'player', page: 3)
+        within('ul.pagination') do
+          expect(find('li:first')).to have_content('« Prev')
+          expect(find('li:last')).to have_content('Next »')
+          expect(find('li.active')).to have_content('1')
+        end
+      end
+
+      it 'page 2' do
+        visit_page(2)
+
+        within('ul.pagination') do
+          expect(find('li:first')).to have_content('« Prev')
+          expect(find('li:last')).to have_content('Next »')
+          expect(find('li.active')).to have_content('2')
+        end
+      end
+
+      it 'page 3' do
+        visit_page(3)
+
+        within('ul.pagination') do
+          expect(find('li:first')).to have_content('« Prev')
+          expect(find('li:last')).to have_content('Next »')
+          expect(find('li.active')).to have_content('3')
+        end
+      end
     end
 
-    it 'paginates correctly and contain the right item' do
-      expect(find('ul.pagination li:first')).to have_content('« Prev')
-      expect(find('ul.pagination li:last')).to have_content('Next »')
-      expect(find('ul.pagination li.active')).to have_content('3')
+    context 'with limited_pagination=true' do
+      before do
+        allow(RailsAdmin::AbstractModel.new(Player).config.list).
+          to receive(:limited_pagination).
+          and_return(true)
+      end
+
+      it 'page 1' do
+        visit_page(1)
+
+        within('ul.pagination') do
+          expect(find('li:first')).not_to have_content('« Prev')
+          expect(find('li:last')).to have_content('Next »')
+        end
+      end
+
+      it 'page 2' do
+        visit_page(2)
+
+        within('ul.pagination') do
+          expect(find('li:first')).to have_content('« Prev')
+          expect(find('li:last')).to have_content('Next »')
+        end
+      end
+
+      it 'page 3' do
+        visit_page(3)
+
+        within('ul.pagination') do
+          expect(find('li:first')).to have_content('« Prev')
+          expect(find('li:last')).to have_content('Next »')
+        end
+      end
     end
   end
 

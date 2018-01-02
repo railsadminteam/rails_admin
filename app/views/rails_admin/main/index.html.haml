@@ -106,7 +106,11 @@
             %td.last.links
               %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
 
-    - if @objects.respond_to?(:total_count)
+    - if @model_config.list.limited_pagination
+      .row
+        .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap/without_count', total_pages: Float::INFINITY, remote: true)
+
+    - elsif @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       .row
         .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap', remote: true)
