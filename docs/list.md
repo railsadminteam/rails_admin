@@ -238,6 +238,22 @@ RailsAdmin.config do |config|
   end
 end
 ```
+### Limited pagination
+
+It allows to avoid `count(*)` query which take a lot of resources on big tables.
+Pagination includes only: `next`/`prev` buttons.
+Default value is `false`.
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    list do
+      limited_pagination true
+    end
+  end
+end
+```
+
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
 
