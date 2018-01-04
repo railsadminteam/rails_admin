@@ -59,6 +59,42 @@ More on ActiveRecord's API pages.
 
 RailsAdmin doesn't know about :conditions in your association, so you'll need to use `authorization` or `associated_collection_scope` to scope visible records (in the select box)
 
+### Restricting records based on association scope
+
+You can configure RailsAdmin to use the scope as defined on your association (also works on through associations). The following code will result in only showing `active` players for the Players field on the Team form:
+
+```ruby
+class Team < ApplicationRecord
+  has_many :memberships, inverse_of: :team
+  has_many :players, through: :memberships
+end
+
+class Membership < ApplicationRecord
+  belongs_to :team, inverse_of: :memberships
+  belongs_to :player, -> { active }, inverse_of: :memberships
+end
+
+class Player < ApplicationRecord
+  has_many :memberships, inverse_of: :player
+  scope :active, -> { where(retired: false) }
+end
+
+config.model Team do
+  edit do
+    include_fields :policy_section, :title, :description, :players
+    configure :players do
+      associated_collection_scope do
+        resource_scope = bindings[:object].class.reflect_on_association(:players).source_reflection.scope
+
+        proc do |scope|
+          resource_scope ? scope.merge(resource_scope) : scope
+        end
+      end
+    end
+  end
+end
+```
+
 ### Restricting records through authorization
 
 Another way to scope potential records is to use authorization, through Cancan:
