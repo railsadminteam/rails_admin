@@ -36,7 +36,37 @@ any of the other field defaults.
 
 ### Virtual Fields
 
-It is possible to configure Rails Admin to display "virtual" fields--fields that are not database attributes on the model. Just define them as methods on your model, then configure a field of the same name. [_needs expansion_]
+It is possible to configure Rails Admin to display "virtual" fields--fields that are not database attributes on the model. Just define them as methods on your model, then configure a field of the same name.
+
+In your model add a method with any name, like:
+
+```ruby
+class Address < ApplicationRecord
+  belongs_to :state
+  belongs_to :city
+
+  # Virtual field method
+  def full_address
+    [self.street, self.number, self.city.name, self.state.name].compact.join(', ')
+  end
+end
+```
+
+And
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Address do
+    list do
+      # virtual field
+      configure :full_address do
+        # any configuration
+      end
+      fields :full_address, :street, :number #, ...
+    end
+  end
+end
+```
 
 ### Controlling by logic
 
