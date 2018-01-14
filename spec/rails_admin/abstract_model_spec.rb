@@ -18,7 +18,7 @@ describe RailsAdmin::AbstractModel do
       end
     end
 
-    context 'on enum' do
+    context 'on ActiveRecord native enum' do
       shared_examples "filter on enum" do
         before do
           ["S", "M", "L"].each do |size|
@@ -56,7 +56,7 @@ describe RailsAdmin::AbstractModel do
           let(:expected_elements_count) { 1 }
         end
       end
-    end
+    end if CI_ORM == :active_record && ::Rails.version >= '4.1'
 
     context 'on dates with :en locale' do
       before do

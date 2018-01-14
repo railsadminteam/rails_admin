@@ -14,6 +14,8 @@ class FieldTest < ActiveRecord::Base
 
   attachment :refile_asset if defined?(Refile)
 
-  enum size_string_enum: {S: 's', M: 'm', L: 'l'}
-  enum size_integer_enum: [:small, :medium, :large]
+  if ::Rails.version >= '4.1' # enum support was added in Rails 4.1
+    enum size_string_enum: {S: 's', M: 'm', L: 'l'}
+    enum size_integer_enum: [:small, :medium, :large]
+  end
 end
