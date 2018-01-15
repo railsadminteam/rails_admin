@@ -19,6 +19,12 @@ describe RailsAdmin::Config::Fields::Types::Json do
       end
     end
 
+    it 'returns correct value for empty json' do
+      allow(object).to receive(:json_field) { {} }
+      actual = field.with(bindings).formatted_value
+      expect(actual).to eq("{\n}")
+    end
+
     it 'retuns correct value' do
       allow(object).to receive(:json_field) { {sample_key: "sample_value"} }
       actual = field.with(bindings).formatted_value
