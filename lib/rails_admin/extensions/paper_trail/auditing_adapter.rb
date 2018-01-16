@@ -63,9 +63,9 @@ module RailsAdmin
           end
         end
 
-        def latest
+        def latest(count = 100)
           @version_class
-            .order(id: :desc).includes(:item).limit(100)
+            .order(id: :desc).includes(:item).limit(count)
             .collect { |version| VersionProxy.new(version, @user_class) }
         end
 
