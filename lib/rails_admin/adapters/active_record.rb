@@ -101,12 +101,6 @@ module RailsAdmin
 
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
-            value =
-              if value.is_a?(Array)
-                value.map { |v| field.parse_value(v) }
-              else
-                field.parse_value(value)
-              end
             statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator).to_statement
             @statements << statement if statement.present?
             @values << value1 unless value1.nil?
@@ -126,7 +120,8 @@ module RailsAdmin
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
         wb = WhereBuilder.new(scope)
         fields.each do |field|
-          wb.add(field, field.parse_value(query), field.search_operator)
+          value = parse_field_value(field, query)
+          wb.add(field, value, field.search_operator)
         end
         # OR all query statements
         wb.build
