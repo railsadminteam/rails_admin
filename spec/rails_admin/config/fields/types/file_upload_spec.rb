@@ -43,4 +43,31 @@ describe RailsAdmin::Config::Fields::Types::FileUpload do
       end
     end
   end
+
+  describe '#pretty_value' do
+    context 'when the field is not image' do
+      before do
+        RailsAdmin.config FieldTest do
+          field :string_field, :file_upload do
+            def resource_url
+              'http://example.com/dummy.txt'
+            end
+          end
+        end
+      end
+
+      let :rails_admin_field do
+        RailsAdmin.config('FieldTest').fields.detect do |f|
+          f.name == :string_field
+        end.with(
+          object: FieldTest.new(string_field: 'dummy.txt'),
+          view: ApplicationController.new.view_context,
+        )
+      end
+
+      it 'has non-empty link text' do
+        expect(rails_admin_field.pretty_value).to eq '<a target="_blank" href="http://example.com/dummy.txt">dummy.txt</a>'
+      end
+    end
+  end
 end
