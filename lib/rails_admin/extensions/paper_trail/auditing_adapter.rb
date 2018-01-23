@@ -64,9 +64,9 @@ module RailsAdmin
         end
 
         def latest(count = 100)
-          @version_class
-            .order(id: :desc).includes(:item).limit(count)
-            .collect { |version| VersionProxy.new(version, @user_class) }
+          @version_class.
+            order(id: :desc).includes(:item).limit(count).
+            collect { |version| VersionProxy.new(version, @user_class) }
         end
 
         def delete_object(_object, _model, _user)
