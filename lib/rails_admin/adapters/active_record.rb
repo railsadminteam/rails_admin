@@ -225,29 +225,13 @@ module RailsAdmin
         def build_statement_for_string_or_text
           return if @value.blank?
 
-          unless ['postgresql', 'postgis'].include? ar_adapter
-            @value = @value.mb_chars.downcase
-          end
+          @value = @value.mb_chars.downcase unless @operator.in?(%w(is =))
 
-          @value = begin
-            case @operator
-            when 'default', 'like'
-              "%#{@value}%"
-            when 'starts_with'
-              "#{@value}%"
-            when 'ends_with'
-              "%#{@value}"
-            when 'is', '='
-              @value
-            else
-              return
-            end
-          end
-
-          if ['postgresql', 'postgis'].include? ar_adapter
-            ["(#{@column} ILIKE ?)", @value]
-          else
-            ["(LOWER(#{@column}) LIKE ?)", @value]
+          case @operator
+          when 'default', 'like' then ["(LOWER(#{@column}) LIKE ?)", "%#{@value}%"]
+          when 'starts_with'     then ["(LOWER(#{@column}) LIKE ?)", "#{@value}%"]
+          when 'ends_with'       then ["(LOWER(#{@column}) LIKE ?)", "%#{@value}"]
+          when 'is', '='         then ["(#{@column} = ?)", @value]
           end
         end
 
