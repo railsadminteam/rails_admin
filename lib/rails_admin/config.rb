@@ -267,6 +267,10 @@ module RailsAdmin
         RailsAdmin::AbstractModel.all.collect { |m| model(m) }
       end
 
+      def disable_browser_validations_for=(models)
+        @disable_browser_validations_for = models.map(&:constantize)
+      end
+
       # Reset all configurations to defaults.
       #
       # @see RailsAdmin::Config.registry
