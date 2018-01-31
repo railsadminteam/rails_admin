@@ -5,7 +5,9 @@ module RailsAdmin
     def rails_admin_form_for(*args, &block)
       options = args.extract_options!.reverse_merge(builder: RailsAdmin::FormBuilder)
       (options[:html] ||= {})[:novalidate] ||= !RailsAdmin::Config.browser_validations
-
+      if RailsAdmin::Config.disable_browser_validations_for.include? args.first.class
+        options[:html][:novalidate] = true
+      end
       form_for(*(args << options), &block) << after_nested_form_callbacks
     end
 
