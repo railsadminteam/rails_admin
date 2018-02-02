@@ -60,9 +60,6 @@ module RailsAdmin
       # Tell browsers whether to use the native HTML5 validations (novalidate form option).
       attr_accessor :browser_validations
 
-      # Force disable browser validation for specific models
-      attr_accessor :disable_browser_validations_for
-
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
 
@@ -273,7 +270,6 @@ module RailsAdmin
       def reset
         @compact_show_view = true
         @browser_validations = true
-        @disable_browser_validations_for = []
         @yell_for_non_accessible_fields = true
         @authenticate = nil
         @authorize = nil
