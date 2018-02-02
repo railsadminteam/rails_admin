@@ -274,6 +274,19 @@ describe RailsAdmin::Config do
     end
   end
 
+  describe '.forgery_protection_settings' do
+    it 'uses with: :exception by default' do
+      expect(RailsAdmin.config.forgery_protection_settings).to eq(with: :exception)
+    end
+
+    it 'allows to customize settings' do
+      RailsAdmin.config do |config|
+        config.forgery_protection_settings = {with: :null_session}
+      end
+      expect(RailsAdmin.config.forgery_protection_settings).to eq(with: :null_session)
+    end
+  end
+
   describe '.model' do
     let(:fields) { described_class.model(Team).fields }
     before do
