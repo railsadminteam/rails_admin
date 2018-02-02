@@ -62,6 +62,10 @@ module RailsAdmin
       # set parent controller
       attr_accessor :parent_controller
 
+      # set settings for `protect_from_forgery` method
+      # By default, it raises exception upon invalid CSRF tokens
+      attr_accessor :forgery_protection_settings
+
       # Stores model configuration objects in a hash identified by model's class
       # name.
       #
@@ -288,6 +292,7 @@ module RailsAdmin
         @navigation_static_links = {}
         @navigation_static_label = nil
         @parent_controller = '::ActionController::Base'
+        @forgery_protection_settings = {with: :exception}
         RailsAdmin::Config::Actions.reset
       end
 
