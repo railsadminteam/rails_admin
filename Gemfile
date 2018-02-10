@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'appraisal', '>= 2.0'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 gem 'haml'
 gem 'devise'
 
@@ -10,7 +10,6 @@ group :active_record do
 
   platforms :ruby, :mswin, :mingw do
     gem 'mysql2', '~> 0.3.14'
-    gem 'pg', '>= 0.14'
     gem 'sqlite3', '>= 1.3'
   end
 end

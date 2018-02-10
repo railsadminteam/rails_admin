@@ -22,7 +22,11 @@ ensure
 end
 
 silence_stream(STDOUT) do
-  ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
+  if ActiveRecord::Migrator.respond_to? :migrate
+    ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
+  else
+    ActiveRecord::MigrationContext.new(File.expand_path('../../dummy_app/db/migrate/', __FILE__)).migrate
+  end
 end
 
 class Tableless < ActiveRecord::Base
