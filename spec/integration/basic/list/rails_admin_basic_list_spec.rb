@@ -53,6 +53,28 @@ describe 'RailsAdmin Basic List', type: :request do
     end
   end
 
+  describe 'GET /admin/team' do
+    let!(:teams) do
+      [
+        FactoryGirl.create(:team, main_sponsor: 'no_sponsor'),
+        FactoryGirl.create(:team, main_sponsor: 'food_factory'),
+      ]
+    end
+
+    it "allows filtering on enum values" do
+      RailsAdmin.config Team do
+        list do
+          field :name
+          field :main_sponsor
+        end
+      end
+
+      visit index_path(model_name: 'team', f: {main_sponsor: {'1' => {v: 'food_factory'}}})
+      is_expected.to have_no_content(teams[0].name)
+      is_expected.to have_content(teams[1].name)
+    end
+  end
+
   describe 'GET /admin/player' do
     before do
       @teams = Array.new(2) do
