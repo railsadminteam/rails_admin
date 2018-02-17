@@ -87,5 +87,19 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       @object.datetime_field = field.parse_input(datetime_field: 'Sat, 01 Sep 2012 12:00:00 +0200')
       expect(@object.datetime_field).to eq(Time.zone.parse('2012-09-01 12:00:00 +02:00'))
     end
+
+    it 'changes formats when the locale changes' do
+      french_format = "%A %d %B %Y %H:%M"
+      allow(I18n).to receive(:t).with(:long, scope: [:time, :formats], raise: true).and_return(french_format)
+      @object = FactoryGirl.create(:field_test)
+      @object.datetime_field = field.parse_input(datetime_field: @time.strftime(french_format))
+      expect(@object.datetime_field.strftime(french_format)).to eq(@time.strftime(french_format))
+
+      american_format = "%B %d, %Y %H:%M"
+      allow(I18n).to receive(:t).with(:long, scope: [:time, :formats], raise: true).and_return(american_format)
+      @object = FactoryGirl.create(:field_test)
+      @object.datetime_field = field.parse_input(datetime_field: @time.strftime(american_format))
+      expect(@object.datetime_field.strftime(american_format)).to eq(@time.strftime(american_format))
+    end
   end
 end
