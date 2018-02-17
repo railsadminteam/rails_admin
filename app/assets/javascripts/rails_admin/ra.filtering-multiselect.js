@@ -215,9 +215,9 @@
       this.element.find("option").each(function(i, option) {
         widget._cache['o_' + option.value] = {id: option.value, value: $(option).text()};
         if (option.selected) {
-          $(option).clone().appendTo(widget.selection).attr("selected", false).attr("title", $(option).text());
+          $(option).clone().appendTo(widget.selection).prop("selected", false).prop("title", $(option).text());
         } else {
-          $(option).clone().appendTo(widget.collection).attr("selected", false).attr("title", $(option).text());
+          $(option).clone().appendTo(widget.collection).prop("selected", false).prop("title", $(option).text());
         }
       });
     },
@@ -227,7 +227,7 @@
       options.each(function(i, option) {
         widget.element.find('option[value="' + option.value + '"]').removeAttr("selected");
       });
-      $(options).appendTo(this.collection).attr('selected', false);
+      $(options).appendTo(this.collection).prop('selected', false);
     },
 
     _query: function(query, success) {
@@ -282,12 +282,12 @@
       options.each(function(i, option) {
         var el = widget.element.find('option[value="' + option.value + '"]');
         if (el.length) {
-          el.attr("selected", "selected");
+          el.prop("selected", true);
         } else {
-          widget.element.append($('<option></option>').attr('value', option.value).attr('selected', "selected"));
+          widget.element.append($('<option></option>').prop('value', option.value).prop('selected', true));
         }
       });
-      $(options).appendTo(this.selection).attr('selected', false);
+      $(options).appendTo(this.selection).prop('selected', false);
     },
 
     _move: function(direction, options) {
