@@ -282,9 +282,9 @@
       options.each(function(i, option) {
         var el = widget.element.find('option[value="' + option.value + '"]');
         if (el.length) {
-          el.attr("selected", "selected");
+          el.prop("selected", "selected");
         } else {
-          widget.element.append($('<option></option>').attr('value', option.value).attr('selected', "selected"));
+          widget.element.append($('<option></option>').prop('value', option.value).prop('selected', "selected"));
         }
       });
       $(options).appendTo(this.selection).attr('selected', false);
