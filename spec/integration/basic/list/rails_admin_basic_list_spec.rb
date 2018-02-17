@@ -316,6 +316,36 @@ describe 'RailsAdmin Basic List', type: :request do
     end
   end
 
+  describe 'GET /admin/player with requested filters' do
+    it 'should escape filter parameters' do
+      xss = '"><script>alert(1)</script>'
+      escaped = ERB::Util.html_escape_once(xss)
+
+      get index_path(model_name: 'player', f: {name: {"#{xss}" => {o: xss, v: xss}},
+                                               id: {'2' => {o: 'between', v: [xss, xss, xss]}}})
+
+      options = {
+        index: escaped,
+        label: 'Name',
+        name: 'name',
+        type: 'string',
+        value: escaped,
+        operator: escaped,
+      }
+      expect(response.body).to include("$.filters.append(#{options.to_json});")
+
+      options = {
+        index: '2',
+        label: 'Id',
+        name: 'id',
+        type: 'integer',
+        value: [escaped, escaped, escaped],
+        operator: 'between',
+      }
+      expect(response.body).to include("$.filters.append(#{options.to_json});")
+    end
+  end
+
   describe 'GET /admin/player with 2 objects' do
     before do
       @players = FactoryGirl.create_list(:player, 2)

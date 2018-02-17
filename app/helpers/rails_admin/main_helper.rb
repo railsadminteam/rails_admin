@@ -58,7 +58,7 @@ module RailsAdmin
 
     def ordered_filter_string
       @ordered_filter_string ||= ordered_filters.map do |duplet|
-        options = {index: duplet[0]}
+        options = {index: /^\d+$/ === duplet[0].to_s.strip ? duplet[0] : escape_once(duplet[0])}
         filter_for_field = duplet[1]
         filter_name = filter_for_field.keys.first
         filter_hash = filter_for_field.values.first
@@ -71,12 +71,15 @@ module RailsAdmin
         when :date, :datetime, :time
           options[:datetimepicker_format] = field.parser.to_momentjs
         end
+
         options[:label] = field.label
         options[:name]  = field.name
         options[:type]  = field.type
-        options[:value] = filter_hash['v']
+        options[:value] = if v = filter_hash['v']
+                            v.respond_to?(:map) ? v.map { |i| escape_once(i) } : escape_once(v)
+                          end
         options[:label] = field.label
-        options[:operator] = filter_hash['o']
+        options[:operator] = filter_hash['o'] ? escape_once(filter_hash['o']) : nil
         %{$.filters.append(#{options.to_json});}
       end.join("\n").html_safe if ordered_filters
     end
