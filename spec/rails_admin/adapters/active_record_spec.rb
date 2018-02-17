@@ -394,6 +394,18 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       expect(build_statement(:enum, '1', nil)).to eq(['(field IN (?))', ['1']])
     end
 
+    describe 'with ActiveRecord native enum' do
+      let(:scope) { FieldTest.all }
+
+      it 'supports integer enum type query' do
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'integer_enum_field' => {'1' => {v: 2, o: 'default'}}))).to eq(predicates_for(scope.where(['(field_tests.integer_enum_field IN (?))', 2])))
+      end
+
+      it 'supports string enum type query' do
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'string_enum_field' => {'1' => {v: 'm', o: 'default'}}))).to eq(predicates_for(scope.where(['(field_tests.string_enum_field IN (?))', 'm'])))
+      end
+    end if ::Rails.version >= '4.1'
+
     it 'supports uuid type query' do
       uuid = SecureRandom.uuid
       expect(build_statement(:uuid, uuid, nil)).to eq(['(field = ?)', uuid])

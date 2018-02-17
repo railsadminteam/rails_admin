@@ -70,6 +70,9 @@ Style/FileName:
   Exclude:
     - 'lib/rails_admin/bootstrap-sass.rb'
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Style/Lambda:
   Enabled: false
 
