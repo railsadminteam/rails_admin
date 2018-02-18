@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :auditing_versions_limit do
-          50
+          100
         end
 
         register_instance_option :controller do
