@@ -2,7 +2,31 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.2.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.3.0...HEAD)
+
+
+## [1.3.0](https://github.com/sferik/rails_admin/tree/v1.3.0) - 2018-02-18
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.2.0...v1.3.0)
+
+#### Added
+- Configurability for forgery protection setting([#2989](https://github.com/sferik/rails_admin/pull/2989))
+- Configurability for the number of audit records displayed into dashboard([#2982](https://github.com/sferik/rails_admin/pull/2982))
+- Add limited pagination mode, which doesn't require count query([#2968](https://github.com/sferik/rails_admin/pull/2968))
+- Prettier output of JSON field value([#2937](https://github.com/sferik/rails_admin/pull/2937), [#2973](https://github.com/sferik/rails_admin/pull/2973), [#2980](https://github.com/sferik/rails_admin/pull/2980))
+- Add markdown field support through SimpleMDE([#2949](https://github.com/sferik/rails_admin/pull/2949))
+- Checkboxes for bulk actions in index page can be turned off now([#2917](https://github.com/sferik/rails_admin/pull/2917))
+
+### Fixed
+- Parse JS translations as JSON([#2925](https://github.com/sferik/rails_admin/pull/2925))
+- Re-selecting an item after unselecting has no effect in filtering-multiselect([#2912](https://github.com/sferik/rails_admin/issues/2912))
+- Stop memoization of datetime parser to handle locale changes([#2824](https://github.com/sferik/rails_admin/pull/2824))
+- Filters for ActiveRecord Enum field behaved incorrectly for enums whose labels are different from values([#2971](https://github.com/sferik/rails_admin/pull/2971))
+- Client-side required validation was not enforced in filtering-select widget([#2905](https://github.com/sferik/rails_admin/pull/2905))
+- Filter refresh button was broken([#2890](https://github.com/sferik/rails_admin/pull/2890))
+
+### Security
+- Fix XSS vulnerability in filter and multi-select widget([#2985](https://github.com/sferik/rails_admin/issues/2985), [44f09ed7](https://github.com/sferik/rails_admin/commit/44f09ed72b5e0e917a5d61bd89c48d97c494b41c))
 
 
 ## [1.2.0](https://github.com/sferik/rails_admin/tree/v1.2.0) - 2017-05-31
