@@ -76,7 +76,6 @@ config.actions do
   member :my_member_action do             # subclass Base. Accessible at /admin/<model_name>/<id>/my_member_action
     i18n_key :edit                        # will have the same menu/title labels as the Edit action.
   end
-  
 end
 
 ```
