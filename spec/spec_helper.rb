@@ -1,7 +1,7 @@
 # Configure Rails Envinronment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-CI_TARGET_ORMS = [:active_record, :mongoid]
+CI_TARGET_ORMS = [:active_record, :mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 require 'simplecov'
@@ -20,6 +20,7 @@ require File.expand_path('../dummy_app/config/environment', __FILE__)
 require 'rspec/rails'
 require 'factory_girl'
 require 'factories'
+require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
 

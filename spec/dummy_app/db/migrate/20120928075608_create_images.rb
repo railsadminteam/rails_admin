@@ -1,4 +1,4 @@
-class CreateImages < ActiveRecord::Migration
+class CreateImages < MigrationBase
   def change
     create_table :images do |t|
       t.attachment :file

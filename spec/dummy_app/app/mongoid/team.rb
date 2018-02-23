@@ -17,6 +17,7 @@ class Team
   field :revenue, type: BigDecimal
   field :color, type: String
   field :custom_field, type: String
+  field :main_sponsor, type: Integer
 
   has_many :players, inverse_of: :team, order: :_id.asc
   has_and_belongs_to_many :fans

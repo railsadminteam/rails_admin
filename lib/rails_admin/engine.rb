@@ -12,7 +12,7 @@ module RailsAdmin
   class Engine < Rails::Engine
     isolate_namespace RailsAdmin
 
-    config.action_dispatch.rescue_responses.merge!('RailsAdmin::ActionNotAllowed' => :forbidden)
+    config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin precompile hook', group: :all do |app|
       app.config.assets.precompile += %w(
@@ -23,7 +23,8 @@ module RailsAdmin
       )
     end
 
-    initializer 'RailsAdmin pjax hook' do |app|
+    initializer 'RailsAdmin setup middlewares' do |app|
+      app.config.middleware.use ActionDispatch::Flash
       app.config.middleware.use Rack::Pjax
     end
 

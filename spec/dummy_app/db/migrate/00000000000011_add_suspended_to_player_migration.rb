@@ -1,4 +1,4 @@
-class AddSuspendedToPlayerMigration < ActiveRecord::Migration
+class AddSuspendedToPlayerMigration < MigrationBase
   def self.up
     add_column :players, :suspended, :boolean, default: false
   end

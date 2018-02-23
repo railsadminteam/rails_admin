@@ -13,4 +13,9 @@ class FieldTest < ActiveRecord::Base
   mount_uploader :carrierwave_asset, CarrierwaveUploader
 
   attachment :refile_asset if defined?(Refile)
+
+  if ::Rails.version >= '4.1' # enum support was added in Rails 4.1
+    enum string_enum_field: {S: 's', M: 'm', L: 'l'}
+    enum integer_enum_field: [:small, :medium, :large]
+  end
 end

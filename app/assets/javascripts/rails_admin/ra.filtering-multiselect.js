@@ -175,22 +175,26 @@
     _queryFilter: function(val) {
       var widget = this;
       widget._query(val, function(matches) {
-        var i;
+
         var filtered = [];
-        for (i in matches) {
-          if (matches.hasOwnProperty(i) && !widget.selected(matches[i].id)) {
+        var i;
+
+        for (i = 0; i < matches.length; i++) {
+          if (!widget.selected(matches[i].id)) {
             filtered.push(i);
           }
         }
         if (filtered.length > 0) {
-          widget.collection.html('');
-          for (i in filtered) {
-            widget.collection.append(
-              $('<option></option>').attr('value', matches[filtered[i]].id).attr('title', matches[filtered[i]].label).text(matches[filtered[i]].label)
-            );
+          widget.collection[0].innerHTML = '';
+          for (i = 0; i < filtered.length; i++) {
+            var newOptions = $('<option></option>')
+              .prop('value', matches[filtered[i]].id)
+              .prop('title', matches[filtered[i]].label)
+              .text(matches[filtered[i]].label);
+            $(widget.collection[0]).append(newOptions);
           }
         } else {
-          widget.collection.html(widget.noObjectsPlaceholder);
+          widget.collection[0].innerHTML = widget.noObjectsPlaceholder;
         }
       });
     },
@@ -209,12 +213,11 @@
       var widget = this;
 
       this.element.find("option").each(function(i, option) {
+        widget._cache['o_' + option.value] = {id: option.value, value: $(option).text()};
         if (option.selected) {
-          widget._cache['o_' + option.value] = {id: option.value, value: option.innerHTML};
-          $(option).clone().appendTo(widget.selection).attr("selected", false).attr("title", $(option).text());
+          $(option).clone().appendTo(widget.selection).prop("selected", false).prop("title", $(option).text());
         } else {
-          widget._cache['o_' + option.value] = {id: option.value, value: option.innerHTML};
-          $(option).clone().appendTo(widget.collection).attr("selected", false).attr("title", $(option).text());
+          $(option).clone().appendTo(widget.collection).prop("selected", false).prop("title", $(option).text());
         }
       });
     },
@@ -224,7 +227,7 @@
       options.each(function(i, option) {
         widget.element.find('option[value="' + option.value + '"]').removeAttr("selected");
       });
-      $(options).appendTo(this.collection).attr('selected', false);
+      $(options).appendTo(this.collection).prop('selected', false);
     },
 
     _query: function(query, success) {
@@ -279,12 +282,12 @@
       options.each(function(i, option) {
         var el = widget.element.find('option[value="' + option.value + '"]');
         if (el.length) {
-          el.attr("selected", "selected");
+          el.prop("selected", true);
         } else {
-          widget.element.append($('<option></option>').attr('value', option.value).attr('selected', "selected"));
+          widget.element.append($('<option></option>').prop('value', option.value).prop('selected', true));
         }
       });
-      $(options).appendTo(this.selection).attr('selected', false);
+      $(options).appendTo(this.selection).prop('selected', false);
     },
 
     _move: function(direction, options) {
@@ -314,7 +317,9 @@
     },
 
     selected: function(value) {
-      return this.element.find('option[value="' + value + '"]').attr("selected");
+      if (this.selection[0].querySelectorAll('option[value="' + value + '"]')[0]) {
+        return true;
+      }
     },
 
     destroy: function() {

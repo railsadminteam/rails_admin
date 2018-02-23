@@ -2,22 +2,35 @@
 require 'spec_helper'
 
 describe RailsAdmin::MainController, type: :controller do
+  routes { RailsAdmin::Engine.routes }
+
+  def get(action, params)
+    if Rails.version >= '5.0'
+      super action, params: params
+    else
+      super action, params
+    end
+  end
+
   describe '#dashboard' do
     before do
       allow(controller).to receive(:render).and_return(true) # no rendering
     end
 
     it 'shows statistics by default' do
-      expect(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
+      allow(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
+      expect(RailsAdmin.config(Player).abstract_model).to receive(:count)
       controller.dashboard
     end
 
     it 'does not show statistics if turned off' do
       RailsAdmin.config do |c|
+        c.included_models = [Player]
         c.actions do
           dashboard do
             statistics false
           end
+          index # mandatory
         end
       end
 
@@ -47,10 +60,16 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe '#check_for_cancel' do
+    before do
+      allow(controller).to receive(:back_or_index) { raise(StandardError.new('redirected back')) }
+    end
+
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
-      allow(controller).to receive(:back_or_index) { fail(StandardError.new('redirected back')) }
       expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete' }.to raise_error('redirected back')
-      expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: [] }.not_to raise_error
+    end
+
+    it 'does not redirect to back if params[:bulk_ids] and params[:bulk_action] is present' do
+      expect { get :bulk_delete, model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: [1] }.not_to raise_error
     end
   end
 
@@ -85,7 +104,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     context 'using active_record, supporting joins', active_record: true do
-      it 'gives back the local column'  do
+      it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
         expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
       end
@@ -94,7 +113,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view' do
     before do
-      @teams = 21.times.collect { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
     end
 
@@ -106,7 +125,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view with kaminari custom param_name' do
     before do
-      @teams = 21.times.collect { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
       Kaminari.config.param_name = :pagina
     end
@@ -123,7 +142,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called with bulk_ids' do
     before do
-      @teams = 21.times.collect { FactoryGirl.create :team }
+      @teams = FactoryGirl.create_list(:team, 21)
       controller.params = {model_name: 'teams', bulk_action: 'bulk_delete', bulk_ids: @teams.collect(&:id)}
     end
 
@@ -140,9 +159,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it "doesn't scope associated collection records when associated_collection_scope is nil" do
-      @players = 2.times.collect do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 2)
 
       RailsAdmin.config Team do
         field :players do
@@ -154,9 +171,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'scopes associated collection records according to associated_collection_scope' do
-      @players = 4.times.collect do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 4)
 
       RailsAdmin.config Team do
         field :players do
@@ -173,9 +188,7 @@ describe RailsAdmin::MainController, type: :controller do
       @team.revenue = BigDecimal.new('3')
       @team.save
 
-      @players = 5.times.collect do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 5)
 
       RailsAdmin.config Team do
         field :players do
@@ -192,9 +205,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'limits associated collection records number to 30 if cache_all is false' do
-      @players = 40.times.collect do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -205,9 +216,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it "doesn't limit associated collection records number to 30 if cache_all is true" do
-      @players = 40.times.collect do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -218,11 +227,30 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'orders associated collection records by id, descending' do
-      @players = 3.times.collect do
-        FactoryGirl.create :player
-      end
+      @players = FactoryGirl.create_list(:player, 3)
 
       expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
+    end
+  end
+
+  describe '#get_collection' do
+    before do
+      @team = FactoryGirl.create(:team)
+      controller.params = {model_name: 'teams'}
+      RailsAdmin.config Team do
+        field :players do
+          eager_load true
+        end
+      end
+      @model_config = RailsAdmin.config(Team)
+    end
+
+    it 'performs eager-loading for an association field with `eagar_load true`' do
+      scope = double('scope')
+      abstract_model = @model_config.abstract_model
+      allow(@model_config).to receive(:abstract_model).and_return(abstract_model)
+      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), scope).once
+      controller.send(:get_collection, @model_config, scope, false)
     end
   end
 
@@ -242,6 +270,30 @@ describe RailsAdmin::MainController, type: :controller do
         FactoryGirl.create :player, team: (FactoryGirl.create :team)
         get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
+      end
+    end
+
+    context 'when authorizing requests with pundit' do
+      if defined?(Devise::Test)
+        include Devise::Test::ControllerHelpers
+      else
+        include Devise::TestHelpers
+      end
+
+      controller(RailsAdmin::MainController) do
+        include ::Pundit
+        after_action :verify_authorized
+      end
+
+      it 'performs authorization' do
+        RailsAdmin.config do |c|
+          c.authorize_with(:pundit)
+          c.authenticate_with { warden.authenticate! scope: :user }
+          c.current_user_method(&:current_user)
+        end
+        login_as FactoryGirl.create :user, roles: [:admin]
+        player = FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        expect { get :show, model_name: 'player', id: player.id }.not_to raise_error
       end
     end
   end
@@ -300,20 +352,18 @@ describe RailsAdmin::MainController, type: :controller do
       end
 
       it 'sanitize params recursively in nested forms' do
-        expect(controller.params).to eq(
-          'field_test' => {
-            'datetime_field' => ::Time.zone.parse('Sun, 01 Aug 2010 00:00:00 UTC +00:00'),
-            'nested_field_tests_attributes' => {
-              'new_1330520162002' => {
-                'comment_attributes' => {
-                  'created_at' => ::Time.zone.parse('Mon, 02 Aug 2010 00:00:00 UTC +00:00'),
-                },
-                'created_at' => ::Time.zone.parse('Tue, 03 Aug 2010 00:00:00 UTC +00:00'),
+        expect(controller.params[:field_test].to_h).to eq(
+          'datetime_field' => ::Time.zone.parse('Sun, 01 Aug 2010 00:00:00 UTC +00:00'),
+          'nested_field_tests_attributes' => {
+            'new_1330520162002' => {
+              'comment_attributes' => {
+                'created_at' => ::Time.zone.parse('Mon, 02 Aug 2010 00:00:00 UTC +00:00'),
               },
+              'created_at' => ::Time.zone.parse('Tue, 03 Aug 2010 00:00:00 UTC +00:00'),
             },
-            'comment_attributes' => {
-              'created_at' => ::Time.zone.parse('Wed, 04 Aug 2010 00:00:00 UTC +00:00'),
-            },
+          },
+          'comment_attributes' => {
+            'created_at' => ::Time.zone.parse('Wed, 04 Aug 2010 00:00:00 UTC +00:00'),
           },
         )
       end
@@ -349,17 +399,16 @@ describe RailsAdmin::MainController, type: :controller do
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
-      expect(controller.params).to eq(
-        'field_test' => {
-          'carrierwave_asset' => 'test',
-          'remove_carrierwave_asset' => 'test',
-          'carrierwave_asset_cache' => 'test',
-          'dragonfly_asset' => 'test',
-          'remove_dragonfly_asset' => 'test',
-          'retained_dragonfly_asset' => 'test',
-          'paperclip_asset' => 'test',
-          'delete_paperclip_asset' => 'test',
-        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
+      expect(controller.params[:field_test].to_h).to eq({
+        'carrierwave_asset' => 'test',
+        'remove_carrierwave_asset' => 'test',
+        'carrierwave_asset_cache' => 'test',
+        'dragonfly_asset' => 'test',
+        'remove_dragonfly_asset' => 'test',
+        'retained_dragonfly_asset' => 'test',
+        'paperclip_asset' => 'test',
+        'delete_paperclip_asset' => 'test',
+      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do
@@ -374,11 +423,10 @@ describe RailsAdmin::MainController, type: :controller do
         },
       )
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(Comment), controller.params['comment'])
-      expect(controller.params).to eq(
-        'comment' => {
-          'commentable_id' => 'test',
-          'commentable_type' => 'test',
-        })
+      expect(controller.params[:comment].to_h).to eq(
+        'commentable_id' => 'test',
+        'commentable_type' => 'test',
+      )
     end
   end
 end

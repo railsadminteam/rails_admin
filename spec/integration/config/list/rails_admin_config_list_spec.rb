@@ -434,4 +434,44 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       is_expected.not_to have_link('embed 1')
     end
   end
+
+  describe 'checkboxes?' do
+    describe 'default is enabled' do
+      before do
+        RailsAdmin.config FieldTest do
+          list
+        end
+      end
+
+      it 'displays checkboxes on index' do
+        @records = FactoryGirl.create_list :field_test, 3
+
+        visit index_path(model_name: 'field_test')
+        checkboxes = all(:xpath, './/form[@id="bulk_form"]//input[@type="checkbox"]')
+        expect(checkboxes.length).to be > 0
+
+        expect(page).to have_content('Selected items')
+      end
+    end
+
+    describe 'false' do
+      before do
+        RailsAdmin.config FieldTest do
+          list do
+            checkboxes false
+          end
+        end
+      end
+
+      it 'does not display any checkboxes on index' do
+        @records = FactoryGirl.create_list :field_test, 3
+
+        visit index_path(model_name: 'field_test')
+        checkboxes = all(:xpath, './/form[@id="bulk_form"]//input[@type="checkbox"]')
+        expect(checkboxes.length).to eq 0
+
+        expect(page).not_to have_content('Selected items')
+      end
+    end
+  end
 end

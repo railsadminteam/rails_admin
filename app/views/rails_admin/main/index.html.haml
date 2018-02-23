@@ -10,6 +10,7 @@
   export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
   description = RailsAdmin.config(@abstract_model.model_name).description
   properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).visible_fields
+  checkboxes = @model_config.list.checkboxes?
   # columns paginate
   sets = get_column_sets(properties)
   properties = sets[params[:set].to_i] || []
@@ -17,7 +18,8 @@
   other_right = sets[params[:set].to_i + 1].present?
 
 - content_for :contextual_tabs do
-  = bulk_menu
+  - if checkboxes
+    = bulk_menu
   - if filterable_fields.present?
     %li.dropdown{style: 'float:right'}
       %a.dropdown-toggle{href: '#', :'data-toggle' => "dropdown"}
@@ -51,9 +53,9 @@
       .input-group
         %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
         %span.input-group-btn
-          %button.btn.btn-primary{type: "submit", :'data-disable-with' => "<i class='icon-white icon-refresh'></i> ".html_safe + t("admin.misc.refresh")}
+          %button.btn.btn-primary{type: 'submit', :'data-disable-with' => '<i class="icon-white icon-refresh"></i> '.html_safe + t('admin.misc.refresh')}
             %i.icon-white.icon-refresh
-            = t("admin.misc.refresh")
+            = t('admin.misc.refresh')
           %button#remove_filter.btn.btn-info{title: "Reset filters"}
             %i.icon-white.icon-remove
       - if export_action
@@ -75,8 +77,9 @@
     %table.table.table-condensed.table-striped
       %thead
         %tr
-          %th.shrink
-            %input.toggle{type: "checkbox"}
+          - if checkboxes
+            %th.shrink
+              %input.toggle{type: "checkbox"}
           - if other_left
             %th.other.left.shrink= "..."
           - properties.each do |property|
@@ -90,9 +93,9 @@
           %th.last.shrink
       %tbody
         - @objects.each do |object|
-          %tr{class: "#{@abstract_model.param_key}_row"}
-            %td
-              = check_box_tag "bulk_ids[]", object.id, false
+          %tr{class: "#{@abstract_model.param_key}_row #{@model_config.list.with(object: object).row_css_class}"}
+            - if checkboxes
+              %td= check_box_tag "bulk_ids[]", object.id, false
             - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
               %td.other.left= link_to "...", @other_left_link, class: 'pjax'
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
@@ -103,7 +106,11 @@
             %td.last.links
               %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
 
-    - if @objects.respond_to?(:total_count)
+    - if @model_config.list.limited_pagination
+      .row
+        .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap/without_count', total_pages: Float::INFINITY, remote: true)
+
+    - elsif @objects.respond_to?(:total_count)
       - total_count = @objects.total_count.to_i
       .row
         .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap', remote: true)

@@ -8,7 +8,7 @@ require 'rails_admin/adapters/mongoid/bson'
 module RailsAdmin
   module Adapters
     module Mongoid
-      DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point)
+      DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point).freeze
 
       def parse_object_id(value)
         Bson.parse_object_id(value)
@@ -190,7 +190,7 @@ module RailsAdmin
         when String
           field_name, collection_name = options[:sort].split('.').reverse
           if collection_name && collection_name != table_name
-            fail('sorting by associated model column is not supported in Non-Relational databases')
+            raise('sorting by associated model column is not supported in Non-Relational databases')
           end
         when Symbol
           field_name = options[:sort].to_s

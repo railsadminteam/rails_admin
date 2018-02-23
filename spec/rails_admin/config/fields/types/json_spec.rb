@@ -22,7 +22,7 @@ describe RailsAdmin::Config::Fields::Types::Json do
     it 'returns correct value for empty json' do
       allow(object).to receive(:json_field) { {} }
       actual = field.with(bindings).formatted_value
-      expect(actual).to eq("{\n}")
+      expect(actual).to match(/{\n+}/)
     end
 
     it 'retuns correct value' do

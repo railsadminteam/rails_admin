@@ -5,6 +5,10 @@ module RailsAdmin
     module Sections
       # Configuration of the list view
       class List < RailsAdmin::Config::Sections::Base
+        register_instance_option :checkboxes? do
+          true
+        end
+
         register_instance_option :filters do
           []
         end
@@ -12,6 +16,12 @@ module RailsAdmin
         # Number of items listed per page
         register_instance_option :items_per_page do
           RailsAdmin::Config.default_items_per_page
+        end
+
+        # Positive value shows only prev, next links in pagination.
+        # This is for avoiding count(*) query.
+        register_instance_option :limited_pagination do
+          false
         end
 
         register_instance_option :sort_by do
@@ -24,6 +34,10 @@ module RailsAdmin
 
         register_instance_option :scopes do
           []
+        end
+
+        register_instance_option :row_css_class do
+          ''
         end
       end
     end

@@ -6,5 +6,5 @@ DummyApp::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   root to: 'rails_admin/main#dashboard'
   # https://github.com/sferik/rails_admin/issues/362
-  get ':controller(/:action(/:id(.:format)))'
+  get ':controller(/:action(/:id(.:format)))' unless Rails.version.to_s >= '5'
 end

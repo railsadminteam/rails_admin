@@ -12,9 +12,13 @@ module RailsAdmin
           nil
         end
 
+        register_instance_option :auditing_versions_limit do
+          100
+        end
+
         register_instance_option :controller do
           proc do
-            @history = @auditing_adapter && @auditing_adapter.latest || []
+            @history = @auditing_adapter && @auditing_adapter.latest(@action.auditing_versions_limit) || []
             if @action.statistics?
               @abstract_models = RailsAdmin::Config.visible_models(controller: self).collect(&:abstract_model)
 
@@ -30,7 +34,7 @@ module RailsAdmin
                 @most_recent_created[t.model.name] = t.model.last.try(:created_at)
               end
             end
-            render @action.template_name, status: (flash[:error].present? ? :not_found : 200)
+            render @action.template_name, status: @status_code || :ok
           end
         end
 

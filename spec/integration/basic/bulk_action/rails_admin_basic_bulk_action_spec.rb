@@ -4,7 +4,7 @@ describe 'RailsAdmin Basic Bulk Action', type: :request do
   subject { page }
 
   before do
-    @players = 2.times.collect { FactoryGirl.create :player }
+    @players = FactoryGirl.create_list(:player, 2)
   end
 
   describe 'bulk_delete' do
@@ -29,21 +29,21 @@ describe 'RailsAdmin Basic Bulk Action', type: :request do
       is_expected.to have_content(@players.last.name)
     end
 
-    it 'returns 404 error for DELETE request if the records are already deleted' do
+    it 'returns error message for DELETE request if the records are already deleted' do
       expect(Player.count).to eq @players.length
       player_ids = [@players.first.id]
       @players.first.destroy # delete selected object before send request to delete it.
 
       delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: player_ids))
-      expect(response.response_code).to eq 404
-      expect(response.body).to match(/0 players failed to be deleted/i)
+      expect(response.response_code).to eq 302
+      expect(flash[:error]).to match(/0 players failed to be deleted/i)
     end
 
-    it 'returns 404 error for DELETE request without bulk_ids' do
+    it 'returns error message for DELETE request without bulk_ids' do
       expect(Player.count).to eq @players.length
       delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: ''))
-      expect(response.response_code).to eq 404
-      expect(response.body).to match(/0 players failed to be deleted/i)
+      expect(response.response_code).to eq 302
+      expect(flash[:error]).to match(/0 players failed to be deleted/i)
     end
   end
 

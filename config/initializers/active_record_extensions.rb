@@ -1,4 +1,4 @@
-if defined?(::ActiveRecord)
+ActiveSupport.on_load(:active_record) do
   module ActiveRecord
     class Base
       def self.rails_admin(&block)
@@ -6,11 +6,11 @@ if defined?(::ActiveRecord)
       end
 
       def rails_admin_default_object_label_method
-        self.new_record? ? "new #{self.class}" : "#{self.class} ##{id}"
+        new_record? ? "new #{self.class}" : "#{self.class} ##{id}"
       end
 
       def safe_send(value)
-        if self.has_attribute?(value)
+        if has_attribute?(value)
           read_attribute(value)
         else
           send(value)

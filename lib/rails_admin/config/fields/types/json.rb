@@ -13,6 +13,10 @@ module RailsAdmin
             value ? JSON.pretty_generate(value) : nil
           end
 
+          register_instance_option :pretty_value do
+            bindings[:view].content_tag(:pre) { formatted_value }.html_safe
+          end
+
           def parse_value(value)
             value.present? ? JSON.parse(value) : nil
           end

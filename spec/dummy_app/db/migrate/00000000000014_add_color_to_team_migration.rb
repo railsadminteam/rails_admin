@@ -1,4 +1,4 @@
-class AddColorToTeamMigration < ActiveRecord::Migration
+class AddColorToTeamMigration < MigrationBase
   def self.up
     add_column :teams, :color, :string
   end

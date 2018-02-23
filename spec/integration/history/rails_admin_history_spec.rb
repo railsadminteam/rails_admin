@@ -79,7 +79,7 @@ describe 'RailsAdmin History', type: :request, active_record: true do
         end
 
         it 'renders a XHR request successfully' do
-          xhr :get, history_index_path(@model, page: 2)
+          get history_index_path(@model, page: 2), xhr: true
         end
       end
     end

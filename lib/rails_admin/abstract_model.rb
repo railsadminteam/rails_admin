@@ -87,12 +87,11 @@ module RailsAdmin
         case association.type
         when :has_one
           if child = object.send(association.name)
-            yield(association, child)
+            yield(association, [child])
           end
         when :has_many
-          object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
-            yield(association, child)
-          end
+          children = object.send(association.name)
+          yield(association, Array.new(children))
         end
       end
     end
@@ -147,7 +146,7 @@ module RailsAdmin
       end
 
       def build_statement_for_type
-        fail('You must override build_statement_for_type in your StatementBuilder')
+        raise('You must override build_statement_for_type in your StatementBuilder')
       end
 
       def build_statement_for_integer_decimal_or_float
@@ -185,11 +184,11 @@ module RailsAdmin
       end
 
       def unary_operators
-        fail('You must override unary_operators in your StatementBuilder')
+        raise('You must override unary_operators in your StatementBuilder')
       end
 
       def range_filter(_min, _max)
-        fail('You must override range_filter in your StatementBuilder')
+        raise('You must override range_filter in your StatementBuilder')
       end
 
       class FilteringDuration

@@ -36,11 +36,20 @@ module RailsAdmin
           item: :item_id,
           created_at: :created_at,
           message: :event,
-        }
+        }.freeze
+
+        def self.setup
+          raise('PaperTrail not found') unless defined?(::PaperTrail)
+          RailsAdmin::ApplicationController.class_eval do
+            def user_for_paper_trail
+              _current_user.try(:id) || _current_user
+            end
+          end
+        end
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
-          fail('PaperTrail not found') unless defined?(PaperTrail)
           @controller = controller
+          @controller.send(:set_paper_trail_whodunnit) if @controller
           begin
             @user_class = user_class.to_s.constantize
           rescue NameError
@@ -54,8 +63,10 @@ module RailsAdmin
           end
         end
 
-        def latest
-          @version_class.order('id DESC').limit(100).collect { |version| VersionProxy.new(version, @user_class) }
+        def latest(count = 100)
+          @version_class.
+            order(id: :desc).includes(:item).limit(count).
+            collect { |version| VersionProxy.new(version, @user_class) }
         end
 
         def delete_object(_object, _model, _user)
