@@ -32,104 +32,31 @@
     button: null,
     input: null,
     select: null,
+    filtering_select: null,
 
     _create: function() {
-      var filtering_select = this.element.siblings(
+      this.filtering_select = this.element.siblings(
         '[data-input-for="' + this.element.attr('id') + '"]'
       );
 
       // When using the browser back and forward buttons, it is possible that
       // the autocomplete field will be cached which causes duplicate fields
       // to be generated.
-      if (filtering_select.length > 0) {
-        this.input = filtering_select.children('input');
-        this.button = filtering_select.children('.input-group-btn');
+      if (this.filtering_select.length > 0) {
+        this.input = this.filtering_select.children('input');
+        this.button = this.filtering_select.children('.input-group-btn');
       } else {
         this.element.hide();
-        filtering_select = this._inputGroup(this.element.attr('id'));
+        this.filtering_select = this._inputGroup(this.element.attr('id'));
         this.input = this._inputField();
         this.button = this._buttonField();
       }
 
       if (this.options.float_left) {
-        var float_style = "left"
+        this.filtering_select.css('float', 'left')
       } else {
-        var float_style = "none"
+        this.filtering_select.css('float', 'none')
       }
-      var filtering_select = $('<div class="input-group filtering-select col-sm-2" style="float: ' + float_style + ' "></div>')
-
-      var input = this.input = $('<input type="text">')
-        .val(value)
-        .addClass("form-control ra-filtering-select-input")
-        .attr('style', select.attr('style'))
-        .show()
-        .autocomplete({
-          delay: this.options.searchDelay,
-          minLength: this.options.minLength,
-          source: this._getSourceFunction(this.options.source),
-          select: function(event, ui) {
-            var option = $('<option></option>').attr('value', ui.item.id).attr('selected', 'selected').text(ui.item.value);
-            select.html(option);
-            select.trigger("change", ui.item.id);
-            self._trigger("selected", event, {
-              item: option
-            });
-            $(self.element.parents('.controls')[0]).find('.update').removeClass('disabled');
-          },
-          change: function(event, ui) {
-            if (!ui.item) {
-              var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
-                  valid = false;
-              select.children("option").each(function() {
-                if ($(this).text().match(matcher)) {
-                  this.selected = valid = true;
-                  return false;
-                }
-              });
-              if (!valid || $(this).val() == '') {
-                // remove invalid value, as it didn't match anything
-                $(this).val(null);
-                select.html($('<option value="" selected="selected"></option>'));
-                input.data("ui-autocomplete").term = "";
-                $(self.element.parents('.controls')[0]).find('.update').addClass('disabled');
-                return false;
-              }
-
-            }
-          }
-        })
-        .keyup(function() {
-          /* Clear select options and trigger change if selected item is deleted */
-          if ($(this).val().length == 0) {
-            select.html($('<option value="" selected="selected"></option>'));
-            select.trigger("change");
-          }
-        })
-
-      if(select.attr('placeholder'))
-        input.attr('placeholder', select.attr('placeholder'))
-
-      input.data("ui-autocomplete")._renderItem = function(ul, item) {
-        return $("<li></li>")
-          .data("ui-autocomplete-item", item)
-          .append( $( "<a></a>" ).html( item.html || item.id ) )
-          .appendTo(ul);
-      };
-
-      var button = this.button = $('<span class="input-group-btn"><label class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Show All Items" role="button"><span class="caret"></span><span class="ui-button-text">&nbsp;</span></label></span>')
-        .click(function() {
-          // close if already visible
-          if (input.autocomplete("widget").is(":visible")) {
-            input.autocomplete("close");
-            return;
-          }
-
-          // pass empty string as value to search for, displaying all results
-          input.autocomplete("search", "");
-          input.focus();
-        });
-
-      filtering_select.append(input).append(button).insertAfter(select);
 
       this._setOptionsSource();
       this._initAutocomplete();
@@ -137,7 +64,7 @@
       this._overloadRenderItem();
       this._autocompleteDropdownEvent(this.button);
 
-      return filtering_select.append(this.input)
+      return this.filtering_select.append(this.input)
         .append(this.button)
         .insertAfter(this.element);
     },
@@ -270,11 +197,6 @@
         input.attr('placeholder', this.element.attr('placeholder'));
       }
 
-      if (this.element.attr('required')) {
-        input.attr('required', this.element.attr('required'));
-        this.element.attr('required', false);
-      }
-
       return input;
     },
 
@@ -282,7 +204,7 @@
       return $('<div>')
         .addClass('input-group filtering-select col-sm-2')
         .attr('data-input-for', inputFor)
-        .css('float', 'left');
+        .css('float', this.element.css("float"));
     },
 
     _initAutocomplete: function() {
@@ -367,6 +289,7 @@
       this.input.remove();
       this.button.remove();
       this.element.show();
+      this.filtering_select.remove();
       $.Widget.prototype.destroy.call(this);
     }
   });
