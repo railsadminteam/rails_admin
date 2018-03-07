@@ -327,6 +327,37 @@ describe RailsAdmin::Config do
       end
     end
   end
+
+  describe "field types code reloading" do
+    let(:config) { described_class.model(Team) }
+    let(:fields) { described_class.model(Team).edit.fields }
+
+    let(:team_config) {
+      Proc.new {
+        field :id
+        field :wins, :boolean
+      }
+    }
+    let(:team_config2) {
+      Proc.new {
+        field :wins, :toggle
+      }
+    }
+
+    it "allows code reloading" do
+      Team.send(:rails_admin, &team_config)
+
+      # This simulates the way RailsAdmin really does it
+      config.edit.send(:_fields, true)
+
+      class RailsAdmin::Config::Fields::Types::Toggle < RailsAdmin::Config::Fields::Base
+        RailsAdmin::Config::Fields::Types::register(self)
+      end
+      Team.send(:rails_admin, &team_config2)
+      expect(fields.map(&:name)).to match_array %i(id wins)
+    end
+  end
+
 end
 
 module ExampleModule
