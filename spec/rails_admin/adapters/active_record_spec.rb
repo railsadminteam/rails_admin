@@ -2,12 +2,12 @@ require 'spec_helper'
 require 'timecop'
 
 describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
-  before do
-    @like = if ['postgresql', 'postgis'].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
-              '(field ILIKE ?)'
-            else
-              '(LOWER(field) LIKE ?)'
-            end
+  let(:like) do
+    if ['postgresql', 'postgis'].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
+      '(field ILIKE ?)'
+    else
+      '(LOWER(field) LIKE ?)'
+    end
   end
 
   def predicates_for(scope)
@@ -204,17 +204,17 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it 'supports string type query' do
         expect(build_statement(:string, '', nil)).to be_nil
         expect(build_statement(:string, 'foo', 'was')).to be_nil
-        expect(build_statement(:string, 'foo', 'default')).to eq([@like, '%foo%'])
-        expect(build_statement(:string, 'foo', 'like')).to eq([@like, '%foo%'])
-        expect(build_statement(:string, 'foo', 'starts_with')).to eq([@like, 'foo%'])
-        expect(build_statement(:string, 'foo', 'ends_with')).to eq([@like, '%foo'])
-        expect(build_statement(:string, 'foo', 'is')).to eq([@like, 'foo'])
+        expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
+        expect(build_statement(:string, 'foo', 'like')).to eq([like, '%foo%'])
+        expect(build_statement(:string, 'foo', 'starts_with')).to eq([like, 'foo%'])
+        expect(build_statement(:string, 'foo', 'ends_with')).to eq([like, '%foo'])
+        expect(build_statement(:string, 'foo', 'is')).to eq(['(field = ?)', 'foo'])
       end
 
       it 'performs case-insensitive searches' do
         unless ['postgresql', 'postgis'].include?(::ActiveRecord::Base.configurations[Rails.env]['adapter'])
-          expect(build_statement(:string, 'foo', 'default')).to eq([@like, '%foo%'])
-          expect(build_statement(:string, 'FOO', 'default')).to eq([@like, '%foo%'])
+          expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
+          expect(build_statement(:string, 'FOO', 'default')).to eq([like, '%foo%'])
         end
       end
 
