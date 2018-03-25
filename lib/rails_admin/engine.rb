@@ -26,6 +26,11 @@ module RailsAdmin
     initializer 'RailsAdmin setup middlewares' do |app|
       app.config.middleware.use ActionDispatch::Flash
       app.config.middleware.use Rack::Pjax
+
+      app.config.session_store :cookie_store
+      app.config.middleware.use ActionDispatch::Cookies
+      app.config.middleware.use ActionDispatch::Session::CookieStore, app.config.session_options
+      app.config.middleware.use Rack::MethodOverride
     end
 
     rake_tasks do
