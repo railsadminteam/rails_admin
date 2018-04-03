@@ -1,3 +1,5 @@
+require 'rails_admin/config/fields/types/file_upload'
+
 module RailsAdmin
   module Config
     module Fields
