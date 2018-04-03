@@ -23,12 +23,16 @@ module RailsAdmin
             nil
           end
 
+          register_instance_option :presence_method do
+            :presence
+          end
+
           register_instance_option :export_value do
             resource_url.to_s
           end
 
           register_instance_option :pretty_value do
-            if value.presence
+            if value.send(presence_method)
               v = bindings[:view]
               url = resource_url
               if image
