@@ -8,7 +8,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :thumb_method do
-            { resize: '300x200>' }
+            { resize: '100x100>' }
           end
 
           register_instance_option :delete_method do
