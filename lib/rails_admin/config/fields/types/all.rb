@@ -1,4 +1,5 @@
 require 'rails_admin/config/fields/types/active_record_enum'
+require 'rails_admin/config/fields/types/active_storage'
 require 'rails_admin/config/fields/types/belongs_to_association'
 require 'rails_admin/config/fields/types/boolean'
 require 'rails_admin/config/fields/types/bson_object_id'
