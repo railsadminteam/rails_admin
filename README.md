@@ -50,9 +50,10 @@ Also, 1.0.0 and 1.1.0 is known to have [CSRF vulnerability](https://github.com/s
 
 ### [Action required] Rails 5.2
 
-**Rails version 5.2 requires you to generate ActiveStorage migration file**
+Rails version 5.2 requires you to generate ActiveStorage migration file
+
 ```bash
-rails g active_storage:install
+rails active_storage:install
 rails db:migrate
 ```
 
