@@ -48,6 +48,14 @@ Also, 1.0.0 and 1.1.0 is known to have [CSRF vulnerability](https://github.com/s
 4. Provide a namespace for the routes when asked
 5. Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin). (if you chose default namespace: /admin)
 
+### [Action required] Rails 5.2
+
+**Rails version 5.2 requires you to generate ActiveStorage migration file**
+```bash
+rails g active_storage:install
+rails db:migrate
+```
+
 ## Configuration
 ### Global
 In `config/initializers/rails_admin.rb`:
