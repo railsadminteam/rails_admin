@@ -155,6 +155,8 @@ module RailsAdmin
           case @type
           when :boolean
             boolean_unary_operators
+          when :integer, :decimal, :float
+            numeric_unary_operators
           else
             generic_unary_operators
           end
@@ -181,6 +183,7 @@ module RailsAdmin
             '_not_empty' => ["(#{@column} IS NOT NULL)"],
           )
         end
+        alias_method :numeric_unary_operators, :boolean_unary_operators
 
         def range_filter(min, max)
           if min && max
