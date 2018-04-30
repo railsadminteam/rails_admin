@@ -24,5 +24,6 @@ module DummyApp
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
     config.active_record.raise_in_transactional_callbacks = true if Rails::VERSION::MAJOR == 4 && Rails::VERSION::MINOR == 2 && CI_ORM == :active_record
     config.active_record.time_zone_aware_types = [:datetime, :time] if Rails::VERSION::MAJOR >= 5 && CI_ORM == :active_record
+    config.active_record.sqlite3.represent_boolean_as_integer = true if CI_ORM == :active_record && config.active_record.sqlite3.respond_to?(:represent_boolean_as_integer=)
   end
 end

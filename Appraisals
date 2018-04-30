@@ -118,8 +118,14 @@ appraise "rails-5.1" do
   gem 'devise', '~> 4.0'
 
   group :active_record do
-    gem 'pg', '~> 0.14'
+    gem 'pg', '~> 0.14', platforms: :ruby
     gem 'paper_trail', '>= 5.0'
+
+    platforms :jruby do
+      gem 'activerecord-jdbcmysql-adapter', '~> 51.0'
+      gem 'activerecord-jdbcpostgresql-adapter', github: "jruby/activerecord-jdbc-adapter"
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 51.0'
+    end
   end
 
   group :mongoid do
@@ -131,17 +137,18 @@ appraise "rails-5.1" do
 end
 
 appraise "rails-5.2" do
-  gem 'rails', '~> 5.2.0.rc1'
+  gem 'rails', '~> 5.2.0'
   gem 'sass-rails', '~> 5.0'
-  gem 'devise', github: 'plataformatec/devise'
+  gem 'devise', '~> 4.4'
 
   group :active_record do
-    gem 'pg', '>= 1.0.0'
+    gem 'pg', '>= 1.0.0', platforms: :ruby
+    gem 'cancancan', '~> 1.12', github: 'mshibuya/cancancan', branch: 'topic-backport-rails-5-2-support-to-1-x'
     gem 'paper_trail', '>= 5.0'
   end
 
   group :mongoid do
-    gem 'mongoid', '>= 7.0.0.beta'
+    gem 'mongoid', '~> 6.4'
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'

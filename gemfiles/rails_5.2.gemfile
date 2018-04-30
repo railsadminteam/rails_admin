@@ -3,17 +3,18 @@
 source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
-gem "rails", "~> 5.2.0.rc1"
+gem "rails", "~> 5.2.0"
 gem "haml"
-gem "devise", github: "plataformatec/devise"
+gem "devise", "~> 4.4"
 gem "sass-rails", "~> 5.0"
 
 group :active_record do
   gem "paper_trail", ">= 5.0"
-  gem "pg", ">= 1.0.0"
+  gem "pg", ">= 1.0.0", platforms: :ruby
+  gem "cancancan", "~> 1.12", github: "mshibuya/cancancan", branch: "topic-backport-rails-5-2-support-to-1-x"
 
   platforms :ruby, :mswin, :mingw do
-    gem "mysql2", "~> 0.3.14"
+    gem "mysql2", ">= 0.3.14"
     gem "sqlite3", ">= 1.3"
   end
 end
@@ -24,7 +25,6 @@ end
 
 group :test do
   gem "cancan", ">= 1.6"
-  gem "cancancan", "~> 1.12.0"
   gem "carrierwave", ">= 0.8"
   gem "coveralls"
   gem "database_cleaner", [">= 1.2", "!= 1.4.0", "!= 1.5.0"]
@@ -48,7 +48,7 @@ group :test do
 end
 
 group :mongoid do
-  gem "mongoid", ">= 7.0.0.beta"
+  gem "mongoid", "~> 6.4"
   gem "kaminari-mongoid"
   gem "mongoid-paperclip", ">= 0.0.8", require: "mongoid_paperclip"
   gem "carrierwave-mongoid", ">= 0.6.3", require: "carrierwave/mongoid"

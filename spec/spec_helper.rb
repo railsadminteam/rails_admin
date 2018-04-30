@@ -53,6 +53,7 @@ end
 
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
+Capybara.server = :webrick
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|

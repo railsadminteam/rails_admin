@@ -43,6 +43,7 @@ describe 'RailsAdmin CanCan Authorization', type: :request do
   subject { page }
 
   before do
+    skip "CanCan does not work with ActiveRecord >= 5.2" if CI_ORM == :active_record && ActiveRecord::VERSION::STRING >= '5.2'
     RailsAdmin.config do |c|
       c.authorize_with(:cancan)
       c.authenticate_with { warden.authenticate! scope: :user }
