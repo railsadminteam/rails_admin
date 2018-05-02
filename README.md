@@ -72,6 +72,27 @@ end
 
 Details: [Models](https://github.com/sferik/rails_admin/wiki/Models), [Groups](https://github.com/sferik/rails_admin/wiki/Groups), [Fields](https://github.com/sferik/rails_admin/wiki/Fields)
 
+
+### Custom model search using pg_search
+```ruby
+class Ball < ActiveRecord::Base
+  include PgSearch
+  validates :name, presence: true
+  belongs_to :player
+
+  pg_search_scope :rails_admin_search,
+    :against => [:id, :name],
+    :associated_against => {
+      player: [:id, :name]
+    },
+    using: {
+      tsearch: {any_word: true,},
+      trigram: {threshold: 0.1}
+    }
+end
+```
+
+
 ## Documentation
 https://github.com/sferik/rails_admin/wiki
 
