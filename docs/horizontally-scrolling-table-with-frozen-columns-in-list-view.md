@@ -1,4 +1,39 @@
-Here's a technique that you can use to make the list view table show all of the columns on a single page, with horizontal scrolling and frozen header columns in the table.
+_Updated 2018-05-02, pending PR to add this feature with a config setting._
+
+Here's a technique that you can use to make the list view table show all of the columns on a single page, with horizontal scrolling and frozen header columns in the table. [PR #3017](https://github.com/sferik/rails_admin/pull/3017) adds this feature with the config setting `horizontal_scroll_list`, which is used as follows:
+```ruby
+RailsAdmin.config do |config|
+  ...
+  # Use default horizontal scroll settings of 3 frozen columns (checkboxes, links/actions, ID) with a border on the right:
+  config.horizontal_scroll_list = true
+
+  # Use horizontal scrolling, but without any frozen columns:
+  config.horizontal_scroll_list = {num_frozen_columns: 0}
+
+  # Freeze more or fewer columns (col 1 = checkboxes, 2 = links/actions):
+  config.horizontal_scroll_list = {num_frozen_columns: 4}
+  config.horizontal_scroll_list = {num_frozen_columns: 1}
+
+  # Turn off frozen columns border:
+  config.horizontal_scroll_list = {css: '.scroll-frozen-last { box-shadow: none; }'}
+  ...
+end
+```
+
+This feature uses the CSS `position: sticky` value. It is designed to degrade gracefully on browsers that do not support `sticky`: users of those browsers will still have a horizontally-scrolling table, but the first few columns will not be frozen.
+
+Here are examples of what you'll get, using RailsAdmin's `spec/dummy_app` for an example.
+
+Default - `config.horizontal_scroll_list` unset:
+![](https://user-images.githubusercontent.com/1115369/39540385-5804f2b8-4df7-11e8-93c4-3c1b77b647be.png)
+
+`config.horizontal_scroll_list = true` (some scrolling shown):
+![](https://user-images.githubusercontent.com/1115369/39540539-c3e8fa06-4df7-11e8-958c-730ce13c22f7.png)
+
+`config.horizontal_scroll_list = {num_frozen_columns: 0}` (some scrolling shown):
+![](https://user-images.githubusercontent.com/1115369/39540666-28615bc2-4df8-11e8-97fb-1f0bc2c246b6.png)
+
+The following instructions allow you to add this feature to rails_admin before the PR is accepted/released.
 
 First, make all of your columns show up on a single page by editing `config/initializers/rails_admin.rb`:
 ```ruby
@@ -11,80 +46,73 @@ end
 
 Next, add some custom javascript by creating `app/assets/javascripts/rails_admin/custom/ui.js`:
 ```javascript
-$(document).on('rails_admin.dom_ready', function(){
-  var $table = $('#bulk_form').find('table');
-  var table = $table[0];
+(function(){
 
-  // Abort if there's nothing to do. Don't repeat ourselves, either.
-  if (!table || $table.hasClass('js-horiz-scroll')) { return; }
+  var horizontalScrollList = function(){
+    var $table = $('#bulk_form').find('table');
+    var table = $table[0];
 
-  // Add our indicator class. Also some enhancements.
-  $table.addClass('js-horiz-scroll table-hover');
+    // Abort if there's nothing to do. Don't repeat ourselves, either.
+    if (!table || $table.hasClass('js-horiz-scroll')) { return; }
 
-  ////
-  // Make the table horizontally scrollable.
-  // Inspiration from bootstrap's table-responsive.
-  ////
-  var tableWrapper = document.createElement('DIV');
-  //tableWrapper.className = 'table-responsive';
-  //tableWrapper.style.width = '100%';
-  tableWrapper.style.overflowX = 'auto';
-  tableWrapper.style.marginBottom = table.style.marginBottom;
-  table.style.marginBottom = '0';
-  //tableWrapper.style.overflowY = 'hidden';
-  table.parentElement.insertBefore(tableWrapper, table);
-  tableWrapper.appendChild(table);
-  $table.find('th.last,td.last').each(function(index, td){
-    var tr = td.parentElement;
-    tr.insertBefore(td, tr.children[1]);
+    // Add our indicator class. Also some enhancements.
+    $table.addClass('js-horiz-scroll table-hover');
+
+    ////
+    // Make the table horizontally scrollable.
+    // Inspiration from bootstrap's table-responsive.
+    ////
+    var tableWrapper = document.createElement('DIV');
+    tableWrapper.style.overflowX = 'auto';
+    tableWrapper.style.marginBottom = '20px';
+    table.style.marginBottom = '0';
+    table.parentElement.insertBefore(tableWrapper, table);
+    tableWrapper.appendChild(table);
+
+    // Move the links column to the left.
+    $table.find('th.last,td.last').each(function(index, td){
+      var tr = td.parentElement;
+      tr.insertBefore(td, tr.children[1]);
+    });
+
+    // Allow a render before calculating positions.
+    setTimeout(function(){
+      // Freeze the left columns.
+      var numFrozen = 3;
+      var $trs = $('#bulk_form').find('table tr');
+      var $headerTds = $trs.first().children('th,td');
+      var i, bgColor;
+      var offsets = [];
+      for (i = 0; i < numFrozen; i++) {
+        offsets.push($($headerTds[i]).position().left);
+      }
+      $trs.each(function(index, tr){
+        for (i = 0; i < numFrozen; i++) {
+          tr.children[i].style.position = 'sticky';
+          tr.children[i].style.left = (offsets[i]-offsets[0])+'px';
+          if (i === numFrozen-1) {
+            tr.children[i].style.boxShadow = '-1px 0 0 0 #ddd inset';
+            tr.children[i].style.paddingRight = '6px';
+          }
+          if (index % 2 === 0) {
+            bgColor = '#fff';
+            if (index === 0 && tr.children[i].className.indexOf('headerSort') > -1) {
+              bgColor = '#e2eff6';
+            }
+            tr.children[i].style.backgroundColor = bgColor;
+          }
+        }
+      });
+    }, 0);
+
+  };
+
+  $(window).on('load', function(){ // on 'load' to allow link icons to load.
+    horizontalScrollList();
+    $(document).on('rails_admin.dom_ready', horizontalScrollList);
   });
 
-  ////
-  // Freeze the left columns.
-  // Inspiration from http://stackoverflow.com/questions/1312236/how-do-i-create-an-html-table-with-fixed-frozen-left-column-and-scrollable-body
-  ////
-  var $trs = $table.find('tr');
-  var $headerTr = $trs.first();
-  var $headerTds = $headerTr.children('th,td');
-  var i, $td, pos;
-  var offsets = [];
-  var widths = [];
-  for (i = 0; i < 3; i++) {
-    $td = $($headerTds[i]);
-    pos = $td.position();
-    offsets.push(pos.left);
-    widths.push($td.outerWidth());
-  }
-  $trs.each(function(index, tr){
-    for (i = 0; i < 3; i++) {
-      tr.children[i].style.position = 'absolute';
-      tr.children[i].style.left = offsets[i]+'px';
-      tr.children[i].style.width = widths[i]+'px';
-    }
-  });
-  $td = $($headerTds[2]);
-  var margin = $td.position().left + $td.outerWidth() - $(tableWrapper).position().left;
-  tableWrapper.style.marginLeft = margin+'px';
-  tableWrapper.style.borderLeft = '1px solid black';
-
-  // Bottom-align the headers.
-  var trHeight = $headerTr.height();
-  for (i = 0; i < 3; i++) {
-    $td = $($headerTr[0].children[i]);
-    $td.css('padding-top', (trHeight - $td.height() - 4)+'px');
-  }
-
-  // Remove main browser window's horizontal scrollbar.
-  $('body').css('overflow-x', 'hidden');
-});
+}());
 ```
 
 Now be sure to do whatever else might be required in order to get the custom javascript included in your compiled assets, such as bumping your `Rails.application.config.assets.version` - https://github.com/sferik/rails_admin/issues/738#issuecomment-68483204 - or other things mentioned in that issue.
-
-Some parts of the above could be achieved by customizing `app/views/rails_admin/main/index.html.haml` and/or adding custom CSS instead of javascript, but that approach would require overriding a rather substantial file, which doesn't lend itself to easily upgrading your gems. Comment at https://github.com/sferik/rails_admin/issues/2272 if you think this should be made into a pull request.
-
-Enjoy!
-
-
-Here's what you'll get (rails_admin 0.6.8, Chrome 46.0):
-![railsadminhorizscroll](https://cloud.githubusercontent.com/assets/1115369/11372389/cf7cd36a-9292-11e5-9e00-ea7e3374c090.jpg)
