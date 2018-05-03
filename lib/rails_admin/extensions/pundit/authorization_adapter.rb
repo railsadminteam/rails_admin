@@ -43,9 +43,8 @@ module RailsAdmin
         # and bulk_delete/destroy actions and should return a scope which limits the records
         # to those which the user can perform the given action on.
         def query(_action, abstract_model)
-          @controller.policy_scope(abstract_model.model.all)
-        rescue ::Pundit::NotDefinedError
-          abstract_model.model.all
+          @controller.policy_scope_or_nil(abstract_model.model.all) ||
+            abstract_model.model.all
         end
 
         # This is called in the new/create actions to determine the initial attributes for new

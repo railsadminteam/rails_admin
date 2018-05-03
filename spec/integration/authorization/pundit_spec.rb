@@ -36,6 +36,21 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
       is_expected.not_to have_content('Add new')
     end
 
+    context do
+      let(:uninspectable_all) do
+        Player.all.tap do |all|
+          def all.inspect
+            fail 'All was inspected; this can be costly.'
+          end
+        end
+      end
+
+      it 'GET /admin should not call Player.all.inspect' do
+        allow(Player).to receive(:all).and_return(uninspectable_all)
+        visit dashboard_path
+      end
+    end
+
     it 'GET /admin/team should raise Pundit::NotAuthorizedError' do
       expect { visit index_path(model_name: 'team') }.to raise_error(Pundit::NotAuthorizedError)
     end
