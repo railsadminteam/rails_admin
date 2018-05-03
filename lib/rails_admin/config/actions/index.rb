@@ -29,9 +29,9 @@ module RailsAdmin
           proc do
             @objects ||= list_entries
 
-            unless @model_config.list.scopes.empty?
+            if @model_config.list.scopes.any?
               if params[:scope].blank?
-                unless @model_config.list.scopes.first.nil?
+                if @model_config.list.scopes.first && @objects.empty?
                   @objects = @objects.send(@model_config.list.scopes.first)
                 end
               elsif @model_config.list.scopes.collect(&:to_s).include?(params[:scope])
