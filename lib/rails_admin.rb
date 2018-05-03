@@ -46,7 +46,7 @@ module RailsAdmin
   rescue LoadError
     if YAML.respond_to?(:safe_load)
       def self.yaml_load(yaml)
-        YAML.safe_load(yaml)
+        YAML.safe_load(yaml, [BSON::Document])
       end
     else
       raise LoadError.new "Safe-loading of YAML is not available. Please install 'safe_yaml' or install Psych 2.0+"
