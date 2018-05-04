@@ -11,7 +11,7 @@ module RailsAdmin
             parent_value = super(value)
             return unless parent_value
             value_with_tz = parent_value.in_time_zone
-            ::DateTime.parse(value_with_tz.strftime('%Y-%m-%d %H:%M:%S'))
+            ::DateTime.parse(value_with_tz.strftime('%Y-%m-%d %H:%M:%S %Z'))
           end
 
           register_instance_option :strftime_format do
