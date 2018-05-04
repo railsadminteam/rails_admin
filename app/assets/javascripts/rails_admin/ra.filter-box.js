@@ -168,7 +168,9 @@
         .append('&nbsp;')
         .append(additional_control);
 
-      $('#filters_box').append($content);
+      if($('#filters_box input[name*="' + field_name + '"]').length == 0){
+        $('#filters_box').append($content);
+      }
 
       $content.find('.date, .datetime').datetimepicker({
         locale: RailsAdmin.I18n.locale,
