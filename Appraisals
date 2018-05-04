@@ -141,9 +141,12 @@ appraise "rails-5.2" do
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.4'
 
+  group :test do
+    gem 'cancancan', '~> 1.12', github: 'mshibuya/cancancan', branch: 'topic-backport-rails-5-2-support-to-1-x'
+  end
+
   group :active_record do
     gem 'pg', '>= 1.0.0', platforms: :ruby
-    gem 'cancancan', '~> 1.12', github: 'mshibuya/cancancan', branch: 'topic-backport-rails-5-2-support-to-1-x'
     gem 'paper_trail', '>= 5.0'
   end
 
