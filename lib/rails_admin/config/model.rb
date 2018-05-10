@@ -76,6 +76,10 @@ module RailsAdmin
         0
       end
 
+      register_instance_option :search_scope do
+        @search_scope ||= nil
+      end
+
       # parent node in navigation/breadcrumb
       register_instance_option :parent do
         @parent_model ||= begin

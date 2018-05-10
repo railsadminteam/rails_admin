@@ -32,11 +32,9 @@ module RailsAdmin
         scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
 
         if options[:query]
-          begin
-            # if you're using pg_search, the method is not defined
-            # eventhough it's there
-            scope = scope.rails_admin_search(options[:query])
-          rescue
+          if self.config.search_scope
+            scope = scope.send(self.config.search_scope, options[:query])
+          else
             scope = query_scope(scope, options[:query])
           end
         end
