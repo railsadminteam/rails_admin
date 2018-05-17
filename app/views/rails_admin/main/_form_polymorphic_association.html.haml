@@ -10,7 +10,7 @@
   default_options = { float_left: false }
 
   js_data = type_collection.inject({}) do |options, model|
-    model_name = model[0].downcase.parameterize.underscore
+    model_name = model.second.underscore.downcase
     source_abstract_model = RailsAdmin.config(form.object.class).abstract_model
     options.merge(model_name.gsub("_", "") => {
       xhr: true,
