@@ -476,15 +476,9 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
   end
 
   describe 'horizontal-scroll list option' do
-    horiz_scroll_css = {
-      enabled: '.table-wrapper { margin-bottom: 20px; overflow-x: auto; }',
-      frozen_cols: '.scroll-frozen { position: sticky; }',
-      last_col: '.scroll-frozen-last { box-shadow: -1px 0 0 0 #ddd inset; }',
-    }
-    js_include_test = "td.style.left = ($td.position().left-firstPosition)+'px';"
     all_team_columns = ['', '', 'Id', 'Created at', 'Updated at', 'Division', 'Name', 'Logo url', 'Team Manager', 'Ballpark', 'Mascot', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Color', 'Custom field', 'Main Sponsor', 'Players', 'Some Fans', 'Comments']
 
-    it "displays all fields with on one page when true" do
+    it "displays all fields on one page when true" do
       RailsAdmin.config do |config|
         config.horizontal_scroll_list = true
       end
@@ -493,30 +487,12 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       cols = all('th').collect(&:text)
       expect(cols[0..4]).to eq(all_team_columns[0..4])
       expect(cols).to contain_exactly(*all_team_columns)
-      expect(page).to have_selector('.table-wrapper')
-      expect(page.html).to include(horiz_scroll_css[:enabled])
-      expect(page.html).to include(horiz_scroll_css[:frozen_cols])
-      expect(page.html).to include(horiz_scroll_css[:last_col])
-      expect(page.html).to include(js_include_test)
-      expect(all('.scroll-frozen').count).to eq(12)
-      expect(all('th.scroll-frozen').count).to eq(3)
-      expect(all('td.scroll-frozen').count).to eq(9)
-      expect(all('.scroll-frozen-last').count).to eq(4)
-    end
-
-    it "displays all fields with custom css" do
-      custom_css = '.scroll-frozen-last { box-shadow: none; }'
-      RailsAdmin.config do |config|
-        config.horizontal_scroll_list = {css: custom_css}
-      end
-      visit index_path(model_name: 'team')
-      cols = all('th').collect(&:text)
-      expect(cols[0..4]).to eq(all_team_columns[0..4])
-      expect(cols).to contain_exactly(*all_team_columns)
-      expect(page.html).to include(horiz_scroll_css[:enabled])
-      expect(page.html).to include(horiz_scroll_css[:frozen_cols])
-      expect(page.html).to include(custom_css)
-      expect(page.html).to include(js_include_test)
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(12)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(3)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(9)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
     end
 
     it "displays all fields with custom frozen columns" do
@@ -528,14 +504,12 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       cols = all('th').collect(&:text)
       expect(cols[0..4]).to eq(all_team_columns[0..4])
       expect(cols).to contain_exactly(*all_team_columns)
-      expect(page.html).to include(horiz_scroll_css[:enabled])
-      expect(page.html).to include(horiz_scroll_css[:frozen_cols])
-      expect(page.html).to include(horiz_scroll_css[:last_col])
-      expect(page.html).to include(js_include_test)
-      expect(all('.scroll-frozen').count).to eq(8)
-      expect(all('th.scroll-frozen').count).to eq(2)
-      expect(all('td.scroll-frozen').count).to eq(6)
-      expect(all('.scroll-frozen-last').count).to eq(4)
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(8)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(2)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(6)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
     end
 
     it "displays all fields with no checkboxes" do
@@ -552,10 +526,10 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       cols = all('th').collect(&:text)
       expect(cols[0..3]).to eq(all_team_columns[1..4])
       expect(cols).to contain_exactly(*all_team_columns[1..-1])
-      expect(all('.scroll-frozen').count).to eq(8)
-      expect(all('th.scroll-frozen').count).to eq(2)
-      expect(all('td.scroll-frozen').count).to eq(6)
-      expect(all('.scroll-frozen-last').count).to eq(4)
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(8)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(2)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(6)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
     end
 
     it "displays all fields with no frozen columns" do
@@ -567,20 +541,20 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       cols = all('th').collect(&:text)
       expect(cols[0..4]).to eq(all_team_columns[0..4])
       expect(cols).to contain_exactly(*all_team_columns)
-      expect(page.html).to include(horiz_scroll_css[:enabled])
-      expect(page.html).not_to include(horiz_scroll_css[:frozen_cols])
-      expect(page.html).not_to include(js_include_test)
-      expect(all('.scroll-frozen').count).to eq(0)
-      expect(all('.scroll-frozen-last').count).to eq(0)
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).not_to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(0)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(0)
     end
 
     it "displays sets when not set" do
       visit index_path(model_name: 'team')
       expect(all('th').collect(&:text)).to eq ['', 'Id', 'Created at', 'Updated at', 'Division', 'Name', 'Logo url', '...', '']
-      expect(page.html).not_to include(horiz_scroll_css[:enabled])
-      expect(page.html).not_to include(horiz_scroll_css[:frozen_cols])
-      expect(page.html).not_to include(horiz_scroll_css[:last_col])
-      expect(page.html).not_to include(js_include_test)
+      expect(page).to have_selector('.table-wrapper')
+      expect(page).not_to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).not_to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(0)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(0)
     end
   end
 end
