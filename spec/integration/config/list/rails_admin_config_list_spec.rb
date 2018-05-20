@@ -556,5 +556,95 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       expect(all('.ra-horizontal-scroll-frozen').count).to eq(0)
       expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(0)
     end
+
+    it "displays sets when global config is on but model config is off" do
+      RailsAdmin.config do |config|
+        config.horizontal_scroll_list = true
+      end
+      RailsAdmin.config Team do
+        list do
+          horizontal_scroll_list false
+        end
+      end
+      visit index_path(model_name: 'team')
+      expect(all('th').collect(&:text)).to eq ['', 'Id', 'Created at', 'Updated at', 'Division', 'Name', 'Logo url', '...', '']
+      expect(page).to have_selector('.table-wrapper')
+      expect(page).not_to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).not_to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(0)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(0)
+    end
+
+    it "displays all fields when global config is off but model config is on" do
+      RailsAdmin.config Team do
+        list do
+          horizontal_scroll_list true
+        end
+      end
+      FactoryGirl.create_list :team, 3
+      visit index_path(model_name: 'team')
+      cols = all('th').collect(&:text)
+      expect(cols[0..4]).to eq(all_team_columns[0..4])
+      expect(cols).to contain_exactly(*all_team_columns)
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(12)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(3)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(9)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
+    end
+
+    it "displays all fields with custom model config settings" do
+      RailsAdmin.config do |config|
+        config.horizontal_scroll_list = true
+      end
+      RailsAdmin.config Team do
+        list do
+          horizontal_scroll_list(num_frozen_columns: 2)
+        end
+      end
+      FactoryGirl.create_list :team, 3
+      FactoryGirl.create_list :player, 3
+      visit index_path(model_name: 'team')
+      cols = all('th').collect(&:text)
+      expect(cols[0..4]).to eq(all_team_columns[0..4])
+      expect(cols).to contain_exactly(*all_team_columns)
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(8)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(2)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(6)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
+      visit index_path(model_name: 'player')
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(12)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(3)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(9)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
+    end
+
+    it "displays all fields with model config checkbox settings" do
+      RailsAdmin.config do |config|
+        config.horizontal_scroll_list = true
+      end
+      RailsAdmin.config Team do
+        list do
+          horizontal_scroll_list(num_frozen_columns: 3)
+          checkboxes false
+        end
+      end
+      FactoryGirl.create_list :team, 3
+      visit index_path(model_name: 'team')
+      cols = all('th').collect(&:text)
+      expect(cols[0..3]).to eq(all_team_columns[1..4])
+      expect(cols).to contain_exactly(*all_team_columns[1..-1])
+      expect(page).to have_selector('.table-wrapper.ra-horizontal-scroll-table')
+      expect(page).to have_selector('.ra-horizontal-scroll-list')
+      expect(all('.ra-horizontal-scroll-frozen').count).to eq(12)
+      expect(all('th.ra-horizontal-scroll-frozen').count).to eq(3)
+      expect(all('td.ra-horizontal-scroll-frozen').count).to eq(9)
+      expect(all('.ra-horizontal-scroll-frozen-last').count).to eq(4)
+    end
   end
 end
