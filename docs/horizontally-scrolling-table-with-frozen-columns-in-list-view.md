@@ -1,4 +1,4 @@
-_Updated 2018-05-02, pending PR to add this feature with a config setting._
+_Updated 2018-05-21, pending PR to add this feature with a config setting._
 
 Here's a technique that you can use to make the list view table show all of the columns on a single page, with horizontal scrolling and frozen header columns in the table. [PR #3017](https://github.com/sferik/rails_admin/pull/3017) adds this feature with the config setting `horizontal_scroll_list`, which is used as follows:
 ```ruby
@@ -14,8 +14,28 @@ RailsAdmin.config do |config|
   config.horizontal_scroll_list = {num_frozen_columns: 4}
   config.horizontal_scroll_list = {num_frozen_columns: 1}
 
-  # Turn off frozen columns border:
-  config.horizontal_scroll_list = {css: '.scroll-frozen-last { box-shadow: none; }'}
+  # Turn off horizontal scrolling for a specific model:
+  config.model 'Team' do
+    list do
+      horizontal_scroll_list false # "nil" doesn't work, it must be explicitly false
+    end
+  end
+
+  # Use custom settings of horizontal scrolling for a specific model:
+  config.model 'Team' do
+    list do
+      checkboxes false
+      horizontal_scroll_list(num_frozen_columns: 3) # per-model config does not account for checkboxes
+    end
+  end
+
+  # Use horizontal scrolling only for a specific model:
+  config.horizontal_scroll_list = nil
+  config.model 'Team' do
+    list do
+      horizontal_scroll_list true
+    end
+  end
   ...
 end
 ```
