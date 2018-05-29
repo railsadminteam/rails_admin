@@ -99,6 +99,10 @@
               $('<a href="#" class="switch-select"></a>')
               .append($('<i></i>').addClass('icon-' + (multiple_values ? 'minus' : 'plus')))
             );
+          additional_control =
+            $('<input class="additional-fieldset default input-sm form-control" type="hidden" />')
+            .prop('value', field_operator)
+            .prop('name', operator_name);
         break;
         case 'string':
         case 'text':

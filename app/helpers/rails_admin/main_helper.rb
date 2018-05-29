@@ -67,6 +67,7 @@ module RailsAdmin
         end
         case field.type
         when :enum
+          options[:operator] = field.search_operator
           options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
         when :date, :datetime, :time
           options[:datetimepicker_format] = field.parser.to_momentjs
@@ -76,7 +77,7 @@ module RailsAdmin
         options[:type]  = field.type
         options[:value] = filter_hash['v']
         options[:label] = field.label
-        options[:operator] = filter_hash['o']
+        options[:operator] = filter_hash['o'] if filter_hash['o'].present?
         %{$.filters.append(#{options.to_json});}
       end.join("\n").html_safe if ordered_filters
     end

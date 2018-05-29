@@ -159,6 +159,8 @@ module RailsAdmin
           case @operator
           when 'between'
             range_filter(range_begin, range_end)
+          when 'in'
+            ["(#{@column} IN (?))", Array.wrap(@value)]
           else
             column_for_value(val) if val
           end
