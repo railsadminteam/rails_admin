@@ -10,6 +10,8 @@ RailsAdmin.config do |config|
 end
 ```
 
+Also see how to [show all columns on one page in a horizontally-scrolling table](https://github.com/sferik/rails_admin/wiki/Horizontally-scrolling-table-with-frozen-columns-in-list-view).
+
 ### Width of individual columns
 
 By default, columns have a `max-width` of 120px, and no `min-width`. While there does not appear to be fine-grained controls for max-/min-width, you can specify a fixed width in pixels for individual columns:
