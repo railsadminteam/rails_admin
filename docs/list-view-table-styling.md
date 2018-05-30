@@ -1,4 +1,4 @@
-**Fields - Column CSS class**
+## Fields - Column CSS class
 
 By default each column has a CSS class set according to field's data type. 
 `<field_type>_field`
@@ -23,7 +23,7 @@ end
 This classes will be shown on list, show and edit views. They are part of the API and should not change.
 In list views, both header th and td data will receive both classes.
 
-**Fields - Column width**
+## Fields - Column width
 
 If you want to set a fixed width for a column in the list view:
 
@@ -48,3 +48,5 @@ end
 ```
 
 It will use field's name CSS class to set a width for header and data columns.
+
+Also see how to [show all fields on one page in a horizontally-scrolling table](https://github.com/sferik/rails_admin/wiki/Horizontally-scrolling-table-with-frozen-columns-in-list-view).
