@@ -19,19 +19,19 @@ module RailsAdmin
           # Pass the location of the theme and mode for Codemirror
           register_instance_option :assets do
             {
-              mode: '/assets/codemirror/modes/css.js',
-              theme: '/assets/codemirror/themes/night.css',
+              mode: ::ActionController::Base.helpers.asset_path('codemirror/modes/css.js'),
+              theme: ::ActionController::Base.helpers.asset_path('codemirror/themes/night.css'),
             }
           end
 
           # Use this if you want to point to a cloud instances of CodeMirror
           register_instance_option :js_location do
-            '/assets/codemirror.js'
+            ::ActionController::Base.helpers.asset_path('codemirror.js')
           end
 
           # Use this if you want to point to a cloud instances of CodeMirror
           register_instance_option :css_location do
-            '/assets/codemirror.css'
+            ::ActionController::Base.helpers.asset_path('codemirror.css')
           end
 
           register_instance_option :partial do
