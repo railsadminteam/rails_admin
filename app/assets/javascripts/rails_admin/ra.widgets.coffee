@@ -56,19 +56,22 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
 
     content.find('[data-fileupload]').change ->
       input = this
-      image_container = $("#" + input.id).parent().children(".preview")
-      unless image_container.length
-        image_container = $("#" + input.id).parent().prepend($('<img />').addClass('preview').addClass('img-thumbnail')).find('img.preview')
-        image_container.parent().find('img:not(.preview)').hide()
+      image_containers = []
+      for i in [0..input.files.length - 1]
+        image_containers[i] = $("#" + input.id).parent().prepend($('<img />').addClass('preview').addClass('img-thumbnail')).find('img.preview')
+        image_containers[i].parent().find('img:not(.preview)').hide()
       ext = $("#" + input.id).val().split('.').pop().toLowerCase()
       if input.files and input.files[0] and $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) != -1
-        reader = new FileReader()
-        reader.onload = (e) ->
-          image_container.attr "src", e.target.result
-        reader.readAsDataURL input.files[0]
-        image_container.show()
+        for idx in [0..input.files.length - 1]
+          reader = new FileReader()
+          onload = (index) ->
+            (e) ->
+              image_containers[index].attr "src", e.target.result
+          reader.onload = onload(idx)
+          reader.readAsDataURL input.files[idx]
+          image_containers[idx].show()
       else
-        image_container.hide()
+        image_containers.map((c) -> c.hide())
 
     # filtering-multiselect
 

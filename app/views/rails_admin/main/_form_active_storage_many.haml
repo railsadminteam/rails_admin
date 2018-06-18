@@ -1,0 +1,12 @@
+- files = form.object.send(field.method_name).send(field.presence_method)
+
+.toggle{style: ('display:none;' if files && field.delete_method && form.object.send(field.delete_method) == '1')}
+  - files&.each_with_index do |file, idx|
+    = field.format_html(file)
+    - if field.optional? && field.errors.blank? && files
+      %div
+        %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button', onclick: "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false;"}
+          %i.icon-white.icon-trash
+          = I18n.t('admin.actions.delete.menu').capitalize + " #{field.label.downcase}"
+        = check_box_tag("#{form.object.class.name.downcase}[#{field.delete_method}][#{idx}]", false, false, style: 'display:none;')
+  = form.file_field(field.name, field.html_attributes.reverse_merge({ data: { fileupload: true }, multiple: true}))
