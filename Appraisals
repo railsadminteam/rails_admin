@@ -123,7 +123,7 @@ appraise "rails-5.1" do
 
     platforms :jruby do
       gem 'activerecord-jdbcmysql-adapter', '~> 51.0'
-      gem 'activerecord-jdbcpostgresql-adapter', github: "jruby/activerecord-jdbc-adapter"
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 51.0'
       gem 'activerecord-jdbcsqlite3-adapter', '~> 51.0'
     end
   end
