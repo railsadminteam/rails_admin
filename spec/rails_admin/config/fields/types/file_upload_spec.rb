@@ -66,7 +66,7 @@ describe RailsAdmin::Config::Fields::Types::FileUpload do
       end
 
       it 'has non-empty link text' do
-        expect(rails_admin_field.pretty_value).to eq '<a target="_blank" href="http://example.com/dummy.txt">dummy.txt</a>'
+        expect(Nokogiri::HTML(rails_admin_field.pretty_value).text).to eq 'dummy.txt'
       end
     end
   end
