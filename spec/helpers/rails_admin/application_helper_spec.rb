@@ -1,27 +1,12 @@
 require 'spec_helper'
-require 'cancan'
-
-class TestAbility
-  include CanCan::Ability
-  def initialize(_user)
-    can :access, :rails_admin
-    can :edit, FieldTest
-    cannot :edit, FieldTest, string_field: 'dangerous'
-  end
-end
 
 describe RailsAdmin::ApplicationHelper, type: :helper do
   describe '#authorized?' do
-    before do
-      allow(RailsAdmin.config).to receive(:_current_user).and_return(FactoryGirl.create(:user))
-      allow(helper.controller).to receive(:authorization_adapter).and_return(RailsAdmin::AUTHORIZATION_ADAPTERS[:cancan].new(RailsAdmin.config, TestAbility))
-    end
+    let(:abstract_model) { RailsAdmin.config(FieldTest).abstract_model }
 
-    it 'doesn\'t test unpersisted objects' do
-      am = RailsAdmin.config(FieldTest).abstract_model
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'dangerous'))).to be_falsey
-      expect(helper.authorized?(:edit, am, FactoryGirl.create(:field_test, string_field: 'not-dangerous'))).to be_truthy
-      expect(helper.authorized?(:edit, am, FactoryGirl.build(:field_test, string_field: 'dangerous'))).to be_truthy
+    it 'doesn\'t use unpersisted objects' do
+      expect(helper).to receive(:action).with(:edit, abstract_model, nil).and_call_original
+      helper.authorized?(:edit, abstract_model, FactoryGirl.build(:field_test))
     end
   end
 

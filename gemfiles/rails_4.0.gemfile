@@ -31,8 +31,6 @@ group :development, :test do
 end
 
 group :test do
-  gem "cancan", ">= 1.6"
-  gem "cancancan", "~> 1.12"
   gem "carrierwave", ">= 0.8"
   gem "coveralls"
   gem "database_cleaner", [">= 1.2", "!= 1.4.0", "!= 1.5.0"]
@@ -49,6 +47,7 @@ group :test do
   gem "rubocop", "~> 0.41.2"
   gem "simplecov", ">= 0.9", require: false
   gem "timecop", ">= 0.5"
+  gem "cancancan", "~> 1.12"
 
   platforms :ruby_19 do
     gem "tins", "~> 1.6.0", require: false

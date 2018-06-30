@@ -56,6 +56,9 @@ matrix:
     - rvm: 2.3.7
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
       gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.3.7
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/cancan.gemfile
     - rvm: 2.4.4
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile

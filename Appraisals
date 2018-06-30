@@ -6,6 +6,10 @@ appraise "rails-4.0" do
   gem 'capybara', '>= 0.8', group: :test
   gem 'kaminari', '~> 0.14'
 
+  group :test do
+    gem 'cancancan', '~> 1.12'
+  end
+
   group :active_record do
     gem 'paper_trail', '~> 5.0'
 
@@ -34,6 +38,10 @@ appraise "rails-4.1" do
   gem 'rails', '~> 4.1.0'
   gem 'devise', '>= 3.2'
   gem 'capybara', '>= 0.8', group: :test
+
+  group :test do
+    gem 'cancancan', '~> 1.12'
+  end
 
   group :active_record do
     gem 'paper_trail', '>= 5.0'
@@ -65,6 +73,10 @@ appraise "rails-4.2" do
   gem 'devise', '>= 3.4'
   gem 'capybara', '>= 0.8', group: :test
 
+  group :test do
+    gem 'cancancan', '~> 1.12'
+  end
+
   group :active_record do
     gem 'paper_trail', '>= 5.0'
 
@@ -94,6 +106,10 @@ appraise "rails-5.0" do
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.0'
 
+  group :test do
+    gem 'cancancan', '~> 2.0'
+  end
+
   group :active_record do
     gem 'paper_trail', '>= 5.0'
 
@@ -109,6 +125,7 @@ appraise "rails-5.0" do
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+    gem 'cancancan-mongoid'
   end
 end
 
@@ -116,6 +133,10 @@ appraise "rails-5.1" do
   gem 'rails', '~> 5.1.0'
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.0'
+
+  group :test do
+    gem 'cancancan', '~> 2.0'
+  end
 
   group :active_record do
     gem 'pg', '~> 0.14', platforms: :ruby
@@ -133,6 +154,7 @@ appraise "rails-5.1" do
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+    gem 'cancancan-mongoid'
   end
 end
 
@@ -142,7 +164,7 @@ appraise "rails-5.2" do
   gem 'devise', '~> 4.4'
 
   group :test do
-    gem 'cancancan', '~> 1.12', github: 'mshibuya/cancancan', branch: 'topic-backport-rails-5-2-support-to-1-x'
+    gem 'cancancan', '~> 2.0'
   end
 
   group :active_record do
@@ -155,5 +177,16 @@ appraise "rails-5.2" do
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+    gem 'cancancan-mongoid'
+  end
+end
+
+appraise "cancan" do
+  gem 'rails', '~> 5.1.0'
+  gem 'sass-rails', '~> 5.0'
+  gem 'devise', '~> 4.0'
+
+  group :test do
+    gem 'cancan', '>= 1.6'
   end
 end
