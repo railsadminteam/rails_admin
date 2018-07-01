@@ -1,42 +1,6 @@
 Rails Admin is fully compatible with [[CanCanCan|https://github.com/CanCanCommunity/cancancan]], an authorization framework to limit which actions a user can perform on each model.
 
-### Create an extension for CanCanCan
-
-```ruby
-module RailsAdmin
-  module Extensions
-    module CanCanCan2
-      class AuthorizationAdapter < RailsAdmin::Extensions::CanCanCan::AuthorizationAdapter
-        def authorize(action, abstract_model = nil, model_object = nil)
-          return unless action
-          reaction, subject = fetch_action_and_subject(action, abstract_model, model_object)
-          @controller.current_ability.authorize!(reaction, subject)
-        end
-
-        def authorized?(action, abstract_model = nil, model_object = nil)
-          return unless action
-          reaction, subject = fetch_action_and_subject(action, abstract_model, model_object)
-          @controller.current_ability.can?(reaction, subject)
-        end
-
-        def fetch_action_and_subject(action, abstract_model, model_object)
-          reaction = action
-          subject = model_object || abstract_model&.model
-          unless subject
-            subject = reaction
-            reaction = :read
-          end
-          return reaction, subject
-        end
-      end
-    end
-  end
-end
-
-RailsAdmin.add_extension(:cancancan2, RailsAdmin::Extensions::CanCanCan2, authorization: true)
-
-```
-### Add to Rails Admin
+### Configuration
 
 Add this to RailsAdmin initializer.
 
@@ -44,7 +8,7 @@ Add this to RailsAdmin initializer.
 # config/initializers/rails_admin.rb
 
 RailsAdmin.config do |config|
-  config.authorize_with :cancancan2
+  config.authorize_with :cancancan
 end
 ```
 
@@ -65,7 +29,7 @@ class Ability
     can :read, :all                 # allow everyone to read everything
     return unless user && user.admin?
     can :access, :rails_admin       # only allow admin users to access Rails Admin
-    can :dashboard, :all            # allow access to dashboard
+    can :read, :dashboard           # allow access to dashboard
     if user.role? :superadmin
       can :manage, :all             # allow superadmins to do anything
     elsif user.role? :manager
@@ -89,7 +53,7 @@ You just have to add your admin ability class as a second parameter to `authoriz
 # in config/initializers/rails_admin.rb
 
 RailsAdmin.config do |config|
-  config.authorize_with :cancancan2, AdminAbility
+  config.authorize_with :cancancan, AdminAbility
 end
 ```
 
@@ -139,7 +103,7 @@ Here are the checks used by default in RailsAdmin:
 can :access, :rails_admin # needed to access RailsAdmin
 
 # Performed checks for `root` level actions:
-can :dashboard            # dashboard access
+can :read, :dashboard            # dashboard access
 
 # Performed checks for `collection` scoped actions:
 can :index, Model         # included in :read
