@@ -340,4 +340,27 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       end
     end
   end
+
+  describe 'with existing dashboard ability which uses no subject' do
+    class LegacyDashboardAbility
+      include CanCan::Ability
+      def initialize(_)
+        can :access, :rails_admin
+        can :dashboard
+      end
+    end
+
+    before do
+      RailsAdmin.config { |c| c.authorize_with :cancancan, LegacyDashboardAbility }
+      @user = FactoryGirl.create :user
+      login_as @user
+    end
+
+    it 'shows dashboard with instruction on how to migrate to new ability notation' do
+      allow(ActiveSupport::Deprecation).to receive(:warn)
+      expect(ActiveSupport::Deprecation).to receive(:warn).with(/can :read, :dashboard/)
+      visit dashboard_path
+      is_expected.to have_content('Dashboard')
+    end
+  end
 end if defined?(CanCanCan)
