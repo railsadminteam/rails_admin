@@ -14,6 +14,10 @@ class FieldTest < ActiveRecord::Base
 
   attachment :refile_asset if defined?(Refile)
 
+  has_one_attached :active_storage_asset if defined?(ActiveStorage)
+  attr_accessor :remove_active_storage_asset
+  after_save { active_storage_asset.purge if remove_active_storage_asset == '1' }
+
   if ::Rails.version >= '4.1' # enum support was added in Rails 4.1
     enum string_enum_field: {S: 's', M: 'm', L: 'l'}
     enum integer_enum_field: [:small, :medium, :large]
