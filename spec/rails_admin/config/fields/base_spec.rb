@@ -99,6 +99,20 @@ describe RailsAdmin::Config::Fields::Base do
         end
       end
     end
+
+    if defined?(ActiveStorage)
+      context 'of a ActiveStorage installation' do
+        it 'is _attachment and _blob fields' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_asset }.children_fields).to match_array [:active_storage_asset_attachment, :active_storage_asset_blob]
+        end
+
+        it 'is hidden, not filterable' do
+          fields = RailsAdmin.config(FieldTest).fields.select { |f| [:active_storage_asset_attachment, :active_storage_asset_blob].include?(f.name) }
+          expect(fields).to all(be_hidden)
+          expect(fields).not_to include(be_filterable)
+        end
+      end
+    end
   end
 
   describe '#form_default_value' do
