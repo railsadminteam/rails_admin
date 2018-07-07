@@ -383,6 +383,9 @@ describe RailsAdmin::MainController, type: :controller do
           delete_method :delete_paperclip_asset
         end
         field :refile_asset if defined?(Refile)
+        field :active_storage_asset do
+          delete_method :remove_active_storage_asset
+        end if defined?(ActiveStorage)
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
@@ -395,7 +398,8 @@ describe RailsAdmin::MainController, type: :controller do
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
-        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}),
+        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
+          merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -408,7 +412,8 @@ describe RailsAdmin::MainController, type: :controller do
         'retained_dragonfly_asset' => 'test',
         'paperclip_asset' => 'test',
         'delete_paperclip_asset' => 'test',
-      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
+      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
+        merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do
