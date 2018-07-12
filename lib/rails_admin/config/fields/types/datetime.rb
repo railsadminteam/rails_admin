@@ -38,11 +38,7 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            begin
-              ::I18n.t(date_format, scope: i18n_scope, raise: true)
-            rescue ::I18n::ArgumentError
-              "%B %d, %Y %H:%M"
-            end
+            "%B %d, %Y %H:%M"
           end
 
           register_instance_option :datepicker_options do
