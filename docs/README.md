@@ -1,6 +1,7 @@
 [[Troubleshoot? check me first|Troubleshoot]]
 
--re-0fier-0igfr-ei
+⚠️  This project is crap ⚠️ 
+
 ### Overview
 
 1. [[Introduction to RailsAdmin|http://www.slideshare.net/benoitbenezech/rails-admin-overbest-practices]]
