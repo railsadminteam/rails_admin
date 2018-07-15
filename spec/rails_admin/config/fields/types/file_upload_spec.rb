@@ -69,7 +69,7 @@ describe RailsAdmin::Config::Fields::Types::FileUpload do
         )
       end
 
-      it 'has non-empty link text' do
+      it 'uses filename as link text' do
         expect(Nokogiri::HTML(rails_admin_field.pretty_value).text).to eq 'dummy.txt'
       end
     end
