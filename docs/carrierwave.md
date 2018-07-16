@@ -5,8 +5,6 @@ Your model should look like this:
 ```ruby
 class Article < ActiveRecord::Base
   mount_uploader :asset, AssetUploader
-  # don't forget those if you use :attr_accessible (delete method and form caching method are provided by Carrierwave and used by RailsAdmin)
-  attr_accessor :asset, :asset_cache, :remove_asset
 end
 ```
 
@@ -40,6 +38,62 @@ end
 config.model Article do
   nested do
     field :post_thumbnail
+  end
+end
+```
+
+## Multiple upload
+
+RailsAdmin also work with CarrierWave's native multiple upload feature, but it has a little quirkiness and needs some work depending on your usage.
+
+Simple setup goes like:
+
+```ruby
+class Article < ActiveRecord::Base
+  mount_uploaders :assets, AssetUploader
+end
+```
+
+```ruby
+field :assets, :multiple_carrierwave
+```
+
+### Want to delete attachments
+
+CarrierWave decides whether the attachments to be deleted or not by looking `remove_#{name}` attribute. But when activated, it removes all attachments, so RailsAdmin decided not to use it.
+
+Instead, you need to implement alternative way in your model like this:
+
+```ruby
+class Article < ActiveRecord::Base
+  mount_uploaders :assets, CarrierwaveUploader
+  attr_accessor :delete_assets
+  after_validation do
+    uploaders = assets.delete_if do |uploader|
+      if Array(delete_assets).include?(uploader.file.identifier)
+        uploader.remove!
+        true
+      end
+    end
+    write_attribute(:assets, uploaders.map { |uploader| uploader.file.identifier })
+  end
+end
+```
+
+### Want to preserve existing attachments when uploading more
+
+By default, CarrierWave's multiple upload feature discards existing ones when new files are uploaded. Here's a workaround: 
+
+```ruby
+class Article < ActiveRecord::Base
+  mount_uploaders :assets, CarrierwaveUploader
+  def assets=(files)
+    appended = files.map do |file|
+      uploader = _mounter(:assets).blank_uploader
+      uploader.cache! file
+      uploader
+    end
+    super(assets + appended)
   end
 end
 ```
