@@ -381,7 +381,9 @@ describe RailsAdmin::Config do
           i.name == "RailsAdmin reload config in development"
         end.first.block.call
         if defined?(ActiveSupport::Reloader)
-          ActiveSupport::Reloader.new.tap(&:class_unload!)
+          Rails.application.executor.wrap do
+            ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+          end
           # else
           # for Rails 4 not imlemented yet
         end
