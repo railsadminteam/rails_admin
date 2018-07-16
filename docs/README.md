@@ -45,6 +45,7 @@
   * [[Paperclip]]
   * [[Dragonfly]]
   * [[Carrierwave]]
+  * [[ActiveStorage]]
 * [[Enumeration]]
 * [[Boolean]]
 * [[Decimal]]
