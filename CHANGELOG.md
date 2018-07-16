@@ -4,16 +4,16 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v1.3.0...HEAD)
 
-#### Added
+### Added
 - Support for ActiveStorage([#2990](https://github.com/sferik/rails_admin/issues/2990), [#3037](https://github.com/sferik/rails_admin/pull/3037))
 - Support for multiple file upload for ActiveStorage and CarrierWave ([5bb2d375](https://github.com/sferik/rails_admin/commit/5bb2d375a236268e51c7e8682c2d110d9e52970f))
-- Support for CanCanCan 2.x([#2901](https://github.com/sferik/rails_admin/issues/2901), [#3029](https://github.com/sferik/rails_admin/pull/3029))
+- Support for CanCanCan 2.x([a32d49e4](https://github.com/sferik/rails_admin/commit/a32d49e4b96944905443588a1216b3362ee64c1a), [#2901](https://github.com/sferik/rails_admin/issues/2901))
 - Support for jquery-ui-rails 6.x([#2951](https://github.com/sferik/rails_admin/issues/2951), [#3003](https://github.com/sferik/rails_admin/issues/3003))
 
 ### Fixed
 - Improved support for Rails API mode, requiring needed middlewares in engine's initializer([#2919](https://github.com/sferik/rails_admin/issues/2919), [#3006](https://github.com/sferik/rails_admin/pull/3006))
 - Make the link text to uploaded file shorter, instead of showing full url([#2983](https://github.com/sferik/rails_admin/pull/2983))
-- Fix duplication of filters on browser back([#2998](https://github.com/sferik/rails_admin/pull/2998)
+- Fix duplication of filters on browser back([#2998](https://github.com/sferik/rails_admin/pull/2998))
 - Fix "can't modify frozen array" exception on code reload([#2999](https://github.com/sferik/rails_admin/pull/2999))
 - Fix incorrectly comparing numeric columns with empty string when handling blank operator([#3007](https://github.com/sferik/rails_admin/pull/3007))
 
@@ -22,7 +22,7 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v1.2.0...v1.3.0)
 
-#### Added
+### Added
 - Configurability for forgery protection setting([#2989](https://github.com/sferik/rails_admin/pull/2989))
 - Configurability for the number of audit records displayed into dashboard([#2982](https://github.com/sferik/rails_admin/pull/2982))
 - Add limited pagination mode, which doesn't require count query([#2968](https://github.com/sferik/rails_admin/pull/2968))
@@ -46,7 +46,7 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v1.1.1...v1.2.0)
 
-#### Added
+### Added
 - Add ILIKE support for PostgreSQL/PostGIS adapter, multibyte downcase for other adapters([#2766](https://github.com/sferik/rails_admin/pull/2766))
 - Support for UUID query([#2766](https://github.com/sferik/rails_admin/pull/2766))
 - Support for Haml 5([#2840](https://github.com/sferik/rails_admin/pull/2840), [#2870](https://github.com/sferik/rails_admin/pull/2870), [#2877](https://github.com/sferik/rails_admin/pull/2877))
