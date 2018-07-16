@@ -40,7 +40,7 @@ module RailsAdmin
       end
 
       def count(options = {}, scope = nil)
-        all(options.merge(limit: false, page: false), scope).count(:all)
+        all(options.merge(limit: false, page: false), scope).count(1)
       end
 
       def destroy(objects)
