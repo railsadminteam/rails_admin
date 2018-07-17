@@ -12,7 +12,7 @@ SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCo
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
-  minimum_coverage(91.21)
+  minimum_coverage(CI_ORM == :mongoid ? 90.37 : 91.21)
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)

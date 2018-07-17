@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'appraisal', '>= 2.0'
-gem 'rails', '~> 5.1.0'
+gem 'rails'
 gem 'haml'
 gem 'devise'
 
@@ -19,7 +19,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'cancan', '>= 1.6'
   gem 'carrierwave', '>= 0.8'
   gem 'coveralls'
   gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']

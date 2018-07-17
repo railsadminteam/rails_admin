@@ -329,6 +329,9 @@ describe RailsAdmin::Config do
   end
 
   describe "field types code reloading" do
+    before { Rails.application.config.cache_classes = false }
+    after { Rails.application.config.cache_classes = true }
+
     let(:config) { described_class.model(Team) }
     let(:fields) { described_class.model(Team).edit.fields }
 
@@ -338,9 +341,16 @@ describe RailsAdmin::Config do
         field :wins, :boolean
       end
     end
+
     let(:team_config2) do
       proc do
         field :wins, :toggle
+      end
+    end
+
+    let(:team_config3) do
+      proc do
+        field :wins
       end
     end
 
@@ -364,6 +374,21 @@ describe RailsAdmin::Config do
       Team.send(:rails_admin, &team_config2)
       expect(fields.map(&:name)).to match_array %i(id wins)
     end
+
+    it "updates model config when reloading code for rails 5" do
+      Team.send(:rails_admin, &team_config)
+
+      # this simulates rails code reloading
+      RailsAdmin::Engine.initializers.select do |i|
+        i.name == "RailsAdmin reload config in development"
+      end.first.block.call
+      Rails.application.executor.wrap do
+        ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+      end
+
+      Team.send(:rails_admin, &team_config3)
+      expect(fields.map(&:name)).to match_array %i(wins)
+    end if defined?(ActiveSupport::Reloader)
   end
 end
 

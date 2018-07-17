@@ -49,7 +49,11 @@ class FieldTest
   field :dragonfly_asset_name
   field :dragonfly_asset_uid
   dragonfly_accessor :dragonfly_asset
+
   mount_uploader :carrierwave_asset, CarrierwaveUploader
+  # carrierwave-mongoid does not support mount_uploaders yet:
+  #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
+  mount_uploader :carrierwave_assets, CarrierwaveUploader
 
   if defined?(Refile)
     extend Refile::Mongoid::Attachment

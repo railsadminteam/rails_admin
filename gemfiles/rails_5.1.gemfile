@@ -19,7 +19,7 @@ group :active_record do
 
   platforms :jruby do
     gem "activerecord-jdbcmysql-adapter", "~> 51.0"
-    gem "activerecord-jdbcpostgresql-adapter", github: "jruby/activerecord-jdbc-adapter"
+    gem "activerecord-jdbcpostgresql-adapter", "~> 51.0"
     gem "activerecord-jdbcsqlite3-adapter", "~> 51.0"
   end
 end
@@ -29,7 +29,6 @@ group :development, :test do
 end
 
 group :test do
-  gem "cancan", ">= 1.6"
   gem "carrierwave", ">= 0.8"
   gem "coveralls"
   gem "database_cleaner", [">= 1.2", "!= 1.4.0", "!= 1.5.0"]
@@ -46,6 +45,7 @@ group :test do
   gem "rubocop", "~> 0.41.2"
   gem "simplecov", ">= 0.9", require: false
   gem "timecop", ">= 0.5"
+  gem "cancancan", "~> 2.0"
 
   platforms :ruby_19 do
     gem "tins", "~> 1.6.0", require: false
@@ -57,6 +57,7 @@ group :mongoid do
   gem "kaminari-mongoid"
   gem "mongoid-paperclip", ">= 0.0.8", require: "mongoid_paperclip"
   gem "carrierwave-mongoid", ">= 0.6.3", require: "carrierwave/mongoid"
+  gem "cancancan-mongoid"
 end
 
 gemspec path: "../"

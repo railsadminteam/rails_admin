@@ -1,50 +1,45 @@
 require 'spec_helper'
 
-class Ability
-  include CanCan::Ability
-  def initialize(user)
-    can :access, :rails_admin if user.roles.include? :admin
-    if user.roles.include? :test_exception
-      can :dashboard
-      can :access, :rails_admin
-      can :manage, :all
-      can :show_in_app, :all
+describe 'RailsAdmin CanCanCan Authorization', type: :request do
+  class Ability
+    include CanCan::Ability
+    def initialize(user)
+      can :access, :rails_admin if user.roles.include? :admin
+      if user.roles.include? :test_exception
+        can :read, :dashboard
+        can :access, :rails_admin
+        can :manage, :all
+        can :show_in_app, :all
 
-      # fix for buggy and inconsistent behaviour in Cancan 1.6.8 => https://github.com/ryanb/cancan/issues/721
-      if CI_ORM != :mongoid
-        cannot [:update, :destroy], Player
-        can [:update, :destroy], Player, retired: false
-      else
+        can [:update, :destroy], Player
         cannot [:update, :destroy], Player, retired: true
+      else
+        can :read, :dashboard
+        can :manage, Player if user.roles.include? :manage_player
+        can :read, Player, retired: false if user.roles.include? :read_player
+        can :create, Player, suspended: true if user.roles.include? :create_player
+        can :update, Player, retired: false if user.roles.include? :update_player
+        can :destroy, Player, retired: false if user.roles.include? :destroy_player
+        can :history, Player, retired: false if user.roles.include? :history_player
+        can :show_in_app, Player, retired: false if user.roles.include? :show_in_app_player
       end
-    else
-      can :dashboard
-      can :manage, Player if user.roles.include? :manage_player
-      can :read, Player, retired: false if user.roles.include? :read_player
-      can :create, Player, suspended: true if user.roles.include? :create_player
-      can :update, Player, retired: false if user.roles.include? :update_player
-      can :destroy, Player, retired: false if user.roles.include? :destroy_player
-      can :history, Player, retired: false if user.roles.include? :history_player
-      can :show_in_app, Player, retired: false if user.roles.include? :show_in_app_player
     end
   end
-end
 
-class AdminAbility
-  include CanCan::Ability
-  def initialize(user)
-    can :access, :rails_admin if user.roles.include? :admin
-    can :show_in_app, :all
-    can :manage, :all
+  class AdminAbility
+    include CanCan::Ability
+    def initialize(user)
+      can :access, :rails_admin if user.roles.include? :admin
+      can :show_in_app, :all
+      can :manage, :all
+    end
   end
-end
 
-describe 'RailsAdmin CanCanCan Authorization', type: :request do
   subject { page }
 
   before do
     RailsAdmin.config do |c|
-      c.authorize_with(:cancan)
+      c.authorize_with(:cancancan)
       c.authenticate_with { warden.authenticate! scope: :user }
       c.current_user_method(&:current_user)
     end
@@ -300,7 +295,7 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with a custom admin ability' do
     before do
-      RailsAdmin.config { |c| c.authorize_with :cancan, AdminAbility }
+      RailsAdmin.config { |c| c.authorize_with :cancancan, AdminAbility }
       @user = FactoryGirl.create :user
       login_as @user
     end
@@ -345,4 +340,27 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       end
     end
   end
-end
+
+  describe 'with existing dashboard ability which uses no subject' do
+    class LegacyDashboardAbility
+      include CanCan::Ability
+      def initialize(_)
+        can :access, :rails_admin
+        can :dashboard
+      end
+    end
+
+    before do
+      RailsAdmin.config { |c| c.authorize_with :cancancan, LegacyDashboardAbility }
+      @user = FactoryGirl.create :user
+      login_as @user
+    end
+
+    it 'shows dashboard with instruction on how to migrate to new ability notation' do
+      allow(ActiveSupport::Deprecation).to receive(:warn)
+      expect(ActiveSupport::Deprecation).to receive(:warn).with(/can :read, :dashboard/)
+      visit dashboard_path
+      is_expected.to have_content('Dashboard')
+    end
+  end
+end if defined?(CanCanCan)

@@ -92,10 +92,43 @@ describe RailsAdmin::Config::Fields::Base do
       end
     end
 
+    context 'of a Carrierwave installation with multiple file support' do
+      it 'is the parent field itself' do
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_assets }.children_fields).to eq([:carrierwave_assets])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_assets }.hidden?).to be_falsey
+      end
+    end
+
     if defined?(Refile)
       context 'of a Refile installation' do
         it 'is a _id field' do
           expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :refile_asset }.children_fields).to eq([:refile_asset_id, :refile_asset_filename, :refile_asset_size, :refile_asset_content_type])
+        end
+      end
+    end
+
+    if defined?(ActiveStorage)
+      context 'of a ActiveStorage installation' do
+        it 'is _attachment and _blob fields' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_asset }.children_fields).to match_array [:active_storage_asset_attachment, :active_storage_asset_blob]
+        end
+
+        it 'is hidden, not filterable' do
+          fields = RailsAdmin.config(FieldTest).fields.select { |f| [:active_storage_asset_attachment, :active_storage_asset_blob].include?(f.name) }
+          expect(fields).to all(be_hidden)
+          expect(fields).not_to include(be_filterable)
+        end
+      end
+
+      context 'of a ActiveStorage installation with multiple file support' do
+        it 'is _attachment and _blob fields' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_assets }.children_fields).to match_array [:active_storage_assets_attachments, :active_storage_assets_blobs]
+        end
+
+        it 'is hidden, not filterable' do
+          fields = RailsAdmin.config(FieldTest).fields.select { |f| [:active_storage_assets_attachments, :active_storage_assets_blobs].include?(f.name) }
+          expect(fields).to all(be_hidden)
+          expect(fields).not_to include(be_filterable)
         end
       end
     end
