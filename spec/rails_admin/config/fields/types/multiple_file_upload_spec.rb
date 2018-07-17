@@ -43,30 +43,51 @@ describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
   end
 
   describe '#pretty_value' do
-    context 'when the field is not image' do
-      before do
-        RailsAdmin.config FieldTest do
-          field :string_field, :multiple_file_upload do
-            attachment do
-              def resource_url
-                'http://example.com/dummy.txt'
+    before do
+      RailsAdmin.config FieldTest do
+        field :string_field, :multiple_file_upload do
+          attachment do
+            thumb_method 'thumb'
+
+            def resource_url(thumb = false)
+              if thumb
+                "http://example.com/#{thumb}/#{value}"
+              else
+                "http://example.com/#{value}"
               end
             end
           end
         end
       end
+    end
 
-      let :rails_admin_field do
-        RailsAdmin.config('FieldTest').fields.detect do |f|
-          f.name == :string_field
-        end.with(
-          object: FieldTest.new(string_field: 'dummy.txt'),
-          view: ApplicationController.new.view_context,
-        )
-      end
+    let(:filename) { '' }
+
+    let :rails_admin_field do
+      RailsAdmin.config('FieldTest').fields.detect do |f|
+        f.name == :string_field
+      end.with(
+        object: FieldTest.new(string_field: filename),
+        view: ApplicationController.new.view_context,
+      )
+    end
+
+    context 'when the field is not an image' do
+      let(:filename) { 'dummy.txt' }
 
       it 'uses filename as link text' do
         expect(Nokogiri::HTML(rails_admin_field.pretty_value).text).to eq 'dummy.txt'
+      end
+    end
+
+    context 'when the field is an image' do
+      let(:filename) { 'dummy.jpg' }
+
+      subject { Nokogiri::HTML(rails_admin_field.pretty_value) }
+
+      it 'shows thumbnail image with a link' do
+        expect(subject.css('img').attribute('src').value).to eq 'http://example.com/thumb/dummy.jpg'
+        expect(subject.css('a').attribute('href').value).to eq 'http://example.com/dummy.jpg'
       end
     end
   end
@@ -76,12 +97,13 @@ describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
       RailsAdmin.config FieldTest do
         field :string_field, :multiple_file_upload do
           attachment do
-            delete_key { 'something' }
+            delete_key 'something'
 
-            def resource_url
-              'http://example.com/foo.jpg'
+            def resource_url(_thumb = false)
+              "http://example.com/#{value}"
             end
           end
+
           def value
             ['foo.jpg']
           end
@@ -92,12 +114,15 @@ describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
     let :rails_admin_field do
       RailsAdmin.config('FieldTest').fields.detect do |f|
         f.name == :string_field
-      end
+      end.with(
+        view: ApplicationController.new.view_context,
+      )
     end
 
     it 'enables configuration' do
       expect(rails_admin_field.attachments.map(&:delete_key)).to eq ['something']
       expect(rails_admin_field.attachments.map(&:resource_url)).to eq ['http://example.com/foo.jpg']
+      expect(rails_admin_field.pretty_value).to match(%r{src="http://example.com/foo.jpg"})
     end
   end
 

@@ -23,10 +23,6 @@ module RailsAdmin
               nil
             end
 
-            register_instance_option :export_value do
-              resource_url.to_s
-            end
-
             register_instance_option :pretty_value do
               if value.presence
                 v = bindings[:view]
@@ -45,7 +41,7 @@ module RailsAdmin
               (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif|svg/i
             end
 
-            def resource_url
+            def resource_url(_thumb = false)
               raise('not implemented')
             end
           end
@@ -71,6 +67,14 @@ module RailsAdmin
             nil
           end
 
+          register_instance_option :export_value do
+            attachments.map(&:resource_url).map(&:to_s).join(',')
+          end
+
+          register_instance_option :pretty_value do
+            bindings[:view].safe_join attachments.map(&:pretty_value), ' '
+          end
+
           register_instance_option :allowed_methods do
             [method_name, cache_method, delete_method].compact
           end
@@ -87,11 +91,11 @@ module RailsAdmin
 
           def attachments
             Array(value).map do |attached|
-              attachment = attachment_class.new(attached).with(bindings)
+              attachment = attachment_class.new(attached)
               @attachment_configurations.each do |config|
                 attachment.instance_eval(&config)
               end
-              attachment
+              attachment.with(bindings)
             end
           end
 
