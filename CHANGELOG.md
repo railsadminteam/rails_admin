@@ -11,6 +11,7 @@
 - Support for jquery-ui-rails 6.x([#2951](https://github.com/sferik/rails_admin/issues/2951), [#3003](https://github.com/sferik/rails_admin/issues/3003))
 
 ### Fixed
+- Make code reloading work([#3041](https://github.com/sferik/rails_admin/pull/3041))
 - Improved support for Rails API mode, requiring needed middlewares in engine's initializer([#2919](https://github.com/sferik/rails_admin/issues/2919), [#3006](https://github.com/sferik/rails_admin/pull/3006))
 - Make the link text to uploaded file shorter, instead of showing full url([#2983](https://github.com/sferik/rails_admin/pull/2983))
 - Fix duplication of filters on browser back([#2998](https://github.com/sferik/rails_admin/pull/2998))
