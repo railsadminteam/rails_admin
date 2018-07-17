@@ -344,6 +344,12 @@ describe RailsAdmin::Config do
       end
     end
 
+    let(:team_config3) do
+      proc do
+        field :wins
+      end
+    end
+
     it "allows code reloading" do
       Team.send(:rails_admin, &team_config)
 
@@ -363,6 +369,34 @@ describe RailsAdmin::Config do
       end
       Team.send(:rails_admin, &team_config2)
       expect(fields.map(&:name)).to match_array %i(id wins)
+    end
+
+    it "updates model config when reloading code for rails 5" do
+      if defined?(ActiveSupport::Reloader)
+        Team.send(:rails_admin, &team_config)
+
+        # this simulates rails code reloading
+        Rails.application.config.cache_classes = false
+        RailsAdmin::Engine.initializers.select do |i|
+          i.name == "RailsAdmin reload config in development"
+        end.first.block.call
+        if defined?(ActiveSupport::Reloader)
+          Rails.application.executor.wrap do
+            ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+          end
+          # else
+          # for Rails 4 not imlemented yet
+        end
+        # /end
+
+        Team.send(:rails_admin, &team_config3)
+        expect(fields.map(&:name)).to match_array %i(wins)
+
+        # restore setting to previous value
+        Rails.application.config.cache_classes = true
+        # else
+        # pending "for Rails 4 not implemented"
+      end
     end
   end
 end

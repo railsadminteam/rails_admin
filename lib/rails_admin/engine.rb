@@ -32,6 +32,18 @@ module RailsAdmin
       app.config.middleware.use Rack::Pjax
     end
 
+    initializer 'RailsAdmin reload config in development' do
+      if Rails.application.config.cache_classes
+        if defined?(ActiveSupport::Reloader)
+          ActiveSupport::Reloader.before_class_unload do
+            RailsAdmin::Config.reset_all_models
+          end
+          # else
+          # For Rails 4 not implemented
+        end
+      end
+    end
+
     rake_tasks do
       Dir[File.join(File.dirname(__FILE__), '../tasks/*.rake')].each { |f| load f }
     end

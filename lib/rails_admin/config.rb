@@ -304,6 +304,14 @@ module RailsAdmin
         @registry.delete(key)
       end
 
+      # Reset all models configuration
+      # Used to clear all configurations when reloading code in development.
+      # @see RailsAdmin::Engine
+      # @see RailsAdmin::Config.registry
+      def reset_all_models
+        @registry = {}
+      end
+
       # Get all models that are configured as visible sorted by their weight and label.
       #
       # @see RailsAdmin::Config::Hideable
