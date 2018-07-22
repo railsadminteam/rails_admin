@@ -83,7 +83,7 @@ module RailsAdmin
       end
 
       def embedded?
-        model.relations.values.detect { |a| a.macro.to_sym == :embedded_in }
+        associations.detect { |a| a.macro == :embedded_in }
       end
 
       def cyclic?
@@ -150,7 +150,7 @@ module RailsAdmin
 
       def parse_collection_name(column)
         collection_name, column_name = column.split('.')
-        if [:embeds_one, :embeds_many].include?(model.relations[collection_name].try(:macro).try(:to_sym))
+        if associations.detect { |a| a.name == collection_name.to_sym }.try(:embeds?)
           [table_name, column]
         else
           [collection_name, column_name]

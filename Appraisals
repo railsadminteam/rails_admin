@@ -121,7 +121,7 @@ appraise "rails-5.0" do
   end
 
   group :mongoid do
-    gem 'mongoid', '>= 6.0.0.beta'
+    gem 'mongoid', '~> 6.1'
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
@@ -150,7 +150,7 @@ appraise "rails-5.1" do
   end
 
   group :mongoid do
-    gem 'mongoid', '~> 6.0'
+    gem 'mongoid', '~> 7.0'
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
@@ -173,7 +173,7 @@ appraise "rails-5.2" do
   end
 
   group :mongoid do
-    gem 'mongoid', '~> 6.4'
+    gem 'mongoid', '~> 7.0'
     gem 'kaminari-mongoid'
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
