@@ -2,13 +2,20 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.3.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.0...HEAD)
+
+
+## [1.4.0](https://github.com/sferik/rails_admin/tree/v1.4.0) - 2018-07-22
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.3.0...v1.4.0)
 
 ### Added
 - Support for ActiveStorage([#2990](https://github.com/sferik/rails_admin/issues/2990), [#3037](https://github.com/sferik/rails_admin/pull/3037))
 - Support for multiple file upload for ActiveStorage and CarrierWave ([5bb2d375](https://github.com/sferik/rails_admin/commit/5bb2d375a236268e51c7e8682c2d110d9e52970f))
-- Support for CanCanCan 2.x([a32d49e4](https://github.com/sferik/rails_admin/commit/a32d49e4b96944905443588a1216b3362ee64c1a), [#2901](https://github.com/sferik/rails_admin/issues/2901))
-- Support for jquery-ui-rails 6.x([#2951](https://github.com/sferik/rails_admin/issues/2951), [#3003](https://github.com/sferik/rails_admin/issues/3003))
+- Support for Mongoid 7.0([9ef623f6](https://github.com/sferik/rails_admin/commit/9ef623f6cba73adbf86833d9eb07f1be3924a133), [#3013](https://github.com/sferik/rails_admin/issues/3013))
+- Support for CanCanCan 2.0([a32d49e4](https://github.com/sferik/rails_admin/commit/a32d49e4b96944905443588a1216b3362ee64c1a), [#2901](https://github.com/sferik/rails_admin/issues/2901))
+- Support for Pundit 2.0([bc60c978](https://github.com/sferik/rails_admin/commit/bc60c978adfebe09cdad2c199878d8ff966374f1))
+- Support for jquery-ui-rails 6.0([#2951](https://github.com/sferik/rails_admin/issues/2951), [#3003](https://github.com/sferik/rails_admin/issues/3003))
 
 ### Fixed
 - Make code reloading work([#3041](https://github.com/sferik/rails_admin/pull/3041))
