@@ -26,7 +26,7 @@ module RailsAdmin
     initializer 'RailsAdmin setup middlewares' do |app|
       app.config.middleware.use ActionDispatch::Cookies
       app.config.middleware.use ActionDispatch::Flash
-      if app.config.api_only
+      if app.config.respond_to?(:api_only) && app.config.api_only
         app.config.session_store :cookie_store
         app.config.middleware.use ActionDispatch::Session::CookieStore, app.config.session_options
       end
