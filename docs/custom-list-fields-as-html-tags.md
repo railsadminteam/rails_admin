@@ -5,7 +5,7 @@ An example of a link tag showing User.name and linking to the user model within 
 field :name do
   pretty_value do
     path = bindings[:view].show_path(model_name: 'User', id: bindings[:object].id)
-    bindings[:view].tag(:a, href: path) << bindings[:object].name
+    bindings[:view].content_tag(:a, bindings[:object].name, href: path)
   end
 end
 ```
