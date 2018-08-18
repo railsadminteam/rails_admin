@@ -37,6 +37,12 @@ describe 'RailsAdmin Export', type: :request do
               "#{value} exported"
             end
           end
+
+          field :json_field, :json do
+            formatted_value do
+              '{}'
+            end
+          end
         end
       end
 
@@ -46,7 +52,7 @@ describe 'RailsAdmin Export', type: :request do
       click_button 'Export to csv'
       csv = CSV.parse page.driver.response.body.force_encoding('utf-8') # comes through as us-ascii on some platforms
       expect(csv[0]).to match_array ['Id', 'Created at', 'Updated at', 'Deleted at', 'Name', 'Position',
-                                     'Number', 'Retired', 'Injured', 'Born on', 'Notes', 'Suspended', 'Formation', 'Id [Team]', 'Created at [Team]',
+                                     'Number', 'Retired', 'Injured', 'Born on', 'Notes', 'Suspended', 'Formation', 'Json field', 'Id [Team]', 'Created at [Team]',
                                      'Updated at [Team]', 'Name [Team]', 'Logo url [Team]', 'Team Manager [Team]', 'Ballpark [Team]',
                                      'Mascot [Team]', 'Founded [Team]', 'Wins [Team]', 'Losses [Team]', 'Win percentage [Team]',
                                      'Revenue [Team]', 'Color [Team]', 'Custom field [Team]', 'Main Sponsor [Team]', 'Id [Draft]', 'Created at [Draft]',
