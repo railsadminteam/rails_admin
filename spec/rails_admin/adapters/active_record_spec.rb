@@ -36,6 +36,16 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
 
     before do
+      RailsAdmin.config do |c|
+        c.model Player do
+          include_all_fields
+
+          field :json_field, :json do
+            queryable true
+          end
+        end
+      end
+
       @players = FactoryGirl.create_list(:player, 3) + [
         # Multibyte players
         FactoryGirl.create(:player, name: 'Антоха'),
