@@ -38,7 +38,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
     end
 
     describe 'a record with has_one association' do
-      let(:draft) { FactoryGirl.create(:draft) }
+      let(:draft) { FactoryBot.create(:draft) }
       let(:number) { draft.player.number + 1 } # to avoid collision
 
       before do
@@ -62,7 +62,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
       let(:league) { League.new }
       let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new league }
       let(:name) { 'Awesome League' }
-      let(:teams) { [FactoryGirl.create(:team)] }
+      let(:teams) { [FactoryBot.create(:team)] }
       let(:divisions) { [Division.create!(name: 'div 1', league: League.create!(name: 'north')), Division.create!(name: 'div 2', league: League.create!(name: 'south'))] }
 
       before do
@@ -82,9 +82,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
     describe 'a record with has_one association' do
       let(:name) { 'Stefan Koza' }
       let(:suspended) { true }
-      let(:player) { FactoryGirl.create(:player, suspended: true, name: name, draft: FactoryGirl.create(:draft)) }
+      let(:player) { FactoryBot.create(:player, suspended: true, name: name, draft: FactoryBot.create(:draft)) }
       let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
-      let(:new_team) { FactoryGirl.create(:team) }
+      let(:new_team) { FactoryBot.create(:team) }
       let(:new_suspended) { false }
       let(:new_draft) { nil }
       let(:new_number) { player.number + 29 }
@@ -106,7 +106,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
   end
 
   describe 'destroy' do
-    let(:player) { FactoryGirl.create(:player) }
+    let(:player) { FactoryBot.create(:player) }
     let(:object) { RailsAdmin::Adapters::ActiveRecord::AbstractObject.new player }
 
     before do
@@ -124,7 +124,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_record: tr
         object_label_method { :custom_name }
       end
 
-      @league = FactoryGirl.create :league
+      @league = FactoryBot.create :league
 
       expect(RailsAdmin.config('League').with(object: @league).object_label).to eq("League '#{@league.name}'")
     end

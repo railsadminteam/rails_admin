@@ -5,7 +5,7 @@ describe 'RailsAdmin Basic Delete', type: :request do
 
   describe 'delete' do
     it "shows \"Delete model\"" do
-      @draft = FactoryGirl.create :draft
+      @draft = FactoryBot.create :draft
       @player = @draft.player
       @comment = @player.comments.create
       visit delete_path(model_name: 'player', id: @player.id)
@@ -33,7 +33,7 @@ describe 'RailsAdmin Basic Delete', type: :request do
         index
         delete
       end
-      @draft = FactoryGirl.create :draft
+      @draft = FactoryBot.create :draft
       @player = @draft.player
       @comment = @player.comments.create
       visit delete_path(model_name: 'player', id: @player.id)
@@ -49,7 +49,7 @@ describe 'RailsAdmin Basic Delete', type: :request do
 
   describe 'delete of an object which has an associated item without id' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       allow_any_instance_of(Player).to receive(:draft).and_return(Draft.new)
       visit delete_path(model_name: 'player', id: @player.id)
     end
@@ -63,8 +63,8 @@ describe 'RailsAdmin Basic Delete', type: :request do
 
   describe 'delete an object which has many associated item' do
     before do
-      comments = FactoryGirl.create_list :comment, 20
-      @player = FactoryGirl.create :player, comments: comments
+      comments = FactoryBot.create_list :comment, 20
+      @player = FactoryBot.create :player, comments: comments
       visit delete_path(model_name: 'player', id: @player.id)
     end
 

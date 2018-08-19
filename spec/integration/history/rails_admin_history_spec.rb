@@ -5,7 +5,7 @@ describe 'RailsAdmin History', type: :request, active_record: true do
     before :each do
       RailsAdmin::History.delete_all
       @model = RailsAdmin::AbstractModel.new('Player')
-      player = FactoryGirl.create :player
+      player = FactoryBot.create :player
       30.times do |i|
         player.number = i
         RailsAdmin::History.create_history_item "change #{i}", player, @model, nil

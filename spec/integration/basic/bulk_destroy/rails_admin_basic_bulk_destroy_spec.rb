@@ -7,7 +7,7 @@ describe 'RailsAdmin Basic Bulk Destroy', type: :request do
     before do
       RailsAdmin::History.destroy_all
       RailsAdmin.config { |c| c.audit_with :history }
-      @players = Array.new(3) { FactoryGirl.create(:player) }
+      @players = Array.new(3) { FactoryBot.create(:player) }
       @delete_ids = @players[0..1].collect(&:id)
 
       # NOTE: This uses an internal, unsupported capybara API which could break at any moment. We
@@ -34,7 +34,7 @@ describe 'RailsAdmin Basic Bulk Destroy', type: :request do
 
   describe 'cancelled bulk_deletion' do
     before do
-      @players = Array.new(3) { FactoryGirl.create(:player) }
+      @players = Array.new(3) { FactoryBot.create(:player) }
       @delete_ids = @players[0..1].collect(&:id)
 
       # NOTE: This uses an internal, unsupported capybara API which could break at any moment. We

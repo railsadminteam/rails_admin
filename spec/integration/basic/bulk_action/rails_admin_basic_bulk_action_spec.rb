@@ -4,7 +4,7 @@ describe 'RailsAdmin Basic Bulk Action', type: :request do
   subject { page }
 
   before do
-    @players = FactoryGirl.create_list(:player, 2)
+    @players = FactoryBot.create_list(:player, 2)
   end
 
   describe 'bulk_delete' do

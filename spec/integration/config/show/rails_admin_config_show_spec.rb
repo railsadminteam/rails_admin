@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'RailsAdmin Config DSL Show Section', type: :request do
   subject { page }
-  let(:team) { FactoryGirl.create :team }
+  let(:team) { FactoryBot.create :team }
 
   def do_request
     visit show_path(model_name: 'team', id: team.id)
@@ -10,7 +10,7 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
   describe 'JSON show view' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       visit uri
     end
 
@@ -344,7 +344,7 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
   describe 'embedded model', mongoid: true do
     it "does not show link to individual object's page" do
-      @record = FactoryGirl.create :field_test
+      @record = FactoryBot.create :field_test
       2.times.each { |i| @record.embeds.create name: "embed #{i}" }
       visit show_path(model_name: 'field_test', id: @record.id)
       is_expected.not_to have_link('embed 0')
@@ -353,7 +353,7 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
   end
 
   describe 'virtual field' do
-    let(:team) { FactoryGirl.create :team, name: 'foobar' }
+    let(:team) { FactoryBot.create :team, name: 'foobar' }
     context 'with formatted_value defined' do
       before do
         RailsAdmin.config Team do

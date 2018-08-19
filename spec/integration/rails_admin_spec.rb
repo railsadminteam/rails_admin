@@ -94,8 +94,8 @@ describe RailsAdmin, type: :request do
 
   describe 'polymorphic associations' do
     before :each do
-      @team = FactoryGirl.create :team
-      @comment = FactoryGirl.create :comment, commentable: @team
+      @team = FactoryBot.create :team
+      @comment = FactoryBot.create :comment, commentable: @team
     end
 
     it 'works like belongs to associations in the list view' do

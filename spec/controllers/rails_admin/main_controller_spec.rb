@@ -50,8 +50,8 @@ describe RailsAdmin::MainController, type: :controller do
     it 'most recent change dates are different for same-named models in different modules' do
       user_create = 10.days.ago.to_date
       comment_create = 20.days.ago.to_date
-      FactoryGirl.create(:user_confirmed, created_at: user_create)
-      FactoryGirl.create(:comment_confirmed, created_at: comment_create)
+      FactoryBot.create(:user_confirmed, created_at: user_create)
+      FactoryBot.create(:comment_confirmed, created_at: comment_create)
 
       controller.dashboard
       expect(controller.instance_variable_get('@most_recent_created')['User::Confirmed']).to eq user_create
@@ -113,7 +113,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view' do
     before do
-      @teams = FactoryGirl.create_list(:team, 21)
+      @teams = FactoryBot.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
     end
 
@@ -125,7 +125,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view with kaminari custom param_name' do
     before do
-      @teams = FactoryGirl.create_list(:team, 21)
+      @teams = FactoryBot.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
       Kaminari.config.param_name = :pagina
     end
@@ -142,7 +142,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called with bulk_ids' do
     before do
-      @teams = FactoryGirl.create_list(:team, 21)
+      @teams = FactoryBot.create_list(:team, 21)
       controller.params = {model_name: 'teams', bulk_action: 'bulk_delete', bulk_ids: @teams.collect(&:id)}
     end
 
@@ -153,13 +153,13 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries for associated_collection' do
     before do
-      @team = FactoryGirl.create :team
+      @team = FactoryBot.create :team
       controller.params = {associated_collection: 'players', current_action: 'update', source_abstract_model: 'team', source_object_id: @team.id, model_name: 'player', action: 'index'}
       controller.get_model # set @model_config for Team
     end
 
     it "doesn't scope associated collection records when associated_collection_scope is nil" do
-      @players = FactoryGirl.create_list(:player, 2)
+      @players = FactoryBot.create_list(:player, 2)
 
       RailsAdmin.config Team do
         field :players do
@@ -171,7 +171,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'scopes associated collection records according to associated_collection_scope' do
-      @players = FactoryGirl.create_list(:player, 4)
+      @players = FactoryBot.create_list(:player, 4)
 
       RailsAdmin.config Team do
         field :players do
@@ -188,7 +188,7 @@ describe RailsAdmin::MainController, type: :controller do
       @team.revenue = BigDecimal.new('3')
       @team.save
 
-      @players = FactoryGirl.create_list(:player, 5)
+      @players = FactoryBot.create_list(:player, 5)
 
       RailsAdmin.config Team do
         field :players do
@@ -205,7 +205,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'limits associated collection records number to 30 if cache_all is false' do
-      @players = FactoryGirl.create_list(:player, 40)
+      @players = FactoryBot.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -216,7 +216,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it "doesn't limit associated collection records number to 30 if cache_all is true" do
-      @players = FactoryGirl.create_list(:player, 40)
+      @players = FactoryBot.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -227,7 +227,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'orders associated collection records by id, descending' do
-      @players = FactoryGirl.create_list(:player, 3)
+      @players = FactoryBot.create_list(:player, 3)
 
       expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
     end
@@ -235,7 +235,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#get_collection' do
     before do
-      @team = FactoryGirl.create(:team)
+      @team = FactoryBot.create(:team)
       controller.params = {model_name: 'teams'}
       RailsAdmin.config Team do
         field :players do
@@ -259,15 +259,15 @@ describe RailsAdmin::MainController, type: :controller do
       class TeamWithNumberedPlayers < Team
         has_many :numbered_players, class_name: 'Player', primary_key: :number, foreign_key: 'team_id'
       end
-      FactoryGirl.create :team
-      TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, number: 123)]
+      FactoryBot.create :team
+      TeamWithNumberedPlayers.first.numbered_players = [FactoryBot.create(:player, number: 123)]
       get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json
       expect(response.body).to match(/\"id\":\"123\"/)
     end
 
     context 'as JSON' do
       it 'returns strings' do
-        FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        FactoryBot.create :player, team: (FactoryBot.create :team)
         get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
       end
@@ -291,8 +291,8 @@ describe RailsAdmin::MainController, type: :controller do
           c.authenticate_with { warden.authenticate! scope: :user }
           c.current_user_method(&:current_user)
         end
-        login_as FactoryGirl.create :user, roles: [:admin]
-        player = FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        login_as FactoryBot.create :user, roles: [:admin]
+        player = FactoryBot.create :player, team: (FactoryBot.create :team)
         expect { get :show, model_name: 'player', id: player.id }.not_to raise_error
       end
     end

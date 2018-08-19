@@ -33,7 +33,7 @@ describe 'RailsAdmin Basic New', type: :request do
 
   describe 'GET /admin/player/new with has-one/belongs_to/has_many association' do
     before do
-      FactoryGirl.create :draft
+      FactoryBot.create :draft
       visit new_path(model_name: 'player')
     end
 
@@ -46,7 +46,7 @@ describe 'RailsAdmin Basic New', type: :request do
 
   describe 'GET /admin/player/new with missing label' do
     before do
-      FactoryGirl.create :team, name: ''
+      FactoryBot.create :team, name: ''
       visit new_path(model_name: 'player')
     end
   end
@@ -58,13 +58,13 @@ describe 'RailsAdmin Basic New', type: :request do
     end
 
     it 'prepropulates belongs to relationships' do
-      @team = FactoryGirl.create :team, name: 'belongs_to association prepopulated'
+      @team = FactoryBot.create :team, name: 'belongs_to association prepopulated'
       visit new_path(model_name: 'player', associations: {team: @team.id})
       expect(page).to have_css("select#player_team_id option[selected='selected'][value='#{@team.id}']")
     end
 
     it 'prepropulates has_many relationships' do
-      @player = FactoryGirl.create :player, name: 'has_many association prepopulated'
+      @player = FactoryBot.create :player, name: 'has_many association prepopulated'
       visit new_path(model_name: 'team', associations: {players: @player.id})
       expect(page).to have_css("select#team_player_ids option[selected='selected'][value='#{@player.id}']")
     end

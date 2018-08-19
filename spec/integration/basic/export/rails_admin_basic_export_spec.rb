@@ -7,11 +7,11 @@ describe 'RailsAdmin Export', type: :request do
   before do
     Comment.all.collect(&:destroy) # rspec bug => doesn't get destroyed with transaction
 
-    @players = FactoryGirl.create_list(:player, 4)
+    @players = FactoryBot.create_list(:player, 4)
     @player = @players.first
-    @player.team = FactoryGirl.create :team
-    @player.draft = FactoryGirl.create :draft
-    @player.comments = (@comments = Array.new(2) { FactoryGirl.create(:comment) })
+    @player.team = FactoryBot.create :team
+    @player.draft = FactoryBot.create :draft
+    @player.comments = (@comments = Array.new(2) { FactoryBot.create(:comment) })
     @player.save
 
     @abstract_model = RailsAdmin::AbstractModel.new(Player)

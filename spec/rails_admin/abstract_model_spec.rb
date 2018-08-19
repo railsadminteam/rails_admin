@@ -22,11 +22,11 @@ describe RailsAdmin::AbstractModel do
       shared_examples "filter on enum" do
         before do
           ["S", "M", "L"].each do |size|
-            FactoryGirl.create(:field_test, string_enum_field: size)
+            FactoryBot.create(:field_test, string_enum_field: size)
           end
 
           ["small", "medium", "large"].each do |size|
-            FactoryGirl.create(:field_test, integer_enum_field: size)
+            FactoryBot.create(:field_test, integer_enum_field: size)
           end
         end
         let(:model) { RailsAdmin::AbstractModel.new('FieldTest') }
@@ -61,7 +61,7 @@ describe RailsAdmin::AbstractModel do
     context 'on dates with :en locale' do
       before do
         [Date.new(2012, 1, 1), Date.new(2012, 1, 2), Date.new(2012, 1, 3), Date.new(2012, 1, 4)].each do |date|
-          FactoryGirl.create(:field_test, date_field: date)
+          FactoryBot.create(:field_test, date_field: date)
         end
       end
 
@@ -77,15 +77,15 @@ describe RailsAdmin::AbstractModel do
     context 'on datetimes with :en locale' do
       before do
         I18n.locale = :en
-        FactoryGirl.create(:field_test, datetime_field: Time.local(2012, 1, 1, 23, 59, 59))
-        FactoryGirl.create(:field_test, datetime_field: Time.local(2012, 1, 2, 0, 0, 0))
-        FactoryGirl.create(:field_test, datetime_field: Time.local(2012, 1, 3, 23, 59, 59))
+        FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 1, 23, 59, 59))
+        FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 2, 0, 0, 0))
+        FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 3, 23, 59, 59))
 
         # TODO: Mongoid 3.0.0 mysteriously expands the range of inclusion slightly...
         if defined?(Mongoid) && Mongoid::VERSION >= '3.0.0'
-          FactoryGirl.create(:field_test, datetime_field: Time.local(2012, 1, 4, 0, 0, 1))
+          FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 4, 0, 0, 1))
         else
-          FactoryGirl.create(:field_test, datetime_field: Time.local(2012, 1, 4, 0, 0, 0))
+          FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 4, 0, 0, 0))
         end
       end
 
@@ -119,9 +119,9 @@ describe RailsAdmin::AbstractModel do
   describe 'each_associated_children' do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
-      @draft = FactoryGirl.build :draft
-      @comments = FactoryGirl.build_list :comment, 2
-      @player = FactoryGirl.build :player, draft: @draft, comments: @comments
+      @draft = FactoryBot.build :draft
+      @comments = FactoryBot.build_list :comment, 2
+      @player = FactoryBot.build :player, draft: @draft, comments: @comments
     end
 
     it 'should return has_one and has_many associations with its children' do

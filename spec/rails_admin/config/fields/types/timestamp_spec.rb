@@ -5,7 +5,7 @@ describe RailsAdmin::Config::Fields::Types::Timestamp, active_record: true do
 
   describe '#parse_input' do
     before :each do
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @time = ::Time.now.getutc
       @field = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :timestamp_field }
     end

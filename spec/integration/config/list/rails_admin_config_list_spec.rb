@@ -10,7 +10,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :name
         end
       end
-      FactoryGirl.create :team
+      FactoryBot.create :team
       visit index_path(model_name: 'team')
       is_expected.to have_selector('th.header.string_type.name_field')
       is_expected.to have_selector('td.string_type.name_field')
@@ -20,8 +20,8 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
   describe 'number of items per page' do
     before do
       2.times.each do
-        FactoryGirl.create :league
-        FactoryGirl.create :player
+        FactoryBot.create :league
+        FactoryBot.create :player
       end
     end
 
@@ -284,7 +284,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = FactoryGirl.create_list(:fan, 2)
+      @fans = FactoryBot.create_list(:fan, 2)
       visit index_path(model_name: 'fan')
       # NOTE: Capybara really doesn't want us to look at invisible text. This test
       # could break at any moment.
@@ -305,7 +305,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = FactoryGirl.create_list(:fan, 2).sort_by(&:id)
+      @fans = FactoryBot.create_list(:fan, 2).sort_by(&:id)
       visit index_path(model_name: 'fan')
       expect(find('tbody tr:nth-child(1) td:nth-child(3)')).to have_content(@fans[1].name.upcase)
       expect(find('tbody tr:nth-child(2) td:nth-child(3)')).to have_content(@fans[0].name.upcase)
@@ -322,7 +322,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = FactoryGirl.create_list(:fan, 2)
+      @fans = FactoryBot.create_list(:fan, 2)
       visit index_path(model_name: 'fan')
       is_expected.to have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{2} \w{3} \d{1,2}:\d{1,2}/)
     end
@@ -338,7 +338,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :updated_at
         end
       end
-      @fans = FactoryGirl.create_list(:fan, 2)
+      @fans = FactoryBot.create_list(:fan, 2)
       visit index_path(model_name: 'fan')
       is_expected.to have_selector('tbody tr:nth-child(1) td:nth-child(4)', text: /\d{4}-\d{2}-\d{2}/)
     end
@@ -351,8 +351,8 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :player_names_truncated
         end
       end
-      @team = FactoryGirl.create :team
-      @players = FactoryGirl.create_list :player, 2, team: @team
+      @team = FactoryBot.create :team
+      @players = FactoryBot.create_list :player, 2, team: @team
       visit index_path(model_name: 'team')
       expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
     end
@@ -427,7 +427,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
           field :embeds
         end
       end
-      @record = FactoryGirl.create :field_test
+      @record = FactoryBot.create :field_test
       2.times.each { |i| @record.embeds.create name: "embed #{i}" }
       visit index_path(model_name: 'field_test')
       is_expected.not_to have_link('embed 0')
@@ -444,7 +444,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       end
 
       it 'displays checkboxes on index' do
-        @records = FactoryGirl.create_list :field_test, 3
+        @records = FactoryBot.create_list :field_test, 3
 
         visit index_path(model_name: 'field_test')
         checkboxes = all(:xpath, './/form[@id="bulk_form"]//input[@type="checkbox"]')
@@ -464,7 +464,7 @@ describe 'RailsAdmin Config DSL List Section', type: :request do
       end
 
       it 'does not display any checkboxes on index' do
-        @records = FactoryGirl.create_list :field_test, 3
+        @records = FactoryBot.create_list :field_test, 3
 
         visit index_path(model_name: 'field_test')
         checkboxes = all(:xpath, './/form[@id="bulk_form"]//input[@type="checkbox"]')

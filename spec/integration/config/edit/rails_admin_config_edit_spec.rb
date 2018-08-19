@@ -705,7 +705,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
   describe 'nested form' do
     it 'works', js: true do
-      @record = FactoryGirl.create :field_test
+      @record = FactoryBot.create :field_test
       NestedFieldTest.create! title: 'title 1', field_test: @record
       NestedFieldTest.create! title: 'title 2', field_test: @record
       visit edit_path(model_name: 'field_test', id: @record.id)
@@ -727,7 +727,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
 
     it 'works with nested has_many', js: true do
-      @record = FactoryGirl.create :field_test
+      @record = FactoryBot.create :field_test
       visit edit_path(model_name: 'field_test', id: @record.id)
 
       find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
@@ -736,7 +736,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
 
     it 'is optional for has_one' do
-      @record = FactoryGirl.create :field_test
+      @record = FactoryBot.create :field_test
       visit edit_path(model_name: 'field_test', id: @record.id)
       click_button 'Save'
       @record.reload
@@ -818,7 +818,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
 
   describe 'embedded model', mongoid: true do
     it 'works' do
-      @record = FactoryGirl.create :field_test
+      @record = FactoryBot.create :field_test
       2.times.each { |i| @record.embeds.create name: "embed #{i}" }
       visit edit_path(model_name: 'field_test', id: @record.id)
       fill_in 'field_test_embeds_attributes_0_name', with: 'embed 1 edited'
@@ -840,7 +840,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
             end
           end
         end
-        @field_test = FactoryGirl.create :field_test
+        @field_test = FactoryBot.create :field_test
       end
 
       it 'don\'t allow to remove element', js: true do
@@ -857,7 +857,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
             field :players
           end
         end
-        @team = FactoryGirl.create :team
+        @team = FactoryBot.create :team
       end
 
       it 'allow to remove element', js: true do

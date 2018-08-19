@@ -36,10 +36,10 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
 
     before do
-      @players = FactoryGirl.create_list(:player, 3) + [
+      @players = FactoryBot.create_list(:player, 3) + [
         # Multibyte players
-        FactoryGirl.create(:player, name: 'Антоха'),
-        FactoryGirl.create(:player, name: 'Петруха'),
+        FactoryBot.create(:player, name: 'Антоха'),
+        FactoryBot.create(:player, name: 'Петруха'),
       ]
     end
 
@@ -137,7 +137,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     before do
       @teams = [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
-               collect { |h| FactoryGirl.create :team, h }
+               collect { |h| FactoryBot.create :team, h }
     end
 
     it 'makes correct query' do
@@ -163,9 +163,9 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
 
     before do
-      @division = FactoryGirl.create :division, name: 'bar division'
+      @division = FactoryBot.create :division, name: 'bar division'
       @teams = [{}, {division: @division}, {name: 'somewhere foos', division: @division}, {name: 'nowhere foos'}].
-               collect { |h| FactoryGirl.create :team, h }
+               collect { |h| FactoryBot.create :team, h }
     end
 
     context 'without configuration' do

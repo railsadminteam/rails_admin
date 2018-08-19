@@ -5,7 +5,7 @@ describe 'RailsAdmin Basic Show', type: :request do
 
   describe 'show' do
     it 'has History, Edit, Delete, Details and attributes' do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       visit show_path(model_name: 'player', id: @player.id)
 
       is_expected.to have_selector('a', text: 'History')
@@ -28,8 +28,8 @@ describe 'RailsAdmin Basic Show', type: :request do
 
   describe 'show with belongs_to association' do
     before do
-      @player = FactoryGirl.create :player
-      @team   = FactoryGirl.create :team
+      @player = FactoryBot.create :player
+      @team   = FactoryBot.create :team
       @player.update_attributes(team_id: @team.id)
       visit show_path(model_name: 'player', id: @player.id)
     end
@@ -41,8 +41,8 @@ describe 'RailsAdmin Basic Show', type: :request do
 
   describe 'show with has-one association' do
     before do
-      @player = FactoryGirl.create :player
-      @draft  = FactoryGirl.create :draft, player: @player
+      @player = FactoryBot.create :player
+      @draft  = FactoryBot.create :draft, player: @player
       visit show_path(model_name: 'player', id: @player.id)
     end
 
@@ -53,10 +53,10 @@ describe 'RailsAdmin Basic Show', type: :request do
 
   describe 'show with has-and-belongs-to-many association' do
     before do
-      @player = FactoryGirl.create :player
-      @comment1 = FactoryGirl.create :comment, commentable: @player
-      @comment2 = FactoryGirl.create :comment, commentable: @player
-      @comment3 = FactoryGirl.create :comment, commentable: FactoryGirl.create(:player)
+      @player = FactoryBot.create :player
+      @comment1 = FactoryBot.create :comment, commentable: @player
+      @comment2 = FactoryBot.create :comment, commentable: @player
+      @comment3 = FactoryBot.create :comment, commentable: FactoryBot.create(:player)
 
       visit show_path(model_name: 'player', id: @player.id)
     end
@@ -70,8 +70,8 @@ describe 'RailsAdmin Basic Show', type: :request do
 
   describe 'show for polymorphic objects' do
     before do
-      @player = FactoryGirl.create :player
-      @comment = FactoryGirl.create :comment, commentable: @player
+      @player = FactoryBot.create :player
+      @comment = FactoryBot.create :comment, commentable: @player
       visit show_path(model_name: 'comment', id: @comment.id)
     end
 

@@ -8,7 +8,7 @@ describe RailsAdmin::Config::Fields::Base do
       end
 
       expect(RailsAdmin.config('Ball').fields.first.with(object: Ball.new)).to be_required
-      expect(RailsAdmin.config('Ball').fields.first.with(object: FactoryGirl.create(:ball))).not_to be_required
+      expect(RailsAdmin.config('Ball').fields.first.with(object: FactoryBot.create(:ball))).not_to be_required
     end
 
     context 'on a Paperclip installation' do
@@ -147,7 +147,7 @@ describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.with(object: @team).form_default_value).to eq('default value')
       @team.name = 'set value'
       expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.with(object: @team).form_default_value).to be_nil
-      @team = FactoryGirl.create :team
+      @team = FactoryBot.create :team
       @team.name = nil
       expect(RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }.with(object: @team).form_default_value).to be_nil
     end
@@ -212,7 +212,7 @@ describe RailsAdmin::Config::Fields::Base do
 
     it 'defaults to false if associated collection count >= 100' do
       @players = Array.new(100) do
-        FactoryGirl.create :player
+        FactoryBot.create :player
       end
       expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
     end
@@ -223,14 +223,14 @@ describe RailsAdmin::Config::Fields::Base do
       end
       it 'defaults to true if associated collection count less than than limit' do
         @players = Array.new(4) do
-          FactoryGirl.create :player
+          FactoryBot.create :player
         end
         expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_truthy
       end
 
       it 'defaults to false if associated collection count >= that limit' do
         @players = Array.new(5) do
-          FactoryGirl.create :player
+          FactoryBot.create :player
         end
         expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :players }.associated_collection_cache_all).to be_falsey
       end
@@ -332,7 +332,7 @@ describe RailsAdmin::Config::Fields::Base do
         field :virtual_column
         field :name
       end
-      @league = FactoryGirl.create :league
+      @league = FactoryBot.create :league
       expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :virtual_column }.sortable).to be_falsey
       expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :virtual_column }.searchable).to be_falsey
       expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :name }.sortable).to be_truthy
@@ -370,7 +370,7 @@ describe RailsAdmin::Config::Fields::Base do
         field :virtual_column
         field :name
       end
-      @league = FactoryGirl.create :league
+      @league = FactoryBot.create :league
       expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :virtual_column }.virtual?).to be_truthy
       expect(RailsAdmin.config('League').export.fields.detect { |f| f.name == :name }.virtual?).to be_falsey
     end

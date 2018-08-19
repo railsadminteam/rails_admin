@@ -5,7 +5,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       visit edit_path(model_name: 'player', id: @player.id)
     end
 
@@ -36,13 +36,13 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'association with inverse_of option' do
     it 'adds a related id to the belongs_to create team link' do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       visit edit_path(model_name: 'player', id: @player.id)
       is_expected.to have_selector("a[data-link='/admin/team/new?associations%5Bplayers%5D=#{@player.id}&modal=true']")
     end
 
     it 'adds a related id to the has_many create team link' do
-      @team = FactoryGirl.create :team
+      @team = FactoryBot.create :team
       visit edit_path(model_name: 'team', id: @team.id)
       is_expected.to have_selector("a[data-link='/admin/player/new?associations%5Bteam%5D=#{@team.id}&modal=true']")
     end
@@ -50,7 +50,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'readonly associations' do
     it 'is not editable' do
-      @league = FactoryGirl.create :league
+      @league = FactoryBot.create :league
       visit edit_path(model_name: 'league', id: @league.id)
       is_expected.not_to have_selector('select#league_team_ids')
       is_expected.to have_selector('select#league_division_ids') # decoy, fails if naming scheme changes
@@ -59,7 +59,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'has many associations through more than one association' do
     it 'is not editable' do
-      @league = FactoryGirl.create :league
+      @league = FactoryBot.create :league
       visit edit_path(model_name: 'league', id: @league.id)
       expect(page).to have_selector('select#league_division_ids')
       expect(page).to_not have_selector('select#league_player_ids')
@@ -68,8 +68,8 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit with has-and-belongs-to-many association' do
     before do
-      @teams = FactoryGirl.create_list(:team, 3)
-      @fan = FactoryGirl.create :fan, teams: [@teams[0]]
+      @teams = FactoryBot.create_list(:team, 3)
+      @fan = FactoryBot.create :fan, teams: [@teams[0]]
       visit edit_path(model_name: 'fan', id: @fan.id)
     end
 
@@ -96,15 +96,15 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'edit with missing label', given: ['a player exists', 'three teams with no name exist'] do
     before do
-      @player = FactoryGirl.create :player
-      @teams = Array.new(3) { FactoryGirl.create :team, name: '' }
+      @player = FactoryBot.create :player
+      @teams = Array.new(3) { FactoryBot.create :team, name: '' }
       visit edit_path(model_name: 'player', id: @player.id)
     end
   end
 
   describe 'edit object with overridden to_param' do
     before do
-      @ball = FactoryGirl.create :ball
+      @ball = FactoryBot.create :ball
       visit edit_path(model_name: 'ball', id: @ball.id)
     end
 
@@ -115,7 +115,7 @@ describe 'RailsAdmin Basic Edit', type: :request do
 
   describe 'clicking cancel when editing an object' do
     before do
-      @ball = FactoryGirl.create :ball
+      @ball = FactoryBot.create :ball
       visit '/admin/ball?sort=color'
       click_link 'Edit'
     end

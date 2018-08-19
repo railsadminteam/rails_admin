@@ -5,7 +5,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update with errors' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       visit edit_path(model_name: 'player', id: @player.id)
     end
 
@@ -19,7 +19,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update and add another' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
 
       visit edit_path(model_name: 'player', id: @player.id)
 
@@ -40,7 +40,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update and edit' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
 
       visit edit_path(model_name: 'player', id: @player.id)
 
@@ -61,8 +61,8 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update with has-one association' do
     before do
-      @player = FactoryGirl.create :player
-      @draft = FactoryGirl.create :draft
+      @player = FactoryBot.create :player
+      @draft = FactoryBot.create :draft
       @number = @draft.player.number + 1 # to avoid collision
       put edit_path(model_name: 'player', id: @player.id, player: {name: 'Jackie Robinson', draft_id: @draft.id, number: @number, position: 'Second baseman'})
       @player.reload
@@ -86,7 +86,7 @@ describe 'RailsAdmin Basic Update', type: :request do
         c.audit_with :history
       end
 
-      @league = FactoryGirl.create :league
+      @league = FactoryBot.create :league
       @divisions = Array.new(3) { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
 
       put edit_path(model_name: 'league', id: @league.id, league: {name: 'National League', division_ids: [@divisions[0].id]})
@@ -120,7 +120,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update with invalid object' do
     before do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
 
       visit edit_path(model_name: 'player', id: @player.id)
 
@@ -148,7 +148,7 @@ describe 'RailsAdmin Basic Update', type: :request do
         end
       end
 
-      @user = FactoryGirl.create :user
+      @user = FactoryBot.create :user
 
       visit edit_path(model_name: 'user', id: @user.id)
 
@@ -165,7 +165,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update with serialized objects of Mongoid', mongoid: true do
     before do
-      @field_test = FactoryGirl.create :field_test
+      @field_test = FactoryBot.create :field_test
 
       visit edit_path(model_name: 'field_test', id: @field_test.id)
     end
@@ -193,7 +193,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update with overridden to_param' do
     before do
-      @ball = FactoryGirl.create :ball
+      @ball = FactoryBot.create :ball
 
       visit edit_path(model_name: 'ball', id: @ball.id)
 
@@ -210,7 +210,7 @@ describe 'RailsAdmin Basic Update', type: :request do
 
   describe 'update of STI subclass on superclass view' do
     before do
-      @hardball = FactoryGirl.create :hardball
+      @hardball = FactoryBot.create :hardball
 
       visit edit_path(model_name: 'ball', id: @hardball.id)
 

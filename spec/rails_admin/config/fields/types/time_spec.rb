@@ -17,7 +17,7 @@ describe RailsAdmin::Config::Fields::Types::Time do
     end
 
     before :each do
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @time = ::Time.now.getutc
     end
 

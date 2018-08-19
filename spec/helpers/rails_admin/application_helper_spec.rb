@@ -6,7 +6,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
     it 'doesn\'t use unpersisted objects' do
       expect(helper).to receive(:action).with(:edit, abstract_model, nil).and_call_original
-      helper.authorized?(:edit, abstract_model, FactoryGirl.build(:field_test))
+      helper.authorized?(:edit, abstract_model, FactoryBot.build(:field_test))
     end
   end
 
@@ -69,7 +69,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
     describe '#actions' do
       it 'returns actions by type' do
         abstract_model = RailsAdmin::AbstractModel.new(Player)
-        object = FactoryGirl.create :player
+        object = FactoryBot.create :player
         expect(helper.actions(:all, abstract_model, object).collect(&:custom_key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
         expect(helper.actions(:root, abstract_model, object).collect(&:custom_key)).to eq([:dashboard])
         expect(helper.actions(:collection, abstract_model, object).collect(&:custom_key)).to eq([:index, :new, :export, :bulk_delete, :history_index])
@@ -144,7 +144,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
     describe '#breadcrumb' do
       it 'gives us a breadcrumb' do
-        @action = RailsAdmin::Config::Actions.find(:edit, abstract_model: RailsAdmin::AbstractModel.new(Team), object: FactoryGirl.create(:team, name: 'the avengers'))
+        @action = RailsAdmin::Config::Actions.find(:edit, abstract_model: RailsAdmin::AbstractModel.new(Team), object: FactoryBot.create(:team, name: 'the avengers'))
         bc = helper.breadcrumb
         expect(bc).to match(/Dashboard/) # dashboard
         expect(bc).to match(/Teams/) # list
@@ -176,7 +176,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
         @action = RailsAdmin::Config::Actions.find :show
         @abstract_model = RailsAdmin::AbstractModel.new(Team)
-        @object = FactoryGirl.create(:team, name: 'the avengers')
+        @object = FactoryBot.create(:team, name: 'the avengers')
 
         expect(helper.menu_for(:root)).to match(/Dashboard/)
         expect(helper.menu_for(:collection, @abstract_model)).to match(/List/)
@@ -351,19 +351,19 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
     describe '#edit_user_link' do
       it "don't include email column" do
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:player))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:player))
         result = helper.edit_user_link
         expect(result).to eq nil
       end
 
       it 'include email column' do
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).to match('href')
       end
 
       it 'show gravatar' do
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).to include('gravatar')
       end
@@ -373,7 +373,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
           config.show_gravatar = false
         end
 
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).not_to include('gravatar')
       end

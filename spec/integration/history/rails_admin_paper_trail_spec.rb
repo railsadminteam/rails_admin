@@ -19,7 +19,7 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
   describe 'on object creation', type: :request do
     subject { page }
     before do
-      @user = FactoryGirl.create :user
+      @user = FactoryBot.create :user
       RailsAdmin::Config.authenticate_with { warden.authenticate! scope: :user }
       RailsAdmin::Config.current_user_method(&:current_user)
       login_as @user
@@ -41,8 +41,8 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
     before(:each) do
       PaperTrail::Version.delete_all
       @model = RailsAdmin::AbstractModel.new('PaperTrailTest')
-      @user = FactoryGirl.create :user
-      @paper_trail_test = FactoryGirl.create :paper_trail_test
+      @user = FactoryBot.create :user
+      @paper_trail_test = FactoryBot.create :paper_trail_test
       with_versioning do
         PaperTrail.whodunnit = @user.id
         30.times do |i|
