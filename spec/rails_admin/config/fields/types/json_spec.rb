@@ -58,6 +58,33 @@ describe RailsAdmin::Config::Fields::Types::Json do
     end
   end
 
+  describe '#export_value' do
+    before do
+      RailsAdmin.config do |config|
+        config.model FieldTest do
+          field :json_field, :json
+        end
+      end
+    end
+
+    it 'returns correct value for empty json' do
+      allow(object).to receive(:json_field) { {} }
+      actual = field.with(bindings).export_value
+      expect(actual).to match(/{\n+}/)
+    end
+
+    it 'returns correct value' do
+      allow(object).to receive(:json_field) { {sample_key: "sample_value"} }
+      actual = field.with(bindings).export_value
+      expected = [
+        "{",
+        "  \"sample_key\": \"sample_value\"",
+        "}",
+      ].join("\n")
+      expect(actual).to eq(expected)
+    end
+  end
+
   describe '#parse_input' do
     before :each do
       RailsAdmin.config do |config|
