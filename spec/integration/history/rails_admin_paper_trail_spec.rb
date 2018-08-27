@@ -44,7 +44,13 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
       @user = FactoryBot.create :user
       @paper_trail_test = FactoryBot.create :paper_trail_test
       with_versioning do
-        PaperTrail.whodunnit = @user.id
+        # `PaperTrail.whodunnit` deprecated in PT 9, will be removed in 10.
+        # Use `PaperTrail.request.whodunnit` instead.
+        if PaperTrail.respond_to?(:request)
+          PaperTrail.request.whodunnit = @user.id
+        else
+          PaperTrail.whodunnit = @user.id
+        end
         30.times do |i|
           @paper_trail_test.update!(name: "updated name #{i}")
         end
