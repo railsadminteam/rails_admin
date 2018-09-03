@@ -89,7 +89,7 @@ or
 Rails.application.eager_load!
 ```
 
-## Alternative method for the RailsAdmin versions that do not extends the ApplicationController
+## Alternative method for the RailsAdmin versions that does not extend ApplicationController
 
 Create an initializer file named : rails_admin_reload.rb
 
