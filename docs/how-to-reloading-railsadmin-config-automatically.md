@@ -93,7 +93,7 @@ Rails.application.eager_load!
 
 Create an initializer file named : rails_admin_reload.rb
 
-```
+```ruby
 Rails.application.config.to_prepare do
   RailsAdmin::ApplicationController.class_eval do
     before_action :reload_rails_admin, if: :reload_rails_admin? # Reloading RailsAdmin Config Automatically
