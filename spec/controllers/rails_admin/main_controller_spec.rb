@@ -378,24 +378,37 @@ describe RailsAdmin::MainController, type: :controller do
     it 'allows for delete method with Carrierwave' do
       RailsAdmin.config FieldTest do
         field :carrierwave_asset
+        field :carrierwave_assets do
+          delete_method :delete_carrierwave_assets
+        end
         field :dragonfly_asset
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
         end
         field :refile_asset if defined?(Refile)
+        field :active_storage_asset do
+          delete_method :remove_active_storage_asset
+        end if defined?(ActiveStorage)
+        field :active_storage_assets do
+          delete_method :remove_active_storage_assets
+        end if defined?(ActiveStorage)
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
           'carrierwave_asset' => 'test',
           'carrierwave_asset_cache' => 'test',
           'remove_carrierwave_asset' => 'test',
+          'carrierwave_assets' => 'test',
+          'carrierwave_assets_cache' => 'test',
+          'delete_carrierwave_assets' => 'test',
           'dragonfly_asset' => 'test',
           'remove_dragonfly_asset' => 'test',
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
-        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}),
+        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
+          merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -403,12 +416,16 @@ describe RailsAdmin::MainController, type: :controller do
         'carrierwave_asset' => 'test',
         'remove_carrierwave_asset' => 'test',
         'carrierwave_asset_cache' => 'test',
+        'carrierwave_assets' => 'test',
+        'carrierwave_assets_cache' => 'test',
+        'delete_carrierwave_assets' => 'test',
         'dragonfly_asset' => 'test',
         'remove_dragonfly_asset' => 'test',
         'retained_dragonfly_asset' => 'test',
         'paperclip_asset' => 'test',
         'delete_paperclip_asset' => 'test',
-      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}))
+      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
+        merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do

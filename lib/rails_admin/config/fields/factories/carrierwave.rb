@@ -6,7 +6,9 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   model = parent.abstract_model.model
   if defined?(::CarrierWave) && model.is_a?(CarrierWave::Mount) && model.uploaders.include?(attachment_name = properties.name.to_s.chomp('_file_name').to_sym)
     columns = [model.uploader_options[attachment_name][:mount_on] || attachment_name, "#{attachment_name}_content_type".to_sym, "#{attachment_name}_file_size".to_sym]
-    field = RailsAdmin::Config::Fields::Types.load(:carrierwave).new(parent, attachment_name, properties)
+    field = RailsAdmin::Config::Fields::Types.load(
+      [:serialized, :json].include?(properties.type) ? :multiple_carrierwave : :carrierwave,
+    ).new(parent, attachment_name, properties)
     fields << field
     children_fields = []
     columns.each do |children_column_name|

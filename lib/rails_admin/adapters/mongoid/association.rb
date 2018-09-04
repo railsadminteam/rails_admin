@@ -45,7 +45,7 @@ module RailsAdmin
         end
 
         def foreign_key
-          return unless [:embeds_one, :embeds_many].exclude?(macro.to_sym)
+          return if embeds?
           association.foreign_key.to_sym rescue nil
         end
 
@@ -82,7 +82,7 @@ module RailsAdmin
 
         def nested_options
           nested = nested_attributes_options.try { |o| o[name] }
-          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !association.cyclic
+          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !cyclic?
             raise <<-MSG.gsub(/^\s+/, '')
             Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
             because embedded model doesn't have top-level access.
@@ -96,13 +96,24 @@ module RailsAdmin
           true
         end
 
+        def macro
+          association.try(:macro) || association.class.name.split('::').last.underscore.to_sym
+        end
+
+        def embeds?
+          [:embeds_one, :embeds_many].include?(macro)
+        end
+
       private
 
         def inverse_of_field
           association.respond_to?(:inverse_of_field) && association.inverse_of_field
         end
 
-        delegate :macro, :options, to: :association, prefix: false
+        def cyclic?
+          association.respond_to?(:cyclic?) ? association.cyclic? : association.cyclic
+        end
+
         delegate :nested_attributes_options, to: :model, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end

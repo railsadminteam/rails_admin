@@ -3,6 +3,7 @@ require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
 describe 'RailsAdmin PaperTrail history', active_record: true do
   before(:each) do
+    skip 'Requires Ruby >= 2.3' if Rails::VERSION::STRING >= '5.2' && RUBY_VERSION =~ /^2\.2/
     RailsAdmin.config do |config|
       config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
     end

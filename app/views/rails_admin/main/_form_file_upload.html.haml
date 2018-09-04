@@ -1,4 +1,4 @@
-- file = form.object.send(field.method_name).presence
+- file = field.value
 
 .toggle{style: ('display:none;' if file && field.delete_method && form.object.send(field.delete_method) == '1')}
   - if value = field.pretty_value

@@ -70,6 +70,23 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       else
         image_container.hide()
 
+    # multiple-fileupload-preview
+
+    content.find('[data-multiple-fileupload]').change ->
+      input = this
+      $("#" + input.id).parent().children(".preview").remove()
+      for file in input.files
+        ext = file.name.split('.').pop().toLowerCase()
+        if $.inArray(ext, ['gif','png','jpg','jpeg','bmp']) == -1
+          continue
+        image_container = $('<img />').addClass('preview').addClass('img-thumbnail')
+        do (image_container) ->
+          reader = new FileReader()
+          reader.onload = (e) ->
+            image_container.attr "src", e.target.result
+          reader.readAsDataURL file
+          $("#" + input.id).parent().append($('<div></div>').addClass('preview').append(image_container))
+
     # filtering-multiselect
 
     content.find('[data-filteringmultiselect]').each ->

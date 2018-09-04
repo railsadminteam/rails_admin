@@ -24,8 +24,24 @@ module RailsAdmin
     end
 
     initializer 'RailsAdmin setup middlewares' do |app|
+      app.config.session_store :cookie_store
+      app.config.middleware.use ActionDispatch::Cookies
       app.config.middleware.use ActionDispatch::Flash
+      app.config.middleware.use ActionDispatch::Session::CookieStore, app.config.session_options
+      app.config.middleware.use Rack::MethodOverride
       app.config.middleware.use Rack::Pjax
+    end
+
+    initializer 'RailsAdmin reload config in development' do
+      if Rails.application.config.cache_classes
+        if defined?(ActiveSupport::Reloader)
+          ActiveSupport::Reloader.before_class_unload do
+            RailsAdmin::Config.reset_all_models
+          end
+          # else
+          # For Rails 4 not implemented
+        end
+      end
     end
 
     rake_tasks do

@@ -2,17 +2,17 @@
 
 [![Gem Version](https://img.shields.io/gem/v/rails_admin.svg)][gem]
 [![Build Status](https://img.shields.io/travis/sferik/rails_admin.svg)][travis]
-[![Dependency Status](https://img.shields.io/gemnasium/sferik/rails_admin.svg)][gemnasium]
-[![Code Climate](https://img.shields.io/codeclimate/github/sferik/rails_admin.svg)][codeclimate]
 [![Coverage Status](https://img.shields.io/coveralls/sferik/rails_admin.svg)][coveralls]
 [![Inline docs](http://inch-ci.org/github/sferik/rails_admin.svg)][inch]
+[![Code Climate](https://codeclimate.com/github/sferik/rails_admin.svg)][codeclimate]
+[![SemVer](https://api.dependabot.com/badges/compatibility_score?dependency-name=rails_admin&package-manager=bundler&version-scheme=semver)][semver]
 
 [gem]: https://rubygems.org/gems/rails_admin
 [travis]: https://travis-ci.org/sferik/rails_admin
-[gemnasium]: https://gemnasium.com/sferik/rails_admin
-[codeclimate]: https://codeclimate.com/github/sferik/rails_admin
 [coveralls]: https://coveralls.io/r/sferik/rails_admin
 [inch]: http://inch-ci.org/github/sferik/rails_admin
+[codeclimate]: https://codeclimate.com/github/sferik/rails_admin
+[semver]: https://dependabot.com/compatibility-score.html?dependency-name=rails_admin&package-manager=bundler&version-scheme=semver
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 

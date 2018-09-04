@@ -130,7 +130,7 @@ module RailsAdmin
           @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
         else
           # parent is RailsAdmin::Config::Model, recursion is on Section's classes
-          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
+          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).clone.freeze
         end
         readonly ? @_ro_fields : (@_fields ||= @_ro_fields.collect(&:clone))
       end
