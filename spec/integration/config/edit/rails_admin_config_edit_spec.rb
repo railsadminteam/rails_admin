@@ -63,6 +63,20 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       visit new_path(model_name: 'team')
       expect(find_field('team[color]').value).to eq('black')
     end
+
+    it 'renders custom value next time if error happend' do
+      RailsAdmin.config(Team) do
+        field :name do
+          render do
+            bindings[:object].persisted? ? 'Custom Name' : raise(ZeroDivisionError)
+          end
+        end
+      end
+      expect { visit new_path(model_name: 'team') }.to raise_error(/ZeroDivisionError/)
+      record = FactoryBot.create(:team)
+      visit edit_path(model_name: 'team', id: record.id)
+      expect(page).to have_content('Custom Name')
+    end
   end
 
   describe 'css hooks' do

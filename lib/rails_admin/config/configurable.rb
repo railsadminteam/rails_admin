@@ -23,6 +23,23 @@ module RailsAdmin
         self.class.register_deprecated_instance_option(option_name, replacement_option_name, scope, &custom_error)
       end
 
+    private
+
+      def with_recurring(option_name, value_proc, default_proc)
+        # Track recursive invocation with an instance variable. This prevents run-away recursion
+        # and allows configurations such as
+        # label { "#{label}".upcase }
+        # This will use the default definition when called recursively.
+        if instance_variable_get("@#{option_name}_recurring")
+          instance_eval(&default_proc)
+        else
+          instance_variable_set("@#{option_name}_recurring", true)
+          instance_eval(&value_proc)
+        end
+      ensure
+        instance_variable_set("@#{option_name}_recurring", false)
+      end
+
       module ClassMethods
         # Register an instance option. Instance option is a configuration
         # option that stores its value within an instance variable and is
@@ -51,17 +68,7 @@ module RailsAdmin
               value = instance_variable_get("@#{option_name}_registered")
               case value
               when Proc
-                # Track recursive invocation with an instance variable. This prevents run-away recursion
-                # and allows configurations such as
-                # label { "#{label}".upcase }
-                # This will use the default definition when called recursively.
-                if instance_variable_get("@#{option_name}_recurring")
-                  value = instance_eval(&default)
-                else
-                  instance_variable_set("@#{option_name}_recurring", true)
-                  value = instance_eval(&value)
-                  instance_variable_set("@#{option_name}_recurring", false)
-                end
+                value = with_recurring(option_name, value, default)
               when nil
                 value = instance_eval(&default)
               end
