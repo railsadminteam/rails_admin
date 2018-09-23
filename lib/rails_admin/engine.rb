@@ -43,7 +43,8 @@ module RailsAdmin
       Dir[File.join(File.dirname(__FILE__), '../tasks/*.rake')].each { |f| load f }
     end
 
-    initializer 'RailsAdmin check for required middlewares', after: :build_middleware_stack do |app|
+    # Check for required middlewares, can be missing in Rails API mode
+    config.after_initialize do |app|
       has_session_store = app.config.middleware.to_a.any? { |m| m.klass.try(:<=, ActionDispatch::Session::AbstractStore) } || ::Rails.version < '5.0'
       loaded = app.config.middleware.to_a.map(&:name)
       required = %w(ActionDispatch::Cookies ActionDispatch::Flash Rack::MethodOverride)
