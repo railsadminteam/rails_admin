@@ -54,7 +54,7 @@ module RailsAdmin
         configs << "config.middleware.use #{app.config.session_store.try(:name) || 'ActionDispatch::Session::CookieStore'}, #{app.config.session_options}" unless has_session_store
         raise <<-EOM
 Required middlewares for RailsAdmin are not added
-To fix tihs, add
+To fix this, add
 
   #{configs.join("\n  ")}
 
