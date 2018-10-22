@@ -101,6 +101,26 @@ end
     end
 ```
 
+* The [mongoid-enum gem](https://github.com/thetron/mongoid-enum) needs a bit of help to play with rails_admin:
+```ruby
+class Person
+  include Mongoid::Document
+  include Mongoid::Enum
+
+  # This typical mongoid-enum field definition will add a constant for you. In this case, Person::STATUS
+  enum :status, [:living, :dead, :undead]
+
+  rails_admin do
+    list do
+      # mongoid stores enum fields in a column named with an underscore prefix
+      configure :_status, :enum do
+        enum { STATUS }
+      end
+    end
+  end
+end
+```
+
 ### Multi-select ENUM example using User.roles as example...
 During Create/Update, display a Multi-Select Widget for :roles field.
 Stores/Retrieves the selected options as array into a single db string field as serialized array.
