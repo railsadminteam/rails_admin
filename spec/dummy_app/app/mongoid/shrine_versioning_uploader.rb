@@ -11,7 +11,7 @@ class ShrineVersioningUploader < Shrine
   process(:store) do |io|
     {
       original: io,
-      thumb: FakeIO.new("thumb-#{io.read}", )
+      thumb: FakeIO.another_version(io, :thumb),
     }
   end
 end

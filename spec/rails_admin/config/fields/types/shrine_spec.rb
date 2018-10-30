@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe RailsAdmin::Config::Fields::Types::Shrine do
   context 'when asset is an image with versions' do
-    let(:record) { FactoryBot.create :field_test, shrine_versioning_asset: FakeIO.new('dummy', {filename: 'test.jpg', content_type: 'image/jpeg'}) }
+    let(:record) { FactoryBot.create :field_test, shrine_versioning_asset: FakeIO.new('dummy', filename: 'test.jpg', content_type: 'image/jpeg') }
     let(:field) do
       RailsAdmin.config('FieldTest').fields.detect do |f|
         f.name == :shrine_versioning_asset
@@ -62,7 +62,7 @@ describe RailsAdmin::Config::Fields::Types::Shrine do
 
     describe '#image?' do
       context 'when attachment is an image' do
-        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', {filename: 'test.jpg', content_type: 'image/jpeg'}) }
+        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', filename: 'test.jpg', content_type: 'image/jpeg') }
 
         it 'returns true' do
           expect(field.image?).to be_truthy
@@ -70,7 +70,7 @@ describe RailsAdmin::Config::Fields::Types::Shrine do
       end
 
       context 'when attachment is not an image' do
-        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', {filename: 'test.txt', content_type: 'text/plain'}) }
+        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', filename: 'test.txt', content_type: 'text/plain') }
 
         it 'returns false' do
           expect(field.image?).to be_falsy
@@ -80,7 +80,7 @@ describe RailsAdmin::Config::Fields::Types::Shrine do
 
     describe '#value' do
       context 'when attachment exists' do
-        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', {filename: 'test.txt', content_type: 'text/plain'}) }
+        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', filename: 'test.txt', content_type: 'text/plain') }
 
         it 'returns attached object' do
           expect(field.value).to be_a(ShrineUploader::UploadedFile)
@@ -95,7 +95,7 @@ describe RailsAdmin::Config::Fields::Types::Shrine do
     end
 
     describe '#thumb_method' do
-      let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', {filename: 'test.jpg', content_type: 'image/jpeg'}) }
+      let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', filename: 'test.jpg', content_type: 'image/jpeg') }
 
       it 'returns nil' do
         expect(field.thumb_method).to eq(nil)
@@ -104,7 +104,7 @@ describe RailsAdmin::Config::Fields::Types::Shrine do
 
     describe '#resource_url' do
       context 'when calling without thumb' do
-        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', {filename: 'test.txt', content_type: 'text/plain'}) }
+        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', filename: 'test.txt', content_type: 'text/plain') }
 
         it 'returns url' do
           expect(field.resource_url).not_to be_nil
@@ -112,7 +112,7 @@ describe RailsAdmin::Config::Fields::Types::Shrine do
       end
 
       context 'when calling with thumb' do
-        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', {filename: 'test.jpg', content_type: 'image/jpeg'}) }
+        let(:record) { FactoryBot.create :field_test, shrine_asset: FakeIO.new('dummy', filename: 'test.jpg', content_type: 'image/jpeg') }
 
         it 'returns url' do
           expect(field.resource_url(field.thumb_method)).not_to be_nil
