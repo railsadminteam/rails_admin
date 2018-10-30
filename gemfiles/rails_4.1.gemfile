@@ -42,9 +42,12 @@ group :test do
   gem "rack-cache", require: "rack/cache"
   gem "rspec-rails", ">= 2.14"
   gem "rubocop", "~> 0.41.2"
+  gem "shrine", "~> 2.0"
+  gem "shrine-memory"
   gem "simplecov", ">= 0.9", require: false
   gem "timecop", ">= 0.5"
   gem "cancancan", "~> 1.12"
+
 
   platforms :ruby_19 do
     gem "tins", "~> 1.6.0", require: false
@@ -57,6 +60,7 @@ group :mongoid do
   gem "mongoid-paperclip", ">= 0.0.8", require: "mongoid_paperclip"
   gem "carrierwave-mongoid", ">= 0.6.3", require: "carrierwave/mongoid"
   gem "refile-mongoid", github: "DimaSamodurov/refile-mongoid", platforms: :ruby
+  gem "shrine-mongoid"
 end
 
 platforms :ruby do
