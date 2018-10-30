@@ -47,6 +47,9 @@ class FieldTest < ActiveRecord::Base
     end
   end
 
+  include ShrineUploader.attachment(:shrine_asset)
+  include ShrineVersioningUploader.attachment(:shrine_versioning_asset)
+
   if ::Rails.version >= '4.1' # enum support was added in Rails 4.1
     enum string_enum_field: {S: 's', M: 'm', L: 'l'}
     enum integer_enum_field: [:small, :medium, :large]

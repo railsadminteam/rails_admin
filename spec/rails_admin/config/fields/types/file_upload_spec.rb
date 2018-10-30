@@ -16,6 +16,10 @@ describe RailsAdmin::Config::Fields::Types::FileUpload do
           field :active_storage_asset do
             delete_method :remove_active_storage_asset
           end if defined?(ActiveStorage)
+          field :shrine_asset do
+            delete_method :remove_shrine_asset
+            cache_method :cached_shrine_asset_data
+          end if defined?(Shrine)
         end
       end
       expect(RailsAdmin.config(FieldTest).field(:carrierwave_asset).allowed_methods.collect(&:to_s)).to eq %w(carrierwave_asset remove_carrierwave_asset carrierwave_asset_cache)
@@ -23,6 +27,7 @@ describe RailsAdmin::Config::Fields::Types::FileUpload do
       expect(RailsAdmin.config(FieldTest).field(:paperclip_asset).allowed_methods.collect(&:to_s)).to eq %w(paperclip_asset delete_paperclip_asset)
       expect(RailsAdmin.config(FieldTest).field(:refile_asset).allowed_methods.collect(&:to_s)).to eq %w(refile_asset remove_refile_asset) if defined?(Refile)
       expect(RailsAdmin.config(FieldTest).field(:active_storage_asset).allowed_methods.collect(&:to_s)).to eq %w(active_storage_asset remove_active_storage_asset) if defined?(ActiveStorage)
+      expect(RailsAdmin.config(FieldTest).field(:shrine_asset).allowed_methods.collect(&:to_s)).to eq %w(shrine_asset remove_shrine_asset cached_shrine_asset_data) if defined?(Shrine)
     end
   end
 

@@ -132,6 +132,21 @@ describe RailsAdmin::Config::Fields::Base do
         end
       end
     end
+
+    if defined?(Shrine)
+      context 'of a Shrine installation' do
+        it 'is the parent field itself' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :shrine_asset }.children_fields).to eq([:shrine_asset_data])
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :shrine_asset }.hidden?).to be_falsey
+        end
+
+        it 'is not filterable' do
+          fields = RailsAdmin.config(FieldTest).fields.select { |f| [:shrine_asset_data].include?(f.name) }
+          expect(fields).to all(be_hidden)
+          expect(fields).not_to include(be_filterable)
+        end
+      end
+    end
   end
 
   describe '#form_default_value' do

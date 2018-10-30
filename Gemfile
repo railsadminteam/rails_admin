@@ -34,6 +34,8 @@ group :test do
   gem 'rspec-rails', '>= 2.14'
   gem 'rubocop', '~> 0.41.2'
   gem 'simplecov', '>= 0.9', require: false
+  gem 'shrine', '>= 2.0'
+  gem 'shrine-memory'
   gem 'timecop', '>= 0.5'
 
   platforms :ruby_19 do
