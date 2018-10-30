@@ -60,6 +60,7 @@ group :mongoid do
   gem "mongoid-paperclip", ">= 0.0.8", require: "mongoid_paperclip"
   gem "carrierwave-mongoid", ">= 0.6.3", require: "carrierwave/mongoid"
   gem "refile-mongoid", github: "DimaSamodurov/refile-mongoid", platforms: :ruby
+  gem "shrine-mongoid"
 end
 
 platforms :ruby do
