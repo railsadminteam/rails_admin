@@ -36,6 +36,8 @@ group :test do
   gem "rack-cache", require: "rack/cache"
   gem "rspec-rails", ">= 2.14"
   gem "rubocop", "~> 0.41.2"
+  gem "shrine", "~> 2.0"
+  gem "shrine-memory"
   gem "simplecov", ">= 0.9", require: false
   gem "timecop", ">= 0.5"
   gem "cancan", ">= 1.6"

@@ -13,6 +13,7 @@ gem "kaminari", "~> 0.14"
 
 group :active_record do
   gem "paper_trail", "~> 5.0"
+  gem "test_after_commit"
 
   platforms :ruby, :mswin, :mingw do
     gem "mysql2", ">= 0.3.14"
