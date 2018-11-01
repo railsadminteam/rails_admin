@@ -49,7 +49,6 @@ group :test do
   gem "timecop", ">= 0.5"
   gem "cancancan", "~> 1.12"
 
-
   platforms :ruby_19 do
     gem "tins", "~> 1.6.0", require: false
   end

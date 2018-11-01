@@ -37,7 +37,7 @@ gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
-gem 'shrine', '>= 2.0'
+gem 'shrine', '~> 2.0'
 gem 'shrine-memory'
 
 platforms :ruby_21, :ruby_22 do
