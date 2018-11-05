@@ -223,6 +223,8 @@ module RailsAdmin
         def build_statement_for_string_or_text
           return if @value.blank?
 
+          return ["(#{@column} = ?)", @value] if ['is', '='].include?(@operator)
+
           unless ['postgresql', 'postgis'].include? ar_adapter
             @value = @value.mb_chars.downcase
           end
@@ -235,8 +237,6 @@ module RailsAdmin
               "#{@value}%"
             when 'ends_with'
               "%#{@value}"
-            when 'is', '='
-              @value
             else
               return
             end
