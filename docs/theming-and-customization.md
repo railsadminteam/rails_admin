@@ -80,4 +80,5 @@ ENV['RAILS_ADMIN_THEME'] = 'example_theme'
 * [[Flatly theme|https://github.com/konjoot/rails_admin_flatly_theme]]: Bootstrap 2 flatly theme.
 * [[Rails Admin Material|https://github.com/blocknotes/rails_admin_material]]: A Material design theme.
 * [[Rollincode theme|https://github.com/rollincode/rails_admin_theme]]: Bootstrap 3 flat theme.
+* [[SoftwareBrothers theme|https://github.com/SoftwareBrothers/rails_admin_softwarebrothers_theme]]: SoftwareBrothers theme
 * Designer, or feel like one? Add your own.
