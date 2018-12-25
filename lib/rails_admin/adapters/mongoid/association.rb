@@ -41,7 +41,7 @@ module RailsAdmin
         end
 
         def primary_key
-          :_id
+          (options[:primary_key] || :_id).try(:to_sym) unless polymorphic?
         end
 
         def foreign_key
@@ -114,6 +114,7 @@ module RailsAdmin
           association.respond_to?(:cyclic?) ? association.cyclic? : association.cyclic
         end
 
+        delegate :options, :scope, to: :association, prefix: false
         delegate :nested_attributes_options, to: :model, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end
