@@ -41,7 +41,7 @@ module RailsAdmin
         end
 
         def primary_key
-          (options[:primary_key] || :_id).try(:to_sym) unless polymorphic?
+          (options[:primary_key] || :_id).try(:to_sym)
         end
 
         def foreign_key
