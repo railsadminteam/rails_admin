@@ -41,7 +41,7 @@ module RailsAdmin
         end
 
         def primary_key
-          (options[:primary_key] || :_id).try(:to_sym)
+          options[:primary_key].try(:to_sym) || :_id
         end
 
         def foreign_key
@@ -74,6 +74,11 @@ module RailsAdmin
 
         def inverse_of
           association.inverse_of.try :to_sym
+        end
+
+        def ref_ids_method
+          return unless [:has_and_belongs_to_many].include?(type)
+          foreign_key
         end
 
         def read_only?

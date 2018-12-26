@@ -62,6 +62,11 @@ module RailsAdmin
           options[:inverse_of].try :to_sym
         end
 
+        def ref_ids_method
+          return unless [:has_many, :has_and_belongs_to_many].include?(type)
+          "#{name.to_s.singularize}_ids".to_sym
+        end
+
         def read_only?
           (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) ||
             association.nested? ||
