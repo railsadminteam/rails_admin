@@ -132,6 +132,7 @@
 
 #### Field extension
 * [Enumerize](https://github.com/brainspec/enumerize): Enumerated attributes with I18n and ActiveRecord/Mongoid support
+* [RailsAdminActiontext](https://github.com/jemcode/rails_admin_actiontext): Rails 6 ActionText (Trix editor) support
 * [RailsAdminCharts](https://github.com/pgeraghty/rails_admin_charts): Charts using Highcharts
 * [RailsAdminDynamicCharts](https://github.com/openjaf/rails_admin_dynamic_charts): Dynamic Charts
 * [RailsAdminGlobalizeField](https://github.com/scarfaceDeb/rails_admin_globalize_field): Tabbed interface and custom field type for globalize3 translations
