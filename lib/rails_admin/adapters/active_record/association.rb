@@ -2,15 +2,12 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       class Association
-        attr_reader :association, :model
+        attr_reader :association, :model, :name
 
         def initialize(association, model)
           @association = association
           @model = model
-        end
-
-        def name
-          association.name.to_sym
+          @name = association.name.to_sym rescue nil
         end
 
         def pretty_name

@@ -82,4 +82,12 @@ FactoryBot.define do
   factory :paper_trail_test do
     sequence(:name) { |n| "name #{n}" }
   end
+
+  factory :book do
+    sequence(:title) { |n| "Book #{n}" }
+  end
+
+  factory :author do
+    sequence(:name) { |n| "Author #{n}" }
+  end
 end
