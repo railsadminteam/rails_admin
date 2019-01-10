@@ -43,9 +43,12 @@ module RailsAdmin
       Dir[File.join(File.dirname(__FILE__), '../tasks/*.rake')].each { |f| load f }
     end
 
-    # Check for required middlewares, can be missing in Rails API mode
+    # Check for required middlewares, users may forget to use them in Rails API mode
     config.after_initialize do |app|
-      has_session_store = app.config.middleware.to_a.any? { |m| m.klass.try(:<=, ActionDispatch::Session::AbstractStore) } || ::Rails.version < '5.0'
+      has_session_store = ::Rails.version < '5.0' || app.config.middleware.to_a.any? do |m|
+        m.klass.try(:<=, ActionDispatch::Session::AbstractStore) ||
+          m.klass.name =~ /^ActionDispatch::Session::/
+      end
       loaded = app.config.middleware.to_a.map(&:name)
       required = %w(ActionDispatch::Cookies ActionDispatch::Flash Rack::MethodOverride)
       missing = required - loaded
@@ -54,7 +57,7 @@ module RailsAdmin
         configs << "config.middleware.use #{app.config.session_store.try(:name) || 'ActionDispatch::Session::CookieStore'}, #{app.config.session_options}" unless has_session_store
         raise <<-EOM
 Required middlewares for RailsAdmin are not added
-To fix tihs, add
+To fix this, add
 
   #{configs.join("\n  ")}
 
