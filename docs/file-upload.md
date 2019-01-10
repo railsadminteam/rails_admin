@@ -1,4 +1,4 @@
-File upload is a 'virtual' field type not meant to be used directly, but through vendor implementations ([[Paperclip]]/[[Dragonfly]]/[[Carrierwave]])
+File upload is a 'virtual' field type not meant to be used directly, but through vendor implementations ([[Paperclip]]/[[Dragonfly]]/[[Carrierwave]]/[[ActiveStorage]])
 
 Those implementation share common characteristics.
 
