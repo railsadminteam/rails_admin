@@ -19,7 +19,6 @@ module RailsAdmin
         end
 
         def type
-          Rails.logger.debug "property.type.to_s #{property.type.to_s}"
           case property.type.to_s
           when 'Array', 'Money'
             :serialized
