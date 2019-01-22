@@ -1,12 +1,14 @@
 ### Go somewhere
 ```ruby
 visit rails_admin.dashboard_path
+visit rails_admin.index_path(model_name: 'blog~post')
 visit rails_admin.new_path(model_name: 'blog~post')
 visit rails_admin.edit_path(model_name: 'blog~post', id: post.id)
 ```
 ### Assert you landed somewhere
 ```ruby
 expect(current_path).to eq rails_admin.dashboard_path
+expect(current_path).to eq rails_admin.index_path(model_name: 'blog~post')
 expect(current_path).to eq rails_admin.new_path(model_name: 'blog~post')
 expect(current_path).to eq rails_admin.edit_path(model_name: 'blog~post', id: post.id)
 ```
