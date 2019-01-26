@@ -1,10 +1,9 @@
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/file_upload'
-require 'rails_admin/adapters/active_record/association'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-  if defined?(::ActiveStorage) && properties.is_a?(RailsAdmin::Adapters::ActiveRecord::Association) && (match = /\A(.+)_attachments?\Z/.match properties.name) && properties.klass.to_s == 'ActiveStorage::Attachment'
+  if defined?(::ActiveStorage) && properties.try(:association?) && (match = /\A(.+)_attachments?\Z/.match properties.name) && properties.klass.to_s == 'ActiveStorage::Attachment'
     name = match[1]
     field = RailsAdmin::Config::Fields::Types.load(
       properties.type == :has_many ? :multiple_active_storage : :active_storage,
