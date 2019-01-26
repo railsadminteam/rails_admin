@@ -102,7 +102,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-_Edit: Solution 2: Add `object_label_method` to `ApplicationRecord` then send `.decorate` method to use Drapper Decorator.
+_Edit_: Solution 2: Add `object_label_method` to `ApplicationRecord` then send `.decorate` method to use Drapper Decorator.
 
 Add `object_label_method` method.
 
