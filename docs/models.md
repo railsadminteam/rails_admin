@@ -102,6 +102,44 @@ RailsAdmin.config do |config|
 end
 ```
 
+_Edit: Solution 2: Add `object_label_method` to `ApplicationRecord` then send `.decorate` method to use Drapper Decorator.
+
+Add `object_label_method` method.
+
+```ruby
+  def object_label_method
+    klass = "#{self.class.name}Decorator".classify
+
+    if Object.const_defined? klass
+      object = klass.constantize.send(:decorate, self)
+      if object.respond_to? :object_label
+        object.object_label
+      else
+        id
+      end
+    end
+  end
+```
+Then add 
+
+```ruby
+class UserDecorator < Draper::Decorator
+  def object_label
+     #...
+  end
+end
+```
+or use `alias_method`
+
+```ruby
+class UserDecorator < Draper::Decorator
+  def display_name
+    ["(#{id})", first_name, last_name].join(' ')
+  end
+  alias_method :object_label, :display_name
+end
+```
+
 ### Difference between `label` and `object_label`
 
 `label` and `object_label` are both model configuration options. `label` is used
