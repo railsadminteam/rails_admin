@@ -1,6 +1,8 @@
 language: ruby
 
-before_install: gem install bundler
+before_install:
+    - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+    - gem install bundler -v '< 2'
 
 before_script:
   - cd spec/dummy_app
@@ -59,16 +61,22 @@ matrix:
     - rvm: 2.3.7
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/cancan.gemfile
-    - rvm: 2.4.4
+    - rvm: 2.4.5
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.4.4
+    - rvm: 2.4.5
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.5.1
+    - rvm: 2.5.3
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.5.1
+    - rvm: 2.5.3
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.6.0
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.6.0
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
     - rvm: ruby-head
@@ -86,9 +94,15 @@ matrix:
     - rvm: jruby-9.1.9.0
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.1.gemfile
+    - rvm: jruby-9.2.5.0
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: jruby-9.2.5.0
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.2.gemfile
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.1.gemfile
+      gemfile: gemfiles/rails_5.2.gemfile
   allow_failures:
     - rvm: ruby-head
     - rvm: rbx-2.2.7
