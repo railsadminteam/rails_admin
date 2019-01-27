@@ -39,6 +39,7 @@ module RailsAdmin
       encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 
       csv_string = generate_csv_string(options)
+      csv_string.force_encoding(@abstract_model.encoding) if @abstract_model
       if encoding_to
         csv_string = csv_string.encode(encoding_to, invalid: :replace, undef: :replace, replace: '?')
       end

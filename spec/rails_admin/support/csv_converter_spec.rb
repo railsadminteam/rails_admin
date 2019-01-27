@@ -35,14 +35,17 @@ describe RailsAdmin::CSVConverter do
 
     context 'when encoding FROM latin1', active_record: true do
       let(:encoding) { '' }
-      let(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
+      let!(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
       before do
         case ActiveRecord::Base.connection_config[:adapter]
         when 'postgresql'
           @connection = ActiveRecord::Base.connection.instance_variable_get(:@connection)
           @connection.set_client_encoding('latin1')
         when 'mysql2'
-          ActiveRecord::Base.connection.execute('SET NAMES latin1;')
+          @connection = ActiveRecord::Base.connection.instance_variable_get(:@connection)
+          @connection.send :charset_name=, 'latin1'
+        when 'sqlite3'
+          skip 'SQLite3 does not support latin1'
         end
       end
       after do
@@ -50,7 +53,7 @@ describe RailsAdmin::CSVConverter do
         when 'postgresql'
           @connection.set_client_encoding('utf8')
         when 'mysql2'
-          ActiveRecord::Base.connection.execute('SET NAMES utf8;')
+          @connection.send :charset_name=, 'utf8'
         end
       end
 
