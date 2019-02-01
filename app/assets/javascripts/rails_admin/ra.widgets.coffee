@@ -240,6 +240,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         options = $(this).data('options')
         textarea = this
         $.getScript options['locations']['mode'], (script, textStatus, jqXHR) ->
+          options = $(domEle).data('options')
           $('head').append('<link href="' + options['locations']['theme'] + '" rel="stylesheet" media="all" type="text\/css">')
           CodeMirror.fromTextArea(textarea,options['options'])
           $(textarea).addClass('codemirrored')
