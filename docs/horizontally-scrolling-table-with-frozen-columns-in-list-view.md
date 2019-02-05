@@ -135,10 +135,11 @@ Next, add some custom javascript by creating `app/assets/javascripts/rails_admin
 }());
 ```
 
-```javascript
 Eslinted version (minus some no-parm reassign errors)
 
 https://eslint.org/
+
+```javascript
 /* eslint-env jquery */
 
 const horizontalScrollList = () => {
