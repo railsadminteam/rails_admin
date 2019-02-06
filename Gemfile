@@ -4,6 +4,7 @@ gem 'appraisal', '>= 2.0'
 gem 'rails'
 gem 'haml'
 gem 'devise'
+gem 'sassc-rails'
 
 group :active_record do
   gem 'paper_trail'
