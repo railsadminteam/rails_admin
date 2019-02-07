@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem "appraisal", ">= 2.0"
 gem "rails", "~> 4.1.0"
 gem "haml"
+gem "sassc-rails"
 gem "devise", ">= 3.2"
 gem "capybara", ">= 0.8", group: :test
 
