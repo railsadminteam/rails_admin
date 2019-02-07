@@ -6,6 +6,7 @@ gem "appraisal", ">= 2.0"
 gem "rails", "~> 4.0.0"
 gem "haml"
 gem "devise", ">= 3.2"
+gem "sass-rails", "~> 4.0.3"
 gem "sassc-rails"
 gem "test-unit"
 gem "capybara", ">= 0.8", group: :test

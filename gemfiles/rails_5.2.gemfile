@@ -6,6 +6,7 @@ gem "appraisal", ">= 2.0"
 gem "rails", "~> 5.2.0"
 gem "haml"
 gem "devise", "~> 4.4"
+gem "sass-rails", "~> 5.0"
 gem "sassc-rails"
 
 group :active_record do
