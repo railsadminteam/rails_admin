@@ -30,7 +30,7 @@ group :mongoid do
 end
 
 gem 'carrierwave', '>= 0.8'
-gem 'devise', '>= 3.2', '< 4.6'
+gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
