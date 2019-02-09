@@ -27,7 +27,7 @@ describe RailsAdmin::Config::Fields::Types::Password do
 
       it 'keeps the value' do
         field.parse_input(params)
-        expect(params).to eq({password: 'aaa'})
+        expect(params).to eq(password: 'aaa')
       end
     end
   end
