@@ -1,4 +1,4 @@
-Rails Admin is fully compatible with [[CanCanCan|https://github.com/CanCanCommunity/cancancan]], an authorization framework to limit which actions a user can perform on each model.
+Rails Admin is fully compatible with [[CanCanCan|https://github.com/CanCanCommunity/cancancan]].
 
 ### Configuration
 
