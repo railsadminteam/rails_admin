@@ -74,10 +74,10 @@ matrix:
     - rvm: 2.5.3
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.6.0
+    - rvm: 2.6.1
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.6.0
+    - rvm: 2.6.1
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
     - rvm: ruby-head
