@@ -31,7 +31,7 @@ module RailsAdmin
                 @max = current_count > @max ? current_count : @max
                 @count[t.model.name] = current_count
                 next unless t.properties.detect { |c| c.name == :created_at }
-                sort_field = t.properties.detect { |c| c.name == t.config.dashboard_sort_by} ? t.config.dashboard_sort_by : nil
+                sort_field = t.properties.detect { |c| c.name == t.config.dashboard_sort_by } ? t.config.dashboard_sort_by : nil
                 @most_recent_created[t.model.name] = t.model.order(sort_field).last.try(:created_at)
               end
             end
