@@ -36,11 +36,9 @@ module RailsAdmin
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
               @object.set_attributes(params[@abstract_model.param_key])
-              @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
-                @object.send("#{name}=", value)
-              end
+              action_authorized = !@authorization_adapter || @authorization_adapter.authorized?(:create, @abstract_model, @object)
 
-              if @object.save
+              if action_authorized && @object.save
                 @auditing_adapter && @auditing_adapter.create_object(@object, @abstract_model, _current_user)
                 respond_to do |format|
                   format.html { redirect_to_on_success }
