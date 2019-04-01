@@ -42,7 +42,8 @@ module RailsAdmin
 
           def parse_input(params)
             value = params[name]
-            return unless value
+            return unless value.present?
+            
             params[name] = parse_input_value(value)
           end
 
