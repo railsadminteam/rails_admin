@@ -28,6 +28,7 @@ group :test do
   gem "dragonfly", "~> 1.0"
   gem "factory_bot", ">= 4.2"
   gem "generator_spec", ">= 0.8"
+  gem "i18n-spec"
   gem "launchy", ">= 2.2"
   gem "mini_magick", ">= 3.4"
   gem "paperclip", [">= 3.4", "!= 4.3.0"]
