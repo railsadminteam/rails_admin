@@ -1,3 +1,5 @@
+require 'active_support/core_ext/string/strip'
+
 module RailsAdmin
   module Extensions
     module PaperTrail
