@@ -50,5 +50,7 @@ end
 ```
 
 ```ruby
-field :assets, :multiple_active_storage
+field :assets, :multiple_active_storage do
+  delete_method :delete_assets
+end
 ```
