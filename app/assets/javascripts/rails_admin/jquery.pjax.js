@@ -188,8 +188,6 @@ function pjax(options) {
     xhr.setRequestHeader('X-PJAX', 'true')
     xhr.setRequestHeader('X-PJAX-Container', context.selector)
 
-    var result
-
     if (!fire('pjax:beforeSend', [xhr, settings]))
       return false
 
@@ -437,7 +435,7 @@ function fallbackPjax(options) {
       form.append($('<input>', {type: 'hidden', name: pair[0], value: pair[1]}))
     })
   } else if (typeof data === 'object') {
-    for (key in data)
+    for (var key in data)
       form.append($('<input>', {type: 'hidden', name: key, value: data[key]}))
   }
 
