@@ -181,7 +181,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'scopes associated collection records according to bindings' do
-      @team.revenue = BigDecimal.new('3')
+      @team.revenue = BigDecimal('3')
       @team.save
 
       @players = FactoryBot.create_list(:player, 5)

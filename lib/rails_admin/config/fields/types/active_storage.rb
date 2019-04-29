@@ -24,6 +24,7 @@ module RailsAdmin
           def resource_url(thumb = false)
             return nil unless value
             if thumb && value.variable?
+              thumb = thumb_method if thumb == true
               variant = value.variant(thumb)
               Rails.application.routes.url_helpers.rails_blob_representation_path(
                 variant.blob.signed_id, variant.variation.key, variant.blob.filename, only_path: true

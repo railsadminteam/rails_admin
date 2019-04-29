@@ -10,6 +10,10 @@ appraise "rails-5.0" do
   group :active_record do
     gem 'paper_trail', '>= 5.0'
 
+    platforms :ruby, :mswin, :mingw do
+      gem 'sqlite3', '~> 1.3.0'
+    end
+
     platforms :jruby do
       gem 'activerecord-jdbcmysql-adapter', '~> 50.0'
       gem 'activerecord-jdbcpostgresql-adapter', '~> 50.0'
@@ -81,6 +85,22 @@ appraise "rails-5.2" do
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
     gem 'cancancan-mongoid'
+  end
+end
+
+appraise "rails-6.0" do
+  gem 'rails', '~> 6.0.0.rc1'
+  gem 'sass-rails', '~> 5.0'
+  gem 'devise', '~> 4.4'
+
+  group :test do
+    gem 'cancancan', '~> 3.0'
+    gem 'rspec-rails', '>= 4.0.0.beta2'
+  end
+
+  group :active_record do
+    gem 'pg', '>= 1.0.0', platforms: :ruby
+    gem 'paper_trail', '>= 5.0'
   end
 end
 

@@ -26,7 +26,7 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with read player role' do
     before do
-      @user.update_attributes(roles: [:admin, :read_player])
+      @user.update(roles: [:admin, :read_player])
     end
 
     it 'GET /admin should show Player but not League' do
@@ -48,7 +48,7 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with admin role' do
     before do
-      @user.update_attributes(roles: [:admin, :manage_player])
+      @user.update(roles: [:admin, :manage_player])
     end
 
     it 'GET /admin should show Player but not League' do
@@ -78,7 +78,7 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with all roles' do
     it 'shows links to all actions' do
-      @user.update_attributes(roles: [:admin, :manage_player])
+      @user.update(roles: [:admin, :manage_player])
       @player = FactoryBot.create :player
 
       visit index_path(model_name: 'player')
@@ -129,7 +129,7 @@ describe 'RailsAdmin Pundit Authorization', type: :request do
 
   context 'when custom authorization key is suffixed with ?' do
     before do
-      @user.update_attributes(roles: [:admin])
+      @user.update(roles: [:admin])
       RailsAdmin.config do |c|
         c.actions do
           dashboard do

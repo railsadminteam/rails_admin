@@ -29,6 +29,7 @@ gemfile:
   - gemfiles/rails_5.0.gemfile
   - gemfiles/rails_5.1.gemfile
   - gemfiles/rails_5.2.gemfile
+  - gemfiles/rails_6.0.gemfile
 
 services:
   - mongodb
@@ -39,7 +40,7 @@ matrix:
   include:
     - rvm: 2.2.10
       env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_5.2.gemfile
+      gemfile: gemfiles/rails_5.0.gemfile
     - rvm: 2.2.10
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
@@ -58,10 +59,10 @@ matrix:
     - rvm: 2.4.5
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
     - rvm: 2.6.3
@@ -85,6 +86,10 @@ matrix:
     - rvm: jruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
+  exclude:
+    - rvm: 2.6.3
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_6.0.gemfile
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head

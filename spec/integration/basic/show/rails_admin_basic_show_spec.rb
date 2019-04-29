@@ -30,7 +30,7 @@ describe 'RailsAdmin Basic Show', type: :request do
     before do
       @player = FactoryBot.create :player
       @team   = FactoryBot.create :team
-      @player.update_attributes(team_id: @team.id)
+      @player.update(team_id: @team.id)
       visit show_path(model_name: 'player', id: @player.id)
     end
 
