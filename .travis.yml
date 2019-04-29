@@ -26,10 +26,10 @@ rvm:
   - 2.6.3
 
 gemfile:
-  - gemfiles/rails_5.0.gemfile
-  - gemfiles/rails_5.1.gemfile
-  - gemfiles/rails_5.2.gemfile
   - gemfiles/rails_6.0.gemfile
+
+addons:
+  postgresql: "9.4"
 
 services:
   - mongodb
@@ -43,34 +43,34 @@ matrix:
       gemfile: gemfiles/rails_5.0.gemfile
     - rvm: 2.2.10
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.2.gemfile
+      gemfile: gemfiles/rails_5.0.gemfile
     - rvm: 2.3.8
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.1.gemfile
+    - rvm: 2.3.8
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.1.gemfile
+    - rvm: 2.4.5
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.4.5
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.5.5
+      env: CI_ORM=mongoid
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.5.5
+      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
+      gemfile: gemfiles/rails_5.2.gemfile
+    - rvm: 2.6.3
       env: CI_ORM=active_record CI_DB_ADAPTER=mysql2
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.3.8
+      gemfile: gemfiles/rails_6.0.gemfile
+    - rvm: 2.6.3
       env: CI_ORM=active_record CI_DB_ADAPTER=postgresql CI_DB_USERNAME=postgres
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.3.8
+      gemfile: gemfiles/rails_6.0.gemfile
+    - rvm: 2.6.3
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/cancan.gemfile
-    - rvm: 2.4.5
-      env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.4.5
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.5.5
-      env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.5.5
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.6.3
-      env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.6.3
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.2.gemfile
     - rvm: ruby-head
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
