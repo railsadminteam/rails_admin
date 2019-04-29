@@ -23,12 +23,9 @@ env:
     - JRUBY_OPTS="$JRUBY_OPTS --debug"
 
 rvm:
-  - 2.3.8
+  - 2.6.3
 
 gemfile:
-  - gemfiles/rails_4.0.gemfile
-  - gemfiles/rails_4.1.gemfile
-  - gemfiles/rails_4.2.gemfile
   - gemfiles/rails_5.0.gemfile
   - gemfiles/rails_5.1.gemfile
   - gemfiles/rails_5.2.gemfile
@@ -38,16 +35,8 @@ services:
 
 dist: trusty
 
-sudo: false
-
 matrix:
   include:
-    - rvm: 2.1.10
-      env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.1.10
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_4.2.gemfile
     - rvm: 2.2.10
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
@@ -75,10 +64,10 @@ matrix:
     - rvm: 2.5.3
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
     - rvm: ruby-head
@@ -87,13 +76,10 @@ matrix:
     - rvm: ruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: rbx-2.2.7
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: jruby-9.2.5.0
+    - rvm: jruby-9.2.6.0
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: jruby-9.2.5.0
+    - rvm: jruby-9.2.6.0
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_5.2.gemfile
     - rvm: jruby-head
@@ -101,7 +87,6 @@ matrix:
       gemfile: gemfiles/rails_5.2.gemfile
   allow_failures:
     - rvm: ruby-head
-    - rvm: rbx-2.2.7
     - rvm: jruby-head
   fast_finish: true
 

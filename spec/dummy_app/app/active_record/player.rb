@@ -10,9 +10,7 @@ class Player < ActiveRecord::Base
     record.errors.add(:base, 'Player is cheating') if value.to_s =~ /on steroids/
   end
 
-  if ::Rails.version >= '4.1'
-    enum formation: {start: 'start', substitute: 'substitute'}
-  end
+  enum formation: {start: 'start', substitute: 'substitute'}
 
   before_destroy :destroy_hook
 

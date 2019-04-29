@@ -47,8 +47,6 @@ class FieldTest < ActiveRecord::Base
     end
   end
 
-  if ::Rails.version >= '4.1' # enum support was added in Rails 4.1
-    enum string_enum_field: {S: 's', M: 'm', L: 'l'}
-    enum integer_enum_field: [:small, :medium, :large]
-  end
+  enum string_enum_field: {S: 's', M: 'm', L: 'l'}
+  enum integer_enum_field: [:small, :medium, :large]
 end

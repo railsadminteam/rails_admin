@@ -74,17 +74,11 @@ describe 'RailsAdmin Export', type: :request do
     end
 
     it 'allows to export to XML' do
+      pending "Mongoid does not support to_xml's :include option" if CI_ORM == :mongoid
       visit export_path(model_name: 'player')
       click_button 'Export to xml'
 
-      # spec fails on non 1.9 mri rubies because of this https://github.com/rails/rails/pull/2076
-      # waiting for fix (rails-3.1.4?)
-      # and Mongoid with ActiveModel 3.1 does not support to_xml's :include options
-      # (due change of implementation in ActiveModel::Serializers between 3.1 and 3.2)
-      if RUBY_VERSION =~ /1\.9/ &&
-         (CI_ORM != :mongoid || (CI_ORM == :mongoid && ActiveModel::VERSION::STRING >= '3.2'))
-        is_expected.to have_content @player.team.name
-      end
+      is_expected.to have_content @player.team.name
     end
 
     it 'exports polymorphic fields the easy way for now' do

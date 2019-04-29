@@ -11,11 +11,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   end
 
   def predicates_for(scope)
-    if scope.respond_to?(:where_values)
-      scope.where_values
-    else
-      scope.where_clause.instance_variable_get(:@predicates)
-    end
+    scope.where_clause.instance_variable_get(:@predicates)
   end
 
   describe '#associations' do
@@ -464,7 +460,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it 'supports string enum type query' do
         expect(predicates_for(abstract_model.send(:filter_scope, scope, 'string_enum_field' => {'1' => {v: 'm', o: 'default'}}))).to eq(predicates_for(scope.where(['(field_tests.string_enum_field IN (?))', 'm'])))
       end
-    end if ::Rails.version >= '4.1'
+    end
 
     it 'supports uuid type query' do
       uuid = SecureRandom.uuid

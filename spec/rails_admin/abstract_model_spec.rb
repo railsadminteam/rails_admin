@@ -56,7 +56,7 @@ describe RailsAdmin::AbstractModel do
           let(:expected_elements_count) { 1 }
         end
       end
-    end if ::Rails.version >= '4.1'
+    end
 
     context 'on dates with :en locale' do
       before do
