@@ -1,4 +1,4 @@
-.ra-sidescroll-table {
+.ra-sidescroll {
   margin-bottom: 20px;
   overflow-x: auto;
   .table {
@@ -7,6 +7,12 @@
 
   .ra-sidescroll-frozen {
     position: sticky;
+
+    // border-right isn't sticky
+    &.last-of-frozen {
+      box-shadow: -1px 0 0 0 $table-border-color inset;
+      padding-right: $table-condensed-cell-padding + 1px;
+    }
   }
 
   // Remove transparency on frozen cells.
@@ -19,11 +25,5 @@
     &.headerSortUp, &.headerSortDown {
       background-color: $table-bg-header-sort;
     }
-  }
-
-  // border-right isn't sticky
-  .ra-sidescroll-frozen-last {
-    box-shadow: -1px 0 0 0 $table-border-color inset;
-    padding-right: $table-condensed-cell-padding + 1px;
   }
 }

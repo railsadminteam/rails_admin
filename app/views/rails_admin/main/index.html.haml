@@ -12,8 +12,7 @@
   properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).visible_fields
   checkboxes = @model_config.list.checkboxes?
   # columns paginate
-  horiz_scroll = @model_config.list.horizontal_scroll_list_calc
-  unless horiz_scroll[:enabled]
+  unless (frozen_columns = @model_config.list.sidescroll_frozen_columns)
     sets = get_column_sets(properties)
     properties = sets[params[:set].to_i] || []
     other_left = ((params[:set].to_i - 1) >= 0) && sets[params[:set].to_i - 1].present?
@@ -71,54 +70,50 @@
         %li{class: "#{'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0)}"}
           %a{href: index_path(params.merge(scope: scope, page: nil)), class: 'pjax'}= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize))
 
-  = form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: ["form", horiz_scroll[:num_frozen_columns] > 0 ? "ra-sidescroll" : nil].compact.join(' ') do
+  = form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: ["form", frozen_columns ? 'ra-sidescroll' : nil], data: (frozen_columns ? {ra_sidescroll: frozen_columns} : {}) do
     = hidden_field_tag :bulk_action
     - if description.present?
       %p
         %strong= description
 
-    .table-wrapper{class: horiz_scroll[:enabled] && 'ra-sidescroll-table'}
-      %table.table.table-condensed.table-striped
-        %thead
-          %tr
-            - horiz_scroll_i = horiz_scroll[:num_frozen_columns]
+    %table.table.table-condensed.table-striped
+      %thead
+        %tr
+          - if checkboxes
+            %th.shrink
+              %input.toggle{type: "checkbox"}
+          - if frozen_columns
+            %th.last.shrink
+          - if other_left
+            %th.other.left.shrink= "..."
+          - properties.each do |property|
+            - selected = (sort == property.name.to_s)
+            - if property.sortable
+              - sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})
+              - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
+            %th{class: "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}", :'data-href' => (property.sortable && sort_location), rel: "tooltip", title: "#{property.hint}"}= capitalize_first_letter(property.label)
+          - if other_right
+            %th.other.right.shrink= "..."
+          - unless frozen_columns
+            %th.last.shrink
+      %tbody
+        - @objects.each do |object|
+          %tr{class: "#{@abstract_model.param_key}_row #{@model_config.list.with(object: object).row_css_class}"}
             - if checkboxes
-              %th.shrink{class: [(horiz_scroll_i -= 1) > -1 && 'ra-sidescroll-frozen', horiz_scroll_i == 0 && 'ra-sidescroll-frozen-last']}
-                %input.toggle{type: "checkbox"}
-            - if horiz_scroll[:enabled]
-              %th.last.shrink{class: [(horiz_scroll_i -= 1) > -1 && 'ra-sidescroll-frozen', horiz_scroll_i == 0 && 'ra-sidescroll-frozen-last']}
-            - elsif other_left
-              %th.other.left.shrink= "..."
-            - properties.each do |property|
-              - selected = (sort == property.name.to_s)
-              - if property.sortable
-                - sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})
-                - sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected)
-              %th{class: [property.sortable && "header pjax", property.sortable && sort_direction, property.css_class, property.type_css_class, (horiz_scroll_i -= 1) > -1 && 'ra-sidescroll-frozen', horiz_scroll_i == 0 && 'ra-sidescroll-frozen-last'], :'data-href' => (property.sortable && sort_location), rel: "tooltip", title: "#{property.hint}"}= capitalize_first_letter(property.label)
-            - unless horiz_scroll[:enabled]
-              - if other_right
-                %th.other.right.shrink= "..."
-              %th.last.shrink
-        %tbody
-          - @objects.each do |object|
-            - horiz_scroll_i = horiz_scroll[:num_frozen_columns]
-            %tr{class: "#{@abstract_model.param_key}_row #{@model_config.list.with(object: object).row_css_class}"}
-              - if checkboxes
-                %td{class: [(horiz_scroll_i -= 1) > -1 && 'ra-sidescroll-frozen', horiz_scroll_i == 0 && 'ra-sidescroll-frozen-last']}= check_box_tag "bulk_ids[]", object.id, false
-              - td_links = capture do
-                %td.last.links{class: [(horiz_scroll_i -= 1) > -1 && 'ra-sidescroll-frozen', horiz_scroll_i == 0 && 'ra-sidescroll-frozen-last']}
-                  %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
-              - if horiz_scroll[:enabled]
-                = td_links
-              - elsif @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
-                %td.other.left= link_to "...", @other_left_link, class: 'pjax'
-              - properties.map{ |property| property.bind(:object, object) }.each do |property|
-                - value = property.pretty_value
-                %td{class: [property.css_class, property.type_css_class, (horiz_scroll_i -= 1) > -1 && 'ra-sidescroll-frozen', horiz_scroll_i == 0 && 'ra-sidescroll-frozen-last' ], title: strip_tags(value.to_s)}= value
-              - unless horiz_scroll[:enabled]
-                - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
-                  %td.other.right= link_to "...", @other_right_link, class: 'pjax'
-                = td_links
+              %td= check_box_tag "bulk_ids[]", object.id, false
+            - if frozen_columns
+              %td.last.links
+                %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
+            - if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {}))
+              %td.other.left= link_to "...", @other_left_link, class: 'pjax'
+            - properties.map{ |property| property.bind(:object, object) }.each do |property|
+              - value = property.pretty_value
+              %td{class: "#{property.css_class} #{property.type_css_class}", title: strip_tags(value.to_s)}= value
+            - if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1)))
+              %td.other.right= link_to "...", @other_right_link, class: 'pjax'
+            - unless frozen_columns
+              %td.last.links
+                %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
 
     - if @model_config.list.limited_pagination
       .row
