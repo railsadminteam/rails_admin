@@ -9,6 +9,8 @@ class FieldTest < ActiveRecord::Base
   attr_accessor :delete_paperclip_asset
   before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
+  ActiveRecord::Base.extend Dragonfly::Model
+  ActiveRecord::Base.extend Dragonfly::Model::Validations
   dragonfly_accessor :dragonfly_asset
 
   mount_uploader :carrierwave_asset, CarrierwaveUploader
