@@ -116,7 +116,6 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
 
         context 'with Kaminari' do
           before do
-            @paged = @adapter.listing_for_model @model, nil, false, false, false, nil
             Kaminari.config.page_method_name = :per_page_kaminari
           end
 
@@ -124,8 +123,12 @@ describe 'RailsAdmin PaperTrail history', active_record: true do
             Kaminari.config.page_method_name = :page
           end
 
+          let(:paginated_array) { Kaminari::PaginatableArray.new.page('1') }
+
           it "supports pagination when Kaminari's page_method_name is customized" do
-            expect(PaperTrail::Version).to receive(:per_page_kaminari).twice.and_return(@paged)
+            expect(PaperTrail::Version).to receive(:per_page_kaminari).twice.and_return(@padinated_listing)
+            allow(Kaminari).to receive(:paginate_array).and_return(paginated_array)
+            expect(paginated_array).to receive(:per_page_kaminari).twice.and_return(paginated_array)
             @adapter.listing_for_model @model, nil, false, false, false, nil
             @adapter.listing_for_object @model, @paper_trail_test, nil, false, false, false, nil
           end
