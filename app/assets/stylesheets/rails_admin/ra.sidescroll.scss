@@ -1,11 +1,11 @@
-.ra-horizontal-scroll-table {
+.ra-sidescroll-table {
   margin-bottom: 20px;
   overflow-x: auto;
   .table {
     margin-bottom: 0;
   }
 
-  .ra-horizontal-scroll-frozen {
+  .ra-sidescroll-frozen {
     position: sticky;
   }
 
@@ -15,14 +15,14 @@
     background-color: $table-bg-default;
   }
   $table-bg-header-sort: #e2eff6 !default;
-  .table .ra-horizontal-scroll-frozen {
+  .table .ra-sidescroll-frozen {
     &.headerSortUp, &.headerSortDown {
       background-color: $table-bg-header-sort;
     }
   }
 
   // border-right isn't sticky
-  .ra-horizontal-scroll-frozen-last {
+  .ra-sidescroll-frozen-last {
     box-shadow: -1px 0 0 0 $table-border-color inset;
     padding-right: $table-condensed-cell-padding + 1px;
   }

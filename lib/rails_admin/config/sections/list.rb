@@ -40,13 +40,13 @@ module RailsAdmin
           ''
         end
 
-        register_instance_option :horizontal_scroll_list do
+        register_instance_option :sidescroll do
           nil
         end
 
         def horizontal_scroll_list_calc
-          global_config = RailsAdmin::Config.horizontal_scroll_list
-          model_config = horizontal_scroll_list
+          global_config = RailsAdmin::Config.sidescroll
+          model_config = sidescroll
           enabled = model_config == false ? false : (!!model_config || !!global_config)
           if enabled
             num_frozen = model_config[:num_frozen_columns] if model_config.is_a?(Hash)

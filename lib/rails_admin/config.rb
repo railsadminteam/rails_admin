@@ -59,8 +59,8 @@ module RailsAdmin
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
 
-      # Enable horizontal-scroll table in list view, ignore total_columns_width
-      attr_accessor :horizontal_scroll_list
+      # Enable horizontal-scrolling table in list view, ignore total_columns_width
+      attr_accessor :sidescroll
 
       # set parent controller
       attr_accessor :parent_controller
@@ -288,7 +288,7 @@ module RailsAdmin
         @excluded_models = []
         @included_models = []
         @total_columns_width = 697
-        @horizontal_scroll_list = nil
+        @sidescroll = nil
         @label_methods = [:name, :title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
