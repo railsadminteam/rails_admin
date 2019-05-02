@@ -39,6 +39,30 @@ module RailsAdmin
         register_instance_option :row_css_class do
           ''
         end
+
+        register_instance_option :horizontal_scroll_list do
+          nil
+        end
+
+        def horizontal_scroll_list_calc
+          global_config = RailsAdmin::Config.horizontal_scroll_list
+          model_config = horizontal_scroll_list
+          enabled = model_config == false ? false : (!!model_config || !!global_config)
+          if enabled
+            num_frozen = model_config[:num_frozen_columns] if model_config.is_a?(Hash)
+            unless num_frozen
+              num_frozen = global_config[:num_frozen_columns] if global_config.is_a?(Hash)
+              num_frozen ||= 3 # by default, freeze checkboxes, links & first property (usually primary key / id?)
+              num_frozen -= 1 unless checkboxes? # model config should be explicit about this, only adjust if using global config
+            end
+          else
+            num_frozen = 0
+          end
+          {
+            enabled: enabled,
+            num_frozen_columns: num_frozen,
+          }
+        end
       end
     end
   end
