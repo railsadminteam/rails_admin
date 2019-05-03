@@ -3,7 +3,7 @@
   Keep it clean, people
 */
 
-$avatar-size: 30px;
+$avatar-size: px_to_em(30);
 
 body.rails_admin {
 
@@ -20,10 +20,10 @@ body.rails_admin {
 
       img {
         position: absolute;
-        top: ((40px - $avatar-size) / 2);
+        top: ((px_to_em(40) - $avatar-size) / 2);
 
         & + span {
-          margin-left: ($avatar-size + 5px);
+          margin-left: ($avatar-size + px_to_em(5));
         }
       }
     }
