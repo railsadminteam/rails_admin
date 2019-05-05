@@ -26,10 +26,6 @@ module RailsAdmin
           register_instance_option :partial do
             :form_froala
           end
-
-          [:config_options, :css_location, :js_location].each do |key|
-            register_deprecated_instance_option :"froala_#{key}", key
-          end
         end
       end
     end
