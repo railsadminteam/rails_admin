@@ -81,5 +81,13 @@ FactoryBot.define do
 
   factory :paper_trail_test do
     sequence(:name) { |n| "name #{n}" }
+
+    factory :paper_trail_test_subclass,
+            parent: :paper_trail_test,
+            class: 'PaperTrailTestSubclass'
+
+    factory :paper_trail_test_subclass_in_namespace,
+            parent: :paper_trail_test,
+            class: 'PaperTrailTest::SubclassInNamespace'
   end
 end

@@ -112,11 +112,9 @@ module RailsAdmin
             sort_reverse = 'true'
           end
 
-          ar_model = model.model
           current_page = page.presence || '1'
 
-          versions = version_class_for(ar_model).where item_type: ar_model.name
-          versions = versions.where item_id: object.id if object
+          versions = object.nil? ? versions_for_model(model) : object.versions
           versions = versions.where('event LIKE ?', "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == 'true' ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, current_page).per(per_page)
@@ -126,6 +124,20 @@ module RailsAdmin
             paginated_proxies << VersionProxy.new(version, @user_class)
           end
           paginated_proxies
+        end
+
+        def versions_for_model(model)
+          model_name = model.model.name
+          base_class_name = model.model.base_class.name
+
+          options =
+            if base_class_name == model_name
+              {item_type: model_name}
+            else
+              {item_type: base_class_name, item_id: model.model.all}
+            end
+
+          version_class_for(model.model).where(options)
         end
 
         # PT can be configured to use [custom version
