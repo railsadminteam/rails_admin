@@ -168,25 +168,13 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       field = type_select.parents('.control-group').first()
       object_select = field.find('select').last()
       urls = type_select.data('urls')
+
       type_select.on 'change', (e) ->
-        if $(this).val() is ''
-          object_select.html('<option value=""></option>')
-        else
-          $.ajax
-            url: urls[type_select.val()]
-            data:
-              compact: true
-              all: true
-            beforeSend: (xhr) ->
-              xhr.setRequestHeader("Accept", "application/json")
-            success: (data, status, xhr) ->
-              html = $('<option></option>')
-              $(data).each (i, el) ->
-                option = $('<option></option>')
-                option.attr('value', el.id)
-                option.text(el.label)
-                html = html.add(option)
-              object_select.html(html)
+        selected_type = type_select.val().toLowerCase()
+        selected_data = $("##{selected_type}-js-options").data('options')
+        object_select.data('options', selected_data)
+        object_select.filteringSelect("destroy")
+        object_select.filteringSelect selected_data
 
 
     # simplemde
