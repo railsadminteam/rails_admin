@@ -90,6 +90,7 @@ end
 
 appraise "rails-6.0" do
   gem 'rails', '~> 6.0.0.rc1'
+  gem 'haml', github: 'haml/haml'
   gem 'sass-rails', ['>= 6.0.0.beta3', '< 7']
   gem 'devise', '~> 4.4'
 
