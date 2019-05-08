@@ -1,23 +1,21 @@
-_Updated 2018-05-21, pending PR to add this feature with a config setting._
-
-Here's a technique that you can use to make the list view table show all of the columns on a single page, with horizontal scrolling and frozen header columns in the table. [PR #3017](https://github.com/sferik/rails_admin/pull/3017) adds this feature with the config setting `horizontal_scroll_list`, which is used as follows:
+Here's a technique that you can use to make the list view table show all of the columns on a single page, with horizontal scrolling and frozen header columns in the table. [PR #3017](https://github.com/sferik/rails_admin/pull/3017) adds this feature with the config setting `sidescroll`, which is used as follows:
 ```ruby
 RailsAdmin.config do |config|
   ...
   # Use default horizontal scroll settings of 3 frozen columns (checkboxes, links/actions, ID) with a border on the right:
-  config.horizontal_scroll_list = true
+  config.sidescroll = true
 
   # Use horizontal scrolling, but without any frozen columns:
-  config.horizontal_scroll_list = {num_frozen_columns: 0}
+  config.sidescroll = {num_frozen_columns: 0}
 
   # Freeze more or fewer columns (col 1 = checkboxes, 2 = links/actions):
-  config.horizontal_scroll_list = {num_frozen_columns: 4}
-  config.horizontal_scroll_list = {num_frozen_columns: 1}
+  config.sidescroll = {num_frozen_columns: 4}
+  config.sidescroll = {num_frozen_columns: 1}
 
   # Turn off horizontal scrolling for a specific model:
   config.model 'Team' do
     list do
-      horizontal_scroll_list false # "nil" doesn't work, it must be explicitly false
+      sidescroll false # "nil" doesn't work, it must be explicitly false
     end
   end
 
@@ -25,15 +23,15 @@ RailsAdmin.config do |config|
   config.model 'Team' do
     list do
       checkboxes false
-      horizontal_scroll_list(num_frozen_columns: 3) # per-model config does not account for checkboxes
+      sidescroll(num_frozen_columns: 3) # per-model config does not account for checkboxes
     end
   end
 
   # Use horizontal scrolling only for a specific model:
-  config.horizontal_scroll_list = nil
+  config.sidescroll = nil
   config.model 'Team' do
     list do
-      horizontal_scroll_list true
+      sidescroll true
     end
   end
   ...
@@ -44,13 +42,13 @@ This feature uses the CSS `position: sticky` value. It is designed to degrade gr
 
 Here are examples of what you'll get, using RailsAdmin's `spec/dummy_app` for an example.
 
-Default - `config.horizontal_scroll_list` unset:
+Default - `config.sidescroll` unset:
 ![](https://user-images.githubusercontent.com/1115369/39540385-5804f2b8-4df7-11e8-93c4-3c1b77b647be.png)
 
-`config.horizontal_scroll_list = true` (some scrolling shown):
+`config.sidescroll = true` (some scrolling shown):
 ![](https://user-images.githubusercontent.com/1115369/39540539-c3e8fa06-4df7-11e8-958c-730ce13c22f7.png)
 
-`config.horizontal_scroll_list = {num_frozen_columns: 0}` (some scrolling shown):
+`config.sidescroll = {num_frozen_columns: 0}` (some scrolling shown):
 ![](https://user-images.githubusercontent.com/1115369/39540666-28615bc2-4df8-11e8-97fb-1f0bc2c246b6.png)
 
 The following instructions allow you to add this feature to rails_admin before the PR is accepted/released.
