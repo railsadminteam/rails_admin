@@ -916,50 +916,50 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'SimpleMDE Support' do
-    it 'adds Javascript to enable SimpleMDE' do
+    it 'works without error', js: true do
       RailsAdmin.config Draft do
         edit do
           field :notes, :simple_mde
         end
       end
-      visit new_path(model_name: 'draft')
-      is_expected.to have_selector('textarea#draft_notes[data-richtext="simplemde"]')
+      expect { visit new_path(model_name: 'draft') }.not_to raise_error
+      is_expected.to have_selector('a[title="Markdown Guide"]')
     end
   end
 
   describe 'CKEditor Support' do
-    it 'adds Javascript to enable CKEditor' do
+    it 'works without error', js: true do
       RailsAdmin.config Draft do
         edit do
           field :notes, :ck_editor
         end
       end
-      visit new_path(model_name: 'draft')
-      is_expected.to have_selector('textarea#draft_notes[data-richtext="ckeditor"]')
+      expect { visit new_path(model_name: 'draft') }.not_to raise_error
+      is_expected.to have_selector('#cke_draft_notes')
     end
   end
 
   describe 'CodeMirror Support' do
-    it 'adds Javascript to enable CodeMirror' do
+    it 'works without error', js: true do
       RailsAdmin.config Draft do
         edit do
           field :notes, :code_mirror
         end
       end
-      visit new_path(model_name: 'draft')
-      is_expected.to have_selector('textarea#draft_notes[data-richtext="codemirror"]')
+      expect { visit new_path(model_name: 'draft') }.not_to raise_error
+      is_expected.to have_selector('.CodeMirror')
     end
   end
 
   describe 'bootstrap_wysihtml5 Support' do
-    it 'adds Javascript to enable bootstrap_wysihtml5' do
+    it 'works without error', js: true do
       RailsAdmin.config Draft do
         edit do
           field :notes, :wysihtml5
         end
       end
-      visit new_path(model_name: 'draft')
-      is_expected.to have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"]')
+      expect { visit new_path(model_name: 'draft') }.not_to raise_error
+      is_expected.to have_selector('.wysihtml5-toolbar')
     end
 
     it 'should include custom wysihtml5 configuration' do
@@ -979,14 +979,14 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'Froala Support' do
-    it 'adds Javascript to enable Froala' do
+    it 'works without error', js: true do
       RailsAdmin.config Draft do
         edit do
           field :notes, :froala
         end
       end
-      visit new_path(model_name: 'draft')
-      is_expected.to have_selector('textarea#draft_notes[data-richtext="froala-wysiwyg"]')
+      expect { visit new_path(model_name: 'draft') }.not_to raise_error
+      is_expected.to have_selector('.froala-editor')
     end
 
     it 'should include custom froala configuration' do

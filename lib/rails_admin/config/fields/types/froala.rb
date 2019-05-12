@@ -8,19 +8,21 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
-          # If you want to have a different toolbar configuration for wysihtml5
-          # you can use a Ruby hash to configure these options:
-          # https://github.com/jhollingworth/bootstrap-wysihtml5/#advanced
+          # See https://www.froala.com/wysiwyg-editor/docs/options
           register_instance_option :config_options do
             nil
           end
 
+          register_instance_option :version do
+            '1.2.8'
+          end
+
           register_instance_option :css_location do
-            ActionController::Base.helpers.asset_path('froala_editor.min.css')
+            "https://cdnjs.cloudflare.com/ajax/libs/froala-editor/#{version}/css/froala_editor.min.css"
           end
 
           register_instance_option :js_location do
-            ActionController::Base.helpers.asset_path('froala_editor.min.js')
+            "https://cdnjs.cloudflare.com/ajax/libs/froala-editor/#{version}/js/froala_editor.min.js"
           end
 
           register_instance_option :partial do

@@ -14,13 +14,16 @@ module RailsAdmin
             nil
           end
 
-          # Use this if you want to point to a cloud instance of the base SimpleMDE
+          register_instance_option :version do
+            '1.11.2'
+          end
+
           register_instance_option :js_location do
-            "#{Rails.application.config.assets.prefix}/simplemde.min.js"
+            "https://cdnjs.cloudflare.com/ajax/libs/simplemde/#{version}/simplemde.min.js"
           end
 
           register_instance_option :css_location do
-            "#{Rails.application.config.assets.prefix}/simplemde.min.css"
+            "https://cdnjs.cloudflare.com/ajax/libs/simplemde/#{version}/simplemde.min.css"
           end
 
           register_instance_option :partial do
