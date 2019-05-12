@@ -292,27 +292,26 @@ describe 'RailsAdmin Basic List', type: :request do
       RailsAdmin.config Player do
         list { filters([:name, :team]) }
       end
-      get index_path(model_name: 'player')
+      visit index_path(model_name: 'player')
 
-      options = {
-        index: 1,
-        label: 'Name',
-        name: 'name',
-        type: 'string',
-        value: '',
-        operator: nil,
-      }
-      expect(response.body).to include("$.filters.append(#{options.to_json});")
-
-      options = {
-        index: 2,
-        label: 'Team',
-        name: 'team',
-        type: 'belongs_to_association',
-        value: '',
-        operator: nil,
-      }
-      expect(response.body).to include("$.filters.append(#{options.to_json});")
+      expect(JSON.parse(find('#filters_box')['data-options']).map(&:symbolize_keys)).to match_array [
+        {
+          index: 1,
+          label: 'Name',
+          name: 'name',
+          type: 'string',
+          value: '',
+          operator: nil,
+        },
+        {
+          index: 2,
+          label: 'Team',
+          name: 'team',
+          type: 'belongs_to_association',
+          value: '',
+          operator: nil,
+        },
+      ]
     end
   end
 

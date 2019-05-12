@@ -48,9 +48,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     # fileupload
 
     content.find('[data-fileupload]').each ->
-      input = this
-      $(this).on 'click', ".delete input[type='checkbox']", ->
-        $(input).children('.toggle').toggle('slow')
+      parent = $(this).closest('.controls')
+      parent.find('.btn-remove-image').on 'click', ->
+        $(this).siblings('[type=checkbox]').click()
+        parent.find('.toggle').toggle('slow')
+        $(this).toggleClass('btn-danger btn-info')
+        false
 
     # fileupload-preview
 
@@ -69,6 +72,15 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
         image_container.show()
       else
         image_container.hide()
+
+    # multiple-fileupload
+
+    content.find('[data-multiple-fileupload]').each ->
+      $(this).closest('.controls').find('.btn-remove-image').on 'click', ->
+        $(this).siblings('[type=checkbox]').click()
+        $(this).parent('.toggle').toggle('slow')
+        $(this).toggleClass('btn-danger btn-info')
+        false
 
     # multiple-fileupload-preview
 

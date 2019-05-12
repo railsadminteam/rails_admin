@@ -2,7 +2,7 @@
   .toggle
     = attachment.pretty_value
     - if field.delete_method
-      %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button', onclick: "$(this).siblings('[type=checkbox]').click(); $(this).parent('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false;"}
+      %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button'}
         %i.icon-white.icon-trash
         = I18n.t('admin.actions.delete.menu').capitalize + " #{field.label.downcase} ##{i + 1}"
 

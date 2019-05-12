@@ -53,12 +53,16 @@ $(document).on 'click', 'form .tab-content .tab-pane a.remove_nested_one_fields'
     siblings('i').toggleClass('icon-check icon-trash')
 
 $(document).ready ->
+  RailsAdmin.I18n.init $('html').attr('lang'), $("#admin-js").data('i18nOptions')
   $(document).trigger('rails_admin.dom_ready')
 
 $(document).on 'pjax:end', ->
   $(document).trigger('rails_admin.dom_ready')
 
 $(document).on 'rails_admin.dom_ready', ->
+  $('.nav.nav-pills li.active').removeClass('active')
+  $(".nav.nav-pills li[data-model=\"#{$('.page-header').data('model')}\"]").addClass('active')
+
   $('.animate-width-to').each ->
     length = $(this).data("animate-length")
     width = $(this).data("animate-width-to")
@@ -74,6 +78,23 @@ $(document).on 'rails_admin.dom_ready', ->
   $('[formnovalidate]').on 'click', ->
     $(this).closest('form').attr('novalidate', true)
 
+  $.each $('#filters_box').data('options'), ->
+    $.filters.append(this)
+
+# Interactions for index action
+$(document).on 'click', ".bulk-link", (event) ->
+  event.preventDefault()
+  $('#bulk_action').val($(this).data('action'))
+  $('#bulk_form').submit()
+
+$(document).on 'click', "#remove_filter", (event) ->
+  event.preventDefault()
+  $("#filters_box").html("")
+  $("hr.filters_box").hide()
+  $(this).parent().siblings("input[type='search']").val("")
+  $(this).parents("form").submit()
+
+# Interactions for export action
 $(document).on 'click', '#fields_to_export label input#check_all', () ->
   elems = $('#fields_to_export label input')
   if $('#fields_to_export label input#check_all').is ':checked'
@@ -81,22 +102,6 @@ $(document).on 'click', '#fields_to_export label input#check_all', () ->
   else
     $(elems).prop('checked',false)
 
-# when the user hits the back button, the inline JS <script> that
-# highlights the current model in the left menu doesn't get run by
-# pjax, so this code runs it:
-# https://github.com/defunkt/jquery-pjax/issues/241#issuecomment-13251065
-$(document).on 'pjax:popstate', () ->
-  $(document).one 'pjax:end', (event) ->
-    $(event.target).find('script').each () ->
-      $.globalEval(this.text || this.textContent || this.innerHTML || '')
-      return
-    return
-  return
+$(document).on 'click', '#fields_to_export .reverse-selection', () ->
+  $(this).closest(".control-group").find(".controls").find("input").click()
 
-#Remove all filter and then refresh
-$(document).on 'click',  "#remove_filter",(event) ->
-  event.preventDefault()
-  $("#filters_box").html("")
-  $("hr.filters_box").hide()
-  $(this).parent().siblings("input[type='search']").val("")
-  $(this).parents("form").submit()  

@@ -56,8 +56,8 @@ module RailsAdmin
       end.to_a.sort_by(&:first)
     end
 
-    def ordered_filter_string
-      @ordered_filter_string ||= ordered_filters.map do |duplet|
+    def ordered_filter_options
+      @ordered_filter_options ||= ordered_filters.map do |duplet|
         options = {index: duplet[0]}
         filter_for_field = duplet[1]
         filter_name = filter_for_field.keys.first
@@ -77,8 +77,8 @@ module RailsAdmin
         options[:value] = filter_hash['v']
         options[:label] = field.label
         options[:operator] = filter_hash['o']
-        %{$.filters.append(#{options.to_json});}
-      end.join("\n").html_safe if ordered_filters
+        options
+      end if ordered_filters
     end
   end
 end
