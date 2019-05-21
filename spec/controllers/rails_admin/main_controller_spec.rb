@@ -341,6 +341,9 @@ describe RailsAdmin::MainController, type: :controller do
         field :active_storage_assets do
           delete_method :remove_active_storage_assets
         end if defined?(ActiveStorage)
+        field :shrine_asset do
+          delete_method :remove_shrine_asset
+        end if defined?(Shrine)
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
@@ -357,7 +360,8 @@ describe RailsAdmin::MainController, type: :controller do
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
         }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
-          merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}),
+          merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
+          merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -374,7 +378,8 @@ describe RailsAdmin::MainController, type: :controller do
         'paperclip_asset' => 'test',
         'delete_paperclip_asset' => 'test',
       }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
-        merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}))
+        merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
+        merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do

@@ -23,6 +23,7 @@ require 'factories'
 require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
+require 'support/fakeio'
 
 Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
 

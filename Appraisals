@@ -27,6 +27,7 @@ appraise "rails-5.0" do
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
     gem 'cancancan-mongoid'
+    gem 'shrine-mongoid'
   end
 end
 
@@ -56,6 +57,7 @@ appraise "rails-5.1" do
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
     gem 'cancancan-mongoid'
+    gem 'shrine-mongoid'
   end
 end
 
@@ -85,6 +87,7 @@ appraise "rails-5.2" do
     gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
     gem 'cancancan-mongoid'
+    gem 'shrine-mongoid'
   end
 end
 
