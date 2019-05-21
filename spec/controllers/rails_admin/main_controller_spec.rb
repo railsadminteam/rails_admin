@@ -8,53 +8,6 @@ describe RailsAdmin::MainController, type: :controller do
     super action, params: params
   end
 
-  describe '#dashboard' do
-    before do
-      allow(controller).to receive(:render).and_return(true) # no rendering
-    end
-
-    it 'shows statistics by default' do
-      allow(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
-      expect(RailsAdmin.config(Player).abstract_model).to receive(:count)
-      controller.dashboard
-    end
-
-    it 'does not show statistics if turned off' do
-      RailsAdmin.config do |c|
-        c.included_models = [Player]
-        c.actions do
-          dashboard do
-            statistics false
-          end
-          index # mandatory
-        end
-      end
-
-      expect(RailsAdmin.config(Player).abstract_model).not_to receive(:count)
-      controller.dashboard
-    end
-
-    it 'counts are different for same-named models in different modules' do
-      allow(RailsAdmin.config(User::Confirmed).abstract_model).to receive(:count).and_return(10)
-      allow(RailsAdmin.config(Comment::Confirmed).abstract_model).to receive(:count).and_return(0)
-
-      controller.dashboard
-      expect(controller.instance_variable_get('@count')['User::Confirmed']).to be 10
-      expect(controller.instance_variable_get('@count')['Comment::Confirmed']).to be 0
-    end
-
-    it 'most recent change dates are different for same-named models in different modules' do
-      user_create = 10.days.ago.to_date
-      comment_create = 20.days.ago.to_date
-      FactoryBot.create(:user_confirmed, created_at: user_create)
-      FactoryBot.create(:comment_confirmed, created_at: comment_create)
-
-      controller.dashboard
-      expect(controller.instance_variable_get('@most_recent_created')['User::Confirmed']).to eq user_create
-      expect(controller.instance_variable_get('@most_recent_created')['Comment::Confirmed']).to eq comment_create
-    end
-  end
-
   describe '#check_for_cancel' do
     before do
       allow(controller).to receive(:back_or_index) { raise(StandardError.new('redirected back')) }
