@@ -14,7 +14,7 @@ module RailsAdmin
           end
 
           register_instance_option :version do
-            '1.2.8'
+            '2.9.5'
           end
 
           register_instance_option :css_location do

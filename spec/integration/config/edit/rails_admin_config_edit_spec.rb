@@ -986,7 +986,7 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
         end
       end
       expect { visit new_path(model_name: 'draft') }.not_to raise_error
-      is_expected.to have_selector('.froala-editor')
+      is_expected.to have_selector('.fr-box')
     end
 
     it 'should include custom froala configuration' do
