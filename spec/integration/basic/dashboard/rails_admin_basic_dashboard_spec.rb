@@ -43,4 +43,38 @@ describe 'RailsAdmin Basic Dashboard', type: :request do
     expect(find('tr.user_confirmed_links')).to have_content '10 days ago'
     expect(find('tr.comment_confirmed_links')).to have_content '20 days ago'
   end
+
+  describe 'with I18n' do
+    around do |example|
+      I18n.config.available_locales = I18n.config.available_locales + [:xx]
+      I18n.backend.class.send(:include, I18n::Backend::Pluralization)
+      I18n.backend.store_translations :xx,
+                                      admin: {
+                                        misc: {
+                                          ago: 'back',
+                                        },
+                                      },
+                                      datetime: {
+                                        distance_in_words: {
+                                          x_days: {
+                                            one: '1 day',
+                                          },
+                                        },
+                                      }
+
+      I18n.locale = :xx
+
+      example.run
+
+      I18n.locale = :en
+      I18n.config.available_locales = I18n.config.available_locales - [:xx]
+    end
+
+    it "fallbacks to 'ago' when 'time_ago' is not available" do
+      FactoryBot.create(:player, created_at: 1.day.ago)
+
+      visit dashboard_path
+      expect(page).to have_content '1 day back'
+    end
+  end
 end
