@@ -27,7 +27,13 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
   end
 
   describe 'compact_show_view' do
-    it 'hides empty fields in show view by default' do
+    it 'hides nil fields in show view by default' do
+      do_request
+      is_expected.not_to have_css('.logo_url_field')
+    end
+
+    it 'hides blank fields in show view by default' do
+      team.update logo_url: ''
       do_request
       is_expected.not_to have_css('.logo_url_field')
     end
@@ -39,6 +45,15 @@ describe 'RailsAdmin Config DSL Show Section', type: :request do
 
       do_request
       is_expected.to have_css('.logo_url_field')
+    end
+
+    describe 'with boolean field' do
+      let(:player) { FactoryBot.create :player, retired: false }
+
+      it 'does not hide false value' do
+        visit show_path(model_name: 'player', id: player.id)
+        is_expected.to have_css('.retired_field')
+      end
     end
   end
 
