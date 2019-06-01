@@ -42,8 +42,8 @@ module RailsAdmin
         scope = scope.includes(*options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
         scope = scope.any_in(_id: options[:bulk_ids]) if options[:bulk_ids]
-        scope = scope.where(query_conditions(options[:query])) if options[:query]
-        scope = scope.where(filter_conditions(options[:filters])) if options[:filters]
+        scope = query_scope(scope, options[:query]) if options[:query]
+        scope = filter_scope(scope, options[:filters]) if options[:filters]
         if options[:page] && options[:per]
           scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
         end
@@ -113,21 +113,25 @@ module RailsAdmin
         conditions_per_collection
       end
 
-      def query_conditions(query, fields = config.list.fields.select(&:queryable?))
-        statements = []
+      def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
+        if config.list.search_by
+          scope.send(config.list.search_by, query)
+        else
+          statements = []
 
-        fields.each do |field|
-          value = parse_field_value(field, query)
-          conditions_per_collection = make_field_conditions(field, value, field.search_operator)
-          statements.concat make_condition_for_current_collection(field, conditions_per_collection)
+          fields.each do |field|
+            value = parse_field_value(field, query)
+            conditions_per_collection = make_field_conditions(field, value, field.search_operator)
+            statements.concat make_condition_for_current_collection(field, conditions_per_collection)
+          end
+
+          scope.where(statements.any? ? {'$or' => statements} : {})
         end
-
-        statements.any? ? {'$or' => statements} : {}
       end
 
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
-      def filter_conditions(filters, fields = config.list.fields.select(&:filterable?))
+      def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         statements = []
 
         filters.each_pair do |field_name, filters_dump|
@@ -145,7 +149,7 @@ module RailsAdmin
           end
         end
 
-        statements.any? ? {'$and' => statements} : {}
+        scope.where(statements.any? ? {'$and' => statements} : {})
       end
 
       def parse_collection_name(column)

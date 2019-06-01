@@ -24,6 +24,10 @@ module RailsAdmin
           false
         end
 
+        register_instance_option :search_by do
+          nil
+        end
+
         register_instance_option :sort_by do
           parent.abstract_model.primary_key
         end

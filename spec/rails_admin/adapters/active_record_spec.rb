@@ -128,7 +128,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
-  describe '#query_conditions' do
+  describe '#query_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
 
     before do
@@ -155,7 +155,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
-  describe '#filter_conditions' do
+  describe '#filter_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
 
     before do
