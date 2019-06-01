@@ -1,3 +1,40 @@
+## ActiveRecord Enums(Recommended)
+
+RailsAdmin has built-in support for [ActiveRecord's Enum feature](https://api.rubyonrails.org/v5.2.3/classes/ActiveRecord/Enum.html). All you have to do is setting up enums
+
+```ruby
+class Player < ActiveRecord::Base
+  # keys are string
+  enum formation: {start: 'start', substitute: 'substitute'}
+end
+```
+
+```ruby
+class Team < ActiveRecord::Base
+  # keys are integer
+  enum main_sponsor: [:no_sponsor, :food_factory, :transportation_company, :bank, :energy_producer]
+end
+```
+
+then RailsAdmin will automatically recognize it as ActiveRecord Enum. Filter feature is also supported.
+
+You can omit type for the fields detected automatically, but if you want to be explicit for field type in configuration, be sure to use `:active_record_enum`.
+
+```ruby
+config.model Player do
+  field :formation
+end
+config.model Team do
+  field :main_sponsor, :active_record_enum
+end
+```
+
+`:enum` is the different thing(see the section below) and do not work with ActiveRecord Enum columns.
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/active_record_enum.rb]]
+
+## RailsAdmin Enums(Legacy)
+
 The `:enum` field type is for when you need to display a list of potential values. It will be rendered with a select box in forms.
 
 Other advantage, a **filter** with a select box will be added too.
