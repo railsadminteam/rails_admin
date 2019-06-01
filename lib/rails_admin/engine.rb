@@ -1,4 +1,3 @@
-require 'font-awesome-rails'
 require 'jquery-rails'
 require 'jquery-ui-rails'
 require 'kaminari'
