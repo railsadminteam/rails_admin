@@ -1215,47 +1215,76 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
   end
 
   describe 'ActiveRecord::Enum support', active_record: true do
-    before do
-      class FieldTestWithEnum < FieldTest
-        self.table_name = 'field_tests'
-        enum integer_field: %w(foo bar)
-      end
-      RailsAdmin.config.included_models = [FieldTestWithEnum]
-      RailsAdmin.config FieldTestWithEnum do
-        edit do
-          field :integer_field do
-            default_value 'foo'
+    describe 'for string-keyed enum' do
+      before do
+        RailsAdmin.config FieldTest do
+          edit do
+            field :string_enum_field do
+              default_value 'M'
+            end
           end
         end
       end
+
+      it 'auto-detects enumeration' do
+        visit new_path(model_name: 'field_test')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.not_to have_selector('.enum_type select[multiple]')
+        expect(all('.enum_type option').map(&:text).select(&:present?)).to eq %w(S M L)
+      end
+
+      it 'shows current value as selected' do
+        visit edit_path(model_name: 'field_test', id: FieldTest.create(string_enum_field: 'L'))
+        expect(find('.enum_type select').value).to eq 'l'
+      end
+
+      it 'can be updated' do
+        visit edit_path(model_name: 'field_test', id: FieldTest.create(string_enum_field: 'S'))
+        select 'L'
+        click_button 'Save'
+        expect(FieldTest.first.string_enum_field).to eq 'L'
+      end
+
+      it 'pre-populates default value' do
+        visit new_path(model_name: 'field_test')
+        expect(find('.enum_type select').value).to eq 'm'
+      end
     end
 
-    after do
-      Object.send :remove_const, :FieldTestWithEnum
-    end
+    describe 'for integer-keyed enum' do
+      before do
+        RailsAdmin.config FieldTest do
+          edit do
+            field :integer_enum_field do
+              default_value :medium
+            end
+          end
+        end
+      end
 
-    it 'auto-detects enumeration' do
-      visit new_path(model_name: 'field_test_with_enum')
-      is_expected.to have_selector('.enum_type select')
-      is_expected.not_to have_selector('.enum_type select[multiple]')
-      expect(all('.enum_type option').map(&:text).select(&:present?)).to eq %w(foo bar)
-    end
+      it 'auto-detects enumeration' do
+        visit new_path(model_name: 'field_test')
+        is_expected.to have_selector('.enum_type select')
+        is_expected.not_to have_selector('.enum_type select[multiple]')
+        expect(all('.enum_type option').map(&:text).select(&:present?)).to eq %w(small medium large)
+      end
 
-    it 'shows current value as selected' do
-      visit edit_path(model_name: 'field_test_with_enum', id: FieldTestWithEnum.create(integer_field: 'bar'))
-      expect(find('.enum_type select').value).to eq '1'
-    end
+      it 'shows current value as selected' do
+        visit edit_path(model_name: 'field_test', id: FieldTest.create(integer_enum_field: :large))
+        expect(find('.enum_type select').value).to eq "2"
+      end
 
-    it 'can be updated' do
-      visit edit_path(model_name: 'field_test_with_enum', id: FieldTestWithEnum.create(integer_field: 'bar'))
-      select 'foo'
-      click_button 'Save'
-      expect(FieldTestWithEnum.first.integer_field).to eq 'foo'
-    end
+      it 'can be updated' do
+        visit edit_path(model_name: 'field_test', id: FieldTest.create(integer_enum_field: :small))
+        select 'large'
+        click_button 'Save'
+        expect(FieldTest.first.integer_enum_field).to eq "large"
+      end
 
-    it 'pre-populates default value' do
-      visit new_path(model_name: 'field_test_with_enum')
-      expect(find('.enum_type select').value).to eq '0'
+      it 'pre-populates default value' do
+        visit new_path(model_name: 'field_test')
+        expect(find('.enum_type select').value).to eq "1"
+      end
     end
   end
 
