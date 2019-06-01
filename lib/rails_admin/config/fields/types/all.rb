@@ -1,3 +1,4 @@
+require 'rails_admin/config/fields/types/action_text'
 require 'rails_admin/config/fields/types/active_record_enum'
 require 'rails_admin/config/fields/types/active_storage'
 require 'rails_admin/config/fields/types/belongs_to_association'

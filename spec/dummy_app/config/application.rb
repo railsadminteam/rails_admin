@@ -11,6 +11,7 @@ rescue LoadError # rubocop:disable HandleExceptions
 end
 
 require 'active_storage/engine' if Rails.version >= '5.2.0' && CI_ORM == :active_record
+require 'action_text/engine' if Rails.version >= '6.0.0' && CI_ORM == :active_record
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

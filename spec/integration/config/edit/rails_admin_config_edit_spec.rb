@@ -1005,6 +1005,18 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
     end
   end
 
+  describe 'ActionText Support' do
+    it 'works without error', js: true do
+      RailsAdmin.config FieldTest do
+        edit do
+          field :action_text_field
+        end
+      end
+      expect { visit new_path(model_name: 'field_test') }.not_to raise_error
+      is_expected.to have_selector('trix-toolbar')
+    end
+  end if defined?(ActionText)
+
   describe 'Paperclip Support' do
     it 'shows a file upload field' do
       RailsAdmin.config User do

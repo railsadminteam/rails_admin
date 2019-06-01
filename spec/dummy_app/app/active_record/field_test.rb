@@ -52,6 +52,8 @@ class FieldTest < ActiveRecord::Base
   include ShrineUploader.attachment(:shrine_asset)
   include ShrineVersioningUploader.attachment(:shrine_versioning_asset)
 
+  has_rich_text :action_text_field if defined?(ActionText)
+
   enum string_enum_field: {S: 's', M: 'm', L: 'l'}
   enum integer_enum_field: [:small, :medium, :large]
 end

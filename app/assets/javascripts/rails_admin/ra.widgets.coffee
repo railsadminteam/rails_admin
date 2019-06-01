@@ -349,3 +349,11 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
           goFroalaWysiwygs(array)
       else
         goFroalaWysiwygs(array)
+
+    # action_text
+
+    content.find('trix-editor').each ->
+      if !window.Trix
+        options = $(this).data('options')
+        $('head').append('<link href="' + options['csspath'] + '" rel="stylesheet" media="all" type="text\/css">')
+        $.getScript options['jspath']
