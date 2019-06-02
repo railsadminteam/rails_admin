@@ -42,10 +42,10 @@
 [[Base|Base Field]]
 
 * [[FileUpload|File Upload]]
-  * [[Paperclip]]
-  * [[Dragonfly]]
-  * [[Carrierwave]]
   * [[ActiveStorage]]
+  * [[Carrierwave]]
+  * [[Dragonfly]]
+  * [[Paperclip]]
 * [[Enumeration]]
 * [[Boolean]]
 * [[Decimal]]
@@ -55,10 +55,11 @@
 * [[String]]
   * [[Password]]
 * [[Text]]
+  * [[ActionText]]
   * [[CKEditor]]
   * [[CodeMirror]]
-  * [[Wysihtml5]]
   * [[Froala WYSIWYG HTML Editor]]
+  * [[Wysihtml5]]
 * [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
 
 
