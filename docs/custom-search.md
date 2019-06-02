@@ -4,7 +4,9 @@ You can add your custom search method instead of using the default search. This 
 
 ```
 config.model Player do
-  search_scope :my_search
+  list do
+    search_by :my_search
+  end
 end
 
 class Player < ApplicationRecord
@@ -15,7 +17,9 @@ end
 # Example 2 using `pg_search`
 ```
 config.model Player do
-  search_scope :my_search
+  list do
+    search_by :my_search
+  end
 end
 
 class Player < ApplicationRecord
