@@ -2,7 +2,7 @@ You can add your custom search method instead of using the default search. This 
 
 # Example 1
 
-```
+```ruby
 config.model Player do
   list do
     search_by :my_search
@@ -15,7 +15,7 @@ end
 ```
 
 # Example 2 using `pg_search`
-```
+```ruby
 config.model Player do
   list do
     search_by :my_search
