@@ -2,8 +2,6 @@ module RailsAdmin
   module Config
     module Proxyable
       class Proxy < BasicObject
-        attr_reader :bindings
-
         def initialize(object, bindings = {})
           @object = object
           @bindings = bindings
@@ -21,12 +19,12 @@ module RailsAdmin
 
         def method_missing(name, *args, &block)
           if @object.respond_to?(name)
-            reset = @object.instance_variable_get('@bindings')
+            reset = @object.bindings
             begin
-              @object.instance_variable_set('@bindings', @bindings)
+              @object.bindings = @bindings
               response = @object.__send__(name, *args, &block)
             ensure
-              @object.instance_variable_set('@bindings', reset)
+              @object.bindings = reset
             end
             response
           else

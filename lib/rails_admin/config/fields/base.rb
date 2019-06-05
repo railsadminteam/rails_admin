@@ -20,7 +20,7 @@ module RailsAdmin
 
         NAMED_INSTANCE_VARIABLES = [
           :@parent, :@root, :@section, :@children_fields_registered,
-          :@associated_model_config, :@group, :@bindings
+          :@associated_model_config, :@group
         ].freeze
 
         def initialize(parent, name, properties)
