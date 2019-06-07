@@ -153,6 +153,24 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect { abstract_model.all(query: 'foo') }.not_to raise_error
       end
     end
+
+    context 'when parsing is not idempotent' do
+      before do
+        RailsAdmin.config do |c|
+          c.model Team do
+            field :name do
+              def parse_value(value)
+                "#{value}s"
+              end
+            end
+          end
+        end
+      end
+
+      it 'parses value only once' do
+        expect(abstract_model.all(query: 'foo')).to match_array @teams[1]
+      end
+    end
   end
 
   describe '#filter_scope' do
@@ -180,6 +198,24 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     it 'makes correct query' do
       expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq([@teams[2]])
+    end
+
+    context 'when parsing is not idempotent' do
+      before do
+        RailsAdmin.config do |c|
+          c.model Team do
+            field :name do
+              def parse_value(value)
+                "some#{value}"
+              end
+            end
+          end
+        end
+      end
+
+      it 'parses value only once' do
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2]
+      end
     end
   end
 

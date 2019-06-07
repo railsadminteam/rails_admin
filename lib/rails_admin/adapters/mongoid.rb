@@ -104,7 +104,6 @@ module RailsAdmin
         conditions_per_collection = {}
         field.searchable_columns.each do |column_infos|
           collection_name, column_name = parse_collection_name(column_infos[:column])
-          value = parse_field_value(field, value)
           statement = build_statement(column_name, column_infos[:type], value, operator)
           next unless statement
           conditions_per_collection[collection_name] ||= []

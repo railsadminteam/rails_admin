@@ -198,6 +198,24 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     it 'makes correct query' do
       expect(@abstract_model.all(query: 'foo').to_a).to match_array @players[1..2]
     end
+
+    context 'when parsing is not idempotent' do
+      before do
+        RailsAdmin.config do |c|
+          c.model Player do
+            field :name do
+              def parse_value(value)
+                "#{value}s"
+              end
+            end
+          end
+        end
+      end
+
+      it 'parses value only once' do
+        expect(@abstract_model.all(query: 'foo')).to match_array @players[1..1]
+      end
+    end
   end
 
   describe '#filter_scope' do
@@ -210,6 +228,24 @@ describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
 
     it 'makes correct query' do
       expect(@abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'team' => {'0001' => {o: 'like', v: 'bar'}}})).to eq([@players[2]])
+    end
+
+    context 'when parsing is not idempotent' do
+      before do
+        RailsAdmin.config do |c|
+          c.model Player do
+            field :name do
+              def parse_value(value)
+                "#{value}s"
+              end
+            end
+          end
+        end
+      end
+
+      it 'parses value only once' do
+        expect(@abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}})).to match_array @players[2]
+      end
     end
   end
 
