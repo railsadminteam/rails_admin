@@ -2,7 +2,46 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.2...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.beta...HEAD)
+
+
+## [2.0.0.beta](https://github.com/sferik/rails_admin/tree/v2.0.0.beta) - 2019-06-08
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.2...v2.0.0.beta)
+
+### Added
+- Rails 6 support([#3122](https://github.com/sferik/rails_admin/pull/3122))
+- ActionText support([#3144](https://github.com/sferik/rails_admin/issues/3144), [Wiki](https://github.com/sferik/rails_admin/wiki/ActionText))
+- sass-rails 6 support([#3129](https://github.com/sferik/rails_admin/issues/3129))
+- Sidescroll feature([#3017](https://github.com/sferik/rails_admin/pull/3017), [Wiki](https://github.com/sferik/rails_admin/wiki/Horizontally-scrolling-table-with-frozen-columns-in-list-view))
+- Custom search feature([#343](https://github.com/sferik/rails_admin/issues/343), [#3019](https://github.com/sferik/rails_admin/pull/3019), [Wiki](https://github.com/sferik/rails_admin/wiki/Custom-Search))
+- Filtering-select feature for polymorphic association([#2886](https://github.com/sferik/rails_admin/pull/2886))
+- Shrine support([#3081](https://github.com/sferik/rails_admin/pull/3081))
+- Flexibility for localication of *time* ago([#3135](https://github.com/sferik/rails_admin/pull/3135), [49add741](https://github.com/sferik/rails_admin/commit/49add7413794e2a1423b86399ef476414d22970f))
+
+### Changed
+- Vendorize font-awesome to allow using different version in app([#3039](https://github.com/sferik/rails_admin/issues/3039))
+- Stop inlining JavaScripts for CSP friendliness([#3087](https://github.com/sferik/rails_admin/issues/3087))
+- Richtext editors now uses CDN-hosted assets([#3126](https://github.com/sferik/rails_admin/issues/3126))
+
+### Removed
+- Remove deprecated DSL syntax for richtext editors([e0b390d9](https://github.com/sferik/rails_admin/commit/e0b390d99eab64c99f1f3cccae2029649e90e11c))
+- Drop support for Ruby 2.1 and Rails 4.x([dd247804](https://github.com/sferik/rails_admin/commit/dd24780445f4dd676ae033c69a5b64347b80c3bc))
+
+### Fixed
+- Fix Mongoid query and filter parsing value twice([#2755](https://github.com/sferik/rails_admin/issues/2755))
+- Fix thread-safety issues([#2897](https://github.com/sferik/rails_admin/issues/2897), [#2942](https://github.com/sferik/rails_admin/issues/2942), [1d22bc66](https://github.com/sferik/rails_admin/commit/1d22bc66168ac9ea478ea95b4b3b79f41263c0bd))
+- Fix compact_show_view not showing Boolean falses([#2416](https://github.com/sferik/rails_admin/issues/2416))
+- Fix PaperTrail fail to fetch versions for STI subclasses([#2865](https://github.com/sferik/rails_admin/pull/2865))
+- Fix Dragonfly factory breaks if a model not extending Dragonfly::Model is passed([#2720](https://github.com/sferik/rails_admin/pull/2720))
+- Fix PaperTrail adapter not using Kaminari's `page_method_name` for pagination([#2712](https://github.com/sferik/rails_admin/pull/2712))
+- Fix #bulk_menu was not using passed `abstract_model` ([#2782](https://github.com/sferik/rails_admin/pull/2782))
+- Fix wrong styles when using multiple instances of CodeMirror([#3107](https://github.com/sferik/rails_admin/pull/3107))
+- Fix password being cleared when used with Devise 4.6([72bc0373](https://github.com/sferik/rails_admin/commit/72bc03736162ffef8e5b99f42ca605d17fe7e7d0))
+- ActiveStorage factory caused const missing for Mongoid([#3088](https://github.com/sferik/rails_admin/pull/3088), [db927687](https://github.com/sferik/rails_admin/commit/db9276879c8e8c5e8772261725ef0e0cdadd9cf1))
+- Fix exact matches were using LIKE, which was not index-friendly([#3000](https://github.com/sferik/rails_admin/pull/3000))
+- Middleware check failed when using RedisStore([#3076](https://github.com/sferik/rails_admin/issues/3076))
+- Fix field being reset to default after an error([#3066](https://github.com/sferik/rails_admin/pull/3066))
 
 
 ## [1.4.2](https://github.com/sferik/rails_admin/tree/v1.4.2) - 2018-09-23
