@@ -340,6 +340,8 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             end
           end
         end
+        # Preload all models to prevent I18n being cleared in Mongoid builds
+        RailsAdmin::AbstractModel.all
         en = {admin: {actions: {
           zorg: {bulk_link: 'Zorg all these %{model_label_plural}'},
           blub: {bulk_link: 'Blub all these %{model_label_plural}'},
