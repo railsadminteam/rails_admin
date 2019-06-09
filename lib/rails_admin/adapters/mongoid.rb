@@ -74,6 +74,12 @@ module RailsAdmin
         fields.collect { |_name, field| Property.new(field, model) }
       end
 
+      def base_class
+        klass = model
+        klass = klass.superclass while klass.hereditary?
+        klass
+      end
+
       def table_name
         model.collection_name.to_s
       end

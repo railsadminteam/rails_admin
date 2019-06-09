@@ -103,6 +103,29 @@ describe 'RailsAdmin Basic Create', type: :request do
     end
   end
 
+  describe 'create with polymorphic associations' do
+    it 'is editable', js: true do
+      @players = ['Jackie Robinson', 'Rob Wooten'].map { |name| FactoryBot.create :player, name: name }
+      visit new_path(model_name: 'comment')
+      select 'Player', from: 'comment[commentable_type]'
+      find('input.ra-filtering-select-input').set('Rob')
+      page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
+      page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+      click_button 'Save'
+      expect(Comment.first.commentable).to eq @players[0]
+    end
+
+    it 'uses base class for models with inheritance' do
+      @hardball = FactoryBot.create :hardball
+      post new_path(model_name: 'comment', comment: {commentable_type: 'Hardball', commentable_id: @hardball.id})
+      @comment = Comment.first
+      expect(@comment.commentable_type).to eq 'Ball'
+      expect(@comment.commentable).to eq @hardball
+    end
+  end
+
   describe 'create with uniqueness constraint violated', given: 'a player exists' do
     before do
       @team = FactoryBot.create :team

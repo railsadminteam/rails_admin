@@ -28,6 +28,12 @@ describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
+  describe '#base_class' do
+    it 'returns inheritance base class' do
+      expect(RailsAdmin::AbstractModel.new(Hardball).base_class).to eq Ball
+    end
+  end
+
   describe 'data access methods' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
 

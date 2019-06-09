@@ -63,13 +63,13 @@ module RailsAdmin
 
           def polymorphic_type_collection
             associated_model_config.collect do |config|
-              [config.label, (config.abstract_model.sti_base_class || config.abstract_model.model).name]
+              [config.label, config.abstract_model.model.name]
             end
           end
 
           def polymorphic_type_urls
             types = associated_model_config.collect do |config|
-              [config.label, config.abstract_model.to_param]
+              [config.abstract_model.model.name, config.abstract_model.to_param]
             end
             ::Hash[*types.collect { |v| [v[0], bindings[:view].index_path(v[1])] }.flatten]
           end
@@ -77,6 +77,13 @@ module RailsAdmin
           # Reader for field's value
           def value
             bindings[:object].send(association.name)
+          end
+
+          def parse_input(params)
+            if (type_value = params[association.foreign_type.to_sym]).present?
+              config = associated_model_config.find { |c| type_value == c.abstract_model.model.name }
+              params[association.foreign_type.to_sym] = config.abstract_model.base_class.name if config
+            end
           end
         end
       end

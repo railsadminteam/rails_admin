@@ -4,6 +4,8 @@ class Ball
 
   field :color, type: String
 
+  has_one :comment, as: :commentable
+
   validates_presence_of :color, on: :create
 
   def to_param
