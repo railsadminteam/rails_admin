@@ -182,7 +182,7 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       urls = type_select.data('urls')
 
       type_select.on 'change', (e) ->
-        selected_type = type_select.val().toLowerCase()
+        selected_type = type_select.find('option:selected').text().toLowerCase()
         selected_data = $("##{selected_type}-js-options").data('options')
         object_select.data('options', selected_data)
         object_select.filteringSelect("destroy")

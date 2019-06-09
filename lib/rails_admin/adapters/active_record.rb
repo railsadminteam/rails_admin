@@ -64,6 +64,18 @@ module RailsAdmin
         end
       end
 
+      def sti_base_class
+        return unless model.columns.any?{|c| c.name == model.inheritance_column }
+        base_class = model
+        model.ancestors.each do |k|
+          break if k == ::ActiveRecord::Base
+          next unless k.is_a?(Class)
+          next unless k.table_name == table_name
+          base_class = k
+        end
+        base_class
+      end
+
       delegate :primary_key, :table_name, to: :model, prefix: false
 
       def encoding
