@@ -1,1 +1,0 @@
- stupid manual
