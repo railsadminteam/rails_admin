@@ -1,3 +1,5 @@
+require 'rails_admin/adapters/mongoid'
+
 class FieldTest
   include Mongoid::Document
   include Mongoid::Paperclip
