@@ -30,7 +30,7 @@ The method name is `remove_#{name}` by default, but you can configure it using `
 
 ```ruby
 field :asset, :active_storage do
-  delete_method :delete_asset
+  delete_method :remove_asset
 end
 ```
 
@@ -51,6 +51,6 @@ end
 
 ```ruby
 field :assets, :multiple_active_storage do
-  delete_method :delete_assets
+  delete_method :remove_assets
 end
 ```
