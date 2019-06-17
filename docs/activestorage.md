@@ -25,12 +25,24 @@ class Article < ActiveRecord::Base
   after_save { asset.purge if remove_asset == '1' }
 end
 ```
-
 The method name is `remove_#{name}` by default, but you can configure it using `delete_method` option:
 
 ```ruby
 field :asset, :active_storage do
   delete_method :remove_asset
+end
+```
+
+## show correct file name
+```ruby
+field :asset, :active_storage do
+  delete_method :remove_asset
+  pretty_value do
+    if value
+      path = Rails.application.routes.url_helpers.rails_blob_path(value, only_path: true)
+      bindings[:view].content_tag(:a, value.filename, href: path)
+    end
+  end
 end
 ```
 
