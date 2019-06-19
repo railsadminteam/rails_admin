@@ -11,7 +11,7 @@ module RailsAdmin
         require 'rails_admin/bootstrap-sass/sass_functions'
       end
 
-      require 'sass-rails' if rails?
+      require 'sassc-rails' if rails?
 
       unless rails? || compass?
         raise(Bootstrap::FrameworkNotFound.new('bootstrap-sass requires either Rails > 3.1 or Compass, neither of which are loaded'))
