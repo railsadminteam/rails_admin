@@ -6,7 +6,7 @@ gem "appraisal", ">= 2.0"
 gem "rails", "~> 6.0.0.rc1"
 gem "haml", github: "haml/haml"
 gem "devise", "~> 4.4"
-gem "sassc-rails"
+gem "sassc-rails", "~> 2.1"
 
 group :active_record do
   gem "paper_trail", ">= 5.0"
