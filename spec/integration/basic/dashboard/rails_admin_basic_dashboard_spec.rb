@@ -34,8 +34,8 @@ describe 'RailsAdmin Basic Dashboard', type: :request do
   end
 
   it 'most recent change dates are different for same-named models in different modules' do
-    user_create = 10.days.ago.to_date
-    comment_create = 20.days.ago.to_date
+    user_create = 10.days.ago
+    comment_create = 20.days.ago
     FactoryBot.create(:user_confirmed, created_at: user_create)
     FactoryBot.create(:comment_confirmed, created_at: comment_create)
 
