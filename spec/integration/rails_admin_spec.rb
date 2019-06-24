@@ -39,35 +39,6 @@ describe RailsAdmin, type: :request do
     end
   end
 
-  describe 'hidden fields with default values' do
-    before do
-      RailsAdmin.config Player do
-        include_all_fields
-        edit do
-          field :name, :hidden do
-            default_value do
-              bindings[:view]._current_user.email
-            end
-          end
-        end
-      end
-    end
-
-    it 'shows up with default value, hidden' do
-      visit new_path(model_name: 'player')
-      is_expected.to have_selector("#player_name[type=hidden][value='username@example.com']", visible: false)
-      is_expected.not_to have_selector("#player_name[type=hidden][value='toto@example.com']", visible: false)
-    end
-
-    it 'does not show label' do
-      is_expected.not_to have_selector('label', text: 'Name')
-    end
-
-    it 'does not show help block' do
-      is_expected.not_to have_xpath("id('player_name')/../p[@class='help-block']")
-    end
-  end
-
   describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
@@ -89,32 +60,6 @@ describe RailsAdmin, type: :request do
       visit index_path(model_name: 'player')
       is_expected.to have_selector('.header.name_field')
       is_expected.not_to have_selector('.header.team_field')
-    end
-  end
-
-  describe 'polymorphic associations' do
-    before :each do
-      @team = FactoryBot.create :team
-      @comment = FactoryBot.create :comment, commentable: @team
-    end
-
-    it 'works like belongs to associations in the list view' do
-      visit index_path(model_name: 'comment')
-
-      is_expected.to have_content(@team.name)
-    end
-
-    it 'is editable' do
-      visit edit_path(model_name: 'comment', id: @comment.id)
-
-      is_expected.to have_selector('select#comment_commentable_type')
-      is_expected.to have_selector('select#comment_commentable_id')
-    end
-
-    it 'is visible in the owning end' do
-      visit edit_path(model_name: 'team', id: @team.id)
-
-      is_expected.to have_selector('select#team_comment_ids')
     end
   end
 
@@ -159,6 +104,22 @@ describe RailsAdmin, type: :request do
       fill_in 'league[name]', with: 'National league'
       find('input[name="authenticity_token"]', visible: false).set("invalid token")
       expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
+    end
+  end
+
+  context 'with invalid model name' do
+    it "redirects to dashboard and inform the user the model wasn't found" do
+      visit '/admin/whatever'
+      expect(page.driver.status_code).to eq(404)
+      expect(find('.alert-danger')).to have_content("Model 'Whatever' could not be found")
+    end
+  end
+
+  context 'with invalid action' do
+    it "redirects to balls index and inform the user the id wasn't found" do
+      visit '/admin/ball/545-typo'
+      expect(page.driver.status_code).to eq(404)
+      expect(find('.alert-danger')).to have_content("Ball with id '545-typo' could not be found")
     end
   end
 end

@@ -7,6 +7,12 @@ describe RailsAdmin::AbstractModel do
     end
   end
 
+  describe '#to_param' do
+    it 'turns namespaces into prefixes with ~' do
+      expect(RailsAdmin::AbstractModel.new('Cms::BasicPage').to_param).to eq('cms~basic_page')
+    end
+  end
+
   describe 'filters' do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('FieldTest')

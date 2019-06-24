@@ -11,13 +11,52 @@ describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config('Ball').fields.first.with(object: FactoryBot.create(:ball))).not_to be_required
     end
 
-    context 'on a Paperclip installation' do
-      it 'should detect required fields' do
-        expect(RailsAdmin.config('Image').fields.detect { |f| f.name == :file }.with(object: Image.new)).to be_required
+    context 'without validation' do
+      it 'is optional' do
+        # draft.notes is nullable and has no validation
+        field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :notes }
+        expect(field.properties.nullable?).to be_truthy
+        expect(field.required?).to be_falsey
       end
     end
 
-    context 'when the validation is conditional' do
+    context 'with presence validation' do
+      it 'is required' do
+        # draft.date is nullable in the schema but has an AR
+        # validates_presence_of validation that makes it required
+        field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :date }
+        expect(field.properties.nullable?).to be_truthy
+        expect(field.required?).to be_truthy
+      end
+    end
+
+    context 'with numericality validation' do
+      it 'is required' do
+        # draft.round is nullable in the schema but has an AR
+        # validates_numericality_of validation that makes it required
+        field = RailsAdmin.config('Draft').edit.fields.detect { |f| f.name == :round }
+        expect(field.properties.nullable?).to be_truthy
+        expect(field.required?).to be_truthy
+      end
+    end
+
+    context 'with validation marked as allow_nil or allow_blank' do
+      it 'is optional' do
+        # team.revenue is nullable in the schema but has an AR
+        # validates_numericality_of validation that allows nil
+        field = RailsAdmin.config('Team').edit.fields.detect { |f| f.name == :revenue }
+        expect(field.properties.nullable?).to be_truthy
+        expect(field.required?).to be_falsey
+
+        # team.founded is nullable in the schema but has an AR
+        # validates_numericality_of validation that allows blank
+        field = RailsAdmin.config('Team').edit.fields.detect { |f| f.name == :founded }
+        expect(field.properties.nullable?).to be_truthy
+        expect(field.required?).to be_falsey
+      end
+    end
+
+    context 'with conditional validation' do
       before do
         class ConditionalValidationTest < Tableless
           column :foo, :varchar
@@ -27,9 +66,48 @@ describe RailsAdmin::Config::Fields::Base do
         end
       end
 
-      it 'is false' do
+      it 'is optional' do
         expect(RailsAdmin.config('ConditionalValidationTest').fields.detect { |f| f.name == :foo }).not_to be_required
         expect(RailsAdmin.config('ConditionalValidationTest').fields.detect { |f| f.name == :bar }).not_to be_required
+      end
+    end
+
+    context 'on a Paperclip installation' do
+      it 'should detect required fields' do
+        expect(RailsAdmin.config('Image').fields.detect { |f| f.name == :file }.with(object: Image.new)).to be_required
+      end
+    end
+
+    describe 'associations' do
+      before do
+        class RelTest < Tableless
+          column :league_id, :integer
+          column :division_id, :integer, nil, false
+          column :player_id, :integer
+          belongs_to :league
+          belongs_to :division
+          belongs_to :player
+          validates_numericality_of(:player_id, only_integer: true)
+        end
+        @fields = RailsAdmin.config(RelTest).create.fields
+      end
+
+      describe 'for column with nullable foreign key and no model validations' do
+        it 'is optional' do
+          expect(@fields.detect { |f| f.name == :league }.required?).to be_falsey
+        end
+      end
+
+      describe 'for column with non-nullable foreign key and no model validations' do
+        it 'is optional' do
+          expect(@fields.detect { |f| f.name == :division }.required?).to be_falsey
+        end
+      end
+
+      describe 'for column with nullable foreign key and a numericality model validation' do
+        it 'is required' do
+          expect(@fields.detect { |f| f.name == :player }.required?).to be_truthy
+        end
       end
     end
   end

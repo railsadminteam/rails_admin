@@ -25,7 +25,7 @@ class Team
 
   validates_presence_of :division_id, only_integer: true
   validates_presence_of :manager
-  validates_numericality_of :founded, only_integer: true
+  validates_numericality_of :founded, only_integer: true, allow_blank: true
   validates_numericality_of :wins, only_integer: true
   validates_numericality_of :losses, only_integer: true
   validates_numericality_of :win_percentage
