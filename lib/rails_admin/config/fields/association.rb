@@ -78,7 +78,7 @@ module RailsAdmin
 
         # Reader for associated primary key
         def associated_primary_key
-          @associated_primary_key ||= association.primary_key
+          @associated_primary_key ||= associated_model_config.abstract_model.primary_key
         end
 
         # Reader for the association's key

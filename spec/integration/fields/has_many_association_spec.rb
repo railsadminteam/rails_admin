@@ -248,4 +248,34 @@ describe 'HasManyAssociation field', type: :request do
       is_expected.to have_selector('a.ra-multiselect-item-remove-all')
     end
   end
+
+  context 'with custom primary_key option', active_record: true do
+    let(:user) { FactoryBot.create :user }
+    let!(:teams) { [FactoryBot.create(:team, manager: user.email), FactoryBot.create(:team)] }
+    before do
+      class ManagingUser < User
+        has_many :teams, foreign_key: :manager, primary_key: :email
+      end
+      RailsAdmin.config.included_models = [ManagingUser, Team]
+      RailsAdmin.config ManagingUser do
+        field(:teams) { associated_collection_cache_all false }
+      end
+    end
+
+    it "picks up associated model's primary key correctly" do
+      visit edit_path(model_name: 'managing_user', id: user.id)
+      expect(find("select#managing_user_team_ids option[value=\"#{teams[0].id}\"]")).to have_content teams[0].name
+    end
+
+    it "allows update with fetching associated objects via xhr", js: true do
+      visit edit_path(model_name: 'managing_user', id: user.id)
+      find('input.ra-multiselect-search').set('T')
+      page.execute_script("$('input.ra-multiselect-search').trigger('focus')")
+      page.execute_script("$('input.ra-multiselect-search').trigger('keydown')")
+      find('.ra-multiselect-collection option', text: teams[1].name).select_option
+      find('.ra-multiselect-item-add').click
+      click_button 'Save'
+      expect(ManagingUser.first.teams).to match_array teams
+    end
+  end
 end

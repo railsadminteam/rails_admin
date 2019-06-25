@@ -204,14 +204,15 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe 'index' do
-    it "uses source association's primary key with :compact, not target model's default primary key", skip_mongoid: true do
+    it "uses target model's primary key", skip_mongoid: true do
+      @player = FactoryBot.create(:player, number: 123)
       class TeamWithNumberedPlayers < Team
         has_many :numbered_players, class_name: 'Player', primary_key: :number, foreign_key: 'team_id'
       end
       FactoryBot.create :team
-      TeamWithNumberedPlayers.first.numbered_players = [FactoryBot.create(:player, number: 123)]
+      TeamWithNumberedPlayers.first.numbered_players = [@player]
       get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/\"id\":\"123\"/)
+      expect(response.body).to match(/\"id\":\"#{@player.id}\"/)
     end
 
     context 'as JSON' do

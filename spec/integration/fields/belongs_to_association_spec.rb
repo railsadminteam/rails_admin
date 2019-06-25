@@ -40,4 +40,23 @@ describe 'BelongsToAssociation field', type: :request do
       is_expected.to have_css("a[href='/admin/team/#{@team.id}']")
     end
   end
+
+  context 'with custom primary_key option', active_record: true do
+    let(:user) { FactoryBot.create :user }
+    let!(:teams) { [FactoryBot.create(:team, manager: user.email), FactoryBot.create(:team)] }
+    before do
+      class ManagedTeam < Team
+        belongs_to :user, foreign_key: :manager, primary_key: :email
+      end
+      RailsAdmin.config.included_models = [ManagedTeam]
+      RailsAdmin.config ManagedTeam do
+        field :user
+      end
+    end
+
+    it 'picks up associated primary key correctly' do
+      visit edit_path(model_name: 'managed_team', id: teams[0].id)
+      expect(page).to have_css("select#managed_team_manager option[value=\"#{user.id}\"]")
+    end
+  end
 end
