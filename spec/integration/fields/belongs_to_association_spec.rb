@@ -41,13 +41,10 @@ describe 'BelongsToAssociation field', type: :request do
     end
   end
 
-  context 'with custom primary_key option', active_record: true do
-    let(:user) { FactoryBot.create :user }
-    let!(:teams) { [FactoryBot.create(:team, manager: user.email), FactoryBot.create(:team)] }
+  context 'with custom primary_key option' do
+    let(:user) { FactoryBot.create :managing_user }
+    let!(:teams) { [FactoryBot.create(:managed_team, manager: user.email), FactoryBot.create(:managed_team)] }
     before do
-      class ManagedTeam < Team
-        belongs_to :user, foreign_key: :manager, primary_key: :email
-      end
       RailsAdmin.config.included_models = [ManagedTeam]
       RailsAdmin.config ManagedTeam do
         field :user

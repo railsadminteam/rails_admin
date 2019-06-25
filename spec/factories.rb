@@ -25,6 +25,8 @@ FactoryBot.define do
     sequence(:wins)
     sequence(:losses)
     sequence(:win_percentage)
+
+    factory :managed_team, class: ManagedTeam
   end
 
   factory :league do
@@ -45,6 +47,7 @@ FactoryBot.define do
     sequence(:password) { |_n| 'password' }
 
     factory :user_confirmed, class: User::Confirmed
+    factory :managing_user, class: ManagingUser
   end
 
   factory :field_test do

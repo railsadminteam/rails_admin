@@ -249,14 +249,11 @@ describe 'HasManyAssociation field', type: :request do
     end
   end
 
-  context 'with custom primary_key option', active_record: true do
-    let(:user) { FactoryBot.create :user }
-    let!(:teams) { [FactoryBot.create(:team, manager: user.email), FactoryBot.create(:team)] }
+  context 'with custom primary_key option' do
+    let(:user) { FactoryBot.create :managing_user }
+    let!(:teams) { [FactoryBot.create(:managed_team, manager: user.email), FactoryBot.create(:managed_team)] }
     before do
-      class ManagingUser < User
-        has_many :teams, foreign_key: :manager, primary_key: :email
-      end
-      RailsAdmin.config.included_models = [ManagingUser, Team]
+      RailsAdmin.config.included_models = [ManagingUser, ManagedTeam]
       RailsAdmin.config ManagingUser do
         field(:teams) { associated_collection_cache_all false }
       end

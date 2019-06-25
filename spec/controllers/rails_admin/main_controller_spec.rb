@@ -204,15 +204,11 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe 'index' do
-    it "uses target model's primary key", skip_mongoid: true do
-      @player = FactoryBot.create(:player, number: 123)
-      class TeamWithNumberedPlayers < Team
-        has_many :numbered_players, class_name: 'Player', primary_key: :number, foreign_key: 'team_id'
-      end
-      FactoryBot.create :team
-      TeamWithNumberedPlayers.first.numbered_players = [@player]
-      get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/\"id\":\"#{@player.id}\"/)
+    it "uses target model's primary key" do
+      @user = FactoryBot.create :managing_user
+      @team = FactoryBot.create :managed_team, user: @user
+      get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
+      expect(response.body).to match(/\"id\":\"#{@user.id}\"/)
     end
 
     context 'as JSON' do
