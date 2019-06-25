@@ -105,7 +105,7 @@ module RailsAdmin
 
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
-            statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator).to_statement
+            statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator, @scope.connection.adapter_name).to_statement
             @statements << statement if statement.present?
             @values << value1 unless value1.nil?
             @values << value2 unless value2.nil?
@@ -153,10 +153,15 @@ module RailsAdmin
       end
 
       def build_statement(column, type, value, operator)
-        StatementBuilder.new(column, type, value, operator).to_statement
+        StatementBuilder.new(column, type, value, operator, model.connection.adapter_name).to_statement
       end
 
       class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
+        def initialize(column, type, value, operator, adapter_name)
+          super column, type, value, operator
+          @adapter_name = adapter_name
+        end
+
       protected
 
         def unary_operators
@@ -269,7 +274,7 @@ module RailsAdmin
         end
 
         def ar_adapter
-          ::ActiveRecord::Base.connection.adapter_name.downcase
+          @adapter_name.downcase
         end
       end
     end
