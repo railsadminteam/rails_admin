@@ -41,6 +41,7 @@ en:
       up: "Up"
       down: "Down"
       navigation: "Navigation"
+      root_navigation: "Actions"
       navigation_static_label: "Links"
       log_out: "Log out"
       time_ago: "%{time} ago"
