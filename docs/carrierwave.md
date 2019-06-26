@@ -70,12 +70,12 @@ class Article < ActiveRecord::Base
   attr_accessor :delete_assets
   after_validation do
     uploaders = assets.delete_if do |uploader|
-      if Array(delete_assets).include?(uploader.file.identifier)
+      if Array(delete_assets).include?(uploader.file.filename)
         uploader.remove!
         true
       end
     end
-    write_attribute(:assets, uploaders.map { |uploader| uploader.file.identifier })
+    write_attribute(:assets, uploaders.map { |uploader| uploader.file.filename })
   end
 end
 ```
