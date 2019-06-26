@@ -92,6 +92,29 @@ describe RailsAdmin, type: :request do
       visit dashboard_path
       is_expected.to have_selector('.label-danger')
     end
+
+    it 'has links for actions which are marked as show_in_navigation' do
+      I18n.backend.store_translations(
+        :en, admin: {actions: {
+          shown_in_navigation: {menu: 'Look this'},
+        }}
+      )
+      RailsAdmin.config do |config|
+        config.actions do
+          dashboard do
+            show_in_navigation false
+          end
+          root :shown_in_navigation, :dashboard do
+            action_name :dashboard
+            show_in_navigation true
+          end
+        end
+      end
+
+      visit dashboard_path
+      is_expected.not_to have_css '.root_links li', text: 'Dashboard'
+      is_expected.to have_css '.root_links li', text: 'Look this'
+    end
   end
 
   describe 'CSRF protection' do

@@ -200,6 +200,29 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
         @action = RailsAdmin::Config::Actions.find :dashboard
         expect(helper.menu_for(:root)).not_to match(/Dashboard/)
       end
+
+      it 'shows actions which are marked as show_in_menu' do
+        I18n.backend.store_translations(
+          :en, admin: {actions: {
+            shown_in_menu: {menu: 'Look this'},
+          }}
+        )
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              show_in_menu false
+            end
+            root :shown_in_menu, :dashboard do
+              action_name :dashboard
+              show_in_menu true
+            end
+          end
+        end
+
+        @action = RailsAdmin::Config::Actions.find :dashboard
+        expect(helper.menu_for(:root)).not_to match(/Dashboard/)
+        expect(helper.menu_for(:root)).to match(/Look this/)
+      end
     end
 
     describe '#main_navigation' do
@@ -283,6 +306,61 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
           weight 1
         end
         expect(helper.main_navigation).to match(/(Players).*(Comments)/m)
+      end
+    end
+
+    describe '#root_navigation' do
+      it 'shows actions which are marked as show_in_sidebar' do
+        I18n.backend.store_translations(
+          :en, admin: {actions: {
+            shown_in_sidebar: {menu: 'Look this'},
+          }}
+        )
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              show_in_sidebar false
+            end
+            root :shown_in_sidebar, :dashboard do
+              action_name :dashboard
+              show_in_sidebar true
+            end
+          end
+        end
+
+        expect(helper.root_navigation).not_to match(/Dashboard/)
+        expect(helper.root_navigation).to match(/Look this/)
+      end
+
+      it 'allows grouping by sidebar_label' do
+        I18n.backend.store_translations(
+          :en, admin: {
+            actions: {
+              foo: {menu: 'Foo'},
+              bar: {menu: 'Bar'},
+            },
+          }
+        )
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              show_in_sidebar true
+              sidebar_label 'One'
+            end
+            root :foo, :dashboard do
+              action_name :dashboard
+              show_in_sidebar true
+              sidebar_label 'Two'
+            end
+            root :bar, :dashboard do
+              action_name :dashboard
+              show_in_sidebar true
+              sidebar_label 'Two'
+            end
+          end
+        end
+
+        expect(helper.strip_tags(helper.root_navigation).delete(' ')).to eq 'OneDashboardTwoFooBar'
       end
     end
 
