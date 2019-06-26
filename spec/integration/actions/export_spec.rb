@@ -99,4 +99,10 @@ describe 'Export action', type: :request do
       expect(csv[0]).not_to include('Created at')
     end
   end
+
+  it 'supports bulk export' do
+    visit index_path(model_name: 'player')
+    click_link 'Export found Players'
+    is_expected.to have_content('Select fields to export')
+  end
 end
