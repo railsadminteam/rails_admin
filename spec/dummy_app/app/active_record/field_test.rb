@@ -19,12 +19,12 @@ class FieldTest < ActiveRecord::Base
   attr_accessor :delete_carrierwave_assets
   after_validation do
     uploaders = carrierwave_assets.delete_if do |uploader|
-      if Array(delete_carrierwave_assets).include?(uploader.file.identifier)
+      if Array(delete_carrierwave_assets).include?(uploader.file.filename)
         uploader.remove!
         true
       end
     end
-    write_attribute(:carrierwave_assets, uploaders.map { |uploader| uploader.file.identifier })
+    write_attribute(:carrierwave_assets, uploaders.map { |uploader| uploader.file.filename })
   end
   def carrierwave_assets=(files)
     appended = files.map do |file|

@@ -13,7 +13,7 @@ module RailsAdmin
             end
 
             register_instance_option :delete_key do
-              value.file.identifier
+              value.file.filename
             end
 
             def resource_url(thumb = false)
