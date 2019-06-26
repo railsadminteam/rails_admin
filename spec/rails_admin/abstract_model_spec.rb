@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe RailsAdmin::AbstractModel do
+  describe '.all' do
+    it 'returns abstract models for all models' do
+      expect(RailsAdmin::AbstractModel.all.map(&:model)).to include Player, Team
+    end
+
+    it 'does not pick up a model without table', active_record: true do
+      expect(RailsAdmin::AbstractModel.all.map(&:model)).not_to include WithoutTable
+    end
+  end
+
   describe '#to_s' do
     it 'returns model\'s name' do
       expect(RailsAdmin::AbstractModel.new(Cms::BasicPage).to_s).to eq Cms::BasicPage.to_s

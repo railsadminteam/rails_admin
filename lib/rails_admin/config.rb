@@ -210,9 +210,7 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
-        excluded = (excluded_models.collect(&:to_s) + %w(RailsAdmin::History PaperTrail::Version PaperTrail::VersionAssociation ActiveStorage::Attachment ActiveStorage::Blob))
-
-        (viable_models - excluded).uniq.sort
+        (viable_models - excluded_models.collect(&:to_s)).uniq.sort
       end
 
       # Loads a model configuration instance from the registry or registers

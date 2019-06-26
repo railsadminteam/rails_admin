@@ -46,7 +46,7 @@ module RailsAdmin
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
       ancestors = model.ancestors.collect(&:to_s)
-      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
+      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class? && model.table_exists?
         initialize_active_record
       elsif ancestors.include?('Mongoid::Document')
         initialize_mongoid

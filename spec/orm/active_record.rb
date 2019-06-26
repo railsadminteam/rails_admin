@@ -62,6 +62,14 @@ class Tableless < ActiveRecord::Base
         Hash[columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }]
     end
 
+    def table_exists?
+      true
+    end
+
+    def primary_key
+      "id"
+    end
+
   private
 
     def lookup_attribute_type(type)
