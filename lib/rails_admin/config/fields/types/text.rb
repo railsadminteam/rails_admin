@@ -16,6 +16,10 @@ module RailsAdmin
             }
           end
 
+          def parse_input(params)
+            params[name] = params[name].presence if params.key?(name)
+          end
+
           register_instance_option :partial do
             :form_text
           end

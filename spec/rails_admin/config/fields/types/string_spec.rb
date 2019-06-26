@@ -23,5 +23,7 @@ describe RailsAdmin::Config::Fields::Types::String do
     end
   end
 
-  it_behaves_like 'a generic field type', :string_field, :string
+  it_behaves_like 'a generic field type', :string_field
+
+  it_behaves_like 'a string-ish field type', :text_field
 end

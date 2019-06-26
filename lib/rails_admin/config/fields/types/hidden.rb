@@ -22,6 +22,10 @@ module RailsAdmin
           def generic_help
             false
           end
+
+          def parse_input(params)
+            params[name] = params[name].presence if params.key?(name)
+          end
         end
       end
     end
