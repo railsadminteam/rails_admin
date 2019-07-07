@@ -16,24 +16,6 @@ class FieldTest < ActiveRecord::Base
   mount_uploader :carrierwave_asset, CarrierwaveUploader
   mount_uploaders :carrierwave_assets, CarrierwaveUploader
   serialize :carrierwave_assets, JSON
-  attr_accessor :delete_carrierwave_assets
-  after_validation do
-    uploaders = carrierwave_assets.delete_if do |uploader|
-      if Array(delete_carrierwave_assets).include?(uploader.file.filename)
-        uploader.remove!
-        true
-      end
-    end
-    write_attribute(:carrierwave_assets, uploaders.map { |uploader| uploader.file.filename })
-  end
-  def carrierwave_assets=(files)
-    appended = files.map do |file|
-      uploader = _mounter(:carrierwave_assets).blank_uploader
-      uploader.cache! file
-      uploader
-    end
-    super(carrierwave_assets + appended)
-  end
 
   attachment :refile_asset if defined?(Refile)
 

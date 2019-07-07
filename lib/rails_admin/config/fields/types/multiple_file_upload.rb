@@ -19,6 +19,10 @@ module RailsAdmin
               nil
             end
 
+            register_instance_option :keep_key do
+              nil
+            end
+
             register_instance_option :delete_key do
               nil
             end
@@ -65,6 +69,14 @@ module RailsAdmin
 
           register_instance_option :delete_method do
             nil
+          end
+
+          register_instance_option :keep_method do
+            nil
+          end
+
+          register_instance_option :reorderable? do
+            false
           end
 
           register_instance_option :export_value do

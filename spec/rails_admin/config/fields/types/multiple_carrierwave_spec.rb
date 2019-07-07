@@ -16,7 +16,7 @@ describe RailsAdmin::Config::Fields::Types::MultipleCarrierwave do
       RailsAdmin.config('FieldTest').fields.detect do |f|
         f.name == :carrierwave_assets
       end.with(
-        object: FieldTest.new(carrierwave_assets: ['dummy.txt']),
+        object: FieldTest.new(carrierwave_assets: [File.open(file_path('test.jpg'))]),
         view: ApplicationController.new.view_context,
       )
     end

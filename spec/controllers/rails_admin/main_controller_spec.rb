@@ -324,9 +324,7 @@ describe RailsAdmin::MainController, type: :controller do
     it 'allows for delete method with Carrierwave' do
       RailsAdmin.config FieldTest do
         field :carrierwave_asset
-        field :carrierwave_assets do
-          delete_method :delete_carrierwave_assets
-        end
+        field :carrierwave_assets
         field :dragonfly_asset
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
@@ -348,8 +346,6 @@ describe RailsAdmin::MainController, type: :controller do
           'carrierwave_asset_cache' => 'test',
           'remove_carrierwave_asset' => 'test',
           'carrierwave_assets' => 'test',
-          'carrierwave_assets_cache' => 'test',
-          'delete_carrierwave_assets' => 'test',
           'dragonfly_asset' => 'test',
           'remove_dragonfly_asset' => 'test',
           'retained_dragonfly_asset' => 'test',
@@ -367,8 +363,6 @@ describe RailsAdmin::MainController, type: :controller do
         'remove_carrierwave_asset' => 'test',
         'carrierwave_asset_cache' => 'test',
         'carrierwave_assets' => 'test',
-        'carrierwave_assets_cache' => 'test',
-        'delete_carrierwave_assets' => 'test',
         'dragonfly_asset' => 'test',
         'remove_dragonfly_asset' => 'test',
         'retained_dragonfly_asset' => 'test',

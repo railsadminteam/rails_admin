@@ -11,3 +11,7 @@ iframe.wysihtml5-sandbox, .wysihtml5-editor{
   max-height: 200px;
   max-width: 300px;
 }
+
+.controls.ui-sortable .sortables{
+  cursor: move;
+}

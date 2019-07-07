@@ -31,7 +31,7 @@ group :mongoid do
   gem 'shrine-mongoid'
 end
 
-gem 'carrierwave', '>= 0.8'
+gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
 gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'
 gem 'mini_magick', '>= 3.4'

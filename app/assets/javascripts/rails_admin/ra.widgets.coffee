@@ -76,11 +76,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
     # multiple-fileupload
 
     content.find('[data-multiple-fileupload]').each ->
-      $(this).closest('.controls').find('.btn-remove-image').on 'click', ->
+      $(this).closest('.controls').find('.btn-remove-image').on('click', ->
         $(this).siblings('[type=checkbox]').click()
         $(this).parent('.toggle').toggle('slow')
         $(this).toggleClass('btn-danger btn-info')
         false
+      ).end().sortable(items: '.sortables')
 
     # multiple-fileupload-preview
 
