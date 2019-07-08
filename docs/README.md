@@ -129,7 +129,7 @@
 * [RailsAdminAuthorizedFields](https://github.com/xronos-i-am/rails_admin_authorized_fields): Simplified authorization rules for models' fields in rails_admin
 * [RailsAdminHisteroid](https://github.com/franc/rails_admin_histeroid): Mongoid 3.1 history audit support
 * [RailsAdminHistoryRollback](https://github.com/rikkipitt/rails_admin_history_rollback): PaperTrail history rollback
-* [RailsAdminPundit](https://github.com/sudosu/rails_admin_pundit): Integration with Pundit authorization system
+* [RailsAdminPundit](https://github.com/sudosu/rails_admin_pundit): Integration with Pundit authorization system (this gem is for users of Pundit 1.x - the Pundit 2.x API has built-in support in RailsAdmin)
 
 #### Field extension
 * [Enumerize](https://github.com/brainspec/enumerize): Enumerated attributes with I18n and ActiveRecord/Mongoid support
