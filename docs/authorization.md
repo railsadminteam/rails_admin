@@ -20,6 +20,15 @@ RailsAdmin.config do |config|
 end
 ```
 
+Also, there's built-in support for Pundit:
+
+```ruby
+RailsAdmin.config do |config|
+  config.authorize_with :pundit
+end
+```
+
+
 * [[CanCanCan (recommended)|CanCanCan]]
 * [[CanCan with relation to current Model|CanCan:-remove-associated-action-buttons-in-forms]]
 * [[Declarative Authorization (possible)|Declarative Authorization]]
