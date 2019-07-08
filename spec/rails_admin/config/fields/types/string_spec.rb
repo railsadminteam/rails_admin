@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::String do
+RSpec.describe RailsAdmin::Config::Fields::Types::String do
   describe '#html_attributes' do
     before :each do
       RailsAdmin.config Ball do

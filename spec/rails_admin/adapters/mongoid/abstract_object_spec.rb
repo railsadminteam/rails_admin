@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rails_admin/adapters/mongoid/abstract_object'
 
-describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', mongoid: true do
+RSpec.describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', mongoid: true do
   before do
     @players = FactoryBot.create_list :player, 3
     @draft = FactoryBot.create :draft

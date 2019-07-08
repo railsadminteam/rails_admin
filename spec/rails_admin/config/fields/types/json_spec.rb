@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Json do
+RSpec.describe RailsAdmin::Config::Fields::Types::Json do
   let(:field) { RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :json_field } }
   let(:object) { FieldTest.new }
   let(:bindings) do

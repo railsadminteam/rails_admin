@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'FilteringMultiSelect widget', type: :request, js: true do
+RSpec.describe 'FilteringMultiSelect widget', type: :request, js: true do
   subject { page }
 
   describe 'Choose all button' do

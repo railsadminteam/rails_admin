@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Show action', type: :request do
+RSpec.describe 'Show action', type: :request do
   subject { page }
   let(:team) { FactoryBot.create :team }
 

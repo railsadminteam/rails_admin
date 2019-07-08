@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Dragonfly do
+RSpec.describe RailsAdmin::Config::Fields::Types::Dragonfly do
   it_behaves_like 'a generic field type', :string_field, :dragonfly
 
   describe 'with a model which does not extend Dragonfly::Model' do

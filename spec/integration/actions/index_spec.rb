@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'Index action', type: :request do
+RSpec.describe 'Index action', type: :request do
   subject { page }
 
   describe 'page' do

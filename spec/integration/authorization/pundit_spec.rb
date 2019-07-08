@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin Pundit Authorization', type: :request do
+RSpec.describe 'RailsAdmin Pundit Authorization', type: :request do
   subject { page }
 
   before do

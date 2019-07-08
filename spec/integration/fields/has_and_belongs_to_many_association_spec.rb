@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'HasAndBelongsToManyAssociation field', type: :request do
+RSpec.describe 'HasAndBelongsToManyAssociation field', type: :request do
   subject { page }
 
   context 'on create' do

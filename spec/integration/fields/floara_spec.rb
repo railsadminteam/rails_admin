@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Floara field', type: :request do
+RSpec.describe 'Floara field', type: :request do
   subject { page }
 
   it 'works without error', js: true do

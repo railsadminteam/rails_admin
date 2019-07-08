@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Dashboard action', type: :request do
+RSpec.describe 'Dashboard action', type: :request do
   subject { page }
 
   it 'shows statistics by default' do

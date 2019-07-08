@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Paperclip do
+RSpec.describe RailsAdmin::Config::Fields::Types::Paperclip do
   it_behaves_like 'a generic field type', :string_field, :paperclip
 
   context 'when a *_file_name field exists but not decleared as has_attached_file' do

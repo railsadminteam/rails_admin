@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::ApplicationHelper, type: :helper do
+RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
   describe '#authorized?' do
     let(:abstract_model) { RailsAdmin.config(FieldTest).abstract_model }
 

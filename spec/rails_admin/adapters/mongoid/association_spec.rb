@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
+RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   before :all do
     RailsAdmin::AbstractModel.reset_polymorphic_parents
 

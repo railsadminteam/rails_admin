@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Datetime do
+RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
   it_behaves_like 'a generic field type', :datetime_field, :datetime
 
   describe '#formatted_value' do

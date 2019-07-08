@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'BulkDelete action', type: :request do
+RSpec.describe 'BulkDelete action', type: :request do
   subject { page }
 
   describe 'confirmation page' do

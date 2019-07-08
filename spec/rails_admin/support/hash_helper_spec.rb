@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe RailsAdmin::HashHelper do
+RSpec.describe RailsAdmin::HashHelper do
   let(:hash) do
     {
       'subject' => 'Test',

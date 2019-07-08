@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe RailsAdmin::MainController, type: :controller do
+RSpec.describe RailsAdmin::MainController, type: :controller do
   routes { RailsAdmin::Engine.routes }
 
   def get(action, params)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Serialized field', type: :request do
+RSpec.describe 'Serialized field', type: :request do
   subject { page }
 
   context 'with serialized objects' do

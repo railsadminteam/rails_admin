@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Proxyable do
+RSpec.describe RailsAdmin::Config::Proxyable do
   class ProxyableTest
     include RailsAdmin::Config::Proxyable
 

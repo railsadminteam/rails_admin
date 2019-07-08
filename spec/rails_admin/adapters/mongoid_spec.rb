@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
+RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
   describe '#associations' do
     it 'returns Association class' do
       expect(RailsAdmin::AbstractModel.new(Player).associations.first).

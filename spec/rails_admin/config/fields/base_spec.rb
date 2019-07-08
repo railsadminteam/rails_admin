@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Base do
+RSpec.describe RailsAdmin::Config::Fields::Base do
   describe '#required' do
     it 'reads the on: :create/:update validate option' do
       RailsAdmin.config Ball do

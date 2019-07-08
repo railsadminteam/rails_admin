@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'base64'
 
-describe RailsAdmin::Config::Fields::Types::MultipleCarrierwave do
+RSpec.describe RailsAdmin::Config::Fields::Types::MultipleCarrierwave do
   it_behaves_like 'a generic field type', :string_field, :multiple_carrierwave
 
   describe '#thumb_method' do

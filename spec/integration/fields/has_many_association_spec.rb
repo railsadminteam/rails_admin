@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'HasManyAssociation field', type: :request do
+RSpec.describe 'HasManyAssociation field', type: :request do
   subject { page }
 
   context 'when an association is readonly' do

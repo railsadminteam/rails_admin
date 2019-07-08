@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Edit action', type: :request do
+RSpec.describe 'Edit action', type: :request do
   subject { page }
 
   describe 'page' do

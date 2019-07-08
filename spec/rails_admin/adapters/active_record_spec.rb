@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'timecop'
 
-describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
+RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   let(:like) do
     if ['postgresql', 'postgis'].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
       '(field ILIKE ?)'

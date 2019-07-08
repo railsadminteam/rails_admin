@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Delete action', type: :request do
+RSpec.describe 'Delete action', type: :request do
   subject { page }
 
   it "shows \"Delete model\"" do

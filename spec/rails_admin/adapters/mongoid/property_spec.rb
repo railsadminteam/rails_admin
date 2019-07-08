@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
+RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
   subject { RailsAdmin::AbstractModel.new(FieldTest).properties.detect { |p| p.name == field } }
 
   describe '_id field' do

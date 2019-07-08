@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'csv'
 
-describe 'Export action', type: :request do
+RSpec.describe 'Export action', type: :request do
   subject { page }
 
   before do

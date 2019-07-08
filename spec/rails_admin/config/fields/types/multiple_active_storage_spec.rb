@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage do
+RSpec.describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage do
   it_behaves_like 'a generic field type', :string_field, :multiple_active_storage
 
   let(:record) { FactoryBot.create :field_test }

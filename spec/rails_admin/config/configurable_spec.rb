@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Configurable do
+RSpec.describe RailsAdmin::Config::Configurable do
   class ConfigurableTest
     include RailsAdmin::Config::Configurable
 
