@@ -22,6 +22,18 @@ Here are some ways *you* can contribute:
 [issues]: https://github.com/sferik/rails_admin/issues
 [gittip]: https://www.gittip.com/sferik/
 
+## Development
+
+### Running tests locally
+
+To run the test suite, you need PhantomJS and ImageMagick (or GraphicsMagick).
+
+Example on macOS using Homebrew:
+
+    brew cask install phantomjs
+    brew install imagemagick
+    bundle exec rspec
+
 ## Getting Help
 
 We use a [mailing list][list] for user support. If you've got a "how do
