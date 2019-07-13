@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'ActiveRecordEnum field', type: :request, active_record: true do
+RSpec.describe 'ActiveRecordEnum field', type: :request, active_record: true do
   subject { page }
 
   describe 'for string-keyed enum' do

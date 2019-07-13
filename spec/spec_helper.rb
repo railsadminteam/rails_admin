@@ -61,6 +61,8 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  config.disable_monkey_patching!
+
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers
 

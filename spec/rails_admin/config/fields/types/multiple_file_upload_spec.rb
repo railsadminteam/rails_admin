@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
+RSpec.describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
   it_behaves_like 'a generic field type', :string_field, :multiple_file_upload
 
   describe '#allowed_methods' do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::MainHelper, type: :helper do
+RSpec.describe RailsAdmin::MainHelper, type: :helper do
   describe '#rails_admin_form_for' do
     let(:html_form) do
       helper.rails_admin_form_for(FieldTest.new, url: new_path(model_name: 'field_test')) {}

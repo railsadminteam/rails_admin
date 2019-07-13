@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Paperclip field', type: :request do
+RSpec.describe 'Paperclip field', type: :request do
   subject { page }
 
   it 'shows a file upload field' do

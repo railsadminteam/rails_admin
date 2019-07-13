@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'HasOneAssociation field', type: :request do
+RSpec.describe 'HasOneAssociation field', type: :request do
   subject { page }
 
   describe 'with inverse_of option' do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Color field', type: :request do
+RSpec.describe 'Color field', type: :request do
   subject { page }
 
   it 'shows input with class color' do

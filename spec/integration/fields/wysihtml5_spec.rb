@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Wysihtml5 field', type: :request do
+RSpec.describe 'Wysihtml5 field', type: :request do
   subject { page }
 
   it 'works without error', js: true do

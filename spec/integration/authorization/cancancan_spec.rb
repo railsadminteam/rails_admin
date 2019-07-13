@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin CanCanCan Authorization', type: :request do
+RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
   class Ability
     include CanCan::Ability
     def initialize(user)

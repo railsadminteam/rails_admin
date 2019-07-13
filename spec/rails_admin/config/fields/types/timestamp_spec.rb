@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Timestamp, active_record: true do
+RSpec.describe RailsAdmin::Config::Fields::Types::Timestamp, active_record: true do
   it_behaves_like 'a generic field type', :timestamp_field, :timestamp
 
   describe '#parse_input' do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Base action', type: :request do
+RSpec.describe 'Base action', type: :request do
   subject { page }
 
   describe '#enabled?' do

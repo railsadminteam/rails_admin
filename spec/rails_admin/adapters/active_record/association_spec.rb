@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'timecop'
 
-describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true do
+RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true do
   before :all do
     RailsAdmin::AbstractModel.reset_polymorphic_parents
 

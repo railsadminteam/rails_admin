@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Hidden field', type: :request do
+RSpec.describe 'Hidden field', type: :request do
   subject { page }
 
   describe '#default_value' do

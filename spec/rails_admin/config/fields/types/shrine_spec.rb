@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Shrine do
+RSpec.describe RailsAdmin::Config::Fields::Types::Shrine do
   context 'when asset is an image with versions' do
     let(:record) { FactoryBot.create :field_test, shrine_versioning_asset: FakeIO.new('dummy', filename: 'test.jpg', content_type: 'image/jpeg') }
     let(:field) do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Enum field', type: :request, active_record: true do
+RSpec.describe 'Enum field', type: :request, active_record: true do
   subject { page }
 
   describe "when object responds to '\#{method}_enum'" do

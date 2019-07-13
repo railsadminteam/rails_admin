@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::ApplicationController, type: :controller do
+RSpec.describe RailsAdmin::ApplicationController, type: :controller do
   describe '#to_model_name' do
     it 'works with modules' do
       expect(controller.to_model_name('conversations~conversation')).to eq('Conversations::Conversation')

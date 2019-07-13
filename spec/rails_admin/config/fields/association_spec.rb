@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Association do
+RSpec.describe RailsAdmin::Config::Fields::Association do
   describe '#pretty_value' do
     let(:player) { FactoryBot.create(:player, name: '<br />', team: FactoryBot.create(:team)) }
     let(:field) { RailsAdmin.config('Team').fields.detect { |f| f.name == :players } }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'MultipleCarrierwave field', type: :request, active_record: true do
+RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true do
   subject { page }
   before do
     RailsAdmin.config FieldTest do

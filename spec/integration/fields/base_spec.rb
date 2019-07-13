@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Base field', type: :request do
+RSpec.describe 'Base field', type: :request do
   subject { page }
 
   describe '#default_value' do

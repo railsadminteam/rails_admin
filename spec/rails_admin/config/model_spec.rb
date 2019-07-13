@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Model do
+RSpec.describe RailsAdmin::Config::Model do
   describe '#excluded?' do
     before do
       RailsAdmin.config do |config|

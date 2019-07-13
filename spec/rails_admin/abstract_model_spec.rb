@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::AbstractModel do
+RSpec.describe RailsAdmin::AbstractModel do
   describe '.all' do
     it 'returns abstract models for all models' do
       expect(RailsAdmin::AbstractModel.all.map(&:model)).to include Player, Team

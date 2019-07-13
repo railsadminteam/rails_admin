@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config do
+RSpec.describe RailsAdmin::Config do
   describe '.included_models' do
     it 'only uses included models' do
       RailsAdmin.config.included_models = [Team, League]

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin, type: :request do
+RSpec.describe RailsAdmin, type: :request do
   subject { page }
 
   before do
