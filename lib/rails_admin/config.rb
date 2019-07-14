@@ -141,11 +141,11 @@ module RailsAdmin
       #   end
       #
       # To use an authorization adapter, pass the name of the adapter. For example,
-      # to use with CanCan[https://github.com/ryanb/cancan], pass it like this.
+      # to use with CanCanCan[https://github.com/CanCanCommunity/cancancan/], pass it like this.
       #
-      # @example CanCan
+      # @example CanCanCan
       #   RailsAdmin.config do |config|
-      #     config.authorize_with :cancan
+      #     config.authorize_with :cancancan
       #   end
       #
       # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.

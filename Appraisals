@@ -107,13 +107,3 @@ appraise "rails-6.0" do
     gem 'paper_trail', '>= 5.0'
   end
 end
-
-appraise "cancan" do
-  gem 'rails', '~> 5.1.0'
-  gem 'sassc-rails', '~> 2.1'
-  gem 'devise', '~> 4.0'
-
-  group :test do
-    gem 'cancan', '>= 1.6'
-  end
-end

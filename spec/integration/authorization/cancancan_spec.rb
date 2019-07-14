@@ -363,4 +363,4 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
       is_expected.to have_content('Dashboard')
     end
   end if CanCan::VERSION < '3'
-end if defined?(CanCanCan)
+end

@@ -99,7 +99,7 @@ module RailsAdmin
           key.to_sym
         end
 
-        # For Cancan and the like
+        # For CanCanCan and the like
         register_instance_option :authorization_key do
           key.to_sym
         end
