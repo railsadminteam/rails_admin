@@ -62,14 +62,5 @@ class FieldTest
   #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
   mount_uploader :carrierwave_assets, CarrierwaveUploader
 
-  if defined?(Refile)
-    extend Refile::Mongoid::Attachment
-
-    field :refile_asset_filename
-    field :refile_asset_size
-    field :refile_asset_content_type
-    attachment :refile_asset
-  end
-
   validates :short_text, length: {maximum: 255}
 end

@@ -17,8 +17,6 @@ class FieldTest < ActiveRecord::Base
   mount_uploaders :carrierwave_assets, CarrierwaveUploader
   serialize :carrierwave_assets, JSON
 
-  attachment :refile_asset if defined?(Refile)
-
   if defined?(ActiveStorage)
     has_one_attached :active_storage_asset
     attr_accessor :remove_active_storage_asset
