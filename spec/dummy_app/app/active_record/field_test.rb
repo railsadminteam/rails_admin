@@ -36,4 +36,6 @@ class FieldTest < ActiveRecord::Base
 
   enum string_enum_field: {S: 's', M: 'm', L: 'l'}
   enum integer_enum_field: [:small, :medium, :large]
+
+  validates :string_field, exclusion: {in: ['Invalid']} # to test file upload caching
 end

@@ -23,6 +23,10 @@ module RailsAdmin
             nil
           end
 
+          register_instance_option :cache_value do
+            bindings[:object].public_send(cache_method) if cache_method
+          end
+
           register_instance_option :export_value do
             resource_url.to_s
           end
