@@ -19,13 +19,15 @@ module RailsAdmin
               nil
             end
 
-            register_instance_option :keep_key do
+            register_instance_option :keep_value do
               nil
             end
 
-            register_instance_option :delete_key do
+            register_instance_option :delete_value do
               nil
             end
+
+            register_deprecated_instance_option :delete_key, :delete_value
 
             register_instance_option :pretty_value do
               if value.presence

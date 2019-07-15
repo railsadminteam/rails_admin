@@ -26,7 +26,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleCarrierwave do
     end
   end
 
-  describe '#delete_key', active_record: true do
+  describe '#delete_value', active_record: true do
     before do
       RailsAdmin.config FieldTest do
         field :carrierwave_assets, :multiple_carrierwave
@@ -49,7 +49,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleCarrierwave do
 
     it 'does not use file.identifier, which is not available for Fog files' do
       expect_any_instance_of(CarrierWave::SanitizedFile).not_to receive :identifier
-      expect(rails_admin_field.attachments.map(&:delete_key)).to eq ['dummy.gif']
+      expect(rails_admin_field.attachments.map(&:delete_value)).to eq ['dummy.gif']
     end
   end
 end

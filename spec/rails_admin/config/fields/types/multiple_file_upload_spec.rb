@@ -95,7 +95,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
       RailsAdmin.config FieldTest do
         field :string_field, :multiple_file_upload do
           attachment do
-            delete_key 'something'
+            delete_value 'something'
 
             def resource_url(_thumb = false)
               "http://example.com/#{value}"
@@ -118,7 +118,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
     end
 
     it 'enables configuration' do
-      expect(rails_admin_field.attachments.map(&:delete_key)).to eq ['something']
+      expect(rails_admin_field.attachments.map(&:delete_value)).to eq ['something']
       expect(rails_admin_field.attachments.map(&:resource_url)).to eq ['http://example.com/foo.jpg']
       expect(rails_admin_field.pretty_value).to match(%r{src="http://example.com/foo.jpg"})
     end

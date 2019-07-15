@@ -12,7 +12,7 @@ module RailsAdmin
               {resize: '100x100>'}
             end
 
-            register_instance_option :delete_key do
+            register_instance_option :delete_value do
               value.id
             end
 

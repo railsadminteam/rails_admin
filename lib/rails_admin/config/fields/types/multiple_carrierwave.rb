@@ -12,11 +12,11 @@ module RailsAdmin
               @thumb_method ||= ((versions = value.versions.keys).detect { |k| k.in?([:thumb, :thumbnail, 'thumb', 'thumbnail']) } || versions.first.to_s)
             end
 
-            register_instance_option :keep_key do
+            register_instance_option :keep_value do
               value.cache_name || value.identifier
             end
 
-            register_instance_option :delete_key do
+            register_instance_option :delete_value do
               value.file.filename
             end
 
