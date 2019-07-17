@@ -23,14 +23,19 @@ See the Base class your `ActionName` will inherit from:
 
 It is also possible to inherit from any other action class.
 
-## Useful link 
- Here is a useful link describing how to create custom action in Rails admin, as a plugin 
+## Resources
+ 
+How to create custom action in Rails admin, as a plugin:
 
  [[http://blog.endpoint.com/2012/03/railsadmin-custom-action-case-study.html]]
 
- Here's another example, which adds a custom action without needing to add it as a plugin:
+Add a custom action without needing to add it as a plugin:
 
  [[https://web.archive.org/web/20180828051240/http://blog.paulrugelhiatt.com/ruby/rails/2014/10/27/rails-admin-custom-action-example.html]]
+
+Create a custom action:
+
+[[https://blog.codeminer42.com/writing-custom-railsadmin-actions-e0799aadc8ae]]
 
 ## Double pjax
 
