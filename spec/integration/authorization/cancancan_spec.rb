@@ -132,6 +132,13 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
       expect(@player).to be_suspended # suspended is inherited behavior based on permission
     end
 
+    it 'POST /admin/player/new with unauthorized attribute value should raise access denied' do
+      visit new_path(model_name: 'player')
+      fill_in 'player[name]', with: 'Jackie Robinson'
+      uncheck 'player[suspended]'
+      expect { click_button 'Save' }.to raise_error(CanCan::AccessDenied)
+    end
+
     it 'GET /admin/player/1/edit should raise access denied' do
       @player = FactoryBot.create :player
       expect { visit edit_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
@@ -161,6 +168,13 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
     it 'GET /admin/player/1/edit with retired player should raise access denied' do
       @player = FactoryBot.create :player, retired: true
       expect { visit edit_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
+    end
+
+    it 'PUT /admin/player/new with unauthorized attribute value should raise access denied' do
+      @player = FactoryBot.create :player
+      visit edit_path(model_name: 'player', id: @player.id)
+      check 'player[retired]'
+      expect { click_button 'Save' }.to raise_error(CanCan::AccessDenied)
     end
 
     it 'GET /admin/player/1/delete should raise access denied' do
