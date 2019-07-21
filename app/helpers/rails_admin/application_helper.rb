@@ -101,7 +101,7 @@ module RailsAdmin
 
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.collect do |title, url|
-        content_tag(:li, link_to(title.to_s, url, target: '_blank'))
+        content_tag(:li, link_to(title.to_s, url, target: '_blank', rel: 'noopener noreferrer'))
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
