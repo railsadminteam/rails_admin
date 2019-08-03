@@ -135,6 +135,15 @@ RSpec.describe 'RailsAdmin PaperTrail history', active_record: true do
               @adapter.listing_for_model @model, nil, false, false, false, nil
               @adapter.listing_for_object @model, @paper_trail_test, nil, false, false, false, nil
             end
+
+            it "does not break when Kaminari's page_method_name is not applied to Kaminari::PaginatableArray" do
+              expect(PaperTrail::Version).to receive(:per_page_kaminari).twice.and_return(@padinated_listing)
+              allow(Kaminari).to receive(:paginate_array).and_return(paginated_array)
+              allow(paginated_array).to receive(:respond_to).with(:per_page_kaminari).and_return(false)
+              expect(paginated_array).to receive(:page).twice.and_return(paginated_array)
+              @adapter.listing_for_model @model, nil, false, false, false, nil
+              @adapter.listing_for_object @model, @paper_trail_test, nil, false, false, false, nil
+            end
           end
         end
       end
