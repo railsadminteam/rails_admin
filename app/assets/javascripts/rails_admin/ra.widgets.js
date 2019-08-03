@@ -235,7 +235,7 @@
               instance.destroy(true);
             }
           } catch (error1) {}
-          window.CKEDITOR.replace(this, $(this).data('options'));
+          window.CKEDITOR.replace(this, $(this).data('options').options);
           $(this).addClass('ckeditored');
         });
       };
