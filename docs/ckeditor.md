@@ -17,6 +17,18 @@ RailsAdmin.config do |config|
 end
 ```
 
+## Configuration
+
+CKEditor accepts [various options](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html), you can configure them in following way:
+
+```ruby
+field :description, :ck_editor do
+  config_js ActionController::Base.helpers.asset_path('your_ckeditor_config.js')
+end
+```
+
+## Misc
+
 Although ckeditor is loaded in modal windows (e.g. twb), by default changes are not saved by submitting the modal. This is because the underlying textarea gets not updated before the ajax post request is issued. To prevent this you can use the following code:
 ```coffeescript
 $(document).ready ->
@@ -32,10 +44,10 @@ Add this code to assets/javascripts/rails_admin/custom/ckeditor_ajax.js.coffee a
 //= require rails_admin/custom/ckeditor_ajax
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb]]
-
 Reminder: It's necessary to configure ckeditor in asset precompile:
 
 ```
 Rails.application.config.assets.precompile += ['ckeditor/*']
 ```
+
+[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb]]
