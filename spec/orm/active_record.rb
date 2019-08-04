@@ -21,7 +21,10 @@ silence_stream(STDOUT) do
   if ActiveRecord::Migrator.respond_to? :migrate
     ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
   else
-    ActiveRecord::MigrationContext.new(File.expand_path('../../dummy_app/db/migrate/', __FILE__)).migrate
+    ActiveRecord::MigrationContext.new(
+      *([File.expand_path('../../dummy_app/db/migrate/', __FILE__)] +
+          (ActiveRecord::MigrationContext.instance_method(:initialize).arity == 2 ? [ActiveRecord::SchemaMigration] : [])),
+    ).migrate
   end
 end
 
