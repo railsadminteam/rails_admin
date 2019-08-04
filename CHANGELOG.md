@@ -2,7 +2,42 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.beta...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.rc...HEAD)
+
+
+## [2.0.0.rc](https://github.com/sferik/rails_admin/tree/v2.0.0.rc) - 2019-08-04
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.beta...v2.0.0.rc)
+
+### Added
+- Add Support for CarrierWave 2.0 multiple file upload's keep, append and reorder feature([fb093e04](https://github.com/sferik/rails_admin/commit/fb093e04502e7bff30594f5baf1227abb7199384))
+- Add ability to configure way how custom actions show up in root/top/sidebar navigation([#2844](https://github.com/sferik/rails_admin/pull/2844))
+
+### Changed
+- [BREAKING CHANGE] Stop authorization adapters assigning attributes on create and update, just check for permission instead([#3120](https://github.com/sferik/rails_admin/pull/3120), [c84d1703](https://github.com/sferik/rails_admin/commit/c84d1703b47b396382d152471dac8fc8dc41aefd))
+- [BREAKING CHANGE] Do not show tableless models by default([#3157](https://github.com/sferik/rails_admin/issues/3157), [87b38b33](https://github.com/sferik/rails_admin/commit/87b38b336cc668a74803dec4628215e2e2941248))
+- [BREAKING CHANGE] Convert empty string into nil for nullable string-like fields to achieve uniqueness-index friendliness([#2099](https://github.com/sferik/rails_admin/issues/2099), [#3172](https://github.com/sferik/rails_admin/issues/3172), [3f9ab1cc](https://github.com/sferik/rails_admin/commit/3f9ab1cc009caa8b466f34da692c3561da2235e4))
+- Extract head from application template for ease of customization([#3114](https://github.com/sferik/rails_admin/pull/3114))
+- Rename `delete_key` to `delete_value`, used to identify which file to delete in multiple file upload([8b8c3a44](https://github.com/sferik/rails_admin/commit/8b8c3a44177465823128e9b48b11467ccf7db001))
+- Get rid of CoffeeScript, use plain JavaScript instead([#3111](https://github.com/sferik/rails_admin/issues/3111), [#3168](https://github.com/sferik/rails_admin/pull/3168))
+- Replace sass-rails with sassc-rails([#3156](https://github.com/sferik/rails_admin/pull/3156))
+
+### Removed
+- Drop support for CanCan, please use its successor CanCanCan([6b7495f1](https://github.com/sferik/rails_admin/commit/6b7495f1454e30027a9d77b911206cc7703170a3))
+- Drop support for CanCanCan legacy `can :dashboard` style dashboard ability notation([5bebac24](https://github.com/sferik/rails_admin/commit/5bebac2488906f3739717108efadedaa091ccaf5))
+- Drop Refile support due to maintenance inactivity([25ae06a9](https://github.com/sferik/rails_admin/commit/25ae06a9a6eb534afa4a5f17e64ca346086bb3b8))
+
+### Fixed
+- Fix PaperTrail pagination breaks when Kaminari's `page_method_name` is set([#3170](https://github.com/sferik/rails_admin/issues/3170), [136b943c](https://github.com/sferik/rails_admin/commit/136b943ce842eba6b0a13dc2956ddc9ce20d006c))
+- Fix failing to pass config location to CKEditor([#3162](https://github.com/sferik/rails_admin/issues/3162), [c38b76d7](https://github.com/sferik/rails_admin/commit/c38b76d707f198be0ac8baa1ff02dde7bd02344f))
+- Fix CarrierWave multiple file uploader breaking when used with Fog([#3070](https://github.com/sferik/rails_admin/issues/3070))
+- Fix placeholder being picked up as a selection in filtering-multiselect([#2807](https://github.com/sferik/rails_admin/issues/2807), [15502601](https://github.com/sferik/rails_admin/commit/15502601ccd0bbbaeb364a0ee605f360d65c5cbb))
+- Fix breaking with has_many and custom primary key([#1878](https://github.com/sferik/rails_admin/issues/1878), [be7d2f4a](https://github.com/sferik/rails_admin/commit/be7d2f4a3ad1fda788f92a0e0dd4a83b98f141f4))
+- Fix to choose right LIKE statement in per-model basis([#1676](https://github.com/sferik/rails_admin/issues/1676), [4ea4575e](https://github.com/sferik/rails_admin/commit/4ea4575e934e26cec4a5b214b9fe68cb96b40247))
+- Fix polymorphic associations not using STI base classes for polymorphic type([#2136](https://github.com/sferik/rails_admin/pull/2136))
+
+### Security
+- Add `rel="noopener"` to all `target="_blank"` links to prevent Reverse tabnabbing([#2960](https://github.com/sferik/rails_admin/issues/2960), [#3169](https://github.com/sferik/rails_admin/pull/3169))
 
 
 ## [2.0.0.beta](https://github.com/sferik/rails_admin/tree/v2.0.0.beta) - 2019-06-08

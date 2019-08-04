@@ -50,7 +50,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 ## Installation
 
-1. On your gemfile: `gem 'rails_admin', '~> 2.0.0.beta'`
+1. On your gemfile: `gem 'rails_admin', '~> 2.0.0.rc'`
 2. Run `bundle install`
 3. Run `rails g rails_admin:install`
 4. Provide a namespace for the routes when asked
