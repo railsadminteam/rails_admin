@@ -1,10 +1,10 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Hidden < RailsAdmin::Config::Fields::Base
+        class Hidden < StringLike
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :view_helper do
@@ -21,10 +21,6 @@ module RailsAdmin
 
           def generic_help
             false
-          end
-
-          def parse_input(params)
-            params[name] = params[name].presence if params.key?(name)
           end
         end
       end

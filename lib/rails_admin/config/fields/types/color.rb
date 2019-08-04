@@ -1,18 +1,11 @@
-require 'rails_admin/config/fields/base'
-require 'rails_admin/config/fields/types/string'
+require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Color < RailsAdmin::Config::Fields::Types::String
+        class Color < StringLike
           RailsAdmin::Config::Fields::Types.register(self)
-
-          register_instance_option :html_attributes do
-            {
-              required: required?,
-            }
-          end
 
           register_instance_option :pretty_value do
             bindings[:view].content_tag :strong, (value.presence || ' - '), style: "color: #{color}"

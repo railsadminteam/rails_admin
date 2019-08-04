@@ -1,10 +1,10 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class String < RailsAdmin::Config::Fields::Base
+        class String < StringLike
           RailsAdmin::Config::Fields::Types.register(self)
 
           def input_size
@@ -36,10 +36,6 @@ module RailsAdmin
               end
             end
             text
-          end
-
-          def parse_input(params)
-            params[name] = params[name].presence if params.key?(name)
           end
 
           register_instance_option :partial do

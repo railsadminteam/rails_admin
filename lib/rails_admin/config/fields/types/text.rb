@@ -1,10 +1,10 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Text < RailsAdmin::Config::Fields::Base
+        class Text < StringLike
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
@@ -14,10 +14,6 @@ module RailsAdmin
               cols: '48',
               rows: '3',
             }
-          end
-
-          def parse_input(params)
-            params[name] = params[name].presence if params.key?(name)
           end
 
           register_instance_option :partial do

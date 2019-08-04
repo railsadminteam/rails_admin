@@ -1,10 +1,10 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/text'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Wysihtml5 < RailsAdmin::Config::Fields::Types::Text
+        class Wysihtml5 < Text
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 

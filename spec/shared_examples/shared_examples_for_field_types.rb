@@ -23,36 +23,14 @@ RSpec.shared_examples 'a generic field type' do |column_name, field_type|
   end
 end
 
-RSpec.shared_examples 'a string-ish field type' do |column_name, field_type|
-  describe '#parse_input' do
-    before do
-      RailsAdmin.config FieldTest do
-        field column_name, field_type
-      end
-    end
-    subject do
-      RailsAdmin.config('FieldTest').fields.detect do |f|
-        f.name == column_name
-      end.with(object: FieldTest.new)
-    end
+RSpec.shared_examples 'a string-like field type' do |column_name, _|
+  subject do
+    RailsAdmin.config('FieldTest').fields.detect do |f|
+      f.name == column_name
+    end.with(object: FieldTest.new)
+  end
 
-    context 'when value is empty' do
-      let(:params) { {column_name => ''} }
-
-      it 'makes the value nil' do
-        subject.parse_input(params)
-        expect(params.key?(column_name)).to be true
-        expect(params[column_name]).to be nil
-      end
-    end
-
-    context 'when value does not exist in params' do
-      let(:params) { {} }
-
-      it 'does not touch params' do
-        subject.parse_input(params)
-        expect(params.key?(column_name)).to be false
-      end
-    end
+  it 'is a StringLike field' do
+    expect(subject).to be_a(RailsAdmin::Config::Fields::Types::StringLike)
   end
 end
