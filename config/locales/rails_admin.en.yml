@@ -45,6 +45,7 @@ en:
       navigation_static_label: "Links"
       log_out: "Log out"
       time_ago: "%{time} ago"
+      ago: "ago"
       more: "Plus %{count} more %{models_name}"
     flash:
       successful: "%{name} successfully %{action}"
