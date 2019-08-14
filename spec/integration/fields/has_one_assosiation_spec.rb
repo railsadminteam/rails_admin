@@ -92,4 +92,41 @@ RSpec.describe 'HasOneAssociation field', type: :request do
       expect(@record.comment).to be_nil
     end
   end
+
+  context 'with custom primary_key option' do
+    let(:user) { FactoryBot.create :managing_user }
+    let!(:team) { FactoryBot.create(:managed_team) }
+    before do
+      RailsAdmin.config.included_models = [ManagingUser, ManagedTeam]
+      RailsAdmin.config ManagingUser do
+        field :team
+      end
+    end
+
+    it "allows update" do
+      visit edit_path(model_name: 'managing_user', id: user.id)
+      select(team.name, from: 'Team')
+      click_button 'Save'
+      expect(ManagingUser.first.team).to eq team
+    end
+
+    context 'when fetching associated objects via xhr' do
+      before do
+        RailsAdmin.config ManagingUser do
+          field(:team) { associated_collection_cache_all false }
+        end
+      end
+
+      it "allows update", js: true do
+        visit edit_path(model_name: 'managing_user', id: user.id)
+        find('input.ra-filtering-select-input').set('T')
+        page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
+        page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("#{team.name}")').trigger('mouseenter').click()}
+        click_button 'Save'
+        expect(ManagingUser.first.team).to eq team
+      end
+    end
+  end
 end

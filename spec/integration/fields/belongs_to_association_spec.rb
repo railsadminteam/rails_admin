@@ -42,18 +42,42 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
   end
 
   context 'with custom primary_key option' do
-    let(:user) { FactoryBot.create :managing_user }
-    let!(:teams) { [FactoryBot.create(:managed_team, manager: user.email), FactoryBot.create(:managed_team)] }
+    let(:users) { FactoryBot.create_list :managing_user, 2 }
+    let!(:teams) { [FactoryBot.create(:managed_team, manager: users[0].email), FactoryBot.create(:managed_team)] }
     before do
-      RailsAdmin.config.included_models = [ManagedTeam]
+      RailsAdmin.config.included_models = [ManagedTeam, ManagingUser]
       RailsAdmin.config ManagedTeam do
         field :user
       end
     end
 
-    it 'picks up associated primary key correctly' do
+    it 'allows update' do
       visit edit_path(model_name: 'managed_team', id: teams[0].id)
-      expect(page).to have_css("select#managed_team_manager option[value=\"#{user.id}\"]")
+      expect(page).to have_css("select#managed_team_manager option[value=\"#{users[0].email}\"]")
+      select("ManagingUser ##{users[1].id}", from: 'User')
+      click_button 'Save'
+      teams[0].reload
+      expect(teams[0].user).to eq users[1]
+    end
+
+    context 'when fetching associated objects via xhr' do
+      before do
+        RailsAdmin.config ManagedTeam do
+          field(:user) { associated_collection_cache_all false }
+        end
+      end
+
+      it 'allows update', js: true do
+        visit edit_path(model_name: 'managed_team', id: teams[0].id)
+        find('input.ra-filtering-select-input').set('M')
+        page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
+        page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("ManagingUser ##{users[1].id}")').trigger('mouseenter').click()}
+        click_button 'Save'
+        teams[0].reload
+        expect(teams[0].user).to eq users[1]
+      end
     end
   end
 end

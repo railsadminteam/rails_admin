@@ -255,24 +255,35 @@ RSpec.describe 'HasManyAssociation field', type: :request do
     before do
       RailsAdmin.config.included_models = [ManagingUser, ManagedTeam]
       RailsAdmin.config ManagingUser do
-        field(:teams) { associated_collection_cache_all false }
+        field :teams
       end
     end
 
-    it "picks up associated model's primary key correctly" do
+    it "allows update" do
       visit edit_path(model_name: 'managing_user', id: user.id)
       expect(find("select#managing_user_team_ids option[value=\"#{teams[0].id}\"]")).to have_content teams[0].name
-    end
-
-    it "allows update with fetching associated objects via xhr", js: true do
-      visit edit_path(model_name: 'managing_user', id: user.id)
-      find('input.ra-multiselect-search').set('T')
-      page.execute_script("$('input.ra-multiselect-search').trigger('focus')")
-      page.execute_script("$('input.ra-multiselect-search').trigger('keydown')")
-      find('.ra-multiselect-collection option', text: teams[1].name).select_option
-      find('.ra-multiselect-item-add').click
+      select(teams[1].name, from: 'Teams')
       click_button 'Save'
       expect(ManagingUser.first.teams).to match_array teams
+    end
+
+    context 'when fetching associated objects via xhr' do
+      before do
+        RailsAdmin.config ManagingUser do
+          field(:teams) { associated_collection_cache_all false }
+        end
+      end
+
+      it "allows update", js: true do
+        visit edit_path(model_name: 'managing_user', id: user.id)
+        find('input.ra-multiselect-search').set('T')
+        page.execute_script("$('input.ra-multiselect-search').trigger('focus')")
+        page.execute_script("$('input.ra-multiselect-search').trigger('keydown')")
+        find('.ra-multiselect-collection option', text: teams[1].name).select_option
+        find('.ra-multiselect-item-add').click
+        click_button 'Save'
+        expect(ManagingUser.first.teams).to match_array teams
+      end
     end
   end
 end
