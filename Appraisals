@@ -92,10 +92,10 @@ appraise "rails-5.2" do
 end
 
 appraise "rails-6.0" do
-  gem 'rails', '~> 6.0.0.rc1'
-  gem 'haml', github: 'haml/haml'
+  gem 'rails', '~> 6.0.0'
+  gem 'haml'
   gem 'sassc-rails', '~> 2.1'
-  gem 'devise', '~> 4.4'
+  gem 'devise', '~> 4.4', github: 'plataformatec/devise'
 
   group :test do
     gem 'cancancan', '~> 3.0'

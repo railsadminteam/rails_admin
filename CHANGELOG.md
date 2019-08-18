@@ -2,7 +2,16 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.rc...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0...HEAD)
+
+
+## [2.0.0](https://github.com/sferik/rails_admin/tree/v2.0.0) - 2019-08-18
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.rc...v2.0.0)
+
+### Fixed
+- Fix support for belongs_to with custom primary key was broken in 2.0.0.rc([#3184](https://github.com/sferik/rails_admin/issues/3184), [0e92ca43](https://github.com/sferik/rails_admin/commit/0e92ca43fe7782a8d62ae9285a8d3de7857c9853))
+- Fix missing translation `en.admin.misc.ago`([#3180](https://github.com/sferik/rails_admin/pull/3180))
 
 
 ## [2.0.0.rc](https://github.com/sferik/rails_admin/tree/v2.0.0.rc) - 2019-08-04
