@@ -1,0 +1,8 @@
+<%= form.rich_text_area field.method_name, field.html_attributes.reverse_merge(
+  data: {
+    options: {
+      csspath: field.css_location,
+      jspath: field.js_location
+    }.to_json
+  }
+) %>
