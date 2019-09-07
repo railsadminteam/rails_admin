@@ -1,4 +1,4 @@
-Here are listed community proposed solutions to solve [Sorcery](https://github.com/NoamB/sorcery) and RailsAdmin compatibility:
+Here are listed community proposed solutions to solve [Sorcery](https://github.com/Sorcery/sorcery) and RailsAdmin compatibility:
 
 ### Authentication
 
