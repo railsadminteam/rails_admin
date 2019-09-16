@@ -173,7 +173,7 @@ By default, they are ordered by alphabetical order. If you need to override this
 a weight attribute. Default is 0. Lower values will bubble items to the top, higher values
 will move them to the bottom. Items with same weight will still be ordered by alphabetical order.
 The mechanism is fully compatible with navigation labels. Items will be ordered within their own
-menu subset. (but parent will always be first inside his submenu).
+menu subset (but the parent item will always be first inside this submenu).
 
 Example:
 
