@@ -47,4 +47,33 @@ register_instance_option :pjax? do
 end
 ```
 
+## Automatically add custom action to rails_admin available action
+
+The order in the menu (if it's a custom action, is the position in the main navigation sidapanel) is given by the requiring it befor or after other custom actions but all custom actions, loaded this way, are placed the end of the default actions.
+
+In an initializer, say `[ENGINE_NAME]\config\initializers\my_action_initializer.rb`
+
+```ruby
+RailsAdmin.config do |config|
+    config.actions do
+        thecore_record_analysis
+    end
+end
+```
+
+## Manage custom action's visibility via CanCanCan 
+
+### Root Actions
+
+Example (in case the root action is called my_root_action and rails admin ~> 1):
+
+```ruby
+can :my_root_action, :all if user.admin?
+```
+
+For rails admin ~> 2
+
+```ruby
+can :read, :my_root_action if user.admin?
+```
  
