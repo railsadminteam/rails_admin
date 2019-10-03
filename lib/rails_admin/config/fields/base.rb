@@ -7,7 +7,7 @@ require 'rails_admin/config/inspectable'
 module RailsAdmin
   module Config
     module Fields
-      class Base # rubocop:disable ClassLength
+      class Base # rubocop:disable Metrics/ClassLength
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable

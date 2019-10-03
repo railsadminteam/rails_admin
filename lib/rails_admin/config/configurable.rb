@@ -7,7 +7,7 @@ module RailsAdmin
         base.send :extend, ClassMethods
       end
 
-      def has_option?(name) # rubocop:disable PredicateName
+      def has_option?(name) # rubocop:disable Naming/PredicateName
         options = self.class.instance_variable_get('@config_options')
         options && options.key?(name)
       end
