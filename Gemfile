@@ -8,7 +8,7 @@ gem 'devise'
 group :active_record do
   gem 'paper_trail'
 
-  platforms :ruby, :mswin, :mingw do
+  platforms :ruby, :mswin, :mingw, :x64_mingw do
     gem 'mysql2', '>= 0.3.14'
     gem 'sqlite3', '>= 1.3'
   end
@@ -19,6 +19,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'cancancan', '~> 3.0'
   gem 'carrierwave', ['>= 2.0.0.rc', '< 3']
   gem 'coveralls'
   gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
@@ -42,6 +43,9 @@ group :test do
   platforms :ruby_19 do
     gem 'tins', '~> 1.6.0', require: false
   end
+  
+  # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 end
 
 gemspec
