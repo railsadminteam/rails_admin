@@ -223,6 +223,25 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2]
       end
     end
+
+    context 'when a default_search_operator is set' do
+      before do
+        RailsAdmin.config do |c|
+          c.default_search_operator = 'starts_with'
+        end
+      end
+
+      it 'only matches on prefix' do
+        # Specified operator is honored and matches
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2..3]
+
+        # No operator falls back to the default_search_operator(starts_with) and doesn't match NON-PREFIX
+        expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'where'}}})).to be_empty
+
+        # No operator falls back to the default_search_operator(starts_with) and doesn't match NON-PREFIX
+        expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'somewhere'}}})).to match_array @teams[2]
+      end
+    end
   end
 
   describe '#build_statement' do
