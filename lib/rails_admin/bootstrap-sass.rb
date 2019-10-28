@@ -19,7 +19,9 @@ module RailsAdmin
 
       if defined?(::Sass) && ::Sass.respond_to?(:load_paths)
         stylesheets = File.expand_path(File.join('..', 'vendor', 'assets', 'stylesheets'))
+        fonts = File.expand_path(File.join('..', 'vendor', 'assets', 'fonts'))
         ::Sass.load_paths << stylesheets
+        ::Sass.load_paths << fonts
       end
     end
 
