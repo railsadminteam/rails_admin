@@ -148,7 +148,7 @@ Actions can provide specific option configuration, check their respective wiki p
 ### Through authorization
 
 Authorization is done automatically before any link is displayed, any page accessed, etc.
-Check [[Cancan]] for the list of key used by RailsAdmin default actions.
+Check [[CanCanCan]] for the list of key used by RailsAdmin default actions.
 
 You can change the authorization key with:
 
