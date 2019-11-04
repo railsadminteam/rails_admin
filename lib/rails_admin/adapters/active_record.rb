@@ -144,7 +144,7 @@ module RailsAdmin
             field = fields.detect { |f| f.name.to_s == field_name }
             value = parse_field_value(field, filter_dump[:v])
 
-            wb.add(field, value, (filter_dump[:o] || 'default'))
+            wb.add(field, value, (filter_dump[:o] || RailsAdmin::Config.default_search_operator))
             # AND current filter statements to other filter statements
             scope = wb.build
           end
