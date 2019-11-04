@@ -5,29 +5,153 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
+Bundler/OrderedGems:
+  Enabled: false
+
+Gemspec/OrderedDependencies:
+  Enabled: false
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Layout/ClosingHeredocIndentation:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+Layout/IndentHeredoc:
+  Enabled: false
+
+Layout/IndentationWidth:
+  Enabled: false
+
+Layout/LeadingBlankLines:
+  Enabled: false
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
 # Offense count: 22
 # Configuration parameters: AllowSafeAssignment.
 Lint/AssignmentInCondition:
   Enabled: false
 
+Lint/DuplicateMethods:
+  Enabled: false
+
+Lint/ReturnInVoidContext:
+  Enabled: false
+
+Lint/ScriptPermission:
+  Enabled: false
+
+Lint/UnneededSplatExpansion:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+  Max: 51
+
 # Offense count: 7
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Naming/VariableNumber:
   Enabled: false
 
 # Offense count: 11
 Style/ClassVars:
   Enabled: false
 
+Style/CommentedKeyword:
+  Enabled: false
+
+Style/ExpandPathArguments:
+  Enabled: false
+
+Style/EvalWithLocation:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IdenticalConditionalBranches:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/InverseMethods:
+  Enabled: false
+
+Style/MethodMissingSuper:
+  Enabled: false
+
+Style/MixinUsage:
+  Enabled: false
+
+Style/MissingRespondToMissing:
+  Enabled: false
+
+Style/MultilineIfModifier:
+  Enabled: false
+
+Style/MultipleComparison:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/OrAssignment:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
 # Offense count: 7
 Style/RescueModifier:
   Enabled: false
 
+Style/RescueStandardError:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/StderrPuts:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: false
 
+Style/SymbolArray:
+  Enabled: false
 
-Style/StringLiterals:
+Style/TernaryParentheses:
   Enabled: false
 
 Style/WordArray:
+  Enabled: false
+
+Style/YodaCondition:
   Enabled: false

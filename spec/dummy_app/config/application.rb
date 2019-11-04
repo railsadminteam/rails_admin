@@ -7,7 +7,7 @@ require 'sprockets/railtie'
 begin
   require CI_ORM.to_s
   require "#{CI_ORM}/railtie"
-rescue LoadError # rubocop:disable HandleExceptions
+rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
 require 'active_storage/engine' if Rails.version >= '5.2.0' && CI_ORM == :active_record
