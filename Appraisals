@@ -10,7 +10,7 @@ appraise "rails-5.0" do
   group :active_record do
     gem 'paper_trail', '>= 5.0'
 
-    platforms :ruby, :mswin, :mingw do
+    platforms :ruby, :mswin, :mingw, :x64_mingw do
       gem 'sqlite3', '~> 1.3.0'
     end
 
