@@ -1,6 +1,6 @@
 - @model_config.show.with(object: @object, view: self, controller: self.controller).visible_groups.each do |fieldset|
   - unless (fields = fieldset.with(object: @object, view: self, controller: self.controller).visible_fields).empty?
-    - unless (fields = fields.reject{ |f| RailsAdmin::config.compact_show_view && f.formatted_value.nil? || f.formatted_value == '' }).empty?
+    - unless (fields = fields.reject{ |f| RailsAdmin::config.compact_show_view && (f.formatted_value.nil? || f.formatted_value == '') }).empty?
       .fieldset
         %h4
           = fieldset.label
