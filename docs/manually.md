@@ -28,7 +28,7 @@ Edit the `config/initializers/rails_admin.rb` file and add the authentication.
 ```
   config.authenticate_with do
     authenticate_or_request_with_http_basic('Login required') do |username, password|
-      user = User.where(name:username).first
+      user = User.where(name: username).first
       user.authenticate(password) if user
     end
   end
