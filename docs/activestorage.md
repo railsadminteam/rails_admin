@@ -56,7 +56,7 @@ class Article < ActiveRecord::Base
   # for deletion
   attr_accessor :remove_assets
   after_save do
-    Array(remove_assets).each { |id| assets.find_by_id(id).try(:purge) }
+    assets.where(id: remove_assets).find_each(&:purge)
   end
 end
 ```
