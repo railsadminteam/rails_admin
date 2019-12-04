@@ -60,6 +60,7 @@ class Article < ActiveRecord::Base
   end
 end
 ```
+<!-- `assets.where(id: remove_assets).find_each(&:purge)` does not work well when we add images -->
 
 ```ruby
 field :assets, :multiple_active_storage do
