@@ -49,12 +49,12 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record:
   end
 
   it 'lists associations' do
-    expect(@post.associations.collect { |a| a.name.to_s }).to include(*%w(a_r_blog a_r_categories a_r_comments))
+    expect(@post.associations.collect { |a| a.name.to_s }).to include('a_r_blog', 'a_r_categories', 'a_r_comments')
   end
 
   it 'list associations types in supported [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
     # ActiveRecord 4.1 converts has_and_belongs_to_many association to has_many
-    expect((@post.associations + @blog.associations + @user.associations).collect(&:type).uniq.collect(&:to_s)).to include(*%w(belongs_to has_many has_one))
+    expect((@post.associations + @blog.associations + @user.associations).collect(&:type).uniq.collect(&:to_s)).to include('belongs_to', 'has_many', 'has_one')
   end
 
   describe 'belongs_to association' do
