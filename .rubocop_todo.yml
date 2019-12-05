@@ -52,7 +52,7 @@ Lint/ReturnInVoidContext:
 Lint/ScriptPermission:
   Enabled: false
 
-Lint/UnneededSplatExpansion:
+Lint/RedundantSplatExpansion:
   Enabled: false
 
 Metrics/BlockLength:
