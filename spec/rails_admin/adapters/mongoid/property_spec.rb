@@ -207,7 +207,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
 
     it 'does not cause problem with custom validators' do
       class MyCustomValidator < ActiveModel::Validator
-        def validate(_r); end
+        def validate(_record); end
       end
       class CustomValiated
         include Mongoid::Document

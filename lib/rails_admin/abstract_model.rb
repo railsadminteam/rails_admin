@@ -16,11 +16,11 @@ module RailsAdmin
       end
 
       alias_method :old_new, :new
-      def new(m)
-        m = m.constantize unless m.is_a?(Class)
-        (am = old_new(m)).model && am.adapter ? am : nil
+      def new(model)
+        model = model.constantize unless model.is_a?(Class)
+        (abstract_model = old_new(model)).model && abstract_model.adapter ? abstract_model : nil
       rescue LoadError, NameError
-        puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
+        puts "[RailsAdmin] Could not load model #{abstract_model}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
       end
 

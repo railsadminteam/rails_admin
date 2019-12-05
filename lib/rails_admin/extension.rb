@@ -1,4 +1,3 @@
-
 module RailsAdmin
   EXTENSIONS = [] # rubocop:disable Style/MutableConstant
   AUTHORIZATION_ADAPTERS = {} # rubocop:disable Style/MutableConstant
