@@ -33,7 +33,7 @@ MLB::Team.send(:results_to_team, results).each do |mlb_team|
                                 founded: mlb_team.founded,
                                 wins: mlb_team.wins,
                                 losses: mlb_team.losses,
-                                win_percentage: format('%.3f', (mlb_team.wins.to_f / (mlb_team.wins + mlb_team.losses))).to_f, # rubocop:disable Style/FormatStringToken
+                                win_percentage: format('%.3f', (mlb_team.wins.to_f / (mlb_team.wins + mlb_team.losses))).to_f,
                                 division: division)
     team.save!
   end
