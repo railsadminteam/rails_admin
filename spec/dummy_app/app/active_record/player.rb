@@ -1,5 +1,5 @@
 class Player < ActiveRecord::Base
-  belongs_to :team, inverse_of: :players
+  belongs_to :team, optional: true, inverse_of: :players
   has_one :draft, dependent: :destroy
   has_many :comments, as: :commentable
 

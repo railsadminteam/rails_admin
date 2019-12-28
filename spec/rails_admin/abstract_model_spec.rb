@@ -93,15 +93,15 @@ RSpec.describe RailsAdmin::AbstractModel do
     context 'on datetimes with :en locale' do
       before do
         I18n.locale = :en
-        FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 1, 23, 59, 59))
-        FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 2, 0, 0, 0))
-        FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 3, 23, 59, 59))
+        FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 1, 23, 59, 59))
+        FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 2, 0, 0, 0))
+        FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 3, 23, 59, 59))
 
         # TODO: Mongoid 3.0.0 mysteriously expands the range of inclusion slightly...
         if defined?(Mongoid) && Mongoid::VERSION >= '3.0.0'
-          FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 4, 0, 0, 1))
+          FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 4, 0, 0, 1))
         else
-          FactoryBot.create(:field_test, datetime_field: Time.local(2012, 1, 4, 0, 0, 0))
+          FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 4, 0, 0, 0))
         end
       end
 
