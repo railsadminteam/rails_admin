@@ -56,6 +56,8 @@ require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 Capybara.server = :webrick
 
+RailsAdmin.setup_all_extensions
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect

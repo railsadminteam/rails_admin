@@ -31,6 +31,12 @@ module RailsAdmin
         end
       end
 
+      module ControllerExtension
+        def user_for_paper_trail
+          _current_user.try(:id) || _current_user
+        end
+      end
+
       class AuditingAdapter
         COLUMN_MAPPING = {
           table: :item_type,
@@ -52,11 +58,7 @@ module RailsAdmin
 
         def self.setup
           raise('PaperTrail not found') unless defined?(::PaperTrail)
-          RailsAdmin::ApplicationController.class_eval do
-            def user_for_paper_trail
-              _current_user.try(:id) || _current_user
-            end
-          end
+          RailsAdmin::Extensions::ControllerExtension.send(:include, ControllerExtension)
         end
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
