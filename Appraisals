@@ -106,4 +106,13 @@ appraise "rails-6.0" do
     gem 'pg', '>= 1.0.0', platforms: :ruby
     gem 'paper_trail', '>= 5.0'
   end
+
+  group :mongoid do
+    gem 'mongoid', '~> 7.0'
+    gem 'kaminari-mongoid'
+    gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+    gem 'cancancan-mongoid', github: 'mshibuya/cancancan-mongoid', branch: 'mongoid-7'
+    gem 'shrine-mongoid'
+  end
 end
