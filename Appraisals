@@ -105,6 +105,12 @@ appraise "rails-6.0" do
   group :active_record do
     gem 'pg', '>= 1.0.0', platforms: :ruby
     gem 'paper_trail', '>= 5.0'
+
+    platforms :jruby do
+      gem 'activerecord-jdbcmysql-adapter', '~> 60.0'
+      gem 'activerecord-jdbcpostgresql-adapter', '~> 60.0'
+      gem 'activerecord-jdbcsqlite3-adapter', '~> 60.0'
+    end
   end
 
   group :mongoid do

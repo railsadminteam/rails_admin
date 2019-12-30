@@ -77,16 +77,12 @@ matrix:
       gemfile: gemfiles/rails_6.0.gemfile
     - rvm: jruby-9.2.7.0
       env: CI_ORM=mongoid
-      gemfile: gemfiles/rails_5.2.gemfile
+      gemfile: gemfiles/rails_6.0.gemfile
     - rvm: jruby-9.2.7.0
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.2.gemfile
-    - rvm: jruby-head
-      env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
-      gemfile: gemfiles/rails_5.2.gemfile
+      gemfile: gemfiles/rails_6.0.gemfile
   allow_failures:
     - rvm: ruby-head
-    - rvm: jruby-head
   fast_finish: true
 
 notifications:
