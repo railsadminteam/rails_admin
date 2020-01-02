@@ -4,6 +4,9 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.1...HEAD)
 
+### Fixed
+- Improved I18n date format handling ([#3238](https://github.com/sferik/rails_admin/pull/3238))
+
 
 ## [2.0.1](https://github.com/sferik/rails_admin/tree/v2.0.1) - 2019-12-31
 
