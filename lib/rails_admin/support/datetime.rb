@@ -43,7 +43,7 @@ module RailsAdmin
               month_names.each_with_index { |m, i| date_string = date_string.gsub(/\b#{m}\b/i, english[i]) }
             when '%b'
               english = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-              abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/\b#{m}\b/i, english[i]) }
+              abbr_month_names.each_with_index { |m, i| date_string = date_string.gsub(/\b#{Regexp.escape(m)}/i, english[i]) }
             when '%p'
               date_string = date_string.gsub(/\b#{::I18n.t('date.time.am', default: "am")}\b/i, 'am')
               date_string = date_string.gsub(/\b#{::I18n.t('date.time.pm', default: "pm")}\b/i, 'pm')

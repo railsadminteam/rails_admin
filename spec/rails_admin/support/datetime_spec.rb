@@ -40,7 +40,7 @@ RSpec.describe RailsAdmin::Support::Datetime do
     context 'when non-en locale' do
       let(:test_locale) { :fr }
       # Note: By default, rails-i18n uses all lower-case for Spanish day/month names
-      let(:input) { 'Jeu Jeudi 02 Jan Janvier 05:30pm' }
+      let(:input) { 'Jeu Jeudi 02 Jan. Janvier 05:30pm' }
 
       it 'returns the English translated string' do
         result = RailsAdmin::Support::Datetime.delocalize(input, format)
