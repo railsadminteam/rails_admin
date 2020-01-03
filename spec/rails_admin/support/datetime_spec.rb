@@ -19,10 +19,7 @@ RSpec.describe RailsAdmin::Support::Datetime do
 
   describe '.delocalize' do
     around do |example|
-      original_locale = I18n.locale
-      I18n.locale = test_locale
-      example.run
-      I18n.locale = original_locale
+      I18n.with_locale(test_locale) { example.run }
     end
     let(:format) { '%a %A %d %b %B %I:%M%p' }
     let(:english_translation) { 'Thu Thursday 02 Jan January 05:30pm' }
@@ -39,7 +36,7 @@ RSpec.describe RailsAdmin::Support::Datetime do
 
     context 'when non-en locale' do
       let(:test_locale) { :fr }
-      # Note: By default, rails-i18n uses all lower-case for Spanish day/month names
+      # Note: Translation uses all lower-case day/month names
       let(:input) { 'Jeu Jeudi 02 Jan. Janvier 05:30pm' }
 
       it 'returns the English translated string' do
