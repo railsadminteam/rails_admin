@@ -93,6 +93,7 @@ This library aims to support and is [tested against][travis] the following Ruby 
 * Ruby 2.4
 * Ruby 2.5
 * Ruby 2.6
+* Ruby 2.7
 * [JRuby][]
 
 [jruby]: http://jruby.org/
