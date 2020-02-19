@@ -1,5 +1,4 @@
 require 'rails_admin/config/fields/types/file_upload'
-require 'vips'
 
 module RailsAdmin
   module Config
