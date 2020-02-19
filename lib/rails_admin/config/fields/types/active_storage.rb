@@ -8,7 +8,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :thumb_method do
-            if require('vips')
+            if Gem.loaded_specs.key?('ruby-vips')
               {resize_to_limit: [100, 100]}
             else
               {resize: '100x100>'}
