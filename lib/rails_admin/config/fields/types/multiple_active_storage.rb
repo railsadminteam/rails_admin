@@ -1,4 +1,5 @@
 require 'rails_admin/config/fields/types/multiple_file_upload'
+require 'vips'
 
 module RailsAdmin
   module Config
@@ -9,7 +10,11 @@ module RailsAdmin
 
           class ActiveStorageAttachment < RailsAdmin::Config::Fields::Types::MultipleFileUpload::AbstractAttachment
             register_instance_option :thumb_method do
-              {resize_to_limit: [100, 100]}
+              if ::Vips.present?
+                {resize_to_limit: [100, 100]}
+              else
+                {resize: "100x100>"}
+              end
             end
 
             register_instance_option :delete_value do
