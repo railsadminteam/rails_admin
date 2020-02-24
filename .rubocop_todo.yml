@@ -34,11 +34,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'rails_admin.gemspec'
 
-# Offense count: 53
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
 # Offense count: 5
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterMagicComment:
