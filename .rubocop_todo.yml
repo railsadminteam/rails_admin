@@ -391,9 +391,3 @@ Style/SafeNavigation:
     - 'lib/rails_admin/extensions/cancancan/authorization_adapter.rb'
     - 'lib/rails_admin/extensions/paper_trail/auditing_adapter.rb'
     - 'lib/rails_admin/extensions/pundit/authorization_adapter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/StderrPuts:
-  Exclude:
-    - 'Rakefile'
