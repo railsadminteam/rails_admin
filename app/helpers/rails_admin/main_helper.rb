@@ -59,29 +59,29 @@ module RailsAdmin
     end
 
     def ordered_filter_options
-      if ordered_filters
-        @ordered_filter_options ||= ordered_filters.map do |duplet|
-          options = {index: duplet[0]}
-          filter_for_field = duplet[1]
-          filter_name = filter_for_field.keys.first
-          filter_hash = filter_for_field.values.first
-          unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
-            raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
-          end
-          case field.type
-          when :enum
-            options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
-          when :date, :datetime, :time
-            options[:datetimepicker_format] = field.parser.to_momentjs
-          end
-          options[:label] = field.label
-          options[:name]  = field.name
-          options[:type]  = field.type
-          options[:value] = filter_hash['v']
-          options[:label] = field.label
-          options[:operator] = filter_hash['o']
-          options
+      return unless ordered_filters
+
+      @ordered_filter_options ||= ordered_filters.map do |duplet|
+        options = {index: duplet[0]}
+        filter_for_field = duplet[1]
+        filter_name = filter_for_field.keys.first
+        filter_hash = filter_for_field.values.first
+        unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
+          raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
         end
+        case field.type
+        when :enum
+          options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
+        when :date, :datetime, :time
+          options[:datetimepicker_format] = field.parser.to_momentjs
+        end
+        options[:label] = field.label
+        options[:name]  = field.name
+        options[:type]  = field.type
+        options[:value] = filter_hash['v']
+        options[:label] = field.label
+        options[:operator] = filter_hash['o']
+        options
       end
     end
   end

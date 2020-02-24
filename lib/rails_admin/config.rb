@@ -201,11 +201,11 @@ module RailsAdmin
       end
 
       def default_search_operator=(operator)
-        if %w[default like starts_with ends_with is =].include? operator
-          @default_search_operator = operator
-        else
+        unless %w[default like starts_with ends_with is =].include? operator
           raise(ArgumentError.new("Search operator '#{operator}' not supported"))
         end
+
+        @default_search_operator = operator
       end
 
       # pool of all found model names from the whole application

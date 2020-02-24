@@ -80,10 +80,10 @@ module RailsAdmin
           end
 
           def parse_input(params)
-            if (type_value = params[association.foreign_type.to_sym]).present?
-              config = associated_model_config.find { |c| type_value == c.abstract_model.model.name }
-              params[association.foreign_type.to_sym] = config.abstract_model.base_class.name if config
-            end
+            return if (type_value = params[association.foreign_type.to_sym]).blank?
+
+            config = associated_model_config.find { |c| type_value == c.abstract_model.model.name }
+            params[association.foreign_type.to_sym] = config.abstract_model.base_class.name if config
           end
         end
       end
