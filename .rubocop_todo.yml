@@ -428,13 +428,3 @@ Style/TernaryParentheses:
 Style/WordArray:
   EnforcedStyle: percent
   MinSize: 8
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: forbid_for_all_comparison_operators, forbid_for_equality_operators_only, require_for_all_comparison_operators, require_for_equality_operators_only
-Style/YodaCondition:
-  Exclude:
-    - 'lib/rails_admin/config/fields/base.rb'
-    - 'lib/rails_admin/config/hideable.rb'
-    - 'lib/tasks/rails_admin.rake'
