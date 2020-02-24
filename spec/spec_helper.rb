@@ -25,7 +25,7 @@ require 'database_cleaner'
 require "orm/#{CI_ORM}"
 
 Dir[File.expand_path('support/**/*.rb', __dir__),
-    File.expand_path('shared_examples/**/*.rb', __dir__)].each { |f| require f }
+    File.expand_path('shared_examples/**/*.rb', __dir__)].sort.each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
