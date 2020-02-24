@@ -36,14 +36,6 @@ Gemspec/RequiredRubyVersion:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: squiggly, active_support, powerpack, unindent
-Layout/HeredocIndentation:
-  Exclude:
-    - 'lib/rails_admin/engine.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.
 # SupportedStyles: space, no_space
 # SupportedStylesForEmptyBraces: space, no_space
