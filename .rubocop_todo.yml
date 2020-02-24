@@ -332,12 +332,6 @@ Style/NumericPredicate:
     - 'lib/rails_admin/config.rb'
     - 'lib/rails_admin/config/fields/types/string.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/OrAssignment:
-  Exclude:
-    - 'lib/rails_admin/config/sections.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
