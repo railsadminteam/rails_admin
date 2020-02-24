@@ -17,9 +17,7 @@ module RailsAdmin
             end
 
             register_instance_option :image? do
-              if value
-                value.filename.to_s.split('.').last =~ /jpg|jpeg|png|gif|svg/i
-              end
+              value.filename.to_s.split('.').last =~ /jpg|jpeg|png|gif|svg/i if value
             end
 
             def resource_url(thumb = false)

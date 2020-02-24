@@ -32,9 +32,7 @@ module RailsAdmin
         scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
         scope = query_scope(scope, options[:query]) if options[:query]
         scope = filter_scope(scope, options[:filters]) if options[:filters]
-        if options[:page] && options[:per]
-          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
-        end
+        scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per]) if options[:page] && options[:per]
         scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
         scope
       end
@@ -238,9 +236,7 @@ module RailsAdmin
 
           return ["(#{@column} = ?)", @value] if ['is', '='].include?(@operator)
 
-          unless %w[postgresql postgis].include? ar_adapter
-            @value = @value.mb_chars.downcase
-          end
+          @value = @value.mb_chars.downcase unless %w[postgresql postgis].include? ar_adapter
 
           @value = begin
             case @operator
@@ -268,9 +264,7 @@ module RailsAdmin
         end
 
         def build_statement_for_uuid
-          if @value.to_s =~ /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/
-            column_for_value(@value)
-          end
+          column_for_value(@value) if @value.to_s =~ /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/
         end
 
         def ar_adapter

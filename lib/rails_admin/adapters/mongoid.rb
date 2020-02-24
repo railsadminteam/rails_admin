@@ -44,9 +44,7 @@ module RailsAdmin
         scope = scope.any_in(_id: options[:bulk_ids]) if options[:bulk_ids]
         scope = query_scope(scope, options[:query]) if options[:query]
         scope = filter_scope(scope, options[:filters]) if options[:filters]
-        if options[:page] && options[:per]
-          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
-        end
+        scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per]) if options[:page] && options[:per]
         scope = sort_by(options, scope) if options[:sort]
         scope
       rescue NoMethodError => e
@@ -206,9 +204,7 @@ module RailsAdmin
         case options[:sort]
         when String
           field_name, collection_name = options[:sort].split('.').reverse
-          if collection_name && collection_name != table_name
-            raise('sorting by associated model column is not supported in Non-Relational databases')
-          end
+          raise('sorting by associated model column is not supported in Non-Relational databases') if collection_name && collection_name != table_name
         when Symbol
           field_name = options[:sort].to_s
         end
