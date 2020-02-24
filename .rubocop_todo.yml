@@ -315,11 +315,6 @@ Style/MultilineIfModifier:
     - 'spec/rails_admin/config/fields/types/shrine_spec.rb'
     - 'spec/rails_admin/config_spec.rb'
 
-# Offense count: 1
-Style/MultipleComparison:
-  Exclude:
-    - 'lib/rails_admin/abstract_model.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
