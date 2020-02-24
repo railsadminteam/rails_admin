@@ -5,8 +5,8 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
     include CanCan::Ability
     def initialize(user)
       can :access, :rails_admin if user.roles.include? :admin
+      can :read, :dashboard
       if user.roles.include? :test_exception
-        can :read, :dashboard
         can :access, :rails_admin
         can :manage, :all
         can :show_in_app, :all
@@ -14,7 +14,6 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
         can %i[update destroy], Player
         cannot %i[update destroy], Player, retired: true
       else
-        can :read, :dashboard
         can :manage, Player if user.roles.include? :manage_player
         can :read, Player, retired: false if user.roles.include? :read_player
         can :create, Player, suspended: true if user.roles.include? :create_player
