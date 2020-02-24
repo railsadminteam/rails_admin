@@ -320,18 +320,6 @@ Style/MultipleComparison:
   Exclude:
     - 'lib/rails_admin/abstract_model.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AutoCorrect, EnforcedStyle, IgnoredMethods.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Exclude:
-    - 'spec/**/*'
-    - 'app/helpers/rails_admin/application_helper.rb'
-    - 'app/helpers/rails_admin/main_helper.rb'
-    - 'lib/rails_admin/config.rb'
-    - 'lib/rails_admin/config/fields/types/string.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
