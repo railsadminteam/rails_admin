@@ -13,10 +13,6 @@ Layout/AccessModifierIndentation:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
-Layout/LineLength:
-  AllowURI: true
-  Enabled: false
-
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
@@ -32,6 +28,10 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Max: 12 # TODO: Lower to 6
+
+Metrics/LineLength:
+  AllowURI: true
+  Enabled: false
 
 Metrics/MethodLength:
   CountComments: false
