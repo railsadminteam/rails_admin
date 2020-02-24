@@ -275,15 +275,6 @@ Style/IfUnlessModifier:
     - 'lib/rails_admin/extensions/pundit/authorization_adapter.rb'
     - 'lib/rails_admin/support/csv_converter.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: InverseMethods, InverseBlocks.
-Style/InverseMethods:
-  Exclude:
-    - 'lib/rails_admin/config/fields.rb'
-    - 'lib/rails_admin/config/fields/types/enum.rb'
-    - 'lib/rails_admin/config/fields/types/polymorphic_association.rb'
-
 # Offense count: 4
 Style/MethodMissingSuper:
   Exclude:
