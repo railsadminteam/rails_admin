@@ -23,8 +23,8 @@ module RailsAdmin
           object.save(options)
         end
 
-        def method_missing(name, *args, &block)
-          object.send(name, *args, &block)
+        def method_missing(method_name, *args, &block)
+          object.send(method_name, *args, &block)
         end
       end
     end
