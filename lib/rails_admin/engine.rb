@@ -54,13 +54,13 @@ module RailsAdmin
       unless missing.empty? && has_session_store
         configs = missing.map { |m| "config.middleware.use #{m}" }
         configs << "config.middleware.use #{app.config.session_store.try(:name) || 'ActionDispatch::Session::CookieStore'}, #{app.config.session_options}" unless has_session_store
-        raise <<-EOM
-Required middlewares for RailsAdmin are not added
-To fix this, add
-
-  #{configs.join("\n  ")}
-
-to config/application.rb.
+        raise <<~EOM
+          Required middlewares for RailsAdmin are not added
+          To fix this, add
+          
+            #{configs.join("\n  ")}
+          
+          to config/application.rb.
         EOM
       end
     end
