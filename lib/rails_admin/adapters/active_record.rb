@@ -14,6 +14,7 @@ module RailsAdmin
 
       def get(id)
         return unless object = model.where(primary_key => id).first
+
         AbstractObject.new object
       end
 
@@ -228,6 +229,7 @@ module RailsAdmin
 
         def build_statement_for_belongs_to_association
           return if @value.blank?
+
           ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value
         end
 
@@ -260,6 +262,7 @@ module RailsAdmin
 
         def build_statement_for_enum
           return if @value.blank?
+
           ["(#{@column} IN (?))", Array.wrap(@value)]
         end
 

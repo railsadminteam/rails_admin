@@ -41,6 +41,7 @@ module RailsAdmin
           https://github.com/ruby/csv/issues/62
         MSG
       end
+
       options = HashWithIndifferentAccess.new(options)
       encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 

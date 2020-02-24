@@ -15,6 +15,7 @@ module RailsAdmin
       return 'info' if percent < 34     # < 1/100 of max
       return 'success' if percent < 67  # < 1/10 of max
       return 'warning' if percent < 84  # < 1/3 of max
+
       'danger'                          # > 1/3 of max
     end
     # rubocop:enable Style/NumericPredicate
@@ -44,6 +45,7 @@ module RailsAdmin
 
     def ordered_filters
       return @ordered_filters if @ordered_filters.present?
+
       @index = 0
       @ordered_filters = (params[:f].try(:permit!).try(:to_h) || @model_config.list.filters).inject({}) do |memo, filter|
         field_name = filter.is_a?(Array) ? filter.first : filter
@@ -69,6 +71,7 @@ module RailsAdmin
         unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
           raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
         end
+
         case field.type
         when :enum
           options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])

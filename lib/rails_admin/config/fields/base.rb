@@ -213,6 +213,7 @@ module RailsAdmin
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
             next unless self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+
             returned = false if fields.include?(name)
           end
           returned

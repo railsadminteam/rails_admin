@@ -51,6 +51,7 @@ module RailsAdmin
 
           def associated_collection(type)
             return [] if type.blank?
+
             config = RailsAdmin.config(type)
             config.abstract_model.all.collect do |object|
               [object.send(config.object_label_method), object.id]

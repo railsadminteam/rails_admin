@@ -62,6 +62,7 @@ module RailsAdmin
 
         def self.setup
           raise('PaperTrail not found') unless defined?(::PaperTrail)
+
           RailsAdmin::Extensions::ControllerExtension.send(:include, ControllerExtension)
         end
 

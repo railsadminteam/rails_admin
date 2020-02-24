@@ -124,6 +124,7 @@ module RailsAdmin
 
       def to_statement
         return if [@operator, @value].any? { |v| v == '_discard' }
+
         unary_operators[@operator] || unary_operators[@value] ||
           build_statement_for_type_generic
       end
@@ -154,6 +155,7 @@ module RailsAdmin
         when Array then
           val, range_begin, range_end = *@value.collect do |v|
             next unless [v.to_i.to_s, v.to_f.to_s].include?(v)
+
             @type == :integer ? v.to_i : v.to_f
           end
           case @operator

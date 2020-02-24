@@ -118,6 +118,7 @@ module RailsAdmin
           collection_name, column_name = parse_collection_name(column_infos[:column])
           statement = build_statement(column_name, column_infos[:type], value, operator)
           next unless statement
+
           conditions_per_collection[collection_name] ||= []
           conditions_per_collection[collection_name] << statement
         end
@@ -149,6 +150,7 @@ module RailsAdmin
           filters_dump.each do |_, filter_dump|
             field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
+
             value = parse_field_value(field, filter_dump[:v])
             conditions_per_collection = make_field_conditions(field, value, (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
@@ -189,6 +191,7 @@ module RailsAdmin
       def perform_search_on_associated_collection(field_name, conditions)
         target_association = associations.detect { |a| a.name == field_name }
         return [] unless target_association
+
         model = target_association.klass
         case target_association.type
         when :belongs_to, :has_and_belongs_to_many
@@ -252,6 +255,7 @@ module RailsAdmin
 
         def build_statement_for_string_or_text
           return if @value.blank?
+
           @value = begin
             case @operator
             when 'default', 'like'
@@ -271,6 +275,7 @@ module RailsAdmin
 
         def build_statement_for_enum
           return if @value.blank?
+
           {@column => {'$in' => Array.wrap(@value)}}
         end
 

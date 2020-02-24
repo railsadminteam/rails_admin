@@ -21,6 +21,7 @@ module RailsAdmin
 
           def resource_url(thumb = false)
             return nil unless value
+
             if thumb && value.variable?
               thumb = thumb_method if thumb == true
               variant = value.variant(thumb)

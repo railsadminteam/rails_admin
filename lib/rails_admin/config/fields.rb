@@ -50,6 +50,7 @@ module RailsAdmin
         parent.abstract_model.properties.each do |properties|
           # Unless a previous factory has already loaded current field as well
           next if fields.detect { |f| f.name == properties.name }
+
           # Loop through factories until one returns true
           @@registry.detect { |factory| factory.call(parent, properties, fields) }
         end
@@ -57,6 +58,7 @@ module RailsAdmin
         parent.abstract_model.associations.reject { |a| a.type == :belongs_to }.each do |association| # :belongs_to are created by factory for belongs_to fields
           # Unless a previous factory has already loaded current field as well
           next if fields.detect { |f| f.name == association.name }
+
           # Loop through factories until one returns true
           @@registry.detect { |factory| factory.call(parent, association, fields) }
         end

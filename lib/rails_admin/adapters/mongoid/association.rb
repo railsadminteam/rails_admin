@@ -50,6 +50,7 @@ module RailsAdmin
 
         def foreign_key
           return if embeds?
+
           begin
             association.foreign_key.to_sym
           rescue StandardError
@@ -59,16 +60,19 @@ module RailsAdmin
 
         def foreign_key_nullable?
           return if foreign_key.nil?
+
           true
         end
 
         def foreign_type
           return unless polymorphic? && %i[referenced_in belongs_to].include?(macro)
+
           association.inverse_type.try(:to_sym) || :"#{name}_type"
         end
 
         def foreign_inverse_of
           return unless polymorphic? && %i[referenced_in belongs_to].include?(macro)
+
           inverse_of_field.try(:to_sym)
         end
 
@@ -97,6 +101,7 @@ module RailsAdmin
             Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
             MSG
           end
+
           nested
         end
 

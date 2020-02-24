@@ -30,6 +30,7 @@ module RailsAdmin
 
         def delocalize(date_string, format)
           return date_string if ::I18n.locale.to_s == 'en'
+
           format.to_s.scan(/%[AaBbp]/) do |match|
             case match
             when '%A'
@@ -54,6 +55,7 @@ module RailsAdmin
 
         def normalize(date_string, format)
           return unless date_string
+
           delocalize(date_string, format)
           parse_date_string(date_string)
         end

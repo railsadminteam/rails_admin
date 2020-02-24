@@ -35,6 +35,7 @@ module RailsAdmin
       return nil unless _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
       return nil unless (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
+
       link_to rails_admin.url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main') do
         html = []
         html << image_tag("#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: '') if RailsAdmin::Config.show_gravatar && _current_user.email.present?
@@ -58,6 +59,7 @@ module RailsAdmin
 
     def logout_method
       return [Devise.sign_out_via].flatten.first if defined?(Devise)
+
       :delete
     end
 
@@ -174,6 +176,7 @@ module RailsAdmin
     def bulk_menu(abstract_model = @abstract_model)
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
+
       content_tag :li, class: 'dropdown', style: 'float:right' do
         content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
