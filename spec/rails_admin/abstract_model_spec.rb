@@ -37,11 +37,11 @@ RSpec.describe RailsAdmin::AbstractModel do
     context 'on ActiveRecord native enum', active_record: true do
       shared_examples "filter on enum" do
         before do
-          ["S", "M", "L"].each do |size|
+          %w[S M L].each do |size|
             FactoryBot.create(:field_test, string_enum_field: size)
           end
 
-          ["small", "medium", "large"].each do |size|
+          %w[small medium large].each do |size|
             FactoryBot.create(:field_test, integer_enum_field: size)
           end
         end

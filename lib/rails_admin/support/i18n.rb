@@ -6,7 +6,7 @@ module RailsAdmin
       def abbr_day_names
         ::I18n.t('date.abbr_day_names', raise: true)
       rescue ::I18n::ArgumentError
-        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        %w[Sun Mon Tue Wed Thu Fri Sat]
       end
 
       def abbr_month_names
@@ -27,7 +27,7 @@ module RailsAdmin
       def day_names
         ::I18n.t('date.day_names', raise: true)
       rescue ::I18n::ArgumentError
-        ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
       end
 
       def month_names

@@ -238,7 +238,7 @@ module RailsAdmin
 
           return ["(#{@column} = ?)", @value] if ['is', '='].include?(@operator)
 
-          unless ['postgresql', 'postgis'].include? ar_adapter
+          unless %w[postgresql postgis].include? ar_adapter
             @value = @value.mb_chars.downcase
           end
 
@@ -255,7 +255,7 @@ module RailsAdmin
             end
           end
 
-          if ['postgresql', 'postgis'].include? ar_adapter
+          if %w[postgresql postgis].include? ar_adapter
             ["(#{@column} ILIKE ?)", @value]
           else
             ["(LOWER(#{@column}) LIKE ?)", @value]

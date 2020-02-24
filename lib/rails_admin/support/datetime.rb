@@ -33,10 +33,10 @@ module RailsAdmin
           format.to_s.scan(/%[AaBbp]/) do |match|
             case match
             when '%A'
-              english = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+              english = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
               day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
             when '%a'
-              english = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+              english = %w[Sun Mon Tue Wed Thu Fri Sat]
               abbr_day_names.each_with_index { |d, i| date_string = date_string.gsub(/#{d}/, english[i]) }
             when '%B'
               english = [nil, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][1..-1]

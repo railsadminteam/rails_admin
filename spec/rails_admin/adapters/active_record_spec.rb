@@ -3,7 +3,7 @@ require 'timecop'
 
 RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   let(:like) do
-    if ['postgresql', 'postgis'].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
+    if %w[postgresql postgis].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
       '(field ILIKE ?)'
     else
       '(LOWER(field) LIKE ?)'
@@ -269,7 +269,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'performs case-insensitive searches' do
-        unless ['postgresql', 'postgis'].include?(::ActiveRecord::Base.configurations[Rails.env]['adapter'])
+        unless %w[postgresql postgis].include?(::ActiveRecord::Base.configurations[Rails.env]['adapter'])
           expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
           expect(build_statement(:string, 'FOO', 'default')).to eq([like, '%foo%'])
         end
