@@ -73,7 +73,7 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :request
 
   config.before do |example|
-    DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :truncation : :transaction
+    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction # rubocop:disable Style/TernaryParentheses
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
