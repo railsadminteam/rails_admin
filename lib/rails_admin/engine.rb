@@ -57,9 +57,9 @@ module RailsAdmin
         raise <<~EOM
           Required middlewares for RailsAdmin are not added
           To fix this, add
-          
+
             #{configs.join("\n  ")}
-          
+
           to config/application.rb.
         EOM
       end

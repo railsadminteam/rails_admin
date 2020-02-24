@@ -41,11 +41,9 @@ module RailsAdmin
         end
 
         def primary_key
-          begin
-            association.primary_key.to_sym
-          rescue StandardError
-            :_id
-          end
+          association.primary_key.to_sym
+        rescue StandardError
+          :_id
         end
 
         def foreign_key
