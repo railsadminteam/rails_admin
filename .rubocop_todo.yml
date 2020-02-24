@@ -102,12 +102,6 @@ Lint/DuplicateMethods:
   Exclude:
     - 'lib/rails_admin/config.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/NonDeterministicRequireOrder:
-  Exclude:
-    - 'spec/spec_helper.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Lint/RedundantCopDisableDirective:
