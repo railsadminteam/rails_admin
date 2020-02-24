@@ -215,22 +215,6 @@ Style/EvalWithLocation:
   Exclude:
     - 'lib/rails_admin/config/actions.rb'
 
-# Offense count: 15
-# Cop supports --auto-correct.
-Style/ExpandPathArguments:
-  Exclude:
-    - 'lib/generators/rails_admin/install_generator.rb'
-    - 'rails_admin.gemspec'
-    - 'spec/dummy_app/Rakefile'
-    - 'spec/dummy_app/config/application.rb'
-    - 'spec/dummy_app/config/boot.rb'
-    - 'spec/dummy_app/config/environment.rb'
-    - 'spec/integration/fields/multiple_carrierwave_spec.rb'
-    - 'spec/orm/active_record.rb'
-    - 'spec/rails_admin/active_record_extension_spec.rb'
-    - 'spec/rails_admin/install_generator_spec.rb'
-    - 'spec/spec_helper.rb'
-
 # Offense count: 3
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: annotated, template, unannotated
