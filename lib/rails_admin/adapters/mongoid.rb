@@ -20,7 +20,7 @@ module RailsAdmin
 
       def get(id)
         AbstractObject.new(model.find(id))
-      rescue => e
+      rescue StandardError => e
         raise e if %w(
           Mongoid::Errors::DocumentNotFound
           Mongoid::Errors::InvalidFind

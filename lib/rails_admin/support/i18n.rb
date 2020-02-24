@@ -20,7 +20,7 @@ module RailsAdmin
 
       def date_format
         ::I18n.t('date.formats.default', raise: true)
-      rescue
+      rescue StandardError
         '%Y-%m-%d'
       end
 

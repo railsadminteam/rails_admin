@@ -33,7 +33,7 @@ module RailsAdmin
     (AUTHORIZATION_ADAPTERS.values + AUDITING_ADAPTERS.values).each do |klass|
       begin
         klass.setup if klass.respond_to? :setup
-      rescue # rubocop:disable Lint/HandleExceptions
+      rescue StandardError # rubocop:disable Lint/HandleExceptions
         # ignore errors
       end
     end
