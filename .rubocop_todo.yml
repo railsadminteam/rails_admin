@@ -71,12 +71,6 @@ Lint/ScriptPermission:
   Exclude:
     - 'spec/dummy_app/Rakefile'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/UnneededCopDisableDirective:
-  Exclude:
-    - 'app/helpers/rails_admin/main_helper.rb'
-
 # Offense count: 199
 # Configuration parameters: CountComments, ExcludedMethods.
 # ExcludedMethods: refine
