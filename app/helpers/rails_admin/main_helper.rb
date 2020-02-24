@@ -9,7 +9,6 @@ module RailsAdmin
       form_for(*(args << options), &block) << after_nested_form_callbacks
     end
 
-    # rubocop:disable Style/NumericPredicate
     def get_indicator(percent)
       return '' if percent < 0          # none
       return 'info' if percent < 34     # < 1/100 of max
@@ -18,7 +17,6 @@ module RailsAdmin
 
       'danger'                          # > 1/3 of max
     end
-    # rubocop:enable Style/NumericPredicate
 
     def get_column_sets(properties)
       sets = []
