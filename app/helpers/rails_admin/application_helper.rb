@@ -117,7 +117,7 @@ module RailsAdmin
       nodes.collect do |node|
         model_param = node.abstract_model.to_param
         url         = rails_admin.url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
-        level_class = " nav-level-#{level}" if level > 0
+        level_class = " nav-level-#{level}" if level.positive?
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
         li = content_tag :li, data: {model: model_param} do
           link_to nav_icon + capitalize_first_letter(node.label_plural), url, class: "pjax#{level_class}"

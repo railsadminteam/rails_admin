@@ -320,7 +320,7 @@ module RailsAdmin
 
       def visible_models(bindings)
         visible_models_with_bindings(bindings).sort do |a, b|
-          if (weight_order = a.weight <=> b.weight) == 0
+          if (weight_order = a.weight <=> b.weight).zero?
             a.label.downcase <=> b.label.downcase
           else
             weight_order
