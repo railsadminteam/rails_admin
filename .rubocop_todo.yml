@@ -122,11 +122,6 @@ Lint/RedundantSplatExpansion:
     - 'spec/rails_admin/adapters/active_record/association_spec.rb'
 
 # Offense count: 1
-Lint/ReturnInVoidContext:
-  Exclude:
-    - 'lib/rails_admin/support/csv_converter.rb'
-
-# Offense count: 1
 # Cop supports --auto-correct.
 Lint/ScriptPermission:
   Exclude:
