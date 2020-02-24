@@ -344,12 +344,6 @@ Style/OrAssignment:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'lib/rails_admin/config/fields/base.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
