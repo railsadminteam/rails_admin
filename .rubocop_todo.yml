@@ -34,16 +34,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'rails_admin.gemspec'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterMagicComment:
-  Exclude:
-    - 'lib/rails_admin/support/csv_converter.rb'
-    - 'rails_admin.gemspec'
-    - 'spec/controllers/rails_admin/main_controller_spec.rb'
-    - 'spec/dummy_app/app/active_record/carrierwave_uploader.rb'
-    - 'spec/dummy_app/app/mongoid/carrierwave_uploader.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
