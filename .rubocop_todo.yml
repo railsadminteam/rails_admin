@@ -397,10 +397,3 @@ Style/SafeNavigation:
 Style/StderrPuts:
   Exclude:
     - 'Rakefile'
-
-# Offense count: 547
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Enabled: false
