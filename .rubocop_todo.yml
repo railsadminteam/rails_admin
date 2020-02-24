@@ -239,20 +239,6 @@ Style/FormatStringToken:
     - 'spec/dummy_app/db/seeds.rb'
     - 'spec/helpers/rails_admin/application_helper_spec.rb'
 
-# Offense count: 9
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Exclude:
-    - 'lib/rails_admin.rb'
-    - 'lib/rails_admin/adapters/active_record.rb'
-    - 'lib/rails_admin/bootstrap-sass.rb'
-    - 'lib/rails_admin/config.rb'
-    - 'lib/rails_admin/config/actions.rb'
-    - 'lib/rails_admin/config/fields/types/polymorphic_association.rb'
-    - 'lib/rails_admin/config/inspectable.rb'
-    - 'lib/rails_admin/config/sections/list.rb'
-    - 'lib/rails_admin/extension.rb'
-
 # Offense count: 4
 Style/MethodMissingSuper:
   Exclude:
