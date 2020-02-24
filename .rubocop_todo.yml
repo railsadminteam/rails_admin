@@ -34,12 +34,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'rails_admin.gemspec'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Layout/ClosingHeredocIndentation:
-  Exclude:
-    - 'lib/rails_admin/adapters/mongoid/abstract_object.rb'
-
 # Offense count: 53
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterGuardClause:
