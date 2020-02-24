@@ -12,13 +12,17 @@ RSpec.describe RailsAdmin::Config::Fields::Types::FileUpload do
           field :paperclip_asset do
             delete_method :delete_paperclip_asset
           end
-          field :active_storage_asset do
-            delete_method :remove_active_storage_asset
-          end if defined?(ActiveStorage)
-          field :shrine_asset do
-            delete_method :remove_shrine_asset
-            cache_method :cached_shrine_asset_data
-          end if defined?(Shrine)
+          if defined?(ActiveStorage)
+            field :active_storage_asset do
+              delete_method :remove_active_storage_asset
+            end
+          end
+          if defined?(Shrine)
+            field :shrine_asset do
+              delete_method :remove_shrine_asset
+              cache_method :cached_shrine_asset_data
+            end
+          end
         end
       end
       expect(RailsAdmin.config(FieldTest).field(:carrierwave_asset).allowed_methods.collect(&:to_s)).to eq %w[carrierwave_asset remove_carrierwave_asset carrierwave_asset_cache]

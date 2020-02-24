@@ -375,20 +375,22 @@ RSpec.describe RailsAdmin::Config do
       expect(fields.map(&:name)).to match_array %i[id wins]
     end
 
-    it 'updates model config when reloading code for rails 5' do
-      Team.send(:rails_admin, &team_config)
+    if defined?(ActiveSupport::Reloader)
+      it 'updates model config when reloading code for rails 5' do
+        Team.send(:rails_admin, &team_config)
 
-      # this simulates rails code reloading
-      RailsAdmin::Engine.initializers.select do |i|
-        i.name == 'RailsAdmin reload config in development'
-      end.first.block.call
-      Rails.application.executor.wrap do
-        ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+        # this simulates rails code reloading
+        RailsAdmin::Engine.initializers.select do |i|
+          i.name == 'RailsAdmin reload config in development'
+        end.first.block.call
+        Rails.application.executor.wrap do
+          ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+        end
+
+        Team.send(:rails_admin, &team_config3)
+        expect(fields.map(&:name)).to match_array %i[wins]
       end
-
-      Team.send(:rails_admin, &team_config3)
-      expect(fields.map(&:name)).to match_array %i[wins]
-    end if defined?(ActiveSupport::Reloader)
+    end
   end
 end
 
