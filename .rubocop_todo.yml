@@ -35,15 +35,6 @@ Gemspec/RequiredRubyVersion:
     - 'rails_admin.gemspec'
 
 # Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceBeforeBlockBraces:
-  Exclude:
-    - 'spec/rails_admin/install_generator_spec.rb'
-
-# Offense count: 1
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - 'spec/rails_admin/install_generator_spec.rb'
