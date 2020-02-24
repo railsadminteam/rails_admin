@@ -95,29 +95,29 @@ RSpec.describe RailsAdmin::CSVConverter do
       end
     end
 
-    context "when specifying a column separator" do
-      context "when options keys are symbolized" do
+    context 'when specifying a column separator' do
+      context 'when options keys are symbolized' do
         let(:options) { {encoding_to: 'UTF-8', generator: {col_sep: '___'}} }
-        it "uses the column separator specified" do
+        it 'uses the column separator specified' do
           expect(subject[2].unpack('H*').first).
             to eq 'efbbbf4e756d6265725f5f5f4e616d650a315f5f5fe381aae381bee381880a'
         end
       end
 
-      context "when options keys are string" do
+      context 'when options keys are string' do
         let(:options) { {'encoding_to' => 'UTF-8', 'generator' => {'col_sep' => '___'}} }
-        it "uses the column separator specified" do
+        it 'uses the column separator specified' do
           expect(subject[2].unpack('H*').first).
             to eq 'efbbbf4e756d6265725f5f5f4e616d650a315f5f5fe381aae381bee381880a'
         end
       end
     end
 
-    context "when objects is empty" do
+    context 'when objects is empty' do
       let(:objects) { [] }
       let(:options) { {} }
 
-      it "generates an empty csv" do
+      it 'generates an empty csv' do
         expect(subject[2]).to eq("\n")
       end
     end

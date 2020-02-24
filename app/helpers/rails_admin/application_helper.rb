@@ -87,10 +87,10 @@ module RailsAdmin
     def root_navigation
       actions(:root).select(&:show_in_sidebar).group_by(&:sidebar_label).collect do |label, nodes|
         li_stack = nodes.map do |node|
-          url = rails_admin.url_for(action: node.action_name, controller: "rails_admin/main")
+          url = rails_admin.url_for(action: node.action_name, controller: 'rails_admin/main')
           nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
           content_tag :li do
-            link_to nav_icon + " " + wording_for(:menu, node), url, class: "pjax"
+            link_to nav_icon + ' ' + wording_for(:menu, node), url, class: 'pjax'
           end
         end.join.html_safe
         label ||= t('admin.misc.root_navigation')

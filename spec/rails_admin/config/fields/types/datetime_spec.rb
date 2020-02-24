@@ -89,13 +89,13 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
     end
 
     it 'changes formats when the locale changes' do
-      french_format = "%A %d %B %Y %H:%M"
+      french_format = '%A %d %B %Y %H:%M'
       allow(I18n).to receive(:t).with(:long, scope: %i[time formats], raise: true).and_return(french_format)
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime(french_format))
       expect(@object.datetime_field.strftime(french_format)).to eq(@time.strftime(french_format))
 
-      american_format = "%B %d, %Y %H:%M"
+      american_format = '%B %d, %Y %H:%M'
       allow(I18n).to receive(:t).with(:long, scope: %i[time formats], raise: true).and_return(american_format)
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime(american_format))

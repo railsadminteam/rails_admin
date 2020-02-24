@@ -13,7 +13,7 @@ module RailsAdmin
         begin
           names = ::I18n.t('date.abbr_month_names', raise: true)
         rescue ::I18n::ArgumentError
-          names = [nil, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+          names = [nil, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         end
         names[1..-1]
       end
@@ -21,7 +21,7 @@ module RailsAdmin
       def date_format
         ::I18n.t('date.formats.default', raise: true)
       rescue
-        "%Y-%m-%d"
+        '%Y-%m-%d'
       end
 
       def day_names
@@ -34,7 +34,7 @@ module RailsAdmin
         begin
           names = ::I18n.t('date.month_names', raise: true)
         rescue ::I18n::ArgumentError
-          names = [nil, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+          names = [nil, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         end
         names[1..-1]
       end

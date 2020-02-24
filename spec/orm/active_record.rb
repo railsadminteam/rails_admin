@@ -70,7 +70,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def primary_key
-      "id"
+      'id'
     end
 
   private

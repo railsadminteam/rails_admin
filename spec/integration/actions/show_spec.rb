@@ -231,7 +231,7 @@ RSpec.describe 'Show action', type: :request do
     end
   end
 
-  describe "fields" do
+  describe 'fields' do
     before do
       RailsAdmin.config do |c|
         c.compact_show_view = false

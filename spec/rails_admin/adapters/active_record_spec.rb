@@ -332,13 +332,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it "supports '_blank' operator" do
         [['_blank', ''], ['', '_blank']].each do |value, operator|
-          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NULL)"])
+          expect(build_statement(:boolean, value, operator)).to eq(['(field IS NULL)'])
         end
       end
 
       it "supports '_present' operator" do
         [['_present', ''], ['', '_present']].each do |value, operator|
-          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NOT NULL)"])
+          expect(build_statement(:boolean, value, operator)).to eq(['(field IS NOT NULL)'])
         end
       end
 
@@ -356,13 +356,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it "supports '_empty' operator" do
         [['_empty', ''], ['', '_empty']].each do |value, operator|
-          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NULL)"])
+          expect(build_statement(:boolean, value, operator)).to eq(['(field IS NULL)'])
         end
       end
 
       it "supports '_not_empty' operator" do
         [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
-          expect(build_statement(:boolean, value, operator)).to eq(["(field IS NOT NULL)"])
+          expect(build_statement(:boolean, value, operator)).to eq(['(field IS NOT NULL)'])
         end
       end
     end
@@ -438,9 +438,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it "supports '_blank' operator" do
         [['_blank', ''], ['', '_blank']].each do |value, operator|
           aggregate_failures do
-            expect(build_statement(:integer, value, operator)).to eq(["(field IS NULL)"])
-            expect(build_statement(:decimal, value, operator)).to eq(["(field IS NULL)"])
-            expect(build_statement(:float, value, operator)).to eq(["(field IS NULL)"])
+            expect(build_statement(:integer, value, operator)).to eq(['(field IS NULL)'])
+            expect(build_statement(:decimal, value, operator)).to eq(['(field IS NULL)'])
+            expect(build_statement(:float, value, operator)).to eq(['(field IS NULL)'])
           end
         end
       end
@@ -448,9 +448,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it "supports '_present' operator" do
         [['_present', ''], ['', '_present']].each do |value, operator|
           aggregate_failures do
-            expect(build_statement(:integer, value, operator)).to eq(["(field IS NOT NULL)"])
-            expect(build_statement(:decimal, value, operator)).to eq(["(field IS NOT NULL)"])
-            expect(build_statement(:float, value, operator)).to eq(["(field IS NOT NULL)"])
+            expect(build_statement(:integer, value, operator)).to eq(['(field IS NOT NULL)'])
+            expect(build_statement(:decimal, value, operator)).to eq(['(field IS NOT NULL)'])
+            expect(build_statement(:float, value, operator)).to eq(['(field IS NOT NULL)'])
           end
         end
       end
@@ -458,9 +458,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it "supports '_null' operator" do
         [['_null', ''], ['', '_null']].each do |value, operator|
           aggregate_failures do
-            expect(build_statement(:integer, value, operator)).to eq(["(field IS NULL)"])
-            expect(build_statement(:decimal, value, operator)).to eq(["(field IS NULL)"])
-            expect(build_statement(:float, value, operator)).to eq(["(field IS NULL)"])
+            expect(build_statement(:integer, value, operator)).to eq(['(field IS NULL)'])
+            expect(build_statement(:decimal, value, operator)).to eq(['(field IS NULL)'])
+            expect(build_statement(:float, value, operator)).to eq(['(field IS NULL)'])
           end
         end
       end
@@ -468,9 +468,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it "supports '_not_null' operator" do
         [['_not_null', ''], ['', '_not_null']].each do |value, operator|
           aggregate_failures do
-            expect(build_statement(:integer, value, operator)).to eq(["(field IS NOT NULL)"])
-            expect(build_statement(:decimal, value, operator)).to eq(["(field IS NOT NULL)"])
-            expect(build_statement(:float, value, operator)).to eq(["(field IS NOT NULL)"])
+            expect(build_statement(:integer, value, operator)).to eq(['(field IS NOT NULL)'])
+            expect(build_statement(:decimal, value, operator)).to eq(['(field IS NOT NULL)'])
+            expect(build_statement(:float, value, operator)).to eq(['(field IS NOT NULL)'])
           end
         end
       end
@@ -478,9 +478,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it "supports '_empty' operator" do
         [['_empty', ''], ['', '_empty']].each do |value, operator|
           aggregate_failures do
-            expect(build_statement(:integer, value, operator)).to eq(["(field IS NULL)"])
-            expect(build_statement(:decimal, value, operator)).to eq(["(field IS NULL)"])
-            expect(build_statement(:float, value, operator)).to eq(["(field IS NULL)"])
+            expect(build_statement(:integer, value, operator)).to eq(['(field IS NULL)'])
+            expect(build_statement(:decimal, value, operator)).to eq(['(field IS NULL)'])
+            expect(build_statement(:float, value, operator)).to eq(['(field IS NULL)'])
           end
         end
       end
@@ -488,9 +488,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it "supports '_not_empty' operator" do
         [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
           aggregate_failures do
-            expect(build_statement(:integer, value, operator)).to eq(["(field IS NOT NULL)"])
-            expect(build_statement(:decimal, value, operator)).to eq(["(field IS NOT NULL)"])
-            expect(build_statement(:float, value, operator)).to eq(["(field IS NOT NULL)"])
+            expect(build_statement(:integer, value, operator)).to eq(['(field IS NOT NULL)'])
+            expect(build_statement(:decimal, value, operator)).to eq(['(field IS NOT NULL)'])
+            expect(build_statement(:float, value, operator)).to eq(['(field IS NOT NULL)'])
           end
         end
       end
