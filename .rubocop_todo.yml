@@ -253,11 +253,6 @@ Style/GuardClause:
     - 'lib/rails_admin/config/sections/list.rb'
     - 'lib/rails_admin/extension.rb'
 
-# Offense count: 2
-Style/IdenticalConditionalBranches:
-  Exclude:
-    - 'spec/integration/authorization/cancancan_spec.rb'
-
 # Offense count: 4
 Style/MethodMissingSuper:
   Exclude:
