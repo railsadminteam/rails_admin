@@ -350,16 +350,6 @@ Style/RedundantSelf:
   Exclude:
     - 'lib/rails_admin/config/fields/base.rb'
 
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/RescueModifier:
-  Exclude:
-    - 'app/helpers/rails_admin/application_helper.rb'
-    - 'lib/rails_admin/abstract_model.rb'
-    - 'lib/rails_admin/adapters/mongoid/association.rb'
-    - 'lib/rails_admin/config/actions/show_in_app.rb'
-    - 'lib/rails_admin/extensions/paper_trail/auditing_adapter.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
