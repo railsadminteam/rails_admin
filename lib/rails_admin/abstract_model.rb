@@ -174,14 +174,14 @@ module RailsAdmin
         if start_date
           start_date = (begin
                           start_date.to_date
-                        rescue
+                        rescue StandardError
                           nil
                         end)
         end
         if end_date
           end_date = (begin
                         end_date.to_date
-                      rescue
+                      rescue StandardError
                         nil
                       end)
         end

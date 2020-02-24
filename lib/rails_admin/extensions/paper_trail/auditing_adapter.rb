@@ -25,7 +25,7 @@ module RailsAdmin
         def username
           (begin
              @user_class.find(@version.whodunnit).try(:email)
-           rescue
+           rescue StandardError
              nil
            end) || @version.whodunnit
         end

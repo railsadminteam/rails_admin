@@ -48,7 +48,7 @@ module RailsAdmin
         scope = Devise::Mapping.find_scope!(_current_user)
         begin
           main_app.send("destroy_#{scope}_session_path")
-        rescue
+        rescue StandardError
           false
         end
       elsif main_app.respond_to?(:logout_path)

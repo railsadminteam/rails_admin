@@ -43,7 +43,7 @@ module RailsAdmin
         def primary_key
           begin
             association.primary_key.to_sym
-          rescue
+          rescue StandardError
             :_id
           end
         end
@@ -52,7 +52,7 @@ module RailsAdmin
           return if embeds?
           begin
             association.foreign_key.to_sym
-          rescue
+          rescue StandardError
             nil
           end
         end
