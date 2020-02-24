@@ -15,7 +15,7 @@ SimpleCov.start do
   minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
 end
 
-require File.expand_path('../dummy_app/config/environment', __FILE__)
+require File.expand_path('dummy_app/config/environment', __dir__)
 
 require 'rspec/rails'
 require 'factory_bot'
@@ -24,8 +24,8 @@ require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
 
-Dir[File.expand_path('../support/**/*.rb', __FILE__),
-    File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__),
+    File.expand_path('shared_examples/**/*.rb', __dir__)].each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
