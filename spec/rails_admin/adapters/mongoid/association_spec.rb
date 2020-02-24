@@ -71,7 +71,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   end
 
   it 'lists associations' do
-    expect(@post.associations.collect { |a| a.name.to_sym }).to match_array [:mongo_blog, :mongo_categories, :mongo_comments, :mongo_note]
+    expect(@post.associations.collect { |a| a.name.to_sym }).to match_array %i[mongo_blog mongo_categories mongo_comments mongo_note]
   end
 
   it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do

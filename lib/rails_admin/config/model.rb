@@ -25,7 +25,7 @@ module RailsAdmin
       attr_accessor :groups
       attr_reader :parent, :root
 
-      NAMED_INSTANCE_VARIABLES = [:@parent, :@root].freeze
+      NAMED_INSTANCE_VARIABLES = %i[@parent @root].freeze
 
       def initialize(entity)
         @parent = nil

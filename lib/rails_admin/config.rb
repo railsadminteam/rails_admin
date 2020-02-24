@@ -278,8 +278,8 @@ module RailsAdmin
         @current_user = nil
         @default_hidden_fields = {}
         @default_hidden_fields[:base] = [:_type]
-        @default_hidden_fields[:edit] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
-        @default_hidden_fields[:show] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:edit] = %i[id _id created_at created_on deleted_at updated_at updated_on deleted_on]
+        @default_hidden_fields[:show] = %i[id _id created_at created_on deleted_at updated_at updated_on deleted_on]
         @default_items_per_page = 20
         @default_associated_collection_limit = 100
         @default_search_operator = 'default'
@@ -287,7 +287,7 @@ module RailsAdmin
         @included_models = []
         @total_columns_width = 697
         @sidescroll = nil
-        @label_methods = [:name, :title]
+        @label_methods = %i[name title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
         @show_gravatar = true

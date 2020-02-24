@@ -34,7 +34,7 @@ module RailsAdmin
           end
 
           register_instance_option :i18n_scope do
-            [:time, :formats]
+            %i[time formats]
           end
 
           register_instance_option :strftime_format do

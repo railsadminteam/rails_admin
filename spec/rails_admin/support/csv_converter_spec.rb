@@ -13,7 +13,7 @@ RSpec.describe RailsAdmin::CSVConverter do
 
     FactoryBot.create :player
     objects = Player.all
-    schema = {only: [:number, :name]}
+    schema = {only: %i[number name]}
     expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Name/)
   end
 
@@ -28,7 +28,7 @@ RSpec.describe RailsAdmin::CSVConverter do
     end
 
     let(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'なまえ' }
-    let(:schema) { {only: [:number, :name]} }
+    let(:schema) { {only: %i[number name]} }
     let(:options) { {encoding_to: encoding} }
 
     subject { RailsAdmin::CSVConverter.new(objects, schema).to_csv(options) }
