@@ -7,7 +7,7 @@ module RailsAdmin
       @fields = []
       @associations = []
 
-      return self if (@objects = objects).blank?
+      return if (@objects = objects).blank?
 
       @model = objects.dup.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
