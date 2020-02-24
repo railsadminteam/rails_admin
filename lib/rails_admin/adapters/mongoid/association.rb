@@ -41,12 +41,20 @@ module RailsAdmin
         end
 
         def primary_key
-          association.primary_key.to_sym rescue :_id
+          begin
+            association.primary_key.to_sym
+          rescue
+            :_id
+          end
         end
 
         def foreign_key
           return if embeds?
-          association.foreign_key.to_sym rescue nil
+          begin
+            association.foreign_key.to_sym
+          rescue
+            nil
+          end
         end
 
         def foreign_key_nullable?
