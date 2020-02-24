@@ -300,21 +300,6 @@ Style/MissingRespondToMissing:
     - 'lib/rails_admin/config/model.rb'
     - 'lib/rails_admin/config/proxyable/proxy.rb'
 
-# Offense count: 13
-# Cop supports --auto-correct.
-Style/MultilineIfModifier:
-  Exclude:
-    - 'app/helpers/rails_admin/main_helper.rb'
-    - 'spec/controllers/rails_admin/main_controller_spec.rb'
-    - 'spec/integration/fields/action_text_spec.rb'
-    - 'spec/rails_admin/config/fields/types/action_text_spec.rb'
-    - 'spec/rails_admin/config/fields/types/active_storage_spec.rb'
-    - 'spec/rails_admin/config/fields/types/file_upload_spec.rb'
-    - 'spec/rails_admin/config/fields/types/multiple_active_storage_spec.rb'
-    - 'spec/rails_admin/config/fields/types/multiple_file_upload_spec.rb'
-    - 'spec/rails_admin/config/fields/types/shrine_spec.rb'
-    - 'spec/rails_admin/config_spec.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
