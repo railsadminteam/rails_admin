@@ -104,14 +104,6 @@ Lint/ScriptPermission:
   Exclude:
     - 'spec/dummy_app/Rakefile'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Lint/SendWithMixinArgument:
-  Exclude:
-    - 'config/initializers/mongoid_extensions.rb'
-    - 'lib/rails_admin/extensions/paper_trail/auditing_adapter.rb'
-    - 'lib/rails_admin/extensions/pundit/authorization_adapter.rb'
-
 # Offense count: 2
 # Configuration parameters: AllowComments.
 Lint/SuppressedException:
