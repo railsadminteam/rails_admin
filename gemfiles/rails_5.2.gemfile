@@ -47,8 +47,7 @@ group :test do
   gem "rubocop", "~> 0.68.1"
   gem "rubocop-performance"
   gem "simplecov", ">= 0.9", require: false
-  gem "shrine", "~> 2.0"
-  gem "shrine-memory"
+  gem "shrine", "~> 3.0"
   gem "timecop", ">= 0.5"
   gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
@@ -63,7 +62,7 @@ group :mongoid do
   gem "mongoid-paperclip", ">= 0.0.8", require: "mongoid_paperclip"
   gem "carrierwave-mongoid", ">= 0.6.3", require: "carrierwave/mongoid"
   gem "cancancan-mongoid"
-  gem "shrine-mongoid"
+  gem "shrine-mongoid", '~> 1.0'
 end
 
 gemspec path: "../"

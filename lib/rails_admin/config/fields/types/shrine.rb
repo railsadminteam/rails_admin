@@ -10,14 +10,16 @@ module RailsAdmin
           register_instance_option :thumb_method do
             unless defined? @thumb_method
               @thumb_method = begin
-                next nil unless value.is_a?(Hash)
+                next nil unless bindings[:object].respond_to?("#{name}_derivatives")
 
-                if value.key?(:thumb)
+                derivatives = bindings[:object].public_send("#{name}_derivatives")
+
+                if derivatives.key?(:thumb)
                   :thumb
-                elsif value.key?(:thumbnail)
+                elsif derivatives.key?(:thumbnail)
                   :thumbnail
                 else
-                  value.keys.first
+                  derivatives.keys.first
                 end
               end
             end
@@ -32,6 +34,10 @@ module RailsAdmin
             name
           end
 
+          register_instance_option :link_name do
+            value.original_filename
+          end
+
           register_instance_option :cache_value do
             bindings[:object].public_send("cached_#{name}_data") if bindings[:object].respond_to?("cached_#{name}_data")
           end
@@ -39,8 +45,8 @@ module RailsAdmin
           def resource_url(thumb = nil)
             return nil unless value
 
-            if value.is_a?(Hash)
-              value[thumb || value.keys.first].url
+            if thumb
+              bindings[:object].public_send(:"#{name}", thumb).url
             else
               value.url
             end
