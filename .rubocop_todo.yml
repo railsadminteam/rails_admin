@@ -338,12 +338,6 @@ Style/OrAssignment:
   Exclude:
     - 'lib/rails_admin/config/sections.rb'
 
-# Offense count: 70
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
