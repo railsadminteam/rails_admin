@@ -420,11 +420,3 @@ Style/SymbolArray:
 Style/TernaryParentheses:
   Exclude:
     - 'spec/spec_helper.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: WordRegex.
-# SupportedStyles: percent, brackets
-Style/WordArray:
-  EnforcedStyle: percent
-  MinSize: 8
