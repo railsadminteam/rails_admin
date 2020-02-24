@@ -23,7 +23,7 @@ module RailsAdmin
                   end
                   super __items__.map(&:id)
                 end
-RUBY
+              RUBY
             elsif %i[has_one references_one].include? association.macro
               instance_eval <<-RUBY, __FILE__, __LINE__ + 1
                 def #{name}_id=(item_id)
@@ -32,7 +32,7 @@ RUBY
                   item.update_attribute('#{association.foreign_key}', id) unless persisted?
                   super item.id
                 end
-RUBY
+              RUBY
             end
           end
         end
