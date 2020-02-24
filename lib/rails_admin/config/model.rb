@@ -81,7 +81,7 @@ module RailsAdmin
       register_instance_option :parent do
         @parent_model ||= begin
           klass = abstract_model.model.superclass
-          klass = nil if klass.to_s.in?(%w(Object BasicObject ActiveRecord::Base))
+          klass = nil if klass.to_s.in?(%w[Object BasicObject ActiveRecord::Base])
           klass
         end
       end

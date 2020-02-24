@@ -321,10 +321,10 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     describe 'boolean type queries' do
       it 'supports boolean type query' do
-        %w(false f 0).each do |value|
+        %w[false f 0].each do |value|
           expect(build_statement(:boolean, value, nil)).to eq(['(field IS NULL OR field = ?)', false])
         end
-        %w(true t 1).each do |value|
+        %w[true t 1].each do |value|
           expect(build_statement(:boolean, value, nil)).to eq(['(field = ?)', true])
         end
         expect(build_statement(:boolean, 'word', nil)).to be_nil
@@ -378,7 +378,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(build_statement(:integer, ['6', '', ''], 'default')).to eq(['(field = ?)', 6])
         expect(build_statement(:integer, ['7', '10', ''], 'default')).to eq(['(field = ?)', 7])
         expect(build_statement(:integer, ['8', '', '20'], 'default')).to eq(['(field = ?)', 8])
-        expect(build_statement(:integer, %w(9 10 20), 'default')).to eq(['(field = ?)', 9])
+        expect(build_statement(:integer, %w[9 10 20], 'default')).to eq(['(field = ?)', 9])
       end
 
       it 'supports integer type range query' do
@@ -387,7 +387,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(build_statement(:integer, ['', '3', ''], 'between')).to eq(['(field >= ?)', 3])
         expect(build_statement(:integer, ['', '', '5'], 'between')).to eq(['(field <= ?)', 5])
         expect(build_statement(:integer, ['', '10', '20'], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
-        expect(build_statement(:integer, %w(15 10 20), 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
+        expect(build_statement(:integer, %w[15 10 20], 'between')).to eq(['(field BETWEEN ? AND ?)', 10, 20])
         expect(build_statement(:integer, ['', 'word1', ''], 'between')).to be_nil
         expect(build_statement(:integer, ['', '', 'word2'], 'between')).to be_nil
         expect(build_statement(:integer, ['', 'word3', 'word4'], 'between')).to be_nil

@@ -84,7 +84,7 @@ module RailsAdmin
 
       def parse_string(value)
         return if value.blank?
-        return value if %w(DateTime Date Time).include?(value.class.name)
+        return value if %w[DateTime Date Time].include?(value.class.name)
         return if (delocalized_value = delocalize(value)).blank?
 
         begin

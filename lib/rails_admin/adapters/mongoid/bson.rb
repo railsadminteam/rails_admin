@@ -16,11 +16,11 @@ module RailsAdmin
           def parse_object_id(value)
             OBJECT_ID.from_string(value)
           rescue StandardError => e
-            raise e if %w(
+            raise e if %w[
               Moped::Errors::InvalidObjectId
               BSON::ObjectId::Invalid
               BSON::InvalidObjectId
-            ).exclude?(e.class.to_s)
+            ].exclude?(e.class.to_s)
           end
         end
       end

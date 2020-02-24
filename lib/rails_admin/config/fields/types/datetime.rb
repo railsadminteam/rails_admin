@@ -22,7 +22,7 @@ module RailsAdmin
 
           def value
             parent_value = super
-            if %w(DateTime Date Time).include?(parent_value.class.name)
+            if %w[DateTime Date Time].include?(parent_value.class.name)
               parent_value.in_time_zone
             else
               parent_value

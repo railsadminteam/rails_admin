@@ -74,9 +74,9 @@ RSpec.describe RailsAdmin::Config do
 
     it 'can be configured' do
       RailsAdmin.config do |config|
-        config.main_app_name = %w(stati c value)
+        config.main_app_name = %w[stati c value]
       end
-      expect(RailsAdmin.config.main_app_name).to eq(%w(stati c value))
+      expect(RailsAdmin.config.main_app_name).to eq(%w[stati c value])
     end
   end
 
@@ -303,7 +303,7 @@ RSpec.describe RailsAdmin::Config do
         end
       end
       it 'execute all passed blocks' do
-        expect(fields.map(&:name)).to match_array %i(players fans)
+        expect(fields.map(&:name)).to match_array %i[players fans]
       end
     end
     context 'when expand redefine behavior' do
@@ -372,7 +372,7 @@ RSpec.describe RailsAdmin::Config do
         end
       end
       Team.send(:rails_admin, &team_config2)
-      expect(fields.map(&:name)).to match_array %i(id wins)
+      expect(fields.map(&:name)).to match_array %i[id wins]
     end
 
     it 'updates model config when reloading code for rails 5' do
@@ -387,7 +387,7 @@ RSpec.describe RailsAdmin::Config do
       end
 
       Team.send(:rails_admin, &team_config3)
-      expect(fields.map(&:name)).to match_array %i(wins)
+      expect(fields.map(&:name)).to match_array %i[wins]
     end if defined?(ActiveSupport::Reloader)
   end
 end

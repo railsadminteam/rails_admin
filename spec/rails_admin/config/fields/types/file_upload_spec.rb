@@ -21,11 +21,11 @@ RSpec.describe RailsAdmin::Config::Fields::Types::FileUpload do
           end if defined?(Shrine)
         end
       end
-      expect(RailsAdmin.config(FieldTest).field(:carrierwave_asset).allowed_methods.collect(&:to_s)).to eq %w(carrierwave_asset remove_carrierwave_asset carrierwave_asset_cache)
-      expect(RailsAdmin.config(FieldTest).field(:dragonfly_asset).allowed_methods.collect(&:to_s)).to eq %w(dragonfly_asset remove_dragonfly_asset retained_dragonfly_asset)
-      expect(RailsAdmin.config(FieldTest).field(:paperclip_asset).allowed_methods.collect(&:to_s)).to eq %w(paperclip_asset delete_paperclip_asset)
-      expect(RailsAdmin.config(FieldTest).field(:active_storage_asset).allowed_methods.collect(&:to_s)).to eq %w(active_storage_asset remove_active_storage_asset) if defined?(ActiveStorage)
-      expect(RailsAdmin.config(FieldTest).field(:shrine_asset).allowed_methods.collect(&:to_s)).to eq %w(shrine_asset remove_shrine_asset cached_shrine_asset_data) if defined?(Shrine)
+      expect(RailsAdmin.config(FieldTest).field(:carrierwave_asset).allowed_methods.collect(&:to_s)).to eq %w[carrierwave_asset remove_carrierwave_asset carrierwave_asset_cache]
+      expect(RailsAdmin.config(FieldTest).field(:dragonfly_asset).allowed_methods.collect(&:to_s)).to eq %w[dragonfly_asset remove_dragonfly_asset retained_dragonfly_asset]
+      expect(RailsAdmin.config(FieldTest).field(:paperclip_asset).allowed_methods.collect(&:to_s)).to eq %w[paperclip_asset delete_paperclip_asset]
+      expect(RailsAdmin.config(FieldTest).field(:active_storage_asset).allowed_methods.collect(&:to_s)).to eq %w[active_storage_asset remove_active_storage_asset] if defined?(ActiveStorage)
+      expect(RailsAdmin.config(FieldTest).field(:shrine_asset).allowed_methods.collect(&:to_s)).to eq %w[shrine_asset remove_shrine_asset cached_shrine_asset_data] if defined?(Shrine)
     end
   end
 
