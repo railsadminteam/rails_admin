@@ -153,7 +153,7 @@ module RailsAdmin
         case @value
         when Array then
           val, range_begin, range_end = *@value.collect do |v|
-            next unless v.to_i.to_s == v || v.to_f.to_s == v
+            next unless [v.to_i.to_s, v.to_f.to_s].include?(v)
             @type == :integer ? v.to_i : v.to_f
           end
           case @operator
