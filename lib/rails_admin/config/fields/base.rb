@@ -255,7 +255,7 @@ module RailsAdmin
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
           if !state.nil? || block
-            required state.nil? ? proc { false == instance_eval(&block) } : false == state
+            required state.nil? ? proc { instance_eval(&block) == false } : state == false
           else
             optional?
           end
