@@ -360,17 +360,6 @@ Style/RescueModifier:
     - 'lib/rails_admin/config/actions/show_in_app.rb'
     - 'lib/rails_admin/extensions/paper_trail/auditing_adapter.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: implicit, explicit
-Style/RescueStandardError:
-  Exclude:
-    - 'lib/rails_admin/adapters/mongoid.rb'
-    - 'lib/rails_admin/adapters/mongoid/bson.rb'
-    - 'lib/rails_admin/extension.rb'
-    - 'lib/rails_admin/support/i18n.rb'
-
 # Offense count: 26
 # Cop supports --auto-correct.
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
