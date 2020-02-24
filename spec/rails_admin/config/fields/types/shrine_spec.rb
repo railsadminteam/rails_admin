@@ -23,6 +23,12 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Shrine do
       end
     end
 
+    describe '#link_name' do
+      it 'returns filename' do
+        expect(field.link_name).to eq('test.jpg')
+      end
+    end
+
     describe '#value' do
       context 'when attachment exists' do
         it 'returns attached object' do
