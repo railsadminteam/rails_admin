@@ -91,6 +91,25 @@ RSpec.describe 'HasOneAssociation field', type: :request do
       @record.reload
       expect(@record.comment).to be_nil
     end
+
+    context 'when XSS attack is attempted', js: true do
+      it 'does not break on adding a new item' do
+        allow(I18n).to receive(:t).and_call_original
+        expect(I18n).to receive(:t).with('admin.form.new_model', name: 'Comment').and_return('<script>throw "XSS";</script>')
+        @record = FactoryBot.create :field_test
+        visit edit_path(model_name: 'field_test', id: @record.id)
+        find('#field_test_comment_attributes_field .add_nested_fields').click
+      end
+
+      it 'does not break on adding an existing item' do
+        RailsAdmin.config Comment do
+          object_label_method :content
+        end
+        @record = FactoryBot.create :field_test
+        FactoryBot.create :comment, content: '<script>throw "XSS";</script>', commentable: @record
+        visit edit_path(model_name: 'field_test', id: @record.id)
+      end
+    end
   end
 
   context 'with custom primary_key option' do
