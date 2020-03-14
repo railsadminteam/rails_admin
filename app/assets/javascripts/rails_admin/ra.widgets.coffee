@@ -115,7 +115,11 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       # add each nested field to a tab-pane and reference it in the nav
       tab_content.children('.fields:not(.tab-pane)').addClass('tab-pane').each ->
         $(this).attr('id', 'unique-id-' + (new Date().getTime()) + Math.floor(Math.random()*100000)) # some elements are created on the same ms
-        nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
+        nav.append(
+          $('<li></li>').append(
+            $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + this.id).text($(this).children('.object-infos').data('object-label'))
+          )
+        )
       # only if no tab is set to active
       if nav.find("> li.active").length == 0
         # init first tab, toggler and tab_content/tabs visibility
@@ -143,8 +147,12 @@ $(document).on 'rails_admin.dom_ready', (e, content) ->
       toggler = field.find('> .controls > .btn-group > .toggler')
       tab_content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each ->
         # Convert the "add nested field" button to just showing the title of the new model
-        field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').html( $(this).children('.object-infos').data('object-label') )
-        nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>')
+        field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').text( $(this).children('.object-infos').data('object-label') )
+        nav.append(
+          $('<li></li>').append(
+            $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + this.id).text($(this).children('.object-infos').data('object-label'))
+          )
+        )
       first_tab = nav.find("> li > a[data-toggle='tab']:first")
       first_tab.tab('show')
       field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html())

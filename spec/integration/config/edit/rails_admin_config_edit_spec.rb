@@ -757,6 +757,28 @@ describe 'RailsAdmin Config DSL Edit Section', type: :request do
       expect(@record.comment).to be_nil
     end
 
+    context 'when XSS attack is attempted', js: true do
+      it 'does not break on adding a new item' do
+        allow(I18n).to receive(:t).and_call_original
+        expect(I18n).to receive(:t).with('admin.form.new_model', name: 'Comment').and_return('<script>throw "XSS";</script>')
+        expect(I18n).to receive(:t).with('admin.form.new_model', name: 'Nested field test').and_return('<script>throw "XSS";</script>')
+        @record = FactoryBot.create :field_test
+        visit edit_path(model_name: 'field_test', id: @record.id)
+        find('#field_test_comment_attributes_field .add_nested_fields').click
+        find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
+      end
+
+      it 'does not break on editing an existing item' do
+        RailsAdmin.config Comment do
+          object_label_method :content
+        end
+        @record = FactoryBot.create :field_test
+        FactoryBot.create :comment, content: '<script>throw "XSS";</script>', commentable: @record
+        NestedFieldTest.create! title: '<script>throw "XSS";</script>', field_test: @record
+        visit edit_path(model_name: 'field_test', id: @record.id)
+      end
+    end
+
     it 'sets bindings[:object] to nested object' do
       RailsAdmin.config(NestedFieldTest) do
         nested do

@@ -9,6 +9,9 @@ $(document).ready ->
 $(document).on 'nested:fieldAdded', 'form', (content) ->
   field = content.field.addClass('tab-pane').attr('id', 'unique-id-' + (new Date().getTime()))
   new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>')
+  new_tab = $('<li></li>').append(
+    $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + field.attr('id')).text(field.children('.object-infos').data('object-label'))
+  )
   parent_group = field.closest('.control-group')
   controls = parent_group.children('.controls')
   one_to_one = controls.data('nestedone') != undefined
@@ -24,7 +27,7 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
   toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right')
 
   # Convert the "add nested field" button to just showing the title of the new model
-  controls.find('.add_nested_fields').removeClass('add_nested_fields').html(field.children('.object-infos').data('object-label')) if one_to_one
+  controls.find('.add_nested_fields').removeClass('add_nested_fields').text(field.children('.object-infos').data('object-label')) if one_to_one
 
 $(document).on 'nested:fieldRemoved', 'form', (content) ->
   field = content.field
