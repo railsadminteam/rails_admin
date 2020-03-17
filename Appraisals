@@ -159,7 +159,7 @@ appraise "rails-5.1" do
 end
 
 appraise "rails-5.2" do
-  gem 'rails', '~> 5.2.0'
+  gem 'rails', '~> 5.2.0', github: 'rails/rails', branch: '5-2-stable'
   gem 'sass-rails', '~> 5.0'
   gem 'devise', '~> 4.4'
 

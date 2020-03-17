@@ -1,10 +1,9 @@
 language: ruby
 
-before_install:
-  # https://github.com/danmayer/coverband/issues/162#issuecomment-452173268
-  - rm /home/travis/.rvm/gems/*/specifications/bundler-2.*.gemspec || true
-  - gem install bundler -v '< 2'
-  - ruby -e "exit RUBY_VERSION >= '2.6'" && gem update --system || true
+before_install: |
+    ruby -e "exit RUBY_PLATFORM == 'java'" && \
+    rm /home/travis/.rvm/gems/*/specifications/bundler-2.*.gemspec && \
+    gem install bundler -v '< 2' || true
 
 before_script:
   - cd spec/dummy_app

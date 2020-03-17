@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
-gem "rails", "~> 5.2.0"
+gem "rails", "~> 5.2.0", github: "rails/rails", branch: "5-2-stable"
 gem "haml"
 gem "devise", "~> 4.4"
 gem "sass-rails", "~> 5.0"
