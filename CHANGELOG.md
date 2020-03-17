@@ -1,8 +1,25 @@
 # RailsAdmin Changelog
 
-## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
+## [Unreleased](https://github.com/sferik/rails_admin/tree/1.x-stable)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.2...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.3...1.x-stable)
+
+
+## [1.4.3](https://github.com/sferik/rails_admin/tree/v1.4.3) - 2020-03-17
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.2...v1.4.3)
+
+### Fixed
+- Fix NoMethodError when used with Rails 6.0 ([#3122](https://github.com/sferik/rails_admin/pull/3122))
+- Fix wrong styles when using multiple instances of CodeMirror([#3107](https://github.com/sferik/rails_admin/pull/3107))
+- Fix password being cleared when used with Devise 4.6([72bc0373](https://github.com/sferik/rails_admin/commit/72bc03736162ffef8e5b99f42ca605d17fe7e7d0))
+- ActiveStorage factory caused const missing for Mongoid([#3088](https://github.com/sferik/rails_admin/pull/3088), [db927687](https://github.com/sferik/rails_admin/commit/db9276879c8e8c5e8772261725ef0e0cdadd9cf1))
+- Fix exact matches were using LIKE, which was not index-friendly([#3000](https://github.com/sferik/rails_admin/pull/3000))
+- Middleware check failed when using RedisStore([#3076](https://github.com/sferik/rails_admin/issues/3076))
+- Fix field being reset to default after an error([#3066](https://github.com/sferik/rails_admin/pull/3066))
+
+### Security
+- Fix XSS vulnerability in nested forms([872a637b](https://github.com/sferik/rails_admin/commit/872a637b118e0607eccd8b0b3b94e5f6f9db6758))
 
 
 ## [1.4.2](https://github.com/sferik/rails_admin/tree/v1.4.2) - 2018-09-23
