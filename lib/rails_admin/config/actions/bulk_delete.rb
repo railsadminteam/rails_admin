@@ -53,7 +53,7 @@ module RailsAdmin
         end
 
         register_instance_option :authorization_key do
-          :destroy
+          :bulk_delete
         end
 
         register_instance_option :bulkable? do
