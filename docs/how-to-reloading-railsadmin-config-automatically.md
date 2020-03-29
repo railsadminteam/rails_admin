@@ -101,8 +101,10 @@ Rails.application.config.to_prepare do
     def reload_rails_admin
       RailsAdmin::Config.reset
 
+      # Use this if you have a single RailsAdmin configuration file (default)
       load("#{Rails.root}/config/initializers/rails_admin.rb")
 
+      # Use this if you have a folder with your RailsAdmin configuration files inside, or comment if not
       Dir.foreach("#{Rails.root}/config/initializers/rails_admin") do |item|
         next if item == '.' or item == '..'
         load("#{Rails.root}/config/initializers/rails_admin/#{item}")
