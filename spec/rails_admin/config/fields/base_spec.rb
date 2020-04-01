@@ -84,9 +84,9 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
           column :league_id, :integer
           column :division_id, :integer, nil, false
           column :player_id, :integer
-          belongs_to :league
-          belongs_to :division
-          belongs_to :player
+          belongs_to :league, optional: true
+          belongs_to :division, optional: true
+          belongs_to :player, optional: true
           validates_numericality_of(:player_id, only_integer: true)
         end
         @fields = RailsAdmin.config(RelTest).create.fields

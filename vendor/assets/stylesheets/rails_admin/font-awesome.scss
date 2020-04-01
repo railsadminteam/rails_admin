@@ -11,8 +11,8 @@
 //= depend_on_asset "rails_admin/fontawesome-webfont.svg"
 @font-face {
   font-family: 'FontAwesome';
-  src: url('<%= font_path('rails_admin/fontawesome-webfont.eot') %>');
-  src: url('<%= font_path('rails_admin/fontawesome-webfont.eot') %>?#iefix') format('embedded-opentype'), url('<%= font_path('rails_admin/fontawesome-webfont.woff2') %>') format('woff2'), url('<%= font_path('rails_admin/fontawesome-webfont.woff') %>') format('woff'), url('<%= font_path('rails_admin/fontawesome-webfont.ttf') %>') format('truetype'), url('<%= font_path('rails_admin/fontawesome-webfont.svg') %>#fontawesomeregular') format('svg');
+  src: asset-url('rails_admin/fontawesome-webfont.eot');
+  src: asset-url('rails_admin/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), asset-url('rails_admin/fontawesome-webfont.woff2') format('woff2'), asset-url('rails_admin/fontawesome-webfont.woff') format('woff'), asset-url('rails_admin/fontawesome-webfont.ttf') format('truetype'), asset-url('rails_admin/fontawesome-webfont.svg#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }

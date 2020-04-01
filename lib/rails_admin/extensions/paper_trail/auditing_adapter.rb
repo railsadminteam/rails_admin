@@ -23,11 +23,17 @@ module RailsAdmin
         end
 
         def username
-          @user_class.find(@version.whodunnit).try(:email) rescue nil || @version.whodunnit
+          (@user_class.find(@version.whodunnit).try(:email) rescue nil) || @version.whodunnit
         end
 
         def item
           @version.item_id
+        end
+      end
+
+      module ControllerExtension
+        def user_for_paper_trail
+          _current_user.try(:id) || _current_user
         end
       end
 
@@ -52,11 +58,7 @@ module RailsAdmin
 
         def self.setup
           raise('PaperTrail not found') unless defined?(::PaperTrail)
-          RailsAdmin::ApplicationController.class_eval do
-            def user_for_paper_trail
-              _current_user.try(:id) || _current_user
-            end
-          end
+          RailsAdmin::Extensions::ControllerExtension.send(:include, ControllerExtension)
         end
 
         def initialize(controller, user_class = 'User', version_class = '::Version')

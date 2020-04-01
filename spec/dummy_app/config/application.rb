@@ -7,7 +7,7 @@ require 'sprockets/railtie'
 begin
   require CI_ORM.to_s
   require "#{CI_ORM}/railtie"
-rescue LoadError # rubocop:disable HandleExceptions
+rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
 require 'active_storage/engine' if Rails.version >= '5.2.0' && CI_ORM == :active_record
@@ -22,6 +22,7 @@ module DummyApp
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    config.load_defaults Rails.version[0, 3] if Rails.version >= '5.1.0'
     config.eager_load_paths.reject! { |p| p =~ %r{/app/(\w+)$} && !%w(controllers helpers views).push(CI_ORM).include?(Regexp.last_match[1]) }
     config.autoload_paths += %W(#{config.root}/app/#{CI_ORM} #{config.root}/app/#{CI_ORM}/concerns #{config.root}/lib)
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]

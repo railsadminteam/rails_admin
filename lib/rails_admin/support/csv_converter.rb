@@ -73,7 +73,7 @@ module RailsAdmin
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
       method = @objects.respond_to?(:find_each) ? :find_each : :each
 
-      CSV.generate(generator_options) do |csv|
+      CSV.generate(**generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
         @objects.send(method) do |object|

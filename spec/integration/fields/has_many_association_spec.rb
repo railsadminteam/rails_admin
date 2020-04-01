@@ -211,6 +211,22 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
       end
     end
+
+    context 'when XSS attack is attempted', js: true do
+      it 'does not break on adding a new item' do
+        allow(I18n).to receive(:t).and_call_original
+        expect(I18n).to receive(:t).with('admin.form.new_model', name: 'Nested field test').and_return('<script>throw "XSS";</script>')
+        @record = FactoryBot.create :field_test
+        visit edit_path(model_name: 'field_test', id: @record.id)
+        find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
+      end
+
+      it 'does not break on editing an existing item' do
+        @record = FactoryBot.create :field_test
+        NestedFieldTest.create! title: '<script>throw "XSS";</script>', field_test: @record
+        visit edit_path(model_name: 'field_test', id: @record.id)
+      end
+    end
   end
 
   context 'with not nullable foreign key', active_record: true do

@@ -16,6 +16,12 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
+## Announcements
+
+### [Action required] Security issue
+
+**RailsAdmin 2.0.1, 2.0.0 and up to 1.4.2 have been reported to have XSS vulnerability.** We strongly recommend that you upgrade RailsAdmin to 2.0.2 (and higher) or 1.4.3 as soon as possible, if you are on those versions. See [d72090ec](https://github.com/sferik/rails_admin/commit/d72090ec6a07c3b9b7b48ab50f3d405f91ff4375) for the detail.
+
 ## Getting started
 
 * Check out [the docs][docs].
@@ -93,6 +99,7 @@ This library aims to support and is [tested against][travis] the following Ruby 
 * Ruby 2.4
 * Ruby 2.5
 * Ruby 2.6
+* Ruby 2.7
 * [JRuby][]
 
 [jruby]: http://jruby.org/

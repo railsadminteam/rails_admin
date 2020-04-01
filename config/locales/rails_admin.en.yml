@@ -29,6 +29,7 @@ en:
     misc:
       search: "Search"
       filter: "Filter"
+      reset_filters: "Reset filters"
       refresh: "Refresh"
       show_all: "Show all"
       add_filter: "Add filter"

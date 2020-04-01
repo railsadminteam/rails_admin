@@ -11,7 +11,9 @@
   $(document).on('nested:fieldAdded', 'form', function(content) {
     var controls, field, nav, new_tab, one_to_one, parent_group, toggler;
     field = content.field.addClass('tab-pane').attr('id', 'unique-id-' + (new Date().getTime()));
-    new_tab = $('<li><a data-toggle="tab" href="#' + field.attr('id') + '">' + field.children('.object-infos').data('object-label') + '</a></li>');
+    new_tab = $('<li></li>').append(
+        $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + field.attr('id')).text(field.children('.object-infos').data('object-label'))
+    )
     parent_group = field.closest('.control-group');
     controls = parent_group.children('.controls');
     one_to_one = controls.data('nestedone') !== void 0;
@@ -27,7 +29,7 @@
     content.select(':hidden').show('slow');
     toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right');
     if (one_to_one) {
-      controls.find('.add_nested_fields').removeClass('add_nested_fields').html(field.children('.object-infos').data('object-label'));
+      controls.find('.add_nested_fields').removeClass('add_nested_fields').text(field.children('.object-infos').data('object-label'));
     }
   });
 

@@ -2,7 +2,33 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.2...HEAD)
+
+
+## [2.0.2](https://github.com/sferik/rails_admin/tree/v2.0.2) - 2020-03-17
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.1...v2.0.2)
+
+### Fixed
+- Fix to use I18n to translate the button 'Reset filters'([#3248](https://github.com/sferik/rails_admin/pull/3248))
+
+### Security
+- Fix XSS vulnerability in nested forms([d72090ec](https://github.com/sferik/rails_admin/commit/d72090ec6a07c3b9b7b48ab50f3d405f91ff4375))
+
+
+## [2.0.1](https://github.com/sferik/rails_admin/tree/v2.0.1) - 2019-12-31
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0...v2.0.1)
+
+### Fixed
+- Fix Zeitwerk incompatible behavior of autoloading constants during initialization([#3190](https://github.com/sferik/rails_admin/issues/3190), [e275012b](https://github.com/sferik/rails_admin/commit/e275012b630453cb1187e71a938382a3c5d3ef39))
+- Fix empty fields being hidden regardless of `compact_show_view`([#3213](https://github.com/sferik/rails_admin/pull/3213))
+- Fix `filter_scope` not using `default_search_operator` as default([#3212](https://github.com/sferik/rails_admin/pull/3212))
+- Fix PaperTrail integration returning `nil` as username instead of `whodunnit`([#3210](https://github.com/sferik/rails_admin/pull/3210))
+- Fix Sprockets 4 incompatibility of vendorized Fontawesome([#3204](https://github.com/sferik/rails_admin/issues/3204), [#3207](https://github.com/sferik/rails_admin/pull/3207))
+
+### Security
+- Update moment.js to 2.24.0 to address security vulnerability([#3182](https://github.com/sferik/rails_admin/issues/3182), [#3201](https://github.com/sferik/rails_admin/pull/3201))
 
 
 ## [2.0.0](https://github.com/sferik/rails_admin/tree/v2.0.0) - 2019-08-18
