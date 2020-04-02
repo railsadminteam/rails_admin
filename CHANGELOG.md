@@ -2,7 +2,18 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.1...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.2...HEAD)
+
+
+## [2.0.2](https://github.com/sferik/rails_admin/tree/v2.0.2) - 2020-03-17
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.1...v2.0.2)
+
+### Fixed
+- Fix to use I18n to translate the button 'Reset filters'([#3248](https://github.com/sferik/rails_admin/pull/3248))
+
+### Security
+- Fix XSS vulnerability in nested forms([d72090ec](https://github.com/sferik/rails_admin/commit/d72090ec6a07c3b9b7b48ab50f3d405f91ff4375))
 
 
 ## [2.0.1](https://github.com/sferik/rails_admin/tree/v2.0.1) - 2019-12-31

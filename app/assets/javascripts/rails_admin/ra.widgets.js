@@ -137,7 +137,11 @@
         toggler = field.find('> .controls > .btn-group > .toggler');
         tab_content.children('.fields:not(.tab-pane)').addClass('tab-pane').each(function() {
           $(this).attr('id', 'unique-id-' + (new Date().getTime()) + Math.floor(Math.random() * 100000));
-          nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>');
+          nav.append(
+              $('<li></li>').append(
+                  $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + this.id).text($(this).children('.object-infos').data('object-label'))
+              )
+          );
         });
         if (nav.find("> li.active").length === 0) {
           nav.find("> li > a[data-toggle='tab']:first").tab('show');
@@ -165,8 +169,12 @@
         tab_content = field.find("> .tab-content");
         toggler = field.find('> .controls > .btn-group > .toggler');
         tab_content.children(".fields:not(.tab-pane)").addClass('tab-pane active').each(function() {
-          field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').html($(this).children('.object-infos').data('object-label'));
-          nav.append('<li><a data-toggle="tab" href="#' + this.id + '">' + $(this).children('.object-infos').data('object-label') + '</a></li>');
+          field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').text($(this).children('.object-infos').data('object-label'));
+          nav.append(
+              $('<li></li>').append(
+                  $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + this.id).text($(this).children('.object-infos').data('object-label'))
+              )
+          );
         });
         first_tab = nav.find("> li > a[data-toggle='tab']:first");
         first_tab.tab('show');
