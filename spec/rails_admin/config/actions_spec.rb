@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Actions do
+RSpec.describe RailsAdmin::Config::Actions do
   describe 'default' do
     it 'is as before' do
       expect(RailsAdmin::Config::Actions.all.collect(&:key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])

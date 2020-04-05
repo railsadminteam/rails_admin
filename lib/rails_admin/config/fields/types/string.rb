@@ -1,16 +1,21 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class String < RailsAdmin::Config::Fields::Base
+        class String < StringLike
           RailsAdmin::Config::Fields::Types.register(self)
+
+          def input_size
+            [50, length.to_i].reject(&:zero?).min
+          end
 
           register_instance_option :html_attributes do
             {
+              required: required?,
               maxlength: length,
-              size: [50, length.to_i].reject(&:zero?).min,
+              size: input_size,
             }
           end
 
@@ -22,11 +27,12 @@ module RailsAdmin
               max_length = [length, valid_length[:maximum] || nil].compact.min
               min_length = [0, valid_length[:minimum] || nil].compact.max
               if max_length
-                if min_length == 0
-                  text += "#{I18n.translate('admin.form.char_length_up_to').capitalize} #{max_length}."
-                else
-                  text += "#{I18n.translate('admin.form.char_length_of').capitalize} #{min_length}-#{max_length}."
-                end
+                text +=
+                  if min_length == 0
+                    "#{I18n.translate('admin.form.char_length_up_to').capitalize} #{max_length}."
+                  else
+                    "#{I18n.translate('admin.form.char_length_of').capitalize} #{min_length}-#{max_length}."
+                  end
               end
             end
             text

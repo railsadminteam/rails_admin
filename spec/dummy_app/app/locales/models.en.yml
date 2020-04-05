@@ -5,6 +5,7 @@ en:
         name: Their Name
       team:
         manager: Team Manager
+        main_sponsor: Main Sponsor
         fans: Some Fans
   mongoid:
     *en_attributes

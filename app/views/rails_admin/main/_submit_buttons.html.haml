@@ -11,6 +11,6 @@
       - if authorized? :edit, @abstract_model
         %button.btn.btn-info{type: "submit", name: "_add_edit", :'data-disable-with' => t("admin.form.save_and_edit")}
           = t("admin.form.save_and_edit")
-      %button.btn{type: "submit", name: "_continue", :'data-disable-with' => t("admin.form.cancel"), :formnovalidate => true}
+      %button.btn.btn-default{type: "submit", name: "_continue", :'data-disable-with' => t("admin.form.cancel"), :formnovalidate => true}
         %i.icon-remove
         = t("admin.form.cancel")

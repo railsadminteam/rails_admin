@@ -1,38 +1,38 @@
 require 'spec_helper'
 require 'timecop'
 
-describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true do
+RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true do
   before :all do
     RailsAdmin::AbstractModel.reset_polymorphic_parents
 
-    class ARBlog < ActiveRecord::Base
+    class ARBlog < Tableless
       has_many :a_r_posts
       has_many :a_r_comments, as: :commentable
       belongs_to :librarian, polymorphic: true
     end
 
-    class ARPost < ActiveRecord::Base
+    class ARPost < Tableless
       belongs_to :a_r_blog
       has_and_belongs_to_many :a_r_categories
       has_many :a_r_comments, as: :commentable
     end
 
-    class ARCategory < ActiveRecord::Base
+    class ARCategory < Tableless
       has_and_belongs_to_many :a_r_posts
       belongs_to :librarian, polymorphic: true
     end
 
-    class ARUser < ActiveRecord::Base
+    class ARUser < Tableless
       has_one :a_r_profile
       has_many :a_r_categories, as: :librarian
     end
 
-    class ARProfile < ActiveRecord::Base
+    class ARProfile < Tableless
       belongs_to :a_r_user
       has_many :a_r_blogs, as: :librarian
     end
 
-    class ARComment < ActiveRecord::Base
+    class ARComment < Tableless
       belongs_to :commentable, polymorphic: true
     end
 
@@ -103,6 +103,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
         expect(association.type).to eq :has_many
         expect(association.klass).to eq Division
         expect(association.read_only?).to be_falsey
+        expect(association.foreign_key_nullable?).to be_truthy
       end
     end
 
@@ -113,6 +114,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
         expect(association.type).to eq :has_many
         expect(association.klass).to eq Team
         expect(association.read_only?).to be_truthy
+        expect(association.foreign_key_nullable?).to be_truthy
       end
     end
 
@@ -127,6 +129,30 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
     end
   end
 
+  describe 'has_many association with not nullable foreign key' do
+    let(:field_test) { RailsAdmin::AbstractModel.new(FieldTest) }
+    let(:association) { field_test.associations.detect { |a| a.name == :nested_field_tests } }
+
+    context 'for direct has many' do
+      it 'returns correct values' do
+        expect(association.foreign_key_nullable?).to be_falsey
+      end
+    end
+
+    context 'when foreign_key is passed as Symbol' do
+      before do
+        class FieldTestWithSymbolForeignKey < FieldTest
+          has_many :nested_field_tests, dependent: :destroy, inverse_of: :field_test, foreign_key: :field_test_id
+        end
+      end
+      let(:field_test) { RailsAdmin::AbstractModel.new(FieldTestWithSymbolForeignKey) }
+
+      it 'does not break' do
+        expect(association.foreign_key_nullable?).to be_falsey
+      end
+    end
+  end
+
   describe 'has_and_belongs_to_many association' do
     subject { @post.associations.detect { |a| a.name == :a_r_categories } }
 
@@ -135,6 +161,7 @@ describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record: true 
       expect(subject.klass).to eq ARCategory
       expect(subject.primary_key).to eq :id
       expect(subject.foreign_type).to be_nil
+      expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil

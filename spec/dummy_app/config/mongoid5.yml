@@ -1,0 +1,20 @@
+defaults: &defaults
+  use_utc: false
+  use_activesupport_time_zone: true
+
+development:
+  <<: *defaults
+  database: dummy_app_development
+  clients:
+    default:
+      database: dummy_app_development
+      hosts:
+        - 127.0.0.1:27017
+
+test:
+  <<: *defaults
+  clients:
+    default:
+      database: dummy_app_test
+      hosts:
+        - 127.0.0.1:27017

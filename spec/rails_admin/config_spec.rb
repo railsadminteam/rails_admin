@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config do
+RSpec.describe RailsAdmin::Config do
   describe '.included_models' do
     it 'only uses included models' do
       RailsAdmin.config.included_models = [Team, League]
@@ -36,7 +36,7 @@ describe RailsAdmin::Config do
   describe '.add_extension' do
     before do
       silence_warnings do
-        RailsAdmin::EXTENSIONS = []
+        RailsAdmin.const_set('EXTENSIONS', [])
       end
     end
 
@@ -131,6 +131,9 @@ describe RailsAdmin::Config do
 
     context 'given paper_trail as the extension for auditing', active_record: true do
       before do
+        class ControllerMock
+          def set_paper_trail_whodunnit; end
+        end
         module PaperTrail; end
         class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, auditing: true)
@@ -140,7 +143,7 @@ describe RailsAdmin::Config do
         RailsAdmin.config do |config|
           config.audit_with(:example)
         end
-        expect { RailsAdmin.config.audit_with.call }.not_to raise_error
+        expect { ControllerMock.new.instance_eval(&RailsAdmin.config.audit_with) }.not_to raise_error
       end
     end
   end
@@ -260,7 +263,7 @@ describe RailsAdmin::Config do
 
   describe '.parent_controller' do
     it 'uses default class' do
-      expect(RailsAdmin.config.parent_controller).to eq '::ApplicationController'
+      expect(RailsAdmin.config.parent_controller).to eq '::ActionController::Base'
     end
 
     it 'uses other class' do
@@ -269,6 +272,123 @@ describe RailsAdmin::Config do
       end
       expect(RailsAdmin.config.parent_controller).to eq 'TestController'
     end
+  end
+
+  describe '.forgery_protection_settings' do
+    it 'uses with: :exception by default' do
+      expect(RailsAdmin.config.forgery_protection_settings).to eq(with: :exception)
+    end
+
+    it 'allows to customize settings' do
+      RailsAdmin.config do |config|
+        config.forgery_protection_settings = {with: :null_session}
+      end
+      expect(RailsAdmin.config.forgery_protection_settings).to eq(with: :null_session)
+    end
+  end
+
+  describe '.model' do
+    let(:fields) { described_class.model(Team).fields }
+    before do
+      described_class.model Team do
+        field :players do
+          visible false
+        end
+      end
+    end
+    context 'when model expanded' do
+      before do
+        described_class.model(Team) do
+          field :fans
+        end
+      end
+      it 'execute all passed blocks' do
+        expect(fields.map(&:name)).to match_array %i(players fans)
+      end
+    end
+    context 'when expand redefine behavior' do
+      before do
+        described_class.model Team do
+          field :players
+        end
+      end
+      it 'execute all passed blocks' do
+        expect(fields.find { |f| f.name == :players }.visible).to be true
+      end
+    end
+    context 'when model expanded in config' do
+      let(:block) { proc { field :players } }
+      before do
+        allow(block).to receive(:source_location).and_return(['config/initializers/rails_admin.rb'])
+        described_class.model(Team, &block)
+      end
+      it 'executes first' do
+        expect(fields.find { |f| f.name == :players }.visible).to be false
+      end
+    end
+  end
+
+  describe "field types code reloading" do
+    before { Rails.application.config.cache_classes = false }
+    after { Rails.application.config.cache_classes = true }
+
+    let(:config) { described_class.model(Team) }
+    let(:fields) { described_class.model(Team).edit.fields }
+
+    let(:team_config) do
+      proc do
+        field :id
+        field :wins, :boolean
+      end
+    end
+
+    let(:team_config2) do
+      proc do
+        field :wins, :toggle
+      end
+    end
+
+    let(:team_config3) do
+      proc do
+        field :wins
+      end
+    end
+
+    it "allows code reloading" do
+      Team.send(:rails_admin, &team_config)
+
+      # This simulates the way RailsAdmin really does it
+      config.edit.send(:_fields, true)
+
+      module RailsAdmin
+        module Config
+          module Fields
+            module Types
+              class Toggle < RailsAdmin::Config::Fields::Base
+                RailsAdmin::Config::Fields::Types.register(self)
+              end
+            end
+          end
+        end
+      end
+      Team.send(:rails_admin, &team_config2)
+      expect(fields.map(&:name)).to match_array %i(id wins)
+    end
+
+    it "updates model config when reloading code for rails 5" do
+      Team.send(:rails_admin, &team_config)
+
+      # this simulates rails code reloading
+      RailsAdmin::Engine.initializers.select do |i|
+        i.name == "RailsAdmin reload config in development"
+      end.first.block.call
+      Rails.application.executor.wrap do
+        ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+      end
+
+      Team.send(:rails_admin, &team_config3)
+      expect(fields.map(&:name)).to match_array %i(wins)
+    end if defined?(ActiveSupport::Reloader)
   end
 end
 

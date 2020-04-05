@@ -21,11 +21,11 @@ module RailsAdmin
         elsif type && type != (field.nil? ? nil : field.type)
           if field
             properties = field.properties
-            _fields.delete(field)
+            field = _fields[_fields.index(field)] = RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)
           else
             properties = abstract_model.properties.detect { |p| name == p.name }
+            field = (_fields << RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
           end
-          field = (_fields << RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last
         end
 
         # If field has not been yet defined add some default properties
@@ -130,7 +130,7 @@ module RailsAdmin
           @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
         else
           # parent is RailsAdmin::Config::Model, recursion is on Section's classes
-          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).freeze
+          @_ro_fields ||= parent.send(self.class.superclass.to_s.underscore.split('/').last)._fields(true).clone.freeze
         end
         readonly ? @_ro_fields : (@_fields ||= @_ro_fields.collect(&:clone))
       end

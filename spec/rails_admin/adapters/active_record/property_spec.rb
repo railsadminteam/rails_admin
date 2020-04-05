@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'timecop'
 
-describe 'RailsAdmin::Adapters::ActiveRecord::Property', active_record: true do
+RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Property', active_record: true do
   describe 'string field' do
     subject { RailsAdmin::AbstractModel.new('Player').properties.detect { |f| f.name == :name } }
 

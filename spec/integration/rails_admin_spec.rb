@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin, type: :request do
+RSpec.describe RailsAdmin, type: :request do
   subject { page }
 
   before do
@@ -31,40 +31,11 @@ describe RailsAdmin, type: :request do
     # Note: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it 'loads stylesheets in header' do
-      is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin.css"]', visible: false)
+      is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
     end
 
     it 'loads javascript files in body' do
-      is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin.js"]', visible: false)
-    end
-  end
-
-  describe 'hidden fields with default values' do
-    before do
-      RailsAdmin.config Player do
-        include_all_fields
-        edit do
-          field :name, :hidden do
-            default_value do
-              bindings[:view]._current_user.email
-            end
-          end
-        end
-      end
-    end
-
-    it 'shows up with default value, hidden' do
-      visit new_path(model_name: 'player')
-      is_expected.to have_selector("#player_name[type=hidden][value='username@example.com']")
-      is_expected.not_to have_selector("#player_name[type=hidden][value='toto@example.com']")
-    end
-
-    it 'does not show label' do
-      is_expected.not_to have_selector('label', text: 'Name')
-    end
-
-    it 'does not show help block' do
-      is_expected.not_to have_xpath("id('player_name')/../p[@class='help-block']")
+      is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin"][src$=".js"]', visible: false)
     end
   end
 
@@ -89,32 +60,6 @@ describe RailsAdmin, type: :request do
       visit index_path(model_name: 'player')
       is_expected.to have_selector('.header.name_field')
       is_expected.not_to have_selector('.header.team_field')
-    end
-  end
-
-  describe 'polymorphic associations' do
-    before :each do
-      @team = FactoryGirl.create :team
-      @comment = FactoryGirl.create :comment, commentable: @team
-    end
-
-    it 'works like belongs to associations in the list view' do
-      visit index_path(model_name: 'comment')
-
-      is_expected.to have_content(@team.name)
-    end
-
-    it 'is editable' do
-      visit edit_path(model_name: 'comment', id: @comment.id)
-
-      is_expected.to have_selector('select#comment_commentable_type')
-      is_expected.to have_selector('select#comment_commentable_id')
-    end
-
-    it 'is visible in the owning end' do
-      visit edit_path(model_name: 'team', id: @team.id)
-
-      is_expected.to have_selector('select#team_comment_ids')
     end
   end
 
@@ -146,6 +91,58 @@ describe RailsAdmin, type: :request do
     it 'has label-danger class on log out link' do
       visit dashboard_path
       is_expected.to have_selector('.label-danger')
+    end
+
+    it 'has links for actions which are marked as show_in_navigation' do
+      I18n.backend.store_translations(
+        :en, admin: {actions: {
+          shown_in_navigation: {menu: 'Look this'},
+        }}
+      )
+      RailsAdmin.config do |config|
+        config.actions do
+          dashboard do
+            show_in_navigation false
+          end
+          root :shown_in_navigation, :dashboard do
+            action_name :dashboard
+            show_in_navigation true
+          end
+        end
+      end
+
+      visit dashboard_path
+      is_expected.not_to have_css '.root_links li', text: 'Dashboard'
+      is_expected.to have_css '.root_links li', text: 'Look this'
+    end
+  end
+
+  describe 'CSRF protection' do
+    before do
+      allow_any_instance_of(ActionController::Base).to receive(:protect_against_forgery?).and_return(true)
+    end
+
+    it 'is enforced' do
+      visit new_path(model_name: 'league')
+      fill_in 'league[name]', with: 'National league'
+      find('input[name="authenticity_token"]', visible: false).set("invalid token")
+      expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
+    end
+  end
+
+  context 'with invalid model name' do
+    it "redirects to dashboard and inform the user the model wasn't found" do
+      visit '/admin/whatever'
+      expect(page.driver.status_code).to eq(404)
+      expect(find('.alert-danger')).to have_content("Model 'Whatever' could not be found")
+    end
+  end
+
+  context 'with invalid action' do
+    it "redirects to balls index and inform the user the id wasn't found" do
+      visit '/admin/ball/545-typo'
+      expect(page.driver.status_code).to eq(404)
+      expect(find('.alert-danger')).to have_content("Ball with id '545-typo' could not be found")
     end
   end
 end

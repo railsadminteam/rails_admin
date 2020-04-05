@@ -13,6 +13,7 @@ class Player
   field :born_on, type: Date
   field :notes, type: String
   field :suspended, type: Boolean, default: false
+  field :formation, type: String
 
   validates_presence_of(:name)
   validates_numericality_of(:number, only_integer: true)
@@ -26,6 +27,8 @@ class Player
   has_many :comments, as: :commentable
 
   before_destroy :destroy_hook
+
+  scope :rails_admin_search, ->(query) { where(name: query.reverse) }
 
   def destroy_hook; end
 

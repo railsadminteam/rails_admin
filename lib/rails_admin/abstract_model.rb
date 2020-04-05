@@ -1,3 +1,5 @@
+require 'rails_admin/support/datetime'
+
 module RailsAdmin
   class AbstractModel
     cattr_accessor :all
@@ -44,7 +46,7 @@ module RailsAdmin
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
       ancestors = model.ancestors.collect(&:to_s)
-      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class?
+      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class? && model.table_exists?
         initialize_active_record
       elsif ancestors.include?('Mongoid::Document')
         initialize_mongoid
@@ -87,12 +89,11 @@ module RailsAdmin
         case association.type
         when :has_one
           if child = object.send(association.name)
-            yield(association, child)
+            yield(association, [child])
           end
         when :has_many
-          object.send(association.name).each do |child| # rubocop:disable ShadowingOuterLocalVariable
-            yield(association, child)
-          end
+          children = object.send(association.name)
+          yield(association, Array.new(children))
         end
       end
     end
@@ -116,6 +117,10 @@ module RailsAdmin
       require 'rails_admin/adapters/neo4j'
       extend Adapters::Neo4j
     end
+    
+    def parse_field_value(field, value)
+      value.is_a?(Array) ? value.map { |v| field.parse_value(v) } : field.parse_value(value)
+    end
 
     class StatementBuilder
       def initialize(column, type, value, operator)
@@ -127,7 +132,6 @@ module RailsAdmin
 
       def to_statement
         return if [@operator, @value].any? { |v| v == '_discard' }
-
         unary_operators[@operator] || unary_operators[@value] ||
           build_statement_for_type_generic
       end
@@ -150,7 +154,7 @@ module RailsAdmin
       end
 
       def build_statement_for_type
-        fail('You must override build_statement_for_type in your StatementBuilder')
+        raise('You must override build_statement_for_type in your StatementBuilder')
       end
 
       def build_statement_for_integer_decimal_or_float
@@ -174,22 +178,25 @@ module RailsAdmin
       end
 
       def build_statement_for_date
-        range_filter(*get_filtering_duration)
+        start_date, end_date = get_filtering_duration
+        start_date = (start_date.to_date rescue nil) if start_date
+        end_date = (end_date.to_date rescue nil) if end_date
+        range_filter(start_date, end_date)
       end
 
       def build_statement_for_datetime_or_timestamp
         start_date, end_date = get_filtering_duration
-        start_date = start_date.to_time.beginning_of_day if start_date
-        end_date = end_date.to_time.end_of_day if end_date
+        start_date = start_date.try(:beginning_of_day) if start_date
+        end_date = end_date.try(:end_of_day) if end_date
         range_filter(start_date, end_date)
       end
 
       def unary_operators
-        fail('You must override unary_operators in your StatementBuilder')
+        raise('You must override unary_operators in your StatementBuilder')
       end
 
       def range_filter(_min, _max)
-        fail('You must override range_filter in your StatementBuilder')
+        raise('You must override range_filter in your StatementBuilder')
       end
 
       class FilteringDuration
@@ -227,7 +234,7 @@ module RailsAdmin
         end
 
         def between
-          [convert_to_date(@value[1]), convert_to_date(@value[2])]
+          [@value[1], @value[2]]
         end
 
         def default
@@ -236,18 +243,8 @@ module RailsAdmin
 
       private
 
-        def date_format
-          I18n.t('admin.misc.filter_date_format',
-                 default: I18n.t('admin.misc.filter_date_format', locale: :en)).gsub('dd', '%d').gsub('mm', '%m').gsub('yy', '%Y')
-        end
-
-        def convert_to_date(value)
-          value.present? && Date.strptime(value, date_format)
-        end
-
         def default_date
-          default_date_value = Array.wrap(@value).first
-          convert_to_date(default_date_value) rescue false
+          Array.wrap(@value).first
         end
       end
     end

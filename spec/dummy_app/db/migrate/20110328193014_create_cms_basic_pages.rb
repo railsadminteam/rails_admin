@@ -1,4 +1,4 @@
-class CreateCmsBasicPages < ActiveRecord::Migration
+class CreateCmsBasicPages < ActiveRecord::Migration[5.0]
   def self.up
     create_table :cms_basic_pages do |t|
       t.string :title

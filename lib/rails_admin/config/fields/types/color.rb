@@ -1,10 +1,10 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Color < RailsAdmin::Config::Fields::Base
+        class Color < StringLike
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :pretty_value do

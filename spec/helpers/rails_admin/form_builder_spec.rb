@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin::FormBuilder', type: :helper do
+RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
   describe '#generate' do
     before do
       allow(helper).to receive(:authorized?).and_return(true)

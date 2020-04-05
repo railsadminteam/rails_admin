@@ -20,8 +20,9 @@ module RailsAdmin
               @authorization_adapter && @authorization_adapter.attributes_for(:new, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
-              if object_params = params[@abstract_model.to_param]
-                @object.set_attributes(@object.attributes.merge(object_params))
+              if object_params = params[@abstract_model.param_key]
+                sanitize_params_for!(request.xhr? ? :modal : :create)
+                @object.set_attributes(@object.attributes.merge(object_params.to_h))
               end
               respond_to do |format|
                 format.html { render @action.template_name }
@@ -35,9 +36,7 @@ module RailsAdmin
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
               @object.set_attributes(params[@abstract_model.param_key])
-              @authorization_adapter && @authorization_adapter.attributes_for(:create, @abstract_model).each do |name, value|
-                @object.send("#{name}=", value)
-              end
+              @authorization_adapter && @authorization_adapter.authorize(:create, @abstract_model, @object)
 
               if @object.save
                 @auditing_adapter && @auditing_adapter.create_object(@object, @abstract_model, _current_user)

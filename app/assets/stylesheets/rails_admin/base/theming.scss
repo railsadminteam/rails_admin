@@ -8,7 +8,7 @@ $avatar-size: 30px;
 body.rails_admin {
 
   .thumbnail {
-    display:inline-block;
+    display: inline-block;
   }
 
   /* room for upper navbar */
@@ -58,6 +58,10 @@ body.rails_admin {
     }
   }
 
+  label.input-group-addon {
+    cursor: pointer;
+  }
+
   /* fat labels in forms */
   .label.form-label {
     padding: 7px 7px 8px 7px;
@@ -70,7 +74,7 @@ body.rails_admin {
       display:none;
     }
 
-    .control-group.image_field {
+    .control-group {
       .img-thumbnail {
         margin-bottom: 10px;
       }
@@ -127,13 +131,10 @@ body.rails_admin {
       display:block;
     }
 
-    /* Put form controls above siblings to make them accessible */
-    .controls {
-      z-index: 1;
-    }
-
     /* nested forms */
     .tab-content {
+      clear: both;
+
       .tab-pane {
         @include clearfix;
         border-left: 5px solid #049cdb;
@@ -334,7 +335,7 @@ body.rails_admin {
       position: fixed;
       top: $navbar-height;
       bottom: 0;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
   }
 }

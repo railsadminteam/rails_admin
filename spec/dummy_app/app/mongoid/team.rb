@@ -17,6 +17,7 @@ class Team
   field :revenue, type: BigDecimal
   field :color, type: String
   field :custom_field, type: String
+  field :main_sponsor, type: Integer
 
   has_many :players, inverse_of: :team, order: :_id.asc
   has_and_belongs_to_many :fans
@@ -24,7 +25,7 @@ class Team
 
   validates_presence_of :division_id, only_integer: true
   validates_presence_of :manager
-  validates_numericality_of :founded, only_integer: true
+  validates_numericality_of :founded, only_integer: true, allow_blank: true
   validates_numericality_of :wins, only_integer: true
   validates_numericality_of :losses, only_integer: true
   validates_numericality_of :win_percentage

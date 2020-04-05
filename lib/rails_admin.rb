@@ -2,12 +2,13 @@ require 'rails_admin/engine'
 require 'rails_admin/abstract_model'
 require 'rails_admin/config'
 require 'rails_admin/extension'
-require 'rails_admin/extensions/cancan'
 require 'rails_admin/extensions/cancancan'
+require 'rails_admin/extensions/pundit'
 require 'rails_admin/extensions/paper_trail'
 require 'rails_admin/extensions/history'
 require 'rails_admin/support/csv_converter'
-require 'rails_admin/support/core_extensions'
+require 'rails_admin/support/hash_helper'
+require 'yaml'
 
 module RailsAdmin
   # Setup RailsAdmin
@@ -31,6 +32,28 @@ module RailsAdmin
     else
       RailsAdmin::Config
     end
+  end
+
+  # Backwards-compatible with safe_yaml/load when SafeYAML isn't available.
+  # Evaluates available YAML loaders at boot and creates appropriate method,
+  # so no conditionals are required at runtime.
+  begin
+    require 'safe_yaml/load'
+    def self.yaml_load(yaml)
+      SafeYAML.load(yaml)
+    end
+  rescue LoadError
+    if YAML.respond_to?(:safe_load)
+      def self.yaml_load(yaml)
+        YAML.safe_load(yaml)
+      end
+    else
+      raise LoadError.new "Safe-loading of YAML is not available. Please install 'safe_yaml' or install Psych 2.0+"
+    end
+  end
+
+  def self.yaml_dump(object)
+    YAML.dump(object)
   end
 end
 

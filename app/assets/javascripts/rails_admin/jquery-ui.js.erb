@@ -1,0 +1,8 @@
+<% require_asset "jquery-ui/effect" %>
+<% if Jquery::Ui::Rails::JQUERY_UI_VERSION >= '1.12' %>
+  <% require_asset "jquery-ui/widgets/sortable" %>
+  <% require_asset "jquery-ui/widgets/autocomplete" %>
+<% else %>
+  <% require_asset "jquery-ui/sortable" %>
+  <% require_asset "jquery-ui/autocomplete" %>
+<% end %>

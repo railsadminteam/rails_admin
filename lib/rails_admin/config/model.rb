@@ -9,6 +9,7 @@ require 'rails_admin/config/has_fields'
 require 'rails_admin/config/has_description'
 require 'rails_admin/config/sections'
 require 'rails_admin/config/actions'
+require 'rails_admin/config/inspectable'
 
 module RailsAdmin
   module Config
@@ -18,10 +19,13 @@ module RailsAdmin
       include RailsAdmin::Config::Configurable
       include RailsAdmin::Config::Hideable
       include RailsAdmin::Config::Sections
+      include RailsAdmin::Config::Inspectable
 
       attr_reader :abstract_model
       attr_accessor :groups
       attr_reader :parent, :root
+
+      NAMED_INSTANCE_VARIABLES = [:@parent, :@root].freeze
 
       def initialize(entity)
         @parent = nil
@@ -40,7 +44,8 @@ module RailsAdmin
       end
 
       def excluded?
-        @excluded ||= !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
+        return @excluded if defined?(@excluded)
+        @excluded = !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
       end
 
       def object_label
@@ -61,7 +66,7 @@ module RailsAdmin
       end
 
       register_instance_option :label_plural do
-        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: Float::INFINITY, default: label.pluralize)
+        (@label_plural ||= {})[::I18n.locale] ||= abstract_model.model.model_name.human(count: Float::INFINITY, default: label.pluralize(::I18n.locale))
       end
 
       def pluralize(count)
@@ -84,7 +89,8 @@ module RailsAdmin
       register_instance_option :navigation_label do
         @navigation_label ||= begin
           # Use source method object in case it's overwritten in the model
-          parent_module = Class.method(:parent).unbind.bind(abstract_model.model).call
+          # parent_module = Class.method(:parent).unbind.bind(abstract_model.model).call
+          parent_module = abstract_model.model.try(:module_parent) || abstract_model.model.try!(:parent)
           if parent_module != Object
             parent_module.to_s
           end
@@ -97,25 +103,8 @@ module RailsAdmin
 
       # Act as a proxy for the base section configuration that actually
       # store the configurations.
-      def method_missing(m, *args, &block)
-        send(:base).send(m, *args, &block)
-      end
-
-      def inspect
-        "#<#{self.class.name}[#{abstract_model.model.name}] #{
-          instance_variables.collect do |v|
-            value = instance_variable_get(v)
-            if [:@parent, :@root].include? v
-              if value.respond_to? :name
-                "#{v}=#{value.name.inspect}"
-              else
-                "#{v}=#{value.class.name}"
-              end
-            else
-              "#{v}=#{value.inspect}"
-            end
-          end.join(', ')
-        }>"
+      def method_missing(method_name, *args, &block)
+        send(:base).send(method_name, *args, &block)
       end
     end
   end
