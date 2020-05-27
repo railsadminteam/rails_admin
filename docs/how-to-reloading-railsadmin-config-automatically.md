@@ -1,5 +1,10 @@
 ## Automatically reload rails_admin configuration when in development mode
-In your /config/initializers/rails_admin.rb you should add config.parent_controller = ApplicationController.to_s
+In your `/config/initializers/rails_admin.rb` you should add:
+```ruby
+config.parent_controller = ApplicationController.to_s
+```
+
+And then in `ApplicationController`:
 ```ruby
 class ApplicationController < ActionController::Base
   protect_from_forgery
