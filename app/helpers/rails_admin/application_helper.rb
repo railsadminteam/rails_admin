@@ -156,9 +156,25 @@ module RailsAdmin
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) && a.show_in_menu }
       actions.collect do |action|
         wording = wording_for(:menu, action)
+        li_class = "icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}"
+        a_href = rails_admin.url_for(
+          action: action.action_name,
+          controller: 'rails_admin/main',
+          model_name: abstract_model.try(:to_param),
+          id: object.try(:persisted?) ? object.try(:id) : nil
+        )
+        confirmation_text =
+          if text_or_lambda = action.try(:confirmation_text)
+            if text_or_lambda.respond_to?(:call)
+              text_or_lambda.call(object)
+            else
+              text_or_lambda
+            end
+          end
+
         %(
-          <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="icon #{action.key}_#{parent}_link #{'active' if current_action?(action)}">
-            <a class="#{action.pjax? ? 'pjax' : ''}" href="#{rails_admin.url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))}">
+          <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="#{li_class}">
+            <a class="#{action.pjax? ? 'pjax' : ''}" href="#{a_href}"#{" data-confirm='#{confirmation_text}'" if confirmation_text}>
               <i class="#{action.link_icon}"></i>
               <span#{only_icon ? " style='display:none'" : ''}>#{wording}</span>
             </a>
