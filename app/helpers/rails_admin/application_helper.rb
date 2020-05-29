@@ -161,16 +161,9 @@ module RailsAdmin
           action: action.action_name,
           controller: 'rails_admin/main',
           model_name: abstract_model.try(:to_param),
-          id: object.try(:persisted?) ? object.try(:id) : nil
+          id: object.try(:persisted?) ? object.try(:id) : nil,
         )
-        confirmation_text =
-          if text_or_lambda = action.try(:confirmation_text)
-            if text_or_lambda.respond_to?(:call)
-              text_or_lambda.call(object)
-            else
-              text_or_lambda
-            end
-          end
+        confirmation_text = action.try(:confirmation_text).try(:call, object)
 
         %(
           <li title="#{wording if only_icon}" rel="#{'tooltip' if only_icon}" class="#{li_class}">
