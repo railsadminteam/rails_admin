@@ -2,6 +2,8 @@ Install and configure according to [the official instruction](https://github.com
 
 Your model should look like this:
 
+## simple upload
+
 ```ruby
 class Article < ActiveRecord::Base
   has_one_attached :asset
@@ -14,7 +16,7 @@ You can specify the field as an 'active_storage' type if not detected:
 field :asset, :active_storage
 ```
 
-## Deleting an attachment
+### Deleting an attachment
 
 You need to define a delete method if you want to delete attachment:
 
