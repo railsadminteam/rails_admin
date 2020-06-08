@@ -22,7 +22,7 @@ You need to define a delete method if you want to delete attachment:
 class Article < ActiveRecord::Base
   has_one_attached :asset
   attr_accessor :remove_asset
-  after_save { asset.purge if remove_asset == '1' }
+  after_save { asset.purge if remove_asset.present? }
 end
 ```
 The method name is `remove_#{name}` by default, but you can configure it using `delete_method` option:
