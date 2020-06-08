@@ -8,13 +8,13 @@ class Article < ActiveRecord::Base
 end
 ```
 
-You can specify the field as a 'active_storage' type if not detected:
+You can specify the field as an 'active_storage' type if not detected:
 
 ```ruby
 field :asset, :active_storage
 ```
 
-## Deleting attachment
+## Deleting an attachment
 
 You need to define a delete method if you want to delete attachment:
 
@@ -33,7 +33,7 @@ field :asset, :active_storage do
 end
 ```
 
-## show correct file name
+### show correct file name of attachment
 ```ruby
 field :asset, :active_storage do
   delete_method :remove_asset
@@ -46,7 +46,7 @@ field :asset, :active_storage do
 end
 ```
 
-## Multiple upload
+## Multiple uploads
 
 Support for multiple upload works the same way:
 
@@ -66,4 +66,11 @@ end
 field :assets, :multiple_active_storage do
   delete_method :remove_assets
 end
+```
+
+### show correct file name for Multiple attachments
+
+```ruby
+#TODO
+
 ```
