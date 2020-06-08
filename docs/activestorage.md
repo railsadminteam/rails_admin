@@ -2,7 +2,7 @@ Install and configure according to [the official instruction](https://github.com
 
 Your model should look like this:
 
-## simple upload
+## Simple upload
 
 ```ruby
 class Article < ActiveRecord::Base
@@ -50,8 +50,15 @@ end
 
 ## Multiple uploads
 
-Support for multiple upload works the same way:
+Support for multiple uploads works the same way:
 
+```ruby
+class Article < ActiveRecord::Base
+  has_many_attached :assets
+end
+```
+
+### Deleting Multiple attachments
 ```ruby
 class Article < ActiveRecord::Base
   has_many_attached :assets
