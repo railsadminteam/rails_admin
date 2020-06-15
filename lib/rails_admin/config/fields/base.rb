@@ -7,7 +7,7 @@ require 'rails_admin/config/inspectable'
 module RailsAdmin
   module Config
     module Fields
-      class Base # rubocop:disable ClassLength
+      class Base # rubocop:disable Metrics/ClassLength
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
@@ -20,7 +20,7 @@ module RailsAdmin
 
         NAMED_INSTANCE_VARIABLES = [
           :@parent, :@root, :@section, :@children_fields_registered,
-          :@associated_model_config, :@group, :@bindings
+          :@associated_model_config, :@group
         ].freeze
 
         def initialize(parent, name, properties)

@@ -1,22 +1,20 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
+RSpec.describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
   it_behaves_like 'a generic field type', :string_field, :multiple_file_upload
 
   describe '#allowed_methods' do
     it 'includes delete_method and cache_method' do
       RailsAdmin.config do |config|
         config.model FieldTest do
-          field :carrierwave_assets, :multiple_carrierwave do
-            delete_method :delete_carrierwave_assets
-          end
+          field :carrierwave_assets, :multiple_carrierwave
           field :active_storage_assets, :multiple_active_storage do
             delete_method :remove_active_storage_assets
           end if defined?(ActiveStorage)
         end
       end
-      expect(RailsAdmin.config(FieldTest).field(:carrierwave_assets).allowed_methods.collect(&:to_s)).to eq %w(carrierwave_assets carrierwave_assets_cache delete_carrierwave_assets)
-      expect(RailsAdmin.config(FieldTest).field(:active_storage_assets).allowed_methods.collect(&:to_s)).to eq %w(active_storage_assets remove_active_storage_assets) if defined?(ActiveStorage)
+      expect(RailsAdmin.config(FieldTest).field(:carrierwave_assets).with(object: FieldTest.new).allowed_methods.collect(&:to_s)).to eq %w(carrierwave_assets)
+      expect(RailsAdmin.config(FieldTest).field(:active_storage_assets).with(object: FieldTest.new).allowed_methods.collect(&:to_s)).to eq %w(active_storage_assets remove_active_storage_assets) if defined?(ActiveStorage)
     end
   end
 
@@ -97,7 +95,7 @@ describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
       RailsAdmin.config FieldTest do
         field :string_field, :multiple_file_upload do
           attachment do
-            delete_key 'something'
+            delete_value 'something'
 
             def resource_url(_thumb = false)
               "http://example.com/#{value}"
@@ -120,7 +118,7 @@ describe RailsAdmin::Config::Fields::Types::MultipleFileUpload do
     end
 
     it 'enables configuration' do
-      expect(rails_admin_field.attachments.map(&:delete_key)).to eq ['something']
+      expect(rails_admin_field.attachments.map(&:delete_value)).to eq ['something']
       expect(rails_admin_field.attachments.map(&:resource_url)).to eq ['http://example.com/foo.jpg']
       expect(rails_admin_field.pretty_value).to match(%r{src="http://example.com/foo.jpg"})
     end

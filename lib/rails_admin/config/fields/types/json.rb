@@ -17,6 +17,10 @@ module RailsAdmin
             bindings[:view].content_tag(:pre) { formatted_value }.html_safe
           end
 
+          register_instance_option :export_value do
+            formatted_value
+          end
+
           def parse_value(value)
             value.present? ? JSON.parse(value) : nil
           end

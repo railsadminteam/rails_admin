@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Datetime do
+RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
   it_behaves_like 'a generic field type', :datetime_field, :datetime
 
   describe '#formatted_value' do
@@ -31,7 +31,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
     let(:field) { RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :datetime_field } }
 
     before :each do
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @time = ::Time.now.getutc
     end
 
@@ -40,7 +40,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
     end
 
     it 'is able to read %B %-d, %Y %H:%M' do
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%B %-d, %Y %H:%M'))
       expect(@object.datetime_field.strftime('%Y-%m-%d %H:%M')).to eq(@time.strftime('%Y-%m-%d %H:%M'))
     end
@@ -54,7 +54,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
         end
       end
 
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%a, %d %b %Y %H:%M:%S %z'))
       expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
     end
@@ -68,7 +68,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
         end
       end
 
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%Y-%m-%d %H:%M:%S'))
       expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
     end
@@ -83,7 +83,7 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
       end
 
       Time.zone = 'Vienna'
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: 'Sat, 01 Sep 2012 12:00:00 +0200')
       expect(@object.datetime_field).to eq(Time.zone.parse('2012-09-01 12:00:00 +02:00'))
     end
@@ -91,13 +91,13 @@ describe RailsAdmin::Config::Fields::Types::Datetime do
     it 'changes formats when the locale changes' do
       french_format = "%A %d %B %Y %H:%M"
       allow(I18n).to receive(:t).with(:long, scope: [:time, :formats], raise: true).and_return(french_format)
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime(french_format))
       expect(@object.datetime_field.strftime(french_format)).to eq(@time.strftime(french_format))
 
       american_format = "%B %d, %Y %H:%M"
       allow(I18n).to receive(:t).with(:long, scope: [:time, :formats], raise: true).and_return(american_format)
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime(american_format))
       expect(@object.datetime_field.strftime(american_format)).to eq(@time.strftime(american_format))
     end

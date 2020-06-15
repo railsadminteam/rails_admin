@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Actions::Base do
+RSpec.describe RailsAdmin::Config::Actions::Base do
   describe '#visible?' do
     it 'excludes models not referenced in the only array' do
       RailsAdmin.config do |config|

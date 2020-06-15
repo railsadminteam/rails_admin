@@ -1,4 +1,3 @@
-require 'font-awesome-rails'
 require 'jquery-rails'
 require 'jquery-ui-rails'
 require 'kaminari'
@@ -24,11 +23,6 @@ module RailsAdmin
     end
 
     initializer 'RailsAdmin setup middlewares' do |app|
-      app.config.session_store :cookie_store
-      app.config.middleware.use ActionDispatch::Cookies
-      app.config.middleware.use ActionDispatch::Flash
-      app.config.middleware.use ActionDispatch::Session::CookieStore, app.config.session_options
-      app.config.middleware.use Rack::MethodOverride
       app.config.middleware.use Rack::Pjax
     end
 
@@ -46,6 +40,29 @@ module RailsAdmin
 
     rake_tasks do
       Dir[File.join(File.dirname(__FILE__), '../tasks/*.rake')].each { |f| load f }
+    end
+
+    # Check for required middlewares, users may forget to use them in Rails API mode
+    config.after_initialize do |app|
+      has_session_store = app.config.middleware.to_a.any? do |m|
+        m.klass.try(:<=, ActionDispatch::Session::AbstractStore) ||
+          m.klass.name =~ /^ActionDispatch::Session::/
+      end
+      loaded = app.config.middleware.to_a.map(&:name)
+      required = %w(ActionDispatch::Cookies ActionDispatch::Flash Rack::MethodOverride)
+      missing = required - loaded
+      unless missing.empty? && has_session_store
+        configs = missing.map { |m| "config.middleware.use #{m}" }
+        configs << "config.middleware.use #{app.config.session_store.try(:name) || 'ActionDispatch::Session::CookieStore'}, #{app.config.session_options}" unless has_session_store
+        raise <<-EOM
+Required middlewares for RailsAdmin are not added
+To fix this, add
+
+  #{configs.join("\n  ")}
+
+to config/application.rb.
+        EOM
+      end
     end
   end
 end

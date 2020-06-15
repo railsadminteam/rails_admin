@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Association do
+RSpec.describe RailsAdmin::Config::Fields::Association do
   describe '#pretty_value' do
-    let(:player) { FactoryGirl.create(:player, name: '<br />', team: FactoryGirl.create(:team)) }
+    let(:player) { FactoryBot.create(:player, name: '<br />', team: FactoryBot.create(:team)) }
     let(:field) { RailsAdmin.config('Team').fields.detect { |f| f.name == :players } }
-    let(:view) { ActionView::Base.new.tap { |d| allow(d).to receive(:action).and_return(nil) } }
+    let(:view) { (ActionView.version.to_s >= '6' ? ActionView::Base.empty : ActionView::Base.new).tap { |d| allow(d).to receive(:action).and_return(nil) } }
     subject { field.with(object: player.team, view: view).pretty_value }
 
     context 'when the link is disabled' do

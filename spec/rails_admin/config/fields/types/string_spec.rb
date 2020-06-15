@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::String do
+RSpec.describe RailsAdmin::Config::Fields::Types::String do
   describe '#html_attributes' do
     before :each do
       RailsAdmin.config Ball do
@@ -23,5 +23,7 @@ describe RailsAdmin::Config::Fields::Types::String do
     end
   end
 
-  it_behaves_like 'a generic field type', :string_field, :string
+  it_behaves_like 'a generic field type', :string_field
+
+  it_behaves_like 'a string-like field type', :string_field
 end

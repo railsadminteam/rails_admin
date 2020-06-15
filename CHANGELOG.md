@@ -2,7 +2,134 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.2...HEAD)
+
+
+## [2.0.2](https://github.com/sferik/rails_admin/tree/v2.0.2) - 2020-03-17
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.1...v2.0.2)
+
+### Fixed
+- Fix to use I18n to translate the button 'Reset filters'([#3248](https://github.com/sferik/rails_admin/pull/3248))
+
+### Security
+- Fix XSS vulnerability in nested forms([d72090ec](https://github.com/sferik/rails_admin/commit/d72090ec6a07c3b9b7b48ab50f3d405f91ff4375))
+
+
+## [2.0.1](https://github.com/sferik/rails_admin/tree/v2.0.1) - 2019-12-31
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0...v2.0.1)
+
+### Fixed
+- Fix Zeitwerk incompatible behavior of autoloading constants during initialization([#3190](https://github.com/sferik/rails_admin/issues/3190), [e275012b](https://github.com/sferik/rails_admin/commit/e275012b630453cb1187e71a938382a3c5d3ef39))
+- Fix empty fields being hidden regardless of `compact_show_view`([#3213](https://github.com/sferik/rails_admin/pull/3213))
+- Fix `filter_scope` not using `default_search_operator` as default([#3212](https://github.com/sferik/rails_admin/pull/3212))
+- Fix PaperTrail integration returning `nil` as username instead of `whodunnit`([#3210](https://github.com/sferik/rails_admin/pull/3210))
+- Fix Sprockets 4 incompatibility of vendorized Fontawesome([#3204](https://github.com/sferik/rails_admin/issues/3204), [#3207](https://github.com/sferik/rails_admin/pull/3207))
+
+### Security
+- Update moment.js to 2.24.0 to address security vulnerability([#3182](https://github.com/sferik/rails_admin/issues/3182), [#3201](https://github.com/sferik/rails_admin/pull/3201))
+
+
+## [2.0.0](https://github.com/sferik/rails_admin/tree/v2.0.0) - 2019-08-18
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.rc...v2.0.0)
+
+### Fixed
+- Fix support for belongs_to with custom primary key was broken in 2.0.0.rc([#3184](https://github.com/sferik/rails_admin/issues/3184), [0e92ca43](https://github.com/sferik/rails_admin/commit/0e92ca43fe7782a8d62ae9285a8d3de7857c9853))
+- Fix missing translation `en.admin.misc.ago`([#3180](https://github.com/sferik/rails_admin/pull/3180))
+
+
+## [2.0.0.rc](https://github.com/sferik/rails_admin/tree/v2.0.0.rc) - 2019-08-04
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.0.beta...v2.0.0.rc)
+
+### Added
+- Add Support for CarrierWave 2.0 multiple file upload's keep, append and reorder feature([fb093e04](https://github.com/sferik/rails_admin/commit/fb093e04502e7bff30594f5baf1227abb7199384))
+- Add ability to configure way how custom actions show up in root/top/sidebar navigation([#2844](https://github.com/sferik/rails_admin/pull/2844))
+
+### Changed
+- [BREAKING CHANGE] Stop authorization adapters assigning attributes on create and update, just check for permission instead([#3120](https://github.com/sferik/rails_admin/pull/3120), [c84d1703](https://github.com/sferik/rails_admin/commit/c84d1703b47b396382d152471dac8fc8dc41aefd))
+- [BREAKING CHANGE] Do not show tableless models by default([#3157](https://github.com/sferik/rails_admin/issues/3157), [87b38b33](https://github.com/sferik/rails_admin/commit/87b38b336cc668a74803dec4628215e2e2941248))
+- [BREAKING CHANGE] Convert empty string into nil for nullable string-like fields to achieve uniqueness-index friendliness([#2099](https://github.com/sferik/rails_admin/issues/2099), [#3172](https://github.com/sferik/rails_admin/issues/3172), [3f9ab1cc](https://github.com/sferik/rails_admin/commit/3f9ab1cc009caa8b466f34da692c3561da2235e4))
+- Extract head from application template for ease of customization([#3114](https://github.com/sferik/rails_admin/pull/3114))
+- Rename `delete_key` to `delete_value`, used to identify which file to delete in multiple file upload([8b8c3a44](https://github.com/sferik/rails_admin/commit/8b8c3a44177465823128e9b48b11467ccf7db001))
+- Get rid of CoffeeScript, use plain JavaScript instead([#3111](https://github.com/sferik/rails_admin/issues/3111), [#3168](https://github.com/sferik/rails_admin/pull/3168))
+- Replace sass-rails with sassc-rails([#3156](https://github.com/sferik/rails_admin/pull/3156))
+
+### Removed
+- Drop support for CanCan, please use its successor CanCanCan([6b7495f1](https://github.com/sferik/rails_admin/commit/6b7495f1454e30027a9d77b911206cc7703170a3))
+- Drop support for CanCanCan legacy `can :dashboard` style dashboard ability notation([5bebac24](https://github.com/sferik/rails_admin/commit/5bebac2488906f3739717108efadedaa091ccaf5))
+- Drop Refile support due to maintenance inactivity([25ae06a9](https://github.com/sferik/rails_admin/commit/25ae06a9a6eb534afa4a5f17e64ca346086bb3b8))
+
+### Fixed
+- Fix PaperTrail pagination breaks when Kaminari's `page_method_name` is set([#3170](https://github.com/sferik/rails_admin/issues/3170), [136b943c](https://github.com/sferik/rails_admin/commit/136b943ce842eba6b0a13dc2956ddc9ce20d006c))
+- Fix failing to pass config location to CKEditor([#3162](https://github.com/sferik/rails_admin/issues/3162), [c38b76d7](https://github.com/sferik/rails_admin/commit/c38b76d707f198be0ac8baa1ff02dde7bd02344f))
+- Fix CarrierWave multiple file uploader breaking when used with Fog([#3070](https://github.com/sferik/rails_admin/issues/3070))
+- Fix placeholder being picked up as a selection in filtering-multiselect([#2807](https://github.com/sferik/rails_admin/issues/2807), [15502601](https://github.com/sferik/rails_admin/commit/15502601ccd0bbbaeb364a0ee605f360d65c5cbb))
+- Fix breaking with has_many and custom primary key([#1878](https://github.com/sferik/rails_admin/issues/1878), [be7d2f4a](https://github.com/sferik/rails_admin/commit/be7d2f4a3ad1fda788f92a0e0dd4a83b98f141f4))
+- Fix to choose right LIKE statement in per-model basis([#1676](https://github.com/sferik/rails_admin/issues/1676), [4ea4575e](https://github.com/sferik/rails_admin/commit/4ea4575e934e26cec4a5b214b9fe68cb96b40247))
+- Fix polymorphic associations not using STI base classes for polymorphic type([#2136](https://github.com/sferik/rails_admin/pull/2136))
+
+### Security
+- Add `rel="noopener"` to all `target="_blank"` links to prevent Reverse tabnabbing([#2960](https://github.com/sferik/rails_admin/issues/2960), [#3169](https://github.com/sferik/rails_admin/pull/3169))
+
+
+## [2.0.0.beta](https://github.com/sferik/rails_admin/tree/v2.0.0.beta) - 2019-06-08
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.2...v2.0.0.beta)
+
+### Added
+- Rails 6 support([#3122](https://github.com/sferik/rails_admin/pull/3122))
+- ActionText support([#3144](https://github.com/sferik/rails_admin/issues/3144), [Wiki](https://github.com/sferik/rails_admin/wiki/ActionText))
+- sass-rails 6 support([#3129](https://github.com/sferik/rails_admin/issues/3129))
+- Sidescroll feature([#3017](https://github.com/sferik/rails_admin/pull/3017), [Wiki](https://github.com/sferik/rails_admin/wiki/Horizontally-scrolling-table-with-frozen-columns-in-list-view))
+- Custom search feature([#343](https://github.com/sferik/rails_admin/issues/343), [#3019](https://github.com/sferik/rails_admin/pull/3019), [Wiki](https://github.com/sferik/rails_admin/wiki/Custom-Search))
+- Filtering-select feature for polymorphic association([#2886](https://github.com/sferik/rails_admin/pull/2886))
+- Shrine support([#3081](https://github.com/sferik/rails_admin/pull/3081))
+- Flexibility for localication of *time* ago([#3135](https://github.com/sferik/rails_admin/pull/3135), [49add741](https://github.com/sferik/rails_admin/commit/49add7413794e2a1423b86399ef476414d22970f))
+
+### Changed
+- Vendorize font-awesome to allow using different version in app([#3039](https://github.com/sferik/rails_admin/issues/3039))
+- Stop inlining JavaScripts for CSP friendliness([#3087](https://github.com/sferik/rails_admin/issues/3087))
+- Richtext editors now uses CDN-hosted assets([#3126](https://github.com/sferik/rails_admin/issues/3126))
+
+### Removed
+- Remove deprecated DSL syntax for richtext editors([e0b390d9](https://github.com/sferik/rails_admin/commit/e0b390d99eab64c99f1f3cccae2029649e90e11c))
+- Drop support for Ruby 2.1 and Rails 4.x([dd247804](https://github.com/sferik/rails_admin/commit/dd24780445f4dd676ae033c69a5b64347b80c3bc))
+
+### Fixed
+- Fix Mongoid query and filter parsing value twice([#2755](https://github.com/sferik/rails_admin/issues/2755))
+- Fix thread-safety issues([#2897](https://github.com/sferik/rails_admin/issues/2897), [#2942](https://github.com/sferik/rails_admin/issues/2942), [1d22bc66](https://github.com/sferik/rails_admin/commit/1d22bc66168ac9ea478ea95b4b3b79f41263c0bd))
+- Fix compact_show_view not showing Boolean falses([#2416](https://github.com/sferik/rails_admin/issues/2416))
+- Fix PaperTrail fail to fetch versions for STI subclasses([#2865](https://github.com/sferik/rails_admin/pull/2865))
+- Fix Dragonfly factory breaks if a model not extending Dragonfly::Model is passed([#2720](https://github.com/sferik/rails_admin/pull/2720))
+- Fix PaperTrail adapter not using Kaminari's `page_method_name` for pagination([#2712](https://github.com/sferik/rails_admin/pull/2712))
+- Fix #bulk_menu was not using passed `abstract_model` ([#2782](https://github.com/sferik/rails_admin/pull/2782))
+- Fix wrong styles when using multiple instances of CodeMirror([#3107](https://github.com/sferik/rails_admin/pull/3107))
+- Fix password being cleared when used with Devise 4.6([72bc0373](https://github.com/sferik/rails_admin/commit/72bc03736162ffef8e5b99f42ca605d17fe7e7d0))
+- ActiveStorage factory caused const missing for Mongoid([#3088](https://github.com/sferik/rails_admin/pull/3088), [db927687](https://github.com/sferik/rails_admin/commit/db9276879c8e8c5e8772261725ef0e0cdadd9cf1))
+- Fix exact matches were using LIKE, which was not index-friendly([#3000](https://github.com/sferik/rails_admin/pull/3000))
+- Middleware check failed when using RedisStore([#3076](https://github.com/sferik/rails_admin/issues/3076))
+- Fix field being reset to default after an error([#3066](https://github.com/sferik/rails_admin/pull/3066))
+
+
+## [1.4.2](https://github.com/sferik/rails_admin/tree/v1.4.2) - 2018-09-23
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.1...v1.4.2)
+
+### Fixed
+- Fix `can't modify frozen Array` error on startup([#3060](https://github.com/sferik/rails_admin/issues/3060))
+- Fix deprecation warning with PaperTrail.whodunnit([#3059](https://github.com/sferik/rails_admin/pull/3059))
+
+
+## [1.4.1](https://github.com/sferik/rails_admin/tree/v1.4.1) - 2018-08-19
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v1.4.0...v1.4.1)
+
+### Fixed
+- Export crashes for models with JSON field([#3056](https://github.com/sferik/rails_admin/pull/3056))
+- Middlewares being mangled by engine initializer, causing app's session store configuration to be overwritten([#3048](https://github.com/sferik/rails_admin/issues/3048), [59478af9](https://github.com/sferik/rails_admin/commit/59478af9a05c76bdfe35e94e63c60ba89c27a483))
 
 
 ## [1.4.0](https://github.com/sferik/rails_admin/tree/v1.4.0) - 2018-07-22

@@ -10,16 +10,27 @@ RSpec.shared_examples 'a generic field type' do |column_name, field_type|
           end
         end
       end
-
-      let :rails_admin_field do
+      subject do
         RailsAdmin.config('FieldTest').fields.detect do |f|
           f.name == column_name
         end.with(object: FieldTest.new)
       end
 
       it 'should contain a required attribute with the string "required" as value' do
-        expect(rails_admin_field.html_attributes[:required]).to be_truthy
+        expect(subject.html_attributes[:required]).to be_truthy
       end
     end
+  end
+end
+
+RSpec.shared_examples 'a string-like field type' do |column_name, _|
+  subject do
+    RailsAdmin.config('FieldTest').fields.detect do |f|
+      f.name == column_name
+    end.with(object: FieldTest.new)
+  end
+
+  it 'is a StringLike field' do
+    expect(subject).to be_a(RailsAdmin::Config::Fields::Types::StringLike)
   end
 end

@@ -118,7 +118,7 @@
 
       /* Add all to selection */
       this.addAll.click(function(e){
-        widget._select($('option', widget.collection));
+        widget._select($('option:not(:disabled)', widget.collection));
         e.preventDefault();
         widget.selection.trigger('change');
       });

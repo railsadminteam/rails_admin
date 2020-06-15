@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe RailsAdmin::ApplicationHelper, type: :helper do
+RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
   describe '#authorized?' do
     let(:abstract_model) { RailsAdmin.config(FieldTest).abstract_model }
 
     it 'doesn\'t use unpersisted objects' do
       expect(helper).to receive(:action).with(:edit, abstract_model, nil).and_call_original
-      helper.authorized?(:edit, abstract_model, FactoryGirl.build(:field_test))
+      helper.authorized?(:edit, abstract_model, FactoryBot.build(:field_test))
     end
   end
 
@@ -69,7 +69,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
     describe '#actions' do
       it 'returns actions by type' do
         abstract_model = RailsAdmin::AbstractModel.new(Player)
-        object = FactoryGirl.create :player
+        object = FactoryBot.create :player
         expect(helper.actions(:all, abstract_model, object).collect(&:custom_key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
         expect(helper.actions(:root, abstract_model, object).collect(&:custom_key)).to eq([:dashboard])
         expect(helper.actions(:collection, abstract_model, object).collect(&:custom_key)).to eq([:index, :new, :export, :bulk_delete, :history_index])
@@ -144,7 +144,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
     describe '#breadcrumb' do
       it 'gives us a breadcrumb' do
-        @action = RailsAdmin::Config::Actions.find(:edit, abstract_model: RailsAdmin::AbstractModel.new(Team), object: FactoryGirl.create(:team, name: 'the avengers'))
+        @action = RailsAdmin::Config::Actions.find(:edit, abstract_model: RailsAdmin::AbstractModel.new(Team), object: FactoryBot.create(:team, name: 'the avengers'))
         bc = helper.breadcrumb
         expect(bc).to match(/Dashboard/) # dashboard
         expect(bc).to match(/Teams/) # list
@@ -176,7 +176,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
         @action = RailsAdmin::Config::Actions.find :show
         @abstract_model = RailsAdmin::AbstractModel.new(Team)
-        @object = FactoryGirl.create(:team, name: 'the avengers')
+        @object = FactoryBot.create(:team, name: 'the avengers')
 
         expect(helper.menu_for(:root)).to match(/Dashboard/)
         expect(helper.menu_for(:collection, @abstract_model)).to match(/List/)
@@ -199,6 +199,29 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
 
         @action = RailsAdmin::Config::Actions.find :dashboard
         expect(helper.menu_for(:root)).not_to match(/Dashboard/)
+      end
+
+      it 'shows actions which are marked as show_in_menu' do
+        I18n.backend.store_translations(
+          :en, admin: {actions: {
+            shown_in_menu: {menu: 'Look this'},
+          }}
+        )
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              show_in_menu false
+            end
+            root :shown_in_menu, :dashboard do
+              action_name :dashboard
+              show_in_menu true
+            end
+          end
+        end
+
+        @action = RailsAdmin::Config::Actions.find :dashboard
+        expect(helper.menu_for(:root)).not_to match(/Dashboard/)
+        expect(helper.menu_for(:root)).to match(/Look this/)
       end
     end
 
@@ -286,6 +309,61 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
       end
     end
 
+    describe '#root_navigation' do
+      it 'shows actions which are marked as show_in_sidebar' do
+        I18n.backend.store_translations(
+          :en, admin: {actions: {
+            shown_in_sidebar: {menu: 'Look this'},
+          }}
+        )
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              show_in_sidebar false
+            end
+            root :shown_in_sidebar, :dashboard do
+              action_name :dashboard
+              show_in_sidebar true
+            end
+          end
+        end
+
+        expect(helper.root_navigation).not_to match(/Dashboard/)
+        expect(helper.root_navigation).to match(/Look this/)
+      end
+
+      it 'allows grouping by sidebar_label' do
+        I18n.backend.store_translations(
+          :en, admin: {
+            actions: {
+              foo: {menu: 'Foo'},
+              bar: {menu: 'Bar'},
+            },
+          }
+        )
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              show_in_sidebar true
+              sidebar_label 'One'
+            end
+            root :foo, :dashboard do
+              action_name :dashboard
+              show_in_sidebar true
+              sidebar_label 'Two'
+            end
+            root :bar, :dashboard do
+              action_name :dashboard
+              show_in_sidebar true
+              sidebar_label 'Two'
+            end
+          end
+        end
+
+        expect(helper.strip_tags(helper.root_navigation).delete(' ')).to eq 'OneDashboardTwoFooBar'
+      end
+    end
+
     describe '#static_navigation' do
       it 'shows not show static nav if no static links defined' do
         RailsAdmin.config do |config|
@@ -340,30 +418,45 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
             end
           end
         end
-        @action = RailsAdmin::Config::Actions.find :index
-        result = helper.bulk_menu(RailsAdmin::AbstractModel.new(Team))
-        expect(result).to match('zorg_action')
-        expect(result).to match('blub')
+        # Preload all models to prevent I18n being cleared in Mongoid builds
+        RailsAdmin::AbstractModel.all
+        en = {admin: {actions: {
+          zorg: {bulk_link: 'Zorg all these %{model_label_plural}'},
+          blub: {bulk_link: 'Blub all these %{model_label_plural}'},
+        }}}
+        I18n.backend.store_translations(:en, en)
 
-        expect(helper.bulk_menu(RailsAdmin::AbstractModel.new(Player))).not_to match('blub')
+        @abstract_model = RailsAdmin::AbstractModel.new(Team)
+        result = helper.bulk_menu
+
+        expect(result).to match('zorg_action')
+        expect(result).to match('Zorg all these Teams')
+        expect(result).to match('blub')
+        expect(result).to match('Blub all these Teams')
+
+        result_2 = helper.bulk_menu(RailsAdmin::AbstractModel.new(Player))
+        expect(result_2).to match('zorg_action')
+        expect(result_2).to match('Zorg all these Players')
+        expect(result_2).not_to match('blub')
+        expect(result_2).not_to match('Blub all these Players')
       end
     end
 
     describe '#edit_user_link' do
       it "don't include email column" do
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:player))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:player))
         result = helper.edit_user_link
         expect(result).to eq nil
       end
 
       it 'include email column' do
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).to match('href')
       end
 
       it 'show gravatar' do
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).to include('gravatar')
       end
@@ -373,7 +466,7 @@ describe RailsAdmin::ApplicationHelper, type: :helper do
           config.show_gravatar = false
         end
 
-        allow(helper).to receive(:_current_user).and_return(FactoryGirl.create(:user))
+        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).not_to include('gravatar')
       end

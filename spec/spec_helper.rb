@@ -12,19 +12,20 @@ SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCo
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
-  minimum_coverage(CI_ORM == :mongoid ? 90.37 : 91.21)
+  minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
 
 require 'rspec/rails'
-require 'factory_girl'
+require 'factory_bot'
 require 'factories'
 require 'policies'
 require 'database_cleaner'
 require "orm/#{CI_ORM}"
 
-Dir[File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('../support/**/*.rb', __FILE__),
+    File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -55,10 +56,14 @@ require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 Capybara.server = :webrick
 
+RailsAdmin.setup_all_extensions
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.disable_monkey_patching!
 
   config.include RSpec::Matchers
   config.include RailsAdmin::Engine.routes.url_helpers

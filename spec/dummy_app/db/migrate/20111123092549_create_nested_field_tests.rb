@@ -1,4 +1,4 @@
-class CreateNestedFieldTests < MigrationBase
+class CreateNestedFieldTests < ActiveRecord::Migration[5.0]
   def change
     create_table :nested_field_tests do |t|
       t.string :title

@@ -1,17 +1,17 @@
 require 'spec_helper'
 require 'rails_admin/adapters/mongoid/abstract_object'
 
-describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', mongoid: true do
+RSpec.describe 'RailsAdmin::Adapters::Mongoid::AbstractObject', mongoid: true do
   before do
-    @players = FactoryGirl.create_list :player, 3
-    @draft = FactoryGirl.create :draft
-    @team = RailsAdmin::Adapters::Mongoid::AbstractObject.new FactoryGirl.create :team
+    @players = FactoryBot.create_list :player, 3
+    @draft = FactoryBot.create :draft
+    @team = RailsAdmin::Adapters::Mongoid::AbstractObject.new FactoryBot.create :team
   end
 
   describe 'references_many association' do
     it 'supports retrieval of ids through foo_ids' do
       expect(@team.player_ids).to eq([])
-      player = FactoryGirl.create :player, team: @team
+      player = FactoryBot.create :player, team: @team
       expect(@team.player_ids).to eq([player.id])
     end
 

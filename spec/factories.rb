@@ -1,6 +1,6 @@
 # coding: utf-8
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :player do
     sequence(:name) { |n| "Player #{n}" }
     sequence(:number) { |n| n }
@@ -8,7 +8,7 @@ FactoryGirl.define do
   end
 
   factory :draft do
-    date 1.week.ago
+    date { 1.week.ago }
     sequence(:round)
     sequence(:pick)
     sequence(:overall)
@@ -25,6 +25,8 @@ FactoryGirl.define do
     sequence(:wins)
     sequence(:losses)
     sequence(:win_percentage)
+
+    factory :managed_team, class: ManagedTeam
   end
 
   factory :league do
@@ -45,6 +47,7 @@ FactoryGirl.define do
     sequence(:password) { |_n| 'password' }
 
     factory :user_confirmed, class: User::Confirmed
+    factory :managing_user, class: ManagingUser
   end
 
   factory :field_test do
@@ -63,23 +66,31 @@ FactoryGirl.define do
     end
 
     factory :comment_confirmed, class: Comment::Confirmed do
-      content('something')
+      content { 'something' }
     end
   end
 
   factory :ball do
-    color(%w(red blue green yellow purple brown black white).sample)
+    color { %w(red blue green yellow purple brown black white).sample }
   end
 
   factory :hardball do
-    color('blue')
+    color { 'blue' }
   end
 
   factory :image do
-    file File.open(Rails.root.join('public', 'robots.txt'))
+    file { File.open(Rails.root.join('public', 'robots.txt')) }
   end
 
   factory :paper_trail_test do
     sequence(:name) { |n| "name #{n}" }
+
+    factory :paper_trail_test_subclass,
+            parent: :paper_trail_test,
+            class: 'PaperTrailTestSubclass'
+
+    factory :paper_trail_test_subclass_in_namespace,
+            parent: :paper_trail_test,
+            class: 'PaperTrailTest::SubclassInNamespace'
   end
 end

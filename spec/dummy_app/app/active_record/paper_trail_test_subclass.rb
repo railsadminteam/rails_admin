@@ -1,0 +1,2 @@
+class PaperTrailTestSubclass < PaperTrailTest
+end
