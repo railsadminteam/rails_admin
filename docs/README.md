@@ -146,7 +146,7 @@
 * [RailsAdminNestedSet](https://github.com/rs-pro/rails_admin_nested_set): Drag and drop tree view for Awesome Nested Set / mongoid nested set
 * [RailsAdminPlaceField](https://github.com/thinkclay/rails_admin_place_field): Google Maps with Places and Foursquare Venues
 * [RailsAdminRedactor](https://github.com/anarchocurious/rails-admin-redactor): Adds support for the [Redactor](http://imperavi.com/redactor/) wysiwyg editor
-* [RailsAdminTagList](https://github.com/kryzhovnik/rails_admin_tag_list): ActsAsTaggableOn tag_list field
+* [RailsAdminTagList](https://github.com/kryzhovnik/rails_admin_tag_list): ActsAsTaggableOn tag_list field (DEPRECATED)
 * [RailsUploader](https://github.com/glebtv/rails-uploader): Nice mass file uploads with jQuery File Upload for rails_admin and mongoid
 * [Rich](https://github.com/bastiaanterhorst/rich): an opinionated CKEditor implementation with file uploads
 * [RailsAdminCountries](https://github.com/xronos-i-am/rails_admin_countries): Add [countries](https://github.com/hexorx/countries) gem support
