@@ -16,7 +16,7 @@ This assume you want to use the FREE version of Froala WYSIWYG HTML Editor (whic
     field :content, :froala
   end
 
-  # Optionally providing froala options (see https://froala.com/wysiwyg-editor/docs/plugins)
+  # Optionally providing froala options (see https://froala.com/wysiwyg-editor/docs/options/)
   edit do
     field :content, :froala do
       config_options do
