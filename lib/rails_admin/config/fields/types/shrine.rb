@@ -45,11 +45,7 @@ module RailsAdmin
           def resource_url(thumb = nil)
             return nil unless value
 
-            if thumb
-              bindings[:object].public_send(:"#{name}", thumb).url
-            else
-              value.url
-            end
+            thumb && bindings[:object].public_send(:"#{name}", thumb).try(:url) || value.url
           end
         end
       end
