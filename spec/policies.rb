@@ -33,10 +33,12 @@ class ApplicationPolicy
   def new?
     user.roles.include? :admin
   end
+  alias create? new?
 
   def edit?
     user.roles.include? :admin
   end
+  alias update? edit?
 
   def export?
     user.roles.include? :admin
@@ -49,12 +51,16 @@ end
 
 class PlayerPolicy < ApplicationPolicy
   def new?
-    (user.roles.include?(:create_player) || user.roles.include?(:admin) || user.roles.include?(:manage_player))
+    (user.roles.include?(:manage_player) ||
+      (user.roles.include?(:create_player) && (!record.is_a?(Player) || record.suspended)))
   end
+  alias create? new?
 
   def edit?
-    (user.roles.include? :manage_player)
+    (user.roles.include?(:manage_player) ||
+      (user.roles.include?(:update_player) && (!record.is_a?(Player) || !record.retired)))
   end
+  alias update? edit?
 
   def destroy?
     (user.roles.include? :manage_player)

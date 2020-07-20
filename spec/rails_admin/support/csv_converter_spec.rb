@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe RailsAdmin::CSVConverter do
+RSpec.describe RailsAdmin::CSVConverter do
   it 'keeps headers ordering' do
     RailsAdmin.config(Player) do
       export do
@@ -11,7 +11,7 @@ describe RailsAdmin::CSVConverter do
       end
     end
 
-    FactoryGirl.create :player
+    FactoryBot.create :player
     objects = Player.all
     schema = {only: [:number, :name]}
     expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Name/)
@@ -27,7 +27,7 @@ describe RailsAdmin::CSVConverter do
       end
     end
 
-    let(:objects) { FactoryGirl.create_list :player, 1, number: 1, name: 'なまえ' }
+    let(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'なまえ' }
     let(:schema) { {only: [:number, :name]} }
     let(:options) { {encoding_to: encoding} }
 
@@ -35,7 +35,7 @@ describe RailsAdmin::CSVConverter do
 
     context 'when encoding FROM latin1', active_record: true do
       let(:encoding) { '' }
-      let(:objects) { FactoryGirl.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
+      let(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
       before do
         case ActiveRecord::Base.connection_config[:adapter]
         when 'postgresql'

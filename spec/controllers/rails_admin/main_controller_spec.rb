@@ -1,62 +1,11 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe RailsAdmin::MainController, type: :controller do
+RSpec.describe RailsAdmin::MainController, type: :controller do
   routes { RailsAdmin::Engine.routes }
 
   def get(action, params)
-    if Rails.version >= '5.0'
-      super action, params: params
-    else
-      super action, params
-    end
-  end
-
-  describe '#dashboard' do
-    before do
-      allow(controller).to receive(:render).and_return(true) # no rendering
-    end
-
-    it 'shows statistics by default' do
-      allow(RailsAdmin.config(Player).abstract_model).to receive(:count).and_return(0)
-      expect(RailsAdmin.config(Player).abstract_model).to receive(:count)
-      controller.dashboard
-    end
-
-    it 'does not show statistics if turned off' do
-      RailsAdmin.config do |c|
-        c.included_models = [Player]
-        c.actions do
-          dashboard do
-            statistics false
-          end
-          index # mandatory
-        end
-      end
-
-      expect(RailsAdmin.config(Player).abstract_model).not_to receive(:count)
-      controller.dashboard
-    end
-
-    it 'counts are different for same-named models in different modules' do
-      allow(RailsAdmin.config(User::Confirmed).abstract_model).to receive(:count).and_return(10)
-      allow(RailsAdmin.config(Comment::Confirmed).abstract_model).to receive(:count).and_return(0)
-
-      controller.dashboard
-      expect(controller.instance_variable_get('@count')['User::Confirmed']).to be 10
-      expect(controller.instance_variable_get('@count')['Comment::Confirmed']).to be 0
-    end
-
-    it 'most recent change dates are different for same-named models in different modules' do
-      user_create = 10.days.ago.to_date
-      comment_create = 20.days.ago.to_date
-      FactoryGirl.create(:user_confirmed, created_at: user_create)
-      FactoryGirl.create(:comment_confirmed, created_at: comment_create)
-
-      controller.dashboard
-      expect(controller.instance_variable_get('@most_recent_created')['User::Confirmed']).to eq user_create
-      expect(controller.instance_variable_get('@most_recent_created')['Comment::Confirmed']).to eq comment_create
-    end
+    super action, params: params
   end
 
   describe '#check_for_cancel' do
@@ -113,7 +62,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view' do
     before do
-      @teams = FactoryGirl.create_list(:team, 21)
+      @teams = FactoryBot.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
     end
 
@@ -125,7 +74,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called from view with kaminari custom param_name' do
     before do
-      @teams = FactoryGirl.create_list(:team, 21)
+      @teams = FactoryBot.create_list(:team, 21)
       controller.params = {model_name: 'teams'}
       Kaminari.config.param_name = :pagina
     end
@@ -142,7 +91,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries called with bulk_ids' do
     before do
-      @teams = FactoryGirl.create_list(:team, 21)
+      @teams = FactoryBot.create_list(:team, 21)
       controller.params = {model_name: 'teams', bulk_action: 'bulk_delete', bulk_ids: @teams.collect(&:id)}
     end
 
@@ -153,13 +102,13 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#list_entries for associated_collection' do
     before do
-      @team = FactoryGirl.create :team
+      @team = FactoryBot.create :team
       controller.params = {associated_collection: 'players', current_action: 'update', source_abstract_model: 'team', source_object_id: @team.id, model_name: 'player', action: 'index'}
       controller.get_model # set @model_config for Team
     end
 
     it "doesn't scope associated collection records when associated_collection_scope is nil" do
-      @players = FactoryGirl.create_list(:player, 2)
+      @players = FactoryBot.create_list(:player, 2)
 
       RailsAdmin.config Team do
         field :players do
@@ -171,7 +120,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'scopes associated collection records according to associated_collection_scope' do
-      @players = FactoryGirl.create_list(:player, 4)
+      @players = FactoryBot.create_list(:player, 4)
 
       RailsAdmin.config Team do
         field :players do
@@ -185,10 +134,10 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'scopes associated collection records according to bindings' do
-      @team.revenue = BigDecimal.new('3')
+      @team.revenue = BigDecimal('3')
       @team.save
 
-      @players = FactoryGirl.create_list(:player, 5)
+      @players = FactoryBot.create_list(:player, 5)
 
       RailsAdmin.config Team do
         field :players do
@@ -205,7 +154,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'limits associated collection records number to 30 if cache_all is false' do
-      @players = FactoryGirl.create_list(:player, 40)
+      @players = FactoryBot.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -216,7 +165,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it "doesn't limit associated collection records number to 30 if cache_all is true" do
-      @players = FactoryGirl.create_list(:player, 40)
+      @players = FactoryBot.create_list(:player, 40)
 
       RailsAdmin.config Team do
         field :players do
@@ -227,7 +176,7 @@ describe RailsAdmin::MainController, type: :controller do
     end
 
     it 'orders associated collection records by id, descending' do
-      @players = FactoryGirl.create_list(:player, 3)
+      @players = FactoryBot.create_list(:player, 3)
 
       expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
     end
@@ -235,7 +184,7 @@ describe RailsAdmin::MainController, type: :controller do
 
   describe '#get_collection' do
     before do
-      @team = FactoryGirl.create(:team)
+      @team = FactoryBot.create(:team)
       controller.params = {model_name: 'teams'}
       RailsAdmin.config Team do
         field :players do
@@ -255,19 +204,16 @@ describe RailsAdmin::MainController, type: :controller do
   end
 
   describe 'index' do
-    it "uses source association's primary key with :compact, not target model's default primary key", skip_mongoid: true do
-      class TeamWithNumberedPlayers < Team
-        has_many :numbered_players, class_name: 'Player', primary_key: :number, foreign_key: 'team_id'
-      end
-      FactoryGirl.create :team
-      TeamWithNumberedPlayers.first.numbered_players = [FactoryGirl.create(:player, number: 123)]
-      get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team_with_numbered_players', associated_collection: 'numbered_players', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/\"id\":\"123\"/)
+    it "uses target model's primary key" do
+      @user = FactoryBot.create :managing_user
+      @team = FactoryBot.create :managed_team, user: @user
+      get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
+      expect(response.body).to match(/\"id\":\"#{@user.id}\"/)
     end
 
     context 'as JSON' do
       it 'returns strings' do
-        FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        FactoryBot.create :player, team: (FactoryBot.create :team)
         get :index, model_name: 'player', source_object_id: Team.first.id, source_abstract_model: 'team', associated_collection: 'players', current_action: :create, compact: true, format: :json
         expect(JSON.parse(response.body).first['id']).to be_a_kind_of String
       end
@@ -291,8 +237,8 @@ describe RailsAdmin::MainController, type: :controller do
           c.authenticate_with { warden.authenticate! scope: :user }
           c.current_user_method(&:current_user)
         end
-        login_as FactoryGirl.create :user, roles: [:admin]
-        player = FactoryGirl.create :player, team: (FactoryGirl.create :team)
+        login_as FactoryBot.create :user, roles: [:admin]
+        player = FactoryBot.create :player, team: (FactoryBot.create :team)
         expect { get :show, model_name: 'player', id: player.id }.not_to raise_error
       end
     end
@@ -378,20 +324,20 @@ describe RailsAdmin::MainController, type: :controller do
     it 'allows for delete method with Carrierwave' do
       RailsAdmin.config FieldTest do
         field :carrierwave_asset
-        field :carrierwave_assets do
-          delete_method :delete_carrierwave_assets
-        end
+        field :carrierwave_assets
         field :dragonfly_asset
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
         end
-        field :refile_asset if defined?(Refile)
         field :active_storage_asset do
           delete_method :remove_active_storage_asset
         end if defined?(ActiveStorage)
         field :active_storage_assets do
           delete_method :remove_active_storage_assets
         end if defined?(ActiveStorage)
+        field :shrine_asset do
+          delete_method :remove_shrine_asset
+        end if defined?(Shrine)
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
@@ -399,16 +345,14 @@ describe RailsAdmin::MainController, type: :controller do
           'carrierwave_asset_cache' => 'test',
           'remove_carrierwave_asset' => 'test',
           'carrierwave_assets' => 'test',
-          'carrierwave_assets_cache' => 'test',
-          'delete_carrierwave_assets' => 'test',
           'dragonfly_asset' => 'test',
           'remove_dragonfly_asset' => 'test',
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
-        }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
-          merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}),
+        }.merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
+          merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -417,15 +361,13 @@ describe RailsAdmin::MainController, type: :controller do
         'remove_carrierwave_asset' => 'test',
         'carrierwave_asset_cache' => 'test',
         'carrierwave_assets' => 'test',
-        'carrierwave_assets_cache' => 'test',
-        'delete_carrierwave_assets' => 'test',
         'dragonfly_asset' => 'test',
         'remove_dragonfly_asset' => 'test',
         'retained_dragonfly_asset' => 'test',
         'paperclip_asset' => 'test',
         'delete_paperclip_asset' => 'test',
-      }.merge(defined?(Refile) ? {'refile_asset' => 'test', 'remove_refile_asset' => 'test'} : {}).
-        merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}))
+      }.merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
+        merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}))
     end
 
     it 'allows for polymorphic associations parameters' do

@@ -29,15 +29,7 @@ module RailsAdmin
 
           def parse_value(value)
             return unless value.present?
-            if ::Rails.version >= '5'
-              abstract_model.model.attribute_types[name.to_s].serialize(value)
-            else
-              # Depending on the colum type and AR version, we might get a
-              # string or an integer, so we need to handle both cases.
-              enum.fetch(value) do
-                type_cast_value(value)
-              end
-            end
+            abstract_model.model.attribute_types[name.to_s].serialize(value)
           end
 
           def parse_input(params)
@@ -53,19 +45,11 @@ module RailsAdmin
         private
 
           def parse_input_value(value)
-            if ::Rails.version >= '5'
-              abstract_model.model.attribute_types[name.to_s].deserialize(value)
-            else
-              enum.invert[type_cast_value(value)]
-            end
+            abstract_model.model.attribute_types[name.to_s].deserialize(value)
           end
 
           def type_cast_value(value)
-            if ::Rails.version >= '4.2'
-              abstract_model.model.column_types[name.to_s].type_cast_from_user(value)
-            else
-              abstract_model.model.column_types[name.to_s].type_cast(value)
-            end
+            abstract_model.model.column_types[name.to_s].type_cast_from_user(value)
           end
         end
       end

@@ -1,5 +1,8 @@
 - file = field.value
 
+- if field.cache_method
+  = form.hidden_field(field.cache_method, value: field.cache_value)
+
 .toggle{style: ('display:none;' if file && field.delete_method && form.object.send(field.delete_method) == '1')}
   - if value = field.pretty_value
     = value
@@ -7,11 +10,8 @@
   = form.file_field(field.name, field.html_attributes.reverse_merge({ data: { fileupload: true }}))
 
 - if field.optional? && field.errors.blank? && file && field.delete_method
-  %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button', onclick: "$(this).siblings('[type=checkbox]').click(); $(this).siblings('.toggle').toggle('slow'); jQuery(this).toggleClass('btn-danger btn-info'); return false;"}
+  %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button'}
     %i.icon-white.icon-trash
     = I18n.t('admin.actions.delete.menu').capitalize + " #{field.label.downcase}"
 
   = form.check_box(field.delete_method, style: 'display:none;')
-
-- if field.cache_method
-  = form.hidden_field(field.cache_method)

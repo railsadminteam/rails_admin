@@ -4,7 +4,7 @@ require 'rails_admin/config/fields/types/file_upload'
 
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   extensions = [:name, :uid]
-  if (properties.name.to_s =~ /^(.+)_uid$/) && defined?(::Dragonfly) && parent.abstract_model.model.dragonfly_attachment_classes.collect(&:attribute).include?(attachment_name = Regexp.last_match[1].to_sym)
+  if (properties.name.to_s =~ /^(.+)_uid$/) && defined?(::Dragonfly) && parent.abstract_model.model.respond_to?(:dragonfly_attachment_classes) && parent.abstract_model.model.dragonfly_attachment_classes.collect(&:attribute).include?(attachment_name = Regexp.last_match[1].to_sym)
     field = RailsAdmin::Config::Fields::Types.load(:dragonfly).new(parent, attachment_name, properties)
     children_fields = []
     extensions.each do |ext|

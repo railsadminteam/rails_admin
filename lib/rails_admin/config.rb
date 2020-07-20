@@ -59,6 +59,9 @@ module RailsAdmin
       # Set the max width of columns in list view before a new set is created
       attr_accessor :total_columns_width
 
+      # Enable horizontal-scrolling table in list view, ignore total_columns_width
+      attr_accessor :sidescroll
+
       # set parent controller
       attr_accessor :parent_controller
 
@@ -138,11 +141,11 @@ module RailsAdmin
       #   end
       #
       # To use an authorization adapter, pass the name of the adapter. For example,
-      # to use with CanCan[https://github.com/ryanb/cancan], pass it like this.
+      # to use with CanCanCan[https://github.com/CanCanCommunity/cancancan/], pass it like this.
       #
-      # @example CanCan
+      # @example CanCanCan
       #   RailsAdmin.config do |config|
-      #     config.authorize_with :cancan
+      #     config.authorize_with :cancancan
       #   end
       #
       # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
@@ -207,9 +210,7 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
-        excluded = (excluded_models.collect(&:to_s) + %w(RailsAdmin::History PaperTrail::Version PaperTrail::VersionAssociation ActiveStorage::Attachment ActiveStorage::Blob))
-
-        (viable_models - excluded).uniq.sort
+        (viable_models - excluded_models.collect(&:to_s)).uniq.sort
       end
 
       # Loads a model configuration instance from the registry or registers
@@ -285,6 +286,7 @@ module RailsAdmin
         @excluded_models = []
         @included_models = []
         @total_columns_width = 697
+        @sidescroll = nil
         @label_methods = [:name, :title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
@@ -344,7 +346,7 @@ module RailsAdmin
                   end
                 end
               end
-            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
+            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable Style/MultilineBlockChain
         end
       end
 

@@ -18,8 +18,7 @@
               %span.show= link_to capitalize_first_letter(abstract_model.config.label_plural), index_path, class: 'pjax'
             %td
               - if last_created
-                = time_ago_in_words last_created
-                = t "admin.misc.ago"
+                = t "admin.misc.time_ago", time: time_ago_in_words(last_created), default: "#{time_ago_in_words(last_created)} #{t("admin.misc.ago")}"
             %td
               - count = @count[abstract_model.model.name]
               - percent = count > 0 ? (@max <= 1 ? count : ((Math.log(count+1) * 100.0) / Math.log(@max+1)).to_i) : -1

@@ -35,6 +35,12 @@ module RailsAdmin
     end
 
     def to_csv(options = {})
+      if CSV::VERSION == '3.0.2'
+        raise <<-MSG.gsub(/^\s+/, '')
+          CSV library bundled with Ruby 2.6.0 has encoding issue, please upgrade Ruby to 2.6.1 or later.
+          https://github.com/ruby/csv/issues/62
+        MSG
+      end
       options = HashWithIndifferentAccess.new(options)
       encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 
@@ -67,7 +73,7 @@ module RailsAdmin
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
       method = @objects.respond_to?(:find_each) ? :find_each : :each
 
-      CSV.generate(generator_options) do |csv|
+      CSV.generate(**generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
         @objects.send(method) do |object|

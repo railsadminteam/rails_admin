@@ -29,6 +29,7 @@ en:
     misc:
       search: "Search"
       filter: "Filter"
+      reset_filters: "Reset filters"
       refresh: "Refresh"
       show_all: "Show all"
       add_filter: "Add filter"
@@ -41,8 +42,10 @@ en:
       up: "Up"
       down: "Down"
       navigation: "Navigation"
+      root_navigation: "Actions"
       navigation_static_label: "Links"
       log_out: "Log out"
+      time_ago: "%{time} ago"
       ago: "ago"
       more: "Plus %{count} more %{models_name}"
     flash:

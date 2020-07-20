@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin CanCanCan Authorization', type: :request do
+RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
   class Ability
     include CanCan::Ability
     def initialize(user)
@@ -44,13 +44,13 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       c.current_user_method(&:current_user)
     end
     @player_model = RailsAdmin::AbstractModel.new(Player)
-    @user = FactoryGirl.create :user
+    @user = FactoryBot.create :user
     login_as @user
   end
 
   describe 'with no roles' do
     before do
-      @user.update_attributes(roles: [])
+      @user.update(roles: [])
     end
 
     it 'GET /admin should raise CanCan::AccessDenied' do
@@ -64,7 +64,7 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with read player role' do
     before do
-      @user.update_attributes(roles: [:admin, :read_player])
+      @user.update(roles: [:admin, :read_player])
     end
 
     it 'GET /admin should show Player but not League' do
@@ -82,8 +82,8 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
         end
       end
       @players = [
-        FactoryGirl.create(:player, retired: false),
-        FactoryGirl.create(:player, retired: true),
+        FactoryBot.create(:player, retired: false),
+        FactoryBot.create(:player, retired: true),
       ]
 
       visit index_path(model_name: 'player')
@@ -109,7 +109,7 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with create and read player role' do
     before do
-      @user.update_attributes(roles: [:admin, :read_player, :create_player])
+      @user.update(roles: [:admin, :read_player, :create_player])
     end
 
     it 'GET /admin/player/new should render and create record upon submission' do
@@ -132,19 +132,26 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       expect(@player).to be_suspended # suspended is inherited behavior based on permission
     end
 
+    it 'POST /admin/player/new with unauthorized attribute value should raise access denied' do
+      visit new_path(model_name: 'player')
+      fill_in 'player[name]', with: 'Jackie Robinson'
+      uncheck 'player[suspended]'
+      expect { click_button 'Save' }.to raise_error(CanCan::AccessDenied)
+    end
+
     it 'GET /admin/player/1/edit should raise access denied' do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       expect { visit edit_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe 'with update and read player role' do
     before do
-      @user.update_attributes(roles: [:admin, :read_player, :update_player])
+      @user.update(roles: [:admin, :read_player, :update_player])
     end
 
     it 'GET /admin/player/1/edit should render and update record upon submission' do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       visit edit_path(model_name: 'player', id: @player.id)
       is_expected.to have_content('Save and edit')
       is_expected.not_to have_content('Save and add another')
@@ -159,20 +166,27 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
     end
 
     it 'GET /admin/player/1/edit with retired player should raise access denied' do
-      @player = FactoryGirl.create :player, retired: true
+      @player = FactoryBot.create :player, retired: true
       expect { visit edit_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
     end
 
+    it 'PUT /admin/player/new with unauthorized attribute value should raise access denied' do
+      @player = FactoryBot.create :player
+      visit edit_path(model_name: 'player', id: @player.id)
+      check 'player[retired]'
+      expect { click_button 'Save' }.to raise_error(CanCan::AccessDenied)
+    end
+
     it 'GET /admin/player/1/delete should raise access denied' do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       expect { visit delete_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe 'with history role' do
     it 'shows links to history action' do
-      @user.update_attributes(roles: [:admin, :read_player, :history_player])
-      @player = FactoryGirl.create :player
+      @user.update(roles: [:admin, :read_player, :history_player])
+      @player = FactoryBot.create :player
 
       visit index_path(model_name: 'player')
       is_expected.to have_css('.show_member_link')
@@ -190,8 +204,8 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with show in app role' do
     it 'shows links to show in app action' do
-      @user.update_attributes(roles: [:admin, :read_player, :show_in_app_player])
-      @player = FactoryGirl.create :player
+      @user.update(roles: [:admin, :read_player, :show_in_app_player])
+      @player = FactoryBot.create :player
 
       visit index_path(model_name: 'player')
       is_expected.to have_css('.show_member_link')
@@ -211,8 +225,8 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with all roles' do
     it 'shows links to all actions' do
-      @user.update_attributes(roles: [:admin, :manage_player])
-      @player = FactoryGirl.create :player
+      @user.update(roles: [:admin, :manage_player])
+      @player = FactoryBot.create :player
 
       visit index_path(model_name: 'player')
       is_expected.to have_css('.show_member_link')
@@ -232,11 +246,11 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with destroy and read player role' do
     before do
-      @user.update_attributes(roles: [:admin, :read_player, :destroy_player])
+      @user.update(roles: [:admin, :read_player, :destroy_player])
     end
 
     it 'GET /admin/player/1/delete should render and destroy record upon submission' do
-      @player = FactoryGirl.create :player
+      @player = FactoryBot.create :player
       player_id = @player.id
       visit delete_path(model_name: 'player', id: player_id)
 
@@ -246,13 +260,13 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
     end
 
     it 'GET /admin/player/1/delete with retired player should raise access denied' do
-      @player = FactoryGirl.create :player, retired: true
+      @player = FactoryBot.create :player, retired: true
       expect { visit delete_path(model_name: 'player', id: @player.id) }.to raise_error(CanCan::AccessDenied)
     end
 
     it 'GET /admin/player/bulk_delete should render records which are authorized to' do
-      active_player = FactoryGirl.create :player, retired: false
-      retired_player = FactoryGirl.create :player, retired: true
+      active_player = FactoryBot.create :player, retired: false
+      retired_player = FactoryBot.create :player, retired: true
 
       post bulk_action_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: [active_player, retired_player].collect(&:id))
 
@@ -261,8 +275,8 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
     end
 
     it 'POST /admin/player/bulk_destroy should destroy records which are authorized to' do
-      active_player = FactoryGirl.create :player, retired: false
-      retired_player = FactoryGirl.create :player, retired: true
+      active_player = FactoryBot.create :player, retired: false
+      retired_player = FactoryBot.create :player, retired: true
 
       delete bulk_delete_path(model_name: 'player', bulk_ids: [active_player, retired_player].collect(&:id))
       expect(@player_model.get(active_player.id)).to be_nil
@@ -272,9 +286,9 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with exception role' do
     it 'GET /admin/player/bulk_delete should render records which are authorized to' do
-      @user.update_attributes(roles: [:admin, :test_exception])
-      active_player = FactoryGirl.create :player, retired: false
-      retired_player = FactoryGirl.create :player, retired: true
+      @user.update(roles: [:admin, :test_exception])
+      active_player = FactoryBot.create :player, retired: false
+      retired_player = FactoryBot.create :player, retired: true
 
       post bulk_action_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: [active_player, retired_player].collect(&:id))
 
@@ -283,9 +297,9 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
     end
 
     it 'POST /admin/player/bulk_destroy should destroy records which are authorized to' do
-      @user.update_attributes(roles: [:admin, :test_exception])
-      active_player = FactoryGirl.create :player, retired: false
-      retired_player = FactoryGirl.create :player, retired: true
+      @user.update(roles: [:admin, :test_exception])
+      active_player = FactoryBot.create :player, retired: false
+      retired_player = FactoryBot.create :player, retired: true
 
       delete bulk_delete_path(model_name: 'player', bulk_ids: [active_player, retired_player].collect(&:id))
       expect(@player_model.get(active_player.id)).to be_nil
@@ -296,13 +310,13 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
   describe 'with a custom admin ability' do
     before do
       RailsAdmin.config { |c| c.authorize_with :cancancan, AdminAbility }
-      @user = FactoryGirl.create :user
+      @user = FactoryBot.create :user
       login_as @user
     end
 
     describe 'with admin role only' do
       before do
-        @user.update_attributes(roles: [:admin])
+        @user.update(roles: [:admin])
       end
 
       it 'GET /admin/team should render successfully' do
@@ -316,51 +330,28 @@ describe 'RailsAdmin CanCanCan Authorization', type: :request do
       end
 
       it 'GET /admin/player/1/edit should render successfully' do
-        @player = FactoryGirl.create :player
+        @player = FactoryBot.create :player
         visit edit_path(model_name: 'player', id: @player.id)
         expect(page.status_code).to eq(200)
       end
 
       it 'GET /admin/player/1/edit with retired player should render successfully' do
-        @player = FactoryGirl.create :player, retired: true
+        @player = FactoryBot.create :player, retired: true
         visit edit_path(model_name: 'player', id: @player.id)
         expect(page.status_code).to eq(200)
       end
 
       it 'GET /admin/player/1/delete should render successfully' do
-        @player = FactoryGirl.create :player
+        @player = FactoryBot.create :player
         visit delete_path(model_name: 'player', id: @player.id)
         expect(page.status_code).to eq(200)
       end
 
       it 'GET /admin/player/1/delete with retired player should render successfully' do
-        @player = FactoryGirl.create :player, retired: true
+        @player = FactoryBot.create :player, retired: true
         visit delete_path(model_name: 'player', id: @player.id)
         expect(page.status_code).to eq(200)
       end
     end
   end
-
-  describe 'with existing dashboard ability which uses no subject' do
-    class LegacyDashboardAbility
-      include CanCan::Ability
-      def initialize(_)
-        can :access, :rails_admin
-        can :dashboard
-      end
-    end
-
-    before do
-      RailsAdmin.config { |c| c.authorize_with :cancancan, LegacyDashboardAbility }
-      @user = FactoryGirl.create :user
-      login_as @user
-    end
-
-    it 'shows dashboard with instruction on how to migrate to new ability notation' do
-      allow(ActiveSupport::Deprecation).to receive(:warn)
-      expect(ActiveSupport::Deprecation).to receive(:warn).with(/can :read, :dashboard/)
-      visit dashboard_path
-      is_expected.to have_content('Dashboard')
-    end
-  end
-end if defined?(CanCanCan)
+end

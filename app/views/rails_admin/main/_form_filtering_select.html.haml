@@ -26,7 +26,7 @@
   }
 
 - selected_id = (hdv = field.form_default_value).nil? ? selected_id : hdv
-= form.select field.method_name, collection, { selected: selected_id, include_blank: true }, field.html_attributes.reverse_merge({ data: { filteringselect: true, options: js_data.to_json }, placeholder: t('admin.misc.search') })
+= form.select field.method_name, collection, { selected: selected_id, include_blank: true }, field.html_attributes.reverse_merge({ data: { filteringselect: true, options: js_data.to_json }, placeholder: t('admin.misc.search'), style: "float: left" })
 
 - if authorized?(:new, config.abstract_model) && field.inline_add
   - path_hash = { model_name: config.abstract_model.to_param, modal: true }

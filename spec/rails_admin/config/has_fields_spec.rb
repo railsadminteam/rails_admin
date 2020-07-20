@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::HasFields do
+RSpec.describe RailsAdmin::Config::HasFields do
   it 'shows hidden fields when added through the DSL' do
     expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division_id }).not_to be_visible
 

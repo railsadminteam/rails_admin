@@ -1,4 +1,4 @@
-class CreateDraftsMigration < MigrationBase
+class CreateDraftsMigration < ActiveRecord::Migration[5.0]
   def self.up
     create_table :drafts do |t|
       t.timestamps null: false

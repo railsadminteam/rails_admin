@@ -16,7 +16,7 @@
             %b= t('admin.export.select_all_fields')
     .form-group.control-group
       .col-sm-12
-        .well.well-sm{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).closest(".control-group").find(".controls").find("input").click()', style: 'margin: 0; cursor: pointer;'}
+        .well.well-sm.reverse-selection{rel: 'tooltip', title: t('admin.export.click_to_reverse_selection'), style: 'margin: 0; cursor: pointer;'}
           %b= t('admin.export.fields_from', name: @model_config.label_plural.downcase)
         .controls
           .row
@@ -40,7 +40,7 @@
       - fields = field.associated_model_config.export.with(controller: self.controller, view: self, object: (associated_model = field.associated_model_config.abstract_model.model).new).visible_fields.select{ |f| !f.association? }
       .form-group.control-group
         .col-sm-12
-          .well.well-sm{rel: 'tooltip', :'data-original-title' => t('admin.export.click_to_reverse_selection'), onclick: 'jQuery(this).closest(".control-group").find(".controls").find("input").click()', style: 'margin: 0; cursor: pointer;'}
+          .well.well-sm.reverse-selection{rel: 'tooltip', title: t('admin.export.click_to_reverse_selection'), style: 'margin: 0; cursor: pointer;'}
             %b= t('admin.export.fields_from_associated', name: field.label.downcase)
           .controls
             .row

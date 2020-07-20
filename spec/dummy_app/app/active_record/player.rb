@@ -1,5 +1,5 @@
 class Player < ActiveRecord::Base
-  belongs_to :team, inverse_of: :players
+  belongs_to :team, optional: true, inverse_of: :players
   has_one :draft, dependent: :destroy
   has_many :comments, as: :commentable
 
@@ -10,11 +10,11 @@ class Player < ActiveRecord::Base
     record.errors.add(:base, 'Player is cheating') if value.to_s =~ /on steroids/
   end
 
-  if ::Rails.version >= '4.1'
-    enum formation: {start: 'start', substitute: 'substitute'}
-  end
+  enum formation: {start: 'start', substitute: 'substitute'}
 
   before_destroy :destroy_hook
+
+  scope :rails_admin_search, ->(query) { where(name: query.reverse) }
 
   def destroy_hook; end
 

@@ -1,4 +1,4 @@
-class CreateLeaguesMigration < MigrationBase
+class CreateLeaguesMigration < ActiveRecord::Migration[5.0]
   def self.up
     create_table :leagues do |t|
       t.timestamps null: false

@@ -22,6 +22,29 @@ Here are some ways *you* can contribute:
 [issues]: https://github.com/sferik/rails_admin/issues
 [gittip]: https://www.gittip.com/sferik/
 
+## Development
+
+### Running tests locally
+
+To run the test suite, you need PhantomJS and ImageMagick (or GraphicsMagick).
+
+Example on macOS using Homebrew:
+
+    brew cask install phantomjs
+    brew install imagemagick
+    bundle exec rspec
+
+### Tests run against multiple versions of Rails
+
+In CI, we use [appraisal] to run tests against multiple versions of Rails.
+The [gemfiles/ directory] contains the Gemfiles used to create the CI build
+matrix. See [the Travis CI configuration] for more details on what Ruby versions
+run what Rails versions.
+
+[appraisal]: https://github.com/thoughtbot/appraisal
+[gemfiles/ directory]: ./gemfiles
+[the Travis CI configuration]: ./.travis.yml
+
 ## Getting Help
 
 We use a [mailing list][list] for user support. If you've got a "how do

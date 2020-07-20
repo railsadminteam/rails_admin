@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RailsAdmin::Config::Fields::Types::Date do
+RSpec.describe RailsAdmin::Config::Fields::Types::Date do
   it_behaves_like 'a generic field type', :date_field, :date
 
   describe '#formatted_value' do
@@ -31,7 +31,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
     let(:field) { RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :date_field } }
 
     before :each do
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @time = ::Time.now.getutc
     end
 
@@ -89,7 +89,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
           default_value Date.current
         end
       end
-      @object = FactoryGirl.create(:field_test)
+      @object = FactoryBot.create(:field_test)
       @time = ::Time.now.getutc
     end
 
@@ -98,7 +98,7 @@ describe RailsAdmin::Config::Fields::Types::Date do
     end
 
     it 'should propagate to the field formatted_value when the object is a new record' do
-      object = FactoryGirl.build(:field_test)
+      object = FactoryBot.build(:field_test)
       field.bindings = {object: object}
       expect(field.formatted_value).to eq(Date.current.strftime('%B %d, %Y'))
     end

@@ -1,0 +1,29 @@
+.ra-sidescroll {
+  margin-bottom: 20px;
+  overflow-x: auto;
+  .table {
+    margin-bottom: 0;
+  }
+
+  .ra-sidescroll-frozen {
+    position: sticky;
+
+    // border-right isn't sticky
+    &.last-of-frozen {
+      box-shadow: -1px 0 0 0 $table-border-color inset;
+      padding-right: $table-condensed-cell-padding + 1px;
+    }
+  }
+
+  // Remove transparency on frozen cells.
+  $table-bg-default: if($table-bg == transparent, if($body-bg == transparent, #fff, $body-bg), $table-bg) !default;
+  .table-striped > tbody > tr:nth-child(even) > td, .table-striped > thead > tr > th {
+    background-color: $table-bg-default;
+  }
+  $table-bg-header-sort: #e2eff6 !default;
+  .table .ra-sidescroll-frozen {
+    &.headerSortUp, &.headerSortDown {
+      background-color: $table-bg-header-sort;
+    }
+  }
+}

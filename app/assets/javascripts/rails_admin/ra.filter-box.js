@@ -48,7 +48,7 @@
             );
         case 'datetime':
         case 'timestamp':
-          control = control || $('<select class="switch-additionnal-fieldsets input-sm form-control"></select>')
+          control = control || $('<select class="switch-additional-fieldsets input-sm form-control"></select>')
             .prop('name', operator_name)
             .append($('<option data-additional-fieldset="default" value="default"></option>').prop('selected', field_operator == "default").text(RailsAdmin.I18n.t("date")))
             .append($('<option data-additional-fieldset="between" value="between"></option>').prop('selected', field_operator == "between").text(RailsAdmin.I18n.t("between_and_")))
@@ -103,7 +103,7 @@
         case 'string':
         case 'text':
         case 'belongs_to_association':
-          control = $('<select class="switch-additionnal-fieldsets input-sm form-control"></select>')
+          control = $('<select class="switch-additional-fieldsets input-sm form-control"></select>')
             .prop('value', field_operator)
             .prop('name', operator_name)
             .append('<option value="_discard">...</option>')
@@ -122,7 +122,7 @@
         case 'integer':
         case 'decimal':
         case 'float':
-          control = $('<select class="switch-additionnal-fieldsets input-sm form-control"></select>')
+          control = $('<select class="switch-additional-fieldsets input-sm form-control"></select>')
             .prop('name', operator_name)
             .append($('<option data-additional-fieldset="default" value="default"></option>').prop('selected', field_operator == "default").text(RailsAdmin.I18n.t("number")))
             .append($('<option data-additional-fieldset="between" value="between"></option>').prop('selected', field_operator == "between").text(RailsAdmin.I18n.t("between_and_")))
@@ -214,7 +214,7 @@
     $(this).find('i').toggleClass("icon-plus icon-minus")
   });
 
-  $(document).on('change', "#filters_box .switch-additionnal-fieldsets", function(e) {
+  $(document).on('change', "#filters_box .switch-additional-fieldsets", function(e) {
     var selected_option = $(this).find('option:selected');
     if(klass = $(selected_option).data('additional-fieldset')) {
       $(this).siblings('.additional-fieldset:not(.' + klass + ')').hide('slow');

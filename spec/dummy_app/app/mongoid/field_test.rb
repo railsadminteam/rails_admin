@@ -1,3 +1,5 @@
+require 'rails_admin/adapters/mongoid'
+
 class FieldTest
   include Mongoid::Document
   include Mongoid::Paperclip
@@ -33,6 +35,11 @@ class FieldTest
   field :protected_field, type: String
   has_mongoid_attached_file :paperclip_asset, styles: {thumb: '100x100>'}
 
+  field :shrine_asset_data, type: String
+  include ShrineUploader::Attachment.new(:shrine_asset)
+  field :shrine_versioning_asset_data, type: String
+  include ShrineVersioningUploader::Attachment.new(:shrine_versioning_asset)
+
   has_many :nested_field_tests, dependent: :destroy, inverse_of: :field_test, autosave: true
   accepts_nested_attributes_for :nested_field_tests, allow_destroy: true
 
@@ -54,15 +61,6 @@ class FieldTest
   # carrierwave-mongoid does not support mount_uploaders yet:
   #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
   mount_uploader :carrierwave_assets, CarrierwaveUploader
-
-  if defined?(Refile)
-    extend Refile::Mongoid::Attachment
-
-    field :refile_asset_filename
-    field :refile_asset_size
-    field :refile_asset_content_type
-    attachment :refile_asset
-  end
 
   validates :short_text, length: {maximum: 255}
 end
