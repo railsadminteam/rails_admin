@@ -59,4 +59,4 @@ config.browser_validations = false # Default is true
 
 **Next**
 
-Then you can start adding [[actions|Actions]], configuring [[models|Navigation]], [[sections|Base]] and [[fields|Fields]].
+Then you can start adding [[actions|Actions]], configuring [[models|Models]], [[sections|Base]] and [[fields|Fields]].
