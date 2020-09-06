@@ -275,6 +275,27 @@ This would output the name column prepended with team's logo using the `tag`
 view helper. This example uses `value` method to access the name field's value,
 but that could be written more verbosely as `bindings[:object].name`.
 
+### Render a link (a tag, href)
+
+```ruby
+RailsAdmin.config do |config|
+  config.model 'Team' do
+    show do
+      field :name do
+        read_only true
+        pretty_value do
+          v = bindings[:view]
+          team = bindings[:object]
+          url = team.ticket_page
+          # value will point to bindings[:object].name
+          v.link_to(value, url, target: '_blank', rel: 'noopener noreferrer')
+        end
+      end
+    end
+  end
+end
+```
+
 Fields of different date types (date, datetime, time, timestamp) have two extra
 options to set the time formatting:
 
