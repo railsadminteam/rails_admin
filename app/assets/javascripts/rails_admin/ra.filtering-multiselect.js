@@ -18,15 +18,6 @@
       },
       sortable: false,
       removable: true,
-      regional: {
-        up: "Up",
-        down: "Down",
-        add: "Add",
-        chooseAll: "Choose all",
-        chosen: "Chosen records",
-        clearAll: "Clear all",
-        remove: "Remove"
-      },
       searchDelay: 400,
       remote_source: null,
       xhr: false
@@ -48,7 +39,7 @@
 
       this.header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
 
-      this.filter = $('<input type="search" placeholder="' + this.options.regional.search + '" class="form-control ra-multiselect-search"/>');
+      this.filter = $('<input type="search" placeholder="' + RailsAdmin.I18n.t("search") + '" class="form-control ra-multiselect-search"/>');
 
       this.header.append(this.filter);
 
@@ -70,7 +61,7 @@
 
       this.collection.addClass("form-control ra-multiselect-collection");
 
-      this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
+      this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + RailsAdmin.I18n.t("choose_all") + '</a>');
 
       this.columns.left.html(this.collection)
                           .append(this.addAll);
@@ -78,17 +69,17 @@
       this.collection.wrap('<div class="wrapper"/>');
 
 
-      this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
+      this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + RailsAdmin.I18n.t("add") + '</a>');
       this.columns.center.append(this.add);
 
       if (this.options.removable) {
-        this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
+        this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + RailsAdmin.I18n.t("remove") + '</a>');
         this.columns.center.append(this.remove);
       }
 
       if (this.options.sortable) {
-        this.up = $('<a href="#" class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + this.options.regional.up + '</a>');
-        this.down = $('<a href="#" class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + this.options.regional.down + '</a>');
+        this.up = $('<a href="#" class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + RailsAdmin.I18n.t("up") + '</a>');
+        this.down = $('<a href="#" class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + RailsAdmin.I18n.t("down") + '</a>');
         this.columns.center.append(this.up).append(this.down);
       }
 
@@ -97,7 +88,7 @@
 
 
       if (this.options.removable) {
-        this.removeAll = $('<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
+        this.removeAll = $('<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + RailsAdmin.I18n.t("clear_all") + '</a>');
         this.columns.right.append(this.removeAll);
       }
 

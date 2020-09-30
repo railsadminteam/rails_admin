@@ -18,6 +18,13 @@ en:
       ends_with: Ends with
       too_many_objects: "Too many objects, use search box above"
       no_objects: "No objects found"
+      up: Up
+      down: Down
+      add: Add
+      choose_all: Choose all
+      search: Search
+      clear_all: Clear all
+      remove: Remove
     loading: "Loading..."
     toggle_navigation: Toggle navigation
     home:
