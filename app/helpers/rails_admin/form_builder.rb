@@ -47,7 +47,9 @@ module RailsAdmin
           end
         end
       else
-        field.nested_form ? field_for(field) : input_for(field)
+        @template.content_tag(:div, class: "form-group control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
+          field.nested_form ? field_for(field) : input_for(field)
+        end
       end
     end
 
