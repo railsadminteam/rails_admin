@@ -75,10 +75,10 @@ matrix:
     - rvm: ruby-head
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_6.0.gemfile
-    - rvm: jruby-9.2.11.0
+    - rvm: jruby-9.2.13.0
       env: CI_ORM=mongoid
       gemfile: gemfiles/rails_6.0.gemfile
-    - rvm: jruby-9.2.11.0
+    - rvm: jruby-9.2.13.0
       env: CI_ORM=active_record CI_DB_ADAPTER=sqlite3
       gemfile: gemfiles/rails_6.0.gemfile
   allow_failures:
