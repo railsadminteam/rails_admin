@@ -124,6 +124,7 @@ RSpec.describe 'HasManyAssociation field', type: :request do
 
       # trigger click via JS, workaround for instability in CI
       execute_script %($('button[name="_save"]').trigger('click');)
+      sleep 0.15
       is_expected.to have_content('Field test successfully updated')
 
       @record.reload
