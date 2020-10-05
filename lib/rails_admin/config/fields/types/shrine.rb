@@ -31,15 +31,15 @@ module RailsAdmin
           end
 
           register_instance_option :cache_method do
-            name
+            name if bindings[:object].try("cached_#{name}_data")
+          end
+
+          register_instance_option :cache_value do
+            bindings[:object].try("cached_#{name}_data")
           end
 
           register_instance_option :link_name do
             value.original_filename
-          end
-
-          register_instance_option :cache_value do
-            bindings[:object].public_send("cached_#{name}_data") if bindings[:object].respond_to?("cached_#{name}_data")
           end
 
           def resource_url(thumb = nil)
