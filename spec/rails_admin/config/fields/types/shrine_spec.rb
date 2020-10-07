@@ -11,9 +11,13 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Shrine do
     end
 
     before do
-      if record.shrine_versioning_asset
-        record.shrine_versioning_asset_derivatives!
-        record.save
+      if Gem.loaded_specs['shrine'].version >= Gem::Version.create('3')
+        if record.shrine_versioning_asset
+          record.shrine_versioning_asset_derivatives!
+          record.save
+        end
+      else
+        skip
       end
     end
 
