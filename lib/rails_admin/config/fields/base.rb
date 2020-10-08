@@ -145,6 +145,8 @@ module RailsAdmin
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :label do
           (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
+        rescue ActionView::Template::Error
+          (@label ||= {})[::I18n.locale] ||= name
         end
 
         register_instance_option :hint do
