@@ -75,7 +75,7 @@ module RailsAdmin
         when 'postgresql'
           ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
         when 'mysql2'
-          ::ActiveRecord::Base.connection.instance_variable_get(:@connection).encoding
+          ::ActiveRecord::Base.connection.raw_connection.encoding
         when 'oracle_enhanced'
           ::ActiveRecord::Base.connection.select_one("SELECT dummy FROM DUAL").values.first.encoding
         else
