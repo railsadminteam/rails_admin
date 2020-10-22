@@ -43,6 +43,7 @@
       });
       content.find('[data-enumeration]').each(function() {
         if ($(this).is('[multiple]')) {
+          console.log('WidgetJS', $(this).data('options'));
           $(this).filteringMultiselect($(this).data('options'));
         } else {
           $(this).filteringSelect($(this).data('options'));

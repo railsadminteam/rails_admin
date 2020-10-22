@@ -21,7 +21,6 @@
       regional: {
         add: "Add",
         chooseAll: "Choose all",
-        chosen: "Chosen records",
         clearAll: "Clear all",
         down: "Down",
         remove: "Remove",
