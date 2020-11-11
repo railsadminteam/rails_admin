@@ -283,6 +283,9 @@ RSpec.describe 'Index action', type: :request do
     it 'displays base filters when no filters are present in the params' do
       RailsAdmin.config Player do
         list { filters([:name, :team]) }
+        field :name do
+          default_filter_operator 'is'
+        end
       end
       visit index_path(model_name: 'player')
 
@@ -293,7 +296,7 @@ RSpec.describe 'Index action', type: :request do
           name: 'name',
           type: 'string',
           value: '',
-          operator: nil,
+          operator: 'is',
         },
         {
           index: 2,
