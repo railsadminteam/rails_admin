@@ -286,6 +286,9 @@ RSpec.describe 'Index action', type: :request do
         field :name do
           default_filter_operator 'is'
         end
+        field :team do
+          filterable true
+        end
       end
       visit index_path(model_name: 'player')
 

@@ -228,7 +228,7 @@ module RailsAdmin
         end
 
         register_instance_option :default_filter_operator do
-          'default'
+          nil
         end
 
         def editable?
