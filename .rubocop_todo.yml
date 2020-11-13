@@ -130,7 +130,7 @@ Lint/UnneededSplatExpansion:
 # Configuration parameters: CountComments, ExcludedMethods.
 # ExcludedMethods: refine
 Metrics/BlockLength:
-  Max: 1081
+  Max: 1090
 
 # Offense count: 7
 Naming/AccessorMethodName:
