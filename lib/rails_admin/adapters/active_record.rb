@@ -216,6 +216,7 @@ module RailsAdmin
           when :enum                      then build_statement_for_enum
           when :belongs_to_association    then build_statement_for_belongs_to_association
           when :uuid                      then build_statement_for_uuid
+          when :fulltext_indexed          then build_statement_for_fulltext_indexed
           end
         end
 
@@ -270,6 +271,17 @@ module RailsAdmin
         def build_statement_for_uuid
           if @value.to_s =~ /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/
             column_for_value(@value)
+          end
+        end
+
+        def build_statement_for_fulltext_indexed
+          return if @value.blank?
+          
+          # Use MATCH conditions only for MySQL queries that would normally use LIKE conditions
+          if ['mysql', 'mysql2'].include?(ar_adapter) && ['default', 'like'].include?(@operator)
+            ["(MATCH (#{@column}) AGAINST (? IN BOOLEAN MODE))", @value]
+          else
+            build_statement_for_string_or_text
           end
         end
 
