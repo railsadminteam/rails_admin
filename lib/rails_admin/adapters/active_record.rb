@@ -276,16 +276,14 @@ module RailsAdmin
 
         def build_statement_for_fulltext_indexed
           return if @value.blank?
-          
+
+          table_name, column_name = @column.split('.')
+          model = table_name.classify.constantize
+          index_exists = model.connection.index_exists?(table_name, column_name, type: :fulltext)
+
           # Use MATCH conditions only for MySQL queries that would normally use LIKE conditions if a fulltext index exists
-          if %w[mysql mysql2].include?(ar_adapter) && %w[default like].include?(@operator)
-            table_name, column_name = @column.split('.')
-            model = table_name.classify.constantize
-            if model.connection.index_exists?(table_name, column_name, type: :fulltext)
-              ["(MATCH (#{@column}) AGAINST (? IN BOOLEAN MODE))", @value]
-            else
-              build_statement_for_string_or_text
-            end
+          if %w[mysql mysql2].include?(ar_adapter) && %w[default like].include?(@operator) && index_exists
+            ["(MATCH (#{@column}) AGAINST (? IN BOOLEAN MODE))", @value]
           else
             build_statement_for_string_or_text
           end
