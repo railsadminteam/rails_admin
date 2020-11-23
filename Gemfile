@@ -14,10 +14,6 @@ group :active_record do
   end
 end
 
-group :development do
-  gem 'mlb', '>= 0.7'
-end
-
 group :development, :test do
   gem 'pry', '>= 0.9'
 end

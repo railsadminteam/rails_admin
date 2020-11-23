@@ -63,7 +63,8 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ''
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       mongo:
         image: mongo:4.4
         ports:
@@ -90,6 +91,7 @@ jobs:
     - name: Setup application
       env:
         BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
+        CI_DB_ADAPTER: ${{ matrix.adapter }}
         RAILS_ENV: test
       run: |
         cd spec/dummy_app

@@ -13,14 +13,23 @@ namespace :rails_admin do
   task :prepare_ci_env do
     adapter = ENV['CI_DB_ADAPTER'] || 'sqlite3'
     database = ('sqlite3' == adapter ? 'db/development.sqlite3' : 'ci_rails_admin')
+    username =
+      case adapter
+      when 'postgresql'
+        'postgres'
+      when 'mysql2'
+        'root'
+      else
+        ''
+      end
 
     configuration = {
       'test' => {
         'adapter' => adapter,
         'database' => database,
-        'username' => 'postgresql' == adapter ? 'postgres' : '',
-        'password' => '',
-        'host' => 'localhost',
+        'username' => username,
+        'password' => ('postgresql' == adapter ? 'postgres' : ''),
+        'host' => '127.0.0.1',
         'encoding' => 'utf8',
         'pool' => 5,
         'timeout' => 5000,
