@@ -1,14 +1,14 @@
 # RailsAdmin
 
 [![Gem Version](https://img.shields.io/gem/v/rails_admin.svg)][gem]
-[![Build Status](https://img.shields.io/travis/sferik/rails_admin.svg)][travis]
+[![Build Status](https://img.shields.io/github/workflow/status/sferik/rails_admin/Test)][ghactions]
 [![Coverage Status](https://img.shields.io/coveralls/sferik/rails_admin.svg)][coveralls]
 [![Inline docs](http://inch-ci.org/github/sferik/rails_admin.svg)][inch]
 [![Code Climate](https://codeclimate.com/github/sferik/rails_admin.svg)][codeclimate]
 [![SemVer](https://api.dependabot.com/badges/compatibility_score?dependency-name=rails_admin&package-manager=bundler&version-scheme=semver)][semver]
 
 [gem]: https://rubygems.org/gems/rails_admin
-[travis]: https://travis-ci.org/sferik/rails_admin
+[ghactions]: https://github.com/sferik/rails_admin/actions
 [coveralls]: https://coveralls.io/r/sferik/rails_admin
 [inch]: http://inch-ci.org/github/sferik/rails_admin
 [codeclimate]: https://codeclimate.com/github/sferik/rails_admin
@@ -92,7 +92,7 @@ list][list].
 If you think you found a bug in RailsAdmin, you can [submit an issue](https://github.com/sferik/rails_admin/issues/new).
 
 ## Supported Ruby Versions
-This library aims to support and is [tested against][travis] the following Ruby implementations:
+This library aims to support and is [tested against][ghactions] the following Ruby implementations:
 
 * Ruby 2.2
 * Ruby 2.3
