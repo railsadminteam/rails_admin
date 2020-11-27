@@ -5,14 +5,19 @@ CI_TARGET_ORMS = [:active_record, :mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 require 'simplecov'
-require 'coveralls'
+require 'simplecov-lcov'
 
-SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
+SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::LcovFormatter]
 
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
   minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
+end
+
+SimpleCov::Formatter::LcovFormatter.config do |c|
+  c.report_with_single_file = true
+  c.single_report_path = 'coverage/lcov.info'
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)

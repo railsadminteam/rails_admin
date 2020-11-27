@@ -99,6 +99,24 @@ jobs:
         cd ../../
     - name: Run tests
       run: bundle exec rake spec
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      continue-on-error: true
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.test_number }}
+        parallel: true
+
+  coveralls:
+    name: Coveralls
+    needs: rspec
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
 
   rubocop:
     name: RuboCop
