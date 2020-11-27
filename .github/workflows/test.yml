@@ -30,11 +30,15 @@ jobs:
             orm: active_record
             adapter: sqlite3
           - ruby: 2.7
-            gemfile: gemfiles/rails_6.0.gemfile
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.7
+            gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: mysql2
           - ruby: 2.7
-            gemfile: gemfiles/rails_6.0.gemfile
+            gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: postgresql
           - ruby: 2.6

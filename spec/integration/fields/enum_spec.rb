@@ -141,21 +141,17 @@ RSpec.describe 'Enum field', type: :request, active_record: true do
 
   describe 'when serialize is enabled in ActiveRecord model', active_record: true do
     before do
-      # ActiveRecord 4.2 momoizes result of serialized_attributes, so we have to clear it.
-      Team.remove_instance_variable(:@serialized_attributes) if Team.instance_variable_defined?(:@serialized_attributes)
-      Team.instance_eval do
+      class TeamWithSerializedEnum < Team
+        self.table_name = 'teams'
         serialize :color
         def color_enum
           %w(blue green red)
         end
       end
-      visit new_path(model_name: 'team')
-    end
-
-    after do
-      Team.reset_column_information
-      Team.attribute_type_decorations.clear
-      Team.instance_eval { undef :color_enum }
+      RailsAdmin.config do |c|
+        c.included_models = [TeamWithSerializedEnum]
+      end
+      visit new_path(model_name: 'team_with_serialized_enum')
     end
 
     it 'makes enumeration multi-selectable' do
