@@ -104,7 +104,7 @@ jobs:
       continue-on-error: true
       with:
         github-token: ${{ secrets.github_token }}
-        flag-name: run-${{ matrix.test_number }}
+        flag-name: run-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ matrix.orm }}-${{ matrix.adapter }}
         parallel: true
 
   coveralls:
