@@ -5,14 +5,19 @@ CI_TARGET_ORMS = [:active_record, :mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 require 'simplecov'
-require 'coveralls'
+require 'simplecov-lcov'
 
-SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
+SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::LcovFormatter]
 
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
   minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
+end
+
+SimpleCov::Formatter::LcovFormatter.config do |c|
+  c.report_with_single_file = true
+  c.single_report_path = 'coverage/lcov.info'
 end
 
 require File.expand_path('../dummy_app/config/environment', __FILE__)
@@ -71,6 +76,15 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.include Capybara::DSL, type: :request
+
+  config.verbose_retry = true
+  config.display_try_failure_messages = true
+  config.around :each, :js do |example|
+    example.run_with_retry retry: 2
+  end
+  config.retry_callback = proc do |example|
+    Capybara.reset! if example.metadata[:js]
+  end
 
   config.before do |example|
     DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction

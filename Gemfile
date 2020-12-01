@@ -21,7 +21,6 @@ end
 group :test do
   gem 'cancancan', '~> 3.0'
   gem 'carrierwave', ['>= 2.0.0.rc', '< 3']
-  gem 'coveralls'
   gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
   gem 'dragonfly', '~> 1.0'
   gem 'factory_bot', '>= 4.2'
@@ -34,9 +33,11 @@ group :test do
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
   gem 'rspec-expectations', '!= 3.8.3'
+  gem 'rspec-retry'
   gem 'rubocop', '~> 0.68.1'
   gem 'rubocop-performance'
   gem 'simplecov', '>= 0.9', require: false
+  gem 'simplecov-lcov', require: false
   gem 'shrine', '~> 2.0'
   gem 'shrine-memory'
   gem 'timecop', '>= 0.5'
