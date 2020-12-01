@@ -528,7 +528,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       it 'performs case-insensitive searches' do
         unless ['postgresql', 'postgis'].include?(::ActiveRecord::Base.configurations[Rails.env]['adapter'])
           expect(build_statement(:fulltext_indexed, 'foo', 'default')).to eq([like, '%foo%'])
-          expect(build_statement(:fulltext_indexed, 'FOO', 'default')).to eq([like, '%foo%'])
+          expect(build_statement(:fulltext_indexed, 'FOO', 'default')).to eq([like, '%FOO%'])
         end
       end
 
