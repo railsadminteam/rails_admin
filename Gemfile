@@ -5,6 +5,17 @@ gem 'rails'
 gem 'haml'
 gem 'devise'
 
+group :mongoid do
+  gem 'mongoid', '~> 4.0.0'
+  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+  gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+end
+
+group :neo4j do
+  gem 'neo4j', github: 'neo4jrb/neo4j'
+  gem 'neo4j-core', github: 'neo4jrb/neo4j-core'
+end
+
 group :active_record do
   gem 'paper_trail'
 

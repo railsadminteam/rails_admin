@@ -76,6 +76,10 @@ module RailsAdmin
           true
         end
 
+        def eager_loadable?
+          type == :has_one && !polymorphic?
+        end
+
         delegate :options, :scope, to: :association, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end

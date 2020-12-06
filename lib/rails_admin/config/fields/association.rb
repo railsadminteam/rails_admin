@@ -98,7 +98,9 @@ module RailsAdmin
 
         # Reader for the association's value unformatted
         def value
-          bindings[:object].send(association.name)
+          result = bindings[:object].send(association.name)
+          result = result.to_a if result && result.respond_to?(:to_a)
+          result
         end
 
         # has many?
@@ -110,6 +112,10 @@ module RailsAdmin
           true
         end
 
+        def eager_loadable?
+          association.eager_loadable?
+        end
+        
         def associated_model_limit
           RailsAdmin.config.default_associated_collection_limit
         end

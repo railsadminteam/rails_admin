@@ -1,9 +1,8 @@
 module RailsAdmin
   module Adapters
-    module Mongoid
+    module Neo4j
       class Association
         attr_reader :association, :model
-
         def initialize(association, model)
           @association = association
           @model = model
@@ -18,62 +17,55 @@ module RailsAdmin
         end
 
         def type
-          case macro.to_sym
-          when :belongs_to, :referenced_in, :embedded_in
-            :belongs_to
-          when :has_one, :references_one, :embeds_one
-            :has_one
-          when :has_many, :references_many, :embeds_many
-            :has_many
-          when :has_and_belongs_to_many, :references_and_referenced_in_many
-            :has_and_belongs_to_many
-          else
-            raise("Unknown association type: #{macro.inspect}")
+          case type.to_sym
+          when :has_one, :has_many
+            type.to_sym
+            fail("Unknown association type: #{type.inspect}")
           end
         end
 
         def klass
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
-            polymorphic_parents(:mongoid, model.name, name) || []
+          if polymorphic? #&& [:referenced_in, :belongs_to].include?(type)
+            if association.model_class.is_a?(Array)
+              association.model_class
+            elsif association.model_class == false
+              []
+            end
           else
-            association.klass
+            association.target_class_names[0].constantize.to_s
           end
         end
 
         def primary_key
-          association.primary_key.to_sym rescue :_id
+          :uuid
         end
 
         def foreign_key
-          return if embeds?
+          return unless [:embeds_one, :embeds_many].exclude?(type.to_sym)
           association.foreign_key.to_sym rescue nil
         end
 
-        def foreign_key_nullable?
-          return if foreign_key.nil?
-          true
-        end
-
         def foreign_type
-          return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          return unless polymorphic? && [:referenced_in, :belongs_to].include?(type)
           association.inverse_type.try(:to_sym) || :"#{name}_type"
         end
 
         def foreign_inverse_of
-          return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          return unless polymorphic? && [:referenced_in, :belongs_to].include?(type)
           inverse_of_field.try(:to_sym)
         end
 
         def as
-          association.as.try :to_sym
+          true
         end
 
         def polymorphic?
-          association.polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          association.model_class == false || association.model_class.is_a?(Array)
         end
 
         def inverse_of
-          association.inverse_of.try :to_sym
+          #association.inverse_of.try :to_sym
+          nil
         end
 
         def read_only?
@@ -82,8 +74,8 @@ module RailsAdmin
 
         def nested_options
           nested = nested_attributes_options.try { |o| o[name] }
-          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !cyclic?
-            raise <<-MSG.gsub(/^\s+/, '')
+          if !nested && [:embeds_one, :embeds_many].include?(type.to_sym) && !association.cyclic
+            fail <<-MSG.gsub(/^\s+/, '')
             Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
             because embedded model doesn't have top-level access.
             Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
@@ -97,15 +89,7 @@ module RailsAdmin
         end
 
         def eager_loadable?
-          type == :has_one && !polymorphic?
-        end
-
-        def macro
-          association.try(:macro) || association.class.name.split('::').last.underscore.to_sym
-        end
-
-        def embeds?
-          [:embeds_one, :embeds_many].include?(macro)
+          true
         end
 
       private
@@ -114,10 +98,7 @@ module RailsAdmin
           association.respond_to?(:inverse_of_field) && association.inverse_of_field
         end
 
-        def cyclic?
-          association.respond_to?(:cyclic?) ? association.cyclic? : association.cyclic
-        end
-
+        delegate :type, :options, to: :association, prefix: false
         delegate :nested_attributes_options, to: :model, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end

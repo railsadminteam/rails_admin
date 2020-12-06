@@ -88,7 +88,10 @@ module RailsAdmin
 
       register_instance_option :navigation_label do
         @navigation_label ||= begin
-          if (parent_module = abstract_model.model.try(:module_parent) || abstract_model.model.try!(:parent)) != Object
+          # Use source method object in case it's overwritten in the model
+          # parent_module = Class.method(:parent).unbind.bind(abstract_model.model).call
+          parent_module = abstract_model.model.try(:module_parent) || abstract_model.model.try!(:parent)
+          if parent_module != Object
             parent_module.to_s
           end
         end

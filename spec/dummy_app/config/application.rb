@@ -26,8 +26,17 @@ module DummyApp
     config.eager_load_paths.reject! { |p| p =~ %r{/app/(\w+)$} && !%w(controllers helpers views).push(CI_ORM).include?(Regexp.last_match[1]) }
     config.autoload_paths += %W(#{config.root}/app/#{CI_ORM} #{config.root}/app/#{CI_ORM}/concerns #{config.root}/lib)
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
+    
+    # Do not swallow errors in after_commit/after_rollback callbacks.
+    config.active_record.raise_in_transactional_callbacks = true if Rails.version >= '4.2' && CI_ORM == :active_record
     config.active_record.time_zone_aware_types = [:datetime, :time] if CI_ORM == :active_record
     config.active_record.sqlite3.represent_boolean_as_integer = true if CI_ORM == :active_record && Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR == 2
     config.active_storage.service = :local if defined?(ActiveStorage)
+    
+    if CI_ORM == :neo4j
+      config.neo4j.session_options = { basic_auth: { username: 'neo4j', password: 'neo5j'} } 
+      config.neo4j.session_type = :server_db 
+      config.neo4j.session_path = 'http://localhost:7474'
+    end    
   end
 end

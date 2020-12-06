@@ -50,6 +50,8 @@ module RailsAdmin
         initialize_active_record
       elsif ancestors.include?('Mongoid::Document')
         initialize_mongoid
+      elsif ancestors.include?('Neo4j::ActiveNode') || ancestors.include?('Neo4j::ActiveRel')
+        initialize_neo4j
       end
     end
 
@@ -110,6 +112,12 @@ module RailsAdmin
       extend Adapters::Mongoid
     end
 
+    def initialize_neo4j
+      @adapter = :neo4j
+      require 'rails_admin/adapters/neo4j'
+      extend Adapters::Neo4j
+    end
+    
     def parse_field_value(field, value)
       value.is_a?(Array) ? value.map { |v| field.parse_value(v) } : field.parse_value(value)
     end
