@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
+RSpec.describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
   describe '#associations' do
     it 'returns Association class' do
       expect(RailsAdmin::AbstractModel.new(Player).associations.first).
@@ -17,7 +17,7 @@ describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
 
   describe 'data access methods' do
     before do
-      @players = FactoryGirl.create_list(:player, 3)
+      @players = FactoryBot.create_list(:player, 3)
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
     end
 
@@ -101,8 +101,8 @@ describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
             queryable true
           end
         end
-        @players = FactoryGirl.create_list(:player, 3)
-        @team = FactoryGirl.create :team, name: 'foobar'
+        @players = FactoryBot.create_list(:player, 3)
+        @team = FactoryBot.create :team, name: 'foobar'
         @team.players << @players[1]
         @abstract_model = RailsAdmin::AbstractModel.new('Player')
       end
@@ -124,10 +124,10 @@ describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
             searchable :all
           end
         end
-        @teams = FactoryGirl.create_list(:team, 3)
+        @teams = FactoryBot.create_list(:team, 3)
         @players = [{team: @teams[1]},
                     {team: @teams[1], name: 'foobar'},
-                    {team: @teams[2]}].collect { |h| FactoryGirl.create :player, h }
+                    {team: @teams[2]}].collect { |h| FactoryBot.create :player, h }
         @abstract_model = RailsAdmin::AbstractModel.new('Team')
       end
 
@@ -148,8 +148,8 @@ describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
             searchable :all
           end
         end
-        @teams = FactoryGirl.create_list(:team, 3)
-        @fans = [{}, {name: 'foobar'}, {}].collect { |h| FactoryGirl.create :fan, h }
+        @teams = FactoryBot.create_list(:team, 3)
+        @fans = [{}, {name: 'foobar'}, {}].collect { |h| FactoryBot.create :fan, h }
         @teams[1].fans = [@fans[0], @fans[1]]
         @teams[2].fans << @fans[2]
         @abstract_model = RailsAdmin::AbstractModel.new('Team')
@@ -163,36 +163,13 @@ describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
         expect(@abstract_model.all(filters: {'fans' => {'0000' => {o: 'is', v: 'foobar'}}}).to_a).to eq(@teams[1..1])
       end
     end
-
-    describe 'whose type is embedded has_many' do
-      before do
-        RailsAdmin.config FieldTest do
-          field :embeds do
-            queryable true
-            searchable :all
-          end
-        end
-        @field_tests = FactoryGirl.create_list(:field_test, 3)
-        @field_tests[0].embeds.create name: 'foo'
-        @field_tests[1].embeds.create name: 'bar'
-        @abstract_model = RailsAdmin::AbstractModel.new('FieldTest')
-      end
-
-      it 'supports querying' do
-        expect(@abstract_model.all(query: 'bar').to_a).to eq(@field_tests[1..1])
-      end
-
-      it 'supports filtering' do
-        expect(@abstract_model.all(filters: {'embeds' => {'0000' => {o: 'is', v: 'bar'}}}).to_a).to eq(@field_tests[1..1])
-      end
-    end
   end
 
   describe '#query_conditions' do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
       @players = [{}, {name: 'Many foos'}, {position: 'foo shortage'}].
-                 collect { |h| FactoryGirl.create :player, h }
+                 collect { |h| FactoryBot.create :player, h }
     end
 
     it 'makes correct query' do
@@ -203,9 +180,9 @@ describe 'RailsAdmin::Adapters::Neo4j', neo4j: true do
   describe '#filter_conditions' do
     before do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
-      @team = FactoryGirl.create :team, name: 'king of bar'
+      @team = FactoryBot.create :team, name: 'king of bar'
       @players = [{}, {team: @team}, {name: 'Many foos', team: @team}, {name: 'Great foo'}].
-                 collect { |h| FactoryGirl.create :player, h }
+                 collect { |h| FactoryBot.create :player, h }
     end
 
     it 'makes correct query' do

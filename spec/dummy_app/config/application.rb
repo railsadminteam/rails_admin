@@ -28,15 +28,14 @@ module DummyApp
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
     
     # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true if Rails.version >= '4.2' && CI_ORM == :active_record
     config.active_record.time_zone_aware_types = [:datetime, :time] if CI_ORM == :active_record
     config.active_record.sqlite3.represent_boolean_as_integer = true if CI_ORM == :active_record && Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR == 2
     config.active_storage.service = :local if defined?(ActiveStorage)
     
     if CI_ORM == :neo4j
-      config.neo4j.session_options = { basic_auth: { username: 'neo4j', password: 'neo5j'} } 
-      config.neo4j.session_type = :server_db 
-      config.neo4j.session_path = 'http://localhost:7474'
+      config.neo4j.session.options = { basic_auth: { username: 'neo4j', password: 'neo5j'} }
+      config.neo4j.session.type = :http
+      config.neo4j.session.path = 'http://localhost:7475'
     end    
   end
 end

@@ -50,7 +50,8 @@ class User
   # Add Paperclip support for avatars
   #has_mongoid_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100>'}
 
-  property :roles, type: Array
+  property :roles
+  serialize :roles
 
   def attr_accessible_role
     :custom_role

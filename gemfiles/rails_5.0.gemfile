@@ -23,6 +23,15 @@ group :active_record do
   end
 end
 
+group :neo4j do
+  gem "cancancan-neo4j"
+  gem "carrierwave-neo4j"
+  gem "devise-neo4j"
+  gem "neo4j", "~> 9.0"
+  gem "neo4j-core"
+  gem "neo4jrb-paperclip", require: "neo4jrb_paperclip"
+end
+
 group :development, :test do
   gem "pry", ">= 0.9"
 end

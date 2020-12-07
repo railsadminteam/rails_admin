@@ -4,8 +4,8 @@ class Draft
   property :created_at, type: DateTime
   property :updated_at, type: DateTime
 
-  belongs_to :player
-  belongs_to :team
+  has_one :out, :player, type: :draft_for
+  has_one :out, :team, type: :picked_for
   property :date, type: Date
   property :round, type: Integer
   property :pick, type: Integer

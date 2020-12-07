@@ -1,0 +1,45 @@
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of ActiveNode to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.yml definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using neo4j:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
+
+---
+:constraints:
+- CONSTRAINT ON ( `cms::basicpage`:`Cms::BasicPage` ) ASSERT `cms::basicpage`.uuid
+  IS UNIQUE
+- CONSTRAINT ON ( `comment::confirmed`:`Comment::Confirmed` ) ASSERT `comment::confirmed`.uuid
+  IS UNIQUE
+- CONSTRAINT ON ( `neo4j::migrations::schemamigration`:`Neo4j::Migrations::SchemaMigration`
+  ) ASSERT `neo4j::migrations::schemamigration`.migration_id IS UNIQUE
+- CONSTRAINT ON ( `user::confirmed`:`User::Confirmed` ) ASSERT `user::confirmed`.uuid
+  IS UNIQUE
+- CONSTRAINT ON ( anotherfieldtest:AnotherFieldTest ) ASSERT anotherfieldtest.uuid
+  IS UNIQUE
+- CONSTRAINT ON ( ball:Ball ) ASSERT ball.uuid IS UNIQUE
+- CONSTRAINT ON ( category:Category ) ASSERT category.uuid IS UNIQUE
+- CONSTRAINT ON ( comment:Comment ) ASSERT comment.uuid IS UNIQUE
+- CONSTRAINT ON ( deeplynestedfieldtest:DeeplyNestedFieldTest ) ASSERT deeplynestedfieldtest.uuid
+  IS UNIQUE
+- CONSTRAINT ON ( division:Division ) ASSERT division.uuid IS UNIQUE
+- CONSTRAINT ON ( draft:Draft ) ASSERT draft.uuid IS UNIQUE
+- CONSTRAINT ON ( fan:Fan ) ASSERT fan.uuid IS UNIQUE
+- CONSTRAINT ON ( fieldtest:FieldTest ) ASSERT fieldtest.uuid IS UNIQUE
+- CONSTRAINT ON ( hardball:Hardball ) ASSERT hardball.uuid IS UNIQUE
+- CONSTRAINT ON ( image:Image ) ASSERT image.uuid IS UNIQUE
+- CONSTRAINT ON ( league:League ) ASSERT league.uuid IS UNIQUE
+- CONSTRAINT ON ( nestedfieldtest:NestedFieldTest ) ASSERT nestedfieldtest.uuid IS
+  UNIQUE
+- CONSTRAINT ON ( player:Player ) ASSERT player.uuid IS UNIQUE
+- CONSTRAINT ON ( tableless:Tableless ) ASSERT tableless.uuid IS UNIQUE
+- CONSTRAINT ON ( team:Team ) ASSERT team.uuid IS UNIQUE
+- CONSTRAINT ON ( user:User ) ASSERT user.uuid IS UNIQUE
+:indexes: []
+:versions:
+- '20201207040028'

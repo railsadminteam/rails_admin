@@ -20,28 +20,20 @@ module RailsAdmin
 
         def type
           case property.type.to_s
-          when 'Array', 'Hash', 'Money'
-            :serialized
+          when 'String'
+            string_field_type
+          when 'Integer'
+            :integer
+          when 'Float'
+            :float
           when 'BigDecimal'
             :decimal
-          when 'Boolean'
-            :boolean
-          when 'BSON::ObjectId', 'Moped::BSON::ObjectId'
-            :bson_object_id
           when 'Date'
             :date
           when 'ActiveSupport::TimeWithZone', 'DateTime', 'Time'
             :datetime
-          when 'Float'
-            :float
-          when 'Integer'
-            :integer
-          when 'Object'
-            object_field_type
-          when 'String'
-            string_field_type
-          when 'Symbol'
-            :string
+          when 'Boolean'
+            :boolean
           else
             :string
           end
@@ -68,15 +60,6 @@ module RailsAdmin
         end
 
       private
-
-        def object_field_type
-          if [:belongs_to, :referenced_in, :embedded_in].
-             include?(model.relations.values.detect { |r| r.foreign_key.try(:to_sym) == name }.try(:macro).try(:to_sym))
-            :bson_object_id
-          else
-            :string
-          end
-        end
 
         def string_field_type
           if ((length = length_validation_lookup) && length < 256) || STRING_TYPE_COLUMN_NAMES.include?(name)

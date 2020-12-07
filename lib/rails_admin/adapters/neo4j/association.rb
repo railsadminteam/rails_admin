@@ -17,10 +17,20 @@ module RailsAdmin
         end
 
         def type
-          case type.to_sym
-          when :has_one, :has_many
-            type.to_sym
-            fail("Unknown association type: #{type.inspect}")
+          case association.type.to_sym
+          when :has_one
+            case association.direction.to_sym
+            when :out
+              :belongs_to
+            when :in
+              :has_one
+            else
+              fail("Unknown direction: #{association.direction.inspect}")
+            end
+          when :has_many
+            :has_many
+          else
+            fail("Unknown association type: #{association.type.inspect}")
           end
         end
 
@@ -41,8 +51,11 @@ module RailsAdmin
         end
 
         def foreign_key
-          return unless [:embeds_one, :embeds_many].exclude?(type.to_sym)
           association.foreign_key.to_sym rescue nil
+        end
+
+        def foreign_key_nullable?
+          true
         end
 
         def foreign_type
@@ -98,7 +111,7 @@ module RailsAdmin
           association.respond_to?(:inverse_of_field) && association.inverse_of_field
         end
 
-        delegate :type, :options, to: :association, prefix: false
+        delegate :options, :type, to: :association, prefix: false
         delegate :nested_attributes_options, to: :model, prefix: false
         delegate :polymorphic_parents, to: RailsAdmin::AbstractModel
       end

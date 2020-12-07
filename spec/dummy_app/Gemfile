@@ -26,6 +26,13 @@ group :mongoid do
   gem 'shrine-mongoid'
 end
 
+group :neo4j do
+  gem 'devise-neo4j'
+  gem 'neo4j', '~> 9.0'
+  gem 'neo4j-core'
+  gem 'neo4jrb-paperclip'
+end
+
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
 gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'

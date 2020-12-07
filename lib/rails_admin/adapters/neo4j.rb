@@ -20,6 +20,7 @@ module RailsAdmin
 
       def get(id)
         AbstractObject.new(model.find(id))
+      rescue ::Neo4j::ActiveNode::Labels::RecordNotFound # rubocop:disable Lint/HandleExceptions
       end
 
       def scoped

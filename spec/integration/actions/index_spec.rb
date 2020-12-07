@@ -761,7 +761,7 @@ RSpec.describe 'Index action', type: :request do
   end
 
   describe 'sorting' do
-    let(:today) { Date.today }
+    let(:today) { Date.today.to_time }
     let(:players) do
       [{name: 'Jackie Robinson',  created_at: today,            team_id: rand(99_999), number: 42},
        {name: 'Deibinson Romero', created_at: (today - 2.days), team_id: rand(99_999), number: 13},

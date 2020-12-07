@@ -22,7 +22,7 @@ class Team
   property :custom_field, type: String
 
   has_many :in, :players, origin: :team#, order: :_id.asc
-  #has_and_belongs_to_many :fans
+  has_many :in, :fans, origin: :teams
   has_many :in, :comments, origin: :commentable
 
   validates_presence_of :division_id, only_integer: true

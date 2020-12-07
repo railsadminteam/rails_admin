@@ -6,7 +6,7 @@ RSpec.describe 'Delete action', type: :request do
   it "shows \"Delete model\"" do
     @draft = FactoryBot.create :draft
     @player = @draft.player
-    @comment = @player.comments.create
+    @comment = @player.comments.create({})
     visit delete_path(model_name: 'player', id: @player.id)
     is_expected.to have_content('delete this player')
     is_expected.to have_link(@player.name, href: "/admin/player/#{@player.id}")
@@ -33,7 +33,7 @@ RSpec.describe 'Delete action', type: :request do
       end
       @draft = FactoryBot.create :draft
       @player = @draft.player
-      @comment = @player.comments.create
+      @comment = @player.comments.create({})
       visit delete_path(model_name: 'player', id: @player.id)
     end
 

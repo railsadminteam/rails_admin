@@ -6,7 +6,8 @@ class Player
   include ActiveModel::ForbiddenAttributesProtection
 
   property :deleted_at, type: DateTime
-  has_one :out, :team, type: :PLAYS_FOR
+
+  has_one :out, :team, type: :plays_for, model_class: 'Team'
   property :name, type: String
   property :position, type: String
   property :number, type: Integer
@@ -17,15 +18,15 @@ class Player
   property :suspended, type: Boolean, default: false
 
   validates_presence_of(:name)
-  validates_numericality_of(:number, only_integer: true)
+  #validates_numericality_of(:number, only_integer: true)
   validates_uniqueness_of(:number, scope: :team_id, message: 'There is already a player with that number on this team')
 
   validates_each :name do |record, _attr, value|
     record.errors.add(:base, 'Player is cheating') if value.to_s =~ /on steroids/
   end
 
-  has_one :draft, dependent: :destroy
-  has_many :comments, as: :commentable
+  has_one :in, :draft, dependent: :destroy, type: :picked_by, model_class: 'Draft'
+  has_many :in, :comments, type: :commented_by
 
   before_destroy :destroy_hook
 
