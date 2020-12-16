@@ -7,8 +7,16 @@ module RailsAdmin
         class FulltextIndexed < StringLike
           RailsAdmin::Config::Fields::Types.register(self)
 
+          register_instance_option :html_attributes do
+            {
+              required: required?,
+              cols: '48',
+              rows: '3',
+            }
+          end
+
           register_instance_option :partial do
-            :form_field
+            :form_text
           end
         end
       end
