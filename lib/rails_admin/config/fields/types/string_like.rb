@@ -9,6 +9,18 @@ module RailsAdmin
             properties.try(:nullable?)
           end
 
+          register_instance_option :strip_value? do
+            false
+          end
+        
+          def parse_value(value)
+            if value.present? && strip_value?
+              value.strip
+            else
+              value
+            end
+          end
+
           def parse_input(params)
             params[name] = params[name].presence if params.key?(name) && treat_empty_as_nil?
           end
