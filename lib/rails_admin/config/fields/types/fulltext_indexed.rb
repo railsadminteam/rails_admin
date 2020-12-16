@@ -1,4 +1,4 @@
-require 'rails_admin/config/fields/types/string_like'
+require 'rails_admin/config/fields/types/text'
 
 module RailsAdmin
   module Config
