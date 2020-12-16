@@ -27,6 +27,66 @@ RSpec.describe RailsAdmin::Config::Fields::Types::StringLike do
     end
   end
 
+  describe '#strip_value?' do
+    subject do
+      RailsAdmin.config('FieldTest').fields.detect do |f|
+        f.name == :string_field
+      end.with(object: FieldTest.new)
+    end
+
+    context 'with strip_value being true' do
+      before do
+        RailsAdmin.config FieldTest do
+          field :string_field do
+            strip_value true
+          end
+        end
+      end
+
+      context 'when value has leading and trailing whitespace' do
+        let(:value) { '  testing  ' }
+
+        it 'strips the whitespace from the value' do
+          expect(subject.parse_value(value)).to eq('testing')
+        end
+      end
+
+      context 'when value does not have leading or trailing whitespace' do
+        let(:value) { 'testing' }
+
+        it 'keeps the value untouched' do
+          expect(subject.parse_value(value)).to eq(value)
+        end
+      end
+    end
+
+    context 'with strip_value being false' do
+      before do
+        RailsAdmin.config FieldTest do
+          field :string_field do
+            strip_value false
+          end
+        end
+      end
+
+      context 'when value has leading and trailing whitespace' do
+        let(:value) { '  testing  ' }
+
+        it 'keeps the value untouched' do
+          expect(subject.parse_value(value)).to eq(value)
+        end
+      end
+
+      context 'when value does not have leading or trailing whitespace' do
+        let(:value) { 'testing' }
+
+        it 'keeps the value untouched' do
+          expect(subject.parse_value(value)).to eq(value)
+        end
+      end
+    end
+  end
+
   describe '#parse_input' do
     subject do
       RailsAdmin.config('FieldTest').fields.detect do |f|
