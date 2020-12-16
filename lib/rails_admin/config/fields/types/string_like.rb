@@ -12,7 +12,7 @@ module RailsAdmin
           register_instance_option :strip_value? do
             false
           end
-        
+
           def parse_value(value)
             if value.present? && strip_value?
               value.strip
