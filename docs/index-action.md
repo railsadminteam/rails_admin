@@ -1,4 +1,4 @@
-### Example authorizations for cancan:
+### Example authorizations for CanCanCan:
 
 ```ruby
   can :manage, :all
