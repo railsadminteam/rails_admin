@@ -4,6 +4,12 @@ CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = [:active_record, :mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
+if RUBY_ENGINE == 'jruby'
+  # Workaround for JRuby CI failure https://github.com/jruby/jruby/issues/6547#issuecomment-774104996
+  require 'i18n/backend'
+  require 'i18n/backend/simple'
+end
+
 require 'simplecov'
 require 'simplecov-lcov'
 
