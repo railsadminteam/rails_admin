@@ -14,6 +14,19 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage do
   end
 
   describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage::ActiveStorageAttachment do
+    describe '#thumb_method' do
+      let(:record) { FactoryBot.create :field_test, active_storage_assets: [{io: StringIO.new('dummy'), filename: "test.txt", content_type: "text/plain"}] }
+      subject { field.attachments[0] }
+
+      it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
+        if ::ActiveStorage::VERSION::MAJOR >= 6
+          expect(subject.thumb_method).to eq(resize_to_limit: [100, 100])
+        else
+          expect(subject.thumb_method).to eq(resize: '100x100>')
+        end
+      end
+    end
+
     describe '#pretty_value' do
       subject { field.pretty_value }
 

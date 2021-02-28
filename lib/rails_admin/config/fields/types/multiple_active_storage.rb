@@ -9,7 +9,7 @@ module RailsAdmin
 
           class ActiveStorageAttachment < RailsAdmin::Config::Fields::Types::MultipleFileUpload::AbstractAttachment
             register_instance_option :thumb_method do
-              if Gem.loaded_specs.key?('ruby-vips')
+              if ::ActiveStorage::VERSION::MAJOR >= 6
                 {resize_to_limit: [100, 100]}
               else
                 {resize: '100x100>'}
