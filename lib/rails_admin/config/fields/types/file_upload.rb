@@ -31,6 +31,10 @@ module RailsAdmin
             resource_url.to_s
           end
 
+          register_instance_option :link_name do
+            value
+          end
+
           register_instance_option :pretty_value do
             if value.presence
               v = bindings[:view]
@@ -40,7 +44,7 @@ module RailsAdmin
                 image_html = v.image_tag(thumb_url, class: 'img-thumbnail')
                 url != thumb_url ? v.link_to(image_html, url, target: '_blank', rel: 'noopener noreferrer') : image_html
               else
-                v.link_to(value, url, target: '_blank', rel: 'noopener noreferrer')
+                v.link_to(link_name, url, target: '_blank', rel: 'noopener noreferrer')
               end
             end
           end

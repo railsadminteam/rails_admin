@@ -38,8 +38,6 @@ group :test do
   gem 'rubocop-performance'
   gem 'simplecov', '>= 0.9', require: false
   gem 'simplecov-lcov', require: false
-  gem 'shrine', '~> 2.0'
-  gem 'shrine-memory'
   gem 'timecop', '>= 0.5'
 
   platforms :ruby_19 do
