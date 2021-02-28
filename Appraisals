@@ -5,6 +5,7 @@ appraise "rails-5.0" do
 
   group :test do
     gem 'cancancan', '~> 2.0'
+    gem 'paperclip', ['>= 3.4', '!= 4.3.0']
     gem 'shrine', '~> 2.13.0'
     gem 'shrine-memory'
   end
@@ -40,6 +41,7 @@ appraise "rails-5.1" do
 
   group :test do
     gem 'cancancan', '~> 2.0'
+    gem 'paperclip', ['>= 3.4', '!= 4.3.0']
     gem 'shrine', '~> 3.0'
   end
 
@@ -71,6 +73,7 @@ appraise "rails-5.2" do
 
   group :test do
     gem 'cancancan', '~> 2.0'
+    gem 'paperclip', ['>= 3.4', '!= 4.3.0']
     gem 'shrine', '~> 3.0'
   end
 
@@ -103,6 +106,7 @@ appraise "rails-6.0" do
 
   group :test do
     gem 'cancancan', '~> 3.0'
+    gem 'kt-paperclip'
     gem 'rspec-rails', '>= 4.0.0.beta2'
     gem 'shrine', '~> 3.0'
   end
@@ -129,13 +133,15 @@ appraise "rails-6.0" do
 end
 
 appraise "rails-6.1" do
-  gem 'rails', '~> 6.1.0.rc1'
+  gem 'rails', '~> 6.1.0'
   gem 'haml'
   gem 'sassc-rails', '~> 2.1'
   gem 'devise', '~> 4.7'
+  gem 'webrick', '~> 1.7'
 
   group :test do
-    gem 'cancancan', '~> 3.0', github: 'ghiculescu/cancancan', branch: 'avoid-resolve_column_aliases-2'
+    gem 'cancancan', '~> 3.2'
+    gem 'kt-paperclip'
     gem 'rspec-rails', '>= 4.0.0.beta2'
     gem 'shrine', '~> 3.0'
   end

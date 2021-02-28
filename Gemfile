@@ -27,15 +27,14 @@ group :test do
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
-  gem 'paperclip', ['>= 3.4', '!= 4.3.0']
   gem 'poltergeist', '~> 1.5'
   gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
   gem 'rspec-expectations', '!= 3.8.3'
   gem 'rspec-retry'
-  gem 'rubocop', '~> 0.68.1'
-  gem 'rubocop-performance'
+  gem 'rubocop', '~> 0.68.1', require: false
+  gem 'rubocop-performance', require: false
   gem 'simplecov', '>= 0.9', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop', '>= 0.5'

@@ -3,10 +3,11 @@
 source "https://rubygems.org"
 
 gem "appraisal", ">= 2.0"
-gem "rails", "~> 6.1.0.rc1"
+gem "rails", "~> 6.1.0"
 gem "haml"
 gem "devise", "~> 4.7"
 gem "sassc-rails", "~> 2.1"
+gem "webrick", "~> 1.7"
 
 group :active_record do
   gem "paper_trail", ">= 5.0"
@@ -23,7 +24,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "cancancan", "~> 3.0", github: "ghiculescu/cancancan", branch: "avoid-resolve_column_aliases-2"
+  gem "cancancan", "~> 3.2"
   gem "carrierwave", [">= 2.0.0.rc", "< 3"]
   gem "database_cleaner", [">= 1.2", "!= 1.4.0", "!= 1.5.0", "< 2.0"]
   gem "dragonfly", "~> 1.0"
@@ -31,19 +32,19 @@ group :test do
   gem "generator_spec", ">= 0.8"
   gem "launchy", ">= 2.2"
   gem "mini_magick", ">= 3.4"
-  gem "paperclip", [">= 3.4", "!= 4.3.0"]
   gem "poltergeist", "~> 1.5"
   gem "pundit"
   gem "rack-cache", require: "rack/cache"
   gem "rspec-rails", ">= 4.0.0.beta2"
   gem "rspec-expectations", "!= 3.8.3"
   gem "rspec-retry"
-  gem "rubocop", "~> 0.68.1"
-  gem "rubocop-performance"
+  gem "rubocop", "~> 0.68.1", require: false
+  gem "rubocop-performance", require: false
   gem "simplecov", ">= 0.9", require: false
   gem "simplecov-lcov", require: false
   gem "timecop", ">= 0.5"
   gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+  gem "kt-paperclip"
   gem "shrine", "~> 3.0"
 
   platforms :ruby_19 do
