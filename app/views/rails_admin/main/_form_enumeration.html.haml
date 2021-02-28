@@ -7,12 +7,13 @@
       sortable: false,
       cacheAll: true,
       regional: {
+        add: t("admin.misc.add_new"),
         chooseAll: t("admin.misc.chose_all"),
-        chosen: t("admin.misc.chosen", name: config.label_plural),
         clearAll: t("admin.misc.clear_all"),
+        down: t("admin.misc.down"),
+        remove: t("admin.misc.remove"),
         search: t("admin.misc.search"),
-        up: t("admin.misc.up"),
-        down: t("admin.misc.down")
+        up: t("admin.misc.up")
       }
     }
   = form.select field.method_name, field.enum, { selected: field.form_value, object: form.object }, field.html_attributes.reverse_merge({data: { filteringmultiselect: true, options: js_data.to_json }, multiple: true})
