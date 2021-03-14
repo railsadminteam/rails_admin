@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.1...HEAD)
+
+
+## [2.1.1](https://github.com/sferik/rails_admin/tree/v2.1.1) - 2021-03-14
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.0...v2.1.1)
+
+### Fixed
+- Fix AbstractObject's proxying was incompatible with keyword arguments in Ruby 3.0 ([#3342](https://github.com/sferik/rails_admin/issues/3342))
 
 
 ## [2.1.0](https://github.com/sferik/rails_admin/tree/v2.1.0) - 2021-02-28
