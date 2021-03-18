@@ -24,9 +24,9 @@
     $(window.document).trigger('rails_admin.dom_ready', [field, parent_group]);
     new_tab.children('a').tab('show');
     if (!one_to_one) {
-      nav.select(':hidden').show('slow');
+      nav.filter(':hidden').show('slow');
     }
-    content.select(':hidden').show('slow');
+    content.filter(':hidden').show('slow');
     toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right');
     if (one_to_one) {
       controls.find('.add_nested_fields').removeClass('add_nested_fields').text(field.children('.object-infos').data('object-label'));
@@ -45,7 +45,7 @@
     (current_li.next().length ? current_li.next() : current_li.prev()).children('a:first').tab('show');
     current_li.remove();
     if (nav.children().length === 0) {
-      nav.select(':visible').hide('slow');
+      nav.filter(':visible').hide('slow');
       toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right');
     }
     if (one_to_one) {
