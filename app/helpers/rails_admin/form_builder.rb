@@ -1,3 +1,5 @@
+require 'nested_form/builder_mixin'
+
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::NestedForm::BuilderMixin
