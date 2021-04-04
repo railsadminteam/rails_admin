@@ -6,6 +6,7 @@ appraise "rails-5.0" do
   group :test do
     gem 'cancancan', '~> 2.0'
     gem 'paperclip', ['>= 3.4', '!= 4.3.0']
+    gem 'mimemagic', '< 0.3.10'
     gem 'shrine', '~> 2.13.0'
     gem 'shrine-memory'
   end

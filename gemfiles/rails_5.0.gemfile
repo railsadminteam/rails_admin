@@ -49,6 +49,7 @@ group :test do
   gem "timecop", ">= 0.5"
   gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
   gem "paperclip", [">= 3.4", "!= 4.3.0"]
+  gem "mimemagic", "< 0.3.10"
   gem "shrine", "~> 2.13.0"
   gem "shrine-memory"
 
