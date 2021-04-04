@@ -21,8 +21,8 @@ $(document).on 'nested:fieldAdded', 'form', (content) ->
   nav.append(new_tab)
   $(window.document).trigger('rails_admin.dom_ready', [field, parent_group]) # fire dom_ready for new player in town
   new_tab.children('a').tab('show') # activate added tab
-  nav.select(':hidden').show('slow') unless one_to_one # show nav if hidden
-  content.select(':hidden').show('slow') # show tabs content if hidden
+  nav.filter(':hidden').show('slow') unless one_to_one # show nav if hidden
+  content.filter(':hidden').show('slow') # show tabs content if hidden
   # toggler 'on' if inactive
   toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right')
 
@@ -44,7 +44,7 @@ $(document).on 'nested:fieldRemoved', 'form', (content) ->
   current_li.remove()
 
   if nav.children().length == 0 # removed last tab
-    nav.select(':visible').hide('slow') # hide nav. No use anymore.
+    nav.filter(':visible').hide('slow') # hide nav. No use anymore.
     # toggler 'off' if active
     toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right')
 

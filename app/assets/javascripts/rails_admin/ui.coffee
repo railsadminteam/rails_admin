@@ -33,11 +33,11 @@ $(document).on 'click', '[data-target]', ->
   if !$(this).hasClass('disabled')
     if $(this).has('i.icon-chevron-down').length
       $(this).removeClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
-      $($(this).data('target')).select(':visible').hide('slow')
+      $($(this).data('target')).filter(':visible').hide('slow')
     else
       if $(this).has('i.icon-chevron-right').length
         $(this).addClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right')
-        $($(this).data('target')).select(':hidden').show('slow')
+        $($(this).data('target')).filter(':hidden').show('slow')
 
 $(document).on 'click', '.form-horizontal legend', ->
   if $(this).has('i.icon-chevron-down').length
