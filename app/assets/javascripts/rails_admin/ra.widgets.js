@@ -172,7 +172,7 @@
           field.find('> .controls .add_nested_fields').removeClass('add_nested_fields').text($(this).children('.object-infos').data('object-label'));
           nav.append(
               $('<li></li>').append(
-                  $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + this.id).text($(this).children('.object-infos').data('object-label'))
+                  $('<a></a>').attr('data-toggle', 'tab').attr('href', '#' + $(this).id).text($(this).children('.object-infos').data('object-label'))
               )
           );
         });
