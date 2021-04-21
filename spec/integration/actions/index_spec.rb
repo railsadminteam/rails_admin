@@ -59,6 +59,27 @@ RSpec.describe 'Index action', type: :request do
       @comment = FactoryBot.create(:comment, commentable: @players[2])
     end
 
+    it 'hides redundant filter options for required fields', js: true do
+      RailsAdmin.config Player do
+        list do
+          field :name do
+            required true
+          end
+          field :team
+        end
+      end
+
+      visit index_path(model_name: 'player', f: {name: {'1' => {v: ''}}, team: {'2' => {v: ''}}})
+
+      within(:select, name: 'f[name][1][o]') do
+        expect(page.all('option').map(&:value)).to_not include('_present', '_blank')
+      end
+
+      within(:select, name: 'f[team][2][o]') do
+        expect(page.all('option').map(&:value)).to include('_present', '_blank')
+      end
+    end
+
     it 'allows to query on any attribute' do
       RailsAdmin.config Player do
         list do
@@ -283,6 +304,12 @@ RSpec.describe 'Index action', type: :request do
     it 'displays base filters when no filters are present in the params' do
       RailsAdmin.config Player do
         list { filters([:name, :team]) }
+        field :name do
+          default_filter_operator 'is'
+        end
+        field :team do
+          filterable true
+        end
       end
       visit index_path(model_name: 'player')
 
@@ -293,7 +320,8 @@ RSpec.describe 'Index action', type: :request do
           name: 'name',
           type: 'string',
           value: '',
-          operator: nil,
+          operator: 'is',
+          required: true,
         },
         {
           index: 2,
@@ -302,6 +330,7 @@ RSpec.describe 'Index action', type: :request do
           type: 'belongs_to_association',
           value: '',
           operator: nil,
+          required: false,
         },
       ]
     end

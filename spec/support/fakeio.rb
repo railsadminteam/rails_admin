@@ -10,14 +10,6 @@ class FakeIO
     @content_type = content_type
   end
 
-  def self.another_version(object, version_name)
-    FakeIO.new(
-      "#{version_name}-#{object.read}",
-      filename: "#{version_name}-#{object.original_filename}",
-      content_type: object.content_type,
-    )
-  end
-
   extend Forwardable
   delegate %i(read rewind eof? close size) => :@io
 end

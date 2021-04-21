@@ -131,6 +131,8 @@ Lint/UnneededSplatExpansion:
 # ExcludedMethods: refine
 Metrics/BlockLength:
   Max: 1081
+  Exclude:
+    - 'spec/integration/actions/index_spec.rb'
 
 # Offense count: 7
 Naming/AccessorMethodName:

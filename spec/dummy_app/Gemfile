@@ -1,16 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '>= 6.0.0.beta'
-gem 'rack-cache', require: 'rack/cache'
+gem 'rails', '>= 6.0.0'
 
 group :active_record do
   platforms :jruby do
     gem 'activerecord-jdbcmysql-adapter', '>= 1.2'
-    gem 'jdbc-mysql', '>= 5.1'
     gem 'activerecord-jdbcpostgresql-adapter', '>= 1.2'
-    gem 'jdbc-postgres', '>= 9.2'
     gem 'activerecord-jdbcsqlite3-adapter', '>= 1.2'
-    gem 'jdbc-sqlite3', '>= 3.7'
   end
 
   platforms :ruby, :mswin, :mingw do
@@ -27,7 +23,7 @@ group :mongoid do
   gem 'kaminari-mongoid'
   gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-  gem 'shrine-mongoid'
+  gem 'shrine-mongoid', '~> 1.0'
 end
 
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
@@ -37,8 +33,7 @@ gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
-gem 'shrine', '~> 2.0'
-gem 'shrine-memory'
+gem 'shrine', '~> 3.0'
 
 # Gems used only for assets and not required
 # in production environments by default.

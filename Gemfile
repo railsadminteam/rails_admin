@@ -21,24 +21,22 @@ end
 group :test do
   gem 'cancancan', '~> 3.0'
   gem 'carrierwave', ['>= 2.0.0.rc', '< 3']
-  gem 'coveralls'
-  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0']
+  gem 'database_cleaner', ['>= 1.2', '!= 1.4.0', '!= 1.5.0', '< 2.0']
   gem 'dragonfly', '~> 1.0'
   gem 'factory_bot', '>= 4.2'
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
-  gem 'paperclip', ['>= 3.4', '!= 4.3.0']
   gem 'poltergeist', '~> 1.5'
   gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'
   gem 'rspec-expectations', '!= 3.8.3'
-  gem 'rubocop', '~> 0.68.1'
-  gem 'rubocop-performance'
+  gem 'rspec-retry'
+  gem 'rubocop', '~> 0.68.1', require: false
+  gem 'rubocop-performance', require: false
   gem 'simplecov', '>= 0.9', require: false
-  gem 'shrine', '~> 2.0'
-  gem 'shrine-memory'
+  gem 'simplecov-lcov', require: false
   gem 'timecop', '>= 0.5'
 
   platforms :ruby_19 do

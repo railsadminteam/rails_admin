@@ -67,7 +67,7 @@ pull request with failing specs.
 
 ## Submitting a Pull Request
 1. [Fork the repository.][fork]
-2. [Create a topic branch.][branch]
+2. Create a branch.
 3. Add specs for your unimplemented feature or bug fix.
 4. Run `bundle exec rake spec`. If your specs pass, return to step 3.
 5. Implement your feature or bug fix.
@@ -78,5 +78,4 @@ pull request with failing specs.
 9. [Submit a pull request.][pr]
 
 [fork]: http://help.github.com/fork-a-repo/
-[branch]: http://learn.github.com/p/branching.html
 [pr]: http://help.github.com/send-pull-requests/

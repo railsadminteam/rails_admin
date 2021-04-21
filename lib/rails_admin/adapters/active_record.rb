@@ -71,11 +71,17 @@ module RailsAdmin
       delegate :primary_key, :table_name, to: :model, prefix: false
 
       def encoding
-        case ::ActiveRecord::Base.connection_config[:adapter]
+        adapter =
+          if ::ActiveRecord::Base.respond_to?(:connection_db_config)
+            ::ActiveRecord::Base.connection_db_config.configuration_hash[:adapter]
+          else
+            ::ActiveRecord::Base.connection_config[:adapter]
+          end
+        case adapter
         when 'postgresql'
           ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
         when 'mysql2'
-          ::ActiveRecord::Base.connection.instance_variable_get(:@connection).encoding
+          ::ActiveRecord::Base.connection.raw_connection.encoding
         when 'oracle_enhanced'
           ::ActiveRecord::Base.connection.select_one("SELECT dummy FROM DUAL").values.first.encoding
         else

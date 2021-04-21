@@ -36,7 +36,6 @@ en:
       bulk_menu_title: "Selected items"
       remove: "Remove"
       add_new: "Add new"
-      chosen: "Chosen %{name}"
       chose_all: "Choose all"
       clear_all: "Clear all"
       up: "Up"

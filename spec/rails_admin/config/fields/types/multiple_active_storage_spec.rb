@@ -7,10 +7,47 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage do
   let(:field) do
     RailsAdmin.config('FieldTest').fields.detect do |f|
       f.name == :active_storage_assets
-    end.with(object: record)
+    end.with(
+      object: record,
+      view: ApplicationController.new.view_context,
+    )
   end
 
   describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage::ActiveStorageAttachment do
+    describe '#thumb_method' do
+      let(:record) { FactoryBot.create :field_test, active_storage_assets: [{io: StringIO.new('dummy'), filename: "test.txt", content_type: "text/plain"}] }
+      subject { field.attachments[0] }
+
+      it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
+        if ::ActiveStorage::VERSION::MAJOR >= 6
+          expect(subject.thumb_method).to eq(resize_to_limit: [100, 100])
+        else
+          expect(subject.thumb_method).to eq(resize: '100x100>')
+        end
+      end
+    end
+
+    describe '#pretty_value' do
+      subject { field.pretty_value }
+
+      context 'when attachment is not an image' do
+        let(:record) { FactoryBot.create :field_test, active_storage_assets: [{io: StringIO.new('dummy'), filename: "test.txt", content_type: "text/plain"}] }
+
+        it 'uses filename as link text' do
+          expect(Nokogiri::HTML(subject).text).to eq 'test.txt'
+        end
+      end
+
+      context 'when the field is an image' do
+        let(:record) { FactoryBot.create :field_test, active_storage_assets: [{io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"}] }
+
+        it 'shows thumbnail image with a link' do
+          expect(Nokogiri::HTML(subject).css('img').attribute('src').value).to match(%r{rails/active_storage/representations})
+          expect(Nokogiri::HTML(subject).css('a').attribute('href').value).to match(%r{rails/active_storage/blobs})
+        end
+      end
+    end
+
     describe '#image?' do
       context 'when attachment is an image' do
         let(:record) { FactoryBot.create :field_test, active_storage_assets: [{io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"}] }

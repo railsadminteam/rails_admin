@@ -10,6 +10,16 @@ RSpec.describe RailsAdmin::Config::Fields::Types::ActiveStorage do
     end.with(object: record)
   end
 
+  describe '#thumb_method' do
+    it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
+      if ::ActiveStorage::VERSION::MAJOR >= 6
+        expect(field.thumb_method).to eq(resize_to_limit: [100, 100])
+      else
+        expect(field.thumb_method).to eq(resize: '100x100>')
+      end
+    end
+  end
+
   describe '#image?' do
     context 'when attachment is an image' do
       let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"} }

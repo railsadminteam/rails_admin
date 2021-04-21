@@ -20,11 +20,17 @@ module RailsAdmin
         end
 
         def save(options = {validate: true})
-          object.save(options)
+          object.save(**options)
         end
 
-        def method_missing(method_name, *args, &block)
-          object.send(method_name, *args, &block)
+        if RUBY_VERSION >= '2.7'
+          def method_missing(method_name, *args, **kwargs, &block)
+            object.send(method_name, *args, **kwargs, &block)
+          end
+        else
+          def method_missing(method_name, *args, &block)
+            object.send(method_name, *args, &block)
+          end
         end
       end
     end

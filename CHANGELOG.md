@@ -2,7 +2,36 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.2...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.1...HEAD)
+
+
+## [2.1.1](https://github.com/sferik/rails_admin/tree/v2.1.1) - 2021-03-14
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.0...v2.1.1)
+
+### Fixed
+- Fix AbstractObject's proxying was incompatible with keyword arguments in Ruby 3.0 ([#3342](https://github.com/sferik/rails_admin/issues/3342))
+
+
+## [2.1.0](https://github.com/sferik/rails_admin/tree/v2.1.0) - 2021-02-28
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.0.2...v2.1.0)
+
+### Added
+- Ability to set default filter operator for fields ([#3318](https://github.com/sferik/rails_admin/pull/3318))
+- Shrine 3.x support ([#3257](https://github.com/sferik/rails_admin/pull/3257))
+- Rails 6.1 compatibility ([f0c46f1e](https://github.com/sferik/rails_admin/commit/f0c46f1e128b5d31d812ff3a80d15db8692c848b))
+
+### Fixed
+- Some translation entries of filtering-multiselect weren't localizable ([#3315](https://github.com/sferik/rails_admin/pull/3315))
+- Thumbnail generation breaks when used with ActiveStorage 6.x and ruby-vips ([#3255](https://github.com/sferik/rails_admin/pull/3255), [2dba791c](https://github.com/sferik/rails_admin/commit/2dba791c9135b3202d662f90fac443d282869bd6))
+- Hide present/blank filter options for required fields ([#3340](https://github.com/sferik/rails_admin/pull/3340))
+- Fix to show correct filename for multiple attachments ([#3295](https://github.com/sferik/rails_admin/pull/3295))
+- Fix encoding detection was incompatible with DB connection proxies like active_record_host_pool gem ([#3313](https://github.com/sferik/rails_admin/pull/3313))
+- Fix hidden fields breaking indentation ([#3278](https://github.com/sferik/rails_admin/pull/3278), [#2487](https://github.com/sferik/rails_admin/issues/2487))
+
+### Removed
+- Remove `yell_for_non_accessible_fields` option since it has no effect since 0.5.0 ([#3249](https://github.com/sferik/rails_admin/pull/3249))
 
 
 ## [2.0.2](https://github.com/sferik/rails_admin/tree/v2.0.2) - 2020-03-17

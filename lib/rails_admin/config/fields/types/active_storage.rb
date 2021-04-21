@@ -8,7 +8,11 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :thumb_method do
-            {resize: '100x100>'}
+            if ::ActiveStorage::VERSION::MAJOR >= 6
+              {resize_to_limit: [100, 100]}
+            else
+              {resize: '100x100>'}
+            end
           end
 
           register_instance_option :delete_method do

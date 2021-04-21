@@ -34,10 +34,17 @@ RSpec.describe RailsAdmin::CSVConverter do
     subject { RailsAdmin::CSVConverter.new(objects, schema).to_csv(options) }
 
     context 'when encoding FROM latin1', active_record: true do
+      let(:connection_config) do
+        if ActiveRecord::Base.respond_to?(:connection_db_config)
+          ActiveRecord::Base.connection_db_config.configuration_hash
+        else
+          ActiveRecord::Base.connection_config
+        end
+      end
       let(:encoding) { '' }
       let(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
       before do
-        case ActiveRecord::Base.connection_config[:adapter]
+        case connection_config[:adapter]
         when 'postgresql'
           @connection = ActiveRecord::Base.connection.instance_variable_get(:@connection)
           @connection.set_client_encoding('latin1')
@@ -46,7 +53,7 @@ RSpec.describe RailsAdmin::CSVConverter do
         end
       end
       after do
-        case ActiveRecord::Base.connection_config[:adapter]
+        case connection_config[:adapter]
         when 'postgresql'
           @connection.set_client_encoding('utf8')
         when 'mysql2'

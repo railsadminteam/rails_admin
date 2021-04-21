@@ -9,6 +9,14 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::AbstractObject', active_reco
       expect(object).to receive(:method_call)
       abstract_object.method_call
     end
+
+    context 'when the method of underlying object receives keyword arguments' do
+      let(:object) { Class.new { def foo(bar: 1); end }.new }
+
+      it 'does not break on proxying' do
+        expect { abstract_object.foo(bar: 2) }.not_to raise_error
+      end
+    end
   end
 
   describe 'create' do
