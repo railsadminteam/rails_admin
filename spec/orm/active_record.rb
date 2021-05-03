@@ -39,10 +39,21 @@ class Tableless < ActiveRecord::Base
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
-      define_attribute(name.to_s,
-                       connection.send(:lookup_cast_type, sql_type.to_s))
+      cast_type = connection.send(:lookup_cast_type, sql_type.to_s)
+      define_attribute(name.to_s, cast_type)
       columns <<
-        ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, connection.send(:lookup_cast_type, sql_type.to_s), sql_type.to_s, null)
+        if ActiveRecord.version > Gem::Version.new('6.0')
+          type_metadata = ActiveRecord::ConnectionAdapters::SqlTypeMetadata.new(
+            sql_type: sql_type.to_s,
+            type: cast_type.type,
+            limit: cast_type.limit,
+            precision: cast_type.precision,
+            scale: cast_type.scale,
+          )
+          ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, type_metadata, null)
+        else
+          ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, cast_type, sql_type.to_s, null)
+        end
     end
 
     def columns_hash

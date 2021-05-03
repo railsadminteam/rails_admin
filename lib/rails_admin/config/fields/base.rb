@@ -227,6 +227,10 @@ module RailsAdmin
           bindings[:view].render partial: "rails_admin/main/#{partial}", locals: {field: self, form: bindings[:form]}
         end
 
+        register_instance_option :default_filter_operator do
+          nil
+        end
+
         def editable?
           !(@properties && @properties.read_only?)
         end

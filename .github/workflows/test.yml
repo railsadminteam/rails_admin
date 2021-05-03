@@ -1,0 +1,148 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  rspec:
+    name: RSpec
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ 2.6, 2.7, jruby ]
+        gemfile: [ gemfiles/rails_6.0.gemfile ]
+        orm: [ active_record ]
+        adapter: [ sqlite3 ]
+        include:
+          - ruby: 2.2
+            gemfile: gemfiles/rails_5.0.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.3
+            gemfile: gemfiles/rails_5.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.4
+            gemfile: gemfiles/rails_5.2.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.5
+            gemfile: gemfiles/rails_5.2.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.7
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.7
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: mysql2
+          - ruby: 2.7
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: postgresql
+          - ruby: 3.0
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+          - ruby: 2.6
+            gemfile: gemfiles/rails_5.2.gemfile
+            orm: mongoid
+            adapter: sqlite3
+          - ruby: 2.7
+            gemfile: gemfiles/rails_6.0.gemfile
+            orm: mongoid
+            adapter: sqlite3
+          - ruby: jruby
+            gemfile: gemfiles/rails_6.0.gemfile
+            orm: mongoid
+            adapter: sqlite3
+    runs-on: ubuntu-16.04
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      postgres:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      mongo:
+        image: mongo:4.4
+        ports:
+          - 27017:27017
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+      CI_ORM: ${{ matrix.orm }}
+      JRUBY_OPTS: --debug
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Cache gems
+      uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-${{ matrix.ruby }}-
+    - name: Install dependencies
+      run: bundle install --without development --jobs=3 --retry=3 --path=vendor/bundle
+    - name: Setup application
+      env:
+        BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
+        CI_DB_ADAPTER: ${{ matrix.adapter }}
+        RAILS_ENV: test
+      run: |
+        cd spec/dummy_app
+        bundle exec rake rails_admin:prepare_ci_env db:create db:migrate
+        cd ../../
+    - name: Run tests
+      run: bundle exec rake spec
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      continue-on-error: true
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ matrix.orm }}-${{ matrix.adapter }}
+        parallel: true
+
+  coveralls:
+    name: Coveralls
+    needs: rspec
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
+
+  rubocop:
+    name: RuboCop
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Cache gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ hashFiles('Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-${{ matrix.ruby }}-
+      - name: Install dependencies
+        run: bundle install --without development --jobs=3 --retry=3 --path=vendor/bundle
+      - name: Run check
+        run: bundle exec rake rubocop

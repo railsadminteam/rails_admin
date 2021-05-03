@@ -11,6 +11,7 @@
       var field_value = options['value'];
       var field_operator = options['operator'];
       var select_options = options['select_options'];
+      var required = options['required'];
       var index = options['index'];
       var value_name    = 'f[' +  field_name + '][' + index + '][v]';
       var operator_name = 'f[' +  field_name + '][' + index + '][o]';
@@ -24,9 +25,13 @@
             .append('<option value="_discard">...</option>')
             .append($('<option value="true"></option>').prop('selected', field_value == "true").text(RailsAdmin.I18n.t("true")))
             .append($('<option value="false"></option>').prop('selected', field_value == "false").text(RailsAdmin.I18n.t("false")))
-            .append('<option disabled="disabled">---------</option>')
-            .append($('<option value="_present"></option>').prop('selected', field_value == "_present").text(RailsAdmin.I18n.t("is_present")))
-            .append($('<option value="_blank"></option>').prop('selected', field_value == "_blank").text(RailsAdmin.I18n.t("is_blank")));
+            if (!required) {
+              control.append([
+                '<option disabled="disabled">---------</option>',
+                $('<option value="_present"></option>').prop('selected', field_value == "_present").text(RailsAdmin.I18n.t("is_present")),
+                $('<option value="_blank"></option>').prop('selected', field_value == "_blank").text(RailsAdmin.I18n.t("is_blank"))
+              ])
+            }
           break;
         case 'date':
           additional_control =
@@ -56,9 +61,13 @@
             .append($('<option value="yesterday"></option>').prop('selected', field_operator == "yesterday").text(RailsAdmin.I18n.t("yesterday")))
             .append($('<option value="this_week"></option>').prop('selected', field_operator == "this_week").text(RailsAdmin.I18n.t("this_week")))
             .append($('<option value="last_week"></option>').prop('selected', field_operator == "last_week").text(RailsAdmin.I18n.t("last_week")))
-            .append('<option disabled="disabled">---------</option>')
-            .append($('<option value="_not_null"></option>').prop('selected', field_operator == "_not_null").text(RailsAdmin.I18n.t("is_present")))
-            .append($('<option value="_null"></option>').prop('selected', field_operator == "_null").text(RailsAdmin.I18n.t("is_blank")));
+          if (!required) {
+            control.append([
+              '<option disabled="disabled">---------</option>',
+              $('<option value="_not_null"></option>').prop('selected', field_operator == "_not_null").text(RailsAdmin.I18n.t("is_present")),
+              $('<option value="_null"></option>').prop('selected', field_operator == "_null").text(RailsAdmin.I18n.t("is_blank"))
+            ])
+          }
           additional_control = additional_control ||
             $('<input size="25" class="datetime additional-fieldset default input-sm form-control" type="text" />')
             .css('display', (!field_operator || field_operator == "default") ? 'inline-block' : 'none')
@@ -84,10 +93,14 @@
             .prop('name', multiple_values ? undefined : value_name)
             .data('name', value_name)
             .append('<option value="_discard">...</option>')
-            .append($('<option value="_present"></option>').prop('selected', field_value == "_present").text(RailsAdmin.I18n.t("is_present")))
-            .append($('<option value="_blank"></option>').prop('selected', field_value == "_blank").text(RailsAdmin.I18n.t("is_blank")))
-            .append('<option disabled="disabled">---------</option>')
-            .append(select_options)
+          if (!required) {
+            control.append([
+              $('<option value="_present"></option>').prop('selected', field_value == "_present").text(RailsAdmin.I18n.t("is_present")),
+              $('<option value="_blank"></option>').prop('selected', field_value == "_blank").text(RailsAdmin.I18n.t("is_blank")),
+              '<option disabled="disabled">---------</option>'
+            ])
+          }
+          control.append(select_options)
             .add(
               $('<select multiple="multiple" class="select-multiple input-sm form-control"></select>')
               .css('display', multiple_values ? 'inline-block' : 'none')
@@ -111,9 +124,13 @@
             .append($('<option data-additional-fieldset="additional-fieldset" value="is"></option>').prop('selected', field_operator == "is").text(RailsAdmin.I18n.t("is_exactly")))
             .append($('<option data-additional-fieldset="additional-fieldset" value="starts_with"></option>').prop('selected', field_operator == "starts_with").text(RailsAdmin.I18n.t("starts_with")))
             .append($('<option data-additional-fieldset="additional-fieldset" value="ends_with"></option>').prop('selected', field_operator == "ends_with").text(RailsAdmin.I18n.t("ends_with")))
-            .append('<option disabled="disabled">---------</option>')
-            .append($('<option value="_present"></option>').prop('selected', field_operator == "_present").text(RailsAdmin.I18n.t("is_present")))
-            .append($('<option value="_blank"></option>').prop('selected', field_operator == "_blank").text(RailsAdmin.I18n.t("is_blank")));
+          if (!required) {
+            control.append([
+              '<option disabled="disabled">---------</option>',
+              $('<option value="_present"></option>').prop('selected', field_operator == "_present").text(RailsAdmin.I18n.t("is_present")),
+              $('<option value="_blank"></option>').prop('selected', field_operator == "_blank").text(RailsAdmin.I18n.t("is_blank"))
+            ])
+          }
           additional_control = $('<input class="additional-fieldset input-sm form-control" type="text" />')
             .css('display', field_operator == "_present" || field_operator == "_blank" ? 'none' : 'inline-block')
             .prop('name', value_name)
@@ -126,9 +143,13 @@
             .prop('name', operator_name)
             .append($('<option data-additional-fieldset="default" value="default"></option>').prop('selected', field_operator == "default").text(RailsAdmin.I18n.t("number")))
             .append($('<option data-additional-fieldset="between" value="between"></option>').prop('selected', field_operator == "between").text(RailsAdmin.I18n.t("between_and_")))
-            .append('<option disabled="disabled">---------</option>')
-            .append($('<option value="_not_null"></option>').prop('selected', field_operator == "_not_null").text(RailsAdmin.I18n.t("is_present")))
-            .append($('<option value="_null"></option>').prop('selected', field_operator == "_null").text(RailsAdmin.I18n.t("is_blank")));
+          if (!required) {
+            control.append([
+              '<option disabled="disabled">---------</option>',
+              $('<option value="_not_null"></option>').prop('selected', field_operator == "_not_null").text(RailsAdmin.I18n.t("is_present")),
+              $('<option value="_null"></option>').prop('selected', field_operator == "_null").text(RailsAdmin.I18n.t("is_blank"))
+            ])
+          }
           additional_control =
             $('<input class="additional-fieldset default input-sm form-control" type="text" />')
             .css('display', (!field_operator || field_operator == "default") ? 'inline-block' : 'none')
@@ -193,6 +214,7 @@
       value: $(this).data('field-value'),
       operator: $(this).data('field-operator'),
       select_options: $(this).data('field-options'),
+      required: $(this).data('field-required'),
       index: $.now().toString().slice(6,11),
       datetimepicker_format: $(this).data('field-datetimepicker-format')
     });

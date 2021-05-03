@@ -19,13 +19,13 @@
       sortable: false,
       removable: true,
       regional: {
-        up: "Up",
-        down: "Down",
-        add: "Add",
-        chooseAll: "Choose all",
-        chosen: "Chosen records",
-        clearAll: "Clear all",
-        remove: "Remove"
+        add: 'Add',
+        chooseAll: 'Choose all',
+        clearAll: 'Clear all',
+        down: 'Down',
+        remove: 'Remove',
+        search: 'Search',
+        up: 'Up'
       },
       searchDelay: 400,
       remote_source: null,

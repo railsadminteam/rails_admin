@@ -556,4 +556,21 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
       expect(RailsAdmin.config(Team).field(:name).allowed_methods).to eq [:name]
     end
   end
+
+  describe '#default_filter_operator' do
+    it 'has a default and be user customizable' do
+      RailsAdmin.config Team do
+        list do
+          field :division
+          field :name do
+            default_filter_operator 'is'
+          end
+        end
+      end
+      name_field = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }
+      expect(name_field.default_filter_operator).to eq('is') # custom via user specification
+      division_field = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }
+      expect(division_field.default_filter_operator).to be nil # rails_admin generic fallback
+    end
+  end
 end

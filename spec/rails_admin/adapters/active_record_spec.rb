@@ -2,8 +2,15 @@ require 'spec_helper'
 require 'timecop'
 
 RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
+  let(:activerecord_config) do
+    if ::ActiveRecord::Base.respond_to? :connection_db_config
+      ::ActiveRecord::Base.connection_db_config.configuration_hash
+    else
+      ::ActiveRecord::Base.connection_config
+    end
+  end
   let(:like) do
-    if ['postgresql', 'postgis'].include? ::ActiveRecord::Base.configurations[Rails.env]['adapter']
+    if ['postgresql', 'postgis'].include? activerecord_config[:adapter]
       '(field ILIKE ?)'
     else
       '(LOWER(field) LIKE ?)'
@@ -122,7 +129,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'supports multibyte querying' do
-        unless ::ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
+        unless activerecord_config[:adapter] == 'sqlite3'
           results = abstract_model.all(query: @players[4].name)
           expect(results).to eq(@players[4, 1])
         end
@@ -269,7 +276,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'performs case-insensitive searches' do
-        unless ['postgresql', 'postgis'].include?(::ActiveRecord::Base.configurations[Rails.env]['adapter'])
+        unless ['postgresql', 'postgis'].include?(activerecord_config[:adapter])
           expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
           expect(build_statement(:string, 'FOO', 'default')).to eq([like, '%foo%'])
         end

@@ -3,10 +3,22 @@ require 'spec_helper'
 RSpec.describe RailsAdmin::Config::Fields::Types::Shrine do
   context 'when asset is an image with versions' do
     let(:record) { FactoryBot.create :field_test, shrine_versioning_asset: FakeIO.new('dummy', filename: 'test.jpg', content_type: 'image/jpeg') }
+
     let(:field) do
       RailsAdmin.config('FieldTest').fields.detect do |f|
         f.name == :shrine_versioning_asset
       end.with(object: record)
+    end
+
+    before do
+      if Gem.loaded_specs['shrine'].version >= Gem::Version.create('3')
+        if record.shrine_versioning_asset
+          record.shrine_versioning_asset_derivatives!
+          record.save
+        end
+      else
+        skip
+      end
     end
 
     describe '#image?' do
@@ -15,10 +27,16 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Shrine do
       end
     end
 
+    describe '#link_name' do
+      it 'returns filename' do
+        expect(field.link_name).to eq('test.jpg')
+      end
+    end
+
     describe '#value' do
       context 'when attachment exists' do
         it 'returns attached object' do
-          expect(field.value).to be_a(Hash)
+          expect(field.value).to be_a(ShrineVersioningUploader::UploadedFile)
         end
       end
 
@@ -40,7 +58,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Shrine do
     describe '#resource_url' do
       context 'when calling without thumb' do
         it 'returns original url' do
-          expect(field.resource_url).to match(/original-/)
+          expect(field.resource_url).to_not match(/thumb-/)
         end
       end
 

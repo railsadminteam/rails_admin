@@ -38,7 +38,8 @@ module RailsAdmin
                   image_html = v.image_tag(thumb_url, class: 'img-thumbnail')
                   url != thumb_url ? v.link_to(image_html, url, target: '_blank', rel: 'noopener noreferrer') : image_html
                 else
-                  v.link_to(value, url, target: '_blank', rel: 'noopener noreferrer')
+                  display_value = value.respond_to?(:filename) ? value.filename : value
+                  v.link_to(display_value, url, target: '_blank', rel: 'noopener noreferrer')
                 end
               end
             end

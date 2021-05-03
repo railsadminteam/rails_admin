@@ -3,6 +3,12 @@ require 'spec_helper'
 RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
   describe '#generate' do
     before do
+      RailsAdmin.config Player do
+        create do
+          include_all_fields
+          field :number, :hidden
+        end
+      end
       allow(helper).to receive(:authorized?).and_return(true)
       (@object = Player.new).save
       @builder = RailsAdmin::FormBuilder.new(:player, @object, helper, {})
@@ -12,6 +18,10 @@ RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
     it 'does not add additional error div from default ActionView::Base.field_error_proc' do
       expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).not_to have_css('.field_with_errors')
       expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).to have_css('.control-group.error')
+    end
+
+    it 'hidden fields should be wrapper' do
+      expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).to match('form-group control-group hidden_type number_field')
     end
   end
 
