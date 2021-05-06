@@ -182,6 +182,23 @@ You can use these 3 bindings to decide whereas the action should be visible or n
 * `bindings[:abstract_model]` is checked abstract model (except root actions)
 * `bindings[:object]` is checked instance object (member actions only)
 
+For instance, if you want to allow editing of games, but only if they haven't yet started:
+
+```ruby
+config.actions do
+  edit do
+    visible do
+      object = bindings[:object]
+      case object
+      when Game then !object.started? # only allow editing games if they haven't started
+      when Player then true           # allow editing of Players any time
+      else false                      # don't allow editing anything else
+      end
+    end
+  end
+end
+```
+
 Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
 
 Important: at some point of the application lifecycle, bindings can be nil:
