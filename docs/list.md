@@ -18,7 +18,7 @@ By default, columns have a `max-width` of 120px, and no `min-width`. While there
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Player do
+  config.model 'Player' do
     list do
       field :created_at do # (1)
         column_width 300
@@ -44,7 +44,7 @@ You can also configure it per model:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       items_per_page 100
     end
@@ -60,7 +60,7 @@ You can change default behavior with use two options: `sort_by` and `sort_revers
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Player do
+  config.model 'Player' do
     list do
       sort_by :name
       field :name do
@@ -78,7 +78,7 @@ Default visible filters. Must be a list of fields name.
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       filters [:name, :manager]
       # Manually enable/disable per field
@@ -106,7 +106,7 @@ end
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Player do
+  config.model 'Player' do
     list do
       field :created_at do # (1)
         sortable false
@@ -139,7 +139,7 @@ If you want to reverse (or cancel it) the default sort order (first column click
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       field :id do
         sort_reverse false   # will sort id increasing ('asc') first ones first (default is last ones first)
@@ -171,7 +171,7 @@ Belongs_to associations:
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Player do
+  config.model 'Player' do
     list do
       field :created_at do # (1)
         searchable false
@@ -222,7 +222,7 @@ First will be the default, nil means no scope (also it is possible to disable no
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       scopes [:not_cart, :cart, nil]
     end
@@ -233,7 +233,7 @@ end
 This can also be used for achieving `unscoped` list view(i.e. ignoring `default_scope`):
 ```ruby
 RailsAdmin.config do |config|
-  config.model Player do
+  config.model 'Player' do
     list do
       scopes [:unscoped]
     end
@@ -248,7 +248,7 @@ Default value is `false`.
 
 ```ruby
 RailsAdmin.config do |config|
-  config.model Team do
+  config.model 'Team' do
     list do
       limited_pagination true
     end
