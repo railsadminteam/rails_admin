@@ -92,5 +92,9 @@ FactoryBot.define do
     factory :paper_trail_test_subclass_in_namespace,
             parent: :paper_trail_test,
             class: 'PaperTrailTest::SubclassInNamespace'
+
+    factory :paper_trail_test_with_custom_association,
+            parent: :paper_trail_test,
+            class: 'PaperTrailTestWithCustomAssociation'
   end
 end

@@ -106,7 +106,7 @@ RSpec.describe 'RailsAdmin PaperTrail history', active_record: true do
             end
 
             it '#table returns item class name' do
-              expect(@version.table.to_s).to eq('PaperTrailTest')
+              expect(@version.table.to_s).to eq(@model.model.base_class.name)
             end
           end
 
@@ -143,7 +143,7 @@ RSpec.describe 'RailsAdmin PaperTrail history', active_record: true do
     end
   end
 
-  context 'PaperTrailTest' do
+  context 'with a normal PaperTrail model' do
     let(:paper_class_name) { 'PaperTrailTest' }
     let(:paper_factory) { :paper_trail_test }
 
@@ -155,7 +155,7 @@ RSpec.describe 'RailsAdmin PaperTrail history', active_record: true do
     it_behaves_like :paper_history
   end
 
-  context 'PaperTrailTestSubclass' do
+  context 'with a subclassed PaperTrail model' do
     let(:paper_class_name) { 'PaperTrailTestSubclass' }
     let(:paper_factory) { :paper_trail_test_subclass }
 
@@ -167,7 +167,7 @@ RSpec.describe 'RailsAdmin PaperTrail history', active_record: true do
     it_behaves_like :paper_history
   end
 
-  context 'PaperTrailTest::SubclassInNamespace' do
+  context 'with a namespaced PaperTrail model' do
     let(:paper_class_name) { 'PaperTrailTest::SubclassInNamespace' }
     let(:paper_factory) { :paper_trail_test_subclass_in_namespace }
 
@@ -175,6 +175,13 @@ RSpec.describe 'RailsAdmin PaperTrail history', active_record: true do
       let(:paper_model_name) { 'paper_trail_test~subclass_in_namespace' }
       let(:paper_field_name) { 'paper_trail_test_subclass_in_namespace[name]' }
     end
+
+    it_behaves_like :paper_history
+  end
+
+  context 'with a PaperTrail model with custom version association name' do
+    let(:paper_class_name) { 'PaperTrailTestWithCustomAssociation' }
+    let(:paper_factory) { :paper_trail_test_with_custom_association }
 
     it_behaves_like :paper_history
   end
