@@ -2,7 +2,27 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.1...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.0...HEAD)
+
+
+## [2.2.0](https://github.com/sferik/rails_admin/tree/v2.2.0) - 2021-07-24
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.1.1...v2.2.0)
+
+### Added
+- Support for PaperTrail's alternative versions association name([#3354](https://github.com/sferik/rails_admin/pull/3354))
+
+### Changed
+- Update jQuery to 3.x with introducing jQuery.migrate([#3348](https://github.com/sferik/rails_admin/pull/3348), [973dee06](https://github.com/sferik/rails_admin/commit/973dee065938a58d1aef4119a4bc90ac15792421), [#3370](https://github.com/sferik/rails_admin/pull/3370))
+- Update Moment.js to 2.29.1([#3348](https://github.com/sferik/rails_admin/pull/3348), [973dee06](https://github.com/sferik/rails_admin/commit/973dee065938a58d1aef4119a4bc90ac15792421), [7962a194](https://github.com/sferik/rails_admin/commit/7962a19469a709c00f481a50a6d1e7ddd1e37cc6))
+- Update Bootstrap to 3.4.1([#3348](https://github.com/sferik/rails_admin/pull/3348), [973dee06](https://github.com/sferik/rails_admin/commit/973dee065938a58d1aef4119a4bc90ac15792421))
+- Update Bootstrap Datetime Picker to 4.17.49([7962a194](https://github.com/sferik/rails_admin/commit/7962a19469a709c00f481a50a6d1e7ddd1e37cc6))
+
+### Removed
+- Remove unnecessary devise patch([#3352](https://github.com/sferik/rails_admin/pull/3352))
+
+### Fixed
+- Zeitwerk incompatibility([#3190](https://github.com/sferik/rails_admin/issues/3328), [97ccc289](https://github.com/sferik/rails_admin/commit/97ccc28940d65fee53b30c409c49032fbb0885db))
 
 
 ## [2.1.1](https://github.com/sferik/rails_admin/tree/v2.1.1) - 2021-03-14
