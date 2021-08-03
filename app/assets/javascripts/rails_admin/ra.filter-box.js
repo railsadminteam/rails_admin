@@ -98,6 +98,7 @@
               $('<option value="_blank"></option>').prop('selected', field_value == "_blank").text(RailsAdmin.I18n.t("is_blank")),
               '<option disabled="disabled">---------</option>'
             ])
+            .append(select_options)
             .add(
               $('<select multiple="multiple" class="select-multiple input-sm form-control"></select>')
               .css('display', multiple_values ? 'inline-block' : 'none')
