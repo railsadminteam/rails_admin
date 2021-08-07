@@ -34,7 +34,9 @@ RSpec.describe 'Enum field', type: :request, active_record: true do
       visit index_path(model_name: 'team')
       click_link 'Add filter'
       click_link 'Color'
-      is_expected.to have_selector('.filter .switch-select .icon-plus')
+      expect(all('.select-single option').map(&:text)).to include 'blue', 'green', 'red'
+      find('.filter .switch-select .icon-plus').click
+      expect(all('.select-multiple option').map(&:text)).to include 'blue', 'green', 'red'
     end
   end
 
