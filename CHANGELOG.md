@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.1...HEAD)
+
+
+## [2.2.1](https://github.com/sferik/rails_admin/tree/v2.2.0) - 2021-08-08
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.0...v2.2.1)
+
+### Fixed
+- Fix missing select options for single-select enum filters([#3372](https://github.com/sferik/rails_admin/pull/3372))
 
 
 ## [2.2.0](https://github.com/sferik/rails_admin/tree/v2.2.0) - 2021-07-24
