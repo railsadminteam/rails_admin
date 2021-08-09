@@ -9,11 +9,7 @@ module RailsAdmin
 
           class ActiveStorageAttachment < RailsAdmin::Config::Fields::Types::MultipleFileUpload::AbstractAttachment
             register_instance_option :thumb_method do
-              if ::ActiveStorage::VERSION::MAJOR >= 6
-                {resize_to_limit: [100, 100]}
-              else
-                {resize: '100x100>'}
-              end
+              {resize_to_limit: [100, 100]}
             end
 
             register_instance_option :delete_value do

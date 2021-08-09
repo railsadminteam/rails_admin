@@ -12,11 +12,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::ActiveStorage do
 
   describe '#thumb_method' do
     it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
-      if ::ActiveStorage::VERSION::MAJOR >= 6
-        expect(field.thumb_method).to eq(resize_to_limit: [100, 100])
-      else
-        expect(field.thumb_method).to eq(resize: '100x100>')
-      end
+      expect(field.thumb_method).to eq(resize_to_limit: [100, 100])
     end
   end
 

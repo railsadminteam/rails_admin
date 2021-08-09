@@ -19,11 +19,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage do
       subject { field.attachments[0] }
 
       it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
-        if ::ActiveStorage::VERSION::MAJOR >= 6
-          expect(subject.thumb_method).to eq(resize_to_limit: [100, 100])
-        else
-          expect(subject.thumb_method).to eq(resize: '100x100>')
-        end
+        expect(subject.thumb_method).to eq(resize_to_limit: [100, 100])
       end
     end
 

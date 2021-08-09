@@ -4,6 +4,7 @@ gem 'appraisal', '>= 2.0'
 gem 'rails'
 gem 'haml'
 gem 'devise'
+gem 'webrick', '~> 1.7'
 
 group :active_record do
   gem 'paper_trail'

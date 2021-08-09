@@ -8,53 +8,33 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ 2.6, 2.7, jruby ]
-        gemfile: [ gemfiles/rails_6.0.gemfile ]
+        ruby: [ 2.6, 2.7, 3.0, jruby ]
+        gemfile: [ gemfiles/rails_6.1.gemfile ]
         orm: [ active_record ]
         adapter: [ sqlite3 ]
         include:
-          - ruby: 2.2
-            gemfile: gemfiles/rails_5.0.gemfile
-            orm: active_record
-            adapter: sqlite3
-          - ruby: 2.3
-            gemfile: gemfiles/rails_5.1.gemfile
-            orm: active_record
-            adapter: sqlite3
-          - ruby: 2.4
-            gemfile: gemfiles/rails_5.2.gemfile
-            orm: active_record
-            adapter: sqlite3
           - ruby: 2.5
-            gemfile: gemfiles/rails_5.2.gemfile
+            gemfile: gemfiles/rails_6.0.gemfile
             orm: active_record
             adapter: sqlite3
-          - ruby: 2.7
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: active_record
-            adapter: sqlite3
-          - ruby: 2.7
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: active_record
-            adapter: mysql2
-          - ruby: 2.7
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: active_record
-            adapter: postgresql
           - ruby: 3.0
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
-            adapter: sqlite3
-          - ruby: 2.6
-            gemfile: gemfiles/rails_5.2.gemfile
-            orm: mongoid
-            adapter: sqlite3
+            adapter: mysql2
+          - ruby: 3.0
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: postgresql
           - ruby: 2.7
             gemfile: gemfiles/rails_6.0.gemfile
             orm: mongoid
             adapter: sqlite3
+          - ruby: 3.0
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: mongoid
+            adapter: sqlite3
           - ruby: jruby
-            gemfile: gemfiles/rails_6.0.gemfile
+            gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3
     runs-on: ubuntu-16.04
