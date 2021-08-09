@@ -255,6 +255,10 @@ RSpec.describe RailsAdmin::Config do
     it 'should not include classnames start with Concerns::' do
       expect(RailsAdmin::Config.models_pool.select { |m| m.match(/^Concerns::/) }).to be_empty
     end
+
+    it 'includes models in the directory added by config.eager_load_paths' do
+      expect(RailsAdmin::Config.models_pool).to include('Basketball')
+    end
   end
 
   describe '.parent_controller' do
