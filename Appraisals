@@ -13,7 +13,7 @@ appraise "rails-6.0" do
 
   group :active_record do
     gem 'pg', '>= 1.0.0', platforms: :ruby
-    gem 'paper_trail', '>= 5.0'
+    gem 'paper_trail', '>= 12.0'
 
     platforms :jruby do
       gem 'activerecord-jdbcmysql-adapter', '~> 60.0'
@@ -47,7 +47,7 @@ appraise "rails-6.1" do
 
   group :active_record do
     gem 'pg', '>= 1.0.0', platforms: :ruby
-    gem 'paper_trail', '>= 5.0'
+    gem 'paper_trail', '>= 12.0'
 
     platforms :jruby do
       gem 'activerecord-jdbcmysql-adapter', '~> 61.0'
