@@ -18,10 +18,6 @@ RSpec.describe RailsAdmin::Config do
       expect(RailsAdmin::AbstractModel.all.collect(&:model)).to eq([League])
     end
 
-    it 'always excludes history', active_record: true do
-      expect(RailsAdmin::AbstractModel.all.collect(&:model)).not_to include(RailsAdmin::History)
-    end
-
     it 'excluded? returns true for any model not on the list' do
       RailsAdmin.config.included_models = [Team, League]
 

@@ -98,7 +98,6 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     RailsAdmin::Config.reset
     RailsAdmin::AbstractModel.reset
-    RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
   end
 
   config.after(:each) do

@@ -110,7 +110,7 @@ module RailsAdmin
         @authenticate || DEFAULT_AUTHENTICATION
       end
 
-      # Setup auditing/history/versioning provider that observe objects lifecycle
+      # Setup auditing/versioning provider that observe objects lifecycle
       def audit_with(*args, &block)
         extension = args.shift
         if extension

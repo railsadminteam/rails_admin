@@ -1,4 +1,3 @@
-require 'rails_admin/extensions/history/history'
 require 'rails_admin/adapters/active_record'
 
 DatabaseCleaner.strategy = :transaction
