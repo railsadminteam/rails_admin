@@ -1,9 +1,9 @@
 module RailsAdmin
   class Version
-    MAJOR = 2
-    MINOR = 2
-    PATCH = 1
-    PRE = nil
+    MAJOR = 3
+    MINOR = 0
+    PATCH = 0
+    PRE = 'alpha'.freeze
 
     class << self
       # @return [String]
