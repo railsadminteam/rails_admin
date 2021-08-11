@@ -24,6 +24,27 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       expect(@comment.commentable_type).to eq 'Ball'
       expect(@comment.commentable).to eq @hardball
     end
+
+    context 'when the associated model is declared in a two-level namespace' do
+      it 'successfully saves the record', js: true do
+        polymorphic_association_tests = ['Jackie Robinson', 'Rob Wooten'].map do |name|
+          FactoryBot.create(:two_level_namespaced_polymorphic_association_test, name: name)
+        end
+
+        visit new_path(model_name: 'comment')
+
+        select 'Polymorphic association test', from: 'comment[commentable_type]'
+        find('input.ra-filtering-select-input').set('Rob')
+
+        page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
+        page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+
+        page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+        click_button 'Save'
+        expect(Comment.first.commentable).to eq polymorphic_association_tests.first
+      end
+    end
   end
 
   context 'on update' do

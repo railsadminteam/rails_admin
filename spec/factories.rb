@@ -97,4 +97,8 @@ FactoryBot.define do
             parent: :paper_trail_test,
             class: 'PaperTrailTestWithCustomAssociation'
   end
+
+  factory :two_level_namespaced_polymorphic_association_test, class: "TwoLevel::Namespaced::PolymorphicAssociationTest" do
+    sequence(:name) { |n| "name #{n}" }
+  end
 end

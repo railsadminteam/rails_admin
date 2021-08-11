@@ -4,6 +4,7 @@
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.1...HEAD)
 
+- Fix polymorphic associations don't work with namespaced classes([#3376](https://github.com/sferik/rails_admin/issues/3376))
 
 ## [2.2.1](https://github.com/sferik/rails_admin/tree/v2.2.0) - 2021-08-08
 
