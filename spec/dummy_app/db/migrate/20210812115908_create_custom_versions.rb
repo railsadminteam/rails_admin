@@ -1,4 +1,4 @@
-class CreateCustomVersions < ActiveRecord::Migration[6.1]
+class CreateCustomVersions < ActiveRecord::Migration[5.0]
   def change
     create_table :custom_versions do |t|
       t.string :item_type, null: false
