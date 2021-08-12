@@ -1,7 +1,5 @@
 require 'rails_admin/adapters/active_record'
 
-DatabaseCleaner.strategy = :transaction
-
 ActiveRecord::Base.connection.data_sources.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
 end
