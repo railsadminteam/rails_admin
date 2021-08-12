@@ -53,7 +53,7 @@ RSpec.describe 'RailsAdmin PaperTrail auditing', active_record: true do
       end
 
       it 'creates versions' do
-        expect(PaperTrail::Version.count).to eq(30)
+        expect(paper_class_name.constantize.version_class_name.constantize.count).to eq(30)
       end
 
       describe 'model history fetch with auditing adapter' do
