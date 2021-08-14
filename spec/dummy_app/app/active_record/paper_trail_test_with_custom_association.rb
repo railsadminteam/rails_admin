@@ -1,8 +1,8 @@
+class Trail < PaperTrail::Version
+  self.table_name = :custom_versions
+end
+
 class PaperTrailTestWithCustomAssociation < ActiveRecord::Base
   self.table_name = :paper_trail_tests
-  if PaperTrail::VERSION::MAJOR >= 10
-    has_paper_trail versions: {name: :trails}
-  else
-    has_paper_trail versions: :trails
-  end
+  has_paper_trail versions: {class_name: 'Trail'}
 end

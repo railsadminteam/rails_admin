@@ -149,10 +149,10 @@ module RailsAdmin
         # classes](https://github.com/paper-trail-gem/paper_trail#6a-custom-version-classes)
         #
         # ```ruby
-        # has_paper_trail class_name: 'MyVersion'
+        # has_paper_trail versions: { class_name: 'MyVersion' }
         # ```
         def version_class_for(model)
-          model.paper_trail_options[:class_name].try(:constantize) || @version_class
+          model.paper_trail_options.dig(:versions, :class_name).try(:constantize) || @version_class
         end
       end
     end
