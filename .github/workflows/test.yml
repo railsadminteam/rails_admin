@@ -67,15 +67,11 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - name: Cache gems
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
-        restore-keys: |
-          ${{ runner.os }}-gems-${{ matrix.ruby }}-
-    - name: Install dependencies
-      run: bundle install --without development --jobs=3 --retry=3 --path=vendor/bundle
+        bundler-cache: true
+        cache-version: gems-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
+      env:
+        MAKE: make --jobs 4
+        BUNDLE_WITHOUT: development
     - name: Setup application
       env:
         BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
