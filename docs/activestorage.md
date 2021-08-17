@@ -83,3 +83,13 @@ end
 #TODO
 
 ```
+
+### show thumbnails on show and edit views
+Showing thumbnails may require additional setup.
+
+For images, Rails 6 recommend installing the [`image_processing`](https://github.com/janko/image_processing) gem:
+
+```ruby
+# add to your gemfile
+gem 'image_processing', '~> 1.2'
+```
