@@ -37,9 +37,15 @@
         var options;
         options = $(this).data('options');
         $.extend(options, {
+          date: moment($(this).siblings('[type=hidden]').val()),
           locale: RailsAdmin.I18n.locale
         });
         $(this).datetimepicker(options);
+        $(this).on('dp.change', function(e) {
+          if (e.date) {
+            $(this).siblings('[type=hidden]').val(e.date.format('YYYY-MM-DD[T]HH:mm:ss'));
+          }
+        });
       });
       content.find('[data-enumeration]').each(function() {
         if ($(this).is('[multiple]')) {

@@ -283,7 +283,9 @@ module RailsAdmin
         end
 
         def range_filter(min, max)
-          if min && max
+          if min && max && min == max
+            {@column => min}
+          elsif min && max
             {@column => {'$gte' => min, '$lte' => max}}
           elsif min
             {@column => {'$gte' => min}}

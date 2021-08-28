@@ -245,27 +245,18 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
   end
 
   describe 'sanitize_params_for!' do
-    context 'in France' do
+    context 'with datetime' do
       before do
-        I18n.locale = :fr
         ActionController::Parameters.permit_all_parameters = false
-
-        RailsAdmin.config FieldTest do
-          configure :datetime_field do
-            date_format { :default }
-          end
-        end
 
         RailsAdmin.config Comment do
           configure :created_at do
-            date_format { :default }
             show
           end
         end
 
         RailsAdmin.config NestedFieldTest do
           configure :created_at do
-            date_format { :default }
             show
           end
         end
@@ -273,19 +264,19 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         controller.params = ActionController::Parameters.new(
           'field_test' => {
             'unallowed_field' => "I shouldn't be here",
-            'datetime_field' => '1 août 2010 00:00:00',
+            'datetime_field' => '2010-08-01T00:00:00',
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
                   'unallowed_field' => "I shouldn't be here",
-                  'created_at' => '2 août 2010 00:00:00',
+                  'created_at' => '2010-08-02T00:00:00',
                 },
-                'created_at' => '3 août 2010 00:00:00',
+                'created_at' => '2010-08-03T00:00:00',
               },
             },
             'comment_attributes' => {
               'unallowed_field' => "I shouldn't be here",
-              'created_at' => '4 août 2010 00:00:00',
+              'created_at' => '2010-08-04T00:00:00',
             },
           },
         )
@@ -294,7 +285,6 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       after do
         ActionController::Parameters.permit_all_parameters = true
-        I18n.locale = :en
       end
 
       it 'sanitize params recursively in nested forms' do

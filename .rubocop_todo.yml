@@ -440,7 +440,6 @@ Style/RescueStandardError:
   Exclude:
     - 'lib/rails_admin/adapters/mongoid.rb'
     - 'lib/rails_admin/adapters/mongoid/bson.rb'
-    - 'lib/rails_admin/support/i18n.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

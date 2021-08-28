@@ -34,33 +34,21 @@
             }
           break;
         case 'date':
-          additional_control =
-            $('<input size="20" class="date additional-fieldset default input-sm form-control" type="text" />')
-            .css('display', (!field_operator || field_operator == "default") ? 'inline-block' : 'none')
-            .prop('name', value_name + '[]')
-            .prop('value', field_value[0] || '')
-            .add(
-              $('<input size="20" placeholder="-∞" class="date additional-fieldset between input-sm form-control" type="text" />')
-              .css('display', (field_operator == "between") ? 'inline-block' : 'none')
-              .prop('name', value_name + '[]')
-              .prop('value', field_value[1] || '')
-            )
-            .add(
-              $('<input size="20" placeholder="∞" class="date additional-fieldset between input-sm form-control" type="text" />')
-              .css('display', (field_operator == "between") ? 'inline-block' : 'none')
-              .prop('name', value_name + '[]')
-              .prop('value', field_value[2] || '')
-            );
         case 'datetime':
         case 'timestamp':
+        case 'time':
           control = control || $('<select class="switch-additional-fieldsets input-sm form-control"></select>')
             .prop('name', operator_name)
-            .append($('<option data-additional-fieldset="default" value="default"></option>').prop('selected', field_operator == "default").text(RailsAdmin.I18n.t("date")))
+            .append($('<option data-additional-fieldset="default" value="default"></option>').prop('selected', field_operator == "default").text(RailsAdmin.I18n.t(field_type == "time" ? "time" : "date")))
             .append($('<option data-additional-fieldset="between" value="between"></option>').prop('selected', field_operator == "between").text(RailsAdmin.I18n.t("between_and_")))
-            .append($('<option value="today"></option>').prop('selected', field_operator == "today").text(RailsAdmin.I18n.t("today")))
-            .append($('<option value="yesterday"></option>').prop('selected', field_operator == "yesterday").text(RailsAdmin.I18n.t("yesterday")))
-            .append($('<option value="this_week"></option>').prop('selected', field_operator == "this_week").text(RailsAdmin.I18n.t("this_week")))
-            .append($('<option value="last_week"></option>').prop('selected', field_operator == "last_week").text(RailsAdmin.I18n.t("last_week")))
+          if (field_type != 'time') {
+            control.append([
+              $('<option value="today"></option>').prop('selected', field_operator == "today").text(RailsAdmin.I18n.t("today")),
+              $('<option value="yesterday"></option>').prop('selected', field_operator == "yesterday").text(RailsAdmin.I18n.t("yesterday")),
+              $('<option value="this_week"></option>').prop('selected', field_operator == "this_week").text(RailsAdmin.I18n.t("this_week")),
+              $('<option value="last_week"></option>').prop('selected', field_operator == "last_week").text(RailsAdmin.I18n.t("last_week")),
+            ])
+          }
           if (!required) {
             control.append([
               '<option disabled="disabled">---------</option>',
@@ -68,23 +56,24 @@
               $('<option value="_null"></option>').prop('selected', field_operator == "_null").text(RailsAdmin.I18n.t("is_blank"))
             ])
           }
-          additional_control = additional_control ||
-            $('<input size="25" class="datetime additional-fieldset default input-sm form-control" type="text" />')
-            .css('display', (!field_operator || field_operator == "default") ? 'inline-block' : 'none')
-            .prop('name', value_name + '[]')
-            .prop('value', field_value[0] || '')
-            .add(
-              $('<input size="25" placeholder="-∞" class="datetime additional-fieldset between input-sm form-control" type="text" />')
-              .css('display', (field_operator == "between") ? 'inline-block' : 'none')
-              .prop('name', value_name + '[]')
-              .prop('value', field_value[1] || '')
-            )
-            .add(
-              $('<input size="25" placeholder="∞" class="datetime additional-fieldset between input-sm form-control" type="text" />')
-              .css('display', (field_operator == "between") ? 'inline-block' : 'none')
-              .prop('name', value_name + '[]')
-              .prop('value', field_value[2] || '')
-            );
+          additional_control =
+            $.map([undefined, '-∞', '∞'], function(placeholder, index){
+              var visible = index == 0 ? (!field_operator || field_operator == "default") : (field_operator == "between");
+              return $('<span class="additional-fieldset"></span>')
+                .addClass(index == 0 ? 'default' : 'between')
+                .css('display', visible ? 'inline-block' : 'none')
+                .html(
+                  $('<input type="hidden" />')
+                    .prop('name', value_name + '[]')
+                    .prop('value', field_value[index] || '')
+                    .add(
+                      $('<input class="input-sm form-control" type="text" />')
+                        .addClass(field_type == 'date' ? 'date' : 'datetime')
+                        .prop('size', field_type == 'date' || field_type == 'time' ? 20 : 25)
+                        .prop('placeholder', placeholder)
+                    )
+                );
+            });
           break;
         case 'enum':
           var multiple_values = ((field_value instanceof Array) ? true : false)
@@ -193,10 +182,18 @@
 
       $('#filters_box').append($content);
 
-      $content.find('.date, .datetime').datetimepicker({
-        locale: RailsAdmin.I18n.locale,
-        showTodayButton: true,
-        format: options['datetimepicker_format']
+      $content.find('.date, .datetime').each(function() {
+        $(this).datetimepicker({
+          date: moment($(this).siblings('[type=hidden]').val()),
+          locale: RailsAdmin.I18n.locale,
+          showTodayButton: true,
+          format: options['datetimepicker_format']
+        });
+        $(this).on('dp.change', function(e) {
+          if (e.date) {
+            $(this).siblings('[type=hidden]').val(e.date.format('YYYY-MM-DD[T]HH:mm:ss'));
+          }
+        });
       });
 
       $("hr.filters_box:hidden").show('slow');

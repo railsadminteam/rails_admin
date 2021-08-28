@@ -205,7 +205,9 @@ module RailsAdmin
         alias_method :numeric_unary_operators, :boolean_unary_operators
 
         def range_filter(min, max)
-          if min && max
+          if min && max && min == max
+            ["(#{@column} = ?)", min]
+          elsif min && max
             ["(#{@column} BETWEEN ? AND ?)", min, max]
           elsif min
             ["(#{@column} >= ?)", min]

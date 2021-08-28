@@ -503,21 +503,37 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
     end
 
-    describe 'date type queries' do
+    describe 'date/time type queries' do
       let(:scope) { FieldTest.all }
 
       it 'supports date type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', 'February 01, 2012', 'March 01, 2012'], o: 'between'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-03-01')"])
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', 'March 01, 2012', ''], o: 'between'}}))).to eq(["(field_tests.date_field >= '2012-03-01')"])
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '', 'February 01, 2012'], o: 'between'}}))).to eq(["(field_tests.date_field <= '2012-02-01')"])
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['February 01, 2012'], o: 'default'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-02-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '2012-02-01', '2012-03-01'], o: 'between'}}))).to eq(["(field_tests.date_field BETWEEN '2012-02-01' AND '2012-03-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '2012-03-01', ''], o: 'between'}}))).to eq(["(field_tests.date_field >= '2012-03-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '', '2012-02-01'], o: 'between'}}))).to eq(["(field_tests.date_field <= '2012-02-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['2012-02-01'], o: 'default'}}))).to eq(["(field_tests.date_field = '2012-02-01')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'today'}}))).to eq(["(field_tests.date_field = '#{Date.today}')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'yesterday'}}))).to eq(["(field_tests.date_field = '#{Date.yesterday}')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'this_week'}}))).to eq(["(field_tests.date_field BETWEEN '#{Date.today.beginning_of_week}' AND '#{Date.today.end_of_week}')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'last_week'}}))).to eq(["(field_tests.date_field BETWEEN '#{1.week.ago.to_date.beginning_of_week}' AND '#{1.week.ago.to_date.end_of_week}')"])
       end
 
       it 'supports datetime type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'February 01, 2012 12:00', 'March 01, 2012 12:00'], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.utc(2012, 2, 1), Time.utc(2012, 3, 1).end_of_day])))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', 'March 01, 2012 12:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field >= ?)', Time.utc(2012, 3, 1)])))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', 'February 01, 2012 12:00'], o: 'between'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field <= ?)', Time.utc(2012, 2, 1).end_of_day])))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['February 01, 2012 12:00'], o: 'default'}}))).to eq(predicates_for(scope.where(['(field_tests.datetime_field BETWEEN ? AND ?)', Time.utc(2012, 2, 1), Time.utc(2012, 2, 1).end_of_day])))
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '2012-02-01T12:00:00', '2012-03-01T12:00:00'], o: 'between'}}))).to eq(["(field_tests.datetime_field BETWEEN '2012-02-01 12:00:00' AND '2012-03-01 12:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '2012-03-01T12:00:00', ''], o: 'between'}}))).to eq(["(field_tests.datetime_field >= '2012-03-01 12:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', '2012-02-01T12:00:00'], o: 'between'}}))).to eq(["(field_tests.datetime_field <= '2012-02-01 12:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['2012-02-01T12:00:00'], o: 'default'}}))).to eq(["(field_tests.datetime_field = '2012-02-01 12:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'today'}}))).to eq(["(field_tests.datetime_field BETWEEN '#{Date.today} 00:00:00' AND '#{Date.today} 23:59:59.999999')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'yesterday'}}))).to eq(["(field_tests.datetime_field BETWEEN '#{Date.yesterday} 00:00:00' AND '#{Date.yesterday} 23:59:59.999999')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'this_week'}}))).to eq(["(field_tests.datetime_field BETWEEN '#{Date.today.beginning_of_week} 00:00:00' AND '#{Date.today.end_of_week} 23:59:59.999999')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'last_week'}}))).to eq(["(field_tests.datetime_field BETWEEN '#{1.week.ago.to_date.beginning_of_week} 00:00:00' AND '#{1.week.ago.to_date.end_of_week} 23:59:59.999999')"])
+      end
+
+      it 'supports time type query' do
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '2000-01-01T12:00:00', '2000-01-01T14:00:00'], o: 'between'}}))).to eq(["(field_tests.time_field BETWEEN '2000-01-01 12:00:00' AND '2000-01-01 14:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '2000-01-01T14:00:00', ''], o: 'between'}}))).to eq(["(field_tests.time_field >= '2000-01-01 14:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '', '2000-01-01T12:00:00'], o: 'between'}}))).to eq(["(field_tests.time_field <= '2000-01-01 12:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['2000-01-01T12:00:00'], o: 'default'}}))).to eq(["(field_tests.time_field = '2000-01-01 12:00:00')"])
+        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['2021-02-03T12:00:00'], o: 'default'}}))).to eq(["(field_tests.time_field = '2000-01-01 12:00:00')"])
       end
     end
 

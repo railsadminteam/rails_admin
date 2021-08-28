@@ -30,7 +30,7 @@ RSpec.describe 'Base field', type: :request do
       # So we manually cut off first newline character as a workaround here.
       expect(find_field('field_test[string_field]').value.gsub(/^\n/, '')).to eq('string_field default_value')
       expect(find_field('field_test[text_field]').value.gsub(/^\n/, '')).to eq('string_field text_field')
-      expect(find_field('field_test[date_field]').value).to eq(Date.today.to_s)
+      expect(find('[name="field_test[date_field]"]', visible: false).value).to eq(Date.today.to_s)
       expect(has_checked_field?('field_test[boolean_field]')).to be_truthy
     end
 

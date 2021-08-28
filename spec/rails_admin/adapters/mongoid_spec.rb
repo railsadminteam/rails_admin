@@ -127,7 +127,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
         RailsAdmin.config Team do
           field :players do
             queryable true
-            searchable :all
+            searchable :name
           end
         end
         @teams = FactoryBot.create_list(:team, 3)
@@ -151,7 +151,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
         RailsAdmin.config Team do
           field :fans do
             queryable true
-            searchable :all
+            searchable :name
           end
         end
         @teams = FactoryBot.create_list(:team, 3)
@@ -383,17 +383,25 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     end
 
     it 'supports date type query' do
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', 'January 02, 2012', 'January 03, 2012'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 3)}}])
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', 'January 03, 2012', ''], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 3)}}])
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '', 'January 02, 2012'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012, 1, 2)}}])
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['January 02, 2012'], o: 'default'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 2)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '2012-01-02', '2012-01-03'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 3)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '2012-01-03', ''], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 3)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '', '2012-01-02'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012, 1, 2)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['2012-01-02'], o: 'default'}}).selector).to eq('$and' => [{'date_field' => Date.new(2012, 1, 2)}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'today'}}).selector).to eq('$and' => [{'date_field' => Date.today}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'yesterday'}}).selector).to eq('$and' => [{'date_field' => Date.yesterday}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'this_week'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.today.beginning_of_week, '$lte' => Date.today.end_of_week}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'last_week'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => 1.week.ago.to_date.beginning_of_week, '$lte' => 1.week.ago.to_date.end_of_week}}])
     end
 
     it 'supports datetime type query' do
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', 'January 02, 2012 00:00', 'January 03, 2012 00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 2), '$lte' => Time.zone.local(2012, 1, 3).end_of_day}}])
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', 'January 03, 2012 00:00', ''], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 3)}}])
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '', 'January 02, 2012 00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$lte' => Time.zone.local(2012, 1, 2).end_of_day}}])
-      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['January 02, 2012 00:00'], o: 'default'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 2), '$lte' => Time.zone.local(2012, 1, 2).end_of_day}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '2012-01-02T12:00:00', '2012-01-03T12:00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 2, 12), '$lte' => Time.zone.local(2012, 1, 3, 12)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '2012-01-03T12:00:00', ''], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 3, 12)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '', '2012-01-02T12:00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$lte' => Time.zone.local(2012, 1, 2, 12)}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['2012-01-02T12:00:00'], o: 'default'}}).selector).to eq('$and' => [{'datetime_field' => Time.zone.local(2012, 1, 2, 12)}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'today'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.today.beginning_of_day, '$lte' => Date.today.end_of_day}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'yesterday'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.yesterday.beginning_of_day, '$lte' => Date.yesterday.end_of_day}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'this_week'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.today.beginning_of_week.beginning_of_day, '$lte' => Date.today.end_of_week.end_of_day}}])
+      expect(@abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'last_week'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => 1.week.ago.to_date.beginning_of_week.beginning_of_day, '$lte' => 1.week.ago.to_date.end_of_week.end_of_day}}])
     end
 
     it 'supports enum type query' do
