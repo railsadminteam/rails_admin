@@ -36,7 +36,7 @@ module RailsAdmin
                 if image
                   thumb_url = resource_url(thumb_method)
                   image_html = v.image_tag(thumb_url, class: 'img-thumbnail')
-                  url != thumb_url ? v.link_to(image_html, url, target: '_blank', rel: 'noopener noreferrer') : image_html
+                  url == thumb_url ? image_html : v.link_to(image_html, url, target: '_blank', rel: 'noopener noreferrer')
                 else
                   display_value = value.respond_to?(:filename) ? value.filename : value
                   v.link_to(display_value, url, target: '_blank', rel: 'noopener noreferrer')

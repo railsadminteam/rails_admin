@@ -32,7 +32,7 @@ module RailsAdmin
   def self.setup_all_extensions
     (AUTHORIZATION_ADAPTERS.values + AUDITING_ADAPTERS.values).each do |klass|
       klass.setup if klass.respond_to? :setup
-    rescue # rubocop:disable Lint/HandleExceptions, Style/RescueStandardError
+    rescue # rubocop:disable Style/RescueStandardError
       # ignore errors
     end
   end

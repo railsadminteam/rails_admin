@@ -36,7 +36,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       it 'returns the option with no changes' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: :"team.name", sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: :'team.name', sort_reverse: true)
       end
     end
 

@@ -366,11 +366,11 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
+      ['Name', 'Logo url', 'Manager', 'Ballpark', 'Mascot'].each do |text|
         is_expected.not_to have_selector('.label', text: text)
       end
 
-      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
+      ['Division', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Players', 'Fans'].each do |text|
         is_expected.to have_selector('.label', text: text)
       end
     end
@@ -386,11 +386,11 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
+      ['Name', 'Logo url', 'Manager', 'Ballpark', 'Mascot'].each do |text|
         is_expected.not_to have_selector('.label', text: text)
       end
 
-      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
+      ['Division', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Players', 'Fans'].each do |text|
         is_expected.to have_selector('.label', text: text)
       end
     end

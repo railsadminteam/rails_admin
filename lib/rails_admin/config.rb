@@ -27,8 +27,8 @@ module RailsAdmin
       # Configuration option to specify which models you want to exclude.
       attr_accessor :excluded_models
 
-      # Configuration option to specify a whitelist of models you want to RailsAdmin to work with.
-      # The excluded_models list applies against the whitelist as well and further reduces the models
+      # Configuration option to specify a allowlist of models you want to RailsAdmin to work with.
+      # The excluded_models list applies against the allowlist as well and further reduces the models
       # RailsAdmin will use.
       # If included_models is left empty ([]), then RailsAdmin will automatically use all the models
       # in your application (less any excluded_models you may have specified).

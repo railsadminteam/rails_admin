@@ -59,7 +59,7 @@ module RailsAdmin
 
     def wording_for(label, action = @action, abstract_model = @abstract_model, object = @object)
       model_config = abstract_model.try(:config)
-      object = abstract_model && object.is_a?(abstract_model.model) ? object : nil
+      object = nil unless abstract_model && object.is_a?(abstract_model.model)
       action = RailsAdmin::Config::Actions.find(action.to_sym) if action.is_a?(Symbol) || action.is_a?(String)
 
       capitalize_first_letter I18n.t(
@@ -133,16 +133,14 @@ module RailsAdmin
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, class: current_action?(a, am, o) && 'active') do
             crumb = begin
-              if !current_action?(a, am, o)
-                if a.http_methods.include?(:get)
-                  link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
-                    wording_for(:breadcrumb, a, am, o)
-                  end
-                else
-                  content_tag(:span, wording_for(:breadcrumb, a, am, o))
+              if current_action?(a, am, o)
+                wording_for(:breadcrumb, a, am, o)
+              elsif a.http_methods.include?(:get)
+                link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
+                  wording_for(:breadcrumb, a, am, o)
                 end
               else
-                wording_for(:breadcrumb, a, am, o)
+                content_tag(:span, wording_for(:breadcrumb, a, am, o))
               end
             end
             crumb

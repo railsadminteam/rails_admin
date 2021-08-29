@@ -26,7 +26,7 @@ silence_stream(STDOUT) do
 end
 
 class Tableless < ActiveRecord::Base
-  class <<self
+  class << self
     def load_schema
       # do nothing
     end
@@ -54,7 +54,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def columns_hash
-      @columns_hash ||= Hash[columns.collect { |column| [column.name, column] }]
+      @columns_hash ||= columns.collect { |column| [column.name, column] }.to_h
     end
 
     def column_names
@@ -70,7 +70,7 @@ class Tableless < ActiveRecord::Base
 
     def attribute_types
       @attribute_types ||=
-        Hash[columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }]
+        columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }.to_h
     end
 
     def table_exists?
