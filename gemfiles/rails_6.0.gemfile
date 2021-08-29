@@ -10,7 +10,7 @@ gem "webrick", "~> 1.7"
 gem "sassc-rails", "~> 2.1"
 
 group :active_record do
-  gem "paper_trail", ">= 5.0"
+  gem "paper_trail", ">= 12.0"
   gem "pg", ">= 1.0.0", platforms: :ruby
 
   platforms :ruby, :mswin, :mingw, :x64_mingw do
