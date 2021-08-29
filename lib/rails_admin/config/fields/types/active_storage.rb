@@ -36,7 +36,7 @@ module RailsAdmin
 
           def value
             attachment = super
-            attachment if attachment && attachment.attached?
+            attachment if attachment&.attached?
           end
         end
       end

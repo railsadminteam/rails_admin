@@ -7,6 +7,7 @@ AllCops:
     - 'spec/dummy_app/db/schema.rb'
     - 'spec/dummy_app/tmp/**/*'
     - 'vendor/bundle/**/*'
+  TargetRubyVersion: 2.5
 
 Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
@@ -78,6 +79,9 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Style/Lambda:
+  Enabled: false
+
+Style/NumericPredicate:
   Enabled: false
 
 Style/RaiseArgs:

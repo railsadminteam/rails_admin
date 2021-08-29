@@ -31,11 +31,9 @@ module RailsAdmin
   # Setup all extensions for testing
   def self.setup_all_extensions
     (AUTHORIZATION_ADAPTERS.values + AUDITING_ADAPTERS.values).each do |klass|
-      begin
-        klass.setup if klass.respond_to? :setup
-      rescue # rubocop:disable Lint/HandleExceptions, Style/RescueStandardError
-        # ignore errors
-      end
+      klass.setup if klass.respond_to? :setup
+    rescue # rubocop:disable Lint/HandleExceptions, Style/RescueStandardError
+      # ignore errors
     end
   end
 end

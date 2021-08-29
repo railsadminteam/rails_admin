@@ -9,7 +9,7 @@ module RailsAdmin
 
       def has_option?(name) # rubocop:disable Naming/PredicateName
         options = self.class.instance_variable_get('@config_options')
-        options && options.key?(name)
+        options&.key?(name)
       end
 
       # Register an instance option for this object only

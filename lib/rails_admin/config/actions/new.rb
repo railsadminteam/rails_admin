@@ -17,7 +17,7 @@ module RailsAdmin
             if request.get? # NEW
 
               @object = @abstract_model.new
-              @authorization_adapter && @authorization_adapter.attributes_for(:new, @abstract_model).each do |name, value|
+              @authorization_adapter&.attributes_for(:new, @abstract_model)&.each do |name, value|
                 @object.send("#{name}=", value)
               end
               if object_params = params[@abstract_model.param_key]
@@ -36,10 +36,10 @@ module RailsAdmin
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
               @object.set_attributes(params[@abstract_model.param_key])
-              @authorization_adapter && @authorization_adapter.authorize(:create, @abstract_model, @object)
+              @authorization_adapter&.authorize(:create, @abstract_model, @object)
 
               if @object.save
-                @auditing_adapter && @auditing_adapter.create_object(@object, @abstract_model, _current_user)
+                @auditing_adapter&.create_object(@object, @abstract_model, _current_user)
                 respond_to do |format|
                   format.html { redirect_to_on_success }
                   format.js   { render json: {id: @object.id.to_s, label: @model_config.with(object: @object).object_label} }

@@ -63,7 +63,7 @@ module RailsAdmin
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
           @controller = controller
-          @controller.send(:set_paper_trail_whodunnit) if @controller
+          @controller&.send(:set_paper_trail_whodunnit)
           begin
             @user_class = user_class.to_s.constantize
           rescue NameError
