@@ -22,6 +22,7 @@ end
 group :test do
   gem 'cancancan', '~> 3.0'
   gem 'carrierwave', ['>= 2.0.0.rc', '< 3']
+  gem 'cuprite'
   gem 'database_cleaner-mongoid', '>= 2.0', require: false
   gem 'database_cleaner-active_record', '>= 2.0', require: false
   gem 'dragonfly', '~> 1.0'
@@ -29,7 +30,6 @@ group :test do
   gem 'generator_spec', '>= 0.8'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
-  gem 'poltergeist', '~> 1.5'
   gem 'pundit'
   gem 'rack-cache', require: 'rack/cache'
   gem 'rspec-rails', '>= 2.14'

@@ -63,8 +63,11 @@ Devise.setup do |config|
   config.stretches = 0
 end
 
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+require 'capybara/cuprite'
+Capybara.javascript_driver = :cuprite
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, logger: ConsoleLogger)
+end
 Capybara.server = :webrick
 
 RailsAdmin.setup_all_extensions
