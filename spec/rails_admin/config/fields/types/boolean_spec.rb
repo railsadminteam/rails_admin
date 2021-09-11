@@ -15,7 +15,6 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Boolean do
       true => %(<span class='label label-success'>&#x2713;</span>),
       nil => %(<span class='label label-default'>&#x2012;</span>),
     }.each do |field_value, expected_result|
-
       context "when field value is '#{field_value.inspect}'" do
         let(:test_object) { FieldTest.new(boolean_field: field_value) }
 
