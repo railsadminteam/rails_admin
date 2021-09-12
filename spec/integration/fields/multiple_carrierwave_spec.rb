@@ -30,7 +30,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
 
     it 'supports deleting a file', js: true do
       visit edit_path(model_name: 'field_test', id: field_test.id)
-      click_link 'Delete carrierwave assets #1'
+      click_link "Delete 'Carrierwave assets' #1"
       click_button 'Save'
       field_test.reload
       expect(field_test.carrierwave_assets.map { |image| File.basename(image.url) }).to eq ['test.png']
