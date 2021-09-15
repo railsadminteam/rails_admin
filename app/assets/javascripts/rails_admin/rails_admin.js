@@ -5,7 +5,6 @@
 //=  require 'rails_admin/jquery-ui'
 //=  require 'rails_admin/moment-with-locales'
 //=  require 'rails_admin/bootstrap-datetimepicker'
-//=  require 'rails_admin/jquery.colorpicker'
 //=  require 'rails_admin/ra.filter-box'
 //=  require 'rails_admin/ra.filtering-multiselect'
 //=  require 'rails_admin/ra.filtering-select'
