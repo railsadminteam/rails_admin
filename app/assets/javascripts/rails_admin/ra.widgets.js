@@ -3,25 +3,6 @@
     var $editors, array, config_options, goBootstrapWysihtml5s, goCkeditors, goCodeMirrors, goFroalaWysiwygs, goSimpleMDEs, options;
     content = content ? content : $('form');
     if (content.length) {
-      content.find('[data-color]').each(function() {
-        var that;
-        that = this;
-        return $(this).ColorPicker({
-          color: $(that).val(),
-          onShow: function(el) {
-            $(el).fadeIn(500);
-            return false;
-          },
-          onHide: function(el) {
-            $(el).fadeOut(500);
-            return false;
-          },
-          onChange: function(hsb, hex, rgb) {
-            $(that).val(hex);
-            $(that).css('backgroundColor', '#' + hex);
-          }
-        });
-      });
       $.fn.datetimepicker.defaults.icons = {
         time: 'fa fa-clock-o',
         date: 'fa fa-calendar',
