@@ -65,3 +65,22 @@ appraise "rails-6.1" do
     gem 'shrine-mongoid', '~> 1.0'
   end
 end
+
+appraise "rails-7.0" do
+  gem 'rails', '~> 7.0.0.alpha2'
+  gem 'haml'
+  gem 'sassc-rails', '~> 2.1'
+  gem 'devise', '~> 4.7', github: 'strobilomyces/devise', branch: 'patch-1'
+
+  group :test do
+    gem 'cancancan', '~> 3.2'
+    gem 'kt-paperclip'
+    gem 'rspec-rails', '>= 4.0.0.beta2'
+    gem 'shrine', '~> 3.0'
+  end
+
+  group :active_record do
+    gem 'pg', '>= 1.0.0', platforms: :ruby
+    gem 'paper_trail', '>= 12.0'
+  end
+end

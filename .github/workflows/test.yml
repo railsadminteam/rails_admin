@@ -25,6 +25,10 @@ jobs:
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: postgresql
+          - ruby: 3.0
+            gemfile: gemfiles/rails_7.0.gemfile
+            orm: active_record
+            adapter: sqlite3
           - ruby: 2.7
             gemfile: gemfiles/rails_6.0.gemfile
             orm: mongoid
