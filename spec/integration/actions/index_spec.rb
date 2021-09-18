@@ -59,27 +59,6 @@ RSpec.describe 'Index action', type: :request do
       @comment = FactoryBot.create(:comment, commentable: @players[2])
     end
 
-    it 'hides redundant filter options for required fields', js: true do
-      RailsAdmin.config Player do
-        list do
-          field :name do
-            required true
-          end
-          field :team
-        end
-      end
-
-      visit index_path(model_name: 'player', f: {name: {'1' => {v: ''}}, team: {'2' => {v: ''}}})
-
-      within(:select, name: 'f[name][1][o]') do
-        expect(page.all('option').map(&:value)).to_not include('_present', '_blank')
-      end
-
-      within(:select, name: 'f[team][2][o]') do
-        expect(page.all('option').map(&:value)).to include('_present', '_blank')
-      end
-    end
-
     it 'allows to query on any attribute' do
       RailsAdmin.config Player do
         list do

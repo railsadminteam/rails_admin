@@ -9,8 +9,7 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       visit new_path(model_name: 'comment')
       select 'Player', from: 'comment[commentable_type]'
       find('input.ra-filtering-select-input').set('Rob')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
-      page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
       click_button 'Save'
@@ -36,8 +35,7 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
         select 'Polymorphic association test', from: 'comment[commentable_type]'
         find('input.ra-filtering-select-input').set('Rob')
 
-        page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
-        page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+        page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
         expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
 
         page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
@@ -48,20 +46,30 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
   end
 
   context 'on update' do
-    before :each do
-      @team = FactoryBot.create :team
-      @comment = FactoryBot.create :comment, commentable: @team
-    end
+    let(:team) { FactoryBot.create :team, name: 'Los Angeles Dodgers' }
+    let(:comment) { FactoryBot.create :comment, commentable: team }
+    let!(:players) { ['Jackie Robinson', 'Rob Wooten', 'Scott Hairston'].map { |name| FactoryBot.create :player, name: name } }
 
-    it 'is editable' do
-      visit edit_path(model_name: 'comment', id: @comment.id)
-
-      is_expected.to have_selector('select#comment_commentable_type')
-      is_expected.to have_selector('select#comment_commentable_id')
+    it 'is editable', js: true do
+      visit edit_path(model_name: 'comment', id: comment.id)
+      expect(find('select#comment_commentable_type').value).to eq 'Team'
+      expect(find('select#comment_commentable_id', visible: false).value).to eq team.id.to_s
+      find('input.ra-filtering-select-input').set('Los')
+      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
+      select 'Player', from: 'comment[commentable_type]'
+      find('input.ra-filtering-select-input').set('Rob')
+      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Rob Wooten', 'Jackie Robinson']
+      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+      click_button 'Save'
+      expect(comment.reload.commentable).to eq players[0]
     end
 
     it 'is visible in the owning end' do
-      visit edit_path(model_name: 'team', id: @team.id)
+      visit edit_path(model_name: 'team', id: team.id)
 
       is_expected.to have_selector('select#team_comment_ids')
     end

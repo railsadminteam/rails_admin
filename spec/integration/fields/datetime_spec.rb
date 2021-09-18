@@ -10,62 +10,6 @@ RSpec.describe 'Datetime field', type: :request do
     end
   end
 
-  describe 'Bootstrap Datetimepicker integration' do
-    describe 'for form' do
-      before { visit new_path({model_name: 'field_test'}.merge(params)) }
-      let(:params) { {} }
-
-      it 'is initially blank', js: true do
-        expect(find('[name="field_test[datetime_field]"]', visible: false).value).to be_blank
-        expect(find('#field_test_datetime_field').value).to be_blank
-      end
-
-      it 'populates the value selected by the Datetime picker into the hidden_field', js: true do
-        page.execute_script <<-JS
-          $('#field_test_datetime_field').data("DateTimePicker").date(moment('2015-10-08 14:00:00')).toggle();
-        JS
-        expect(find('#field_test_datetime_field').value).to eq 'October 08, 2015 14:00'
-        expect(find('[name="field_test[datetime_field]"]', visible: false).value).to eq '2015-10-08T14:00:00'
-      end
-
-      it 'populates the value entered in the text field into the hidden_field', js: true do
-        fill_in 'Datetime field', with: 'January 2, 2021 03:45'
-        expect(find('[name="field_test[datetime_field]"]', visible: false).value).to eq '2021-01-02T03:45:00'
-        expect(find('#field_test_datetime_field').value).to eq 'January 02, 2021 03:45'
-      end
-
-      context 'with locale set' do
-        around(:each) do |example|
-          original = I18n.default_locale
-          I18n.default_locale = :fr
-          example.run
-          I18n.default_locale = original
-        end
-        let(:params) { {field_test: {datetime_field: '2021-01-02T03:45:00'}} }
-
-        it 'shows and accepts the value in the given locale', js: true do
-          expect(find('[name="field_test[datetime_field]"]', visible: false).value).to eq '2021-01-02T03:45:00'
-          expect(find('#field_test_datetime_field').value).to eq "samedi 02 janvier 2021 03:45"
-          fill_in 'Datetime field', with: 'mercredi 03 février 2021 04:55'
-          expect(find('[name="field_test[datetime_field]"]', visible: false).value).to eq '2021-02-03T04:55:00'
-        end
-      end
-    end
-
-    describe 'for filter' do
-      it 'populates the value selected by the Datetime picker into the hidden_field', js: true do
-        visit index_path(model_name: 'field_test')
-        click_link 'Add filter'
-        click_link 'Datetime field'
-        expect(find('[name^="f[datetime_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
-        page.execute_script <<-JS
-          $('.form-control.datetime').data("DateTimePicker").date(moment('2015-10-08 14:00:00')).toggle();
-        JS
-        expect(find('[name^="f[datetime_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2015-10-08T14:00:00'
-      end
-    end
-  end
-
   describe 'filtering' do
     let!(:field_tests) do
       [FactoryBot.create(:field_test, datetime_field: DateTime.new(2021, 1, 2, 3, 45)),
@@ -100,6 +44,11 @@ RSpec.describe 'Datetime field', type: :request do
   end
 
   context 'on create' do
+    it 'is initially blank' do
+      visit new_path(model_name: 'field_test')
+      expect(find('[name="field_test[datetime_field]"]', visible: false).value).to be_blank
+    end
+
     it 'persists the value' do
       visit new_path(model_name: 'field_test')
       find('[name="field_test[datetime_field]"]', visible: false).set('2021-01-02T03:45:00')
