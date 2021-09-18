@@ -1,5 +1,4 @@
 //=  require 'jquery3'
-//=  require 'rails_admin/jquery.migrate'
 //=  require 'rails-ujs'
 //=  require 'jquery.remotipart'
 //=  require 'rails_admin/jquery-ui'
