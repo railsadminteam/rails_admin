@@ -9,6 +9,14 @@ Add this to RailsAdmin initializer.
 
 RailsAdmin.config do |config|
   config.authorize_with :cancancan
+
+    config.actions do
+        dashboard                     # mandatory
+        # collection actions 
+        index                         # mandatory
+        # Add additional actions as necessary
+        # By default, without cancancan, all actions are enabled.  With cancancan you must explicitly specify your actions.
+    end
 end
 ```
 
