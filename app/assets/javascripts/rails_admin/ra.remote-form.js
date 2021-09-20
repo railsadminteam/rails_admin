@@ -72,7 +72,7 @@
           cancelButtonText = dialog.find(":submit[name=_continue]").html();
       dialog.find('.form-actions').remove();
 
-      form.attr("data-remote", true);
+      form.attr("data-remote", true).attr("data-type", "json");
       dialog.find('.modal-header-title').text(form.data('title'));
       dialog.find('.cancel-action').unbind().click(function(){
         dialog.modal('hide');
@@ -80,13 +80,14 @@
       }).html(cancelButtonText);
 
       dialog.find('.save-action').unbind().click(function(){
-        form.submit();
+        window.Rails.fire(form[0], 'submit');
         return false;
       }).html(saveButtonText);
 
       $(document).trigger('rails_admin.dom_ready', [form])
 
-      form.bind("ajax:complete", function(xhr, data, status) {
+      form.bind("ajax:complete", function(event) {
+        var data = event.detail[0], status = event.detail[1];
         if (status == 'error') {
           dialog.find('.modal-body').html(data.responseText);
           widget._bindFormEvents();
