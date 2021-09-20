@@ -225,7 +225,7 @@
     _deSelect: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        widget.element.find('option[value="' + option.value + '"]').removeAttr("selected");
+        widget.element.find('option[value="' + option.value + '"]').prop('selected', false);
       });
       $(options).appendTo(this.collection).prop('selected', false);
     },

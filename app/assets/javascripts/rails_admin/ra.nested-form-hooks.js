@@ -53,7 +53,7 @@
       add_button.addClass('add_nested_fields').html(add_button.data('add-label'));
     }
     field.find('[required]').each(function() {
-      $(this).removeAttr('required');
+      $(this).prop('required', false);
     });
   });
 }(jQuery));
