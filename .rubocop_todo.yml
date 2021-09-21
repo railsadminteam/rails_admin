@@ -367,6 +367,8 @@ Style/OptionalBooleanParameter:
     - 'lib/rails_admin/config/fields/types/paperclip.rb'
     - 'lib/rails_admin/config/has_fields.rb'
     - 'lib/rails_admin/config/lazy_model.rb'
+    - 'spec/integration/fields/file_upload_spec.rb'
+    - 'spec/integration/fields/multiple_file_upload_spec.rb'
     - 'spec/orm/active_record.rb'
     - 'spec/orm/mongoid.rb'
     - 'spec/rails_admin/config/fields/types/multiple_file_upload_spec.rb'

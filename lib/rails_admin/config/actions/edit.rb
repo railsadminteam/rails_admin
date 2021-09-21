@@ -31,7 +31,7 @@ module RailsAdmin
                 @auditing_adapter&.update_object(@object, @abstract_model, _current_user, changes)
                 respond_to do |format|
                   format.html { redirect_to_on_success }
-                  format.js { render json: {id: @object.id.to_s, label: @model_config.with(object: @object).object_label} }
+                  format.json { render json: {id: @object.id.to_s, label: @model_config.with(object: @object).object_label} }
                 end
               else
                 handle_save_error :edit

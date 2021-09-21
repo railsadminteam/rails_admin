@@ -185,16 +185,16 @@
           }
         }
         if (filtered.length > 0) {
-          widget.collection[0].innerHTML = '';
+          widget.collection.html('');
           for (i = 0; i < filtered.length; i++) {
             var newOptions = $('<option></option>')
               .prop('value', matches[filtered[i]].id)
               .prop('title', matches[filtered[i]].label)
               .text(matches[filtered[i]].label);
-            $(widget.collection[0]).append(newOptions);
+            widget.collection.append(newOptions);
           }
         } else {
-          widget.collection[0].innerHTML = widget.noObjectsPlaceholder;
+          widget.collection.html(widget.noObjectsPlaceholder);
         }
       });
     },
@@ -225,7 +225,7 @@
     _deSelect: function(options) {
       var widget = this;
       options.each(function(i, option) {
-        widget.element.find('option[value="' + option.value + '"]').removeAttr("selected");
+        widget.element.find('option[value="' + option.value + '"]').prop('selected', false);
       });
       $(options).appendTo(this.collection).prop('selected', false);
     },

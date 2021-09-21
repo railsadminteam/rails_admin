@@ -39,7 +39,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
     it 'supports reordering files', js: true do
       visit edit_path(model_name: 'field_test', id: field_test.id)
       page.execute_script File.read(File.expand_path('../../../support/jquery.simulate.drag-sortable.js', __FILE__))
-      page.execute_script %{$(".ui-sortable-handle:first-child").simulateDragSortable({ move: 1});}
+      page.execute_script %{$(".ui-sortable-handle:first-child").simulateDragSortable({move: 1});}
       click_button 'Save'
       field_test.reload
       expect(field_test.carrierwave_assets.map { |image| File.basename(image.url) }).to eq ['test.png', 'test.jpg']

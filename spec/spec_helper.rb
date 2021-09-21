@@ -66,7 +66,7 @@ end
 require 'capybara/cuprite'
 Capybara.javascript_driver = :cuprite
 Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(app, logger: ConsoleLogger)
+  Capybara::Cuprite::Driver.new(app, js_errors: true, logger: ConsoleLogger)
 end
 Capybara.server = :webrick
 

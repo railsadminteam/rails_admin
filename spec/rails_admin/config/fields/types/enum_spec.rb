@@ -7,20 +7,12 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
   describe "when object responds to '\#{method}_enum'" do
     before do
-      Team.class_eval do
-        def color_enum
-          %w(blue green red)
-        end
-      end
+      allow_any_instance_of(Team).to receive(:color_enum).and_return(%w(blue green red))
       RailsAdmin.config Team do
         edit do
           field :color
         end
       end
-    end
-
-    after do
-      Team.send(:remove_method, :color_enum)
     end
 
     it 'auto-detects enumeration' do
@@ -32,6 +24,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
   describe "when class responds to '\#{method}_enum'" do
     before do
+      allow(Team).to receive(:color_enum).and_return(%w(blue green red))
       Team.instance_eval do
         def color_enum
           %w(blue green red)
@@ -42,10 +35,6 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
           field :color
         end
       end
-    end
-
-    after do
-      Team.instance_eval { undef :color_enum }
     end
 
     it 'auto-detects enumeration' do
@@ -152,18 +141,15 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
   describe 'when serialize is enabled in Mongoid model', mongoid: true do
     before do
+      allow(Team).to receive(:color_enum).and_return(%w(blue green red))
       Team.instance_eval do
         field :color, type: Array
-        def color_enum
-          %w(blue green red)
-        end
       end
     end
 
     after do
       Team.instance_eval do
         field :color, type: String
-        undef :color_enum
       end
     end
 
