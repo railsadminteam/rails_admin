@@ -50,7 +50,8 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif|svg/i
+            mime_type = Mime::Type.lookup_by_extension(resource_url.to_s.split('.').last)
+            mime_type.to_s.match?(/^image/)
           end
 
           register_instance_option :allowed_methods do
