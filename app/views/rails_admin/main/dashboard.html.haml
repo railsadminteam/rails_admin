@@ -15,7 +15,7 @@
             - last_created = @most_recent_created[abstract_model.model.name]
             - active = last_created.try(:today?)
             %td
-              %span.show= link_to capitalize_first_letter(abstract_model.config.label_plural), index_path, class: 'pjax'
+              %span.show= link_to abstract_model.config.label_plural, index_path, class: 'pjax'
             %td
               - if last_created
                 = t "admin.misc.time_ago", time: time_ago_in_words(last_created), default: "#{time_ago_in_words(last_created)} #{t("admin.misc.ago")}"
