@@ -148,7 +148,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         bc = helper.breadcrumb
         expect(bc).to match(/Dashboard/) # dashboard
         expect(bc).to match(/Teams/) # list
-        expect(bc).to match(/The avengers/) # show
+        expect(bc).to match(/the avengers/) # show
         expect(bc).to match(/Edit/) # current (edit)
       end
     end
@@ -283,7 +283,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             navigation_label 'commentable'
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown\-header).*(Commentable).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown\-header).*(commentable).*(Comments)/m)
       end
 
       it 'nests in parent model' do
