@@ -17,11 +17,18 @@ RSpec.describe RailsAdmin::Config::Fields::Types::ActiveStorage do
   end
 
   describe '#image?' do
-    context 'when attachment is an image' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"} }
+    context 'configured Mime::Types' do
+      before { Mime::Type.register 'image/webp', :webp }
+      after { Mime::Type.unregister :webp }
 
-      it 'returns true' do
-        expect(field.image?).to be_truthy
+      %w[jpg jpeg png gif svg webp].each do |image_type_ext|
+        context "when attachment is a '#{image_type_ext}' file" do
+          let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.#{image_type_ext}"} }
+
+          it 'returns true' do
+            expect(field.image?).to be_truthy
+          end
+        end
       end
     end
 
