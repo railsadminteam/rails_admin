@@ -19,6 +19,7 @@ en:
       ends_with: Ends with
       too_many_objects: "Too many objects, use search box above"
       no_objects: "No objects found"
+      clear: Clear
     loading: "Loading..."
     toggle_navigation: Toggle navigation
     home:

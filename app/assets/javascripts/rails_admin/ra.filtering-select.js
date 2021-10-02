@@ -85,7 +85,20 @@
         }
       };
 
-      return $.map(
+      if (request.term.length > 0 || this.input.attr('required')) {
+        var additionalOptions = [];
+      } else {
+        var additionalOptions = [{
+          html: $('<span style="color: #888"></span>').append(
+              '<i class="icon-remove"></i> ' +
+              $('<span></span>').text(RailsAdmin.I18n.t("clear")).html()
+          ),
+          value: null,
+          id: null
+        }];
+      }
+
+      return additionalOptions.concat($.map(
         data,
         function(el) {
           var id = el.id || el.value;
@@ -99,7 +112,7 @@
               id: id
             };
           }
-      });
+      }));
     },
 
     _getSourceFunction: function(source) {

@@ -44,9 +44,8 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
   end
 
   context 'on update' do
-    before { visit edit_path(model_name: 'player', id: player.id) }
-
     it 'changes the selected value' do
+      visit edit_path(model_name: 'player', id: player.id)
       expect(find('#player_team_id', visible: false).value).to eq teams[0].id.to_s
       find('input.ra-filtering-select-input').set('Tex')
       page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
@@ -56,10 +55,32 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
       expect(find('#player_team_id', visible: false).value).to eq teams[1].id.to_s
     end
 
-    it 'clears the current selection' do
+    it 'clears the current selection with making the search box empty' do
+      visit edit_path(model_name: 'player', id: player.id)
       find('input.ra-filtering-select-input').set('')
       page.execute_script("$('input.ra-filtering-select-input').trigger('keyup')")
       expect(find('#player_team_id', visible: false).value).to be_empty
+    end
+
+    it 'clears the current selection with selecting the clear option' do
+      visit edit_path(model_name: 'player', id: player.id)
+      within('.filtering-select') { find('.dropdown-toggle').click }
+      find('a.ui-menu-item-wrapper', text: /Clear/).click
+      expect(find('#player_team_id', visible: false).value).to be_empty
+    end
+
+    context 'when the field is required' do
+      before do
+        RailsAdmin.config Player do
+          field(:team) { required true }
+        end
+        visit edit_path(model_name: 'player', id: player.id)
+      end
+
+      it 'does not show the clear option' do
+        within('.filtering-select') { find('.dropdown-toggle').click }
+        is_expected.not_to have_css('a.ui-menu-item-wrapper', text: /Clear/)
+      end
     end
   end
 
