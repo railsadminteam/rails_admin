@@ -110,7 +110,7 @@ module RailsAdmin
 
       respond_to do |format|
         format.html { render whereto, status: :not_acceptable }
-        format.js   { render whereto, layout: false, status: :not_acceptable }
+        format.js   { render whereto, layout: 'rails_admin/modal', status: :not_acceptable, content_type: Mime[:html].to_s }
       end
     end
 

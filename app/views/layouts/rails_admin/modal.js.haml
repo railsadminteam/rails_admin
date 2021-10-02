@@ -1,0 +1,5 @@
+- flash && flash.each do |key, value|
+  .alert.alert-dismissible{class: flash_alert_class(key)}
+    %button.close{type: 'button', :'data-dismiss' => "alert"} &times;
+    = value
+= yield

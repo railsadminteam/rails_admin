@@ -105,4 +105,46 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       expect(FieldTest.first.carrierwave_asset.file.size).to eq 1575
     end
   end
+
+  context 'with validation errors' do
+    before do
+      RailsAdmin.config Team do
+        field :players
+      end
+      RailsAdmin.config Player do
+        field :name
+        field :number
+        field :team
+      end
+    end
+
+    context 'on create' do
+      it 'shows the error messages' do
+        visit new_path(model_name: 'team')
+        click_link 'Add a new Player'
+        is_expected.to have_content 'New Player'
+        find('#player_name').set('on steroids')
+        find('#modal .save-action').click
+        is_expected.to have_css('#modal')
+        is_expected.to have_content 'Player is cheating'
+        is_expected.to have_css '.text-danger', text: 'is not a number'
+      end
+    end
+
+    context 'on update' do
+      let!(:player) { FactoryBot.create :player, name: 'Cheater' }
+
+      it 'shows the error messages' do
+        visit new_path(model_name: 'team')
+        find('option', text: 'Cheater').double_click
+        is_expected.to have_content "Edit Player 'Cheater'"
+        find('#player_name').set('Cheater on steroids')
+        find('#player_number').set('')
+        find('#modal .save-action').click
+        is_expected.to have_css('#modal')
+        is_expected.to have_content 'Player is cheating'
+        is_expected.to have_css '.text-danger', text: 'is not a number'
+      end
+    end
+  end
 end

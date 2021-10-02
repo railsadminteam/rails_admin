@@ -88,10 +88,7 @@
 
       form.bind("ajax:complete", function(event) {
         var data = event.detail[0], status = event.detail[1];
-        if (status == 'error') {
-          dialog.find('.modal-body').html(data.responseText);
-          widget._bindFormEvents();
-        } else {
+        if (status == 'OK') {
           var json = $.parseJSON(data.responseText);
           var option = '<option value="' + json.id + '" selected>' + json.label + '</option>';
           var select = widget.element.find('select').filter(":hidden");
@@ -116,6 +113,9 @@
           }
           widget._trigger("success");
           dialog.modal("hide");
+        } else {
+          dialog.find('.modal-body').html(data.responseText);
+          widget._bindFormEvents();
         }
       });
     },

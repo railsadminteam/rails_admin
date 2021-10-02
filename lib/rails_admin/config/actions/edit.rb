@@ -18,7 +18,7 @@ module RailsAdmin
 
               respond_to do |format|
                 format.html { render @action.template_name }
-                format.js   { render @action.template_name, layout: false }
+                format.js   { render @action.template_name, layout: 'rails_admin/modal', content_type: Mime[:html].to_s }
               end
 
             elsif request.put? # UPDATE
