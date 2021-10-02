@@ -18,7 +18,8 @@ module RailsAdmin
 
             register_instance_option :image? do
               if value
-                value.filename.to_s.split('.').last =~ /jpg|jpeg|png|gif|svg/i
+                mime_type = Mime::Type.lookup_by_extension(value.filename.extension_without_delimiter)
+                mime_type.to_s.match?(/^image/)
               end
             end
 
