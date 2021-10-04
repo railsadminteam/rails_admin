@@ -635,6 +635,16 @@ RSpec.describe 'Index action', type: :request do
     end
   end
 
+  context 'when no record exists' do
+    before do
+      visit index_path(model_name: 'player')
+    end
+
+    it "shows \"No records found\" message" do
+      is_expected.to have_content('No records found')
+    end
+  end
+
   context 'without pagination' do
     before do
       @players = FactoryBot.create_list(:player, 2)

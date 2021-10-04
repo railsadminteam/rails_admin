@@ -115,7 +115,8 @@
                 %ul.inline.list-inline= menu_for :member, @abstract_model, object, true
         - if @objects.empty?
           %tr{class: "empty_row"}
-            %td{:colspan => table_table_header_count, :style=>"text-align: center;"} No Records found
+            %td{colspan: table_table_header_count}
+              = I18n.t('admin.actions.index.no_records')
     - if @model_config.list.limited_pagination
       .row
         .col-md-6= paginate(@objects, theme: 'ra-twitter-bootstrap/without_count', total_pages: Float::INFINITY, remote: true)
