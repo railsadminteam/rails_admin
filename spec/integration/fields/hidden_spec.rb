@@ -39,5 +39,14 @@ RSpec.describe 'Hidden field', type: :request do
     it 'does not show help block' do
       is_expected.not_to have_xpath("id('player_name')/../p[@class='help-block']")
     end
+
+    it 'submits the field value' do
+      visit new_path(model_name: 'player')
+      find("#player_name[type=hidden][value='username@example.com']", visible: false).set('someone@example.com')
+      fill_in 'Number', with: 1
+      click_button 'Save'
+      is_expected.to have_content('Player successfully created')
+      expect(Player.first.name).to eq 'someone@example.com'
+    end
   end
 end
