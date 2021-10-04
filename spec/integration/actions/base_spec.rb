@@ -44,5 +44,28 @@ RSpec.describe 'Base action', type: :request do
         end
       end
     end
+
+    context 'when used with #visible?' do
+      let!(:player) { FactoryBot.create(:player) }
+      before do
+        RailsAdmin.config do |config|
+          config.actions do
+            index
+            show
+            edit do
+              enabled false
+              visible true
+            end
+          end
+        end
+      end
+
+      it 'allows disabled links to be shown' do
+        visit index_path(model_name: 'player')
+        is_expected.to have_css('.edit_member_link.disabled span', text: /Edit/, visible: false)
+        visit show_path(model_name: 'player', id: player.id)
+        is_expected.to have_css('.edit_member_link.disabled a[href*="void(0)"]')
+      end
+    end
   end
 end

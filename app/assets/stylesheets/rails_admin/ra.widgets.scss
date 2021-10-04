@@ -19,3 +19,7 @@ iframe.wysihtml5-sandbox, .wysihtml5-editor{
 .form-group.hidden_type {
   display: none;
 }
+
+.links .inline.list-inline .disabled span {
+  color: $gray-light;
+}
