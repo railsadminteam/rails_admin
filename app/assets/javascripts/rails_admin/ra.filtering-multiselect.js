@@ -32,6 +32,17 @@
       xhr: false
     },
 
+    wrapper: null,
+    filter: null,
+    collection: null,
+    addAll: null,
+    add: null,
+    remove: null,
+    up: null,
+    down: null,
+    selection: null,
+    removeAll: null,
+
     _create: function() {
       this._cache = {};
       this._build();
@@ -42,65 +53,69 @@
     _build: function() {
       var i;
 
-      this.wrapper = $('<div class="ra-multiselect">');
+      this.wrapper = this.element.siblings(
+          '.ra-multiselect[data-input-for="' + this.element.attr('id') + '"]'
+      );
 
+      // Prevent duplication on browser back
+      if (this.wrapper.length > 0) {
+        this.filter = this.wrapper.find('input.ra-multiselect-search');
+        this.collection = this.wrapper.find('select.ra-multiselect-collection');
+        this.addAll = this.wrapper.find('a.ra-multiselect-item-add-all');
+        this.add = this.wrapper.find('a.ra-multiselect-item-add');
+        this.remove = this.wrapper.find('a.ra-multiselect-item-remove');
+        this.up = this.wrapper.find('a.ra-multiselect-item-up');
+        this.down = this.wrapper.find('a.ra-multiselect-item-down');
+        this.selection = this.wrapper.find('select.ra-multiselect-selection');
+        this.removeAll = this.wrapper.find('a.ra-multiselect-item-remove-all');
+        return;
+      }
+
+      this.wrapper = $('<div class="ra-multiselect">').attr('data-input-for', this.element.attr('id'))
       this.wrapper.insertAfter(this.element);
-
-      this.header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
-
+      var header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
       this.filter = $('<input type="search" placeholder="' + this.options.regional.search + '" class="form-control ra-multiselect-search"/>');
+      header.append(this.filter);
+      this.wrapper.append(header);
 
-      this.header.append(this.filter);
-
-      this.wrapper.append(this.header);
-
-      this.columns = {
+      var columns = {
         left: $('<div class="ra-multiselect-column ra-multiselect-left">'),
         center: $('<div class="ra-multiselect-column ra-multiselect-center">'),
         right: $('<div class="ra-multiselect-column ra-multiselect-right">')
       };
 
-      for (i in this.columns) {
-        if (this.columns.hasOwnProperty(i)) {
-          this.wrapper.append(this.columns[i]);
+      for (i in columns) {
+        if (columns.hasOwnProperty(i)) {
+          this.wrapper.append(columns[i]);
         }
       }
 
       this.collection = $('<select multiple="multiple"></select>');
-
       this.collection.addClass("form-control ra-multiselect-collection");
-
       this.addAll = $('<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' + this.options.regional.chooseAll + '</a>');
-
-      this.columns.left.html(this.collection)
-                          .append(this.addAll);
-
+      columns.left.html(this.collection)
+          .append(this.addAll);
       this.collection.wrap('<div class="wrapper"/>');
 
 
       this.add = $('<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' + this.options.regional.add + '</a>');
-      this.columns.center.append(this.add);
-
+      columns.center.append(this.add);
       if (this.options.removable) {
         this.remove = $('<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' + this.options.regional.remove + '</a>');
-        this.columns.center.append(this.remove);
+        columns.center.append(this.remove);
       }
-
       if (this.options.sortable) {
         this.up = $('<a href="#" class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' + this.options.regional.up + '</a>');
         this.down = $('<a href="#" class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' + this.options.regional.down + '</a>');
-        this.columns.center.append(this.up).append(this.down);
+        columns.center.append(this.up).append(this.down);
       }
 
       this.selection = $('<select class="form-control ra-multiselect-selection" multiple="multiple"></select>');
-      this.columns.right.append(this.selection);
-
-
+      columns.right.append(this.selection);
       if (this.options.removable) {
         this.removeAll = $('<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' + this.options.regional.clearAll + '</a>');
-        this.columns.right.append(this.removeAll);
+        columns.right.append(this.removeAll);
       }
-
       this.selection.wrap('<div class="wrapper"/>');
 
       this.element.css({display: "none"});
@@ -108,7 +123,7 @@
       this.tooManyObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("too_many_objects"));
       this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("no_objects"))
 
-      if(this.options.xhr){
+      if (this.options.xhr) {
         this.collection.append(this.tooManyObjectsPlaceholder);
       }
     },

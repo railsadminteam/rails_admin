@@ -114,4 +114,13 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
       end
     end
   end
+
+  it 'does not cause duplication when using browser back' do
+    visit new_path(model_name: 'team')
+    find(%{[href$="/admin/team/export"]}).click
+    is_expected.to have_content 'Export Teams'
+    page.go_back
+    is_expected.to have_content 'New Team'
+    expect(all(:css, 'input.ra-multiselect-search').count).to eq 1
+  end
 end
