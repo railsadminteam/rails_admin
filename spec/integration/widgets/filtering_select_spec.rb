@@ -30,7 +30,8 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
       find('input.ra-filtering-select-input').set('Mets')
       page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
-      is_expected.not_to have_selector('ul.ui-autocomplete')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['No objects found']
     end
 
     it 'sets id of the selected item' do

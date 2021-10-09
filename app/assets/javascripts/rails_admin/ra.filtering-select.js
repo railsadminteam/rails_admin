@@ -50,6 +50,10 @@
         this.input = this._inputField();
         this.button = this._buttonField();
       }
+      this.clearOption = $('<span style="color: #888"></span>').append(
+          '<i class="icon-remove"></i> ' + $('<span></span>').text(RailsAdmin.I18n.t("clear")).html()
+      );
+      this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("no_objects"));
 
       this._setOptionsSource();
       this._initAutocomplete();
@@ -85,34 +89,30 @@
         }
       };
 
-      if (request.term.length > 0 || this.input.attr('required')) {
-        var additionalOptions = [];
-      } else {
-        var additionalOptions = [{
-          html: $('<span style="color: #888"></span>').append(
-              '<i class="icon-remove"></i> ' +
-              $('<span></span>').text(RailsAdmin.I18n.t("clear")).html()
-          ),
-          value: null,
-          id: null
-        }];
-      }
-
-      return additionalOptions.concat($.map(
-        data,
-        function(el) {
-          var id = el.id || el.value;
-          var value = el.label || el.id;
-          // match regexp only for local requests, remote ones are already
-          // filtered, and label may not contain filtered term.
-          if (id && (xhr || matcher.test(el.label))) {
-            return {
-              html: highlighter(value, request.term),
-              value: value,
-              id: id
-            };
+      var matches = $.map(
+          data,
+          function(el) {
+            var id = el.id || el.value;
+            var value = el.label || el.id;
+            // match regexp only for local requests, remote ones are already
+            // filtered, and label may not contain filtered term.
+            if (id && (xhr || matcher.test(el.label))) {
+              return {
+                html: highlighter(value, request.term),
+                value: value,
+                id: id
+              };
+            }
           }
-      }));
+      );
+
+      if (request.term.length === 0 && !this.input.attr('required')) {
+        return [{html: this.clearOption, value: null, id: null}].concat(matches);
+      } else if (matches.length === 0) {
+        return [{html: this.noObjectsPlaceholder, value: null, id: null}];
+      } else {
+        return matches;
+      }
     },
 
     _getSourceFunction: function(source) {
