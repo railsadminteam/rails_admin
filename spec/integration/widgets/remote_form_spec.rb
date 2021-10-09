@@ -83,6 +83,22 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       expect(find('#league_division_ids', visible: false).value).to eq [division.id.to_s]
       expect(division.reload.name).to eq 'National League East'
     end
+
+    context 'with inline_edit set to false' do
+      before do
+        RailsAdmin.config League do
+          field :divisions do
+            inline_edit false
+          end
+        end
+      end
+
+      it 'does not open the modal with double click' do
+        visit edit_path(model_name: 'league', id: leagues[1].id)
+        find('.ra-multiselect-collection option', text: division.name).double_click
+        is_expected.not_to have_content "Edit Division 'National League Central'"
+      end
+    end
   end
 
   context 'with file upload' do

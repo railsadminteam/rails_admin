@@ -17,14 +17,6 @@ module RailsAdmin
             (o = value) && o.send(associated_model_config.object_label_method)
           end
 
-          register_instance_option :inline_add do
-            true
-          end
-
-          register_instance_option :inline_edit do
-            true
-          end
-
           def editable?
             (nested_form || abstract_model.model.new.respond_to?("#{name}_id=")) && super
           end

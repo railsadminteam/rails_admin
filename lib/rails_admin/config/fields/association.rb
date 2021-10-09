@@ -62,6 +62,14 @@ module RailsAdmin
           !!searchable
         end
 
+        register_instance_option :inline_add do
+          true
+        end
+
+        register_instance_option :inline_edit do
+          true
+        end
+
         # Reader for the association's child model's configuration
         def associated_model_config
           @associated_model_config ||= RailsAdmin.config(association.klass)
