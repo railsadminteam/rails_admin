@@ -27,6 +27,7 @@ FactoryBot.define do
     sequence(:win_percentage)
 
     factory :managed_team, class: ManagedTeam
+    factory :restricted_team, class: RestrictedTeam
   end
 
   factory :league do
