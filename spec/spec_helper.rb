@@ -100,7 +100,6 @@ RSpec.configure do |config|
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
-    RailsAdmin::AbstractModel.reset
   end
 
   config.after(:each) do

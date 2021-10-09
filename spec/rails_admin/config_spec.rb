@@ -328,6 +328,25 @@ RSpec.describe RailsAdmin::Config do
     end
   end
 
+  describe '.reset' do
+    before do
+      RailsAdmin.config do |config|
+        config.included_models = ['Player', 'Team']
+      end
+      RailsAdmin::AbstractModel.all
+      RailsAdmin::Config.reset
+      RailsAdmin.config do |config|
+        config.excluded_models = ['Player']
+      end
+    end
+    subject { RailsAdmin::AbstractModel.all.map { |am| am.model.name } }
+
+    it 'refreshes the result of RailsAdmin::AbstractModel.all' do
+      expect(subject).not_to include 'Player'
+      expect(subject).to include 'Team'
+    end
+  end
+
   describe "field types code reloading" do
     before { Rails.application.config.cache_classes = false }
     after { Rails.application.config.cache_classes = true }

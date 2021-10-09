@@ -292,6 +292,7 @@ module RailsAdmin
         @parent_controller = '::ActionController::Base'
         @forgery_protection_settings = {with: :exception}
         RailsAdmin::Config::Actions.reset
+        RailsAdmin::AbstractModel.reset
       end
 
       # Reset a provided model's configuration.
