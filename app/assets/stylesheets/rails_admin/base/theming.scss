@@ -26,6 +26,13 @@ body.rails_admin {
           margin-left: ($avatar-size + 5px);
         }
       }
+
+      > span {
+        color: $navbar-default-link-color;
+        line-height: $navbar-height;
+        padding-left: $navbar-padding-horizontal;
+        padding-right: $navbar-padding-horizontal;
+      }
     }
   }
 

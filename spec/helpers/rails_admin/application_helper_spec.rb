@@ -470,6 +470,21 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         result = helper.edit_user_link
         expect(result).not_to include('gravatar')
       end
+
+      context 'when the user is not authorized to perform edit' do
+        let(:user) { FactoryBot.create(:user) }
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
+          allow(helper).to receive(:_current_user).and_return(user)
+        end
+
+        it 'show gravatar and email without a link' do
+          result = helper.edit_user_link
+          expect(result).to include('gravatar')
+          expect(result).to include(user.email)
+          expect(result).not_to match('href')
+        end
+      end
     end
   end
 
