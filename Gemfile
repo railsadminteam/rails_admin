@@ -41,10 +41,6 @@ group :test do
   gem 'simplecov-lcov', require: false
   gem 'timecop', '>= 0.5'
 
-  platforms :ruby_19 do
-    gem 'tins', '~> 1.6.0', require: false
-  end
-
   # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
   gem 'tzinfo-data', platforms: %i(mingw mswin x64_mingw jruby)
 end
