@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
 RSpec.describe 'RailsAdmin PaperTrail auditing', active_record: true do
   before(:each) do

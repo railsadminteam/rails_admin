@@ -34,6 +34,7 @@ require 'factories'
 require 'policies'
 require "database_cleaner/#{CI_ORM}"
 require "orm/#{CI_ORM}"
+require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
 Dir[File.expand_path('../support/**/*.rb', __FILE__),
     File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
