@@ -23,12 +23,12 @@ RSpec.describe 'HistoryIndex action', type: :request, active_record: true do
 
   it 'shows the history' do
     visit history_index_path(model_name: 'paper_trail_test')
-    is_expected.to have_css('[href="/admin/paper_trail_test/1"]', count: 20)
+    is_expected.to have_css(%([href="/admin/paper_trail_test/#{paper_trail_test.id}"]), count: 20)
   end
 
   it "supports pagination" do
     visit history_index_path(model_name: 'paper_trail_test', page: 2)
-    is_expected.to have_css('[href="/admin/paper_trail_test/1"]', count: 11)
+    is_expected.to have_css(%([href="/admin/paper_trail_test/#{paper_trail_test.id}"]), count: 11)
   end
 
   context "when Kaminari's custom param_name is set" do
@@ -37,7 +37,7 @@ RSpec.describe 'HistoryIndex action', type: :request, active_record: true do
 
     it 'picks the page value from params' do
       visit history_index_path(model_name: 'paper_trail_test', pagina: 2)
-      is_expected.to have_css('[href="/admin/paper_trail_test/1"]', count: 11)
+      is_expected.to have_css(%([href="/admin/paper_trail_test/#{paper_trail_test.id}"]), count: 11)
     end
   end
 end
