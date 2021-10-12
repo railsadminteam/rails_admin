@@ -53,10 +53,6 @@ group :test do
   gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
   gem "kt-paperclip"
   gem "shrine", "~> 3.0"
-
-  platforms :ruby_19 do
-    gem "tins", "~> 1.6.0", require: false
-  end
 end
 
 group :mongoid do
