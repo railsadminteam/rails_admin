@@ -828,4 +828,20 @@ RSpec.describe 'Edit action', type: :request do
       expect(@record.format).to eq('test for format')
     end
   end
+
+  context "with a field with 'open' as a name" do
+    it 'is updatable without any error' do
+      RailsAdmin.config FieldTest do
+        edit do
+          field :open
+        end
+      end
+      record = FieldTest.create
+      visit edit_path(model_name: 'field_test', id: record.id)
+      expect do
+        check 'field_test[open]'
+        click_button 'Save'
+      end.to change { record.reload.open }.from(nil).to(true)
+    end
+  end
 end
