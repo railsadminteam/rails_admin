@@ -3,9 +3,10 @@ require 'csv'
 
 module RailsAdmin
   class CSVConverter
-    def initialize(objects = [], schema = {})
+    def initialize(objects = [], schema = nil)
       @fields = []
       @associations = []
+      schema ||= {}
 
       return self if (@objects = objects).blank?
 
@@ -13,12 +14,13 @@ module RailsAdmin
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
       @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
-      @fields = @methods.collect { |m| export_fields_for(m).first }
+      @fields = @methods.collect { |m| export_field_for(m) }.compact
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       schema_include = schema.delete(:include) || {}
 
       @associations = schema_include.each_with_object({}) do |(key, values), hash|
-        association = association_for(key)
+        association = export_field_for(key)
+        next unless association&.association?
         model_config = association.associated_model_config
         abstract_model = model_config.abstract_model
         methods = [(values[:only] || []) + (values[:methods] || [])].flatten.compact
@@ -28,7 +30,7 @@ module RailsAdmin
           model: abstract_model.model,
           abstract_model: abstract_model,
           model_config: model_config,
-          fields: methods.collect { |m| export_fields_for(m, model_config).first },
+          fields: methods.collect { |m| export_field_for(m, model_config) }.compact,
         }
         hash
       end
@@ -61,12 +63,8 @@ module RailsAdmin
 
   private
 
-    def association_for(key)
-      export_fields_for(key).detect(&:association?)
-    end
-
-    def export_fields_for(method, model_config = @model_config)
-      model_config.export.fields.select { |f| f.name == method }
+    def export_field_for(method, model_config = @model_config)
+      model_config.export.fields.detect { |f| f.name == method }
     end
 
     def generate_csv_string(options)

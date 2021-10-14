@@ -92,6 +92,12 @@ RSpec.describe 'Export action', type: :request do
     end
   end
 
+  it 'does not break when nothing is checked' do
+    visit export_path(model_name: 'comment')
+    all('input[type="checkbox"]').each(&:uncheck)
+    expect { click_button 'Export to csv' }.not_to raise_error
+  end
+
   context 'with csv format' do
     it 'exports with modified schema' do
       page.driver.post(export_path(model_name: 'player', schema: @non_default_schema, csv: true, all: true, csv_options: {generator: {col_sep: ','}}))

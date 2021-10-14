@@ -17,6 +17,28 @@ RSpec.describe RailsAdmin::CSVConverter do
     expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Name/)
   end
 
+  describe '#generate_csv_header' do
+    let(:objects) { FactoryBot.create_list :player, 1 }
+    before do
+      RailsAdmin.config(Player) do
+        export do
+          field :number
+          field :name
+        end
+      end
+    end
+
+    it 'does not break when non-existent fields are given' do
+      expect(RailsAdmin::CSVConverter.new(objects, {only: [:name, :foo], include: {bar: :baz}}).send(:generate_csv_header)).
+        to eq ["Name"]
+    end
+
+    it 'does not break when non-association fields are given to :include' do
+      expect(RailsAdmin::CSVConverter.new(objects, {only: [:name, :foo], include: {name: :name}}).send(:generate_csv_header)).
+        to eq ["Name"]
+    end
+  end
+
   describe '#to_csv' do
     before do
       RailsAdmin.config(Player) do
