@@ -39,6 +39,14 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       expect(@abstract_model.get('4f4f0824dcf2315093000000')).to be_nil
     end
 
+    context 'when Mongoid.raise_not_found_error is false' do
+      before { allow(Mongoid).to receive(:raise_not_found_error).and_return(false) }
+
+      it '#get returns nil when id does not exist' do
+        expect(@abstract_model.get('4f4f0824dcf2315093000000')).to be_nil
+      end
+    end
+
     it '#first returns a player' do
       expect(@players).to include @abstract_model.first
     end
