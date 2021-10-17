@@ -833,7 +833,9 @@ RSpec.describe 'Edit action', type: :request do
     it 'is updatable without any error' do
       RailsAdmin.config FieldTest do
         edit do
-          field :open
+          field :open do
+            nullable false
+          end
         end
       end
       record = FieldTest.create

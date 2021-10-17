@@ -20,6 +20,15 @@ iframe.wysihtml5-sandbox, .wysihtml5-editor{
   display: none;
 }
 
+.form-group.boolean_type {
+  .success.active {
+    @extend .btn-success
+  }
+  .danger.active {
+    @extend .btn-danger
+  }
+}
+
 .links .inline.list-inline .disabled span {
   color: $gray-light;
 }
