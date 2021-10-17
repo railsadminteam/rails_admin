@@ -67,7 +67,7 @@ module RailsAdmin
       attr_accessor :sidescroll
 
       # set parent controller
-      attr_accessor :parent_controller
+      attr_reader :parent_controller
 
       # set settings for `protect_from_forgery` method
       # By default, it raises exception upon invalid CSRF tokens
@@ -267,6 +267,14 @@ module RailsAdmin
           @default_hidden_fields[:show] = fields
         else
           @default_hidden_fields = fields
+        end
+      end
+
+      def parent_controller=(name)
+        @parent_controller = name
+        if defined?(RailsAdmin::ApplicationController)
+          RailsAdmin.send(:remove_const, :ApplicationController)
+          load RailsAdmin::Engine.root.join('app/controllers/rails_admin/application_controller.rb')
         end
       end
 

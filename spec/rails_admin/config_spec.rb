@@ -262,6 +262,10 @@ RSpec.describe RailsAdmin::Config do
   end
 
   describe '.parent_controller' do
+    before do
+      class TestController < ActionController::Base; end
+    end
+
     it 'uses default class' do
       expect(RailsAdmin.config.parent_controller).to eq '::ActionController::Base'
     end
@@ -271,6 +275,21 @@ RSpec.describe RailsAdmin::Config do
         config.parent_controller = 'TestController'
       end
       expect(RailsAdmin.config.parent_controller).to eq 'TestController'
+    end
+  end
+
+  describe '.parent_controller=' do
+    context 'if RailsAdmin::ApplicationController is already loaded' do
+      after do
+        RailsAdmin::Config.reset
+        RailsAdmin.send(:remove_const, :ApplicationController)
+        load RailsAdmin::Engine.root.join('app/controllers/rails_admin/application_controller.rb')
+      end
+
+      it 'can be changed' do
+        RailsAdmin.config.parent_controller = 'ApplicationController'
+        expect(RailsAdmin::ApplicationController.superclass).to eq ApplicationController
+      end
     end
   end
 
