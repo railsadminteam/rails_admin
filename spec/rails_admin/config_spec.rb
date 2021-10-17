@@ -296,6 +296,7 @@ RSpec.describe RailsAdmin::Config do
         end
       end
     end
+
     context 'when model expanded' do
       before do
         described_class.model(Team) do
@@ -306,6 +307,7 @@ RSpec.describe RailsAdmin::Config do
         expect(fields.map(&:name)).to match_array %i(players fans)
       end
     end
+
     context 'when expand redefine behavior' do
       before do
         described_class.model Team do
@@ -316,14 +318,12 @@ RSpec.describe RailsAdmin::Config do
         expect(fields.find { |f| f.name == :players }.visible).to be true
       end
     end
-    context 'when model expanded in config' do
-      let(:block) { proc { field :players } }
-      before do
-        allow(block).to receive(:source_location).and_return(['config/initializers/rails_admin.rb'])
-        described_class.model(Team, &block)
-      end
-      it 'executes first' do
-        expect(fields.find { |f| f.name == :players }.visible).to be false
+
+    context 'when model has no table yet', active_record: true do
+      it 'does not try to apply the configuration block' do
+        described_class.model(WithoutTable) do
+          include_all_fields
+        end
       end
     end
   end
@@ -347,67 +347,86 @@ RSpec.describe RailsAdmin::Config do
     end
   end
 
-  describe "field types code reloading" do
-    before { Rails.application.config.cache_classes = false }
-    after { Rails.application.config.cache_classes = true }
-
-    let(:config) { described_class.model(Team) }
-    let(:fields) { described_class.model(Team).edit.fields }
-
-    let(:team_config) do
-      proc do
-        field :id
-        field :wins, :boolean
+  describe ".apply" do
+    subject { RailsAdmin::Config.apply(&block) }
+    let(:block) do
+      proc do |config|
+        config.model Team do
+          register_instance_option('parameter') # an arbitrary instance method we can spy on
+        end
       end
     end
-
-    let(:team_config2) do
-      proc do
-        field :wins, :toggle
-      end
+    before { RailsAdmin::Config.instance_variable_set(:@initialized, false) }
+    after do
+      RailsAdmin::Config.instance_variable_set(:@initialized, true)
+      RailsAdmin::Config.instance_variable_set(:@deferred_blocks, [])
     end
 
-    let(:team_config3) do
-      proc do
-        field :wins
-      end
+    it "doesn't evaluate the block immediately" do
+      expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option)
+      subject
     end
 
-    it "allows code reloading" do
-      Team.send(:rails_admin, &team_config)
+    it 'evaluates block when initialize! is finished' do
+      expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).with('parameter')
+      subject
+      RailsAdmin::Config.initialize!
+    end
 
-      # This simulates the way RailsAdmin really does it
-      config.edit.send(:_fields, true)
+    it 'evaluates config block only once' do
+      expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).once.with('parameter')
+      subject
+      RailsAdmin::Config.initialize!
+      RailsAdmin::Config.initialize!
+    end
 
-      module RailsAdmin
-        module Config
-          module Fields
-            module Types
-              class Toggle < RailsAdmin::Config::Fields::Base
-                RailsAdmin::Config::Fields::Types.register(self)
-              end
-            end
+    context 'with a non-existent class' do
+      let(:block) do
+        proc do |config|
+          config.model UnknownClass do
+            field :name
           end
         end
       end
-      Team.send(:rails_admin, &team_config2)
-      expect(fields.map(&:name)).to match_array %i(id wins)
+
+      it "doesn't break immediately" do
+        subject
+      end
+    end
+  end
+
+  describe '.reload!' do
+    before do
+      RailsAdmin.config Player do
+        field :name
+      end
+      RailsAdmin.config Team do
+        field :color, :hidden
+      end
     end
 
-    it "updates model config when reloading code for rails 5" do
-      Team.send(:rails_admin, &team_config)
+    it 'clears current configuration' do
+      RailsAdmin::Config.reload!
+      expect(RailsAdmin::Config.model(Player).fields.map(&:name)).to include :number
+    end
 
-      # this simulates rails code reloading
-      RailsAdmin::Engine.initializers.select do |i|
-        i.name == "RailsAdmin reload config in development"
-      end.first.block.call
-      Rails.application.executor.wrap do
-        ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
+    it 're-applies the configuration from the initializer' do
+      RailsAdmin::Config.reload!
+      expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :color
+    end
+
+    it "applies the initializer's configuration first, then models' configurations" do
+      # simulate the situation that Team model is loaded in the middle of processing RailsAdmin initializer
+      allow_any_instance_of(RailsAdmin::Config::Model).to receive(:include_all_fields).and_wrap_original do |method|
+        Team.rails_admin do
+          field :color, :integer
+        end
+        method.call
       end
 
-      Team.send(:rails_admin, &team_config3)
-      expect(fields.map(&:name)).to match_array %i(wins)
-    end if defined?(ActiveSupport::Reloader)
+      RailsAdmin::Config.reload!
+      expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :integer
+    end
   end
 end
 

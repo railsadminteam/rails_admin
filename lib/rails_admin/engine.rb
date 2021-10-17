@@ -24,11 +24,23 @@ module RailsAdmin
       app.config.middleware.use Rack::Pjax
     end
 
-    initializer 'RailsAdmin reload config in development' do
-      if Rails.application.config.cache_classes
+    initializer 'RailsAdmin reload config in development' do |app|
+      config.initializer_path = app.root.join('config/initializers/rails_admin.rb')
+
+      unless Rails.application.config.cache_classes
         ActiveSupport::Reloader.before_class_unload do
-          RailsAdmin::Config.reset_all_models
+          RailsAdmin::Config.reload!
         end
+
+        reloader = app.config.file_watcher.new([config.initializer_path], []) do
+          # Do nothing, ActiveSupport::Reloader will trigger class_unload! anyway
+        end
+
+        app.reloaders << reloader
+        app.reloader.to_run do
+          reloader.execute_if_updated { require_unload_lock! }
+        end
+        reloader.execute
       end
     end
 
@@ -57,6 +69,8 @@ module RailsAdmin
           to config/application.rb.
         EOM
       end
+
+      RailsAdmin::Config.initialize!
     end
   end
 end

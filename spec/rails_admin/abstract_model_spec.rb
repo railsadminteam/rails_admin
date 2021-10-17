@@ -11,6 +11,18 @@ RSpec.describe RailsAdmin::AbstractModel do
     end
   end
 
+  describe '.new' do
+    context 'on ActiveRecord::NoDatabaseError', active_record: true do
+      before do
+        expect(WithoutTable).to receive(:table_exists?).and_raise(ActiveRecord::NoDatabaseError)
+      end
+
+      it 'does not raise error and returns nil' do
+        expect(RailsAdmin::AbstractModel.new('WithoutTable')).to eq nil
+      end
+    end
+  end
+
   describe '#to_s' do
     it 'returns model\'s name' do
       expect(RailsAdmin::AbstractModel.new(Cms::BasicPage).to_s).to eq Cms::BasicPage.to_s

@@ -51,4 +51,24 @@ RSpec.describe RailsAdmin::Config::HasFields do
 
     expect(RailsAdmin.config(Team).fields.map(&:name)).to eql(original_fields_order)
   end
+
+  describe '#_fields' do
+    let(:config) { RailsAdmin.config(Team) }
+    before do
+      RailsAdmin.config(Team) do
+        field :id
+        field :wins, :boolean
+      end
+    end
+
+    it "does not cause FrozenError by changing exiting field's tye" do
+      # Reference the fields for readonly
+      config.edit.send(:_fields, true)
+
+      RailsAdmin.config(Team) do
+        field :wins, :integer
+      end
+      expect(config.fields.map(&:name)).to match_array %i(id wins)
+    end
+  end
 end
