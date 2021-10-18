@@ -43,6 +43,19 @@ RSpec.describe 'Datetimepicker widget', type: :request, js: true do
     expect(find('#field_test_datetime_field').value).to eq '2021-01-02'
   end
 
+  it 'supports custom momentjs_format' do
+    RailsAdmin.config FieldTest do
+      edit do
+        configure(:datetime_field) { momentjs_format 'HH[H]mm[M]ss[S]' }
+      end
+    end
+    visit new_path(model_name: 'field_test')
+    page.execute_script <<-JS
+      $('#field_test_datetime_field').data("DateTimePicker").date(moment('2015-10-08 12:34:56')).toggle();
+    JS
+    expect(find('#field_test_datetime_field').value).to eq '12H34M56S'
+  end
+
   context 'with locale set' do
     around(:each) do |example|
       original = I18n.default_locale

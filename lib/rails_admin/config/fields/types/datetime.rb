@@ -30,7 +30,7 @@ module RailsAdmin
             "%B %d, %Y %H:%M"
           end
 
-          def momentjs_format
+          register_instance_option :momentjs_format do
             RailsAdmin::Support::Datetime.to_momentjs(strftime_format)
           end
 
