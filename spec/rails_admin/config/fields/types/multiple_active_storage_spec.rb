@@ -88,4 +88,10 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage do
       end
     end
   end
+
+  describe '#eager_load' do
+    it 'points to associations to be eager-loaded' do
+      expect(field.eager_load).to eq({active_storage_assets_attachments: :blob})
+    end
+  end
 end if defined?(ActiveStorage)

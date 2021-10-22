@@ -43,6 +43,10 @@ module RailsAdmin
           register_instance_option :delete_method do
             "remove_#{name}" if bindings[:object].respond_to?("remove_#{name}")
           end
+
+          register_instance_option :eager_load do
+            {"#{name}_attachments": :blob}
+          end
         end
       end
     end

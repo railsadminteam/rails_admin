@@ -22,6 +22,10 @@ module RailsAdmin
             end
           end
 
+          register_instance_option :eager_load do
+            {"#{name}_attachment": :blob}
+          end
+
           def resource_url(thumb = false)
             return nil unless value
             if thumb && value.variable?
