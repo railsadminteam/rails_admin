@@ -223,12 +223,29 @@ module RailsAdmin
           []
         end
 
-        register_instance_option :render do
-          bindings[:view].render partial: "rails_admin/main/#{partial}", locals: {field: self, form: bindings[:form]}
-        end
-
         register_instance_option :default_filter_operator do
           nil
+        end
+
+        register_instance_option :eager_load do
+          false
+        end
+
+        register_deprecated_instance_option :eager_load?, :eager_load
+
+        def eager_load_values
+          case eager_load
+          when true
+            [name]
+          when false, nil
+            []
+          else
+            Array.wrap(eager_load)
+          end
+        end
+
+        register_instance_option :render do
+          bindings[:view].render partial: "rails_admin/main/#{partial}", locals: {field: self, form: bindings[:form]}
         end
 
         def editable?

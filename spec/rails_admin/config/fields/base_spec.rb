@@ -573,4 +573,35 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
       expect(division_field.default_filter_operator).to be nil # rails_admin generic fallback
     end
   end
+
+  describe '#eager_load' do
+    let(:field) { RailsAdmin.config('Team').fields.detect { |f| f.name == :players } }
+
+    it 'can be set to true' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load true
+        end
+      end
+      expect(field.eager_load_values).to eq [:players]
+    end
+
+    it 'can be set to false' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load false
+        end
+      end
+      expect(field.eager_load_values).to eq []
+    end
+
+    it 'can be set to a custom value' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load [{players: :draft}, :fans]
+        end
+      end
+      expect(field.eager_load_values).to eq [{players: :draft}, :fans]
+    end
+  end
 end

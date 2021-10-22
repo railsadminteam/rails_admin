@@ -183,23 +183,32 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
   end
 
   describe '#get_collection' do
+    let(:team) { FactoryBot.create :team }
+    let!(:player) { FactoryBot.create :player, team: team }
+    let(:model_config) { RailsAdmin.config(Team) }
+    let(:abstract_model) { model_config.abstract_model }
     before do
-      @team = FactoryBot.create(:team)
-      controller.params = {model_name: 'teams'}
+      controller.params = {model_name: 'team'}
+    end
+
+    it 'performs eager-loading with `eagar_load true`' do
       RailsAdmin.config Team do
         field :players do
           eager_load true
         end
       end
-      @model_config = RailsAdmin.config(Team)
+      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), nil).once.and_call_original
+      controller.send(:get_collection, model_config, nil, false).to_a
     end
 
-    it 'performs eager-loading for an association field with `eagar_load true`' do
-      scope = double('scope')
-      abstract_model = @model_config.abstract_model
-      allow(@model_config).to receive(:abstract_model).and_return(abstract_model)
-      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), scope).once
-      controller.send(:get_collection, @model_config, scope, false)
+    it 'performs eager-loading with custom eagar_load value' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load players: :draft
+        end
+      end
+      expect(abstract_model).to receive(:all).with(hash_including(include: [{players: :draft}]), nil).once.and_call_original
+      controller.send(:get_collection, model_config, nil, false).to_a
     end
   end
 

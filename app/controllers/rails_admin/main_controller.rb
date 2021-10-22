@@ -120,10 +120,10 @@ module RailsAdmin
     end
 
     def get_collection(model_config, scope, pagination)
-      associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
+      eager_loads = model_config.list.fields.flat_map(&:eager_load_values)
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
-      options = options.merge(include: associations) unless associations.blank?
+      options = options.merge(include: eager_loads) unless eager_loads.blank?
       options = options.merge(get_sort_hash(model_config))
       options = options.merge(query: params[:query]) if params[:query].present?
       options = options.merge(filters: params[:f]) if params[:f].present?

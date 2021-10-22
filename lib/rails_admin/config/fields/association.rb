@@ -58,7 +58,7 @@ module RailsAdmin
           association.foreign_key_nullable?
         end
 
-        register_instance_option :eager_load? do
+        register_instance_option :eager_load do
           !!searchable
         end
 
