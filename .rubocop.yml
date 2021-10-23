@@ -7,6 +7,7 @@ AllCops:
     - 'spec/dummy_app/db/schema.rb'
     - 'spec/dummy_app/tmp/**/*'
     - 'vendor/bundle/**/*'
+  NewCops: disable
   TargetRubyVersion: 2.5
 
 Gemspec/DateAssignment:
