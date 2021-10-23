@@ -92,3 +92,25 @@ config.model Player do
   end
 end
 ```
+
+### Eager load
+
+Associations can be configured to be eager-loaded to prevent N+1 queries. `belongs_to` associations are eager-loaded by default, but you can configure additional eager-loads like:
+
+```ruby
+config.model Team do
+  field :players do
+    eager_load true
+  end
+end
+```
+
+or passing a custom value:
+
+```ruby
+config.model Team do
+  field :players do
+    eager_load players: :draft
+  end
+end
+```
