@@ -28,15 +28,15 @@ module RailsAdmin
           end
 
           def associated_primary_key
-            @associated_primary_key ||= association.primary_key
+            association.primary_key
           end
 
           def selected_id
-            bindings[:object].send(foreign_key)
+            bindings[:object].send(association.key_accessor)
           end
 
           def method_name
-            nested_form ? "#{name}_attributes".to_sym : association.foreign_key
+            nested_form ? "#{name}_attributes".to_sym : super
           end
 
           def multiple?

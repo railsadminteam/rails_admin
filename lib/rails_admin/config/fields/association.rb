@@ -10,6 +10,10 @@ module RailsAdmin
           @properties
         end
 
+        def method_name
+          association.key_accessor
+        end
+
         register_instance_option :pretty_value do
           v = bindings[:view]
           [value].flatten.select(&:present?).collect do |associated|
@@ -82,12 +86,7 @@ module RailsAdmin
 
         # Reader for associated primary key
         def associated_primary_key
-          @associated_primary_key ||= associated_model_config.abstract_model.primary_key
-        end
-
-        # Reader for the association's key
-        def foreign_key
-          association.foreign_key
+          association.primary_key
         end
 
         # Reader whether this is a polymorphic association

@@ -41,7 +41,12 @@ module RailsAdmin
         end
 
         def primary_key
-          association.primary_key.to_sym rescue :_id
+          case type
+          when :belongs_to, :has_and_belongs_to_many
+            association.primary_key.to_sym
+          else
+            :_id
+          end
         end
 
         def foreign_key
@@ -62,6 +67,19 @@ module RailsAdmin
         def foreign_inverse_of
           return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
           inverse_of_field.try(:to_sym)
+        end
+
+        def key_accessor
+          case macro.to_sym
+          when :has_many
+            "#{name.to_s.singularize}_ids".to_sym
+          when :has_one
+            "#{name}_id".to_sym
+          when :embedded_in, :embeds_one, :embeds_many
+            nil
+          else
+            foreign_key
+          end
         end
 
         def as
