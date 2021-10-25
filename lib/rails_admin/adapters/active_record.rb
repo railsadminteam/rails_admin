@@ -1,6 +1,6 @@
 require 'active_record'
-require 'rails_admin/adapters/active_record/abstract_object'
 require 'rails_admin/adapters/active_record/association'
+require 'rails_admin/adapters/active_record/object_extension'
 require 'rails_admin/adapters/active_record/property'
 
 module RailsAdmin
@@ -9,12 +9,12 @@ module RailsAdmin
       DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry].freeze
 
       def new(params = {})
-        AbstractObject.new(model.new(params))
+        model.new(params).extend(ObjectExtension)
       end
 
       def get(id)
         return unless object = model.where(primary_key => id).first
-        AbstractObject.new object
+        object.extend(ObjectExtension)
       end
 
       def scoped

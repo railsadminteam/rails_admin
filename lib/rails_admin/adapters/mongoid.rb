@@ -1,7 +1,7 @@
 require 'mongoid'
 require 'rails_admin/config/sections/list'
-require 'rails_admin/adapters/mongoid/abstract_object'
 require 'rails_admin/adapters/mongoid/association'
+require 'rails_admin/adapters/mongoid/object_extension'
 require 'rails_admin/adapters/mongoid/property'
 require 'rails_admin/adapters/mongoid/bson'
 
@@ -15,13 +15,13 @@ module RailsAdmin
       end
 
       def new(params = {})
-        AbstractObject.new(model.new(params))
+        model.new(params).extend(ObjectExtension)
       end
 
       def get(id)
         object = model.find(id)
         return nil unless object
-        AbstractObject.new(object)
+        object.extend(ObjectExtension)
       rescue => e
         raise e if %w(
           Mongoid::Errors::DocumentNotFound

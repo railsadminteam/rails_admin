@@ -27,12 +27,12 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
     end
 
-    it '#new returns instance of AbstractObject' do
-      expect(@abstract_model.new.object).to be_instance_of(Player)
+    it '#new returns a Mongoid::Document instance' do
+      expect(@abstract_model.new).to be_a(Mongoid::Document)
     end
 
-    it '#get returns instance of AbstractObject' do
-      expect(@abstract_model.get(@players.first.id.to_s).object).to eq(@players.first)
+    it '#get returns a Mongoid::Document instance' do
+      expect(@abstract_model.get(@players.first.id.to_s)).to eq(@players.first)
     end
 
     it '#get returns nil when id does not exist' do

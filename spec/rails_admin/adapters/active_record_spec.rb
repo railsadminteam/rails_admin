@@ -52,16 +52,20 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       ]
     end
 
-    it '#new returns instance of AbstractObject' do
-      expect(abstract_model.new.object).to be_instance_of(Player)
+    it '#new returns an ActiveRecord instance' do
+      expect(abstract_model.new).to be_a(ActiveRecord::Base)
     end
 
-    it '#get returns instance of AbstractObject' do
-      expect(abstract_model.get(@players.first.id).object).to eq(@players.first)
+    it '#get returns an ActiveRecord instance' do
+      expect(abstract_model.get(@players.first.id)).to eq(@players.first)
     end
 
     it '#get returns nil when id does not exist' do
       expect(abstract_model.get('abc')).to be_nil
+    end
+
+    it '#get returns an object that can be passed to ActiveJob' do
+      expect { NullJob.perform_later(abstract_model.get(@players.first.id)) }.not_to raise_error
     end
 
     it '#first returns a player' do

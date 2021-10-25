@@ -4,6 +4,8 @@ module RailsAdmin
       class Association
         attr_reader :association, :model
 
+        delegate :autosave?, to: :association
+
         def initialize(association, model)
           @association = association
           @model = model
