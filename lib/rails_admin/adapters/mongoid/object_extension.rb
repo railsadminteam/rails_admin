@@ -18,6 +18,11 @@ module RailsAdmin
                   send(name)&.save
                 end
               end
+              object.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
+                def #{name}_id=(item_id)
+                  self.#{name} = (#{association.klass}.find(item_id) rescue nil)
+                end
+              RUBY
             end
           end
         end

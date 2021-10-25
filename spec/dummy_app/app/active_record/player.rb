@@ -17,12 +17,4 @@ class Player < ActiveRecord::Base
   scope :rails_admin_search, ->(query) { where(name: query.reverse) }
 
   def destroy_hook; end
-
-  def draft_id
-    draft.try :id
-  end
-
-  def draft_id=(id)
-    self.draft = Draft.find_by_id(id)
-  end
 end

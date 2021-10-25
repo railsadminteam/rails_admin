@@ -110,5 +110,15 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
         end
       end
     end
+
+    context 'with explicit id setter' do
+      let(:user) { ManagingUser.create(FactoryBot.attributes_for(:user)) }
+      let(:team) { ManagedTeam.create(FactoryBot.attributes_for(:team)) }
+
+      it 'works without issues' do
+        user.team_id = team.id
+        expect(user.reload.team).to eq team
+      end
+    end
   end
 end

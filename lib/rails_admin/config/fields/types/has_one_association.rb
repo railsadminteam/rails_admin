@@ -17,10 +17,6 @@ module RailsAdmin
             (o = value) && o.send(associated_model_config.object_label_method)
           end
 
-          def editable?
-            (nested_form || abstract_model.model.new.respond_to?("#{name}_id=")) && super
-          end
-
           def selected_id
             value.try :id
           end
