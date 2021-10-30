@@ -39,9 +39,9 @@ module RailsAdmin
         field
       end
 
-      # configure a field without adding it.
+      # configure field(s) from the default group in a section without changing the original order.
       def configure(name, type = nil, &block)
-        field(name, type, false, &block)
+        [*name].each { |field_name| field(field_name, type, false, &block) }
       end
 
       # include fields by name and apply an optionnal block to each (through a call to fields),

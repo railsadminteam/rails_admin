@@ -36,20 +36,40 @@ RSpec.describe RailsAdmin::Config::HasFields do
     expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :players }.properties).not_to be_nil
   end
 
-  it 'does not change the order of existing fields, if some field types of them are changed' do
-    original_fields_order = RailsAdmin.config(Team).fields.map(&:name)
+  describe '#configure' do
+    it 'does not change the order of existing fields, if some field types of them are changed' do
+      original_fields_order = RailsAdmin.config(Team).fields.map(&:name)
 
-    RailsAdmin.config do |config|
-      config.model Team do
-        configure :players, :enum do
-          enum { [] }
+      RailsAdmin.config do |config|
+        config.model Team do
+          configure :players, :enum do
+            enum { [] }
+          end
+
+          configure :revenue, :integer
         end
-
-        configure :revenue, :integer
       end
+
+      expect(RailsAdmin.config(Team).fields.map(&:name)).to eql(original_fields_order)
     end
 
-    expect(RailsAdmin.config(Team).fields.map(&:name)).to eql(original_fields_order)
+    it 'allows passing multiple fields to share the same configuration' do
+      target_field_names = [:players, :revenue]
+
+      original_config = RailsAdmin.config(Team).fields.select { |field| target_field_names.include?(field.name) }
+      original_config.each { |field| expect(field).to be_visible }
+
+      RailsAdmin.config do |config|
+        config.model Team do
+          configure target_field_names do
+            visible false
+          end
+        end
+      end
+
+      updated_config = RailsAdmin.config(Team).fields.select { |field| target_field_names.include?(field.name) }
+      updated_config.each { |field| expect(field).to_not be_visible }
+    end
   end
 
   describe '#_fields' do
