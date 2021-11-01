@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
   spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*', 'vendor/**/*']
   spec.licenses = %w(MIT)
-  spec.homepage = 'https://github.com/sferik/rails_admin'
+  spec.homepage = 'https://github.com/railsadminteam/rails_admin'
   spec.name = 'rails_admin'
   spec.require_paths = %w(lib)
   spec.required_ruby_version     = '>= 2.5.0'

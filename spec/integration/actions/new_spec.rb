@@ -23,7 +23,7 @@ RSpec.describe 'New action', type: :request do
       is_expected.to have_selector('#player_notes_field .help-block', text: 'Optional')
     end
 
-    # https://github.com/sferik/rails_admin/issues/362
+    # https://github.com/railsadminteam/rails_admin/issues/362
     # test that no link uses the "wildcard route" with the main
     # controller and new method
     it "does not use the 'wildcard route'" do

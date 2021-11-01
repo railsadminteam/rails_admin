@@ -22,7 +22,7 @@ RSpec.describe 'Index action', type: :request do
       # it "has the search box with some prompt text" do
       is_expected.to have_selector("input[placeholder='Filter']")
 
-      # https://github.com/sferik/rails_admin/issues/362
+      # https://github.com/railsadminteam/rails_admin/issues/362
       # test that no link uses the "wildcard route" with the main
       # controller and list method
       # it "does not use the 'wildcard route'" do
