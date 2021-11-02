@@ -39,7 +39,7 @@ RSpec.describe RailsAdmin, type: :request do
     end
   end
 
-  describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
+  describe '_current_user' do # https://github.com/railsadminteam/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
         list do

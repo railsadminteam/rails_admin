@@ -259,7 +259,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(result).not_to match('Comments')
       end
 
-      it 'shows children of hidden models' do # https://github.com/sferik/rails_admin/issues/978
+      it 'shows children of hidden models' do # https://github.com/railsadminteam/rails_admin/issues/978
         RailsAdmin.config do |config|
           config.included_models = [Ball, Hardball]
           config.model Ball do

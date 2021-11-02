@@ -165,7 +165,7 @@ module RailsAdmin
       #     config.authorize_with :cancancan
       #   end
       #
-      # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
+      # See the wiki[https://github.com/railsadminteam/rails_admin/wiki] for more on authorization.
       #
       # @see RailsAdmin::Config::DEFAULT_AUTHORIZE
       def authorize_with(*args, &block)
