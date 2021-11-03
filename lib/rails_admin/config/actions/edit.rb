@@ -42,7 +42,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-pencil'
+          'fas fa-pencil-alt'
         end
       end
     end

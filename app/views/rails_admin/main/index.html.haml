@@ -54,11 +54,11 @@
       .input-group
         %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: t("admin.misc.filter")}
         %span.input-group-btn
-          %button.btn.btn-primary{type: 'submit', :'data-disable-with' => '<i class="icon-white icon-refresh"></i> '.html_safe + t('admin.misc.refresh')}
-            %i.icon-white.icon-refresh
+          %button.btn.btn-primary{type: 'submit', :'data-disable-with' => '<i class="fas fa-sync"></i> '.html_safe + t('admin.misc.refresh')}
+            %i.fas.fa-sync
             = t('admin.misc.refresh')
           %button#remove_filter.btn.btn-info{title: t('admin.misc.reset_filters')}
-            %i.icon-white.icon-remove
+            %i.fas.fa-times
       - if export_action
         %span{style: 'float:right'}= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'btn btn-info'
 

@@ -27,7 +27,7 @@
       nav.filter(':hidden').show('slow');
     }
     content.filter(':hidden').show('slow');
-    toggler.addClass('active').removeClass('disabled').children('i').addClass('icon-chevron-down').removeClass('icon-chevron-right');
+    toggler.addClass('active').removeClass('disabled').children('i').addClass('fa-chevron-down').removeClass('fa-chevron-right');
     if (one_to_one) {
       controls.find('.add_nested_fields').removeClass('add_nested_fields').text(field.children('.object-infos').data('object-label'));
     }
@@ -46,7 +46,7 @@
     current_li.remove();
     if (nav.children().length === 0) {
       nav.filter(':visible').hide('slow');
-      toggler.removeClass('active').addClass('disabled').children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+      toggler.removeClass('active').addClass('disabled').children('i').removeClass('fa-chevron-down').addClass('fa-chevron-right');
     }
     if (one_to_one) {
       add_button = toggler.next();

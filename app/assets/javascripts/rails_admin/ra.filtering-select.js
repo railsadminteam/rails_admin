@@ -51,7 +51,7 @@
         this.button = this._buttonField();
       }
       this.clearOption = $('<span style="color: #888"></span>').append(
-          '<i class="icon-remove"></i> ' + $('<span></span>').text(RailsAdmin.I18n.t("clear")).html()
+          '<i class="fas fa-times"></i> ' + $('<span></span>').text(RailsAdmin.I18n.t("clear")).html()
       );
       this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(RailsAdmin.I18n.t("no_objects"));
 

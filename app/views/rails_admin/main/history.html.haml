@@ -10,8 +10,8 @@
     .input-group
       %input.form-control.input-small{name: "query", type: "search", value: query, placeholder: "#{t("admin.misc.filter")}", class: 'input-small'}
       %span.input-group-btn
-        %button.btn.btn-primary{type: 'submit', :'data-disable-with' => '<i class="icon-white icon-refresh"></i> '.html_safe + t('admin.misc.refresh')}
-          %i.icon-white.icon-refresh
+        %button.btn.btn-primary{type: 'submit', :'data-disable-with' => '<i class="fas fa-sync"></i> '.html_safe + t('admin.misc.refresh')}
+          %i.fas.fa-sync
           = t("admin.misc.refresh")
 %table#history.table.table-condensed.table-striped.table-hover
   %thead

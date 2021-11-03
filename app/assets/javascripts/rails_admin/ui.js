@@ -42,12 +42,12 @@
 
   $(document).on('click', '[data-target]', function() {
     if (!$(this).hasClass('disabled')) {
-      if ($(this).has('i.icon-chevron-down').length) {
-        $(this).removeClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right');
+      if ($(this).has('i.fa-chevron-down').length) {
+        $(this).removeClass('active').children('i').toggleClass('fa-chevron-down fa-chevron-right');
         $($(this).data('target')).filter(':visible').hide('slow');
       } else {
-        if ($(this).has('i.icon-chevron-right').length) {
-          $(this).addClass('active').children('i').toggleClass('icon-chevron-down icon-chevron-right');
+        if ($(this).has('i.fa-chevron-right').length) {
+          $(this).addClass('active').children('i').toggleClass('fa-chevron-down fa-chevron-right');
           $($(this).data('target')).filter(':hidden').show('slow');
         }
       }
@@ -55,19 +55,19 @@
   });
 
   $(document).on('click', '.form-horizontal legend', function() {
-    if ($(this).has('i.icon-chevron-down').length) {
+    if ($(this).has('i.fa-chevron-down').length) {
       $(this).siblings('.control-group:visible').hide('slow');
-      $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right');
+      $(this).children('i').toggleClass('fa-chevron-down fa-chevron-right');
     } else {
-      if ($(this).has('i.icon-chevron-right').length) {
+      if ($(this).has('i.fa-chevron-right').length) {
         $(this).siblings('.control-group:hidden').show('slow');
-        $(this).children('i').toggleClass('icon-chevron-down icon-chevron-right');
+        $(this).children('i').toggleClass('fa-chevron-down fa-chevron-right');
       }
     }
   });
 
   $(document).on('click', 'form .tab-content .tab-pane a.remove_nested_one_fields', function() {
-    $(this).children('input[type="hidden"]').val($(this).hasClass('active')).siblings('i').toggleClass('icon-check icon-trash');
+    $(this).children('input[type="hidden"]').val($(this).hasClass('active')).siblings('i').toggleClass('fa-check fa-trash');
   });
 
   $(document).ready(function() {
@@ -90,7 +90,7 @@
         width: width
       }, length, 'easeOutQuad');
     });
-    $('.form-horizontal legend').has('i.icon-chevron-right').each(function() {
+    $('.form-horizontal legend').has('i.fa-chevron-right').each(function() {
       $(this).siblings('.control-group').hide();
     });
     $(".table").tooltip({

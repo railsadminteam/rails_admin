@@ -19,7 +19,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-eye-open'
+          'fas fa-eye'
         end
 
         register_instance_option :pjax? do

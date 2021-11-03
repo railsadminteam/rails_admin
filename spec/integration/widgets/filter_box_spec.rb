@@ -32,9 +32,9 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
     click_link 'Add filter'
     click_link 'Position'
     is_expected.to have_css('.form-search', count: 2)
-    within('#filters_box') { click_link 'Name' }
+    within('#filters_box') { click_button 'Name' }
     is_expected.to have_no_css('.form-search select[name^="f[name]"]')
-    within('#filters_box') { click_link 'Position' }
+    within('#filters_box') { click_button 'Position' }
     is_expected.to have_no_css('.form-search')
   end
 
@@ -126,7 +126,7 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Add filter'
       click_link 'Color'
       expect(all('.select-single option').map(&:text)).to include 'white', 'black', 'red', 'green', 'blu<e>é'
-      find('.filter .switch-select .icon-plus').click
+      find('.filter .switch-select .fa-plus').click
       expect(all('.select-multiple option').map(&:text)).to include 'white', 'black', 'red', 'green', 'blu<e>é'
     end
   end

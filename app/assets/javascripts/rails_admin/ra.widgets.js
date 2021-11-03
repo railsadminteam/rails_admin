@@ -136,16 +136,16 @@
         if (nav.children().length === 0) {
           nav.hide();
           tab_content.hide();
-          toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right');
+          toggler.addClass('disabled').removeClass('active').children('i').addClass('fa-chevron-right');
         } else {
           if (toggler.hasClass('active')) {
             nav.show();
             tab_content.show();
-            toggler.children('i').addClass('icon-chevron-down');
+            toggler.children('i').addClass('fa-chevron-down');
           } else {
             nav.hide();
             tab_content.hide();
-            toggler.children('i').addClass('icon-chevron-right');
+            toggler.children('i').addClass('fa-chevron-right');
           }
         }
       });
@@ -165,18 +165,18 @@
         });
         first_tab = nav.find("> li > a[data-toggle='tab']:first");
         first_tab.tab('show');
-        field.find("> .controls > [data-target]:first").html('<i class="icon-white"></i> ' + first_tab.html());
+        field.find("> .controls > [data-target]:first").html('<i class="fas"></i> ' + first_tab.html());
         nav.hide();
         if (nav.children().length === 0) {
           nav.hide();
           tab_content.hide();
-          toggler.addClass('disabled').removeClass('active').children('i').addClass('icon-chevron-right');
+          toggler.addClass('disabled').removeClass('active').children('i').addClass('fa-chevron-right');
         } else {
           if (toggler.hasClass('active')) {
-            toggler.children('i').addClass('icon-chevron-down');
+            toggler.children('i').addClass('fa-chevron-down');
             tab_content.show();
           } else {
-            toggler.children('i').addClass('icon-chevron-right');
+            toggler.children('i').addClass('fa-chevron-right');
             tab_content.hide();
           }
         }

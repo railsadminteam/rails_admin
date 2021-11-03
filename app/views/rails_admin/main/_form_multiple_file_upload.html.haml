@@ -3,7 +3,7 @@
     = attachment.pretty_value
     - if field.delete_method || field.keep_method
       %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button'}
-        %i.icon-white.icon-trash
+        %i.fas.fa-trash
         = I18n.t('admin.form.delete_file', field_label: field.label, number: i + 1)
       - if field.keep_method
         = form.check_box(field.keep_method, {multiple:true, checked: true, style: 'display:none;'}, attachment.keep_value, nil)

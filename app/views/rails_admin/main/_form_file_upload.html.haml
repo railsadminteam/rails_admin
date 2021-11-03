@@ -11,7 +11,7 @@
 
 - if field.optional? && field.errors.blank? && file && field.delete_method
   %a.btn.btn-info.btn-remove-image{href: '#', :'data-toggle' => 'button', role: 'button'}
-    %i.icon-white.icon-trash
+    %i.fas.fa-trash
     = I18n.t('admin.actions.delete.link', object_label: field.label)
 
   = form.check_box(field.delete_method, style: 'display:none;')

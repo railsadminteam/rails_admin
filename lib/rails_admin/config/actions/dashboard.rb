@@ -43,7 +43,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-home'
+          'fas fa-home'
         end
 
         register_instance_option :statistics? do

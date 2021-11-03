@@ -53,7 +53,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-plus'
+          'fas fa-plus'
         end
       end
     end

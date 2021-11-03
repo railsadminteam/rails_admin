@@ -97,7 +97,7 @@
             )
             .add(
               $('<a href="#" class="switch-select"></a>')
-              .append($('<i></i>').addClass('icon-' + (multiple_values ? 'minus' : 'plus')))
+              .append($('<i></i>').addClass('fas fa-' + (multiple_values ? 'minus' : 'plus')))
             );
         break;
         case 'string':
@@ -172,8 +172,7 @@
         .attr('id', filterContainerId)
         .addClass('filter form-search')
         .append(
-          $('<span class="label label-info form-label"></span>')
-          .append($('<a href="#delete" class="delete"></a>').append('<i class="fa fa-trash-o fa-fw icon-white"></i>').append(document.createTextNode(field_label)))
+          $('<button type="button" class="btn btn-info btn-sm delete"></button>').append('<i class="fas fa-trash"></i>').append(document.createTextNode(field_label))
         )
         .append('&nbsp;')
         .append(control)
@@ -228,7 +227,7 @@
     var not_selected_select = $(this).siblings('select:hidden');
     not_selected_select.attr('name', not_selected_select.data('name')).show('slow');
     selected_select.attr('name', null).hide('slow');
-    $(this).find('i').toggleClass("icon-plus icon-minus")
+    $(this).find('i').toggleClass("fa-plus fa-minus")
   });
 
   $(document).on('change', "#filters_box .switch-additional-fieldsets", function(e) {

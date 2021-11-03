@@ -19,13 +19,13 @@ RSpec.describe 'Boolean field', type: :request do
 
     it 'can be updated' do
       visit edit_path(model_name: 'field_test', id: field_test.id)
-      find('.boolean_type .icon-ok').sibling('input').click
+      find('.boolean_type .fa-check').sibling('input').click
       click_button 'Save and edit'
       expect(field_test.reload.boolean_field).to be true
-      find('.boolean_type .icon-remove').sibling('input').click
+      find('.boolean_type .fa-times').sibling('input').click
       click_button 'Save and edit'
       expect(field_test.reload.boolean_field).to be false
-      find('.boolean_type .icon-minus').sibling('input').click
+      find('.boolean_type .fa-minus').sibling('input').click
       click_button 'Save and edit'
       expect(field_test.reload.boolean_field).to be nil
     end
