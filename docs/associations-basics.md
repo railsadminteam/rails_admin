@@ -68,7 +68,7 @@ end
 
 ### Nested form
 
-If you have accepts_nested_attributes_for set up in your model but don't want the association to be a nested form in your model:
+If you have `accepts_nested_attributes_for` set up in your model but don't want the association to be a nested form in your model:
 
 ```ruby
 config.model Team do
