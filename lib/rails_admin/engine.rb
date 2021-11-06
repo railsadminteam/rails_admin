@@ -5,7 +5,6 @@ require 'nested_form'
 require 'rack-pjax'
 require 'rails'
 require 'rails_admin'
-require 'remotipart'
 
 module RailsAdmin
   class Engine < Rails::Engine
