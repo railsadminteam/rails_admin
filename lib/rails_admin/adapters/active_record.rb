@@ -250,7 +250,7 @@ module RailsAdmin
 
           @value = begin
             case @operator
-            when 'default', 'like'
+            when 'default', 'like', 'not_like'
               "%#{@value}%"
             when 'starts_with'
               "#{@value}%"
@@ -262,7 +262,13 @@ module RailsAdmin
           end
 
           if ['postgresql', 'postgis'].include? ar_adapter
-            ["(#{@column} ILIKE ?)", @value]
+            if @operator == 'not_like'
+              ["(#{@column} NOT ILIKE ?)", @value]
+            else
+              ["(#{@column} ILIKE ?)", @value]
+            end
+          elsif @operator == 'not_like'
+            ["(LOWER(#{@column}) NOT LIKE ?)", @value]
           else
             ["(LOWER(#{@column}) LIKE ?)", @value]
           end

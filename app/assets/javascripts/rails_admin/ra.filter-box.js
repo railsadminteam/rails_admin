@@ -119,6 +119,13 @@
             .prop('name', operator_name)
             .append('<option value="_discard">...</option>')
             .append($('<option data-additional-fieldset="additional-fieldset" value="like"></option>').prop('selected', field_operator == "like").text(RailsAdmin.I18n.t("contains")))
+            .append(
+            $(
+            '<option data-additional-fieldset="additional-fieldset" value="not_like"></option>'
+            )
+            .prop("selected", field_operator == "not_like")
+            .text(RailsAdmin.I18n.t("does_not_contain"))
+            )
             .append($('<option data-additional-fieldset="additional-fieldset" value="is"></option>').prop('selected', field_operator == "is").text(RailsAdmin.I18n.t("is_exactly")))
             .append($('<option data-additional-fieldset="additional-fieldset" value="starts_with"></option>').prop('selected', field_operator == "starts_with").text(RailsAdmin.I18n.t("starts_with")))
             .append($('<option data-additional-fieldset="additional-fieldset" value="ends_with"></option>').prop('selected', field_operator == "ends_with").text(RailsAdmin.I18n.t("ends_with")))

@@ -258,6 +258,8 @@ module RailsAdmin
           return if @value.blank?
           @value = begin
             case @operator
+            when 'not_like'
+              Regexp.compile("^((?!#{Regexp.escape(@value)}).)*$", Regexp::IGNORECASE)
             when 'default', 'like'
               Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
             when 'starts_with'

@@ -377,6 +377,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'was')).to be_nil
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq(field: /foo/i)
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq(field: /foo/i)
+      expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'not_like')).to eq(field: /^((?!foo).)*$/i)
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq(field: /^foo/i)
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq(field: /foo$/i)
       expect(@abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq(field: 'foo')
