@@ -164,6 +164,7 @@
               )
             );
           break;
+        case "citext":
         case "string":
         case "text":
         case "belongs_to_association":
