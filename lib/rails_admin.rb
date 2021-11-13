@@ -55,5 +55,3 @@ module RailsAdmin
     YAML.dump(object)
   end
 end
-
-require 'rails_admin/bootstrap-sass' unless defined? Bootstrap
