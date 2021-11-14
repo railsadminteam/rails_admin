@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'appraisal', '>= 2.0'
 gem 'devise'
 gem 'rails'
+gem 'webpacker', require: false
 gem 'webrick', '~> 1.7'
 
 group :active_record do

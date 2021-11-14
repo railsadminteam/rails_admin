@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '>= 6.0.0'
+gem 'webpacker', require: false
 
 group :active_record do
   platforms :jruby do

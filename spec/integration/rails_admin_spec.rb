@@ -31,11 +31,21 @@ RSpec.describe RailsAdmin, type: :request do
     # NOTE: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it 'loads stylesheets in header' do
-      is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
+      when :webpacker
+        is_expected.to have_no_selector('head link[href~="rails_admin"][href$=".css"]', visible: false)
+      end
     end
 
     it 'loads javascript files in body' do
-      is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin"][src$=".js"]', visible: false)
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin"][src$=".js"]', visible: false)
+      when :webpacker
+        is_expected.to have_selector('head script[src^="/packs-test/js/rails_admin"][src$=".js"]', visible: false)
+      end
     end
   end
 

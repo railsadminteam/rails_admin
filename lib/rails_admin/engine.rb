@@ -13,10 +13,12 @@ module RailsAdmin
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin precompile hook', group: :all do |app|
-      app.config.assets.precompile += %w[
-        rails_admin/rails_admin.js
-        rails_admin/rails_admin.css
-      ]
+      if app.config.respond_to?(:assets)
+        app.config.assets.precompile += %w[
+          rails_admin/rails_admin.js
+          rails_admin/rails_admin.css
+        ]
+      end
     end
 
     initializer 'RailsAdmin setup middlewares' do |app|

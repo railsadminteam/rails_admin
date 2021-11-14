@@ -3,11 +3,13 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   Exclude:
     - "gemfiles/*"
+    - "node_modules/**/*"
     - "spec/dummy_app/bin/**/*"
     - "spec/dummy_app/db/schema.rb"
     - "spec/dummy_app/tmp/**/*"
     - "vendor/bundle/**/*"
   NewCops: disable
+  SuggestExtensions: false
   TargetRubyVersion: 2.5
 
 Gemspec/DateAssignment:
@@ -113,7 +115,7 @@ Metrics/MethodLength:
   Max: 29 # TODO: Lower to 15
 
 Metrics/ModuleLength:
-  Max: 202 # TODO: Lower to 100
+  Max: 204 # TODO: Lower to 100
 
 Metrics/ParameterLists:
   Max: 8 # TODO: Lower to 4

@@ -86,6 +86,9 @@ module RailsAdmin
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
 
+      # Set where RailsAdmin fetches JS/CSS from, defaults to :sprockets
+      attr_accessor :asset_source
+
       # Finish initialization by executing deferred configuration blocks
       def initialize!
         @deferred_blocks.each { |block| block.call(self) }
@@ -317,6 +320,7 @@ module RailsAdmin
         @show_gravatar = true
         @navigation_static_links = {}
         @navigation_static_label = nil
+        @asset_source = (defined?(Webpacker) ? :webpacker : :sprockets)
         @parent_controller = '::ActionController::Base'
         @forgery_protection_settings = {with: :exception}
         RailsAdmin::Config::Actions.reset
