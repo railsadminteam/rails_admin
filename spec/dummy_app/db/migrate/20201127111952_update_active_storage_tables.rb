@@ -5,7 +5,7 @@ class UpdateActiveStorageTables < ActiveRecord::Migration[5.0]
       t.belongs_to :blob, null: false, index: false
       t.string :variation_digest, null: false
 
-      t.index %i[blob_id variation_digest], name: "index_active_storage_variant_records_uniqueness", unique: true
+      t.index %i[blob_id variation_digest], name: 'index_active_storage_variant_records_uniqueness', unique: true
     end
   end
 end

@@ -14,13 +14,12 @@ module RailsAdmin
         include RailsAdmin::Config::Groupable
         include RailsAdmin::Config::Inspectable
 
-        attr_reader :name, :properties, :abstract_model
+        attr_reader :name, :properties, :abstract_model, :parent, :root
         attr_accessor :defined, :order, :section
-        attr_reader :parent, :root
 
-        NAMED_INSTANCE_VARIABLES = [
-          :@parent, :@root, :@section, :@children_fields_registered,
-          :@associated_model_config, :@group
+        NAMED_INSTANCE_VARIABLES = %i[
+          @parent @root @section @children_fields_registered
+          @associated_model_config @group
         ].freeze
 
         def initialize(parent, name, properties)
@@ -36,7 +35,7 @@ module RailsAdmin
         end
 
         register_instance_option :css_class do
-          "#{self.name}_field"
+          "#{name}_field"
         end
 
         def type_css_class
@@ -78,37 +77,35 @@ module RailsAdmin
 
         # list of columns I should search for that field [{ column: 'table_name.column', type: field.type }, {..}]
         register_instance_option :searchable_columns do
-          @searchable_columns ||= begin
-            case searchable
-            when true
-              [{column: "#{abstract_model.table_name}.#{name}", type: type}]
-            when false
-              []
-            when :all # valid only for associations
-              table_name = associated_model_config.abstract_model.table_name
-              associated_model_config.list.fields.collect { |f| {column: "#{table_name}.#{f.name}", type: f.type} }
-            else
-              [searchable].flatten.collect do |f|
-                if f.is_a?(String) && f.include?('.')                            #  table_name.column
-                  table_name, column = f.split '.'
-                  type = nil
-                elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
-                  am = AbstractModel.new(f.keys.first) if f.keys.first.is_a?(Class)
-                  table_name = am&.table_name || f.keys.first
-                  column = f.values.first
-                  property = am&.properties&.detect { |p| p.name == f.values.first.to_sym }
-                  type = property&.type
-                else                                                             #  <attribute|column>
-                  am = (association? ? associated_model_config.abstract_model : abstract_model)
-                  table_name = am.table_name
-                  column = f
-                  property = am.properties.detect { |p| p.name == f.to_sym }
-                  type = property&.type
-                end
-                {column: "#{table_name}.#{column}", type: (type || :string)}
-              end
-            end
-          end
+          @searchable_columns ||= case searchable
+                                  when true
+                                    [{column: "#{abstract_model.table_name}.#{name}", type: type}]
+                                  when false
+                                    []
+                                  when :all # valid only for associations
+                                    table_name = associated_model_config.abstract_model.table_name
+                                    associated_model_config.list.fields.collect { |f| {column: "#{table_name}.#{f.name}", type: f.type} }
+                                  else
+                                    [searchable].flatten.collect do |f|
+                                      if f.is_a?(String) && f.include?('.')                            #  table_name.column
+                                        table_name, column = f.split '.'
+                                        type = nil
+                                      elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
+                                        am = AbstractModel.new(f.keys.first) if f.keys.first.is_a?(Class)
+                                        table_name = am&.table_name || f.keys.first
+                                        column = f.values.first
+                                        property = am&.properties&.detect { |p| p.name == f.values.first.to_sym }
+                                        type = property&.type
+                                      else                                                             #  <attribute|column>
+                                        am = (association? ? associated_model_config.abstract_model : abstract_model)
+                                        table_name = am.table_name
+                                        column = f
+                                        property = am.properties.detect { |p| p.name == f.to_sym }
+                                        type = property&.type
+                                      end
+                                      {column: "#{table_name}.#{column}", type: (type || :string)}
+                                    end
+                                  end
         end
 
         register_instance_option :formatted_value do
@@ -172,17 +169,16 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          context = begin
-            if bindings && bindings[:object]
-              bindings[:object].persisted? ? :update : :create
-            else
-              :nil
-            end
-          end
+          context = if bindings && bindings[:object]
+                      bindings[:object].persisted? ? :update : :create
+                    else
+                      :nil
+                    end
+
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
             abstract_model.model.validators_on(column_name).detect do |v|
               !(v.options[:allow_nil] || v.options[:allow_blank]) &&
-                [:presence, :numericality, :attachment_presence].include?(v.kind) &&
+                %i[presence numericality attachment_presence].include?(v.kind) &&
                 (v.options[:on] == context || v.options[:on].blank?) &&
                 (v.options[:if].blank? && v.options[:unless].blank?)
             end
@@ -213,6 +209,7 @@ module RailsAdmin
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
             next unless self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+
             returned = false if fields.include?(name)
           end
           returned
@@ -276,7 +273,7 @@ module RailsAdmin
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
           if !state.nil? || block
-            required state.nil? ? proc { false == instance_eval(&block) } : false == state
+            required state.nil? ? proc { instance_eval(&block) == false } : state == false
           else
             optional?
           end
@@ -319,7 +316,7 @@ module RailsAdmin
         end
 
         def generic_help
-          (required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')) + '. '
+          "#{required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')}. "
         end
 
         def generic_field_help

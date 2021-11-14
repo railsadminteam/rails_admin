@@ -22,8 +22,9 @@ module RailsAdmin
     def edit_user_link
       return nil unless _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
+
       content = [
-        RailsAdmin::Config.show_gravatar && _current_user.email.present? && image_tag("#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: ''),
+        RailsAdmin::Config.show_gravatar && _current_user.email.present? && image_tag("#{request.ssl? ? 'https://secure' : 'http://www'}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: ''),
         content_tag(:span, _current_user.email),
       ].compact.join.html_safe
       if (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
@@ -36,7 +37,11 @@ module RailsAdmin
     def logout_path
       if defined?(Devise)
         scope = Devise::Mapping.find_scope!(_current_user)
-        main_app.send("destroy_#{scope}_session_path") rescue false
+        begin
+          main_app.send("destroy_#{scope}_session_path")
+        rescue StandardError
+          false
+        end
       elsif main_app.respond_to?(:logout_path)
         main_app.logout_path
       end
@@ -44,6 +49,7 @@ module RailsAdmin
 
     def logout_method
       return [Devise.sign_out_via].flatten.first if defined?(Devise)
+
       :delete
     end
 
@@ -78,7 +84,7 @@ module RailsAdmin
     def root_navigation
       actions(:root).select(&:show_in_sidebar).group_by(&:sidebar_label).collect do |label, nodes|
         li_stack = nodes.map do |node|
-          url = rails_admin.url_for(action: node.action_name, controller: "rails_admin/main")
+          url = rails_admin.url_for(action: node.action_name, controller: 'rails_admin/main')
           nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
           content_tag :li do
             link_to nav_icon + " " + wording_for(:menu, node), url, class: "pjax"
@@ -125,25 +131,23 @@ module RailsAdmin
           am = a.send(:eval, 'bindings[:abstract_model]')
           o = a.send(:eval, 'bindings[:object]')
           content_tag(:li, class: current_action?(a, am, o) && 'active') do
-            crumb = begin
-              if current_action?(a, am, o)
+            if current_action?(a, am, o)
+              wording_for(:breadcrumb, a, am, o)
+            elsif a.http_methods.include?(:get)
+              link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
                 wording_for(:breadcrumb, a, am, o)
-              elsif a.http_methods.include?(:get)
-                link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
-                  wording_for(:breadcrumb, a, am, o)
-                end
-              else
-                content_tag(:span, wording_for(:breadcrumb, a, am, o))
               end
+            else
+              content_tag(:span, wording_for(:breadcrumb, a, am, o))
             end
-            crumb
           end
         end.reverse.join.html_safe
       end
     end
 
     # parent => :root, :collection, :member
-    def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
+    # perf matters here (no action view trickery)
+    def menu_for(parent, abstract_model = nil, object = nil, only_icon = false)
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) && a.show_in_menu }
       actions.collect do |action|
         wording = wording_for(:menu, action)
@@ -169,6 +173,7 @@ module RailsAdmin
     def bulk_menu(abstract_model = @abstract_model)
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
+
       content_tag :li, class: 'dropdown', style: 'float:right' do
         content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do

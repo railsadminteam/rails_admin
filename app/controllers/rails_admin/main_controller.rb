@@ -54,21 +54,19 @@ module RailsAdmin
       params[:sort_reverse] ||= 'false'
 
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
-      column = begin
-        if field.nil? || field.sortable == true # use params[:sort] on the base table
-          "#{abstract_model.table_name}.#{params[:sort]}"
-        elsif field.sortable == false # use default sort, asked field is not sortable
-          "#{abstract_model.table_name}.#{model_config.list.sort_by}"
-        elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
-          field.sortable
-        elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
-          "#{field.sortable.keys.first}.#{field.sortable.values.first}"
-        elsif field.association? # use column on target table
-          "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
-        else # use described column in the field conf.
-          "#{abstract_model.table_name}.#{field.sortable}"
-        end
-      end
+      column = if field.nil? || field.sortable == true # use params[:sort] on the base table
+                 "#{abstract_model.table_name}.#{params[:sort]}"
+               elsif field.sortable == false # use default sort, asked field is not sortable
+                 "#{abstract_model.table_name}.#{model_config.list.sort_by}"
+               elsif (field.sortable.is_a?(String) || field.sortable.is_a?(Symbol)) && field.sortable.to_s.include?('.') # just provide sortable, don't do anything smart
+                 field.sortable
+               elsif field.sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+                 "#{field.sortable.keys.first}.#{field.sortable.values.first}"
+               elsif field.association? # use column on target table
+                 "#{field.associated_model_config.abstract_model.table_name}.#{field.sortable}"
+               else # use described column in the field conf.
+                 "#{abstract_model.table_name}.#{field.sortable}"
+               end
 
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {sort: column, sort_reverse: (params[:sort_reverse] == reversed_sort.to_s)}
@@ -91,6 +89,7 @@ module RailsAdmin
 
     def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
       return unless target_params.present?
+
       fields = visible_fields(action, model_config)
       allowed_methods = fields.collect(&:allowed_methods).flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
       fields.each { |field| field.parse_input(target_params) }
@@ -116,6 +115,7 @@ module RailsAdmin
 
     def check_for_cancel
       return unless params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
+
       redirect_to(back_or_index, notice: I18n.t('admin.flash.noaction'))
     end
 
@@ -133,10 +133,11 @@ module RailsAdmin
 
     def get_association_scope_from_params
       return nil unless params[:associated_collection].present?
+
       source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
       source_model_config = source_abstract_model.config
       source_object = source_abstract_model.get(params[:source_object_id])
-      action = params[:current_action].in?(%w(create update)) ? params[:current_action] : 'edit'
+      action = params[:current_action].in?(%w[create update]) ? params[:current_action] : 'edit'
       @association = source_model_config.send(action).fields.detect { |f| f.name == params[:associated_collection].to_sym }.with(controller: self, object: source_object)
       @association.associated_collection_scope
     end

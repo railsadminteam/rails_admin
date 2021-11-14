@@ -12,7 +12,7 @@ namespace :rails_admin do
   desc 'CI env for Travis'
   task :prepare_ci_env do
     adapter = ENV['CI_DB_ADAPTER'] || 'sqlite3'
-    database = ('sqlite3' == adapter ? 'db/development.sqlite3' : 'ci_rails_admin')
+    database = (adapter == 'sqlite3' ? 'db/development.sqlite3' : 'ci_rails_admin')
     username =
       case adapter
       when 'postgresql'
@@ -28,7 +28,7 @@ namespace :rails_admin do
         'adapter' => adapter,
         'database' => database,
         'username' => username,
-        'password' => ('postgresql' == adapter ? 'postgres' : ''),
+        'password' => (adapter == 'postgresql' ? 'postgres' : ''),
         'host' => '127.0.0.1',
         'encoding' => 'utf8',
         'pool' => 5,

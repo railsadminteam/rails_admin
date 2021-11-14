@@ -70,10 +70,10 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
       it 'returns actions by type' do
         abstract_model = RailsAdmin::AbstractModel.new(Player)
         object = FactoryBot.create :player
-        expect(helper.actions(:all, abstract_model, object).collect(&:custom_key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
+        expect(helper.actions(:all, abstract_model, object).collect(&:custom_key)).to eq(%i[dashboard index show new edit export delete bulk_delete history_show history_index show_in_app])
         expect(helper.actions(:root, abstract_model, object).collect(&:custom_key)).to eq([:dashboard])
-        expect(helper.actions(:collection, abstract_model, object).collect(&:custom_key)).to eq([:index, :new, :export, :bulk_delete, :history_index])
-        expect(helper.actions(:member, abstract_model, object).collect(&:custom_key)).to eq([:show, :edit, :delete, :history_show, :show_in_app])
+        expect(helper.actions(:collection, abstract_model, object).collect(&:custom_key)).to eq(%i[index new export bulk_delete history_index])
+        expect(helper.actions(:member, abstract_model, object).collect(&:custom_key)).to eq(%i[show edit delete history_show show_in_app])
       end
 
       it 'only returns visible actions, passing bindings correctly' do
@@ -105,7 +105,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
       it 'uses first sign out method from Devise when it is defined' do
         allow(Object).to receive(:defined?).with(Devise).and_return(true)
 
-        expect(Devise).to receive(:sign_out_via).and_return([:whatever_defined_on_devise, :something_ignored])
+        expect(Devise).to receive(:sign_out_via).and_return(%i[whatever_defined_on_devise something_ignored])
         expect(helper.logout_method).to eq(:whatever_defined_on_devise)
       end
     end
@@ -165,11 +165,11 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             end
             show do
               visible do
-                bindings[:object].class == Team
+                bindings[:object].instance_of?(Team)
               end
             end
             delete do
-              http_methods [:post, :put, :delete]
+              http_methods %i[post put delete]
             end
           end
         end
@@ -192,7 +192,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         RailsAdmin.config do |config|
           config.actions do
             dashboard do
-              http_methods [:post, :put, :delete]
+              http_methods %i[post put delete]
             end
           end
         end
@@ -266,7 +266,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             hide
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown\-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Hardballs)/m)
       end
 
       it 'shows children of excluded models' do
@@ -283,7 +283,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             navigation_label 'commentable'
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown\-header).*(commentable).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown-header).*(commentable).*(Comments)/m)
       end
 
       it 'nests in parent model' do
@@ -293,7 +293,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             parent Player
           end
         end
-        expect(helper.main_navigation).to match(/(Players).* (nav\-level\-1).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(Players).* (nav-level-1).*(Comments)/m)
       end
 
       it 'orders' do

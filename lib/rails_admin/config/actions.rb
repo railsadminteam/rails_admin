@@ -9,20 +9,19 @@ module RailsAdmin
           end
           scope ||= :all
           init_actions!
-          actions = begin
-            case scope
-            when :all
-              @@actions
-            when :root
-              @@actions.select(&:root?)
-            when :collection
-              @@actions.select(&:collection?)
-            when :bulkable
-              @@actions.select(&:bulkable?)
-            when :member
-              @@actions.select(&:member?)
-            end
-          end
+          actions = case scope
+                    when :all
+                      @@actions
+                    when :root
+                      @@actions.select(&:root?)
+                    when :collection
+                      @@actions.select(&:collection?)
+                    when :bulkable
+                      @@actions.select(&:bulkable?)
+                    when :member
+                      @@actions.select(&:member?)
+                    end
+
           actions = actions.collect { |action| action.with(bindings) }
           bindings[:controller] ? actions.select(&:visible?) : actions
         end
@@ -52,7 +51,7 @@ module RailsAdmin
             def key
               :#{key}
             end
-          ))
+          ), __FILE__, __LINE__ - 5)
           add_action_custom_key(a, &block)
         end
 
@@ -71,7 +70,7 @@ module RailsAdmin
               action = #{klass}.new
               add_action_custom_key(action, &block)
             end
-          }
+          }, __FILE__, __LINE__ - 5
         end
 
       private

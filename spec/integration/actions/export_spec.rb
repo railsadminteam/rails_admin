@@ -58,7 +58,7 @@ RSpec.describe 'Export action', type: :request do
                                    'Updated at [Draft]', 'Date [Draft]', 'Round [Draft]', 'Pick [Draft]', 'Overall [Draft]',
                                    'College [Draft]', 'Notes [Draft]', 'Id [Comments]', 'Content [Comments]', 'Created at [Comments]',
                                    'Updated at [Comments]']
-    expect(csv.flatten).to include(@player.name + ' exported')
+    expect(csv.flatten).to include("#{@player.name} exported")
     expect(csv.flatten).to include(@player.team.name)
     expect(csv.flatten).to include(@player.draft.college)
 

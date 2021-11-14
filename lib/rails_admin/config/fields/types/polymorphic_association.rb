@@ -51,6 +51,7 @@ module RailsAdmin
 
           def associated_collection(type)
             return [] if type.blank?
+
             config = RailsAdmin.config(type)
             config.abstract_model.all.collect do |object|
               [object.send(config.object_label_method), object.id]
@@ -58,7 +59,7 @@ module RailsAdmin
           end
 
           def associated_model_config
-            @associated_model_config ||= association.klass.collect { |type| RailsAdmin.config(type) }.select { |config| !config.excluded? }
+            @associated_model_config ||= association.klass.collect { |type| RailsAdmin.config(type) }.reject(&:excluded?)
           end
 
           def polymorphic_type_collection

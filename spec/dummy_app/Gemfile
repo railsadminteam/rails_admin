@@ -19,10 +19,10 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'mongoid', ['>= 6.0', '< 8']
-  gem 'kaminari-mongoid'
-  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+  gem 'kaminari-mongoid'
+  gem 'mongoid', ['>= 6.0', '< 8']
+  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'shrine-mongoid', '~> 1.0'
 end
 
@@ -38,8 +38,8 @@ gem 'shrine', '~> 3.0'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sassc-rails', '~> 2.1'
   gem 'coffee-rails', '~> 4.0'
+  gem 'sassc-rails', '~> 2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
