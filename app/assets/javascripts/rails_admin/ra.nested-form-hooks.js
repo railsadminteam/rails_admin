@@ -30,7 +30,10 @@
     content = parent_group.children(".tab-content");
     toggler = controls.find(".toggler");
     nav.append(new_tab);
-    $(window.document).trigger("rails_admin.dom_ready", [field, parent_group]);
+
+    const event = new CustomEvent("rails_admin.dom_ready", { detail: field });
+    document.dispatchEvent(event);
+
     new_tab.children("a").tab("show");
     if (!one_to_one) {
       nav.filter(":hidden").show("slow");

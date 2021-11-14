@@ -105,7 +105,8 @@
         })
         .html(saveButtonText);
 
-      $(document).trigger("rails_admin.dom_ready", [form]);
+      const event = new CustomEvent("rails_admin.dom_ready", { detail: form });
+      document.dispatchEvent(event);
 
       form.bind("ajax:complete", function (event) {
         var data = event.detail[0],
