@@ -1,15 +1,7 @@
-/*
- * RailsAdmin remote form @VERSION
- *
- * License
- *
- * http://www.railsadmin.org
- *
- * Depends:
- *   jquery.ui.core.js
- *   jquery.ui.widget.js
- *   jquery.ui.dialog.js
- */
+import Rails from "@rails/ujs";
+import jQuery from "jquery";
+import "jquery-ui/ui/widget";
+
 (function ($) {
   $.widget("ra.remoteForm", {
     _create: function () {
@@ -40,7 +32,8 @@
         .find(".update")
         .unbind()
         .bind("click", function (e) {
-          if ((value = dom_widget.find("select").val())) {
+          var value = dom_widget.find("select").val();
+          if (value) {
             widget._bindModalOpening(
               e,
               $(this).data("link").replace("__ID__", value)
@@ -53,7 +46,7 @@
 
     _bindModalOpening: function (e, url) {
       e.preventDefault();
-      widget = this;
+      var widget = this;
       if ($("#modal").length) return false;
 
       var dialog = this._getModal();
@@ -100,7 +93,7 @@
         .find(".save-action")
         .unbind()
         .click(function () {
-          window.Rails.fire(form[0], "submit");
+          Rails.fire(form[0], "submit");
           return false;
         })
         .html(saveButtonText);

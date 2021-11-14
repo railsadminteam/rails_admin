@@ -1,3 +1,7 @@
+import jQuery from "jquery";
+import moment from "moment";
+import I18n from "./i18n";
+
 (function ($) {
   var filters;
 
@@ -25,22 +29,22 @@
             .append(
               $('<option value="true"></option>')
                 .prop("selected", field_value == "true")
-                .text(RailsAdmin.I18n.t("true"))
+                .text(I18n.t("true"))
             )
             .append(
               $('<option value="false"></option>')
                 .prop("selected", field_value == "false")
-                .text(RailsAdmin.I18n.t("false"))
+                .text(I18n.t("false"))
             );
           if (!required) {
             control.append([
               '<option disabled="disabled">---------</option>',
               $('<option value="_present"></option>')
                 .prop("selected", field_value == "_present")
-                .text(RailsAdmin.I18n.t("is_present")),
+                .text(I18n.t("is_present")),
               $('<option value="_blank"></option>')
                 .prop("selected", field_value == "_blank")
-                .text(RailsAdmin.I18n.t("is_blank")),
+                .text(I18n.t("is_blank")),
             ]);
           }
           break;
@@ -59,31 +63,29 @@
                   '<option data-additional-fieldset="default" value="default"></option>'
                 )
                   .prop("selected", field_operator == "default")
-                  .text(
-                    RailsAdmin.I18n.t(field_type == "time" ? "time" : "date")
-                  )
+                  .text(I18n.t(field_type == "time" ? "time" : "date"))
               )
               .append(
                 $(
                   '<option data-additional-fieldset="between" value="between"></option>'
                 )
                   .prop("selected", field_operator == "between")
-                  .text(RailsAdmin.I18n.t("between_and_"))
+                  .text(I18n.t("between_and_"))
               );
           if (field_type != "time") {
             control.append([
               $('<option value="today"></option>')
                 .prop("selected", field_operator == "today")
-                .text(RailsAdmin.I18n.t("today")),
+                .text(I18n.t("today")),
               $('<option value="yesterday"></option>')
                 .prop("selected", field_operator == "yesterday")
-                .text(RailsAdmin.I18n.t("yesterday")),
+                .text(I18n.t("yesterday")),
               $('<option value="this_week"></option>')
                 .prop("selected", field_operator == "this_week")
-                .text(RailsAdmin.I18n.t("this_week")),
+                .text(I18n.t("this_week")),
               $('<option value="last_week"></option>')
                 .prop("selected", field_operator == "last_week")
-                .text(RailsAdmin.I18n.t("last_week")),
+                .text(I18n.t("last_week")),
             ]);
           }
           if (!required) {
@@ -91,10 +93,10 @@
               '<option disabled="disabled">---------</option>',
               $('<option value="_not_null"></option>')
                 .prop("selected", field_operator == "_not_null")
-                .text(RailsAdmin.I18n.t("is_present")),
+                .text(I18n.t("is_present")),
               $('<option value="_null"></option>')
                 .prop("selected", field_operator == "_null")
-                .text(RailsAdmin.I18n.t("is_blank")),
+                .text(I18n.t("is_blank")),
             ]);
           }
           additional_control = $.map(
@@ -139,10 +141,10 @@
                 : [
                     $('<option value="_present"></option>')
                       .prop("selected", field_value == "_present")
-                      .text(RailsAdmin.I18n.t("is_present")),
+                      .text(I18n.t("is_present")),
                     $('<option value="_blank"></option>')
                       .prop("selected", field_value == "_blank")
-                      .text(RailsAdmin.I18n.t("is_blank")),
+                      .text(I18n.t("is_blank")),
                     '<option disabled="disabled">---------</option>',
                   ]
             )
@@ -179,45 +181,45 @@
                 '<option data-additional-fieldset="additional-fieldset" value="like"></option>'
               )
                 .prop("selected", field_operator == "like")
-                .text(RailsAdmin.I18n.t("contains"))
+                .text(I18n.t("contains"))
             )
             .append(
               $(
                 '<option data-additional-fieldset="additional-fieldset" value="not_like"></option>'
               )
                 .prop("selected", field_operator == "not_like")
-                .text(RailsAdmin.I18n.t("does_not_contain"))
+                .text(I18n.t("does_not_contain"))
             )
             .append(
               $(
                 '<option data-additional-fieldset="additional-fieldset" value="is"></option>'
               )
                 .prop("selected", field_operator == "is")
-                .text(RailsAdmin.I18n.t("is_exactly"))
+                .text(I18n.t("is_exactly"))
             )
             .append(
               $(
                 '<option data-additional-fieldset="additional-fieldset" value="starts_with"></option>'
               )
                 .prop("selected", field_operator == "starts_with")
-                .text(RailsAdmin.I18n.t("starts_with"))
+                .text(I18n.t("starts_with"))
             )
             .append(
               $(
                 '<option data-additional-fieldset="additional-fieldset" value="ends_with"></option>'
               )
                 .prop("selected", field_operator == "ends_with")
-                .text(RailsAdmin.I18n.t("ends_with"))
+                .text(I18n.t("ends_with"))
             );
           if (!required) {
             control.append([
               '<option disabled="disabled">---------</option>',
               $('<option value="_present"></option>')
                 .prop("selected", field_operator == "_present")
-                .text(RailsAdmin.I18n.t("is_present")),
+                .text(I18n.t("is_present")),
               $('<option value="_blank"></option>')
                 .prop("selected", field_operator == "_blank")
-                .text(RailsAdmin.I18n.t("is_blank")),
+                .text(I18n.t("is_blank")),
             ]);
           }
           additional_control = $(
@@ -244,24 +246,24 @@
                 '<option data-additional-fieldset="default" value="default"></option>'
               )
                 .prop("selected", field_operator == "default")
-                .text(RailsAdmin.I18n.t("number"))
+                .text(I18n.t("number"))
             )
             .append(
               $(
                 '<option data-additional-fieldset="between" value="between"></option>'
               )
                 .prop("selected", field_operator == "between")
-                .text(RailsAdmin.I18n.t("between_and_"))
+                .text(I18n.t("between_and_"))
             );
           if (!required) {
             control.append([
               '<option disabled="disabled">---------</option>',
               $('<option value="_not_null"></option>')
                 .prop("selected", field_operator == "_not_null")
-                .text(RailsAdmin.I18n.t("is_present")),
+                .text(I18n.t("is_present")),
               $('<option value="_null"></option>')
                 .prop("selected", field_operator == "_null")
-                .text(RailsAdmin.I18n.t("is_blank")),
+                .text(I18n.t("is_blank")),
             ]);
           }
           additional_control = $(
@@ -331,7 +333,7 @@
       $content.find(".date, .datetime").each(function () {
         $(this).datetimepicker({
           date: moment($(this).siblings("[type=hidden]").val()),
-          locale: RailsAdmin.I18n.locale,
+          locale: I18n.locale,
           showTodayButton: true,
           format: options["datetimepicker_format"],
         });
@@ -365,7 +367,7 @@
 
   $(document).on("click", "#filters_box .delete", function (e) {
     e.preventDefault();
-    form = $(this).parents("form");
+    var form = $(this).parents("form");
     $(this).parents(".filter").remove();
     !$("#filters_box").children().length &&
       $("hr.filters_box:visible").hide("slow");
@@ -387,7 +389,8 @@
     "#filters_box .switch-additional-fieldsets",
     function (e) {
       var selected_option = $(this).find("option:selected");
-      if ((klass = $(selected_option).data("additional-fieldset"))) {
+      var klass = $(selected_option).data("additional-fieldset");
+      if (klass) {
         $(this)
           .siblings(".additional-fieldset:not(." + klass + ")")
           .hide("slow");

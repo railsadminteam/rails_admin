@@ -1,3 +1,8 @@
+import jQuery from "jquery";
+import "jquery-ui/ui/widgets/sortable";
+import moment from "moment";
+import I18n from "./i18n";
+
 (function ($) {
   document.addEventListener("rails_admin.dom_ready", function (event) {
     var $editors,
@@ -27,7 +32,7 @@
         options = $(this).data("options");
         $.extend(options, {
           date: moment($(this).siblings("[type=hidden]").val()),
-          locale: RailsAdmin.I18n.locale,
+          locale: I18n.locale,
         });
         $(this).datetimepicker(options);
         $(this).on("dp.change", function (e) {

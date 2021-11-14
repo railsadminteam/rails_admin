@@ -1,7 +1,7 @@
-app/assets/stylesheets/rails_admin/aristo
-app/assets/stylesheets/rails_admin/themes/cerulean
 coverage
 spec/dummy_app/public
 spec/dummy_app/tmp
 spec/support/jquery.simulate.drag-sortable.js
+src/rails_admin/styles/aristo
+src/rails_admin/styles/themes/cerulean
 vendor

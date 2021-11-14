@@ -1,3 +1,5 @@
+import jQuery from "jquery";
+
 (function ($) {
   $(document).ready(function () {
     return (window.nestedFormEvents.insertFields = function (

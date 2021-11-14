@@ -1,14 +1,7 @@
-/*
- * RailsAdmin filtering multiselect @VERSION
- *
- * License
- *
- * http://www.railsadmin.org
- *
- * Depends:
- *   jquery.ui.core.js
- *   jquery.ui.widget.js
- */
+import jQuery from "jquery";
+import "jquery-ui/ui/widget";
+import I18n from "./i18n";
+
 (function ($) {
   $.widget("ra.filteringMultiselect", {
     _cache: {},
@@ -152,10 +145,10 @@
       this.element.css({ display: "none" });
 
       this.tooManyObjectsPlaceholder = $('<option disabled="disabled" />').text(
-        RailsAdmin.I18n.t("too_many_objects")
+        I18n.t("too_many_objects")
       );
       this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(
-        RailsAdmin.I18n.t("no_objects")
+        I18n.t("no_objects")
       );
 
       if (this.options.xhr) {
@@ -301,7 +294,7 @@
         if (!this.options.xhr) {
           for (i in this._cache) {
             if (this._cache.hasOwnProperty(i)) {
-              option = this._cache[i];
+              var option = this._cache[i];
               matches.push({ id: option.id, label: option.value });
             }
           }
@@ -327,7 +320,7 @@
               this._cache.hasOwnProperty(i) &&
               query.test(this._cache[i]["value"])
             ) {
-              option = this._cache[i];
+              var option = this._cache[i];
               matches.push({ id: option.id, label: option.value });
             }
           }

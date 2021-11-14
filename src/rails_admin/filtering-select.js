@@ -1,18 +1,8 @@
-/*
- * RailsAdmin filtering select @VERSION
- *
- * Based on the combobox example from jQuery UI documentation
- * http://jqueryui.com/demos/autocomplete/#combobox
- *
- * License
- *
- * http://www.railsadmin.org
- *
- * Depends:
- *   jquery.ui.core.js
- *   jquery.ui.widget.js
- *   jquery.ui.autocomplete.js
- */
+import jQuery from "jquery";
+import "jquery-ui/ui/widget";
+import "jquery-ui/ui/widgets/autocomplete";
+import I18n from "./i18n";
+
 (function ($) {
   "use strict";
 
@@ -52,10 +42,10 @@
       }
       this.clearOption = $('<span style="color: #888"></span>').append(
         '<i class="fas fa-times"></i> ' +
-          $("<span></span>").text(RailsAdmin.I18n.t("clear")).html()
+          $("<span></span>").text(I18n.t("clear")).html()
       );
       this.noObjectsPlaceholder = $('<option disabled="disabled" />').text(
-        RailsAdmin.I18n.t("no_objects")
+        I18n.t("no_objects")
       );
 
       this._setOptionsSource();

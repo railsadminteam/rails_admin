@@ -1,3 +1,7 @@
+import jQuery from "jquery";
+import "jquery-ui/ui/effect";
+import I18n from "./i18n";
+
 (function ($) {
   $(document).on("click", "#list input.toggle", function () {
     $("#list [name='bulk_ids[]']").prop("checked", $(this).is(":checked"));
@@ -90,10 +94,7 @@
   );
 
   $(document).ready(function () {
-    RailsAdmin.I18n.init(
-      $("html").attr("lang"),
-      $("#admin-js").data("i18nOptions")
-    );
+    I18n.init($("html").attr("lang"), $("#admin-js").data("i18nOptions"));
 
     const event = new CustomEvent("rails_admin.dom_ready");
     document.dispatchEvent(event);
