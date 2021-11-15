@@ -8,10 +8,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ 2.6, 2.7, 3.0, jruby ]
-        gemfile: [ gemfiles/rails_6.1.gemfile ]
-        orm: [ active_record ]
-        adapter: [ sqlite3 ]
+        ruby: [2.6, 2.7, 3.0, jruby]
+        gemfile: [gemfiles/rails_6.1.gemfile]
+        orm: [active_record]
+        adapter: [sqlite3]
         include:
           - ruby: 2.5
             gemfile: gemfiles/rails_6.0.gemfile
@@ -66,34 +66,34 @@ jobs:
       CI_ORM: ${{ matrix.orm }}
       JRUBY_OPTS: --debug
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        cache-version: gems-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
-      env:
-        MAKE: make --jobs 4
-        BUNDLE_WITHOUT: development
-    - name: Setup application
-      env:
-        BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
-        CI_DB_ADAPTER: ${{ matrix.adapter }}
-        RAILS_ENV: test
-      run: |
-        cd spec/dummy_app
-        bundle exec rake rails_admin:prepare_ci_env db:create db:migrate
-        cd ../../
-    - name: Run tests
-      run: bundle exec rake spec
-    - name: Coveralls Parallel
-      uses: coverallsapp/github-action@master
-      continue-on-error: true
-      with:
-        github-token: ${{ secrets.github_token }}
-        flag-name: run-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ matrix.orm }}-${{ matrix.adapter }}
-        parallel: true
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+          cache-version: gems-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
+        env:
+          MAKE: make --jobs 4
+          BUNDLE_WITHOUT: development
+      - name: Setup application
+        env:
+          BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
+          CI_DB_ADAPTER: ${{ matrix.adapter }}
+          RAILS_ENV: test
+        run: |
+          cd spec/dummy_app
+          bundle exec rake rails_admin:prepare_ci_env db:create db:migrate
+          cd ../../
+      - name: Run tests
+        run: bundle exec rake spec
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        continue-on-error: true
+        with:
+          github-token: ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ matrix.orm }}-${{ matrix.adapter }}
+          parallel: true
 
   coveralls:
     name: Coveralls
@@ -105,6 +105,18 @@ jobs:
         with:
           github-token: ${{ secrets.github_token }}
           parallel-finished: true
+
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Run check
+        run: npx prettier --check .
 
   rubocop:
     name: RuboCop

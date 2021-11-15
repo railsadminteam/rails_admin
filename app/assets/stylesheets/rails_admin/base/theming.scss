@@ -6,7 +6,6 @@
 $avatar-size: 30px;
 
 body.rails_admin {
-
   .thumbnail {
     display: inline-block;
   }
@@ -78,7 +77,7 @@ body.rails_admin {
   .form-horizontal {
     /* hide hidden fields controls by default */
     .control-group .hidden_type {
-      display:none;
+      display: none;
     }
 
     .control-group {
@@ -94,7 +93,7 @@ body.rails_admin {
     }
 
     legend {
-      cursor:pointer;
+      cursor: pointer;
       i {
         vertical-align: inherit !important;
       }
@@ -107,7 +106,7 @@ body.rails_admin {
       }
       .remove_nested_fields,
       .remove_nested_one_fields {
-        position:absolute;
+        position: absolute;
       }
       p {
         font-size: 12px;
@@ -116,7 +115,8 @@ body.rails_admin {
       .help-block {
         // margin-top: 0px;
       }
-      .input-prepend, .input-append {
+      .input-prepend,
+      .input-append {
         margin-bottom: 0px;
         label {
           margin-bottom: 0px;
@@ -128,14 +128,15 @@ body.rails_admin {
     }
 
     /* We want input size to be used, unfixate input width */
-    input, textarea {
-      width:revert;
+    input,
+    textarea {
+      width: revert;
     }
     .help-block {
-      clear:left;
+      clear: left;
     }
-    input[type=file] {
-      display:block;
+    input[type="file"] {
+      display: block;
     }
 
     /* nested forms */
@@ -158,13 +159,13 @@ body.rails_admin {
 
         & > .remove_nested_fields,
         & > .remove_nested_one_fields {
-          display:block;
+          display: block;
           opacity: 0;
           position: absolute;
           top: 0px;
           left: 5px;
-          -webkit-transition: opacity .15s ease;
-          transition: opacity .15s ease;
+          -webkit-transition: opacity 0.15s ease;
+          transition: opacity 0.15s ease;
         }
         &:hover > .remove_nested_fields,
         &:hover > .remove_nested_one_fields,
@@ -186,7 +187,7 @@ body.rails_admin {
 
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
-      border-color:lighten(#049cdb, 30%);
+      border-color: lighten(#049cdb, 30%);
       margin-left: 20px;
 
       .form-group {
@@ -195,8 +196,8 @@ body.rails_admin {
     }
 
     /* totally awesome! nesting on 4 levels! */
-    .tab-content .tab-content .tab-content  .tab-content .tab-pane {
-      border-color:lighten(#049cdb, 40%);
+    .tab-content .tab-content .tab-content .tab-content .tab-pane {
+      border-color: lighten(#049cdb, 40%);
       margin-left: 30px;
 
       .form-group {
@@ -213,13 +214,13 @@ body.rails_admin {
   /* nested nav */
   .nav {
     .nav-level-1 {
-      padding-left:30px;
+      padding-left: 30px;
     }
     .nav-level-2 {
-      padding-left:60px;
+      padding-left: 60px;
     }
     .nav-level-3 {
-      padding-left:90px;
+      padding-left: 90px;
     }
   }
 
@@ -245,9 +246,9 @@ body.rails_admin {
       }
     }
     .thumbnail {
-      float:left;
+      float: left;
       & + * {
-        clear:left;
+        clear: left;
       }
     }
     /* backport of Bootstrap 1.4 table headers */
@@ -265,18 +266,18 @@ body.rails_admin {
     }
     .headerSortUp,
     .headerSortDown {
-      background-color: rgba(141,192,219,.25);
-      text-shadow: 0 1px 1px rgba(255,255,255,.75);
+      background-color: rgba(141, 192, 219, 0.25);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     }
     .header:hover {
       &:after {
-        visibility:visible;
+        visibility: visible;
       }
     }
     .headerSortDown,
     .headerSortDown:hover {
       &:after {
-        visibility:visible;
+        visibility: visible;
         @include opacity(60);
       }
     }
@@ -286,7 +287,7 @@ body.rails_admin {
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
         border-top: 4px solid #000;
-        visibility:visible;
+        visibility: visible;
         @include box-shadow(none);
         @include opacity(60);
       }
@@ -297,33 +298,35 @@ body.rails_admin {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width:150px;
+      max-width: 150px;
     }
 
     /* icons */
     td.links {
       max-width: none;
       .list-inline {
-        margin:0px;
-        li { display:inline-block; }
+        margin: 0px;
+        li {
+          display: inline-block;
+        }
       }
     }
 
     /* Shrink to content width */
     .shrink {
-      width:1px;
-      white-space:nowrap;
+      width: 1px;
+      white-space: nowrap;
     }
 
     /* History */
     th.created_at {
-      width:160px;
+      width: 160px;
     }
     th.username {
-      width:140px;
+      width: 140px;
     }
     th.item {
-      width:60px;
+      width: 60px;
     }
   }
 }

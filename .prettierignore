@@ -1,0 +1,4 @@
+app/assets/stylesheets/rails_admin/aristo
+app/assets/stylesheets/rails_admin/themes/cerulean
+spec/support/jquery.simulate.drag-sortable.js
+vendor
