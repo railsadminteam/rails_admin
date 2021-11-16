@@ -94,14 +94,17 @@
       $("html").attr("lang"),
       $("#admin-js").data("i18nOptions")
     );
-    $(document).trigger("rails_admin.dom_ready");
+
+    const event = new CustomEvent("rails_admin.dom_ready");
+    document.dispatchEvent(event);
   });
 
   $(document).on("pjax:end", function () {
-    $(document).trigger("rails_admin.dom_ready");
+    const event = new CustomEvent("rails_admin.dom_ready");
+    document.dispatchEvent(event);
   });
 
-  $(document).on("rails_admin.dom_ready", function () {
+  document.addEventListener("rails_admin.dom_ready", function () {
     $(".nav.nav-pills li.active").removeClass("active");
     $(
       '.nav.nav-pills li[data-model="' + $(".page-header").data("model") + '"]'

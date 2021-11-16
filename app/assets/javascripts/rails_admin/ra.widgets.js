@@ -1,5 +1,5 @@
 (function ($) {
-  $(document).on("rails_admin.dom_ready", function (e, content) {
+  document.addEventListener("rails_admin.dom_ready", function (event) {
     var $editors,
       array,
       config_options,
@@ -9,7 +9,7 @@
       goFroalaWysiwygs,
       goSimpleMDEs,
       options;
-    content = content ? content : $("form");
+    var content = event.detail || $("form");
     if (content.length) {
       $.fn.datetimepicker.defaults.icons = {
         time: "fa fa-clock-o",

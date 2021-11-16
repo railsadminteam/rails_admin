@@ -30,5 +30,5 @@
   }
 
   $(window).on("load", setFrozenColPositions);
-  $(document).on("rails_admin.dom_ready", setFrozenColPositions);
+  document.addEventListener("rails_admin.dom_ready", setFrozenColPositions);
 })(jQuery);
