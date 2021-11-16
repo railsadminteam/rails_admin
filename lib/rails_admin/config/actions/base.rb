@@ -78,6 +78,11 @@ module RailsAdmin
           true
         end
 
+        # Target window [_self, _blank]
+        register_instance_option :target_window do
+          :_self
+        end
+
         # This block is evaluated in the context of the controller when action is called
         # You can access:
         # - @objects if you're on a model scope

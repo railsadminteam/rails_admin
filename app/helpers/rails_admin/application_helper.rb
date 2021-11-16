@@ -158,7 +158,10 @@ module RailsAdmin
                    else
                      'javascript:void(0)'
                    end
-            content_tag(:a, label, {href: href}.merge(action.pjax? ? {class: ['pjax']} : {}))
+
+            extra_classes = []
+            extra_classes << 'pjax' if action.pjax? && action.target_window != :_blank
+            content_tag(:a, label, {href: href, target: action.target_window, class: extra_classes})
           else
             content_tag(:span, label)
           end
