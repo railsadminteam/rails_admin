@@ -80,7 +80,7 @@ module RailsAdmin
 
         # Target window [_self, _blank]
         register_instance_option :target_window do
-          :_self
+          nil
         end
 
         # This block is evaluated in the context of the controller when action is called
