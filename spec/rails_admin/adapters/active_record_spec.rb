@@ -16,6 +16,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       '(LOWER(field) LIKE ?)'
     end
   end
+  let(:not_like) do
+    if ['postgresql', 'postgis'].include? activerecord_config[:adapter]
+      '(field NOT ILIKE ?)'
+    else
+      '(LOWER(field) NOT LIKE ?)'
+    end
+  end
 
   def predicates_for(scope)
     scope.where_clause.instance_variable_get(:@predicates)
@@ -274,6 +281,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(build_statement(:string, 'foo', 'was')).to be_nil
         expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
         expect(build_statement(:string, 'foo', 'like')).to eq([like, '%foo%'])
+        expect(build_statement(:string, 'foo', 'not_like')).to eq([not_like, '%foo%'])
         expect(build_statement(:string, 'foo', 'starts_with')).to eq([like, 'foo%'])
         expect(build_statement(:string, 'foo', 'ends_with')).to eq([like, '%foo'])
         expect(build_statement(:string, 'foo', 'is')).to eq(['(field = ?)', 'foo'])
