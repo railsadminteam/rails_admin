@@ -50,7 +50,7 @@ module RailsAdmin
             end
 
             def resource_url(_thumb = false)
-              raise('not implemented')
+              raise 'not implemented'
             end
           end
 
