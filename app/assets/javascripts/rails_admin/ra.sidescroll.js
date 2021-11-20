@@ -1,7 +1,7 @@
 (function ($) {
   "use strict";
 
-  document.addEventListener("rails_admin.dom_ready",  () => {
+  document.addEventListener("rails_admin.dom_ready", () => {
     const listForm = document.getElementById("bulk_form");
     if (!listForm || !listForm.classList.contains("ra-sidescroll")) {
       return;
