@@ -14,8 +14,8 @@
 
 /***  Libraries  ***/
 
-@import "./aristo/jquery-ui-1.8.7.custom";
 @import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
+@import "./filtering-select";
 @import "./filtering-multiselect";
 @import "./widgets";
 @import "./sidescroll";

@@ -69,7 +69,7 @@ import I18n from "./i18n";
         this.element.attr("id")
       );
       this.wrapper.insertAfter(this.element);
-      var header = $('<div class="ra-multiselect-header ui-helper-clearfix">');
+      var header = $('<div class="ra-multiselect-header">');
       this.filter = $(
         '<input type="search" placeholder="' +
           this.options.regional.search +
@@ -93,7 +93,7 @@ import I18n from "./i18n";
       this.collection = $('<select multiple="multiple"></select>');
       this.collection.addClass("form-control ra-multiselect-collection");
       this.addAll = $(
-        '<a href="#" class="ra-multiselect-item-add-all"><span class="ui-icon ui-icon-circle-triangle-e"></span>' +
+        '<a href="#" class="ra-multiselect-item-add-all"><span class="fas fa-chevron-circle-right"></span>' +
           this.options.regional.chooseAll +
           "</a>"
       );
@@ -101,27 +101,23 @@ import I18n from "./i18n";
       this.collection.wrap('<div class="wrapper"/>');
 
       this.add = $(
-        '<a href="#" class="ui-icon ui-icon-circle-triangle-e ra-multiselect-item-add">' +
-          this.options.regional.add +
-          "</a>"
-      );
+        '<a href="#" class="fas fa-chevron-circle-right ra-multiselect-item-add"></a>'
+      ).attr("title", this.options.regional.add);
       columns.center.append(this.add);
       if (this.options.removable) {
         this.remove = $(
-          '<a href="#" class="ui-icon ui-icon-circle-triangle-w ra-multiselect-item-remove">' +
-            this.options.regional.remove +
-            "</a>"
-        );
+          '<a href="#" class="fas fa-chevron-circle-left ra-multiselect-item-remove"></a>'
+        ).attr("title", this.options.regional.remove);
         columns.center.append(this.remove);
       }
       if (this.options.sortable) {
         this.up = $(
-          '<a href="#" class="ui-icon ui-icon-circle-triangle-n ra-multiselect-item-up">' +
+          '<a href="#" class="fas fa-chevron-circle-up ra-multiselect-item-up">' +
             this.options.regional.up +
             "</a>"
         );
         this.down = $(
-          '<a href="#" class="ui-icon ui-icon-circle-triangle-s ra-multiselect-item-down">' +
+          '<a href="#" class="fas fa-chevron-circle-down ra-multiselect-item-down">' +
             this.options.regional.down +
             "</a>"
         );
@@ -134,7 +130,7 @@ import I18n from "./i18n";
       columns.right.append(this.selection);
       if (this.options.removable) {
         this.removeAll = $(
-          '<a href="#" class="ra-multiselect-item-remove-all"><span class="ui-icon ui-icon-circle-triangle-w"></span>' +
+          '<a href="#" class="ra-multiselect-item-remove-all"><span class="fas fa-chevron-circle-left"></span>' +
             this.options.regional.clearAll +
             "</a>"
         );

@@ -34,53 +34,20 @@
     width: 30px;
     padding-top: 15px;
     text-align: center;
-    .ui-icon {
+    .fas {
       margin: 5px auto;
     }
   }
 
-  span.ui-icon {
+  span.fas,
+  a.fas {
+    color: #aaa;
+    font-size: 16px;
     margin-right: 4px;
-  }
-  .ui-icon {
-    cursor: pointer;
-    display: inline-block;
-    vertical-align: top;
-    &.ui-icon-circle-triangle-e {
-      background-position: -16px -32px !important;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/icon_sprite.png");
-    }
-    &.ui-icon-circle-triangle-e:hover {
-      background-position: -16px -48px !important;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/icon_sprite.png");
-    }
-    &.ui-icon-circle-triangle-w {
-      background-position: 0px -32px !important;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/icon_sprite.png");
-    }
-    &.ui-icon-circle-triangle-w:hover {
-      background-position: 0px -48px !important;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/icon_sprite.png");
-    }
-    &.ui-icon-circle-triangle-n {
-      background-position: 0px 0px !important;
-      margin-left: 1px;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/ui-icon-circle-triangle-n-light.png");
-    }
-    &.ui-icon-circle-triangle-n:hover {
-      background-position: 0px 0px !important;
-      margin-left: 1px;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/ui-icon-circle-triangle-n-dark.png");
-    }
-    &.ui-icon-circle-triangle-s {
-      background-position: 0px 0px !important;
-      margin-left: 1px;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/ui-icon-circle-triangle-s-light.png");
-    }
-    &.ui-icon-circle-triangle-s:hover {
-      background-position: 0px 0px !important;
-      margin-left: 1px;
-      background-image: url("~rails_admin/src/rails_admin/images/multiselect/ui-icon-circle-triangle-s-dark.png");
+    text-decoration: none;
+
+    &:hover {
+      color: $gray;
     }
   }
 }
