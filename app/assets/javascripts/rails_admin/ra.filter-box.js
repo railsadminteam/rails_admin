@@ -164,6 +164,7 @@
               )
             );
           break;
+        case "citext":
         case "string":
         case "text":
         case "belongs_to_association":
@@ -179,6 +180,13 @@
               )
                 .prop("selected", field_operator == "like")
                 .text(RailsAdmin.I18n.t("contains"))
+            )
+            .append(
+              $(
+                '<option data-additional-fieldset="additional-fieldset" value="not_like"></option>'
+              )
+                .prop("selected", field_operator == "not_like")
+                .text(RailsAdmin.I18n.t("does_not_contain"))
             )
             .append(
               $(

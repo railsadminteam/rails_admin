@@ -220,7 +220,7 @@ module RailsAdmin
           case @type
           when :boolean                   then build_statement_for_boolean
           when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-          when :string, :text             then build_statement_for_string_or_text
+          when :string, :text, :citext    then build_statement_for_string_or_text
           when :enum                      then build_statement_for_enum
           when :belongs_to_association    then build_statement_for_belongs_to_association
           when :uuid                      then build_statement_for_uuid
@@ -252,7 +252,7 @@ module RailsAdmin
 
           @value = begin
             case @operator
-            when 'default', 'like'
+            when 'default', 'like', 'not_like'
               "%#{@value}%"
             when 'starts_with'
               "#{@value}%"
@@ -264,7 +264,13 @@ module RailsAdmin
           end
 
           if ['postgresql', 'postgis'].include? ar_adapter
-            ["(#{@column} ILIKE ?)", @value]
+            if @operator == 'not_like'
+              ["(#{@column} NOT ILIKE ?)", @value]
+            else
+              ["(#{@column} ILIKE ?)", @value]
+            end
+          elsif @operator == 'not_like'
+            ["(LOWER(#{@column}) NOT LIKE ?)", @value]
           else
             ["(LOWER(#{@column}) LIKE ?)", @value]
           end
