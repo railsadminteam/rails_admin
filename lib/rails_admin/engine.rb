@@ -1,5 +1,3 @@
-require 'jquery-rails'
-require 'jquery-ui-rails'
 require 'kaminari'
 require 'nested_form'
 require 'rack-pjax'
@@ -15,9 +13,12 @@ module RailsAdmin
     initializer 'RailsAdmin precompile hook', group: :all do |app|
       if app.config.respond_to?(:assets)
         app.config.assets.precompile += %w[
-          rails_admin/rails_admin.js
-          rails_admin/rails_admin.css
+          rails_admin.js
+          rails_admin.css
         ]
+        app.config.assets.paths << RailsAdmin::Engine.root.join('src')
+        require 'rails_admin/support/esmodule_preprocessor'
+        Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
       end
     end
 

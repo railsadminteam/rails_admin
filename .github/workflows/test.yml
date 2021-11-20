@@ -12,18 +12,18 @@ jobs:
         gemfile: [gemfiles/rails_6.1.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
-        asset: [webpacker]
+        asset: [sprockets]
         include:
           - ruby: 2.5
             gemfile: gemfiles/rails_6.0.gemfile
             orm: active_record
             adapter: sqlite3
-            asset: webpacker
+            asset: sprockets
           - ruby: 3.0
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: mysql2
-            asset: webpacker
+            asset: sprockets
           - ruby: 3.0
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
@@ -34,21 +34,26 @@ jobs:
             orm: active_record
             adapter: sqlite3
             asset: webpacker
+          - ruby: 3.0
+            gemfile: gemfiles/rails_7.0.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: sprockets
           - ruby: 2.7
             gemfile: gemfiles/rails_6.0.gemfile
             orm: mongoid
             adapter: sqlite3
-            asset: webpacker
+            asset: sprockets
           - ruby: 3.0
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3
-            asset: webpacker
+            asset: sprockets
           - ruby: jruby
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3
-            asset: webpacker
+            asset: sprockets
     runs-on: ubuntu-latest
     services:
       mysql:

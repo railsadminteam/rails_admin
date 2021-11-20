@@ -33,7 +33,7 @@ RSpec.describe RailsAdmin, type: :request do
     it 'loads stylesheets in header' do
       case RailsAdmin.config.asset_source
       when :sprockets
-        is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
+        is_expected.to have_selector('head link[href^="/assets/rails_admin"][href$=".css"]', visible: false)
       when :webpacker
         is_expected.to have_no_selector('head link[href~="rails_admin"][href$=".css"]', visible: false)
       end
@@ -42,7 +42,7 @@ RSpec.describe RailsAdmin, type: :request do
     it 'loads javascript files in body' do
       case RailsAdmin.config.asset_source
       when :sprockets
-        is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin"][src$=".js"]', visible: false)
+        is_expected.to have_selector('head script[src^="/assets/rails_admin"][src$=".js"]', visible: false)
       when :webpacker
         is_expected.to have_selector('head script[src^="/packs-test/js/rails_admin"][src$=".js"]', visible: false)
       end

@@ -40,7 +40,6 @@ gem 'webrick', '~> 1.7'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'coffee-rails', '~> 4.0'
   gem 'sassc-rails', '~> 2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
