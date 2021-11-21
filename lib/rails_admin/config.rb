@@ -221,7 +221,7 @@ module RailsAdmin
         if %w(default like not_like starts_with ends_with is =).include? operator
           @default_search_operator = operator
         else
-          raise(ArgumentError.new("Search operator '#{operator}' not supported"))
+          raise ArgumentError.new("Search operator '#{operator}' not supported")
         end
       end
 

@@ -30,7 +30,7 @@ module RailsAdmin
           when :has_and_belongs_to_many, :references_and_referenced_in_many
             :has_and_belongs_to_many
           else
-            raise("Unknown association type: #{macro.inspect}")
+            raise "Unknown association type: #{macro.inspect}"
           end
         end
 

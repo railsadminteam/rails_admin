@@ -66,7 +66,7 @@ module RailsAdmin
 
           # virtual class
           def resource_url
-            raise('not implemented')
+            raise 'not implemented'
           end
 
           def virtual?
