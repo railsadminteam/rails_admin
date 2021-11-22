@@ -302,7 +302,6 @@ Style/IdenticalConditionalBranches:
 # Cop supports --auto-correct.
 Style/IfUnlessModifier:
   Exclude:
-    - "config/initializers/haml.rb"
     - "lib/rails_admin/adapters/active_record.rb"
     - "lib/rails_admin/adapters/mongoid.rb"
     - "lib/rails_admin/bootstrap-sass.rb"
