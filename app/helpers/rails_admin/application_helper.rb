@@ -73,9 +73,9 @@ module RailsAdmin
 
         if RailsAdmin::Config.collapsible_sidebar
           collapse_id = navigation_label.parameterize.underscore rescue 'root-menu'
-          %(<li data-menu-label-id='#{collapse_id}' data-menu-label='#{label}' class='dropdown-header bg-info' style="cursor:pointer;" data-toggle=\"collapse\" href="##{collapse_id}">#{capitalize_first_letter label} -</li><div id='#{collapse_id}' class="ra-menu-collapse collapse in"><ul class="nav nav-pills nav-stacked">#{li_stack}</ul></div>) if li_stack.present?
-        else
-          %(<li class='dropdown-header'>#{label}</li>#{li_stack}) if li_stack.present?
+          %(<li data-menu-label-id='#{collapse_id}' data-menu-label='#{label}' class='dropdown-header bg-info' style="cursor:pointer;" data-toggle=\"collapse\" href="##{collapse_id}">#{label} -</li><div id='#{collapse_id}' class="ra-menu-collapse collapse in"><ul class="nav nav-pills nav-stacked">#{li_stack}</ul></div>) if li_stack.present?
+        elsif li_stack.present?
+          %(<li class='dropdown-header'>#{label}</li>#{li_stack})
         end
       end.join.html_safe
     end
