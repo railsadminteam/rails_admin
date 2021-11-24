@@ -23,11 +23,17 @@ module RailsAdmin
         end
 
         def username
-          @user_class.find(@version.whodunnit).try(:email) rescue nil || @version.whodunnit
+          (@user_class.find(@version.whodunnit).try(:email) rescue nil) || @version.whodunnit
         end
 
         def item
           @version.item_id
+        end
+      end
+
+      module ControllerExtension
+        def user_for_paper_trail
+          _current_user.try(:id) || _current_user
         end
       end
 
@@ -51,17 +57,13 @@ module RailsAdmin
         EOS
 
         def self.setup
-          raise('PaperTrail not found') unless defined?(::PaperTrail)
-          RailsAdmin::ApplicationController.class_eval do
-            def user_for_paper_trail
-              _current_user.try(:id) || _current_user
-            end
-          end
+          raise 'PaperTrail not found' unless defined?(::PaperTrail)
+          RailsAdmin::Extensions::ControllerExtension.send(:include, ControllerExtension)
         end
 
         def initialize(controller, user_class = 'User', version_class = '::Version')
           @controller = controller
-          @controller.send(:set_paper_trail_whodunnit) if @controller
+          @controller&.send(:set_paper_trail_whodunnit)
           begin
             @user_class = user_class.to_s.constantize
           rescue NameError
@@ -114,7 +116,7 @@ module RailsAdmin
 
           current_page = page.presence || '1'
 
-          versions = object.nil? ? versions_for_model(model) : object.versions
+          versions = object.nil? ? versions_for_model(model) : object.public_send(model.model.versions_association_name)
           versions = versions.where('event LIKE ?', "%#{query}%") if query.present?
           versions = versions.order(sort_reverse == 'true' ? "#{sort} DESC" : sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, current_page).per(per_page)
@@ -147,10 +149,10 @@ module RailsAdmin
         # classes](https://github.com/paper-trail-gem/paper_trail#6a-custom-version-classes)
         #
         # ```ruby
-        # has_paper_trail class_name: 'MyVersion'
+        # has_paper_trail versions: { class_name: 'MyVersion' }
         # ```
         def version_class_for(model)
-          model.paper_trail_options[:class_name].try(:constantize) || @version_class
+          model.paper_trail_options.dig(:versions, :class_name).try(:constantize) || @version_class
         end
       end
     end

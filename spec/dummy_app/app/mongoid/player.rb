@@ -31,12 +31,4 @@ class Player
   scope :rails_admin_search, ->(query) { where(name: query.reverse) }
 
   def destroy_hook; end
-
-  def draft_id
-    draft.try :id
-  end
-
-  def draft_id=(id)
-    self.draft = Draft.where(_id: id).first
-  end
 end

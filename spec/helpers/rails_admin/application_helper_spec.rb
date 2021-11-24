@@ -148,7 +148,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         bc = helper.breadcrumb
         expect(bc).to match(/Dashboard/) # dashboard
         expect(bc).to match(/Teams/) # list
-        expect(bc).to match(/The avengers/) # show
+        expect(bc).to match(/the avengers/) # show
         expect(bc).to match(/Edit/) # current (edit)
       end
     end
@@ -259,7 +259,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(result).not_to match('Comments')
       end
 
-      it 'shows children of hidden models' do # https://github.com/sferik/rails_admin/issues/978
+      it 'shows children of hidden models' do # https://github.com/railsadminteam/rails_admin/issues/978
         RailsAdmin.config do |config|
           config.included_models = [Ball, Hardball]
           config.model Ball do
@@ -283,7 +283,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             navigation_label 'commentable'
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown\-header).*(Commentable).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(dropdown\-header).*(commentable).*(Comments)/m)
       end
 
       it 'nests in parent model' do
@@ -469,6 +469,21 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
         result = helper.edit_user_link
         expect(result).not_to include('gravatar')
+      end
+
+      context 'when the user is not authorized to perform edit' do
+        let(:user) { FactoryBot.create(:user) }
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
+          allow(helper).to receive(:_current_user).and_return(user)
+        end
+
+        it 'show gravatar and email without a link' do
+          result = helper.edit_user_link
+          expect(result).to include('gravatar')
+          expect(result).to include(user.email)
+          expect(result).not_to match('href')
+        end
       end
     end
   end

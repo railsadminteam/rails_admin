@@ -69,14 +69,15 @@ module RailsAdmin
         when :enum
           options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
         when :date, :datetime, :time
-          options[:datetimepicker_format] = field.parser.to_momentjs
+          options[:datetimepicker_format] = field.momentjs_format
         end
         options[:label] = field.label
         options[:name]  = field.name
         options[:type]  = field.type
         options[:value] = filter_hash['v']
         options[:label] = field.label
-        options[:operator] = filter_hash['o']
+        options[:operator] = filter_hash['o'] || field.default_filter_operator
+        options[:required] = field.required
         options
       end if ordered_filters
     end

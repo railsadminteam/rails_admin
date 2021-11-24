@@ -1,4 +1,4 @@
-require 'rails_admin/config/lazy_model'
+require 'rails_admin/config/model'
 require 'rails_admin/config/sections/list'
 require 'active_support/core_ext/module/attribute_accessors'
 
@@ -20,6 +20,10 @@ module RailsAdmin
 
     DEFAULT_CURRENT_USER = proc {}
 
+    # Variables to track initialization process
+    @initialized = false
+    @deferred_blocks = []
+
     class << self
       # Application title, can be an array of two elements
       attr_accessor :main_app_name
@@ -27,8 +31,8 @@ module RailsAdmin
       # Configuration option to specify which models you want to exclude.
       attr_accessor :excluded_models
 
-      # Configuration option to specify a whitelist of models you want to RailsAdmin to work with.
-      # The excluded_models list applies against the whitelist as well and further reduces the models
+      # Configuration option to specify a allowlist of models you want to RailsAdmin to work with.
+      # The excluded_models list applies against the allowlist as well and further reduces the models
       # RailsAdmin will use.
       # If included_models is left empty ([]), then RailsAdmin will automatically use all the models
       # in your application (less any excluded_models you may have specified).
@@ -66,7 +70,7 @@ module RailsAdmin
       attr_accessor :collapsible_sidebar
 
       # set parent controller
-      attr_accessor :parent_controller
+      attr_reader :parent_controller
 
       # set settings for `protect_from_forgery` method
       # By default, it raises exception upon invalid CSRF tokens
@@ -85,8 +89,21 @@ module RailsAdmin
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
 
-      # yell about fields that are not marked as accessible
-      attr_accessor :yell_for_non_accessible_fields
+      # Finish initialization by executing deferred configuration blocks
+      def initialize!
+        @deferred_blocks.each { |block| block.call(self) }
+        @deferred_blocks.clear
+        @initialized = true
+      end
+
+      # Evaluate the given block either immediately or lazily, based on initialization status.
+      def apply(&block)
+        if @initialized
+          block.call(self)
+        else
+          @deferred_blocks << block
+        end
+      end
 
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
@@ -116,7 +133,7 @@ module RailsAdmin
         @authenticate || DEFAULT_AUTHENTICATION
       end
 
-      # Setup auditing/history/versioning provider that observe objects lifecycle
+      # Setup auditing/versioning provider that observe objects lifecycle
       def audit_with(*args, &block)
         extension = args.shift
         if extension
@@ -151,7 +168,7 @@ module RailsAdmin
       #     config.authorize_with :cancancan
       #   end
       #
-      # See the wiki[https://github.com/sferik/rails_admin/wiki] for more on authorization.
+      # See the wiki[https://github.com/railsadminteam/rails_admin/wiki] for more on authorization.
       #
       # @see RailsAdmin::Config::DEFAULT_AUTHORIZE
       def authorize_with(*args, &block)
@@ -204,10 +221,10 @@ module RailsAdmin
       end
 
       def default_search_operator=(operator)
-        if %w(default like starts_with ends_with is =).include? operator
+        if %w(default like not_like starts_with ends_with is =).include? operator
           @default_search_operator = operator
         else
-          raise(ArgumentError.new("Search operator '#{operator}' not supported"))
+          raise ArgumentError.new("Search operator '#{operator}' not supported")
         end
       end
 
@@ -241,8 +258,8 @@ module RailsAdmin
           end
         end
 
-        @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
-        @registry[key].add_deferred_block(&block) if block
+        @registry[key] ||= RailsAdmin::Config::Model.new(entity)
+        @registry[key].instance_eval(&block) if block && @registry[key].abstract_model
         @registry[key]
       end
 
@@ -253,6 +270,14 @@ module RailsAdmin
           @default_hidden_fields[:show] = fields
         else
           @default_hidden_fields = fields
+        end
+      end
+
+      def parent_controller=(name)
+        @parent_controller = name
+        if defined?(RailsAdmin::ApplicationController)
+          RailsAdmin.send(:remove_const, :ApplicationController)
+          load RailsAdmin::Engine.root.join('app/controllers/rails_admin/application_controller.rb')
         end
       end
 
@@ -274,7 +299,6 @@ module RailsAdmin
       def reset
         @compact_show_view = true
         @browser_validations = true
-        @yell_for_non_accessible_fields = true
         @authenticate = nil
         @authorize = nil
         @audit = nil
@@ -300,6 +324,7 @@ module RailsAdmin
         @parent_controller = '::ActionController::Base'
         @forgery_protection_settings = {with: :exception}
         RailsAdmin::Config::Actions.reset
+        RailsAdmin::AbstractModel.reset
       end
 
       # Reset a provided model's configuration.
@@ -318,14 +343,21 @@ module RailsAdmin
         @registry = {}
       end
 
+      # Perform reset, then load RailsAdmin initializer again
+      def reload!
+        @initialized = false
+        reset
+        load RailsAdmin::Engine.config.initializer_path
+        initialize!
+      end
+
       # Get all models that are configured as visible sorted by their weight and label.
       #
       # @see RailsAdmin::Config::Hideable
-
       def visible_models(bindings)
         visible_models_with_bindings(bindings).sort do |a, b|
           if (weight_order = a.weight <=> b.weight) == 0
-            a.label.downcase <=> b.label.downcase
+            a.label.casecmp(b.label)
           else
             weight_order
           end
@@ -342,7 +374,7 @@ module RailsAdmin
         included_models.collect(&:to_s).presence || begin
           @@system_models ||= # memoization for tests
             ([Rails.application] + Rails::Engine.subclasses.collect(&:instance)).flat_map do |app|
-              (app.paths['app/models'].to_a + app.paths.eager_load).collect do |load_path|
+              (app.paths['app/models'].to_a + app.config.eager_load_paths).collect do |load_path|
                 Dir.glob(app.root.join(load_path)).collect do |load_dir|
                   Dir.glob(load_dir + '/**/*.rb').collect do |filename|
                     # app/models/module/class.rb => module/class.rb => module/class => Module::Class
@@ -350,7 +382,7 @@ module RailsAdmin
                   end
                 end
               end
-            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable MultilineBlockChain
+            end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable Style/MultilineBlockChain
         end
       end
 

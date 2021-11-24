@@ -1,7 +1,7 @@
 require 'mongoid'
 require 'rails_admin/config/sections/list'
-require 'rails_admin/adapters/mongoid/abstract_object'
 require 'rails_admin/adapters/mongoid/association'
+require 'rails_admin/adapters/mongoid/object_extension'
 require 'rails_admin/adapters/mongoid/property'
 require 'rails_admin/adapters/mongoid/bson'
 
@@ -15,11 +15,13 @@ module RailsAdmin
       end
 
       def new(params = {})
-        AbstractObject.new(model.new(params))
+        model.new(params).extend(ObjectExtension)
       end
 
       def get(id)
-        AbstractObject.new(model.find(id))
+        object = model.find(id)
+        return nil unless object
+        object.extend(ObjectExtension)
       rescue => e
         raise e if %w(
           Mongoid::Errors::DocumentNotFound
@@ -207,7 +209,7 @@ module RailsAdmin
         when String
           field_name, collection_name = options[:sort].split('.').reverse
           if collection_name && collection_name != table_name
-            raise('sorting by associated model column is not supported in Non-Relational databases')
+            raise 'sorting by associated model column is not supported in Non-Relational databases'
           end
         when Symbol
           field_name = options[:sort].to_s
@@ -258,6 +260,8 @@ module RailsAdmin
           return if @value.blank?
           @value = begin
             case @operator
+            when 'not_like'
+              Regexp.compile("^((?!#{Regexp.escape(@value)}).)*$", Regexp::IGNORECASE)
             when 'default', 'like'
               Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
             when 'starts_with'
@@ -283,7 +287,9 @@ module RailsAdmin
         end
 
         def range_filter(min, max)
-          if min && max
+          if min && max && min == max
+            {@column => min}
+          elsif min && max
             {@column => {'$gte' => min, '$lte' => max}}
           elsif min
             {@column => {'$gte' => min}}

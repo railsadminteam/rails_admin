@@ -8,7 +8,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :thumb_method do
-            {resize: '100x100>'}
+            {resize_to_limit: [100, 100]}
           end
 
           register_instance_option :delete_method do
@@ -17,8 +17,13 @@ module RailsAdmin
 
           register_instance_option :image? do
             if value
-              value.filename.to_s.split('.').last =~ /jpg|jpeg|png|gif|svg/i
+              mime_type = Mime::Type.lookup_by_extension(value.filename.extension_without_delimiter)
+              mime_type.to_s.match?(/^image/)
             end
+          end
+
+          register_instance_option :eager_load do
+            {"#{name}_attachment": :blob}
           end
 
           def resource_url(thumb = false)
@@ -36,7 +41,7 @@ module RailsAdmin
 
           def value
             attachment = super
-            attachment if attachment && attachment.attached?
+            attachment if attachment&.attached?
           end
         end
       end

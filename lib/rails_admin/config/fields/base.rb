@@ -7,7 +7,7 @@ require 'rails_admin/config/inspectable'
 module RailsAdmin
   module Config
     module Fields
-      class Base # rubocop:disable ClassLength
+      class Base # rubocop:disable Metrics/ClassLength
         include RailsAdmin::Config::Proxyable
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
@@ -93,17 +93,17 @@ module RailsAdmin
                   table_name, column = f.split '.'
                   type = nil
                 elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
-                  am = f.keys.first.is_a?(Class) && AbstractModel.new(f.keys.first)
-                  table_name = am && am.table_name || f.keys.first
+                  am = AbstractModel.new(f.keys.first) if f.keys.first.is_a?(Class)
+                  table_name = am&.table_name || f.keys.first
                   column = f.values.first
-                  property = am && am.properties.detect { |p| p.name == f.values.first.to_sym }
-                  type = property && property.type
+                  property = am&.properties&.detect { |p| p.name == f.values.first.to_sym }
+                  type = property&.type
                 else                                                             #  <attribute|column>
                   am = (association? ? associated_model_config.abstract_model : abstract_model)
                   table_name = am.table_name
                   column = f
                   property = am.properties.detect { |p| p.name == f.to_sym }
-                  type = property && property.type
+                  type = property&.type
                 end
                 {column: "#{table_name}.#{column}", type: (type || :string)}
               end
@@ -155,7 +155,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :length do
-          @length ||= properties && properties.length
+          @length ||= properties&.length
         end
 
         # Accessor for field's length restrictions per validations
@@ -193,7 +193,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :serial? do
-          properties && properties.serial?
+          properties&.serial?
         end
 
         register_instance_option :view_helper do
@@ -221,6 +221,27 @@ module RailsAdmin
         # columns mapped (belongs_to, paperclip, etc.). First one is used for searching/sorting by default
         register_instance_option :children_fields do
           []
+        end
+
+        register_instance_option :default_filter_operator do
+          nil
+        end
+
+        register_instance_option :eager_load do
+          false
+        end
+
+        register_deprecated_instance_option :eager_load?, :eager_load
+
+        def eager_load_values
+          case eager_load
+          when true
+            [name]
+          when false, nil
+            []
+          else
+            Array.wrap(eager_load)
+          end
         end
 
         register_instance_option :render do

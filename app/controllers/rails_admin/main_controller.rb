@@ -30,7 +30,7 @@ module RailsAdmin
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
       scope = model_config.abstract_model.scoped
-      if auth_scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
+      if auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
         scope = scope.merge(auth_scope)
       end
       scope = scope.instance_eval(&additional_scope) if additional_scope
@@ -110,7 +110,7 @@ module RailsAdmin
 
       respond_to do |format|
         format.html { render whereto, status: :not_acceptable }
-        format.js   { render whereto, layout: false, status: :not_acceptable }
+        format.js   { render whereto, layout: 'rails_admin/modal', status: :not_acceptable, content_type: Mime[:html].to_s }
       end
     end
 
@@ -120,10 +120,10 @@ module RailsAdmin
     end
 
     def get_collection(model_config, scope, pagination)
-      associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
+      eager_loads = model_config.list.fields.flat_map(&:eager_load_values)
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
-      options = options.merge(include: associations) unless associations.blank?
+      options = options.merge(include: eager_loads) unless eager_loads.blank?
       options = options.merge(get_sort_hash(model_config))
       options = options.merge(query: params[:query]) if params[:query].present?
       options = options.merge(filters: params[:f]) if params[:f].present?

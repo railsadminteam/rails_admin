@@ -1,0 +1,2 @@
+class Basketball < Ball
+end

@@ -30,7 +30,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-share'
+          'fas fa-file-export'
         end
       end
     end

@@ -19,7 +19,7 @@ module RailsAdmin
       def new(m)
         m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
-      rescue LoadError, NameError
+      rescue *([LoadError, NameError] + (defined?(ActiveRecord) ? ['ActiveRecord::NoDatabaseError'.constantize] : []))
         puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
       end
@@ -139,14 +139,14 @@ module RailsAdmin
           case @type
           when :date
             build_statement_for_date
-          when :datetime, :timestamp
+          when :datetime, :timestamp, :time
             build_statement_for_datetime_or_timestamp
           end
         end
       end
 
       def build_statement_for_type
-        raise('You must override build_statement_for_type in your StatementBuilder')
+        raise 'You must override build_statement_for_type in your StatementBuilder'
       end
 
       def build_statement_for_integer_decimal_or_float
@@ -178,17 +178,17 @@ module RailsAdmin
 
       def build_statement_for_datetime_or_timestamp
         start_date, end_date = get_filtering_duration
-        start_date = start_date.to_time.try(:beginning_of_day) if start_date
-        end_date = end_date.to_time.try(:end_of_day) if end_date
+        start_date = start_date.beginning_of_day if start_date.is_a?(Date)
+        end_date = end_date.end_of_day if end_date.is_a?(Date)
         range_filter(start_date, end_date)
       end
 
       def unary_operators
-        raise('You must override unary_operators in your StatementBuilder')
+        raise 'You must override unary_operators in your StatementBuilder'
       end
 
       def range_filter(_min, _max)
-        raise('You must override range_filter in your StatementBuilder')
+        raise 'You must override range_filter in your StatementBuilder'
       end
 
       class FilteringDuration

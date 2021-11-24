@@ -31,6 +31,7 @@ class FieldTest
   field :time_field, type: Time
 
   field :format, type: String
+  field :open, type: Boolean
   field :restricted_field, type: String
   field :protected_field, type: String
   has_mongoid_attached_file :paperclip_asset, styles: {thumb: '100x100>'}

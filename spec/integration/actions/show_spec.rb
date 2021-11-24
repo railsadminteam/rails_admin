@@ -76,6 +76,26 @@ RSpec.describe 'Show action', type: :request do
     end
   end
 
+  context 'when compact_show_view is disabled' do
+    before do
+      RailsAdmin.config do |c|
+        c.compact_show_view = false
+      end
+    end
+
+    it 'shows nil fields' do
+      team.update logo_url: nil
+      visit show_path(model_name: 'team', id: team.id)
+      is_expected.to have_css('.logo_url_field')
+    end
+
+    it 'shows blank fields' do
+      team.update logo_url: ''
+      visit show_path(model_name: 'team', id: team.id)
+      is_expected.to have_css('.logo_url_field')
+    end
+  end
+
   describe 'bindings' do
     it 'should be present' do
       RailsAdmin.config Team do |_c|
@@ -346,11 +366,11 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
+      ['Name', 'Logo url', 'Manager', 'Ballpark', 'Mascot'].each do |text|
         is_expected.not_to have_selector('.label', text: text)
       end
 
-      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
+      ['Division', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Players', 'Fans'].each do |text|
         is_expected.to have_selector('.label', text: text)
       end
     end
@@ -366,11 +386,11 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
+      ['Name', 'Logo url', 'Manager', 'Ballpark', 'Mascot'].each do |text|
         is_expected.not_to have_selector('.label', text: text)
       end
 
-      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
+      ['Division', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Players', 'Fans'].each do |text|
         is_expected.to have_selector('.label', text: text)
       end
     end

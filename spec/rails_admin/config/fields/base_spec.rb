@@ -84,9 +84,9 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
           column :league_id, :integer
           column :division_id, :integer, nil, false
           column :player_id, :integer
-          belongs_to :league
-          belongs_to :division
-          belongs_to :player
+          belongs_to :league, optional: true
+          belongs_to :division, optional: true
+          belongs_to :player, optional: true
           validates_numericality_of(:player_id, only_integer: true)
         end
         @fields = RailsAdmin.config(RelTest).create.fields
@@ -554,6 +554,54 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
       end
 
       expect(RailsAdmin.config(Team).field(:name).allowed_methods).to eq [:name]
+    end
+  end
+
+  describe '#default_filter_operator' do
+    it 'has a default and be user customizable' do
+      RailsAdmin.config Team do
+        list do
+          field :division
+          field :name do
+            default_filter_operator 'is'
+          end
+        end
+      end
+      name_field = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :name }
+      expect(name_field.default_filter_operator).to eq('is') # custom via user specification
+      division_field = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }
+      expect(division_field.default_filter_operator).to be nil # rails_admin generic fallback
+    end
+  end
+
+  describe '#eager_load' do
+    let(:field) { RailsAdmin.config('Team').fields.detect { |f| f.name == :players } }
+
+    it 'can be set to true' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load true
+        end
+      end
+      expect(field.eager_load_values).to eq [:players]
+    end
+
+    it 'can be set to false' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load false
+        end
+      end
+      expect(field.eager_load_values).to eq []
+    end
+
+    it 'can be set to a custom value' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load [{players: :draft}, :fans]
+        end
+      end
+      expect(field.eager_load_values).to eq [{players: :draft}, :fans]
     end
   end
 end

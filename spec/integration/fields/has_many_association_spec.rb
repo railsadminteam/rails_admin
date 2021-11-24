@@ -43,24 +43,17 @@ RSpec.describe 'HasManyAssociation field', type: :request do
 
   context 'on update' do
     it 'is fillable and emptyable', active_record: true do
-      RailsAdmin.config do |c|
-        c.audit_with :history
-      end
-
       @league = FactoryBot.create :league
       @divisions = Array.new(3) { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
 
       put edit_path(model_name: 'league', id: @league.id, league: {name: 'National League', division_ids: [@divisions[0].id]})
 
-      old_name = @league.name
       @league.reload
       expect(@league.name).to eq('National League')
       @divisions[0].reload
       expect(@league.divisions).to include(@divisions[0])
       expect(@league.divisions).not_to include(@divisions[1])
       expect(@league.divisions).not_to include(@divisions[2])
-
-      expect(RailsAdmin::History.where(item: @league.id).collect(&:message)).to include("name: \"#{old_name}\" -> \"National League\"")
 
       put edit_path(model_name: 'league', id: @league.id, league: {division_ids: ['']})
 
@@ -108,107 +101,6 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         visit index_path(model_name: 'field_test')
         is_expected.not_to have_link('embed 0')
         is_expected.not_to have_link('embed 1')
-      end
-    end
-  end
-
-  describe 'nested form' do
-    it 'works', js: true do
-      @record = FactoryBot.create :field_test
-      NestedFieldTest.create! title: 'title 1', field_test: @record
-      NestedFieldTest.create! title: 'title 2', field_test: @record
-      visit edit_path(model_name: 'field_test', id: @record.id)
-
-      fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
-      find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
-
-      # trigger click via JS, workaround for instability in CI
-      execute_script %($('button[name="_save"]').trigger('click');)
-      is_expected.to have_content('Field test successfully updated')
-
-      @record.reload
-      expect(@record.nested_field_tests.length).to eq(1)
-      expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
-    end
-
-    it 'supports adding new nested item', js: true do
-      @record = FactoryBot.create :field_test
-      visit edit_path(model_name: 'field_test', id: @record.id)
-
-      find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
-
-      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
-    end
-
-    it 'sets bindings[:object] to nested object' do
-      RailsAdmin.config(NestedFieldTest) do
-        nested do
-          field :title do
-            label do
-              bindings[:object].class.name
-            end
-          end
-        end
-      end
-      @record = FieldTest.create
-      NestedFieldTest.create! title: 'title 1', field_test: @record
-      visit edit_path(model_name: 'field_test', id: @record.id)
-      expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
-    end
-
-    it 'is deactivatable' do
-      visit new_path(model_name: 'field_test')
-      is_expected.to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
-      RailsAdmin.config(FieldTest) do
-        configure :nested_field_tests do
-          nested_form false
-        end
-      end
-      visit new_path(model_name: 'field_test')
-      is_expected.to have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
-    end
-
-    context 'with nested_attributes_options given' do
-      before do
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
-          and_return(allow_destroy: true, update_only: false)
-      end
-
-      it 'does not show add button when :update_only is true' do
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return(allow_destroy: true, update_only: true)
-        visit new_path(model_name: 'field_test')
-        is_expected.to have_selector('.toggler')
-        is_expected.not_to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
-      end
-
-      it 'does not show destroy button except for newly created when :allow_destroy is false' do
-        @record = FieldTest.create
-        NestedFieldTest.create! title: 'nested title 1', field_test: @record
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return(allow_destroy: false, update_only: false)
-        visit edit_path(model_name: 'field_test', id: @record.id)
-        expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
-        is_expected.not_to have_selector('form .remove_nested_fields')
-        expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-          /<a[^>]* class="remove_nested_fields"[^>]*>/,
-        )
-      end
-    end
-
-    context "when a field which have the same name of nested_in field's" do
-      it "does not hide fields which are not associated with nesting parent field's model" do
-        visit new_path(model_name: 'field_test')
-        is_expected.not_to have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-        expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-          /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/,
-        )
-      end
-
-      it 'hides fields that are deeply nested with inverse_of' do
-        visit new_path(model_name: 'field_test')
-        expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
-        expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
       end
     end
   end

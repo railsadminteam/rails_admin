@@ -1,31 +1,27 @@
-(function($) {
-  function setFrozenColPositions() {
-    var $listForm, frozenColumns;
+"use strict";
 
-    $listForm = $('#bulk_form');
-    if (!$listForm.is('.ra-sidescroll')) {
+{
+  document.addEventListener("rails_admin.dom_ready", () => {
+    const listForm = document.getElementById("bulk_form");
+    if (!listForm || !listForm.classList.contains("ra-sidescroll")) {
       return;
     }
-    frozenColumns = $listForm.data('ra-sidescroll');
 
-    $listForm.find('table tr').each(function(index, tr) {
-      var firstPosition  = 0;
-
-      $(tr).children().slice(0, frozenColumns).each(function(idx, td) {
-        var tdLeft;
-        $(td).addClass('ra-sidescroll-frozen');
-        if (idx === frozenColumns - 1) {
-          $(td).addClass('last-of-frozen');
-        }
-        tdLeft = $(td).position().left;
-        if (idx === 0) {
-          firstPosition = tdLeft;
-        }
-        td.style.left = (tdLeft - firstPosition) + "px";
-      });
+    const frozenColumns = Number(listForm.dataset.raSidescroll);
+    listForm.querySelectorAll("tr").forEach((tr, index) => {
+      let firstPosition;
+      Array.from(tr.children)
+        .slice(0, frozenColumns)
+        .forEach((td, idx) => {
+          td.classList.add("ra-sidescroll-frozen");
+          if (idx === frozenColumns - 1) {
+            td.classList.add("last-of-frozen");
+          }
+          if (idx === 0) {
+            firstPosition = td.offsetLeft;
+          }
+          td.style.left = `${td.offsetLeft - firstPosition}px`;
+        });
     });
-  };
-
-  $(window).on('load', setFrozenColPositions);
-  $(document).on('rails_admin.dom_ready', setFrozenColPositions);
-})(jQuery);
+  });
+}

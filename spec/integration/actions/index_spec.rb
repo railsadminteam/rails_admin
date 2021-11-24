@@ -22,7 +22,7 @@ RSpec.describe 'Index action', type: :request do
       # it "has the search box with some prompt text" do
       is_expected.to have_selector("input[placeholder='Filter']")
 
-      # https://github.com/sferik/rails_admin/issues/362
+      # https://github.com/railsadminteam/rails_admin/issues/362
       # test that no link uses the "wildcard route" with the main
       # controller and list method
       # it "does not use the 'wildcard route'" do
@@ -283,6 +283,12 @@ RSpec.describe 'Index action', type: :request do
     it 'displays base filters when no filters are present in the params' do
       RailsAdmin.config Player do
         list { filters([:name, :team]) }
+        field :name do
+          default_filter_operator 'is'
+        end
+        field :team do
+          filterable true
+        end
       end
       visit index_path(model_name: 'player')
 
@@ -293,7 +299,8 @@ RSpec.describe 'Index action', type: :request do
           name: 'name',
           type: 'string',
           value: '',
-          operator: nil,
+          operator: 'is',
+          required: true,
         },
         {
           index: 2,
@@ -302,6 +309,7 @@ RSpec.describe 'Index action', type: :request do
           type: 'belongs_to_association',
           value: '',
           operator: nil,
+          required: false,
         },
       ]
     end
@@ -624,6 +632,16 @@ RSpec.describe 'Index action', type: :request do
       @players = FactoryBot.create_list :player, 2, team: @team
       visit index_path(model_name: 'team')
       expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
+    end
+  end
+
+  context 'when no record exists' do
+    before do
+      visit index_path(model_name: 'player')
+    end
+
+    it "shows \"No records found\" message" do
+      is_expected.to have_content('No records found')
     end
   end
 

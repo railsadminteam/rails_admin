@@ -45,7 +45,7 @@ module RailsAdmin
             [children_fields]
           end
 
-          register_instance_option :eager_load? do
+          register_instance_option :eager_load do
             false
           end
 

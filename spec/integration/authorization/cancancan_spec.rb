@@ -135,7 +135,7 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
     it 'POST /admin/player/new with unauthorized attribute value should raise access denied' do
       visit new_path(model_name: 'player')
       fill_in 'player[name]', with: 'Jackie Robinson'
-      uncheck 'player[suspended]'
+      choose name: 'player[suspended]', option: '0'
       expect { click_button 'Save' }.to raise_error(CanCan::AccessDenied)
     end
 
@@ -173,7 +173,7 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
     it 'PUT /admin/player/new with unauthorized attribute value should raise access denied' do
       @player = FactoryBot.create :player
       visit edit_path(model_name: 'player', id: @player.id)
-      check 'player[retired]'
+      choose name: 'player[retired]', option: '1'
       expect { click_button 'Save' }.to raise_error(CanCan::AccessDenied)
     end
 

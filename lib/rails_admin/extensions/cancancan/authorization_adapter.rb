@@ -51,13 +51,13 @@ module RailsAdmin
         # records. It should return a hash of attributes which match what the user
         # is authorized to create.
         def attributes_for(action, abstract_model)
-          @controller.current_ability.attributes_for(action, abstract_model && abstract_model.model)
+          @controller.current_ability.attributes_for(action, abstract_model&.model)
         end
 
       private
 
         def resolve_action_and_subject(action, abstract_model, model_object)
-          subject = model_object || abstract_model && abstract_model.model
+          subject = model_object || abstract_model&.model
           if subject
             [action, subject]
           else

@@ -90,6 +90,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_blog_id
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -115,6 +116,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_post_ids
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -135,6 +137,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_category_ids
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -156,6 +159,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to eq :commentable_type
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :commentable_id
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_truthy
       expect(subject.inverse_of).to be_nil
@@ -177,6 +181,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_comment_ids
       expect(subject.as).to eq :commentable
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -202,6 +207,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_falsey
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -221,6 +227,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key).to be_nil
       expect(subject.foreign_key_nullable?).to be_falsey
       expect(subject.foreign_type).to be_nil
+      expect(subject.key_accessor).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil

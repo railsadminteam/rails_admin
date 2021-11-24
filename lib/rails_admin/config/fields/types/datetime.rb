@@ -8,25 +8,12 @@ module RailsAdmin
         class Datetime < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types.register(self)
 
-          def parser
-            RailsAdmin::Support::Datetime.new(strftime_format)
-          end
-
           def parse_value(value)
-            parser.parse_string(value)
+            ::Time.zone.parse(value)
           end
 
           def parse_input(params)
             params[name] = parse_value(params[name]) if params[name]
-          end
-
-          def value
-            parent_value = super
-            if %w(DateTime Date Time).include?(parent_value.class.name)
-              parent_value.in_time_zone
-            else
-              parent_value
-            end
           end
 
           register_instance_option :date_format do
@@ -38,17 +25,19 @@ module RailsAdmin
           end
 
           register_instance_option :strftime_format do
-            begin
-              ::I18n.t(date_format, scope: i18n_scope, raise: true)
-            rescue ::I18n::ArgumentError
-              "%B %d, %Y %H:%M"
-            end
+            ::I18n.t(date_format, scope: i18n_scope, raise: true)
+          rescue ::I18n::ArgumentError
+            "%B %d, %Y %H:%M"
+          end
+
+          register_instance_option :momentjs_format do
+            RailsAdmin::Support::Datetime.to_momentjs(strftime_format)
           end
 
           register_instance_option :datepicker_options do
             {
               showTodayButton: true,
-              format: parser.to_momentjs,
+              format: momentjs_format,
             }
           end
 
@@ -63,6 +52,10 @@ module RailsAdmin
             true
           end
 
+          register_instance_option :queryable? do
+            false
+          end
+
           register_instance_option :formatted_value do
             if time = (value || default_value)
               ::I18n.l(time, format: strftime_format)
@@ -73,6 +66,10 @@ module RailsAdmin
 
           register_instance_option :partial do
             :form_datetime
+          end
+
+          def form_value
+            value&.in_time_zone&.strftime('%FT%T') || form_default_value
           end
         end
       end

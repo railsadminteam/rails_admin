@@ -17,8 +17,6 @@ module RailsAdmin
       app.config.assets.precompile += %w(
         rails_admin/rails_admin.js
         rails_admin/rails_admin.css
-        rails_admin/jquery.colorpicker.js
-        rails_admin/jquery.colorpicker.css
       )
     end
 
@@ -26,15 +24,23 @@ module RailsAdmin
       app.config.middleware.use Rack::Pjax
     end
 
-    initializer 'RailsAdmin reload config in development' do
-      if Rails.application.config.cache_classes
-        if defined?(ActiveSupport::Reloader)
-          ActiveSupport::Reloader.before_class_unload do
-            RailsAdmin::Config.reset_all_models
-          end
-          # else
-          # For Rails 4 not implemented
+    initializer 'RailsAdmin reload config in development' do |app|
+      config.initializer_path = app.root.join('config/initializers/rails_admin.rb')
+
+      unless Rails.application.config.cache_classes
+        ActiveSupport::Reloader.before_class_unload do
+          RailsAdmin::Config.reload!
         end
+
+        reloader = app.config.file_watcher.new([config.initializer_path], []) do
+          # Do nothing, ActiveSupport::Reloader will trigger class_unload! anyway
+        end
+
+        app.reloaders << reloader
+        app.reloader.to_run do
+          reloader.execute_if_updated { require_unload_lock! }
+        end
+        reloader.execute
       end
     end
 
@@ -54,15 +60,17 @@ module RailsAdmin
       unless missing.empty? && has_session_store
         configs = missing.map { |m| "config.middleware.use #{m}" }
         configs << "config.middleware.use #{app.config.session_store.try(:name) || 'ActionDispatch::Session::CookieStore'}, #{app.config.session_options}" unless has_session_store
-        raise <<-EOM
-Required middlewares for RailsAdmin are not added
-To fix this, add
+        raise <<~EOM
+          Required middlewares for RailsAdmin are not added
+          To fix this, add
 
-  #{configs.join("\n  ")}
+            #{configs.join("\n  ")}
 
-to config/application.rb.
+          to config/application.rb.
         EOM
       end
+
+      RailsAdmin::Config.initialize!
     end
   end
 end

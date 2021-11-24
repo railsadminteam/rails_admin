@@ -5,21 +5,21 @@ improve this project.
 
 [free-sw]: http://www.fsf.org/licensing/essays/free-sw.html
 
-Here are some ways *you* can contribute:
+Here are some ways _you_ can contribute:
 
-* by using alpha, beta, and prerelease versions
-* by triaging bug reports
-* by writing or editing documentation
-* by writing specifications
-* by writing code (**no patch is too small**: fix typos, add comments, clean up
+- by using alpha, beta, and prerelease versions
+- by triaging bug reports
+- by writing or editing documentation
+- by writing specifications
+- by writing code (**no patch is too small**: fix typos, add comments, clean up
   inconsistent whitespace)
-* by refactoring code
-* by fixing [issues][]
-* by reviewing patches
-* by suggesting new features
-* [financially][gittip]
+- by refactoring code
+- by fixing [issues][]
+- by reviewing patches
+- by suggesting new features
+- [financially][gittip]
 
-[issues]: https://github.com/sferik/rails_admin/issues
+[issues]: https://github.com/railsadminteam/rails_admin/issues
 [gittip]: https://www.gittip.com/sferik/
 
 ## Development
@@ -43,7 +43,7 @@ run what Rails versions.
 
 [appraisal]: https://github.com/thoughtbot/appraisal
 [gemfiles/ directory]: ./gemfiles
-[the Travis CI configuration]: ./.travis.yml
+[the travis ci configuration]: ./.travis.yml
 
 ## Getting Help
 
@@ -59,15 +59,16 @@ rails_admin, please [open an issue][issues], but check to make sure it hasn't
 already been submitted. When submitting a bug report, please include a
 [Gist][] that includes a stack trace and any details that may be
 necessary to reproduce the bug, including your gem version, Ruby
-version, and operating system.  Ideally, a bug report should include a
+version, and operating system. Ideally, a bug report should include a
 pull request with failing specs.
 
 [gist]: https://gist.github.com/
 [list]: http://groups.google.com/group/rails_admin
 
 ## Submitting a Pull Request
+
 1. [Fork the repository.][fork]
-2. [Create a topic branch.][branch]
+2. Create a branch.
 3. Add specs for your unimplemented feature or bug fix.
 4. Run `bundle exec rake spec`. If your specs pass, return to step 3.
 5. Implement your feature or bug fix.
@@ -78,5 +79,4 @@ pull request with failing specs.
 9. [Submit a pull request.][pr]
 
 [fork]: http://help.github.com/fork-a-repo/
-[branch]: http://learn.github.com/p/branching.html
 [pr]: http://help.github.com/send-pull-requests/

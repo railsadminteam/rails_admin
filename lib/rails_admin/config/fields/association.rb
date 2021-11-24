@@ -5,13 +5,13 @@ module RailsAdmin
   module Config
     module Fields
       class Association < RailsAdmin::Config::Fields::Base
-        def self.inherited(klass)
-          super(klass)
-        end
-
         # Reader for the association information hash
         def association
           @properties
+        end
+
+        def method_name
+          association.key_accessor
         end
 
         register_instance_option :pretty_value do
@@ -22,7 +22,7 @@ module RailsAdmin
             wording = associated.send(amc.object_label_method)
             can_see = !am.embedded? && (show_action = v.action(:show, am, associated))
             can_see ? v.link_to(wording, v.url_for(action: show_action.action_name, model_name: am.to_param, id: associated.id), class: 'pjax') : ERB::Util.html_escape(wording)
-          end.to_sentence.html_safe
+          end.to_sentence.html_safe.presence || '-'
         end
 
         # Accessor whether association is visible or not. By default
@@ -62,8 +62,16 @@ module RailsAdmin
           association.foreign_key_nullable?
         end
 
-        register_instance_option :eager_load? do
+        register_instance_option :eager_load do
           !!searchable
+        end
+
+        register_instance_option :inline_add do
+          true
+        end
+
+        register_instance_option :inline_edit do
+          true
         end
 
         # Reader for the association's child model's configuration
@@ -78,12 +86,7 @@ module RailsAdmin
 
         # Reader for associated primary key
         def associated_primary_key
-          @associated_primary_key ||= associated_model_config.abstract_model.primary_key
-        end
-
-        # Reader for the association's key
-        def foreign_key
-          association.foreign_key
+          association.primary_key
         end
 
         # Reader whether this is a polymorphic association

@@ -1,7 +1,4 @@
-require 'rails_admin/extensions/history/history'
 require 'rails_admin/adapters/active_record'
-
-DatabaseCleaner.strategy = :transaction
 
 ActiveRecord::Base.connection.data_sources.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
@@ -29,7 +26,7 @@ silence_stream(STDOUT) do
 end
 
 class Tableless < ActiveRecord::Base
-  class <<self
+  class << self
     def load_schema
       # do nothing
     end
@@ -39,14 +36,25 @@ class Tableless < ActiveRecord::Base
     end
 
     def column(name, sql_type = nil, default = nil, null = true)
-      define_attribute(name.to_s,
-                       connection.send(:lookup_cast_type, sql_type.to_s))
+      cast_type = connection.send(:lookup_cast_type, sql_type.to_s)
+      define_attribute(name.to_s, cast_type)
       columns <<
-        ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, connection.send(:lookup_cast_type, sql_type.to_s), sql_type.to_s, null)
+        if ActiveRecord.version > Gem::Version.new('6.0')
+          type_metadata = ActiveRecord::ConnectionAdapters::SqlTypeMetadata.new(
+            sql_type: sql_type.to_s,
+            type: cast_type.type,
+            limit: cast_type.limit,
+            precision: cast_type.precision,
+            scale: cast_type.scale,
+          )
+          ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, type_metadata, null)
+        else
+          ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, cast_type, sql_type.to_s, null)
+        end
     end
 
     def columns_hash
-      @columns_hash ||= Hash[columns.collect { |column| [column.name, column] }]
+      @columns_hash ||= columns.collect { |column| [column.name, column] }.to_h
     end
 
     def column_names
@@ -62,7 +70,7 @@ class Tableless < ActiveRecord::Base
 
     def attribute_types
       @attribute_types ||=
-        Hash[columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }]
+        columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }.to_h
     end
 
     def table_exists?
