@@ -26,6 +26,10 @@ Layout/LineLength:
   AllowURI: true
   Enabled: false
 
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+  SupportedTypes: [case, if]
+
 Layout/SpaceBeforeBrackets:
   Enabled: true
 

@@ -248,16 +248,17 @@ module RailsAdmin
 
           @value = @value.mb_chars.downcase unless %w[postgresql postgis].include? ar_adapter
 
-          @value = case @operator
-                   when 'default', 'like', 'not_like'
-                     "%#{@value}%"
-                   when 'starts_with'
-                     "#{@value}%"
-                   when 'ends_with'
-                     "%#{@value}"
-                   else
-                     return
-                   end
+          @value =
+            case @operator
+            when 'default', 'like', 'not_like'
+              "%#{@value}%"
+            when 'starts_with'
+              "#{@value}%"
+            when 'ends_with'
+              "%#{@value}"
+            else
+              return
+            end
 
           if %w[postgresql postgis].include? ar_adapter
             if @operator == 'not_like'

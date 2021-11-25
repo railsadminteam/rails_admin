@@ -243,16 +243,17 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def model(entity, &block)
-        key = case entity
-              when RailsAdmin::AbstractModel
-                entity.model.try(:name).try :to_sym
-              when Class
-                entity.name.to_sym
-              when String, Symbol
-                entity.to_sym
-              else
-                entity.class.name.to_sym
-              end
+        key =
+          case entity
+          when RailsAdmin::AbstractModel
+            entity.model.try(:name).try :to_sym
+          when Class
+            entity.name.to_sym
+          when String, Symbol
+            entity.to_sym
+          else
+            entity.class.name.to_sym
+          end
 
         @registry[key] ||= RailsAdmin::Config::Model.new(entity)
         @registry[key].instance_eval(&block) if block && @registry[key].abstract_model

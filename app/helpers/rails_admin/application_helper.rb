@@ -157,11 +157,12 @@ module RailsAdmin
         content_tag(:li, {class: li_class}.merge(only_icon ? {title: wording, rel: 'tooltip'} : {})) do
           label = content_tag(:i, '', {class: action.link_icon}) + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
           if action.enabled? || !only_icon
-            href = if action.enabled?
-                     rails_admin.url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))
-                   else
-                     'javascript:void(0)'
-                   end
+            href =
+              if action.enabled?
+                rails_admin.url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))
+              else
+                'javascript:void(0)'
+              end
             content_tag(:a, label, {href: href}.merge(action.pjax? ? {class: ['pjax']} : {}))
           else
             content_tag(:span, label)

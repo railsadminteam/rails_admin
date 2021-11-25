@@ -9,18 +9,19 @@ module RailsAdmin
           end
           scope ||= :all
           init_actions!
-          actions = case scope
-                    when :all
-                      @@actions
-                    when :root
-                      @@actions.select(&:root?)
-                    when :collection
-                      @@actions.select(&:collection?)
-                    when :bulkable
-                      @@actions.select(&:bulkable?)
-                    when :member
-                      @@actions.select(&:member?)
-                    end
+          actions =
+            case scope
+            when :all
+              @@actions
+            when :root
+              @@actions.select(&:root?)
+            when :collection
+              @@actions.select(&:collection?)
+            when :bulkable
+              @@actions.select(&:bulkable?)
+            when :member
+              @@actions.select(&:member?)
+            end
 
           actions = actions.collect { |action| action.with(bindings) }
           bindings[:controller] ? actions.select(&:visible?) : actions

@@ -30,14 +30,15 @@ module RailsAdmin
         @parent = nil
         @root = self
 
-        @abstract_model = case entity
-                          when RailsAdmin::AbstractModel
-                            entity
-                          when Class, String, Symbol
-                            RailsAdmin::AbstractModel.new(entity)
-                          else
-                            RailsAdmin::AbstractModel.new(entity.class)
-                          end
+        @abstract_model =
+          case entity
+          when RailsAdmin::AbstractModel
+            entity
+          when Class, String, Symbol
+            RailsAdmin::AbstractModel.new(entity)
+          else
+            RailsAdmin::AbstractModel.new(entity.class)
+          end
 
         @groups = [RailsAdmin::Config::Fields::Group.new(self, :default).tap { |g| g.label { I18n.translate('admin.form.basic_info') } }]
       end
@@ -87,9 +88,10 @@ module RailsAdmin
       end
 
       register_instance_option :navigation_label do
-        @navigation_label ||= if (parent_module = abstract_model.model.try(:module_parent) || abstract_model.model.try!(:parent)) != Object
-                                parent_module.to_s
-                              end
+        @navigation_label ||=
+          if (parent_module = abstract_model.model.try(:module_parent) || abstract_model.model.try!(:parent)) != Object
+            parent_module.to_s
+          end
       end
 
       register_instance_option :navigation_icon do
