@@ -27,7 +27,9 @@ module RailsAdmin
     initializer 'RailsAdmin reload config in development' do |app|
       config.initializer_path = app.root.join('config/initializers/rails_admin.rb')
 
-      unless Rails.application.config.cache_classes
+      if Rails.application.config.cache_classes
+        RailsAdmin::Config.initialize!
+      else
         ActiveSupport::Reloader.before_class_unload do
           RailsAdmin::Config.reload!
         end
