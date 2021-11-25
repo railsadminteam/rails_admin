@@ -35,7 +35,7 @@ Workaround: add `I18n.default_locale = :de` inside RailsAdmin's initializer (bef
 
 ### Asset pipeline
 
-The master branch currently targets Rails 3.1. Older branch with 3.0 compatibility is present, but is no longer maintained.
+The master branch currently targets Rails >= 6.0. `rails_admin@2.x.x` (see the [`2.x-stable` branch](https://github.com/railsadminteam/rails_admin/blob/2.x-stable/rails_admin.gemspec#L15)) targets Rails >= 5.0. Older Rails versions may work, but are not actively maintained.
 
 If you are updating from a Rails 3.0 application, you will no longer need to
 update your assets, they will be served from the engine (through Sprockets).
@@ -54,7 +54,7 @@ config.assets.initialize_on_precompile = false
 ```
 
 will reduce your compilation time and is recommended.
-Note that this is needed on **Heroku** if you set `compile = false` and don't versionate `public/assets`.
+Note that this is needed on **Heroku** if you set `compile = false` and don't version `public/assets`.
 More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
 
 Also, as of version 0.0.4, you have to add this to successfully precompile assets. This is also needed if you're deploying in **Heroku**.
