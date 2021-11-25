@@ -218,7 +218,7 @@ module RailsAdmin
       end
 
       def default_search_operator=(operator)
-        if %w(default like not_like starts_with ends_with is =).include? operator
+        if %w[default like not_like starts_with ends_with is =].include? operator
           @default_search_operator = operator
         else
           raise ArgumentError.new("Search operator '#{operator}' not supported")
@@ -243,17 +243,17 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def model(entity, &block)
-        key = begin
-          if entity.is_a?(RailsAdmin::AbstractModel)
+        key =
+          case entity
+          when RailsAdmin::AbstractModel
             entity.model.try(:name).try :to_sym
-          elsif entity.is_a?(Class)
+          when Class
             entity.name.to_sym
-          elsif entity.is_a?(String) || entity.is_a?(Symbol)
+          when String, Symbol
             entity.to_sym
           else
             entity.class.name.to_sym
           end
-        end
 
         @registry[key] ||= RailsAdmin::Config::Model.new(entity)
         @registry[key].instance_eval(&block) if block && @registry[key].abstract_model
@@ -302,8 +302,8 @@ module RailsAdmin
         @current_user = nil
         @default_hidden_fields = {}
         @default_hidden_fields[:base] = [:_type]
-        @default_hidden_fields[:edit] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
-        @default_hidden_fields[:show] = [:id, :_id, :created_at, :created_on, :deleted_at, :updated_at, :updated_on, :deleted_on]
+        @default_hidden_fields[:edit] = %i[id _id created_at created_on deleted_at updated_at updated_on deleted_on]
+        @default_hidden_fields[:show] = %i[id _id created_at created_on deleted_at updated_at updated_on deleted_on]
         @default_items_per_page = 20
         @default_associated_collection_limit = 100
         @default_search_operator = 'default'
@@ -311,7 +311,7 @@ module RailsAdmin
         @included_models = []
         @total_columns_width = 697
         @sidescroll = nil
-        @label_methods = [:name, :title]
+        @label_methods = %i[name title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
         @show_gravatar = true
@@ -372,7 +372,7 @@ module RailsAdmin
             ([Rails.application] + Rails::Engine.subclasses.collect(&:instance)).flat_map do |app|
               (app.paths['app/models'].to_a + app.config.eager_load_paths).collect do |load_path|
                 Dir.glob(app.root.join(load_path)).collect do |load_dir|
-                  Dir.glob(load_dir + '/**/*.rb').collect do |filename|
+                  Dir.glob("#{load_dir}/**/*.rb").collect do |filename|
                     # app/models/module/class.rb => module/class.rb => module/class => Module::Class
                     lchomp(filename, "#{app.root.join(load_dir)}/").chomp('.rb').camelize
                   end

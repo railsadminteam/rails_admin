@@ -4,7 +4,7 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
   subject { page }
 
   let(:field_test) { FactoryBot.create :field_test }
-  let(:nested_field_tests) { %w(1 2).map { |i| NestedFieldTest.create! title: "title #{i}", field_test: field_test } }
+  let(:nested_field_tests) { %w[1 2].map { |i| NestedFieldTest.create! title: "title #{i}", field_test: field_test } }
   before do
     RailsAdmin.config(FieldTest) do
       field :nested_field_tests

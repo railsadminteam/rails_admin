@@ -31,6 +31,7 @@ module RailsAdmin
 
         def primary_key
           return nil if polymorphic?
+
           case type
           when :has_one
             association.klass.primary_key
@@ -45,6 +46,7 @@ module RailsAdmin
 
         def foreign_key_nullable?
           return true if foreign_key.nil? || type != :has_many
+
           (column = klass.columns_hash[foreign_key.to_s]).nil? || column.null
         end
 

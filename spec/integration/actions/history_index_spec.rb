@@ -26,7 +26,7 @@ RSpec.describe 'HistoryIndex action', type: :request, active_record: true do
     is_expected.to have_css(%([href="/admin/paper_trail_test/#{paper_trail_test.id}"]), count: 20)
   end
 
-  it "supports pagination" do
+  it 'supports pagination' do
     visit history_index_path(model_name: 'paper_trail_test', page: 2)
     is_expected.to have_css(%([href="/admin/paper_trail_test/#{paper_trail_test.id}"]), count: 11)
   end

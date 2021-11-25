@@ -93,7 +93,7 @@ RSpec.describe 'Time field', type: :request, active_record: true do
       find('[name="field_test[time_field]"]', visible: false).set('2000-01-01T04:55:00')
       click_button 'Save'
       field_test.reload
-      expect(field_test.time_field.iso8601).to eq "2000-01-01T04:55:00-06:00"
+      expect(field_test.time_field.iso8601).to eq '2000-01-01T04:55:00-06:00'
     end
 
     it 'is not altered by just saving untouched' do

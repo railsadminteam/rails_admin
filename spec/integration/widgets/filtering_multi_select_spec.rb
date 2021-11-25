@@ -99,7 +99,7 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
     end
 
     describe 'Choose all button' do
-      it "does not pick the placeholder for selection" do
+      it 'does not pick the placeholder for selection' do
         click_link 'Choose all'
         expect(page).not_to have_css('#team_player_ids option', visible: false)
         expect(page).not_to have_css('.ra-multiselect-selection option')
@@ -117,7 +117,7 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
 
   it 'does not cause duplication when using browser back' do
     visit new_path(model_name: 'team')
-    find(%{[href$="/admin/team/export"]}).click
+    find(%([href$="/admin/team/export"])).click
     is_expected.to have_content 'Export Teams'
     page.go_back
     is_expected.to have_content 'New Team'

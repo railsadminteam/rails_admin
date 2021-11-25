@@ -12,9 +12,8 @@ module RailsAdmin
         include RailsAdmin::Config::Configurable
         include RailsAdmin::Config::Hideable
 
-        attr_reader :name, :abstract_model
+        attr_reader :name, :abstract_model, :parent, :root
         attr_accessor :section
-        attr_reader :parent, :root
 
         def initialize(parent, name)
           @parent = parent

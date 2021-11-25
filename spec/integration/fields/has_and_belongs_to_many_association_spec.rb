@@ -56,7 +56,7 @@ RSpec.describe 'HasAndBelongsToManyAssociation field', type: :request do
   context "with Mongoid's custom primary_key option", mongoid: true do
     let(:user) { FactoryBot.create :managing_user, players: [players[0]], balls: [balls[0]] }
     let!(:players) { FactoryBot.create_list(:player, 2) }
-    let!(:balls) { %w(red blue).map { |color| FactoryBot.create(:ball, color: color) } }
+    let!(:balls) { %w[red blue].map { |color| FactoryBot.create(:ball, color: color) } }
     before do
       RailsAdmin.config ManagingUser do
         field :players
@@ -64,7 +64,7 @@ RSpec.describe 'HasAndBelongsToManyAssociation field', type: :request do
       end
     end
 
-    it "allows update" do
+    it 'allows update' do
       visit edit_path(model_name: 'managing_user', id: user.id)
       expect(find("select#managing_user_player_names option[value=\"#{players[0].name}\"]")).to be_selected
       expect(find("select#managing_user_ball_ids option[value=\"#{balls[0].color}\"]")).to be_selected

@@ -12,10 +12,10 @@ RSpec.describe RailsAdmin::Engine do
     end
     after { Rails.application.config.cache_classes = true }
 
-    it "triggers RailsAdmin config to be reloaded" do
+    it 'triggers RailsAdmin config to be reloaded' do
       # this simulates rails code reloading
       RailsAdmin::Engine.initializers.select do |i|
-        i.name == "RailsAdmin reload config in development"
+        i.name == 'RailsAdmin reload config in development'
       end.first.block.call(Rails.application)
       Rails.application.executor.wrap do
         ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
@@ -24,7 +24,7 @@ RSpec.describe RailsAdmin::Engine do
       RailsAdmin.config(Player) do
         field :number
       end
-      expect(fields.map(&:name)).to match_array %i(number)
+      expect(fields.map(&:name)).to match_array %i[number]
     end
   end
 end

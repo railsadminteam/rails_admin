@@ -70,9 +70,9 @@ RSpec.describe RailsAdmin::Config do
 
     it 'can be configured' do
       RailsAdmin.config do |config|
-        config.main_app_name = %w(stati c value)
+        config.main_app_name = %w[stati c value]
       end
-      expect(RailsAdmin.config.main_app_name).to eq(%w(stati c value))
+      expect(RailsAdmin.config.main_app_name).to eq(%w[stati c value])
     end
   end
 
@@ -130,7 +130,9 @@ RSpec.describe RailsAdmin::Config do
         class ControllerMock
           def set_paper_trail_whodunnit; end
         end
+
         module PaperTrail; end
+
         class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, auditing: true)
       end
@@ -240,6 +242,7 @@ RSpec.describe RailsAdmin::Config do
         include Mongoid::Document
         recursively_embeds_one
       end
+
       class RecursivelyEmbedsMany
         include Mongoid::Document
         recursively_embeds_many
@@ -323,7 +326,7 @@ RSpec.describe RailsAdmin::Config do
         end
       end
       it 'execute all passed blocks' do
-        expect(fields.map(&:name)).to match_array %i(players fans)
+        expect(fields.map(&:name)).to match_array %i[players fans]
       end
     end
 
@@ -350,7 +353,7 @@ RSpec.describe RailsAdmin::Config do
   describe '.reset' do
     before do
       RailsAdmin.config do |config|
-        config.included_models = ['Player', 'Team']
+        config.included_models = %w[Player Team]
       end
       RailsAdmin::AbstractModel.all
       RailsAdmin::Config.reset
@@ -366,7 +369,7 @@ RSpec.describe RailsAdmin::Config do
     end
   end
 
-  describe ".apply" do
+  describe '.apply' do
     subject { RailsAdmin::Config.apply(&block) }
     let(:block) do
       proc do |config|
@@ -451,6 +454,8 @@ end
 
 module ExampleModule
   class AuthorizationAdapter; end
+
   class ConfigurationAdapter; end
+
   class AuditingAdapter; end
 end

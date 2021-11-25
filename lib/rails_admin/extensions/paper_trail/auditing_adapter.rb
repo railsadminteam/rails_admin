@@ -11,7 +11,7 @@ module RailsAdmin
 
         def message
           @message = @version.event
-          @version.respond_to?(:changeset) && @version.changeset.present? ? @message + ' [' + @version.changeset.to_a.collect { |c| c[0] + ' = ' + c[1][1].to_s }.join(', ') + ']' : @message
+          @version.respond_to?(:changeset) && @version.changeset.present? ? @message + ' [' + @version.changeset.to_a.collect { |c| "#{c[0]} = #{c[1][1]}" }.join(', ') + ']' : @message
         end
 
         def created_at
@@ -23,7 +23,11 @@ module RailsAdmin
         end
 
         def username
-          (@user_class.find(@version.whodunnit).try(:email) rescue nil) || @version.whodunnit
+          begin
+            @user_class.find(@version.whodunnit).try(:email)
+          rescue StandardError
+            nil
+          end || @version.whodunnit
         end
 
         def item
@@ -58,7 +62,8 @@ module RailsAdmin
 
         def self.setup
           raise 'PaperTrail not found' unless defined?(::PaperTrail)
-          RailsAdmin::Extensions::ControllerExtension.send(:include, ControllerExtension)
+
+          RailsAdmin::Extensions::ControllerExtension.include ControllerExtension
         end
 
         def initialize(controller, user_class = 'User', version_class = '::Version')

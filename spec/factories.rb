@@ -72,7 +72,7 @@ FactoryBot.define do
   end
 
   factory :ball do
-    color { %w(red blue green yellow purple brown black white).sample }
+    color { %w[red blue green yellow purple brown black white].sample }
   end
 
   factory :hardball do
@@ -99,7 +99,7 @@ FactoryBot.define do
             class: 'PaperTrailTestWithCustomAssociation'
   end
 
-  factory :two_level_namespaced_polymorphic_association_test, class: "TwoLevel::Namespaced::PolymorphicAssociationTest" do
+  factory :two_level_namespaced_polymorphic_association_test, class: 'TwoLevel::Namespaced::PolymorphicAssociationTest' do
     sequence(:name) { |n| "name #{n}" }
   end
 end

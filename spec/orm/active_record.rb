@@ -14,12 +14,12 @@ ensure
   old_stream.close
 end
 
-silence_stream(STDOUT) do
+silence_stream($stdout) do
   if ActiveRecord::Migrator.respond_to? :migrate
-    ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
+    ActiveRecord::Migrator.migrate File.expand_path('../dummy_app/db/migrate', __dir__)
   else
     ActiveRecord::MigrationContext.new(
-      *([File.expand_path('../../dummy_app/db/migrate/', __FILE__)] +
+      *([File.expand_path('../dummy_app/db/migrate', __dir__)] +
           (ActiveRecord::MigrationContext.instance_method(:initialize).arity == 2 ? [ActiveRecord::SchemaMigration] : [])),
     ).migrate
   end
@@ -78,7 +78,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def primary_key
-      "id"
+      'id'
     end
 
   private
