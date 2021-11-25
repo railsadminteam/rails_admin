@@ -88,7 +88,7 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
   it 'prevents duplication when using browser back and forward' do
     player
     visit index_path(model_name: 'player')
-    find(%{[href$="/admin/player/#{player.id}/edit"]}).click
+    find(%([href$="/admin/player/#{player.id}/edit"])).click
     is_expected.to have_content 'Edit Player'
     page.go_back
     is_expected.to have_content 'List of Players'

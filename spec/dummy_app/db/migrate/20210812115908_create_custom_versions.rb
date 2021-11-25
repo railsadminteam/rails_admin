@@ -8,6 +8,6 @@ class CreateCustomVersions < ActiveRecord::Migration[5.0]
       t.text :object
       t.datetime :created_at
     end
-    add_index :custom_versions, [:item_type, :item_id]
+    add_index :custom_versions, %i[item_type item_id]
   end
 end

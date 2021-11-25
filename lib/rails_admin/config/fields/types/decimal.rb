@@ -11,7 +11,7 @@ module RailsAdmin
           register_instance_option :html_attributes do
             {
               required: required?,
-              step: "any",
+              step: 'any',
             }
           end
         end

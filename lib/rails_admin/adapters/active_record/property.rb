@@ -48,7 +48,7 @@ module RailsAdmin
       private
 
         def serialized?
-          model.type_for_attribute(property.name).class == ::ActiveRecord::Type::Serialized
+          model.type_for_attribute(property.name).instance_of?(::ActiveRecord::Type::Serialized)
         end
       end
     end

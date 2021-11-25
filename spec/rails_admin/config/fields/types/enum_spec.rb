@@ -7,7 +7,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
   describe "when object responds to '\#{method}_enum'" do
     before do
-      allow_any_instance_of(Team).to receive(:color_enum).and_return(%w(blue green red))
+      allow_any_instance_of(Team).to receive(:color_enum).and_return(%w[blue green red])
       RailsAdmin.config Team do
         edit do
           field :color
@@ -18,16 +18,16 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     it 'auto-detects enumeration' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
       is_expected.not_to be_multiple
-      expect(subject.with(object: Team.new).enum).to eq %w(blue green red)
+      expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
     end
   end
 
   describe "when class responds to '\#{method}_enum'" do
     before do
-      allow(Team).to receive(:color_enum).and_return(%w(blue green red))
+      allow(Team).to receive(:color_enum).and_return(%w[blue green red])
       Team.instance_eval do
         def color_enum
-          %w(blue green red)
+          %w[blue green red]
         end
       end
       RailsAdmin.config Team do
@@ -39,7 +39,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
     it 'auto-detects enumeration' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
-      expect(subject.with(object: Team.new).enum).to eq %w(blue green red)
+      expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     before do
       Team.class_eval do
         def color_list
-          %w(blue green red)
+          %w[blue green red]
         end
       end
       RailsAdmin.config Team do
@@ -63,7 +63,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
     it 'allows configuration' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
-      expect(subject.with(object: Team.new).enum).to eq %w(blue green red)
+      expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
     end
   end
 
@@ -71,7 +71,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     before do
       Team.instance_eval do
         def color_list
-          %w(blue green red)
+          %w[blue green red]
         end
       end
       RailsAdmin.config Team do
@@ -87,7 +87,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
     it 'allows configuration' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
-      expect(subject.with(object: Team.new).enum).to eq %w(blue green red)
+      expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
     end
   end
 
@@ -95,14 +95,14 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     before do
       Team.class_eval do
         def color_list
-          %w(blue green red)
+          %w[blue green red]
         end
       end
       RailsAdmin.config Team do
         field :color, :enum do
           enum_method :color_list
           enum do
-            %w(yellow black)
+            %w[yellow black]
           end
         end
       end
@@ -114,7 +114,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
     it 'allows direct listing of enumeration options and override enum method' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
-      expect(subject.with(object: Team.new).enum).to eq %w(yellow black)
+      expect(subject.with(object: Team.new).enum).to eq %w[yellow black]
     end
   end
 
@@ -126,7 +126,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
         self.table_name = 'teams'
         serialize :color
         def color_enum
-          %w(blue green red)
+          %w[blue green red]
         end
       end
       RailsAdmin.config do |c|
@@ -141,7 +141,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
 
   describe 'when serialize is enabled in Mongoid model', mongoid: true do
     before do
-      allow(Team).to receive(:color_enum).and_return(%w(blue green red))
+      allow(Team).to receive(:color_enum).and_return(%w[blue green red])
       Team.instance_eval do
         field :color, type: Array
       end

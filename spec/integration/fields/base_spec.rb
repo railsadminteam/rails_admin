@@ -39,7 +39,7 @@ RSpec.describe 'Base field', type: :request do
         field :color, :enum do
           default_value 'black'
           enum do
-            %w(black white)
+            %w[black white]
           end
         end
       end
@@ -51,7 +51,9 @@ RSpec.describe 'Base field', type: :request do
       RailsAdmin.config(Team) do
         field :name do
           render do
-            bindings[:object].persisted? ? 'Custom Name' : raise(ZeroDivisionError)
+            raise ZeroDivisionError unless bindings[:object].persisted?
+
+            'Custom Name'
           end
         end
       end

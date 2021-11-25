@@ -21,13 +21,13 @@ module RailsAdmin
           end
 
           register_instance_option :i18n_scope do
-            [:time, :formats]
+            %i[time formats]
           end
 
           register_instance_option :strftime_format do
             ::I18n.t(date_format, scope: i18n_scope, raise: true)
           rescue ::I18n::ArgumentError
-            "%B %d, %Y %H:%M"
+            '%B %d, %Y %H:%M'
           end
 
           register_instance_option :momentjs_format do

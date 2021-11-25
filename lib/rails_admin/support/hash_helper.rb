@@ -13,11 +13,12 @@ module RailsAdmin
       when Hash
         obj.each_with_object({}) do |(key, val), res|
           nkey = key.is_a?(String) ? key.to_sym : key
-          nval = case val
-                 when Hash, Array then symbolize(val)
-                 when String      then val.to_sym
-                 else val
-                 end
+          nval =
+            case val
+            when Hash, Array then symbolize(val)
+            when String      then val.to_sym
+            else val
+            end
           res[nkey] = nval
         end
       else

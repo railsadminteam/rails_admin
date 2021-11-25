@@ -53,7 +53,7 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
     it 'creates an associated record and adds into selection' do
       visit edit_path(model_name: 'league', id: leagues[1].id)
       click_link 'Add a new Division'
-      is_expected.to have_content "New Division"
+      is_expected.to have_content 'New Division'
       fill_in 'Name', with: 'National League West'
       find(%(#division_custom_league_id option[value="#{leagues[0].id}"]), visible: false).select_option
       find('#modal .save-action').click
@@ -115,7 +115,7 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       visit new_path(model_name: 'nested_field_test')
       click_link 'Add a new Field test'
       is_expected.to have_content 'New Field test'
-      attach_file "Carrierwave asset", file_path('test.jpg')
+      attach_file 'Carrierwave asset', file_path('test.jpg')
       find('#modal .save-action').click
       is_expected.to have_no_css('#modal')
       expect(FieldTest.first.carrierwave_asset.file.size).to eq 1575

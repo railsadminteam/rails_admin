@@ -86,7 +86,7 @@ RSpec.describe 'Datetime field', type: :request do
       find('[name="field_test[datetime_field]"]', visible: false).set('2021-02-03T04:55:00')
       click_button 'Save'
       field_test.reload
-      expect(field_test.datetime_field.iso8601).to eq "2021-02-03T04:55:00-06:00"
+      expect(field_test.datetime_field.iso8601).to eq '2021-02-03T04:55:00-06:00'
     end
 
     it 'is not altered by just saving untouched' do

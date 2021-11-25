@@ -18,7 +18,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Boolean do
       context "when field value is '#{field_value.inspect}'" do
         let(:test_object) { FieldTest.new(boolean_field: field_value) }
 
-        it "returns the appropriate html result" do
+        it 'returns the appropriate html result' do
           expect(subject.pretty_value).to eq(expected_result)
         end
       end

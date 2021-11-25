@@ -54,7 +54,7 @@ RSpec.describe RailsAdmin::Config::HasFields do
     end
 
     it 'allows passing multiple fields to share the same configuration' do
-      target_field_names = [:players, :revenue]
+      target_field_names = %i[players revenue]
 
       original_config = RailsAdmin.config(Team).fields.select { |field| target_field_names.include?(field.name) }
       original_config.each { |field| expect(field).to be_visible }
@@ -88,7 +88,7 @@ RSpec.describe RailsAdmin::Config::HasFields do
       RailsAdmin.config(Team) do
         field :wins, :integer
       end
-      expect(config.fields.map(&:name)).to match_array %i(id wins)
+      expect(config.fields.map(&:name)).to match_array %i[id wins]
     end
   end
 end

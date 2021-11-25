@@ -1,7 +1,7 @@
 # Configure Rails Envinronment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-CI_TARGET_ORMS = [:active_record, :mongoid].freeze
+CI_TARGET_ORMS = %i[active_record mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 if RUBY_ENGINE == 'jruby'
@@ -26,7 +26,7 @@ SimpleCov::Formatter::LcovFormatter.config do |c|
   c.single_report_path = 'coverage/lcov.info'
 end
 
-require File.expand_path('../dummy_app/config/environment', __FILE__)
+require File.expand_path('dummy_app/config/environment', __dir__)
 
 require 'rspec/rails'
 require 'factory_bot'
@@ -36,8 +36,8 @@ require "database_cleaner/#{CI_ORM}"
 require "orm/#{CI_ORM}"
 require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
-Dir[File.expand_path('../support/**/*.rb', __FILE__),
-    File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__),
+    File.expand_path('shared_examples/**/*.rb', __dir__)].sort.each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -97,7 +97,7 @@ RSpec.configure do |config|
   end
 
   config.before do |example|
-    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :deletion : :transaction
+    DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :deletion : :transaction
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset

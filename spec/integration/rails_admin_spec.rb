@@ -28,7 +28,7 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'html head' do
     before { visit dashboard_path }
 
-    # Note: the [href^="/asset... syntax matches the start of a value. The reason
+    # NOTE: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it 'loads stylesheets in header' do
       is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
@@ -125,7 +125,7 @@ RSpec.describe RailsAdmin, type: :request do
     it 'is enforced' do
       visit new_path(model_name: 'league')
       fill_in 'league[name]', with: 'National league'
-      find('input[name="authenticity_token"]', visible: false).set("invalid token")
+      find('input[name="authenticity_token"]', visible: false).set('invalid token')
       expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
     end
   end

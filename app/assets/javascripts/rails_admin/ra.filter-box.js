@@ -183,6 +183,13 @@
             )
             .append(
               $(
+                '<option data-additional-fieldset="additional-fieldset" value="not_like"></option>'
+              )
+                .prop("selected", field_operator == "not_like")
+                .text(RailsAdmin.I18n.t("does_not_contain"))
+            )
+            .append(
+              $(
                 '<option data-additional-fieldset="additional-fieldset" value="is"></option>'
               )
                 .prop("selected", field_operator == "is")
