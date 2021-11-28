@@ -239,7 +239,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         @abstract_model = RailsAdmin::AbstractModel.new(Team)
         @object = FactoryBot.create(:team, name: 'the avengers')
 
-        expect(helper.menu_for(:member, @abstract_model, @object)).to match(/_blank/)        
+        expect(helper.menu_for(:member, @abstract_model, @object)).to match(/_blank/)
       end
     end
 
