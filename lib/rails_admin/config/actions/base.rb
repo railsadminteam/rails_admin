@@ -75,7 +75,7 @@ module RailsAdmin
 
         # Render via pjax?
         register_instance_option :pjax? do
-          true
+          target_window.blank?
         end
 
         # Target window [_self, _blank]
