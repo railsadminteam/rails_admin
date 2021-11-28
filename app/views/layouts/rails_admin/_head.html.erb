@@ -3,10 +3,15 @@
 <meta content="width=device-width, initial-scale=1" name="viewport; charset=utf-8"/>
 <meta content="NONE,NOARCHIVE" name="robots"/>
 <%= csrf_meta_tag %>
-<% if RailsAdmin::config.asset_source == :webpacker %>
-  <%= javascript_pack_tag "rails_admin" %>
+<% case RailsAdmin::config.asset_source
+   when :webpacker %>
   <%= stylesheet_pack_tag "rails_admin" %>
-<% else %>
-  <%= stylesheet_link_tag "rails_admin.css", media: :all %>
-  <%= javascript_include_tag "rails_admin.js" %>
-<% end %>
+  <%= javascript_pack_tag "rails_admin" %>
+<% when :webpack, :sprockets %>
+  <% handle_asset_dependency_error do %>
+    <%= stylesheet_link_tag "rails_admin.css", media: :all %>
+    <%= javascript_include_tag "rails_admin.js", defer: true %>
+  <% end %>
+<% else
+     raise "Unknown asset_source: #{RailsAdmin::config.asset_source}"
+   end %>

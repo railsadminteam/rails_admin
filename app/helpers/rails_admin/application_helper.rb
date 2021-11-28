@@ -195,5 +195,17 @@ module RailsAdmin
       else "alert-#{flash_key}"
       end
     end
+
+    def handle_asset_dependency_error
+      yield
+    rescue LoadError => e
+      if e.message =~ /sassc/
+        e = e.exception <<-MSG.gsub(/^\s{10}/, '')
+          #{e.message}
+          RailsAdmin requires the gem sassc-rails, make sure to put `gem 'sassc-rails'` to Gemfile.
+        MSG
+      end
+      raise e
+    end
   end
 end
