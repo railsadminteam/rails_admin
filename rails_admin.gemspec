@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/railsadminteam/rails_admin'
   spec.name = 'rails_admin'
   spec.require_paths = %w[lib]
-  spec.required_ruby_version     = '>= 2.5.0'
+  spec.required_ruby_version     = '>= 2.6.0'
   spec.required_rubygems_version = '>= 1.8.11'
   spec.summary = 'Admin for Rails'
   spec.version = RailsAdmin::Version

@@ -86,7 +86,7 @@ RSpec.describe 'Export action', type: :request do
     click_button 'Export to csv'
     csv = CSV.parse page.driver.response.body
     expect(csv[0]).to match_array ['Id', 'Commentable', 'Commentable type', 'Content', 'Created at', 'Updated at']
-    csv[1..-1].each do |line|
+    csv[1..].each do |line|
       expect(line[csv[0].index('Commentable')]).to eq(@player.id.to_s)
       expect(line[csv[0].index('Commentable type')]).to eq(@player.class.to_s)
     end

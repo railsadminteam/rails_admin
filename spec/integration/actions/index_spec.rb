@@ -898,7 +898,7 @@ RSpec.describe 'Index action', type: :request do
           end
         end
       end
-      visit index_path(model_name: 'player', query: player.name[1..-1])
+      visit index_path(model_name: 'player', query: player.name[1..])
       is_expected.to have_no_content(player.name)
     end
   end
@@ -1141,7 +1141,7 @@ RSpec.describe 'Index action', type: :request do
       visit index_path(model_name: 'team')
       cols = all('th').collect(&:text)
       expect(cols[0..3]).to eq(all_team_columns[1..4])
-      expect(cols).to contain_exactly(*all_team_columns[1..-1])
+      expect(cols).to contain_exactly(*all_team_columns[1..])
       expect(page).to have_selector('.ra-sidescroll[data-ra-sidescroll=2]')
     end
 
@@ -1225,7 +1225,7 @@ RSpec.describe 'Index action', type: :request do
       visit index_path(model_name: 'team')
       cols = all('th').collect(&:text)
       expect(cols[0..3]).to eq(all_team_columns[1..4])
-      expect(cols).to contain_exactly(*all_team_columns[1..-1])
+      expect(cols).to contain_exactly(*all_team_columns[1..])
       expect(page).to have_selector('.ra-sidescroll[data-ra-sidescroll=3]')
     end
   end

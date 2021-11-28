@@ -8,7 +8,6 @@ AllCops:
     - "spec/dummy_app/tmp/**/*"
     - "vendor/bundle/**/*"
   NewCops: disable
-  TargetRubyVersion: 2.5
 
 Gemspec/DateAssignment:
   Enabled: true

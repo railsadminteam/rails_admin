@@ -13,7 +13,7 @@ jobs:
         orm: [active_record]
         adapter: [sqlite3]
         include:
-          - ruby: 2.5
+          - ruby: 2.6
             gemfile: gemfiles/rails_6.0.gemfile
             orm: active_record
             adapter: sqlite3
