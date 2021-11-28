@@ -224,13 +224,13 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(helper.menu_for(:root)).to match(/Look this/)
       end
 
-      it 'should render allow an action to have target_window as config' do
+      it 'should render allow an action to have link_target as config' do
         RailsAdmin.config do |config|
           config.actions do
             dashboard
             index
             show do
-              target_window :_blank
+              link_target :_blank
             end
           end
         end
