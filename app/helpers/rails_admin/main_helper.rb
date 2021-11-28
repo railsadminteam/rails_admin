@@ -1,5 +1,3 @@
-require 'builder'
-
 module RailsAdmin
   module MainHelper
     def rails_admin_form_for(*args, &block)
