@@ -29,7 +29,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 [demo]: http://rails-admin-tb.herokuapp.com/
 [dummy_app]: https://github.com/bbenezech/dummy_app
-[docs]: https://github.com/railsadminteam/rails_admin/wiki
+[docs]: docs/index.md
 
 ## Features
 
@@ -59,9 +59,9 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 In `config/initializers/rails_admin.rb`:
 
-[Details](https://github.com/railsadminteam/rails_admin/wiki/Base-configuration)
+[Details](docs/base-configuration.md)
 
-To begin with, you may be interested in setting up [Devise](https://github.com/railsadminteam/rails_admin/wiki/Devise), [CanCanCan](https://github.com/railsadminteam/rails_admin/wiki/Cancancan) or [Papertrail](https://github.com/railsadminteam/rails_admin/wiki/Papertrail)!
+To begin with, you may be interested in setting up [Devise](docs/devise.md), [CanCanCan](docs/cancancan.md) or [Papertrail](docs/papertrail.md)!
 
 ### Per model
 
@@ -78,14 +78,14 @@ class Ball < ActiveRecord::Base
 end
 ```
 
-Details: [Models](https://github.com/railsadminteam/rails_admin/wiki/Models), [Groups](https://github.com/railsadminteam/rails_admin/wiki/Groups), [Fields](https://github.com/railsadminteam/rails_admin/wiki/Fields)
+Details: [Models](docs/models.md), [Groups](docs/groups.md), [Fields](docs/fields.md)
 
 ## Support
 
 If you have a question, please check this README, the wiki, and the [list of
 known issues][troubleshoot].
 
-[troubleshoot]: https://github.com/railsadminteam/rails_admin/wiki/Troubleshoot
+[troubleshoot]: docs/troubleshoot.md
 
 If you still have a question, you can ask the [official RailsAdmin mailing
 list][list].
