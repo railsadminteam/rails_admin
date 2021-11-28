@@ -3,48 +3,6 @@
     $("#list [name='bulk_ids[]']").prop("checked", $(this).is(":checked"));
   });
 
-  $(document).on("click", ".pjax", function (event) {
-    if (event.which > 1 || event.metaKey || event.ctrlKey) {
-      return;
-    }
-
-    if ($.support.pjax) {
-      event.preventDefault();
-      $.pjax({
-        container: $(this).data("pjax-container") || "[data-pjax-container]",
-        url: $(this).data("href") || $(this).attr("href"),
-        timeout: 2000,
-      });
-      return;
-    }
-
-    if ($(this).data("href")) {
-      window.location = $(this).data("href");
-    }
-  });
-
-  $(document).on("submit", ".pjax-form", function (event) {
-    if ($.support.pjax) {
-      event.preventDefault();
-      $.pjax({
-        container: $(this).data("pjax-container") || "[data-pjax-container]",
-        url:
-          this.action +
-          (this.action.indexOf("?") !== -1 ? "&" : "?") +
-          $(this).serialize(),
-        timeout: 2000,
-      });
-    }
-  });
-
-  $(document)
-    .on("pjax:start", function () {
-      return $("#loading").show();
-    })
-    .on("pjax:end", function () {
-      return $("#loading").hide();
-    });
-
   $(document).on("click", "[data-target]", function () {
     if (!$(this).hasClass("disabled")) {
       if ($(this).has("i.fa-chevron-down").length) {
@@ -95,11 +53,6 @@
       $("#admin-js").data("i18nOptions")
     );
 
-    const event = new CustomEvent("rails_admin.dom_ready");
-    document.dispatchEvent(event);
-  });
-
-  $(document).on("pjax:end", function () {
     const event = new CustomEvent("rails_admin.dom_ready");
     document.dispatchEvent(event);
   });

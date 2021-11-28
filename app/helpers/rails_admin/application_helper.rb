@@ -163,7 +163,7 @@ module RailsAdmin
               else
                 'javascript:void(0)'
               end
-            content_tag(:a, label, {href: href}.merge(action.pjax? ? {class: ['pjax']} : {}))
+            content_tag(:a, label, {href: href})
           else
             content_tag(:span, label)
           end
