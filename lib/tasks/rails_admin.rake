@@ -9,7 +9,7 @@ namespace :rails_admin do
     system 'rails g rails_admin:uninstall'
   end
 
-  desc 'CI env for Travis'
+  desc 'CI env for GitHub Actions'
   task :prepare_ci_env do
     adapter = ENV['CI_DB_ADAPTER'] || 'sqlite3'
     database = (adapter == 'sqlite3' ? 'db/development.sqlite3' : 'ci_rails_admin')
