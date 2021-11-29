@@ -86,9 +86,8 @@ module RailsAdmin
       associations.each do |association|
         case association.type
         when :has_one
-          if child = object.send(association.name)
-            yield(association, [child])
-          end
+          child = object.send(association.name)
+          yield(association, [child]) if child
         when :has_many
           children = object.send(association.name)
           yield(association, Array.new(children))

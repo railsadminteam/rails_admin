@@ -10,7 +10,8 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     children_fields = []
     extensions.each do |ext|
       children_column_name = "#{attachment_name}_#{ext}".to_sym
-      next unless child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
+      child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
+      next unless child_properties
 
       children_field = fields.detect { |f| f.name == children_column_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_properties, fields)
       children_field.hide

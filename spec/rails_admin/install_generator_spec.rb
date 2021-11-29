@@ -15,7 +15,7 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
     silence_stream($stdout) do
       generator.invoke('install')
     end
-    expect(destination_root).to have_structure {
+    expect(destination_root).to(have_structure do
       directory 'config' do
         directory 'initializers' do
           file 'rails_admin.rb' do
@@ -23,6 +23,6 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
           end
         end
       end
-    }
+    end)
   end
 end

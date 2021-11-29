@@ -11,7 +11,7 @@ module RailsAdmin
     before_action :check_for_cancel
 
     RailsAdmin::Config::Actions.all.each do |action|
-      class_eval <<-EOS, __FILE__, __LINE__ + 1
+      class_eval <<-RUBY, __FILE__, __LINE__ + 1
         def #{action.action_name}
           action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym)
           @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
@@ -21,7 +21,7 @@ module RailsAdmin
 
           instance_eval &@action.controller
         end
-      EOS
+      RUBY
     end
 
     def bulk_action
@@ -30,9 +30,8 @@ module RailsAdmin
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
       scope = model_config.abstract_model.scoped
-      if auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
-        scope = scope.merge(auth_scope)
-      end
+      auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
+      scope = scope.merge(auth_scope) if auth_scope
       scope = scope.instance_eval(&additional_scope) if additional_scope
       get_collection(model_config, scope, pagination)
     end

@@ -21,7 +21,9 @@ module RailsAdmin
 
     def edit_user_link
       return nil unless _current_user.respond_to?(:email)
-      return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
+
+      abstract_model = RailsAdmin.config(_current_user.class).abstract_model
+      return nil unless abstract_model
 
       content = [
         RailsAdmin::Config.show_gravatar && _current_user.email.present? && image_tag("#{request.ssl? ? 'https://secure' : 'http://www'}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: ''),
