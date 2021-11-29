@@ -223,6 +223,24 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(helper.menu_for(:root)).not_to match(/Dashboard/)
         expect(helper.menu_for(:root)).to match(/Look this/)
       end
+
+      it 'should render allow an action to have link_target as config' do
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard
+            index
+            show do
+              link_target :_blank
+            end
+          end
+        end
+
+        @action = RailsAdmin::Config::Actions.find :show
+        @abstract_model = RailsAdmin::AbstractModel.new(Team)
+        @object = FactoryBot.create(:team, name: 'the avengers')
+
+        expect(helper.menu_for(:member, @abstract_model, @object)).to match(/_blank/)
+      end
     end
 
     describe '#main_navigation' do
