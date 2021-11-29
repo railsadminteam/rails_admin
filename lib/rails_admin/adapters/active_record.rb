@@ -280,7 +280,7 @@ module RailsAdmin
         end
 
         def build_statement_for_uuid
-          column_for_value(@value) if @value.to_s =~ /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/
+          column_for_value(@value) if /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/.match?(@value.to_s)
         end
 
         def ar_adapter

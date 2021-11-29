@@ -20,7 +20,7 @@ class Player
   validates_uniqueness_of(:number, scope: :team_id, message: 'There is already a player with that number on this team')
 
   validates_each :name do |record, _attr, value|
-    record.errors.add(:base, 'Player is cheating') if value.to_s =~ /on steroids/
+    record.errors.add(:base, 'Player is cheating') if /on steroids/.match?(value.to_s)
   end
 
   has_one :draft, dependent: :destroy

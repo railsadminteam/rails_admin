@@ -96,7 +96,7 @@ module RailsAdmin
       # Evaluate the given block either immediately or lazily, based on initialization status.
       def apply(&block)
         if @initialized
-          block.call(self)
+          yield(self)
         else
           @deferred_blocks << block
         end
