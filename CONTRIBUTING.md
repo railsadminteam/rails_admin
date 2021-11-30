@@ -36,14 +36,14 @@ Example on macOS using Homebrew:
 
 ### Tests run against multiple versions of Rails
 
-In CI, we use [appraisal] to run tests against multiple versions of Rails.
-The [gemfiles/ directory] contains the Gemfiles used to create the CI build
-matrix. See [the Travis CI configuration] for more details on what Ruby versions
+In CI, we use [appraisal] to run tests against multiple versions of Rails. The
+[gemfiles/ directory] contains the Gemfiles used to create the CI build matrix.
+See the [GitHub Actions configuration] for more details on what Ruby versions
 run what Rails versions.
 
 [appraisal]: https://github.com/thoughtbot/appraisal
 [gemfiles/ directory]: ./gemfiles
-[the travis ci configuration]: ./.travis.yml
+[github actions configuration]: ./.github/workflows/test.yml
 
 ## Getting Help
 
