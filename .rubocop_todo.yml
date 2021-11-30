@@ -21,7 +21,7 @@ Lint/ReturnInVoidContext:
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
 # IgnoredMethods: refine
 Metrics/BlockLength:
-  Max: 1135
+  Max: 1152
 
 # Offense count: 1
 # Configuration parameters: Max, CountKeywordArgs.

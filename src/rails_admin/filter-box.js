@@ -11,12 +11,15 @@ import flatpickr from "flatpickr";
       var field_name = options["name"];
       var field_type = options["type"];
       var field_value = options["value"] || "";
+      var field_separator = options["separator"];
       var field_operator = options["operator"];
       var operators = options["operators"];
       var index = options["index"];
       var value_name = "f[" + field_name + "][" + index + "][v]";
       var operator_name = "f[" + field_name + "][" + index + "][o]";
+      var separator_filter_name = "f[" + field_name + "][" + index + "][s]";
       var control = null;
+      var separator_control = null;
       var additional_control = null;
 
       if (operators.length > 0) {
@@ -110,6 +113,23 @@ import flatpickr from "flatpickr";
         case "text":
         case "belongs_to_association":
         case "has_one_association":
+          if ($("#filters_box > div").length > 0) {
+            separator_control = $(
+              '<select class="input-sm form-control"></select>'
+            )
+              .prop("name", separator_filter_name)
+              .append(
+                $('<option value="or"></option>')
+                  .prop("selected", field_separator == "or")
+                  .text(I18n.t("or"))
+              )
+              .append(
+                $('<option value="and"></option>')
+                  .prop("selected", field_separator == "and")
+                  .text(I18n.t("and"))
+              );
+          }
+
           additional_control = $(
             '<input class="additional-fieldset form-control form-control-sm" type="text" />'
           )
@@ -177,6 +197,8 @@ import flatpickr from "flatpickr";
       var $content = $("<div>")
         .attr("id", filterContainerId)
         .addClass("filter d-inline-block my-1")
+        .append(separator_control)
+        .append("&nbsp;")
         .append(
           $(
             '<button type="button" class="btn btn-info btn-sm delete"></button>'

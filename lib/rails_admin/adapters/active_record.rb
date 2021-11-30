@@ -192,6 +192,14 @@ module RailsAdmin
           scope = scope.references(*@tables.uniq) if @tables.any?
           scope
         end
+
+        def build_with_separator(initial_scope, separator)
+          scope = @scope.where(@statements.join, *@values)
+          initial_scope = initial_scope.references(*@tables.uniq) if @tables.any?
+          scope = @scope.or(initial_scope.where(@statements.join, *@values)) if separator == 'or'
+          scope = scope.references(*@tables.uniq) if @tables.any?
+          scope
+        end
       end
 
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
@@ -211,15 +219,17 @@ module RailsAdmin
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
+        initial_scope = scope
         filters.each_pair do |field_name, filters_dump|
+          field = fields.detect { |f| f.name.to_s == field_name }
           filters_dump.each_value do |filter_dump|
             wb = WhereBuilder.new(scope)
-            field = fields.detect { |f| f.name.to_s == field_name }
+
             value = parse_field_value(field, filter_dump[:v])
 
             wb.add(field, value, (filter_dump[:o] || RailsAdmin::Config.default_search_operator))
-            # AND current filter statements to other filter statements
-            scope = wb.build
+            scope = wb.build_with_separator(initial_scope, filter_dump[:s]) if filter_dump[:s] == 'or'
+            scope = wb.build unless filter_dump[:s] == 'or'
           end
         end
         scope
