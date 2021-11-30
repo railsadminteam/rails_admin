@@ -144,15 +144,21 @@ module RailsAdmin
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
+          field = fields.detect { |f| f.name.to_s == field_name }
+          multiple_filters_with_same_key = field.searchable_columns.length == 1
+
+          wb = WhereBuilder.new(scope) if multiple_filters_with_same_key
+
           filters_dump.each do |_, filter_dump|
-            wb = WhereBuilder.new(scope)
-            field = fields.detect { |f| f.name.to_s == field_name }
+            wb = WhereBuilder.new(scope) unless multiple_filters_with_same_key
             value = parse_field_value(field, filter_dump[:v])
 
             wb.add(field, value, (filter_dump[:o] || RailsAdmin::Config.default_search_operator))
             # AND current filter statements to other filter statements
-            scope = wb.build
+            scope = wb.build unless multiple_filters_with_same_key
           end
+          # OR current filter statements to other filter statements if multiple filters for the same key
+          scope = wb.build if multiple_filters_with_same_key
         end
         scope
       end

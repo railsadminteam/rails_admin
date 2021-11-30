@@ -147,11 +147,12 @@ module RailsAdmin
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
-        statements = []
+
 
         filters.each_pair do |field_name, filters_dump|
+          statements = []
+          field = fields.detect { |f| f.name.to_s == field_name }
           filters_dump.each do |_, filter_dump|
-            field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
 
             value = parse_field_value(field, filter_dump[:v])
@@ -163,9 +164,11 @@ module RailsAdmin
               statements << field_statements.first
             end
           end
+          and_or_or = '$and'
+          and_or_or = '$or' if statements.length > 1 and field.searchable_columns.length == 1
+          scope = scope.where(statements.any? ? {and_or_or => statements} : {})
         end
-
-        scope.where(statements.any? ? {'$and' => statements} : {})
+        scope
       end
 
       def parse_collection_name(column)

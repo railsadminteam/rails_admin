@@ -76,6 +76,24 @@ RSpec.describe 'Index action', type: :request do
       end
     end
 
+    it 'allows to query the same attribute with or' do
+      RailsAdmin.config Player do
+        list do
+          field :name
+          field :team
+          field :injured
+          field :retired
+        end
+      end
+
+      visit index_path(model_name: 'player', f: {name: {'1' => {v: @players[0].name}, '2' => {v: @players[1].name}}})
+      is_expected.to have_content(@players[0].name)
+      is_expected.to have_content(@players[1].name)
+      (2..3).each do |i|
+        is_expected.to have_no_content(@players[i].name)
+      end
+    end
+
     it 'allows to filter on one attribute' do
       RailsAdmin.config Player do
         list do
