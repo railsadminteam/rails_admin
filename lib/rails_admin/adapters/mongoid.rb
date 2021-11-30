@@ -147,13 +147,14 @@ module RailsAdmin
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
-        statements = []
-
+        initial_scope = scope
         filters.each_pair do |field_name, filters_dump|
+          field = fields.detect { |f| f.name.to_s == field_name }
+
           filters_dump.each do |_, filter_dump|
-            field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
 
+            statements = []
             value = parse_field_value(field, filter_dump[:v])
             conditions_per_collection = make_field_conditions(field, value, (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
@@ -162,10 +163,17 @@ module RailsAdmin
             elsif field_statements.any?
               statements << field_statements.first
             end
+            separator = '$and'
+            is_separator_or_input = filter_dump[:s].present? && filter_dump[:s] == 'or'
+            scope =
+              if is_separator_or_input
+                scope.or(initial_scope.where(statements.any? ? {separator => statements} : {}))
+              else
+                scope.where(statements.any? ? {separator => statements} : {})
+              end
           end
         end
-
-        scope.where(statements.any? ? {'$and' => statements} : {})
+        scope
       end
 
       def parse_collection_name(column)

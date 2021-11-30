@@ -8,13 +8,16 @@
       var field_name = options["name"];
       var field_type = options["type"];
       var field_value = options["value"];
+      var field_separator = options["separator"];
       var field_operator = options["operator"];
       var select_options = options["select_options"];
       var required = options["required"];
       var index = options["index"];
       var value_name = "f[" + field_name + "][" + index + "][v]";
       var operator_name = "f[" + field_name + "][" + index + "][o]";
+      var separator_filter_name = "f[" + field_name + "][" + index + "][s]";
       var control = null;
+      var separator_control = null;
       var additional_control = null;
 
       switch (field_type) {
@@ -168,6 +171,23 @@
         case "string":
         case "text":
         case "belongs_to_association":
+          if ($("#filters_box").find("p").length > 0) {
+            separator_control = $(
+              '<select class="input-sm form-control"></select>'
+            )
+              .prop("name", separator_filter_name)
+              .append(
+                $('<option value="or"></option>')
+                  .prop("selected", field_separator == "or")
+                  .text(RailsAdmin.I18n.t("or"))
+              )
+              .append(
+                $('<option value="and"></option>')
+                  .prop("selected", field_separator == "and")
+                  .text(RailsAdmin.I18n.t("and"))
+              );
+          }
+
           control = $(
             '<select class="switch-additional-fieldsets input-sm form-control"></select>'
           )
@@ -314,6 +334,8 @@
       var $content = $("<p>")
         .attr("id", filterContainerId)
         .addClass("filter form-search")
+        .append(separator_control)
+        .append("&nbsp;")
         .append(
           $(
             '<button type="button" class="btn btn-info btn-sm delete"></button>'
