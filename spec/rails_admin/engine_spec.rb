@@ -14,9 +14,9 @@ RSpec.describe RailsAdmin::Engine do
 
     it 'triggers RailsAdmin config to be reloaded' do
       # this simulates rails code reloading
-      RailsAdmin::Engine.initializers.select do |i|
+      RailsAdmin::Engine.initializers.find do |i|
         i.name == 'RailsAdmin reload config in development'
-      end.first.block.call(Rails.application)
+      end.block.call(Rails.application)
       Rails.application.executor.wrap do
         ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
       end

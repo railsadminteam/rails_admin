@@ -51,7 +51,7 @@ module RailsAdmin
         scope = sort_by(options, scope) if options[:sort]
         scope
       rescue NoMethodError => e
-        if e.message =~ /page/
+        if /page/.match?(e.message)
           e = e.exception <<-EOM.gsub(/^\s{12}/, '')
             #{e.message}
             If you don't have kaminari-mongoid installed, add `gem 'kaminari-mongoid'` to your Gemfile.
