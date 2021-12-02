@@ -1,7 +1,7 @@
 <% if field.nullable? %>
   <div class="btn-group" data-toggle="buttons">
     <% {'1': true, '0': false, '': nil}.each do |text, value| %>
-      <label class="<%= [field.css_classes[value], ("active" if field.form_value == value)] %> btn btn-default">
+      <label class="<%= [field.css_classes[value], ("active" if field.form_value == value)].compact.join(' ') %> btn btn-default">
         <%= form.radio_button field.method_name, text, field.html_attributes.reverse_merge({ checked: field.form_value == value, required: field.required}) %>
         <%= field.labels[value].html_safe %>
       </label>
