@@ -11,7 +11,7 @@
   "main": "src/rails_admin/base.js",
   "scripts": {
     "link": "yarn link && cd spec/dummy_app && yarn link rails_admin",
-    "prettier": "prettier -w ."
+    "format": "prettier -w ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",

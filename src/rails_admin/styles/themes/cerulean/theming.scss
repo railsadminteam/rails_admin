@@ -3,8 +3,13 @@
 // .rails_admin .sidebar-nav added to prevent same link color
 // ------------------------------------------------------------------
 
-@mixin btn-shadow($color){
-  @include gradient-vertical-three-colors(lighten($color, 8%), $color, 60%, darken($color, 4%));
+@mixin btn-shadow($color) {
+  @include gradient-vertical-three-colors(
+    lighten($color, 8%),
+    $color,
+    60%,
+    darken($color, 4%)
+  );
   filter: none;
   border-bottom: 1px solid darken($color, 10%);
 }
@@ -18,16 +23,21 @@
 }
 
 .navbar.navbar-default .badge {
-      background-color: #fff;
-      color: $navbar-default-bg;
-  }
+  background-color: #fff;
+  color: $navbar-default-bg;
+}
 
-.navbar.navbar-inverse , .rails_admin .sidebar-nav  {
-    @include gradient-vertical-three-colors(lighten($navbar-inverse-bg, 8%), lighten($navbar-inverse-bg, 4%), 60%, darken($navbar-inverse-bg, 2%));
-    filter: none;
-    border-bottom: 1px solid darken($navbar-inverse-bg, 10%);
-  }
-
+.navbar.navbar-inverse,
+.rails_admin .sidebar-nav {
+  @include gradient-vertical-three-colors(
+    lighten($navbar-inverse-bg, 8%),
+    lighten($navbar-inverse-bg, 4%),
+    60%,
+    darken($navbar-inverse-bg, 2%)
+  );
+  filter: none;
+  border-bottom: 1px solid darken($navbar-inverse-bg, 10%);
+}
 
 .navbar.navbar-inverse .badge {
   background-color: #fff;
@@ -36,14 +46,11 @@
 
 .navbar .navbar-nav > li > a,
 .navbar .navbar-brand {
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  }
-
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
 
 @media (max-width: $grid-float-breakpoint-max) {
-
   .navbar {
-
     .dropdown-header {
       color: #fff;
     }
@@ -53,7 +60,6 @@
 // Buttons ====================================================================
 
 .btn {
-
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 
   .caret {
@@ -62,7 +68,6 @@
 }
 
 .btn-default {
-
   @include btn-shadow($btn-default-bg);
 
   &:hover {
@@ -104,10 +109,8 @@
 table,
 .table {
   > thead > tr > th {
-
     color: $headings-color;
   }
-
 }
 
 // Forms ======================================================================
@@ -125,7 +128,6 @@ table,
 .panel-warning,
 .panel-danger,
 .panel-info {
-
   .panel-heading,
   .panel-title {
     color: #fff;

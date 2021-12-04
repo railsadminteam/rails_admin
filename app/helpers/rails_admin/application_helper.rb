@@ -199,7 +199,7 @@ module RailsAdmin
     def handle_asset_dependency_error
       yield
     rescue LoadError => e
-      if e.message =~ /sassc/
+      if /sassc/.match?(e.message)
         e = e.exception <<-MSG.gsub(/^\s{10}/, '')
           #{e.message}
           RailsAdmin requires the gem sassc-rails, make sure to put `gem 'sassc-rails'` to Gemfile.

@@ -138,7 +138,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run check
-        run: ./node_modules/.bin/prettier --check .
+        run: yarn run prettier --check .
 
   rubocop:
     name: RuboCop
