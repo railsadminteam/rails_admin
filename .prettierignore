@@ -1,4 +1,6 @@
-app/assets/stylesheets/rails_admin/aristo
-app/assets/stylesheets/rails_admin/themes/cerulean
+coverage
+lib/generators/rails_admin/templates
+spec/dummy_app/public
+spec/dummy_app/tmp
 spec/support/jquery.simulate.drag-sortable.js
 vendor

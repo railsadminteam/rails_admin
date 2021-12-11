@@ -10,6 +10,10 @@ module RailsAdmin
       def to_s
         [MAJOR, MINOR, PATCH, PRE].compact.join('.')
       end
+
+      def js
+        JSON.parse(File.read("#{__dir__}/../../package.json"))['version']
+      end
     end
   end
 end

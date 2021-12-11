@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem "appraisal", ">= 2.0"
 gem "rails", "~> 7.0.0.alpha2"
 gem "devise", "~> 4.7", github: "strobilomyces/devise", branch: "patch-1"
+gem "webpacker", require: false
 gem "webrick", "~> 1.7"
 gem "sassc-rails", "~> 2.1"
 

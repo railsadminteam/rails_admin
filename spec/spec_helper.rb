@@ -96,6 +96,10 @@ RSpec.configure do |config|
     Capybara.reset! if example.metadata[:js]
   end
 
+  config.before(:all) do
+    Webpacker.instance.compiler.compile if defined?(Webpacker)
+  end
+
   config.before do |example|
     DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :deletion : :transaction
 

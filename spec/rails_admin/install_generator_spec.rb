@@ -7,6 +7,7 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
 
   before do
     prepare_destination
+    FileUtils.touch File.join(destination_root, 'Gemfile')
   end
 
   it 'mounts RailsAdmin as Engine and generates RailsAdmin Initializer' do
@@ -21,6 +22,22 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
           file 'rails_admin.rb' do
             contains 'RailsAdmin.config'
           end
+        end
+      end
+      case CI_ASSET
+      when :webpacker
+        file 'app/javascript/packs/rails_admin.js' do
+          contains 'import "rails_admin/src/rails_admin/base"'
+        end
+        file 'app/javascript/stylesheets/rails_admin.scss' do
+          contains '@import "~rails_admin/src/rails_admin/styles/base"'
+        end
+        file 'config/webpack/environment.js' do
+          contains 'ProvidePlugin({jQuery'
+        end
+      when :sprockets
+        file 'Gemfile' do
+          contains 'sassc-rails'
         end
       end
     }

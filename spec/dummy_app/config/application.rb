@@ -2,7 +2,6 @@ require File.expand_path('boot', __dir__)
 
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
-require 'sprockets/railtie'
 
 begin
   require CI_ORM.to_s
@@ -13,6 +12,13 @@ end
 
 require 'active_storage/engine' if CI_ORM == :active_record
 require 'action_text/engine' if CI_ORM == :active_record
+
+case CI_ASSET
+when :webpacker
+  require 'webpacker'
+else
+  require "#{CI_ASSET}/railtie"
+end
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
