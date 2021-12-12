@@ -4,9 +4,7 @@ ActiveSupport.on_load(:active_record) do
   module ActiveRecord
     class Base
       def self.rails_admin(&block)
-        RailsAdmin.config do |config|
-          config.model(self, &block)
-        end
+        RailsAdmin.config(self, &block)
       end
 
       def rails_admin_default_object_label_method

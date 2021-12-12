@@ -35,14 +35,7 @@ module RailsAdmin
       end
     end
 
-    initializer 'RailsAdmin apply configuration', after: :eager_load! do |app|
-      RailsAdmin::Config.initialize!
-
-      # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
-      app.reload_routes!
-    end
-
-    initializer 'RailsAdmin precompile hook', group: :all, after: 'RailsAdmin apply configuration' do |app|
+    initializer 'RailsAdmin precompile hook', group: :all do |app|
       case RailsAdmin.config.asset_source
       when :sprockets
         if defined?(Sprockets)

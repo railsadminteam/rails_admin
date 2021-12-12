@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_admin/config/model'
+require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'
 require 'active_support/core_ext/module/attribute_accessors'
 
@@ -21,10 +21,6 @@ module RailsAdmin
     DEFAULT_AUDIT = proc {}
 
     DEFAULT_CURRENT_USER = proc {}
-
-    # Variables to track initialization process
-    @initialized = false
-    @deferred_blocks = []
 
     class << self
       # Application title, can be an array of two elements
@@ -87,22 +83,6 @@ module RailsAdmin
 
       # Set where RailsAdmin fetches JS/CSS from, defaults to :sprockets
       attr_writer :asset_source
-
-      # Finish initialization by executing deferred configuration blocks
-      def initialize!
-        @deferred_blocks.each { |block| block.call(self) }
-        @deferred_blocks.clear
-        @initialized = true
-      end
-
-      # Evaluate the given block either immediately or lazily, based on initialization status.
-      def apply(&block)
-        if @initialized
-          yield(self)
-        else
-          @deferred_blocks << block
-        end
-      end
 
       # Setup authentication to be run as a before filter
       # This is run inside the controller instance so you can setup any authentication you need to
@@ -257,8 +237,8 @@ module RailsAdmin
             entity.class.name.to_sym
           end
 
-        @registry[key] ||= RailsAdmin::Config::Model.new(entity)
-        @registry[key].instance_eval(&block) if block && @registry[key].abstract_model
+        @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        @registry[key].add_deferred_block(&block) if block
         @registry[key]
       end
 
@@ -360,10 +340,8 @@ module RailsAdmin
 
       # Perform reset, then load RailsAdmin initializer again
       def reload!
-        @initialized = false
         reset
         load RailsAdmin::Engine.config.initializer_path
-        initialize!
       end
 
       # Get all models that are configured as visible sorted by their weight and label.

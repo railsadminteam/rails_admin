@@ -377,54 +377,6 @@ RSpec.describe RailsAdmin::Config do
     end
   end
 
-  describe '.apply' do
-    subject { RailsAdmin::Config.apply(&block) }
-    let(:block) do
-      proc do |config|
-        config.model Team do
-          register_instance_option('parameter') # an arbitrary instance method we can spy on
-        end
-      end
-    end
-    before { RailsAdmin::Config.instance_variable_set(:@initialized, false) }
-    after do
-      RailsAdmin::Config.instance_variable_set(:@initialized, true)
-      RailsAdmin::Config.instance_variable_set(:@deferred_blocks, [])
-    end
-
-    it "doesn't evaluate the block immediately" do
-      expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option)
-      subject
-    end
-
-    it 'evaluates block when initialize! is finished' do
-      expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).with('parameter')
-      subject
-      RailsAdmin::Config.initialize!
-    end
-
-    it 'evaluates config block only once' do
-      expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).once.with('parameter')
-      subject
-      RailsAdmin::Config.initialize!
-      RailsAdmin::Config.initialize!
-    end
-
-    context 'with a non-existent class' do
-      let(:block) do
-        proc do |config|
-          config.model UnknownClass do
-            field :name
-          end
-        end
-      end
-
-      it "doesn't break immediately" do
-        subject
-      end
-    end
-  end
-
   describe '.reload!' do
     before do
       RailsAdmin.config Player do
@@ -446,12 +398,8 @@ RSpec.describe RailsAdmin::Config do
     end
 
     it "applies the initializer's configuration first, then models' configurations" do
-      # simulate the situation that Team model is loaded in the middle of processing RailsAdmin initializer
-      allow_any_instance_of(RailsAdmin::Config::Model).to receive(:include_all_fields).and_wrap_original do |method|
-        Team.rails_admin do
-          field :color, :integer
-        end
-        method.call
+      Team.rails_admin do
+        field :color, :integer
       end
 
       RailsAdmin::Config.reload!

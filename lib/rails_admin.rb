@@ -29,7 +29,7 @@ module RailsAdmin
     if entity
       RailsAdmin::Config.model(entity, &block)
     elsif block_given?
-      RailsAdmin::Config.apply(&block)
+      block.call(RailsAdmin::Config)
     else
       RailsAdmin::Config
     end
