@@ -56,7 +56,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
 
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%a, %d %b %Y %H:%M:%S %z'))
-      expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
+      expect(@object.datetime_field.to_formatted_s(:rfc822)).to eq(@time.to_formatted_s(:rfc822))
     end
 
     it 'has a customization option' do
@@ -70,7 +70,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
 
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%Y-%m-%d %H:%M:%S'))
-      expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
+      expect(@object.datetime_field.to_formatted_s(:rfc822)).to eq(@time.to_formatted_s(:rfc822))
     end
 
     it 'does round-trip saving properly with non-UTC timezones' do
