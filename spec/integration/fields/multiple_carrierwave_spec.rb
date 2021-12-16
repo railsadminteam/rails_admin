@@ -10,7 +10,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
     end
   end
 
-  it 'supports uploading multiple files' do
+  it 'supports uploading multiple files', js: true do
     visit new_path(model_name: 'field_test')
     attach_file 'Carrierwave assets', [file_path('test.jpg'), file_path('test.png')]
     click_button 'Save'
