@@ -6,26 +6,11 @@ module RailsAdmin
 
     layout :get_layout
 
-    before_action :get_model, except: RailsAdmin::Config::Actions.all(:root).collect(&:action_name)
-    before_action :get_object, only: RailsAdmin::Config::Actions.all(:member).collect(&:action_name)
     before_action :check_for_cancel
 
-    RailsAdmin::Config::Actions.all.each do |action|
-      class_eval <<-EOS, __FILE__, __LINE__ + 1
-        def #{action.action_name}
-          action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym)
-          @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
-          @action = action.with({controller: self, abstract_model: @abstract_model, object: @object})
-          fail(ActionNotAllowed) unless @action.enabled?
-          @page_name = wording_for(:title)
-
-          instance_eval &@action.controller
-        end
-      EOS
-    end
-
     def bulk_action
-      send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(controller: self, abstract_model: @abstract_model).select(&:bulkable?).collect(&:route_fragment))
+      get_model
+      process(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(controller: self, abstract_model: @abstract_model).select(&:bulkable?).collect(&:route_fragment))
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
@@ -38,6 +23,38 @@ module RailsAdmin
     end
 
   private
+
+    def action_missing(name, *_args)
+      action = RailsAdmin::Config::Actions.find(name.to_sym)
+      raise AbstractController::ActionNotFound.new("The action '#{name}' could not be found for #{self.class.name}", self, name) unless action
+
+      get_model unless action.root?
+      get_object if action.member?
+      @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
+      @action = action.with({controller: self, abstract_model: @abstract_model, object: @object})
+      raise(ActionNotAllowed) unless @action.enabled?
+
+      @page_name = wording_for(:title)
+
+      instance_eval(&@action.controller)
+    end
+
+    def method_missing(name, *args, &block)
+      action = RailsAdmin::Config::Actions.find(name.to_sym)
+      if action
+        action_missing name, *args, &block
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(sym, include_private)
+      if RailsAdmin::Config::Actions.find(name.to_sym)
+        true
+      else
+        super
+      end
+    end
 
     def get_layout
       "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"

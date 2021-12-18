@@ -281,9 +281,12 @@ module RailsAdmin
         end
       end
 
-      # Returns action configuration object
+      # Setup actions to be used.
       def actions(&block)
-        RailsAdmin::Config::Actions.instance_eval(&block) if block
+        return unless block
+
+        RailsAdmin::Config::Actions.reset
+        RailsAdmin::Config::Actions.instance_eval(&block)
       end
 
       # Returns all model configurations
@@ -333,14 +336,6 @@ module RailsAdmin
       def reset_model(model)
         key = model.is_a?(Class) ? model.name.to_sym : model.to_sym
         @registry.delete(key)
-      end
-
-      # Reset all models configuration
-      # Used to clear all configurations when reloading code in development.
-      # @see RailsAdmin::Engine
-      # @see RailsAdmin::Config.registry
-      def reset_all_models
-        @registry = {}
       end
 
       # Perform reset, then load RailsAdmin initializer again

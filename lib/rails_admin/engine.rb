@@ -73,6 +73,9 @@ module RailsAdmin
       end
 
       RailsAdmin::Config.initialize!
+
+      # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
+      app.reload_routes!
     end
   end
 end

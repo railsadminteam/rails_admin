@@ -183,6 +183,13 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#action_missing' do
+    it 'raises error when action is not found' do
+      expect(RailsAdmin::Config::Actions).to receive(:find).and_return(nil)
+      expect { get :index, model_name: 'player' }.to raise_error AbstractController::ActionNotFound
+    end
+  end
+
   describe '#get_collection' do
     let(:team) { FactoryBot.create :team }
     let!(:player) { FactoryBot.create :player, team: team }
