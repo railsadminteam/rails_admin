@@ -26,7 +26,7 @@ module RailsAdmin
 
     def action_missing(name, *_args)
       action = RailsAdmin::Config::Actions.find(name.to_sym)
-      raise AbstractController::ActionNotFound.new("The action '#{name}' could not be found for #{self.class.name}", self, name) unless action
+      raise AbstractController::ActionNotFound.new("The action '#{name}' could not be found for #{self.class.name}") unless action
 
       get_model unless action.root?
       get_object if action.member?
