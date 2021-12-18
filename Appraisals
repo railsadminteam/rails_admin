@@ -65,9 +65,9 @@ appraise 'rails-6.1' do
 end
 
 appraise 'rails-7.0' do
-  gem 'rails', '~> 7.0.0.rc1'
+  gem 'rails', '~> 7.0.0'
   gem 'sassc-rails', '~> 2.1'
-  gem 'devise', '~> 4.7', github: 'heartcombo/devise'
+  gem 'devise', '~> 4.8'
 
   group :test do
     gem 'cancancan', '~> 3.2'
