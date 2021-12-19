@@ -50,6 +50,10 @@ module RailsAdmin
           nil
         end
 
+        register_instance_option :sticky? do
+          false
+        end
+
         register_instance_option :sortable do
           !virtual? || children_fields.first || false
         end

@@ -60,12 +60,6 @@ module RailsAdmin
       # Tell browsers whether to use the native HTML5 validations (novalidate form option).
       attr_accessor :browser_validations
 
-      # Set the max width of columns in list view before a new set is created
-      attr_accessor :total_columns_width
-
-      # Enable horizontal-scrolling table in list view, ignore total_columns_width
-      attr_accessor :sidescroll
-
       # set parent controller
       attr_reader :parent_controller
 
@@ -281,6 +275,14 @@ module RailsAdmin
         end
       end
 
+      def total_columns_width=(_)
+        ActiveSupport::Deprecation.warn('The total_columns_width configuration option is deprecated and has no effect.')
+      end
+
+      def sidescroll=(_)
+        ActiveSupport::Deprecation.warn('The sidescroll configuration option was removed, it is always enabled now.')
+      end
+
       # Setup actions to be used.
       def actions(&block)
         return unless block
@@ -315,8 +317,6 @@ module RailsAdmin
         @default_search_operator = 'default'
         @excluded_models = []
         @included_models = []
-        @total_columns_width = 697
-        @sidescroll = nil
         @label_methods = %i[name title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}

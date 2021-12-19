@@ -16,25 +16,6 @@ module RailsAdmin
       'danger'                          # > 1/3 of max
     end
 
-    def get_column_sets(properties)
-      sets = []
-      property_index = 0
-      set_index = 0
-
-      while property_index < properties.length
-        current_set_width = 0
-        loop do
-          sets[set_index] ||= []
-          sets[set_index] << properties[property_index]
-          current_set_width += (properties[property_index].column_width || 120)
-          property_index += 1
-          break if current_set_width >= RailsAdmin::Config.total_columns_width || property_index >= properties.length
-        end
-        set_index += 1
-      end
-      sets
-    end
-
     def filterable_fields
       @filterable_fields ||= @model_config.list.fields.select(&:filterable?)
     end

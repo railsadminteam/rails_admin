@@ -9,15 +9,8 @@
   export_action = RailsAdmin::Config::Actions.find(:export, { controller: self.controller, abstract_model: @abstract_model })
   export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
   description = RailsAdmin.config(@abstract_model.model_name).description
-  properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).visible_fields
+  properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).fields_for_table
   checkboxes = @model_config.list.checkboxes?
-  # columns paginate
-  unless (frozen_columns = @model_config.list.sidescroll_frozen_columns)
-    sets = get_column_sets(properties)
-    properties = sets[params[:set].to_i] || []
-    other_left = ((params[:set].to_i - 1) >= 0) && sets[params[:set].to_i - 1].present?
-    other_right = sets[params[:set].to_i + 1].present?
-  end
   table_table_header_count = begin
     count = checkboxes ? 1 : 0
     count = count + properties.count
@@ -91,7 +84,7 @@
       </div>
       <% if export_action %>
         <span style="float:right">
-          <%= link_to wording_for(:link, export_action), export_path(params.except('set').except('page')), class: 'btn btn-info' %>
+          <%= link_to wording_for(:link, export_action), export_path(params.except('page')), class: 'btn btn-info' %>
         </span>
       <% end %>
     </div>
@@ -108,7 +101,7 @@
       <% end %>
     </ul>
   <% end %>
-  <%= form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: ["form", frozen_columns ? 'ra-sidescroll' : nil], data: (frozen_columns ? {ra_sidescroll: frozen_columns} : {}) do %>
+  <%= form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: ["form"] do %>
     <%= hidden_field_tag :bulk_action %>
     <% if description.present? %>
       <p>
@@ -117,91 +110,59 @@
         </strong>
       </p>
     <% end %>
-    <table class="table table-condensed table-striped table-hover">
-      <thead>
-        <tr>
-          <% if checkboxes %>
-            <th class="shrink">
-              <input class="toggle" type="checkbox"></input>
-            </th>
-          <% end %>
-          <% if frozen_columns %>
-            <th class="last shrink"></th>
-          <% end %>
-          <% if other_left %>
-            <th class="other left shrink">
-              <%= "..." %>
-            </th>
-          <% end %>
-          <% properties.each do |property| %>
-            <% selected = (sort == property.name.to_s) %>
-            <% if property.sortable %>
-              <% sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}) %>
-              <% sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected) %>
-            <% end %>
-            <th class="<%= "#{property.sortable && "header pjax" || nil} #{sort_direction if property.sortable && sort_direction} #{property.css_class} #{property.type_css_class}" %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">
-              <%= property.label %>
-            </th>
-          <% end %>
-          <% if other_right %>
-            <th class="other right shrink">
-              <%= "..." %>
-            </th>
-          <% end %>
-          <% unless frozen_columns %>
-            <th class="last shrink"></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @objects.each do |object| %>
-          <tr class="<%= @abstract_model.param_key %>_row <%= @model_config.list.with(object: object).row_css_class %>">
+    <div id="sidescroll">
+      <table class="table table-condensed table-striped table-hover">
+        <thead>
+          <tr>
             <% if checkboxes %>
-              <td>
-                <%= check_box_tag "bulk_ids[]", object.id, false %>
-              </td>
+              <th class="shrink sticky">
+                <input class="toggle" type="checkbox"></input>
+              </th>
             <% end %>
-            <% if frozen_columns %>
-              <td class="last links">
+            <% properties.each do |property| %>
+              <% selected = (sort == property.name.to_s) %>
+              <% if property.sortable %>
+                <% sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}) %>
+                <% sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected) %>
+              <% end %>
+              <th class="<%= [property.sortable && "header pjax", property.sortable && sort_direction, property.sticky? && 'sticky', property.css_class, property.type_css_class].compact.join(' ') %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">
+                <%= property.label %>
+              </th>
+            <% end %>
+            <th class="last shrink"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @objects.each do |object| %>
+            <tr class="<%= @abstract_model.param_key %>_row <%= @model_config.list.with(object: object).row_css_class %>">
+              <% if checkboxes %>
+                <td class="sticky">
+                  <%= check_box_tag "bulk_ids[]", object.id, false %>
+                </td>
+              <% end %>
+              <% properties.map{ |property| property.bind(:object, object) }.each do |property| %>
+                <% value = property.pretty_value %>
+                <td class="<%= [property.sticky? && 'sticky', property.css_class, property.type_css_class].compact.join(' ') %>" title="<%= strip_tags(value.to_s) %>">
+                  <%= value %>
+                </td>
+              <% end %>
+              <td class="last links ra-sidescroll-frozen">
                 <ul class="inline list-inline">
                   <%= menu_for :member, @abstract_model, object, true %>
                 </ul>
               </td>
-            <% end %>
-            <% if @other_left_link ||= other_left && index_path(params.except('set').merge(params[:set].to_i != 1 ? {set: (params[:set].to_i - 1)} : {})) %>
-              <td class="other left">
-                <%= link_to "...", @other_left_link, class: 'pjax' %>
+            </tr>
+          <% end %>
+          <% if @objects.empty? %>
+            <tr class="empty_row">
+              <td colspan="<%= table_table_header_count %>">
+                <%= I18n.t('admin.actions.index.no_records') %>
               </td>
-            <% end %>
-            <% properties.map{ |property| property.bind(:object, object) }.each do |property| %>
-              <% value = property.pretty_value %>
-              <td class="<%= property.css_class %> <%= property.type_css_class %>" title="<%= strip_tags(value.to_s) %>">
-                <%= value %>
-              </td>
-            <% end %>
-            <% if @other_right_link ||= other_right && index_path(params.merge(set: (params[:set].to_i + 1))) %>
-              <td class="other right">
-                <%= link_to "...", @other_right_link, class: 'pjax' %>
-              </td>
-            <% end %>
-            <% unless frozen_columns %>
-              <td class="last links">
-                <ul class="inline list-inline">
-                  <%= menu_for :member, @abstract_model, object, true %>
-                </ul>
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-        <% if @objects.empty? %>
-          <tr class="empty_row">
-            <td colspan="<%= table_table_header_count %>">
-              <%= I18n.t('admin.actions.index.no_records') %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
     <% if @model_config.list.limited_pagination %>
       <div class="row">
         <div class="col-md-6">

@@ -233,6 +233,14 @@ body.rails_admin {
     }
   }
 
+  #sidescroll {
+    margin-bottom: 20px;
+    overflow-x: auto;
+    .table {
+      margin-bottom: 0;
+    }
+  }
+
   /* Table cells behaviour */
   .table {
     // Cells
@@ -254,10 +262,13 @@ body.rails_admin {
     /* backport of Bootstrap 1.4 table headers */
     .header {
       cursor: pointer;
+      padding-right: 18px;
       &:after {
         content: "";
         float: right;
         margin-top: 7px;
+        margin-left: 8px;
+        margin-right: -16px;
         border-width: 0 4px 4px;
         border-style: solid;
         border-color: #000 transparent;
@@ -293,12 +304,31 @@ body.rails_admin {
       }
     }
 
+    th {
+      white-space: nowrap;
+    }
+
     /* text-overflow when cell content > 150px */
     td {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 150px;
+    }
+
+    th,
+    td {
+      padding: 5px 10px;
+    }
+
+    .sticky {
+      position: sticky;
+    }
+
+    th.last,
+    td.last {
+      position: sticky;
+      right: 0px;
     }
 
     /* icons */
@@ -327,6 +357,25 @@ body.rails_admin {
     }
     th.item {
       width: 60px;
+    }
+  }
+
+  // Remove transparency on sticky cells.
+  $table-bg-default: if(
+    $table-bg == transparent,
+    if($body-bg == transparent, #fff, $body-bg),
+    $table-bg
+  ) !default;
+  .table-striped > tbody > tr:nth-child(even) > td,
+  .table-striped > thead > tr > th {
+    background-color: $table-bg-default;
+  }
+  $table-bg-header-sort: #e2eff6 !default;
+  .table .sticky,
+  .table .last {
+    &.headerSortUp,
+    &.headerSortDown {
+      background-color: $table-bg-header-sort;
     }
   }
 }
