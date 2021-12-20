@@ -13,7 +13,11 @@ module RailsAdmin
     def install
       namespace = ask_for('Where do you want to mount rails_admin?', 'admin', _namespace)
       route("mount RailsAdmin::Engine => '/#{namespace}', as: 'rails_admin'")
-      template 'initializer.erb', 'config/initializers/rails_admin.rb'
+      if File.exist? File.join(destination_root, 'config/initializers/rails_admin.rb')
+        insert_into_file 'config/initializers/rails_admin.rb', "  config.asset_source = :#{asset}\n", after: "RailsAdmin.config do |config|\n"
+      else
+        template 'initializer.erb', 'config/initializers/rails_admin.rb'
+      end
       display "Using [#{asset}] for asset delivery method"
       case asset
       when 'webpack'

@@ -8,20 +8,30 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
   before do
     prepare_destination
     FileUtils.touch File.join(destination_root, 'Gemfile')
+    FileUtils.mkdir_p(File.join(destination_root, 'config/initializers'))
+    File.write(File.join(destination_root, 'config/routes.rb'), <<-RUBY.gsub(/^ {4}/, ''))
+    Rails.application.routes.draw do
+      # empty
+    end
+    RUBY
+  end
+
+  after do
+    FileUtils.rm_rf(destination_root)
   end
 
   it 'mounts RailsAdmin as Engine and generates RailsAdmin Initializer' do
-    expect_any_instance_of(generator_class).to receive(:route).
-      with("mount RailsAdmin::Engine => '/admin', as: 'rails_admin'")
-    silence_stream($stdout) do
-      generator.invoke('install')
-    end
+    run_generator
     expect(destination_root).to have_structure {
       directory 'config' do
         directory 'initializers' do
           file 'rails_admin.rb' do
             contains 'RailsAdmin.config'
+            contains 'asset_source ='
           end
+        end
+        file 'routes.rb' do
+          contains "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
         end
       end
       case CI_ASSET
@@ -41,5 +51,15 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
         end
       end
     }
+  end
+
+  it 'inserts asset_source option to RailsAdmin Initializer' do
+    File.write(File.join(destination_root, 'config/initializers/rails_admin.rb'), <<-RUBY.gsub(/^ {4}/, ''))
+    RailsAdmin.config do |config|
+      # empty
+    end
+    RUBY
+    run_generator
+    expect(File.read(File.join(destination_root, 'config/initializers/rails_admin.rb'))).to include 'config.asset_source ='
   end
 end
