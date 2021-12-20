@@ -2,8 +2,77 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v2.2.1...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.beta...HEAD)
 
+## [3.0.0.beta](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.beta) - 2021-12-20
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v2.2.1...v3.0.0.beta)
+
+### Added
+
+- Rails 7.0.0 support ([011b9ae](https://github.com/railsadminteam/rails_admin/commit/011b9aea12d2c3a5e8654786e49071254baacf18), [670d803](https://github.com/railsadminteam/rails_admin/commit/670d803c262429600c6eb7f59f8b36aa145081e5))
+- Webpacker support ([#3414](https://github.com/railsadminteam/rails_admin/pull/3414))
+- Add #link_target to action configuration ([#3419](https://github.com/railsadminteam/rails_admin/pull/3419))
+- Add not like (=does not contain) operator ([#3410](https://github.com/railsadminteam/rails_admin/pull/3410))
+- Support for PostgreSQL citext data type ([#3413](https://github.com/railsadminteam/rails_admin/pull/3413), [#2177](https://github.com/railsadminteam/rails_admin/issues/2177))
+- Allow #configure to handle multiple fields for a section at once ([#3406](https://github.com/railsadminteam/rails_admin/pull/3406), [#2667](https://github.com/railsadminteam/rails_admin/issues/2667))
+- Add has_one id setters/getters, eliminating the need for explicitly defining them ([42f0a5f](https://github.com/railsadminteam/rails_admin/commit/42f0a5f5aac4b7481dcd4950803d12077b598ce5), [#2625](https://github.com/railsadminteam/rails_admin/issues/2625))
+- Support for Mongoid's has_and_belongs_to_many custom primary_key ([3f67637](https://github.com/railsadminteam/rails_admin/commit/3f676371ce7fc088220095afa12d3e20c2c6123a), [#3097](https://github.com/railsadminteam/rails_admin/pull/3097))
+- Support for eager-loading arbitrary associations ([4404758](https://github.com/railsadminteam/rails_admin/commit/44047580b7d536a84a92c173a3bd00dc9d211399), [#2928](https://github.com/railsadminteam/rails_admin/issues/2928))
+- Support for nullable boolean field ([7583369](https://github.com/railsadminteam/rails_admin/commit/7583369a1d1763e542d36930a968726425cacb6c), [#3145](https://github.com/railsadminteam/rails_admin/issues/3145))
+- Support for configuration reload in development mode ([e4ae669](https://github.com/railsadminteam/rails_admin/commit/e4ae6698e52e56a1cefdf5c4097b29b8306f21e2), [#2726](https://github.com/railsadminteam/rails_admin/issues/2726), [08f50aa](https://github.com/railsadminteam/rails_admin/commit/08f50aabc1922aeb289ced4ccbe9f983bc1aaa89), [#3420](https://github.com/railsadminteam/rails_admin/issues/3420))
+- Add 'No objects found' placeholder in filtering-select as well ([7e3a1a6](https://github.com/railsadminteam/rails_admin/commit/7e3a1a632811a917f2cbd8dbe471861bc0a1ac85), [#3332](https://github.com/railsadminteam/rails_admin/issues/3332))
+- Add inline_edit to HasManyAssociation as well ([798ab1b](https://github.com/railsadminteam/rails_admin/commit/798ab1b6ae400f2b853441a9fa48f8e7ad24208d), [#1911](https://github.com/railsadminteam/rails_admin/issues/1911))
+- Add hover highlight to the list table for better visibility ([#3221](https://github.com/railsadminteam/rails_admin/pull/3221))
+- Add ability to show disabled actions, as well as completely hiding ([6c877ea](https://github.com/railsadminteam/rails_admin/commit/6c877eac1a052881b2d4950a44d41f7fd77b044f), [#1765](https://github.com/railsadminteam/rails_admin/issues/1765))
+- Add the message 'no records found' when a list is empty ([#3365](https://github.com/railsadminteam/rails_admin/pull/3365), [a5fe6f8](https://github.com/railsadminteam/rails_admin/commit/a5fe6f806498975a91ae11544ce21310592774a2), [#3329](https://github.com/railsadminteam/rails_admin/issues/3329))
+- Add a way to clear belongs_to selection using mouse ([ac3fe35](https://github.com/railsadminteam/rails_admin/commit/ac3fe35b65e858a3b528a523e1b6fbeafe1d359b), [#2090](https://github.com/railsadminteam/rails_admin/issues/2090))
+- Add HTML5 validation for float-like field types ([#3378](https://github.com/railsadminteam/rails_admin/pull/3378), [#3289](https://github.com/railsadminteam/rails_admin/issues/3289))
+
+### Changed
+
+- Remove horizontal pagination and always use sidescroll view for list action table ([d51e943](https://github.com/railsadminteam/rails_admin/commit/d51e94314de4b510df0767a695d5953bb7b3fad5))
+- Replace image assets with Font Awesome icons ([a0a568b](https://github.com/railsadminteam/rails_admin/commit/a0a568bc866158382b52ec24639699695146794c))
+- Switch templates from HAML to ERB ([#3425](https://github.com/railsadminteam/rails_admin/pull/3425), [#3439](https://github.com/railsadminteam/rails_admin/pull/3439), [#3173](https://github.com/railsadminteam/rails_admin/issues/3173))
+- Rewrite some JavaScript code not to use jQuery ([#3416](https://github.com/railsadminteam/rails_admin/pull/3416), [#3417](https://github.com/railsadminteam/rails_admin/pull/3417))
+- Upgrade FontAwesome to 5.15.4 ([cb1ac73](https://github.com/railsadminteam/rails_admin/commit/cb1ac732c4df85cc082c4e40f2c8a7d144ceb9f2))
+- Stop using AbstractObject and use raw model instances with extension ([af88091](https://github.com/railsadminteam/rails_admin/commit/af88091d11590dc95df4866c62fba0c49a7bb9a8), [#2847](https://github.com/railsadminteam/rails_admin/issues/2847))
+- Switch from jquery_ujs to rails-ujs ([#3390](https://github.com/railsadminteam/rails_admin/pull/3390), [dea63f4](https://github.com/railsadminteam/rails_admin/commit/dea63f49ee18644ee5e8dee1fb57e0c742d27a97))
+- Make colorpicker field use HTML5 native color picker ([#3387](https://github.com/railsadminteam/rails_admin/pull/3387))
+- Change to use ISO 8601 time format for browser-server communication, instead of localized value ([01e8d5f](https://github.com/railsadminteam/rails_admin/commit/01e8d5fc8ec94e68af6fdbd80759a751cd83f74a), [#3344](https://github.com/railsadminteam/rails_admin/issues/3344))
+
+### Removed
+
+- Remove dependency for builder and remotipart ([#3427](https://github.com/railsadminteam/rails_admin/pull/3427), [58b76d1](https://github.com/railsadminteam/rails_admin/commit/58b76d1e66ec06b752567da9c118f611105ff39f))
+- Remove capitalization helper, letting I18n to perform necessary transformation ([#3396](https://github.com/railsadminteam/rails_admin/pull/3396))
+- Remove jQuery Migrate ([#3389](https://github.com/railsadminteam/rails_admin/pull/3389), [b385d4d](https://github.com/railsadminteam/rails_admin/commit/b385d4d50f372de65d8c6c33a4b8256403894483))
+- Remove the legacy history adapter([#3374](https://github.com/railsadminteam/rails_admin/issues/3374), [b627580](https://github.com/railsadminteam/rails_admin/commit/b62758039308872e7abe91a51715e1608bfd0915))
+- Drop support for Ruby < 2.5 and Rails 5.x([decf428](https://github.com/railsadminteam/rails_admin/commit/decf4280183b8b6a453aa802942fc825524c2f13), [17e20b6](https://github.com/railsadminteam/rails_admin/commit/17e20b6daef1708598ab8cff5678501f8bac4709))
+
+### Fixed
+
+- Reduce object allocations when rendering main navigation menu ([#3412](https://github.com/railsadminteam/rails_admin/pull/3412))
+- Fix N+1 queries for ActiveStorage attachments ([e4d5b2f](https://github.com/railsadminteam/rails_admin/commit/e4d5b2f3bece0f5f3e5f588e20e52031ad33e124), [#3282](https://github.com/railsadminteam/rails_admin/issues/3282))
+- Fix to convert DateTime format for Moment.js as much as possible ([6d5c049](https://github.com/railsadminteam/rails_admin/commit/6d5c049124d0b390f4612e8e6524f00500afe52e), [#2736](https://github.com/railsadminteam/rails_admin/issues/2736), [#3009](https://github.com/railsadminteam/rails_admin/issues/3009))
+- Fix config.parent_controller to work after the class loading ([5bd9805](https://github.com/railsadminteam/rails_admin/commit/5bd980564a565906a6fda87d2ef31590d3e3b0a5), [#2790](https://github.com/railsadminteam/rails_admin/issues/2790))
+- Fix NoMethodError when Mongoid's raise_not_found_error is false ([973bd8e](https://github.com/railsadminteam/rails_admin/commit/973bd8e50591a538841575c33b6221706481dae3), [#2623](https://github.com/railsadminteam/rails_admin/issues/2623))
+- Fix NoMethodError "undefined method 'has_one_attached'" ([e4ae669](https://github.com/railsadminteam/rails_admin/commit/e4ae6698e52e56a1cefdf5c4097b29b8306f21e2), [#3025](https://github.com/railsadminteam/rails_admin/issues/3025))
+- Fix NoMethodError "undefined method `label' for nil:NilClass" on export ([f2104b5](https://github.com/railsadminteam/rails_admin/commit/f2104b595930491a18ede44c9e1a8c881a0316b8), [#1685](https://github.com/railsadminteam/rails_admin/issues/1685))
+- Fix Kaminari's custom param_name was not used in history_index and history_show ([#3227](https://github.com/railsadminteam/rails_admin/pull/3227), [#3400](https://github.com/railsadminteam/rails_admin/pull/3400))
+- Fix Gravater and email were not shown when the current user is not editable ([bd44929](https://github.com/railsadminteam/rails_admin/commit/bd449292088cb68aad22b282b6344778862187e5), [#3237](https://github.com/railsadminteam/rails_admin/issues/3237))
+- Fix RailsAdmin::Config.reset didn't clear the effect of previous included_models/excluded_models ([1190d51](https://github.com/railsadminteam/rails_admin/commit/1190d510ee73949af618bd279e4712f1be4550b6), [#3305](https://github.com/railsadminteam/rails_admin/issues/3305))
+- Fix duplication of filtering-multiselect on browser back ([3c10b09](https://github.com/railsadminteam/rails_admin/commit/3c10b0918b65e64624f06ebd5e402181f478cc64), [#3211](https://github.com/railsadminteam/rails_admin/issues/3211))
+- Fix no error message is shown on failure with dependent: :restrict_with_error ([bf353cc](https://github.com/railsadminteam/rails_admin/commit/bf353cc76d6e56d511e9c5a87d0ffbd83669e3f2), [#3323](https://github.com/railsadminteam/rails_admin/issues/3223))
+- Fix read-only associations are shown empty if it has no value ([7580f33](https://github.com/railsadminteam/rails_admin/commit/7580f3366a6e4a16b439de7fd64860fe26628ad7), [#2681](https://github.com/railsadminteam/rails_admin/issues/2681))
+- Fix hidden fields taking up some space ([5aaee51](https://github.com/railsadminteam/rails_admin/commit/5aaee5153441fd82854a998ac02ebbe303b82bf2), [#3380](https://github.com/railsadminteam/rails_admin/issues/3380))
+- Fix to show validation errors in modals ([f67defb](https://github.com/railsadminteam/rails_admin/commit/f67defb55ad9d1a1fe8428029c947bcd00b5ce8a), [#1735](https://github.com/railsadminteam/rails_admin/issues/1735))
+- Fix image file detection by using Mime::Type ([#3398](https://github.com/railsadminteam/rails_admin/pull/3398), [#3239](https://github.com/railsadminteam/rails_admin/issues/3239))
+- Fix 'no objects' message not showing up in filtering-multiselect widget ([aa5545c](https://github.com/railsadminteam/rails_admin/commit/aa5545c928ce0de80142966c19b64be76d88286f))
+- Fix 'Delete Image' translation does not work well in some languages ([#3382](https://github.com/railsadminteam/rails_admin/pull/3382), [#3260](https://github.com/railsadminteam/rails_admin/issues/3260))
+- Fix polymorphic associations don't work with namespaced classes ([#3377](https://github.com/railsadminteam/rails_admin/pull/3377), [#3376](https://github.com/railsadminteam/rails_admin/issues/3376))
+- Fix Boolean pretty_value to include default fallback ([#3379](https://github.com/railsadminteam/rails_admin/pull/3379))
+- Fix history#index not supporting models with custom version classes ([ed19f9e](https://github.com/railsadminteam/rails_admin/commit/ed19f9e793b91de1c2bc9133e026b0396e6ec777))
+- Fix models stored in eager_load_paths are not picked up by #viable_models ([#3373](https://github.com/railsadminteam/rails_admin/issues/3373), [238f18e](https://github.com/railsadminteam/rails_admin/commit/238f18ee2386f9858670b7995dcb628b8fe6bde9))
 - Fix polymorphic associations don't work with namespaced classes([#3376](https://github.com/railsadminteam/rails_admin/issues/3376))
 
 ## [2.2.1](https://github.com/railsadminteam/rails_admin/tree/v2.2.0) - 2021-08-08

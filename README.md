@@ -47,11 +47,16 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 ## Installation
 
-1. On your gemfile: `gem 'rails_admin', '~> 2.0'`
+1. On your gemfile: `gem 'rails_admin', ['>= 3.0.0.beta', '< 4']`
 2. Run `bundle install`
 3. Run `rails g rails_admin:install`
 4. Provide a namespace for the routes when asked
 5. Start a server `rails s` and administer your data at [/admin](http://localhost:3000/admin). (if you chose default namespace: /admin)
+
+## Upgrading from 2.x
+
+Due to introduction of Webpack/Webpacker support, some additional dependency and configuration will be needed.
+Running `rails g rails_admin:install` will suggest you some required changes, based on current setup of your app.
 
 ## Configuration
 
