@@ -4,6 +4,14 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.beta...HEAD)
 
+## [3.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.beta2) - 2021-12-25
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.beta...v3.0.0.beta2)
+
+### Fixed
+
+- Fix NameError 'uninitialized constant RailsAdmin::Version' on install ([d2ad520](https://github.com/railsadminteam/rails_admin/commit/d2ad5209f98d8678c6317b49f13727b8605048b3), [#3452](https://github.com/railsadminteam/rails_admin/issues/3452))
+
 ## [3.0.0.beta](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.beta) - 2021-12-20
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v2.2.1...v3.0.0.beta)
