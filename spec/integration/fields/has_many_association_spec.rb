@@ -3,6 +3,12 @@ require 'spec_helper'
 RSpec.describe 'HasManyAssociation field', type: :request do
   subject { page }
 
+  it 'adds a related id to the has_many create team link' do
+    @team = FactoryBot.create :team
+    visit edit_path(model_name: 'team', id: @team.id)
+    is_expected.to have_selector("a[data-link='/admin/player/new?modal=true&player%5Bteam_id%5D=#{@team.id}']")
+  end
+
   context 'when an association is readonly' do
     it 'is not editable' do
       @league = FactoryBot.create :league

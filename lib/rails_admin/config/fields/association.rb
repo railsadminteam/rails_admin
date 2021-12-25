@@ -89,6 +89,11 @@ module RailsAdmin
           association.primary_key
         end
 
+        # Returns params which are to be set in modals
+        def associated_prepopulate_params
+          {}
+        end
+
         # Reader whether this is a polymorphic association
         def polymorphic?
           association.polymorphic?

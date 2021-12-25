@@ -1,13 +1,8 @@
 <%
-  related_id = params[:associations] && params[:associations][field.name.to_s]
   config = field.associated_model_config
   source_abstract_model = RailsAdmin.config(form.object.class).abstract_model
 
-  if form.object.new_record? && related_id.present? && related_id != 'new'
-    selected = [config.abstract_model.get(related_id)]
-  else
-    selected = form.object.send(field.name)
-  end
+  selected = form.object.send(field.name)
   selected_ids = selected.map{|s| s.send(field.associated_primary_key)}
 
   current_action = params[:action].in?(['create', 'new']) ? 'create' : 'update'
@@ -43,7 +38,6 @@
 <% selected_ids = (hdv = field.form_default_value).nil? ? selected_ids : hdv %>
 <%= form.select field.method_name, collection, { selected: selected_ids, object: form.object }, field.html_attributes.reverse_merge({data: { filteringmultiselect: true, options: js_data.to_json }, multiple: true}) %>
 <% if authorized?(:new, config.abstract_model) && field.inline_add %>
-  <% path_hash = { model_name: config.abstract_model.to_param, modal: true } %>
-  <% path_hash.merge!({ associations: { field.inverse_of => (form.object.persisted? ? form.object.id : 'new') } }) if field.inverse_of %>
+  <% path_hash = { model_name: config.abstract_model.to_param, modal: true }.merge!(field.associated_prepopulate_params) %>
   <%= link_to "<i class=\"fas fa-plus\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', data: { link: new_path(path_hash) }, class: "create btn btn-info", style: 'margin-left:10px' %>
 <% end %>

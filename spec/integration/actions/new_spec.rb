@@ -44,15 +44,16 @@ RSpec.describe 'New action', type: :request do
       expect(page).to have_css('input[value=Sam]')
     end
 
-    it 'prepropulates belongs to relationships' do
-      @team = FactoryBot.create :team, name: 'belongs_to association prepopulated'
-      visit new_path(model_name: 'player', associations: {team: @team.id})
-      expect(page).to have_css("select#player_team_id option[selected='selected'][value='#{@team.id}']")
+    it 'prepropulates has_one relationships' do
+      @draft = FactoryBot.create :draft
+      @player = FactoryBot.create :player, name: 'has_one association prepopulated'
+      visit new_path(model_name: 'player', player: {draft_id: @draft.id})
+      expect(page).to have_css("select#player_draft_id option[selected='selected'][value='#{@draft.id}']")
     end
 
     it 'prepropulates has_many relationships' do
       @player = FactoryBot.create :player, name: 'has_many association prepopulated'
-      visit new_path(model_name: 'team', associations: {players: @player.id})
+      visit new_path(model_name: 'team', team: {player_ids: [@player.id]})
       expect(page).to have_css("select#team_player_ids option[selected='selected'][value='#{@player.id}']")
     end
   end
