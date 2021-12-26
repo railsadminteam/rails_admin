@@ -939,6 +939,48 @@ RSpec.describe 'Index action', type: :request do
     end
   end
 
+  describe 'with model scope' do
+    context 'without default scope' do
+      let!(:teams) { %w[red yellow blue].map { |color| FactoryBot.create :team, color: color } }
+
+      it 'works', active_record: true do
+        RailsAdmin.config do |config|
+          config.model Team do
+            scope { Team.where(color: %w[red blue]) }
+          end
+        end
+        visit index_path(model_name: 'team')
+        expect(all(:css, 'td.color_field').map(&:text)).to match_array %w[red blue]
+      end
+
+      it 'works', mongoid: true do
+        RailsAdmin.config do |config|
+          config.model Team do
+            scope { Team.any_in(color: %w[red blue]) }
+          end
+        end
+        visit index_path(model_name: 'team')
+        expect(all(:css, 'td.color_field').map(&:text)).to match_array %w[red blue]
+      end
+    end
+
+    context 'with default_scope' do
+      let!(:comments) { %w[something anything].map { |content| FactoryBot.create :comment_confirmed, content: content } }
+      before do
+        RailsAdmin.config do |config|
+          config.model Comment::Confirmed do
+            scope { Comment::Confirmed.unscoped }
+          end
+        end
+      end
+
+      it 'can be overriden' do
+        visit index_path(model_name: 'comment~confirmed')
+        expect(all(:css, 'td.content_field').map(&:text)).to match_array %w[something anything]
+      end
+    end
+  end
+
   describe 'with scopes' do
     before do
       RailsAdmin.config do |config|

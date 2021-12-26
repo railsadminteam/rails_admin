@@ -32,7 +32,7 @@ module RailsAdmin
     end
 
     def get_object
-      raise RailsAdmin::ObjectNotFound unless (@object = @abstract_model.get(params[:id]))
+      raise RailsAdmin::ObjectNotFound unless (@object = @abstract_model.get(params[:id], @model_config.scope))
     end
 
     def to_model_name(param)

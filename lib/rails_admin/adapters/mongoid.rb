@@ -18,8 +18,8 @@ module RailsAdmin
         model.new(params).extend(ObjectExtension)
       end
 
-      def get(id)
-        object = model.find(id)
+      def get(id, scope = scoped)
+        object = scope.find(id)
         return nil unless object
 
         object.extend(ObjectExtension)

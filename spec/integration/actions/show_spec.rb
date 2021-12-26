@@ -437,4 +437,22 @@ RSpec.describe 'Show action', type: :request do
       end
     end
   end
+
+  describe 'with model scope' do
+    let!(:comments) { %w[something anything].map { |content| FactoryBot.create :comment_confirmed, content: content } }
+    before do
+      RailsAdmin.config do |config|
+        config.model Comment::Confirmed do
+          scope { Comment::Confirmed.unscoped }
+        end
+      end
+    end
+
+    it 'overrides default_scope' do
+      visit show_path(model_name: 'comment~confirmed', id: comments[0].id)
+      is_expected.to have_selector('dd', text: 'something')
+      visit show_path(model_name: 'comment~confirmed', id: comments[1].id)
+      is_expected.to have_selector('dd', text: 'anything')
+    end
+  end
 end

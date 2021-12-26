@@ -12,8 +12,8 @@ module RailsAdmin
         model.new(params).extend(ObjectExtension)
       end
 
-      def get(id)
-        return unless object = model.where(primary_key => id).first
+      def get(id, scope = scoped)
+        return unless object = scope.where(primary_key => id).first
 
         object.extend(ObjectExtension)
       end
