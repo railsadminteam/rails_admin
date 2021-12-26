@@ -1,74 +1,95 @@
 require 'spec_helper'
 
-RSpec.describe RailsAdmin::Config::Fields::Types::ActiveStorage do
-  it_behaves_like 'a generic field type', :string_field, :active_storage
+if defined?(ActiveStorage)
+  RSpec.describe RailsAdmin::Config::Fields::Types::ActiveStorage do
+    it_behaves_like 'a generic field type', :string_field, :active_storage
 
-  let(:record) { FactoryBot.create :field_test }
-  let(:field) do
-    RailsAdmin.config('FieldTest').fields.detect do |f|
-      f.name == :active_storage_asset
-    end.with(object: record)
+    let(:record) { FactoryBot.create :field_test }
+    let(:field) do
+      RailsAdmin.config('FieldTest').fields.detect do |f|
+        f.name == :active_storage_asset
+      end.with(object: record)
+    end
+
+    describe '#thumb_method' do
+      it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
+        expect(field.thumb_method).to eq(resize_to_limit: [100, 100])
+      end
+    end
+
+    describe '#image?' do
+      context 'configured Mime::Types' do
+        before { Mime::Type.register 'image/webp', :webp }
+        after { Mime::Type.unregister :webp }
+
+        %w[jpg jpeg png gif svg webp].each do |image_type_ext|
+          context "when attachment is a '#{image_type_ext}' file" do
+            let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.#{image_type_ext}"} }
+
+            it 'returns true' do
+              expect(field.image?).to be_truthy
+            end
+          end
+        end
+      end
+
+      context 'when attachment is not an image' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.txt', content_type: 'text/plain'} }
+
+        it 'returns false' do
+          expect(field.image?).to be_falsy
+        end
+      end
+    end
+
+    describe '#resource_url' do
+      context 'when calling with thumb = false' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.jpg', content_type: 'image/jpeg'} }
+
+        it 'returns original url' do
+          expect(field.resource_url).not_to match(/representations/)
+        end
+      end
+
+      context 'when attachment is an image' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.jpg', content_type: 'image/jpeg'} }
+
+        it 'returns variant\'s url' do
+          expect(field.resource_url(true)).to match(/representations/)
+        end
+      end
+
+      context 'when attachment is not an image' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.txt', content_type: 'text/plain'} }
+
+        it 'returns original url' do
+          expect(field.resource_url(true)).not_to match(/representations/)
+        end
+      end
+    end
+
+    describe '#value' do
+      context 'when attachment exists' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.jpg', content_type: 'image/jpeg'} }
+
+        it 'returns attached object' do
+          expect(field.value).to be_a(ActiveStorage::Attached::One)
+        end
+      end
+
+      context 'when attachment does not exist' do
+        let(:record) { FactoryBot.create :field_test }
+
+        it 'returns nil' do
+          expect(field.value).to be_nil
+        end
+      end
+    end
+
+    describe '#eager_load' do
+      it 'points to associations to be eager-loaded' do
+        expect(field.eager_load).to eq({active_storage_asset_attachment: :blob})
+      end
+    end
   end
-
-  describe '#image?' do
-    context 'when attachment is an image' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"} }
-
-      it 'returns true' do
-        expect(field.image?).to be_truthy
-      end
-    end
-
-    context 'when attachment is not an image' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.txt", content_type: "text/plain"} }
-
-      it 'returns false' do
-        expect(field.image?).to be_falsy
-      end
-    end
-  end
-
-  describe '#resource_url' do
-    context 'when calling with thumb = false' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"} }
-
-      it 'returns original url' do
-        expect(field.resource_url).not_to match(/representations/)
-      end
-    end
-
-    context 'when attachment is an image' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"} }
-
-      it 'returns variant\'s url' do
-        expect(field.resource_url(true)).to match(/representations/)
-      end
-    end
-
-    context 'when attachment is not an image' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.txt", content_type: "text/plain"} }
-
-      it 'returns original url' do
-        expect(field.resource_url(true)).not_to match(/representations/)
-      end
-    end
-  end
-
-  describe '#value' do
-    context 'when attachment exists' do
-      let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: "test.jpg", content_type: "image/jpeg"} }
-
-      it 'returns attached object' do
-        expect(field.value).to be_a(ActiveStorage::Attached::One)
-      end
-    end
-
-    context 'when attachment does not exist' do
-      let(:record) { FactoryBot.create :field_test }
-
-      it 'returns nil' do
-        expect(field.value).to be_nil
-      end
-    end
-  end
-end if defined?(ActiveStorage)
+end

@@ -209,6 +209,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
       class MyCustomValidator < ActiveModel::Validator
         def validate(_r); end
       end
+
       class CustomValiated
         include Mongoid::Document
         field :text, type: String

@@ -79,11 +79,12 @@ RSpec.describe RailsAdmin::Config::Model do
                                           i18n: {
                                             plural: {
                                               rule: ->(count) do
-                                                if count == 0
+                                                case count
+                                                when 0
                                                   :zero
-                                                elsif count == 1
+                                                when 1
                                                   :one
-                                                elsif count == 2
+                                                when 2
                                                   :two
                                                 else
                                                   :other

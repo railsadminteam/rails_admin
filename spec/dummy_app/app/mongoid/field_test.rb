@@ -31,6 +31,7 @@ class FieldTest
   field :time_field, type: Time
 
   field :format, type: String
+  field :open, type: Boolean
   field :restricted_field, type: String
   field :protected_field, type: String
   has_mongoid_attached_file :paperclip_asset, styles: {thumb: '100x100>'}
@@ -51,6 +52,7 @@ class FieldTest
   accepts_nested_attributes_for :embeds, allow_destroy: true
 
   attr_accessor :delete_paperclip_asset
+
   before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
   field :dragonfly_asset_name

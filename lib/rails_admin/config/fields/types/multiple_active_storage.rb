@@ -9,7 +9,7 @@ module RailsAdmin
 
           class ActiveStorageAttachment < RailsAdmin::Config::Fields::Types::MultipleFileUpload::AbstractAttachment
             register_instance_option :thumb_method do
-              {resize: '100x100>'}
+              {resize_to_limit: [100, 100]}
             end
 
             register_instance_option :delete_value do
@@ -18,12 +18,14 @@ module RailsAdmin
 
             register_instance_option :image? do
               if value
-                value.filename.to_s.split('.').last =~ /jpg|jpeg|png|gif|svg/i
+                mime_type = Mime::Type.lookup_by_extension(value.filename.extension_without_delimiter)
+                mime_type.to_s.match?(/^image/)
               end
             end
 
             def resource_url(thumb = false)
               return nil unless value
+
               if thumb && value.variable?
                 variant = value.variant(thumb_method)
                 Rails.application.routes.url_helpers.rails_blob_representation_path(
@@ -41,6 +43,10 @@ module RailsAdmin
 
           register_instance_option :delete_method do
             "remove_#{name}" if bindings[:object].respond_to?("remove_#{name}")
+          end
+
+          register_instance_option :eager_load do
+            {"#{name}_attachments": :blob}
           end
         end
       end

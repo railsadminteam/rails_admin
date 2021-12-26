@@ -7,19 +7,16 @@ module RailsAdmin
         class Date < RailsAdmin::Config::Fields::Types::Datetime
           RailsAdmin::Config::Fields::Types.register(self)
 
+          def parse_value(value)
+            ::Date.parse(value) if value.present?
+          end
+
           register_instance_option :date_format do
             :long
           end
 
           register_instance_option :i18n_scope do
-            [:date, :formats]
-          end
-
-          register_instance_option :datepicker_options do
-            {
-              showTodayButton: true,
-              format: parser.to_momentjs,
-            }
+            %i[date formats]
           end
 
           register_instance_option :html_attributes do

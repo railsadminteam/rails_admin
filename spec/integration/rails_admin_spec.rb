@@ -28,18 +28,28 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'html head' do
     before { visit dashboard_path }
 
-    # Note: the [href^="/asset... syntax matches the start of a value. The reason
+    # NOTE: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it 'loads stylesheets in header' do
-      is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        is_expected.to have_selector('head link[href^="/assets/rails_admin"][href$=".css"]', visible: false)
+      when :webpacker
+        is_expected.to have_no_selector('head link[href~="rails_admin"][href$=".css"]', visible: false)
+      end
     end
 
     it 'loads javascript files in body' do
-      is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin"][src$=".js"]', visible: false)
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        is_expected.to have_selector('head script[src^="/assets/rails_admin"][src$=".js"]', visible: false)
+      when :webpacker
+        is_expected.to have_selector('head script[src^="/packs-test/js/rails_admin"][src$=".js"]', visible: false)
+      end
     end
   end
 
-  describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
+  describe '_current_user' do # https://github.com/railsadminteam/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
         list do
@@ -125,7 +135,7 @@ RSpec.describe RailsAdmin, type: :request do
     it 'is enforced' do
       visit new_path(model_name: 'league')
       fill_in 'league[name]', with: 'National league'
-      find('input[name="authenticity_token"]', visible: false).set("invalid token")
+      find('input[name="authenticity_token"]', visible: false).set('invalid token')
       expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
     end
   end

@@ -27,6 +27,7 @@ FactoryBot.define do
     sequence(:win_percentage)
 
     factory :managed_team, class: ManagedTeam
+    factory :restricted_team, class: RestrictedTeam
   end
 
   factory :league do
@@ -71,7 +72,7 @@ FactoryBot.define do
   end
 
   factory :ball do
-    color { %w(red blue green yellow purple brown black white).sample }
+    color { %w[red blue green yellow purple brown black white].sample }
   end
 
   factory :hardball do
@@ -92,5 +93,13 @@ FactoryBot.define do
     factory :paper_trail_test_subclass_in_namespace,
             parent: :paper_trail_test,
             class: 'PaperTrailTest::SubclassInNamespace'
+
+    factory :paper_trail_test_with_custom_association,
+            parent: :paper_trail_test,
+            class: 'PaperTrailTestWithCustomAssociation'
+  end
+
+  factory :two_level_namespaced_polymorphic_association_test, class: 'TwoLevel::Namespaced::PolymorphicAssociationTest' do
+    sequence(:name) { |n| "name #{n}" }
   end
 end

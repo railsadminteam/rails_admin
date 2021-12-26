@@ -1,0 +1,28 @@
+{
+  "name": "rails_admin",
+  "version": "3.0.0-beta",
+  "description": "RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.",
+  "homepage": "https://github.com/railsadminteam/rails_admin",
+  "license": "MIT",
+  "author": "Mitsuhiro Shibuya <mit.shibuya@gmail.com>",
+  "files": [
+    "src"
+  ],
+  "main": "src/rails_admin/base.js",
+  "scripts": {
+    "link": "yarn link && cd spec/dummy_app && yarn link rails_admin",
+    "format": "prettier -w ."
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@rails/ujs": "^6.1.4-1",
+    "bootstrap-sass": "3.4.1",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.49",
+    "jquery": "^3.6.0",
+    "jquery-ui": "^1.12.1",
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
+}

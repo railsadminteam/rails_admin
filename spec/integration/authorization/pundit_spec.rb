@@ -26,7 +26,7 @@ RSpec.describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with read player role' do
     before do
-      @user.update(roles: [:admin, :read_player])
+      @user.update(roles: %i[admin read_player])
     end
 
     it 'GET /admin should show Player but not League' do
@@ -48,7 +48,7 @@ RSpec.describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with admin role' do
     before do
-      @user.update(roles: [:admin, :manage_player])
+      @user.update(roles: %i[admin manage_player])
     end
 
     it 'GET /admin should show Player but not League' do
@@ -78,7 +78,7 @@ RSpec.describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with all roles' do
     it 'shows links to all actions' do
-      @user.update(roles: [:admin, :manage_player])
+      @user.update(roles: %i[admin manage_player])
       @player = FactoryBot.create :player
 
       visit index_path(model_name: 'player')
@@ -99,26 +99,26 @@ RSpec.describe 'RailsAdmin Pundit Authorization', type: :request do
 
   describe 'with create and read player role' do
     before do
-      @user.update(roles: [:admin, :read_player, :create_player])
+      @user.update(roles: %i[admin read_player create_player])
     end
 
     it 'POST /admin/player/new with unauthorized attribute value should raise access denied' do
       visit new_path(model_name: 'player')
       fill_in 'player[name]', with: 'Jackie Robinson'
-      uncheck 'player[suspended]'
+      choose name: 'player[suspended]', option: '0'
       expect { click_button 'Save' }.to raise_error(Pundit::NotAuthorizedError)
     end
   end
 
   describe 'with update and read player role' do
     before do
-      @user.update(roles: [:admin, :read_player, :update_player])
+      @user.update(roles: %i[admin read_player update_player])
     end
 
     it 'PUT /admin/player/new with unauthorized attribute value should raise access denied' do
       @player = FactoryBot.create :player
       visit edit_path(model_name: 'player', id: @player.id)
-      check 'player[retired]'
+      choose name: 'player[retired]', option: '1'
       expect { click_button 'Save' }.to raise_error(Pundit::NotAuthorizedError)
     end
   end

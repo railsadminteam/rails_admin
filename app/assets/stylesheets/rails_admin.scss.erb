@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+<%
+  theme = ENV['RAILS_ADMIN_THEME'] || :default
+%>
+
+/***  Variables  ***/
+
+@import "rails_admin/custom/variables";
+@import "rails_admin/bootstrap/variables";
+@import "rails_admin/styles/base/variables";
+@import "rails_admin/styles/themes/<%= theme %>/variables";
+
+/***  Mixins  ***/
+
+@import "rails_admin/bootstrap/mixins";
+@import "rails_admin/styles/base/mixins";
+@import "rails_admin/styles/themes/<%= theme %>/mixins";
+@import "rails_admin/custom/mixins";
+
+/***  Libraries  ***/
+
+@import "rails_admin/bootstrap-datetimepicker-build";
+@import "rails_admin/styles/filtering-select";
+@import "rails_admin/styles/filtering-multiselect";
+@import "rails_admin/styles/widgets";
+
+
+/*** Font-awesome ***/
+
+@import 'rails_admin/font-awesome';
+
+/***  Bootstrap Theming  ***/
+
+@import "rails_admin/bootstrap/normalize";
+@import "rails_admin/bootstrap/scaffolding";
+@import "rails_admin/bootstrap/grid";
+<%# @import "rails_admin/bootstrap/layouts"; %>
+@import "rails_admin/bootstrap/type";
+@import "rails_admin/bootstrap/forms";
+@import "rails_admin/bootstrap/tables";
+@import "rails_admin/bootstrap/dropdowns";
+@import "rails_admin/bootstrap/wells";
+@import "rails_admin/bootstrap/component-animations";
+@import "rails_admin/bootstrap/close";
+@import "rails_admin/bootstrap/buttons";
+@import "rails_admin/bootstrap/button-groups";
+@import "rails_admin/bootstrap/input-groups";
+@import "rails_admin/bootstrap/alerts";
+@import "rails_admin/bootstrap/navs";
+@import "rails_admin/bootstrap/navbar";
+@import "rails_admin/bootstrap/breadcrumbs";
+@import "rails_admin/bootstrap/pagination";
+@import "rails_admin/bootstrap/pager";
+@import "rails_admin/bootstrap/modals";
+@import "rails_admin/bootstrap/tooltip";
+@import "rails_admin/bootstrap/popovers";
+@import "rails_admin/bootstrap/thumbnails";
+@import "rails_admin/bootstrap/labels";
+@import "rails_admin/bootstrap/panels";
+@import "rails_admin/bootstrap/badges";
+@import "rails_admin/bootstrap/progress-bars";
+<%# @import "rails_admin/bootstrap/accordion"; %>
+@import "rails_admin/bootstrap/carousel";
+<%# @import "rails_admin/bootstrap/hero-unit"; %>
+@import "rails_admin/bootstrap/utilities";
+@import "rails_admin/bootstrap/responsive-utilities";
+
+/***  RailsAdmin Theming  ***/
+
+@import "rails_admin/styles/base/theming";
+@import "rails_admin/styles/themes/<%= theme %>/theming";
+@import "rails_admin/custom/theming";
+
+
+

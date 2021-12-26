@@ -1,9 +1,10 @@
+require 'rails_admin/extensions/controller_extension'
 
 module RailsAdmin
-  EXTENSIONS = [] # rubocop:disable MutableConstant
-  AUTHORIZATION_ADAPTERS = {} # rubocop:disable MutableConstant
-  AUDITING_ADAPTERS = {} # rubocop:disable MutableConstant
-  CONFIGURATION_ADAPTERS = {} # rubocop:disable MutableConstant
+  EXTENSIONS = [] # rubocop:disable Style/MutableConstant
+  AUTHORIZATION_ADAPTERS = {} # rubocop:disable Style/MutableConstant
+  AUDITING_ADAPTERS = {} # rubocop:disable Style/MutableConstant
+  CONFIGURATION_ADAPTERS = {} # rubocop:disable Style/MutableConstant
 
   # Extend RailsAdmin
   #
@@ -14,16 +15,19 @@ module RailsAdmin
 
     EXTENSIONS << extension_key
 
-    if options[:authorization]
-      AUTHORIZATION_ADAPTERS[extension_key] = extension_definition::AuthorizationAdapter
-    end
+    AUTHORIZATION_ADAPTERS[extension_key] = extension_definition::AuthorizationAdapter if options[:authorization]
 
-    if options[:configuration]
-      CONFIGURATION_ADAPTERS[extension_key] = extension_definition::ConfigurationAdapter
-    end
+    CONFIGURATION_ADAPTERS[extension_key] = extension_definition::ConfigurationAdapter if options[:configuration]
 
-    if options[:auditing]
-      AUDITING_ADAPTERS[extension_key] = extension_definition::AuditingAdapter
+    AUDITING_ADAPTERS[extension_key] = extension_definition::AuditingAdapter if options[:auditing]
+  end
+
+  # Setup all extensions for testing
+  def self.setup_all_extensions
+    (AUTHORIZATION_ADAPTERS.values + AUDITING_ADAPTERS.values).each do |klass|
+      klass.setup if klass.respond_to? :setup
+    rescue # rubocop:disable Style/RescueStandardError
+      # ignore errors
     end
   end
 end

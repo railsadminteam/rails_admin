@@ -58,7 +58,7 @@ RSpec.describe 'Export action', type: :request do
                                    'Updated at [Draft]', 'Date [Draft]', 'Round [Draft]', 'Pick [Draft]', 'Overall [Draft]',
                                    'College [Draft]', 'Notes [Draft]', 'Id [Comments]', 'Content [Comments]', 'Created at [Comments]',
                                    'Updated at [Comments]']
-    expect(csv.flatten).to include(@player.name + ' exported')
+    expect(csv.flatten).to include("#{@player.name} exported")
     expect(csv.flatten).to include(@player.team.name)
     expect(csv.flatten).to include(@player.draft.college)
 
@@ -90,6 +90,12 @@ RSpec.describe 'Export action', type: :request do
       expect(line[csv[0].index('Commentable')]).to eq(@player.id.to_s)
       expect(line[csv[0].index('Commentable type')]).to eq(@player.class.to_s)
     end
+  end
+
+  it 'does not break when nothing is checked' do
+    visit export_path(model_name: 'comment')
+    all('input[type="checkbox"]').each(&:uncheck)
+    expect { click_button 'Export to csv' }.not_to raise_error
   end
 
   context 'with csv format' do

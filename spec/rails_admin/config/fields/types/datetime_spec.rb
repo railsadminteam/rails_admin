@@ -56,7 +56,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
 
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%a, %d %b %Y %H:%M:%S %z'))
-      expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
+      expect(@object.datetime_field.to_formatted_s(:rfc822)).to eq(@time.to_formatted_s(:rfc822))
     end
 
     it 'has a customization option' do
@@ -70,7 +70,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
 
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime('%Y-%m-%d %H:%M:%S'))
-      expect(@object.datetime_field.to_s(:rfc822)).to eq(@time.to_s(:rfc822))
+      expect(@object.datetime_field.to_formatted_s(:rfc822)).to eq(@time.to_formatted_s(:rfc822))
     end
 
     it 'does round-trip saving properly with non-UTC timezones' do
@@ -89,14 +89,14 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Datetime do
     end
 
     it 'changes formats when the locale changes' do
-      french_format = "%A %d %B %Y %H:%M"
-      allow(I18n).to receive(:t).with(:long, scope: [:time, :formats], raise: true).and_return(french_format)
+      french_format = '%A %d %B %Y %H:%M'
+      allow(I18n).to receive(:t).with(:long, scope: %i[time formats], raise: true).and_return(french_format)
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime(french_format))
       expect(@object.datetime_field.strftime(french_format)).to eq(@time.strftime(french_format))
 
-      american_format = "%B %d, %Y %H:%M"
-      allow(I18n).to receive(:t).with(:long, scope: [:time, :formats], raise: true).and_return(american_format)
+      american_format = '%B %d, %Y %H:%M'
+      allow(I18n).to receive(:t).with(:long, scope: %i[time formats], raise: true).and_return(american_format)
       @object = FactoryBot.create(:field_test)
       @object.datetime_field = field.parse_input(datetime_field: @time.strftime(american_format))
       expect(@object.datetime_field.strftime(american_format)).to eq(@time.strftime(american_format))

@@ -6,31 +6,16 @@ module RailsAdmin
 
     layout :get_layout
 
-    before_action :get_model, except: RailsAdmin::Config::Actions.all(:root).collect(&:action_name)
-    before_action :get_object, only: RailsAdmin::Config::Actions.all(:member).collect(&:action_name)
     before_action :check_for_cancel
 
-    RailsAdmin::Config::Actions.all.each do |action|
-      class_eval <<-EOS, __FILE__, __LINE__ + 1
-        def #{action.action_name}
-          action = RailsAdmin::Config::Actions.find('#{action.action_name}'.to_sym)
-          @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
-          @action = action.with({controller: self, abstract_model: @abstract_model, object: @object})
-          fail(ActionNotAllowed) unless @action.enabled?
-          @page_name = wording_for(:title)
-
-          instance_eval &@action.controller
-        end
-      EOS
-    end
-
     def bulk_action
-      send(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(controller: self, abstract_model: @abstract_model).select(&:bulkable?).collect(&:route_fragment))
+      get_model
+      process(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(controller: self, abstract_model: @abstract_model).select(&:bulkable?).collect(&:route_fragment))
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
       scope = model_config.abstract_model.scoped
-      if auth_scope = @authorization_adapter && @authorization_adapter.query(auth_scope_key, model_config.abstract_model)
+      if auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
         scope = scope.merge(auth_scope)
       end
       scope = scope.instance_eval(&additional_scope) if additional_scope
@@ -38,6 +23,38 @@ module RailsAdmin
     end
 
   private
+
+    def action_missing(name, *_args)
+      action = RailsAdmin::Config::Actions.find(name.to_sym)
+      raise AbstractController::ActionNotFound.new("The action '#{name}' could not be found for #{self.class.name}") unless action
+
+      get_model unless action.root?
+      get_object if action.member?
+      @authorization_adapter.try(:authorize, action.authorization_key, @abstract_model, @object)
+      @action = action.with({controller: self, abstract_model: @abstract_model, object: @object})
+      raise(ActionNotAllowed) unless @action.enabled?
+
+      @page_name = wording_for(:title)
+
+      instance_eval(&@action.controller)
+    end
+
+    def method_missing(name, *args, &block)
+      action = RailsAdmin::Config::Actions.find(name.to_sym)
+      if action
+        action_missing name, *args, &block
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(sym, include_private)
+      if RailsAdmin::Config::Actions.find(name.to_sym)
+        true
+      else
+        super
+      end
+    end
 
     def get_layout
       "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
@@ -54,7 +71,7 @@ module RailsAdmin
       params[:sort_reverse] ||= 'false'
 
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
-      column = begin
+      column =
         if field.nil? || field.sortable == true # use params[:sort] on the base table
           "#{abstract_model.table_name}.#{params[:sort]}"
         elsif field.sortable == false # use default sort, asked field is not sortable
@@ -68,7 +85,6 @@ module RailsAdmin
         else # use described column in the field conf.
           "#{abstract_model.table_name}.#{field.sortable}"
         end
-      end
 
       reversed_sort = (field ? field.sort_reverse? : model_config.list.sort_reverse?)
       {sort: column, sort_reverse: (params[:sort_reverse] == reversed_sort.to_s)}
@@ -91,6 +107,7 @@ module RailsAdmin
 
     def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
       return unless target_params.present?
+
       fields = visible_fields(action, model_config)
       allowed_methods = fields.collect(&:allowed_methods).flatten.uniq.collect(&:to_s) << 'id' << '_destroy'
       fields.each { |field| field.parse_input(target_params) }
@@ -110,20 +127,21 @@ module RailsAdmin
 
       respond_to do |format|
         format.html { render whereto, status: :not_acceptable }
-        format.js   { render whereto, layout: false, status: :not_acceptable }
+        format.js   { render whereto, layout: 'rails_admin/modal', status: :not_acceptable, content_type: Mime[:html].to_s }
       end
     end
 
     def check_for_cancel
       return unless params[:_continue] || (params[:bulk_action] && !params[:bulk_ids])
+
       redirect_to(back_or_index, notice: I18n.t('admin.flash.noaction'))
     end
 
     def get_collection(model_config, scope, pagination)
-      associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
+      eager_loads = model_config.list.fields.flat_map(&:eager_load_values)
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
-      options = options.merge(include: associations) unless associations.blank?
+      options = options.merge(include: eager_loads) unless eager_loads.blank?
       options = options.merge(get_sort_hash(model_config))
       options = options.merge(query: params[:query]) if params[:query].present?
       options = options.merge(filters: params[:f]) if params[:f].present?
@@ -133,10 +151,11 @@ module RailsAdmin
 
     def get_association_scope_from_params
       return nil unless params[:associated_collection].present?
+
       source_abstract_model = RailsAdmin::AbstractModel.new(to_model_name(params[:source_abstract_model]))
       source_model_config = source_abstract_model.config
       source_object = source_abstract_model.get(params[:source_object_id])
-      action = params[:current_action].in?(%w(create update)) ? params[:current_action] : 'edit'
+      action = params[:current_action].in?(%w[create update]) ? params[:current_action] : 'edit'
       @association = source_model_config.send(action).fields.detect { |f| f.name == params[:associated_collection].to_sym }.with(controller: self, object: source_object)
       @association.associated_collection_scope
     end

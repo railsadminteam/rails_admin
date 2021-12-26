@@ -1,13 +1,19 @@
 # Configure Rails Envinronment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-CI_TARGET_ORMS = [:active_record, :mongoid].freeze
+CI_TARGET_ORMS = %i[active_record mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
-require 'simplecov'
-require 'coveralls'
+if RUBY_ENGINE == 'jruby'
+  # Workaround for JRuby CI failure https://github.com/jruby/jruby/issues/6547#issuecomment-774104996
+  require 'i18n/backend'
+  require 'i18n/backend/simple'
+end
 
-SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
+require 'simplecov'
+require 'simplecov-lcov'
+
+SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::LcovFormatter]
 
 SimpleCov.start do
   add_filter '/spec/'
@@ -15,17 +21,23 @@ SimpleCov.start do
   minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
 end
 
-require File.expand_path('../dummy_app/config/environment', __FILE__)
+SimpleCov::Formatter::LcovFormatter.config do |c|
+  c.report_with_single_file = true
+  c.single_report_path = 'coverage/lcov.info'
+end
+
+require File.expand_path('dummy_app/config/environment', __dir__)
 
 require 'rspec/rails'
 require 'factory_bot'
 require 'factories'
 require 'policies'
-require 'database_cleaner'
+require "database_cleaner/#{CI_ORM}"
 require "orm/#{CI_ORM}"
+require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
-Dir[File.expand_path('../support/**/*.rb', __FILE__),
-    File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__),
+    File.expand_path('shared_examples/**/*.rb', __dir__)].sort.each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -52,9 +64,14 @@ Devise.setup do |config|
   config.stretches = 0
 end
 
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+require 'capybara/cuprite'
+Capybara.javascript_driver = :cuprite
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, js_errors: true, logger: ConsoleLogger)
+end
 Capybara.server = :webrick
+
+RailsAdmin.setup_all_extensions
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -70,14 +87,24 @@ RSpec.configure do |config|
 
   config.include Capybara::DSL, type: :request
 
+  config.verbose_retry = true
+  config.display_try_failure_messages = true
+  config.around :each, :js do |example|
+    example.run_with_retry retry: (ENV['CI'] && RUBY_ENGINE == 'jruby' ? 3 : 2)
+  end
+  config.retry_callback = proc do |example|
+    Capybara.reset! if example.metadata[:js]
+  end
+
+  config.before(:all) do
+    Webpacker.instance.compiler.compile if defined?(Webpacker)
+  end
+
   config.before do |example|
-    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
+    DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :deletion : :transaction
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
-    RailsAdmin::AbstractModel.reset
-    RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
-    RailsAdmin::Config.yell_for_non_accessible_fields = false
   end
 
   config.after(:each) do

@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::MainController, type: :controller do
@@ -10,7 +11,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
   describe '#check_for_cancel' do
     before do
-      allow(controller).to receive(:back_or_index) { raise(StandardError.new('redirected back')) }
+      allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
     end
 
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
@@ -36,7 +37,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       it 'returns the option with no changes' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: :"team.name", sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: :'team.name', sort_reverse: true)
       end
     end
 
@@ -182,24 +183,40 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#action_missing' do
+    it 'raises error when action is not found' do
+      expect(RailsAdmin::Config::Actions).to receive(:find).and_return(nil)
+      expect { get :index, model_name: 'player' }.to raise_error AbstractController::ActionNotFound
+    end
+  end
+
   describe '#get_collection' do
+    let(:team) { FactoryBot.create :team }
+    let!(:player) { FactoryBot.create :player, team: team }
+    let(:model_config) { RailsAdmin.config(Team) }
+    let(:abstract_model) { model_config.abstract_model }
     before do
-      @team = FactoryBot.create(:team)
-      controller.params = {model_name: 'teams'}
+      controller.params = {model_name: 'team'}
+    end
+
+    it 'performs eager-loading with `eagar_load true`' do
       RailsAdmin.config Team do
         field :players do
           eager_load true
         end
       end
-      @model_config = RailsAdmin.config(Team)
+      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), nil).once.and_call_original
+      controller.send(:get_collection, model_config, nil, false).to_a
     end
 
-    it 'performs eager-loading for an association field with `eagar_load true`' do
-      scope = double('scope')
-      abstract_model = @model_config.abstract_model
-      allow(@model_config).to receive(:abstract_model).and_return(abstract_model)
-      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), scope).once
-      controller.send(:get_collection, @model_config, scope, false)
+    it 'performs eager-loading with custom eagar_load value' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load players: :draft
+        end
+      end
+      expect(abstract_model).to receive(:all).with(hash_including(include: [{players: :draft}]), nil).once.and_call_original
+      controller.send(:get_collection, model_config, nil, false).to_a
     end
   end
 
@@ -208,7 +225,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       @user = FactoryBot.create :managing_user
       @team = FactoryBot.create :managed_team, user: @user
       get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/\"id\":\"#{@user.id}\"/)
+      expect(response.body).to match(/"id":"#{@user.id}"/)
     end
 
     context 'as JSON' do
@@ -245,27 +262,18 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
   end
 
   describe 'sanitize_params_for!' do
-    context 'in France' do
+    context 'with datetime' do
       before do
-        I18n.locale = :fr
         ActionController::Parameters.permit_all_parameters = false
-
-        RailsAdmin.config FieldTest do
-          configure :datetime_field do
-            date_format { :default }
-          end
-        end
 
         RailsAdmin.config Comment do
           configure :created_at do
-            date_format { :default }
             show
           end
         end
 
         RailsAdmin.config NestedFieldTest do
           configure :created_at do
-            date_format { :default }
             show
           end
         end
@@ -273,19 +281,19 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         controller.params = ActionController::Parameters.new(
           'field_test' => {
             'unallowed_field' => "I shouldn't be here",
-            'datetime_field' => '1 août 2010 00:00:00',
+            'datetime_field' => '2010-08-01T00:00:00',
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
                   'unallowed_field' => "I shouldn't be here",
-                  'created_at' => '2 août 2010 00:00:00',
+                  'created_at' => '2010-08-02T00:00:00',
                 },
-                'created_at' => '3 août 2010 00:00:00',
+                'created_at' => '2010-08-03T00:00:00',
               },
             },
             'comment_attributes' => {
               'unallowed_field' => "I shouldn't be here",
-              'created_at' => '4 août 2010 00:00:00',
+              'created_at' => '2010-08-04T00:00:00',
             },
           },
         )
@@ -294,7 +302,6 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       after do
         ActionController::Parameters.permit_all_parameters = true
-        I18n.locale = :en
       end
 
       it 'sanitize params recursively in nested forms' do
@@ -329,15 +336,21 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
         end
-        field :active_storage_asset do
-          delete_method :remove_active_storage_asset
-        end if defined?(ActiveStorage)
-        field :active_storage_assets do
-          delete_method :remove_active_storage_assets
-        end if defined?(ActiveStorage)
-        field :shrine_asset do
-          delete_method :remove_shrine_asset
-        end if defined?(Shrine)
+        if defined?(ActiveStorage)
+          field :active_storage_asset do
+            delete_method :remove_active_storage_asset
+          end
+        end
+        if defined?(ActiveStorage)
+          field :active_storage_assets do
+            delete_method :remove_active_storage_assets
+          end
+        end
+        if defined?(Shrine)
+          field :shrine_asset do
+            delete_method :remove_shrine_asset
+          end
+        end
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {

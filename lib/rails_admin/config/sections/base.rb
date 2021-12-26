@@ -18,10 +18,9 @@ module RailsAdmin
         include RailsAdmin::Config::HasGroups
         include RailsAdmin::Config::HasDescription
 
-        attr_reader :abstract_model
-        attr_reader :parent, :root
+        attr_reader :abstract_model, :parent, :root
 
-        NAMED_INSTANCE_VARIABLES = [:@parent, :@root, :@abstract_model].freeze
+        NAMED_INSTANCE_VARIABLES = %i[@parent @root @abstract_model].freeze
 
         def initialize(parent)
           @parent = parent

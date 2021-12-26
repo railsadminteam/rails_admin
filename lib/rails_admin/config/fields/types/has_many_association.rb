@@ -17,17 +17,17 @@ module RailsAdmin
             false
           end
 
-          register_instance_option :inline_add do
-            true
-          end
-
           def method_name
-            nested_form ? "#{super}_attributes".to_sym : "#{super.to_s.singularize}_ids".to_sym # name_ids
+            nested_form ? "#{name}_attributes".to_sym : super
           end
 
           # Reader for validation errors of the bound object
           def errors
             bindings[:object].errors[name]
+          end
+
+          def associated_prepopulate_params
+            {associated_model_config.abstract_model.param_key => {association.foreign_key => bindings[:object].try(:id)}}
           end
         end
       end

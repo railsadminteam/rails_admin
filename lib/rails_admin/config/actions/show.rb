@@ -26,7 +26,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-info-sign'
+          'fas fa-info-circle'
         end
       end
     end

@@ -1,11 +1,104 @@
 inherit_from: .rubocop_todo.yml
 
+require:
+  - rubocop-performance
+
 AllCops:
   Exclude:
-    - 'spec/dummy_app/bin/**/*'
-    - 'spec/dummy_app/db/schema.rb'
-    - 'spec/dummy_app/tmp/**/*'
-    - 'vendor/bundle/**/*'
+    - "gemfiles/*"
+    - "node_modules/**/*"
+    - "spec/dummy_app/bin/**/*"
+    - "spec/dummy_app/db/schema.rb"
+    - "spec/dummy_app/tmp/**/*"
+    - "vendor/bundle/**/*"
+  NewCops: disable
+  SuggestExtensions: false
+  TargetRubyVersion: 2.5
+
+Gemspec/DateAssignment:
+  Enabled: true
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/LineEndStringConcatenationIndentation:
+  Enabled: true
+
+Layout/LineLength:
+  AllowURI: true
+  Enabled: false
+
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+  SupportedTypes: [case, if]
+
+Layout/SpaceBeforeBrackets:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Lint/AmbiguousAssignment:
+  Enabled: true
+
+Lint/AmbiguousRange:
+  Enabled: true
+
+Lint/DeprecatedConstants:
+  Enabled: true
+
+Lint/DuplicateBranch:
+  Enabled: true
+  IgnoreLiteralBranches: true
+
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: true
+
+Lint/EmptyBlock:
+  Enabled: true
+  Exclude:
+    - "spec/**/*"
+
+Lint/EmptyClass:
+  Enabled: true
+  Exclude:
+    - "spec/**/*"
+
+Lint/EmptyInPattern:
+  Enabled: true
+
+Lint/LambdaWithoutLiteralBlock:
+  Enabled: true
+
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: true
+
+Lint/NumberedParameterAssignment:
+  Enabled: true
+
+Lint/OrAssignmentToConstant:
+  Enabled: true
+
+Lint/RedundantDirGlobSort:
+  Enabled: true
+
+Lint/SymbolConversion:
+  Enabled: true
+
+Lint/ToEnumArguments:
+  Enabled: true
+
+Lint/TripleQuotes:
+  Enabled: true
+
+Lint/UnexpectedBlockArity:
+  Enabled: true
+
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: true
 
 Metrics/AbcSize:
   Max: 69.98 # TODO: Lower to 15
@@ -15,47 +108,53 @@ Metrics/BlockNesting:
 
 Metrics/ClassLength:
   CountComments: false
-  Max: 120 # TODO: Lower to 100
+  Max: 132 # TODO: Lower to 100
 
 Metrics/CyclomaticComplexity:
-  Max: 12 # TODO: Lower to 6
-
-Metrics/LineLength:
-  AllowURI: true
-  Enabled: false
+  Max: 15 # TODO: Lower to 6
 
 Metrics/MethodLength:
   CountComments: false
   Max: 29 # TODO: Lower to 15
 
 Metrics/ModuleLength:
-  Max: 200 # TODO: Lower to 100
+  Max: 205 # TODO: Lower to 100
 
 Metrics/ParameterLists:
   Max: 8 # TODO: Lower to 4
   CountKeywordArgs: true
 
 Metrics/PerceivedComplexity:
-  Max: 14 # TODO: Lower to 7
+  Max: 17 # TODO: Lower to 7
 
-Style/AccessModifierIndentation:
-  EnforcedStyle: outdent
+Naming/FileName:
+  Exclude:
+    - "lib/rails_admin/bootstrap-sass.rb"
+
+Naming/InclusiveLanguage:
+  Enabled: true
 
 Style/Alias:
   Enabled: false
 
+Style/ArgumentsForwarding:
+  Enabled: true
+
+Style/CollectionCompact:
+  Enabled: true
+
 Style/CollectionMethods:
   PreferredMethods:
-    map:      'collect'
-    reduce:   'inject'
-    find:     'detect'
-    find_all: 'select'
+    map: "collect"
+    reduce: "inject"
+    find: "detect"
+    find_all: "select"
 
 Style/Documentation:
   Enabled: false
 
-Style/DotPosition:
-  EnforcedStyle: trailing
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
 
 Style/DoubleNegation:
   Enabled: false
@@ -66,24 +165,62 @@ Style/EachWithObject:
 Style/Encoding:
   Enabled: false
 
-Style/FileName:
-  Exclude:
-    - 'lib/rails_admin/bootstrap-sass.rb'
+Style/EndlessMethod:
+  Enabled: true
 
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Style/HashConversion:
+  Enabled: true
+
+Style/HashExcept:
+  Enabled: true
+
+Style/IfWithBooleanLiteralBranches:
+  Enabled: true
+
+Style/InPatternThen:
+  Enabled: true
+
 Style/Lambda:
   Enabled: false
+
+Style/MultilineInPatternThen:
+  Enabled: true
+
+Style/NegatedIfElseCondition:
+  Enabled: true
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NilLambda:
+  Enabled: true
+
+Style/QuotedSymbols:
+  Enabled: true
 
 Style/RaiseArgs:
   EnforcedStyle: compact
 
-Style/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
+Style/RedundantArgument:
+  Enabled: true
+
+Style/RedundantSelfAssignmentBranch:
+  Enabled: true
+
+Style/StringChars:
+  Enabled: true
+
+Style/SwapValues:
+  Enabled: true
 
 Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: 'comma'
+  EnforcedStyleForMultiline: "comma"
 
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: 'comma'
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: "comma"
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: "comma"

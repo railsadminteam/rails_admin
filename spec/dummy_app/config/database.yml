@@ -8,7 +8,7 @@ postgresql:
   database: rails_admin
   username: postgres
   password:
-  host: localhost
+  host: 127.0.0.1
   encoding: utf8
   pool: 5
   timeout: 5000
@@ -18,7 +18,7 @@ mysql:
   database: rails_admin
   username: root
   password:
-  host: localhost
+  host: 127.0.0.1
   encoding: utf8
   pool: 5
   timeout: 5000

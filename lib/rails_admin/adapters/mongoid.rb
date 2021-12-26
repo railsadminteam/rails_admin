@@ -1,32 +1,35 @@
 require 'mongoid'
 require 'rails_admin/config/sections/list'
-require 'rails_admin/adapters/mongoid/abstract_object'
 require 'rails_admin/adapters/mongoid/association'
+require 'rails_admin/adapters/mongoid/object_extension'
 require 'rails_admin/adapters/mongoid/property'
 require 'rails_admin/adapters/mongoid/bson'
 
 module RailsAdmin
   module Adapters
     module Mongoid
-      DISABLED_COLUMN_TYPES = %w(Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point).freeze
+      DISABLED_COLUMN_TYPES = %w[Range Moped::BSON::Binary BSON::Binary Mongoid::Geospatial::Point].freeze
 
       def parse_object_id(value)
         Bson.parse_object_id(value)
       end
 
       def new(params = {})
-        AbstractObject.new(model.new(params))
+        model.new(params).extend(ObjectExtension)
       end
 
       def get(id)
-        AbstractObject.new(model.find(id))
-      rescue => e
-        raise e if %w(
+        object = model.find(id)
+        return nil unless object
+
+        object.extend(ObjectExtension)
+      rescue StandardError => e
+        raise e if %w[
           Mongoid::Errors::DocumentNotFound
           Mongoid::Errors::InvalidFind
           Moped::Errors::InvalidObjectId
           BSON::InvalidObjectId
-        ).exclude?(e.class.to_s)
+        ].exclude?(e.class.to_s)
       end
 
       def scoped
@@ -44,13 +47,11 @@ module RailsAdmin
         scope = scope.any_in(_id: options[:bulk_ids]) if options[:bulk_ids]
         scope = query_scope(scope, options[:query]) if options[:query]
         scope = filter_scope(scope, options[:filters]) if options[:filters]
-        if options[:page] && options[:per]
-          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
-        end
+        scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per]) if options[:page] && options[:per]
         scope = sort_by(options, scope) if options[:sort]
         scope
       rescue NoMethodError => e
-        if e.message =~ /page/
+        if /page/.match?(e.message)
           e = e.exception <<-EOM.gsub(/^\s{12}/, '')
             #{e.message}
             If you don't have kaminari-mongoid installed, add `gem 'kaminari-mongoid'` to your Gemfile.
@@ -120,6 +121,7 @@ module RailsAdmin
           collection_name, column_name = parse_collection_name(column_infos[:column])
           statement = build_statement(column_name, column_infos[:type], value, operator)
           next unless statement
+
           conditions_per_collection[collection_name] ||= []
           conditions_per_collection[collection_name] << statement
         end
@@ -151,6 +153,7 @@ module RailsAdmin
           filters_dump.each do |_, filter_dump|
             field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
+
             value = parse_field_value(field, filter_dump[:v])
             conditions_per_collection = make_field_conditions(field, value, (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
@@ -191,6 +194,7 @@ module RailsAdmin
       def perform_search_on_associated_collection(field_name, conditions)
         target_association = associations.detect { |a| a.name == field_name }
         return [] unless target_association
+
         model = target_association.klass
         case target_association.type
         when :belongs_to, :has_and_belongs_to_many
@@ -206,9 +210,7 @@ module RailsAdmin
         case options[:sort]
         when String
           field_name, collection_name = options[:sort].split('.').reverse
-          if collection_name && collection_name != table_name
-            raise('sorting by associated model column is not supported in Non-Relational databases')
-          end
+          raise 'sorting by associated model column is not supported in Non-Relational databases' if collection_name && collection_name != table_name
         when Symbol
           field_name = options[:sort].to_s
         end
@@ -246,8 +248,8 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return {@column => false} if %w(false f 0).include?(@value)
-          return {@column => true} if %w(true t 1).include?(@value)
+          return {@column => false} if %w[false f 0].include?(@value)
+          return {@column => true} if %w[true t 1].include?(@value)
         end
 
         def column_for_value(value)
@@ -256,8 +258,11 @@ module RailsAdmin
 
         def build_statement_for_string_or_text
           return if @value.blank?
-          @value = begin
+
+          @value =
             case @operator
+            when 'not_like'
+              Regexp.compile("^((?!#{Regexp.escape(@value)}).)*$", Regexp::IGNORECASE)
             when 'default', 'like'
               Regexp.compile(Regexp.escape(@value), Regexp::IGNORECASE)
             when 'starts_with'
@@ -269,12 +274,13 @@ module RailsAdmin
             else
               return
             end
-          end
+
           {@column => @value}
         end
 
         def build_statement_for_enum
           return if @value.blank?
+
           {@column => {'$in' => Array.wrap(@value)}}
         end
 
@@ -283,7 +289,9 @@ module RailsAdmin
         end
 
         def range_filter(min, max)
-          if min && max
+          if min && max && min == max
+            {@column => min}
+          elsif min && max
             {@column => {'$gte' => min, '$lte' => max}}
           elsif min
             {@column => {'$gte' => min}}

@@ -49,8 +49,6 @@ RSpec.describe 'BulkDelete action', type: :request do
 
   context 'on destroy' do
     before do
-      RailsAdmin::History.destroy_all
-      RailsAdmin.config { |c| c.audit_with :history }
       @players = Array.new(3) { FactoryBot.create(:player) }
       @delete_ids = @players[0..1].collect(&:id)
 
@@ -63,15 +61,8 @@ RSpec.describe 'BulkDelete action', type: :request do
       click_button "Yes, I'm sure"
     end
 
-    it 'does not contain deleted records', active_record: true do
-      expect(RailsAdmin::AbstractModel.new('Player').count).to eq(1)
-      expect(RailsAdmin::History.count).to eq(@delete_ids.count)
-      RailsAdmin::History.all.each do |history|
-        expect(history.table).to eq('Player')
-      end
-      RailsAdmin::History.all.each do |history|
-        expect(@delete_ids).to include(history.item)
-      end
+    it 'does not contain deleted records' do
+      expect(RailsAdmin::AbstractModel.new('Player').all.pluck(:id)).to eq([@players[2].id])
       expect(page).to have_selector('.alert-success', text: '2 Players successfully deleted')
     end
   end

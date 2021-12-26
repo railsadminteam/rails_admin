@@ -5,14 +5,16 @@
 .bundle
 .idea/
 .rvmrc
+.sass-cache
 .yardoc
 /.emacs.desktop
 /gemfiles/*.lock
+/node_modules/*
 /rails_admin.gems
 /spec/generators/tmp
 /spec/lib/tmp
+/yarn.lock
 Gemfile.lock
-Gemfile31.lock
 coverage/*
 db/*.sqlite3
 db/*.sqlite3-journal
@@ -26,7 +28,4 @@ spec/dummy_app/log/*.log
 spec/dummy_app/public/uploads
 spec/dummy_app/Gemfile.lock
 tmp/**/*
-/.emacs.desktop
-.idea/*.xml
-.sass-cache
 nbproject

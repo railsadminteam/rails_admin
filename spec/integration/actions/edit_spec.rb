@@ -9,16 +9,16 @@ RSpec.describe 'Edit action', type: :request do
       visit edit_path(model_name: 'player', id: @player.id)
     end
 
-    it "shows \"Edit model\"" do
+    it 'shows "Edit model"' do
       is_expected.to have_content('Edit Player')
     end
 
-    it "shows required fields as \"Required\"" do
+    it 'shows required fields as "Required"' do
       is_expected.to have_selector('div', text: /Name\s*Required/)
       is_expected.to have_selector('div', text: /Number\s*Required/)
     end
 
-    it "shows non-required fields as \"Optional\"" do
+    it 'shows non-required fields as "Optional"' do
       expect(find('#player_position_field .help-block')).to have_content('Optional')
       expect(find('#player_born_on_field .help-block')).to have_content('Optional')
       expect(find('#player_notes_field .help-block')).to have_content('Optional')
@@ -289,7 +289,7 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  describe "fields" do
+  describe 'fields' do
     it 'shows all by default' do
       visit new_path(model_name: 'team')
       is_expected.to have_selector('select#team_division_id')
@@ -695,39 +695,6 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  context 'on clicking save without changing anything' do
-    before { @datetime = 'October 08, 2015 06:45' }
-    context 'when config.time_zone set' do
-      before do
-        RailsAdmin.config Player do
-          field :datetime_field
-        end
-        @old_timezone = Time.zone
-        Time.zone = ActiveSupport::TimeZone.new('Central Time (US & Canada)')
-      end
-
-      after do
-        Time.zone = @old_timezone
-      end
-
-      it 'does not alter datetime fields' do
-        visit new_path(model_name: 'field_test')
-        find('#field_test_datetime_field').set(@datetime)
-        click_button 'Save and edit'
-        expect(find('#field_test_datetime_field').value).to eq(@datetime)
-      end
-    end
-
-    context 'without config.time_zone set (default)' do
-      it 'does not alter datetime fields' do
-        visit new_path(model_name: 'field_test')
-        find('#field_test_datetime_field').set(@datetime)
-        click_button 'Save and edit'
-        expect(find('#field_test_datetime_field').value).to eq(@datetime)
-      end
-    end
-  end
-
   context 'with errors' do
     before do
       @player = FactoryBot.create :player
@@ -859,6 +826,24 @@ RSpec.describe 'Edit action', type: :request do
       click_button 'Save' # first(:button, "Save").click
       @record = RailsAdmin::AbstractModel.new('FieldTest').first
       expect(@record.format).to eq('test for format')
+    end
+  end
+
+  context "with a field with 'open' as a name" do
+    it 'is updatable without any error' do
+      RailsAdmin.config FieldTest do
+        edit do
+          field :open do
+            nullable false
+          end
+        end
+      end
+      record = FieldTest.create
+      visit edit_path(model_name: 'field_test', id: record.id)
+      expect do
+        check 'field_test[open]'
+        click_button 'Save'
+      end.to change { record.reload.open }.from(nil).to(true)
     end
   end
 end

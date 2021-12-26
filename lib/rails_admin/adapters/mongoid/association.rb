@@ -4,6 +4,8 @@ module RailsAdmin
       class Association
         attr_reader :association, :model
 
+        delegate :autosave?, to: :association
+
         def initialize(association, model)
           @association = association
           @model = model
@@ -28,12 +30,12 @@ module RailsAdmin
           when :has_and_belongs_to_many, :references_and_referenced_in_many
             :has_and_belongs_to_many
           else
-            raise("Unknown association type: #{macro.inspect}")
+            raise "Unknown association type: #{macro.inspect}"
           end
         end
 
         def klass
-          if polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          if polymorphic? && %i[referenced_in belongs_to].include?(macro)
             polymorphic_parents(:mongoid, model.name, name) || []
           else
             association.klass
@@ -41,27 +43,53 @@ module RailsAdmin
         end
 
         def primary_key
-          association.primary_key.to_sym rescue :_id
+          case type
+          when :belongs_to, :has_and_belongs_to_many
+            association.primary_key.to_sym
+          else
+            :_id
+          end
         end
 
         def foreign_key
           return if embeds?
-          association.foreign_key.to_sym rescue nil
+
+          begin
+            association.foreign_key.to_sym
+          rescue StandardError
+            nil
+          end
         end
 
         def foreign_key_nullable?
           return if foreign_key.nil?
+
           true
         end
 
         def foreign_type
-          return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          return unless polymorphic? && %i[referenced_in belongs_to].include?(macro)
+
           association.inverse_type.try(:to_sym) || :"#{name}_type"
         end
 
         def foreign_inverse_of
-          return unless polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          return unless polymorphic? && %i[referenced_in belongs_to].include?(macro)
+
           inverse_of_field.try(:to_sym)
+        end
+
+        def key_accessor
+          case macro.to_sym
+          when :has_many
+            "#{name.to_s.singularize}_ids".to_sym
+          when :has_one
+            "#{name}_id".to_sym
+          when :embedded_in, :embeds_one, :embeds_many
+            nil
+          else
+            foreign_key
+          end
         end
 
         def as
@@ -69,7 +97,7 @@ module RailsAdmin
         end
 
         def polymorphic?
-          association.polymorphic? && [:referenced_in, :belongs_to].include?(macro)
+          association.polymorphic? && %i[referenced_in belongs_to].include?(macro)
         end
 
         def inverse_of
@@ -82,13 +110,14 @@ module RailsAdmin
 
         def nested_options
           nested = nested_attributes_options.try { |o| o[name] }
-          if !nested && [:embeds_one, :embeds_many].include?(macro.to_sym) && !cyclic?
+          if !nested && %i[embeds_one embeds_many].include?(macro.to_sym) && !cyclic?
             raise <<-MSG.gsub(/^\s+/, '')
             Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
             because embedded model doesn't have top-level access.
             Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
             MSG
           end
+
           nested
         end
 
@@ -101,7 +130,7 @@ module RailsAdmin
         end
 
         def embeds?
-          [:embeds_one, :embeds_many].include?(macro)
+          %i[embeds_one embeds_many].include?(macro)
         end
 
       private

@@ -1,3 +1,4 @@
 --color
 --order=random
 --profile
+--exclude-pattern 'dummy_app/node_modules/rails_admin/**/*_spec.rb'
