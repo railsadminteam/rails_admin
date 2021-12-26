@@ -52,7 +52,7 @@
     </tbody>
   </table>
 <% end %>
-<% if @auditing_adapter && authorized?(:history_index) %>
+<% if @history && authorized?(:history_index) %>
   <div class="block" id="block-tables">
     <div class="content">
       <h2>
