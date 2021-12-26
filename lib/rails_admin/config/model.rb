@@ -102,6 +102,10 @@ module RailsAdmin
         abstract_model.scoped
       end
 
+      register_instance_option :last_created_at do
+        abstract_model.model.last.try(:created_at) if abstract_model.properties.detect { |c| c.name == :created_at }
+      end
+
       # Act as a proxy for the base section configuration that actually
       # store the configurations.
       def method_missing(method_name, *args, &block)
