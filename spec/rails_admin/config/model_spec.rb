@@ -127,7 +127,7 @@ RSpec.describe RailsAdmin::Config::Model do
     end
   end
 
-  describe '#last_created_at' do
+  describe '#last_created_at', active_record: true do
     let!(:teams) do
       [FactoryBot.create(:team, created_at: 1.day.ago), FactoryBot.create(:team, created_at: 2.days.ago)]
     end
