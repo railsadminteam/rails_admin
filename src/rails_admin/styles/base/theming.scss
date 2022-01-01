@@ -10,8 +10,8 @@ body.rails_admin {
     display: inline-block;
   }
 
-  /* room for upper navbar */
-  padding-top: $navbar-height;
+  /* Top navigation */
+  padding-top: $nav-link-height + $navbar-padding-y * 2;
 
   .navbar {
     .edit_user_root_link {
@@ -25,30 +25,22 @@ body.rails_admin {
           margin-left: ($avatar-size + 5px);
         }
       }
-
-      > span {
-        color: $navbar-default-link-color;
-        line-height: $navbar-height;
-        padding-left: $navbar-padding-horizontal;
-        padding-right: $navbar-padding-horizontal;
-      }
     }
   }
 
-  .sidebar-nav {
+  /* Sidebar navigation */
+  .btn-toggle-nav {
     padding: 0;
-    background-color: $navbar-default-bg;
 
     .dropdown-header {
       padding: ($grid-gutter-width / 2) ($grid-gutter-width / 2) 3px;
       font-weight: bold;
-      color: $gray;
+      color: $gray-700;
       text-transform: uppercase;
     }
 
-    > .nav-stacked > li > a {
-      padding: $padding-base-vertical ($grid-gutter-width / 2);
-      border-radius: 0;
+    > li > a {
+      padding: ($navbar-padding-y / 2) ($grid-gutter-width / 2);
 
       &.nav-level-1 {
         padding-left: $grid-gutter-width;
@@ -64,88 +56,17 @@ body.rails_admin {
     }
   }
 
-  label.input-group-addon {
-    cursor: pointer;
-  }
-
-  /* fat labels in forms */
-  .label.form-label {
-    padding: 7px 7px 8px 7px;
-  }
-
-  /* new/edit/export forms */
-  .form-horizontal {
+  /* Main form */
+  form.main {
     /* hide hidden fields controls by default */
     .control-group .hidden_type {
       display: none;
     }
 
-    .control-group {
-      .img-thumbnail {
-        margin-bottom: 10px;
-      }
-
-      .btn-remove-image {
-        &.btn-info {
-          margin-top: 10px;
-        }
-      }
-    }
-
-    legend {
-      cursor: pointer;
-      i {
-        vertical-align: inherit !important;
-      }
-    }
-
-    &.denser {
-      margin-top: 30px;
-      .controls .nav {
-        margin: 30px 0 0;
-      }
-      .remove_nested_fields,
-      .remove_nested_one_fields {
-        position: absolute;
-      }
-      p {
-        font-size: 12px;
-        line-height: 16px;
-      }
-      .help-block {
-        // margin-top: 0px;
-      }
-      .input-prepend,
-      .input-append {
-        margin-bottom: 0px;
-        label {
-          margin-bottom: 0px;
-        }
-      }
-      legend {
-        margin-bottom: 30px;
-      }
-    }
-
-    /* We want input size to be used, unfixate input width */
-    input,
-    textarea {
-      width: revert;
-    }
-    .help-block {
-      clear: left;
-    }
-    input[type="file"] {
-      display: block;
-    }
-
     /* nested forms */
     .tab-content {
-      clear: both;
-
       .tab-pane {
-        @include clearfix;
-        border-left: 5px solid #049cdb;
+        border-left: 5px solid map-get($theme-colors, primary);
         position: relative;
 
         fieldset {
@@ -164,7 +85,6 @@ body.rails_admin {
           position: absolute;
           top: 0px;
           left: 5px;
-          -webkit-transition: opacity 0.15s ease;
           transition: opacity 0.15s ease;
         }
         &:hover > .remove_nested_fields,
@@ -177,7 +97,7 @@ body.rails_admin {
 
     /* double nesting, guys. Easy. */
     .tab-content .tab-content .tab-pane {
-      border-color: lighten(#049cdb, 20%);
+      border-color: lighten(map-get($theme-colors, info), 20%);
       margin-left: 10px;
 
       .form-group {
@@ -187,7 +107,7 @@ body.rails_admin {
 
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
-      border-color: lighten(#049cdb, 30%);
+      border-color: lighten(map-get($theme-colors, warning), 30%);
       margin-left: 20px;
 
       .form-group {
@@ -197,7 +117,7 @@ body.rails_admin {
 
     /* totally awesome! nesting on 4 levels! */
     .tab-content .tab-content .tab-content .tab-content .tab-pane {
-      border-color: lighten(#049cdb, 40%);
+      border-color: lighten(map-get($theme-colors, success), 40%);
       margin-left: 30px;
 
       .form-group {
@@ -206,43 +126,21 @@ body.rails_admin {
     }
   }
 
-  // .modal {
-  //   width: 750px;
-  //   margin-left: -375px;
-  // }
-
-  /* nested nav */
-  .nav {
-    .nav-level-1 {
-      padding-left: 30px;
-    }
-    .nav-level-2 {
-      padding-left: 60px;
-    }
-    .nav-level-3 {
-      padding-left: 90px;
-    }
-  }
-
-  /* tab links should match icon color */
+  /* Action tabs */
   .nav.nav-tabs {
-    margin-bottom: 20px;
-
-    li.icon a {
-      color: #000;
+    li.nav-item.icon + li.nav-item.dropdown {
+      margin-left: auto;
     }
-  }
-
-  #sidescroll {
-    margin-bottom: 20px;
-    overflow-x: auto;
-    .table {
-      margin-bottom: 0;
+    /* To silence Popper's warning: 'CSS "margin" styles cannot be used...' */
+    .dropdown-menu {
+      margin: 0;
     }
   }
 
   /* Table cells behaviour */
   .table {
+    height: 100%;
+
     // Cells
     > thead,
     > tbody,
@@ -271,14 +169,14 @@ body.rails_admin {
         margin-right: -16px;
         border-width: 0 4px 4px;
         border-style: solid;
-        border-color: #000 transparent;
+        border-color: $dark transparent;
         visibility: hidden;
       }
     }
     .headerSortUp,
     .headerSortDown {
-      background-color: rgba(141, 192, 219, 0.25);
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+      background-color: rgba($info, 0.25);
+      text-shadow: 0 1px 1px rgba($light, 0.75);
     }
     .header:hover {
       &:after {
@@ -289,7 +187,7 @@ body.rails_admin {
     .headerSortDown:hover {
       &:after {
         visibility: visible;
-        @include opacity(60);
+        opacity: 60;
       }
     }
     .headerSortUp {
@@ -297,10 +195,10 @@ body.rails_admin {
         border-bottom: none;
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
-        border-top: 4px solid #000;
+        border-top: 4px solid $dark;
         visibility: visible;
         @include box-shadow(none);
-        @include opacity(60);
+        opacity: 60;
       }
     }
 
@@ -335,9 +233,13 @@ body.rails_admin {
     td.links {
       max-width: none;
       .list-inline {
-        margin: 0px;
+        margin-bottom: 0;
         li {
           display: inline-block;
+          padding: 0 3px;
+          .nav-link {
+            padding: 0 0.1em;
+          }
         }
       }
     }
@@ -360,41 +262,64 @@ body.rails_admin {
     }
   }
 
-  // Remove transparency on sticky cells.
-  $table-bg-default: if(
-    $table-bg == transparent,
-    if($body-bg == transparent, #fff, $body-bg),
-    $table-bg
-  ) !default;
-  .table-striped > tbody > tr:nth-child(even) > td,
-  .table-striped > thead > tr > th {
-    background-color: $table-bg-default;
+  /* Dashboard */
+  .table {
+    .progress {
+      height: 100%;
+    }
   }
-  $table-bg-header-sort: #e2eff6 !default;
-  .table .sticky,
-  .table .last {
-    &.headerSortUp,
-    &.headerSortDown {
-      background-color: $table-bg-header-sort;
+
+  /* Index */
+  #filters_box {
+    .form-control {
+      display: inline-block;
+      vertical-align: middle;
+      width: auto;
+    }
+  }
+  #sidescroll {
+    margin-bottom: 20px;
+    overflow-x: auto;
+    .table {
+      margin-bottom: 0;
+    }
+
+    // Remove transparency on sticky cells.
+    $table-bg-default: if(
+      $table-bg == transparent,
+      if($body-bg == transparent, #fff, $body-bg),
+      $table-bg
+    ) !default;
+    .table-striped > tbody > tr > td,
+    .table-striped > thead > tr > th {
+      background-color: $table-bg-default;
+    }
+    $table-bg-header-sort: #e2eff6 !default;
+    .table .sticky,
+    .table .last {
+      &.headerSortUp,
+      &.headerSortDown {
+        background-color: $table-bg-header-sort;
+      }
     }
   }
 }
 
-@media screen and (min-width: $grid-float-breakpoint) {
+@media screen and (min-width: map-get($grid-breakpoints, "sm")) {
   body.rails_admin {
-    .navbar {
-      .edit_user_root_link {
-        img {
-          top: (($navbar-height - $avatar-size) / 2);
-        }
-      }
-    }
-
-    .sidebar-nav {
+    .btn-toggle-nav {
       position: fixed;
-      top: $navbar-height;
+      top: $nav-link-height + $navbar-padding-y * 2;
       bottom: 0;
       overflow-y: auto;
+    }
+  }
+}
+
+@media screen and (max-width: map-get($grid-breakpoints, "sm")) {
+  body.rails_admin {
+    .container {
+      padding: 0;
     }
   }
 }

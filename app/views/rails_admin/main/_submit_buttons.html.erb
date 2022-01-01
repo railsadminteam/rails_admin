@@ -1,5 +1,5 @@
-<div class="form-group form-actions">
-  <div class="col-sm-offset-2 col-sm-10">
+<div class="form-actions row justify-content-end my-3">
+  <div class="col-sm-10">
     <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>"></input>
     <button class="btn btn-primary" data-disable-with="<%= t("admin.form.save") %>" name="_save" type="submit">
       <i class="fas fa-check"></i>
@@ -16,7 +16,7 @@
           <%= t("admin.form.save_and_edit") %>
         </button>
       <% end %>
-      <button class="btn btn-default" data-disable-with="<%= t("admin.form.cancel") %>" formnovalidate="<%= true %>" name="_continue" type="submit">
+      <button class="btn btn-light" data-disable-with="<%= t("admin.form.cancel") %>" formnovalidate="<%= true %>" name="_continue" type="submit">
         <i class="fas fa-times"></i>
         <%= t("admin.form.cancel") %>
       </button>

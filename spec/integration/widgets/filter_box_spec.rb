@@ -9,15 +9,19 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       field :position
     end
     visit index_path(model_name: 'player')
-    is_expected.to have_no_css('.form-search')
+    is_expected.to have_no_css('#filters_box .filter')
     click_link 'Add filter'
     click_link 'Name'
-    is_expected.to have_css('.form-search', count: 1)
-    is_expected.to have_css('.form-search select[name^="f[name]"]')
+    within('#filters_box') do
+      is_expected.to have_css('.filter', count: 1)
+      is_expected.to have_css('.filter select[name^="f[name]"]')
+    end
     click_link 'Add filter'
     click_link 'Position'
-    is_expected.to have_css('.form-search', count: 2)
-    is_expected.to have_css('.form-search select[name^="f[position]"]')
+    within('#filters_box') do
+      is_expected.to have_css('.filter', count: 2)
+      is_expected.to have_css('.filter select[name^="f[position]"]')
+    end
   end
 
   it 'removes filters' do
@@ -26,16 +30,18 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       field :position
     end
     visit index_path(model_name: 'player')
-    is_expected.to have_no_css('.form-search')
+    is_expected.to have_no_css('#filters_box .filter')
     click_link 'Add filter'
     click_link 'Name'
     click_link 'Add filter'
     click_link 'Position'
-    is_expected.to have_css('.form-search', count: 2)
-    within('#filters_box') { click_button 'Name' }
-    is_expected.to have_no_css('.form-search select[name^="f[name]"]')
-    within('#filters_box') { click_button 'Position' }
-    is_expected.to have_no_css('.form-search')
+    within('#filters_box') do
+      is_expected.to have_css('.filter', count: 2)
+      click_button 'Name'
+      is_expected.to have_no_css('.filter select[name^="f[name]"]')
+      click_button 'Position'
+      is_expected.to have_no_css('.filter')
+    end
   end
 
   it 'hides redundant filter options for required fields' do

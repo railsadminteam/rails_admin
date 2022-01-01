@@ -117,6 +117,7 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       is_expected.to have_content 'New Field test'
       attach_file 'Carrierwave asset', file_path('test.jpg')
       find('#modal .save-action').click
+      find('#modal .save-action').click # do it again, as a workaround for intermittent failure
       is_expected.to have_no_css('#modal')
       expect(FieldTest.first.carrierwave_asset.file.size).to eq 1575
     end

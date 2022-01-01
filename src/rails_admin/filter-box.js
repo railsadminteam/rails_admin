@@ -23,7 +23,7 @@ import I18n from "./i18n";
 
       switch (field_type) {
         case "boolean":
-          control = $('<select class="input-sm form-control"></select>')
+          control = $('<select class="form-control form-control-sm"></select>')
             .prop("name", value_name)
             .append('<option value="_discard">...</option>')
             .append(
@@ -55,7 +55,7 @@ import I18n from "./i18n";
           control =
             control ||
             $(
-              '<select class="switch-additional-fieldsets input-sm form-control"></select>'
+              '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
             )
               .prop("name", operator_name)
               .append(
@@ -114,7 +114,9 @@ import I18n from "./i18n";
                     .prop("name", value_name + "[]")
                     .prop("value", field_value[index] || "")
                     .add(
-                      $('<input class="input-sm form-control" type="text" />')
+                      $(
+                        '<input class="form-control form-control-sm" type="text" />'
+                      )
                         .addClass(field_type == "date" ? "date" : "datetime")
                         .prop(
                           "size",
@@ -129,7 +131,7 @@ import I18n from "./i18n";
         case "enum":
           var multiple_values = field_value instanceof Array ? true : false;
           control = $(
-            '<select class="select-single input-sm form-control"></select>'
+            '<select class="select-single form-control form-control-sm"></select>'
           )
             .css("display", multiple_values ? "none" : "inline-block")
             .prop("name", multiple_values ? undefined : value_name)
@@ -151,7 +153,7 @@ import I18n from "./i18n";
             .append(select_options)
             .add(
               $(
-                '<select multiple="multiple" class="select-multiple input-sm form-control"></select>'
+                '<select multiple="multiple" class="select-multiple form-control form-control-sm"></select>'
               )
                 .css("display", multiple_values ? "inline-block" : "none")
                 .prop("name", multiple_values ? value_name + "[]" : undefined)
@@ -171,7 +173,7 @@ import I18n from "./i18n";
         case "text":
         case "belongs_to_association":
           control = $(
-            '<select class="switch-additional-fieldsets input-sm form-control"></select>'
+            '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
           )
             .prop("value", field_operator)
             .prop("name", operator_name)
@@ -223,7 +225,7 @@ import I18n from "./i18n";
             ]);
           }
           additional_control = $(
-            '<input class="additional-fieldset input-sm form-control" type="text" />'
+            '<input class="additional-fieldset form-control form-control-sm" type="text" />'
           )
             .css(
               "display",
@@ -238,7 +240,7 @@ import I18n from "./i18n";
         case "decimal":
         case "float":
           control = $(
-            '<select class="switch-additional-fieldsets input-sm form-control"></select>'
+            '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
           )
             .prop("name", operator_name)
             .append(
@@ -267,7 +269,7 @@ import I18n from "./i18n";
             ]);
           }
           additional_control = $(
-            '<input class="additional-fieldset default input-sm form-control" type="text" />'
+            '<input class="additional-fieldset default form-control form-control-sm" type="text" />'
           )
             .css(
               "display",
@@ -280,7 +282,7 @@ import I18n from "./i18n";
             .prop("value", field_value[0] || "")
             .add(
               $(
-                '<input placeholder="-∞" class="additional-fieldset between input-sm form-control" />'
+                '<input placeholder="-∞" class="additional-fieldset between form-control form-control-sm" />'
               )
                 .css(
                   "display",
@@ -292,7 +294,7 @@ import I18n from "./i18n";
             )
             .add(
               $(
-                '<input placeholder="∞" class="additional-fieldset between input-sm form-control" />'
+                '<input placeholder="∞" class="additional-fieldset between form-control form-control-sm" />'
               )
                 .css(
                   "display",
@@ -304,7 +306,9 @@ import I18n from "./i18n";
             );
           break;
         default:
-          control = $('<input type="text" class="input-sm form-control" />')
+          control = $(
+            '<input type="text" class="form-control form-control-sm" />'
+          )
             .prop("name", value_name)
             .prop("value", field_value);
           break;
@@ -313,9 +317,9 @@ import I18n from "./i18n";
       var filterContainerId = field_name + "-" + index + "-filter-container";
       $("p#" + filterContainerId).remove();
 
-      var $content = $("<p>")
+      var $content = $("<div>")
         .attr("id", filterContainerId)
-        .addClass("filter form-search")
+        .addClass("filter d-inline-block my-1")
         .append(
           $(
             '<button type="button" class="btn btn-info btn-sm delete"></button>'

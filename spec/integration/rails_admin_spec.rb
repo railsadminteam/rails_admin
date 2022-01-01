@@ -76,7 +76,7 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'secondary navigation' do
     it 'has Gravatar image' do
       visit dashboard_path
-      is_expected.to have_selector('ul.navbar-right img[src*="gravatar.com"]')
+      is_expected.to have_selector('ul.navbar-nav img[src*="gravatar.com"]')
     end
 
     it "does not show Gravatar when user doesn't have email method" do

@@ -18,9 +18,9 @@ RSpec.describe 'New action', type: :request do
     end
 
     it 'shows non-required fields as "Optional"' do
-      is_expected.to have_selector('#player_position_field .help-block', text: 'Optional')
-      is_expected.to have_selector('#player_born_on_field .help-block', text: 'Optional')
-      is_expected.to have_selector('#player_notes_field .help-block', text: 'Optional')
+      is_expected.to have_selector('#player_position_field .form-text', text: 'Optional')
+      is_expected.to have_selector('#player_born_on_field .form-text', text: 'Optional')
+      is_expected.to have_selector('#player_notes_field .form-text', text: 'Optional')
     end
 
     # https://github.com/railsadminteam/rails_admin/issues/362

@@ -1,4 +1,5 @@
 import jQuery from "jquery";
+import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
 
 (function ($) {
   $(document).ready(function () {
@@ -19,12 +20,15 @@ import jQuery from "jquery";
     field = content.field
       .addClass("tab-pane")
       .attr("id", "unique-id-" + new Date().getTime());
-    new_tab = $("<li></li>").append(
-      $("<a></a>")
-        .attr("data-toggle", "tab")
-        .attr("href", "#" + field.attr("id"))
-        .text(field.children(".object-infos").data("object-label"))
-    );
+    new_tab = $("<li></li>")
+      .append(
+        $("<a></a>")
+          .addClass("nav-link")
+          .attr("data-bs-toggle", "tab")
+          .attr("href", "#" + field.attr("id"))
+          .text(field.children(".object-infos").data("object-label"))
+      )
+      .addClass("nav-item");
     parent_group = field.closest(".control-group");
     controls = parent_group.children(".controls");
     one_to_one = controls.data("nestedone") !== void 0;
@@ -36,7 +40,9 @@ import jQuery from "jquery";
     const event = new CustomEvent("rails_admin.dom_ready", { detail: field });
     document.dispatchEvent(event);
 
-    new_tab.children("a").tab("show");
+    new_tab.children("a").each(function (index, element) {
+      bootstrap.Tab.getOrCreateInstance(element).show();
+    });
     if (!one_to_one) {
       nav.filter(":hidden").show("slow");
     }
@@ -76,7 +82,9 @@ import jQuery from "jquery";
     toggler = controls.find(".toggler");
     (current_li.next().length ? current_li.next() : current_li.prev())
       .children("a:first")
-      .tab("show");
+      .each(function (index, element) {
+        bootstrap.Tab.getOrCreateInstance(element).show();
+      });
     current_li.remove();
     if (nav.children().length === 0) {
       nav.filter(":visible").hide("slow");

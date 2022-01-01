@@ -21,7 +21,7 @@ RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
     end
 
     it 'hidden fields should be wrapper' do
-      expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).to match('form-group control-group hidden_type number_field')
+      expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).to match('control-group row mb-3 hidden_type number_field')
     end
   end
 

@@ -18,16 +18,13 @@
 %>
 
 <% content_for :contextual_tabs do %>
-  <% if checkboxes %>
-    <%= bulk_menu %>
-  <% end %>
   <% if filterable_fields.present? %>
-    <li class="dropdown" style="float:right">
-      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
         <%= t('admin.misc.add_filter') %>
         <b class="caret"></b>
       </a>
-      <ul class="dropdown-menu" id="filters" style="left:auto; right:0;">
+      <ul class="dropdown-menu dropdown-menu-end" id="filters">
         <% filterable_fields.each do |field| %>
           <%
             field_options = case field.type
@@ -40,6 +37,7 @@
           <li>
             <a
               href="#"
+              class="dropdown-item"
               data-field-label="<%= field.label %>"
               data-field-name="<%= field.name %>"
               data-field-operator="<%= field.default_filter_operator %>"
@@ -56,6 +54,9 @@
       </ul>
     </li>
   <% end %>
+  <% if checkboxes %>
+    <%= bulk_menu %>
+  <% end %>
 <% end %>
 
 <style>
@@ -66,27 +67,29 @@
 </style>
 
 <div id="list">
-  <%= form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form form-inline") do %>
-    <div class="well">
-      <span data-options="<%= ordered_filter_options.to_json %>" id="filters_box"></span>
+  <%= form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form") do %>
+    <div class="card mb-3 p-3 bg-light">
+      <div class="row" data-options="<%= ordered_filter_options.to_json %>" id="filters_box"></div>
       <hr class="filters_box" style="display:<%= ordered_filters.empty? ? 'none' : 'block' %>"/>
-      <div class="input-group">
-        <input class="form-control input-small" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>"></input>
-        <span class="input-group-btn">
-          <button class="btn btn-primary" data-disable-with="<%= '<i class="fas fa-sync"></i>' + t('admin.misc.refresh') %>" type="submit">
-            <i class="fas fa-sync"></i>
-            <%= t('admin.misc.refresh') %>
-          </button>
-          <button class="btn btn-info" id="remove_filter" title="<%= t('admin.misc.reset_filters') %>">
-            <i class="fas fa-times"></i>
-          </button>
-        </span>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="input-group">
+            <input class="form-control" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>"></input>
+            <button class="btn btn-primary" data-disable-with="<%= '<i class="fas fa-sync"></i>' + t('admin.misc.refresh') %>" type="submit">
+              <i class="fas fa-sync"></i>
+              <%= t('admin.misc.refresh') %>
+            </button>
+            <button class="btn btn-info" id="remove_filter" title="<%= t('admin.misc.reset_filters') %>">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-6 text-end">
+          <% if export_action %>
+            <%= link_to wording_for(:link, export_action), export_path(params.except('page')), class: 'btn btn-info' %>
+          <% end %>
+        </div>
       </div>
-      <% if export_action %>
-        <span style="float:right">
-          <%= link_to wording_for(:link, export_action), export_path(params.except('page')), class: 'btn btn-info' %>
-        </span>
-      <% end %>
     </div>
   <% end %>
   <% unless @model_config.list.scopes.empty? %>
@@ -101,7 +104,7 @@
       <% end %>
     </ul>
   <% end %>
-  <%= form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: ["form"] do %>
+  <%= form_tag bulk_action_path(model_name: @abstract_model.to_param), method: :post, id: "bulk_form", class: ["form", "mb-3"] do %>
     <%= hidden_field_tag :bulk_action %>
     <% if description.present? %>
       <p>
@@ -125,7 +128,7 @@
                 <% sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}) %>
                 <% sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected) %>
               <% end %>
-              <th class="<%= [property.sortable && "header pjax", property.sortable && sort_direction, property.sticky? && 'sticky', property.css_class, property.type_css_class].compact.join(' ') %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">
+              <th class="<%= [property.sortable && "header pjax", property.sortable && sort_direction, property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">
                 <%= property.label %>
               </th>
             <% end %>
@@ -142,7 +145,7 @@
               <% end %>
               <% properties.map{ |property| property.bind(:object, object) }.each do |property| %>
                 <% value = property.pretty_value %>
-                <td class="<%= [property.sticky? && 'sticky', property.css_class, property.type_css_class].compact.join(' ') %>" title="<%= strip_tags(value.to_s) %>">
+                <td class="<%= [property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" title="<%= strip_tags(value.to_s) %>">
                   <%= value %>
                 </td>
               <% end %>
@@ -178,7 +181,7 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <%= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-default clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size %>
+          <%= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-light clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size %>
         </div>
       </div>
       <div class="clearfix total-count">

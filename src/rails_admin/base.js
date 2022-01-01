@@ -3,7 +3,7 @@ import jQuery from "jquery";
 import moment from "moment";
 import "./vendor/jquery.pjax";
 import "./vendor/jquery_nested_form";
-import "bootstrap-sass";
+import "bootstrap";
 import "moment/min/locales.js";
 import "eonasdan-bootstrap-datetimepicker";
 

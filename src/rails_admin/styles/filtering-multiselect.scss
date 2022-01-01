@@ -41,13 +41,13 @@
 
   span.fas,
   a.fas {
-    color: #aaa;
+    color: $gray-400;
     font-size: 16px;
     margin-right: 4px;
     text-decoration: none;
 
     &:hover {
-      color: $gray;
+      color: $gray-700;
     }
   }
 }

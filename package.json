@@ -15,8 +15,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@popperjs/core": "^2.11.0",
     "@rails/ujs": "^6.1.4-1",
-    "bootstrap-sass": "3.4.1",
+    "bootstrap": "^5.1.3",
     "eonasdan-bootstrap-datetimepicker": "^4.17.49",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.12.1",

@@ -1,6 +1,7 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/widgets/sortable";
 import moment from "moment";
+import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
 import I18n from "./i18n";
 
 (function ($) {
@@ -147,7 +148,7 @@ import I18n from "./i18n";
       content.find("[data-filteringmultiselect]").each(function () {
         $(this).filteringMultiselect($(this).data("options"));
         if ($(this).parents("#modal").length) {
-          $(this).siblings(".btn").remove();
+          $(this).parent().siblings(".modal-actions").remove();
         } else {
           $(this).parents(".control-group").first().remoteForm();
         }
@@ -155,7 +156,7 @@ import I18n from "./i18n";
       content.find("[data-filteringselect]").each(function () {
         $(this).filteringSelect($(this).data("options"));
         if ($(this).parents("#modal").length) {
-          $(this).siblings(".btn").remove();
+          $(this).parent().siblings(".modal-actions").remove();
         } else {
           $(this).parents(".control-group").first().remoteForm();
         }
@@ -177,20 +178,27 @@ import I18n from "./i18n";
                 Math.floor(Math.random() * 100000)
             );
             nav.append(
-              $("<li></li>").append(
-                $("<a></a>")
-                  .attr("data-toggle", "tab")
-                  .attr("href", "#" + this.id)
-                  .text($(this).children(".object-infos").data("object-label"))
-              )
+              $("<li></li>")
+                .append(
+                  $("<a></a>")
+                    .addClass("nav-link")
+                    .attr("data-bs-toggle", "tab")
+                    .attr("href", "#" + this.id)
+                    .text(
+                      $(this).children(".object-infos").data("object-label")
+                    )
+                )
+                .addClass("nav-item")
             );
           });
         if (nav.find("> li.active").length === 0) {
-          nav.find("> li > a[data-toggle='tab']:first").tab("show");
+          nav
+            .find("> li > a[data-bs-toggle='tab']:first")
+            .each(function (index, element) {
+              bootstrap.Tab.getOrCreateInstance(element).show();
+            });
         }
         if (nav.children().length === 0) {
-          nav.hide();
-          tab_content.hide();
           toggler
             .addClass("disabled")
             .removeClass("active")
@@ -198,12 +206,9 @@ import I18n from "./i18n";
             .addClass("fa-chevron-right");
         } else {
           if (toggler.hasClass("active")) {
-            nav.show();
-            tab_content.show();
+            $(toggler.data("bs-target")).addClass("show");
             toggler.children("i").addClass("fa-chevron-down");
           } else {
-            nav.hide();
-            tab_content.hide();
             toggler.children("i").addClass("fa-chevron-right");
           }
         }
@@ -225,21 +230,21 @@ import I18n from "./i18n";
             nav.append(
               $("<li></li>").append(
                 $("<a></a>")
-                  .attr("data-toggle", "tab")
+                  .attr("data-bs-toggle", "tab")
                   .attr("href", "#" + $(this).id)
                   .text($(this).children(".object-infos").data("object-label"))
               )
             );
           });
-        first_tab = nav.find("> li > a[data-toggle='tab']:first");
-        first_tab.tab("show");
+        first_tab = nav.find("> li > a[data-bs-toggle='tab']:first");
+        first_tab.each(function (index, element) {
+          bootstrap.Tab.getOrCreateInstance(element).show();
+        });
         field
           .find("> .controls > [data-target]:first")
           .html('<i class="fas"></i> ' + first_tab.html());
         nav.hide();
         if (nav.children().length === 0) {
-          nav.hide();
-          tab_content.hide();
           toggler
             .addClass("disabled")
             .removeClass("active")
@@ -247,11 +252,10 @@ import I18n from "./i18n";
             .addClass("fa-chevron-right");
         } else {
           if (toggler.hasClass("active")) {
+            $(toggler.data("bs-target")).addClass("show");
             toggler.children("i").addClass("fa-chevron-down");
-            tab_content.show();
           } else {
             toggler.children("i").addClass("fa-chevron-right");
-            tab_content.hide();
           }
         }
       });
