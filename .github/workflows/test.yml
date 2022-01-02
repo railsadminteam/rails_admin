@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.6, 2.7, 3.0, jruby]
+        ruby: [2.6, 2.7, "3.0", jruby]
         gemfile: [gemfiles/rails_6.1.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
@@ -19,22 +19,22 @@ jobs:
             orm: active_record
             adapter: sqlite3
             asset: sprockets
-          - ruby: 3.0
+          - ruby: "3.0"
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: mysql2
             asset: sprockets
-          - ruby: 3.0
+          - ruby: "3.0"
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: postgresql
             asset: webpacker
-          - ruby: 3.0
+          - ruby: "3.0"
             gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: sqlite3
             asset: webpacker
-          - ruby: 3.0
+          - ruby: "3.0"
             gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: sqlite3
@@ -44,7 +44,7 @@ jobs:
             orm: mongoid
             adapter: sqlite3
             asset: sprockets
-          - ruby: 3.0
+          - ruby: "3.0"
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3
@@ -148,7 +148,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0
+          ruby-version: "3.0"
       - name: Cache gems
         uses: actions/cache@v2
         with:
