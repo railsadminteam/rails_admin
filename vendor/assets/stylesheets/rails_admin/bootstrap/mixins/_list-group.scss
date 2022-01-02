@@ -1,31 +1,24 @@
 // List Groups
 
+// scss-docs-start list-group-mixin
 @mixin list-group-item-variant($state, $background, $color) {
   .list-group-item-#{$state} {
     color: $color;
     background-color: $background;
 
-    // [converter] extracted a& to a.list-group-item-#{$state}
-  }
+    &.list-group-item-action {
+      &:hover,
+      &:focus {
+        color: $color;
+        background-color: shade-color($background, 10%);
+      }
 
-  a.list-group-item-#{$state} {
-    color: $color;
-
-    .list-group-item-heading {
-      color: inherit;
-    }
-
-    &:hover,
-    &:focus {
-      color: $color;
-      background-color: darken($background, 5%);
-    }
-    &.active,
-    &.active:hover,
-    &.active:focus {
-      color: #fff;
-      background-color: $color;
-      border-color: $color;
+      &.active {
+        color: $white;
+        background-color: $color;
+        border-color: $color;
+      }
     }
   }
 }
+// scss-docs-end list-group-mixin
