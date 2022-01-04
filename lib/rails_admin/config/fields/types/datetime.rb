@@ -30,14 +30,15 @@ module RailsAdmin
             '%B %d, %Y %H:%M'
           end
 
-          register_instance_option :momentjs_format do
-            RailsAdmin::Support::Datetime.to_momentjs(strftime_format)
+          register_instance_option :flatpickr_format do
+            RailsAdmin::Support::Datetime.to_flatpickr_format(strftime_format)
           end
 
           register_instance_option :datepicker_options do
             {
-              showTodayButton: true,
-              format: momentjs_format,
+              allowInput: true,
+              enableTime: true,
+              altFormat: flatpickr_format,
             }
           end
 
@@ -66,6 +67,10 @@ module RailsAdmin
 
           register_instance_option :partial do
             :form_datetime
+          end
+
+          register_deprecated_instance_option :momentjs_format do
+            ActiveSupport::Deprecation.warn('The momentjs_format configuration option is deprecated, please use flatpickr_format with corresponding values here: https://flatpickr.js.org/formatting/')
           end
 
           def form_value

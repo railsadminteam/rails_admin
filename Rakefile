@@ -22,3 +22,14 @@ rescue LoadError
 end
 
 task default: %i[spec rubocop]
+
+namespace :vendorize do
+  desc 'Tasks for vendorizing assets'
+
+  task :flatpickr do
+    Dir.chdir(__dir__)
+    flatpickr = File.read('node_modules/flatpickr/dist/flatpickr.js')
+    locales = Dir.glob('node_modules/flatpickr/dist/l10n/*.js').map { |f| File.read(f) }
+    File.write('vendor/assets/javascripts/rails_admin/flatpickr-with-locales.js', ([flatpickr] + locales).join("\n"))
+  end
+end

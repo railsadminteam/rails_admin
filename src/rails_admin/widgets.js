@@ -1,7 +1,7 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/widgets/sortable";
-import moment from "moment";
 import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
+import flatpickr from "flatpickr";
 import I18n from "./i18n";
 
 (function ($) {
@@ -17,32 +17,23 @@ import I18n from "./i18n";
       options;
     var content = event.detail || $("form");
     if (content.length) {
-      $.fn.datetimepicker.defaults.icons = {
-        time: "fa fa-clock-o",
-        date: "fa fa-calendar",
-        up: "fa fa-chevron-up",
-        down: "fa fa-chevron-down",
-        previous: "fa fa-angle-double-left",
-        next: "fa fa-angle-double-right",
-        today: "fa fa-dot-circle-o",
-        clear: "fa fa-trash",
-        close: "fa fa-times",
-      };
       content.find("[data-datetimepicker]").each(function () {
         var options;
-        options = $(this).data("options");
-        $.extend(options, {
-          date: moment($(this).siblings("[type=hidden]").val()),
-          locale: I18n.locale,
-        });
-        $(this).datetimepicker(options);
-        $(this).on("dp.change", function (e) {
-          if (e.date) {
-            $(this)
-              .siblings("[type=hidden]")
-              .val(e.date.format("YYYY-MM-DD[T]HH:mm:ss"));
-          }
-        });
+        options = $.extend(
+          {
+            dateFormat: "Y-m-dTH:i:S",
+            altInput: true,
+            locale: I18n.locale,
+          },
+          $(this).data("options")
+        );
+        if (flatpickr.l10ns[options.locale]) {
+          flatpickr(this, options);
+        } else {
+          import(`flatpickr/dist/l10n/${options.locale}`).then(() => {
+            flatpickr(this, options);
+          });
+        }
       });
       content.find("[data-enumeration]").each(function () {
         if ($(this).is("[multiple]")) {

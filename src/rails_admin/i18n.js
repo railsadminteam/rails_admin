@@ -1,12 +1,9 @@
-import moment from "moment";
-
 export default {
   locale: null,
   translations: null,
   init(locale, translations) {
     this.locale = locale;
     this.translations = translations;
-    moment.locale(this.locale);
     if (typeof this.translations === "string") {
       this.translations = JSON.parse(this.translations);
     }

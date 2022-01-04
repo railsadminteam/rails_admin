@@ -1,11 +1,9 @@
 import Rails from "@rails/ujs";
 import jQuery from "jquery";
-import moment from "moment";
 import "./vendor/jquery.pjax";
 import "./vendor/jquery_nested_form";
 import "bootstrap";
-import "moment/min/locales.js";
-import "eonasdan-bootstrap-datetimepicker";
+import "flatpickr/dist/flatpickr";
 
 import "./filter-box";
 import "./filtering-multiselect";
@@ -18,4 +16,3 @@ import "./widgets";
 
 Rails.start();
 window.$ = window.jQuery = jQuery;
-window.moment = moment;

@@ -5,8 +5,7 @@
 //=  require 'rails_admin/jquery-ui/effect'
 //=  require 'rails_admin/jquery-ui/widgets/sortable'
 //=  require 'rails_admin/jquery-ui/widgets/autocomplete'
-//=  require 'rails_admin/moment-with-locales'
-//=  require 'rails_admin/bootstrap-datetimepicker'
+//=  require 'rails_admin/flatpickr-with-locales'
 //=  require 'rails_admin/popper'
 //=  require 'rails_admin/bootstrap'
 

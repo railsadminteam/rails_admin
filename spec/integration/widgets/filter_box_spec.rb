@@ -95,7 +95,7 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Date field'
       expect(find('[name^="f[date_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
       page.execute_script <<-JS
-        $('.form-control.date').data("DateTimePicker").date(moment('2015-10-08')).toggle();
+        document.querySelector('.form-control.date')._flatpickr.setDate('2015-10-08');
       JS
       expect(find('[name^="f[date_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2015-10-08T00:00:00'
     end
@@ -114,7 +114,7 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Datetime field'
       expect(find('[name^="f[datetime_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
       page.execute_script <<-JS
-        $('.form-control.datetime').data("DateTimePicker").date(moment('2015-10-08 14:00:00')).toggle();
+        document.querySelector('.form-control.datetime')._flatpickr.setDate('2015-10-08 14:00:00');
       JS
       expect(find('[name^="f[datetime_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2015-10-08T14:00:00'
     end
@@ -150,9 +150,9 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Time field'
       expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
       page.execute_script <<-JS
-        $('.form-control.datetime').data("DateTimePicker").date(moment('2000-01-01 14:00:00')).toggle();
+        document.querySelector('.form-control.datetime')._flatpickr.setDate('2000-01-01 14:00:00');
       JS
-      expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq "#{Date.today}T14:00:00"
+      expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2000-01-01T14:00:00'
     end
   end
 end

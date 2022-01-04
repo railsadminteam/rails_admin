@@ -45,7 +45,7 @@
               data-field-required="<%= field.required.to_s %>"
               data-field-type="<%= field.type %>"
               data-field-value=""
-              data-field-datetimepicker-format="<%= field.try(:momentjs_format) %>"
+              data-field-datetimepicker-options="<%= field.try(:datepicker_options).try(:to_json) %>"
             >
               <%= field.label %>
             </a>

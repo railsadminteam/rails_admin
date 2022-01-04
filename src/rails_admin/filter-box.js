@@ -1,6 +1,6 @@
 import jQuery from "jquery";
-import moment from "moment";
 import I18n from "./i18n";
+import flatpickr from "flatpickr";
 
 (function ($) {
   var filters;
@@ -110,20 +110,15 @@ import I18n from "./i18n";
                 .addClass(index == 0 ? "default" : "between")
                 .css("display", visible ? "inline-block" : "none")
                 .html(
-                  $('<input type="hidden" />')
+                  $('<input class="input-sm form-control" type="text" />')
+                    .addClass(field_type == "date" ? "date" : "datetime")
                     .prop("name", value_name + "[]")
                     .prop("value", field_value[index] || "")
-                    .add(
-                      $(
-                        '<input class="form-control form-control-sm" type="text" />'
-                      )
-                        .addClass(field_type == "date" ? "date" : "datetime")
-                        .prop(
-                          "size",
-                          field_type == "date" || field_type == "time" ? 20 : 25
-                        )
-                        .prop("placeholder", placeholder)
+                    .prop(
+                      "size",
+                      field_type == "date" || field_type == "time" ? 20 : 25
                     )
+                    .prop("placeholder", placeholder)
                 );
             }
           );
@@ -335,18 +330,20 @@ import I18n from "./i18n";
       $("#filters_box").append($content);
 
       $content.find(".date, .datetime").each(function () {
-        $(this).datetimepicker({
-          date: moment($(this).siblings("[type=hidden]").val()),
-          locale: I18n.locale,
-          showTodayButton: true,
-          format: options["datetimepicker_format"],
-        });
-        $(this).on("dp.change", function (e) {
-          if (e.date) {
-            $(this)
-              .siblings("[type=hidden]")
-              .val(e.date.format("YYYY-MM-DD[T]HH:mm:ss"));
-          }
+        var self = this;
+        var flatpickrOptions = $.extend(
+          {
+            dateFormat: "Y-m-dTH:i:S",
+            altInput: true,
+            locale: I18n.locale,
+          },
+          options["datetimepicker_options"]
+        );
+        (flatpickr.l10ns[flatpickrOptions.locale]
+          ? Promise.resolve()
+          : import(`flatpickr/dist/l10n/${flatpickrOptions.locale}`)
+        ).then(() => {
+          flatpickr(this, flatpickrOptions);
         });
       });
 
@@ -365,7 +362,7 @@ import I18n from "./i18n";
       select_options: $(this).data("field-options"),
       required: $(this).data("field-required"),
       index: $.now().toString().slice(6, 11),
-      datetimepicker_format: $(this).data("field-datetimepicker-format"),
+      datetimepicker_options: $(this).data("field-datetimepicker-options"),
     });
   });
 
