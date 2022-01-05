@@ -49,7 +49,7 @@ module RailsAdmin
     end
 
     def respond_to_missing?(sym, include_private)
-      if RailsAdmin::Config::Actions.find(name.to_sym)
+      if RailsAdmin::Config::Actions.find(sym)
         true
       else
         super
