@@ -105,7 +105,6 @@ import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
       document.dispatchEvent(event);
 
       form.bind("ajax:complete", function (event) {
-        console.log(event);
         var data = event.detail[0],
           status = event.detail[1];
         if (status == "OK") {

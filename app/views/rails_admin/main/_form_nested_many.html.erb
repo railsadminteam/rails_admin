@@ -1,6 +1,6 @@
 <div class="controls col-sm-10" data-nestedmany="true">
   <div class="btn-group">
-    <a class="<%= (field.active? ? 'active' : 'active') %> btn btn-info toggler" data-bs-target="<%= form.jquery_namespace(field) %> .collapse" data-bs-toggle="collapse" role="button">
+    <a class="<%= (field.active? ? 'active' : '') %> btn btn-info toggler" data-bs-target="<%= form.jquery_namespace(field) %> .collapse" data-bs-toggle="collapse" role="button">
       <i class="fas"></i>
     </a>
     <% unless field.nested_form[:update_only] || !field.inline_add %>
