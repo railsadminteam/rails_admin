@@ -7,6 +7,7 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
 
   before do
     prepare_destination
+    File.write(File.join(destination_root, 'package.json'), '{"license": "MIT"}')
     FileUtils.touch File.join(destination_root, 'Gemfile')
     FileUtils.mkdir_p(File.join(destination_root, 'config/initializers'))
     File.write(File.join(destination_root, 'config/routes.rb'), <<-RUBY.gsub(/^ {4}/, ''))
@@ -21,7 +22,9 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
   end
 
   it 'mounts RailsAdmin as Engine and generates RailsAdmin Initializer' do
-    run_generator
+    Dir.chdir(destination_root) do
+      run_generator
+    end
     expect(destination_root).to have_structure {
       directory 'config' do
         directory 'initializers' do
@@ -59,7 +62,9 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
       # empty
     end
     RUBY
-    run_generator
+    Dir.chdir(destination_root) do
+      run_generator
+    end
     expect(File.read(File.join(destination_root, 'config/initializers/rails_admin.rb'))).to include 'config.asset_source ='
   end
 end
