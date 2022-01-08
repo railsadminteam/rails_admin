@@ -5,15 +5,17 @@
 <% sort_reverse = params[:sort_reverse] %>
 <% path_method = params[:id] ? "history_show_path" : "history_index_path" %>
 <%= form_tag("", method: "get", class: "search pjax-form form-inline") do %>
-  <div class="well">
-    <div class="input-group">
-      <input class="input-small form-control input-small" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>" />
-      <span class="input-group-btn">
-        <button class="btn btn-primary" data-disable-with="<%= '<i class="fas fa-sync"></i> '.html_safe + t('admin.misc.refresh') %>" type="submit">
-          <i class="fas fa-sync"></i>
-          <%= t("admin.misc.refresh") %>
-        </button>
-      </span>
+  <div class="card mb-3 p-3 bg-light">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="input-group">
+          <input class="form-control" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>" />
+          <button class="btn btn-primary" data-disable-with="<%= '<i class="fas fa-sync"></i> ' + t('admin.misc.refresh') %>" type="submit">
+            <i class="fas fa-sync"></i>
+            <%= t("admin.misc.refresh") %>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>
@@ -74,5 +76,5 @@
 </table>
 <% unless params[:all] || !@history.respond_to?(:current_page) %>
   <%= paginate(@history, theme: 'ra-twitter-bootstrap', remote: true) %>
-  <%= link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn pjax") unless (tc = @history.total_count) <= @history.size || tc > 100 %>
+  <%= link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn btn-light pjax") unless (tc = @history.total_count) <= @history.size || tc > 100 %>
 <% end %>
