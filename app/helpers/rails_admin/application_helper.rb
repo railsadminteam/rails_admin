@@ -154,7 +154,7 @@ module RailsAdmin
         li_class = ['nav-item', 'icon', "#{action.key}_#{parent}_link"].
                    concat(action.enabled? ? [] : ['disabled'])
         content_tag(:li, {class: li_class}.merge(only_icon ? {title: wording, rel: 'tooltip'} : {})) do
-          label = content_tag(:i, '', {class: action.link_icon}) + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
+          label = content_tag(:i, '', {class: action.link_icon}) + ' ' + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
           if action.enabled? || !only_icon
             href =
               if action.enabled?
@@ -162,7 +162,7 @@ module RailsAdmin
               else
                 'javascript:void(0)'
               end
-            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', action.pjax? && 'pjax', current_action?(action) && 'active', action.enabled? || 'disabled'].compact})
+            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', action.pjax? && 'pjax', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact})
           else
             content_tag(:span, label)
           end

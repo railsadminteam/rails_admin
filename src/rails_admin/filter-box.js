@@ -110,7 +110,9 @@ import flatpickr from "flatpickr";
                 .addClass(index == 0 ? "default" : "between")
                 .css("display", visible ? "inline-block" : "none")
                 .html(
-                  $('<input class="input-sm form-control-sm" type="text" />')
+                  $(
+                    '<input class="input-sm form-control form-control-sm" type="text" />'
+                  )
                     .addClass(field_type == "date" ? "date" : "datetime")
                     .prop("name", value_name + "[]")
                     .prop("value", field_value[index] || "")
