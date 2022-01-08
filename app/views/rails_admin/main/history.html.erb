@@ -7,7 +7,7 @@
 <%= form_tag("", method: "get", class: "search pjax-form form-inline") do %>
   <div class="well">
     <div class="input-group">
-      <input class="input-small form-control input-small" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>"></input>
+      <input class="input-small form-control input-small" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>" />
       <span class="input-group-btn">
         <button class="btn btn-primary" data-disable-with="<%= '<i class="fas fa-sync"></i> '.html_safe + t('admin.misc.refresh') %>" type="submit">
           <i class="fas fa-sync"></i>

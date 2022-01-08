@@ -1,7 +1,7 @@
 <% params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token) %>
 <% visible_fields = @model_config.export.with(view: self, object: @abstract_model.model.new, controller: self.controller).visible_fields %>
 <%= form_tag export_path(params.merge(all: true)), method: 'post', class: "main" do %>
-  <input name="send_data" type="hidden" value="true">/</input>
+  <input name="send_data" type="hidden" value="true" />
   <fieldset id="fields_to_export">
     <legend>
       <i class="fas fa-chevron-down"></i>
@@ -126,7 +126,7 @@
   </fieldset>
   <div class="form-group form-actions">
     <div class="col-sm-offset-2 col-sm-10">
-      <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>"></input>
+      <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>" />
       <button class="btn btn-primary" name="csv" type="submit">
         <i class="fas fa-check"></i>
         <%= t("admin.export.confirmation", name: 'csv') %>

@@ -7,7 +7,7 @@
   <%= render partial: "delete_notice", object: @object %>
 </ul>
 <%= form_for(@object, url: delete_path(model_name: @abstract_model.to_param, id: @object.id), html: {method: "delete"}) do %>
-  <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>"></input>
+  <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>" />
   <div class="form-actions">
     <button class="btn btn-danger" data-disable-with="<%= t("admin.form.confirmation") %>" type="submit">
       <i class="fas fa-check"></i>
