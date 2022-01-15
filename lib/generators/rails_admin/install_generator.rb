@@ -53,7 +53,6 @@ module RailsAdmin
       @scss_relative_dir = '../stylesheets/'
       template 'rails_admin.js.erb', 'app/javascript/packs/rails_admin.js'
       template 'rails_admin.scss', 'app/javascript/stylesheets/rails_admin.scss'
-      template 'environment.js', 'config/webpack/environment.js'
     end
 
     def configure_for_webpack
