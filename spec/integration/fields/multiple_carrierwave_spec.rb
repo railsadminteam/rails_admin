@@ -38,6 +38,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
 
     it 'supports reordering files', js: true do
       visit edit_path(model_name: 'field_test', id: field_test.id)
+      page.execute_script File.read(File.expand_path('../../../vendor/assets/javascripts/rails_admin/jquery3.js', __dir__))
       page.execute_script File.read(File.expand_path('../../support/jquery.simulate.drag-sortable.js', __dir__))
       page.execute_script %{$(".ui-sortable-handle:first-child").simulateDragSortable({move: 1});}
       click_button 'Save'

@@ -21,25 +21,25 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
 
     it 'supports filtering' do
       find('input.ra-filtering-select-input').set('ge')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['Los Angeles Dodgers', 'Texas Rangers']
       find('input.ra-filtering-select-input').set('Los')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
       find('input.ra-filtering-select-input').set('Mets')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['No objects found']
     end
 
     it 'sets id of the selected item' do
       find('input.ra-filtering-select-input').set('Tex')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
-      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Texas Rangers")').trigger('mouseenter').click()}
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Texas Rangers")).click()}
       expect(find('#player_team_id', visible: false).value).to eq teams[1].id.to_s
     end
   end
@@ -49,17 +49,17 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
       visit edit_path(model_name: 'player', id: player.id)
       expect(find('#player_team_id', visible: false).value).to eq teams[0].id.to_s
       find('input.ra-filtering-select-input').set('Tex')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
-      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Texas Rangers")').trigger('mouseenter').click()}
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Texas Rangers")).click()}
       expect(find('#player_team_id', visible: false).value).to eq teams[1].id.to_s
     end
 
     it 'clears the current selection with making the search box empty' do
       visit edit_path(model_name: 'player', id: player.id)
       find('input.ra-filtering-select-input').set('')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('keyup')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keyup'))")
       expect(find('#player_team_id', visible: false).value).to be_empty
     end
 
@@ -109,12 +109,12 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
 
     it 'supports filtering' do
       find('input.ra-filtering-select-input').set('ge')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['Los Angeles Dodgers', 'Texas Rangers']
       teams[0].update name: 'Cincinnati Reds'
       find('input.ra-filtering-select-input').set('Red')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Cincinnati Reds']
     end

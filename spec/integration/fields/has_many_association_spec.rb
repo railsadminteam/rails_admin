@@ -175,8 +175,6 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       it 'allows update', js: true do
         visit edit_path(model_name: 'managing_user', id: user.id)
         find('input.ra-multiselect-search').set('T')
-        page.execute_script("$('input.ra-multiselect-search').trigger('focus')")
-        page.execute_script("$('input.ra-multiselect-search').trigger('keydown')")
         find('.ra-multiselect-collection option', text: teams[1].name).select_option
         find('.ra-multiselect-item-add').click
         click_button 'Save'
