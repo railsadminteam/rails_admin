@@ -10,12 +10,15 @@ module RailsAdmin
         '%D' => 'm/d/y',   # American date format mm/dd/yy
         '%d' => 'd',       # Day of the month (01..31)
         '%-d' => 'j',      # Day of the month (1..31)
+        '%e' => 'j',       # Day of the month (1..31)
         '%F' => 'Y-m-d',   # ISO 8601 date format
         '%H' => 'H',       # Hour of the day, 24-hour clock (00..23)
         '%-H' => 'H',      # Hour of the day, 24-hour clock (0..23)
         '%h' => 'M',       # Same as %b
         '%I' => 'G',       # Hour of the day, 12-hour clock (01..12)
         '%-I' => 'h',      # Hour of the day, 12-hour clock (1..12)
+        '%k' => 'H',       # Hour of the day, 24-hour clock (0..23)
+        '%l' => 'h',       # Hour of the day, 12-hour clock (1..12)
         '%M' => 'i',       # Minute of the hour (00..59)
         '%-M' => 'i',      # Minute of the hour (00..59)
         '%m' => 'm',       # Month of the year (01..12)
