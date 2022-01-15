@@ -116,6 +116,10 @@ module RailsAdmin
         all_fields.collect { |f| f.with(bindings) }.select(&:visible?).sort_by { |f| [f.order, i += 1] } # stable sort, damn
       end
 
+      def possible_fields
+        _fields(true)
+      end
+
     protected
 
       # Raw fields.
