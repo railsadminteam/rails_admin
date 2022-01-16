@@ -332,21 +332,17 @@ import flatpickr from "flatpickr";
       $("#filters_box").append($content);
 
       $content.find(".date, .datetime").each(function () {
-        var self = this;
-        var flatpickrOptions = $.extend(
-          {
-            dateFormat: "Y-m-dTH:i:S",
-            altInput: true,
-            locale: I18n.locale,
-          },
-          options["datetimepicker_options"]
+        flatpickr(
+          this,
+          $.extend(
+            {
+              dateFormat: "Y-m-dTH:i:S",
+              altInput: true,
+              locale: I18n.locale,
+            },
+            options["datetimepicker_options"]
+          )
         );
-        (flatpickr.l10ns[flatpickrOptions.locale]
-          ? Promise.resolve()
-          : import(`flatpickr/dist/l10n/${flatpickrOptions.locale}`)
-        ).then(() => {
-          flatpickr(this, flatpickrOptions);
-        });
       });
 
       $("hr.filters_box:hidden").show("slow");

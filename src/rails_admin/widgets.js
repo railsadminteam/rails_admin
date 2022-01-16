@@ -18,22 +18,17 @@ import I18n from "./i18n";
     var content = event.detail || $("form");
     if (content.length) {
       content.find("[data-datetimepicker]").each(function () {
-        var options;
-        options = $.extend(
-          {
-            dateFormat: "Y-m-dTH:i:S",
-            altInput: true,
-            locale: I18n.locale,
-          },
-          $(this).data("options")
+        flatpickr(
+          this,
+          $.extend(
+            {
+              dateFormat: "Y-m-dTH:i:S",
+              altInput: true,
+              locale: I18n.locale,
+            },
+            $(this).data("options")
+          )
         );
-        if (flatpickr.l10ns[options.locale]) {
-          flatpickr(this, options);
-        } else {
-          import(`flatpickr/dist/l10n/${options.locale}`).then(() => {
-            flatpickr(this, options);
-          });
-        }
       });
       content.find("[data-enumeration]").each(function () {
         if ($(this).is("[multiple]")) {
