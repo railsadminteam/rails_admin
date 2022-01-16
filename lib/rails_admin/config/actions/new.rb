@@ -17,6 +17,7 @@ module RailsAdmin
             if request.get? # NEW
 
               @object = @abstract_model.new
+              @action = @action.with(@action.bindings.merge(object: @object))
               @authorization_adapter&.attributes_for(:new, @abstract_model)&.each do |name, value|
                 @object.send("#{name}=", value)
               end
@@ -54,6 +55,10 @@ module RailsAdmin
 
         register_instance_option :link_icon do
           'fas fa-plus'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end

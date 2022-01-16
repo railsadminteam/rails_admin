@@ -32,10 +32,6 @@ module RailsAdmin
           parent.abstract_model.primary_key
         end
 
-        register_instance_option :sort_reverse? do
-          true # By default show latest first
-        end
-
         register_instance_option :scopes do
           []
         end
@@ -50,6 +46,10 @@ module RailsAdmin
 
         def fields_for_table
           visible_fields.partition(&:sticky?).flatten
+        end
+
+        register_deprecated_instance_option :sort_reverse do
+          ActiveSupport::Deprecation.warn('The sort_reverse configuration option is deprecated and has no effect.')
         end
       end
     end

@@ -175,4 +175,19 @@ RSpec.describe 'New action', type: :request do
       is_expected.to have_content('Player is cheating')
     end
   end
+
+  context 'with a readonly object' do
+    it 'shows non-editable form' do
+      RailsAdmin.config do |config|
+        config.model ReadOnlyComment do
+          edit do
+            field :content
+          end
+        end
+      end
+      visit new_path(model_name: 'read_only_comment')
+      is_expected.not_to have_css('textarea[name="read_only_comment[content]"]')
+      is_expected.to have_css('button[name="_save"]:disabled')
+    end
+  end
 end

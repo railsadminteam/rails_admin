@@ -9,9 +9,9 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       visit new_path(model_name: 'comment')
       select 'Player', from: 'comment[commentable_type]'
       find('input.ra-filtering-select-input').set('Rob')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
-      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
       click_button 'Save'
       expect(Comment.first.commentable).to eq @players[0]
     end
@@ -35,10 +35,10 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
         select 'Polymorphic association test', from: 'comment[commentable_type]'
         find('input.ra-filtering-select-input').set('Rob')
 
-        page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+        page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
         expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
 
-        page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
         click_button 'Save'
         expect(Comment.first.commentable).to eq polymorphic_association_tests.first
       end
@@ -55,15 +55,15 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       expect(find('select#comment_commentable_type').value).to eq 'Team'
       expect(find('select#comment_commentable_id', visible: false).value).to eq team.id.to_s
       find('input.ra-filtering-select-input').set('Los')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
       select 'Player', from: 'comment[commentable_type]'
       find('input.ra-filtering-select-input').set('Rob')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
       expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Rob Wooten', 'Jackie Robinson']
-      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
       click_button 'Save'
       expect(comment.reload.commentable).to eq players[0]
     end

@@ -190,6 +190,13 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#respond_to_missing?' do
+    it 'returns the result based on existence of action' do
+      expect(controller.send(:respond_to_missing?, :index, false)).to be true
+      expect(controller.send(:respond_to_missing?, :invalid_action, false)).to be false
+    end
+  end
+
   describe '#get_collection' do
     let(:team) { FactoryBot.create :team }
     let!(:player) { FactoryBot.create :player, team: team }

@@ -49,7 +49,7 @@ module RailsAdmin
             (only.nil? || [only].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s)) &&
             ![except].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s) &&
             !bindings[:abstract_model].config.excluded?
-          )
+          ) && (!respond_to?(:writable?) || writable?)
         end
 
         register_instance_option :authorized? do

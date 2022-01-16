@@ -252,7 +252,7 @@ module RailsAdmin
         end
 
         def editable?
-          !(@properties && @properties.read_only?)
+          !((@properties && @properties.read_only?) || (bindings[:object] && bindings[:object].readonly?))
         end
 
         # Is this an association

@@ -44,6 +44,10 @@ module RailsAdmin
         register_instance_option :link_icon do
           'fas fa-pencil-alt'
         end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
+        end
       end
     end
   end

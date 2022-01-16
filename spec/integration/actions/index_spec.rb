@@ -795,20 +795,6 @@ RSpec.describe 'Index action', type: :request do
 
     before { @players = players.collect { |h| Player.create(h) } }
 
-    it 'is configurable per model' do
-      RailsAdmin.config Player do
-        list do
-          sort_by :created_at
-          sort_reverse true
-          field :name
-        end
-      end
-      visit index_path(model_name: 'player')
-      player_names_by_date.reverse.each_with_index do |name, i|
-        expect(find("tbody tr:nth-child(#{i + 1})")).to have_content(name)
-      end
-    end
-
     it 'has reverse direction by default' do
       RailsAdmin.config Player do
         list do
@@ -822,11 +808,13 @@ RSpec.describe 'Index action', type: :request do
       end
     end
 
-    it 'allows change default direction' do
+    it 'allows change direction by using field configuration' do
       RailsAdmin.config Player do
         list do
           sort_by :created_at
-          sort_reverse false
+          configure :created_at do
+            sort_reverse false
+          end
           field :name
         end
       end

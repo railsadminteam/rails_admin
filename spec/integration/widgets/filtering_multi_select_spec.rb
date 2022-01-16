@@ -21,10 +21,10 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
 
     it 'supports filtering' do
       find('input.ra-multiselect-search').set('Alex')
-      page.execute_script("$('input.ra-multiselect-search').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-multiselect-search').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_content 'No objects found'
       find('input.ra-multiselect-search').set('Ma')
-      page.execute_script("$('input.ra-multiselect-search').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-multiselect-search').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_content 'Leonys'
       expect(all('.ra-multiselect-collection option').map(&:text)).to match_array ['Leonys Martin', 'Matt Garza']
     end
@@ -89,11 +89,11 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
 
     it 'supports filtering' do
       find('input.ra-multiselect-search').set('Alex')
-      page.execute_script("$('input.ra-multiselect-search').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-multiselect-search').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_content 'No objects found'
       players[2].update name: 'Adam Rosales'
       find('input.ra-multiselect-search').set('Ma')
-      page.execute_script("$('input.ra-multiselect-search').trigger('focus').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-multiselect-search').dispatchEvent(new KeyboardEvent('keydown'))")
       is_expected.to have_content 'Leonys'
       expect(all('.ra-multiselect-collection option').map(&:text)).to match_array ['Leonys Martin']
     end
@@ -107,7 +107,7 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
 
       it 'picks all available items' do
         find('input.ra-multiselect-search').set('Ma')
-        page.execute_script("$('input.ra-multiselect-search').trigger('focus').trigger('keydown')")
+        page.execute_script("document.querySelector('input.ra-multiselect-search').dispatchEvent(new KeyboardEvent('keydown'))")
         expect(page).to have_css('.ra-multiselect-collection option', text: /Matt/)
         click_link 'Choose all'
         expect(all(:css, '#team_player_ids option', visible: false).map(&:value)).to match_array players[1..2].map(&:id).map(&:to_s)

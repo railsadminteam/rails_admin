@@ -64,7 +64,7 @@ module RailsAdmin
         end
 
         def read_only?
-          false
+          model.readonly_attributes.include? property.name.to_s
         end
 
       private

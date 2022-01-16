@@ -13,6 +13,9 @@ RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
       (@object = Player.new).save
       @builder = RailsAdmin::FormBuilder.new(:player, @object, helper, {})
       allow(@builder).to receive(:field_for).and_return('field')
+      action = double
+      allow(action).to receive(:enabled?).and_return true
+      helper.instance_variable_set :@action, action
     end
 
     it 'does not add additional error div from default ActionView::Base.field_error_proc' do
