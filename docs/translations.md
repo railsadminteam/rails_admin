@@ -10,6 +10,25 @@ See [[https://github.com/plataformatec/devise/wiki/I18n]] and [[https://github.c
 
 Copy [[https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]] to your `config/locales` directory and adapt it to your needs.
 
+## Flatpickr
+
+### For Webpack/Webpacker setup
+
+You need to manually import Flatpickr locales you want to use:
+
+`app/javascript/packs/rails_admin.js` or `app/javascript/rails_admin.js`
+
+```diff
+  import "rails_admin/src/rails_admin/base";
+  import "../stylesheets/rails_admin.scss";
++ import "flatpickr/dist/l10n/fr"; // individually
++ import "flatpickr/dist/l10n/index"; // or all at once
+```
+
+### For Asset pipeline setup
+
+All supported locales are loaded by default, just changing locale value is enough.
+
 ## Translation Missing?
 
 **You can pick your locales or contribute in translation here: https://www.localeapp.com/projects/905**
