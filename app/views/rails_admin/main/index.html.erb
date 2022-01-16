@@ -1,6 +1,6 @@
 <%
   query = params[:query]
-  params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export, :_pjax)
+  params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export)
   params.delete(:query) if params[:query].blank?
   params.delete(:sort_reverse) unless params[:sort_reverse] == 'true'
   sort_reverse = params[:sort_reverse]
@@ -67,7 +67,7 @@
 </style>
 
 <div id="list">
-  <%= form_tag(index_path(params.except(*%w[page f query])), method: :get, class: "pjax-form") do %>
+  <%= form_tag(index_path(params.except(*%w[page f query])), method: :get) do %>
     <div class="card mb-3 p-3 bg-light">
       <div class="row" data-options="<%= ordered_filter_options.to_json %>" id="filters_box"></div>
       <hr class="filters_box" style="display:<%= ordered_filters.empty? ? 'none' : 'block' %>"/>
@@ -97,7 +97,7 @@
       <% @model_config.list.scopes.each_with_index do |scope, index| %>
         <% scope = '_all' if scope.nil? %>
         <li class="<%= 'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0) %>">
-          <a class="pjax" href="<%= index_path(params.merge(scope: scope, page: nil)) %>">
+          <a href="<%= index_path(params.merge(scope: scope, page: nil)) %>">
             <%= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize)) %>
           </a>
         </li>
@@ -128,7 +128,7 @@
                 <% sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}) %>
                 <% sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected) %>
               <% end %>
-              <th class="<%= [property.sortable && "header pjax", property.sortable && sort_direction, property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">
+              <th class="<%= [property.sortable && "header", property.sortable && sort_direction, property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">
                 <%= property.label %>
               </th>
             <% end %>
@@ -169,19 +169,19 @@
     <% if @model_config.list.limited_pagination %>
       <div class="row">
         <div class="col-md-6">
-          <%= paginate(@objects, theme: 'ra-twitter-bootstrap/without_count', total_pages: Float::INFINITY, remote: true) %>
+          <%= paginate(@objects, theme: 'ra-twitter-bootstrap/without_count', total_pages: Float::INFINITY) %>
         </div>
       </div>
     <% elsif @objects.respond_to?(:total_count) %>
       <% total_count = @objects.total_count.to_i %>
       <div class="row">
         <div class="col-md-6">
-          <%= paginate(@objects, theme: 'ra-twitter-bootstrap', remote: true) %>
+          <%= paginate(@objects, theme: 'ra-twitter-bootstrap') %>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <%= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-light clearfix pjax") unless total_count > 100 || total_count <= @objects.to_a.size %>
+          <%= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-light clearfix") unless total_count > 100 || total_count <= @objects.to_a.size %>
         </div>
       </div>
       <div class="clearfix total-count">

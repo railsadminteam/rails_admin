@@ -4,8 +4,6 @@ module RailsAdmin
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper
 
-    layout :get_layout
-
     before_action :check_for_cancel
 
     def bulk_action
@@ -54,10 +52,6 @@ module RailsAdmin
       else
         super
       end
-    end
-
-    def get_layout
-      "rails_admin/#{request.headers['X-PJAX'] ? 'pjax' : 'application'}"
     end
 
     def back_or_index

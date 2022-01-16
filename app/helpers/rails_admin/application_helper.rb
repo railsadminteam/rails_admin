@@ -87,7 +87,7 @@ module RailsAdmin
           url = rails_admin.url_for(action: node.action_name, controller: 'rails_admin/main')
           nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
           content_tag :li do
-            link_to nav_icon + " " + wording_for(:menu, node), url, class: "nav-link pjax"
+            link_to nav_icon + " " + wording_for(:menu, node), url, class: "nav-link"
           end
         end.join.html_safe
         label ||= t('admin.misc.root_navigation')
@@ -114,7 +114,7 @@ module RailsAdmin
         level_class = " nav-level-#{level}" if level > 0
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
         li = content_tag :li, data: {model: model_param} do
-          link_to nav_icon + node.label_plural, url, class: "nav-link pjax#{level_class}"
+          link_to nav_icon + node.label_plural, url, class: "nav-link#{level_class}"
         end
         child_nodes = parent_groups[abstract_model.model_name]
         child_nodes ? li + navigation(parent_groups, child_nodes, level + 1) : li
@@ -134,7 +134,7 @@ module RailsAdmin
             if current_action?(a, am, o)
               wording_for(:breadcrumb, a, am, o)
             elsif a.http_methods.include?(:get)
-              link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
+              link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)) do
                 wording_for(:breadcrumb, a, am, o)
               end
             else
@@ -162,7 +162,7 @@ module RailsAdmin
               else
                 'javascript:void(0)'
               end
-            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', action.pjax? && 'pjax', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact})
+            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact})
           else
             content_tag(:span, label)
           end

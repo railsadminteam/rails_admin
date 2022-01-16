@@ -4,7 +4,7 @@
 <% sort = params[:sort] %>
 <% sort_reverse = params[:sort_reverse] %>
 <% path_method = params[:id] ? "history_show_path" : "history_index_path" %>
-<%= form_tag("", method: "get", class: "search pjax-form form-inline") do %>
+<%= form_tag("", method: "get", class: "search form-inline") do %>
   <div class="card mb-3 p-3 bg-light">
     <div class="row">
       <div class="col-sm-6">
@@ -32,7 +32,7 @@
         <% selected = (sort == property_name) %>
         <% sort_direction = (sort_reverse ? "headerSortUp" : "headerSortDown" if selected) %>
         <% sort_location = send(path_method, params.except("sort_reverse").merge(model_name: @abstract_model.to_param, sort: property_name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {})) %>
-        <th class="header pjax <%= column[:css_class] %> <%= sort_direction if selected %>" data-href="<%= sort_location %>">
+        <th class="header <%= column[:css_class] %> <%= sort_direction if selected %>">
           <%= column[:link_text] %>
         </th>
       <% end %>
@@ -54,7 +54,7 @@
             <% label = o.send(@abstract_model.config.object_label_method) %>
             <% if show_action = action(:show, @abstract_model, o) %>
               <td>
-                <%= link_to(label, url_for(action: show_action.action_name, model_name: @abstract_model.to_param, id: o.id), class: 'pjax') %>
+                <%= link_to(label, url_for(action: show_action.action_name, model_name: @abstract_model.to_param, id: o.id)) %>
               </td>
             <% else %>
               <td>
@@ -75,6 +75,6 @@
   </tbody>
 </table>
 <% unless params[:all] || !@history.respond_to?(:current_page) %>
-  <%= paginate(@history, theme: 'ra-twitter-bootstrap', remote: true) %>
-  <%= link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn btn-light pjax") unless (tc = @history.total_count) <= @history.size || tc > 100 %>
+  <%= paginate(@history, theme: 'ra-twitter-bootstrap') %>
+  <%= link_to(t("admin.misc.show_all"), send(path_method, params.merge(all: true)), class: "show-all btn btn-light") unless (tc = @history.total_count) <= @history.size || tc > 100 %>
 <% end %>

@@ -24,7 +24,7 @@
             <% active = last_created.try(:today?) %>
             <td>
               <span class="show">
-                <%= link_to abstract_model.config.label_plural, index_path, class: 'pjax' %>
+                <%= link_to abstract_model.config.label_plural, index_path %>
               </span>
             </td>
             <td>

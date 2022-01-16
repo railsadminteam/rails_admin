@@ -1,6 +1,5 @@
 require 'kaminari'
 require 'nested_form'
-require 'rack-pjax'
 require 'rails'
 require 'rails_admin'
 
@@ -20,10 +19,6 @@ module RailsAdmin
         require 'rails_admin/support/esmodule_preprocessor'
         Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
       end
-    end
-
-    initializer 'RailsAdmin setup middlewares' do |app|
-      app.config.middleware.use Rack::Pjax
     end
 
     initializer 'RailsAdmin reload config in development' do |app|

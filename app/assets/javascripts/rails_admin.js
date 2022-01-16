@@ -1,6 +1,5 @@
 //=  require 'rails-ujs'
 //=  require 'rails_admin/jquery3'
-//=  require 'rails_admin/jquery.pjax'
 //=  require 'jquery_nested_form'
 //=  require 'rails_admin/jquery-ui/effect'
 //=  require 'rails_admin/jquery-ui/widgets/sortable'

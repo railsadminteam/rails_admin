@@ -73,11 +73,6 @@ module RailsAdmin
           false
         end
 
-        # Render via pjax?
-        register_instance_option :pjax? do
-          link_target.blank?
-        end
-
         # Target window [_self, _blank]
         register_instance_option :link_target do
           nil

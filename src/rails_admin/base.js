@@ -1,6 +1,5 @@
 import Rails from "@rails/ujs";
 import jQuery from "jquery";
-import "./vendor/jquery.pjax";
 import "./vendor/jquery_nested_form";
 import "bootstrap";
 import "flatpickr/dist/flatpickr";

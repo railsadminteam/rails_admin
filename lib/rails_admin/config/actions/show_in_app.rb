@@ -25,10 +25,6 @@ module RailsAdmin
         register_instance_option :link_icon do
           'fas fa-eye'
         end
-
-        register_instance_option :pjax? do
-          false
-        end
       end
     end
   end
