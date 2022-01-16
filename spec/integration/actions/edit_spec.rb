@@ -659,6 +659,14 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
+  context 'with a readonly object' do
+    let(:comment) { FactoryBot.create :comment, (CI_ORM == :mongoid ? {_type: 'ReadOnlyComment'} : {}) }
+
+    it 'raises ActionNotAllowed' do
+      expect { visit edit_path(model_name: 'read_only_comment', id: comment.id) }.to raise_error 'RailsAdmin::ActionNotAllowed'
+    end
+  end
+
   context 'with missing label', given: ['a player exists', 'three teams with no name exist'] do
     before do
       @player = FactoryBot.create :player
