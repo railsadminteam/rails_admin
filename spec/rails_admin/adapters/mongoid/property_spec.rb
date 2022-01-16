@@ -195,6 +195,15 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
     end
   end
 
+  describe 'aliased field' do
+    let(:field) { :aliased_field }
+
+    it 'has correct values' do
+      expect(subject.name).to eq :aliased_field
+      expect(subject.pretty_name).to eq 'Aliased field'
+    end
+  end
+
   describe '#length_validation_lookup' do
     it 'detects validation length properly' do
       class LengthValiated

@@ -11,11 +11,11 @@ module RailsAdmin
         end
 
         def name
-          property.name.to_sym
+          (property.options[:as] || property.name).to_sym
         end
 
         def pretty_name
-          property.name.to_s.tr('_', ' ').capitalize
+          (property.options[:as] || property.name).to_s.tr('_', ' ').capitalize
         end
 
         def type
