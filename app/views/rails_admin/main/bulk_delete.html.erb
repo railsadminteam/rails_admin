@@ -6,7 +6,7 @@
 </ul>
 <%= form_tag bulk_delete_path(model_name: @abstract_model.to_param, bulk_ids: @objects.map(&:id)), method: :delete do %>
   <div class="form-actions">
-    <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>"></input>
+    <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>" />
     <button class="btn btn-danger" data-disable-with="<%= t("admin.form.confirmation") %>" type="submit">
       <i class="fas fa-check"></i>
       <%= t("admin.form.confirmation") %>

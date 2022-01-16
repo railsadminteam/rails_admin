@@ -11,6 +11,15 @@ module RailsAdmin
             abstract_model.model.type_for_attribute(name.to_s).serialize(super)&.change(year: 2000, month: 1, day: 1)
           end
 
+          register_instance_option :datepicker_options do
+            {
+              allowInput: true,
+              altFormat: flatpickr_format,
+              enableTime: true,
+              noCalendar: true,
+            }
+          end
+
           register_instance_option :strftime_format do
             '%H:%M'
           end

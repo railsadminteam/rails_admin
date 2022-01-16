@@ -1,6 +1,7 @@
 import Rails from "@rails/ujs";
 import jQuery from "jquery";
 import "jquery-ui/ui/widget";
+import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
 
 (function ($) {
   $.widget("ra.remoteForm", {
@@ -84,7 +85,9 @@ import "jquery-ui/ui/widget";
         .find(".cancel-action")
         .unbind()
         .click(function () {
-          dialog.modal("hide");
+          dialog.each(function (index, element) {
+            bootstrap.Modal.getInstance(element).hide();
+          });
           return false;
         })
         .html(cancelButtonText);
@@ -127,7 +130,6 @@ import "jquery-ui/ui/widget";
             }
           } else {
             // multi-select input
-            var input = widget.element.find(".ra-filtering-select-input");
             var multiselect = widget.element.find(".ra-multiselect");
             if (multiselect.find("option[value=" + json.id + "]").length) {
               // replace
@@ -144,7 +146,9 @@ import "jquery-ui/ui/widget";
             }
           }
           widget._trigger("success");
-          dialog.modal("hide");
+          dialog.each(function (index, element) {
+            bootstrap.Modal.getInstance(element).hide();
+          });
         } else {
           dialog.find(".modal-body").html(data.responseText);
           widget._bindFormEvents();
@@ -157,11 +161,11 @@ import "jquery-ui/ui/widget";
       if (!widget.dialog) {
         widget.dialog = $(
           '<div id="modal" class="modal fade">\
-            <div class="modal-dialog">\
+            <div class="modal-dialog modal-lg">\
             <div class="modal-content">\
             <div class="modal-header">\
-              <a href="#" class="close" data-dismiss="modal">&times;</a>\
               <h3 class="modal-header-title">...</h3>\
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>\
             </div>\
             <div class="modal-body">\
               ...\
@@ -173,16 +177,15 @@ import "jquery-ui/ui/widget";
             </div>\
             </div>\
           </div>'
-        )
-          .modal({
-            keyboard: true,
-            backdrop: true,
-            show: true,
-          })
-          .on("hidden.bs.modal", function () {
-            widget.dialog.remove(); // We don't want to reuse closed modals
-            widget.dialog = null;
-          });
+        ).on("hidden.bs.modal", function () {
+          widget.dialog.remove(); // We don't want to reuse closed modals
+          widget.dialog = null;
+        });
+        new bootstrap.Modal(widget.dialog[0], {
+          keyboard: true,
+          backdrop: true,
+          show: true,
+        }).show();
       }
       return this.dialog;
     },

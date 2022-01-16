@@ -157,9 +157,7 @@ import I18n from "./i18n";
     _buttonField: function () {
       return $(
         '<span class="input-group-btn">' +
-          '<label class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Show All Items" role="button">' +
-          '<span class="caret"></span>' +
-          '<span class="ui-button-text">&nbsp;</span>' +
+          '<label class="btn btn-info dropdown-toggle" title="Show All Items" role="button">' +
           "</label>" +
           "</span>"
       );
@@ -206,9 +204,8 @@ import I18n from "./i18n";
 
     _inputGroup: function (inputFor) {
       return $("<div>")
-        .addClass("input-group filtering-select col-sm-2")
-        .attr("data-input-for", inputFor)
-        .css("float", this.element.css("float"));
+        .addClass("input-group filtering-select")
+        .attr("data-input-for", inputFor);
     },
 
     _initAutocomplete: function () {

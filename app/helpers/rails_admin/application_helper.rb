@@ -28,7 +28,7 @@ module RailsAdmin
         content_tag(:span, _current_user.email),
       ].compact.join.html_safe
       if (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
-        link_to content, rails_admin.url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main')
+        link_to content, rails_admin.url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main'), class: 'nav-link'
       else
         content_tag :span, content
       end
@@ -87,7 +87,7 @@ module RailsAdmin
           url = rails_admin.url_for(action: node.action_name, controller: 'rails_admin/main')
           nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
           content_tag :li do
-            link_to nav_icon + " " + wording_for(:menu, node), url, class: "pjax"
+            link_to nav_icon + " " + wording_for(:menu, node), url, class: "nav-link pjax"
           end
         end.join.html_safe
         label ||= t('admin.misc.root_navigation')
@@ -98,7 +98,7 @@ module RailsAdmin
 
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.collect do |title, url|
-        content_tag(:li, link_to(title.to_s, url, target: '_blank', rel: 'noopener noreferrer'))
+        content_tag(:li, link_to(title.to_s, url, target: '_blank', rel: 'noopener noreferrer', class: 'nav-link'))
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
@@ -114,7 +114,7 @@ module RailsAdmin
         level_class = " nav-level-#{level}" if level > 0
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
         li = content_tag :li, data: {model: model_param} do
-          link_to nav_icon + node.label_plural, url, class: "pjax#{level_class}"
+          link_to nav_icon + node.label_plural, url, class: "nav-link pjax#{level_class}"
         end
         child_nodes = parent_groups[abstract_model.model_name]
         child_nodes ? li + navigation(parent_groups, child_nodes, level + 1) : li
@@ -130,7 +130,7 @@ module RailsAdmin
         parent_actions.collect do |a|
           am = a.send(:eval, 'bindings[:abstract_model]')
           o = a.send(:eval, 'bindings[:object]')
-          content_tag(:li, class: current_action?(a, am, o) && 'active') do
+          content_tag(:li, class: ['breadcrumb-item', current_action?(a, am, o) && 'active']) do
             if current_action?(a, am, o)
               wording_for(:breadcrumb, a, am, o)
             elsif a.http_methods.include?(:get)
@@ -151,11 +151,10 @@ module RailsAdmin
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) && a.show_in_menu }
       actions.collect do |action|
         wording = wording_for(:menu, action)
-        li_class = ['icon', "#{action.key}_#{parent}_link"].
-                   concat(current_action?(action) ? ['active'] : []).
+        li_class = ['nav-item', 'icon', "#{action.key}_#{parent}_link"].
                    concat(action.enabled? ? [] : ['disabled'])
         content_tag(:li, {class: li_class}.merge(only_icon ? {title: wording, rel: 'tooltip'} : {})) do
-          label = content_tag(:i, '', {class: action.link_icon}) + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
+          label = content_tag(:i, '', {class: action.link_icon}) + ' ' + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
           if action.enabled? || !only_icon
             href =
               if action.enabled?
@@ -163,7 +162,7 @@ module RailsAdmin
               else
                 'javascript:void(0)'
               end
-            content_tag(:a, label, {href: href, target: action.link_target}.merge(action.pjax? ? {class: ['pjax']} : {}))
+            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', action.pjax? && 'pjax', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact})
           else
             content_tag(:span, label)
           end
@@ -175,12 +174,12 @@ module RailsAdmin
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
 
-      content_tag :li, class: 'dropdown', style: 'float:right' do
-        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
+      content_tag :li, class: 'nav-item dropdown dropdown-menu-end' do
+        content_tag(:a, class: 'nav-link dropdown-toggle', data: {'bs-toggle': 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
             actions.collect do |action|
               content_tag :li do
-                link_to wording_for(:bulk_link, action, abstract_model), '#', class: 'bulk-link', data: {action: action.action_name}
+                link_to wording_for(:bulk_link, action, abstract_model), '#', class: 'dropdown-item bulk-link', data: {action: action.action_name}
               end
             end.join.html_safe
           end

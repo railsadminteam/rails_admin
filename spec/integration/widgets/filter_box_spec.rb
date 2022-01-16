@@ -9,15 +9,19 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       field :position
     end
     visit index_path(model_name: 'player')
-    is_expected.to have_no_css('.form-search')
+    is_expected.to have_no_css('#filters_box .filter')
     click_link 'Add filter'
     click_link 'Name'
-    is_expected.to have_css('.form-search', count: 1)
-    is_expected.to have_css('.form-search select[name^="f[name]"]')
+    within('#filters_box') do
+      is_expected.to have_css('.filter', count: 1)
+      is_expected.to have_css('.filter select[name^="f[name]"]')
+    end
     click_link 'Add filter'
     click_link 'Position'
-    is_expected.to have_css('.form-search', count: 2)
-    is_expected.to have_css('.form-search select[name^="f[position]"]')
+    within('#filters_box') do
+      is_expected.to have_css('.filter', count: 2)
+      is_expected.to have_css('.filter select[name^="f[position]"]')
+    end
   end
 
   it 'removes filters' do
@@ -26,16 +30,18 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       field :position
     end
     visit index_path(model_name: 'player')
-    is_expected.to have_no_css('.form-search')
+    is_expected.to have_no_css('#filters_box .filter')
     click_link 'Add filter'
     click_link 'Name'
     click_link 'Add filter'
     click_link 'Position'
-    is_expected.to have_css('.form-search', count: 2)
-    within('#filters_box') { click_button 'Name' }
-    is_expected.to have_no_css('.form-search select[name^="f[name]"]')
-    within('#filters_box') { click_button 'Position' }
-    is_expected.to have_no_css('.form-search')
+    within('#filters_box') do
+      is_expected.to have_css('.filter', count: 2)
+      click_button 'Name'
+      is_expected.to have_no_css('.filter select[name^="f[name]"]')
+      click_button 'Position'
+      is_expected.to have_no_css('.filter')
+    end
   end
 
   it 'hides redundant filter options for required fields' do
@@ -89,7 +95,7 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Date field'
       expect(find('[name^="f[date_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
       page.execute_script <<-JS
-        $('.form-control.date').data("DateTimePicker").date(moment('2015-10-08')).toggle();
+        document.querySelector('.form-control.date')._flatpickr.setDate('2015-10-08');
       JS
       expect(find('[name^="f[date_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2015-10-08T00:00:00'
     end
@@ -108,7 +114,7 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Datetime field'
       expect(find('[name^="f[datetime_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
       page.execute_script <<-JS
-        $('.form-control.datetime').data("DateTimePicker").date(moment('2015-10-08 14:00:00')).toggle();
+        document.querySelector('.form-control.datetime')._flatpickr.setDate('2015-10-08 14:00:00');
       JS
       expect(find('[name^="f[datetime_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2015-10-08T14:00:00'
     end
@@ -144,9 +150,9 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       click_link 'Time field'
       expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to be_blank
       page.execute_script <<-JS
-        $('.form-control.datetime').data("DateTimePicker").date(moment('2000-01-01 14:00:00')).toggle();
+        document.querySelector('.form-control.datetime')._flatpickr.setDate('2000-01-01 14:00:00');
       JS
-      expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq "#{Date.today}T14:00:00"
+      expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2000-01-01T14:00:00'
     end
   end
 end

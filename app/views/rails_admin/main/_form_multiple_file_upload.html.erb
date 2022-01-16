@@ -1,5 +1,5 @@
 <% field.attachments.each_with_index do |attachment, i| %>
-  <div class="<%= field.reorderable? ? 'sortables' : '' %> toggle">
+  <div class="<%= field.reorderable? ? 'sortables' : '' %> toggle mb-2">
     <%= attachment.pretty_value %>
     <% if field.delete_method || field.keep_method %>
       <a class="btn btn-info btn-remove-image" data-toggle="button" href="#" role="button">

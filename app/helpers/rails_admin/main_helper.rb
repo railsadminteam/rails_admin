@@ -52,7 +52,7 @@ module RailsAdmin
           when :enum
             options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
           when :date, :datetime, :time
-            options[:datetimepicker_format] = field.momentjs_format
+            options[:datetimepicker_options] = field.datepicker_options
           end
           options[:label] = field.label
           options[:name]  = field.name

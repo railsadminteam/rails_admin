@@ -49,7 +49,7 @@ import I18n from "./i18n";
       return $("#loading").hide();
     });
 
-  $(document).on("click", "[data-target]", function () {
+  $(document).on("click", "[data-bs-target]", function () {
     if (!$(this).hasClass("disabled")) {
       if ($(this).has("i.fa-chevron-down").length) {
         $(this)
@@ -69,7 +69,7 @@ import I18n from "./i18n";
     }
   });
 
-  $(document).on("click", ".form-horizontal legend", function () {
+  $(document).on("click", "form legend", function () {
     if ($(this).has("i.fa-chevron-down").length) {
       $(this).siblings(".control-group:visible").hide("slow");
       $(this).children("i").toggleClass("fa-chevron-down fa-chevron-right");
@@ -122,14 +122,11 @@ import I18n from "./i18n";
         "easeOutQuad"
       );
     });
-    $(".form-horizontal legend")
+    $("form.main legend")
       .has("i.fa-chevron-right")
       .each(function () {
         $(this).siblings(".control-group").hide();
       });
-    $(".table").tooltip({
-      selector: "th[rel=tooltip]",
-    });
     $("[formnovalidate]").on("click", function () {
       $(this).closest("form").attr("novalidate", true);
     });

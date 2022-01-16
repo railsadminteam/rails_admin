@@ -45,9 +45,6 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
         file 'app/javascript/stylesheets/rails_admin.scss' do
           contains '@import "~rails_admin/src/rails_admin/styles/base"'
         end
-        file 'config/webpack/environment.js' do
-          contains 'ProvidePlugin({jQuery'
-        end
       when :sprockets
         file 'Gemfile' do
           contains 'sassc-rails'

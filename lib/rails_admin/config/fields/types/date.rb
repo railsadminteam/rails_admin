@@ -15,6 +15,13 @@ module RailsAdmin
             :long
           end
 
+          register_instance_option :datepicker_options do
+            {
+              allowInput: true,
+              altFormat: flatpickr_format,
+            }
+          end
+
           register_instance_option :i18n_scope do
             %i[date formats]
           end

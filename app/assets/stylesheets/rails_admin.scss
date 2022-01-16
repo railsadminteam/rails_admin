@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+/***  Variables  ***/
+
+@import "rails_admin/custom/variables";
+@import "rails_admin/styles/base/variables";
+
+/***  Mixins  ***/
+
+@import "rails_admin/styles/base/mixins";
+@import "rails_admin/custom/mixins";
+
+/***  Bootstrap ***/
+
+@import "rails_admin/bootstrap/bootstrap";
+
+/***  Libraries  ***/
+
+@import "rails_admin/flatpickr";
+@import "rails_admin/styles/filtering-select";
+@import "rails_admin/styles/filtering-multiselect";
+@import "rails_admin/styles/widgets";
+
+/*** Font-awesome ***/
+
+@import "rails_admin/font-awesome";
+
+/***  RailsAdmin Theming  ***/
+
+@import "rails_admin/styles/base/theming";
+@import "rails_admin/custom/theming";

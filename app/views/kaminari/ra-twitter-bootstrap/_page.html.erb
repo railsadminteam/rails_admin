@@ -1,9 +1,9 @@
 <% if page.current? %>
-  <li class="active">
-    <%= link_to page, url, class: (remote ? 'pjax' : '') %>
+  <li class="page-item active">
+    <%= link_to page, url, class: ['page-link', ('pjax' if remote)].compact %>
   </li>
 <% else %>
-  <li>
-    <%= link_to page, url, class: (remote ? 'pjax' : '') %>
+  <li class="page-item">
+    <%= link_to page, url, class: ['page-link', ('pjax' if remote)].compact %>
   </li>
 <% end %>
