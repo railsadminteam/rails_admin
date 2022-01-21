@@ -13,7 +13,6 @@ module RailsAdmin
     def call(input)
       data = input[:data]
 
-      # only process files under rails_admin/src
       if input[:filename].start_with? RailsAdmin::Engine.root.join('src').to_s
         data.gsub!(/^(import .+)$/) { "// #{Regexp.last_match(1)}" }
         data.gsub!(/^(export +default +{)$/) do
@@ -24,6 +23,8 @@ module RailsAdmin
             raise "Unable to preprocess file: #{input[:filename]}"
           end
         end
+      elsif input[:filename] =~ %r{turbo-rails.+/turbo\.js$}
+        data.gsub!(/^(export .+)$/) { "// #{Regexp.last_match(1)}" }
       end
 
       {data: data}
