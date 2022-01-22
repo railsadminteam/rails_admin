@@ -8,7 +8,7 @@ module RailsAdmin
 
     def bulk_action
       get_model
-      process(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(controller: self, abstract_model: @abstract_model).select(&:bulkable?).collect(&:route_fragment))
+      process(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(:bulkable, controller: self, abstract_model: @abstract_model).collect(&:route_fragment))
     end
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
