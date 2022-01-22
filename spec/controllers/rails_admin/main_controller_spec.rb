@@ -61,6 +61,26 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#bulk_action' do
+    before do
+      RailsAdmin.config do |config|
+        config.actions do
+          dashboard
+          index do
+            visible do
+              raise # This shouldn't be invoked
+            end
+          end
+          bulk_delete
+        end
+      end
+    end
+
+    it 'retrieves actions using :bulkable scope' do
+      expect { post :bulk_action, params: {model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: [1]} }.not_to raise_error
+    end
+  end
+
   describe '#list_entries called from view' do
     before do
       @teams = FactoryBot.create_list(:team, 21)
